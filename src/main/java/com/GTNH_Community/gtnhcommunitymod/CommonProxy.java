@@ -1,6 +1,7 @@
 package com.GTNH_Community.gtnhcommunitymod;
 
 import com.GTNH_Community.gtnhcommunitymod.config.Config;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

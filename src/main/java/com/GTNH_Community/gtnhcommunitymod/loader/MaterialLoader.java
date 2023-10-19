@@ -1,11 +1,10 @@
 package com.GTNH_Community.gtnhcommunitymod.loader;
 
+import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
 
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
-import goodgenerator.util.CharExchanger;
-import gregtech.api.enums.TextureSet;
 
-import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
+import gregtech.api.enums.TextureSet;
 
 /**
  * New Material Pool
@@ -21,17 +20,24 @@ public class MaterialLoader implements Runnable {
         new short[] { 114, 114, 114 },
         "Testing Material",
         subscriptNumbers("Ts"),
-        new Werkstoff.Stats().setBlastFurnace(true).setProtons(0).setMass(0).setMeltingPoint(11451)
-            .setSpeedOverride(1919.0F).setDurOverride(19198100).setQualityOverride((byte) 114),
+        new Werkstoff.Stats().setBlastFurnace(true)
+            .setProtons(0)
+            .setMass(0)
+            .setMeltingPoint(11451)
+            .setSpeedOverride(1919.0F)
+            .setDurOverride(19198100)
+            .setQualityOverride((byte) 114),
         Werkstoff.Types.ELEMENT,
-        new Werkstoff.GenerationFeatures().onlyDust().addMolten().addMetalItems().addCraftingMetalWorkingItems()
-            .addSimpleMetalWorkingItems().addMultipleIngotMetalWorkingItems()
-            .addMetalCraftingSolidifierRecipes().addMetaSolidifierRecipes(),
+        new Werkstoff.GenerationFeatures().onlyDust()
+            .addMolten()
+            .addMetalItems()
+            .addCraftingMetalWorkingItems()
+            .addSimpleMetalWorkingItems()
+            .addMultipleIngotMetalWorkingItems()
+            .addMetalCraftingSolidifierRecipes()
+            .addMetaSolidifierRecipes(),
         offsetID_01,
-        TextureSet.SET_SHINY
-    );
-
-
+        TextureSet.SET_SHINY);
 
     @Override
     public void run() {}

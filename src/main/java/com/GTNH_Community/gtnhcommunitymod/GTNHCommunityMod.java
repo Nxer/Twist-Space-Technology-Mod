@@ -1,9 +1,10 @@
 package com.GTNH_Community.gtnhcommunitymod;
 
-import com.GTNH_Community.gtnhcommunitymod.loader.MaterialLoader;
-import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.GTNH_Community.gtnhcommunitymod.loader.MaterialLoader;
+import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -13,10 +14,10 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 @Mod(
-    modid = Tags.MODID, version = Tags.VERSION,
+    modid = Tags.MODID,
+    version = Tags.VERSION,
     name = Tags.MODNAME,
-    dependencies = "required-after:IC2; "
-        + "required-after:gregtech; "
+    dependencies = "required-after:IC2; " + "required-after:gregtech; "
         + "required-after:bartworks; "
         + "required-after:GoodGenerator; "
         + "required-after:GTNHLanthanides; "
