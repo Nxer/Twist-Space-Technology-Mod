@@ -1,4 +1,4 @@
-package com.myname.mymodid;
+package com.GTNH_Community.gtnhcommunitymod.config;
 
 import java.io.File;
 
@@ -6,12 +6,13 @@ import net.minecraftforge.common.config.Configuration;
 
 public class Config {
 
-    public static String greeting = "Hello World";
+    public static String preInitSign = "pre init GTNH Community Mod";
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
-        greeting = configuration.getString("greeting", Configuration.CATEGORY_GENERAL, greeting, "How shall I greet?");
+        preInitSign = configuration
+            .getString("preInitSign", Configuration.CATEGORY_GENERAL, preInitSign, "GTNH Community Mod preInit Sign");
 
         if (configuration.hasChanged()) {
             configuration.save();

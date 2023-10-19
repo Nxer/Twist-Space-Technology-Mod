@@ -1,4 +1,4 @@
-package com.myname.mymodid;
+package com.GTNH_Community.gtnhcommunitymod;
 
 public class ClientProxy extends CommonProxy {
 

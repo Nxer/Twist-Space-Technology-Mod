@@ -1,5 +1,7 @@
-package com.myname.mymodid;
+package com.GTNH_Community.gtnhcommunitymod;
 
+import com.GTNH_Community.gtnhcommunitymod.loader.MaterialLoader;
+import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,12 +12,26 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-@Mod(modid = Tags.MODID, version = Tags.VERSION, name = Tags.MODNAME, acceptedMinecraftVersions = "[1.7.10]")
-public class MyMod {
+@Mod(
+    modid = Tags.MODID, version = Tags.VERSION,
+    name = Tags.MODNAME,
+    dependencies = "required-after:IC2; "
+        + "required-after:gregtech; "
+        + "required-after:bartworks; "
+        + "required-after:GoodGenerator; "
+        + "required-after:GTNHLanthanides; "
+        + "before:miscutils; ",
+    acceptedMinecraftVersions = "[1.7.10]")
+public class GTNHCommunityMod {
 
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 
-    @SidedProxy(clientSide = "com.myname.mymodid.ClientProxy", serverSide = "com.myname.mymodid.CommonProxy")
+    @Mod.Instance
+    public static GTNHCommunityMod instance;
+
+    @SidedProxy(
+        clientSide = "com.GTNH_Community.gtnhcommunitymod.ClientProxy",
+        serverSide = "com.GTNH_Community.gtnhcommunitymod.CommonProxy")
     public static CommonProxy proxy;
 
     @Mod.EventHandler
@@ -23,6 +39,8 @@ public class MyMod {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
+        WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialLoader()); // Load MaterialLoader
+
     }
 
     @Mod.EventHandler
