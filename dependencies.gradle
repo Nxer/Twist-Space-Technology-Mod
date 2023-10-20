@@ -38,4 +38,5 @@ dependencies {
     implementation('com.github.GTNewHorizons:GTplusplus:1.10.13:dev')
     implementation('com.github.GTNewHorizons:GoodGenerator:0.7.4:dev')
     implementation('com.github.GTNewHorizons:GTNH-Lanthanides:0.11.2:dev')
+    implementation('com.github.GTNewHorizons:TecTech:5.3.9:dev')
 }

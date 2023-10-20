@@ -1,5 +1,5 @@
-# 注册器部分
-## GT通用注册器(仿bartworks)
+# 注册器部分 Register Part
+## GT通用注册器(仿bartworks) GT Common Register (imitate Bartworks)
  - FREE ID RANGE: 12_000-28_998
  - bartimaeusnek reserved 0-10_000
  - GlodBlock reserved range 10_001-10_999

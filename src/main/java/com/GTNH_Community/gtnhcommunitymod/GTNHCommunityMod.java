@@ -3,8 +3,8 @@ package com.GTNH_Community.gtnhcommunitymod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.GTNH_Community.gtnhcommunitymod.loader.MachineLoader;
 import com.GTNH_Community.gtnhcommunitymod.loader.MaterialLoader;
-import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -21,6 +21,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
         + "required-after:bartworks; "
         + "required-after:GoodGenerator; "
         + "required-after:GTNHLanthanides; "
+        + "required-after:tectech; "
         + "before:miscutils; ",
     acceptedMinecraftVersions = "[1.7.10]")
 public class GTNHCommunityMod {
@@ -40,7 +41,7 @@ public class GTNHCommunityMod {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
-        WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialLoader()); // Load MaterialLoader
+        MaterialLoader.loadMaterial();// Load MaterialPool
 
     }
 
@@ -48,6 +49,8 @@ public class GTNHCommunityMod {
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
+        MachineLoader.loadMachineBlock();// Load Machines
+
     }
 
     @Mod.EventHandler
