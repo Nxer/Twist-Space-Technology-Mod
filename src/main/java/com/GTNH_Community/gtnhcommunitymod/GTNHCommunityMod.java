@@ -1,15 +1,15 @@
 package com.GTNH_Community.gtnhcommunitymod;
 
-import com.GTNH_Community.gtnhcommunitymod.loader.RecipeLoader;
-import cpw.mods.fml.common.event.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.GTNH_Community.gtnhcommunitymod.loader.MachineLoader;
 import com.GTNH_Community.gtnhcommunitymod.loader.MaterialLoader;
+import com.GTNH_Community.gtnhcommunitymod.loader.RecipeLoader;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.*;
 
 @Mod(
     modid = Tags.MODID,
@@ -57,10 +57,10 @@ public class GTNHCommunityMod {
         MachineLoader.loadMachines();// Load Machines
     }
 
-//    @Mod.EventHandler
-//    public void completeInit(FMLLoadCompleteEvent event){
-//
-//    }
+    // @Mod.EventHandler
+    // public void completeInit(FMLLoadCompleteEvent event){
+    //
+    // }
 
     @Mod.EventHandler
     // register server commands in this event handler (Remove if not needed)
