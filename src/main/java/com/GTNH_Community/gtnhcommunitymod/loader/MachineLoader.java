@@ -8,7 +8,7 @@ public class MachineLoader {
 
     public static ItemStack IntensifyChemicalDistorter; // INTENSIFY_CHEMICAL_DISTORTER
 
-    public static void loadMachineBlock() {
+    public static void loadMachines() {
 
         IntensifyChemicalDistorter = new GT_TileEntity_IntensifyChemicalDistorter(
             19001,

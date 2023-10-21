@@ -8,9 +8,21 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.Textures.BlockIcons.*;
+import static gregtech.api.util.GT_StructureUtility.ofCoil;
 
+import com.github.bartimaeusnek.bartworks.common.tileentities.multis.mega.GT_TileEntity_MegaMultiBlockBase;
+import com.github.bartimaeusnek.bartworks.common.tileentities.multis.mega.GT_TileEntity_MegaOilCracker;
+import gregtech.api.enums.HeatingCoilLevel;
+import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.FindRecipeResult;
+import gregtech.api.recipe.check.RecipeValidator;
+import gregtech.api.util.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -25,13 +37,17 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.*;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
+
+// GT_MetaTileEntity_EnhancedMultiBlockBase called failed to use 64A energy hatch
+// GT_TileEntity_MegaMultiBlockBase then use megaClass to success to apply 64A hatch
+// Why ?
+//
 // GT_TileEntity_IntensifyChemicalDistorter
 public class GT_TileEntity_IntensifyChemicalDistorter
-    extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_TileEntity_IntensifyChemicalDistorter>
+    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_IntensifyChemicalDistorter>
     implements IConstructable, ISurvivalConstructable {
 
     public GT_TileEntity_IntensifyChemicalDistorter(int aID, String aName, String aNameRegional) {
@@ -50,31 +66,101 @@ public class GT_TileEntity_IntensifyChemicalDistorter
      * IStructureDefinition is expected to be evaluated against current instance only, and should not be used against
      * other instances, even for those of the same class.
      */
-    final int Casing_Index = 176;// texture of Hatch base
-    protected int casingAmountInNeed = 8;// casing amount in need
+    final int Casing_Index_ChemInsertCasing = 176;// texture of Hatch base Chem Inert Casing
+//    protected int casingAmountInNeed = 8;// casing amount in need
     protected int casingAmountActual;
+    protected int mode = 0;// 0 means IntensifyChemicalDistorter; 1 means LCR adv
+
+    private HeatingCoilLevel coilLevel;
+
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+
+    /**
+     *  's' = Stainless casing ;
+     *  'v' = Chemically inert casing ;
+     *  'h' = input Hatch ;
+     *  'p' = PTFE Pipe casing ;
+     *  'c' = coil ;
+     *  'b' = input Bus ;
+     *  '~' = machine ;
+     *  'e' = Energy hatch ;
+     */
+    private final String[][] shape = new String[][] {
+        {"    sss    ","  ssvvvss  "," svvvvvvvs "," svvvvvvvs ","svvvvvvvvvs","svvvvevvvvs","svvvvvvvvvs"," svvvvvvvs "," svvvvvvvs ","  ssvvvss  ","    sss    "},
+        {"           ","     h     ","     p     ","     p     ","     p     "," hpppcppph ","     p     ","     p     ","     p     ","     h     ","           "},
+        {"           ","    h      ","           ","           ","     p   h ","    pcp    "," h   p     ","           ","           ","      h    ","           "},
+        {"           ","           ","   h       ","        h  ","     p     ","    pcp    ","     p     ","  h        ","       h   ","           ","           "},
+        {"           ","           ","       h   ","  h        ","     p     ","    pcp    ","     p     ","        h  ","   h       ","           ","           "},
+        {"           ","      h    ","           ","           "," h   p     ","    pcp    ","     p   h ","           ","           ","    h      ","           "},
+        {"           ","     h     ","           ","           ","     p     "," h  pcp  h ","     p     ","           ","           ","     h     ","           "},
+        {"           ","    h      ","           ","           ","     p   h ","    pcp    "," h   p     ","           ","           ","      h    ","           "},
+        {"           ","           ","   h       ","        h  ","     p     ","    pcp    ","     p     ","  h        ","       h   ","           ","           "},
+        {"           ","           ","       h   ","  h        ","     p     ","    pcp    ","     p     ","        h  ","   h       ","           ","           "},
+        {"           ","      h    ","           ","           "," h   p     ","    pcp    ","     p   h ","           ","           ","    h      ","           "},
+        {"           ","     h     ","     p     ","     p     ","     p     "," hpppcppph ","     p     ","     p     ","     p     ","     h     ","           "},
+        {"    b~b    ","  ssvvvss  "," svvvvvvvs "," svvvvvvvs ","bvvvvvvvvvb","bvvvvevvvvb","bvvvvvvvvvb"," svvvvvvvs "," svvvvvvvs ","  ssvvvss  ","    bbb    "}
+    };
+    private final int horizontalOffSet = 5;
+    private final int verticalOffSet = 12;
+    private final int depthOffSet = 0;
+
 
     @Override
     public IStructureDefinition<GT_TileEntity_IntensifyChemicalDistorter> getStructureDefinition() {
         Structure = StructureDefinition.<GT_TileEntity_IntensifyChemicalDistorter>builder()
             .addShape(
-                mName,
-                transpose(new String[][] { { "ttt", "ttt", "ttt" }, { "t~t", "ttt", "ttt" }, { "ttt", "ttt", "ttt" } }))
+                STRUCTURE_PIECE_MAIN,
+                transpose(shape))
+            /**
+             *  √ 's' = Stainless casing ;
+             *  √ 'v' = Chemically inert casing ;
+             *  √ 'h' = input Hatch & output Hatch;
+             *  √ 'p' = PTFE Pipe casing ;
+             *  √ 'c' = coil ;
+             *  √ 'b' = input Bus or output Bus or Maintenance;
+             *  √ '~' = machine ;
+             *  √ 'e' = Energy hatch ;
+             */
+            .addElement('s',ofBlock(GregTech_API.sBlockCasings4,1))
+            .addElement('v',ofBlock(GregTech_API.sBlockCasings8,0))
+            .addElement('p',ofBlock(GregTech_API.sBlockCasings8,1))
             .addElement(
-                't',
+                'c',
+                withChannel(
+                    "coil",
+                    ofCoil(
+                        GT_TileEntity_IntensifyChemicalDistorter::setCoilLevel,
+                        GT_TileEntity_IntensifyChemicalDistorter::getCoilLevel)))
+            .addElement(
+                'h',
+                GT_HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
+                    .atLeast(
+                        InputHatch,
+                        OutputHatch)
+                    .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
+                    .casingIndex(176)/* index of stainless steal casing */
+                    .dot(1)/* preview channel of blueprint */
+                    .buildAndChain(GregTech_API.sBlockCasings8, 0))
+            .addElement(
+                'b',
                 GT_HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
                     .atLeast(
                         InputBus,
-                        InputHatch,
-                        OutputHatch,
                         OutputBus,
-                        Maintenance,
-                        Muffler,
-                        ExoticEnergy.or(Energy))
+                        Maintenance)
                     .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
-                    .casingIndex(Casing_Index)
-                    .dot(1)
-                    .buildAndChain(onElementPass(x -> x.casingAmountActual++, ofBlock(GregTech_API.sBlockCasings8, 0))))
+                    .casingIndex(49)/* index of chem inert casing */
+                    .dot(2)/* preview channel of blueprint */
+                    .buildAndChain(GregTech_API.sBlockCasings4, 1))
+            .addElement(
+                'e',
+                GT_HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
+                    .atLeast(
+                        Energy.or(ExoticEnergy))
+                    .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
+                    .casingIndex(11)
+                    .dot(3)
+                    .buildAndChain(GregTech_API.sBlockCasings1, 11))
             .build();
         return Structure;
     }
@@ -87,42 +173,68 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(mName, stackSize, hintsOnly, 1, 1, 0);
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
         if (this.mMachine) return -1;
         int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
-        return this.survivialBuildPiece(this.mName, stackSize, 1, 1, 0, realBudget, source, actor, false, true);
+        return this.survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, realBudget, source, actor, false, true);
     }
-
-    @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Testing Machine")
-            .addInfo("Controller block for the Precise Assembler")
-            .addPollutionAmount(getPollutionPerSecond(null))
-            .addInfo("The structure is too complex!")
-            .addInfo(BLUE_PRINT_INFO)
-            .addSeparator()
-            .beginStructureBlock(3, 3, 3, false)
-            .addController("Front middle")
-            .addCasingInfoRange("Casing", 8, 26, false)
-            .addInputHatch("Any Casing")
-            .addInputBus("Any Casing")
-            .addOutputHatch("Any Casing")
-            .addOutputBus("Any Casing")
-            .addEnergyHatch("Any Casing")
-            .addMufflerHatch("Any Casing")
-            .addMaintenanceHatch("Any Casing")
-            .toolTipFinisher("GTNH Community Mod");
-        return tt;
-    }
-
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         return GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
+    }
+
+    // Recipe Processing Handler
+    //
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return  new ProcessingLogic()
+            .enablePerfectOverclock()
+            .setMaxParallel(/*this.mode == 0 ? 16 :*/ 1024)
+            .setSpeedBonus(/*this.mode == 0 ? 1 :*/ 0.1F);
+
+    }
+
+
+    // Power Logic
+//    @Override
+//    protected void setProcessingLogicPower(ProcessingLogic logic) {
+//        logic.setAvailableVoltage(this.getMaxInputEu());
+//        logic.setAvailableAmperage(1);
+//    }
+
+//    @Override
+//    protected void setProcessingLogicPower(ProcessingLogic logic) {
+//        logic.setAvailableVoltage(getAverageInputVoltage());
+//        logic.setAvailableAmperage(getMaxInputAmps());
+//        logic.setAmperageOC(true);
+//    }
+
+//    @Override
+//    protected void setProcessingLogicPower(ProcessingLogic logic) {
+////        boolean useSingleAmp = mEnergyHatches.size() == 1 && mExoticEnergyHatches.size() == 0;
+//        logic.setAvailableVoltage(getMaxInputEu());
+//        logic.setAvailableAmperage();
+//        logic.setAmperageOC(true);
+//    }
+
+
+    //
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.mode = (this.mode + 1) % 2;
+            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("preciseassembler.chat." + this.mode));
+        }
+    }
+
+    //
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return true;
     }
 
     /**
@@ -131,7 +243,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
      */
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
-        return false;
+        return true;
     }
 
     /**
@@ -142,11 +254,8 @@ public class GT_TileEntity_IntensifyChemicalDistorter
      */
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        this.casingAmountActual = 0;
-        if (checkPiece(mName, 1, 1, 0)) {
-            return casingAmountActual >= casingAmountInNeed;
-        }
-        return false;
+//        this.casingAmountActual = 0; // re-init counter
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
     /**
@@ -226,5 +335,35 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                     .build() };
         }
         return new ITexture[] { casingTexturePages[1][48] };
+    }
+
+    // Tooltips
+    @Override
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addMachineType("Testing Machine/Chemical Reactor")
+            .addInfo("Controller block for the Intensify Chemical Distorter")
+            .addInfo("The structure is too complex!")
+            .addInfo(BLUE_PRINT_INFO)
+            .addSeparator()
+            .beginStructureBlock(11, 13, 11, false)
+            .addController("Front middle")
+            .addCasingInfoRange("Casing", 8, 26, false)
+            .addInputHatch("Any Casing")
+            .addInputBus("Any Casing")
+            .addOutputHatch("Any Casing")
+            .addOutputBus("Any Casing")
+            .addEnergyHatch("Any Casing")
+            .addMufflerHatch("Any Casing")
+            .addMaintenanceHatch("Any Casing")
+            .toolTipFinisher("GTNH Community Mod");
+        return tt;
+    }
+
+    public void setCoilLevel(HeatingCoilLevel aCoilLevel) {
+        this.coilLevel = aCoilLevel;
+    }
+    public HeatingCoilLevel getCoilLevel() {
+        return this.coilLevel;
     }
 }
