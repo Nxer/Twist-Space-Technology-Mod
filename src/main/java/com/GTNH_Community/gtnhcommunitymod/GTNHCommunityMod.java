@@ -20,9 +20,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     name = Tags.MODNAME,
     dependencies = "required-after:IC2; " + "required-after:gregtech; "
         + "required-after:bartworks; "
-        + "required-after:GoodGenerator; "
-        + "required-after:GTNHLanthanides; "
-        + "required-after:tectech; "
         + "before:miscutils; ",
     acceptedMinecraftVersions = "[1.7.10]")
 public class GTNHCommunityMod {
