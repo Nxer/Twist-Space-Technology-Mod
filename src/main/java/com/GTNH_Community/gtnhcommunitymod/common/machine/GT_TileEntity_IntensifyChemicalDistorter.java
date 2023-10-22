@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -203,6 +204,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+        if (mode == 0) return GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
         return GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
     }
 

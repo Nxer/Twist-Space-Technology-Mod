@@ -6,10 +6,12 @@ import org.apache.logging.log4j.Logger;
 import com.GTNH_Community.gtnhcommunitymod.loader.MachineLoader;
 import com.GTNH_Community.gtnhcommunitymod.loader.MaterialLoader;
 import com.GTNH_Community.gtnhcommunitymod.loader.RecipeLoader;
+import com.GTNH_Community.gtnhcommunitymod.nei.NEIHandler;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
@@ -47,20 +49,23 @@ public class GTNHCommunityMod {
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
-        RecipeLoader.loadRecipes();// Load Recipes
+        MachineLoader.loadMachines();// Load Machines
+        NEIHandler.IMCSender();// NEI reg
+
     }
 
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-        MachineLoader.loadMachines();// Load Machines
+        RecipeLoader.loadRecipes();// Load Recipes
     }
 
-    // @Mod.EventHandler
-    // public void completeInit(FMLLoadCompleteEvent event){
-    //
-    // }
+    @Mod.EventHandler
+    public void completeInit(FMLLoadCompleteEvent event) {
+        // reflect
+
+    }
 
     @Mod.EventHandler
     // register server commands in this event handler (Remove if not needed)
