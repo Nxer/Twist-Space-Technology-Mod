@@ -1,15 +1,26 @@
 package com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap;
 
+import static com.GTNH_Community.gtnhcommunitymod.util.DescTextLocalization.HeatCapacity;
+
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.function.Supplier;
+
+import net.minecraft.util.StatCollector;
+
+import com.gtnewhorizons.modularui.api.forge.IItemHandlerModifiable;
+import com.gtnewhorizons.modularui.api.math.Pos2d;
+import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 
 import gregtech.api.util.GT_Recipe;
+import gregtech.common.gui.modularui.UIHelper;
 
 public class GTCMRecipe {
 
     public static final GTCMRecipe instance = new GTCMRecipe();
 
-    public static class GTCMRecipeMap extends GT_Recipe.GT_Recipe_Map_LargeNEI {
+    public static class GTCMRecipeMap extends GT_Recipe.GT_Recipe_Map {
 
         /**
          * Initialises a new type of Recipe Handler.
@@ -25,6 +36,8 @@ public class GTCMRecipe {
          *                                   if forgotten.
          * @param aUsualInputCount           the usual amount of Input Slots this Recipe Class has.
          * @param aUsualOutputCount          the usual amount of Output Slots this Recipe Class has.
+         * @param aUsualFluidInputCount      the usual amount of Fluid Input Slots this Recipe Class has.
+         * @param aUsualFluidOutputCount     the usual amount of Fluid Output Slots this Recipe Class has.
          * @param aMinimalInputItems
          * @param aMinimalInputFluids
          * @param aAmperage
@@ -36,9 +49,9 @@ public class GTCMRecipe {
          */
         public GTCMRecipeMap(Collection<gregtech.api.util.GT_Recipe> aRecipeList, String aUnlocalizedName,
             String aLocalName, String aNEIName, String aNEIGUIPath, int aUsualInputCount, int aUsualOutputCount,
-            int aMinimalInputItems, int aMinimalInputFluids, int aAmperage, String aNEISpecialValuePre,
-            int aNEISpecialValueMultiplier, String aNEISpecialValuePost, boolean aShowVoltageAmperageInNEI,
-            boolean aNEIAllowed) {
+            int aUsualFluidInputCount, int aUsualFluidOutputCount, boolean disableOptimize, int aMinimalInputItems,
+            int aMinimalInputFluids, int aAmperage, String aNEISpecialValuePre, int aNEISpecialValueMultiplier,
+            String aNEISpecialValuePost, boolean aShowVoltageAmperageInNEI, boolean aNEIAllowed) {
             super(
                 aRecipeList,
                 aUnlocalizedName,
@@ -55,6 +68,63 @@ public class GTCMRecipe {
                 aNEISpecialValuePost,
                 aShowVoltageAmperageInNEI,
                 aNEIAllowed);
+
+            useModularUI(true);
+            // setProgressBarPos(78, getItemRowCount() * 18);
+            setLogoPos(79, (getItemRowCount() + getFluidRowCount()) * 18);
+            setUsualFluidInputCount(aUsualFluidInputCount);
+            setUsualFluidOutputCount(aUsualFluidOutputCount);
+            setDisableOptimize(disableOptimize);
+
+        }
+
+        private static final int xDirMaxCount = 4;
+        private static final int yOrigin = 8;
+
+        private int getItemRowCount() {
+            return (Math.max(mUsualInputCount, mUsualOutputCount) - 1) / xDirMaxCount + 1;
+        }
+
+        private int getFluidRowCount() {
+            return (Math.max(getUsualFluidInputCount(), getUsualFluidOutputCount()) - 1) / xDirMaxCount + 1;
+        }
+
+        @Override
+        public List<Pos2d> getItemInputPositions(int itemInputCount) {
+            return UIHelper.getGridPositions(itemInputCount, 6, yOrigin, xDirMaxCount);
+        }
+
+        @Override
+        public List<Pos2d> getItemOutputPositions(int itemOutputCount) {
+            return UIHelper.getGridPositions(itemOutputCount, 98, yOrigin, xDirMaxCount);
+        }
+
+        @Override
+        public List<Pos2d> getFluidInputPositions(int fluidInputCount) {
+            return UIHelper.getGridPositions(fluidInputCount, 6, yOrigin + getItemRowCount() * 18, xDirMaxCount);
+        }
+
+        @Override
+        public List<Pos2d> getFluidOutputPositions(int fluidOutputCount) {
+            return UIHelper.getGridPositions(fluidOutputCount, 98, yOrigin + getItemRowCount() * 18, xDirMaxCount);
+        }
+
+        @Override
+        public ModularWindow.Builder createNEITemplate(IItemHandlerModifiable itemInputsInventory,
+            IItemHandlerModifiable itemOutputsInventory, IItemHandlerModifiable specialSlotInventory,
+            IItemHandlerModifiable fluidInputsInventory, IItemHandlerModifiable fluidOutputsInventory,
+            Supplier<Float> progressSupplier, Pos2d windowOffset) {
+            // Delay setter so that calls to #setUsualFluidInputCount and #setUsualFluidOutputCount are considered
+            setNEIBackgroundSize(172, 10 + (getItemRowCount() + getFluidRowCount()) * 18);
+            // setNEIBackgroundSize(172, 82 + (Math.max(getItemRowCount() + getFluidRowCount() - 4, 0)) * 18);
+            return super.createNEITemplate(
+                itemInputsInventory,
+                itemOutputsInventory,
+                specialSlotInventory,
+                fluidInputsInventory,
+                fluidOutputsInventory,
+                progressSupplier,
+                windowOffset);
         }
 
     }
@@ -62,15 +132,18 @@ public class GTCMRecipe {
     public final GTCMRecipeMap IntensifyChemicalDistorterRecipes = new GTCMRecipeMap(
         new HashSet<>(),
         "gtcm.recipe.IntensifyChemicalDistorterRecipes",
-        "Intensify Chemical Distorter",
+        StatCollector.translateToLocal("Intensify Chemical Distorter"),
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
-        6,
-        6,
+        16,
+        16,
+        16,
+        16,
+        true,
         0,
         0,
         1,
-        "Heat Capacity: ",
+        HeatCapacity,
         1,
         " K",
         false,

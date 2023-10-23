@@ -12,6 +12,8 @@ public class DescTextLocalization {
         + EnumChatFormatting.GRAY
         + " hologram projector to build the main structure.";
 
+    public static final String HeatCapacity = StatCollector.translateToLocal(TextLocalization.HeatCapacity);
+
     public static String[] addText(String preFix, int length) {
         String[] text = new String[length];
         for (int i = 0; i < length; i++) {

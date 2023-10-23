@@ -24,10 +24,12 @@ import static gregtech.api.util.GT_StructureUtility.ofCoil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
+import com.GTNH_Community.gtnhcommunitymod.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -359,21 +361,40 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Testing Machine/Chemical Reactor")
+        tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
             .addInfo("Controller block for the Intensify Chemical Distorter")
+            .addInfo(
+                EnumChatFormatting.AQUA + "I! "
+                    + EnumChatFormatting.BLUE
+                    + "AM! "
+                    + EnumChatFormatting.AQUA
+                    + "THE! "
+                    + EnumChatFormatting.BLUE
+                    + "CHEM! "
+                    + EnumChatFormatting.AQUA
+                    + "THAT! "
+                    + EnumChatFormatting.BLUE
+                    + "IS! "
+                    + EnumChatFormatting.AQUA
+                    + "APROOOOOACHING !!")
+            .addInfo("The most advanced base chemical reactor.")
+            .addInfo("Use screwdriver to change mode.")
+            .addInfo(EnumChatFormatting.GOLD + "Intensify Chemical Distorter mode: ")
+            .addInfo("Focus on processing the most complex chemical reaction - 16x Parallel.")
+            .addInfo(EnumChatFormatting.GOLD + "Chemical Reactor mode: ")
+            .addInfo("1024 Parallel and 900% faster than using LCR of the same voltage.")
             .addInfo("The structure is too complex!")
             .addInfo(BLUE_PRINT_INFO)
             .addSeparator()
             .beginStructureBlock(11, 13, 11, false)
-            .addController("Front middle")
+            .addController("Front center")
             .addCasingInfoRange("Casing", 8, 26, false)
-            .addInputHatch("Any Casing")
-            .addInputBus("Any Casing")
-            .addOutputHatch("Any Casing")
-            .addOutputBus("Any Casing")
-            .addEnergyHatch("Any Casing")
-            .addMufflerHatch("Any Casing")
-            .addMaintenanceHatch("Any Casing")
+            .addInputHatch("Any Casing", 1)
+            .addOutputHatch("Any Casing", 1)
+            .addInputBus("Any Casing", 2)
+            .addOutputBus("Any Casing", 2)
+            .addMaintenanceHatch("Any Casing", 2)
+            .addEnergyHatch("Any Casing", 3)
             .toolTipFinisher("GTNH Community Mod");
         return tt;
     }
