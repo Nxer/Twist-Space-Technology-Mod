@@ -1,5 +1,7 @@
 package com.GTNH_Community.gtnhcommunitymod.loader;
 
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameIntensifyChemicalDistorter;
+
 import net.minecraft.item.ItemStack;
 
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
@@ -12,8 +14,8 @@ public class MachineLoader {
 
         IntensifyChemicalDistorter = new GT_TileEntity_IntensifyChemicalDistorter(
             19001,
-            "Intensify Chemical Distorter",
-            "Intensify Chemical Distorter").getStackForm(1);
+            NameIntensifyChemicalDistorter,
+            NameIntensifyChemicalDistorter).getStackForm(1);
 
     }
 }

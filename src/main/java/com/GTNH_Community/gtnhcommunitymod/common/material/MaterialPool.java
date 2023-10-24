@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.common.material;
 
+import static com.GTNH_Community.gtnhcommunitymod.util.TextHandler.texter;
 import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
 
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
@@ -17,7 +18,11 @@ public class MaterialPool implements Runnable {
     // TODO test demo : use Bartworks Werkstoff to new new Item(Material)
     public static final Werkstoff TestingMaterial = new Werkstoff(
         new short[] { 216, 240, 240 }, // RGB for auto texture
-        "Testing Material", // Name
+        // Name, if text need i18n, please use the method Texthandler.texter(String textAsDefault, String i18nKey)
+        // Also don't at this mod translate the auto generator extend gt.materials
+        // These material name will be the baseName.
+        // Translate these text when in GregTech.lang .
+        texter("Testing Material", "bw.Testing Material.notTrans"),
         subscriptNumbers("Tt"), // Chemical formula
         new Werkstoff.Stats().setBlastFurnace(true) // Auto generate the Properties , auto generate EBF recipe
             .setProtons(0)
@@ -27,8 +32,8 @@ public class MaterialPool implements Runnable {
             .setDurOverride(19198100) // Durability
             .setQualityOverride((byte) 114), // Mining Level
         Werkstoff.Types.ELEMENT, // Choose Type of generation , there 'ELEMENT' means a new matter
-        new Werkstoff.GenerationFeatures().onlyDust() // What Pattern want to auto generate , onluDust means has Dust
-                                                      // pattern
+        // What Pattern want to auto generate , onluDust means has Dust pattern
+        new Werkstoff.GenerationFeatures().onlyDust()
             .addMolten() // has Molten
             .addMetalItems()
             .addCraftingMetalWorkingItems()

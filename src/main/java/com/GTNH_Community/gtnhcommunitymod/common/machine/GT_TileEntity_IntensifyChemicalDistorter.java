@@ -3,28 +3,15 @@
  */
 package com.GTNH_Community.gtnhcommunitymod.common.machine;
 
-import static com.GTNH_Community.gtnhcommunitymod.util.DescTextLocalization.BLUE_PRINT_INFO;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.*;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
+import static gregtech.api.enums.GT_HatchElement.*;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -84,14 +71,14 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     private static final String STRUCTURE_PIECE_MAIN = "main";
 
     /**
-     * 's' = Stainless casing ;
-     * 'v' = Chemically inert casing ;
-     * 'h' = input Hatch ;
-     * 'p' = PTFE Pipe casing ;
-     * 'c' = coil ;
-     * 'b' = input Bus ;
-     * '~' = machine ;
-     * 'e' = Energy hatch ;
+     * <li>'s' = Stainless casing ;
+     * <li>'v' = Chemically inert casing ;
+     * <li>'h' = input Hatch ;
+     * <li>'p' = PTFE Pipe casing ;
+     * <li>'c' = coil ;
+     * <li>'b' = input Bus ;
+     * <li>'~' = machine ;
+     * <li>'e' = Energy hatch ;
      */
     private final String[][] shape = new String[][] {
         { "    sss    ", "  ssvvvss  ", " svvvvvvvs ", " svvvvvvvs ", "svvvvvvvvvs", "svvvvevvvvs", "svvvvvvvvvs",
@@ -124,20 +111,20 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     private final int verticalOffSet = 12;
     private final int depthOffSet = 0;
 
+    /**
+     * <li>√ 's' = Stainless casing ;
+     * <li>√ 'v' = Chemically inert casing ;
+     * <li>√ 'h' = input Hatch & output Hatch;
+     * <li>√ 'p' = PTFE Pipe casing ;
+     * <li>√ 'c' = coil ;
+     * <li>√ 'b' = input Bus or output Bus or Maintenance;
+     * <li>√ '~' = machine ;
+     * <li>√ 'e' = Energy hatch ;
+     */
     @Override
     public IStructureDefinition<GT_TileEntity_IntensifyChemicalDistorter> getStructureDefinition() {
         Structure = StructureDefinition.<GT_TileEntity_IntensifyChemicalDistorter>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-            /**
-             * √ 's' = Stainless casing ;
-             * √ 'v' = Chemically inert casing ;
-             * √ 'h' = input Hatch & output Hatch;
-             * √ 'p' = PTFE Pipe casing ;
-             * √ 'c' = coil ;
-             * √ 'b' = input Bus or output Bus or Maintenance;
-             * √ '~' = machine ;
-             * √ 'e' = Energy hatch ;
-             */
             .addElement('s', ofBlock(GregTech_API.sBlockCasings4, 1))
             .addElement('v', ofBlock(GregTech_API.sBlockCasings8, 0))
             .addElement('p', ofBlock(GregTech_API.sBlockCasings8, 1))
@@ -219,28 +206,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             .setSpeedBonus(/* this.mode == 0 ? 1 : */ 0.1F);
 
     }
-
-    // Power Logic
-    // @Override
-    // protected void setProcessingLogicPower(ProcessingLogic logic) {
-    // logic.setAvailableVoltage(this.getMaxInputEu());
-    // logic.setAvailableAmperage(1);
-    // }
-
-    // @Override
-    // protected void setProcessingLogicPower(ProcessingLogic logic) {
-    // logic.setAvailableVoltage(getAverageInputVoltage());
-    // logic.setAvailableAmperage(getMaxInputAmps());
-    // logic.setAmperageOC(true);
-    // }
-
-    // @Override
-    // protected void setProcessingLogicPower(ProcessingLogic logic) {
-    //// boolean useSingleAmp = mEnergyHatches.size() == 1 && mExoticEnergyHatches.size() == 0;
-    // logic.setAvailableVoltage(getMaxInputEu());
-    // logic.setAvailableAmperage();
-    // logic.setAmperageOC(true);
-    // }
 
     //
     @Override
@@ -362,40 +327,27 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
-            .addInfo("Controller block for the Intensify Chemical Distorter")
-            .addInfo(
-                EnumChatFormatting.AQUA + "I! "
-                    + EnumChatFormatting.BLUE
-                    + "AM! "
-                    + EnumChatFormatting.AQUA
-                    + "THE! "
-                    + EnumChatFormatting.BLUE
-                    + "CHEM! "
-                    + EnumChatFormatting.AQUA
-                    + "THAT! "
-                    + EnumChatFormatting.BLUE
-                    + "IS! "
-                    + EnumChatFormatting.AQUA
-                    + "APROOOOOACHING !!")
-            .addInfo("The most advanced base chemical reactor.")
-            .addInfo("Use screwdriver to change mode.")
-            .addInfo(EnumChatFormatting.GOLD + "Intensify Chemical Distorter mode: ")
-            .addInfo("Focus on processing the most complex chemical reaction - 16x Parallel.")
-            .addInfo(EnumChatFormatting.GOLD + "Chemical Reactor mode: ")
-            .addInfo("1024 Parallel and 900% faster than using LCR of the same voltage.")
-            .addInfo("The structure is too complex!")
+            .addInfo(Tooltip_ICD_00)
+            .addInfo(Tooltip_ICD_01)
+            .addInfo(Tooltip_ICD_02)
+            .addInfo(Tooltip_ICD_03)
+            .addInfo(Tooltip_ICD_04)
+            .addInfo(Tooltip_ICD_05)
+            .addInfo(Tooltip_ICD_06)
+            .addInfo(Tooltip_ICD_07)
+            .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
             .addSeparator()
             .beginStructureBlock(11, 13, 11, false)
-            .addController("Front center")
-            .addCasingInfoRange("Casing", 8, 26, false)
-            .addInputHatch("Any Casing", 1)
-            .addOutputHatch("Any Casing", 1)
-            .addInputBus("Any Casing", 2)
-            .addOutputBus("Any Casing", 2)
-            .addMaintenanceHatch("Any Casing", 2)
-            .addEnergyHatch("Any Casing", 3)
-            .toolTipFinisher("GTNH Community Mod");
+            .addController(textFrontCenter)
+            .addCasingInfoRange(textCasing, 8, 26, false)
+            .addInputHatch(textAnyCasing, 1)
+            .addOutputHatch(textAnyCasing, 1)
+            .addInputBus(textAnyCasing, 2)
+            .addOutputBus(textAnyCasing, 2)
+            .addMaintenanceHatch(textAnyCasing, 2)
+            .addEnergyHatch(textAnyCasing, 3)
+            .toolTipFinisher(ModName);
         return tt;
     }
 

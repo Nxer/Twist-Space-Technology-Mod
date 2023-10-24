@@ -27,6 +27,12 @@ public class GTCMMachineRecipePool {
                 WerkstoffLoader.Xenon.getFluidOrGas(1000),
                 Materials.Radon.getGas(1000))
             .fluidOutputs(MaterialPool.TestingMaterial.getMolten(144))
+            .noItemInputs()// GTNH Version 2.4.1+ don't need call this method , BUT!
+            /*
+             * 2.4.0 and earlier need call these methods:
+             * noItemInputs(); noItemOutputs(); noFluidInputs(); noFluidOutputs();
+             * So had better call.
+             */
             .noOptimize()
             .eut(114514)
             .duration(1919 * 20)
@@ -39,6 +45,7 @@ public class GTCMMachineRecipePool {
                 GT_Utility.getIntegratedCircuit(1))
             .fluidInputs(Materials.SolderingAlloy.getSolid(144 * 16))
             .itemOutputs(GT_Utility.copyAmount(1, MachineLoader.IntensifyChemicalDistorter))
+            .noFluidOutputs()
             .eut(1919810)
             .duration(114 * 20)
             .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);

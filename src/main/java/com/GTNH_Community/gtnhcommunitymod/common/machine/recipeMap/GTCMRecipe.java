@@ -1,13 +1,11 @@
 package com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap;
 
-import static com.GTNH_Community.gtnhcommunitymod.util.DescTextLocalization.HeatCapacity;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.*;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.Supplier;
-
-import net.minecraft.util.StatCollector;
 
 import com.gtnewhorizons.modularui.api.forge.IItemHandlerModifiable;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
@@ -28,9 +26,9 @@ public class GTCMRecipe {
          * @param aRecipeList                a List you specify as Recipe List. Usually just an ArrayList with a
          *                                   pre-initialised Size.
          * @param aUnlocalizedName           the unlocalised Name of this Recipe Handler, used mainly for NEI.
-         * @param aLocalName                 @deprecated the displayed Name inside the NEI Recipe GUI for optionally
-         *                                   registering aUnlocalizedName
-         *                                   with the language manager
+         * @param aLocalName                 @deprecated the displayed Name of the NEI Recipe GUI title,
+         *                                   if null then use the aUnlocalizedName;
+         *                                   always is null, by using aUnlocalizedName with i18n.
          * @param aNEIName
          * @param aNEIGUIPath                the displayed GUI Texture, usually just a Machine GUI. Auto-Attaches ".png"
          *                                   if forgotten.
@@ -132,7 +130,7 @@ public class GTCMRecipe {
     public final GTCMRecipeMap IntensifyChemicalDistorterRecipes = new GTCMRecipeMap(
         new HashSet<>(),
         "gtcm.recipe.IntensifyChemicalDistorterRecipes",
-        StatCollector.translateToLocal("Intensify Chemical Distorter"),
+        NameIntensifyChemicalDistorter,
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
         16,
@@ -145,7 +143,7 @@ public class GTCMRecipe {
         1,
         HeatCapacity,
         1,
-        " K",
+        Kelvin,
         false,
         true);
 
