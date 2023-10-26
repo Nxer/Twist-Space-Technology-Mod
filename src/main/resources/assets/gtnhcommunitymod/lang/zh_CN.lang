@@ -17,3 +17,7 @@ HeatCapacity=热容:
 BLUE_PRINT_INFO=请参考§9Structure§1Lib§7全息投影，构建主体结构
 Tooltip_ICD_07=拥有 1024 并行并且比相同电压的大型化学反应釜快 900%%
 bw.Testing Material.notTrans=Testing Material
+item.MetaItem01.1.name=Test Item 1
+item.MetaItem01.0.name=Test Item 0
+item.MetaItem01.name=MetaItem01Base
+CreativeTabsGTCMMetaItems=GTCM Meta Items 1

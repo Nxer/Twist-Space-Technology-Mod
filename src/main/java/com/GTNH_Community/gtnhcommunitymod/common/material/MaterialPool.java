@@ -12,6 +12,13 @@ import gregtech.api.enums.TextureSet;
  */
 public class MaterialPool implements Runnable {
 
+    /*----------- Test the forge item register -----------*/
+
+    // public static ItemAdder_Basic testItem = new ItemAdder_Basic("Testing Item","testingItem.01");
+    // public static ItemStack testItem4 = new ItemStack(testItem,1,1);
+
+    /*----------- Test the forge item register -----------*/
+
     // ID manager
     private static final int offsetID_01 = 20_000;
 

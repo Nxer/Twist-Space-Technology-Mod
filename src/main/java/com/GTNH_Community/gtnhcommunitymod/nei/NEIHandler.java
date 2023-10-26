@@ -4,7 +4,7 @@ import static gregtech.api.enums.Mods.NotEnoughItems;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
+import com.GTNH_Community.gtnhcommunitymod.Tags;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
 
@@ -12,20 +12,18 @@ public class NEIHandler {
 
     public static void IMCSender() {
 
-        GTNHCommunityMod.LOG.info("GTNHCommunityMod sendHandler");
         sendHandler("gtcm.recipe.IntensifyChemicalDistorterRecipes", "gregtech:gt.blockmachines:19001");
 
         sendCatalyst("gtcm.recipe.IntensifyChemicalDistorterRecipes", "gregtech:gt.blockmachines:19001");
         sendCatalyst("gt.recipe.largechemicalreactor", "gregtech:gt.blockmachines:19001", -20);
 
-        GTNHCommunityMod.LOG.info("GTNHCommunityMod sendHandler complete");
     }
 
     private static void sendHandler(String aName, String aBlock) {
         NBTTagCompound aNBT = new NBTTagCompound();
         aNBT.setString("handler", aName);
-        aNBT.setString("modName", "GTNH Community Mod");
-        aNBT.setString("modId", "gtnhcommunitymod");
+        aNBT.setString("modName", Tags.MODNAME);
+        aNBT.setString("modId", Tags.MODID);
         aNBT.setBoolean("modRequired", true);
         aNBT.setString("itemName", aBlock);
         aNBT.setInteger("handlerHeight", 135);

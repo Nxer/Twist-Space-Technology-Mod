@@ -17,7 +17,8 @@ public class TextHandler {
 
     /* The Map across all text<Key, Value> */
     public static Map<String, String> LangMap;
-    public static Map<String, String> LangMapBackUp;
+    // public static Map<String, String> LangMapBackUp;
+    public static Map<String, String> LangMapNeedToWrite = new HashMap<>();
 
     /**
      * When the String inputs need generate a .lang Key-Value at once,
@@ -35,7 +36,7 @@ public class TextHandler {
         if (GTNHCommunityMod.isInDevMode) {
             if (LangMap.get(aKey) == null) {
                 GTNHCommunityMod.LOG.info("Texter get a new key - TextLine: " + aKey + " - " + aTextLine);
-                LangMap.put(aKey, aTextLine);
+                LangMapNeedToWrite.put(aKey, aTextLine);
                 return aTextLine;
             } else {
                 return translateToLocalFormatted(aKey);
@@ -67,7 +68,7 @@ public class TextHandler {
         if (isInDevMode) {
             /* Parse the .lang in LangMap */
             LangMap = LanguageUtil.parseLangFile("en_US");
-            LangMapBackUp = new HashMap<String, String>(LangMap);
+            // LangMapBackUp = new HashMap<String, String>(LangMap);
         }
 
     }
@@ -82,28 +83,31 @@ public class TextHandler {
         if (isInDevMode) {
 
             /* If no new text need to write */
-            if (LangMap.equals(LangMapBackUp)) {
-                GTNHCommunityMod.LOG.info(GTNHCommunityMod.MODID + ": No new text need to handle.");
-                /* If you need to see what the fuck in the LangMap and LangMapBackUp, remove the comment markers. */
-
-                // for(String key : LangMapBackUp.keySet()){
-                // GTNHCommunityMod.LOG.info("Get LanMapBackUp at serializeLangMap() : " + key + " --- " +
-                // LangMapBackUp.get(key));
-                // }
-                // for (String key : LangMap.keySet()){
-                // GTNHCommunityMod.LOG.info("Get LanMap at serializeLangMap() : " + key + " --- " + LangMap.get(key));
-                // }
-
+            if (LangMapNeedToWrite.isEmpty()) {
                 return;
             }
+            // if (LangMap.equals(LangMapBackUp)) {
+            // GTNHCommunityMod.LOG.info(GTNHCommunityMod.MODID + ": No new text need to handle.");
+            // /* If you need to see what the fuck in the LangMap and LangMapBackUp, remove the comment markers. */
+            //
+            // // for(String key : LangMapBackUp.keySet()){
+            // // gtnhcommunitymod.LOG.info("Get LanMapBackUp at serializeLangMap() : " + key + " --- " +
+            // // LangMapBackUp.get(key));
+            // // }
+            // // for (String key : LangMap.keySet()){
+            // // gtnhcommunitymod.LOG.info("Get LanMap at serializeLangMap() : " + key + " --- " + LangMap.get(key));
+            // // }
+            //
+            // return;
+            // }
 
-            /* New a Map with new texts need to write. */
-            Map<String, String> LangMapNeedWrite = new HashMap<String, String>(LangMap);
-
-            /* Remove texts not need to write. */
-            for (String tx : LangMapBackUp.keySet()) {
-                LangMapNeedWrite.remove(tx);
-            }
+            // /* New a Map with new texts need to write. */
+            // Map<String, String> LangMapNeedWrite = new HashMap<String, String>(LangMap);
+            //
+            // /* Remove texts not need to write. */
+            // for (String tx : LangMapBackUp.keySet()) {
+            // LangMapNeedWrite.remove(tx);
+            // }
 
             /* Prepare the files. */
             File en_US_lang = new File(GTNHCommunityMod.DevResource + "\\assets\\gtnhcommunitymod\\lang\\en_US.lang");
@@ -118,17 +122,19 @@ public class TextHandler {
             try {
                 FileWriter en_Us = new FileWriter(en_US_lang, true);
                 FileWriter zh_CN = new FileWriter(zh_CN_lang, true);
-                for (String key : LangMapNeedWrite.keySet()) {
-                    GTNHCommunityMod.LOG.info("en_US write a Line START: " + key + "===>" + LangMapNeedWrite.get(key));
+                for (String key : LangMapNeedToWrite.keySet()) {
+                    GTNHCommunityMod.LOG
+                        .info("en_US write a Line START: " + key + "===>" + LangMapNeedToWrite.get(key));
                     en_Us.write(key);
                     en_Us.write("=");
-                    en_Us.write(LangMapNeedWrite.get(key));
+                    en_Us.write(LangMapNeedToWrite.get(key));
                     en_Us.write("\n");
                     GTNHCommunityMod.LOG.info("en_US write a Line COMPLETE.");
-                    GTNHCommunityMod.LOG.info("zh_CN write a Line START: " + key + "===>" + LangMapNeedWrite.get(key));
+                    GTNHCommunityMod.LOG
+                        .info("zh_CN write a Line START: " + key + "===>" + LangMapNeedToWrite.get(key));
                     zh_CN.write(key);
                     zh_CN.write("=");
-                    zh_CN.write(LangMapNeedWrite.get(key));
+                    zh_CN.write(LangMapNeedToWrite.get(key));
                     zh_CN.write("\n");
                     GTNHCommunityMod.LOG.info("zh_CN write a Line COMPLETE.");
                 }
@@ -141,7 +147,7 @@ public class TextHandler {
             }
 
             /* Del the backup. */
-            LangMapBackUp.clear();
+            LangMapNeedToWrite.clear();
 
         }
     }

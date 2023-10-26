@@ -15,7 +15,7 @@ public class CommonProxy {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
 
         GTNHCommunityMod.LOG.info(Config.preInitSign);
-        GTNHCommunityMod.LOG.info("I am " + Tags.MODNAME + " at version " + Tags.VERSION);
+        GTNHCommunityMod.LOG.info(Tags.MODNAME + " at version " + Tags.VERSION);
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)

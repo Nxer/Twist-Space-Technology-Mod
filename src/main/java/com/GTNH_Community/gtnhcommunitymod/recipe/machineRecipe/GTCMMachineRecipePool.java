@@ -1,5 +1,8 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
+import static com.GTNH_Community.gtnhcommunitymod.common.item.items.ItemList01.TestItem0;
+import static com.GTNH_Community.gtnhcommunitymod.common.item.items.ItemList01.TestItem1;
+
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.common.material.MaterialPool;
 import com.GTNH_Community.gtnhcommunitymod.loader.MachineLoader;
@@ -14,6 +17,14 @@ import gregtech.api.util.GT_Utility;
 public class GTCMMachineRecipePool {
 
     public static void loadGTCMMachineRecipes() {
+
+        // testing
+        GT_Values.RA.stdBuilder()
+            .itemInputs(GT_Utility.copyAmount(1, TestItem0))
+            .itemOutputs(GT_Utility.copyAmount(1, TestItem1))
+            .eut(1)
+            .duration(20)
+            .addTo(GTCMRecipe.instance.IntensifyChemicalDistorterRecipes);
 
         // test machine recipe
         GT_Values.RA.stdBuilder()
