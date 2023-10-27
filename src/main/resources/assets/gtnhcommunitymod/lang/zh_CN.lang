@@ -20,4 +20,4 @@ bw.Testing Material.notTrans=Testing Material
 item.MetaItem01.1.name=Test Item 1
 item.MetaItem01.0.name=Test Item 0
 item.MetaItem01.name=MetaItem01Base
-CreativeTabsGTCMMetaItems=GTCM Meta Items 1
+itemGroup.GTCM Meta Items 1=GTCM Meta Items 1

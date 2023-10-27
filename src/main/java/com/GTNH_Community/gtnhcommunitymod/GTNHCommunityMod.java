@@ -1,15 +1,11 @@
 package com.GTNH_Community.gtnhcommunitymod;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.GTNH_Community.gtnhcommunitymod.devTools.PathHelper;
 import com.GTNH_Community.gtnhcommunitymod.loader.MachineLoader;
 import com.GTNH_Community.gtnhcommunitymod.loader.MaterialLoader;
 import com.GTNH_Community.gtnhcommunitymod.loader.RecipeLoader;
 import com.GTNH_Community.gtnhcommunitymod.nei.NEIHandler;
 import com.GTNH_Community.gtnhcommunitymod.util.TextHandler;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -17,6 +13,9 @@ import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 @Mod(
     modid = Tags.MODID,
@@ -48,7 +47,7 @@ public class GTNHCommunityMod {
     public static final String VERSION = Tags.VERSION;
 
     /**
-     * If you need send a message to the Log, call {@code GTNHCommunityMod.LOG.info(String);} .
+     * If you need send a message to the Log, call {@link GTNHCommunityMod#LOG#info(String message)} .
      */
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 
@@ -70,7 +69,6 @@ public class GTNHCommunityMod {
 
         proxy.preInit(event);
         MaterialLoader.loadMaterial();// Load MaterialPool
-
     }
 
     @Mod.EventHandler
@@ -89,6 +87,9 @@ public class GTNHCommunityMod {
 
         RecipeLoader.loadRecipes();// Load Recipes
 
+        TextHandler.serializeLangMap(isInDevMode);
+
+//        GTNHCommunityMod.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
     }
 
     @Mod.EventHandler
@@ -96,7 +97,6 @@ public class GTNHCommunityMod {
         // reflect
 
         //
-        TextHandler.serializeLangMap(isInDevMode);
 
     }
 

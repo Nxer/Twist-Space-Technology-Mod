@@ -1,29 +1,30 @@
 package com.GTNH_Community.gtnhcommunitymod.common.item.itemAdders;
 
-import java.util.List;
-
+import com.GTNH_Community.gtnhcommunitymod.util.TextHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import com.GTNH_Community.gtnhcommunitymod.util.TextHandler;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
 
 public class ItemAdder_Basic extends Item {
 
-    // private final String metaName;
-    // private final String Name;
+
+    protected String iconPath;
+
     private String unlocalizedName;
 
-    public ItemAdder_Basic(String Name, String MetaName, CreativeTabs aCreativeTabs) {
+    public ItemAdder_Basic(String Name, String MetaName, CreativeTabs aCreativeTabs/*, String aIconPath*/) {
         super();
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.setUnlocalizedName(generateUnlocalizedName(MetaName));
         TextHandler.texter(Name, this.unlocalizedName + ".name");
         this.setCreativeTab(aCreativeTabs);
+//        this.iconPath = aIconPath;
+
         // GameRegistry.registerItem(this, MetaName);
     }
     // public ItemAdder_Basic(String Name, String MetaName, int Meta){
@@ -62,6 +63,16 @@ public class ItemAdder_Basic extends Item {
     public String getUnlocalizedName() {
         return this.unlocalizedName;
     }
+
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerIcons(IIconRegister iconRegister) {
+//        icon = iconRegister.registerIcon(this.iconPath);
+//    }
+//    @Override
+//    public IIcon getIconFromDamage(int aMetaData) {
+//        return icon;
+//    }
 
     @Override
     @SideOnly(Side.CLIENT)
