@@ -1,28 +1,27 @@
 package com.GTNH_Community.gtnhcommunitymod.common.item.itemAdders;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextHandler.texter;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.GTNH_Community.gtnhcommunitymod.util.TextHandler.texter;
-
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * An ItemStack Generator used Meta Item System.
- * <li> Use {@link ItemAdder01#initItem01(String, int)} to create your Item at ItemList01.
+ * <li>Use {@link ItemAdder01#initItem01(String, int)} to create your Item at ItemList01.
  *
  */
 public class ItemAdder01 extends ItemAdder_Basic {
-
 
     /**
      * An Item Map for managing basic items
@@ -39,6 +38,7 @@ public class ItemAdder01 extends ItemAdder_Basic {
      */
     public static final CreativeTabs tabMetaItem01 = new CreativeTabs(
         texter("GTCM Meta Items 1", "itemGroup.GTCM Meta Items 1")) {
+
         @Override
         @SideOnly(Side.CLIENT)
         public Item getTabIconItem() {
@@ -49,7 +49,8 @@ public class ItemAdder01 extends ItemAdder_Basic {
     /**
      * Create the basic item MetaItem01.
      */
-    public static final Item MetaItem01 = new ItemAdder01("MetaItem01Base", "MetaItem01", tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItem01/0");
+    public static final Item MetaItem01 = new ItemAdder01("MetaItem01Base", "MetaItem01", tabMetaItem01)
+        .setTextureName("gtnhcommunitymod:MetaItem01/0");
 
     public ItemAdder01(String aName, String aMetaName, CreativeTabs aCreativeTabs) {
         super(aName, aMetaName, aCreativeTabs);
@@ -62,7 +63,7 @@ public class ItemAdder01 extends ItemAdder_Basic {
      *
      * @param aName The name of your creating item.
      * @param aMeta The MetaValue of your creating item.
-     * @return      Return the Item with ItemStack form you create.
+     * @return Return the Item with ItemStack form you create.
      */
     public static ItemStack initItem01(String aName, int aMeta) {
         // Handle the MetaValue
@@ -76,7 +77,6 @@ public class ItemAdder01 extends ItemAdder_Basic {
 
         return generatedItemStack;
     }
-
 
     /**
      * Init the basic items at the game pre init.
@@ -93,16 +93,19 @@ public class ItemAdder01 extends ItemAdder_Basic {
     public void registerIcons(IIconRegister iconRegister) {
         super.registerIcons(iconRegister);
         this.itemIcon = iconRegister.registerIcon("gtnhcommunitymod:MetaItem01/0");
-        for (int meta : MetaItem01Map.keySet()){
-            ItemStaticDataClientOnly.iconsMap01.put(meta,iconRegister.registerIcon("gtnhcommunitymod:MetaItem01texture"));
+        for (int meta : MetaItem01Map.keySet()) {
+            ItemStaticDataClientOnly.iconsMap01
+                .put(meta, iconRegister.registerIcon("gtnhcommunitymod:MetaItem01texture"));
         }
     }
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIconFromDamage(int aMetaData) {
-        return aMetaData < ItemStaticDataClientOnly.iconsMap01.size() ? ItemStaticDataClientOnly.iconsMap01.get(aMetaData) : ItemStaticDataClientOnly.iconsMap01.get(0);
+        return aMetaData < ItemStaticDataClientOnly.iconsMap01.size()
+            ? ItemStaticDataClientOnly.iconsMap01.get(aMetaData)
+            : ItemStaticDataClientOnly.iconsMap01.get(0);
     }
-
 
     /**
      * Override this method to show all ItemStack of MetaItem01.

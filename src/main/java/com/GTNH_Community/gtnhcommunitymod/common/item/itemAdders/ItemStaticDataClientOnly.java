@@ -1,11 +1,12 @@
 package com.GTNH_Community.gtnhcommunitymod.common.item.itemAdders;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.util.IIcon;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import net.minecraft.util.IIcon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ItemStaticDataClientOnly {
@@ -15,10 +16,10 @@ public class ItemStaticDataClientOnly {
 
     /**
      * @param aMetaName The Name of the Icon.
-     * @return          Return the Path of the Icon.
+     * @return Return the Path of the Icon.
      */
     @SideOnly(Side.CLIENT)
-    public static String getIconPath01(String aMetaName){
+    public static String getIconPath01(String aMetaName) {
         return "gtnhcommunitymod:MetaItem01/" + aMetaName;
     }
 

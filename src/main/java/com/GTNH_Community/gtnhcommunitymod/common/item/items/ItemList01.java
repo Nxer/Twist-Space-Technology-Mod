@@ -1,9 +1,10 @@
 package com.GTNH_Community.gtnhcommunitymod.common.item.items;
 
-import com.GTNH_Community.gtnhcommunitymod.common.item.itemAdders.ItemAdder01;
+import static com.GTNH_Community.gtnhcommunitymod.common.item.itemAdders.ItemAdder01.initItem01;
+
 import net.minecraft.item.ItemStack;
 
-import static com.GTNH_Community.gtnhcommunitymod.common.item.itemAdders.ItemAdder01.initItem01;
+import com.GTNH_Community.gtnhcommunitymod.common.item.itemAdders.ItemAdder01;
 
 public class ItemList01 implements Runnable {
 
