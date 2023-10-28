@@ -1,8 +1,10 @@
 package com.GTNH_Community.gtnhcommunitymod.common.item.itemAdders;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -13,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemAdder_Basic extends Item {
 
-    protected String iconPath;
+    private List<String> tooltips = new ArrayList<>();
 
     private String unlocalizedName;
 
@@ -79,6 +81,15 @@ public class ItemAdder_Basic extends Item {
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item aItem, CreativeTabs aCreativeTabs, List aList) {
         aList.add(new ItemStack(aItem, 1, 0));
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings({ "unchecked" })
+    public void addInformation(ItemStack aItemStack, EntityPlayer aEntityPlayer, List aTooltipsList,
+        boolean p_77624_4_) {
+        if (tooltips.size() > 0) {
+            aTooltipsList.addAll(tooltips);
+        }
     }
 
 }

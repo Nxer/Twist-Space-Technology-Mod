@@ -39,7 +39,7 @@ public class MaterialPool implements Runnable {
             .setDurOverride(19198100) // Durability
             .setQualityOverride((byte) 114), // Mining Level
         Werkstoff.Types.ELEMENT, // Choose Type of generation , there 'ELEMENT' means a new matter
-        // What Pattern want to auto generate , onluDust means has Dust pattern
+        // What Pattern want to auto generate , onlyDust means has Dust pattern not 'only'
         new Werkstoff.GenerationFeatures().onlyDust()
             .addMolten() // has Molten
             .addMetalItems()

@@ -3,10 +3,35 @@
  */
 package com.GTNH_Community.gtnhcommunitymod.common.machine;
 
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.*;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static gregtech.api.enums.GT_HatchElement.*;
-import static gregtech.api.enums.Textures.BlockIcons.*;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.BLUE_PRINT_INFO;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.ModName;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.StructureTooComplex;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_00;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_01;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_02;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_03;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_04;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_05;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_06;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_07;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textAnyCasing;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textCasing;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textFrontCenter;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.InputHatch;
+import static gregtech.api.enums.GT_HatchElement.Maintenance;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +55,8 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -52,9 +79,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     public GT_TileEntity_IntensifyChemicalDistorter(String aName) {
         super(aName);
     }
-
-    // Structure def
-    private static IStructureDefinition<GT_TileEntity_IntensifyChemicalDistorter> Structure;
 
     /**
      * Due to limitation of Java type system, you might need to do an unchecked cast. HOWEVER, the returned
@@ -123,7 +147,13 @@ public class GT_TileEntity_IntensifyChemicalDistorter
      */
     @Override
     public IStructureDefinition<GT_TileEntity_IntensifyChemicalDistorter> getStructureDefinition() {
-        Structure = StructureDefinition.<GT_TileEntity_IntensifyChemicalDistorter>builder()
+        /* index of stainless steal casing */
+        /* preview channel of blueprint */
+        /* index of chem inert casing */
+        /* preview channel of blueprint */
+        // Structure def
+        IStructureDefinition<GT_TileEntity_IntensifyChemicalDistorter> structure = StructureDefinition
+            .<GT_TileEntity_IntensifyChemicalDistorter>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
             .addElement('s', ofBlock(GregTech_API.sBlockCasings4, 1))
             .addElement('v', ofBlock(GregTech_API.sBlockCasings8, 0))
@@ -160,7 +190,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                     .dot(3)
                     .buildAndChain(GregTech_API.sBlockCasings1, 11))
             .build();
-        return Structure;
+        return structure;
     }
 
     @Override
@@ -201,9 +231,16 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     //
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic().enablePerfectOverclock()
-            .setMaxParallel(/* this.mode == 0 ? 16 : */ 1024)
-            .setSpeedBonus(/* this.mode == 0 ? 1 : */ 0.1F);
+        return new ProcessingLogic() {
+
+            @Override
+            protected CheckRecipeResult validateRecipe(GT_Recipe recipe) {
+                return recipe.mSpecialValue <= coilLevel.getHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
+                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+            }
+        }.enablePerfectOverclock()
+            .setMaxParallel(this.mode == 0 ? 16 : 1024)
+            .setSpeedBonus(this.mode == 0 ? 1 : 0.1F);
 
     }
 

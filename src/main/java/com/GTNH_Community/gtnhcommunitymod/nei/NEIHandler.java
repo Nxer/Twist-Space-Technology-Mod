@@ -16,6 +16,7 @@ public class NEIHandler {
 
         sendCatalyst("gtcm.recipe.IntensifyChemicalDistorterRecipes", "gregtech:gt.blockmachines:19001");
         sendCatalyst("gt.recipe.largechemicalreactor", "gregtech:gt.blockmachines:19001", -20);
+        sendCatalyst("gt.recipe.laserengraver", "gregtech:gt.blockmachines:19002", -10);
 
     }
 

@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.loader;
 
+import com.GTNH_Community.gtnhcommunitymod.common.block.blockList01;
 import com.GTNH_Community.gtnhcommunitymod.common.item.items.ItemList01;
 import com.GTNH_Community.gtnhcommunitymod.common.material.MaterialPool;
 import com.GTNH_Community.gtnhcommunitymod.loader.loadingUtils.AdderRegistry;
@@ -16,6 +17,7 @@ public class MaterialLoader {
 
         WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialPool());
         AdderRegistry.addAdder(new ItemList01());
+        AdderRegistry.addAdder(new blockList01());
 
         AdderRegistry.run();
     }

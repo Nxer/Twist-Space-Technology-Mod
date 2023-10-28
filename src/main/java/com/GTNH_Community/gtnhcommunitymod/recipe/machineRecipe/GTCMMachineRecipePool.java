@@ -33,7 +33,8 @@ public class GTCMMachineRecipePool {
              * noItemInputs(); noItemOutputs(); noFluidInputs(); noFluidOutputs();
              * So had better call.
              */
-            .noOptimize()
+            .specialValue(11451) // set special value, like HeatCapacity is the special value of EBF recipes
+            .noOptimize() // disable the auto optimize of GT Machine recipes
             .eut(1919810)
             .duration(114514 * 20)
             .addTo(GTCMRecipe.instance.IntensifyChemicalDistorterRecipes);
@@ -41,7 +42,8 @@ public class GTCMMachineRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 ItemList.Machine_Multi_LargeChemicalReactor.get(16),
-                ItemList.Emitter_UHV.get(16),
+                ItemList.Emitter_UV.get(16),
+                Materials.Carbon.getNanite(1),
                 GT_Utility.getIntegratedCircuit(1))
             .fluidInputs(Materials.SolderingAlloy.getSolid(144 * 16))
             .itemOutputs(GT_Utility.copyAmount(1, MachineLoader.IntensifyChemicalDistorter))

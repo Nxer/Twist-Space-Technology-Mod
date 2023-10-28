@@ -28,11 +28,7 @@ public class TextLocalization {
     public static final String textFrontBottom = texter("Front bottom", "textFrontBottom");
     public static final String StructureTooComplex = texter("The structure is too complex!", "StructureTooComplex");
 
-    /**
-     * Intensify Chemical Distorter text localization
-     */
-
-    // --
+    // region Intensify Chemical Distorter text localization
     public static final String NameIntensifyChemicalDistorter = texter(
         "Intensify Chemical Distorter",
         "NameIntensifyChemicalDistorter");
@@ -72,6 +68,15 @@ public class TextLocalization {
     public static final String Tooltip_ICD_07 = texter(
         "1024 Parallel and 900% faster than using LCR of the same voltage.",
         "Tooltip_ICD_07");
+
+    // endregion
+
+    // region Precise High-Energy Photonic Quantum Master text localization
+
+    public static final String NamePreciseHighEnergyPhotonicQuantumMaster = texter(
+        "Precise High-Energy Photonic Quantum Master",
+        "NamePreciseHighEnergyPhotonicQuantumMaster");
+
     // public static final String Tooltip_ICD_08 = texter(,"Tooltip_ICD_08");
     // public static final String Tooltip_ICD_09 = texter();
     // public static final String Tooltip_ICD_10 = texter();
