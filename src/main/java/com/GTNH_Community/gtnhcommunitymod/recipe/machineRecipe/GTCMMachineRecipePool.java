@@ -75,7 +75,7 @@ public class GTCMMachineRecipePool {
                 WerkstoffLoader.Xenon.getFluidOrGas(1000),
                 Materials.Radon.getGas(1000))
             .fluidOutputs(MaterialPool.TestingMaterial.getMolten(144))
-            .noItemInputs()// GTNH Version 2.4.1+ don't need call this method , BUT!
+            .noItemOutputs()// GTNH Version 2.4.1+ don't need call this method , BUT!
             /*
              * 2.4.0 and earlier need call these methods:
              * noItemInputs(); noItemOutputs(); noFluidInputs(); noFluidOutputs();
