@@ -326,7 +326,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
 
     @Override
     public boolean supportsSingleRecipeLocking() {
-        return true;
+        return false;
     }
 
     // tooltips

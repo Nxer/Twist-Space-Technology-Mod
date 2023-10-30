@@ -363,7 +363,7 @@ public class GTCMMachineRecipePool {
                 Materials.SuperconductorUMVBase.getMolten(64 * 144), MaterialsUEVplus.Space.getFluid(144 * 64 * 8),
                 MaterialsUEVplus.Time.getFluid(144 * 64 * 8) },
             BlockEnum.PhotonControllerUpgradeUMV.get(1),
-            20 * 640,
+            20 * 1280,
             (int) RECIPE_UMV);
         // Upgrade UXV
         GT_Values.RA.stdBuilder()
@@ -485,7 +485,7 @@ public class GTCMMachineRecipePool {
                 GT_Utility.getIntegratedCircuit(13))
             .fluidInputs(
                 MaterialsUEVplus.PrimordialMatter.getFluid(144 * 16),
-                MaterialsUEVplus.RawStarMatter.getFluid(144 * 64),
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getFluid(144 * 64),
                 MaterialsUEVplus.Time.getFluid(144 * 32),
                 MaterialsUEVplus.Space.getFluid(144 * 32))
             .itemOutputs(GT_Utility.copyAmount(8, SpaceWarper))

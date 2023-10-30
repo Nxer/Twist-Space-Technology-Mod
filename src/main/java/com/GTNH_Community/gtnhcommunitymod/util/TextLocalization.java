@@ -60,7 +60,7 @@ public class TextLocalization {
             + EnumChatFormatting.BLUE
             + "IS! "
             + EnumChatFormatting.AQUA
-            + "APROOOOOACHING !!",
+            + "APPROOOOOACHING !!",
         "Tooltip_ICD_01");
     public static final String Tooltip_ICD_02 = texter("The most advanced base chemical reactor.", "Tooltip_ICD_02");
     public static final String Tooltip_ICD_03 = textScrewdriverChangeMode;

@@ -256,10 +256,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     }
 
     //
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return true;
-    }
+    
 
     /**
      * Checks if this is a Correct Machine Part for this kind of Machine (Turbine Rotor for example)
@@ -324,6 +321,11 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     @Override
     public boolean supportsBatchMode() {
+        return true;
+    }
+    
+    @Override
+    public boolean supportsSingleRecipeLocking() {
         return true;
     }
 
