@@ -39,6 +39,7 @@ import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.technus.tectech.recipe.TT_recipeAdder;
 
+import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -349,15 +350,18 @@ public class GTCMMachineRecipePool {
             32000,
             128000000,
             2,
-            new Object[] { ItemList.Casing_Advanced_Iridium.get(1), GT_Utility.copyAmount(1, SpaceWarper),
-                Transformer_UXV_UMV.get(1), ItemList.Casing_Dim_Injector.get(1), ItemList.Emitter_UMV.get(4),
+            new Object[] { ItemList.Casing_Advanced_Iridium.get(1), GT_Utility.copyAmount(4, SpaceWarper),
+                Transformer_UXV_UMV.get(1), ItemList.Casing_Dim_Injector.get(4), ItemList.Emitter_UMV.get(8),
                 GT_ModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16L, 32105),
                 WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 64),
-                ItemList.Field_Generator_UMV.get(2), new Object[] { OrePrefixes.circuit.get(Materials.Exotic), 4 },
-                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 8 },
-                GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUMV, 16) },
+                ItemList.Field_Generator_UMV.get(4), GT_ModHandler.getModItem("dreamcraft", "item.PikoCircuit", 8),
+                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 32 },
+                GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUMV, 16),
+                MaterialsUEVplus.TranscendentMetal.getNanite(16),
+                com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing.get(4) },
             new FluidStack[] { new FluidStack(solderPlasma, 256 * 144),
-                Materials.SuperconductorUMVBase.getMolten(64 * 144) },
+                Materials.SuperconductorUMVBase.getMolten(64 * 144), MaterialsUEVplus.Space.getFluid(144 * 64 * 8),
+                MaterialsUEVplus.Time.getFluid(144 * 64 * 8) },
             BlockEnum.PhotonControllerUpgradeUMV.get(1),
             20 * 640,
             (int) RECIPE_UMV);
@@ -365,18 +369,27 @@ public class GTCMMachineRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 BlockEnum.PhotonControllerUpgradeUMV.get(1),
-                GT_ModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 4),
-                com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing.get(1),
+                GT_ModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 64),
+                com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing.get(16),
                 Transformer_MAX_UXV.get(1),
-                GT_Utility.copyAmount(1, SpaceWarper),
-                ItemList.Tesseract.get(16),
-                ItemList.Emitter_UXV.get(8),
-                ItemList.Field_Generator_UXV.get(8))
+                GT_Utility.copyAmount(16, SpaceWarper),
+                ItemList.Tesseract.get(64),
+                ItemList.Emitter_UXV.get(16),
+                ItemList.Field_Generator_UXV.get(8),
+                com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8.get(1),
+                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(1),
+                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(1),
+                MaterialsUEVplus.Universium.getNanite(16),
+                com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing.get(16))
             .itemOutputs(BlockEnum.PhotonControllerUpgradeUXV.get(1))
             .fluidInputs(
                 MaterialsUEVplus.Time.getMolten(144 * 64),
                 MaterialsUEVplus.Space.getMolten(144 * 64),
-                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64))
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64),
+                Materials.SuperconductorUMVBase.getMolten(128 * 144),
+                Materials.SuperconductorUIVBase.getMolten(256 * 144),
+                Materials.SuperconductorUEVBase.getMolten(512 * 144),
+                MyMaterial.shirabon.getMolten(144 * 144))
             .noFluidOutputs()
             .eut(RECIPE_UXV)
             .duration(810 * 20)
@@ -386,18 +399,26 @@ public class GTCMMachineRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 BlockEnum.PhotonControllerUpgradeUXV.get(1),
-                GT_Utility.copyAmount(16, SpaceWarper),
-                GT_ModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 16),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 16, 15),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 16, 16),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 16, 20),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 16, 21),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 16, 17))
+                GT_Utility.copyAmount(64, SpaceWarper),
+                GT_ModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 64),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 15),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 16),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 20),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 21),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 17),
+                MaterialsUEVplus.Eternity.getNanite(16),
+                MaterialsUEVplus.Universium.getNanite(16),
+                ItemList.Timepiece.get(64),
+                ItemList.EnergisedTesseract.get(64),
+                GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 3, 15))
             .itemOutputs(BlockEnum.PhotonControllerUpgradeMAX.get(1))
             .fluidInputs(
                 MaterialsUEVplus.Universium.getMolten(144 * 64),
                 MaterialsUEVplus.Eternity.getMolten(144 * 64),
-                MaterialsUEVplus.PrimordialMatter.getFluid(144 * 64))
+                MaterialsUEVplus.PrimordialMatter.getFluid(144 * 64),
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64 * 8),
+                MaterialsUEVplus.Time.getFluid(144 * 64 * 8),
+                MaterialsUEVplus.Space.getFluid(144 * 64 * 8))
             .noFluidOutputs()
             .eut(RECIPE_MAX)
             .duration(114514 * 20)
