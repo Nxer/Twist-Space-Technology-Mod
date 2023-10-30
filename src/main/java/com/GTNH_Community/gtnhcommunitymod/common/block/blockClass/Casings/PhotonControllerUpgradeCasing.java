@@ -5,9 +5,9 @@ import static com.GTNH_Community.gtnhcommunitymod.common.block.blockClass.BlockS
 import static com.GTNH_Community.gtnhcommunitymod.common.block.blockList01.PhotonControllerUpgrade;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextHandler.texter;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -32,7 +32,7 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
         this.setResistance(5.0F);
         this.setHarvestLevel("wrench", 1);
         this.setCreativeTab(tabGTCMGeneralTab);
-        PhotonControllerUpgradeCasingMap.put(0, new ItemStack(this, 1, 0));
+        PhotonControllerUpgradeCasingMap.add(0);
         GregTech_API.registerMachineBlock(this, -1);
     }
 
@@ -46,7 +46,7 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
     // -----------------------
     // region Member Variables
 
-    public static Map<Integer, ItemStack> PhotonControllerUpgradeCasingMap = new HashMap<>();
+    public static Set<Integer> PhotonControllerUpgradeCasingMap = new HashSet<>();
 
     /**
      * The Speed Increment of the Upgrade Casing.
@@ -57,6 +57,10 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
         /* LuV */1000, /* ZPM */2000, /* UV */4000, /* UHV */7000, /* UEV */10000, /* UIV */14000, /* UMV */19000,
         /* UXV */25000, /* MAX */32000 };
 
+    /**
+     * Tooltips of these blocks' ItemBlock.
+     */
+    public static String[][] TooltipsArray = new String[14][];
     private IIcon blockIcon;
     private String unlocalizedName;
 
@@ -64,6 +68,15 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
     // -----------------------
     // region Meta Generator
 
+    public static void initPhotonControllerUpgradeCasingMeta(String i18nName, int meta) {
+        // Handle the name
+        texter(i18nName, PhotonControllerUpgrade.getUnlocalizedName() + "." + meta + ".name");
+
+        // Add to Meta Set
+        PhotonControllerUpgradeCasingMap.add(meta);
+    }
+
+    @Deprecated
     public static ItemStack photonControllerUpgradeCasingMeta(String i18nName, int meta) {
         // Handle the name
         texter(i18nName, PhotonControllerUpgrade.getUnlocalizedName() + "." + meta + ".name");
@@ -73,7 +86,21 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
 
         // Create the ItemStack
         ItemStack generatedItemStack = new ItemStack(PhotonControllerUpgrade, 1, meta);
-        PhotonControllerUpgradeCasingMap.put(meta, generatedItemStack);
+        PhotonControllerUpgradeCasingMap.add(meta);
+        return generatedItemStack;
+    }
+
+    @Deprecated
+    public static ItemStack photonControllerUpgradeCasingMeta(String i18nName, int meta, String[] tooltips) {
+        // Handle the name
+        texter(i18nName, PhotonControllerUpgrade.getUnlocalizedName() + "." + meta + ".name");
+
+        // Handle the tooltips
+        TooltipsArray[meta] = tooltips;
+
+        // Create the ItemStack
+        ItemStack generatedItemStack = new ItemStack(PhotonControllerUpgrade, 1, meta);
+        PhotonControllerUpgradeCasingMap.add(meta);
         return generatedItemStack;
     }
 
@@ -112,7 +139,7 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
         this.blockIcon = reg.registerIcon("gtnhcommunitymod:PhotonControllerUpgrades/0");
-        for (int Meta : PhotonControllerUpgradeCasingMap.keySet()) {
+        for (int Meta : PhotonControllerUpgradeCasingMap) {
             iconsBlockPhotonControllerUpgradeMap
                 .put(Meta, reg.registerIcon("gtnhcommunitymod:PhotonControllerUpgrades/" + Meta));
         }
@@ -135,7 +162,7 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item aItem, CreativeTabs aCreativeTabs, List list) {
-        for (int Meta : PhotonControllerUpgradeCasingMap.keySet()) {
+        for (int Meta : PhotonControllerUpgradeCasingMap) {
             list.add(new ItemStack(aItem, 1, Meta));
         }
     }

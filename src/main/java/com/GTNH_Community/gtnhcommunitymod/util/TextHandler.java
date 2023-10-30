@@ -47,6 +47,17 @@ public class TextHandler {
         return "texterError: " + aTextLine;
     }
 
+    public static String texterButKey(String aTextLine, String aKey) {
+
+        if (GTNHCommunityMod.isInDevMode) {
+            if (LangMap.get(aKey) == null) {
+                GTNHCommunityMod.LOG.info("Texter get a new key - TextLine: " + aKey + " - " + aTextLine);
+                LangMapNeedToWrite.put(aKey, aTextLine);
+            }
+        }
+        return aKey;
+    }
+
     /**
      * Auto generate the Key of textLine
      * {@link TextHandler#texter(String aTextLine, String aKey)}

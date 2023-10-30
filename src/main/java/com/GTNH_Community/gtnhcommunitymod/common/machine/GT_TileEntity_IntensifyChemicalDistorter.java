@@ -16,7 +16,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_07;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textAnyCasing;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textCasing;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textFrontCenter;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textFrontBottom;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -249,7 +249,9 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (this.mode + 1) % 2;
-            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("preciseassembler.chat." + this.mode));
+            GT_Utility.sendChatToPlayer(
+                aPlayer,
+                StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
         }
     }
 
@@ -308,6 +310,21 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return true;
     }
 
     /**
@@ -376,7 +393,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             .addInfo(BLUE_PRINT_INFO)
             .addSeparator()
             .beginStructureBlock(11, 13, 11, false)
-            .addController(textFrontCenter)
+            .addController(textFrontBottom)
             .addCasingInfoRange(textCasing, 8, 26, false)
             .addInputHatch(textAnyCasing, 1)
             .addOutputHatch(textAnyCasing, 1)

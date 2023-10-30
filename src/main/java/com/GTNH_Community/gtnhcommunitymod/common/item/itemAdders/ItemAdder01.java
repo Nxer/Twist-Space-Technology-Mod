@@ -118,7 +118,7 @@ public class ItemAdder01 extends ItemAdder_Basic {
         this.itemIcon = iconRegister.registerIcon("gtnhcommunitymod:MetaItem01/0");
         for (int meta : MetaItem01Map.keySet()) {
             ItemStaticDataClientOnly.iconsMap01
-                .put(meta, iconRegister.registerIcon("gtnhcommunitymod:MetaItem01texture"));
+                .put(meta, iconRegister.registerIcon("gtnhcommunitymod:MetaItem01/" + meta));
         }
     }
 

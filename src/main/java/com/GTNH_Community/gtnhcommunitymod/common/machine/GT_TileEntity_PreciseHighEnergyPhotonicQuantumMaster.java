@@ -5,17 +5,23 @@ import static com.GTNH_Community.gtnhcommunitymod.common.block.blockList01.Photo
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.ModName;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.StructureTooComplex;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_00;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_01;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_02;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_03;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_04;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_05;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_06;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_ICD_07;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textAnyCasing;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textCasing;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_00;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_01;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_02;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_03;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_04;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_05;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_06;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_07;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_08;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_PhC_09;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textAroundController;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textCasingAdvIrPlated;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textCasingTT_0;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textCenterOfLRSides;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textFrontCenter;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textHighPowerCasingUDSides;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textUpgradeCasingAndLocation;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -33,12 +39,15 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -58,6 +67,7 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
+import gregtech.api.util.GT_Utility;
 
 public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster>
@@ -208,9 +218,9 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
 
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        // if (this.mode) {
-        // return GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
-        // }
+        if (this.mode) {
+            return GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes;
+        }
         return GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes;
     }
 
@@ -229,10 +239,11 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
             @NotNull
             @Override
             protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
-                return super.createOverclockCalculator(recipe).setSpeedBoost(10000F / (10000F + totalSpeedIncrement));
+                return super.createOverclockCalculator(recipe)
+                    .setSpeedBoost((mode ? 10000F : 5000F) / (10000F + totalSpeedIncrement));
             }
         }.enablePerfectOverclock()
-            .setMaxParallel(/* this.mode ? 16 : 256 */1);
+            .setMaxParallel(this.mode ? 16 : 256);
     }
 
     /**
@@ -246,6 +257,16 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         this.totalSpeedIncrement = 0;
         this.enablePerfectOverclockSignal = false;
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.mode = !this.mode;
+            GT_Utility.sendChatToPlayer(
+                aPlayer,
+                StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + (this.mode ? 1 : 0)));
+        }
     }
 
     // endregion
@@ -288,31 +309,55 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         return false;
     }
 
+    @Override
+    public boolean supportsVoidProtection() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return true;
+    }
+
     // tooltips
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
-            .addInfo(Tooltip_ICD_00)
-            .addInfo(Tooltip_ICD_01)
-            .addInfo(Tooltip_ICD_02)
-            .addInfo(Tooltip_ICD_03)
-            .addInfo(Tooltip_ICD_04)
-            .addInfo(Tooltip_ICD_05)
-            .addInfo(Tooltip_ICD_06)
-            .addInfo(Tooltip_ICD_07)
+        tt.addMachineType(TextLocalization.Tooltip_PhC_MachineType)
+            .addInfo(Tooltip_PhC_00)
+            .addInfo(Tooltip_PhC_01)
+            .addInfo(Tooltip_PhC_02)
+            .addInfo(Tooltip_PhC_03)
+            .addInfo(Tooltip_PhC_04)
+            .addInfo(Tooltip_PhC_05)
+            .addInfo(Tooltip_PhC_06)
+            .addInfo(Tooltip_PhC_07)
+            .addInfo(Tooltip_PhC_08)
+            .addInfo(Tooltip_PhC_09)
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
             .addSeparator()
-            .beginStructureBlock(11, 13, 11, false)
+            .beginStructureBlock(15, 7, 9, false)
             .addController(textFrontCenter)
-            .addCasingInfoRange(textCasing, 8, 26, false)
-            .addInputHatch(textAnyCasing, 1)
-            .addOutputHatch(textAnyCasing, 1)
-            .addInputBus(textAnyCasing, 2)
-            .addOutputBus(textAnyCasing, 2)
-            .addMaintenanceHatch(textAnyCasing, 2)
-            .addEnergyHatch(textAnyCasing, 3)
+            .addCasingInfoRange(textCasingAdvIrPlated, 296, 347, false)
+            .addCasingInfoRange(textCasingTT_0, 0, 78, false)
+            .addCasingInfoRange(textUpgradeCasingAndLocation, 0, 25, false)
+            .addInputHatch(textCenterOfLRSides, 2)
+            .addOutputHatch(textCenterOfLRSides, 2)
+            .addInputBus(textCenterOfLRSides, 2)
+            .addOutputBus(textCenterOfLRSides, 2)
+            .addMaintenanceHatch(textAroundController, 1)
+            .addEnergyHatch(textHighPowerCasingUDSides, 3)
             .toolTipFinisher(ModName);
         return tt;
     }

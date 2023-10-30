@@ -24,7 +24,9 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     name = Tags.MODNAME,
     dependencies = "required-after:IC2; " + "required-after:gregtech; "
         + "required-after:bartworks; "
-        + "before:miscutils; ",
+        + "required-after:TecTech; "
+        + "before:miscutils; "
+        + "after:dreamcraft;",
     acceptedMinecraftVersions = "[1.7.10]")
 public class GTNHCommunityMod {
 
@@ -86,8 +88,6 @@ public class GTNHCommunityMod {
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
 
-        RecipeLoader.loadRecipes();// Load Recipes
-
         TextHandler.serializeLangMap(isInDevMode);
 
         // GTNHCommunityMod.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
@@ -95,6 +95,9 @@ public class GTNHCommunityMod {
 
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
+        GTNHCommunityMod.LOG.info("Start Complete Init.");
+        RecipeLoader.loadRecipes();// Load Recipes
+
         // reflect
 
         //

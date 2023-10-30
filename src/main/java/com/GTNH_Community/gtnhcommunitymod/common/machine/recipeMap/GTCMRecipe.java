@@ -147,4 +147,24 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap PreciseHighEnergyPhotonicQuantumMasterRecipes = new GTCMRecipeMap(
+        new HashSet<>(),
+        "gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes",
+        NamePreciseHighEnergyPhotonicQuantumMaster,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        16,
+        16,
+        16,
+        16,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
 }
