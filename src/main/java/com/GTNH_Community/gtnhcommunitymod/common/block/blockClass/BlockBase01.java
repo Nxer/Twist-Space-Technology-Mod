@@ -1,8 +1,8 @@
 package com.GTNH_Community.gtnhcommunitymod.common.block.blockClass;
 
-import static com.GTNH_Community.gtnhcommunitymod.common.GTCMCreativeTabs.tabMetaBlock01;
+import static com.GTNH_Community.gtnhcommunitymod.client.GTCMCreativeTabs.tabMetaBlock01;
 import static com.GTNH_Community.gtnhcommunitymod.common.block.blockClass.BlockStaticDataClientOnly.iconsBlockMap01;
-import static com.GTNH_Community.gtnhcommunitymod.common.block.blockClass.ItemBlockBase01.MetaBlockMap01;
+import static com.GTNH_Community.gtnhcommunitymod.common.block.blockClass.ItemBlockBase01.MetaBlockSet01;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextHandler.texter;
 
 import java.util.List;
@@ -45,8 +45,6 @@ public class BlockBase01 extends Block {
 
     private String unlocalizedName;
 
-    private IIcon blockIcon;
-
     // endregion
     // -----------------------
     // region getters
@@ -77,7 +75,7 @@ public class BlockBase01 extends Block {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
         this.blockIcon = reg.registerIcon("gtnhcommunitymod:MetaBlocks/0");
-        for (int Meta : MetaBlockMap01.keySet()) {
+        for (int Meta : MetaBlockSet01) {
             iconsBlockMap01.put(Meta, reg.registerIcon("gtnhcommunitymod:MetaBlocks/" + Meta));
         }
     }
@@ -85,7 +83,7 @@ public class BlockBase01 extends Block {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item aItem, CreativeTabs aCreativeTabs, List list) {
-        for (int Meta : MetaBlockMap01.keySet()) {
+        for (int Meta : MetaBlockSet01) {
             list.add(new ItemStack(aItem, 1, Meta));
         }
     }

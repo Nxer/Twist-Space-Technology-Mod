@@ -60,6 +60,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
@@ -238,9 +239,14 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                 return recipe.mSpecialValue <= coilLevel.getHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
                     : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
             }
+
+            @Override
+            protected GT_OverclockCalculator createOverclockCalculator(GT_Recipe recipe) {
+                return super.createOverclockCalculator(recipe).setSpeedBoost(mode == 0 ? 1 : 0.1F);
+            }
+
         }.enablePerfectOverclock()
-            .setMaxParallel(this.mode == 0 ? 16 : 1024)
-            .setSpeedBonus(this.mode == 0 ? 1 : 0.1F);
+            .setMaxParallel(this.mode == 0 ? 16 : 1024);
 
     }
 

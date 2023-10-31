@@ -1,7 +1,7 @@
 package com.GTNH_Community.gtnhcommunitymod.common.machine;
 
+import static com.GTNH_Community.gtnhcommunitymod.common.block.BasicBlocks.PhotonControllerUpgrade;
 import static com.GTNH_Community.gtnhcommunitymod.common.block.blockClass.Casings.PhotonControllerUpgradeCasing.speedIncrement;
-import static com.GTNH_Community.gtnhcommunitymod.common.block.blockList01.PhotonControllerUpgrade;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.ModName;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.StructureTooComplex;

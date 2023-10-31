@@ -1,9 +1,8 @@
 package com.GTNH_Community.gtnhcommunitymod.loader;
 
-import com.GTNH_Community.gtnhcommunitymod.common.block.blockList01;
-import com.GTNH_Community.gtnhcommunitymod.common.item.items.ItemList01;
+import com.GTNH_Community.gtnhcommunitymod.common.block.BlockRegister;
+import com.GTNH_Community.gtnhcommunitymod.common.item.items.ItemRegister;
 import com.GTNH_Community.gtnhcommunitymod.common.material.MaterialPool;
-import com.GTNH_Community.gtnhcommunitymod.loader.loadingUtils.AdderRegistry;
 import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
 
 /**
@@ -13,13 +12,13 @@ import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
  */
 public class MaterialLoader {
 
-    public static void loadMaterial() {
+    public static void load() {
+
+        ItemRegister.registry();
+        BlockRegister.registry();
 
         WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialPool());
-        AdderRegistry.addAdder(new ItemList01());
-        AdderRegistry.addAdder(new blockList01());
 
-        AdderRegistry.run();
     }
 
 }

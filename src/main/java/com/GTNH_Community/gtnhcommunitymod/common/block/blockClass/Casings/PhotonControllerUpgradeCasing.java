@@ -1,8 +1,9 @@
 package com.GTNH_Community.gtnhcommunitymod.common.block.blockClass.Casings;
 
-import static com.GTNH_Community.gtnhcommunitymod.common.GTCMCreativeTabs.tabGTCMGeneralTab;
+import static com.GTNH_Community.gtnhcommunitymod.client.GTCMCreativeTabs.tabGTCMGeneralTab;
+import static com.GTNH_Community.gtnhcommunitymod.common.block.BasicBlocks.PhotonControllerUpgrade;
 import static com.GTNH_Community.gtnhcommunitymod.common.block.blockClass.BlockStaticDataClientOnly.iconsBlockPhotonControllerUpgradeMap;
-import static com.GTNH_Community.gtnhcommunitymod.common.block.blockList01.PhotonControllerUpgrade;
+import static com.GTNH_Community.gtnhcommunitymod.util.MetaItemStackUtils.initMetaItemStack;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextHandler.texter;
 
 import java.util.HashSet;
@@ -32,7 +33,7 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
         this.setResistance(5.0F);
         this.setHarvestLevel("wrench", 1);
         this.setCreativeTab(tabGTCMGeneralTab);
-        PhotonControllerUpgradeCasingMap.add(0);
+        PhotonControllerUpgradeCasingSet.add(0);
         GregTech_API.registerMachineBlock(this, -1);
     }
 
@@ -46,7 +47,7 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
     // -----------------------
     // region Member Variables
 
-    public static Set<Integer> PhotonControllerUpgradeCasingMap = new HashSet<>();
+    public static Set<Integer> PhotonControllerUpgradeCasingSet = new HashSet<>();
 
     /**
      * The Speed Increment of the Upgrade Casing.
@@ -60,7 +61,7 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
     /**
      * Tooltips of these blocks' ItemBlock.
      */
-    public static String[][] TooltipsArray = new String[14][];
+    public static String[][] PhCUpgradeCasingTooltipsArray = new String[14][];
     private IIcon blockIcon;
     private String unlocalizedName;
 
@@ -68,40 +69,15 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
     // -----------------------
     // region Meta Generator
 
-    public static void initPhotonControllerUpgradeCasingMeta(String i18nName, int meta) {
-        // Handle the name
-        texter(i18nName, PhotonControllerUpgrade.getUnlocalizedName() + "." + meta + ".name");
-
-        // Add to Meta Set
-        PhotonControllerUpgradeCasingMap.add(meta);
-    }
-
-    @Deprecated
     public static ItemStack photonControllerUpgradeCasingMeta(String i18nName, int meta) {
-        // Handle the name
-        texter(i18nName, PhotonControllerUpgrade.getUnlocalizedName() + "." + meta + ".name");
 
-        // Set the speedIncrement value
-        // PhotonControllerUpgradeCasing.speedIncrement[meta] = speedIncrement;
-
-        // Create the ItemStack
-        ItemStack generatedItemStack = new ItemStack(PhotonControllerUpgrade, 1, meta);
-        PhotonControllerUpgradeCasingMap.add(meta);
-        return generatedItemStack;
+        return initMetaItemStack(i18nName, meta, PhotonControllerUpgrade, PhotonControllerUpgradeCasingSet);
     }
 
-    @Deprecated
     public static ItemStack photonControllerUpgradeCasingMeta(String i18nName, int meta, String[] tooltips) {
-        // Handle the name
-        texter(i18nName, PhotonControllerUpgrade.getUnlocalizedName() + "." + meta + ".name");
-
         // Handle the tooltips
-        TooltipsArray[meta] = tooltips;
-
-        // Create the ItemStack
-        ItemStack generatedItemStack = new ItemStack(PhotonControllerUpgrade, 1, meta);
-        PhotonControllerUpgradeCasingMap.add(meta);
-        return generatedItemStack;
+        PhCUpgradeCasingTooltipsArray[meta] = tooltips;
+        return photonControllerUpgradeCasingMeta(i18nName, meta);
     }
 
     // endregion
@@ -139,7 +115,7 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
         this.blockIcon = reg.registerIcon("gtnhcommunitymod:PhotonControllerUpgrades/0");
-        for (int Meta : PhotonControllerUpgradeCasingMap) {
+        for (int Meta : PhotonControllerUpgradeCasingSet) {
             iconsBlockPhotonControllerUpgradeMap
                 .put(Meta, reg.registerIcon("gtnhcommunitymod:PhotonControllerUpgrades/" + Meta));
         }
@@ -162,7 +138,7 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item aItem, CreativeTabs aCreativeTabs, List list) {
-        for (int Meta : PhotonControllerUpgradeCasingMap) {
+        for (int Meta : PhotonControllerUpgradeCasingSet) {
             list.add(new ItemStack(aItem, 1, Meta));
         }
     }

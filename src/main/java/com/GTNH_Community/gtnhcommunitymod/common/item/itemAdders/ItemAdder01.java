@@ -1,12 +1,14 @@
 package com.GTNH_Community.gtnhcommunitymod.common.item.itemAdders;
 
-import static com.GTNH_Community.gtnhcommunitymod.common.GTCMCreativeTabs.tabMetaItem01;
-import static com.GTNH_Community.gtnhcommunitymod.util.TextHandler.texter;
+import static com.GTNH_Community.gtnhcommunitymod.util.MetaItemStackUtils.initMetaItemStack;
+import static com.GTNH_Community.gtnhcommunitymod.util.MetaItemStackUtils.metaItemStackTooltipsAdd;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,7 +17,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import com.GTNH_Community.gtnhcommunitymod.common.item.items.BasicItems;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -29,27 +32,22 @@ public class ItemAdder01 extends ItemAdder_Basic {
     /**
      * An Item Map for managing basic items
      */
-    public static Map<String, ItemAdder01> Item01Map = new HashMap<>();
+    // public static Map<String, ItemAdder01> Item01Map = new HashMap<>();
 
     /**
-     * An ItemStack Map for managing MetaItem01
+     * A Set contains the meta value that has been used.
      */
-    public static final Map<Integer, ItemStack> MetaItem01Map = new HashMap<>();
-
-    /**
-     *
-     */
+    public static final Set<Integer> Meta01Set = new HashSet<>();
     public static final Map<Integer, String[]> MetaItemTooltipsMap01 = new HashMap<>();
+
+    private final String unlocalizedName;
 
     /**
      * Create the basic item MetaItem01.
      */
-    public static final Item MetaItem01 = new ItemAdder01("MetaItem01Base", "MetaItem01", tabMetaItem01)
-        .setTextureName("gtnhcommunitymod:MetaItem01/0");
-
     public ItemAdder01(String aName, String aMetaName, CreativeTabs aCreativeTabs) {
         super(aName, aMetaName, aCreativeTabs);
-        Item01Map.put(aMetaName, this);
+        this.unlocalizedName = aMetaName;
     }
 
     /**
@@ -61,62 +59,48 @@ public class ItemAdder01 extends ItemAdder_Basic {
      * @return Return the Item with ItemStack form you create.
      */
     public static ItemStack initItem01(String aName, int aMeta) {
-        // Handle the MetaValue
-        // Handle the Name
-        String aUnlocalizedName = MetaItem01.getUnlocalizedName() + "." + aMeta;
-        texter(aName, aUnlocalizedName + ".name");
-        // Generate the new ItemStack
-        ItemStack generatedItemStack = new ItemStack(MetaItem01, 1, aMeta);
-        // Hold the list of Meta-generated Items
-        MetaItem01Map.put(aMeta, generatedItemStack);
 
-        return generatedItemStack;
+        return initMetaItemStack(aName, aMeta, BasicItems.MetaItem01, Meta01Set);
+
     }
 
     public static ItemStack initItem01(String aName, int aMeta, String[] tooltips) {
-        // Handle the MetaValue
-        // Handle the Name
-        String aUnlocalizedName = MetaItem01.getUnlocalizedName() + "." + aMeta;
-        texter(aName, aUnlocalizedName + ".name");
-        // Generate the new ItemStack
-        ItemStack generatedItemStack = new ItemStack(MetaItem01, 1, aMeta);
-        // Hold the list of Meta-generated Items
-        MetaItem01Map.put(aMeta, generatedItemStack);
 
-        if (null != tooltips) {
-            addTooltips(aMeta, tooltips);
+        if (tooltips != null) {
+            metaItemStackTooltipsAdd(MetaItemTooltipsMap01, aMeta, tooltips);
         }
 
-        return generatedItemStack;
-    }
+        return initItem01(aName, aMeta);
 
-    /**
-     * Add tooltips with the MetaValue of ItemStack.
-     * <li>Mind to call texter() if using this to handle tooltips.
-     *
-     * @param aMeta    The MetaValue of ItemStack.
-     * @param tooltips Tooltips in String[].
-     */
-    public static void addTooltips(int aMeta, String[] tooltips) {
-        MetaItemTooltipsMap01.put(aMeta, tooltips);
     }
 
     /**
      * Init the basic items at the game pre init.
      */
-    public static void init() {
-        for (String MetaName : Item01Map.keySet()) {
-            GameRegistry.registerItem(Item01Map.get(MetaName), MetaName);
-        }
-    }
+    // public static void init() {
+    // for (String MetaName : Item01Map.keySet()) {
+    // GameRegistry.registerItem(Item01Map.get(MetaName), MetaName);
+    // }
+    // }
 
     // region Overrides
+
+    @Override
+    public String getUnlocalizedName(ItemStack aItemStack) {
+        return this.unlocalizedName + "." + aItemStack.getItemDamage();
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return this.unlocalizedName;
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iconRegister) {
         super.registerIcons(iconRegister);
         this.itemIcon = iconRegister.registerIcon("gtnhcommunitymod:MetaItem01/0");
-        for (int meta : MetaItem01Map.keySet()) {
+        for (int meta : Meta01Set) {
             ItemStaticDataClientOnly.iconsMap01
                 .put(meta, iconRegister.registerIcon("gtnhcommunitymod:MetaItem01/" + meta));
         }
@@ -158,8 +142,8 @@ public class ItemAdder01 extends ItemAdder_Basic {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item aItem, CreativeTabs aCreativeTabs, List aList) {
-        for (int Meta : MetaItem01Map.keySet()) {
-            aList.add(MetaItem01Map.get(Meta));
+        for (int Meta : Meta01Set) {
+            aList.add(new ItemStack(BasicItems.MetaItem01, 1, Meta));
         }
     }
     // endregion

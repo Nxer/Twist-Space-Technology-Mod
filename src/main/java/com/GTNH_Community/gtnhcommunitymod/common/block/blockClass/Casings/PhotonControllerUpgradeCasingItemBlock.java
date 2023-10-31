@@ -1,6 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.common.block.blockClass.Casings;
 
-import static com.GTNH_Community.gtnhcommunitymod.common.GTCMCreativeTabs.tabGTCMGeneralTab;
+import static com.GTNH_Community.gtnhcommunitymod.client.GTCMCreativeTabs.tabGTCMGeneralTab;
 
 import java.util.List;
 

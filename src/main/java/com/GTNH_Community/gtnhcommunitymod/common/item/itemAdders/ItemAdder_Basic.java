@@ -23,11 +23,11 @@ public class ItemAdder_Basic extends Item {
         super();
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
-        this.setUnlocalizedName(generateUnlocalizedName(MetaName));
-        TextHandler.texter(Name, this.unlocalizedName + ".name");
         this.setCreativeTab(aCreativeTabs);
-        // this.iconPath = aIconPath;
+        this.unlocalizedName = MetaName;
+        TextHandler.texter(Name, this.unlocalizedName + ".name");
 
+        // this.iconPath = aIconPath;
         // GameRegistry.registerItem(this, MetaName);
     }
     // public ItemAdder_Basic(String Name, String MetaName, int Meta){
@@ -63,6 +63,7 @@ public class ItemAdder_Basic extends Item {
         return this.unlocalizedName + "." + aItemStack.getItemDamage();
     }
 
+    @Override
     public String getUnlocalizedName() {
         return this.unlocalizedName;
     }

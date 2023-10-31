@@ -71,7 +71,7 @@ public class GTNHCommunityMod {
         TextHandler.initLangMap(isInDevMode);
 
         proxy.preInit(event);
-        MaterialLoader.loadMaterial();// Load MaterialPool
+        MaterialLoader.load();// Load MaterialPool
     }
 
     @Mod.EventHandler
