@@ -83,3 +83,5 @@ PreciseHighEnergyPhotonicQuantumMaster.mode.0=Laser Engraver mode
 PreciseHighEnergyPhotonicQuantumMaster.mode.1=Photon Controller mode
 MetaItem01.1.name=Space Warper
 tooltips.SpaceWarper.line1=§1Power of gravitation !
+tooltips.OpticalSOC.line1=These Photons have their own mind.
+MetaItem01.2.name=Optical SoC

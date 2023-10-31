@@ -78,7 +78,7 @@ public class TextHandler {
     public static void initLangMap(Boolean isInDevMode) {
         if (isInDevMode) {
             /* Parse the .lang in LangMap */
-            LangMap = LanguageUtil.parseLangFile("en_US");
+            LangMap = LanguageUtil0.parseLangFile("en_US");
             // LangMapBackUp = new HashMap<String, String>(LangMap);
         }
 

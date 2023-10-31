@@ -1,10 +1,20 @@
 package com.GTNH_Community.gtnhcommunitymod.loader;
 
-import static com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe.GTCMMachineRecipePool.loadGTCMMachineRecipes;
+import com.GTNH_Community.gtnhcommunitymod.recipe.RecipePool;
+import com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe.ChemicalReactorRecipePool;
+import com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe.GTCMMachineRecipePool;
+import com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe.IntensifyChemicalDistorterRecipePool;
+import com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
 
 public class RecipeLoader {
 
     public static void loadRecipes() {
-        loadGTCMMachineRecipes();
+        RecipePool[] recipePools = new RecipePool[] { new GTCMMachineRecipePool(),
+            new IntensifyChemicalDistorterRecipePool(), new ChemicalReactorRecipePool(),
+            new PreciseHighEnergyPhotonicQuantumMasterRecipePool() };
+
+        for (RecipePool recipePool : recipePools) {
+            recipePool.loadRecipes();
+        }
     }
 }

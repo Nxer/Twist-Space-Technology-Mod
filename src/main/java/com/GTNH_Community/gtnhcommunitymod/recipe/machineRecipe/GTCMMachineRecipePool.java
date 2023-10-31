@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.OpticalSOC;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarper;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
@@ -36,6 +37,7 @@ import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.common.material.MaterialPool;
 import com.GTNH_Community.gtnhcommunitymod.loader.MachineLoader;
+import com.GTNH_Community.gtnhcommunitymod.recipe.RecipePool;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
@@ -51,13 +53,17 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IItemContainer;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import ic2.core.Ic2Items;
 
-public class GTCMMachineRecipePool {
+public class GTCMMachineRecipePool implements RecipePool {
 
-    public static void loadGTCMMachineRecipes() {
-        GTNHCommunityMod.LOG.info("loadGTCMMachineRecipes");
+    public GTCMMachineRecipePool() {}
+
+    @Override
+    public void loadRecipes() {
+        GTNHCommunityMod.LOG.info("GTCMMachineRecipePool.loadRecipes");
 
         Fluid solderIndAlloy = FluidRegistry.getFluid("molten.indalloy140");
 
@@ -524,5 +530,20 @@ public class GTCMMachineRecipePool {
             .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
 
         // endregion
+
+        // Optical Soc Circuit Assembly Line
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                ItemList.Circuit_Board_Optical.get(16),
+                OpticalSOC.get(1),
+                com.github.technus.tectech.thing.CustomItemList.DATApipe.get(32),
+                GT_OreDictUnificator.get(OrePrefixes.stick, Materials.EnrichedHolmium, 64))
+            .fluidInputs(new FluidStack(solderPlasma, 144 * 2))
+            .itemOutputs(ItemList.Circuit_OpticalProcessor.get(16))
+            .noFluidOutputs()
+            .eut(9830400)
+            .duration(32 * 20)
+            .addTo(GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes);
+
     }
 }
