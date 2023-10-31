@@ -472,7 +472,7 @@ public class GTCMMachineRecipePool implements RecipePool {
                 GT_Utility.getIntegratedCircuit(10))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 64), Materials.SuperconductorUEVBase.getMolten(16 * 144))
             .itemOutputs(SpaceWarper.get(1))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(72))
+            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
             .eut(RECIPE_UIV)
             .duration(512 * 20)
             .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
@@ -488,7 +488,7 @@ public class GTCMMachineRecipePool implements RecipePool {
                 GT_Utility.getIntegratedCircuit(11))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 32), Materials.SuperconductorUIVBase.getMolten(8 * 144))
             .itemOutputs(SpaceWarper.get(2))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(72))
+            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
             .eut(RECIPE_UMV)
             .duration(256 * 20)
             .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
@@ -504,7 +504,7 @@ public class GTCMMachineRecipePool implements RecipePool {
                 GT_Utility.getIntegratedCircuit(12))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 32), Materials.SuperconductorUMVBase.getMolten(4 * 144))
             .itemOutputs(SpaceWarper.get(4))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(72))
+            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
             .eut(RECIPE_UXV)
             .duration(128 * 20)
             .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
