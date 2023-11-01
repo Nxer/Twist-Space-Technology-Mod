@@ -2,11 +2,14 @@ package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
+import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 
+import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.recipe.RecipePool;
 
+import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.util.GT_ModHandler;
@@ -18,9 +21,11 @@ public class IntensifyChemicalDistorterRecipePool implements RecipePool {
     @Override
     public void loadRecipes() {
 
+        GTNHCommunityMod.LOG.info("IntensifyChemicalDistorterRecipePool loading recipes.");
+
         final GT_Recipe.GT_Recipe_Map ICD = GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
 
-        // PBI
+        // region PBI
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(19),
@@ -44,7 +49,9 @@ public class IntensifyChemicalDistorterRecipePool implements RecipePool {
             .duration(96)
             .addTo(ICD);
 
-        // Silicone
+        // endregion
+
+        // region Silicone
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(11),
@@ -82,7 +89,9 @@ public class IntensifyChemicalDistorterRecipePool implements RecipePool {
             .duration(128 * 64)
             .addTo(ICD);
 
-        // Polyphenylene sulfide
+        // endregion
+
+        // region Polyphenylene sulfide
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.Sulfur.getDust(1))
             .fluidInputs(Materials.Benzene.getFluid(1000))
@@ -105,7 +114,9 @@ public class IntensifyChemicalDistorterRecipePool implements RecipePool {
             .duration(128 * 64)
             .addTo(ICD);
 
-        // Agar
+        // endregion
+
+        // region Agar
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.MeatRaw.getDust(8))
             .fluidInputs(
@@ -149,7 +160,9 @@ public class IntensifyChemicalDistorterRecipePool implements RecipePool {
             .duration(256 * 48)
             .addTo(ICD);
 
-        // PTFE
+        // endregion
+
+        // region PTFE
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.Carbon.getDust(2 * 9))
             .fluidInputs(Materials.Fluorine.getGas(4000 * 9), Materials.Oxygen.getGas(125000))
@@ -181,6 +194,143 @@ public class IntensifyChemicalDistorterRecipePool implements RecipePool {
             .eut(RECIPE_IV)
             .duration(20 * 12 * 32)
             .addTo(ICD);
+
+        // endregion
+
+        // region HSbF6
+        GT_Values.RA.stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(10), Materials.Antimony.getDust(12))
+            .fluidInputs(Materials.Fluorine.getGas(1000 * 5 * 12), Materials.HydrofluoricAcid.getFluid(1000 * 12))
+            .noItemOutputs()
+            .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
+            .specialValue(9900)
+            .eut(RECIPE_UHV)
+            .duration(64)
+            .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(18),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64))
+            .fluidInputs(
+                Materials.Fluorine.getGas(1000 * 5 * 12 * 64),
+                Materials.HydrofluoricAcid.getFluid(1000 * 12 * 64))
+            .noItemOutputs()
+            .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
+            .specialValue(9900)
+            .eut(RECIPE_UHV)
+            .duration(64 * 64)
+            .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.Antimony.getDust(12))
+            .fluidInputs(Materials.Fluorine.getGas(1000 * 6 * 12), Materials.Hydrogen.getGas(1000 * 12))
+            .noItemOutputs()
+            .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
+            .specialValue(9900)
+            .eut(RECIPE_UHV)
+            .duration(64)
+            .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(19),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64),
+                Materials.Antimony.getDust(64))
+            .fluidInputs(Materials.Fluorine.getGas(1000 * 6 * 12 * 64), Materials.Hydrogen.getGas(1000 * 12 * 64))
+            .noItemOutputs()
+            .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
+            .specialValue(9900)
+            .eut(RECIPE_UHV)
+            .duration(64 * 64)
+            .addTo(ICD);
+
+        // endregion
+
+        // region Epoxid
+        GT_Values.RA.stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(13), Materials.Carbon.getDust(21))
+            .fluidInputs(Materials.Hydrogen.getGas(1000 * 24), Materials.Oxygen.getGas(1000 * 4))
+            .noItemOutputs()
+            .fluidOutputs(Materials.Epoxid.getMolten(1000))
+            .eut(RECIPE_HV)
+            .duration(128)
+            .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(21),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(52))
+            .fluidInputs(Materials.Hydrogen.getGas(1000 * 24 * 36), Materials.Oxygen.getGas(1000 * 4 * 36))
+            .noItemOutputs()
+            .fluidOutputs(Materials.Epoxid.getMolten(1000 * 36))
+            .specialValue(5400)
+            .eut(RECIPE_HV)
+            .duration(128 * 36)
+            .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(22),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(49))
+            .fluidInputs(Materials.Hydrogen.getGas(1000 * 24 * 36), Materials.Oxygen.getGas(1000 * 4 * 36))
+            .itemOutputs(
+                Materials.EpoxidFiberReinforced.getPlates(64),
+                Materials.EpoxidFiberReinforced.getPlates(64),
+                Materials.EpoxidFiberReinforced.getPlates(64),
+                Materials.EpoxidFiberReinforced.getPlates(58))
+            .noFluidOutputs()
+            .specialValue(5400)
+            .eut(RECIPE_HV)
+            .duration(128 * 36)
+            .addTo(ICD);
+
+        // endregion
 
     }
 }

@@ -19,8 +19,8 @@
 # Mega 激光蚀刻机：Precise High-Energy Photonic Quantum Master √
 # 可变数量模块化加速 √
 # 光源设备结构方块 待完成
-# Tooltips 和配方等等具体细节 待完成
-# Mega激光蚀刻机：PhotonController模式：光学SoC 待完成
+# Tooltips 和配方等等具体细节 √
+# Mega激光蚀刻机：PhotonController模式：光学SoC √
 # 镧系通用纳米萃取：深度化工扭转机配方 待完成
 # 镧系处理-铈部分
 # 镧系处理-通用部分-基础方式

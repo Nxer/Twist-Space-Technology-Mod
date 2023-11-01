@@ -1,6 +1,5 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
-import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.OpticalSOC;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarper;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
@@ -22,7 +21,6 @@ import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static gregtech.api.util.GT_Recipe.GT_Recipe_Map.sAssemblerRecipes;
-import static gregtech.api.util.GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
@@ -53,17 +51,14 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IItemContainer;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import ic2.core.Ic2Items;
 
 public class GTCMMachineRecipePool implements RecipePool {
 
-    public GTCMMachineRecipePool() {}
-
     @Override
     public void loadRecipes() {
-        GTNHCommunityMod.LOG.info("GTCMMachineRecipePool.loadRecipes");
+        GTNHCommunityMod.LOG.info("GTCMMachineRecipePool loading recipes.");
 
         Fluid solderIndAlloy = FluidRegistry.getFluid("molten.indalloy140");
 
@@ -111,30 +106,30 @@ public class GTCMMachineRecipePool implements RecipePool {
             .addTo(sAssemblerRecipes);
 
         // test
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
-                GT_Utility.getIntegratedCircuit(10))
-            .noFluidInputs()
-            .itemOutputs(MaterialPool.TestingMaterial.get(OrePrefixes.dust, 1))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(256 * 20)
-            .addTo(sMultiblockChemicalRecipes);
-
-        // test
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
-                GT_Utility.getIntegratedCircuit(10))
-            .noFluidInputs()
-            .itemOutputs(MaterialPool.TestingMaterial.get(OrePrefixes.dust, 1))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(512 * 20)
-            .addTo(GTCMRecipe.instance.IntensifyChemicalDistorterRecipes);
+        // GT_Values.RA.stdBuilder()
+        // .itemInputs(
+        // new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
+        // GT_Utility.getIntegratedCircuit(10))
+        // .noFluidInputs()
+        // .itemOutputs(MaterialPool.TestingMaterial.get(OrePrefixes.dust, 1))
+        // .noFluidOutputs()
+        // .noOptimize()
+        // .eut(RECIPE_UHV)
+        // .duration(256 * 20)
+        // .addTo(sMultiblockChemicalRecipes);
+        //
+        // // test
+        // GT_Values.RA.stdBuilder()
+        // .itemInputs(
+        // new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
+        // GT_Utility.getIntegratedCircuit(10))
+        // .noFluidInputs()
+        // .itemOutputs(MaterialPool.TestingMaterial.get(OrePrefixes.dust, 1))
+        // .noFluidOutputs()
+        // .noOptimize()
+        // .eut(RECIPE_UHV)
+        // .duration(512 * 20)
+        // .addTo(GTCMRecipe.instance.IntensifyChemicalDistorterRecipes);
 
         // region PreciseHighEnergyPhotonicQuantumMaster
 
@@ -530,20 +525,6 @@ public class GTCMMachineRecipePool implements RecipePool {
             .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
 
         // endregion
-
-        // Optical Soc Circuit Assembly Line
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Circuit_Board_Optical.get(16),
-                OpticalSOC.get(1),
-                com.github.technus.tectech.thing.CustomItemList.DATApipe.get(32),
-                GT_OreDictUnificator.get(OrePrefixes.stick, Materials.EnrichedHolmium, 64))
-            .fluidInputs(new FluidStack(solderPlasma, 144 * 2))
-            .itemOutputs(ItemList.Circuit_OpticalProcessor.get(16))
-            .noFluidOutputs()
-            .eut(9830400)
-            .duration(32 * 20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes);
 
     }
 }
