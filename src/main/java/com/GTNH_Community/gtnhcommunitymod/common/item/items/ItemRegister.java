@@ -26,7 +26,7 @@ public class ItemRegister {
     public static void registryItemContainers() {
         GTCMItemList.TestItem0.set(initItem01("Test Item 0", 0, new String[] { texter("A test item, no use.", "tooltips.TestItem0.line1") }));
         GTCMItemList.SpaceWarper.set(initItem01("Space Warper", 1, new String[] {texter(EnumChatFormatting.DARK_BLUE + "Power of gravitation !", "tooltips.SpaceWarper.line1") }));
-        GTCMItemList.OpticalSOC.set(initItem01("Optical SoC", 2, new String[]{ texter("These Photons have their own mind.","tooltips.OpticalSOC.line1")}));
+        GTCMItemList.OpticalSOC.set(initItem01("Gravitational Constraint Optical Quantum Crystal", 2, new String[]{ texter("These Photons have their own mind.","tooltips.OpticalSOC.line1")}));
     }
 // spotless:on
     public static void registry() {

@@ -136,6 +136,12 @@ public class TextLocalization {
 
 
     // endregion
+    
+    // region MiracleTop
+    
+    public static final String NameMiracleTop = texter(
+        "Miracle Top",
+        "NameMiracleTop");
 
 }
 // spotless:on
