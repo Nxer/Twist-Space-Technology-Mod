@@ -86,3 +86,16 @@ tooltips.SpaceWarper.line1=§1Power of gravitation !
 tooltips.OpticalSOC.line1=These Photons have their own mind.
 MetaItem01.2.name=Gravitational Constraint Optical Quantum Crystal
 NameMiracleTop=Miracle Top
+Tooltip_MiracleTop_06=Enable Perfect overclock when num of rings >= 8 .
+Tooltip_MiracleTop_05=Total speed multiplier is equal to 400% x num of rings.
+Tooltip_MiracleTop_07=256x Parallel.
+Tooltip_MiracleTop_02=For absolute precision and efficiency, please abandon traditional manufacturing methods.
+Tooltip_MiracleTop_01=§dI never think about the future because it will come sooner or later.
+Tooltip_MiracleTop_04=The number of rings is variable:  Maximum 16 rings, Minimum 2 rings(the first and the last).
+Tooltip_MiracleTop_03=The machine consists of a ring section and a conveying section.
+Tooltip_MiracleTop_MachineType=Circuit Assembler/Gravitation Breaker
+Tooltip_MiracleTop_00=Controller block for the Miracle Top.
+textMiracleTopHatchLocation=Outermost 12 blocks on the ring (outermost 3 on each side).
+tooltips.ProofOfHeroes.line1=The physical culmination of your journey, capable to rend gods asunder.
+tooltips.ProofOfHeroes.line2=The physical culmination of your journey, capable to rend gods asunder.
+ProofOfHeroes.name=英雄の証

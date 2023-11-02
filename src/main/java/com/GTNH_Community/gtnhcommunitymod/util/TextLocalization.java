@@ -142,6 +142,20 @@ public class TextLocalization {
     public static final String NameMiracleTop = texter(
         "Miracle Top",
         "NameMiracleTop");
-
+    
+    public static final String Tooltip_MiracleTop_MachineType = texter("Circuit Assembler/Gravitation Breaker", "Tooltip_MiracleTop_MachineType");
+    public static final String Tooltip_MiracleTop_00 = texter("Controller block for the Miracle Top.", "Tooltip_MiracleTop_00");
+    public static final String Tooltip_MiracleTop_01 = texter(EnumChatFormatting.LIGHT_PURPLE+"I never think about the future because it will come sooner or later.", "Tooltip_MiracleTop_01");
+    public static final String Tooltip_MiracleTop_02 = texter("For absolute precision and efficiency, please abandon traditional manufacturing methods.", "Tooltip_MiracleTop_02");
+    public static final String Tooltip_MiracleTop_03 = texter("The machine consists of a ring section and a conveying section.", "Tooltip_MiracleTop_03");
+    public static final String Tooltip_MiracleTop_04 = texter("The number of rings is variable:  Maximum 16 rings, Minimum 2 rings(the first and the last).", "Tooltip_MiracleTop_04");
+    public static final String Tooltip_MiracleTop_05 = texter("Total speed multiplier is equal to 400%% x num of rings.", "Tooltip_MiracleTop_05");
+    public static final String Tooltip_MiracleTop_06 = texter("Enable Perfect overclock when num of rings >= 8 .", "Tooltip_MiracleTop_06");
+    public static final String Tooltip_MiracleTop_07 = texter("256x Parallel.", "Tooltip_MiracleTop_07");
+    public static final String textMiracleTopHatchLocation = texter("Outermost 12 blocks on the ring (outermost 3 on each side).", "textMiracleTopHatchLocation");
+    
+    
+    
+    
 }
 // spotless:on

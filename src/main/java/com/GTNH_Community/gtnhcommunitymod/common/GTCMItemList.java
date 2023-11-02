@@ -17,6 +17,7 @@ public enum GTCMItemList implements IItemContainer {
     TestItem0,
     SpaceWarper,
     OpticalSOC,
+    ProofOfHeroes,
 
     // Blocks
 

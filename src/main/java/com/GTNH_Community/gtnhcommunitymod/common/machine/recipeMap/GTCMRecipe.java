@@ -167,4 +167,24 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap MiracleTopRecipes = new GTCMRecipeMap(
+        new HashSet<>(),
+        "gtcm.recipe.MiracleTopRecipes",
+        NameMiracleTop,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        16,
+        16,
+        16,
+        4,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
 }

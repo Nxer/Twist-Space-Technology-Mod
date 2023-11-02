@@ -27,19 +27,7 @@ public class ItemAdder_Basic extends Item {
         this.unlocalizedName = MetaName;
         TextHandler.texter(Name, this.unlocalizedName + ".name");
 
-        // this.iconPath = aIconPath;
-        // GameRegistry.registerItem(this, MetaName);
     }
-    // public ItemAdder_Basic(String Name, String MetaName, int Meta){
-    // super();
-    // setHasSubtypes(true);
-    // setMaxDamage(0);
-    // setUnlocalizedName(MetaName);
-    // TextHandler.texter(Name,generateUnlocalizedName(MetaName));
-    //
-    // GameRegistry.registerItem(this, MetaName);
-
-    // }
 
     public static String generateUnlocalizedName(String MetaName) {
         return "item." + MetaName;

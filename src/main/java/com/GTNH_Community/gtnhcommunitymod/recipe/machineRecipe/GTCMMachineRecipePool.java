@@ -5,6 +5,10 @@ import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UMV_UIV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UXV_UMV;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Spacetime;
+import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
@@ -56,6 +60,7 @@ import ic2.core.Ic2Items;
 
 public class GTCMMachineRecipePool implements RecipePool {
 
+    // spotless:off
     @Override
     public void loadRecipes() {
         GTNHCommunityMod.LOG.info("GTCMMachineRecipePool loading recipes.");
@@ -526,5 +531,68 @@ public class GTCMMachineRecipePool implements RecipePool {
 
         // endregion
 
+        // region Miracle Top
+
+        // MiracleTop
+        TT_recipeAdder.addResearchableAssemblylineRecipe(
+            GT_ModHandler.getModItem("gregtech", "gt.blockmachines", 1, 12735),
+            10000000,
+            20000,
+            128000000,
+            2,
+            new Object[] { GT_ModHandler.getModItem("gregtech", "gt.blockmachines", 64, 12735),
+                Component_Assembly_Line.get(64), SpaceWarper.get(64), MaterialsUEVplus.TranscendentMetal.getNanite(48),
+
+                GT_ModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 4),
+                GT_ModHandler.getModItem("dreamcraft", "item.PikoCircuit", 32),
+                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 64 },
+                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 64 },
+
+                GTCMItemList.OpticalSOC.get(64), GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 14), GTCMItemList.OpticalSOC.get(64),
+
+                eM_Spacetime.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.TranscendentMetal, 64),
+                ItemList.Field_Generator_UIV.get(32),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.Infinity, 64) },
+            new FluidStack[] { new FluidStack(solderPlasma, 1024 * 144), MaterialsUEVplus.SpaceTime.getMolten(16 * 144),
+                Materials.SuperconductorUIVBase.getMolten(64 * 144),
+                Materials.SuperconductorUEVBase.getMolten(512 * 144) },
+            GT_Utility.copyAmount(1, MachineLoader.MiracleTop),
+            20 * 3600,
+            (int) RECIPE_UMV);
+
+        TT_recipeAdder.addResearchableAssemblylineRecipe(
+            eM_Coil.get(1),
+            10000000,
+            20000,
+            32000000,
+            1,
+            new Object[] { eM_Hollow.get(4), SpaceWarper.get(8), eM_Coil.get(8),
+                GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 4),
+
+                ItemList.Field_Generator_UEV.get(2), ItemList.Casing_Assembler.get(16),
+                ItemList.Casing_Gearbox_TungstenSteel.get(16),
+                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 24 },
+
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64) },
+            new FluidStack[] { new FluidStack(solderPlasma, 1024 * 144), Materials.UUMatter.getFluid(1000 * 64),
+                Materials.OsmiumTetroxide.getMolten(144 * 256), Materials.SuperconductorUEVBase.getMolten(32 * 144) },
+            eM_Spacetime.get(1),
+            20 * 480,
+            (int) RECIPE_UHV);
+
+        // endregion
+        
+        
+
     }
+    // spotless:on
 }

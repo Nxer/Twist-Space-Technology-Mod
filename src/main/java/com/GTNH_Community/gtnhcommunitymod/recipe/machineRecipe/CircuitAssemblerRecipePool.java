@@ -1,6 +1,7 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.OpticalSOC;
+import static gregtech.api.enums.TierEU.RECIPE_UIV;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -32,8 +33,8 @@ public class CircuitAssemblerRecipePool implements RecipePool {
             .fluidInputs(new FluidStack(solderPlasma, 144 * 2))
             .itemOutputs(ItemList.Circuit_OpticalProcessor.get(16))
             .noFluidOutputs()
-            .eut(9830400)
-            .duration(20 * 20)
+            .eut(RECIPE_UIV)
+            .duration(20 * 90)
             .addTo(GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes);
 
     }
