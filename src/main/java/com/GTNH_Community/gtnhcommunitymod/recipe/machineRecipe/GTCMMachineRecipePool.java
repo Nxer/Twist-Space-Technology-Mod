@@ -439,6 +439,7 @@ public class GTCMMachineRecipePool implements RecipePool {
             .itemOutputs(
                 GTCMItemList.PhotonControllerUpgradeUMV.get(1)
             )
+            .noFluidOutputs()
             .eut(RECIPE_UMV)
             .duration(20 * 1280)
             .addTo(AssemblyLine);
