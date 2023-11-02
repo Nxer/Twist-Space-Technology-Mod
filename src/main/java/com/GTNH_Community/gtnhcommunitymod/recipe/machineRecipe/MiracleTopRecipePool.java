@@ -420,7 +420,7 @@ public class MiracleTopRecipePool implements RecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
-                GT_Utility.copyAmount(1, Wrapped_Optically_Perfected_CPU),
+                GT_Utility.copyAmount(1, Wrapped_Circuit_Board_Bio_Ultra),
                 OpticalSOC.get(1),
                 DATApipe.get(16)
             )
@@ -437,7 +437,7 @@ public class MiracleTopRecipePool implements RecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
-                GT_Utility.copyAmount(16, Wrapped_Optically_Perfected_CPU),
+                GT_Utility.copyAmount(16, Wrapped_Circuit_Board_Bio_Ultra),
                 OpticalSOC.get(16),
                 DATApipe.get(64)
             )
@@ -795,7 +795,8 @@ public class MiracleTopRecipePool implements RecipePool {
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144),
-                new FluidStack(FluidRegistry.getFluid("molten.chromaticglass"), 144*8 )
+                new FluidStack(FluidRegistry.getFluid("molten.chromaticglass"), 144*8 ),
+                Materials.NiobiumTitanium.getMolten(144*32)
             )
             .itemOutputs(
                 ItemList.Circuit_Bioprocessor.get(16)
@@ -813,7 +814,8 @@ public class MiracleTopRecipePool implements RecipePool {
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144*12),
-                new FluidStack(FluidRegistry.getFluid("molten.chromaticglass"), 144*8*12 )
+                new FluidStack(FluidRegistry.getFluid("molten.chromaticglass"), 144*8*12 ),
+                Materials.NiobiumTitanium.getMolten(144*32*12)
             )
             .itemOutputs(
                 ItemList.Circuit_Bioprocessor.get(64),
