@@ -2,6 +2,7 @@ package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
+import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 
@@ -18,6 +19,7 @@ import gregtech.api.util.GT_Utility;
 
 public class IntensifyChemicalDistorterRecipePool implements RecipePool {
 
+    // spotless:off
     @Override
     public void loadRecipes() {
 
@@ -50,6 +52,52 @@ public class IntensifyChemicalDistorterRecipePool implements RecipePool {
             .addTo(ICD);
 
         // endregion
+        
+        // region Phosphoric Acid
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(11),
+                Materials.Apatite.getDust(9))
+            .fluidInputs(
+                Materials.Water.getFluid(1000*5))
+            .itemOutputs(
+                Materials.Calcium.getDust(5))
+            .fluidOutputs(
+                Materials.PhosphoricAcid.getFluid(1000*3),
+                Materials.HydrochloricAcid.getFluid(1000*1))
+            .specialValue(3600)
+            .eut(RECIPE_MV)
+            .duration(20*8)
+            .addTo(ICD);
+        
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(19),
+                Materials.Apatite.getDust(64),
+                Materials.Apatite.getDust(64),
+                Materials.Apatite.getDust(64),
+                Materials.Apatite.getDust(64),
+                Materials.Apatite.getDust(64),
+                Materials.Apatite.getDust(64),
+                Materials.Apatite.getDust(64),
+                Materials.Apatite.getDust(64),
+                Materials.Apatite.getDust(64))
+            .fluidInputs(
+                Materials.Water.getFluid(1000*5*64))
+            .itemOutputs(
+                Materials.Calcium.getDust(5),
+                Materials.Calcium.getDust(5),
+                Materials.Calcium.getDust(5),
+                Materials.Calcium.getDust(5),
+                Materials.Calcium.getDust(5))
+            .fluidOutputs(
+                Materials.PhosphoricAcid.getFluid(1000*3*64),
+                Materials.HydrochloricAcid.getFluid(1000*1*64))
+            .specialValue(4500)
+            .eut(RECIPE_HV)
+            .duration(20*8*16)
+            .addTo(ICD);
+            
 
         // region Silicone
         GT_Values.RA.stdBuilder()
@@ -333,4 +381,5 @@ public class IntensifyChemicalDistorterRecipePool implements RecipePool {
         // endregion
 
     }
+    // spotless:on
 }
