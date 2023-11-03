@@ -572,7 +572,7 @@ public class GTCMMachineRecipePool implements RecipePool {
                 MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64),
                 MaterialsUEVplus.Time.getMolten(144 * 32),
                 MaterialsUEVplus.Space.getMolten(144 * 32))
-            .itemOutputs(SpaceWarper.get(8))
+            .itemOutputs(SpaceWarper.get(16))
             .fluidOutputs(Materials.Hydrogen.getPlasma(1000 * 128))
             .eut(RECIPE_MAX)
             .duration(64 * 20)
