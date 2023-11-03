@@ -25,6 +25,7 @@ public class TextLocalization {
         "BLUE_PRINT_INFO");
     public static final String textCasing = texter("Casing", "textCasing");
     public static final String textAnyCasing = texter("Any Casing", "textAnyCasing");
+    public static final String textTopCenter = texter("Top center", "textTopCenter");
     public static final String textFrontCenter = texter("Front center", "textFrontCenter");
     public static final String textFrontBottom = texter("Front bottom", "textFrontBottom");
     public static final String textCenterOfLRSides = texter("Center area of left and right side", "textCenterOfLRSides");
@@ -139,9 +140,7 @@ public class TextLocalization {
     
     // region MiracleTop
     
-    public static final String NameMiracleTop = texter(
-        "Miracle Top",
-        "NameMiracleTop");
+    public static final String NameMiracleTop = texter("Miracle Top", "NameMiracleTop");
     
     public static final String Tooltip_MiracleTop_MachineType = texter("Circuit Assembler/Gravitation Breaker", "Tooltip_MiracleTop_MachineType");
     public static final String Tooltip_MiracleTop_00 = texter("Controller block for the Miracle Top.", "Tooltip_MiracleTop_00");
@@ -153,6 +152,25 @@ public class TextLocalization {
     public static final String Tooltip_MiracleTop_06 = texter("Enable Perfect overclock when num of rings >= 8 .", "Tooltip_MiracleTop_06");
     public static final String Tooltip_MiracleTop_07 = texter("256x Parallel.", "Tooltip_MiracleTop_07");
     public static final String textMiracleTopHatchLocation = texter("Outermost 12 blocks on the ring (outermost 3 on each side).", "textMiracleTopHatchLocation");
+    
+    // endregion
+    
+    // region Magnetic Drive Pressure Former
+    
+    public static final String NameMagneticDrivePressureFormer = texter("Magnetic Drive Pressure Former","NameMagneticDrivePressureFormer");
+    public static final String Tooltip_MagneticDrivePressureFormer_MachineType = texter("Extruder | Bending Machine | Forming Press", "Tooltip_MagneticDrivePressureFormer_MachineType");
+    public static final String Tooltip_MagneticDrivePressureFormer_00 = texter("Controller block for the Magnetic Drive Pressure Former.", "Tooltip_MagneticDrivePressureFormer_00");
+    public static final String Tooltip_MagneticDrivePressureFormer_01 = texter(EnumChatFormatting.AQUA + "Simple applications of Maxwell's equations.", "Tooltip_MagneticDrivePressureFormer_01");
+    public static final String Tooltip_MagneticDrivePressureFormer_02 = texter("No difficulty ! No hurry !", "Tooltip_MagneticDrivePressureFormer_02");
+    public static final String Tooltip_MagneticDrivePressureFormer_03 = texter(EnumChatFormatting.GOLD + "Extruder Mode:", "Tooltip_MagneticDrivePressureFormer_03");
+    public static final String Tooltip_MagneticDrivePressureFormer_04 = texter("900%% faster than normal | Infinity Coil+ enable Perfect Overclock", "Tooltip_MagneticDrivePressureFormer_04");
+    public static final String Tooltip_MagneticDrivePressureFormer_05 = texter(EnumChatFormatting.GOLD + "Bending and Forming Press Mode:", "Tooltip_MagneticDrivePressureFormer_05");
+    public static final String Tooltip_MagneticDrivePressureFormer_06 = texter("1900%% faster than normal | Enable Perfect Overclock", "Tooltip_MagneticDrivePressureFormer_06");
+    public static final String Tooltip_MagneticDrivePressureFormer_07 = texter("Extra +100%% speed multiplier per Coil Level.", "Tooltip_MagneticDrivePressureFormer_07");
+    public static final String Tooltip_MagneticDrivePressureFormer_08 = texter("Need Infinity Glass to use Laser energy hatch.", "Tooltip_MagneticDrivePressureFormer_08");
+    public static final String Tooltip_MagneticDrivePressureFormer_09 = texter("1024x Parallel.", "Tooltip_MagneticDrivePressureFormer_09");
+    public static final String Tooltip_MagneticDrivePressureFormer_Hatches = texter("Frame location, Osmiridium Casing.", "Tooltip_MagneticDrivePressureFormer_Hatches");
+    public static final String Tooltip_MagneticDrivePressureFormer_EnergyHatch = texter("The white, Iridium Casing, and the bottom center.", "Tooltip_MagneticDrivePressureFormer_EnergyHatch");
     
     
     

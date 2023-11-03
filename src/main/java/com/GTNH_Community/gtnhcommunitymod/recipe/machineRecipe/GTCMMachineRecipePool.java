@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarper;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
@@ -29,6 +30,8 @@ import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -625,15 +628,20 @@ public class GTCMMachineRecipePool implements RecipePool {
                 eM_Coil.get(8),
                 GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 4),
                 
-                ItemList.Field_Generator_UEV.get(2),
-                ItemList.Casing_Assembler.get(16),
-                ItemList.Casing_Gearbox_TungstenSteel.get(16),
+                ItemList.Field_Generator_UEV.get(24),
+                ItemList.Casing_Assembler.get(24),
+                ItemList.Casing_Gearbox_TungstenSteel.get(24),
                 new Object[] { OrePrefixes.circuit.get(Materials.Optical), 24 },
                 
                 GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
                 GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
                 GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
-                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64)
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
+                
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64)
             )
             .fluidInputs(
                 new FluidStack(solderPlasma, 1024 * 144),
@@ -651,6 +659,41 @@ public class GTCMMachineRecipePool implements RecipePool {
 
 
         // endregion
+        
+        // region MagneticDrivePressureFormer
+        GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, Industrial_Extruder.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .itemInputs(
+                ItemList.Casing_MiningOsmiridium.get(64),
+                Industrial_Extruder.get(64),
+                Industrial_PlatePress.get(64),
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),64},
+                
+                ItemList.UV_Coil.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.block,Materials.Neutronium,64),
+                GT_OreDictUnificator.get(OrePrefixes.block,Materials.Neutronium,64),
+                ItemList.UV_Coil.get(64),
+                
+                ItemList.Field_Generator_UV.get(2),
+                ItemList.Robot_Arm_UV.get(16),
+                ItemList.Conveyor_Module_UV.get(16),
+                GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 32),
+                
+                GT_OreDictUnificator.get(OrePrefixes.plateDense,Materials.Neutronium,32),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt02,Materials.SuperconductorUV,64)
+            )
+            .fluidInputs(
+                new FluidStack(solderIndAlloy,144*256),
+                Materials.Naquadria.getMolten(144*256),
+                Materials.Lubricant.getFluid(1000*256),
+                Materials.Samarium.getMolten(144*256)
+            )
+            .itemOutputs(MagneticDrivePressureFormer.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_UHV)
+            .duration(20*256)
+            .addTo(AssemblyLine);
         
         
 

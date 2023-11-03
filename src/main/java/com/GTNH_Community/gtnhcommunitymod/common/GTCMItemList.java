@@ -19,6 +19,13 @@ public enum GTCMItemList implements IItemContainer {
     OpticalSOC,
     ProofOfHeroes,
 
+    // Machines
+
+    IntensifyChemicalDistorter,
+    PreciseHighEnergyPhotonicQuantumMaster,
+    MiracleTop,
+    MagneticDrivePressureFormer,
+
     // Blocks
 
     TestMetaBlock01_0,

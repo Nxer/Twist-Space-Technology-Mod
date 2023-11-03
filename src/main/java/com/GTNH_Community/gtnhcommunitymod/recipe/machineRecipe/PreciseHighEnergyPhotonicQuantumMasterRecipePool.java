@@ -49,9 +49,9 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements RecipeP
             .fluidInputs(Materials.Hydrogen.getPlasma(32000))
             .itemOutputs(
                 GTCMItemList.OpticalSOC.get(64),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 1, 14))
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 8, 14))
             .fluidOutputs(Materials.Helium.getPlasma(8000))
-            .outputChances(10000, 1)
+            .outputChances(10000, 10)
             .noOptimize()
             .eut(RECIPE_UMV)
             .duration(256 * 20)
