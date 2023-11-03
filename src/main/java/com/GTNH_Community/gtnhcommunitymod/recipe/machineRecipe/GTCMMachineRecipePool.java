@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarper;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
@@ -100,13 +101,14 @@ public class GTCMMachineRecipePool implements RecipePool {
         // Intensify Chemical Distorter
         GT_Values.RA.stdBuilder()
             .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
                 GT_Utility.copyAmount(1, ItemRegistry.megaMachines[3]),
-                Materials.Carbon.getNanite(1),
+                Materials.Carbon.getNanite(16),
                 ItemList.Emitter_UV.get(16),
-                GT_Utility.getIntegratedCircuit(10))
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),16})
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 16))
             .noFluidOutputs()
-            .itemOutputs(GT_Utility.copyAmount(1, MachineLoader.IntensifyChemicalDistorter))
+            .itemOutputs(IntensifyChemicalDistorter.get(1))
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20 * 120)

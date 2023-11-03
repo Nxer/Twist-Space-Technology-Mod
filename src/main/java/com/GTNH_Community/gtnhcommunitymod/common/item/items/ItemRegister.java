@@ -29,6 +29,9 @@ public class ItemRegister {
         GTCMItemList.TestItem0.set(initItem01("Test Item 0", 0, new String[] { texter("A test item, no use.", "tooltips.TestItem0.line1") }));
         GTCMItemList.SpaceWarper.set(initItem01("Space Warper", 1, new String[] {texter(EnumChatFormatting.DARK_BLUE + "Power of gravitation !", "tooltips.SpaceWarper.line1") }));
         GTCMItemList.OpticalSOC.set(initItem01("Gravitational Constraint Optical Quantum Crystal", 2, new String[]{ texter("These Photons have their own mind.","tooltips.OpticalSOC.line1")}));
+        GTCMItemList.MoldSingularity.set(initItem01("Mold(Singularity)", 3, new String[]{ texter("Mold for making Singularity","tooltips.MoldSingularity.line1")}));
+        
+        
         GTCMItemList.ProofOfHeroes.set(new ItemStack(ProofOfHeroes,1));
     }
 // spotless:on

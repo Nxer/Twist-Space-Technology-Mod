@@ -19,6 +19,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textTopCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
@@ -111,7 +112,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             @NotNull
             @Override
             public CheckRecipeResult process() {
-                setSpeedBonus((float) ((mode == 0 ? 0.1 : 0.05) / (1 + coilLevel.getTier())));
+                setSpeedBonus((float) ((mode == 0 ? (1.0 / 8.0) : (1.0 / 16.0)) / (1 + coilLevel.getTier())));
                 setPerfectOverclock(isPerfectOverclock());
                 return super.process();
             }
@@ -231,13 +232,14 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
             .addElement(
                 'A',
-                BorosilicateGlass.ofBoroGlass(
-                    (byte) 0,
-                    (byte) 1,
-                    Byte.MAX_VALUE,
-                    (te, t) -> te.glassTier = t,
-                    te -> te.glassTier
-                )
+                withChannel("glass",
+                    BorosilicateGlass.ofBoroGlass(
+                        (byte) 0,
+                        (byte) 1,
+                        Byte.MAX_VALUE,
+                        (te, t) -> te.glassTier = t,
+                        te -> te.glassTier
+                    ))
             )
             .addElement('B', ofBlock(compactFusionCoil,0))
             .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 5))
@@ -251,9 +253,10 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                     .buildAndChain(GregTech_API.sBlockCasings4, 14))
             .addElement(
                 'E',
+                withChannel("coil",
                 ofCoil(
                     GT_TileEntity_MagneticDrivePressureFormer::setCoilLevel,
-                    GT_TileEntity_MagneticDrivePressureFormer::getCoilLevel))
+                    GT_TileEntity_MagneticDrivePressureFormer::getCoilLevel)))
             .addElement(
                 'F',
                 GT_HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()

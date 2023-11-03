@@ -21,6 +21,9 @@ public class NEIHandler {
         sendCatalyst("gtcm.recipe.MiracleTopRecipes", "gregtech:gt.blockmachines:19003");
         sendCatalyst("gt.recipe.largechemicalreactor", "gregtech:gt.blockmachines:19001", -20);
         sendCatalyst("gt.recipe.laserengraver", "gregtech:gt.blockmachines:19002", -10);
+        sendCatalyst("gt.recipe.metalbender", "gregtech:gt.blockmachines:19004", -10);
+        sendCatalyst("gt.recipe.press", "gregtech:gt.blockmachines:19004", -10);
+        sendCatalyst("gt.recipe.extruder", "gregtech:gt.blockmachines:19004", -10);
 
     }
 

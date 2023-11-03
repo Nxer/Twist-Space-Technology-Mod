@@ -42,6 +42,10 @@ dependencies {
     implementation('com.github.GTNewHorizons:GTNH-Lanthanides:0.11.2:dev')
     implementation('com.github.GTNewHorizons:TecTech:5.3.9:dev')
     implementation('com.github.GTNewHorizons:NewHorizonsCoreMod:2.2.31-pre:dev')
+    implementation('com.github.GTNewHorizons:Avaritia:1.46:dev')
+    implementation('com.github.GTNewHorizons:Avaritiaddons:1.6.0-GTNH:dev')
+    implementation('com.github.GTNewHorizons:Eternal-Singularity:1.1.2:dev')
+    implementation('com.github.GTNewHorizons:Universal-Singularities:8.6.7:dev')
 //    implementation('com.github.GTNewHorizons:KubaTech:0.13.4:dev')
 
 }
