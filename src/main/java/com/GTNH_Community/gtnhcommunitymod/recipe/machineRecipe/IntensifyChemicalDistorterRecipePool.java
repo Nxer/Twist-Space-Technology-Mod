@@ -223,10 +223,10 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.Chlorine.getGas(34000),
                 Materials.Hydrogen.getGas(230000),
-                Materials.Oxygen.getGas(36000)
+                Materials.Oxygen.getGas(36000),
                 Materials.Nitrogen.getGas(36000))
             .itemOutputs(
-                ItemList.WovenKevlar.get(64)
+                ItemList.WovenKevlar.get(64),
                 ItemList.WovenKevlar.get(61))
             .noFluidOutputs()
             .noOptimize()
@@ -247,8 +247,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Silicon.getDust(36))
             .fluidInputs(
                 Materials.Oxygen.getGas(1964000),
-                Materials.Hydrogen.getGas(1000 * 5292)
-                Materials.Chlorine.getGas(87000)
+                Materials.Hydrogen.getGas(1000 * 5292),
+                Materials.Chlorine.getGas(87000),
                 Materials.Nitrogen.getGas(450000)  )
             .noItemOutputs()
             .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(45000))
