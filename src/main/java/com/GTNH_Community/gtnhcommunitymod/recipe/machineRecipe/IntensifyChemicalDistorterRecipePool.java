@@ -1,6 +1,11 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
-import static gregtech.api.enums.TierEU.*;
+import static gregtech.api.enums.TierEU.RECIPE_HV;
+import static gregtech.api.enums.TierEU.RECIPE_IV;
+import static gregtech.api.enums.TierEU.RECIPE_MV;
+import static gregtech.api.enums.TierEU.RECIPE_UHV;
+import static gregtech.api.enums.TierEU.RECIPE_UIV;
+import static gregtech.api.enums.TierEU.RECIPE_UV;
 
 import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
@@ -218,10 +223,10 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Carbon.getDust(6),
                 Materials.Calcium.getDust(2))
             .fluidInputs(
-                Materials.Chlorine.getGas(34000),
-                Materials.Hydrogen.getGas(230000),
-                Materials.Oxygen.getGas(36000),
-                Materials.Nitrogen.getGas(36000))
+                Materials.Chlorine.getGas(1000*34),
+                Materials.Hydrogen.getGas(1000*230),
+                Materials.Oxygen.getGas(1000*36),
+                Materials.Nitrogen.getGas(1000*36))
             .itemOutputs(
                 ItemList.WovenKevlar.get(64),
                 ItemList.WovenKevlar.get(61))
@@ -243,12 +248,12 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Iron.getDust(5),
                 Materials.Silicon.getDust(36))
             .fluidInputs(
-                Materials.Oxygen.getGas(1964000),
+                Materials.Oxygen.getGas(1000*1964),
                 Materials.Hydrogen.getGas(1000 * 5292),
-                Materials.Chlorine.getGas(87000),
-                Materials.Nitrogen.getGas(450000)  )
+                Materials.Chlorine.getGas(1000*87),
+                Materials.Nitrogen.getGas(1000*450)  )
             .noItemOutputs()
-            .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(45000))
+            .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(1000*45))
             .specialValue(11700)
             .eut(RECIPE_UIV)
             .duration(20 * 64)
