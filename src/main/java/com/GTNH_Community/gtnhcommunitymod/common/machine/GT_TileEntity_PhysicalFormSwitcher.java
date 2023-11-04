@@ -245,9 +245,12 @@ public class GT_TileEntity_PhysicalFormSwitcher
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 2];
+        String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
+        ret[origin.length - 2] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
+        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Parallel: "
+            + EnumChatFormatting.GOLD
+            + this.getMaxParallelRecipes();
         ret[origin.length] = EnumChatFormatting.AQUA + "Recipe Time multiplier: "
             + EnumChatFormatting.GOLD
             + this.getSpeedBonus();

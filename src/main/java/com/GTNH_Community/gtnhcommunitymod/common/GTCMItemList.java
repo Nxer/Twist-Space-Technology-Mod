@@ -28,6 +28,7 @@ public enum GTCMItemList implements IItemContainer {
     MiracleTop,
     MagneticDrivePressureFormer,
     PhysicalFormSwitcher,
+    MagneticMixer,
 
     // Blocks
 
