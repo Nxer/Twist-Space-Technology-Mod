@@ -6,14 +6,14 @@ import static gregtech.api.enums.TierEU.RECIPE_UV;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.GTNH_Community.gtnhcommunitymod.recipe.RecipePool;
+import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
 
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 
-public class FluidSolidifierRecipePool implements RecipePool {
+public class FluidSolidifierRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {

@@ -19,6 +19,7 @@ public enum GTCMItemList implements IItemContainer {
     OpticalSOC,
     ProofOfHeroes,
     MoldSingularity,
+    ParticleTrapTimeSpaceShield,
 
     // Machines
 

@@ -43,7 +43,7 @@ import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.common.material.MaterialPool;
 import com.GTNH_Community.gtnhcommunitymod.loader.MachineLoader;
-import com.GTNH_Community.gtnhcommunitymod.recipe.RecipePool;
+import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
@@ -61,7 +61,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import ic2.core.Ic2Items;
 
-public class GTCMMachineRecipePool implements RecipePool {
+public class GTCMMachineRecipePool implements IRecipePool {
 
     // spotless:off
     @Override

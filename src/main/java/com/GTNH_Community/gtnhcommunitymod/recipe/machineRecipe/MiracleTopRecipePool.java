@@ -1,6 +1,7 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.OpticalSOC;
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.ParticleTrapTimeSpaceShield;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.ProofOfHeroes;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarper;
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
@@ -14,6 +15,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -22,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
-import com.GTNH_Community.gtnhcommunitymod.recipe.RecipePool;
+import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
 import com.dreammaster.gthandler.GT_CoreModSupport;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
@@ -38,7 +40,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 // spotless:off
-public class MiracleTopRecipePool implements RecipePool {
+public class MiracleTopRecipePool implements IRecipePool {
     
     @Override
     public void loadRecipes() {
@@ -127,6 +129,30 @@ public class MiracleTopRecipePool implements RecipePool {
         // endregion
         
         // region Optical Circuit
+        
+        // Optical SoC frame
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(21),
+                        SpaceTimeBendingCore.get(0),
+                        ItemList.Optical_Cpu_Containment_Housing.get(2),
+                        Materials.Glowstone.getNanite(4)
+                    )
+                    .fluidInputs(
+                        MaterialsUEVplus.Space.getMolten(144),
+                        MaterialsUEVplus.Time.getMolten(144),
+                        MaterialsUEVplus.SpaceTime.getMolten(144*2)
+                    )
+                    .itemOutputs(
+                        ParticleTrapTimeSpaceShield.get(1)
+                    )
+                    .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(2500))
+                    .eut(RECIPE_UMV)
+                    .duration(20*64)
+                    .addTo(MT);
+                    
+            
+            
         
         // Optical Frame
         GT_Values.RA.stdBuilder()
@@ -420,7 +446,7 @@ public class MiracleTopRecipePool implements RecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
-                GT_Utility.copyAmount(1, Wrapped_Circuit_Board_Bio_Ultra),
+                GT_Utility.copyAmount(1, Wrapped_Circuit_Board_Optical),
                 OpticalSOC.get(1),
                 DATApipe.get(16)
             )
@@ -437,7 +463,7 @@ public class MiracleTopRecipePool implements RecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
-                GT_Utility.copyAmount(16, Wrapped_Circuit_Board_Bio_Ultra),
+                GT_Utility.copyAmount(16, Wrapped_Circuit_Board_Optical),
                 OpticalSOC.get(16),
                 DATApipe.get(64)
             )

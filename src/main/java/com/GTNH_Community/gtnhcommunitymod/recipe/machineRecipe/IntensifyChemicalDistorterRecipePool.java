@@ -8,7 +8,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UV;
 
 import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
-import com.GTNH_Community.gtnhcommunitymod.recipe.RecipePool;
+import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
 
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
@@ -17,7 +17,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
-public class IntensifyChemicalDistorterRecipePool implements RecipePool {
+public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
     // spotless:off
     @Override

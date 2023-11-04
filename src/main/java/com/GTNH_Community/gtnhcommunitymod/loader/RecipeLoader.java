@@ -1,6 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.loader;
 
-import com.GTNH_Community.gtnhcommunitymod.recipe.RecipePool;
+import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
 import com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe.ChemicalReactorRecipePool;
 import com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe.CircuitAssemblerRecipePool;
 import com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe.FluidSolidifierRecipePool;
@@ -12,12 +12,12 @@ import com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe.PreciseHighEnerg
 public class RecipeLoader {
 
     public static void loadRecipes() {
-        RecipePool[] recipePools = new RecipePool[] { new GTCMMachineRecipePool(),
+        IRecipePool[] recipePools = new IRecipePool[] { new GTCMMachineRecipePool(),
             new IntensifyChemicalDistorterRecipePool(), new ChemicalReactorRecipePool(),
             new PreciseHighEnergyPhotonicQuantumMasterRecipePool(), new CircuitAssemblerRecipePool(),
             new MiracleTopRecipePool(), new FluidSolidifierRecipePool() };
 
-        for (RecipePool recipePool : recipePools) {
+        for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
         }
     }

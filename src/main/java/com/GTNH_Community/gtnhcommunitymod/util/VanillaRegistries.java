@@ -6,6 +6,7 @@ import net.minecraft.item.ItemBlock;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
+// Demo
 public final class VanillaRegistries {
 
     public static void vanillaRegItem(Item item, String unlocalizedName) {

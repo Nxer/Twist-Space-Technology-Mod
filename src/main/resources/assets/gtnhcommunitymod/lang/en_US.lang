@@ -119,3 +119,5 @@ Tooltip_MagneticDrivePressureFormer_06=1500%% faster than normal | Enable Perfec
 Tooltip_MagneticDrivePressureFormer_09=1024x Parallel.
 tooltips.MoldSingularity.line1=Mold for making Singularity
 MetaItem01.3.name=Mold(Singularity)
+MetaItem01.4.name=Particle Trap - SpaceTime Shield
+tooltips.ParticleTrapTimeSpaceShield.line1=Constrain the operator(the photon) to a miniature spacetime.

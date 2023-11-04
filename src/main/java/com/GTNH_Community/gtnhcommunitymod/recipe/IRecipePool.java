@@ -1,6 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe;
 
-public interface RecipePool {
+public interface IRecipePool {
 
     /**
      * Called at RecipeLoader
