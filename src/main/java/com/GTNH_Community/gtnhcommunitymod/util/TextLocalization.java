@@ -86,6 +86,11 @@ public class TextLocalization {
         "Precise High-Energy Photonic Quantum Master",
         "NamePreciseHighEnergyPhotonicQuantumMaster");
 
+    public static final String NameInfiniteAirHatch = texter(
+        "Infinite Air Hatch",
+        "NameInfiniteAirHatch"
+    );
+
     public static final String Tooltip_PhC_MachineType = texter("Photon Controller/Laser Engraver", "Tooltip_PhC_MachineType");
     public static final String Tooltip_PhC_00 = texter("Controller block for the Precise High-Energy Photonic Quantum Master", "Tooltip_PhC_00");
     public static final String Tooltip_PhC_01 = texter(EnumChatFormatting.BLUE+"Prism tank in order, sir.", "Tooltip_PhC_01");
@@ -137,11 +142,11 @@ public class TextLocalization {
 
 
     // endregion
-    
+
     // region MiracleTop
-    
+
     public static final String NameMiracleTop = texter("Miracle Top", "NameMiracleTop");
-    
+
     public static final String Tooltip_MiracleTop_MachineType = texter("Circuit Assembler/Gravitation Breaker", "Tooltip_MiracleTop_MachineType");
     public static final String Tooltip_MiracleTop_00 = texter("Controller block for the Miracle Top.", "Tooltip_MiracleTop_00");
     public static final String Tooltip_MiracleTop_01 = texter(EnumChatFormatting.LIGHT_PURPLE+"I never think about the future because it will come sooner or later.", "Tooltip_MiracleTop_01");
@@ -152,11 +157,11 @@ public class TextLocalization {
     public static final String Tooltip_MiracleTop_06 = texter("Enable Perfect overclock when num of rings >= 8 .", "Tooltip_MiracleTop_06");
     public static final String Tooltip_MiracleTop_07 = texter("256x Parallel.", "Tooltip_MiracleTop_07");
     public static final String textMiracleTopHatchLocation = texter("Outermost 12 blocks on the ring (outermost 3 on each side).", "textMiracleTopHatchLocation");
-    
+
     // endregion
-    
+
     // region Magnetic Drive Pressure Former
-    
+
     public static final String NameMagneticDrivePressureFormer = texter("Magnetic Drive Pressure Former","NameMagneticDrivePressureFormer");
     public static final String Tooltip_MagneticDrivePressureFormer_MachineType = texter("Extruder | Bending Machine | Forming Press", "Tooltip_MagneticDrivePressureFormer_MachineType");
     public static final String Tooltip_MagneticDrivePressureFormer_00 = texter("Controller block for the Magnetic Drive Pressure Former.", "Tooltip_MagneticDrivePressureFormer_00");
@@ -171,11 +176,11 @@ public class TextLocalization {
     public static final String Tooltip_MagneticDrivePressureFormer_09 = texter("1024x Parallel.", "Tooltip_MagneticDrivePressureFormer_09");
     public static final String Tooltip_MagneticDrivePressureFormer_Hatches = texter("Frame location, Osmiridium Casing.", "Tooltip_MagneticDrivePressureFormer_Hatches");
     public static final String Tooltip_MagneticDrivePressureFormer_EnergyHatch = texter("The white, Iridium Casing, and the bottom center.", "Tooltip_MagneticDrivePressureFormer_EnergyHatch");
-    
+
     // endregion
-    
+
     // region Physical Form Switcher
-    
+
     public static final String NamePhysicalFormSwitcher = texter("Physical Form Switcher","NamePhysicalFormSwitcher");
     public static final String Tooltip_PhysicalFormSwitcher_MachineType = texter("Fluid Solidifier | Fluid Extractor", "Tooltip_PhysicalFormSwitcher_MachineType");
     public static final String Tooltip_PhysicalFormSwitcher_00 = texter("Controller block for the Physical Form Switcher", "Tooltip_PhysicalFormSwitcher_00");
@@ -184,7 +189,7 @@ public class TextLocalization {
     public static final String Tooltip_PhysicalFormSwitcher_03 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_PhysicalFormSwitcher_03");
     public static final String Tooltip_PhysicalFormSwitcher_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_PhysicalFormSwitcher_04");
     public static final String Tooltip_PhysicalFormSwitcher_05 = texter("The Glass Tier limit the recipe voltage tier.", "Tooltip_PhysicalFormSwitcher_05");
-    
-    
+
+
 }
 // spotless:on

@@ -5,7 +5,9 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagn
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMiracleTop;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePreciseHighEnergyPhotonicQuantumMaster;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameInfiniteAirHatch;
 
+import com.GTNH_Community.gtnhcommunitymod.common.machine.singleBlock.GT_MetaTileEntity_Hatch_Air;
 import net.minecraft.item.ItemStack;
 
 import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
@@ -22,6 +24,8 @@ public class MachineLoader {
     public static ItemStack MiracleTop;
     public static ItemStack MagneticDrivePressureFormer;
     public static ItemStack PhysicalFormSwitcher;
+
+    public static ItemStack InfiniteAirHatch;
 
     public static void loadMachines() {
 
@@ -56,5 +60,15 @@ public class MachineLoader {
             NamePhysicalFormSwitcher,
             NamePhysicalFormSwitcher).getStackForm(1);
         GTCMItemList.PhysicalFormSwitcher.set(PhysicalFormSwitcher);
+
+        //
+        InfiniteAirHatch = new GT_MetaTileEntity_Hatch_Air(
+            19006,
+            NameInfiniteAirHatch,
+            NameInfiniteAirHatch,
+            4
+        ).getStackForm(1);
+        GTCMItemList.InfiniteAirHatch.set(InfiniteAirHatch);
+
     }
 }
