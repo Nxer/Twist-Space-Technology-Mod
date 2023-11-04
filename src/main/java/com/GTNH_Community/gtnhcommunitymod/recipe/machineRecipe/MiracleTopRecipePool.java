@@ -836,8 +836,8 @@ public class MiracleTopRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
-                GT_Utility.copyAmount(16,Wrapped_Circuit_Board_Bio_Ultra),
-                GT_ModHandler.getModItem("bartworks","gt.bwMetaGeneratedItem0",16,32699)
+                GT_Utility.copyAmount(12,Wrapped_Circuit_Board_Bio_Ultra),
+                GT_ModHandler.getModItem("bartworks","gt.bwMetaGeneratedItem0",12,32699)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144*16),
@@ -1009,7 +1009,7 @@ public class MiracleTopRecipePool implements IRecipePool {
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(12),
+                GT_Utility.getIntegratedCircuit(16),
                 GT_ModHandler.getModItem("bartworks","gt.bwMetaGeneratedItem0",12,32756),
                 GT_ModHandler.getModItem("bartworks","gt.bwMetaGeneratedItem0",12,32730)
             )
