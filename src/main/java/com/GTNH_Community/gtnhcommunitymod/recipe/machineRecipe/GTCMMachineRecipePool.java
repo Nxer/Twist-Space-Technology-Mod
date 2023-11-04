@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.InfiniteAirHatch;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticMixer;
@@ -36,6 +37,7 @@ import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 
@@ -766,6 +768,20 @@ public class GTCMMachineRecipePool implements IRecipePool {
         
         // endregion
         
+        // region Infinity Air Intake Hatch
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(GT_Utility.getIntegratedCircuit(10),
+                                Hatch_Air_Intake_Extreme.get(4),
+                                ItemList.Electric_Pump_UHV.get(16),
+                                new Object[]{OrePrefixes.circuit.get(Materials.Infinite),8},
+                                GT_OreDictUnificator.get(OrePrefixes.plate,Materials.DraconiumAwakened,16))
+                    .fluidInputs(Materials.Cosmic.getMolten(144*16))
+                    .itemOutputs(InfiniteAirHatch.get(1))
+                    .noFluidOutputs()
+                    .eut(RECIPE_UHV)
+                    .duration(20*30)
+                    .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
+        // endregion
     }
     // spotless:on
 }
