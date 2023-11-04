@@ -7,7 +7,15 @@ import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarpe
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.DATApipe;
 import static gregtech.api.enums.Mods.GTPlusPlus;
-import static gregtech.api.enums.TierEU.*;
+import static gregtech.api.enums.TierEU.RECIPE_EV;
+import static gregtech.api.enums.TierEU.RECIPE_IV;
+import static gregtech.api.enums.TierEU.RECIPE_LuV;
+import static gregtech.api.enums.TierEU.RECIPE_MAX;
+import static gregtech.api.enums.TierEU.RECIPE_UEV;
+import static gregtech.api.enums.TierEU.RECIPE_UHV;
+import static gregtech.api.enums.TierEU.RECIPE_UIV;
+import static gregtech.api.enums.TierEU.RECIPE_UMV;
+import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 
 import net.minecraft.item.ItemStack;
@@ -458,9 +466,6 @@ public class MiracleTopRecipePool implements IRecipePool {
                 GT_Utility.getIntegratedCircuit(16),
                 GT_Utility.copyAmount(16, Wrapped_Circuit_Board_Optical),
                 OpticalSOC.get(16),
-                DATApipe.get(64),
-                DATApipe.get(64),
-                DATApipe.get(64),
                 DATApipe.get(64)
             )
             .fluidInputs(
