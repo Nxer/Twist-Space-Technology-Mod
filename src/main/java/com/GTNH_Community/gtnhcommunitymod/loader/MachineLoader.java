@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.loader;
 
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameInfiniteAirHatch;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameIntensifyChemicalDistorter;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticMixer;
@@ -16,6 +17,7 @@ import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_Magnetic
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MiracleTop;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PhysicalFormSwitcher;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.singleBlock.GT_MetaTileEntity_Hatch_Air;
 
 public class MachineLoader {
 
@@ -26,7 +28,11 @@ public class MachineLoader {
     public static ItemStack PhysicalFormSwitcher;
     public static ItemStack MagneticMixer;
 
+    public static ItemStack InfiniteAirHatch;
+
     public static void loadMachines() {
+
+        // region multi Machine controller
 
         //
         IntensifyChemicalDistorter = new GT_TileEntity_IntensifyChemicalDistorter(
@@ -59,8 +65,18 @@ public class MachineLoader {
             "NamePhysicalFormSwitcher",
             NamePhysicalFormSwitcher).getStackForm(1);
         GTCMItemList.PhysicalFormSwitcher.set(PhysicalFormSwitcher);
+
         //
         MagneticMixer = new GT_TileEntity_MagneticMixer(19006, "NameMagneticMixer", NameMagneticMixer).getStackForm(1);
         GTCMItemList.MagneticMixer.set(MagneticMixer);
+
+        // endregion
+
+        // region Single block Machine
+
+        //
+        InfiniteAirHatch = new GT_MetaTileEntity_Hatch_Air(18999, NameInfiniteAirHatch, NameInfiniteAirHatch, 4)
+            .getStackForm(1);
+        GTCMItemList.InfiniteAirHatch.set(InfiniteAirHatch);
     }
 }

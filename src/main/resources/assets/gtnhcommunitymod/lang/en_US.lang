@@ -131,6 +131,7 @@ Tooltip_PhysicalFormSwitcher_04=Additional 10%% reduction in time per Voltage Ti
 Tooltip_PhysicalFormSwitcher_00=Controller block for the Physical Form Switcher
 Tooltip_PhysicalFormSwitcher_MachineType=Fluid Solidifier | Fluid Extractor
 Tooltip_PhysicalFormSwitcher_05=The Glass Tier limit the recipe voltage tier.
+NameInfiniteAirHatch=Infinite Air Hatch
 NameMagneticMixer="Mini" Magnetic Mixer
 Tooltip_MagneticMixer_01=§cWatch out for the Bumps !
 Tooltip_MagneticMixer_00=Controller block for the "Mini" Magnetic Mixer

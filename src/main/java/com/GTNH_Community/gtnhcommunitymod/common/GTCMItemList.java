@@ -30,6 +30,9 @@ public enum GTCMItemList implements IItemContainer {
     PhysicalFormSwitcher,
     MagneticMixer,
 
+    // single block Machines
+    InfiniteAirHatch,
+
     // Blocks
 
     TestMetaBlock01_0,
