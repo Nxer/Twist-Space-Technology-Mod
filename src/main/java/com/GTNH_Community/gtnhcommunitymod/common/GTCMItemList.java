@@ -29,7 +29,7 @@ public enum GTCMItemList implements IItemContainer {
     MagneticDrivePressureFormer,
     PhysicalFormSwitcher,
 
-    //single block Machines
+    // single block Machines
     InfiniteAirHatch,
 
     // Blocks

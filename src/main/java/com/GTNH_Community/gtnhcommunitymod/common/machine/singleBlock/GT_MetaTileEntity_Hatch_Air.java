@@ -1,26 +1,24 @@
 package com.GTNH_Community.gtnhcommunitymod.common.machine.singleBlock;
 
-import gtPlusPlus.core.util.minecraft.FluidUtils;
-import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gtPlusPlus.core.util.minecraft.FluidUtils;
+import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
 public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGenerator {
 
-    public GT_MetaTileEntity_Hatch_Air(final int aID, final String aName, final String aNameRegional,
-                                             final int aTier) {
+    public GT_MetaTileEntity_Hatch_Air(final int aID, final String aName, final String aNameRegional, final int aTier) {
         super(aID, aName, aNameRegional, aTier);
     }
 
     public GT_MetaTileEntity_Hatch_Air(final String aName, final int aTier, final String[] aDescription,
-                                             final ITexture[][][] aTextures) {
+        final ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
     }
 
@@ -32,14 +30,15 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
     @Override
     public String[] getCustomTooltip() {
         String[] aTooltip = new String[2];
-        aTooltip[0] = "Infinite water supply hatch";
+        aTooltip[0] = "Infinite air supply hatch";
         aTooltip[1] = "Fills to max capacity every 5 seconds";
         return aTooltip;
     }
 
     @Override
     public Fluid getFluidToGenerate() {
-        return FluidUtils.getAir(1).getFluid();
+        return FluidUtils.getAir(1)
+            .getFluid();
     }
 
     @Override
