@@ -100,7 +100,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .eut(RECIPE_HV)
             .duration(20*8*16)
             .addTo(ICD);
-
+        // endregion
 
         // region Silicone
         GT_Values.RA.stdBuilder()
@@ -210,8 +210,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .eut(RECIPE_IV)
             .duration(256 * 48)
             .addTo(ICD);
+        // endregion
 
-        //kevlar
+        // region Kevlar
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(23),
@@ -239,6 +240,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
+                GT_Utility.getIntegratedCircuit(22),
                 Materials.Tin.getDust(45),
                 Materials.Carbon.getDust(11),
                 Materials.Diamond.getDust(64),
