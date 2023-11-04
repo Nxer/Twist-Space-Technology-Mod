@@ -3,6 +3,7 @@ package com.GTNH_Community.gtnhcommunitymod.loader;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameInfiniteAirHatch;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameIntensifyChemicalDistorter;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticDrivePressureFormer;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticMixer;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMiracleTop;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePreciseHighEnergyPhotonicQuantumMaster;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticMixer;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MiracleTop;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PhysicalFormSwitcher;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
@@ -24,22 +26,25 @@ public class MachineLoader {
     public static ItemStack MiracleTop;
     public static ItemStack MagneticDrivePressureFormer;
     public static ItemStack PhysicalFormSwitcher;
+    public static ItemStack MagneticMixer;
 
     public static ItemStack InfiniteAirHatch;
 
     public static void loadMachines() {
 
+        // region multi Machine controller
+        
         //
         IntensifyChemicalDistorter = new GT_TileEntity_IntensifyChemicalDistorter(
             19001,
-            NameIntensifyChemicalDistorter,
+            "NameIntensifyChemicalDistorter",
             NameIntensifyChemicalDistorter).getStackForm(1);
         GTCMItemList.IntensifyChemicalDistorter.set(IntensifyChemicalDistorter);
 
         //
         PreciseHighEnergyPhotonicQuantumMaster = new GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster(
             19002,
-            NamePreciseHighEnergyPhotonicQuantumMaster,
+            "NamePreciseHighEnergyPhotonicQuantumMaster",
             NamePreciseHighEnergyPhotonicQuantumMaster).getStackForm(1);
         GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.set(PreciseHighEnergyPhotonicQuantumMaster);
 
@@ -50,21 +55,28 @@ public class MachineLoader {
         //
         MagneticDrivePressureFormer = new GT_TileEntity_MagneticDrivePressureFormer(
             19004,
-            NameMagneticDrivePressureFormer,
+            "NameMagneticDrivePressureFormer",
             NameMagneticDrivePressureFormer).getStackForm(1);
         GTCMItemList.MagneticDrivePressureFormer.set(MagneticDrivePressureFormer);
 
         //
         PhysicalFormSwitcher = new GT_TileEntity_PhysicalFormSwitcher(
             19005,
-            NamePhysicalFormSwitcher,
+            "NamePhysicalFormSwitcher",
             NamePhysicalFormSwitcher).getStackForm(1);
         GTCMItemList.PhysicalFormSwitcher.set(PhysicalFormSwitcher);
 
         //
-        InfiniteAirHatch = new GT_MetaTileEntity_Hatch_Air(19006, NameInfiniteAirHatch, NameInfiniteAirHatch, 4)
-            .getStackForm(1);
+        MagneticMixer = new GT_TileEntity_MagneticMixer(19006, "NameMagneticMixer", NameMagneticMixer).getStackForm(1);
+        GTCMItemList.MagneticMixer.set(MagneticMixer);
+        
+        // endregion
+        
+        // region Single block Machine
+        
+        //
+        InfiniteAirHatch = new GT_MetaTileEntity_Hatch_Air(18999, NameInfiniteAirHatch, NameInfiniteAirHatch, 4)
+                               .getStackForm(1);
         GTCMItemList.InfiniteAirHatch.set(InfiniteAirHatch);
-
     }
 }

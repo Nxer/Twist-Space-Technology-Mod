@@ -2,10 +2,12 @@ package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticMixer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarper;
 import static com.dreammaster.gthandler.CustomItemList.FluidExtractorUV;
 import static com.dreammaster.gthandler.CustomItemList.FluidSolidifierUV;
+import static com.dreammaster.gthandler.CustomItemList.MixerUV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UMV_UIV;
@@ -743,6 +745,27 @@ public class GTCMMachineRecipePool implements IRecipePool {
         
         // endregion
 
+        // region MagneticMixer
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 16),
+                MixerUV.get(64),
+                ItemList.Field_Generator_UV.get(16),
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16},
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUV, 8)
+            )
+            .fluidInputs(Materials.Iridium.getMolten(144*64))
+            .itemOutputs(MagneticMixer.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UV)
+            .duration(20*384)
+            .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
+        
+        // endregion
+        
     }
     // spotless:on
 }

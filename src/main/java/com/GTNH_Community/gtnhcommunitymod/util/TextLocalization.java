@@ -24,6 +24,7 @@ public class TextLocalization {
             + " hologram projector to build the main structure.",
         "BLUE_PRINT_INFO");
     public static final String textCasing = texter("Casing", "textCasing");
+    public static final String textUseBlueprint = texter("Use "+EnumChatFormatting.BLUE+"Blue"+EnumChatFormatting.AQUA+"print"+EnumChatFormatting.RESET+" to preview", "textUseBlueprint");
     public static final String textAnyCasing = texter("Any Casing", "textAnyCasing");
     public static final String textTopCenter = texter("Top center", "textTopCenter");
     public static final String textFrontCenter = texter("Front center", "textFrontCenter");
@@ -86,10 +87,7 @@ public class TextLocalization {
         "Precise High-Energy Photonic Quantum Master",
         "NamePreciseHighEnergyPhotonicQuantumMaster");
 
-    public static final String NameInfiniteAirHatch = texter(
-        "Infinite Air Hatch",
-        "NameInfiniteAirHatch"
-    );
+    
 
     public static final String Tooltip_PhC_MachineType = texter("Photon Controller/Laser Engraver", "Tooltip_PhC_MachineType");
     public static final String Tooltip_PhC_00 = texter("Controller block for the Precise High-Energy Photonic Quantum Master", "Tooltip_PhC_00");
@@ -189,7 +187,26 @@ public class TextLocalization {
     public static final String Tooltip_PhysicalFormSwitcher_03 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_PhysicalFormSwitcher_03");
     public static final String Tooltip_PhysicalFormSwitcher_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_PhysicalFormSwitcher_04");
     public static final String Tooltip_PhysicalFormSwitcher_05 = texter("The Glass Tier limit the recipe voltage tier.", "Tooltip_PhysicalFormSwitcher_05");
+    
+    // endregion
+    
+    // region Magnetic Mixer
+    public static final String NameMagneticMixer = texter("\"Mini\" Magnetic Mixer","NameMagneticMixer");
+    public static final String Tooltip_MagneticMixer_MachineType = texter("Mixer", "Tooltip_MagneticMixer_MachineType");
+    public static final String Tooltip_MagneticMixer_00 = texter("Controller block for the \"Mini\" Magnetic Mixer", "Tooltip_MagneticMixer_00");
+    public static final String Tooltip_MagneticMixer_01 = texter(EnumChatFormatting.RED +  "Watch out for the Bumps !", "Tooltip_MagneticMixer_01");
+    public static final String Tooltip_MagneticMixer_02 = texter("Looks more like a tumble washing machine.", "Tooltip_MagneticMixer_02");
+    public static final String Tooltip_MagneticMixer_03 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_MagneticMixer_03");
+    public static final String Tooltip_MagneticMixer_04 = texter("Additional 20%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_MagneticMixer_04");
 
-
+    // endregion
+    
+    // region InfiniteAirHatch
+    public static final String NameInfiniteAirHatch = texter(
+        "Infinite Air Hatch",
+        "NameInfiniteAirHatch"
+    );
+    
+    // endregion
 }
 // spotless:on
