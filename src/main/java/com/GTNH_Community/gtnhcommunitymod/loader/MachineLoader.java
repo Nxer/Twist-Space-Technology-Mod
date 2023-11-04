@@ -33,7 +33,7 @@ public class MachineLoader {
     public static void loadMachines() {
 
         // region multi Machine controller
-        
+
         //
         IntensifyChemicalDistorter = new GT_TileEntity_IntensifyChemicalDistorter(
             19001,
@@ -69,14 +69,14 @@ public class MachineLoader {
         //
         MagneticMixer = new GT_TileEntity_MagneticMixer(19006, "NameMagneticMixer", NameMagneticMixer).getStackForm(1);
         GTCMItemList.MagneticMixer.set(MagneticMixer);
-        
+
         // endregion
-        
+
         // region Single block Machine
-        
+
         //
         InfiniteAirHatch = new GT_MetaTileEntity_Hatch_Air(18999, NameInfiniteAirHatch, NameInfiniteAirHatch, 4)
-                               .getStackForm(1);
+            .getStackForm(1);
         GTCMItemList.InfiniteAirHatch.set(InfiniteAirHatch);
     }
 }
