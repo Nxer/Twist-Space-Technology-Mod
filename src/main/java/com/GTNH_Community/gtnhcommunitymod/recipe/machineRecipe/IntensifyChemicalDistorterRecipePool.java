@@ -1,11 +1,5 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
-import static gregtech.api.enums.TierEU.RECIPE_HV;
-import static gregtech.api.enums.TierEU.RECIPE_IV;
-import static gregtech.api.enums.TierEU.RECIPE_MV;
-import static gregtech.api.enums.TierEU.RECIPE_UHV;
-import static gregtech.api.enums.TierEU.RECIPE_UV;
-
 import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
@@ -18,6 +12,8 @@ import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+
+import static gregtech.api.enums.TierEU.*;
 
 public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
@@ -230,8 +226,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 ItemList.WovenKevlar.get(61))
             .noFluidOutputs()
             .noOptimize()
-            .specialValue(10800)
-            .eut(RECIPE_UHV)
+            .specialValue(11700)
+            .eut(RECIPE_UIV)
             .duration(128 * 64)
             .addTo(ICD);
 
@@ -252,8 +248,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Nitrogen.getGas(450000)  )
             .noItemOutputs()
             .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(45000))
-            .specialValue(10800)
-            .eut(RECIPE_UHV)
+            .specialValue(11700)
+            .eut(RECIPE_UIV)
             .duration(128 * 64)
             .addTo(ICD);
 
