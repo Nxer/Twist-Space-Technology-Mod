@@ -268,19 +268,19 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     // endregion
 
     // region General Overrides
-    
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        
+
         aNBT.setBoolean("mode", mode);
         aNBT.setBoolean("enablePerfectOverclockSignal", enablePerfectOverclockSignal);
     }
-    
+
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        
+
         mode = aNBT.getBoolean("mode");
         enablePerfectOverclockSignal = aNBT.getBoolean("enablePerfectOverclockSignal");
     }

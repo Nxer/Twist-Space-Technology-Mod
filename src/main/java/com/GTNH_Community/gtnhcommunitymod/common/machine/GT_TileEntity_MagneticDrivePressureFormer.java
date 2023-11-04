@@ -417,18 +417,18 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(62) };
     }
-    
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        
+
         aNBT.setByte("mode", mode);
     }
-    
+
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        
+
         mode = aNBT.getByte("mode");
     }
 

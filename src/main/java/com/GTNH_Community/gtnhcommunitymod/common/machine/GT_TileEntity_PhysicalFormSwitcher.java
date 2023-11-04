@@ -226,20 +226,20 @@ public class GT_TileEntity_PhysicalFormSwitcher
     // endregion
 
     // region Overrides
-	
-	@Override
-	public void saveNBTData(NBTTagCompound aNBT) {
-		super.saveNBTData(aNBT);
-		
-		aNBT.setBoolean("mode", mode);
-	}
-	
-	@Override
-	public void loadNBTData(final NBTTagCompound aNBT) {
-		super.loadNBTData(aNBT);
-		
-		mode = aNBT.getBoolean("mode");
-	}
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setBoolean("mode", mode);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        mode = aNBT.getBoolean("mode");
+    }
 
     // Scanner Info
     @Override

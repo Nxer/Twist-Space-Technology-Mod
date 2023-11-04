@@ -316,7 +316,7 @@ public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMul
         ret[origin.length] = "Speed multiplier: " + this.speedTotal;
         return ret;
     }
-    
+
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return true;

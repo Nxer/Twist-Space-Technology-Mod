@@ -334,18 +334,18 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     public boolean supportsSingleRecipeLocking() {
         return true;
     }
-    
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        
+
         aNBT.setInteger("mode", mode);
     }
-    
+
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        
+
         mode = aNBT.getInteger("mode");
     }
 
