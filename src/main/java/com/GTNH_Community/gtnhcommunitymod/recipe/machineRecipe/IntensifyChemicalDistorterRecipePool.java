@@ -52,7 +52,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .addTo(ICD);
 
         // endregion
-        
+
         // region Phosphoric Acid
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -69,7 +69,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .eut(RECIPE_MV)
             .duration(20*8)
             .addTo(ICD);
-        
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(19),
@@ -97,7 +97,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .eut(RECIPE_HV)
             .duration(20*8*16)
             .addTo(ICD);
-            
+
 
         // region Silicone
         GT_Values.RA.stdBuilder()
@@ -206,6 +206,53 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .specialValue(10800)
             .eut(RECIPE_IV)
             .duration(256 * 48)
+            .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(19),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(6),
+                Materials.Calcium.getDust(2))
+            .fluidInputs(
+                Materials.Chlorine.getGas(34000),
+                Materials.Hydrogen.getGas(230000),
+                Materials.Oxygen.getGas(36000)
+                Materials.Nitrogen.getGas(36000))
+            .itemOutputs(
+                ItemList.WovenKevlar.get(64)
+                ItemList.WovenKevlar.get(61))
+            .noFluidOutputs()
+            .noOptimize()
+            .specialValue(7200)
+            .eut(RECIPE_UV)
+            .duration(128 * 8)
+            .addTo(ICD);
+
+        //kevlar
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                Materials.Tin.getDust(45),
+                Materials.Carbon.getDust(11),
+                Materials.Diamond.getDust(64),
+                Materials.Diamond.getDust(7),
+                Materials.Nickel.getDust(5),
+                Materials.Palladium.getDust(10),
+                Materials.Iron.getDust(5),
+                Materials.Silicon.getDust(36))
+            .fluidInputs(
+                Materials.Water.getFluid(1964000),
+                Materials.Hydrogen.getGas(1000 * 1364)
+                Materials.Chlorine.getGas(87000)
+                Materials.Nitrogen.getGas(450000)  )
+            .noItemOutputs()
+            .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(45000))
+            .specialValue(7200)
+            .eut(RECIPE_UV)
+            .duration(128 * 8)
             .addTo(ICD);
 
         // endregion
