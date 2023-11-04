@@ -208,6 +208,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .duration(256 * 48)
             .addTo(ICD);
 
+        //kevlar
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(19),
@@ -227,12 +228,11 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 ItemList.WovenKevlar.get(61))
             .noFluidOutputs()
             .noOptimize()
-            .specialValue(7200)
-            .eut(RECIPE_UV)
-            .duration(128 * 8)
+            .specialValue(10800)
+            .eut(RECIPE_UHV)
+            .duration(128 * 64)
             .addTo(ICD);
 
-        //kevlar
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 Materials.Tin.getDust(45),
@@ -250,9 +250,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Nitrogen.getGas(450000)  )
             .noItemOutputs()
             .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(45000))
-            .specialValue(7200)
-            .eut(RECIPE_UV)
-            .duration(128 * 8)
+            .specialValue(10800)
+            .eut(RECIPE_UHV)
+            .duration(128 * 64)
             .addTo(ICD);
 
         // endregion
