@@ -317,11 +317,6 @@ public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMul
         return ret;
     }
 
-    /**
-     * Checks if this is a Correct Machine Part for this kind of Machine (Turbine Rotor for example)
-     *
-     * @param aStack
-     */
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return true;

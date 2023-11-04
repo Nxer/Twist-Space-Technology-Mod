@@ -4,6 +4,7 @@ import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
+import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 
 import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
@@ -12,7 +13,9 @@ import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
 
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -52,7 +55,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .addTo(ICD);
 
         // endregion
-        
+
         // region Phosphoric Acid
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -69,7 +72,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .eut(RECIPE_MV)
             .duration(20*8)
             .addTo(ICD);
-        
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(19),
@@ -97,7 +100,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .eut(RECIPE_HV)
             .duration(20*8*16)
             .addTo(ICD);
-            
+        // endregion
 
         // region Silicone
         GT_Values.RA.stdBuilder()
@@ -206,6 +209,56 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .specialValue(10800)
             .eut(RECIPE_IV)
             .duration(256 * 48)
+            .addTo(ICD);
+        // endregion
+
+        // region Kevlar
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(23),
+                ItemList.Spinneret.get(0),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(6),
+                Materials.Calcium.getDust(2))
+            .fluidInputs(
+                Materials.Chlorine.getGas(1000*34),
+                Materials.Hydrogen.getGas(1000*230),
+                Materials.Oxygen.getGas(1000*36),
+                Materials.Nitrogen.getGas(1000*36))
+            .itemOutputs(
+                ItemList.WovenKevlar.get(64),
+                ItemList.WovenKevlar.get(61))
+            .noFluidOutputs()
+            .noOptimize()
+            .specialValue(11700)
+            .eut(RECIPE_UIV)
+            .duration(20 * 64)
+            .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(22),
+                Materials.Tin.getDust(45),
+                Materials.Carbon.getDust(11),
+                Materials.Diamond.getDust(64),
+                Materials.Diamond.getDust(7),
+                Materials.Nickel.getDust(5),
+                Materials.Palladium.getDust(10),
+                Materials.Iron.getDust(5),
+                Materials.Silicon.getDust(36))
+            .fluidInputs(
+                Materials.Oxygen.getGas(1000*1964),
+                Materials.Hydrogen.getGas(1000 * 5292),
+                Materials.Chlorine.getGas(1000*87),
+                Materials.Nitrogen.getGas(1000*450)  )
+            .noItemOutputs()
+            .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(1000*45))
+            .specialValue(11700)
+            .eut(RECIPE_UIV)
+            .duration(20 * 64)
             .addTo(ICD);
 
         // endregion
