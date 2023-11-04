@@ -2,7 +2,10 @@ package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarper;
+import static com.dreammaster.gthandler.CustomItemList.FluidExtractorUV;
+import static com.dreammaster.gthandler.CustomItemList.FluidSolidifierUV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UMV_UIV;
@@ -58,6 +61,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IItemContainer;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import ic2.core.Ic2Items;
 
@@ -697,7 +701,47 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20*256)
             .addTo(AssemblyLine);
         
+        // endregion
         
+        // region PhysicalFormSwitcher
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(10),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt,Materials.Naquadria,16),
+                        FluidExtractorUV.get(64),
+                        
+                        FluidSolidifierUV.get(64),
+                        ItemList.Field_Generator_UV.get(16),
+                        GT_OreDictUnificator.get(OrePrefixes.plateDense,Materials.NaquadahAlloy,16),
+                        
+                        new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),16},
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt04,Materials.SuperconductorUV,8)
+                    )
+                    .fluidInputs(Materials.Iridium.getMolten(144*64))
+                    .itemOutputs(PhysicalFormSwitcher.get(1))
+                    .noFluidOutputs()
+                    .eut(RECIPE_UV)
+                    .duration(20*180)
+                    .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
+        
+        // Containment Field casing
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(11),
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Steel, 1),
+                ItemList.Field_Generator_LuV.get(4),
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate),8},
+                GT_OreDictUnificator.get(OrePrefixes.cableGt01,Materials.Naquadah,4),
+                GT_OreDictUnificator.get(OrePrefixes.plate,Materials.Steel,8))
+            .fluidInputs(Materials.NaquadahAlloy.getMolten(144*4))
+            .itemOutputs(GT_ModHandler.getModItem("gregtech","gt.blockcasings2",1,8))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UV)
+            .duration(20*30)
+            .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
+        
+        // endregion
 
     }
     // spotless:on

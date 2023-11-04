@@ -27,6 +27,7 @@ public enum GTCMItemList implements IItemContainer {
     PreciseHighEnergyPhotonicQuantumMaster,
     MiracleTop,
     MagneticDrivePressureFormer,
+    PhysicalFormSwitcher,
 
     // Blocks
 

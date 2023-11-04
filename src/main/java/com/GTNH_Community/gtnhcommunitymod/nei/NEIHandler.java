@@ -24,6 +24,8 @@ public class NEIHandler {
         sendCatalyst("gt.recipe.metalbender", "gregtech:gt.blockmachines:19004", -10);
         sendCatalyst("gt.recipe.press", "gregtech:gt.blockmachines:19004", -10);
         sendCatalyst("gt.recipe.extruder", "gregtech:gt.blockmachines:19004", -10);
+        sendCatalyst("gt.recipe.fluidextractor", "gregtech:gt.blockmachines:19005", -10);
+        sendCatalyst("gt.recipe.fluidsolidifier", "gregtech:gt.blockmachines:19005", -10);
 
     }
 
