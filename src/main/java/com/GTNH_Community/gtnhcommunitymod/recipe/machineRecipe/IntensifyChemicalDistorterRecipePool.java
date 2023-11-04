@@ -244,8 +244,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Iron.getDust(5),
                 Materials.Silicon.getDust(36))
             .fluidInputs(
-                Materials.Water.getFluid(1964000),
-                Materials.Hydrogen.getGas(1000 * 1364)
+                Materials.Oxygen.getGas(1964000),
+                Materials.Hydrogen.getGas(1000 * 5292)
                 Materials.Chlorine.getGas(87000)
                 Materials.Nitrogen.getGas(450000)  )
             .noItemOutputs()
