@@ -42,6 +42,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -267,6 +268,22 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     // endregion
 
     // region General Overrides
+    
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        
+        aNBT.setBoolean("mode", mode);
+        aNBT.setBoolean("enablePerfectOverclockSignal", enablePerfectOverclockSignal);
+    }
+    
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        
+        mode = aNBT.getBoolean("mode");
+        enablePerfectOverclockSignal = aNBT.getBoolean("enablePerfectOverclockSignal");
+    }
 
     @Override
     public String[] getInfoData() {
