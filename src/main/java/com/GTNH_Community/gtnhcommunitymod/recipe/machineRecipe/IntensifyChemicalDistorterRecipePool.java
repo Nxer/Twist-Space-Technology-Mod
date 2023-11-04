@@ -1,5 +1,7 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
+import static gregtech.api.enums.TierEU.*;
+
 import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
@@ -12,8 +14,6 @@ import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-
-import static gregtech.api.enums.TierEU.*;
 
 public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
@@ -209,7 +209,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         //kevlar
         GT_Values.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(19),
+                GT_Utility.getIntegratedCircuit(23),
+                ItemList.Spinneret.get(0),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),
