@@ -840,9 +840,9 @@ public class MiracleTopRecipePool implements IRecipePool {
                 GT_ModHandler.getModItem("bartworks","gt.bwMetaGeneratedItem0",12,32699)
             )
             .fluidInputs(
-                new FluidStack(solderIndAlloy, 144*16),
-                new FluidStack(FluidRegistry.getFluid("molten.chromaticglass"), 144*8*16 ),
-                Materials.NiobiumTitanium.getMolten(144*32*16)
+                new FluidStack(solderIndAlloy, 144*12),
+                new FluidStack(FluidRegistry.getFluid("molten.chromaticglass"), 144*8*12),
+                Materials.NiobiumTitanium.getMolten(144*32*12)
             )
             .itemOutputs(
                 ItemList.Circuit_Bioprocessor.get(64),
