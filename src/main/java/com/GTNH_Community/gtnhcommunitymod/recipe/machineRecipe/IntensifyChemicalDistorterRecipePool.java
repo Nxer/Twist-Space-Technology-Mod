@@ -229,7 +229,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .noOptimize()
             .specialValue(11700)
             .eut(RECIPE_UIV)
-            .duration(128 * 64)
+            .duration(20 * 64)
             .addTo(ICD);
 
         GT_Values.RA.stdBuilder()
@@ -251,7 +251,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(45000))
             .specialValue(11700)
             .eut(RECIPE_UIV)
-            .duration(128 * 64)
+            .duration(20 * 64)
             .addTo(ICD);
 
         // endregion
