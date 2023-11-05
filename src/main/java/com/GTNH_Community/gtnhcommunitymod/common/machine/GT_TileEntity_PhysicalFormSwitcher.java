@@ -84,6 +84,13 @@ public class GT_TileEntity_PhysicalFormSwitcher
     protected ProcessingLogic createProcessingLogic() {
         return new ProcessingLogic() {
 
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                setSpeedBonus(getSpeedBonus());
+                return super.process();
+            }
+
             @Override
             protected @NotNull CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
                 if (glassTier < 12 && glassTier < GT_Utility.getTier(recipe.mEUt)) {
@@ -91,8 +98,7 @@ public class GT_TileEntity_PhysicalFormSwitcher
                 }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes)
-            .setSpeedBonus(this.getSpeedBonus());
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
     public int getMaxParallelRecipes() {

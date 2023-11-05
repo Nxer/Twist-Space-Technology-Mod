@@ -34,6 +34,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -48,6 +50,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
+import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -75,8 +78,15 @@ public class GT_TileEntity_MagneticDomainConstructor
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic().setMaxParallelSupplier(this::getMaxParallelRecipes)
-            .setSpeedBonus(this.getSpeedBonus());
+        return new ProcessingLogic() {
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                setSpeedBonus(getSpeedBonus());
+                return super.process();
+            }
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
     public int getMaxParallelRecipes() {
@@ -142,7 +152,7 @@ public class GT_TileEntity_MagneticDomainConstructor
     // region Structure
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        int ring = stackSize.stackSize;
+        int ExtraRing = stackSize.stackSize - 1;
         this.buildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
@@ -151,8 +161,8 @@ public class GT_TileEntity_MagneticDomainConstructor
             baseVerticalOffSet,
             baseDepthOffSet);
 
-        if (ring > 1) {
-            for (int pointer = 1; pointer < ring; pointer++) {
+        if (ExtraRing > 0) {
+            for (int pointer = 1; pointer < ExtraRing; pointer++) {
                 this.buildPiece(
                     STRUCTURE_PIECE_MIDDLE,
                     stackSize,
@@ -169,7 +179,7 @@ public class GT_TileEntity_MagneticDomainConstructor
             hintsOnly,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - ring * 4);
+            baseDepthOffSet - ExtraRing * 4);
 
     }
 
