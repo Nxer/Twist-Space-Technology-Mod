@@ -2,13 +2,16 @@ package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.InfiniteAirHatch;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.IntensifyChemicalDistorter;
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDomainConstructor;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticMixer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarper;
+import static com.dreammaster.gthandler.CustomItemList.ElectromagneticSeparatorUHV;
 import static com.dreammaster.gthandler.CustomItemList.FluidExtractorUV;
 import static com.dreammaster.gthandler.CustomItemList.FluidSolidifierUV;
 import static com.dreammaster.gthandler.CustomItemList.MixerUV;
+import static com.dreammaster.gthandler.CustomItemList.PolarizerUHV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UMV_UIV;
@@ -782,6 +785,34 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     .duration(20*30)
                     .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
         // endregion
+        
+        // region MagneticDomainConstructor
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 16),
+                ElectromagneticSeparatorUHV.get(16),
+                
+                PolarizerUHV.get(16),
+                ItemList.Field_Generator_UV.get(3),
+                ItemList.Robot_Arm_UHV.get(8),
+                
+                new Object[]{OrePrefixes.circuit.get(Materials.Bio),16},
+                GT_OreDictUnificator.get(OrePrefixes.plate,Materials.BlackPlutonium,64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04,Materials.SuperconductorUHV,16)
+            )
+            .fluidInputs(new FluidStack(solderPlasma,144*64))
+            .itemOutputs(MagneticDomainConstructor.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UHV)
+            .duration(20*320)
+            .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
+        
+        
+        // endregion
+        
+        
     }
     // spotless:on
 }

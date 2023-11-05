@@ -315,7 +315,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(ItemList.Circuit_OpticalMainframe.get(1))
             .noFluidOutputs()
             .eut(RECIPE_UEV)
-            .duration(20*300)
+            .duration(20*500)
             .addTo(MT);
 
         // Optical Computer

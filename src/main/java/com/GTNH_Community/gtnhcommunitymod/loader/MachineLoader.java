@@ -2,6 +2,7 @@ package com.GTNH_Community.gtnhcommunitymod.loader;
 
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameInfiniteAirHatch;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameIntensifyChemicalDistorter;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticDomainConstructor;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticMixer;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMiracleTop;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 
 import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticDomainConstructor;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticMixer;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MiracleTop;
@@ -27,7 +29,9 @@ public class MachineLoader {
     public static ItemStack MagneticDrivePressureFormer;
     public static ItemStack PhysicalFormSwitcher;
     public static ItemStack MagneticMixer;
+    public static ItemStack MagneticDomainConstructor;
 
+    // Single Block
     public static ItemStack InfiniteAirHatch;
 
     public static void loadMachines() {
@@ -69,6 +73,13 @@ public class MachineLoader {
         //
         MagneticMixer = new GT_TileEntity_MagneticMixer(19006, "NameMagneticMixer", NameMagneticMixer).getStackForm(1);
         GTCMItemList.MagneticMixer.set(MagneticMixer);
+
+        //
+        MagneticDomainConstructor = new GT_TileEntity_MagneticDomainConstructor(
+            19007,
+            "NameMagneticDomainConstructor",
+            NameMagneticDomainConstructor).getStackForm(1);
+        GTCMItemList.MagneticDomainConstructor.set(MagneticDomainConstructor);
 
         // endregion
 
