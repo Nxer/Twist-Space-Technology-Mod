@@ -47,6 +47,7 @@ dependencies {
     implementation('com.github.GTNewHorizons:Avaritiaddons:1.6.0-GTNH:dev')
     implementation('com.github.GTNewHorizons:Eternal-Singularity:1.1.2:dev')
     implementation('com.github.GTNewHorizons:Universal-Singularities:8.6.7:dev')
+    implementation('com.github.GTNewHorizons:BlockRenderer6343:1.0.3:dev')
 //    implementation('com.github.GTNewHorizons:KubaTech:0.13.4:dev')
 
 }

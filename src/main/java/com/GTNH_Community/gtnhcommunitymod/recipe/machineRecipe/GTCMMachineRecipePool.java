@@ -6,6 +6,7 @@ import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDo
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticMixer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.PhysicalFormSwitcher;
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.Silksong;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarper;
 import static com.dreammaster.gthandler.CustomItemList.ElectromagneticSeparatorUHV;
 import static com.dreammaster.gthandler.CustomItemList.FluidExtractorUV;
@@ -16,6 +17,7 @@ import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UMV_UIV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UXV_UMV;
+import static com.dreammaster.gthandler.CustomItemList.WiremillUV;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Spacetime;
@@ -809,8 +811,30 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20*320)
             .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
         
-        
         // endregion
+        
+        // region Silksong
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 8),
+                WiremillUV.get(16),
+                
+                GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 8),
+                ItemList.Robot_Arm_ZPM.get(16),
+                ItemList.Conveyor_Module_ZPM.get(16),
+                
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate),8},
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorZPM, 16),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 16)
+            )
+            .fluidInputs(Materials.Iridium.getMolten(144*32))
+            .itemOutputs(Silksong.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_ZPM)
+            .duration(20*600)
+            .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
         
         
     }

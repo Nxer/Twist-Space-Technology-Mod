@@ -30,6 +30,7 @@ public enum GTCMItemList implements IItemContainer {
     PhysicalFormSwitcher,
     MagneticMixer,
     MagneticDomainConstructor,
+    Silksong,
 
     // single block Machines
     InfiniteAirHatch,

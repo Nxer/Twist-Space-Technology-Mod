@@ -29,6 +29,7 @@ public class NEIHandler {
         sendCatalyst("gtpp.recipe.multimixer", "gregtech:gt.blockmachines:19006", -10);
         sendCatalyst("gt.recipe.polarizer", "gregtech:gt.blockmachines:19007", -10);
         sendCatalyst("gt.recipe.electromagneticseparator", "gregtech:gt.blockmachines:19007", -10);
+        sendCatalyst("gt.recipe.wiremill", "gregtech:gt.blockmachines:19008", -10);
 
     }
 

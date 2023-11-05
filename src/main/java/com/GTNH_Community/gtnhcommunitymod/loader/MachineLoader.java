@@ -8,6 +8,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagn
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMiracleTop;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePreciseHighEnergyPhotonicQuantumMaster;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameSilksong;
 
 import net.minecraft.item.ItemStack;
 
@@ -19,6 +20,7 @@ import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_Magnetic
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MiracleTop;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PhysicalFormSwitcher;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_Silksong;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.singleBlock.GT_MetaTileEntity_Hatch_Air;
 
 public class MachineLoader {
@@ -30,6 +32,7 @@ public class MachineLoader {
     public static ItemStack PhysicalFormSwitcher;
     public static ItemStack MagneticMixer;
     public static ItemStack MagneticDomainConstructor;
+    public static ItemStack Silksong;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -80,6 +83,10 @@ public class MachineLoader {
             "NameMagneticDomainConstructor",
             NameMagneticDomainConstructor).getStackForm(1);
         GTCMItemList.MagneticDomainConstructor.set(MagneticDomainConstructor);
+
+        //
+        Silksong = new GT_TileEntity_Silksong(19008, "NameSilksong", NameSilksong).getStackForm(1);
+        GTCMItemList.Silksong.set(Silksong);
 
         // endregion
 

@@ -10,13 +10,16 @@ import static gregtech.api.enums.TierEU.RECIPE_UV;
 import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
+import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsKevlar;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
@@ -432,6 +435,101 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .addTo(ICD);
 
         // endregion
+        
+        // region Bastnasite
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(3),
+                GT_OreDictUnificator.get(OrePrefixes.crushed,Materials.Bastnasite,64),// Bastnasite
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
+                
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 16),
+                
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64)
+                
+            )
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*768),
+                Materials.Nitrogen.getGas(1000*210),
+                Materials.Chlorine.getGas(1000*260),
+                Materials.Fluorine.getGas(1000*75)
+            )
+            .itemOutputs(
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 15),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
+                WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust,11),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 35)
+            )
+            .fluidOutputs(
+                Materials.Oxygen.getGas(1000*150)
+            )
+            .specialValue(11700)
+            .eut(RECIPE_UHV)
+            .duration(20*20)
+            .addTo(ICD);
+        
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(3),
+                        GT_OreDictUnificator.get(OrePrefixes.crushed,Materials.Bastnasite,64),// Bastnasite
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
+                        
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 48),
+                        
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64)
+                    
+                    )
+                    .fluidInputs(
+                        Materials.Hydrogen.getGas(1000*752),
+                        Materials.Nitrogen.getGas(1000*210),
+                        Materials.Chlorine.getGas(1000*260),
+                        Materials.Fluorine.getGas(1000*75)
+                    )
+                    .itemOutputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 15),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
+                        WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust,11),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 35)
+                    )
+                    .fluidOutputs(
+                        Materials.Oxygen.getGas(1000*166)
+                    )
+                    .specialValue(11700)
+                    .eut(RECIPE_UHV)
+                    .duration(20*20)
+                    .addTo(ICD);
 
     }
     // spotless:on

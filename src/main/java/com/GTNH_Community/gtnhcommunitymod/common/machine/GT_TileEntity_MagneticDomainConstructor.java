@@ -152,7 +152,7 @@ public class GT_TileEntity_MagneticDomainConstructor
     // region Structure
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        int ExtraRing = stackSize.stackSize - 1;
+        int Ring = stackSize.stackSize;
         this.buildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
@@ -161,8 +161,8 @@ public class GT_TileEntity_MagneticDomainConstructor
             baseVerticalOffSet,
             baseDepthOffSet);
 
-        if (ExtraRing > 0) {
-            for (int pointer = 1; pointer < ExtraRing; pointer++) {
+        if (Ring > 1) {
+            for (int pointer = 1; pointer < Ring; pointer++) {
                 this.buildPiece(
                     STRUCTURE_PIECE_MIDDLE,
                     stackSize,
@@ -179,7 +179,7 @@ public class GT_TileEntity_MagneticDomainConstructor
             hintsOnly,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - ExtraRing * 4);
+            baseDepthOffSet - Ring * 4);
 
     }
 
@@ -222,7 +222,7 @@ public class GT_TileEntity_MagneticDomainConstructor
         }
 
         built += survivialBuildPiece(
-            STRUCTURE_PIECE_MAIN,
+            STRUCTURE_PIECE_END,
             stackSize,
             baseHorizontalOffSet,
             baseVerticalOffSet,
