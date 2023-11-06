@@ -138,7 +138,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     public boolean isPerfectOverclock() {
         boolean sign = false;
 
-        if (1 == mode || 2 == mode) {
+        if (mode != 0) {
             // Bending & Forming Press mode
             sign = true;
         } else if (this.coilLevel.getLevel() >= 14) {
@@ -175,6 +175,8 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                 return GT_Recipe.GT_Recipe_Map.sBenderRecipes;
             case 2:
                 return GT_Recipe.GT_Recipe_Map.sPressRecipes;
+            case 3:
+                return GT_Recipe.GT_Recipe_Map.sHammerRecipes;
             default:
                 return GT_Recipe.GT_Recipe_Map.sExtruderRecipes;
         }
@@ -183,7 +185,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 3);
+            this.mode = (byte) ((this.mode + 1) % 4);
 
             GT_Utility.sendChatToPlayer(
                 aPlayer,

@@ -23,6 +23,7 @@ public class NEIHandler {
         sendCatalyst("gt.recipe.laserengraver", "gregtech:gt.blockmachines:19002", -10);
         sendCatalyst("gt.recipe.metalbender", "gregtech:gt.blockmachines:19004", -10);
         sendCatalyst("gt.recipe.press", "gregtech:gt.blockmachines:19004", -10);
+        sendCatalyst("gt.recipe.hammer", "gregtech:gt.blockmachines:19004", -10);
         sendCatalyst("gt.recipe.extruder", "gregtech:gt.blockmachines:19004", -10);
         sendCatalyst("gt.recipe.fluidextractor", "gregtech:gt.blockmachines:19005", -10);
         sendCatalyst("gt.recipe.fluidsolidifier", "gregtech:gt.blockmachines:19005", -10);
@@ -30,6 +31,8 @@ public class NEIHandler {
         sendCatalyst("gt.recipe.polarizer", "gregtech:gt.blockmachines:19007", -10);
         sendCatalyst("gt.recipe.electromagneticseparator", "gregtech:gt.blockmachines:19007", -10);
         sendCatalyst("gt.recipe.wiremill", "gregtech:gt.blockmachines:19008", -10);
+        sendCatalyst("gt.recipe.slicer", "gregtech:gt.blockmachines:19009", -10);
+        sendCatalyst("gt.recipe.cuttingsaw", "gregtech:gt.blockmachines:19009", -10);
 
     }
 

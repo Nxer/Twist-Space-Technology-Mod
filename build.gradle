@@ -1,4 +1,4 @@
-//version: 1698936026
+//version: 1699231026
 /*
  DO NOT CHANGE THIS FILE!
  Also, you may replace this file at any time if there is an update available.
@@ -1172,30 +1172,32 @@ tasks.named("ideVirtualMainClasses").configure {
 // workaround variable hiding in pom processing
 def projectConfigs = project.configurations
 
-publishing {
-    publications {
-        create("maven", MavenPublication) {
-            from components.java
+if (System.getenv("MAVEN_USER") != null) {
+    publishing {
+        publications {
+            create("maven", MavenPublication) {
+                from components.java
 
-            if (apiPackage) {
-                artifact apiJar
+                if (apiPackage) {
+                    artifact apiJar
+                }
+
+                groupId = System.getenv("ARTIFACT_GROUP_ID") ?: project.group
+                artifactId = System.getenv("ARTIFACT_ID") ?: project.name
+                // Using the identified version, not project.version as it has the prepended 1.7.10
+                version = System.getenv("RELEASE_VERSION") ?: identifiedVersion
             }
-
-            groupId = System.getenv("ARTIFACT_GROUP_ID") ?: project.group
-            artifactId = System.getenv("ARTIFACT_ID") ?: project.name
-            // Using the identified version, not project.version as it has the prepended 1.7.10
-            version = System.getenv("RELEASE_VERSION") ?: identifiedVersion
         }
-    }
 
-    repositories {
-        if (usesMavenPublishing.toBoolean()) {
-            maven {
-                url = mavenPublishUrl
-                allowInsecureProtocol = mavenPublishUrl.startsWith("http://") // Mostly for the GTNH maven
-                credentials {
-                    username = System.getenv("MAVEN_USER") ?: "NONE"
-                    password = System.getenv("MAVEN_PASSWORD") ?: "NONE"
+        repositories {
+            if (usesMavenPublishing.toBoolean()) {
+                maven {
+                    url = mavenPublishUrl
+                    allowInsecureProtocol = mavenPublishUrl.startsWith("http://") // Mostly for the GTNH maven
+                    credentials {
+                        username = System.getenv("MAVEN_USER") ?: "NONE"
+                        password = System.getenv("MAVEN_PASSWORD") ?: "NONE"
+                    }
                 }
             }
         }

@@ -31,6 +31,7 @@ public enum GTCMItemList implements IItemContainer {
     MagneticMixer,
     MagneticDomainConstructor,
     Silksong,
+    HolySeparator,
 
     // single block Machines
     InfiniteAirHatch,

@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.loader;
 
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameHolySeparator;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameInfiniteAirHatch;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameIntensifyChemicalDistorter;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticDomainConstructor;
@@ -13,6 +14,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameSilk
 import net.minecraft.item.ItemStack;
 
 import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_HolySeparator;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticDomainConstructor;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
@@ -33,6 +35,7 @@ public class MachineLoader {
     public static ItemStack MagneticMixer;
     public static ItemStack MagneticDomainConstructor;
     public static ItemStack Silksong;
+    public static ItemStack HolySeparator;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -88,12 +91,16 @@ public class MachineLoader {
         Silksong = new GT_TileEntity_Silksong(19008, "NameSilksong", NameSilksong).getStackForm(1);
         GTCMItemList.Silksong.set(Silksong);
 
+        //
+        HolySeparator = new GT_TileEntity_HolySeparator(19009, "NameHolySeparator", NameHolySeparator).getStackForm(1);
+        GTCMItemList.HolySeparator.set(HolySeparator);
+
         // endregion
 
         // region Single block Machine
 
         //
-        InfiniteAirHatch = new GT_MetaTileEntity_Hatch_Air(18999, NameInfiniteAirHatch, NameInfiniteAirHatch, 4)
+        InfiniteAirHatch = new GT_MetaTileEntity_Hatch_Air(18999, "NameInfiniteAirHatch", NameInfiniteAirHatch, 9)
             .getStackForm(1);
         GTCMItemList.InfiniteAirHatch.set(InfiniteAirHatch);
     }

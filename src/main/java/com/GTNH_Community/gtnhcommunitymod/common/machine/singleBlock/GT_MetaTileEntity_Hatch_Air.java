@@ -66,11 +66,11 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
 
     @Override
     public ITexture[] getTexturesActive(final ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, new GT_RenderedTexture(TexturesGtBlock.Overlay_Water) };
+        return new ITexture[] { aBaseTexture, new GT_RenderedTexture(TexturesGtBlock.Overlay_Hatch_Muffler_Adv) };
     }
 
     @Override
     public ITexture[] getTexturesInactive(final ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, new GT_RenderedTexture(TexturesGtBlock.Overlay_Water) };
+        return new ITexture[] { aBaseTexture, new GT_RenderedTexture(TexturesGtBlock.Overlay_Hatch_Muffler_Adv) };
     }
 }

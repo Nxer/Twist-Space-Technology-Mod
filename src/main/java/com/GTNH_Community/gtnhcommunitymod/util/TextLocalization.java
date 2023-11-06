@@ -167,7 +167,7 @@ public class TextLocalization {
     public static final String Tooltip_MagneticDrivePressureFormer_02 = texter("No difficulty ! No hurry !", "Tooltip_MagneticDrivePressureFormer_02");
     public static final String Tooltip_MagneticDrivePressureFormer_03 = texter(EnumChatFormatting.GOLD + "Extruder Mode:", "Tooltip_MagneticDrivePressureFormer_03");
     public static final String Tooltip_MagneticDrivePressureFormer_04 = texter("700%% faster than normal | Infinity Coil+ enable Perfect Overclock", "Tooltip_MagneticDrivePressureFormer_04");
-    public static final String Tooltip_MagneticDrivePressureFormer_05 = texter(EnumChatFormatting.GOLD + "Bending and Forming Press Mode:", "Tooltip_MagneticDrivePressureFormer_05");
+    public static final String Tooltip_MagneticDrivePressureFormer_05 = texter(EnumChatFormatting.GOLD + "Bending and Forming Press and Forge Hammer Mode:", "Tooltip_MagneticDrivePressureFormer_05");
     public static final String Tooltip_MagneticDrivePressureFormer_06 = texter("1500%% faster than normal | Enable Perfect Overclock", "Tooltip_MagneticDrivePressureFormer_06");
     public static final String Tooltip_MagneticDrivePressureFormer_07 = texter("Extra +100%% speed multiplier per Coil Level.", "Tooltip_MagneticDrivePressureFormer_07");
     public static final String Tooltip_MagneticDrivePressureFormer_08 = texter("Need Infinity Glass to use Laser energy hatch.", "Tooltip_MagneticDrivePressureFormer_08");
@@ -180,7 +180,7 @@ public class TextLocalization {
     // region Physical Form Switcher
 
     public static final String NamePhysicalFormSwitcher = texter("Physical Form Switcher","NamePhysicalFormSwitcher");
-    public static final String Tooltip_PhysicalFormSwitcher_MachineType = texter("Fluid Solidifier | Fluid Extractor", "Tooltip_PhysicalFormSwitcher_MachineType");
+    public static final String Tooltip_PhysicalFormSwitcher_MachineType = texter("Fluid Solidifier | Fluid Extractor | Forge Hammer", "Tooltip_PhysicalFormSwitcher_MachineType");
     public static final String Tooltip_PhysicalFormSwitcher_00 = texter("Controller block for the Physical Form Switcher", "Tooltip_PhysicalFormSwitcher_00");
     public static final String Tooltip_PhysicalFormSwitcher_01 = texter(EnumChatFormatting.YELLOW + "Forming Master !", "Tooltip_PhysicalFormSwitcher_01");
     public static final String Tooltip_PhysicalFormSwitcher_02 = texter("The ultimate method of melt operation.", "Tooltip_PhysicalFormSwitcher_02");
@@ -221,6 +221,16 @@ public class TextLocalization {
     public static final String Tooltip_Silksong_03 = texter("8x Parallel per piece.","Tooltip_Silksong_03");
     public static final String Tooltip_Silksong_04 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_Silksong_04");
     // endregion
+    
+    // region HolySeparator
+    public static final String NameHolySeparator = texter("Holy Separator", "NameHolySeparator");
+    public static final String Tooltip_HolySeparator_MachineType = texter("Cutter | Slicer","Tooltip_HolySeparator_MachineType");
+    public static final String Tooltip_HolySeparator_00 = texter("Controller block for the Holy Separator","Tooltip_HolySeparator_00");
+    public static final String Tooltip_HolySeparator_01 = texter(EnumChatFormatting.YELLOW+"Precision "+EnumChatFormatting.GRAY+"and "+EnumChatFormatting.AQUA+"Grace.","Tooltip_HolySeparator_01");
+    public static final String Tooltip_HolySeparator_02 = texter("Another form of laser engraving.","Tooltip_HolySeparator_02");
+    public static final String Tooltip_HolySeparator_03 = texter("You can even slice potato chips with this.","Tooltip_HolySeparator_03");
+    public static final String Tooltip_HolySeparator_04 = texter("Extra 8x Parallel per Piece. 16 Piece enable Perfect Overclock.","Tooltip_HolySeparator_04");
+    public static final String Tooltip_HolySeparator_05 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_HolySeparator_05");
     
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");

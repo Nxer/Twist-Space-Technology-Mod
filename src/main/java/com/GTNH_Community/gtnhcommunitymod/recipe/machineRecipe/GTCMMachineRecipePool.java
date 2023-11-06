@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.HolySeparator;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.InfiniteAirHatch;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDomainConstructor;
@@ -19,6 +20,7 @@ import static com.dreammaster.gthandler.CustomItemList.Transformer_UMV_UIV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UXV_UMV;
 import static com.dreammaster.gthandler.CustomItemList.WiremillUV;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Containment_Field;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Spacetime;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
@@ -43,6 +45,7 @@ import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_CuttingFactoryController;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 
@@ -62,6 +65,7 @@ import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import goodgenerator.items.MyMaterial;
+import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -836,7 +840,66 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20*600)
             .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
         
+        // endregion
         
+        // region HolySeparator
+        GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, Industrial_CuttingFactoryController.get(1))
+            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .itemInputs(
+                ItemList.Casing_MAX.get(16),
+                CustomItemList.CuttingMachineUHV.get(32),
+                CustomItemList.SlicingMachineUHV.get(32),
+                eM_Power.get(16),
+                
+                ItemList.Field_Generator_UHV.get(16),
+                ItemList.Emitter_UHV.get(64),
+                ItemList.Emitter_UHV.get(64),
+                ItemList.Electric_Pump_UHV.get(8),
+                
+                new Object[]{OrePrefixes.circuit.get(Materials.Bio),16},
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite),16},
+                GT_Utility.copyAmount(64, Ic2Items.iridiumPlate),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 16),
+                
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 16)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*128),
+                Materials.Naquadria.getMolten(144*64),
+                Materials.SuperCoolant.getFluid(1000*128)
+            )
+            .itemOutputs(HolySeparator.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UHV)
+            .duration(20*1200)
+            .addTo(AssemblyLine);
+        
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                
+                eM_Hollow.get(4),
+                ItemList.Field_Generator_UHV.get(8),
+                ItemList.Field_Generator_UV.get(16),
+                
+                ItemList.Field_Generator_ZPM.get(64),
+                ItemRefer.Advanced_Radiation_Protection_Plate.get(16),
+                eM_Power.get(4),
+                
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite),6},
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 2)
+            )
+            .fluidInputs(new FluidStack(solderPlasma, 144*32))
+            .itemOutputs(eM_Containment_Field.get(4))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UHV)
+            .duration(20*60)
+            .addTo(sAssemblerRecipes);
+        
+        // endregion
     }
     // spotless:on
 }

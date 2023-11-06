@@ -29,6 +29,7 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
@@ -95,11 +96,11 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
-    public int getMaxParallelRecipes() {
+    private int getMaxParallelRecipes() {
         return this.piece * 8;
     }
 
-    public float getSpeedBonus() {
+    private float getSpeedBonus() {
         return (float) Math.pow(0.9, this.coilLevel.getLevel());
     }
 
@@ -285,6 +286,20 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
     // endregion
 
     // region Overrides
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setInteger("piece", piece);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        piece = aNBT.getInteger("piece");
+    }
 
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
