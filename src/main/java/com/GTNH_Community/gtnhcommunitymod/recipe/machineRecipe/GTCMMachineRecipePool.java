@@ -45,7 +45,6 @@ import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_CuttingFactoryController;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 
@@ -844,7 +843,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         
         // region HolySeparator
         GT_Values.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, Industrial_CuttingFactoryController.get(1))
+            .metadata(RESEARCH_ITEM, CustomItemList.CuttingMachineUHV.get(1))
             .metadata(RESEARCH_TIME, 2 * HOURS)
             .itemInputs(
                 ItemList.Casing_MAX.get(16),
