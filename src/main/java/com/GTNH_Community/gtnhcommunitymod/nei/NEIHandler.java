@@ -33,6 +33,8 @@ public class NEIHandler {
         sendCatalyst("gt.recipe.wiremill", "gregtech:gt.blockmachines:19008", -10);
         sendCatalyst("gt.recipe.slicer", "gregtech:gt.blockmachines:19009", -10);
         sendCatalyst("gt.recipe.cuttingsaw", "gregtech:gt.blockmachines:19009", -10);
+        sendCatalyst("gt.recipe.extractor", "gregtech:gt.blockmachines:19010", -10);
+        sendCatalyst("gt.recipe.compressor", "gregtech:gt.blockmachines:19010", -10);
 
     }
 

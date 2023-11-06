@@ -236,6 +236,13 @@ public class TextLocalization {
     
     // region SpaceScaler
     public static final String NameSpaceScaler = texter("Space Scaler","NameSpaceScaler");
+    public static final String Tooltip_SpaceScaler_MachineType = texter("Compressor | Extractor","Tooltip_SpaceScaler_MachineType");
+    public static final String Tooltip_SpaceScaler_00 = texter("Controller block for the Space Scaler","Tooltip_SpaceScaler_00");
+    public static final String Tooltip_SpaceScaler_01 = texter(EnumChatFormatting.AQUA+" First Look Space Technology.","Tooltip_SpaceScaler_01");
+    public static final String Tooltip_SpaceScaler_02 = texter("Another method to operate matter.","Tooltip_SpaceScaler_02");
+    public static final String Tooltip_SpaceScaler_03 = texter("Only if the space is manageable...","Tooltip_SpaceScaler_03");
+    public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.","Tooltip_SpaceScaler_04");
+    public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.","Tooltip_SpaceScaler_05");
     
     // endregion
     // region InfiniteAirHatch
