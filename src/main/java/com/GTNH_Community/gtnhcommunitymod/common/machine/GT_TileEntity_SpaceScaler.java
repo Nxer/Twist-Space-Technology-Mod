@@ -1,0 +1,332 @@
+package com.GTNH_Community.gtnhcommunitymod.common.machine;
+
+import com.github.technus.tectech.thing.block.QuantumGlassBlock;
+import com.google.common.collect.ImmutableList;
+import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
+import com.gtnewhorizon.structurelib.structure.IItemSource;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_HatchElementBuilder;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.BLUE_PRINT_INFO;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.ModName;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.StructureTooComplex;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_HolySeparator_00;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_HolySeparator_01;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_HolySeparator_02;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_HolySeparator_03;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_HolySeparator_04;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_HolySeparator_05;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_HolySeparator_MachineType;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textScrewdriverChangeMode;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textUseBlueprint;
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.InputHatch;
+import static gregtech.api.enums.GT_HatchElement.Maintenance;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static net.minecraft.util.StatCollector.translateToLocalFormatted;
+
+public class GT_TileEntity_SpaceScaler
+	extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_SpaceScaler>
+	implements IConstructable, ISurvivalConstructable {
+	// region Class Constructor
+	public GT_TileEntity_SpaceScaler(int aID, String aName, String aNameRegional) {
+		super(aID, aName, aNameRegional);
+	}
+	
+	public GT_TileEntity_SpaceScaler(String aName) {
+		super(aName);
+	}
+	// endregion
+	
+	// region Processing Logic
+	private byte mode = 0;
+	private int fieldGeneratorTier;
+	
+	@Override
+	public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+		return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+	}
+	
+	@Override
+	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+		if (this.mMachine) return -1;
+		int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
+		return this.survivialBuildPiece(
+			STRUCTURE_PIECE_MAIN,
+			stackSize,
+			horizontalOffSet,
+			verticalOffSet,
+			depthOffSet,
+			realBudget,
+			source,
+			actor,
+			false,
+			true);
+	}
+	// endregion
+	
+	// region Structure
+	@Override
+	public void construct(ItemStack stackSize, boolean hintsOnly) {
+		this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+	}
+	private static final String STRUCTURE_PIECE_MAIN = "mainSpaceScaler";
+	private final int horizontalOffSet = 15;
+	private final int verticalOffSet = 15;
+	private final int depthOffSet = 0;
+	@Override
+	public IStructureDefinition<GT_TileEntity_SpaceScaler> getStructureDefinition() {
+		return StructureDefinition.<GT_TileEntity_SpaceScaler>builder()
+			       .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+			       .addElement('A',
+			                   GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+				                   .atLeast(Energy.or(ExoticEnergy))
+				                   .adder(GT_TileEntity_SpaceScaler::addToMachineList)
+				                   .dot(1)
+				                   .casingIndex(1024)
+				                   .buildAndChain(sBlockCasingsTT, 0))
+			       .addElement('B',ofBlock(sBlockCasingsTT, 4))
+			       .addElement('C',ofBlock(sBlockCasingsTT, 6))
+			       .addElement('D',ofBlock(QuantumGlassBlock.INSTANCE, 0))
+			       .addElement('E',
+			                   GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+				                   .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance)
+				                   .adder(GT_TileEntity_SpaceScaler::addToMachineList)
+				                   .dot(2)
+				                   .casingIndex(1028)
+				                   .buildAndChain(sBlockCasingsTT, 4))
+			       .addElement('G',
+			                   ofBlocksTiered(
+				                   (block,meta) -> {
+									   if (block != sBlockCasingsTT){
+										   return null;
+									   }
+									   switch (meta){
+										   case 6:
+											   return 2;
+										   case 14:
+											   return 4;
+										   default:
+											   return 0;
+									   }
+				                   },
+				                   ImmutableList.of(
+									   Pair.of(sBlockCasingsTT, 6),
+									   Pair.of(sBlockCasingsTT, 14)),
+				                   0,
+				                   (m, t)-> m.fieldGeneratorTier= t,
+				                   m -> m.fieldGeneratorTier
+			                   )
+			                   /*
+			                   ofChain(
+				                   onElementPass(x->x.fieldGeneratorTier=1, ofBlock(sBlockCasingsTT, 14)),
+				                   onElementPass(x->x.fieldGeneratorTier=0, ofBlock(sBlockCasingsTT, 6))
+			                   )
+							    */
+							   
+			       )
+			       .build();
+	}
+	/*
+	Blocks:
+A -> ofBlock...(gt.blockcasingsTT, 0, ...); // Energy
+B -> ofBlock...(gt.blockcasingsTT, 4, ...);
+C -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator NORMAL
+D -> ofBlock...(tile.quantumGlass, 0, ...);
+E -> ofBlock...(gt.blockcasingsTT, 4, ...); // Hatches
+G -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator can upgrade
+	 */
+	
+	@Override
+	public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+		return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+			       || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+	}
+	
+	private final String[][] shapeMain = new String[][]{
+		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","              AAA              ","            AAEEEAA            ","           AEEEEEEEA           ","           AEECCCEEA           ","          AEECEEECEEA          ","          AEECEEECEEA          ","          AEECEEECEEA          ","           AEECCCEEA           ","           AEEEEEEEA           ","            AAEEEAA            ","              AAA              ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","               A               ","               A               ","              AAA              ","            AAAAAAA            ","              AAA              ","               A               ","               A               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","            BBBBBBB            ","          BB       BB          ","         B           B         ","        B             B        ","       B               B       ","       B               B       ","      B                 B      ","      B                 B      ","      B        B        B      ","      B       BGB       B      ","      B        B        B      ","      B                 B      ","      B                 B      ","       B               B       ","       B               B       ","        B             B        ","         B           B         ","          BB       BB          ","            BBBBBBB            ","                               ","                               ","                               ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","                               ","                               ","            BBBBBBB            ","          BB       BB          ","         B           B         ","        B             B        ","       B               B       ","      B                 B      ","      B                 B      ","     B                   B     ","     B                   B     ","     B                   B     ","     B         G         B     ","     B                   B     ","     B                   B     ","     B                   B     ","      B                 B      ","      B                 B      ","       B               B       ","        B             B        ","         B           B         ","          BB       BB          ","            BBBBBBB            ","                               ","                               ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","               G               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","            BBBBBBB            ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","   B                       B   ","   B                       B   ","   B                       B   ","   B           G           B   ","   B                       B   ","   B                       B   ","   B                       B   ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","            BBBBBBB            ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","            BBBBBBB            ","          BB       BB          ","                               ","                               ","                               ","                               ","                               ","                               ","   B                       B   ","   B                       B   ","  B                         B  ","  B                         B  ","  B                         B  ","  B                         B  ","  B                         B  ","  B                         B  ","  B                         B  ","   B                       B   ","   B                       B   ","                               ","                               ","                               ","                               ","                               ","                               ","          BB       BB          ","            BBBBBBB            ","                               ","                               "},
+		{"                               ","                               ","                               ","          BB       BB          ","         B           B         ","                               ","                               ","                               ","                               ","                               ","   B                       B   ","  B                         B  ","  B                         B  ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","  B                         B  ","  B                         B  ","   B                       B   ","                               ","                               ","                               ","                               ","                               ","         B           B         ","          BB       BB          ","                               ","                               "},
+		{"                               ","                               ","                               ","         B           B         ","        B             B        ","                               ","                               ","                               ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","                               ","                               ","                               ","        B             B        ","         B           B         ","                               ","                               "},
+		{"                               ","                               ","                               ","        B             B        ","       B               B       ","                               ","                               ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","                               ","                               ","       B               B       ","        B             B        ","                               ","                               "},
+		{"                               ","              AAA              ","                               ","       B               B       ","      B                 B      ","                               ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","                               ","                               ","A                             A","A                             A","A                             A","                               ","                               ","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","                               ","      B                 B      ","       B               B       ","                               ","              AAA              "},
+		{"                               ","            AAEEEAA            ","                               ","       B               B       ","      B                 B      ","                               ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","A                             A","A                             A","E                             E","E                             E","E                             E","A                             A","A                             A","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","                               ","      B                 B      ","       B               B       ","                               ","            AAEEEAA            "},
+		{"                               ","           AEEEEEEEA           ","               A               ","      B                 B      ","     B                   B     ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","A                             A","E                             E","E                             E","E                             E","EA                           AE","E                             E","E                             E","E                             E","A                             A","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","     B                   B     ","      B                 B      ","               A               ","           AEEEEEEEA           "},
+		{"              AAA              ","           AEECCCEEA           ","               A               ","      B                 B      ","     B                   B     ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","A                             A","E                             E","E                             E","C              D              C","CA            DDD            AC","C              D              C","E                             E","E                             E","A                             A","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","     B                   B     ","      B                 B      ","               A               ","           AEECCCEEA           "},
+		{"             AEEEA             ","          AEECEEECEEA          ","              AAA              ","      B        B        B      ","     B                   B     ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","A                             A","E                             E","E                             E","C              D              C","EA            D D            AE","EAB          D   D          BAE","EA            D D            AE","C              D              C","E                             E","E                             E","A                             A","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","     B                   B     ","      B        B        B      ","              AAA              ","          AEECEEECEEA          "},
+		{"             AE~EA             ","          AEECEEECEEA          ","            AAAAAAA            ","      B       BGB       B      ","     B         G         B     ","               G               ","   B           G           B   ","  B                         B  ","                               ","                               ","                               ","A                             A","E                             E","EA                           AE","CA            DDD            AC","EAB          D   D          BAE","EAGGGG       D   D       GGGGAE","EAB          D   D          BAE","CA            DDD            AC","EA                           AE","E                             E","A                             A","                               ","                               ","                               ","  B                         B  ","   B           G           B   ","               G               ","     B         G         B     ","      B       BGB       B      ","            AAAAAAA            ","          AEECEEECEEA          "},
+		{"             AEEEA             ","          AEECEEECEEA          ","              AAA              ","      B        B        B      ","     B                   B     ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","A                             A","E                             E","E                             E","C              D              C","EA            D D            AE","EAB          D   D          BAE","EA            D D            AE","C              D              C","E                             E","E                             E","A                             A","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","     B                   B     ","      B        B        B      ","              AAA              ","          AEECEEECEEA          "},
+		{"              AAA              ","           AEECCCEEA           ","               A               ","      B                 B      ","     B                   B     ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","A                             A","E                             E","E                             E","C              D              C","CA            DDD            AC","C              D              C","E                             E","E                             E","A                             A","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","     B                   B     ","      B                 B      ","               A               ","           AEECCCEEA           "},
+		{"                               ","           AEEEEEEEA           ","               A               ","      B                 B      ","     B                   B     ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","A                             A","E                             E","E                             E","E                             E","EA                           AE","E                             E","E                             E","E                             E","A                             A","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","     B                   B     ","      B                 B      ","               A               ","           AEEEEEEEA           "},
+		{"                               ","            AAEEEAA            ","                               ","       B               B       ","      B                 B      ","                               ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","A                             A","A                             A","E                             E","E                             E","E                             E","A                             A","A                             A","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","                               ","      B                 B      ","       B               B       ","                               ","            AAEEEAA            "},
+		{"                               ","              AAA              ","                               ","       B               B       ","      B                 B      ","                               ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","                               ","                               ","A                             A","A                             A","A                             A","                               ","                               ","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","                               ","      B                 B      ","       B               B       ","                               ","              AAA              "},
+		{"                               ","                               ","                               ","        B             B        ","       B               B       ","                               ","                               ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","                               ","                               ","       B               B       ","        B             B        ","                               ","                               "},
+		{"                               ","                               ","                               ","         B           B         ","        B             B        ","                               ","                               ","                               ","                               ","   B                       B   ","  B                         B  ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","  B                         B  ","   B                       B   ","                               ","                               ","                               ","                               ","        B             B        ","         B           B         ","                               ","                               "},
+		{"                               ","                               ","                               ","          BB       BB          ","         B           B         ","                               ","                               ","                               ","                               ","                               ","   B                       B   ","  B                         B  ","  B                         B  ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","  B                         B  ","  B                         B  ","   B                       B   ","                               ","                               ","                               ","                               ","                               ","         B           B         ","          BB       BB          ","                               ","                               "},
+		{"                               ","                               ","                               ","            BBBBBBB            ","          BB       BB          ","                               ","                               ","                               ","                               ","                               ","                               ","   B                       B   ","   B                       B   ","  B                         B  ","  B                         B  ","  B                         B  ","  B                         B  ","  B                         B  ","  B                         B  ","  B                         B  ","   B                       B   ","   B                       B   ","                               ","                               ","                               ","                               ","                               ","                               ","          BB       BB          ","            BBBBBBB            ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","            BBBBBBB            ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","   B                       B   ","   B                       B   ","   B                       B   ","   B           G           B   ","   B                       B   ","   B                       B   ","   B                       B   ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","            BBBBBBB            ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","               G               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","                               ","                               ","            BBBBBBB            ","          BB       BB          ","         B           B         ","        B             B        ","       B               B       ","      B                 B      ","      B                 B      ","     B                   B     ","     B                   B     ","     B                   B     ","     B         G         B     ","     B                   B     ","     B                   B     ","     B                   B     ","      B                 B      ","      B                 B      ","       B               B       ","        B             B        ","         B           B         ","          BB       BB          ","            BBBBBBB            ","                               ","                               ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","            BBBBBBB            ","          BB       BB          ","         B           B         ","        B             B        ","       B               B       ","       B               B       ","      B                 B      ","      B                 B      ","      B        B        B      ","      B       BGB       B      ","      B        B        B      ","      B                 B      ","      B                 B      ","       B               B       ","       B               B       ","        B             B        ","         B           B         ","          BB       BB          ","            BBBBBBB            ","                               ","                               ","                               ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","               A               ","               A               ","              AAA              ","            AAAAAAA            ","              AAA              ","               A               ","               A               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               "},
+		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","              AAA              ","            AAEEEAA            ","           AEEEEEEEA           ","           AEECCCEEA           ","          AEECEEECEEA          ","          AEECEEECEEA          ","          AEECEEECEEA          ","           AEECCCEEA           ","           AEEEEEEEA           ","            AAEEEAA            ","              AAA              ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               "}
+	};
+	// endregion
+	
+	// region Overrides
+	
+	@Override
+	protected GT_Multiblock_Tooltip_Builder createTooltip() {
+		final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType(Tooltip_HolySeparator_MachineType)
+		  .addInfo(Tooltip_HolySeparator_00)
+		  .addInfo(textScrewdriverChangeMode)
+		  .addSeparator()
+		  .addInfo(StructureTooComplex)
+		  .addInfo(BLUE_PRINT_INFO)
+		  .beginStructureBlock(31, 31, 32, false)
+		  .addInputHatch(textUseBlueprint, 1)
+		  .addOutputHatch(textUseBlueprint, 1)
+		  .addInputBus(textUseBlueprint, 1)
+		  .addOutputBus(textUseBlueprint, 1)
+		  .addMaintenanceHatch(textUseBlueprint, 1)
+		  .addEnergyHatch(textUseBlueprint, 1)
+		  .toolTipFinisher(ModName);
+		return tt;
+	}
+	
+	@Override
+	public void saveNBTData(NBTTagCompound aNBT) {
+		super.saveNBTData(aNBT);
+		
+		aNBT.setByte("mode", mode);
+		aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
+	}
+	
+	@Override
+	public void loadNBTData(final NBTTagCompound aNBT) {
+		super.loadNBTData(aNBT);
+		
+		mode = aNBT.getByte("mode");
+		fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
+	}
+	
+	@Override
+	public String[] getInfoData() {
+		String[] origin = super.getInfoData();
+		String[] ret = new String[origin.length + 2];
+		System.arraycopy(origin, 0, ret, 0, origin.length);
+		ret[origin.length - 1] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD+ this.mode;
+		ret[origin.length] = EnumChatFormatting.AQUA + "fieldGeneratorTier: " + EnumChatFormatting.GOLD +this.fieldGeneratorTier;
+		return ret;
+	}
+	
+	@Override
+	public boolean isCorrectMachinePart(ItemStack aStack) {
+		return true;
+	}
+	
+	@Override
+	public int getMaxEfficiency(ItemStack aStack) {
+		return 10000;
+	}
+	
+	@Override
+	public int getDamageToComponent(ItemStack aStack) {
+		return 0;
+	}
+	
+	@Override
+	public boolean explodesOnComponentBreak(ItemStack aStack) {
+		return false;
+	}
+	
+	@Override
+	public boolean supportsVoidProtection() {
+		return true;
+	}
+	
+	@Override
+	public boolean supportsInputSeparation() {
+		return true;
+	}
+	
+	@Override
+	public boolean supportsBatchMode() {
+		return true;
+	}
+	
+	@Override
+	public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+		return new GT_TileEntity_SpaceScaler(this.mName);
+	}
+	
+	@Override
+	public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
+		int colorIndex, boolean aActive, boolean redstoneLevel) {
+		if (side == aFacing) {
+			
+			if (aActive) {
+				return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
+				                                                                 .addIcon(OVERLAY_DTPF_ON)
+				                                                                 .extFacing()
+					                                                   .build(),
+					TextureFactory.builder()
+					              .addIcon(OVERLAY_FUSION1_GLOW)
+					              .extFacing()
+					              .glow()
+						.build() };
+			}
+			
+			return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
+			                                                                 .addIcon(OVERLAY_DTPF_OFF)
+			                                                                 .extFacing()
+				                                                   .build() };
+		}
+		
+		return new ITexture[] { casingTexturePages[0][12] };
+	}
+	// endregion
+}

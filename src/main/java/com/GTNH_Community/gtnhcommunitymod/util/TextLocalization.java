@@ -232,6 +232,12 @@ public class TextLocalization {
     public static final String Tooltip_HolySeparator_04 = texter("Extra 8x Parallel per Piece. 16 Piece enable Perfect Overclock.","Tooltip_HolySeparator_04");
     public static final String Tooltip_HolySeparator_05 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_HolySeparator_05");
     
+    // endregion
+    
+    // region SpaceScaler
+    public static final String NameSpaceScaler = texter("Space Scaler","NameSpaceScaler");
+    
+    // endregion
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     
