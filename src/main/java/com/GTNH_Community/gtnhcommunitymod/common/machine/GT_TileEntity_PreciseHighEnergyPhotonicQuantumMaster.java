@@ -151,7 +151,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
                     .atLeast(Energy.or(ExoticEnergy))
                     .dot(3)
                     .casingIndex(1024)
-                    .buildAndChain(sBlockCasingsTT, 0/* ofBlockUnlocalizedName("tectech","gt.blockcasingsTT",0) */))
+                    .buildAndChain(sBlockCasingsTT, 0))
             .addElement(
                 'A',
                 ofChain(

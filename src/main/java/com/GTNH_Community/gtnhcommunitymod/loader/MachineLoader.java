@@ -10,6 +10,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMira
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePreciseHighEnergyPhotonicQuantumMaster;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameSilksong;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameSpaceScaler;
 
 import net.minecraft.item.ItemStack;
 
@@ -23,6 +24,7 @@ import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MiracleT
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PhysicalFormSwitcher;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_Silksong;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_SpaceScaler;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.singleBlock.GT_MetaTileEntity_Hatch_Air;
 
 public class MachineLoader {
@@ -36,6 +38,7 @@ public class MachineLoader {
     public static ItemStack MagneticDomainConstructor;
     public static ItemStack Silksong;
     public static ItemStack HolySeparator;
+    public static ItemStack SpaceScaler;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -94,6 +97,10 @@ public class MachineLoader {
         //
         HolySeparator = new GT_TileEntity_HolySeparator(19009, "NameHolySeparator", NameHolySeparator).getStackForm(1);
         GTCMItemList.HolySeparator.set(HolySeparator);
+
+        //
+        SpaceScaler = new GT_TileEntity_SpaceScaler(19010, "NameSpaceScaler", NameSpaceScaler).getStackForm(1);
+        GTCMItemList.SpaceScaler.set(SpaceScaler);
 
         // endregion
 
