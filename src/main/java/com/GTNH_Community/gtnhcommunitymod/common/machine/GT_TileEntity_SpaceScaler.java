@@ -85,6 +85,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
+                setOverclock(fieldGeneratorTier>1 ? 2 : 1,2);
                 return super.process();
             }
 
@@ -92,11 +93,12 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
     }
 
     public int getMaxParallelRecipes() {
-        return (int) Math.min(MAX_PARALLEL_LIMIT, Math.pow(4, GT_Utility.getTier(this.getMaxInputVoltage())));
+        return (int) Math.min(MAX_PARALLEL_LIMIT, Math.pow(2, GT_Utility.getTier(this.getMaxInputVoltage())));
     }
 
     public float getSpeedBonus() {
-        return (float) (1 / (this.fieldGeneratorTier < 2 ? 1 : 16));
+        return 1.0F;
+//        return (float) (1 / (this.fieldGeneratorTier < 2 ? 1 : 16));
     }
 
     @Override
@@ -189,18 +191,18 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
                 // onElementPass(x->x.fieldGeneratorTier1Amount++, ofBlock(sBlockCasingsTT, 14))
                 // )
                 ofBlocksTiered((block, meta) -> {
-                    if (block != sBlockCasingsTT) {
-                        return null;
-                    }
-                    switch (meta) {
-                        case 6:
-                            return 1;
-                        case 14:
-                            return 2;
-                        default:
-                            return 0;
-                    }
-                },
+                        if (block != sBlockCasingsTT) {
+                            return null;
+                        }
+                        switch (meta) {
+                            case 6:
+                                return 1;
+                            case 14:
+                                return 2;
+                            default:
+                                return 0;
+                        }
+                    },
                     ImmutableList.of(Pair.of(sBlockCasingsTT, 6), Pair.of(sBlockCasingsTT, 14)),
                     0,
                     (m, t) -> m.fieldGeneratorTier = t,
@@ -306,12 +308,11 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 2];
+        String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD + this.mode;
-        ret[origin.length] = EnumChatFormatting.AQUA + "fieldGeneratorTier: "
-            + EnumChatFormatting.GOLD
-            + this.fieldGeneratorTier;
+        ret[origin.length - 2] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD + this.mode;
+        ret[origin.length - 1] = EnumChatFormatting.AQUA + "fieldGeneratorTier: " + EnumChatFormatting.GOLD + this.fieldGeneratorTier;
+        ret[origin.length] = EnumChatFormatting.AQUA + "Parallel: " + EnumChatFormatting.GOLD + this.getMaxParallelRecipes();
         return ret;
     }
 
