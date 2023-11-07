@@ -1105,6 +1105,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 Materials.ShadowSteel.getMolten(144 * 9 * 406),
                 Materials.Iridium.getMolten(144 * 9 * 62),
                 Materials.Platinum.getMolten(144 * 9 * 406),
+                Materials.Uranium.getMolten(144 * 9 * 507),
                 Materials.Naquadria.getMolten(144 * 9 * 66),
                 Materials.Plutonium.getMolten(144 * 9 * 244),
                 Materials.MeteoricIron.getMolten(144 * 9 * 912),
