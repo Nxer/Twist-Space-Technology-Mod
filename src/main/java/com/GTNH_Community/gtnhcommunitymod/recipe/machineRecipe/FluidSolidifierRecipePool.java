@@ -295,5 +295,251 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .duration(20)
             .addTo(fs);
 
+        // ShadowStell
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.ShadowSteel.getMolten(144 * 9 * 406))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 22))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Irdium
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Iridium.getMolten(144 * 9 * 62))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 23))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Platinum
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Platinum.getMolten(144 * 9 * 406))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 25))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Naquadria
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Naquadria.getMolten(144 * 9 * 66))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 26))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Plutonium
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Plutonium.getMolten(144 * 9 * 244))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 27))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // MeteoricIron
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.MeteoricIron.getMolten(144 * 9 * 912))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 28))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Desh
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Desh.getMolten(144 * 9 * 203))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 29))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Europium
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Europium.getMolten(144 * 9 * 62))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 30))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Draconium
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Draconium.getMolten(144 * 9 * 1296))
+            .itemOutputs(
+                GT_ModHandler.getModItem("universalsingularities", "universal.draconicEvolution.singularity", 1, 0))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // DraconiumAwakened
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.DraconiumAwakened.getMolten(144 * 9 * 760))
+            .itemOutputs(
+                GT_ModHandler.getModItem("universalsingularities", "universal.draconicEvolution.singularity", 1, 1))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // ConductiveIron
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.ConductiveIron.getMolten(144 * 9 * 912))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 0))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // ElectricalSteel
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.ElectricalSteel.getMolten(144 * 9 * 912))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 1))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // EnergeticAlloy
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 9 * 191))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 2))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // DarkSteel
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.DarkSteel.getMolten(144 * 9 * 912))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 3))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // RedstoneAlloy
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.RedstoneAlloy.getMolten(144 * 9 * 912))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 5))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // PhasedIron
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.PhasedIron.getMolten(144 * 9 * 912))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 4))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Soularium
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Soularium.getMolten(144 * 9 * 456))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 6))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // VibrantAlloy
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 9 * 145))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 7))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Electrotine
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Electrotine.getMolten(144 * 9 * 1215))
+            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.projectRed.singularity", 1, 0))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Aluminium
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Aluminium.getMolten(144 * 9 * 1824))
+            .itemOutputs(
+                GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 0))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Alumite
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Alumite.getMolten(144 * 9 * 229))
+            .itemOutputs(
+                GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 1))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Ardite
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Ardite.getMolten(144 * 9 * 304))
+            .itemOutputs(
+                GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 2))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Cobalt
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Cobalt.getMolten(144 * 9 * 1824))
+            .itemOutputs(
+                GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 3))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
+
+        // Manyullyn
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MoldSingularity.get(0))
+            .fluidInputs(Materials.Manyullyn.getMolten(144 * 9 * 380))
+            .itemOutputs(
+                GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 6))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(fs);
     }
 }
