@@ -187,3 +187,4 @@ Tooltip_MoleculeDeconstructor_MachineType=Electrolyzer | Centrifuge
 Tooltip_MoleculeDeconstructor_00=Controller block for the Molecule Deconstructor
 Tooltip_MoleculeDeconstructor_03=Extra 24x Parallel per Piece. 16 Piece enable Perfect Overclock.
 Tooltip_MoleculeDeconstructor_02=Separate the molecules one by one with tweezers.
+Tooltip_MoleculeDeconstructor_05=The Glass Tier limit the Energy hatch voltage Tier.

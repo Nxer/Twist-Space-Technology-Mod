@@ -1015,6 +1015,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UHV)
             .duration(20*600)
             .addTo(AssemblyLine);
+        
+        
     }
     // spotless:on
 }
