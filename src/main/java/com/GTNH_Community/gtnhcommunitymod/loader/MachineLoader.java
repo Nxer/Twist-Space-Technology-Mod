@@ -7,6 +7,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagn
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMagneticMixer;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMiracleTop;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameMoleculeDeconstructor;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NamePreciseHighEnergyPhotonicQuantumMaster;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameSilksong;
@@ -21,6 +22,7 @@ import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_Magnetic
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticMixer;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MiracleTop;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MoleculeDeconstructor;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PhysicalFormSwitcher;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_Silksong;
@@ -39,6 +41,7 @@ public class MachineLoader {
     public static ItemStack Silksong;
     public static ItemStack HolySeparator;
     public static ItemStack SpaceScaler;
+    public static ItemStack MoleculeDeconstructor;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -101,6 +104,13 @@ public class MachineLoader {
         //
         SpaceScaler = new GT_TileEntity_SpaceScaler(19010, "NameSpaceScaler", NameSpaceScaler).getStackForm(1);
         GTCMItemList.SpaceScaler.set(SpaceScaler);
+
+        //
+        MoleculeDeconstructor = new GT_TileEntity_MoleculeDeconstructor(
+            19011,
+            "NameMoleculeDeconstructor",
+            NameMoleculeDeconstructor).getStackForm(1);
+        GTCMItemList.MoleculeDeconstructor.set(MoleculeDeconstructor);
 
         // endregion
 
