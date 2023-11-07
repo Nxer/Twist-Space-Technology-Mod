@@ -1139,7 +1139,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 Materials.PhasedIron.getMolten(144 * 9 * 912),
                 Materials.DarkSteel.getMolten(144 * 9 * 912),
                 Materials.RedstoneAlloy.getMolten(144 * 9 * 912),
-                Materials.Soularium.getMolten(144 * 9 * 456)
+                Materials.Soularium.getMolten(144 * 9 * 456),
+                Materials.Infinity.getMolten(144 * 2)
             )
             .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 5))
             .noFluidOutputs()
