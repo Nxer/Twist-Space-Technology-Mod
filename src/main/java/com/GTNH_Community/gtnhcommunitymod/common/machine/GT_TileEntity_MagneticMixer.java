@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.common.machine;
 
+import static com.GTNH_Community.gtnhcommunitymod.common.machine.ValueEnum.MAX_PARALLEL_LIMIT;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.ModName;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.StructureTooComplex;
@@ -83,7 +84,7 @@ public class GT_TileEntity_MagneticMixer
     }
 
     public int getMaxParallelRecipes() {
-        return (int) (Math.pow(4, GT_Utility.getTier(this.getMaxInputVoltage())));
+        return (int) Math.min(MAX_PARALLEL_LIMIT, Math.pow(2, GT_Utility.getTier(this.getMaxInputVoltage())));
     }
 
     public float getSpeedBonus() {
