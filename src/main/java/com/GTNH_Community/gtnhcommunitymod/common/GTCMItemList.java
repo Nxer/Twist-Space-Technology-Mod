@@ -33,6 +33,7 @@ public enum GTCMItemList implements IItemContainer {
     Silksong,
     HolySeparator,
     SpaceScaler,
+    MoleculeDeconstructor,
 
     // single block Machines
     InfiniteAirHatch,

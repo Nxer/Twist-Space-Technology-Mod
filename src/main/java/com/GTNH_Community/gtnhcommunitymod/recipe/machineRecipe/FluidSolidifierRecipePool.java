@@ -295,7 +295,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .duration(20)
             .addTo(fs);
 
-        // ShadowSteel
+        // ShadowStell
         GT_Values.RA.stdBuilder()
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.ShadowSteel.getMolten(144 * 9 * 406))

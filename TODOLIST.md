@@ -1,4 +1,5 @@
-# 注册器部分 Register Part
+# 注册器部分 Register Part 
+# ItemContainer √
 ## GT通用注册器(仿bartworks) GT Common Register (imitate Bartworks)
  - FREE ID RANGE: 12_000-28_998
  - bartimaeusnek reserved 0-10_000
@@ -23,11 +24,18 @@
 # Mega激光蚀刻机：PhotonController模式：光学SoC √
 # 奇迹顶点：大型电路装配线 √
 #
-# 大型搅拌机
+# 大型搅拌机 √
 # 大型压模机 √
 # 大型固化机 √
 # 大型流体提取机 √
+# 大型切割机 √
+# 大型压缩机 √
+# 大型提取机 √
 # 
+# 
+# 
+# 
+# 氟碳镧铈线简化 √
 # 镧系通用纳米萃取：深度化工扭转机配方 待完成
 # 镧系处理-铈部分
 # 镧系处理-通用部分-基础方式

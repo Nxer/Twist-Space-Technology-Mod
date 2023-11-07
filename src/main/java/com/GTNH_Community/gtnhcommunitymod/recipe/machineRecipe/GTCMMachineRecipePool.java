@@ -7,6 +7,7 @@ import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDo
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticMixer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MoldSingularity;
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MoleculeDeconstructor;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.Silksong;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceScaler;
@@ -51,6 +52,7 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Inta
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 
+import gregtech.api.util.*;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -74,11 +76,6 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IItemContainer;
-import gregtech.api.util.GTPP_Recipe;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
 import ic2.core.Ic2Items;
 
 public class GTCMMachineRecipePool implements IRecipePool {
@@ -979,6 +976,44 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(10)
             .addTo(GT_Recipe.GT_Recipe_Map.sCompressorRecipes);
 
+        // endregion
+
+        // region Molecule Deconstructor
+        GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, CustomItemList.ElectrolyzerUV.get(1))
+            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .itemInputs(
+                ItemList.Casing_MAX.get(16),
+                CustomItemList.ElectrolyzerUV.get(64),
+                CustomItemList.CentrifugeUV.get(64),
+                Materials.Carbon.getNanite(16),
+
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
+                ItemList.Emitter_UV.get(16),
+                ItemList.Field_Generator_UV.get(8),
+                ItemList.Electric_Pump_UV.get(32),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 16},
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 64},
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 64),
+
+                GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUV, 64)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*256),
+                Materials.Osmiridium.getMolten(144*256),
+                Materials.UUMatter.getFluid(1000*64),
+                Materials.SuperCoolant.getFluid(1000*128)
+            )
+            .itemOutputs(MoleculeDeconstructor.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UHV)
+            .duration(20*600)
+            .addTo(AssemblyLine);
+
         //come from eternal singularity
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -1299,8 +1334,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UHV)
             .duration(20)
             .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        // endregion
     }
     // spotless:on
 }
