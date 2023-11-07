@@ -85,7 +85,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
-                setOverclock(fieldGeneratorTier>1 ? 2 : 1,2);
+                setOverclock(fieldGeneratorTier > 1 ? 2 : 1, 2);
                 return super.process();
             }
 
@@ -98,7 +98,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
 
     public float getSpeedBonus() {
         return 1.0F;
-//        return (float) (1 / (this.fieldGeneratorTier < 2 ? 1 : 16));
+        // return (float) (1 / (this.fieldGeneratorTier < 2 ? 1 : 16));
     }
 
     @Override
@@ -311,8 +311,12 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length - 2] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD + this.mode;
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "fieldGeneratorTier: " + EnumChatFormatting.GOLD + this.fieldGeneratorTier;
-        ret[origin.length] = EnumChatFormatting.AQUA + "Parallel: " + EnumChatFormatting.GOLD + this.getMaxParallelRecipes();
+        ret[origin.length - 1] = EnumChatFormatting.AQUA + "fieldGeneratorTier: "
+            + EnumChatFormatting.GOLD
+            + this.fieldGeneratorTier;
+        ret[origin.length] = EnumChatFormatting.AQUA + "Parallel: "
+            + EnumChatFormatting.GOLD
+            + this.getMaxParallelRecipes();
         return ret;
     }
 
