@@ -105,6 +105,8 @@ public class GT_TileEntity_HolySeparator
         switch (mode) {
             case 1:
                 return GT_Recipe.GT_Recipe_Map.sSlicerRecipes;
+            case 2:
+                return GT_Recipe.GT_Recipe_Map.sLatheRecipes;
             default:
                 return GT_Recipe.GT_Recipe_Map.sCutterRecipes;
         }
@@ -113,7 +115,7 @@ public class GT_TileEntity_HolySeparator
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
+            this.mode = (byte) ((this.mode + 1) % 3);
 
             GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("HolySeparator.modeMsg." + this.mode));
         }

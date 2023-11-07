@@ -6,6 +6,7 @@ import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.IntensifyC
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDomainConstructor;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticMixer;
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MoleculeDeconstructor;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.Silksong;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceScaler;
@@ -978,6 +979,42 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(GT_Recipe.GT_Recipe_Map.sCompressorRecipes);
         
         // endregion
+        
+        // region Molecule Deconstructor
+        GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, CustomItemList.ElectrolyzerUV.get(1))
+            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .itemInputs(
+                ItemList.Casing_MAX.get(16),
+                CustomItemList.ElectrolyzerUV.get(64),
+                CustomItemList.CentrifugeUV.get(64),
+                Materials.Carbon.getNanite(16),
+                
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
+                ItemList.Emitter_UV.get(16),
+                ItemList.Field_Generator_UV.get(8),
+                ItemList.Electric_Pump_UV.get(32),
+                
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 16},
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 64},
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 64),
+                
+                GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUV, 64)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*256),
+                Materials.Osmiridium.getMolten(144*256),
+                Materials.UUMatter.getFluid(1000*64),
+                Materials.SuperCoolant.getFluid(1000*128)
+            )
+            .itemOutputs(MoleculeDeconstructor.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UHV)
+            .duration(20*600)
+            .addTo(AssemblyLine);
     }
     // spotless:on
 }
