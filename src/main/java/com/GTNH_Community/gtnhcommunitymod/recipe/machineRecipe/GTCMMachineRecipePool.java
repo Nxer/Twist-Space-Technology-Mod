@@ -986,7 +986,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MoldSingularity.get(0),
                 ItemList.Shape_Mold_Block.get(0),
                 GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                GT_ModHandler.getModItem("gregtech","gt.metaitem.02",64,32271),
+                ItemList.MSFMixture.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.Quartz, 64))
             .fluidInputs(
                 new FluidStack(FluidRegistry.getFluid("dye.chemical.dyeblue"), 72 * 9 * 1215),
@@ -1014,7 +1014,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MoldSingularity.get(0),
                 ItemList.Shape_Mold_Block.get(0),
                 GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                GT_ModHandler.getModItem("gregtech","gt.metaitem.02",64,32271),
+                ItemList.MSFMixture.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.Diamond, 64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.Emerald, 64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.Charcoal, 64),
@@ -1042,7 +1042,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MoldSingularity.get(0),
                 ItemList.Shape_Mold_Block.get(0),
                 GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                GT_ModHandler.getModItem("gregtech","gt.metaitem.02",64,32271),
+                ItemList.MSFMixture.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.Olivine, 64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.Ruby, 64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.Sapphire, 64))
@@ -1070,7 +1070,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MoldSingularity.get(0),
                 ItemList.Shape_Mold_Block.get(0),
                 GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                GT_ModHandler.getModItem("gregtech","gt.metaitem.02",64,32271),
+                ItemList.MSFMixture.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.TricalciumPhosphate, 64))
             .fluidInputs(
                 Materials.BlackPlutonium.getMolten(144 * 9 * 12),
@@ -1097,7 +1097,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MoldSingularity.get(0),
                 ItemList.Shape_Mold_Block.get(0),
                 GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                GT_ModHandler.getModItem("gregtech","gt.metaitem.02",64,32271),
+                ItemList.MSFMixture.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.NetherStar, 64))
             .fluidInputs(
                 Materials.BlackPlutonium.getMolten(144 * 9 * 12),
@@ -1126,7 +1126,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MoldSingularity.get(0),
                 ItemList.Shape_Mold_Block.get(0),
                 GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                GT_ModHandler.getModItem("gregtech","gt.metaitem.02",64,32271)
+                ItemList.MSFMixture.get(64)
             )
             .fluidInputs(
                 Materials.BlackPlutonium.getMolten(144 * 9 * 12),
@@ -1154,7 +1154,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MoldSingularity.get(0),
                 ItemList.Shape_Mold_Block.get(0),
                 GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                GT_ModHandler.getModItem("gregtech","gt.metaitem.02",64,32271),
+                ItemList.MSFMixture.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.Unstable, 64),
                 GT_OreDictUnificator.get(OrePrefixes.block, Materials.EnderPearl, 64)
             )

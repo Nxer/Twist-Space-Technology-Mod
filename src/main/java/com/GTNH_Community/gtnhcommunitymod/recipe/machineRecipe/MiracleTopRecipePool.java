@@ -1103,6 +1103,8 @@ public class MiracleTopRecipePool implements IRecipePool {
                 GT_ModHandler.getModItem("gregtech","gt.metaitem.01",64,32081),
                 GT_ModHandler.getModItem("gregtech","gt.metaitem.01",64,32081),
                 GT_ModHandler.getModItem("gregtech","gt.metaitem.01",64,32081)
+
+
             )
             .noFluidOutputs()
             .eut(RECIPE_EV)
