@@ -6,7 +6,10 @@ import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.IntensifyC
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDomainConstructor;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticMixer;
+<<<<<<< HEAD
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MoldSingularity;
+=======
+>>>>>>> 1b16442798eeeb3ab6c3ef85ff08bb5e7bef0e5f
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MoleculeDeconstructor;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.Silksong;
@@ -977,7 +980,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(GT_Recipe.GT_Recipe_Map.sCompressorRecipes);
 
         // endregion
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 1b16442798eeeb3ab6c3ef85ff08bb5e7bef0e5f
         // region Molecule Deconstructor
         GT_Values.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, CustomItemList.ElectrolyzerUV.get(1))
@@ -987,17 +994,29 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 CustomItemList.ElectrolyzerUV.get(64),
                 CustomItemList.CentrifugeUV.get(64),
                 Materials.Carbon.getNanite(16),
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> 1b16442798eeeb3ab6c3ef85ff08bb5e7bef0e5f
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 ItemList.Emitter_UV.get(16),
                 ItemList.Field_Generator_UV.get(8),
                 ItemList.Electric_Pump_UV.get(32),
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> 1b16442798eeeb3ab6c3ef85ff08bb5e7bef0e5f
                 new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 16},
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 64},
                 GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 64),
                 GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 64),
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> 1b16442798eeeb3ab6c3ef85ff08bb5e7bef0e5f
                 GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUV, 64)
             )
@@ -1013,6 +1032,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UHV)
             .duration(20*600)
             .addTo(AssemblyLine);
+<<<<<<< HEAD
 
         //come from eternal singularity
         GT_Values.RA.stdBuilder()
@@ -1334,6 +1354,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UHV)
             .duration(20)
             .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+=======
+>>>>>>> 1b16442798eeeb3ab6c3ef85ff08bb5e7bef0e5f
     }
     // spotless:on
 }
