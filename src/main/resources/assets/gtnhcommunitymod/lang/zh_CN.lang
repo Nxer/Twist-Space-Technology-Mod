@@ -187,3 +187,4 @@ Tooltip_MoleculeDeconstructor_01=§b雷电好像从一架梯子上滚下来.
 Tooltip_MoleculeDeconstructor_02=用镊子将分子一个一个一个分开.
 Tooltip_MoleculeDeconstructor_03=每层提供24x并行. 16层启用无损超频.
 Tooltip_MoleculeDeconstructor_04=电压每提高1级, 额外降低10%%配方耗时, 叠乘计算.
+Tooltip_MoleculeDeconstructor_05=玻璃等级限制能源仓等级.

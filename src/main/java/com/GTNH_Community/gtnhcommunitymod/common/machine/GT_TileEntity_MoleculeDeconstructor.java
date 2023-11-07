@@ -8,6 +8,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_MoleculeDeconstructor_02;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_MoleculeDeconstructor_03;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_MoleculeDeconstructor_04;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_MoleculeDeconstructor_05;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_MoleculeDeconstructor_MachineType;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textFrontBottom;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textScrewdriverChangeMode;
@@ -437,6 +438,7 @@ I -> ofFrame...();
             .addInfo(Tooltip_MoleculeDeconstructor_02)
             .addInfo(Tooltip_MoleculeDeconstructor_03)
             .addInfo(Tooltip_MoleculeDeconstructor_04)
+            .addInfo(Tooltip_MoleculeDeconstructor_05)
             .addInfo(textScrewdriverChangeMode)
             .addSeparator()
             .addInfo(StructureTooComplex)

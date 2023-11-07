@@ -254,6 +254,7 @@ public class TextLocalization {
     public static final String Tooltip_MoleculeDeconstructor_02 = texter("Separate the molecules one by one with tweezers.","Tooltip_MoleculeDeconstructor_02");
     public static final String Tooltip_MoleculeDeconstructor_03 = texter("Extra 24x Parallel per Piece. 16 Piece enable Perfect Overclock.","Tooltip_MoleculeDeconstructor_03");
     public static final String Tooltip_MoleculeDeconstructor_04 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_MoleculeDeconstructor_04");
+    public static final String Tooltip_MoleculeDeconstructor_05 = texter("The Glass Tier limit the Energy hatch voltage Tier.","Tooltip_MoleculeDeconstructor_05");
     
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
