@@ -1336,6 +1336,71 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20)
             .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
 
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(2),
+                GT_ModHandler.getModItem("GoodGenerator", "highDensityPlutoniumNugget", 3),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neutronium, 16),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Caesium, 32),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 4)
+            )
+            .noFluidInputs()
+            .noItemOutputs()
+            .fluidOutputs(new FluidStack(FluidRegistry.getFluid("plutonium based liquid fuel"),1000))
+            .noOptimize()
+            .eut(RECIPE_LuV)
+            .duration(20 * 36)
+            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(2),
+                GT_ModHandler.getModItem("GoodGenerator", "highDensityUraniumNugget", 3),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Potassium, 16),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Quantium, 8),
+                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 2)
+            )
+            .fluidInputs(Materials.Radon.getGas(2000))
+            .noItemOutputs()
+            .fluidOutputs(new FluidStack(FluidRegistry.getFluid("uranium based liquid fuel"),1000))
+            .noOptimize()
+            .eut(RECIPE_LuV)
+            .duration(20 * 36)
+            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(9),
+                GT_ModHandler.getModItem("GoodGenerator", "highDensityPlutoniumNugget", 3),
+                GT_ModHandler.getModItem("GoodGenerator", "wrappedUraniumIngot", 1),
+                GT_ModHandler.getModItem("GoodGenerator", "advancedFuelRod", 1),
+                GT_OreDictUnificator.get(OrePrefixes.screw, Materials.NaquadahEnriched, 2),
+                GT_ModHandler.getModItem("GoodGenerator", "rawAtomicSeparationCatalyst", 32)
+            )
+            .noFluidInputs()
+            .itemOutputs(GT_ModHandler.getModItem("GoodGenerator", "rodCompressedPlutonium", 1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_IV)
+            .duration(20 * 15)
+            .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(18),
+                GT_ModHandler.getModItem("GoodGenerator", "highDensityUraniumNugget", 3),
+                GT_ModHandler.getModItem("GoodGenerator", "wrappedPlutoniumIngot", 1),
+                GT_ModHandler.getModItem("GoodGenerator", "advancedFuelRod", 1),
+                GT_OreDictUnificator.get(OrePrefixes.screw, Materials.NaquadahEnriched, 2),
+                GT_ModHandler.getModItem("GoodGenerator", "rawAtomicSeparationCatalyst", 32)
+            )
+            .noFluidInputs()
+            .itemOutputs(GT_ModHandler.getModItem("GoodGenerator", "rodCompressedUranium", 1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_IV)
+            .duration(20 * 15)
+            .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
     }
     // spotless:on
 }
