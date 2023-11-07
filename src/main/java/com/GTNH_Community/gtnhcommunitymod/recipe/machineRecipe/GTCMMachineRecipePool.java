@@ -1136,6 +1136,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 Materials.ElectricalSteel.getMolten(144 * 9 * 912),
                 Materials.EnergeticAlloy.getMolten(144 * 9 * 191),
                 Materials.PhasedIron.getMolten(144 * 9 * 912),
+                Materials.DarkSteel.getMolten(144 * 9 * 912),
                 Materials.RedstoneAlloy.getMolten(144 * 9 * 912),
                 Materials.Soularium.getMolten(144 * 9 * 456)
             )
