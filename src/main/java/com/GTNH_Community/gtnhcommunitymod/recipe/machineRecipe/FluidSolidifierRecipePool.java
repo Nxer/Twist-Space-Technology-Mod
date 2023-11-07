@@ -288,7 +288,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
         // Mercury
         GT_Values.RA.stdBuilder()
             .itemInputs(MoldSingularity.get(0))
-            .fluidInputs(Materials.Mercury.getFluid(144 * 9 * 1824))
+            .fluidInputs(Materials.Mercury.getFluid(1000 * 9 * 1824))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 21))
             .noFluidOutputs()
             .eut(RECIPE_UV)
