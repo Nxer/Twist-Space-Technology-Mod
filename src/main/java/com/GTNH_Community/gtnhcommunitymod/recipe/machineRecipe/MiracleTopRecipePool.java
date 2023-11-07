@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
+import com.dreammaster.gthandler.CustomItemList;
 import com.dreammaster.gthandler.GT_CoreModSupport;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
@@ -1087,10 +1088,22 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.RedAlloy.getMolten(144*8)
             )
             .itemOutputs(
-                ItemList.NandChip.get(64),
-                ItemList.NandChip.get(64),
-                ItemList.NandChip.get(64),
-                ItemList.NandChip.get(64)
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64),
+                CustomItemList.NandChipBoard.get(64)
             )
             .noFluidOutputs()
             .eut(RECIPE_EV)
@@ -1181,6 +1194,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .eut(RECIPE_MAX)
             .duration(20*1919810)
             .addTo(MT);
+
 
         // endregion
     }
