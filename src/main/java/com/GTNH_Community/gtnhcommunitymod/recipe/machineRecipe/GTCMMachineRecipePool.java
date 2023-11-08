@@ -1346,7 +1346,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             )
             .noFluidInputs()
             .noItemOutputs()
-            .fluidOutputs(new FluidStack(FluidRegistry.getFluid("plutonium based liquid fuel"),1000))
+            .fluidOutputs(MyMaterial.plutoniumBasedLiquidFuel.getFluidOrGas(1000))
             .noOptimize()
             .eut(RECIPE_LuV)
             .duration(20 * 36)
@@ -1362,7 +1362,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             )
             .fluidInputs(Materials.Radon.getGas(2000))
             .noItemOutputs()
-            .fluidOutputs(new FluidStack(FluidRegistry.getFluid("uranium based liquid fuel"),1000))
+            .fluidOutputs(MyMaterial.uraniumBasedLiquidFuel.getFluidOrGas(1000))
             .noOptimize()
             .eut(RECIPE_LuV)
             .duration(20 * 36)
@@ -1371,11 +1371,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(9),
-                GT_ModHandler.getModItem("GoodGenerator", "highDensityPlutoniumNugget", 3),
-                GT_ModHandler.getModItem("GoodGenerator", "wrappedUraniumIngot", 1),
-                GT_ModHandler.getModItem("GoodGenerator", "advancedFuelRod", 1),
-                GT_OreDictUnificator.get(OrePrefixes.screw, Materials.NaquadahEnriched, 2),
-                GT_ModHandler.getModItem("GoodGenerator", "rawAtomicSeparationCatalyst", 32)
+                ItemRefer.High_Density_Plutonium_Nugget.get(3),
+                ItemRefer.Wrapped_Uranium_Ingot.get(1),
+                ItemRefer.Advanced_Fuel_Rod.get(1),
+                ItemRefer.Raw_Atomic_Separation_Catalyst.get(32),
+                GT_OreDictUnificator.get(OrePrefixes.screw, Materials.NaquadahEnriched, 2)
             )
             .noFluidInputs()
             .itemOutputs(GT_ModHandler.getModItem("GoodGenerator", "rodCompressedPlutonium", 1))
@@ -1387,12 +1387,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(18),
-                GT_ModHandler.getModItem("GoodGenerator", "highDensityUraniumNugget", 3),
-                GT_ModHandler.getModItem("GoodGenerator", "wrappedPlutoniumIngot", 1),
-                GT_ModHandler.getModItem("GoodGenerator", "advancedFuelRod", 1),
-                GT_OreDictUnificator.get(OrePrefixes.screw, Materials.NaquadahEnriched, 2),
-                GT_ModHandler.getModItem("GoodGenerator", "rawAtomicSeparationCatalyst", 32)
+                GT_Utility.getIntegratedCircuit(9),
+                ItemRefer.High_Density_Uranium_Nugget.get(3),
+                ItemRefer.Wrapped_Thorium_Ingot.get(1),
+                ItemRefer.Advanced_Fuel_Rod.get(1),
+                ItemRefer.Raw_Atomic_Separation_Catalyst.get(32),
+                GT_OreDictUnificator.get(OrePrefixes.screw, Materials.NaquadahEnriched, 2)
             )
             .noFluidInputs()
             .itemOutputs(GT_ModHandler.getModItem("GoodGenerator", "rodCompressedUranium", 1))
