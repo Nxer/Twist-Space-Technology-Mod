@@ -102,7 +102,7 @@ public class GT_TileEntity_MoleculeDeconstructor
     }
 
     private float getSpeedBonus() {
-        return (float) (Math.pow(0.90, GT_Utility.getTier(this.getMaxInputVoltage())));
+        return (float) (Math.pow(0.90, GT_Utility.getTier(this.getAverageInputVoltage())));
     }
 
     @Override

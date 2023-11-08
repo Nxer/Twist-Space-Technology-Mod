@@ -93,7 +93,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
     }
 
     public int getMaxParallelRecipes() {
-        return (int) Math.min(MAX_PARALLEL_LIMIT, Math.pow(2, GT_Utility.getTier(this.getMaxInputVoltage())));
+        return (int) Math.min(MAX_PARALLEL_LIMIT, Math.pow(2, GT_Utility.getTier(this.getAverageInputVoltage())));
     }
 
     public float getSpeedBonus() {
