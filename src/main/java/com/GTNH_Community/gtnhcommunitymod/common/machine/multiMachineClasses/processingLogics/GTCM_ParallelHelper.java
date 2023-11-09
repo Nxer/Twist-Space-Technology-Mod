@@ -18,7 +18,11 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SingleRecipeCheck;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_OverclockCalculator;
+import gregtech.api.util.GT_ParallelHelper;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility.ItemId;
+import gregtech.api.util.VoidProtectionHelper;
 
 // spotless:off
 public class GTCM_ParallelHelper extends GT_ParallelHelper {
@@ -513,18 +517,18 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 // Sign EUt limit
                 final int canParallelEUt = (int) Math.min( availableEUt / tRecipeEUt, limitParallel);
                 // Maintain a Map to contain inputs.
-                Map<GT_Utility.ItemId, Integer> itemInputsMap = new HashMap<>();
+                Map<ItemId, Integer> itemInputsMap = new HashMap<>();
                 for (ItemStack itemStack : itemInputs){
                     if (itemStack == null) continue;
-                    itemInputsMap.merge(GT_Utility.ItemId.createNoCopy(itemStack), itemStack.stackSize, Integer::sum);
+                    itemInputsMap.merge(ItemId.createNoCopy(itemStack), itemStack.stackSize, Integer::sum);
                 }
 
                 // Maintain a Map to contain recipe item inputs
-                Map<GT_Utility.ItemId, Integer> recipeItemInputsMap = new HashMap<>();
+                Map<ItemId, Integer> recipeItemInputsMap = new HashMap<>();
                 if (recipe.mInputs != null){
                     for (ItemStack itemStack : recipe.mInputs){
                         if (itemStack == null) continue;
-                        recipeItemInputsMap.merge(GT_Utility.ItemId.createNoCopy(itemStack), itemStack.stackSize, Integer::sum);
+                        recipeItemInputsMap.merge(ItemId.createNoCopy(itemStack), itemStack.stackSize, Integer::sum);
                     }
                 }
 
@@ -532,7 +536,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 int canItemInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canParallelEUt);
 
                 if (!recipeItemInputsMap.isEmpty() && recipe.mInputs != null){
-                    for (GT_Utility.ItemId itemIntegerPair : recipeItemInputsMap.keySet()){
+                    for (ItemId itemIntegerPair : recipeItemInputsMap.keySet()){
 
                         int canThisParallel = (int) itemInputsMap.get(itemIntegerPair) / recipeItemInputsMap.get(itemIntegerPair) ;
                         if (canThisParallel<canItemInputsMaxParallel){
@@ -579,11 +583,11 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 // Consume inputs
 
                 // Prepare a map of actual consume of item
-                for (GT_Utility.ItemId itemInput : recipeItemInputsMap.keySet()){
+                for (ItemId itemInput : recipeItemInputsMap.keySet()){
                     int amountNeed=currentParallel * recipeItemInputsMap.get(itemInput);
                     for (ItemStack itemStack : itemInputs){
                         // catch the input slot of items in need
-                        if (itemInput == GT_Utility.ItemId.createNoCopy(itemStack)){
+                        if (itemInput == ItemId.createNoCopy(itemStack)){
                             if (itemStack.stackSize >= amountNeed){
                                 // if stack size is enough to consume
                                 // then consume and break
