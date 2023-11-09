@@ -1,11 +1,16 @@
 package com.GTNH_Community.gtnhcommunitymod.common.machine.multiMachineClasses.processingLogics;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
+import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import gregtech.api.interfaces.tileentity.IRecipeLockable;
@@ -19,6 +24,9 @@ import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_ParallelHelper;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.VoidProtectionHelper;
+import org.apache.commons.lang3.tuple.Pair;
+
+import static com.GTNH_Community.gtnhcommunitymod.common.machine.ValueEnum.MAX_PARALLEL_LIMIT;
 
 // spotless:off
 public class GTCM_ParallelHelper extends GT_ParallelHelper {
@@ -404,15 +412,11 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             copyInputs();
         }
         
-        /*
-         * Set Overclock Calculator
-         */
         if (calculator == null) {
-            calculator = new GTCM_OverclockCalculator()
-                             .setEUt(availableEUt)
-                             .setRecipeEUt(recipe.mEUt)
-                             .setDuration(recipe.mDuration)
-                             .setEUtDiscount(eutModifier);
+            calculator = new GTCM_OverclockCalculator().setEUt(availableEUt)
+                                                     .setRecipeEUt(recipe.mEUt)
+                                                     .setDuration(recipe.mDuration)
+                                                     .setEUtDiscount(eutModifier);
         }
         
         final int tRecipeEUt = (int) Math.ceil(recipe.mEUt * eutModifier);
@@ -425,12 +429,12 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         int limitParallelTemp = 1;
         {
             // TODO Catch the max stack size
-            int maxStackSize = 0;
+            int maxStackSize = 1;
             for(ItemStack itemStack : recipe.mOutputs){
                 maxStackSize = Math.max(maxStackSize, itemStack.stackSize);
             }
             int limitParallelTempItem = Integer.MAX_VALUE / maxStackSize;
-            maxStackSize = 0;
+            maxStackSize = 1;
             for(FluidStack fluidStack : recipe.mFluidOutputs){
                 maxStackSize = Math.max(maxStackSize, fluidStack.amount);
             }
@@ -442,7 +446,6 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         // Save the original max parallel before calculating our overclocking under 1 tick
         int originalMaxParallel = maxParallel;
         if (maxParallel<limitParallel){
-            // calculate parallel over 1 tick.
             double tickTimeAfterOC = calculator.setParallel(originalMaxParallel)
                                                .calculateDurationUnderOneTick();
             if (tickTimeAfterOC < 1) {
@@ -452,19 +455,16 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             maxParallel = limitParallel;
         }
         
-        
+        // Handle batchMode
         int maxParallelBeforeBatchMode = maxParallel;
-        if (maxParallel<limitParallel){
-            if (batchMode) {
-                maxParallel *= batchModifier;
-            }
-        }else if (maxParallel>limitParallel){
-            maxParallel = limitParallel;
+        if (batchMode) {
+            maxParallel *= batchModifier;
+        }
+        if (maxParallel>limitParallel){
+            maxParallel=limitParallel;
         }
         
-        /*
-         * Handle single recipe mod
-         */
+        // Turn to Single Recipe Mode if enabled.
         SingleRecipeCheck recipeCheck = null;
         SingleRecipeCheck.Builder tSingleRecipeCheckBuilder = null;
         if (isRecipeLocked && singleRecipeMachine != null) {
@@ -480,6 +480,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             }
         }
         
+        // Auto protect output overflow
         // Let's look at how many parallels we can get with void protection
         if (protectExcessItem || protectExcessFluid) {
             if (machine == null) {
@@ -500,6 +501,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         
         maxParallelBeforeBatchMode = Math.min(maxParallel, maxParallelBeforeBatchMode);
         
+        
         // Consume inputs to determine normal parallel
         if (recipeCheck != null) {
             int actualMaxParallel = (int) Math.min(maxParallelBeforeBatchMode, availableEUt / tRecipeEUt);
@@ -507,11 +509,125 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         } else {
             long tCurrentUsage = 0;
             boolean builtRecipeCheck = false;
-            /*
-             * TODO Need a method to auto handle input slot about recipe with big value parallel
-             */
             
-            // TODO F**k Crazy Iterating.
+            // Calculate the actual parallel
+            {
+                // Sign EUt limit
+                final int canParallelEUt = Math.min( (int) availableEUt / tRecipeEUt, MAX_PARALLEL_LIMIT);
+                // Maintain a Map to contain inputs.
+                Map<Pair<Item,Integer>, Integer> itemInputsMap = new HashMap<>();
+                for (ItemStack itemStack : itemInputs){
+                    if (itemInputsMap.containsKey(Pair.of(itemStack.getItem(), itemStack.getItemDamage()))){
+                        int newAmount = itemInputsMap.get(Pair.of(itemStack.getItem(), itemStack.getItemDamage())) + itemStack.stackSize;
+                        itemInputsMap.put(Pair.of(itemStack.getItem(), itemStack.getItemDamage()), newAmount);
+                    }else {
+                        itemInputsMap.put(
+                            Pair.of(itemStack.getItem(), itemStack.getItemDamage()),
+                            itemStack.stackSize
+                        );
+                    }
+                }
+                
+                // Maintain a Map to contain recipe item inputs
+                Map<Pair<Item,Integer>, Integer> recipeItemInputsMap = new HashMap<>();
+                if (recipe.mInputs != null){
+                    for (ItemStack itemStack : recipe.mInputs){
+                        if (itemStack.stackSize == 0){
+                            continue;
+                        }
+                        if (recipeItemInputsMap.containsKey(Pair.of(itemStack.getItem(), itemStack.getItemDamage()))){
+                            int newAmount = recipeItemInputsMap.get(Pair.of(itemStack.getItem(), itemStack.getItemDamage())) + itemStack.stackSize;
+                            recipeItemInputsMap.put(Pair.of(itemStack.getItem(), itemStack.getItemDamage()), newAmount);
+                        }else {
+                            recipeItemInputsMap.put(Pair.of(itemStack.getItem(), itemStack.getItemDamage()), itemStack.stackSize);
+                        }
+                    }
+                }
+                
+                // Catch the minimum parallel of every input item's.
+                int canItemInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canParallelEUt);
+                
+                if (!recipeItemInputsMap.isEmpty() && recipe.mInputs != null){
+                    for (Pair<Item,Integer> itemIntegerPair : recipeItemInputsMap.keySet()){
+                        
+                        int canThisParallel = (int) itemInputsMap.get(itemIntegerPair) / recipeItemInputsMap.get(itemIntegerPair) ;
+                        if (canThisParallel<canItemInputsMaxParallel){
+                            canItemInputsMaxParallel = canThisParallel;
+                        }
+                    }
+                }
+                
+                
+                // Maintain a Map to contain fluid inputs
+                Map<Fluid, Integer> fluidInputsMap = new HashMap<>();
+                for (FluidStack fluidStack : fluidInputs){
+                    fluidInputsMap.put(fluidStack.getFluid(), fluidStack.amount);
+                }
+                
+                // Catch the minimum parallel of every input fluid's.
+                int canFluidInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canItemInputsMaxParallel);
+                
+                if (!fluidInputsMap.isEmpty() && recipe.mFluidInputs != null){
+                    for (FluidStack fluidStack : recipe.mFluidInputs){
+                        int canThisParallel = (int) fluidInputsMap.get(fluidStack.getFluid()) / fluidStack.amount;
+                        if (canThisParallel<canFluidInputsMaxParallel){
+                            canFluidInputsMaxParallel = canThisParallel;
+                        }
+                    }
+                }
+                
+                // sanity check
+                if (canFluidInputsMaxParallel <= 0) {
+                    result = CheckRecipeResultRegistry.INTERNAL_ERROR;
+                    return;
+                }
+                
+                // Finish
+                currentParallel = canFluidInputsMaxParallel;
+                
+                if (tSingleRecipeCheckBuilder != null ) {
+                    // If recipe checker is not built yet, build and set it
+                    SingleRecipeCheck builtCheck = tSingleRecipeCheckBuilder.setAfter(itemInputs, fluidInputs)
+                                                                            .setRecipe(recipe)
+                                                                            .build();
+                    singleRecipeMachine.setSingleRecipeCheck(builtCheck);
+                }
+                
+                // Consume inputs
+                
+                // Prepare a map of actual consume of item
+                Map<Pair<Item, Integer>, Integer> actualConsumeItemInput = new HashMap<>();
+                for (Pair<Item, Integer> itemInput : recipeItemInputsMap.keySet()){
+                    actualConsumeItemInput.put(itemInput, currentParallel * recipeItemInputsMap.get(itemInput));
+                }
+                
+                // Prepare a map of actual consume of fluid
+                Map<Fluid, Integer> actualConsumeFluidInput = new HashMap<>();
+                for (Fluid fluidInput : fluidInputsMap.keySet()){
+                    actualConsumeFluidInput.put(fluidInput, currentParallel * fluidInputsMap.get(fluidInput));
+                }
+                
+                // Consume items
+                if (!actualConsumeItemInput.isEmpty()){
+                    for (Pair<Item, Integer> itemInputNeed : actualConsumeItemInput.keySet()){
+                        for (ItemStack itemStack : itemInputs){
+                            if (itemInputNeed.getLeft() == itemStack.getItem() && itemInputNeed.getRight() == itemStack.getItemDamage()){
+                                
+                            }
+                        }
+                    }
+                }
+                
+                // Consume fluids
+                if (!actualConsumeFluidInput.isEmpty()){
+                
+                }
+            }
+            
+            
+            
+            // TODO fuck off crazy iterate
+            /*
             for (; currentParallel < maxParallelBeforeBatchMode
                        && tCurrentUsage < (availableEUt - tRecipeEUt); currentParallel++) {
                 if (!tryConsumeRecipeInputs(recipe, fluidInputs, itemInputs)) {
@@ -527,13 +643,10 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                     builtRecipeCheck = true;
                 }
             }
+            */
+            
         }
         
-        // sanity check
-        if (currentParallel <= 0) {
-            result = CheckRecipeResultRegistry.INTERNAL_ERROR;
-            return;
-        }
         
         
         long eutUseAfterOC = calculator.calculateEUtConsumptionUnderOneTick(originalMaxParallel, currentParallel);
@@ -553,7 +666,6 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             if (recipeCheck != null) {
                 tExtraParallels = recipeCheck.checkRecipeInputs(true, maxExtraParallels, itemInputs, fluidInputs);
             } else {
-                // TODO F**k Crazy Iterating. Again
                 while (tExtraParallels < maxExtraParallels
                            && tryConsumeRecipeInputs(recipe, fluidInputs, itemInputs, currentParallel)) {
                     tExtraParallels += currentParallel;
