@@ -16,6 +16,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameSpac
 import net.minecraft.item.ItemStack;
 
 import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.GTCM_TestMultiMachine;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_HolySeparator;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_MagneticDomainConstructor;
@@ -46,7 +47,13 @@ public class MachineLoader {
     // Single Block
     public static ItemStack InfiniteAirHatch;
 
+    // test
+    public static ItemStack TestMachine;
+
     public static void loadMachines() {
+
+        // test
+        TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 
         // region multi Machine controller
 
