@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.common.machine.singleBlock;
 
+import gregtech.api.util.GT_Utility;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
@@ -10,6 +11,8 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
+
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.*;
 
 public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGenerator {
 
@@ -26,10 +29,22 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
     public MetaTileEntity newMetaEntity(final IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Hatch_Air(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
+    @Override
+    public synchronized String[] getDescription() {
+        mDescriptionArray[1] = FluidCapacity + GT_Utility.formatNumbers(getCapacity()) + "L";
+        final String[] hatchTierString = new String[] { HatchTier + GT_Utility.getColoredTierNameFromTier(mTier) };
 
+        String[] aCustomTips = getCustomTooltip();
+        final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 2];
+        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+        System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.length, 1);
+        System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.length + 1, aCustomTips.length);
+        desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
+        return desc;
+    }
     @Override
     public String[] getCustomTooltip() {
-        String[] aTooltip = new String[2];
+        String[] aTooltip = new String[3];
         aTooltip[0] = "Infinite air supply hatch";
         aTooltip[1] = "Fills to max capacity every 5 seconds";
         return aTooltip;

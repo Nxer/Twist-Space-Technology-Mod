@@ -13,7 +13,11 @@ public class TextLocalization {
 
     public static final String ModName = "GTNH Community Mod";
 
+    public static final String ModNameDesc = texter("Added by " + EnumChatFormatting.GREEN + "GTNH Community Mod" + EnumChatFormatting.GRAY, "ModNameDesc");
+
     public static final String HeatCapacity = texter("Heat Capacity: ", "HeatCapacity");
+    public static final String FluidCapacity = texter("Capacity: ", "FluidCapacity");
+    public static final String HatchTier = texter("Hatch Tier: ", "HatchTier");
     public static final String Kelvin = texter(" K", "Kelvin");
     public static final String BLUE_PRINT_INFO = texter(
         "Follow the" + EnumChatFormatting.BLUE
@@ -87,7 +91,7 @@ public class TextLocalization {
         "Precise High-Energy Photonic Quantum Master",
         "NamePreciseHighEnergyPhotonicQuantumMaster");
 
-    
+
 
     public static final String Tooltip_PhC_MachineType = texter("Photon Controller/Laser Engraver", "Tooltip_PhC_MachineType");
     public static final String Tooltip_PhC_00 = texter("Controller block for the Precise High-Energy Photonic Quantum Master", "Tooltip_PhC_00");
@@ -187,9 +191,9 @@ public class TextLocalization {
     public static final String Tooltip_PhysicalFormSwitcher_03 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_PhysicalFormSwitcher_03");
     public static final String Tooltip_PhysicalFormSwitcher_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_PhysicalFormSwitcher_04");
     public static final String Tooltip_PhysicalFormSwitcher_05 = texter("The Glass Tier limit the recipe voltage tier.", "Tooltip_PhysicalFormSwitcher_05");
-    
+
     // endregion
-    
+
     // region Magnetic Mixer
     public static final String NameMagneticMixer = texter("\"Mini\" Magnetic Mixer","NameMagneticMixer");
     public static final String Tooltip_MagneticMixer_MachineType = texter("Mixer", "Tooltip_MagneticMixer_MachineType");
@@ -200,7 +204,7 @@ public class TextLocalization {
     public static final String Tooltip_MagneticMixer_04 = texter("Additional 20%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_MagneticMixer_04");
 
     // endregion
-    
+
     // region MagneticDomainConstructor
     public static final String NameMagneticDomainConstructor = texter("Magnetic Domain Constructor","NameMagneticDomainConstructor");
     public static final String Tooltip_MagneticDomainConstructor_MachineType = texter("Electromagnetic Separator | Electromagnetic Polarizer","Tooltip_MagneticDomainConstructor_MachineType");
@@ -209,9 +213,9 @@ public class TextLocalization {
     public static final String Tooltip_MagneticDomainConstructor_02 = texter("Controlling the magnetic domains inside the crystal, yes that's it.","Tooltip_MagneticDomainConstructor_02");
     public static final String Tooltip_MagneticDomainConstructor_03 = texter("8x Parallel per Ring.(Don't use a lot of blueprints when first scanning.)","Tooltip_MagneticDomainConstructor_03");
     public static final String Tooltip_MagneticDomainConstructor_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.","Tooltip_MagneticDomainConstructor_04");
-    
+
     // endregion
-    
+
     // region Silksong
     public static final String NameSilksong = texter("Silksong","NameSilksong");
     public static final String Tooltip_Silksong_MachineType = texter("Wiremill","Tooltip_Silksong_MachineType");
@@ -221,7 +225,7 @@ public class TextLocalization {
     public static final String Tooltip_Silksong_03 = texter("8x Parallel per piece.","Tooltip_Silksong_03");
     public static final String Tooltip_Silksong_04 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_Silksong_04");
     // endregion
-    
+
     // region HolySeparator
     public static final String NameHolySeparator = texter("Holy Separator", "NameHolySeparator");
     public static final String Tooltip_HolySeparator_MachineType = texter("Cutter | Slicer | Lathe","Tooltip_HolySeparator_MachineType");
@@ -231,9 +235,9 @@ public class TextLocalization {
     public static final String Tooltip_HolySeparator_03 = texter("You can even slice potato chips with this.","Tooltip_HolySeparator_03");
     public static final String Tooltip_HolySeparator_04 = texter("Extra 8x Parallel per Piece. 16 Piece enable Perfect Overclock.","Tooltip_HolySeparator_04");
     public static final String Tooltip_HolySeparator_05 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_HolySeparator_05");
-    
+
     // endregion
-    
+
     // region SpaceScaler
     public static final String NameSpaceScaler = texter("Space Scaler","NameSpaceScaler");
     public static final String Tooltip_SpaceScaler_MachineType = texter("Compressor | Extractor","Tooltip_SpaceScaler_MachineType");
@@ -243,9 +247,9 @@ public class TextLocalization {
     public static final String Tooltip_SpaceScaler_03 = texter("Only if the space is manageable...","Tooltip_SpaceScaler_03");
     public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.","Tooltip_SpaceScaler_04");
     public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.","Tooltip_SpaceScaler_05");
-    
+
     // endregion
-    
+
     // region MoleculeDeconstructor
     public static final String NameMoleculeDeconstructor = texter("Molecule Deconstructor","NameMoleculeDeconstructor");
     public static final String Tooltip_MoleculeDeconstructor_MachineType = texter("Electrolyzer | Centrifuge","Tooltip_MoleculeDeconstructor_MachineType");
@@ -255,10 +259,10 @@ public class TextLocalization {
     public static final String Tooltip_MoleculeDeconstructor_03 = texter("Extra 24x Parallel per Piece. 16 Piece enable Perfect Overclock.","Tooltip_MoleculeDeconstructor_03");
     public static final String Tooltip_MoleculeDeconstructor_04 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_MoleculeDeconstructor_04");
     public static final String Tooltip_MoleculeDeconstructor_05 = texter("The Glass Tier limit the Energy hatch voltage Tier.","Tooltip_MoleculeDeconstructor_05");
-    
+
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
-    
+
     // endregion
 }
 // spotless:on
