@@ -1,6 +1,7 @@
 package com.GTNH_Community.gtnhcommunitymod.common.machine.singleBlock;
 
-import gregtech.api.util.GT_Utility;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.*;
+
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
@@ -8,11 +9,10 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
-
-import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.*;
 
 public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGenerator {
 
@@ -29,6 +29,7 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
     public MetaTileEntity newMetaEntity(final IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Hatch_Air(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
+
     @Override
     public synchronized String[] getDescription() {
         mDescriptionArray[1] = FluidCapacity + GT_Utility.formatNumbers(getCapacity()) + "L";
@@ -42,6 +43,7 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
         desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
         return desc;
     }
+
     @Override
     public String[] getCustomTooltip() {
         String[] aTooltip = new String[3];
