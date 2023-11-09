@@ -7,11 +7,12 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import gregtech.api.interfaces.tileentity.IRecipeLockable;
 import gregtech.api.interfaces.tileentity.IVoidable;
@@ -24,9 +25,6 @@ import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_ParallelHelper;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.VoidProtectionHelper;
-import org.apache.commons.lang3.tuple.Pair;
-
-import static com.GTNH_Community.gtnhcommunitymod.common.machine.ValueEnum.MAX_PARALLEL_LIMIT;
 
 // spotless:off
 public class GTCM_ParallelHelper extends GT_ParallelHelper {
@@ -513,7 +511,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             // Calculate the actual parallel
             {
                 // Sign EUt limit
-                final int canParallelEUt = Math.min( (int) availableEUt / tRecipeEUt, MAX_PARALLEL_LIMIT);
+                final int canParallelEUt = (int) Math.min( availableEUt / tRecipeEUt, limitParallel);
                 // Maintain a Map to contain inputs.
                 Map<Pair<Item,Integer>, Integer> itemInputsMap = new HashMap<>();
                 for (ItemStack itemStack : itemInputs){
@@ -563,7 +561,6 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 for (FluidStack fluidStack : fluidInputs){
                     fluidInputsMap.put(fluidStack.getFluid(), fluidStack.amount);
                 }
-                
                 // Catch the minimum parallel of every input fluid's.
                 int canFluidInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canItemInputsMaxParallel);
                 
@@ -610,17 +607,47 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 // Consume items
                 if (!actualConsumeItemInput.isEmpty()){
                     for (Pair<Item, Integer> itemInputNeed : actualConsumeItemInput.keySet()){
+                        // get items in need with amount
+                        int amountNeed = actualConsumeItemInput.get(itemInputNeed);
+                        
                         for (ItemStack itemStack : itemInputs){
+                            // catch the input slot of items in need
                             if (itemInputNeed.getLeft() == itemStack.getItem() && itemInputNeed.getRight() == itemStack.getItemDamage()){
-                                
+                                if (itemStack.stackSize >= amountNeed){
+                                    // if stack size is enough to consume
+                                    // then consume and break
+                                    itemStack.stackSize -= amountNeed;
+                                    break;
+                                }else {
+                                    // if not enough
+                                    amountNeed -= itemStack.stackSize;
+                                    itemStack.stackSize = 0;
+                                }
                             }
                         }
+                        
                     }
                 }
                 
                 // Consume fluids
                 if (!actualConsumeFluidInput.isEmpty()){
-                
+                    for (Fluid fluidInputNeed : actualConsumeFluidInput.keySet()){
+                        
+                        int amountNeed = actualConsumeFluidInput.get(fluidInputNeed);
+                        
+                        for (FluidStack fluidStack : fluidInputs){
+                            if (fluidInputNeed == fluidStack.getFluid()){
+                                if (fluidStack.amount >= amountNeed){
+                                    fluidStack.amount -= amountNeed;
+                                    break;
+                                }else {
+                                    amountNeed -= fluidStack.amount;
+                                    fluidStack.amount = 0;
+                                }
+                            }
+                        }
+                        
+                    }
                 }
             }
             
