@@ -89,11 +89,12 @@ public class GT_TileEntity_MagneticDrivePressureFormer
      * <li>0 = Extruder
      * <li>1 = Bending Machine
      * <li>2 = Forming Press
+     * <li>3 = Forge Hammer
      */
     public byte mode = 0;
     public byte glassTier;
     public boolean signHadEnabledPerfectOverclock = false;
-    public HeatingCoilLevel coilLevel = HeatingCoilLevel.LV;
+    public HeatingCoilLevel coilLevel;
 
     public HeatingCoilLevel getCoilLevel() {
         return coilLevel;

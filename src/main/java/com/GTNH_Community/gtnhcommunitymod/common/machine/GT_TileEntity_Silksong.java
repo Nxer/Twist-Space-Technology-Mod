@@ -130,6 +130,8 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
     // endregion
 
     // region Structure
+    // spotless:off
+    
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         int piece = stackSize.stackSize;
@@ -283,6 +285,7 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
             || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
+    // spotless:on
     // endregion
 
     // region Overrides
