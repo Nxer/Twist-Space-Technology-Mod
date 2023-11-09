@@ -37,6 +37,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.GTNH_Community.gtnhcommunitymod.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -80,7 +81,7 @@ public class GT_TileEntity_HolySeparator
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
 
             @NotNull
             @Override

@@ -39,9 +39,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.GTNH_Community.gtnhcommunitymod.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -53,7 +53,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -63,9 +62,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings8;
 
-public class GT_TileEntity_PhysicalFormSwitcher
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_PhysicalFormSwitcher>
-    implements IConstructable, ISurvivalConstructable {
+public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT_TileEntity_PhysicalFormSwitcher> {
 
     // region Class Constructor
     public GT_TileEntity_PhysicalFormSwitcher(int aID, String aName, String aNameRegional) {
@@ -83,7 +80,7 @@ public class GT_TileEntity_PhysicalFormSwitcher
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
 
             @NotNull
             @Override

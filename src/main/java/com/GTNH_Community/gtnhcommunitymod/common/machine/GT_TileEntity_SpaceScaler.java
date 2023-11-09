@@ -40,6 +40,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.GTNH_Community.gtnhcommunitymod.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -79,7 +80,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
 
             @NotNull
             @Override

@@ -19,7 +19,6 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GT_Recipe;
 
 public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable {
@@ -36,17 +35,6 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     // endregion
 
     // region Processing Logic
-
-    /**
-     * Need Rewrite in every machine class.
-     * 
-     * @return The recipe map this machine processing.
-     */
-    @ApiStatus.OverrideOnly
-    @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return GT_Recipe.GT_Recipe_Map.sAssemblerRecipes;
-    }
 
     /**
      * Creates logic to run recipe check based on recipemap. This runs only once, on class instantiation.
