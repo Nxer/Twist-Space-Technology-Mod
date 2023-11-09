@@ -41,6 +41,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.GTNH_Community.gtnhcommunitymod.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -233,7 +234,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     //
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
 
             @Override
             protected CheckRecipeResult validateRecipe(GT_Recipe recipe) {

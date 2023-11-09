@@ -34,6 +34,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.GTNH_Community.gtnhcommunitymod.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
@@ -267,7 +268,7 @@ public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMul
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
 
             @Override
             public ProcessingLogic enablePerfectOverclock() {
