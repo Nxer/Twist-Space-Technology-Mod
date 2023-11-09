@@ -729,6 +729,9 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         fluidInputs = fluidInputsToUse;
     }
     
+    /**
+     * Calculate the Expected value instead of simulate the random processing everytime to down the latency
+     */
     protected void calculateItemOutputs() {
         if (customItemOutputCalculation != null) {
             itemOutputs = customItemOutputCalculation.apply(currentParallel);
@@ -744,14 +747,15 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 continue;
             }
             int items = 0;
+            int remain = 0;
             int itemStackSize = recipe.getOutput(i).stackSize;
-            for (int roll = 0; roll < currentParallel; roll++) {
-                if (recipe.getOutputChance(i) > XSTR.XSTR_INSTANCE.nextInt(10000)) {
-                    items += itemStackSize;
-                }
+            items = itemStackSize * recipe.getOutputChance(i) / 100;
+            remain = itemStackSize * recipe.getOutputChance(i) % 100;
+            if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
+                items += itemStackSize;
             }
-            ItemStack item = recipe.getOutput(i)
-                                   .copy();
+            
+            ItemStack item = recipe.getOutput(i).copy();
             if (items == 0) {
                 item = null;
             } else {
@@ -760,6 +764,42 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             itemOutputs[i] = item;
         }
     }
+
+    /*
+    protected void calculateItemOutputs() {
+        if (customItemOutputCalculation != null) {
+            itemOutputs = customItemOutputCalculation.apply(currentParallel);
+            return;
+        }
+        itemOutputs = new ItemStack[recipe.mOutputs.length];
+        for (int i = 0; i < recipe.mOutputs.length; i++) {
+            if (recipe.getOutputChance(i) >= 10000) {
+                ItemStack item = recipe.getOutput(i)
+                                       .copy();
+                item.stackSize *= currentParallel;
+                itemOutputs[i] = item;
+                continue;
+            }
+            int items = 0;
+            int remain = 0;
+            int itemStackSize = recipe.getOutput(i).stackSize;
+            items = itemStackSize * recipe.getOutputChance(i) / 100;
+            remain = itemStackSize * recipe.getOutputChance(i) % 100;
+            if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
+                items += itemStackSize;
+            }
+            
+            ItemStack item = recipe.getOutput(i).copy();
+            if (items == 0) {
+                item = null;
+            } else {
+                item.stackSize = items;
+            }
+            itemOutputs[i] = item;
+        }
+    }
+    
+     */
     
     protected void calculateFluidOutputs() {
         if (customFluidOutputCalculation != null) {
