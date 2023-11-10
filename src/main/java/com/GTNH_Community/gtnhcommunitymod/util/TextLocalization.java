@@ -247,6 +247,7 @@ public class TextLocalization {
     public static final String Tooltip_SpaceScaler_03 = texter("Only if the space is manageable...","Tooltip_SpaceScaler_03");
     public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.","Tooltip_SpaceScaler_04");
     public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.","Tooltip_SpaceScaler_05");
+    public static final String Tooltip_SpaceScaler_06 = texter("Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.","Tooltip_SpaceScaler_06");
 
     // endregion
 

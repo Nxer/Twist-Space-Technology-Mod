@@ -10,6 +10,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_SpaceScaler_03;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_SpaceScaler_04;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_SpaceScaler_05;
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_SpaceScaler_06;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_SpaceScaler_MachineType;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textScrewdriverChangeMode;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textUseBlueprint;
@@ -38,10 +39,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.google.common.collect.ImmutableList;
@@ -57,9 +60,13 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OverclockCalculator;
+import gregtech.api.util.GT_ParallelHelper;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
@@ -82,7 +89,19 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
+        /*
+         * ProcessingLogic normalProcessingLogic = new GTCM_ProcessingLogic() {
+         * @NotNull
+         * @Override
+         * public CheckRecipeResult process() {
+         * setSpeedBonus(getSpeedBonus());
+         * setOverclock(fieldGeneratorTier > 1 ? 2 : 1, 2);
+         * return super.process();
+         * }
+         * }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+         */
+
+        ProcessingLogic ParticalProcessingLogic = new GTCM_ProcessingLogic() {
 
             @NotNull
             @Override
@@ -92,7 +111,69 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
                 return super.process();
             }
 
+            protected CheckRecipeResult applyRecipe(@NotNull GT_Recipe recipe, GT_ParallelHelper helper,
+                GT_OverclockCalculator calculator, CheckRecipeResult result) {
+                if (!helper.getResult()
+                    .wasSuccessful()) {
+                    return helper.getResult();
+                }
+
+                if (recipe.mCanBeBuffered) {
+                    lastRecipe = recipe;
+                } else {
+                    lastRecipe = null;
+                }
+                calculatedParallels = helper.getCurrentParallel();
+
+                if (calculator.getConsumption() == Long.MAX_VALUE) {
+                    return CheckRecipeResultRegistry.POWER_OVERFLOW;
+                }
+                if (calculator.getDuration() == Integer.MAX_VALUE) {
+                    return CheckRecipeResultRegistry.DURATION_OVERFLOW;
+                }
+
+                calculatedEut = calculator.getConsumption();
+
+                double finalDuration = calculateDuration(recipe, helper, calculator);
+                if (finalDuration >= Integer.MAX_VALUE) {
+                    return CheckRecipeResultRegistry.DURATION_OVERFLOW;
+                }
+                duration = (int) finalDuration;
+
+                // normal mode
+                if (mode != 2) {
+                    outputItems = helper.getItemOutputs();
+                    outputFluids = helper.getFluidOutputs();
+
+                    return result;
+                }
+
+                // add outputs
+                final int multiplier = (int) Math.pow(2, fieldGeneratorTier - 3);
+                GTNHCommunityMod.LOG.info("test multiplier: " + multiplier);
+
+                outputItems = new ItemStack[helper.getItemOutputs().length];
+                GTNHCommunityMod.LOG.info("test before outputItems: " + outputItems);
+                for (int i = 0; i < helper.getItemOutputs().length; i++) {
+                    ItemStack itemStack = helper.getItemOutputs()[i];
+                    itemStack.stackSize = (int) Math.min(Integer.MAX_VALUE, (long) multiplier * itemStack.stackSize);
+                    outputItems[i] = itemStack;
+                }
+                GTNHCommunityMod.LOG.info("test after outputItems: " + outputItems);
+
+                outputFluids = new FluidStack[helper.getFluidOutputs().length];
+                for (int i = 0; i < helper.getFluidOutputs().length; i++) {
+                    FluidStack fluidStack = helper.getFluidOutputs()[i];
+                    fluidStack.amount = (int) Math.min(Integer.MAX_VALUE, (long) multiplier * fluidStack.amount);
+                    outputFluids[i] = fluidStack;
+                }
+
+                return result;
+            }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+
+        // return mode == 3 ? ParticalProcessingLogic : normalProcessingLogic;
+        return ParticalProcessingLogic;
     }
 
     public int getMaxParallelRecipes() {
@@ -109,6 +190,8 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
         switch (mode) {
             case 1:
                 return GT_Recipe.GT_Recipe_Map.sExtractorRecipes;
+            case 2:
+                return GTPP_Recipe.GTPP_Recipe_Map.sCyclotronRecipes;
             default:
                 return GT_Recipe.GT_Recipe_Map.sCompressorRecipes;
         }
@@ -117,8 +200,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-
+            this.mode = fieldGeneratorTier < 3 ? (byte) ((this.mode + 1) % 2) : (byte) ((this.mode + 1) % 3);
             GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("SpaceScaler.modeMsg." + this.mode));
         }
     }
@@ -204,10 +286,6 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
                     .buildAndChain(sBlockCasingsTT, 4))
             .addElement(
                 'G',
-                // ofChain(
-                // onElementPass(x->x.fieldGeneratorTier0Amount++, ofBlock(sBlockCasingsTT, 6)),
-                // onElementPass(x->x.fieldGeneratorTier1Amount++, ofBlock(sBlockCasingsTT, 14))
-                // )
                 ofBlocksTiered(
                     GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
                     ImmutableList.of(
@@ -293,6 +371,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
             .addInfo(Tooltip_SpaceScaler_03)
             .addInfo(Tooltip_SpaceScaler_04)
             .addInfo(Tooltip_SpaceScaler_05)
+            .addInfo(Tooltip_SpaceScaler_06)
             .addInfo(textScrewdriverChangeMode)
             .addSeparator()
             .addInfo(StructureTooComplex)
