@@ -13,6 +13,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.Tooltip_SpaceScaler_MachineType;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textScrewdriverChangeMode;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.textUseBlueprint;
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -29,6 +30,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -161,7 +163,22 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
     private final int horizontalOffSet = 15;
     private final int verticalOffSet = 15;
     private final int depthOffSet = 0;
-
+    public static int getBlockFieldGeneratorTier(Block block, int meta){
+        if (block == sBlockCasingsTT){
+            switch (meta) {
+                case 6:
+                    return 1;
+                case 14:
+                    return 2;
+                default:
+                    return 0;
+            }
+        }
+        if (block == StabilisationFieldGenerators){
+            return meta + 3;
+        }
+        return 0;
+    }
     @Override
     public IStructureDefinition<GT_TileEntity_SpaceScaler> getStructureDefinition() {
         return StructureDefinition.<GT_TileEntity_SpaceScaler>builder()
@@ -191,20 +208,21 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
                 // onElementPass(x->x.fieldGeneratorTier0Amount++, ofBlock(sBlockCasingsTT, 6)),
                 // onElementPass(x->x.fieldGeneratorTier1Amount++, ofBlock(sBlockCasingsTT, 14))
                 // )
-                ofBlocksTiered((block, meta) -> {
-                        if (block != sBlockCasingsTT) {
-                            return null;
-                        }
-                        switch (meta) {
-                            case 6:
-                                return 1;
-                            case 14:
-                                return 2;
-                            default:
-                                return 0;
-                        }
-                    },
-                    ImmutableList.of(Pair.of(sBlockCasingsTT, 6), Pair.of(sBlockCasingsTT, 14)),
+                ofBlocksTiered(
+                    GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
+                    ImmutableList.of(
+                        Pair.of(sBlockCasingsTT, 6),
+                        Pair.of(sBlockCasingsTT, 14),
+                        Pair.of(StabilisationFieldGenerators, 0),
+                        Pair.of(StabilisationFieldGenerators, 1),
+                        Pair.of(StabilisationFieldGenerators, 2),
+                        Pair.of(StabilisationFieldGenerators, 3),
+                        Pair.of(StabilisationFieldGenerators, 4),
+                        Pair.of(StabilisationFieldGenerators, 5),
+                        Pair.of(StabilisationFieldGenerators, 6),
+                        Pair.of(StabilisationFieldGenerators, 7),
+                        Pair.of(StabilisationFieldGenerators, 8)
+                    ),
                     0,
                     (m, t) -> m.fieldGeneratorTier = t,
                     m -> m.fieldGeneratorTier))
