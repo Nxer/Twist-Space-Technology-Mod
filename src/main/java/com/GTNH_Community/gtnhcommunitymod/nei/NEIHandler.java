@@ -36,6 +36,7 @@ public class NEIHandler {
         sendCatalyst("gt.recipe.lathe", "gregtech:gt.blockmachines:19009", -10);
         sendCatalyst("gt.recipe.extractor", "gregtech:gt.blockmachines:19010", -10);
         sendCatalyst("gt.recipe.compressor", "gregtech:gt.blockmachines:19010", -10);
+        sendCatalyst("gtpp.recipe.cyclotron", "gregtech:gt.blockmachines:19010", -10);
         sendCatalyst("gtpp.recipe.multicentrifuge", "gregtech:gt.blockmachines:19011", -10);
         sendCatalyst("gtpp.recipe.multielectro", "gregtech:gt.blockmachines:19011", -10);
 

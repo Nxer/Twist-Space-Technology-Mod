@@ -512,7 +512,6 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
 
                 // Catch the minimum parallel of every input item's.
                 int canItemInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canParallelEUt);
-
                 if (!recipeItemInputsMap.isEmpty() && recipe.mInputs != null) {
                     for (ItemId itemIntegerPair : recipeItemInputsMap.keySet()) {
                         if(recipeItemInputsMap.get(itemIntegerPair)==0){
