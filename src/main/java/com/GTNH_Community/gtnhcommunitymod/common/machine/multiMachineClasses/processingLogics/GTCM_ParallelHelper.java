@@ -514,23 +514,30 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 final int canParallelEUt = (int) Math.min( availableEUt / tRecipeEUt, limitParallel);
                 // Maintain a Map to contain inputs.
                 Map<Pair<Item,Integer>, Integer> itemInputsMap = new HashMap<>();
-                for (ItemStack itemStack : itemInputs){
-                    if (itemInputsMap.containsKey(Pair.of(itemStack.getItem(), itemStack.getItemDamage()))){
-                        int newAmount = itemInputsMap.get(Pair.of(itemStack.getItem(), itemStack.getItemDamage())) + itemStack.stackSize;
-                        itemInputsMap.put(Pair.of(itemStack.getItem(), itemStack.getItemDamage()), newAmount);
-                    }else {
-                        itemInputsMap.put(
-                            Pair.of(itemStack.getItem(), itemStack.getItemDamage()),
-                            itemStack.stackSize
-                        );
+                
+                if (itemInputs != null){
+                    for (ItemStack itemStack : itemInputs){
+                        if (itemStack == null) {
+                            continue;
+                        }
+                        if (itemInputsMap.containsKey(Pair.of(itemStack.getItem(), itemStack.getItemDamage()))){
+                            int newAmount = itemInputsMap.get(Pair.of(itemStack.getItem(), itemStack.getItemDamage())) + itemStack.stackSize;
+                            itemInputsMap.put(Pair.of(itemStack.getItem(), itemStack.getItemDamage()), newAmount);
+                        }else {
+                            itemInputsMap.put(
+                                Pair.of(itemStack.getItem(), itemStack.getItemDamage()),
+                                itemStack.stackSize
+                            );
+                        }
                     }
                 }
+                
                 
                 // Maintain a Map to contain recipe item inputs
                 Map<Pair<Item,Integer>, Integer> recipeItemInputsMap = new HashMap<>();
                 if (recipe.mInputs != null){
                     for (ItemStack itemStack : recipe.mInputs){
-                        if (itemStack.stackSize == 0){
+                        if (itemStack == null || itemStack.stackSize == 0 ){
                             continue;
                         }
                         if (recipeItemInputsMap.containsKey(Pair.of(itemStack.getItem(), itemStack.getItemDamage()))){
@@ -558,14 +565,23 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 
                 // Maintain a Map to contain fluid inputs
                 Map<Fluid, Integer> fluidInputsMap = new HashMap<>();
-                for (FluidStack fluidStack : fluidInputs){
-                    fluidInputsMap.put(fluidStack.getFluid(), fluidStack.amount);
+                if (fluidInputs != null){
+                    for (FluidStack fluidStack : fluidInputs){
+                        if (fluidStack == null){
+                            continue;
+                        }
+                        fluidInputsMap.put(fluidStack.getFluid(), fluidStack.amount);
+                    }
                 }
+                
                 // Catch the minimum parallel of every input fluid's.
                 int canFluidInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canItemInputsMaxParallel);
                 
                 if (!fluidInputsMap.isEmpty() && recipe.mFluidInputs != null){
                     for (FluidStack fluidStack : recipe.mFluidInputs){
+                        if (fluidStack == null){
+                            continue;
+                        }
                         int canThisParallel = (int) fluidInputsMap.get(fluidStack.getFluid()) / fluidStack.amount;
                         if (canThisParallel<canFluidInputsMaxParallel){
                             canFluidInputsMaxParallel = canThisParallel;
