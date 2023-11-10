@@ -528,6 +528,9 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 // Maintain a Map to contain fluid inputs
                 Map<Fluid, Integer> fluidInputsMap = new HashMap<>();
                 for (FluidStack fluidStack : fluidInputs) {
+                    if (fluidStack == null){
+                        continue;
+                    }
                     fluidInputsMap.put(fluidStack.getFluid(), fluidStack.amount);
                 }
                 // Catch the minimum parallel of every input fluid's.
@@ -535,7 +538,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
 
                 if (!fluidInputsMap.isEmpty() && recipe.mFluidInputs != null) {
                     for (FluidStack fluidStack : recipe.mFluidInputs) {
-                        int canThisParallel = (int) fluidInputsMap.get(fluidStack.getFluid()) / fluidStack.amount;
+                        int canThisParallel = fluidInputsMap.get(fluidStack.getFluid()) / fluidStack.amount;
                         if (canThisParallel < canFluidInputsMaxParallel) {
                             canFluidInputsMaxParallel = canThisParallel;
                         }
@@ -560,46 +563,53 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 // Consume inputs
 
                 // Prepare a map of actual consume of item
-                for (ItemId itemInput : recipeItemInputsMap.keySet()) {
-                    Long amountNeed = (long)1*currentParallel * recipeItemInputsMap.get(itemInput);
-                    for (ItemStack itemStack : itemInputs) {
-                        // catch the input slot of items in need
-                        if (itemInput.equals(ItemId.createNoCopy(itemStack))) {
-                            if (itemStack.stackSize >= amountNeed) {
-                                // if stack size is enough to consume
-                                // then consume and break
-                                itemStack.stackSize -= amountNeed;
-                                break;
-                            } else {
-                                // if not enough
-                                amountNeed -= itemStack.stackSize;
-                                itemStack.stackSize = 0;
+                if (!recipeItemInputsMap.isEmpty()){
+                    for (ItemId itemInput : recipeItemInputsMap.keySet()) {
+                        long amountNeed = (long) currentParallel * recipeItemInputsMap.get(itemInput);
+                        for (ItemStack itemStack : itemInputs) {
+                            // catch the input slot of items in need
+                            if (itemInput.equals(ItemId.createNoCopy(itemStack))) {
+                                if (itemStack.stackSize >= amountNeed) {
+                                    // if stack size is enough to consume
+                                    // then consume and break
+                                    itemStack.stackSize -= (int) amountNeed;
+                                    break;
+                                } else {
+                                    // if not enough
+                                    amountNeed -= itemStack.stackSize;
+                                    itemStack.stackSize = 0;
+                                }
                             }
                         }
                     }
                 }
 
                 // Prepare a map of actual consume of fluid
-                for (Fluid fluidInput : fluidInputsMap.keySet()) {
-                    long amountNeed = (long)1*currentParallel * fluidInputsMap.get(fluidInput);
-                    for (FluidStack fluidStack : fluidInputs) {
-                        if (fluidInput == fluidStack.getFluid()) {
-                            if (fluidStack.amount >= amountNeed) {
-                                fluidStack.amount -= amountNeed;
-                                break;
-                            } else {
-                                amountNeed -= fluidStack.amount;
-                                fluidStack.amount = 0;
+                if (recipe.mFluidInputs != null) {
+                    for (FluidStack fluidInputStack : recipe.mFluidInputs) {// 对每一种所需流体进行检索
+                        // 缓存所需实际数量
+                        long amountNeed = (long) currentParallel * fluidInputStack.amount;
+                        for (FluidStack fluidStack : fluidInputs) {// 开始遍历输入仓
+                            
+                            if (fluidInputStack.getFluid() == fluidStack.getFluid()) {
+                                // 遍历到输入仓内所需的流体
+                                // 开始比较数量
+                                if (fluidStack.amount >= amountNeed) {
+                                    fluidStack.amount -= (int) amountNeed; // 如果流体足够扣除消耗，则扣除所需数量
+                                    break; // 停止检索此种流体
+                                } else {
+                                    amountNeed -= fluidStack.amount; // 不够扣除就扣除此槽流体，并继续遍历
+                                    fluidStack.amount = 0;
+                                }
                             }
+                        
                         }
                     }
                 }
-
-
+                
+                // end actual parallel io
             }
-
-
-
+            
         }
 
 
