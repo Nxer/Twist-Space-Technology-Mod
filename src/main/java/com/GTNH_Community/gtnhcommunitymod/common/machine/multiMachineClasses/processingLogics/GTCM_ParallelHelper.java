@@ -666,8 +666,8 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             long items = 0;
             long remain = 0;
             int itemStackSize = recipe.getOutput(i).stackSize;
-            items = (long)1*currentParallel*itemStackSize * recipe.getOutputChance(i) / 100;
-            remain = (long)1*currentParallel*itemStackSize * recipe.getOutputChance(i) % 100;
+            items = (long)1*currentParallel*itemStackSize * recipe.getOutputChance(i) / 10000;
+            remain = (long)1*currentParallel*itemStackSize * recipe.getOutputChance(i) % 10000;
             if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
                 items += itemStackSize;
             }
