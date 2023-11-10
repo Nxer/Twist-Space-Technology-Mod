@@ -701,7 +701,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             } else {
                 FluidStack tFluid = recipe.getFluidOutput(i)
                     .copy();
-                long amount = tFluid.amount * currentParallel;
+                long amount = (long) tFluid.amount * currentParallel;
                 while (amount >= Integer.MAX_VALUE) {
                     FluidStack fluid = tFluid.copy();
                     fluid.amount = Integer.MAX_VALUE;
