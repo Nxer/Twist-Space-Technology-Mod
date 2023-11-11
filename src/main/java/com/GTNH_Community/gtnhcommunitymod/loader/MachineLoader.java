@@ -1,5 +1,6 @@
 package com.GTNH_Community.gtnhcommunitymod.loader;
 
+import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameCrystallineInfinitier;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameHolySeparator;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameInfiniteAirHatch;
 import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameIntensifyChemicalDistorter;
@@ -16,6 +17,7 @@ import static com.GTNH_Community.gtnhcommunitymod.util.TextLocalization.NameSpac
 import net.minecraft.item.ItemStack;
 
 import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
+import com.GTNH_Community.gtnhcommunitymod.common.machine.GTCM_CrystallineInfinitier;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GTCM_TestMultiMachine;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_HolySeparator;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
@@ -43,6 +45,7 @@ public class MachineLoader {
     public static ItemStack HolySeparator;
     public static ItemStack SpaceScaler;
     public static ItemStack MoleculeDeconstructor;
+    public static ItemStack CrystallineInfinitier;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -118,6 +121,13 @@ public class MachineLoader {
             "NameMoleculeDeconstructor",
             NameMoleculeDeconstructor).getStackForm(1);
         GTCMItemList.MoleculeDeconstructor.set(MoleculeDeconstructor);
+
+        //
+        CrystallineInfinitier = new GTCM_CrystallineInfinitier(
+            19012,
+            "NameCrystallineInfinitier",
+            NameCrystallineInfinitier).getStackForm(1);
+        GTCMItemList.CrystallineInfinitier.set(CrystallineInfinitier);
 
         // endregion
 

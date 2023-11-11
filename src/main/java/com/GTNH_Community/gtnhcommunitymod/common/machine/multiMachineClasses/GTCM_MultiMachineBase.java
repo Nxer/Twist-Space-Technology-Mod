@@ -48,6 +48,8 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             @NotNull
             @Override
             public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
                 setSpeedBonus(getSpeedBonus());
                 setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
                 return super.process();
@@ -61,10 +63,17 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * 
      * @return If true, enable Perfect Overclock.
      */
+    protected abstract boolean isEnablePerfectOverclock();
+
+    /**
+     * Proxy Standard Eu Modifier Supplier.
+     *
+     * @return The value (or a method to get the value) of Eu Modifier (dynamically) .
+     */
     @ApiStatus.OverrideOnly
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
+    protected float getEuModifier() {
+        return 1.0F;
+    };
 
     /**
      * Proxy Standard Speed Multiplier Supplier.
@@ -72,9 +81,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return The value (or a method to get the value) of Speed Multiplier (dynamically) .
      */
     @ApiStatus.OverrideOnly
-    protected float getSpeedBonus() {
-        return 1.0F;
-    }
+    protected abstract float getSpeedBonus();
 
     /**
      * Proxy Standard Parallel Supplier.
@@ -82,9 +89,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return The value (or a method to get the value) of Max Parallel (dynamically) .
      */
     @ApiStatus.OverrideOnly
-    protected int getMaxParallelRecipes() {
-        return 1;
-    }
+    protected abstract int getMaxParallelRecipes();
 
     /**
      * Limit the max parallel to prevent overflow.

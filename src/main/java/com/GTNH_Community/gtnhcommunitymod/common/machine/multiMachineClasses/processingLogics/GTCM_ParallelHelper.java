@@ -566,6 +566,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                     for (ItemId itemInput : recipeItemInputsMap.keySet()) {
                         long amountNeed = (long) currentParallel * recipeItemInputsMap.get(itemInput);
                         for (ItemStack itemStack : itemInputs) {
+                            if (itemStack == null) continue;// All inputs iterating need check null
                             // catch the input slot of items in need
                             if (itemInput.equals(ItemId.createNoCopy(itemStack))) {
                                 if (itemStack.stackSize >= amountNeed) {
@@ -589,6 +590,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                         // 缓存所需实际数量
                         long amountNeed = (long) currentParallel * fluidInputStack.amount;
                         for (FluidStack fluidStack : fluidInputs) {// 开始遍历输入仓
+                            if (fluidStack == null) continue;
                             
                             if (fluidInputStack.getFluid() == fluidStack.getFluid()) {
                                 // 遍历到输入仓内所需的流体

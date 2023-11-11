@@ -19,6 +19,7 @@ import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBloc
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
@@ -286,24 +287,26 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
                     .buildAndChain(sBlockCasingsTT, 4))
             .addElement(
                 'G',
-                ofBlocksTiered(
-                    GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
-                    ImmutableList.of(
-                        Pair.of(sBlockCasingsTT, 6),
-                        Pair.of(sBlockCasingsTT, 14),
-                        Pair.of(StabilisationFieldGenerators, 0),
-                        Pair.of(StabilisationFieldGenerators, 1),
-                        Pair.of(StabilisationFieldGenerators, 2),
-                        Pair.of(StabilisationFieldGenerators, 3),
-                        Pair.of(StabilisationFieldGenerators, 4),
-                        Pair.of(StabilisationFieldGenerators, 5),
-                        Pair.of(StabilisationFieldGenerators, 6),
-                        Pair.of(StabilisationFieldGenerators, 7),
-                        Pair.of(StabilisationFieldGenerators, 8)
-                    ),
-                    0,
-                    (m, t) -> m.fieldGeneratorTier = t,
-                    m -> m.fieldGeneratorTier))
+                withChannel("fieldGeneratorTier",
+                            ofBlocksTiered(
+                                GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
+                                ImmutableList.of(
+                                    Pair.of(sBlockCasingsTT, 6),
+                                    Pair.of(sBlockCasingsTT, 14),
+                                    Pair.of(StabilisationFieldGenerators, 0),
+                                    Pair.of(StabilisationFieldGenerators, 1),
+                                    Pair.of(StabilisationFieldGenerators, 2),
+                                    Pair.of(StabilisationFieldGenerators, 3),
+                                    Pair.of(StabilisationFieldGenerators, 4),
+                                    Pair.of(StabilisationFieldGenerators, 5),
+                                    Pair.of(StabilisationFieldGenerators, 6),
+                                    Pair.of(StabilisationFieldGenerators, 7),
+                                    Pair.of(StabilisationFieldGenerators, 8)
+                                ),
+                                0,
+                                (m, t) -> m.fieldGeneratorTier = t,
+                                m -> m.fieldGeneratorTier))
+                )
             .build();
     }
     /*

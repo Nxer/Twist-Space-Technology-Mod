@@ -1,12 +1,12 @@
 package com.GTNH_Community.gtnhcommunitymod.recipe.machineRecipe;
 
+import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.CrystallineInfinitier;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.HolySeparator;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.InfiniteAirHatch;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDomainConstructor;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MagneticMixer;
-import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MoldSingularity;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.MoleculeDeconstructor;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.Silksong;
@@ -75,7 +75,6 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IItemContainer;
-import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
@@ -1015,326 +1014,38 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20*600)
             .addTo(AssemblyLine);
 
-        //come from eternal singularity
+        // endregion
+        
+        // region CrystallineInfinitier
         GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, CustomItemList.AutoclaveUHV.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(22),
-                MoldSingularity.get(0),
-                ItemList.Shape_Mold_Block.get(0),
-                GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                ItemList.MSFMixture.get(64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Quartz, 64))
-            .fluidInputs(
-                new FluidStack(FluidRegistry.getFluid("dye.chemical.dyeblue"), 72 * 9 * 1215),
-                Materials.BlackPlutonium.getMolten(144 * 9 * 12),
-                Materials.Bedrockium.getMolten(144 * 9 * 4),
-                Materials.Silver.getMolten(144 * 9 * 7296),
-                Materials.Gold.getMolten(144 * 9 * 1215),
-                Materials.Iron.getMolten(144 * 9 * 7296),
-                Materials.Redstone.getMolten(144 * 9 * 7296),
-                Materials.Tin.getMolten(144 * 9 * 3648),
-                Materials.Lead.getMolten(144 * 9 * 3648),
-                Materials.Copper.getMolten(144 * 9 * 3648),
-                Materials.Infinity.getMolten(144 * 2)
-            )
-            .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 0))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UEV)
-            .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(22),
-                MoldSingularity.get(0),
-                ItemList.Shape_Mold_Block.get(0),
-                GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                ItemList.MSFMixture.get(64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Diamond, 64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Emerald, 64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Charcoal, 64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 64))
-            .fluidInputs(
-                new FluidStack(FluidRegistry.getFluid("dye.chemical.dyeblue"), 72 * 9 * 1215),
-                Materials.BlackPlutonium.getMolten(144 * 9 * 12),
-                Materials.Bedrockium.getMolten(144 * 9 * 4),
-                Materials.Enderium.getMolten(144 * 9 * 608),
-                Materials.Aluminium.getMolten(144 * 9 * 1824),
-                Materials.Brass.getMolten(144 * 9 * 1824),
-                Materials.Bronze.getMolten(144 * 9 * 1824),
-                Materials.Infinity.getMolten(144 * 2 * 4)
-            )
-            .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 1))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UEV)
-            .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(22),
-                MoldSingularity.get(0),
-                ItemList.Shape_Mold_Block.get(0),
-                GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                ItemList.MSFMixture.get(64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Olivine, 64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Ruby, 64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Sapphire, 64))
-            .fluidInputs(
-                Materials.BlackPlutonium.getMolten(144 * 9 * 12),
-                Materials.Bedrockium.getMolten(144 * 9 * 4),
-                Materials.Electrum.getMolten(144 * 9 * 912),
-                Materials.Invar.getMolten(144 * 9 * 1824),
-                Materials.Magnesium.getMolten(144 * 9 * 3648),
-                Materials.Osmium.getMolten(144 * 9 * 406),
-                Materials.Steel.getMolten(144 * 9 * 912),
-                Materials.Titanium.getMolten(144 * 9 * 2024),
-                Materials.Infinity.getMolten(144 * 2 * 3)
-            )
-            .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 2))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UEV)
-            .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(22),
-                MoldSingularity.get(0),
-                ItemList.Shape_Mold_Block.get(0),
-                GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                ItemList.MSFMixture.get(64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.TricalciumPhosphate, 64))
-            .fluidInputs(
-                Materials.BlackPlutonium.getMolten(144 * 9 * 12),
-                Materials.Bedrockium.getMolten(144 * 9 * 4),
-                Materials.Tungsten.getMolten(144 * 9 * 244),
-                Materials.Zinc.getMolten(144 * 9 * 3648),
-                Materials.Palladium.getMolten(144 * 9 * 136),
-                Materials.DamascusSteel.getMolten(144 * 9 * 153),
-                Materials.BlackSteel.getMolten(144 * 9 * 304),
-                Materials.ElectrumFlux.getMolten(144 * 9 * 16),
-                Materials.Mercury.getFluid(1000 * 9 * 1824),
-                Materials.Infinity.getMolten(144 * 2)
-            )
-            .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 3))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UEV)
-            .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(22),
-                MoldSingularity.get(0),
-                ItemList.Shape_Mold_Block.get(0),
-                GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                ItemList.MSFMixture.get(64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.NetherStar, 64))
-            .fluidInputs(
-                Materials.BlackPlutonium.getMolten(144 * 9 * 12),
-                Materials.Bedrockium.getMolten(144 * 9 * 4),
-                Materials.ShadowSteel.getMolten(144 * 9 * 406),
-                Materials.Iridium.getMolten(144 * 9 * 62),
-                Materials.Platinum.getMolten(144 * 9 * 406),
-                Materials.Uranium.getMolten(144 * 9 * 507),
-                Materials.Naquadria.getMolten(144 * 9 * 66),
-                Materials.Plutonium.getMolten(144 * 9 * 244),
-                Materials.MeteoricIron.getMolten(144 * 9 * 912),
-                Materials.Desh.getMolten(144 * 9 * 203),
-                Materials.Europium.getMolten(144 * 9 * 62),
-                Materials.Infinity.getMolten(144 * 2)
-            )
-            .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 4))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UEV)
-            .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(22),
-                MoldSingularity.get(0),
-                ItemList.Shape_Mold_Block.get(0),
-                GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                ItemList.MSFMixture.get(64)
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 16),
+                eM_Containment_Field.get(4),
+                CustomItemList.AutoclaveUHV.get(64),
+                ItemList.Electric_Pump_UEV.get(16),
+                
+                new Object[]{OrePrefixes.circuit.get(Materials.Bio), 64},
+                new Object[]{OrePrefixes.circuit.get(Materials.Bio), 64},
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
+                
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 64)
             )
             .fluidInputs(
-                Materials.BlackPlutonium.getMolten(144 * 9 * 12),
-                Materials.Bedrockium.getMolten(144 * 9 * 4),
-                Materials.Draconium.getMolten(144 * 9 * 1296),
-                Materials.DraconiumAwakened.getMolten(144 * 9 * 760),
-                Materials.ConductiveIron.getMolten(144 * 9 * 912),
-                Materials.ElectricalSteel.getMolten(144 * 9 * 912),
-                Materials.EnergeticAlloy.getMolten(144 * 9 * 191),
-                Materials.PhasedIron.getMolten(144 * 9 * 912),
-                Materials.DarkSteel.getMolten(144 * 9 * 912),
-                Materials.RedstoneAlloy.getMolten(144 * 9 * 912),
-                Materials.Soularium.getMolten(144 * 9 * 456)
+                new FluidStack(solderPlasma, 144*256),
+                Materials.NaquadahAlloy.getMolten(144*256),
+                Materials.UUMatter.getFluid(1000*128)
             )
-            .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 5))
+            .itemOutputs(CrystallineInfinitier.get(1))
             .noFluidOutputs()
-            .noOptimize()
             .eut(RECIPE_UEV)
-            .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(22),
-                MoldSingularity.get(0),
-                ItemList.Shape_Mold_Block.get(0),
-                GT_ModHandler.getModItem("miscutils","MU-metaitem.01",0,32100),
-                ItemList.MSFMixture.get(64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Unstable, 64),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.EnderPearl, 64)
-            )
-            .fluidInputs(
-                Materials.BlackPlutonium.getMolten(144 * 9 * 12),
-                Materials.Bedrockium.getMolten(144 * 9 * 4),
-                Materials.VibrantAlloy.getMolten(144 * 9 * 145),
-                Materials.Electrotine.getMolten(144 * 9 * 1215),
-                Materials.ConductiveIron.getMolten(144 * 9 * 912),
-                Materials.Aluminium.getMolten(144 * 9 * 1824),
-                Materials.Alumite.getMolten(144 * 9 * 229),
-                Materials.Ardite.getMolten(144 * 9 * 304),
-                Materials.Cobalt.getMolten(144 * 9 * 1824),
-                Materials.Manyullyn.getMolten(144 * 9 * 380),
-                Materials.Infinity.getMolten(144 * 2 * 2)
-            )
-            .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 6))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UEV)
-            .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-
-        //other singularity(no molten)
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Quartz, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 4))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.vanilla.singularity", 1, 0))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Emerald, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.vanilla.singularity", 1, 1))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Diamond, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.vanilla.singularity", 1, 2))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Charcoal, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 3))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Olivine, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 8))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Ruby, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 9))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Sapphire, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 10))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.TricalciumPhosphate, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 16))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.NetherStar, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 24))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Unstable, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.extraUtilities.singularity", 1, 0))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.EnderPearl, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
-            .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 4))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .duration(20*1800)
+            .addTo(AssemblyLine);
+        
 
     }
     // spotless:on

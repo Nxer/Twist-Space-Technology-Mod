@@ -20,6 +20,10 @@ public enum GTCMItemList implements IItemContainer {
     ProofOfHeroes,
     MoldSingularity,
     ParticleTrapTimeSpaceShield,
+    LapotronShard,
+    PerfectLapotronCrystal,
+    EnergyCrystalShard,
+    PerfectEnergyCrystal,
 
     // Machines
 
@@ -34,6 +38,7 @@ public enum GTCMItemList implements IItemContainer {
     HolySeparator,
     SpaceScaler,
     MoleculeDeconstructor,
+    CrystallineInfinitier,
 
     // single block Machines
     InfiniteAirHatch,
