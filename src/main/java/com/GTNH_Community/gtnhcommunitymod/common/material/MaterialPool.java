@@ -59,8 +59,7 @@ public class MaterialPool implements Runnable {
         Werkstoff.Types.MATERIAL,
         new Werkstoff.GenerationFeatures().disable()
             .onlyDust()
-            .addMolten()
-            .addGems(),
+            .addMolten(),
         offsetID_01 + 1,
         TextureSet.SET_SHINY);
 

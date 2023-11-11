@@ -15,6 +15,7 @@ import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.common.material.MaterialPool;
 import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
+import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -130,7 +131,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
 
         // Chip
-        for (ItemStack itemStack : OreDictionary.getOres("craftingLensPurple")) {
+        for (ItemStack itemStack : OreDictionary.getOres("craftingLensBlue")) {
             GT_Values.RA.stdBuilder()
                 .itemInputs(GT_Utility.copyAmount(0, itemStack), PerfectLapotronCrystal.get(1))
                 .noFluidInputs()
@@ -194,5 +195,20 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         }
 
         // endregion
+
+        // region LuAG
+        GT_Values.RA.stdBuilder()
+            .itemInputs(WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.dust, 0))
+            .fluidInputs(WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumOxygenBlend.getMolten(144 * 64))
+            .itemOutputs(
+                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 64),
+                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 64))
+            .noFluidOutputs()
+            .eut(RECIPE_UHV)
+            .duration(20 * 10)
+            .addTo(CI);
+
+        // endregion
+
     }
 }
