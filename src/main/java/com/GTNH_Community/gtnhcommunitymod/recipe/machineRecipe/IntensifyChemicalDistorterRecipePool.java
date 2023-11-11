@@ -374,7 +374,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
         // region Epoxid
         GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(13), Materials.Carbon.getDust(21))
+            .itemInputs(GT_Utility.getIntegratedCircuit(3), Materials.Carbon.getDust(21))
             .fluidInputs(Materials.Hydrogen.getGas(1000 * 24), Materials.Oxygen.getGas(1000 * 4))
             .noItemOutputs()
             .fluidOutputs(Materials.Epoxid.getMolten(1000))
@@ -384,7 +384,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(21),
+                GT_Utility.getIntegratedCircuit(4),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),
@@ -407,7 +407,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(22),
+                GT_Utility.getIntegratedCircuit(5),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),

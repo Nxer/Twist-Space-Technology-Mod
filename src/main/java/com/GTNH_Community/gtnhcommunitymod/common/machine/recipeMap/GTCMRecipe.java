@@ -187,4 +187,24 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap CrystallineInfinitierRecipes = new GTCMRecipeMap(
+        new HashSet<>(),
+        "gtcm.recipe.CrystallineInfinitierRecipes",
+        NameCrystallineInfinitier,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        4,
+        4,
+        4,
+        1,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
 }

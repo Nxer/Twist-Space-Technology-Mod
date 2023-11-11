@@ -99,6 +99,11 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
     public int getMaxParallelRecipes() {
         return (int) Math.min(MAX_PARALLEL_LIMIT, Math.pow(2, GT_Utility.getTier(this.getAverageInputVoltage())));
     }

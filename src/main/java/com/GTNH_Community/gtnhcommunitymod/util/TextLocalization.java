@@ -240,7 +240,7 @@ public class TextLocalization {
 
     // region SpaceScaler
     public static final String NameSpaceScaler = texter("Space Scaler","NameSpaceScaler");
-    public static final String Tooltip_SpaceScaler_MachineType = texter("Compressor | Extractor","Tooltip_SpaceScaler_MachineType");
+    public static final String Tooltip_SpaceScaler_MachineType = texter("Compressor | Extractor | Particle Collider","Tooltip_SpaceScaler_MachineType");
     public static final String Tooltip_SpaceScaler_00 = texter("Controller block for the Space Scaler","Tooltip_SpaceScaler_00");
     public static final String Tooltip_SpaceScaler_01 = texter(EnumChatFormatting.AQUA+" First Look Space Technology.","Tooltip_SpaceScaler_01");
     public static final String Tooltip_SpaceScaler_02 = texter("Another method to operate matter.","Tooltip_SpaceScaler_02");
@@ -261,6 +261,22 @@ public class TextLocalization {
     public static final String Tooltip_MoleculeDeconstructor_04 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_MoleculeDeconstructor_04");
     public static final String Tooltip_MoleculeDeconstructor_05 = texter("The Glass Tier limit the Energy hatch voltage Tier.","Tooltip_MoleculeDeconstructor_05");
 
+    // endregion
+    
+    // region CrystallineInfinitier
+    public static final String NameCrystallineInfinitier = texter("Crystalline Infinitier","NameCrystallineInfinitier");
+    public static final String Tooltip_CrystallineInfinitier_MachineType = texter("Autoclave | Crystalline Infinitier","Tooltip_CrystallineInfinitier_MachineType");
+    public static final String Tooltip_CrystallineInfinitier_00 = texter("Controller block for the Crystalline Infinitier","Tooltip_CrystallineInfinitier_00");
+    public static final String Tooltip_CrystallineInfinitier_01 = texter(EnumChatFormatting.GREEN + "They're here. Grow and multiply without end.","Tooltip_CrystallineInfinitier_01");
+    public static final String Tooltip_CrystallineInfinitier_02 = texter("With Gravitation Tech as a medium, we can control growth of crystalline cells more conveniently.","Tooltip_CrystallineInfinitier_02");
+    public static final String Tooltip_CrystallineInfinitier_03 = texter("Higher glass tier, higher field generator tier, higher voltage tier means higher value of parallel.","Tooltip_CrystallineInfinitier_03");
+    public static final String Tooltip_CrystallineInfinitier_04 = texter("And higher field generator tier means lower Energy cost.","Tooltip_CrystallineInfinitier_04");
+    public static final String Tooltip_CrystallineInfinitier_05 = texter("Crude Stabilisation Field Generator enable Perfect Overclock.","Tooltip_CrystallineInfinitier_05");
+    public static final String Tooltip_CrystallineInfinitier_06 = texter("Extra +300%% speed in Autoclave mode.","Tooltip_CrystallineInfinitier_06");
+    
+    // endregion
+    
+    
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
 

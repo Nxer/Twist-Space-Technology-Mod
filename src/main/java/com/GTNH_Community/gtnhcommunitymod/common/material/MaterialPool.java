@@ -51,6 +51,19 @@ public class MaterialPool implements Runnable {
         offsetID_01, // manage ID here, some IDs has been used , read the README.md
         TextureSet.SET_SHINY); // What Type will the auto Texture be ,SHINY means like Palladium Ingot
 
+    public static final Werkstoff HolmiumGarnet = new Werkstoff(
+        new short[] { 96, 96, 240 },
+        texter("Holmium Garnet", "bw.HolmiumGarnet.notTrans"),
+        subscriptNumbers("Ho3Al5O12"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MATERIAL,
+        new Werkstoff.GenerationFeatures().disable()
+            .onlyDust()
+            .addMolten()
+            .addGems(),
+        offsetID_01 + 1,
+        TextureSet.SET_SHINY);
+
     // Bartworks' Material System run on Runnable.class
     @Override
     public void run() {}
