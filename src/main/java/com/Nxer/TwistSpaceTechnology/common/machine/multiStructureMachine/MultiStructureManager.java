@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
-import java.util.*;
-
 import static com.Nxer.TwistSpaceTechnology.DistortionSpaceTechnology.LOG;
 
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class MultiStructureManager {
 
@@ -23,7 +23,7 @@ public class MultiStructureManager {
     // function
     // to let manager manage the structure main block.
     public static void registryMachine(GT_TileEntity_MultiStructureMachine<?> machine) {
-        if(machine ==null){
+        if (machine == null) {
             LOG.info("unexpected multi-structure registry");
             return;
         }
@@ -38,7 +38,6 @@ public class MultiStructureManager {
         typeMap.put(endID, machine.Type);
 
     }
-
 
     // create a link between main structure and sub structure
     public static boolean linkMachine(GT_TileEntity_MultiStructureMachine<?> mainMachine,
@@ -60,7 +59,7 @@ public class MultiStructureManager {
     // remove a link between main structure and sub structure
     public static void removeLink(GT_TileEntity_MultiStructureMachine<?> mainMachine,
         GT_TileEntity_MultiStructureMachine<?> subMachine) {
-        if(mainMachine==null||subMachine==null){
+        if (mainMachine == null || subMachine == null) {
             return;
         }
         int mainID = mainMachine.ID;
@@ -72,16 +71,15 @@ public class MultiStructureManager {
 
     // when machine block is destroyed in any case, call this function.
     public static void removeMachine(GT_TileEntity_MultiStructureMachine<?> machine) {
-        if(machine==null){
+        if (machine == null) {
             return;
         }
         int ID = machine.ID;
         machines.remove(ID);
-        if(machine.isMainBlock){
+        if (machine.isMainBlock) {
             mapTree.remove(ID);
-        }
-        else{
-            removeLink(getMachine(machine.fatherID),machine);
+        } else {
+            removeLink(getMachine(machine.fatherID), machine);
         }
         typeMap.remove(ID);
     }

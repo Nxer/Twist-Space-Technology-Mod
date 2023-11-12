@@ -13,6 +13,7 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
 import java.util.ArrayList;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -35,7 +36,7 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings8;
 
 public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntity_MultiStructureMachine<T>>
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable {
+    extends GTCM_MultiMachineBase<T> implements IConstructable, ISurvivalConstructable {
 
     public String MainStructName;
 

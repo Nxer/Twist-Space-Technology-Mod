@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.item.itemAdders;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -16,8 +16,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.MultiS
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.util.GT_Utility;
-
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 
 public class ItemMultiStructuresLinkTool extends Item {
 
@@ -36,9 +34,13 @@ public class ItemMultiStructuresLinkTool extends Item {
     public void addInformation(final ItemStack itemStack, final EntityPlayer player, final List toolTip,
         final boolean advancedToolTips) {
         toolTip.add(
-            texter(EnumChatFormatting.LIGHT_PURPLE + "left Click to set Main machine", "tooltips.MultiStructuresLinkTool.line1"));
+            texter(
+                EnumChatFormatting.LIGHT_PURPLE + "left Click to set Main machine",
+                "tooltips.MultiStructuresLinkTool.line1"));
         toolTip.add(
-            texter(EnumChatFormatting.LIGHT_PURPLE + "right Click to set Sub machine", "tooltips.MultiStructuresLinkTool.line2"));
+            texter(
+                EnumChatFormatting.LIGHT_PURPLE + "right Click to set Sub machine",
+                "tooltips.MultiStructuresLinkTool.line2"));
 
     }
 
