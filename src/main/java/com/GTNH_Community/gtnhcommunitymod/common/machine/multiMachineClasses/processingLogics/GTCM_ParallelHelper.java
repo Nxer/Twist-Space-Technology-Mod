@@ -12,8 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
-
 import gregtech.api.interfaces.tileentity.IRecipeLockable;
 import gregtech.api.interfaces.tileentity.IVoidable;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
