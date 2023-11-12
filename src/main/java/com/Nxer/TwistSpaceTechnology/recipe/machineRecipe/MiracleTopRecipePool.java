@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.DistortionSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -44,7 +44,7 @@ public class MiracleTopRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-        DistortionSpaceTechnology.LOG.info("MiracleTopRecipePool loading recipes.");
+        TwistSpaceTechnology.LOG.info("MiracleTopRecipePool loading recipes.");
 
         Fluid solderIndAlloy = FluidRegistry.getFluid("molten.indalloy140");
         Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");

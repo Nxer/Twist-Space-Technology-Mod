@@ -14,8 +14,8 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
 
-        DistortionSpaceTechnology.LOG.info(Config.preInitSign);
-        DistortionSpaceTechnology.LOG.info(Tags.MODNAME + " at version " + Tags.VERSION);
+        TwistSpaceTechnology.LOG.info(Config.preInitSign);
+        TwistSpaceTechnology.LOG.info(Tags.MODNAME + " at version " + Tags.VERSION);
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
@@ -26,6 +26,6 @@ public class CommonProxy {
 
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
-        DistortionSpaceTechnology.LOG.info("Ok, " + Tags.MODNAME + " at version " + Tags.VERSION + " load success .");
+        TwistSpaceTechnology.LOG.info("Ok, " + Tags.MODNAME + " at version " + Tags.VERSION + " load success .");
     }
 }

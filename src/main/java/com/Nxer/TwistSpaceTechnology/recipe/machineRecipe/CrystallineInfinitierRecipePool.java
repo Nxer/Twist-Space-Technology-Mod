@@ -1,5 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static gregtech.api.enums.TierEU.RECIPE_EV;
+import static gregtech.api.enums.TierEU.RECIPE_HV;
+import static gregtech.api.enums.TierEU.RECIPE_IV;
+import static gregtech.api.enums.TierEU.RECIPE_LuV;
+import static gregtech.api.enums.TierEU.RECIPE_MV;
+import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
@@ -14,13 +20,16 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
+import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
+// spotless:off
 public class CrystallineInfinitierRecipePool implements IRecipePool {
 
     @Override
@@ -206,6 +215,227 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .addTo(CI);
 
         // endregion
+        
+        // region Boule
+        
+        // Monocrystalline Silicon Boule
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(2),
+                Materials.GalliumArsenide.getDust(1))
+            .fluidInputs(Materials.SiliconSG.getMolten(144*64))
+            .itemOutputs(ItemList.Circuit_Silicon_Ingot.get(4))
+            .noFluidOutputs()
+            .eut(RECIPE_MV)
+            .duration(20*450)
+            .addTo(CI);
+        
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(2),
+                Materials.GalliumArsenide.getDust(1))
+            .fluidInputs(Materials.Silicon.getMolten(144*64))
+            .itemOutputs(ItemList.Circuit_Silicon_Ingot.get(2))
+            .noFluidOutputs()
+            .eut(RECIPE_MV)
+            .duration(20*450)
+            .addTo(CI);
+        
+        // Phosphorus doped Monocrystalline Silicon Boule
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                Materials.GalliumArsenide.getDust(2),
+                Materials.Phosphorus.getDust(16))
+            .fluidInputs(Materials.SiliconSG.getMolten(144*128))
+            .itemOutputs(ItemList.Circuit_Silicon_Ingot2.get(4))
+            .noFluidOutputs()
+            .eut(RECIPE_HV)
+            .duration(20*150)
+            .addTo(CI);
+        
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                Materials.GalliumArsenide.getDust(2),
+                Materials.Phosphorus.getDust(16))
+            .fluidInputs(Materials.Silicon.getMolten(144*128))
+            .itemOutputs(ItemList.Circuit_Silicon_Ingot2.get(2))
+            .noFluidOutputs()
+            .eut(RECIPE_HV)
+            .duration(20*150)
+            .addTo(CI);
+        
+        // Naquadah doped Monocrystalline Silicon Boule
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        Materials.GalliumArsenide.getDust(4),
+                        Materials.Naquadah.getDust(2))
+                    .fluidInputs(Materials.SiliconSG.getMolten(144*256))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(4))
+                    .noFluidOutputs()
+                    .eut(RECIPE_EV)
+                    .duration(20*256)
+                    .addTo(CI);
+        
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        Materials.GalliumArsenide.getDust(4),
+                        Materials.Naquadah.getDust(2))
+                    .fluidInputs(Materials.Silicon.getMolten(144*256))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(2))
+                    .noFluidOutputs()
+                    .eut(RECIPE_EV)
+                    .duration(20*256)
+                    .addTo(CI);
+        
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        Materials.GalliumArsenide.getDust(4),
+                        MyMaterial.naquadahine.get(OrePrefixes.dust, 6))
+                    .fluidInputs(Materials.SiliconSG.getMolten(144*256))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(4))
+                    .noFluidOutputs()
+                    .eut(RECIPE_IV)
+                    .duration(20*16)
+                    .addTo(CI);
+        
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        Materials.GalliumArsenide.getDust(4),
+                        MyMaterial.naquadahine.get(OrePrefixes.dust, 6))
+                    .fluidInputs(Materials.Silicon.getMolten(144*256))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(2))
+                    .noFluidOutputs()
+                    .eut(RECIPE_IV)
+                    .duration(20*16)
+                    .addTo(CI);
+        
+        // Europium doped Monocrystalline Silicon Boule
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        Materials.GalliumArsenide.getDust(8),
+                        Materials.Europium.getDust(4))
+                    .fluidInputs(Materials.SiliconSG.getMolten(144*512))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot4.get(4))
+                    .noFluidOutputs()
+                    .eut(RECIPE_IV)
+                    .duration(20*336)
+                    .addTo(CI);
+        
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        Materials.GalliumArsenide.getDust(8),
+                        Materials.Europium.getDust(4))
+                    .fluidInputs(Materials.Silicon.getMolten(144*512))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot4.get(2))
+                    .noFluidOutputs()
+                    .eut(RECIPE_IV)
+                    .duration(20*336)
+                    .addTo(CI);
+        
+        // Americium doped Monocrystalline Silicon Boule
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        Materials.GalliumArsenide.getDust(16),
+                        Materials.Americium.getDust(4))
+                    .fluidInputs(Materials.SiliconSG.getMolten(144*1024))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot5.get(4))
+                    .noFluidOutputs()
+                    .eut(RECIPE_LuV)
+                    .duration(20*450)
+                    .addTo(CI);
+        
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        Materials.GalliumArsenide.getDust(16),
+                        Materials.Americium.getDust(4))
+                    .fluidInputs(Materials.Silicon.getMolten(144*1024))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot5.get(2))
+                    .noFluidOutputs()
+                    .eut(RECIPE_LuV)
+                    .duration(20*450)
+                    .addTo(CI);
+        
+        // Optical Enriched Crystalline Silicon Boule
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(3),
+                        ItemList.Field_Generator_UIV.get(0),
+                        Materials.GalliumArsenide.getDust(16),
+                        Materials.Americium.getDust(4))
+                    .fluidInputs(
+                        Materials.SiliconSG.getMolten(144*1024),
+                        Materials.UUMatter.getFluid(1000*32))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot6.get(4))
+                    .noFluidOutputs()
+                    .eut(RECIPE_UEV)
+                    .duration(20*30)
+                    .addTo(CI);
+        
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(3),
+                        ItemList.Field_Generator_UIV.get(0),
+                        Materials.GalliumArsenide.getDust(16),
+                        Materials.Americium.getDust(4))
+                    .fluidInputs(
+                        Materials.Silicon.getMolten(144*1024),
+                        Materials.UUMatter.getFluid(1000*32))
+                    .itemOutputs(ItemList.Circuit_Silicon_Ingot6.get(2))
+                    .noFluidOutputs()
+                    .eut(RECIPE_UEV)
+                    .duration(20*30)
+                    .addTo(CI);
+        
+        // endregion
+        
+        // region AE Quartz
+        // Nether Quartz
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(Materials.NetherQuartz.getDust(64))
+                    .fluidInputs(Materials.Water.getFluid(1000))
+                    .itemOutputs(
+                        GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,11),
+                        GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,11))
+                    .noFluidOutputs()
+                    .eut(RECIPE_IV)
+                    .duration(20*8)
+                    .addTo(CI);
+        
+        // Certus Quartz
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(Materials.CertusQuartz.getDust(64))
+                    .fluidInputs(Materials.Water.getFluid(1000))
+                    .itemOutputs(
+                        GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,10),
+                        GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,10))
+                    .noFluidOutputs()
+                    .eut(RECIPE_IV)
+                    .duration(20*8)
+                    .addTo(CI);
+        
+        // Fluix Quartz
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(Materials.Fluix.getDust(64))
+                    .fluidInputs(Materials.Water.getFluid(1000))
+                    .itemOutputs(
+                        GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,12),
+                        GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,12))
+                    .noFluidOutputs()
+                    .eut(RECIPE_IV)
+                    .duration(20*8)
+                    .addTo(CI);
+        
 
     }
 }
+// spotless:on

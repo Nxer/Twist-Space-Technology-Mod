@@ -9,7 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.DistortionSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 public class MetaItemStackUtils {
 
@@ -33,7 +33,7 @@ public class MetaItemStackUtils {
 
     public static void metaItemStackTooltipsAdd(Map<Integer, String[]> tooltipsMap, int meta, String[] tooltips) {
         if (tooltipsMap.containsKey(meta)) {
-            DistortionSpaceTechnology.LOG.info("failed to Replace a tooltips:" + tooltips[0] + " ...");
+            TwistSpaceTechnology.LOG.info("failed to Replace a tooltips:" + tooltips[0] + " ...");
             return;
         }
         tooltipsMap.put(meta, tooltips);

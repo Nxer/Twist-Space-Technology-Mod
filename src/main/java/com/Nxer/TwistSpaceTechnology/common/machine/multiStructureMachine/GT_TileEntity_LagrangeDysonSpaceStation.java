@@ -14,6 +14,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
+// spotless:off
 public class GT_TileEntity_LagrangeDysonSpaceStation
     extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_IntensifyChemicalDistorter>
     implements IConstructable, ISurvivalConstructable {
@@ -155,3 +156,4 @@ public class GT_TileEntity_LagrangeDysonSpaceStation
         return new ITexture[0];
     }
 }
+// spotless:on

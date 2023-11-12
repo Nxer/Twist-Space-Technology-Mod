@@ -1621,3 +1621,5 @@ if (file('addon.late.local.gradle.kts').exists()) {
 } else if (file('addon.late.local.gradle').exists()) {
     apply from: 'addon.late.local.gradle'
 }
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
