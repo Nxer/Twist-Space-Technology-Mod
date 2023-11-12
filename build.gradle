@@ -61,8 +61,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.8.0' apply false
     id 'org.jetbrains.kotlin.kapt' version '1.8.0' apply false
     id 'com.google.devtools.ksp' version '1.8.0-1.0.9' apply false
-    id 'org.ajoberstar.grgit' version '4.1.1'
-    // 4.1.1 is the last jvm8 supporting version, unused, available for addon.gradle
+    id 'org.ajoberstar.grgit' version '4.1.1' // 4.1.1 is the last jvm8 supporting version, unused, available for addon.gradle
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
     id 'com.palantir.git-version' version '3.0.0' apply false
     id 'de.undercouch.download' version '5.4.0'
@@ -768,7 +767,7 @@ tasks.named("processResources", ProcessResources).configure {
     exclude("spotless.gradle")
 
     // replace stuff in mcmod.info, nothing else. replaces ${key} with value in text
-    filesMatching("mcmod.info") {
+    filesMatching("mcmod.info")  {
         expand "minecraftVersion": project.minecraft.mcVersion,
             "modVersion": modVersion,
             "modId": modId,
@@ -802,7 +801,7 @@ dependencies {
         java17Dependencies('com.github.GTNewHorizons:Hodgepodge:2.3.17')
     }
 
-    java17PatchDependencies("com.github.GTNewHorizons:lwjgl3ify:${lwjgl3ifyVersion}:forgePatches") { transitive = false }
+    java17PatchDependencies("com.github.GTNewHorizons:lwjgl3ify:${lwjgl3ifyVersion}:forgePatches") {transitive = false}
 }
 
 ext.java17JvmArgs = [
@@ -838,7 +837,7 @@ ext.setupHotswapAgentTask = tasks.register("setupHotswapAgent") {
     group = "GTNH Buildscript"
     description = "Installs a recent version of HotSwapAgent into the Java 17 JetBrains runtime directory"
     def hsaUrl = 'https://github.com/HotswapProjects/HotswapAgent/releases/download/1.4.2-SNAPSHOT/hotswap-agent-1.4.2-SNAPSHOT.jar'
-    def targetFolderProvider = javaToolchains.launcherFor(java17Toolchain).map { it.metadata.installationPath.dir("lib/hotswap") }
+    def targetFolderProvider = javaToolchains.launcherFor(java17Toolchain).map {it.metadata.installationPath.dir("lib/hotswap")}
     def targetFilename = "hotswap-agent.jar"
     onlyIf {
         !targetFolderProvider.get().file(targetFilename).asFile.exists()
@@ -861,7 +860,6 @@ public abstract class RunHotswappableMinecraftTask extends RunMinecraftTask {
 
     @Input
     public boolean getEnableHotswap() { return enableHotswap }
-
     @Option(option = "hotswap", description = "Enables HotSwapAgent for enhanced class reloading under a debugger")
     public boolean setEnableHotswap(boolean enable) { enableHotswap = enable }
 
@@ -979,7 +977,7 @@ if (usesShadowedDependencies.toBoolean()) {
         finalizedBy(tasks.shadowJar)
     }
     tasks.named("reobfJar", ReobfuscatedJar) {
-        inputJar.set(tasks.named("shadowJar", ShadowJar).flatMap({ it.archiveFile }))
+        inputJar.set(tasks.named("shadowJar", ShadowJar).flatMap({it.archiveFile}))
     }
     AdhocComponentWithVariants javaComponent = (AdhocComponentWithVariants) project.components.findByName("java")
     javaComponent.withVariantsFromConfiguration(configurations.shadowRuntimeElements) {
