@@ -18,10 +18,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -31,6 +27,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -136,16 +136,36 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
             .addElement(
                 'A',
                 ofChain(
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[0], ofBlock(PhotonControllerUpgrade, 0)),
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[1], ofBlock(PhotonControllerUpgrade, 1)),
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[2], ofBlock(PhotonControllerUpgrade, 2)),
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[3], ofBlock(PhotonControllerUpgrade, 3)),
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[4], ofBlock(PhotonControllerUpgrade, 4)),
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[5], ofBlock(PhotonControllerUpgrade, 5)),
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[6], ofBlock(PhotonControllerUpgrade, 6)),
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[7], ofBlock(PhotonControllerUpgrade, 7)),
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[8], ofBlock(PhotonControllerUpgrade, 8)),
-                    onElementPass(x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[9], ofBlock(PhotonControllerUpgrade, 9)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[0],
+                        ofBlock(PhotonControllerUpgrade, 0)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[1],
+                        ofBlock(PhotonControllerUpgrade, 1)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[2],
+                        ofBlock(PhotonControllerUpgrade, 2)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[3],
+                        ofBlock(PhotonControllerUpgrade, 3)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[4],
+                        ofBlock(PhotonControllerUpgrade, 4)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[5],
+                        ofBlock(PhotonControllerUpgrade, 5)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[6],
+                        ofBlock(PhotonControllerUpgrade, 6)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[7],
+                        ofBlock(PhotonControllerUpgrade, 7)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[8],
+                        ofBlock(PhotonControllerUpgrade, 8)),
+                    onElementPass(
+                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[9],
+                        ofBlock(PhotonControllerUpgrade, 9)),
                     onElementPass(
                         x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[10],
                         ofBlock(PhotonControllerUpgrade, 10)),

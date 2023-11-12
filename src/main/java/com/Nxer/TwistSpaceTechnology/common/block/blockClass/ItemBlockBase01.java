@@ -11,11 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+
+import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -1,8 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
+import net.minecraft.block.Block;
+
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
-import net.minecraft.block.Block;
 
 public class BasicBlocks {
 

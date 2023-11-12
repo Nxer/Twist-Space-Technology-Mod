@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.item.itemAdders;
 
-import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,14 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
-import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+
+import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
+import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

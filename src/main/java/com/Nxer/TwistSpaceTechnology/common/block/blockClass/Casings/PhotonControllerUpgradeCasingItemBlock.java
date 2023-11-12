@@ -2,11 +2,11 @@ package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings;
 
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 

@@ -2,14 +2,12 @@ package com.Nxer.TwistSpaceTechnology.common.block;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlock01;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.PhotonControllerUpgrade;
-import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta;
-import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01.initMetaBlock01;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockRegister {

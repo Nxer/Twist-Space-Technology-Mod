@@ -121,11 +121,14 @@ public class TextHandler {
             // }
 
             /* Prepare the files. */
-            File en_US_lang = new File(DistortionSpaceTechnology.DevResource + "\\assets\\gtnhcommunitymod\\lang\\en_US.lang");
-            File zh_CN_lang = new File(DistortionSpaceTechnology.DevResource + "\\assets\\gtnhcommunitymod\\lang\\zh_CN.lang");
+            File en_US_lang = new File(
+                DistortionSpaceTechnology.DevResource + "\\assets\\gtnhcommunitymod\\lang\\en_US.lang");
+            File zh_CN_lang = new File(
+                DistortionSpaceTechnology.DevResource + "\\assets\\gtnhcommunitymod\\lang\\zh_CN.lang");
             DistortionSpaceTechnology.LOG
                 .info("File finder with en_US.lang catch a file absolutePath: " + en_US_lang.getAbsolutePath());
-            DistortionSpaceTechnology.LOG.info("File finder with en_US.lang catch a file named: " + en_US_lang.getName());
+            DistortionSpaceTechnology.LOG
+                .info("File finder with en_US.lang catch a file named: " + en_US_lang.getName());
 
             /* Write the new textLines in the end of the lang file. */
             DistortionSpaceTechnology.LOG.info("Start write new text: " + en_US_lang.getAbsolutePath());

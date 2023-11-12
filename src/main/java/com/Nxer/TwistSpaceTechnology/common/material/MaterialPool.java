@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.material;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
 
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
@@ -25,23 +24,23 @@ public class MaterialPool implements Runnable {
 
     // TODO test demo : use Bartworks Werkstoff to new new Item(Material)
     public static final Werkstoff TestingMaterial = new Werkstoff(
-	    new short[] { 216, 240, 240 }, // RGB for auto texture
-	    // Name, if text need i18n, please use the method Texthandler.texter(String textAsDefault, String i18nKey)
-	    // Also don't at this mod translate the auto generator extend gt.materials
-	    // These material name will be the baseName.
-	    // Translate these text when in GregTech.lang .
-	    TextHandler.texter("Testing Material", "bw.Testing Material.notTrans"),
-	    subscriptNumbers("Tt"), // Chemical formula
-	    new Werkstoff.Stats().setBlastFurnace(true) // Auto generate the Properties , auto generate EBF recipe
+        new short[] { 216, 240, 240 }, // RGB for auto texture
+        // Name, if text need i18n, please use the method Texthandler.texter(String textAsDefault, String i18nKey)
+        // Also don't at this mod translate the auto generator extend gt.materials
+        // These material name will be the baseName.
+        // Translate these text when in GregTech.lang .
+        TextHandler.texter("Testing Material", "bw.Testing Material.notTrans"),
+        subscriptNumbers("Tt"), // Chemical formula
+        new Werkstoff.Stats().setBlastFurnace(true) // Auto generate the Properties , auto generate EBF recipe
             .setProtons(0)
             .setMass(0)
             .setMeltingPoint(11451) // EBF recipe's special value
             .setSpeedOverride(1919.0F) // Mining speed
             .setDurOverride(19198100) // Durability
             .setQualityOverride((byte) 114), // Mining Level
-	    Werkstoff.Types.ELEMENT, // Choose Type of generation , there 'ELEMENT' means a new matter
-	    // What Pattern want to auto generate , onlyDust means has Dust pattern not 'only'
-	    new Werkstoff.GenerationFeatures().onlyDust()
+        Werkstoff.Types.ELEMENT, // Choose Type of generation , there 'ELEMENT' means a new matter
+        // What Pattern want to auto generate , onlyDust means has Dust pattern not 'only'
+        new Werkstoff.GenerationFeatures().onlyDust()
             .addMolten() // has Molten
             .addMetalItems()
             .addCraftingMetalWorkingItems()
@@ -49,20 +48,20 @@ public class MaterialPool implements Runnable {
             .addMultipleIngotMetalWorkingItems()
             .addMetalCraftingSolidifierRecipes()
             .addMetaSolidifierRecipes(),
-	    offsetID_01, // manage ID here, some IDs has been used , read the README.md
-	    TextureSet.SET_SHINY); // What Type will the auto Texture be ,SHINY means like Palladium Ingot
+        offsetID_01, // manage ID here, some IDs has been used , read the README.md
+        TextureSet.SET_SHINY); // What Type will the auto Texture be ,SHINY means like Palladium Ingot
 
     public static final Werkstoff HolmiumGarnet = new Werkstoff(
-	    new short[] { 96, 96, 240 },
-	    TextHandler.texter("Holmium Garnet", "bw.HolmiumGarnet.notTrans"),
-	    subscriptNumbers("Ho3Al5O12"),
-	    new Werkstoff.Stats(),
-	    Werkstoff.Types.MATERIAL,
-	    new Werkstoff.GenerationFeatures().disable()
+        new short[] { 96, 96, 240 },
+        TextHandler.texter("Holmium Garnet", "bw.HolmiumGarnet.notTrans"),
+        subscriptNumbers("Ho3Al5O12"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MATERIAL,
+        new Werkstoff.GenerationFeatures().disable()
             .onlyDust()
             .addMolten(),
-	    offsetID_01 + 1,
-	    TextureSet.SET_SHINY);
+        offsetID_01 + 1,
+        TextureSet.SET_SHINY);
 
     // Bartworks' Material System run on Runnable.class
     @Override

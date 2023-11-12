@@ -2,11 +2,12 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -25,10 +26,10 @@ public class CircuitAssemblerRecipePool implements IRecipePool {
         // Optical Soc Circuit Assembly Line
         GT_Values.RA.stdBuilder()
             .itemInputs(
-	            ItemList.Circuit_Board_Optical.get(16),
-	            GTCMItemList.OpticalSOC.get(1),
-	            com.github.technus.tectech.thing.CustomItemList.DATApipe.get(32),
-	            GT_OreDictUnificator.get(OrePrefixes.stick, Materials.EnrichedHolmium, 64))
+                ItemList.Circuit_Board_Optical.get(16),
+                GTCMItemList.OpticalSOC.get(1),
+                com.github.technus.tectech.thing.CustomItemList.DATApipe.get(32),
+                GT_OreDictUnificator.get(OrePrefixes.stick, Materials.EnrichedHolmium, 64))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 2))
             .itemOutputs(ItemList.Circuit_OpticalProcessor.get(16))
             .noFluidOutputs()

@@ -1,9 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.nei;
 
-import com.Nxer.TwistSpaceTechnology.Tags;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.Nxer.TwistSpaceTechnology.Tags;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
