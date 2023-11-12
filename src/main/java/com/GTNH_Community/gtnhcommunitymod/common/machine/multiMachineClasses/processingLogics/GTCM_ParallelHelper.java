@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
+
 import gregtech.api.interfaces.tileentity.IRecipeLockable;
 import gregtech.api.interfaces.tileentity.IVoidable;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
@@ -488,12 +490,12 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             int actualMaxParallel = (int) Math.min(maxParallelBeforeBatchMode, availableEUt / tRecipeEUt);
             currentParallel = recipeCheck.checkRecipeInputs(true, actualMaxParallel, itemInputs, fluidInputs);
         } else {
-            long tCurrentUsage = 0;
-            boolean builtRecipeCheck = false;
+            
             // Calculate the actual parallel
             {
                 // Sign EUt limit
                 final int canParallelEUt = (int) Math.min(availableEUt / tRecipeEUt, limitParallel);
+                
                 // Maintain a Map to contain inputs.
                 Map<ItemId, Integer> itemInputsMap = new HashMap<>();
                 for (ItemStack itemStack : itemInputs) {
@@ -513,11 +515,16 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 // Catch the minimum parallel of every input item's.
                 int canItemInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canParallelEUt);
                 if (!recipeItemInputsMap.isEmpty() && recipe.mInputs != null) {
-                    for (ItemId itemIntegerPair : recipeItemInputsMap.keySet()) {
-                        if(recipeItemInputsMap.get(itemIntegerPair)==0){
+                    for (ItemId itemId : recipeItemInputsMap.keySet()) {
+                        if (itemId == null){
                             continue;
                         }
-                        int canThisParallel = (int) itemInputsMap.get(itemIntegerPair) / recipeItemInputsMap.get(itemIntegerPair);
+                        if(recipeItemInputsMap.get(itemId)==0){
+                            continue;
+                        }
+                        
+                        int canThisParallel = (int) itemInputsMap.get(itemId) / recipeItemInputsMap.get(itemId);
+                        
                         if (canThisParallel < canItemInputsMaxParallel) {
                             canItemInputsMaxParallel = canThisParallel;
                         }

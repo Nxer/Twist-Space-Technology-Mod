@@ -107,7 +107,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 GT_Utility.getIntegratedCircuit(1),
                 ItemList.Circuit_Board_Optical.get(1L),
                 getItemContainer("PicoWafer").get(4L),
-                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 2L },
+                ItemList.Circuit_OpticalMainframe.get(2),
                 ItemList.Circuit_Parts_TransistorXSMD.get(48L),
                 ItemList.Circuit_Parts_ResistorXSMD.get(48L),
                 ItemList.Circuit_Parts_CapacitorXSMD.get(48L),
