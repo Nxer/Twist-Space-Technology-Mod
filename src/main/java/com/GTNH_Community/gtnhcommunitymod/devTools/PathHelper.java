@@ -2,7 +2,7 @@ package com.GTNH_Community.gtnhcommunitymod.devTools;
 
 import java.net.URL;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
+import com.GTNH_Community.gtnhcommunitymod.DistortionSpaceTechnology;
 
 /**
  * Some Dev Tools about Path.
@@ -17,7 +17,7 @@ public class PathHelper {
     public static void initResourceAbsolutePath(boolean isInDevMode) {
         if (isInDevMode) {
             /* Get the URL(Path) of the mod when RUN. */
-            URL tempUrl = GTNHCommunityMod.class.getResource("");
+            URL tempUrl = DistortionSpaceTechnology.class.getResource("");
             String tempString;
             if (tempUrl != null) {
                 /* Cut the String. */
@@ -26,7 +26,7 @@ public class PathHelper {
                         6,
                         tempUrl.getFile()
                             .indexOf("build"));
-                GTNHCommunityMod.DevResource = tempString + "src/main/resources";
+                DistortionSpaceTechnology.DevResource = tempString + "src/main/resources";
             }
         }
     }

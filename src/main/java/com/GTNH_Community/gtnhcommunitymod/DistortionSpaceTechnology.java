@@ -24,11 +24,11 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     name = Tags.MODNAME,
     dependencies = "required-after:IC2; " + "required-after:gregtech; "
         + "required-after:bartworks; "
-        + "required-after:TecTech; "
+        + "required-after:tectech; "
         + "before:miscutils; "
         + "after:dreamcraft;",
     acceptedMinecraftVersions = "[1.7.10]")
-public class GTNHCommunityMod {
+public class DistortionSpaceTechnology {
 
     /**
      * <li>The signal of whether in Development Mode.
@@ -50,12 +50,12 @@ public class GTNHCommunityMod {
     public static final String VERSION = Tags.VERSION;
 
     /**
-     * If you need send a message to the Log, call {@link GTNHCommunityMod#LOG#info(String message)} .
+     * If you need send a message to the Log, call {@link DistortionSpaceTechnology#LOG#info(String message)} .
      */
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 
     @Mod.Instance
-    public static GTNHCommunityMod instance;
+    public static DistortionSpaceTechnology instance;
 
     @SidedProxy(
         clientSide = "com.GTNH_Community.gtnhcommunitymod.ClientProxy",
@@ -90,12 +90,12 @@ public class GTNHCommunityMod {
 
         TextHandler.serializeLangMap(isInDevMode);
 
-        // GTNHCommunityMod.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
+        // DistortionSpaceTechnology.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
     }
 
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
-        GTNHCommunityMod.LOG.info("Start Complete Init.");
+        DistortionSpaceTechnology.LOG.info("Start Complete Init.");
         RecipeLoader.loadRecipes();// Load Recipes
 
         // reflect

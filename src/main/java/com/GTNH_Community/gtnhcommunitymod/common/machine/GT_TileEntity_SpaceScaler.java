@@ -45,7 +45,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
+import com.GTNH_Community.gtnhcommunitymod.DistortionSpaceTechnology;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.google.common.collect.ImmutableList;
@@ -151,16 +151,16 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
 
                 // add outputs
                 final int multiplier = (int) Math.pow(2, fieldGeneratorTier - 3);
-                GTNHCommunityMod.LOG.info("test multiplier: " + multiplier);
+                DistortionSpaceTechnology.LOG.info("test multiplier: " + multiplier);
 
                 outputItems = new ItemStack[helper.getItemOutputs().length];
-                GTNHCommunityMod.LOG.info("test before outputItems: " + outputItems);
+                DistortionSpaceTechnology.LOG.info("test before outputItems: " + outputItems);
                 for (int i = 0; i < helper.getItemOutputs().length; i++) {
                     ItemStack itemStack = helper.getItemOutputs()[i];
                     itemStack.stackSize = (int) Math.min(Integer.MAX_VALUE, (long) multiplier * itemStack.stackSize);
                     outputItems[i] = itemStack;
                 }
-                GTNHCommunityMod.LOG.info("test after outputItems: " + outputItems);
+                DistortionSpaceTechnology.LOG.info("test after outputItems: " + outputItems);
 
                 outputFluids = new FluidStack[helper.getFluidOutputs().length];
                 for (int i = 0; i < helper.getFluidOutputs().length; i++) {

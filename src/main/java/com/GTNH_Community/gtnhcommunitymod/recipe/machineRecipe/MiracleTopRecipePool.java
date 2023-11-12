@@ -18,12 +18,12 @@ import static gregtech.api.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 
+import com.GTNH_Community.gtnhcommunitymod.DistortionSpaceTechnology;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
@@ -47,7 +47,7 @@ public class MiracleTopRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-        GTNHCommunityMod.LOG.info("MiracleTopRecipePool loading recipes.");
+        DistortionSpaceTechnology.LOG.info("MiracleTopRecipePool loading recipes.");
 
         Fluid solderIndAlloy = FluidRegistry.getFluid("molten.indalloy140");
         Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");

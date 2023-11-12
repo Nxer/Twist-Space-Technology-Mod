@@ -5,7 +5,7 @@ import static com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList.SpaceWarpe
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
+import com.GTNH_Community.gtnhcommunitymod.DistortionSpaceTechnology;
 import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
@@ -22,7 +22,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
     @Override
     public void loadRecipes() {
 
-        GTNHCommunityMod.LOG.info("PreciseHighEnergyPhotonicQuantumMasterRecipePool loading recipes.");
+        DistortionSpaceTechnology.LOG.info("PreciseHighEnergyPhotonicQuantumMasterRecipePool loading recipes.");
 
         final GT_Recipe.GT_Recipe_Map PhC = GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes;
 

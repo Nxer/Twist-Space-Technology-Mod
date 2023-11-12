@@ -7,7 +7,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
+import com.GTNH_Community.gtnhcommunitymod.DistortionSpaceTechnology;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.recipe.IRecipePool;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
@@ -29,7 +29,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-        GTNHCommunityMod.LOG.info("IntensifyChemicalDistorterRecipePool loading recipes.");
+        DistortionSpaceTechnology.LOG.info("IntensifyChemicalDistorterRecipePool loading recipes.");
 
         final GT_Recipe.GT_Recipe_Map ICD = GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
 

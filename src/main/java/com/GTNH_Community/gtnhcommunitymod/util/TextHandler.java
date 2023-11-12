@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
+import com.GTNH_Community.gtnhcommunitymod.DistortionSpaceTechnology;
 
 /**
  * When Texts need auto generate .lang . Use this.
@@ -33,9 +33,9 @@ public class TextHandler {
         /**
          * If not in Dev mode , return vanilla forge method directly.
          */
-        if (GTNHCommunityMod.isInDevMode) {
+        if (DistortionSpaceTechnology.isInDevMode) {
             if (LangMap.get(aKey) == null) {
-                GTNHCommunityMod.LOG.info("Texter get a new key - TextLine: " + aKey + " - " + aTextLine);
+                DistortionSpaceTechnology.LOG.info("Texter get a new key - TextLine: " + aKey + " - " + aTextLine);
                 LangMapNeedToWrite.put(aKey, aTextLine);
                 return aTextLine;
             } else {
@@ -49,9 +49,9 @@ public class TextHandler {
 
     public static String texterButKey(String aTextLine, String aKey) {
 
-        if (GTNHCommunityMod.isInDevMode) {
+        if (DistortionSpaceTechnology.isInDevMode) {
             if (LangMap.get(aKey) == null) {
-                GTNHCommunityMod.LOG.info("Texter get a new key - TextLine: " + aKey + " - " + aTextLine);
+                DistortionSpaceTechnology.LOG.info("Texter get a new key - TextLine: " + aKey + " - " + aTextLine);
                 LangMapNeedToWrite.put(aKey, aTextLine);
             }
         }
@@ -98,7 +98,7 @@ public class TextHandler {
                 return;
             }
             // if (LangMap.equals(LangMapBackUp)) {
-            // GTNHCommunityMod.LOG.info(GTNHCommunityMod.MODID + ": No new text need to handle.");
+            // DistortionSpaceTechnology.LOG.info(DistortionSpaceTechnology.MODID + ": No new text need to handle.");
             // /* If you need to see what the fuck in the LangMap and LangMapBackUp, remove the comment markers. */
             //
             // // for(String key : LangMapBackUp.keySet()){
@@ -121,39 +121,39 @@ public class TextHandler {
             // }
 
             /* Prepare the files. */
-            File en_US_lang = new File(GTNHCommunityMod.DevResource + "\\assets\\gtnhcommunitymod\\lang\\en_US.lang");
-            File zh_CN_lang = new File(GTNHCommunityMod.DevResource + "\\assets\\gtnhcommunitymod\\lang\\zh_CN.lang");
-            GTNHCommunityMod.LOG
+            File en_US_lang = new File(DistortionSpaceTechnology.DevResource + "\\assets\\gtnhcommunitymod\\lang\\en_US.lang");
+            File zh_CN_lang = new File(DistortionSpaceTechnology.DevResource + "\\assets\\gtnhcommunitymod\\lang\\zh_CN.lang");
+            DistortionSpaceTechnology.LOG
                 .info("File finder with en_US.lang catch a file absolutePath: " + en_US_lang.getAbsolutePath());
-            GTNHCommunityMod.LOG.info("File finder with en_US.lang catch a file named: " + en_US_lang.getName());
+            DistortionSpaceTechnology.LOG.info("File finder with en_US.lang catch a file named: " + en_US_lang.getName());
 
             /* Write the new textLines in the end of the lang file. */
-            GTNHCommunityMod.LOG.info("Start write new text: " + en_US_lang.getAbsolutePath());
+            DistortionSpaceTechnology.LOG.info("Start write new text: " + en_US_lang.getAbsolutePath());
 
             try {
                 FileWriter en_Us = new FileWriter(en_US_lang, true);
                 FileWriter zh_CN = new FileWriter(zh_CN_lang, true);
                 for (String key : LangMapNeedToWrite.keySet()) {
-                    GTNHCommunityMod.LOG
+                    DistortionSpaceTechnology.LOG
                         .info("en_US write a Line START: " + key + "===>" + LangMapNeedToWrite.get(key));
                     en_Us.write(key);
                     en_Us.write("=");
                     en_Us.write(LangMapNeedToWrite.get(key));
                     en_Us.write("\n");
-                    GTNHCommunityMod.LOG.info("en_US write a Line COMPLETE.");
-                    GTNHCommunityMod.LOG
+                    DistortionSpaceTechnology.LOG.info("en_US write a Line COMPLETE.");
+                    DistortionSpaceTechnology.LOG
                         .info("zh_CN write a Line START: " + key + "===>" + LangMapNeedToWrite.get(key));
                     zh_CN.write(key);
                     zh_CN.write("=");
                     zh_CN.write(LangMapNeedToWrite.get(key));
                     zh_CN.write("\n");
-                    GTNHCommunityMod.LOG.info("zh_CN write a Line COMPLETE.");
+                    DistortionSpaceTechnology.LOG.info("zh_CN write a Line COMPLETE.");
                 }
-                GTNHCommunityMod.LOG.info("Finish to write new text: " + en_US_lang.getAbsolutePath());
+                DistortionSpaceTechnology.LOG.info("Finish to write new text: " + en_US_lang.getAbsolutePath());
                 en_Us.close();
                 zh_CN.close();
             } catch (IOException e) {
-                GTNHCommunityMod.LOG.info("Error in serializeLangMap() File Writer en_US");
+                DistortionSpaceTechnology.LOG.info("Error in serializeLangMap() File Writer en_US");
                 throw new RuntimeException(e);
             }
 

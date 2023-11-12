@@ -56,7 +56,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.GTNH_Community.gtnhcommunitymod.GTNHCommunityMod;
+import com.GTNH_Community.gtnhcommunitymod.DistortionSpaceTechnology;
 import com.GTNH_Community.gtnhcommunitymod.common.GTCMItemList;
 import com.GTNH_Community.gtnhcommunitymod.common.machine.recipeMap.GTCMRecipe;
 import com.GTNH_Community.gtnhcommunitymod.common.material.MaterialPool;
@@ -86,7 +86,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
     // spotless:off
     @Override
     public void loadRecipes() {
-        GTNHCommunityMod.LOG.info("GTCMMachineRecipePool loading recipes.");
+        DistortionSpaceTechnology.LOG.info("GTCMMachineRecipePool loading recipes.");
 
         Fluid solderIndAlloy = FluidRegistry.getFluid("molten.indalloy140");
 
