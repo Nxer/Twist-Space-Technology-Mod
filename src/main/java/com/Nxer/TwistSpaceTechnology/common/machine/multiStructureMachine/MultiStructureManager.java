@@ -1,10 +1,6 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
-
-import static com.Nxer.TwistSpaceTechnology.DistortionSpaceTechnology.LOG;
-
-import java.util.HashMap;
-import java.util.HashSet;
-
+/*
+ * package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
+ * // spotless:off
 public class MultiStructureManager {
 
     private static final HashMap<Integer, GT_TileEntity_MultiStructureMachine<?>> machines = new HashMap<>();
@@ -102,3 +98,5 @@ public class MultiStructureManager {
     }
 
 }
+// spotless:on
+ */

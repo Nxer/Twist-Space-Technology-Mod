@@ -309,6 +309,7 @@ G -> ofFrame;
             .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_04)
             .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_05)
             .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_06)
+            .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
             .addInfo(TextLocalization.textScrewdriverChangeMode)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)

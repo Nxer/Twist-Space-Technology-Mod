@@ -4,6 +4,8 @@ import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 
 import net.minecraft.util.EnumChatFormatting;
 
+import com.Nxer.TwistSpaceTechnology.Tags;
+
 // spotless:off
 /**
  * <li>It's best to write here the texts that need auto generate en_US.lang .
@@ -11,9 +13,10 @@ import net.minecraft.util.EnumChatFormatting;
  */
 public class TextLocalization {
 
-    public static final String ModName = "GTNH Community Mod";
+    // region general
+    public static final String ModName = Tags.MODNAME;
 
-    public static final String ModNameDesc = texter("Added by " + EnumChatFormatting.GREEN + "GTNH Community Mod" + EnumChatFormatting.GRAY, "ModNameDesc");
+    public static final String ModNameDesc = texter("Added by " + EnumChatFormatting.GREEN + "Twist Space Technology" + EnumChatFormatting.GRAY, "ModNameDesc");
 
     public static final String HeatCapacity = texter("Heat Capacity: ", "HeatCapacity");
     public static final String FluidCapacity = texter("Capacity: ", "FluidCapacity");
@@ -27,6 +30,10 @@ public class TextLocalization {
             + EnumChatFormatting.GRAY
             + " hologram projector to build the main structure.",
         "BLUE_PRINT_INFO");
+    
+    // endregion
+    
+    // region casing
     public static final String textCasing = texter("Casing", "textCasing");
     public static final String textUseBlueprint = texter("Use "+EnumChatFormatting.BLUE+"Blue"+EnumChatFormatting.AQUA+"print"+EnumChatFormatting.RESET+" to preview", "textUseBlueprint");
     public static final String textAnyCasing = texter("Any Casing", "textAnyCasing");
@@ -42,6 +49,14 @@ public class TextLocalization {
 
     public static final String textScrewdriverChangeMode = texter("Use screwdriver to change mode.", "textScrewdriverChangeMode");
 
+    // endregion
+    
+    // region general tooltips
+    public static final String Tooltip_GlassTierLimitEnergyHatchTier = texter("The Glass Tier limit the Energy hatch voltage Tier.","Tooltip_GlassTierLimitEnergyHatchTier");
+    
+    
+    // endregion
+    
     // region Intensify Chemical Distorter text localization
     public static final String NameIntensifyChemicalDistorter = texter(
         "Intensify Chemical Distorter",

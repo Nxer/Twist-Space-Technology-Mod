@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.devTools;
 
 import java.net.URL;
 
-import com.Nxer.TwistSpaceTechnology.DistortionSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 /**
  * Some Dev Tools about Path.
@@ -17,7 +17,7 @@ public class PathHelper {
     public static void initResourceAbsolutePath(boolean isInDevMode) {
         if (isInDevMode) {
             /* Get the URL(Path) of the mod when RUN. */
-            URL tempUrl = DistortionSpaceTechnology.class.getResource("");
+            URL tempUrl = TwistSpaceTechnology.class.getResource("");
             String tempString;
             if (tempUrl != null) {
                 /* Cut the String. */
@@ -26,7 +26,7 @@ public class PathHelper {
                         6,
                         tempUrl.getFile()
                             .indexOf("build"));
-                DistortionSpaceTechnology.DevResource = tempString + "src/main/resources";
+                TwistSpaceTechnology.DevResource = tempString + "src/main/resources";
             }
         }
     }

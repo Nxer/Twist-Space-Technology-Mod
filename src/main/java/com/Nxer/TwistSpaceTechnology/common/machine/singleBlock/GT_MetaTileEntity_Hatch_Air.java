@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
 import net.minecraft.world.World;
@@ -47,8 +48,8 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
     @Override
     public String[] getCustomTooltip() {
         String[] aTooltip = new String[3];
-        aTooltip[0] = "Infinite air supply hatch";
-        aTooltip[1] = "Fills to max capacity every 5 seconds";
+        aTooltip[0] = texter("Infinite air supply hatch", "GT_MetaTileEntity_Hatch_Air.Tooltip0");
+        aTooltip[1] = texter("Fills to max capacity every 5 seconds", "GT_MetaTileEntity_Hatch_Air.Tooltip1");
         return aTooltip;
     }
 

@@ -56,16 +56,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.DistortionSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import goodgenerator.items.MyMaterial;
 import goodgenerator.util.ItemRefer;
@@ -86,7 +84,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
     // spotless:off
     @Override
     public void loadRecipes() {
-        DistortionSpaceTechnology.LOG.info("GTCMMachineRecipePool loading recipes.");
+        TwistSpaceTechnology.LOG.info("GTCMMachineRecipePool loading recipes.");
 
         Fluid solderIndAlloy = FluidRegistry.getFluid("molten.indalloy140");
 
@@ -97,6 +95,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         IItemContainer eM_Power = com.github.technus.tectech.thing.CustomItemList.eM_Power;
 
         // test machine recipe
+        /*
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(1))
             .fluidInputs(
@@ -114,6 +113,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(1919810)
             .duration(114514 * 20)
             .addTo(GTCMRecipe.instance.IntensifyChemicalDistorterRecipes);
+            
+         */
         /*
          * 2.4.0 and earlier need call these methods:
          * noItemInputs(); noItemOutputs(); noFluidInputs(); noFluidOutputs();
@@ -135,32 +136,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UHV)
             .duration(20 * 120)
             .addTo(sAssemblerRecipes);
-
-        // test
-        // GT_Values.RA.stdBuilder()
-        // .itemInputs(
-        // new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
-        // GT_Utility.getIntegratedCircuit(10))
-        // .noFluidInputs()
-        // .itemOutputs(MaterialPool.TestingMaterial.get(OrePrefixes.dust, 1))
-        // .noFluidOutputs()
-        // .noOptimize()
-        // .eut(RECIPE_UHV)
-        // .duration(256 * 20)
-        // .addTo(sMultiblockChemicalRecipes);
-        //
-        // // test
-        // GT_Values.RA.stdBuilder()
-        // .itemInputs(
-        // new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
-        // GT_Utility.getIntegratedCircuit(10))
-        // .noFluidInputs()
-        // .itemOutputs(MaterialPool.TestingMaterial.get(OrePrefixes.dust, 1))
-        // .noFluidOutputs()
-        // .noOptimize()
-        // .eut(RECIPE_UHV)
-        // .duration(512 * 20)
-        // .addTo(GTCMRecipe.instance.IntensifyChemicalDistorterRecipes);
 
         // region PreciseHighEnergyPhotonicQuantumMaster
 
@@ -528,76 +503,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noFluidOutputs()
             .eut(RECIPE_MAX)
             .duration(114514 * 20)
-            .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
-
-        // Space Wrapper
-
-        // UEV
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Tesseract.get(16),
-                ItemList.EnergisedTesseract.get(16),
-                GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1),
-                ItemList.Field_Generator_UEV.get(8),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16L, 32105),
-                GT_Utility.getIntegratedCircuit(10))
-            .fluidInputs(new FluidStack(solderPlasma, 144 * 64), Materials.SuperconductorUEVBase.getMolten(16 * 144))
-            .itemOutputs(SpaceWarper.get(1))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
-            .eut(RECIPE_UIV)
-            .duration(512 * 20)
-            .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
-
-        // UIV
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Tesseract.get(12),
-                ItemList.EnergisedTesseract.get(12),
-                GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1),
-                ItemList.Field_Generator_UIV.get(4),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 8L, 32105),
-                GT_Utility.getIntegratedCircuit(11))
-            .fluidInputs(new FluidStack(solderPlasma, 144 * 32), Materials.SuperconductorUIVBase.getMolten(8 * 144))
-            .itemOutputs(SpaceWarper.get(2))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
-            .eut(RECIPE_UMV)
-            .duration(256 * 20)
-            .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
-
-        // UMV
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Tesseract.get(8),
-                ItemList.EnergisedTesseract.get(8),
-                GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1),
-                ItemList.Field_Generator_UMV.get(2),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 4L, 32105),
-                GT_Utility.getIntegratedCircuit(12))
-            .fluidInputs(new FluidStack(solderPlasma, 144 * 32), Materials.SuperconductorUMVBase.getMolten(4 * 144))
-            .itemOutputs(SpaceWarper.get(4))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
-            .eut(RECIPE_UXV)
-            .duration(128 * 20)
-            .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
-
-        // UXV
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Tesseract.get(4),
-                ItemList.EnergisedTesseract.get(4),
-                GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1),
-                ItemList.Field_Generator_UXV.get(1),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 2L, 32105),
-                GT_Utility.getIntegratedCircuit(13))
-            .fluidInputs(
-                MaterialsUEVplus.PrimordialMatter.getFluid(144 * 16),
-                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64),
-                MaterialsUEVplus.Time.getMolten(144 * 32),
-                MaterialsUEVplus.Space.getMolten(144 * 32))
-            .itemOutputs(SpaceWarper.get(16))
-            .fluidOutputs(Materials.Hydrogen.getPlasma(1000 * 128))
-            .eut(RECIPE_MAX)
-            .duration(64 * 20)
             .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
 
         // endregion

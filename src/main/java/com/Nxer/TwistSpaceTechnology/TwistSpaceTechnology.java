@@ -28,7 +28,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
         + "before:miscutils; "
         + "after:dreamcraft;",
     acceptedMinecraftVersions = "[1.7.10]")
-public class DistortionSpaceTechnology {
+public class TwistSpaceTechnology {
 
     /**
      * <li>The signal of whether in Development Mode.
@@ -50,12 +50,12 @@ public class DistortionSpaceTechnology {
     public static final String VERSION = Tags.VERSION;
 
     /**
-     * If you need send a message to the Log, call {@link DistortionSpaceTechnology#LOG#info(String message)} .
+     * If you need send a message to the Log, call {@link TwistSpaceTechnology#LOG#info(String message)} .
      */
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 
     @Mod.Instance
-    public static DistortionSpaceTechnology instance;
+    public static TwistSpaceTechnology instance;
 
     @SidedProxy(
         clientSide = "com.Nxer.TwistSpaceTechnology.ClientProxy",
@@ -90,12 +90,12 @@ public class DistortionSpaceTechnology {
 
         TextHandler.serializeLangMap(isInDevMode);
 
-        // DistortionSpaceTechnology.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
+        // TwistSpaceTechnology.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
     }
 
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
-        DistortionSpaceTechnology.LOG.info("Start Complete Init.");
+        TwistSpaceTechnology.LOG.info("Start Complete Init.");
         RecipeLoader.loadRecipes();// Load Recipes
 
         // reflect
