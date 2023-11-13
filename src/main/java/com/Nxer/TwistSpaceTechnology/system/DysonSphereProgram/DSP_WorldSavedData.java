@@ -3,16 +3,16 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
 
-public class DysonSphereProgramWorldSavedData extends WorldSavedData {
+public class DSP_WorldSavedData extends WorldSavedData {
 
-    public static DysonSphereProgramWorldSavedData INSTANCE;
+    public static DSP_WorldSavedData INSTANCE;
     private static final String DATA_NAME = "TST_DysonSphereProgramWorldSavedData";
 
-    public DysonSphereProgramWorldSavedData() {
+    public DSP_WorldSavedData() {
         super(DATA_NAME);
     }
 
-    public DysonSphereProgramWorldSavedData(String name) {
+    public DSP_WorldSavedData(String name) {
         super(name);
     }
 
