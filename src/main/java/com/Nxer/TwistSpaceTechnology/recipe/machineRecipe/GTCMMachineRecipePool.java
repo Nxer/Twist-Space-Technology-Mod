@@ -59,6 +59,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
@@ -951,6 +952,15 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20*1800)
             .addTo(AssemblyLine);
             
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 1))
+            .noFluidInputs()
+            .noItemOutputs()
+            .fluidOutputs(MaterialPool.HolmiumGarnet.getMolten(144))
+            .noOptimize()
+            .eut(96)
+            .duration(72)
+            .addTo(GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes);
         
         // endregon
 

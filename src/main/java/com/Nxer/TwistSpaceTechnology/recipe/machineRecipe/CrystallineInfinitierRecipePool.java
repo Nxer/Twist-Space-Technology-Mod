@@ -25,6 +25,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -77,6 +78,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .addTo(CI);
 
         // Holmium Garnet Dust
+        // gt mixer
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(4), Materials.Holmium.getDust(3), Materials.Sapphire.getDust(5))
             .noFluidInputs()
@@ -135,6 +137,66 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_UV)
             .duration(20 * 60)
             .addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
+        
+        // gt++ mixer
+        GT_Values.RA.stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(4), Materials.Holmium.getDust(3), Materials.Sapphire.getDust(5))
+            .noFluidInputs()
+            .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UV)
+            .duration(20 * 5)
+            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+        
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(4),
+                Materials.Holmium.getDust(3),
+                Materials.GreenSapphire.getDust(10))
+            .noFluidInputs()
+            .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UV)
+            .duration(20 * 5)
+            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+        
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(5),
+                Materials.Holmium.getDust(60),
+                Materials.Sapphire.getDust(64),
+                Materials.Sapphire.getDust(36))
+            .noFluidInputs()
+            .itemOutputs(
+                MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
+                MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
+                MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UV)
+            .duration(20 * 30)
+            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+        
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(5),
+                Materials.Holmium.getDust(60),
+                Materials.GreenSapphire.getDust(64),
+                Materials.GreenSapphire.getDust(64),
+                Materials.GreenSapphire.getDust(64),
+                Materials.GreenSapphire.getDust(8))
+            .noFluidInputs()
+            .itemOutputs(
+                MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
+                MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
+                MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UV)
+            .duration(20 * 60)
+            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
 
         // Chip
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensBlue")) {
