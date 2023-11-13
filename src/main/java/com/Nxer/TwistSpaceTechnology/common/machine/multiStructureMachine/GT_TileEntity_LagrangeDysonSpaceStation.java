@@ -1,3 +1,4 @@
+/*
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
 import net.minecraft.item.ItemStack;
@@ -157,3 +158,4 @@ public class GT_TileEntity_LagrangeDysonSpaceStation
     }
 }
 // spotless:on
+*/

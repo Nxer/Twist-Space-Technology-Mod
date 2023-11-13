@@ -1,3 +1,4 @@
+/*
 package com.Nxer.TwistSpaceTechnology.common.item.itemAdders;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
@@ -80,3 +81,4 @@ public class ItemMultiStructuresLinkTool extends Item {
         return super.onItemRightClick(itemStackIn, worldIn, player);
     }
 }
+*/
