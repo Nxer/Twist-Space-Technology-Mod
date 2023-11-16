@@ -34,7 +34,7 @@ public class TwistSpaceTechnology {
      * <li>The signal of whether in Development Mode.
      * <li>Keep care to set 'false' when dev complete.
      */
-    public static final boolean isInDevMode = false;
+    public static final boolean isInDevMode = true;
 
     /**
      * The absolute Path of your workspace/resources folder.
@@ -50,7 +50,7 @@ public class TwistSpaceTechnology {
     public static final String VERSION = Tags.VERSION;
 
     /**
-     * If you need send a message to the Log, call {@link TwistSpaceTechnology#LOG#info(String message)} .
+     * If you need send a message to the Log, call this.
      */
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 

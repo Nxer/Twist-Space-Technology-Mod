@@ -1,19 +1,20 @@
-package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram;
+package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic;
+// spotless:off
 
-import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.DSP_Planet.OverWorld;
-import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.DSP_Planet.Seth;
-import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.DSP_Planet.TheEnd;
-
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.*;
+// spotless:on
 public enum DSP_Galaxy {
 
     _NULL(0),
-    SolarSystem(1, OverWorld, TheEnd),
-    Ross128(0.2),
-    Barnarda(0.851),
-    Vega(2.98),
-    Tceti(1.9),
-    CentauriB(2.3),
-    AmunRa(0.9, Seth)
+    SolarSystem(1, OverWorld, TheEnd, Miranda, Haumea, Pluto, Triton, Proteus, Oberon, Callisto, Titan, Ganymede, Ceres,
+        Enceladus, Deimos, Venus, Phobos, Mercury, Io, Europa, KuiperBelt, Asteroids, Mars, Moon, Makemake,
+        TwilightForest),
+    Ross128(0.2, Ross128b, Ross128ba),
+    Barnarda(0.851, BarnardaC, BarnardaE, BarnardaF),
+    Vega(2.98, VegaB),
+    TCeti(1.9, TCetiE),
+    CentauriB(2.3, CentauriBb),
+    AmunRa(0.9, Seth, Horus, Anubis, Maahes, Neper, MehenBelt)
 
     ;
 

@@ -216,3 +216,5 @@ MetaItem01.8.name=完美能量水晶
 tooltips.PerfectEnergyCrystal.line1=随着体型变大，它在能量控制方面表现出了不可思议的特性.
 bw.HolmiumGarnet.notTrans=Holmium Garnet
 Tooltip_GlassTierLimitEnergyHatchTier=玻璃等级限制能源仓等级.
+NameDSPLauncher=Dyson Sphere Module Launcher
+TST_Command.printHelp.00=Twist Space Technology Mod : 戴森球系统控制

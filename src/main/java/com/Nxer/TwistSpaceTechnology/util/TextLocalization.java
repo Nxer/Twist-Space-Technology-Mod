@@ -291,6 +291,12 @@ public class TextLocalization {
     
     // endregion
     
+    // region DSPLauncher
+    public static final String NameDSPLauncher = texter("Dyson Sphere Module Launcher","NameDSPLauncher");
+    
+    
+    // endregion
+    
     
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");

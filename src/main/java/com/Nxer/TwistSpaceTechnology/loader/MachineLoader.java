@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -18,6 +19,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
+
 public class MachineLoader {
 
     public static ItemStack IntensifyChemicalDistorter; // INTENSIFY_CHEMICAL_DISTORTER
@@ -32,6 +35,7 @@ public class MachineLoader {
     public static ItemStack SpaceScaler;
     public static ItemStack MoleculeDeconstructor;
     public static ItemStack CrystallineInfinitier;
+    public static ItemStack DSPLauncher;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -120,6 +124,11 @@ public class MachineLoader {
             "NameCrystallineInfinitier",
             TextLocalization.NameCrystallineInfinitier).getStackForm(1);
         GTCMItemList.CrystallineInfinitier.set(CrystallineInfinitier);
+        
+        //
+        DSPLauncher = new TST_DSPLauncher(
+            19013,"NameDSPLauncher",NameDSPLauncher).getStackForm(1);
+        GTCMItemList.DSPLauncher.set(DSPLauncher);
 
         // endregion
 

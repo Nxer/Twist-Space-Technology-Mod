@@ -216,3 +216,5 @@ MetaItem01.8.name=Perfect Energy Crystal
 MetaItem01.7.name=Energy Crystal Shard
 bw.HolmiumGarnet.notTrans=Holmium Garnet
 Tooltip_GlassTierLimitEnergyHatchTier=The Glass Tier limit the Energy hatch voltage Tier.
+NameDSPLauncher=Dyson Sphere Module Launcher
+TST_Command.printHelp.00=Twist Space Technology Mod : Dyson Sphere System Controller
