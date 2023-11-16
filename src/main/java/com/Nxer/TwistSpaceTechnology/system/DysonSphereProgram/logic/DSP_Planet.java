@@ -2,13 +2,15 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic;
 
 // spotless:off
 
+import java.io.Serializable;
+
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.*;
 // spotless:on
 
 /**
  * Contains Planets(Dimensions) with properties.
  */
-public enum DSP_Planet {
+public enum DSP_Planet implements Serializable {
 
     // SolarSystem
     OverWorld(0, 1, SolarSystem),

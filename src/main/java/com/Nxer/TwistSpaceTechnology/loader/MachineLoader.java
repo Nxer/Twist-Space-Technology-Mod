@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
+
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -17,9 +18,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.GT_MetaTileEntity_Hatch_Air;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
 
 public class MachineLoader {
 
@@ -124,10 +124,9 @@ public class MachineLoader {
             "NameCrystallineInfinitier",
             TextLocalization.NameCrystallineInfinitier).getStackForm(1);
         GTCMItemList.CrystallineInfinitier.set(CrystallineInfinitier);
-        
+
         //
-        DSPLauncher = new TST_DSPLauncher(
-            19013,"NameDSPLauncher",NameDSPLauncher).getStackForm(1);
+        DSPLauncher = new TST_DSPLauncher(19013, "NameDSPLauncher", NameDSPLauncher).getStackForm(1);
         GTCMItemList.DSPLauncher.set(DSPLauncher);
 
         // endregion

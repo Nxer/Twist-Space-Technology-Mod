@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Methods.getDimID;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Methods.initDSP_Data;
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
@@ -12,19 +14,21 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
-import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
+import java.io.Serializable;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
+import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -37,7 +41,7 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
 public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
-    implements IConstructable, ISurvivalConstructable, IDSP_IO {
+    implements IConstructable, ISurvivalConstructable, IDSP_IO, Serializable {
 
     // region Class Constructor
     public TST_DSPLauncher(int aID, String aName, String aNameRegional) {
@@ -47,6 +51,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     public TST_DSPLauncher(String aName) {
         super(aName);
     }
+
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_DSPLauncher(this.mName);
@@ -55,44 +60,46 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     // endregion
 
     // region Processing Logic
-	private String ownerName;
-	private int dimID;
-	private DSP_DataCell dspDataCell;
+    private String ownerName;
+    private int dimID;
+    private DSP_DataCell dspDataCell;
+
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
         };
     }
-	
-	/**
-	 * Init information.
-	 * @param aBaseMetaTileEntity   This machine tile entity.
-	 */
-	@Override
-	public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-		
-		super.onPreTick(aBaseMetaTileEntity, aTick);
-		
-		if (aBaseMetaTileEntity.isServerSide() && (aTick == 1)) {
-			TwistSpaceTechnology.LOG.info("test aBaseMetaTileEntity: "+aBaseMetaTileEntity);
-			int dimID = getDimID(aBaseMetaTileEntity);
-			TwistSpaceTechnology.LOG.info("test dimID: "+dimID);
-			String ownerName = aBaseMetaTileEntity.getOwnerName();
-			this.dspDataCell = initDSP_Data(new String(ownerName), dimID);
-			this.ownerName = ownerName;
-			this.dimID = dimID;
-		}
-	}
-//	@Override
-//	public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-//		super.onFirstTick(aBaseMetaTileEntity);
-//
-//	}
-	
-	@Override
-	public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-		return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
-	}
+
+    /**
+     * Init information.
+     * 
+     * @param aBaseMetaTileEntity This machine tile entity.
+     */
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+
+        super.onPreTick(aBaseMetaTileEntity, aTick);
+
+        if (aBaseMetaTileEntity.isServerSide() && (aTick == 1)) {
+            TwistSpaceTechnology.LOG.info("test aBaseMetaTileEntity: " + aBaseMetaTileEntity);
+            int dimID = getDimID(aBaseMetaTileEntity);
+            TwistSpaceTechnology.LOG.info("test dimID: " + dimID);
+            String ownerName = aBaseMetaTileEntity.getOwnerName();
+            this.dspDataCell = initDSP_Data(new String(ownerName), dimID);
+            this.ownerName = ownerName;
+            this.dimID = dimID;
+        }
+    }
+    // @Override
+    // public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+    // super.onFirstTick(aBaseMetaTileEntity);
+    //
+    // }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
     // endregion
 
     // region Structure
@@ -171,18 +178,17 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     protected int getMaxParallelRecipes() {
         return 1;
     }
-	
-	@Override
-	protected GT_Multiblock_Tooltip_Builder createTooltip() {
-		final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-		tt.addMachineType("Test")
-		  .addInfo(TextLocalization.StructureTooComplex)
-		  .addInfo(TextLocalization.BLUE_PRINT_INFO)
-		  .addSeparator()
-		  .toolTipFinisher(TextLocalization.ModName);
-		return tt;
-	}
-	
+
+    @Override
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addMachineType("Test")
+            .addInfo(TextLocalization.StructureTooComplex)
+            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            .addSeparator()
+            .toolTipFinisher(TextLocalization.ModName);
+        return tt;
+    }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,

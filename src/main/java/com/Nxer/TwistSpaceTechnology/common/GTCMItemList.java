@@ -39,7 +39,7 @@ public enum GTCMItemList implements IItemContainer {
     SpaceScaler,
     MoleculeDeconstructor,
     CrystallineInfinitier,
-    
+
     // DSP
     DSPLauncher,
 

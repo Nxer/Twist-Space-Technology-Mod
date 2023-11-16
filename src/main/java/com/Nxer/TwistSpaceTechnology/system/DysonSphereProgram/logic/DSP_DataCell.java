@@ -21,6 +21,7 @@ public class DSP_DataCell implements Serializable {
         this.amountDSPNode = 0;
     }
 
+    public DSP_DataCell() {}
     // endregion
 
     // region Methods
@@ -45,31 +46,36 @@ public class DSP_DataCell implements Serializable {
         return ownerName;
     }
 
-    public void setOwnerName(String ownerName) {
+    public DSP_DataCell setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+        return this;
     }
+
     public DSP_Galaxy getGalaxy() {
         return galaxy;
     }
 
-    public void setGalaxy(DSP_Galaxy galaxy) {
+    public DSP_DataCell setGalaxy(DSP_Galaxy galaxy) {
         this.galaxy = galaxy;
+        return this;
     }
 
     public long getAmountDSPSolarSail() {
         return amountDSPSolarSail;
     }
 
-    public void setAmountDSPSolarSail(long amountDSPSolarSail) {
+    public DSP_DataCell setAmountDSPSolarSail(long amountDSPSolarSail) {
         this.amountDSPSolarSail = amountDSPSolarSail;
+        return this;
     }
 
     public long getAmountDSPNode() {
         return amountDSPNode;
     }
 
-    public void setAmountDSPNode(long amountDSPNode) {
+    public DSP_DataCell setAmountDSPNode(long amountDSPNode) {
         this.amountDSPNode = amountDSPNode;
+        return this;
     }
 
     // endregion

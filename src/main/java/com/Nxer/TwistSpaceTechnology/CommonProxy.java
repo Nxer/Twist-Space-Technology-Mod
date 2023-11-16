@@ -1,9 +1,8 @@
 package com.Nxer.TwistSpaceTechnology;
 
-import com.Nxer.TwistSpaceTechnology.command.TST_Command;
-import gregtech.common.misc.GT_Command;
 import net.minecraftforge.common.MinecraftForge;
 
+import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 

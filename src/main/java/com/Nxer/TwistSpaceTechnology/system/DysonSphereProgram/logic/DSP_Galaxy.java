@@ -1,9 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic;
 // spotless:off
 
+import java.io.Serializable;
+
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.*;
 // spotless:on
-public enum DSP_Galaxy {
+public enum DSP_Galaxy implements Serializable {
 
     _NULL(0),
     SolarSystem(1, OverWorld, TheEnd, Miranda, Haumea, Pluto, Triton, Proteus, Oberon, Callisto, Titan, Ganymede, Ceres,

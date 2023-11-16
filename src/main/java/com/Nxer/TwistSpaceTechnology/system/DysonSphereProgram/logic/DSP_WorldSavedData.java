@@ -68,15 +68,15 @@ public class DSP_WorldSavedData extends WorldSavedData {
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
 
         TwistSpaceTechnology.LOG.info("test readFromNBT");
-        
+
         try {
             byte[] ba = nbtTagCompound.getByteArray(NBTTag_UUID_Name);
             InputStream byteArrayInputStream = new ByteArrayInputStream(ba);
             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
             Object data = objectInputStream.readObject();
             UUID_Name = (Map<String, String>) data;
-            //            objectInputStream.close();
-            //            byteArrayInputStream.close();
+            // objectInputStream.close();
+            // byteArrayInputStream.close();
             TwistSpaceTechnology.LOG.info("test readFromNBT: NBTTag_UUID_Name Success!");
         } catch (IOException | ClassNotFoundException exception) {
             System.out.println(NBTTag_UUID_Name + " FAILED");
@@ -89,29 +89,27 @@ public class DSP_WorldSavedData extends WorldSavedData {
             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
             Object data = objectInputStream.readObject();
             DSP_TeamName = (Map<String, String>) data;
-//            objectInputStream.close();
-//            byteArrayInputStream.close();
+            // objectInputStream.close();
+            // byteArrayInputStream.close();
             TwistSpaceTechnology.LOG.info("test readFromNBT: NBTTag_DSP_TeamName Success!");
         } catch (IOException | ClassNotFoundException exception) {
             System.out.println(NBTTag_DSP_TeamName + " FAILED");
             exception.printStackTrace();
         }
-        
+
         try {
             byte[] ba = nbtTagCompound.getByteArray(NBTTag_DysonSpheres);
             InputStream byteArrayInputStream = new ByteArrayInputStream(ba);
             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
             Object data = objectInputStream.readObject();
             DysonSpheres = (Map<String, HashMap<DSP_Galaxy, DSP_DataCell>>) data;
-            //            objectInputStream.close();
-            //            byteArrayInputStream.close();
+            // objectInputStream.close();
+            // byteArrayInputStream.close();
             TwistSpaceTechnology.LOG.info("test readFromNBT: NBTTag_DysonSpheres Success!");
         } catch (IOException | ClassNotFoundException exception) {
             System.out.println(NBTTag_DysonSpheres + " FAILED");
             exception.printStackTrace();
         }
-
-        
 
         // TODO testing
         TwistSpaceTechnology.LOG.info("test readFromNBT map");
@@ -144,8 +142,8 @@ public class DSP_WorldSavedData extends WorldSavedData {
             objectOutputStream.flush();
             byte[] data = byteArrayOutputStream.toByteArray();
             nbtTagCompound.setByteArray(NBTTag_DysonSpheres, data);
-//            objectOutputStream.close();
-//            byteArrayOutputStream.close();
+            // objectOutputStream.close();
+            // byteArrayOutputStream.close();
             TwistSpaceTechnology.LOG.info("test writeToNBT: NBTTag_DysonSpheres Success!");
         } catch (IOException exception) {
             System.out.println(NBTTag_DysonSpheres + " SAVE FAILED");
@@ -159,8 +157,8 @@ public class DSP_WorldSavedData extends WorldSavedData {
             objectOutputStream.flush();
             byte[] data = byteArrayOutputStream.toByteArray();
             nbtTagCompound.setByteArray(NBTTag_DSP_TeamName, data);
-//            objectOutputStream.close();
-//            byteArrayOutputStream.close();
+            // objectOutputStream.close();
+            // byteArrayOutputStream.close();
             TwistSpaceTechnology.LOG.info("test writeToNBT: NBTTag_DSP_TeamName Success!");
         } catch (IOException exception) {
             System.out.println(NBTTag_DSP_TeamName + " SAVE FAILED");
@@ -174,8 +172,8 @@ public class DSP_WorldSavedData extends WorldSavedData {
             objectOutputStream.flush();
             byte[] data = byteArrayOutputStream.toByteArray();
             nbtTagCompound.setByteArray(NBTTag_UUID_Name, data);
-//            objectOutputStream.close();
-//            byteArrayOutputStream.close();
+            // objectOutputStream.close();
+            // byteArrayOutputStream.close();
             TwistSpaceTechnology.LOG.info("test writeToNBT: NBTTag_UUID_Name Success!");
         } catch (IOException exception) {
             System.out.println(NBTTag_UUID_Name + " SAVE FAILED");
