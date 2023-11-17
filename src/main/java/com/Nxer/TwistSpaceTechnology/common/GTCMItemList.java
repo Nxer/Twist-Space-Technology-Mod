@@ -41,6 +41,9 @@ public enum GTCMItemList implements IItemContainer {
     CrystallineInfinitier,
 
     // DSP
+    SolarSail,
+    DysonSphereFrameComponent,
+    SmallLaunchVehicle,
     DSPLauncher,
 
     // single block Machines

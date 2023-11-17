@@ -33,7 +33,9 @@ public class ItemRegister {
         GTCMItemList.PerfectLapotronCrystal.set(initItem01("Perfect Lapotron Crystal", 6, new String[]{ TextHandler.texter("Immaculate !", "tooltips.PerfectLapotronCrystal.line1")}));
         GTCMItemList.EnergyCrystalShard.set(initItem01("Energy Crystal Shard", 7, new String[]{ TextHandler.texter("A red crystal shard, doesn't look like anything special.", "tooltips.EnergyCrystalShard.line1")}));
         GTCMItemList.PerfectEnergyCrystal.set(initItem01("Perfect Energy Crystal", 8, new String[]{ TextHandler.texter("As it grew in size, it displayed incredible traits on energy control.", "tooltips.PerfectEnergyCrystal.line1")}));
-        
+        GTCMItemList.SolarSail.set(initItem01("Solar Sail",9, new String[]{TextHandler.texter("Collect and concentrate light energy.","tooltips.SolarSail.line1")}));
+        GTCMItemList.DysonSphereFrameComponent.set(initItem01("Dyson Sphere Frame Component", 10, new String[]{TextHandler.texter("Stellar gravity can't destroy these structures, even black hole.", "tooltips.DysonSphereFrameComponent.line1")}));
+        GTCMItemList.SmallLaunchVehicle.set(initItem01("Small Launch Vehicle", 11, new String[]{TextHandler.texter("Subtle and sophisticated.", "tooltips.SmallLaunchVehicle.line1")}));
         
         
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));

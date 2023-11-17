@@ -1,8 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehicle;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
@@ -15,16 +12,13 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -33,120 +27,55 @@ import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 
-public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
-    implements IConstructable, ISurvivalConstructable, IDSP_IO {
+public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
+    implements IConstructable, ISurvivalConstructable, IDSP_IO, IGlobalWirelessEnergy {
 
     // region Class Constructor
-    public TST_DSPLauncher(int aID, String aName, String aNameRegional) {
+    public TST_DSPReceiver(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public TST_DSPLauncher(String aName) {
+    public TST_DSPReceiver(String aName) {
         super(aName);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_DSPLauncher(this.mName);
+        return new TST_DSPReceiver(this.mName);
     }
 
     // endregion
 
     // region Processing Logic
-    private String ownerName;
-    private int dimID;
-    private DSP_DataCell dspDataCell;
-    private IGregTechTileEntity baseMetaTileEntity;
 
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            private long addDSPSolarSailAmount = 0;
-            private long addDSPNodeAmount = 0;
-
-        };
-    }
-
+    @NotNull
     @Override
-    @Nonnull
     public CheckRecipeResult checkProcessing() {
-        // If no logic is found, try legacy checkRecipe
-        if (processingLogic == null) {
-            return checkRecipe(mInventory[1]) ? CheckRecipeResultRegistry.SUCCESSFUL
-                : CheckRecipeResultRegistry.NO_RECIPE;
-        }
-
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration();
-        setEnergyUsage(processingLogic);
-
-        ItemStack[] outputItems = processingLogic.getOutputItems();
-        for (ItemStack items : outputItems) {
-            if (metaItemEqual(items, SolarSail.get(1))) {
-                dspDataCell.addDSPSolarSail(items.stackSize);
-            } else if (metaItemEqual(items, SmallLaunchVehicle.get(1))) {
-                dspDataCell.addDSPNode(items.stackSize);
-            }
-        }
-
-        // mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
-        return result;
+        return super.checkProcessing();
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return GTCMRecipe.instance.DSP_LauncherRecipes;
+    public boolean onRunningTick(ItemStack aStack) {
+        return super.onRunningTick(aStack);
     }
 
-    /**
-     * Init information.
-     * 
-     * @param aBaseMetaTileEntity This machine tile entity.
-     */
-    @Override
-    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-
-        if (aBaseMetaTileEntity.isServerSide() && (aTick == 1)) {
-            this.baseMetaTileEntity = aBaseMetaTileEntity;
-            this.dimID = getDimID(aBaseMetaTileEntity);
-            this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);
-            this.dspDataCell = getOrInitDSPData(ownerName, dimID);
-        }
-
-        super.onPreTick(aBaseMetaTileEntity, aTick);
-
-    }
-
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
     // endregion
 
     // region Structure
     // spotless:off
+	@Override
+	public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+		return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+	}
 	
 	@Override
 	public void construct(ItemStack stackSize, boolean hintsOnly) {
@@ -169,39 +98,38 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 			false,
 			true);
 	}
-	private static final String STRUCTURE_PIECE_MAIN = "mainDSPLauncher";
+	
+	private static final String STRUCTURE_PIECE_MAIN = "mainDSPReceiver";
 	private final int horizontalOffSet = 1;
 	private final int verticalOffSet = 1;
 	private final int depthOffSet = 0;
 	@Override
-	public IStructureDefinition<TST_DSPLauncher> getStructureDefinition() {
-		return IStructureDefinition.<TST_DSPLauncher>builder()
-			       .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
-			                       .addElement(
-				                       'A',
-				                       GT_HatchElementBuilder.<TST_DSPLauncher>builder()
-				                                             .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
-				                                             .adder(TST_DSPLauncher::addToMachineList)
-				                                             .casingIndex(176)
-				                                             .dot(1)
-				                                             .buildAndChain(GregTech_API.sBlockCasings8, 0))
-                   .build();
+	public IStructureDefinition<TST_DSPReceiver> getStructureDefinition() {
+		return IStructureDefinition.<TST_DSPReceiver>builder()
+		                           .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
+		                           .addElement(
+			                           'A',
+			                           GT_HatchElementBuilder.<TST_DSPReceiver>builder()
+			                                                 .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
+			                                                 .adder(TST_DSPReceiver::addToMachineList)
+			                                                 .casingIndex(176)
+			                                                 .dot(1)
+			                                                 .buildAndChain(GregTech_API.sBlockCasings8, 0))
+		                           .build();
 	}
-	
 	private final String[][] shapeMain = new String[][]{{
-															"AAA",
-															"A~A",
-															"AAA"
-														},{
-															"AAA",
-															"AAA",
-															"AAA"
-														},{
-															"AAA",
-															"AAA",
-															"AAA"
-														}};
-	
+		"AAA",
+		"A~A",
+		"AAA"
+	},{
+		"AAA",
+		"AAA",
+		"AAA"
+	},{
+		"AAA",
+		"AAA",
+		"AAA"
+	}};
 	// spotless:on
     // endregion
 

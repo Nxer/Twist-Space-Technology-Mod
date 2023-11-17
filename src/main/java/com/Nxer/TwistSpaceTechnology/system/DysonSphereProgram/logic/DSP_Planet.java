@@ -2,6 +2,8 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic;
 
 // spotless:off
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+
 import java.io.Serializable;
 
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.*;
@@ -65,11 +67,12 @@ public enum DSP_Planet implements Serializable {
     Neper(90, 1, AmunRa),
     MehenBelt(95, 1, AmunRa),
 
-    ;
+    //
+    DSP_Planet_NULL(-114, 0, DSP_Galaxy_NULL),;
 
     public final int dimensionID;
     public final double planetaryCoefficient;
-    private final DSP_Galaxy dependentGalaxy;
+    public final DSP_Galaxy dependentGalaxy;
 
     DSP_Planet(int dimID, double planetaryCoefficient, DSP_Galaxy dependentGalaxy) {
         this.dimensionID = dimID;
@@ -85,6 +88,21 @@ public enum DSP_Planet implements Serializable {
             }
         }
         return 0;
+    }
+
+    public static DSP_Planet getPlanetFromDimID(int dimID) {
+        if (dimID >= 180 && dimID != 227) return OverWorld;
+        for (DSP_Planet planet : DSP_Planet.values()) {
+            if (planet.dimensionID == dimID) {
+                return planet;
+            }
+        }
+        return DSP_Planet_NULL;
+    }
+
+    public static DSP_Galaxy getGalaxyFromDimID(int dimID) {
+        TwistSpaceTechnology.LOG.info(getPlanetFromDimID(dimID).dependentGalaxy);
+        return getPlanetFromDimID(dimID).dependentGalaxy;
     }
 
 }

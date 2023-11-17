@@ -15,7 +15,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
@@ -45,7 +44,24 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                 break;
             }
 
+            // join team command
             case "dsp_join" -> {
+                // check
+                if (args.length < 3) {
+                    // spotless:off
+                    sender.addChatMessage(
+                        new ChatComponentText(
+                            EnumChatFormatting.RED + texter("Invalid command.", "TST_Command.InvalidCommand")));
+                    sender.addChatMessage(
+                        new ChatComponentText(
+                            "↓ Use this to join " + EnumChatFormatting.AQUA + "User1" + EnumChatFormatting.RESET + " to " + EnumChatFormatting.AQUA + "User2" + EnumChatFormatting.RESET + " team ↓"));
+                    sender.addChatMessage(
+                        new ChatComponentText(
+                            "/tst dsp_join " + EnumChatFormatting.AQUA + "User1 " + EnumChatFormatting.AQUA + "User2"));
+                    // spotless:on
+                    break;
+                }
+
                 String waitJoinID = args[1];
                 String toJoinID = args[2];
                 if (waitJoinID.isEmpty() || toJoinID.isEmpty()) {
@@ -55,23 +71,27 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                     break;
                 }
                 joinUserTeam(waitJoinID, toJoinID);
-                TwistSpaceTechnology.LOG.info("test command dsp_join: " + waitJoinID + " -> " + toJoinID);
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        "Joined " + EnumChatFormatting.AQUA
+                            + waitJoinID
+                            + EnumChatFormatting.RESET
+                            + " to "
+                            + EnumChatFormatting.AQUA
+                            + toJoinID
+                            + " ."));
                 break;
             }
 
             case "dsp_check" -> {
+                String checkName;
+
                 if (args.length < 2) {
-                    sender.addChatMessage(
-                        new ChatComponentText(
-                            "↓ Use this to check " + EnumChatFormatting.AQUA
-                                + "User"
-                                + EnumChatFormatting.RESET
-                                + " Dyson Sphere Program Information. ↓"));
-                    sender.addChatMessage(new ChatComponentText("/tst dsp_check " + EnumChatFormatting.AQUA + "User"));
-                    break;
+                    checkName = sender.getCommandSenderName();
+                } else {
+                    checkName = args[1];
                 }
 
-                String checkName = args[1];
                 if (DSP_TeamName == null) {
                     sender.addChatMessage(
                         new ChatComponentText(
@@ -148,7 +168,100 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                                 + " Dyson Sphere: "
                                 + dataCell.getValue()
                                 + "."));
+                    sender.addChatMessage(
+                        new ChatComponentText(
+                            EnumChatFormatting.BLUE + "-----------------------------------------------"));
                 }
+                break;
+            }
+
+            case "dsp_setSolarSail" -> {
+
+                // check
+                if (args.length < 2) {
+                    // spotless:off
+                    sender.addChatMessage(
+                        new ChatComponentText(
+                            EnumChatFormatting.RED + texter("Invalid command.", "TST_Command.InvalidCommand")));
+                    sender.addChatMessage(
+                        new ChatComponentText(
+                            "↓ Use this to set Dyson Sphere Solar Sail " + EnumChatFormatting.GREEN + "amount" + EnumChatFormatting.RESET + " of you or your " + EnumChatFormatting.AQUA + "team" + EnumChatFormatting.RESET + " in current galaxy or in " +EnumChatFormatting.AQUA + " dimension's galaxy " +EnumChatFormatting.RESET+ "↓"));
+                    sender.addChatMessage(
+                        new ChatComponentText(
+                            "/tst dsp_setSolarSail " + EnumChatFormatting.GREEN + "amount " + EnumChatFormatting.AQUA + "<dimID> <team name>"));
+                    sender.addChatMessage(
+                        new ChatComponentText(EnumChatFormatting.BLUE +"-----------------------------------------------"));
+                    // spotless:on
+                    break;
+                }
+                long solarSail;
+                int dimID = -114;
+                String teamName = "defaultPlayerWithErrorInformation";
+
+                try {
+                    solarSail = Long.parseLong(args[1]);
+                } catch (NumberFormatException e) {
+                    sender.addChatMessage(
+                        new ChatComponentText(
+                            EnumChatFormatting.RED + texter(
+                                "Input format error, please check your inputs.",
+                                "TST_Command.InputFormatError")));
+                    break;
+                }
+
+                /*
+                 * /tst dsp_setSolarSail <amount> <dimID> <teamName>
+                 * /tst dsp_setSolarSail <amount> <dimID>
+                 * /tst dsp_setSolarSail <amount>
+                 */
+                if (args.length == 2) {
+                    // use default dimID from player now
+                    // use default team from player or init team of player
+                    dimID = sender.getEntityWorld().provider.dimensionId;
+                    teamName = sender.getCommandSenderName();
+
+                } else if (args.length == 3) {
+                    try {
+                        dimID = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        sender.addChatMessage(
+                            new ChatComponentText(
+                                EnumChatFormatting.RED + texter(
+                                    "Input format error, please check your inputs.",
+                                    "TST_Command.InputFormatError")));
+                        break;
+                    }
+                } else {
+                    try {
+                        dimID = Integer.parseInt(args[2]);
+                        teamName = args[3];
+                    } catch (NumberFormatException e) {
+                        sender.addChatMessage(
+                            new ChatComponentText(
+                                EnumChatFormatting.RED + texter(
+                                    "Input format error, please check your inputs.",
+                                    "TST_Command.InputFormatError")));
+                        break;
+                    }
+                }
+                DSP_DataCell dataCell = getOrInitDSPData(teamName, dimID);
+                dataCell.setDSPSolarSail(solarSail);
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        EnumChatFormatting.GOLD + "Succeed to set Solar Sail amount to "
+                            + EnumChatFormatting.GREEN
+                            + solarSail
+                            + EnumChatFormatting.GOLD
+                            + " , team "
+                            + EnumChatFormatting.RESET
+                            + teamName
+                            + EnumChatFormatting.GOLD
+                            + " in Galaxy "
+                            + EnumChatFormatting.RESET
+                            + dataCell.getGalaxy()));
+                sender.addChatMessage(
+                    new ChatComponentText(EnumChatFormatting.BLUE + "-----------------------------------------------"));
+
                 break;
             }
 
@@ -165,9 +278,10 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         List<String> l = new ArrayList<>();
         String text = args.length == 0 ? "" : args[0].trim();
-        if (args.length == 0 || args.length == 1 && (text.isEmpty() || Stream.of("dsp_join", "dsp_check")
-            .anyMatch(s -> s.startsWith(text)))) {
-            Stream.of("dsp_join", "dsp_check")
+        if (args.length == 0
+            || args.length == 1 && (text.isEmpty() || Stream.of("dsp_join", "dsp_check", "dsp_setSolarSail")
+                .anyMatch(s -> s.startsWith(text)))) {
+            Stream.of("dsp_join", "dsp_check", "dsp_setSolarSail")
                 .filter(s -> text.isEmpty() || s.startsWith(text))
                 .forEach(l::add);
         }
@@ -200,6 +314,32 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                     + EnumChatFormatting.RESET
                     + " Dyson Sphere Program Information. ↓"));
         sender.addChatMessage(new ChatComponentText("/tst dsp_check " + EnumChatFormatting.AQUA + "User1"));
+        sender.addChatMessage(
+            new ChatComponentText(
+                "↓ Use this to set Dyson Sphere Solar Sail " + EnumChatFormatting.GREEN
+                    + "amount"
+                    + EnumChatFormatting.RESET
+                    + " of you or your "
+                    + EnumChatFormatting.AQUA
+                    + "team"
+                    + EnumChatFormatting.RESET
+                    + " in current galaxy or in "
+                    + EnumChatFormatting.AQUA
+                    + " dimension's galaxy "
+                    + EnumChatFormatting.RESET
+                    + "↓"));
+        sender.addChatMessage(
+            new ChatComponentText(
+                "/tst dsp_setSolarSail " + EnumChatFormatting.GREEN
+                    + "amount "
+                    + EnumChatFormatting.AQUA
+                    + "<dimID> <team name>"));
+        sender.addChatMessage(
+            new ChatComponentText(EnumChatFormatting.BLUE + "-----------------------------------------------"));
     }
+
+    // region Methods
+
+    // endregion
 
 }

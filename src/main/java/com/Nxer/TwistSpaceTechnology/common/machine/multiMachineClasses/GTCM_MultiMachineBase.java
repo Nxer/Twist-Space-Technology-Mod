@@ -160,6 +160,11 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     @Override
+    public boolean doRandomMaintenanceDamage() {
+        return true;
+    }
+
+    @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }

@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 // spotless:on
 public enum DSP_Galaxy implements Serializable {
 
-    _NULL(0),
     SolarSystem(1, OverWorld, TheEnd, Miranda, Haumea, Pluto, Triton, Proteus, Oberon, Callisto, Titan, Ganymede, Ceres,
         Enceladus, Deimos, Venus, Phobos, Mercury, Io, Europa, KuiperBelt, Asteroids, Mars, Moon, Makemake,
         TwilightForest),
@@ -16,7 +15,8 @@ public enum DSP_Galaxy implements Serializable {
     Vega(2.98, VegaB),
     TCeti(1.9, TCetiE),
     CentauriB(2.3, CentauriBb),
-    AmunRa(0.9, Seth, Horus, Anubis, Maahes, Neper, MehenBelt)
+    AmunRa(0.9, Seth, Horus, Anubis, Maahes, Neper, MehenBelt),
+    DSP_Galaxy_NULL(0, DSP_Planet_NULL)
 
     ;
 
@@ -26,6 +26,11 @@ public enum DSP_Galaxy implements Serializable {
     DSP_Galaxy(double stellarCoefficient, DSP_Planet... containedPlanets) {
         this.stellarCoefficient = stellarCoefficient;
         this.containedPlanets = containedPlanets;
+    }
+
+    DSP_Galaxy() {
+        this.containedPlanets = new DSP_Planet[] { OverWorld };
+        this.stellarCoefficient = 0;
     }
 
     public DSP_Planet[] getContainedDimensions() {
@@ -46,7 +51,7 @@ public enum DSP_Galaxy implements Serializable {
             if (galaxy.isContainedDim(dimID)) return galaxy;
         }
 
-        return _NULL;
+        return DSP_Galaxy_NULL;
     }
 
 }

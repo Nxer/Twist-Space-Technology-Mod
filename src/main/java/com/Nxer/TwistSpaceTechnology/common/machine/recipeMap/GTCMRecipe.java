@@ -69,7 +69,7 @@ public class GTCMRecipe {
 
             useModularUI(true);
             // setProgressBarPos(78, getItemRowCount() * 18);
-            setLogoPos(79, (getItemRowCount() + getFluidRowCount()) * 18);
+            setLogoPos(79, (getItemRowCount() + getFluidRowCount()) * 18 - 27);
             setUsualFluidInputCount(aUsualFluidInputCount);
             setUsualFluidOutputCount(aUsualFluidOutputCount);
             setDisableOptimize(disableOptimize);
@@ -197,6 +197,26 @@ public class GTCMRecipe {
         4,
         4,
         1,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
+    public final GTCMRecipeMap DSP_LauncherRecipes = new GTCMRecipeMap(
+        new HashSet<>(2),
+        "gtcm.recipe.DSPLauncherRecipes",
+        NameDSPLauncher,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        1,
+        1,
+        1,
+        0,
         true,
         0,
         0,
