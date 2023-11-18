@@ -44,7 +44,10 @@ public enum GTCMItemList implements IItemContainer {
     SolarSail,
     DysonSphereFrameComponent,
     SmallLaunchVehicle,
+    EmptySmallLaunchVehicle,
+    CriticalPhoton,
     DSPLauncher,
+    DSPReceiver,
 
     // single block Machines
     InfiniteAirHatch,

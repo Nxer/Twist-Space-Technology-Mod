@@ -70,7 +70,7 @@ public enum DSP_Planet implements Serializable {
     //
     DSP_Planet_NULL(-114, 0, DSP_Galaxy_NULL),;
 
-    public final int dimensionID;
+    public int dimensionID;
     public final double planetaryCoefficient;
     public final DSP_Galaxy dependentGalaxy;
 
@@ -78,6 +78,11 @@ public enum DSP_Planet implements Serializable {
         this.dimensionID = dimID;
         this.planetaryCoefficient = planetaryCoefficient;
         this.dependentGalaxy = dependentGalaxy;
+    }
+
+    public DSP_Planet setDimensionID(int dimID) {
+        this.dimensionID = dimID;
+        return this;
     }
 
     public static double getPlanetaryCoefficientWithDimID(int dimID) {
@@ -103,6 +108,10 @@ public enum DSP_Planet implements Serializable {
     public static DSP_Galaxy getGalaxyFromDimID(int dimID) {
         TwistSpaceTechnology.LOG.info(getPlanetFromDimID(dimID).dependentGalaxy);
         return getPlanetFromDimID(dimID).dependentGalaxy;
+    }
+
+    public static void readDimIDFromGSCfg() {
+
     }
 
 }

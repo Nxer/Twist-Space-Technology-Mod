@@ -31,6 +31,7 @@ public class TextLocalization {
             + " hologram projector to build the main structure.",
         "BLUE_PRINT_INFO");
     
+    public static final String DSPName = texter(EnumChatFormatting.BLUE+"Dyson Sphere Program","DSPName");
     // endregion
     
     // region casing
@@ -293,6 +294,11 @@ public class TextLocalization {
     
     // region DSPLauncher
     public static final String NameDSPLauncher = texter("Dyson Sphere Module Launcher","NameDSPLauncher");
+    
+    // endregion
+    
+    // region DSPReceiver
+    public static final String NameDSPReceiver = texter("Dyson Sphere Ray Receiver","NameDSPReceiver");
     
     
     // endregion

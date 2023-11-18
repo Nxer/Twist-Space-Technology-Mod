@@ -1,11 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic;
 
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.solarSailPowerPoint;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData.markDataDirty;
+
 import java.io.Serializable;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
-import gregtech.api.enums.TierEU;
-
+// spotless:off
 public class DSP_DataCell implements Serializable {
 
     // region Variables
@@ -13,7 +15,10 @@ public class DSP_DataCell implements Serializable {
     private DSP_Galaxy galaxy;
     private long amountDSPSolarSail;
     private long amountDSPNode;
-    public static final long solarSailPowerPoint = TierEU.UV;
+    private boolean dirty;
+    private long maxDSPPowerPoint;
+    private long usedDSPPowerPoint;
+    
     // endregion
 
     // region Class Constructor
@@ -22,6 +27,9 @@ public class DSP_DataCell implements Serializable {
         this.galaxy = galaxy;
         this.amountDSPSolarSail = 0;
         this.amountDSPNode = 0;
+        this.dirty = true;
+        this.maxDSPPowerPoint = 0;
+        this.usedDSPPowerPoint = 0;
     }
 
     public DSP_DataCell() {
@@ -29,37 +37,143 @@ public class DSP_DataCell implements Serializable {
         this.galaxy = DSP_Galaxy.DSP_Galaxy_NULL;
         this.amountDSPNode = 0;
         this.amountDSPSolarSail = 0;
+        this.dirty = true;
+        this.maxDSPPowerPoint = 0;
+        this.usedDSPPowerPoint = 0;
     }
 
     // endregion
 
     // region Methods
-    public long getDSPPowerPoint() {
-        return (long) (solarSailPowerPoint * this.amountDSPSolarSail * Math.pow(this.amountDSPNode + 1, 0.5));
+    
+    /**
+     * @return Remaining Available DSP Power Points
+     */
+    public long getDSPPowerPointCanUse(){
+        return this.getMaxDSPPowerPoint() - this.usedDSPPowerPoint;
+    }
+    
+    /**
+     * Try to decrease the DSP Power Points used part amount.
+     * @param amount    The <b style:"color=#00FF00">amount</b>.
+     * @return          True means ok; <p>False means something was error.
+     */
+    public boolean tryDecreaseUsedPowerPoint(long amount){
+        if (this.usedDSPPowerPoint >= amount){
+            this.usedDSPPowerPoint -= amount;
+            markDataDirty();
+            return true;
+        }
+        TwistSpaceTechnology.LOG.info("Error ! Trying decrease an amount larger than used DSP Power Point !");
+        TwistSpaceTechnology.LOG.info("Trying amount: "+amount+" ; Used point: "+this.usedDSPPowerPoint+" ;");
+        return false;
+    }
+    
+    /**
+     * Try to request using DSP Power Points.
+     *
+     * @param amount    The points request.
+     * @return          True means success; <p>False means nothing happened, request failed.</p>
+     */
+    public boolean tryUsePowerPoint(long amount){
+        if (this.canUsePowerPoint(amount)){
+            this.usedDSPPowerPoint += amount;
+            markDataDirty();
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     *
+     * @param amount    The trying amount.
+     * @return          False means don't do.
+     */
+    public boolean canUsePowerPoint(long amount){
+        return this.usedDSPPowerPoint + amount <= this.getMaxDSPPowerPoint();
+    }
+    
+    @SuppressWarnings("unsafe")
+    public boolean decreaseUsedPowerPointUnsafely(long amount){
+        markDataDirty();
+        if (tryDecreaseUsedPowerPoint(amount)){
+            return true;
+        }
+        this.markDirty().usedDSPPowerPoint -= amount;
+        return false;
+    }
+    
+    @SuppressWarnings("unsafe")
+    public DSP_DataCell setUsedPowerPointUnsafely(long amount){
+        this.markDirty().usedDSPPowerPoint = amount;
+        markDataDirty();
+        TwistSpaceTechnology.LOG.info("Set 0 to UsedPowerPoint Unsafely at: "+this);
+        return this;
+    }
+    
+    public DSP_DataCell flushMaxDSPPowerPoint(){
+        this.cancelDirty()
+            .setMaxDSPPowerPoint(
+                (long) (
+                    solarSailPowerPoint
+                        * this.amountDSPSolarSail
+                        * Math.pow(this.amountDSPNode + 1, 0.5)));
+        return this;
+    }
+    
+    public long getMaxDSPPowerPoint() {
+        if (this.dirty){
+            return this.flushMaxDSPPowerPoint().maxDSPPowerPoint;
+        }
+        return this.maxDSPPowerPoint;
     }
 
     public DSP_DataCell addDSPSolarSail(long amount) {
         this.amountDSPSolarSail += amount;
-        TwistSpaceTechnology.LOG.info("test addDSPSolarSail: add " + amount + " at " + this);
+        this.flushMaxDSPPowerPoint();
+        markDataDirty();
         return this;
     }
 
     public DSP_DataCell addDSPNode(long amount) {
         this.amountDSPNode += amount;
-        TwistSpaceTechnology.LOG.info("test addDSPNode: add " + amount + " at " + this);
+        this.flushMaxDSPPowerPoint();
+        markDataDirty();
+        return this;
+    }
+    
+    public DSP_DataCell setMaxDSPPowerPoint(long amount){
+        this.maxDSPPowerPoint = amount;
+        markDataDirty();
+        return this;
+    }
+    
+    public DSP_DataCell markDirty(){
+        this.dirty = true;
+        return this;
+    }
+    
+    public DSP_DataCell cancelDirty(){
+        this.dirty = false;
         return this;
     }
 
     @Override
     public String toString() {
         return "DSP_DataCell{ ownerName:" + ownerName
-            + " , galaxy:"
-            + galaxy
-            + " , amountDSPSolarSail:"
-            + amountDSPSolarSail
-            + " , amountDSPNode:"
-            + amountDSPNode
-            + " }";
+                   + " , galaxy:"
+                   + galaxy
+                   + " , amountDSPSolarSail:"
+                   + amountDSPSolarSail
+                   + " , amountDSPNode:"
+                   + amountDSPNode
+                   + " , maxDSPPowerPoint:"
+                   + maxDSPPowerPoint
+                   + " , usedDSPPowerPoint:"
+                   + usedDSPPowerPoint
+                   + " , PowerPointCanUse: "
+                   + getDSPPowerPointCanUse()
+                   + " }";
     }
 
     // endregion
@@ -72,6 +186,7 @@ public class DSP_DataCell implements Serializable {
 
     public DSP_DataCell setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+        markDataDirty();
         return this;
     }
 
@@ -81,6 +196,7 @@ public class DSP_DataCell implements Serializable {
 
     public DSP_DataCell setGalaxy(DSP_Galaxy galaxy) {
         this.galaxy = galaxy;
+        markDataDirty();
         return this;
     }
 
@@ -90,6 +206,8 @@ public class DSP_DataCell implements Serializable {
 
     public DSP_DataCell setDSPSolarSail(long amountDSPSolarSail) {
         this.amountDSPSolarSail = amountDSPSolarSail;
+        this.flushMaxDSPPowerPoint();
+        markDataDirty();
         return this;
     }
 
@@ -99,9 +217,12 @@ public class DSP_DataCell implements Serializable {
 
     public DSP_DataCell setDSPNode(long amountDSPNode) {
         this.amountDSPNode = amountDSPNode;
+        this.flushMaxDSPPowerPoint();
+        markDataDirty();
         return this;
     }
 
     // endregion
 
+    // spotless:on
 }

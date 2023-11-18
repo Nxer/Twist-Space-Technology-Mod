@@ -15,13 +15,19 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import java.util.UUID;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_OverclockCalculator;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
@@ -33,6 +39,7 @@ import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -42,10 +49,11 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 
 public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
-    implements IConstructable, ISurvivalConstructable, IDSP_IO {
+    implements IConstructable, ISurvivalConstructable, IDSP_IO, IGlobalWirelessEnergy {
 
     // region Class Constructor
     public TST_DSPLauncher(int aID, String aName, String aNameRegional) {
@@ -65,16 +73,48 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 
     // region Processing Logic
     private String ownerName;
+    private UUID ownerUUID;
     private int dimID;
     private DSP_DataCell dspDataCell;
     private IGregTechTileEntity baseMetaTileEntity;
 
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 3];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length - 2] = EnumChatFormatting.GOLD + "Owner Name: " + EnumChatFormatting.RESET + ownerName;
+        ret[origin.length - 1] = EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + ownerUUID;
+        ret[origin.length] = EnumChatFormatting.GOLD + "DSP Data Cell: " + EnumChatFormatting.RESET + dspDataCell;
+        return ret;
+    }
+
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
-            private long addDSPSolarSailAmount = 0;
-            private long addDSPNodeAmount = 0;
+            @NotNull
+            @Override
+            protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+                if (!addEUToGlobalEnergyMap(ownerUUID, -recipe.mEUt * recipe.mDuration)) {
+                    return CheckRecipeResultRegistry.insufficientPower((long) recipe.mEUt * recipe.mDuration);
+                }
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
 
+            @Nonnull
+            @Override
+            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+                return GTCM_OverclockCalculator.ofNoOverclock(recipe);
+            }
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                CheckRecipeResult result = super.process();
+                // Power will be directly consumed through wireless
+                setCalculatedEut(0);
+                return result;
+            }
         };
     }
 
@@ -116,6 +156,14 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     }
 
     @Override
+    protected void setProcessingLogicPower(ProcessingLogic logic) {
+        // The voltage is only used for recipe finding
+        logic.setAvailableVoltage(Long.MAX_VALUE);
+        logic.setAvailableAmperage(1);
+        logic.setAmperageOC(false);
+    }
+
+    @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         return GTCMRecipe.instance.DSP_LauncherRecipes;
     }
@@ -132,6 +180,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             this.baseMetaTileEntity = aBaseMetaTileEntity;
             this.dimID = getDimID(aBaseMetaTileEntity);
             this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);
+            this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
             this.dspDataCell = getOrInitDSPData(ownerName, dimID);
         }
 

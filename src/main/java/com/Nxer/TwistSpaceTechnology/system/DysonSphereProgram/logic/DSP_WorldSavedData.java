@@ -46,6 +46,14 @@ public class DSP_WorldSavedData extends WorldSavedData {
         INSTANCE.markDirty();
     }
 
+    public static void markDataDirty() {
+        try {
+            INSTANCE.markDirty();
+        } catch (Exception e) {
+            TwistSpaceTechnology.LOG.info("Failed to mark World Save Data dirty.");
+        }
+    }
+
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {

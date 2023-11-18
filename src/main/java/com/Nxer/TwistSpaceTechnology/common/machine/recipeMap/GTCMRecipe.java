@@ -227,4 +227,24 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap DSP_FakeRecipes = new GTCMRecipeMap(
+        new HashSet<>(2),
+        "gtcm.recipe.DSPFakeRecipes",
+        "",
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        1,
+        1,
+        1,
+        0,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        false);
+
 }

@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.item.items;
 
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01.initItem01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,9 +34,11 @@ public class ItemRegister {
         GTCMItemList.PerfectLapotronCrystal.set(initItem01("Perfect Lapotron Crystal", 6, new String[]{ TextHandler.texter("Immaculate !", "tooltips.PerfectLapotronCrystal.line1")}));
         GTCMItemList.EnergyCrystalShard.set(initItem01("Energy Crystal Shard", 7, new String[]{ TextHandler.texter("A red crystal shard, doesn't look like anything special.", "tooltips.EnergyCrystalShard.line1")}));
         GTCMItemList.PerfectEnergyCrystal.set(initItem01("Perfect Energy Crystal", 8, new String[]{ TextHandler.texter("As it grew in size, it displayed incredible traits on energy control.", "tooltips.PerfectEnergyCrystal.line1")}));
-        GTCMItemList.SolarSail.set(initItem01("Solar Sail",9, new String[]{TextHandler.texter("Collect and concentrate light energy.","tooltips.SolarSail.line1")}));
-        GTCMItemList.DysonSphereFrameComponent.set(initItem01("Dyson Sphere Frame Component", 10, new String[]{TextHandler.texter("Stellar gravity can't destroy these structures, even black hole.", "tooltips.DysonSphereFrameComponent.line1")}));
-        GTCMItemList.SmallLaunchVehicle.set(initItem01("Small Launch Vehicle", 11, new String[]{TextHandler.texter("Subtle and sophisticated.", "tooltips.SmallLaunchVehicle.line1")}));
+        GTCMItemList.SolarSail.set(initItem01("Solar Sail",9, new String[]{TextHandler.texter("Collect and concentrate light energy.","tooltips.SolarSail.line1"), DSPName}));
+        GTCMItemList.DysonSphereFrameComponent.set(initItem01("Dyson Sphere Frame Component", 10, new String[]{TextHandler.texter("Stellar gravity can't destroy these structures, even black hole.", "tooltips.DysonSphereFrameComponent.line1"), DSPName}));
+        GTCMItemList.SmallLaunchVehicle.set(initItem01("Small Launch Vehicle", 11, new String[]{TextHandler.texter("Subtle and sophisticated.", "tooltips.SmallLaunchVehicle.line1"), DSPName}));
+        GTCMItemList.EmptySmallLaunchVehicle.set(initItem01("Empty Small Launch Vehicle", 12, new String[]{TextHandler.texter("Subtle and sophisticated but Empty.", "tooltips.EmptySmallLaunchVehicle.line1"), DSPName}));
+        GTCMItemList.CriticalPhoton.set(initItem01("Critical Photon", 13, new String[]{TextHandler.texter("The future has arrived.", "tooltips.CriticalPhoton.line1"), DSPName}));
         
         
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));

@@ -1,5 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
@@ -12,13 +15,22 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import java.util.UUID;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -32,9 +44,12 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.items.GT_IntegratedCircuit_Item;
 
 public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     implements IConstructable, ISurvivalConstructable, IDSP_IO, IGlobalWirelessEnergy {
@@ -57,15 +72,181 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     // region Processing Logic
 
+    private String ownerName;
+    private UUID ownerUUID;
+    private byte mode = 0;
+    private long usedPowerPoint = 0;
+    private boolean isUsing = false;
+    private long storageEU = 0;
+    private int dimID;
+    private DSP_DataCell dspDataCell;
+    private IGregTechTileEntity baseMetaTileEntity;
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 3];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length - 2] = EnumChatFormatting.GOLD + "Generating EU/t: "
+            + EnumChatFormatting.RESET
+            + generateTickEU();
+        ret[origin.length - 1] = EnumChatFormatting.GOLD + "Used Power Point: "
+            + EnumChatFormatting.RESET
+            + usedPowerPoint;
+        ret[origin.length] = EnumChatFormatting.GOLD + "DSP Data Cell: " + EnumChatFormatting.RESET + dspDataCell;
+        return ret;
+        /*
+         * generateTickEU
+         * usedPowerPoint
+         */
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.mode = (byte) ((this.mode + 1) % 2);
+            GT_Utility
+                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("TST_DSPReceiver.modeMsg." + this.mode));
+        }
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mode", mode);
+        aNBT.setLong("usedPowerPoint", usedPowerPoint);
+        aNBT.setLong("storageEU", storageEU);
+        aNBT.setBoolean("isUsing", isUsing);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        mode = aNBT.getByte("mode");
+        usedPowerPoint = aNBT.getLong("usedPowerPoint");
+        storageEU = aNBT.getLong("storageEU");
+        isUsing = aNBT.getBoolean("isUsing");
+    }
+
+    /**
+     * Get how many DSP power points this machine use.
+     * Limited by putting integrated circuit in controller block slot.
+     * 
+     * @return The amount.
+     */
+    private long getPowerPoint() {
+        if (dspDataCell == null) return 0;
+        // Limit dsp max * circuit.meta / circuit.stackSize
+        ItemStack controllerStack = getControllerSlot();
+        long maxPowerPointLimit = dspDataCell.getMaxDSPPowerPoint();
+        long canUse = dspDataCell.getDSPPowerPointCanUse();
+        if (controllerStack != null && controllerStack.getItem() instanceof GT_IntegratedCircuit_Item) {
+            double multiplier = Math
+                .min(1, ((double) controllerStack.getItemDamage()) / ((double) controllerStack.stackSize));
+            long limited = (long) (multiplier * maxPowerPointLimit);
+            return Math.min(limited, canUse);
+        } else if (controllerStack == null) {
+            return canUse;
+        } else {
+            return 0;
+        }
+    }
+
+    private void startUsingDSP() {
+        isUsing = true;
+        usedPowerPoint = getPowerPoint();
+        if (!dspDataCell.tryUsePowerPoint(usedPowerPoint)) {
+            usedPowerPoint = 0;
+            this.stopMachine();
+            TwistSpaceTechnology.LOG.info("Error ! DSPReceiver try use DSP Power Point FAILED at " + this);
+            TwistSpaceTechnology.LOG.info("Check your Dyson Sphere Program Information!");
+        }
+    }
+
+    private void stopUsingDSP() {
+        isUsing = false;
+        if (!dspDataCell.tryDecreaseUsedPowerPoint(usedPowerPoint)) {
+            dspDataCell.setUsedPowerPointUnsafely(0);
+        }
+        usedPowerPoint = 0;
+    }
+
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
-        return super.checkProcessing();
+        mMaxProgresstime = 128;
+        return CheckRecipeResultRegistry.GENERATING;
+    }
+
+    private long generateTickEU() {
+        return (long) (dspDataCell.getGalaxy().stellarCoefficient
+            * DSP_Planet.getPlanetaryCoefficientWithDimID(this.dimID)
+            * this.usedPowerPoint);
     }
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
-        return super.onRunningTick(aStack);
+        this.storageEU += this.generateTickEU();
+        return true;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (aBaseMetaTileEntity.isServerSide()) {
+            this.baseMetaTileEntity = aBaseMetaTileEntity;
+            this.dimID = getDimID(aBaseMetaTileEntity);
+            this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);
+            this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
+            this.dspDataCell = getOrInitDSPData(ownerName, dimID);
+        }
+    }
+
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+
+        super.onPreTick(aBaseMetaTileEntity, aTick);
+
+        if (aBaseMetaTileEntity.isServerSide()) {
+
+            // Synchronize the DSP source when run machine
+            if (!isUsing && mProgresstime == 1) {
+                startUsingDSP();
+            }
+
+            // Release resource when stop machine
+            if (isUsing && mMaxProgresstime == 0) {
+                stopUsingDSP();
+            }
+
+            if (mode == 0) {
+                // Generate EU directly
+                if (this.storageEU > 0 && aTick % 128 == 0) {
+                    TwistSpaceTechnology.LOG
+                        .info("test addEUToGlobalEnergyMap: ownerUUID: " + ownerUUID + " ; storageEU: " + storageEU);
+                    addEUToGlobalEnergyMap(ownerUUID.toString(), this.storageEU);
+                    this.storageEU = 0;
+                }
+            } else if (mode == 1) {
+                // Generate Photon per int.MAX EU
+                if (storageEU >= EUPerCriticalPhoton) {
+                    int amount = (int) (storageEU / EUPerCriticalPhoton);
+                    if (this.mOutputItems == null) {
+                        this.mOutputItems = new ItemStack[] { CriticalPhoton.get(amount) };
+                    } else {
+                        // safe and more calculate
+                        for (ItemStack items : this.mOutputItems) {
+                            if (metaItemEqual(items, CriticalPhoton.get(1))) {
+                                items.stackSize += amount;
+                            }
+                        }
+                        // unsafe, low calculate and enough
+                        // this.mOutputItems[0].stackSize += amount;
+                    }
+                    storageEU -= EUPerCriticalPhoton * amount;
+                }
+            }
+        }
     }
 
     // endregion

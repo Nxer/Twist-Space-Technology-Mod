@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPReceiver;
 
 import net.minecraft.item.ItemStack;
 
@@ -19,6 +20,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 
 public class MachineLoader {
@@ -36,6 +38,7 @@ public class MachineLoader {
     public static ItemStack MoleculeDeconstructor;
     public static ItemStack CrystallineInfinitier;
     public static ItemStack DSPLauncher;
+    public static ItemStack DSPReceiver;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -128,6 +131,9 @@ public class MachineLoader {
         //
         DSPLauncher = new TST_DSPLauncher(19013, "NameDSPLauncher", NameDSPLauncher).getStackForm(1);
         GTCMItemList.DSPLauncher.set(DSPLauncher);
+
+        DSPReceiver = new TST_DSPReceiver(19014, "NameDSPReceiver", NameDSPReceiver).getStackForm(1);
+        GTCMItemList.DSPReceiver.set(DSPReceiver);
 
         // endregion
 

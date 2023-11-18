@@ -9,6 +9,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.GTCMMachineRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IntensifyChemicalDistorterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPFakeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPLauncherRecipePool;
 
 public class RecipeLoader {
@@ -18,7 +19,7 @@ public class RecipeLoader {
             new IntensifyChemicalDistorterRecipePool(), new ChemicalReactorRecipePool(),
             new PreciseHighEnergyPhotonicQuantumMasterRecipePool(), new CircuitAssemblerRecipePool(),
             new MiracleTopRecipePool(), new FluidSolidifierRecipePool(), new CrystallineInfinitierRecipePool(),
-            new DSPLauncherRecipePool() };
+            new DSPLauncherRecipePool(), new DSPFakeRecipePool() };
 
         for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
