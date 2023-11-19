@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.item.items;
 
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01.initItem01;
+import static com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems.MultiStructuresLinkTool;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemRegister {
 
     public static void registryItems() {
-        Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes };
+        Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes, BasicItems.MultiStructuresLinkTool };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.getUnlocalizedName());
@@ -33,10 +34,11 @@ public class ItemRegister {
         GTCMItemList.PerfectLapotronCrystal.set(initItem01("Perfect Lapotron Crystal", 6, new String[]{ TextHandler.texter("Immaculate !", "tooltips.PerfectLapotronCrystal.line1")}));
         GTCMItemList.EnergyCrystalShard.set(initItem01("Energy Crystal Shard", 7, new String[]{ TextHandler.texter("A red crystal shard, doesn't look like anything special.", "tooltips.EnergyCrystalShard.line1")}));
         GTCMItemList.PerfectEnergyCrystal.set(initItem01("Perfect Energy Crystal", 8, new String[]{ TextHandler.texter("As it grew in size, it displayed incredible traits on energy control.", "tooltips.PerfectEnergyCrystal.line1")}));
-        
-        
-        
+
+
+
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
+        GTCMItemList.MultiStructuresLinkTool.set(new ItemStack(MultiStructuresLinkTool,1));
     }
 // spotless:on
     public static void registry() {

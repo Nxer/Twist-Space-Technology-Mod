@@ -1,18 +1,9 @@
-package com.Nxer.TwistSpaceTechnology.common.machine;
+package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.enums.GT_HatchElement.*;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,7 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -38,16 +28,23 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
-// spotless:off
-public class GTCM_TestMultiMachine
-    extends GTCM_MultiMachineBase<GTCM_TestMultiMachine> {
-    public GTCM_TestMultiMachine(int aID, String aName, String aNameRegional) {
+public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachine {
+
+    public Test_SubStructureMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        setShape();
+        horizontalOffSet = 1;
+        verticalOffSet = 1;
+        depthOffSet = 0;
     }
 
-    public GTCM_TestMultiMachine(String aName) {
-        super(aName);
+    public Test_SubStructureMachine(String mName) {
+        super(mName);
+        horizontalOffSet = 1;
+        verticalOffSet = 1;
+        depthOffSet = 0;
     }
+
     // region Processing Logic
 
     @Override
@@ -69,29 +66,10 @@ public class GTCM_TestMultiMachine
 
     protected int mode = 0;
     private static final String STRUCTURE_PIECE_MAIN = "main";
-    private final String[][] shape = new String[][]{
-        {"AAA", "AAA", "AAA"},
-        {"A~A", "AAA", "AAA"},
-        {"AAA", "AAA", "AAA"}
-    };
-    private final int horizontalOffSet = 1;
-    private final int verticalOffSet = 1;
-    private final int depthOffSet = 0;
 
     @Override
-    public IStructureDefinition<GTCM_TestMultiMachine> getStructureDefinition() {
-        return StructureDefinition
-            .<GTCM_TestMultiMachine>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-            .addElement(
-                'A',
-                GT_HatchElementBuilder.<GTCM_TestMultiMachine>builder()
-                    .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
-                    .adder(GTCM_TestMultiMachine::addToMachineList)
-                    .casingIndex(176)
-                    .dot(1)
-                    .buildAndChain(GregTech_API.sBlockCasings8, 0))
-            .build();
+    public void setShape() {
+        shape = new String[][] { { "AAA", "AAA", "AAA" }, { "A~A", "AAA", "AAA" }, { "AAA", "AAA", "AAA" } };
     }
 
     @Override
@@ -122,7 +100,6 @@ public class GTCM_TestMultiMachine
             true);
     }
 
-
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         if (mode == 0) return GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
@@ -140,47 +117,6 @@ public class GTCM_TestMultiMachine
     }
 
     @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        // this.casingAmountActual = 0; // re-init counter
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
-    }
-
-    @Override
     public boolean supportsSingleRecipeLocking() {
         return true;
     }
@@ -188,27 +124,40 @@ public class GTCM_TestMultiMachine
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-
         aNBT.setInteger("mode", mode);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-
         mode = aNBT.getInteger("mode");
     }
 
     @Override
+    protected IStructureDefinition<Test_SubStructureMachine> internalStructureDefine() {
+        return StructureDefinition.<Test_SubStructureMachine>builder()
+            .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+            .addElement(
+                'A',
+                GT_HatchElementBuilder.<Test_SubStructureMachine>builder()
+                    .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
+                    .adder(Test_SubStructureMachine::addToMachineList)
+                    .casingIndex(176)
+                    .dot(1)
+                    .buildAndChain(GregTech_API.sBlockCasings8, 0))
+            .build();
+    }
+
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GTCM_TestMultiMachine(this.mName);
+        return new Test_SubStructureMachine(this.mName);
     }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int aColorIndex, boolean aActive, boolean aRedstone) {
+        int aColorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
-            if (aActive) return new ITexture[]{casingTexturePages[1][48], TextureFactory.builder()
+            if (aActive) return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE)
                 .extFacing()
                 .build(),
@@ -216,8 +165,8 @@ public class GTCM_TestMultiMachine
                     .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
                     .extFacing()
                     .glow()
-                    .build()};
-            return new ITexture[]{casingTexturePages[1][48], TextureFactory.builder()
+                    .build() };
+            return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR)
                 .extFacing()
                 .build(),
@@ -225,9 +174,9 @@ public class GTCM_TestMultiMachine
                     .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
                     .extFacing()
                     .glow()
-                    .build()};
+                    .build() };
         }
-        return new ITexture[]{casingTexturePages[1][48]};
+        return new ITexture[] { casingTexturePages[1][48] };
     }
 
     // Tooltips
@@ -235,22 +184,20 @@ public class GTCM_TestMultiMachine
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            .addInfo(StructureTooComplex)
+            .addInfo(BLUE_PRINT_INFO)
             .addSeparator()
             .beginStructureBlock(11, 13, 11, false)
-            .addController(TextLocalization.textFrontBottom)
-            .addCasingInfoRange(TextLocalization.textCasing, 8, 26, false)
-            .addInputHatch(TextLocalization.textAnyCasing, 1)
-            .addOutputHatch(TextLocalization.textAnyCasing, 1)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .addMaintenanceHatch(TextLocalization.textAnyCasing, 2)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 3)
-            .toolTipFinisher(TextLocalization.ModName);
+            .addController(textFrontBottom)
+            .addCasingInfoRange(textCasing, 8, 26, false)
+            .addInputHatch(textAnyCasing, 1)
+            .addOutputHatch(textAnyCasing, 1)
+            .addInputBus(textAnyCasing, 2)
+            .addOutputBus(textAnyCasing, 2)
+            .addMaintenanceHatch(textAnyCasing, 2)
+            .addEnergyHatch(textAnyCasing, 3)
+            .toolTipFinisher(ModName);
         return tt;
     }
 
 }
-
-// spotless:on

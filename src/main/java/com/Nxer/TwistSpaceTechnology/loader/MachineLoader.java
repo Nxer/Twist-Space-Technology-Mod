@@ -15,6 +15,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PhysicalFormSw
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.Test_MultiStructMachine;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.Test_SubStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 
@@ -32,6 +34,9 @@ public class MachineLoader {
     public static ItemStack SpaceScaler;
     public static ItemStack MoleculeDeconstructor;
     public static ItemStack CrystallineInfinitier;
+
+    public static ItemStack TestMultiStructureMainMachine;
+    public static ItemStack TestMultiStructureSubMachine;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -132,5 +137,18 @@ public class MachineLoader {
             TextLocalization.NameInfiniteAirHatch,
             9).getStackForm(1);
         GTCMItemList.InfiniteAirHatch.set(InfiniteAirHatch);
+
+        TestMultiStructureMainMachine = new Test_MultiStructMachine(
+            19013,
+            "NameTestMultiStructureMainMachine",
+            TextLocalization.NameTestMultiStructureMainMachine).getStackForm(1);
+        GTCMItemList.TestMultiStructureMainMachine.set(TestMultiStructureSubMachine);
+
+        TestMultiStructureSubMachine = new Test_SubStructureMachine(
+            19014,
+            "NameTestMultiStructureSubMachine",
+            TextLocalization.NameTestMultiStructureSubMachine).getStackForm(1);
+        GTCMItemList.TestMultiStructureSubMachine.set(TestMultiStructureMainMachine);
+
     }
 }

@@ -25,6 +25,8 @@ public enum GTCMItemList implements IItemContainer {
     EnergyCrystalShard,
     PerfectEnergyCrystal,
 
+    MultiStructuresLinkTool,
+
     // Machines
 
     IntensifyChemicalDistorter,
@@ -59,7 +61,11 @@ public enum GTCMItemList implements IItemContainer {
     PhotonControllerUpgradeUIV,
     PhotonControllerUpgradeUMV,
     PhotonControllerUpgradeUXV,
-    PhotonControllerUpgradeMAX
+    PhotonControllerUpgradeMAX,
+
+    // MultiStructure Machine:
+    TestMultiStructureMainMachine,
+    TestMultiStructureSubMachine
 
     ;
 

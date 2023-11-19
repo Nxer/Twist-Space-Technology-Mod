@@ -30,9 +30,9 @@ public class TextLocalization {
             + EnumChatFormatting.GRAY
             + " hologram projector to build the main structure.",
         "BLUE_PRINT_INFO");
-    
+
     // endregion
-    
+
     // region casing
     public static final String textCasing = texter("Casing", "textCasing");
     public static final String textUseBlueprint = texter("Use "+EnumChatFormatting.BLUE+"Blue"+EnumChatFormatting.AQUA+"print"+EnumChatFormatting.RESET+" to preview", "textUseBlueprint");
@@ -50,13 +50,13 @@ public class TextLocalization {
     public static final String textScrewdriverChangeMode = texter("Use screwdriver to change mode.", "textScrewdriverChangeMode");
 
     // endregion
-    
+
     // region general tooltips
     public static final String Tooltip_GlassTierLimitEnergyHatchTier = texter("The Glass Tier limit the Energy hatch voltage Tier.","Tooltip_GlassTierLimitEnergyHatchTier");
-    
-    
+
+
     // endregion
-    
+
     // region Intensify Chemical Distorter text localization
     public static final String NameIntensifyChemicalDistorter = texter(
         "Intensify Chemical Distorter",
@@ -277,7 +277,7 @@ public class TextLocalization {
     public static final String Tooltip_MoleculeDeconstructor_05 = texter("The Glass Tier limit the Energy hatch voltage Tier.","Tooltip_MoleculeDeconstructor_05");
 
     // endregion
-    
+
     // region CrystallineInfinitier
     public static final String NameCrystallineInfinitier = texter("Crystalline Infinitier","NameCrystallineInfinitier");
     public static final String Tooltip_CrystallineInfinitier_MachineType = texter("Autoclave | Crystalline Infinitier","Tooltip_CrystallineInfinitier_MachineType");
@@ -288,10 +288,12 @@ public class TextLocalization {
     public static final String Tooltip_CrystallineInfinitier_04 = texter("And higher field generator tier means lower Energy cost.","Tooltip_CrystallineInfinitier_04");
     public static final String Tooltip_CrystallineInfinitier_05 = texter("Crude Stabilisation Field Generator enable Perfect Overclock.","Tooltip_CrystallineInfinitier_05");
     public static final String Tooltip_CrystallineInfinitier_06 = texter("Extra +300%% speed in Autoclave mode.","Tooltip_CrystallineInfinitier_06");
-    
+
     // endregion
-    
-    
+    public static final String NameTestMultiStructureMainMachine = texter("Test Multi-Structure Main Machine","NameTestMultiStructureMainMachine");
+    public static final String NameTestMultiStructureSubMachine = texter("Test Multi-Structure Main Machine","NameTestMultiStructureSubMachine");
+
+
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
 
