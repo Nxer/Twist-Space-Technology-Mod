@@ -1,5 +1,6 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.recipeMap;
+package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
 import java.util.Collection;
@@ -187,6 +188,26 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap QuantumInversionRecipes = new GTCMRecipeMap(
+        new HashSet<>(),
+        "gtcm.recipe.QuantumInversionRecipes",
+        texter("Quantum Inversion", "NEI.QuantumInversion"),
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        4,
+        4,
+        4,
+        4,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
     public final GTCMRecipeMap CrystallineInfinitierRecipes = new GTCMRecipeMap(
         new HashSet<>(),
         "gtcm.recipe.CrystallineInfinitierRecipes",
@@ -227,24 +248,24 @@ public class GTCMRecipe {
         false,
         true);
 
-    public final GTCMRecipeMap DSP_FakeRecipes = new GTCMRecipeMap(
-        new HashSet<>(2),
-        "gtcm.recipe.DSPFakeRecipes",
-        "",
+    public final GTCMRecipeMap DSP_ReceiverRecipes = new GTCMRecipeMap(
+        new HashSet<>(1),
+        "gtcm.recipe.DSPReceiverRecipes",
+        NameDSPReceiver,
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
         1,
         1,
-        1,
+        0,
         0,
         true,
         0,
         0,
         1,
-        "",
+        texter("Equivalence value of EU : ", "NEI.DSP_ReceiverRecipes.specialValue.pre"),
         1,
         "",
         false,
-        false);
+        true);
 
 }

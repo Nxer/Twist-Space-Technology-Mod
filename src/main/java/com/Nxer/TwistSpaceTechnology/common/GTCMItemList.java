@@ -46,6 +46,11 @@ public enum GTCMItemList implements IItemContainer {
     SmallLaunchVehicle,
     EmptySmallLaunchVehicle,
     CriticalPhoton,
+    Antimatter,
+    AnnihilationConstrainer,
+    AntimatterFuelRod,
+    StellarConstructionFrameMaterial,
+
     DSPLauncher,
     DSPReceiver,
 

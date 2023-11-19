@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic;
 
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.solarSailCanHoldDefault;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.solarSailCanHoldPerNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.solarSailPowerPoint;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData.markDataDirty;
 
@@ -45,6 +47,10 @@ public class DSP_DataCell implements Serializable {
     // endregion
 
     // region Methods
+    
+    public long getSolarSailToDelete(){
+        return Math.max(0, this.amountDSPSolarSail - this.amountDSPNode * solarSailCanHoldPerNode - solarSailCanHoldDefault );
+    }
     
     /**
      * @return Remaining Available DSP Power Points

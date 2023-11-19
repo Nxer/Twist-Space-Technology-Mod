@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_OverclockCalculator;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;

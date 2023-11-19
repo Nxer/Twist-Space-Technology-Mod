@@ -132,6 +132,7 @@ public class MachineLoader {
         DSPLauncher = new TST_DSPLauncher(19013, "NameDSPLauncher", NameDSPLauncher).getStackForm(1);
         GTCMItemList.DSPLauncher.set(DSPLauncher);
 
+        //
         DSPReceiver = new TST_DSPReceiver(19014, "NameDSPReceiver", NameDSPReceiver).getStackForm(1);
         GTCMItemList.DSPReceiver.set(DSPReceiver);
 

@@ -14,14 +14,17 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -40,20 +43,11 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
+import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.block.ModBlocks;
 
 public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_MiracleTop>
     implements IConstructable, ISurvivalConstructable {
-
-    // region Member Variables
-
-    public int speedTotal = 1;
-
-    public int getParallelSpeedTotal() {
-        return this.speedTotal * 16;
-    }
-
-    // endregion
 
     // region Constructors
     public GT_TileEntity_MiracleTop(int aID, String aName, String aNameRegional) {
@@ -252,6 +246,14 @@ public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMul
 
     // region Processing Logic
 
+    private byte mode = 0;
+
+    public int speedTotal = 1;
+
+    public int getParallelSpeedTotal() {
+        return this.speedTotal * 16;
+    }
+
     @Override
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
@@ -281,8 +283,30 @@ public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMul
     }
 
     @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.mode = (byte) ((this.mode + 1) % 2);
+            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MiracleTop.modeMsg." + this.mode));
+        }
+    }
+
+    @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return GTCMRecipe.instance.MiracleTopRecipes;
+        return this.mode == 0 ? GTCMRecipe.instance.MiracleTopRecipes : GTCMRecipe.instance.QuantumInversionRecipes;
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mode", mode);
+        aNBT.setInteger("speedTotal", speedTotal);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        mode = aNBT.getByte("mode");
+        speedTotal = aNBT.getInteger("speedTotal");
     }
 
     @Override

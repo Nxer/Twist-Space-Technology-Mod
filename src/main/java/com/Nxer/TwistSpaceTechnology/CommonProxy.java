@@ -4,11 +4,15 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
+import com.Nxer.TwistSpaceTechnology.event.TickingEvent;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class CommonProxy {
@@ -26,7 +30,9 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
 
         MinecraftForge.EVENT_BUS.register(new DSP_WorldSavedData());
-
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new TickingEvent());
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
@@ -36,5 +42,10 @@ public class CommonProxy {
     public void serverStarting(FMLServerStartingEvent event) {
         TwistSpaceTechnology.LOG.info("Ok, " + Tags.MODNAME + " at version " + Tags.VERSION + " load success .");
         event.registerServerCommand(new TST_Command());
+    }
+
+    public void serverStarted(FMLServerStartedEvent event) {
+        TwistSpaceTechnology.LOG.info("Init DSP Event.");
+        StartServerEvent.INSTANCE.onLoading(event);
     }
 }

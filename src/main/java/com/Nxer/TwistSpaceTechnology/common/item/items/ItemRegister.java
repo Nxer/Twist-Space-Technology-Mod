@@ -39,6 +39,10 @@ public class ItemRegister {
         GTCMItemList.SmallLaunchVehicle.set(initItem01("Small Launch Vehicle", 11, new String[]{TextHandler.texter("Subtle and sophisticated.", "tooltips.SmallLaunchVehicle.line1"), DSPName}));
         GTCMItemList.EmptySmallLaunchVehicle.set(initItem01("Empty Small Launch Vehicle", 12, new String[]{TextHandler.texter("Subtle and sophisticated but Empty.", "tooltips.EmptySmallLaunchVehicle.line1"), DSPName}));
         GTCMItemList.CriticalPhoton.set(initItem01("Critical Photon", 13, new String[]{TextHandler.texter("The future has arrived.", "tooltips.CriticalPhoton.line1"), DSPName}));
+        GTCMItemList.Antimatter.set(initItem01("Antimatter", 14, new String[]{TextHandler.texter("The Other Side of Matter.", "tooltips.Antimatter.line1"), DSPName}));
+        GTCMItemList.AnnihilationConstrainer.set(initItem01("Annihilation Constrainer", 15, new String[]{TextHandler.texter("Encourage indirect operation.", "tooltips.AnnihilationConstrainer.line1"), DSPName}));
+        GTCMItemList.AntimatterFuelRod.set(initItem01("Antimatter Fuel Rod", 16, new String[]{TextHandler.texter("More...", "tooltips.AntimatterFuelRod.line1"), DSPName}));
+        GTCMItemList.StellarConstructionFrameMaterial.set(initItem01("Stellar Construction Frame Material", 17, new String[]{TextHandler.texter("Perfect and expensive.", "tooltips.StellarConstructionFrameMaterial.line1"), DSPName}));
         
         
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));

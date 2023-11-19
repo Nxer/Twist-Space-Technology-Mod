@@ -29,7 +29,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_TestMultiMachine;
-import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;

@@ -8,7 +8,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
