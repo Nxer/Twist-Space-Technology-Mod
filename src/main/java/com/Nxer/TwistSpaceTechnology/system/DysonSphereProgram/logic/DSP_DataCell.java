@@ -20,7 +20,8 @@ public class DSP_DataCell implements Serializable {
     private boolean dirty;
     private long maxDSPPowerPoint;
     private long usedDSPPowerPoint;
-    
+    private byte dataSyncFlag = 0;
+
     // endregion
 
     // region Class Constructor
@@ -47,18 +48,18 @@ public class DSP_DataCell implements Serializable {
     // endregion
 
     // region Methods
-    
+
     public long getSolarSailToDelete(){
         return Math.max(0, this.amountDSPSolarSail - this.amountDSPNode * solarSailCanHoldPerNode - solarSailCanHoldDefault );
     }
-    
+
     /**
      * @return Remaining Available DSP Power Points
      */
     public long getDSPPowerPointCanUse(){
         return this.getMaxDSPPowerPoint() - this.usedDSPPowerPoint;
     }
-    
+
     /**
      * Try to decrease the DSP Power Points used part amount.
      * @param amount    The <b style:"color=#00FF00">amount</b>.
@@ -66,7 +67,7 @@ public class DSP_DataCell implements Serializable {
      */
     public boolean tryDecreaseUsedPowerPoint(long amount){
         if (this.usedDSPPowerPoint >= amount){
-            this.usedDSPPowerPoint -= amount;
+            this.markDirty().usedDSPPowerPoint -= amount;
             markDataDirty();
             return true;
         }
@@ -74,7 +75,7 @@ public class DSP_DataCell implements Serializable {
         TwistSpaceTechnology.LOG.info("Trying amount: "+amount+" ; Used point: "+this.usedDSPPowerPoint+" ;");
         return false;
     }
-    
+
     /**
      * Try to request using DSP Power Points.
      *
@@ -83,13 +84,13 @@ public class DSP_DataCell implements Serializable {
      */
     public boolean tryUsePowerPoint(long amount){
         if (this.canUsePowerPoint(amount)){
-            this.usedDSPPowerPoint += amount;
+            this.markDirty().usedDSPPowerPoint += amount;
             markDataDirty();
             return true;
         }
         return false;
     }
-    
+
     /**
      *
      * @param amount    The trying amount.
@@ -98,7 +99,7 @@ public class DSP_DataCell implements Serializable {
     public boolean canUsePowerPoint(long amount){
         return this.usedDSPPowerPoint + amount <= this.getMaxDSPPowerPoint();
     }
-    
+
     @SuppressWarnings("unsafe")
     public boolean decreaseUsedPowerPointUnsafely(long amount){
         markDataDirty();
@@ -108,7 +109,7 @@ public class DSP_DataCell implements Serializable {
         this.markDirty().usedDSPPowerPoint -= amount;
         return false;
     }
-    
+
     @SuppressWarnings("unsafe")
     public DSP_DataCell setUsedPowerPointUnsafely(long amount){
         this.markDirty().usedDSPPowerPoint = amount;
@@ -116,9 +117,9 @@ public class DSP_DataCell implements Serializable {
         TwistSpaceTechnology.LOG.info("Set 0 to UsedPowerPoint Unsafely at: "+this);
         return this;
     }
-    
+
     public DSP_DataCell flushMaxDSPPowerPoint(){
-        this.cancelDirty()
+        this.markDirty().cancelDirty()
             .setMaxDSPPowerPoint(
                 (long) (
                     solarSailPowerPoint
@@ -126,7 +127,7 @@ public class DSP_DataCell implements Serializable {
                         * Math.pow(this.amountDSPNode + 1, 0.5)));
         return this;
     }
-    
+
     public long getMaxDSPPowerPoint() {
         if (this.dirty){
             return this.flushMaxDSPPowerPoint().maxDSPPowerPoint;
@@ -136,32 +137,38 @@ public class DSP_DataCell implements Serializable {
 
     public DSP_DataCell addDSPSolarSail(long amount) {
         this.amountDSPSolarSail += amount;
-        this.flushMaxDSPPowerPoint();
+        this.markDirty().flushMaxDSPPowerPoint();
         markDataDirty();
         return this;
     }
 
     public DSP_DataCell addDSPNode(long amount) {
         this.amountDSPNode += amount;
-        this.flushMaxDSPPowerPoint();
+        this.markDirty().flushMaxDSPPowerPoint();
         markDataDirty();
         return this;
     }
-    
+
     public DSP_DataCell setMaxDSPPowerPoint(long amount){
-        this.maxDSPPowerPoint = amount;
+        this.markDirty().maxDSPPowerPoint = amount;
         markDataDirty();
         return this;
     }
-    
+
     public DSP_DataCell markDirty(){
         this.dirty = true;
+        this.dataSyncFlag++;
+        if (this.dataSyncFlag > 64) this.dataSyncFlag = 1;
         return this;
     }
-    
+
     public DSP_DataCell cancelDirty(){
         this.dirty = false;
         return this;
+    }
+
+    public byte getDataSyncFlag(){
+        return this.dataSyncFlag;
     }
 
     @Override

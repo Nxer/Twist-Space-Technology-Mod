@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehicle;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
+import static gregtech.api.enums.TierEU.RECIPE_UMV;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -35,7 +36,7 @@ public class DSPRecipePool implements IRecipePool {
             .noFluidInputs()
             .itemOutputs(SmallLaunchVehicle.get(1))
             .noFluidOutputs()
-            .eut(RECIPE_UHV)
+            .eut(RECIPE_UMV)
             .duration(20 * 900)
             .addTo(DSPLauncher);
 
