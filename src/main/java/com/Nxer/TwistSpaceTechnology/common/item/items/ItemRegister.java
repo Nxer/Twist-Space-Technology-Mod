@@ -15,7 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemRegister {
 
     public static void registryItems() {
-        Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes, BasicItems.MultiStructuresLinkTool };
+        Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes};
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.getUnlocalizedName());
@@ -38,7 +38,7 @@ public class ItemRegister {
 
 
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
-        GTCMItemList.MultiStructuresLinkTool.set(new ItemStack(MultiStructuresLinkTool,1));
+//        GTCMItemList.MultiStructuresLinkTool.set(new ItemStack(MultiStructuresLinkTool,1));
     }
 // spotless:on
     public static void registry() {

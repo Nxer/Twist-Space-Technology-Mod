@@ -138,17 +138,17 @@ public class MachineLoader {
             9).getStackForm(1);
         GTCMItemList.InfiniteAirHatch.set(InfiniteAirHatch);
 
-        TestMultiStructureMainMachine = new Test_MultiStructMachine(
-            19013,
-            "NameTestMultiStructureMainMachine",
-            TextLocalization.NameTestMultiStructureMainMachine).getStackForm(1);
-        GTCMItemList.TestMultiStructureMainMachine.set(TestMultiStructureSubMachine);
-
-        TestMultiStructureSubMachine = new Test_SubStructureMachine(
-            19014,
-            "NameTestMultiStructureSubMachine",
-            TextLocalization.NameTestMultiStructureSubMachine).getStackForm(1);
-        GTCMItemList.TestMultiStructureSubMachine.set(TestMultiStructureMainMachine);
+//        TestMultiStructureMainMachine = new Test_MultiStructMachine(
+//            19013,
+//            "NameTestMultiStructureMainMachine",
+//            TextLocalization.NameTestMultiStructureMainMachine).getStackForm(1);
+//        GTCMItemList.TestMultiStructureMainMachine.set(TestMultiStructureSubMachine);
+//
+//        TestMultiStructureSubMachine = new Test_SubStructureMachine(
+//            19014,
+//            "NameTestMultiStructureSubMachine",
+//            TextLocalization.NameTestMultiStructureSubMachine).getStackForm(1);
+//        GTCMItemList.TestMultiStructureSubMachine.set(TestMultiStructureMainMachine);
 
     }
 }
