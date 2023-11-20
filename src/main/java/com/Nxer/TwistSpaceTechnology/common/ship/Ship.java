@@ -1,17 +1,18 @@
 package com.Nxer.TwistSpaceTechnology.common.ship;
 
-import com.Nxer.TwistSpaceTechnology.common.ship.component.ShipComponent;
-import com.Nxer.TwistSpaceTechnology.common.ship.system.*;
-import gregtech.api.util.GT_Utility;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
+import com.Nxer.TwistSpaceTechnology.common.ship.component.ShipComponent;
+import com.Nxer.TwistSpaceTechnology.common.ship.system.*;
+
+import gregtech.api.util.GT_Utility;
 
 public class Ship extends Entity implements Runnable {
 
@@ -38,25 +39,24 @@ public class Ship extends Entity implements Runnable {
     public ControlSystem controlSystem = new ControlSystem();
     public WeaponSystem weaponSystem = new WeaponSystem();
     public ShieldSystem shieldSystem = new ShieldSystem();
-    public RadarSystem radarSystem=new RadarSystem();
+    public RadarSystem radarSystem = new RadarSystem();
 
-
-
-
-    public Ship(World worldIn,String className) {
+    public Ship(World worldIn, String className) {
         super(worldIn);
-        this.world=worldIn;
+        this.world = worldIn;
         init();
     }
 
-    public void init(){
+    public void init() {
 
     }
 
     @Override
     public void travelToDimension(int dimensionId) {
         if (!validDimId.contains(dimensionId) && !forceTravel) {
-            GT_Utility.sendChatToPlayer(owner, "your ship :" + shipName + "is trying to travel to a dimension which can destroy it immediately");
+            GT_Utility.sendChatToPlayer(
+                owner,
+                "your ship :" + shipName + "is trying to travel to a dimension which can destroy it immediately");
         }
         super.travelToDimension(dimensionId);
         if (forceTravel) {
@@ -64,7 +64,6 @@ public class Ship extends Entity implements Runnable {
         }
         var t = new TileEntity();
     }
-
 
     public ShipComponent getComponent(int x, int y, int z) {
         return structure.get(getIndex(x, y, z));
@@ -80,16 +79,16 @@ public class Ship extends Entity implements Runnable {
     }
 
     public boolean checkComponentStatus() {
-        //TODO
+        // TODO
         return reConstructSystems();
     }
 
     public boolean reConstructSystems() {
-        //TODO
+        // TODO
         return true;
     }
 
-    //return false if control system have no energy
+    // return false if control system have no energy
     public boolean checkEnergy() {
         return true;
     }
@@ -117,7 +116,6 @@ public class Ship extends Entity implements Runnable {
     public void openFire() {
 
     }
-
 
     public void damageShield(double startX, double startY, double startZ, double radio, double damage) {
         int cnt = 0;
@@ -149,7 +147,6 @@ public class Ship extends Entity implements Runnable {
 
     }
 
-
     @Override
     protected void entityInit() {
 
@@ -168,7 +165,7 @@ public class Ship extends Entity implements Runnable {
     @Override
     public void run() {
         while (checkComponentStatus()) {
-            long time=System.currentTimeMillis();
+            long time = System.currentTimeMillis();
             charge();
             if (checkEnergy()) {
                 continue;
@@ -177,16 +174,15 @@ public class Ship extends Entity implements Runnable {
             addBulletForWeapons();
             addFuelForEngine();
             move();
-            openFire();//!!
+            openFire();// !!
             try {
-                wait(time+50-System.currentTimeMillis());
+                wait(time + 50 - System.currentTimeMillis());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
 
         }
         setDead();
-
 
     }
 }
