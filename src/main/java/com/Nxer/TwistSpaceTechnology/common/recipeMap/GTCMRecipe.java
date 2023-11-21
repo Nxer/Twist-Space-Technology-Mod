@@ -268,4 +268,24 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap ArtificialStarGeneratingRecipes = new GTCMRecipeMap(
+        new HashSet<>(2),
+        "gtcm.recipe.ArtificialStarGeneratingRecipes",
+        NameArtificialStar,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        1,
+        1,
+        0,
+        0,
+        true,
+        0,
+        0,
+        1,
+        texter("Generate : ", "NEI.ArtificialStarGeneratingRecipes.specialValue.pre"),
+        1,
+        " × 2,147,483,647 EU",
+        false,
+        true);
+
 }

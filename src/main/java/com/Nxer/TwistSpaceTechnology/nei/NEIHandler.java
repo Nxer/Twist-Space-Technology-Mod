@@ -19,6 +19,7 @@ public class NEIHandler {
         sendHandler("gtcm.recipe.CrystallineInfinitierRecipes", "gregtech:gt.blockmachines:19012");
         sendHandler("gtcm.recipe.DSPLauncherRecipes", "gregtech:gt.blockmachines:19013");
         sendHandler("gtcm.recipe.DSPReceiverRecipes", "gregtech:gt.blockmachines:19014");
+        sendHandler("gtcm.recipe.ArtificialStarGeneratingRecipes", "gregtech:gt.blockmachines:19015");
 
         sendCatalyst("gtcm.recipe.IntensifyChemicalDistorterRecipes", "gregtech:gt.blockmachines:19001");
         sendCatalyst("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes", "gregtech:gt.blockmachines:19002");
@@ -48,6 +49,7 @@ public class NEIHandler {
         sendCatalyst("gtcm.recipe.CrystallineInfinitierRecipes", "gregtech:gt.blockmachines:19012");
         sendCatalyst("gtcm.recipe.DSPLauncherRecipes", "gregtech:gt.blockmachines:19013");
         sendCatalyst("gtcm.recipe.DSPReceiverRecipes", "gregtech:gt.blockmachines:19014");
+        sendCatalyst("gtcm.recipe.ArtificialStarGeneratingRecipes", "gregtech:gt.blockmachines:19015");
 
     }
 

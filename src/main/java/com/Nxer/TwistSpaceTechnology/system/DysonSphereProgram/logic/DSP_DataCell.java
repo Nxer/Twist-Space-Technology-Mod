@@ -63,7 +63,7 @@ public class DSP_DataCell implements Serializable {
     /**
      * Try to decrease the DSP Power Points used part amount.
      * @param amount    The <b style:"color=#00FF00">amount</b>.
-     * @return          True means ok; <p>False means something was error.
+     * @return          True means ok; <p>False means something was error(example: Solar Sail amount has been decreased.).
      */
     public boolean tryDecreaseUsedPowerPoint(long amount){
         if (this.usedDSPPowerPoint >= amount){
@@ -73,6 +73,7 @@ public class DSP_DataCell implements Serializable {
         }
         TwistSpaceTechnology.LOG.info("Error ! Trying decrease an amount larger than used DSP Power Point !");
         TwistSpaceTechnology.LOG.info("Trying amount: "+amount+" ; Used point: "+this.usedDSPPowerPoint+" ;");
+        TwistSpaceTechnology.LOG.info("Please check your Dyson Sphere Program information use command: /tst dsp_check ");
         return false;
     }
 

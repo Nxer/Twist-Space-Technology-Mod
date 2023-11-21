@@ -39,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
@@ -176,7 +177,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
      * Get how many DSP power points this machine use.
      * Limited by putting integrated circuit in controller block slot.
      *
-     * @return The amount.
+     * @return The amount, MAX 1024 * Integer.MAX_VALUE.
      */
     private long getPowerPoint() {
         if (dspDataCell == null) return 0;
@@ -188,14 +189,17 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             double multiplier = Math
                 .min(1, ((double) controllerStack.getItemDamage()) / ((double) controllerStack.stackSize));
             long limited = (long) (multiplier * maxPowerPointLimit);
-            return Math.min(limited, canUse);
+            return Math.min(DSP_Values.maxPowerPointPerReceiver, Math.min(limited, canUse));
         } else if (controllerStack == null) {
-            return canUse;
+            return Math.min(DSP_Values.maxPowerPointPerReceiver, canUse);
         } else {
             return 0;
         }
     }
 
+    /**
+     * Request resources and handle exceptions.
+     */
     private void startUsingDSP() {
         isUsing = true;
         dataSyncFlag = dspDataCell.getDataSyncFlag();
@@ -208,10 +212,14 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         }
     }
 
+    /**
+     * Release resources and handle exceptions.
+     */
     private void stopUsingDSP() {
         isUsing = false;
         dataSyncFlag = 0;
         if (!dspDataCell.tryDecreaseUsedPowerPoint(usedPowerPoint)) {
+            // If Solar Sail amount had been decreased, conflict value will be resolved at here.
             dspDataCell.setUsedPowerPointUnsafely(0);
         }
         usedPowerPoint = 0;
@@ -223,7 +231,6 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         super.onBlockDestroyed();
     }
 
-    // TODO call stop when block break
     private void syncDSPData() {
         if (this.dataSyncFlag == dspDataCell.getDataSyncFlag()) return;
         this.stopUsingDSP();
@@ -317,12 +324,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     // spotless:off
 	@Override
 	public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        mHardHammer = true;
-        mSoftHammer = true;
-        mScrewdriver = true;
-        mCrowbar = true;
-        mSolderingTool = true;
-        mWrench = true;
+        repairMachine();
 		return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
 	}
 
@@ -352,6 +354,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 	private final int horizontalOffSet = 23;
 	private final int verticalOffSet = 45;
 	private final int depthOffSet = 12;
+    // 47,54,47
 	@Override
 	public IStructureDefinition<TST_DSPReceiver> getStructureDefinition() {
 		return IStructureDefinition.<TST_DSPReceiver>builder()

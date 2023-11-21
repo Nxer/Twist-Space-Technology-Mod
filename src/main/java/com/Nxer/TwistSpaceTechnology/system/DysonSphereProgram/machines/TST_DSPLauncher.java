@@ -55,6 +55,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -166,7 +167,10 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
                 dspDataCell.addDSPSolarSail(items.stackSize);
             } else if (metaItemEqual(items, SmallLaunchVehicle.get(1))) {
                 dspDataCell.addDSPNode(items.stackSize);
-                mOutputItems = new ItemStack[] { EmptySmallLaunchVehicle.get(items.stackSize) };
+                if (1 != XSTR.XSTR_INSTANCE.nextInt(100)) {
+                    // 99% return EmptySmallLaunchVehicle
+                    mOutputItems = new ItemStack[] { EmptySmallLaunchVehicle.get(items.stackSize) };
+                }
             }
         }
 

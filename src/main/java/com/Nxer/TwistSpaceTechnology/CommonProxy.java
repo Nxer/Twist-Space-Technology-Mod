@@ -22,7 +22,6 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
 
-        TwistSpaceTechnology.LOG.info(Config.preInitSign);
         TwistSpaceTechnology.LOG.info(Tags.MODNAME + " at version " + Tags.VERSION);
     }
 
