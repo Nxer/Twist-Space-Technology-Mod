@@ -32,6 +32,12 @@ public class TextLocalization {
         "BLUE_PRINT_INFO");
 
     public static final String DSPName = texter(EnumChatFormatting.BLUE+"Dyson Sphere Program","DSPName");
+    public static final String Tooltip_Details = texter(EnumChatFormatting.LIGHT_PURPLE+"Details: ","Tooltip_Details");
+    // endregion
+
+    // region special hatch info
+    public static final String Tooltip_DoNotNeedMaintenance = texter("Do Not Need Maintenance!","Tooltip_DoNotNeedMaintenance");
+
     // endregion
 
     // region casing
@@ -293,12 +299,24 @@ public class TextLocalization {
     // endregion
 
     // region DSPLauncher
-    public static final String NameDSPLauncher = texter("Dyson Sphere Module Launcher","NameDSPLauncher");
+    public static final String NameDSPLauncher = texter("Dyson Sphere Module Launch Site","NameDSPLauncher");
+    public static final String Tooltip_DSPLauncher_MachineType = texter("Dyson Sphere Program: Launch Site","Tooltip_DSPLauncher_MachineType");
+    public static final String Tooltip_DSPLauncher_00 = texter("Controller block for the Dyson Sphere Module Launch Site","Tooltip_DSPLauncher_00");
+    public static final String Tooltip_DSPLauncher_01 = texter(EnumChatFormatting.BLUE+"\"Low altitude flight...\"","Tooltip_DSPLauncher_01");
+    public static final String Tooltip_DSPLauncher_02 = texter("Launching Dyson Sphere components into Dyson Sphere orbit to form a Dyson Sphere.","Tooltip_DSPLauncher_02");
+    public static final String Tooltip_DSPLauncher_03 = texter("No overclock and no extra parallel.","Tooltip_DSPLauncher_03");
+    public static final String Tooltip_DSPLauncher_04 = texter("Higher tier of Elevator Module means faster launching.","Tooltip_DSPLauncher_04");
+    public static final String Tooltip_DSPLauncher_05 = texter("Inputting Space Warper will enable overlord mode. Reduce launch intervals.","Tooltip_DSPLauncher_05");
+    public static final String Tooltip_DSPLauncher_06 = texter("Joining the wireless EU network when without installing an energy hatch.","Tooltip_DSPLauncher_06");
+    public static final String Tooltip_DSPLauncher_2_01 = texter("Final progress time = recipe time / ( module tier * 1 or 60 in overload mode )","Tooltip_DSPLauncher_2_01");
+    public static final String Tooltip_DSPLauncher_2_02 = texter("Every Space Warper will provide (default) 15 minutes of overload mode.","Tooltip_DSPLauncher_2_02");
+    public static final String Tooltip_DSPLauncher_2_03 = texter("Input Space Warper will be consumed immediately.","Tooltip_DSPLauncher_2_03");
+    public static final String Tooltip_DSPLauncher_2_04 = texter("Converted to remaining time of overload mode.","Tooltip_DSPLauncher_2_04");
 
     // endregion
 
     // region DSPReceiver
-    public static final String NameDSPReceiver = texter("Dyson Sphere Ray Receiver","NameDSPReceiver");
+    public static final String NameDSPReceiver = texter("Dyson Sphere Ray Receiving Station","NameDSPReceiver");
 
     // endregion
 

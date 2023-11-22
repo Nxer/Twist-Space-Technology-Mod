@@ -3,7 +3,25 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EmptySmallLaunchVehicle;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehicle;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
+import static com.Nxer.TwistSpaceTechnology.config.Config.secondsOfEverySpaceWarperProvideToOverloadTime;
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_00;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_05;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_2_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_2_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_2_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_2_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -12,10 +30,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
@@ -27,6 +42,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -84,12 +100,30 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     // endregion
 
     // region Processing Logic
-    private String ownerName;
-    private UUID ownerUUID;
-    private int dimID;
+    private String ownerName; // init when loading world
+    private UUID ownerUUID; // init when loading world
+    private int dimID; // init when loading world
     private int motorTier = 0;
-    private DSP_DataCell dspDataCell;
-    private IGregTechTileEntity baseMetaTileEntity;
+    private long overloadTime = 0;
+    private boolean wirelessMode = true;
+    private DSP_DataCell dspDataCell; // init when loading world
+    private IGregTechTileEntity baseMetaTileEntity; // init when loading world
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("motorTier", motorTier);
+        aNBT.setLong("overloadTime", overloadTime);
+        aNBT.setBoolean("wirelessMode", wirelessMode);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        motorTier = aNBT.getInteger("motorTier");
+        overloadTime = aNBT.getLong("overloadTime");
+        wirelessMode = aNBT.getBoolean("wirelessMode");
+    }
 
     private void setMotorTier(int tier) {
         this.motorTier = tier;
@@ -102,11 +136,18 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 3];
+        String[] ret = new String[origin.length + 4];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 2] = EnumChatFormatting.GOLD + "Owner Name: " + EnumChatFormatting.RESET + ownerName;
-        ret[origin.length - 1] = EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + ownerUUID;
-        ret[origin.length] = EnumChatFormatting.GOLD + "DSP Data Cell: " + EnumChatFormatting.RESET + dspDataCell;
+        ret[origin.length - 3] = EnumChatFormatting.GOLD + "Owner Name: " + EnumChatFormatting.RESET + ownerName;
+        ret[origin.length - 2] = EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + ownerUUID;
+        ret[origin.length - 1] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
+            + EnumChatFormatting.RESET
+            + dspDataCell;
+        ret[origin.length] = EnumChatFormatting.GOLD + texter("Overload time: ", "TST_DSPLauncher.getInfoData.01")
+            + EnumChatFormatting.RESET
+            + (overloadTime / 20)
+            + " s";
+
         return ret;
     }
 
@@ -116,6 +157,13 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             @NotNull
             @Override
             protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+                // check motor tier
+                if (recipe.mSpecialValue > motorTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
+                }
+                // normal energy hatch mode
+                if (!wirelessMode) return super.validateRecipe(recipe);
+                // check wireless EU net
                 if (!addEUToGlobalEnergyMap(ownerUUID, -recipe.mEUt * recipe.mDuration)) {
                     return CheckRecipeResultRegistry.insufficientPower((long) recipe.mEUt * recipe.mDuration);
                 }
@@ -125,6 +173,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             @Nonnull
             @Override
             protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+                // no generic overclock
                 return GTCM_OverclockCalculator.ofNoOverclock(recipe);
             }
 
@@ -132,8 +181,8 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             @Override
             public CheckRecipeResult process() {
                 CheckRecipeResult result = super.process();
-                // Power will be directly consumed through wireless
-                setCalculatedEut(0);
+                // Power will be directly consumed through wireless if in mode
+                if (wirelessMode) setCalculatedEut(0);
                 return result;
             }
         };
@@ -142,14 +191,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     @Override
     @Nonnull
     public CheckRecipeResult checkProcessing() {
-        // If no logic is found, try legacy checkRecipe
-        if (processingLogic == null) {
-            return checkRecipe(mInventory[1]) ? CheckRecipeResultRegistry.SUCCESSFUL
-                : CheckRecipeResultRegistry.NO_RECIPE;
-        }
-
         setupProcessingLogic(processingLogic);
-
         CheckRecipeResult result = doCheckRecipe();
         result = postCheckRecipe(result, processingLogic);
         // inputs are consumed at this point
@@ -160,6 +202,21 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         mEfficiencyIncrease = 10000;
         mMaxProgresstime = processingLogic.getDuration();
         setEnergyUsage(processingLogic);
+
+        // check input Space Warper
+        for (ItemStack items : getStoredInputs()) {
+            if (metaItemEqual(items, SpaceWarper.get(1))) {
+                overloadTime += 20L * secondsOfEverySpaceWarperProvideToOverloadTime * items.stackSize;
+                items = null;
+            }
+        }
+
+        // if in overload condition, reduced time to one-sixtieth
+        if (overloadTime > 0) {
+            mMaxProgresstime /= 60 * motorTier;
+        } else {
+            mMaxProgresstime /= motorTier;
+        }
 
         ItemStack[] outputItems = processingLogic.getOutputItems();
         for (ItemStack items : outputItems) {
@@ -199,31 +256,30 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
      * @param aBaseMetaTileEntity This machine tile entity.
      */
     @Override
-    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-
-        if (aBaseMetaTileEntity.isServerSide() && (aTick == 1)) {
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (aBaseMetaTileEntity.isServerSide()) {
             this.baseMetaTileEntity = aBaseMetaTileEntity;
             this.dimID = getDimID(aBaseMetaTileEntity);
             this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);
             this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
             this.dspDataCell = getOrInitDSPData(ownerName, dimID);
         }
+    }
 
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPreTick(aBaseMetaTileEntity, aTick);
-
+        if (overloadTime > 0) overloadTime--;
     }
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         this.motorTier = 0;
-        mHardHammer = true;
-        mSoftHammer = true;
-        mScrewdriver = true;
-        mCrowbar = true;
-        mSolderingTool = true;
-        mWrench = true;
         boolean flag = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
         if (this.motorTier < 1) return false;
+        repairMachine();
         return flag;
     }
     // endregion
@@ -276,7 +332,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 		                           .addElement(
 						                       'H',
 						                       GT_HatchElementBuilder.<TST_DSPLauncher>builder()
-						                                             .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
+						                                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
 						                                             .adder(TST_DSPLauncher::addToMachineList)
 						                                             .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
 						                                             .dot(1)
@@ -389,10 +445,27 @@ I -> ofFrame...(NaquadahAlloy);
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Test")
+        tt.addMachineType(Tooltip_DSPLauncher_MachineType)
+            .addInfo(Tooltip_DSPLauncher_00)
+            .addInfo(Tooltip_DSPLauncher_01)
+            .addInfo(Tooltip_DSPLauncher_02)
+            .addInfo(Tooltip_DSPLauncher_03)
+            .addInfo(Tooltip_DSPLauncher_04)
+            .addInfo(Tooltip_DSPLauncher_05)
+            .addInfo(Tooltip_DSPLauncher_06)
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addSeparator()
+            .addStructureInfo(Tooltip_Details)
+            .addStructureInfo(Tooltip_DSPLauncher_2_01)
+            .addStructureInfo(Tooltip_DSPLauncher_2_02)
+            .addStructureInfo(Tooltip_DSPLauncher_2_03)
+            .addStructureInfo(Tooltip_DSPLauncher_2_04)
+            .addStructureInfo("-----------------------------------------")
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addInputBus(textUseBlueprint, 1)
+            .addOutputBus(textUseBlueprint, 1)
+            .addEnergyHatch(textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }

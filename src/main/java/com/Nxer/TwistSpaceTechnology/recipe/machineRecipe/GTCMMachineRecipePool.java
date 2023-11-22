@@ -438,8 +438,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .fluidInputs(
                 new FluidStack(solderPlasma, 256 * 144),
                 Materials.SuperconductorUMVBase.getMolten(64 * 144),
-                MaterialsUEVplus.Space.getFluid(144 * 64 * 8),
-                MaterialsUEVplus.Time.getFluid(144 * 64 * 8)
+                MaterialsUEVplus.Space.getMolten(144 * 64 * 8),
+                MaterialsUEVplus.Time.getMolten(144 * 64 * 8)
             )
             .itemOutputs(
                 GTCMItemList.PhotonControllerUpgradeUMV.get(1)
@@ -578,7 +578,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .fluidInputs(
                 new FluidStack(solderPlasma, 1024 * 144),
                 Materials.UUMatter.getFluid(1000 * 64),
-                Materials.OsmiumTetroxide.getMolten(144 * 256),
+                Materials.Osmiridium.getMolten(144 * 256),
                 Materials.SuperconductorUEVBase.getMolten(32 * 144)
             )
             .itemOutputs(
@@ -697,7 +697,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                                 ItemList.Electric_Pump_UHV.get(16),
                                 new Object[]{OrePrefixes.circuit.get(Materials.Infinite),8},
                                 GT_OreDictUnificator.get(OrePrefixes.plate,Materials.DraconiumAwakened,16))
-                    .fluidInputs(Materials.Cosmic.getMolten(144*16))
+                    .fluidInputs(Materials.CosmicNeutronium.getMolten(144*16))
                     .itemOutputs(InfiniteAirHatch.get(1))
                     .noFluidOutputs()
                     .eut(RECIPE_UHV)

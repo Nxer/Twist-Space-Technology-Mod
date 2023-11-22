@@ -2,9 +2,11 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Antimatter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AntimatterFuelRod;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatter;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.SpacetimeCompressionFieldGenerators;
@@ -17,6 +19,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static com.gtnewhorizons.gtnhintergalactic.block.IGBlocks.SpaceElevatorCasing;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
@@ -29,6 +32,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -48,6 +52,7 @@ import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -79,24 +84,43 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     private int tierDimensionField = -1;
     private int tierTimeField = -1;
     private int tierStabilisationField = -1;
+    private double outputMultiplier = 1;
+    private short recoveryChance = 0;
+
+    @Override
+    public String[] getInfoData() {
+        // spotless:off
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 5];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length - 4] = EnumChatFormatting.GOLD+texter("Generating Multiplier","TST_ArtificialStar.getInfoData.01")+EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+outputMultiplier;
+        ret[origin.length - 3] = EnumChatFormatting.GOLD+texter("Dimension Field Tier","TST_ArtificialStar.getInfoData.02")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierDimensionField;
+        ret[origin.length - 2] = EnumChatFormatting.GOLD+texter("Time Field Tier","TST_ArtificialStar.getInfoData.03")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierTimeField;
+        ret[origin.length - 1] = EnumChatFormatting.GOLD+texter("Stabilisation Field Tier","TST_ArtificialStar.getInfoData.04")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierStabilisationField;
+        ret[origin.length] = EnumChatFormatting.GOLD+texter("Recover material chance","TST_ArtificialStar.getInfoData.05")+EnumChatFormatting.RESET+": "+EnumChatFormatting.AQUA+recoveryChance+EnumChatFormatting.RESET+"/"+EnumChatFormatting.AQUA+"1000";
+        return ret;
+       // spotless:on
+    }
 
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
         // iterate input bus slot
         // consume fuel and generate EU
-        // if no input, still progress
         boolean flag = false;
+        int recoveryAmount = 0;
         for (ItemStack items : getStoredInputs()) {
             if (metaItemEqual(items, Antimatter.get(1))) {
                 consumeAntimatter(items);
                 flag = true;
             } else if (metaItemEqual(items, AntimatterFuelRod.get(1))) {
+                recoveryAmount += items.stackSize;
                 consumeAntimatterFuelRod(items);
                 flag = true;
             }
         }
 
+        // if no antimatter or fuel rod input
         if (!flag) {
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
@@ -105,24 +129,39 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         updateSlots();
         // set progress time with cfg
         mMaxProgresstime = (int) (20 * secondsOfArtificialStarProgressCycleTime);
+        // chance to recover FrameMaterial
+        if (XSTR.XSTR_INSTANCE.nextInt(1000) < recoveryChance) {
+            ItemStack recoverItem = StellarConstructionFrameMaterial.get(1);
+            recoverItem.stackSize = recoveryAmount;
+            mOutputItems = new ItemStack[] { recoverItem.copy(), recoverItem.copy(), recoverItem.copy() };
+        }
         return CheckRecipeResultRegistry.GENERATING;
         // return super.checkProcessing();
     }
 
+    // Artificial Star Output multiplier
+    private void calculateOutputMultiplier() {
+        // tTime^0.25 * tDim^0.25 * 1.588186^(tStabilisation-2)
+        // (100^0.25)*(1.588186^(10-2))) = 128.000
+        // 1.588186^(-1) = 0.629
+        this.outputMultiplier = Math.pow(1d * tierTimeField * tierDimensionField, 0.25d)
+            * Math.pow(1.588186d, tierStabilisationField - 2);
+    }
+
     private void consumeAntimatter(ItemStack antimatter) {
-        if (Long.MAX_VALUE / EUEveryAntimatter < antimatter.stackSize) {
+        if ((1d / outputMultiplier) * Long.MAX_VALUE / EUEveryAntimatter < antimatter.stackSize) {
             addEUToGlobalEnergyMap(
                 ownerUUID,
-                BigInteger.valueOf(EUEveryAntimatter)
+                BigInteger.valueOf((long) (outputMultiplier * EUEveryAntimatter))
                     .multiply(BigInteger.valueOf(antimatter.stackSize)));
         } else {
-            addEUToGlobalEnergyMap(ownerUUID, antimatter.stackSize * EUEveryAntimatter);
+            addEUToGlobalEnergyMap(ownerUUID, (long) (outputMultiplier * antimatter.stackSize * EUEveryAntimatter));
         }
         antimatter.stackSize = 0;
     }
 
     private void consumeAntimatterFuelRod(ItemStack antimatterFuelRod) {
-        if (Long.MAX_VALUE / EUEveryAntimatterFuelRod < antimatterFuelRod.stackSize) {
+        if ((1d / outputMultiplier) * Long.MAX_VALUE / EUEveryAntimatterFuelRod < antimatterFuelRod.stackSize) {
             addEUToGlobalEnergyMap(
                 ownerUUID,
                 BigInteger.valueOf(EUEveryAntimatterFuelRod)
@@ -143,12 +182,24 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     }
 
     @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        /*
+         * if (mMaxProgresstime > 0 && mProgresstime == mMaxProgresstime){
+         * // the last tick of a progress
+         * // destroy render block here
+         * }
+         */
+    }
+
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setLong("storageEU", storageEU);
         aNBT.setInteger("tierDimensionField", tierDimensionField);
         aNBT.setInteger("tierTimeField", tierTimeField);
         aNBT.setInteger("tierStabilisationField", tierStabilisationField);
+        aNBT.setDouble("outputMultiplier", outputMultiplier);
     }
 
     @Override
@@ -158,12 +209,15 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         tierDimensionField = aNBT.getInteger("tierDimensionField");
         tierTimeField = aNBT.getInteger("tierTimeField");
         tierStabilisationField = aNBT.getInteger("tierStabilisationField");
+        outputMultiplier = aNBT.getDouble("outputMultiplier");
     }
 
     // endregion
 
     // region Structure
     // spotless:off
+    // disable crafting input bus/buffer
+    @Override
     protected boolean supportsCraftingMEBuffer() {
         return false;
     }
@@ -174,11 +228,13 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         tierTimeField = -1;
         tierStabilisationField = -1;
         repairMachine();
-        boolean flag = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         if (tierDimensionField < 0 || tierTimeField < 0 || tierStabilisationField < 0) return false;
         // Only allow and must be 1 input bus
         if (this.mInputBusses.size() != 1) return false;
-        return flag;
+        calculateOutputMultiplier();
+        recoveryChance = (short) (tierDimensionField * tierTimeField * tierStabilisationField);
+        return true;
     }
 
     @Override
@@ -227,7 +283,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                                     */
                    .addElement(
                        'A',
-                       withChannel("tierDimensionField",
+                       withChannel("tierdimensionfield",
                                    ofBlocksTiered(
                                        TST_ArtificialStar::getTierDimensionFieldBlockFromBlock,
                                        ImmutableList.of(
@@ -249,7 +305,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                    .addElement('C', ofBlock(sBlockCasingsTT, 4))
                    .addElement(
                        'D',
-                       withChannel("tierTimeField",
+                       withChannel("tiertimefield",
                                    ofBlocksTiered(
                                        TST_ArtificialStar::getTierTimeFieldBlockFromBlock,
                                        ImmutableList.of(
@@ -270,7 +326,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                    .addElement('F', ofBlock(sBlockCasingsTT, 8))
                    .addElement(
                        'G',
-                       withChannel("tierStabilisationField",
+                       withChannel("tierstabilisationfield",
                                    ofBlocksTiered(
                                        TST_ArtificialStar::getTierStabilisationFieldBlockFromBlock,
                                        ImmutableList.of(
@@ -293,8 +349,8 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                    .addElement('K', ofBlock(QuantumGlassBlock.INSTANCE, 0))
                    .addElement('L',
                                GT_HatchElementBuilder.<TST_ArtificialStar>builder()
-                                   .atLeast(InputBus)
-                                   .adder(TST_ArtificialStar::addInputBusToMachineList)
+                                   .atLeast(InputBus, OutputBus)
+                                   .adder(TST_ArtificialStar::addInputBusOrOutputBusToMachineList)
                                    .dot(1)
                                    .casingIndex(1024+12)
                                    .buildAndChain(sBlockCasingsTT, 12))
@@ -391,6 +447,11 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
     @Override
     protected int getMaxParallelRecipes() {
         return 1;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
     }
 
     @Override

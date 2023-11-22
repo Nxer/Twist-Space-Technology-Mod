@@ -105,18 +105,17 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 2] = EnumChatFormatting.GOLD + "Generating EU/t: "
+        ret[origin.length - 2] = EnumChatFormatting.GOLD + texter("Generating EU/t: ", "TST_DSPReceiver.getInfoData.01")
             + EnumChatFormatting.RESET
             + generateTickEU();
-        ret[origin.length - 1] = EnumChatFormatting.GOLD + "Used Power Point: "
+        ret[origin.length - 1] = EnumChatFormatting.GOLD
+            + texter("Used Power Point: ", "TST_DSPReceiver.getInfoData.02")
             + EnumChatFormatting.RESET
             + usedPowerPoint;
-        ret[origin.length] = EnumChatFormatting.GOLD + "DSP Data Cell: " + EnumChatFormatting.RESET + dspDataCell;
+        ret[origin.length] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
+            + EnumChatFormatting.RESET
+            + dspDataCell;
         return ret;
-        /*
-         * generateTickEU
-         * usedPowerPoint
-         */
     }
 
     @Override

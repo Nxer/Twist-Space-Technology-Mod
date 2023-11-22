@@ -166,6 +166,11 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
+    public boolean addInputBusOrOutputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addInputBusToMachineList(aTileEntity, aBaseCasingIndex)
+            || addOutputBusToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return true;
