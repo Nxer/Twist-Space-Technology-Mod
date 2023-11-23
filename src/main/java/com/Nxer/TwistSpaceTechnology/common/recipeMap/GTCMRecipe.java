@@ -1,5 +1,6 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.recipeMap;
+package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
 import java.util.Collection;
@@ -69,7 +70,7 @@ public class GTCMRecipe {
 
             useModularUI(true);
             // setProgressBarPos(78, getItemRowCount() * 18);
-            setLogoPos(79, (getItemRowCount() + getFluidRowCount()) * 18);
+            setLogoPos(79, (getItemRowCount() + getFluidRowCount()) * 18 - 27);
             setUsualFluidInputCount(aUsualFluidInputCount);
             setUsualFluidOutputCount(aUsualFluidOutputCount);
             setDisableOptimize(disableOptimize);
@@ -187,6 +188,26 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap QuantumInversionRecipes = new GTCMRecipeMap(
+        new HashSet<>(),
+        "gtcm.recipe.QuantumInversionRecipes",
+        texter("Quantum Inversion", "NEI.QuantumInversion"),
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        4,
+        4,
+        4,
+        4,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
     public final GTCMRecipeMap CrystallineInfinitierRecipes = new GTCMRecipeMap(
         new HashSet<>(),
         "gtcm.recipe.CrystallineInfinitierRecipes",
@@ -204,6 +225,66 @@ public class GTCMRecipe {
         "",
         1,
         "",
+        false,
+        true);
+
+    public final GTCMRecipeMap DSP_LauncherRecipes = new GTCMRecipeMap(
+        new HashSet<>(2),
+        "gtcm.recipe.DSPLauncherRecipes",
+        NameDSPLauncher,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        1,
+        1,
+        1,
+        0,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
+    public final GTCMRecipeMap DSP_ReceiverRecipes = new GTCMRecipeMap(
+        new HashSet<>(1),
+        "gtcm.recipe.DSPReceiverRecipes",
+        NameDSPReceiver,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        1,
+        1,
+        0,
+        0,
+        true,
+        0,
+        0,
+        1,
+        texter("Equivalence value of EU : ", "NEI.DSP_ReceiverRecipes.specialValue.pre"),
+        1,
+        "",
+        false,
+        true);
+
+    public final GTCMRecipeMap ArtificialStarGeneratingRecipes = new GTCMRecipeMap(
+        new HashSet<>(2),
+        "gtcm.recipe.ArtificialStarGeneratingRecipes",
+        NameArtificialStar,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        1,
+        1,
+        0,
+        0,
+        true,
+        0,
+        0,
+        1,
+        texter("Generate : ", "NEI.ArtificialStarGeneratingRecipes.specialValue.pre"),
+        1,
+        " × 2,147,483,647 EU",
         false,
         true);
 

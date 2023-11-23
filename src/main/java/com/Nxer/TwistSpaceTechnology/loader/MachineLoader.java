@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameArtificialStar;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPReceiver;
+
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -16,6 +20,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.GT_MetaTileEntity_Hatch_Air;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 
 public class MachineLoader {
@@ -32,6 +39,9 @@ public class MachineLoader {
     public static ItemStack SpaceScaler;
     public static ItemStack MoleculeDeconstructor;
     public static ItemStack CrystallineInfinitier;
+    public static ItemStack DSPLauncher;
+    public static ItemStack DSPReceiver;
+    public static ItemStack ArtificialStar;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -120,6 +130,18 @@ public class MachineLoader {
             "NameCrystallineInfinitier",
             TextLocalization.NameCrystallineInfinitier).getStackForm(1);
         GTCMItemList.CrystallineInfinitier.set(CrystallineInfinitier);
+
+        //
+        DSPLauncher = new TST_DSPLauncher(19013, "NameDSPLauncher", NameDSPLauncher).getStackForm(1);
+        GTCMItemList.DSPLauncher.set(DSPLauncher);
+
+        //
+        DSPReceiver = new TST_DSPReceiver(19014, "NameDSPReceiver", NameDSPReceiver).getStackForm(1);
+        GTCMItemList.DSPReceiver.set(DSPReceiver);
+
+        //
+        ArtificialStar = new TST_ArtificialStar(19015, "NameArtificialStar", NameArtificialStar).getStackForm(1);
+        GTCMItemList.ArtificialStar.set(ArtificialStar);
 
         // endregion
 
