@@ -18,6 +18,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstruct
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatter;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Containment;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
@@ -37,7 +38,6 @@ import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
-import static gregtech.api.util.GT_Utility.copyAmount;
 import static gtPlusPlus.core.material.ELEMENT.STANDALONE.ASTRAL_TITANIUM;
 import static gtPlusPlus.core.material.ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.core.material.ELEMENT.STANDALONE.HYPOGEN;

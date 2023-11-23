@@ -53,6 +53,7 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Inta
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -128,7 +129,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(10),
-                GT_Utility.copyAmount(1, ItemRegistry.megaMachines[3]),
+                Utils.copyAmount(1, ItemRegistry.megaMachines[3]),
                 Materials.Carbon.getNanite(16),
                 ItemList.Emitter_UV.get(16),
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),16})
@@ -152,11 +153,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 ItemList.Emitter_UV.get(5),
                 ItemList.Field_Generator_UV.get(1),
                 new Object[] { OrePrefixes.circuit.get(Materials.SuperconductorUHV), 4 },
-                GT_Utility.copyAmount(64, Ic2Items.iridiumPlate),
+                Utils.copyAmount(64, Ic2Items.iridiumPlate),
                 GT_Utility.getIntegratedCircuit(10))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 128))
             .noFluidOutputs()
-            .itemOutputs(GT_Utility.copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
+            .itemOutputs(Utils.copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20 * 120)
@@ -323,7 +324,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // Upgrade UHV
         GT_Values.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GT_Utility.copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
+            .metadata(RESEARCH_ITEM, Utils.copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
             .metadata(RESEARCH_TIME, 2 * HOURS)
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
@@ -544,7 +545,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 Materials.SuperconductorUEVBase.getMolten(512 * 144)
             )
             .itemOutputs(
-                GT_Utility.copyAmount(1, MachineLoader.MiracleTop)
+                Utils.copyAmount(1, MachineLoader.MiracleTop)
             )
             .noFluidOutputs()
             .eut(RECIPE_UMV)
@@ -772,7 +773,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
                 new Object[]{OrePrefixes.circuit.get(Materials.Bio),16},
                 new Object[]{OrePrefixes.circuit.get(Materials.Infinite),16},
-                GT_Utility.copyAmount(64, Ic2Items.iridiumPlate),
+                Utils.copyAmount(64, Ic2Items.iridiumPlate),
                 GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 16),
 
                 GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 16)
