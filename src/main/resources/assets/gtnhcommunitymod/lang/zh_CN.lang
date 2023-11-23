@@ -249,6 +249,7 @@ Waila.TST_DSPReceiver.1=接收能源:
 NEI.EmptySmallLaunchVehicleRecipe.0=99%%返还一个空的小型运载火箭.
 NameArtificialStar=人造恒星
 NEI.ArtificialStarGeneratingRecipes.specialValue.pre=产生 : 
+TST_ArtificialStar.getInfoData.00=连续运行奖励
 TST_ArtificialStar.getInfoData.01=发电倍率
 TST_ArtificialStar.getInfoData.02=空间场等级
 TST_ArtificialStar.getInfoData.03=时间场等级

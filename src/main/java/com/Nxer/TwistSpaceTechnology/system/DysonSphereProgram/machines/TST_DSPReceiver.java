@@ -41,6 +41,7 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import java.util.List;
 import java.util.UUID;
 
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -362,7 +363,9 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                     if (storageEU >= EUPerCriticalPhoton) {
                         int amount = (int) (storageEU / EUPerCriticalPhoton);
                         if (this.mOutputItems == null) {
-                            this.mOutputItems = new ItemStack[] { CriticalPhoton.get(amount) };
+                            ItemStack output = CriticalPhoton.get(1);
+                            output.stackSize = amount;
+                            this.mOutputItems = new ItemStack[] { output };
                         } else {
                             // safe and more calculate
                             for (ItemStack items : this.mOutputItems) {

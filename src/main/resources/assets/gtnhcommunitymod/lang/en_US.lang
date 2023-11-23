@@ -251,6 +251,7 @@ Waila.TST_DSPReceiver.1=Energy Receiving:
 NEI.EmptySmallLaunchVehicleRecipe.0=99%% Return an Empty Small Launch Vehicle.
 NameArtificialStar=Artificial Star
 NEI.ArtificialStarGeneratingRecipes.specialValue.pre=Generate : 
+TST_ArtificialStar.getInfoData.00=Reward for continuous operation
 TST_ArtificialStar.getInfoData.01=Generating Multiplier
 TST_ArtificialStar.getInfoData.02=Dimension Field Tier
 TST_ArtificialStar.getInfoData.03=Time Field Tier
