@@ -43,7 +43,6 @@ import static gtPlusPlus.core.material.ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.core.material.ELEMENT.STANDALONE.HYPOGEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
-import gregtech.api.util.GTPP_Recipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -64,6 +63,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
@@ -160,7 +160,7 @@ public class DSPRecipePool implements IRecipePool {
                 ItemList.EnergisedTesseract.get(16),
 
                 ItemList.Field_Generator_UMV.get(8),
-                copyAmount(64,Particle.getBaseParticle(Particle.HIGGS_BOSON)))
+                copyAmount(64, Particle.getBaseParticle(Particle.HIGGS_BOSON)))
             .fluidInputs(MyMaterial.metastableOganesson.getMolten(144 * 256))
             .itemOutputs(eM_Ultimate_Containment_Advanced.get(8))
             .noFluidOutputs()
@@ -689,21 +689,19 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 SpaceWarper.get(1),
                 Laser_Lens_Special.get(4),
-                copyAmount(64,Particle.getBaseParticle(Particle.GRAVITON)),
-                copyAmount(64,Particle.getBaseParticle(Particle.GRAVITON)),
-                copyAmount(64,Particle.getBaseParticle(Particle.GRAVITON)),
-                copyAmount(64,Particle.getBaseParticle(Particle.GRAVITON))
-            )
-            .fluidInputs(Materials.MysteriousCrystal.getMolten(144*9*64*4))
+                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)))
+            .fluidInputs(Materials.MysteriousCrystal.getMolten(144 * 9 * 64 * 4))
             .itemOutputs(
                 GravitationalLens.get(1),
                 GravitationalLens.get(1),
                 GravitationalLens.get(1),
                 GravitationalLens.get(1),
-                GravitationalLens.get(1)
-            )
+                GravitationalLens.get(1))
             .noFluidOutputs()
-            .outputChances(10000,9000,8000,7000,6000)
+            .outputChances(10000, 9000, 8000, 7000, 6000)
             .noOptimize()
             .eut(RECIPE_UMV)
             .duration(20 * 1200)

@@ -104,12 +104,14 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     private byte dataSyncFlag = 0;
     private IGregTechTileEntity baseMetaTileEntity;
 
-    private double getGLensSpeedMultiplier(){
+    private double getGLensSpeedMultiplier() {
         return gravitationalLensTime == 0 ? 1 : DSP_Values.gravitationalLensSpeedMultiplier;
     }
-    private void decreaseGravitationalLensTime(){
+
+    private void decreaseGravitationalLensTime() {
         if (gravitationalLensTime > 0) gravitationalLensTime--;
     }
+
     @Override
     public String[] getInfoData() {
         // spotless:off
@@ -176,7 +178,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         aNBT.setLong("usedPowerPoint", usedPowerPoint);
         aNBT.setLong("storageEU", storageEU);
         aNBT.setBoolean("isUsing", isUsing);
-        aNBT.setLong("gravitationalLensTime",gravitationalLensTime);
+        aNBT.setLong("gravitationalLensTime", gravitationalLensTime);
     }
 
     @Override
@@ -285,12 +287,13 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         }
     }
 
-    private void checkGLensInput(){
+    private void checkGLensInput() {
         if (mInputBusses.isEmpty()) return;
         if (getStoredInputs().isEmpty()) return;
-        for (ItemStack items : getStoredInputs()){
-            if (metaItemEqual(items, GravitationalLens.get(1))){
-                gravitationalLensTime += 20L * items.stackSize * DSP_Values.secondsOfEveryGravitationalLensProvideToIntensifyTime;
+        for (ItemStack items : getStoredInputs()) {
+            if (metaItemEqual(items, GravitationalLens.get(1))) {
+                gravitationalLensTime += 20L * items.stackSize
+                    * DSP_Values.secondsOfEveryGravitationalLensProvideToIntensifyTime;
                 items.stackSize = 0;
             }
         }
@@ -313,7 +316,6 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             if (isUsing && mMaxProgresstime == 0) {
                 stopUsingDSP();
             }
-
 
             decreaseGravitationalLensTime();
 
