@@ -7,6 +7,25 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_00;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_05;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_05;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_07;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_Controller;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.SpacetimeCompressionFieldGenerators;
@@ -86,13 +105,15 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     private int tierStabilisationField = -1;
     private double outputMultiplier = 1;
     private short recoveryChance = 0;
+    private byte rewardContinuous = 0;
 
     @Override
     public String[] getInfoData() {
         // spotless:off
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 5];
+        String[] ret = new String[origin.length + 6];
         System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length - 5] = EnumChatFormatting.GOLD+texter("Reward for continuous operation","TST_ArtificialStar.getInfoData.00")+EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+(rewardContinuous+100)+"%%";
         ret[origin.length - 4] = EnumChatFormatting.GOLD+texter("Generating Multiplier","TST_ArtificialStar.getInfoData.01")+EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+outputMultiplier;
         ret[origin.length - 3] = EnumChatFormatting.GOLD+texter("Dimension Field Tier","TST_ArtificialStar.getInfoData.02")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierDimensionField;
         ret[origin.length - 2] = EnumChatFormatting.GOLD+texter("Time Field Tier","TST_ArtificialStar.getInfoData.03")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierTimeField;
@@ -122,6 +143,8 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
 
         // if no antimatter or fuel rod input
         if (!flag) {
+            // set 0 to multiplier of rewarding continuous operation
+            rewardContinuous = 0;
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
 
@@ -135,6 +158,8 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
             recoverItem.stackSize = recoveryAmount;
             mOutputItems = new ItemStack[] { recoverItem.copy(), recoverItem.copy(), recoverItem.copy() };
         }
+        // increase multiplier of rewarding continuous operation
+        if (rewardContinuous < 50) rewardContinuous++;
         return CheckRecipeResultRegistry.GENERATING;
         // return super.checkProcessing();
     }
@@ -149,7 +174,8 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     }
 
     private void consumeAntimatter(ItemStack antimatter) {
-        if ((1d / outputMultiplier) * Long.MAX_VALUE / EUEveryAntimatter < antimatter.stackSize) {
+        if (1d * Long.MAX_VALUE / outputMultiplier / EUEveryAntimatter / (rewardContinuous + 100)
+            < antimatter.stackSize) {
             addEUToGlobalEnergyMap(
                 ownerUUID,
                 BigInteger.valueOf((long) (outputMultiplier * EUEveryAntimatter))
@@ -161,13 +187,17 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     }
 
     private void consumeAntimatterFuelRod(ItemStack antimatterFuelRod) {
-        if ((1d / outputMultiplier) * Long.MAX_VALUE / EUEveryAntimatterFuelRod < antimatterFuelRod.stackSize) {
+        if (1d * Long.MAX_VALUE / outputMultiplier / EUEveryAntimatterFuelRod / (rewardContinuous + 100)
+            < antimatterFuelRod.stackSize) {
             addEUToGlobalEnergyMap(
                 ownerUUID,
                 BigInteger.valueOf(EUEveryAntimatterFuelRod)
-                    .multiply(BigInteger.valueOf(antimatterFuelRod.stackSize)));
+                    .multiply(BigInteger.valueOf(antimatterFuelRod.stackSize))
+                    .multiply(BigInteger.valueOf(rewardContinuous + 100)));
         } else {
-            addEUToGlobalEnergyMap(ownerUUID, antimatterFuelRod.stackSize * EUEveryAntimatterFuelRod);
+            addEUToGlobalEnergyMap(
+                ownerUUID,
+                antimatterFuelRod.stackSize * EUEveryAntimatterFuelRod * (rewardContinuous + 100));
         }
         antimatterFuelRod.stackSize = 0;
     }
@@ -200,6 +230,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         aNBT.setInteger("tierTimeField", tierTimeField);
         aNBT.setInteger("tierStabilisationField", tierStabilisationField);
         aNBT.setDouble("outputMultiplier", outputMultiplier);
+        aNBT.setByte("rewardContinuous", rewardContinuous);
     }
 
     @Override
@@ -210,6 +241,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         tierTimeField = aNBT.getInteger("tierTimeField");
         tierStabilisationField = aNBT.getInteger("tierStabilisationField");
         outputMultiplier = aNBT.getDouble("outputMultiplier");
+        rewardContinuous = aNBT.getByte("rewardContinuous");
     }
 
     // endregion
@@ -374,13 +406,31 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Test")
-          .addInfo(TextLocalization.StructureTooComplex)
-          .addInfo(TextLocalization.BLUE_PRINT_INFO)
-          .addSeparator()
+        tt.addMachineType(Tooltip_ArtificialStar_MachineType)
+            .addInfo(Tooltip_ArtificialStar_Controller)
+            .addInfo(Tooltip_ArtificialStar_00)
+            .addInfo(Tooltip_ArtificialStar_01)
+            .addInfo(Tooltip_ArtificialStar_02)
+            .addInfo(Tooltip_ArtificialStar_03)
+            .addInfo(Tooltip_ArtificialStar_04)
+            .addInfo(Tooltip_ArtificialStar_05)
+            .addInfo(Tooltip_ArtificialStar_06)
+            .addInfo(Tooltip_ArtificialStar_07)
+            .addInfo(TextLocalization.StructureTooComplex)
+            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            .addSeparator()
+            .addStructureInfo(Tooltip_Details)
+            .addStructureInfo(Tooltip_ArtificialStar_02_01)
+            .addStructureInfo(Tooltip_ArtificialStar_02_02)
+            .addStructureInfo(Tooltip_ArtificialStar_02_03)
+            .addStructureInfo(Tooltip_ArtificialStar_02_04)
+            .addStructureInfo(Tooltip_ArtificialStar_02_05)
+            .addStructureInfo(Tooltip_ArtificialStar_02_06)
+            .addStructureInfo(Text_SeparatingLine)
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addInputBus(textUseBlueprint, 1)
-          //          .addStructureInfo("")
-          .toolTipFinisher(TextLocalization.ModName);
+            .addOutputBus(textUseBlueprint, 1)
+            .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
     private final String[][] shapeMain = new String[][]{
@@ -451,6 +501,11 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
 
     @Override
     public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
         return false;
     }
 

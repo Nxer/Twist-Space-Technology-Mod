@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.MAX_PARALLEL_LIMIT;
+import static gregtech.api.util.GT_Utility.filterValidMTEs;
 
 import javax.annotation.Nonnull;
 
@@ -17,6 +18,7 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
@@ -85,7 +87,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     @ApiStatus.OverrideOnly
     protected float getEuModifier() {
         return 1.0F;
-    };
+    }
 
     /**
      * Proxy Standard Speed Multiplier Supplier.
@@ -169,6 +171,77 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     public boolean addInputBusOrOutputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return addInputBusToMachineList(aTileEntity, aBaseCasingIndex)
             || addOutputBusToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    @Override
+    public boolean addEnergyOutput(long aEU) {
+        if (aEU <= 0) {
+            return true;
+        }
+        if (!mDynamoHatches.isEmpty()) {
+            return addEnergyOutputMultipleDynamos(aEU, true);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addEnergyOutputMultipleDynamos(long aEU, boolean aAllowMixedVoltageDynamos) {
+        int injected = 0;
+        long totalOutput = 0;
+        long aFirstVoltageFound = -1;
+        boolean aFoundMixedDynamos = false;
+        for (GT_MetaTileEntity_Hatch_Dynamo aDynamo : filterValidMTEs(mDynamoHatches)) {
+            long aVoltage = aDynamo.maxEUOutput();
+            long aTotal = aDynamo.maxAmperesOut() * aVoltage;
+            // Check against voltage to check when hatch mixing
+            if (aFirstVoltageFound == -1) {
+                aFirstVoltageFound = aVoltage;
+            } else {
+                if (aFirstVoltageFound != aVoltage) {
+                    aFoundMixedDynamos = true;
+                }
+            }
+            totalOutput += aTotal;
+        }
+
+        /*
+         * disable explosion
+         * if (totalOutput < aEU || (aFoundMixedDynamos && !aAllowMixedVoltageDynamos)) {
+         * explodeMultiblock();
+         * return false;
+         * }
+         */
+
+        long actualOutputEU;
+        if (totalOutput < aEU) {
+            actualOutputEU = totalOutput;
+        } else {
+            actualOutputEU = aEU;
+        }
+
+        long leftToInject;
+        long aVoltage;
+        int aAmpsToInject;
+        int aRemainder;
+        int ampsOnCurrentHatch;
+        for (GT_MetaTileEntity_Hatch_Dynamo aDynamo : filterValidMTEs(mDynamoHatches)) {
+            leftToInject = actualOutputEU - injected;
+            aVoltage = aDynamo.maxEUOutput();
+            aAmpsToInject = (int) (leftToInject / aVoltage);
+            aRemainder = (int) (leftToInject - (aAmpsToInject * aVoltage));
+            ampsOnCurrentHatch = (int) Math.min(aDynamo.maxAmperesOut(), aAmpsToInject);
+            for (int i = 0; i < ampsOnCurrentHatch; i++) {
+                aDynamo.getBaseMetaTileEntity()
+                    .increaseStoredEnergyUnits(aVoltage, false);
+            }
+            injected += aVoltage * ampsOnCurrentHatch;
+            if (aRemainder > 0 && ampsOnCurrentHatch < aDynamo.maxAmperesOut()) {
+                aDynamo.getBaseMetaTileEntity()
+                    .increaseStoredEnergyUnits(aRemainder, false);
+                injected += aRemainder;
+            }
+        }
+        return injected > 0;
     }
 
     @Override

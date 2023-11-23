@@ -294,8 +294,9 @@ public class DSPRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(21),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 16),
-                lightPlating.getItemStack(6))
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
+                lightPlating.getItemStack(6),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.BlackPlutonium, 16))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 16),
                 ASTRAL_TITANIUM.getFluidStack(144 * 18),
@@ -304,15 +305,15 @@ public class DSPRecipePool implements IRecipePool {
             .noFluidOutputs()
             .specialValue(2)
             .eut(RECIPE_UEV)
-            .duration(20 * 64)
+            .duration(20 * 128)
             .addTo(SpaceAssembler);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(22),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 12),
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 lightPlating.getItemStack(9),
-                GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsUEVplus.SpaceTime, 4))
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 8))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 16),
                 ASTRAL_TITANIUM.getFluidStack(144 * 18),
@@ -328,16 +329,17 @@ public class DSPRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(23),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 8),
-                lightPlating.getItemStack(24),
-                ItemList.EnergisedTesseract.get(6),
-                GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsUEVplus.Eternity, 8))
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 48),
+                lightPlating.getItemStack(36),
+                ItemList.EnergisedTesseract.get(12),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 12))
             .fluidInputs(
                 MaterialsUEVplus.RawStarMatter.getFluid(144 * 32),
                 ASTRAL_TITANIUM.getFluidStack(144 * 72),
                 CELESTIAL_TUNGSTEN.getFluidStack(144 * 72))
-            .itemOutputs(StellarConstructionFrameMaterial.get(64))
+            .itemOutputs(StellarConstructionFrameMaterial.get(32))
             .noFluidOutputs()
+            .noOptimize()
             .specialValue(3)
             .eut(RECIPE_UEV)
             .duration(20 * 64)
@@ -346,9 +348,9 @@ public class DSPRecipePool implements IRecipePool {
         // Lightweight Plate
         GT_Values.RA.stdBuilder()
             .itemInputs(
-                GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsKevlar.Kevlar, 24),
+                GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsKevlar.Kevlar, 32),
                 Materials.Carbon.getNanite(4),
-                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.BlackPlutonium, 16))
+                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.BlackPlutonium, 64))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 4),
                 GT_CoreModSupport.RadoxPolymer.getMolten(144 * 4),

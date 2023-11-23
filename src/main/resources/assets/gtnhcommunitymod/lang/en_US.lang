@@ -188,7 +188,7 @@ Tooltip_SpaceScaler_06=Crude Stabilisation Field Generator block+ allowed machin
 MoleculeDeconstructor.modeMsg.0=Electrolyzer Mode
 MoleculeDeconstructor.modeMsg.1=Centrifuge Mode
 NameMoleculeDeconstructor=Molecule Deconstructor
-Tooltip_MoleculeDeconstructor_04=Additional 10%% reduction in time per Coil Tier, multiplication calculus.
+Tooltip_MoleculeDeconstructor_04=Additional 10%% reduction in time per Voltage Tier, multiplication calculus.
 Tooltip_MoleculeDeconstructor_01=§bThe lightning seemed to roll down a ladder.
 Tooltip_MoleculeDeconstructor_MachineType=Electrolyzer | Centrifuge
 Tooltip_MoleculeDeconstructor_00=Controller block for the Molecule Deconstructor
@@ -282,3 +282,35 @@ infoText_CurrentStellarCoefficient=Current Stellar Coefficient:
 MetaItem01.18.name=Gravitational Lens
 tooltips.GravitationalLens.line2=It is usually utilized to work and alter spatial structures, 
 tooltips.GravitationalLens.line3= but that doesn't stop some people from taking it and focusing sunlight to light fires for fun.
+Tooltip_DSPReceiver_02_03=Every Gravitational Lens will provide (default) 10 minutes of intensify mode.
+Tooltip_DSPReceiver_02_02=Personal Dimension was been classified as Overworld(Earth).
+Tooltip_DSPReceiver_02_05=Converted to remaining time of intensify mode.
+Tooltip_DSPReceiver_02_04=Input Gravitational Lens will be consumed immediately.
+Tooltip_DSPReceiver_02_01=Actual Generating EU = used power point * stellar coefficient * planet coefficient * 1 or 2 in intensify mode 
+Tooltip_DSPReceiver_01=§5§lYou hold in your hands the true power of Master Nebula ...
+Tooltip_DSPReceiver_02=Receive high-energy rays transmitted back from the Dyson Cloud or the Dyson Sphere.
+Tooltip_DSPReceiver_03=The received energy can be exported directly to the Wireless EU Net or Dynamo Hatches or stored as Critical Photons.
+Tooltip_DSPReceiver_04=Ratio of the requesting from Dyson Sphere power point can be limited by putting Integrated Circuit into controller block.
+Tooltip_DSPReceiver_00=Controller block for the Dyson Sphere Ray Receiving Station.
+Tooltip_DSPReceiver_05=At the same time, the maximum requested power point is 1024A Max (default).
+Tooltip_DSPReceiver_06=Actual output power is affected by stellar and planetary coefficients.
+Tooltip_DSPReceiver_07=Inputting Gravitational Lens will enable intensify mode. Increase actual output power.
+Tooltip_DSPReceiver_MachineType=Dyson Sphere Program: Ray Receiving Station
+Tooltip_DSPReceiver_08=Joining the wireless EU network when without installing a dynamo hatch.
+Tooltip_DSPReceiver_02_06=Requesting ratio = Integrated Circuit Number / Stack Size
+Tooltip_ArtificialStar_05=Continuous operation improves power generation.
+Tooltip_ArtificialStar_06=Only and must install 1 input bus.
+Tooltip_ArtificialStar_07=Energy will output to Wireless EU Net directly.
+Tooltip_ArtificialStar_MachineType=Dyson Sphere Program: Annihilation Generator
+Tooltip_ArtificialStar_00=§d§lAll you need to do is to let the proton and antiproton beams
+Tooltip_ArtificialStar_01=§d§l pass silently from both ends into the annihilation constrainer. Easy peasy!
+Tooltip_ArtificialStar_02=It owes its simple shape to the elegance of the theory.
+Tooltip_ArtificialStar_03=Actual output power is affected by 3 types tiered block.
+Tooltip_ArtificialStar_04=At the same time, higher tier increase the probability of recovering materials.
+Tooltip_ArtificialStar_02_01=Output multiplier = tTime^0.25 * tDim^0.25 * 1.588186^(tStabilisation - 2)
+Tooltip_ArtificialStar_02_06=Maximum is 150%% , Minimum is 100%% when uncontinuous.
+Tooltip_ArtificialStar_02_03=Recovering probability = tTime * tDim * tStabilisation / 1000
+Tooltip_ArtificialStar_02_02=Actual Generating EU = recipe value * output multiplier * Rewards for continuous operation
+Tooltip_ArtificialStar_02_05=Rewards multiplier 1%% increase per run when continuous operation.
+Tooltip_ArtificialStar_02_04=Input fuels will be consumed at once, process 6.4s (default), and output the corresponding EU.
+Tooltip_ArtificialStar_Controller=Controller block for the Artificial Star
