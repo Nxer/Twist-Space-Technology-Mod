@@ -10,7 +10,7 @@ public enum DSP_Galaxy implements Serializable {
     SolarSystem(1, OverWorld, TheEnd, Miranda, Haumea, Pluto, Triton, Proteus, Oberon, Callisto, Titan, Ganymede, Ceres,
         Enceladus, Deimos, Venus, Phobos, Mercury, Io, Europa, KuiperBelt, Asteroids, Mars, Moon, Makemake,
         TwilightForest),
-    Ross128(0.2, Ross128b, Ross128ba),
+    Ross128(0.4, Ross128b, Ross128ba),
     Barnarda(0.851, BarnardaC, BarnardaE, BarnardaF),
     Vega(2.98, VegaB),
     TCeti(1.9, TCetiE),

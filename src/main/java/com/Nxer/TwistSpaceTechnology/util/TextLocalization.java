@@ -22,6 +22,7 @@ public class TextLocalization {
     public static final String FluidCapacity = texter("Capacity: ", "FluidCapacity");
     public static final String HatchTier = texter("Hatch Tier: ", "HatchTier");
     public static final String Kelvin = texter(" K", "Kelvin");
+    public static final String Text_SeparatingLine = EnumChatFormatting.GOLD + "-----------------------------------------";
     public static final String BLUE_PRINT_INFO = texter(
         "Follow the" + EnumChatFormatting.BLUE
             + " Structure"
@@ -286,7 +287,7 @@ public class TextLocalization {
     public static final String Tooltip_MoleculeDeconstructor_01 = texter(EnumChatFormatting.AQUA+"The lightning seemed to roll down a ladder.","Tooltip_MoleculeDeconstructor_01");
     public static final String Tooltip_MoleculeDeconstructor_02 = texter("Separate the molecules one by one with tweezers.","Tooltip_MoleculeDeconstructor_02");
     public static final String Tooltip_MoleculeDeconstructor_03 = texter("Extra 24x Parallel per Piece. 16 Piece enable Perfect Overclock.","Tooltip_MoleculeDeconstructor_03");
-    public static final String Tooltip_MoleculeDeconstructor_04 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_MoleculeDeconstructor_04");
+    public static final String Tooltip_MoleculeDeconstructor_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.","Tooltip_MoleculeDeconstructor_04");
     public static final String Tooltip_MoleculeDeconstructor_05 = texter("The Glass Tier limit the Energy hatch voltage Tier.","Tooltip_MoleculeDeconstructor_05");
 
     // endregion
@@ -323,12 +324,43 @@ public class TextLocalization {
 
     // region DSPReceiver
     public static final String NameDSPReceiver = texter("Dyson Sphere Ray Receiving Station","NameDSPReceiver");
+    public static final String Tooltip_DSPReceiver_MachineType = texter("Dyson Sphere Program: Ray Receiving Station","Tooltip_DSPReceiver_MachineType");
+    public static final String Tooltip_DSPReceiver_00 = texter("Controller block for the Dyson Sphere Ray Receiving Station.","Tooltip_DSPReceiver_00");
+    public static final String Tooltip_DSPReceiver_01 = texter(EnumChatFormatting.DARK_PURPLE+""+EnumChatFormatting.BOLD+"You hold in your hands the true power of Master Nebula ...","Tooltip_DSPReceiver_01");
+    public static final String Tooltip_DSPReceiver_02 = texter("Receive high-energy rays transmitted back from the Dyson Cloud or the Dyson Sphere.","Tooltip_DSPReceiver_02");
+    public static final String Tooltip_DSPReceiver_03 = texter("The received energy can be exported directly to the Wireless EU Net or Dynamo Hatches or stored as Critical Photons.","Tooltip_DSPReceiver_03");
+    public static final String Tooltip_DSPReceiver_04 = texter("Ratio of the requesting from Dyson Sphere power point can be limited by putting Integrated Circuit into controller block.","Tooltip_DSPReceiver_04");
+    public static final String Tooltip_DSPReceiver_05 = texter("At the same time, the maximum requested power point is 1024A Max (default).","Tooltip_DSPReceiver_05");
+    public static final String Tooltip_DSPReceiver_06 = texter("Actual output power is affected by stellar and planetary coefficients.","Tooltip_DSPReceiver_06");
+    public static final String Tooltip_DSPReceiver_07 = texter("Inputting Gravitational Lens will enable intensify mode. Increase actual output power.","Tooltip_DSPReceiver_07");
+    public static final String Tooltip_DSPReceiver_08 = texter("Joining the wireless EU network when without installing a dynamo hatch.","Tooltip_DSPReceiver_08");
+    public static final String Tooltip_DSPReceiver_02_01 = texter("Actual Generating EU = used power point * stellar coefficient * planet coefficient * 1 or 2 in intensify mode ","Tooltip_DSPReceiver_02_01");
+    public static final String Tooltip_DSPReceiver_02_02 = texter("Personal Dimension was been classified as Overworld(Earth).","Tooltip_DSPReceiver_02_02");
+    public static final String Tooltip_DSPReceiver_02_03 = texter("Every Gravitational Lens will provide (default) 10 minutes of intensify mode.","Tooltip_DSPReceiver_02_03");
+    public static final String Tooltip_DSPReceiver_02_04 = texter("Input Gravitational Lens will be consumed immediately.","Tooltip_DSPReceiver_02_04");
+    public static final String Tooltip_DSPReceiver_02_05 = texter("Converted to remaining time of intensify mode.","Tooltip_DSPReceiver_02_05");
+    public static final String Tooltip_DSPReceiver_02_06 = texter("Requesting ratio = Integrated Circuit Number / Stack Size","Tooltip_DSPReceiver_02_06");
 
     // endregion
 
     // region ArtificialStar
     public static final String NameArtificialStar = texter("Artificial Star","NameArtificialStar");
-
+    public static final String Tooltip_ArtificialStar_MachineType = texter("Dyson Sphere Program: Annihilation Generator","Tooltip_ArtificialStar_MachineType");
+    public static final String Tooltip_ArtificialStar_Controller = texter("Controller block for the Artificial Star","Tooltip_ArtificialStar_Controller");
+    public static final String Tooltip_ArtificialStar_00 = texter(EnumChatFormatting.LIGHT_PURPLE+""+EnumChatFormatting.BOLD+"All you need to do is to let the proton and antiproton beams","Tooltip_ArtificialStar_00");
+    public static final String Tooltip_ArtificialStar_01 = texter(EnumChatFormatting.LIGHT_PURPLE+""+EnumChatFormatting.BOLD+" pass silently from both ends into the annihilation constrainer. Easy peasy!","Tooltip_ArtificialStar_01");
+    public static final String Tooltip_ArtificialStar_02 = texter("It owes its simple shape to the elegance of the theory.","Tooltip_ArtificialStar_02");
+    public static final String Tooltip_ArtificialStar_03 = texter("Actual output power is affected by 3 types tiered block.","Tooltip_ArtificialStar_03");
+    public static final String Tooltip_ArtificialStar_04 = texter("At the same time, higher tier increase the probability of recovering materials.","Tooltip_ArtificialStar_04");
+    public static final String Tooltip_ArtificialStar_05 = texter("Continuous operation improves power generation.","Tooltip_ArtificialStar_05");
+    public static final String Tooltip_ArtificialStar_06 = texter("Only and must install 1 input bus.","Tooltip_ArtificialStar_06");
+    public static final String Tooltip_ArtificialStar_07 = texter("Energy will output to Wireless EU Net directly.","Tooltip_ArtificialStar_07");
+    public static final String Tooltip_ArtificialStar_02_01 = texter("Output multiplier = tTime^0.25 * tDim^0.25 * 1.588186^(tStabilisation - 2)","Tooltip_ArtificialStar_02_01");
+    public static final String Tooltip_ArtificialStar_02_02 = texter("Actual Generating EU = recipe value * output multiplier * Rewards for continuous operation","Tooltip_ArtificialStar_02_02");
+    public static final String Tooltip_ArtificialStar_02_03 = texter("Recovering probability = tTime * tDim * tStabilisation / 1000","Tooltip_ArtificialStar_02_03");
+    public static final String Tooltip_ArtificialStar_02_04 = texter("Input fuels will be consumed at once, process 6.4s (default), and output the corresponding EU.","Tooltip_ArtificialStar_02_04");
+    public static final String Tooltip_ArtificialStar_02_05 = texter("Rewards multiplier 1%% increase per run when continuous operation.","Tooltip_ArtificialStar_02_05");
+    public static final String Tooltip_ArtificialStar_02_06 = texter("Maximum is 150%% , Minimum is 100%% when uncontinuous.","Tooltip_ArtificialStar_02_06");
 
     // endregion
 
