@@ -5,7 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehic
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
-import static com.Nxer.TwistSpaceTechnology.config.Config.secondsOfEverySpaceWarperProvideToOverloadTime;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfEverySpaceWarperProvideToOverloadTime;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_00;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_01;
@@ -40,6 +40,7 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -194,6 +195,13 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         setupProcessingLogic(processingLogic);
         CheckRecipeResult result = doCheckRecipe();
         result = postCheckRecipe(result, processingLogic);
+        // check input Space Warper
+        for (ItemStack items : getStoredInputs()) {
+            if (metaItemEqual(items, SpaceWarper.get(1))) {
+                overloadTime += 20L * DSP_Values.secondsOfEverySpaceWarperProvideToOverloadTime * items.stackSize;
+                items.stackSize = 0;
+            }
+        }
         // inputs are consumed at this point
         updateSlots();
         if (!result.wasSuccessful()) return result;
@@ -203,17 +211,9 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         mMaxProgresstime = processingLogic.getDuration();
         setEnergyUsage(processingLogic);
 
-        // check input Space Warper
-        for (ItemStack items : getStoredInputs()) {
-            if (metaItemEqual(items, SpaceWarper.get(1))) {
-                overloadTime += 20L * secondsOfEverySpaceWarperProvideToOverloadTime * items.stackSize;
-                items = null;
-            }
-        }
-
         // if in overload condition, reduced time to one-sixtieth
         if (overloadTime > 0) {
-            mMaxProgresstime /= 60 * motorTier;
+            mMaxProgresstime /= DSP_Values.overloadSpeedUpMultiplier * motorTier;
         } else {
             mMaxProgresstime /= motorTier;
         }
@@ -230,8 +230,6 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
                 }
             }
         }
-
-        // mOutputItems = processingLogic.getOutputItems();
         mOutputFluids = processingLogic.getOutputFluids();
 
         return result;

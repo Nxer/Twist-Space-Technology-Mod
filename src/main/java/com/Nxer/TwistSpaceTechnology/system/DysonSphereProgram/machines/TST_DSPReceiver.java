@@ -1,9 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentPlanetCoefficient;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentStellarCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -89,33 +92,45 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     // region Processing Logic
 
-    private String ownerName;
-    private UUID ownerUUID;
+    private String ownerName; // init when load world
+    private UUID ownerUUID; // init when load world
     private byte mode = 0;
     private long usedPowerPoint = 0;
     private boolean isUsing = false;
     private long storageEU = 0;
-    private int dimID;
-    private DSP_DataCell dspDataCell;
+    private long gravitationalLensTime = 0;
+    private int dimID; // init when load world
+    private DSP_DataCell dspDataCell; // init when load world
     private byte dataSyncFlag = 0;
     private IGregTechTileEntity baseMetaTileEntity;
 
+    private double getGLensSpeedMultiplier(){
+        return gravitationalLensTime == 0 ? 1 : DSP_Values.gravitationalLensSpeedMultiplier;
+    }
+    private void decreaseGravitationalLensTime(){
+        if (gravitationalLensTime > 0) gravitationalLensTime--;
+    }
     @Override
     public String[] getInfoData() {
+        // spotless:off
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 3];
+        String[] ret = new String[origin.length + 6];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 2] = EnumChatFormatting.GOLD + texter("Generating EU/t: ", "TST_DSPReceiver.getInfoData.01")
+        ret[origin.length - 5] = EnumChatFormatting.GOLD + texter("Generating EU/t: ", "TST_DSPReceiver.getInfoData.01")
             + EnumChatFormatting.RESET
             + generateTickEU();
-        ret[origin.length - 1] = EnumChatFormatting.GOLD
+        ret[origin.length - 4] = EnumChatFormatting.GOLD
             + texter("Used Power Point: ", "TST_DSPReceiver.getInfoData.02")
             + EnumChatFormatting.RESET
             + usedPowerPoint;
+        ret[origin.length - 3] = EnumChatFormatting.GOLD + texter("Gravitational Lens Intensify Mode remaining time: ","TST_DSPReceiver.getInfoData.03") + EnumChatFormatting.RESET + (gravitationalLensTime/20) + " s";
+        ret[origin.length - 2] = EnumChatFormatting.GOLD + infoText_CurrentStellarCoefficient + EnumChatFormatting.RESET + dspDataCell.getGalaxy() + " -> " + EnumChatFormatting.YELLOW + dspDataCell.getGalaxy().stellarCoefficient;
+        ret[origin.length - 1] = EnumChatFormatting.GOLD + infoText_CurrentPlanetCoefficient + EnumChatFormatting.RESET + DSP_Planet.getPlanetFromDimID(dimID) + " -> " + EnumChatFormatting.YELLOW + DSP_Planet.getPlanetaryCoefficientWithDimID(dimID);
         ret[origin.length] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
             + EnumChatFormatting.RESET
             + dspDataCell;
         return ret;
+        // spotless:on
     }
 
     @Override
@@ -161,6 +176,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         aNBT.setLong("usedPowerPoint", usedPowerPoint);
         aNBT.setLong("storageEU", storageEU);
         aNBT.setBoolean("isUsing", isUsing);
+        aNBT.setLong("gravitationalLensTime",gravitationalLensTime);
     }
 
     @Override
@@ -170,6 +186,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         usedPowerPoint = aNBT.getLong("usedPowerPoint");
         storageEU = aNBT.getLong("storageEU");
         isUsing = aNBT.getBoolean("isUsing");
+        gravitationalLensTime = aNBT.getLong("gravitationalLensTime");
     }
 
     /**
@@ -246,6 +263,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     private long generateTickEU() {
         return (long) (dspDataCell.getGalaxy().stellarCoefficient
             * DSP_Planet.getPlanetaryCoefficientWithDimID(this.dimID)
+            * getGLensSpeedMultiplier()
             * this.usedPowerPoint);
     }
 
@@ -267,6 +285,18 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         }
     }
 
+    private void checkGLensInput(){
+        if (mInputBusses.isEmpty()) return;
+        if (getStoredInputs().isEmpty()) return;
+        for (ItemStack items : getStoredInputs()){
+            if (metaItemEqual(items, GravitationalLens.get(1))){
+                gravitationalLensTime += 20L * items.stackSize * DSP_Values.secondsOfEveryGravitationalLensProvideToIntensifyTime;
+                items.stackSize = 0;
+            }
+        }
+        updateSlots();
+    }
+
     @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
 
@@ -284,8 +314,14 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                 stopUsingDSP();
             }
 
+
+            decreaseGravitationalLensTime();
+
             if (aTick % 128 == 0) {
                 this.syncDSPData();
+
+                checkGLensInput();
+
                 if (mode == 0) {
                     // Generate EU directly
                     if (this.storageEU > 0) {

@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.*;
 // spotless:on
-public enum DSP_Galaxy implements Runnable, Serializable {
+public enum DSP_Galaxy implements Serializable {
 
     SolarSystem(1, OverWorld, TheEnd, Miranda, Haumea, Pluto, Triton, Proteus, Oberon, Callisto, Titan, Ganymede, Ceres,
         Enceladus, Deimos, Venus, Phobos, Mercury, Io, Europa, KuiperBelt, Asteroids, Mars, Moon, Makemake,
@@ -54,8 +54,4 @@ public enum DSP_Galaxy implements Runnable, Serializable {
         return DSP_Galaxy_NULL;
     }
 
-    @Override
-    public void run() {
-
-    }
 }

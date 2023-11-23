@@ -258,6 +258,7 @@ TST_ArtificialStar.getInfoData.04=稳定场等级
 TST_ArtificialStar.getInfoData.05=回收原料几率
 TST_DSPReceiver.getInfoData.01=实际接收 EU/t: 
 TST_DSPReceiver.getInfoData.02=已占用产能点数: 
+TST_DSPReceiver.getInfoData.03=引力透镜增强模式剩余时间: 
 DSPDataCell.getInfoData=戴森球信息: 
 NEI.AntimatterFuelRodGeneratingRecipe.01=有概率回收部分材料. 概率受模块等级影响.
 TST_DSPLauncher.getInfoData.01=剩余过载时间: 
@@ -270,8 +271,14 @@ Tooltip_DSPLauncher_03=不会超频且没有额外并行.
 Tooltip_DSPLauncher_04=更高级的加速轨道可以减少发射耗时.
 Tooltip_DSPLauncher_05=输入空间翘曲器可以进入过载模式. 减少发射时间间隔.
 Tooltip_DSPLauncher_06=未安装能源仓时自动进入无线电力网络模式.
-Tooltip_DSPLauncher_2_01=最终处理时间 = 配方时间 /( 加速轨道等级 * 1 或 60 过载模式下 )
+Tooltip_DSPLauncher_2_01=最终处理时间 = 配方时间 /( 加速轨道等级 * 1 或 30 过载模式下 )
 Tooltip_DSPLauncher_2_02=每个空间翘曲器提供(默认)15分钟的过载模式.
 Tooltip_DSPLauncher_2_03=输入的空间翘曲器会立刻被消耗.
 Tooltip_DSPLauncher_2_04=转换成剩余过载模式时间.
 Tooltip_DoNotNeedMaintenance=不需要维护仓!
+infoText_CurrentStellarCoefficient=当前恒星系数: 
+infoText_CurrentPlanetCoefficient=当前行星系数: 
+MetaItem01.18.name=引力透镜
+tooltips.GravitationalLens.line1=其扭曲而强大的引力场被屏蔽在容器中.
+tooltips.GravitationalLens.line2=通常会利用它来加工和改变空间结构, 
+tooltips.GravitationalLens.line3= 但也不妨碍有些人会拿它聚焦阳光点火玩.

@@ -258,6 +258,7 @@ TST_ArtificialStar.getInfoData.04=Stabilisation Field Tier
 TST_ArtificialStar.getInfoData.05=Recover material chance
 TST_DSPReceiver.getInfoData.01=Generating EU/t: 
 TST_DSPReceiver.getInfoData.02=Used Power Point: 
+TST_DSPReceiver.getInfoData.03=Gravitational Lens Intensify Mode remaining time: 
 DSPDataCell.getInfoData=Dyson Sphere Data: 
 NEI.AntimatterFuelRodGeneratingRecipe.01=Chance to recover some raw materials. Probability is affected by module tier.
 TST_DSPLauncher.getInfoData.01=Overload time: 
@@ -267,7 +268,7 @@ Tooltip_DSPLauncher_05=Inputting Space Warper will enable overlord mode. Reduce 
 Tooltip_DSPLauncher_04=Higher tier of Elevator Module means faster launching.
 Tooltip_DSPLauncher_03=No overclock and no extra parallel.
 Tooltip_DSPLauncher_02=Launching Dyson Sphere components into Dyson Sphere orbit to form a Dyson Sphere.
-Tooltip_DSPLauncher_2_01=Final progress time = recipe time / ( module tier * 1 or 60 in overload mode )
+Tooltip_DSPLauncher_2_01=Final progress time = recipe time / ( module tier * 1 or 30 in overload mode )
 Tooltip_DSPLauncher_2_02=Every Space Warper will provide (default) 15 minutes of overload mode.
 Tooltip_DSPLauncher_2_03=Input Space Warper will be consumed immediately.
 Tooltip_DSPLauncher_06=Joining the wireless EU network when without installing an energy hatch.
@@ -275,3 +276,9 @@ Tooltip_DSPLauncher_2_04=Converted to remaining time of overload mode.
 Tooltip_Details=§dDetails: 
 Tooltip_DSPLauncher_MachineType=Dyson Sphere Program: Launch Site
 Tooltip_DoNotNeedMaintenance=Do Not Need Maintenance!
+infoText_CurrentPlanetCoefficient=Current Planet Coefficient: 
+tooltips.GravitationalLens.line1=Its twisted and powerful gravitational field is shielded in a container.
+infoText_CurrentStellarCoefficient=Current Stellar Coefficient: 
+MetaItem01.18.name=Gravitational Lens
+tooltips.GravitationalLens.line2=It is usually utilized to work and alter spatial structures, 
+tooltips.GravitationalLens.line3= but that doesn't stop some people from taking it and focusing sunlight to light fires for fun.

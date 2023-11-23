@@ -13,7 +13,10 @@ public final class DSP_Values {
     public static final long EUEveryAntimatterFuelRod = Config.EUEveryAntimatterFuelRod;// default 1024L * Integer.MAX_VALUE;
     public static final long EUEveryAntimatter = Config.EUEveryAntimatter;// default 4L * Integer.MAX_VALUE;
     public static final double secondsOfArtificialStarProgressCycleTime = Config.secondsOfArtificialStarProgressCycleTime;// default 6.4
-    public static final int secondsOfEverySpaceWarperProvideToOverloadTime = Config.secondsOfEverySpaceWarperProvideToOverloadTime;
+    public static final int secondsOfEverySpaceWarperProvideToOverloadTime = Config.secondsOfEverySpaceWarperProvideToOverloadTime;// default 60*15
+    public static final int overloadSpeedUpMultiplier = Config.overloadSpeedUpMultiplier; // default 30
+    public static final double gravitationalLensSpeedMultiplier = Config.gravitationalLensSpeedMultiplier;
+    public static final int secondsOfEveryGravitationalLensProvideToIntensifyTime = Config.secondsOfEveryGravitationalLensProvideToIntensifyTime;
 
     // spotless:on
 }

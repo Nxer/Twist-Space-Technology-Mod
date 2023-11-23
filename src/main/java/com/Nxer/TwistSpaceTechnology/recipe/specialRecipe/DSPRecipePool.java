@@ -9,6 +9,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DSPLauncher;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DSPReceiver;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrameComponent;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EmptySmallLaunchVehicle;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehicle;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
@@ -42,6 +43,7 @@ import static gtPlusPlus.core.material.ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.core.material.ELEMENT.STANDALONE.HYPOGEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
+import gregtech.api.util.GTPP_Recipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -158,7 +160,7 @@ public class DSPRecipePool implements IRecipePool {
                 ItemList.EnergisedTesseract.get(16),
 
                 ItemList.Field_Generator_UMV.get(8),
-                Particle.getBaseParticle(Particle.HIGGS_BOSON))
+                copyAmount(64,Particle.getBaseParticle(Particle.HIGGS_BOSON)))
             .fluidInputs(MyMaterial.metastableOganesson.getMolten(144 * 256))
             .itemOutputs(eM_Ultimate_Containment_Advanced.get(8))
             .noFluidOutputs()
@@ -681,6 +683,31 @@ public class DSPRecipePool implements IRecipePool {
             .eut(RECIPE_UEV)
             .duration(20 * 32)
             .addTo(SpaceAssembler);
+
+        // Gravitational Lens
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                SpaceWarper.get(1),
+                Laser_Lens_Special.get(4),
+                copyAmount(64,Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmount(64,Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmount(64,Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmount(64,Particle.getBaseParticle(Particle.GRAVITON))
+            )
+            .fluidInputs(Materials.MysteriousCrystal.getMolten(144*9*64*4))
+            .itemOutputs(
+                GravitationalLens.get(1),
+                GravitationalLens.get(1),
+                GravitationalLens.get(1),
+                GravitationalLens.get(1),
+                GravitationalLens.get(1)
+            )
+            .noFluidOutputs()
+            .outputChances(10000,9000,8000,7000,6000)
+            .noOptimize()
+            .eut(RECIPE_UMV)
+            .duration(20 * 1200)
+            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sCyclotronRecipes);
 
     }
 }

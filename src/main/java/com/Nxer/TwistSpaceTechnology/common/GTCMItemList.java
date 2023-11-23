@@ -50,6 +50,7 @@ public enum GTCMItemList implements IItemContainer {
     AnnihilationConstrainer,
     AntimatterFuelRod,
     StellarConstructionFrameMaterial,
+    GravitationalLens,
     DSPLauncher,
     DSPReceiver,
     ArtificialStar,
