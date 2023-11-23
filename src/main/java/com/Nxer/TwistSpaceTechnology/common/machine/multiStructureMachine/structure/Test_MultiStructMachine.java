@@ -1,11 +1,11 @@
 // spotless:off
-package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
+package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,29 +15,27 @@ import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
-import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 
-public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine {
+public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine<Test_MultiStructMachine> {
 
     public Test_MultiStructMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        setShape();
-        horizontalOffSet = 1;
-        verticalOffSet = 1;
-        depthOffSet = 0;
     }
 
     public Test_MultiStructMachine(String mName) {
         super(mName);
+    }
+
+    @Override
+    public IStructureDefinition<Test_MultiStructMachine> getStructureDefinition() {
+        return null;
     }
 
     // region Processing Logic
@@ -64,7 +62,7 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
 
     @Override
     public void setShape() {
-        shape = new String[][] { { "AAA", "AAA", "AAA" }, { "A~A", "AAA", "AAA" }, { "AAA", "AAA", "AAA" } };
+        super.setShape();
     }
 
     @Override
@@ -75,6 +73,10 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
+        StructureLoader.MultiStructureDefinition.OffSet offSet=StructureLoader.getOffSet(this.mName,STRUCTURE_PIECE_MAIN);
+        int horizontalOffSet=offSet.horizontalOffSet;
+        int verticalOffSet=offSet.verticalOffSet;
+        int depthOffSet=offSet.depthOffSet;
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
@@ -82,6 +84,10 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
         if (this.mMachine) return -1;
         int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
+        StructureLoader.MultiStructureDefinition.OffSet offSet=StructureLoader.getOffSet(this.mName,STRUCTURE_PIECE_MAIN);
+        int horizontalOffSet=offSet.horizontalOffSet;
+        int verticalOffSet=offSet.verticalOffSet;
+        int depthOffSet=offSet.depthOffSet;
         return this.survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
@@ -119,19 +125,10 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     }
 
     @Override
-    protected IStructureDefinition<Test_MultiStructMachine> internalStructureDefine() {
-        return StructureDefinition.<Test_MultiStructMachine>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-            .addElement(
-                'A',
-                GT_HatchElementBuilder.<Test_MultiStructMachine>builder()
-                    .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
-                    .adder(Test_MultiStructMachine::addToMachineList)
-                    .casingIndex(176)
-                    .dot(1)
-                    .buildAndChain(GregTech_API.sBlockCasings8, 0))
-            .build();
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        return true;
     }
+
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {

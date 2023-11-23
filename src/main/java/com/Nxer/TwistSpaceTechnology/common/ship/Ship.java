@@ -56,6 +56,8 @@ public class Ship extends Entity implements Runnable {
 
     }
 
+
+
     @Override
     public void travelToDimension(int dimensionId) {
         if (!validDimId.contains(dimensionId) && !forceTravel) {

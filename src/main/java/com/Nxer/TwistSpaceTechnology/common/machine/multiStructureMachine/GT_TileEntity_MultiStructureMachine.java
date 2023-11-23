@@ -5,8 +5,15 @@ import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructureMachineBuilder;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -14,33 +21,27 @@ import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresL
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
-public abstract class GT_TileEntity_MultiStructureMachine extends
-    GTCM_MultiMachineBase<GT_TileEntity_MultiStructureMachine> implements IConstructable, ISurvivalConstructable {
+public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntity_MultiStructureMachine<T>> extends
+    GTCM_MultiMachineBase<T> implements IConstructable, ISurvivalConstructable {
 
-    public String MainStructName;
-    public int horizontalOffSet;
-    public int verticalOffSet;
-    public int depthOffSet;
     // ONLY main block can process recipe or do anything machine need to do.
     // the sub structure actually only add functional models or additional
     // bonus. once the sub structure registry and link to the main machine,
     // no need to load the chunk or even dimension where substructure is.
     // but every time sub structure reloaded, the main block will also auto reload
     // its main structure
-
     public int ID = -1;
     public int Type = -1;
-    public String[][] shape;
+
     public int fatherID = -1;
-    // block or materials in Object[0], meta in object[1],if meta not required, use 0;
-    public ArrayList<Object[]> staticStructureDefine;
+
 
     protected GT_TileEntity_MultiStructureMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, "MultiStructure." + aNameRegional);
+        setShape();
 
     }
 
@@ -48,21 +49,20 @@ public abstract class GT_TileEntity_MultiStructureMachine extends
         super(mName);
     }
 
-    public void setSubType(ArrayList<Integer> subType) {
-        MultiStructureManager.registryTypeMap(Type, subType);
+    public StructureLoader.MultiStructureDefinition getMultiStructureDefinition(){
+        return StructureLoader.readStructure(mName);
     }
 
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        if (!checkPiece(MainStructName, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            return false;
-        }
-        return MultiStructureManager.isComplete(this);
-    }
+//    @Override
+//    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+//        if (!checkPiece(MainStructName, horizontalOffSet, verticalOffSet, depthOffSet)) {
+//            return false;
+//        }
+//        return MultiStructureManager.isComplete(this);
+//    }
 
     @Override
     public void onBlockDestroyed() {
-        LOG.info("DO YOU ACCESS HERE?");
         MultiStructureManager.removeMachine(this);
         super.onBlockDestroyed();
     }
@@ -73,7 +73,46 @@ public abstract class GT_TileEntity_MultiStructureMachine extends
 
     protected abstract int getMaxParallelRecipes();
 
-    public abstract void setShape();
+    public void setShape() {
+//        for (String piece : pieces) {
+//            shape.add(StructureLoader.readStructure(MainStructName));
+//
+//        }
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (!this.mMachine) {
+            return -1;
+        }
+        Item item=stackSize.getItem();
+        if(item instanceof ItemMultiStructureMachineBuilder){
+            var pieces = StructureLoader.getPieces(this.mName);
+            for(var name:pieces.entrySet()){
+                StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.readStructure(mName).offSet.get(name.getValue());
+                buildPiece(name.getKey(),stackSize,false,offSet.horizontalOffSet,offSet.verticalOffSet,offSet.depthOffSet);
+            }
+            return 0;
+        }
+        return super.survivalConstruct(stackSize, elementBudget, env);
+    }
+
+
+    //need to be optimized and rewrite
+    @Override
+    public boolean checkStructure(boolean aForceReset, IGregTechTileEntity aBaseMetaTileEntity) {
+        if(MultiStructureManager.isComplete(this)){
+            var pieces = StructureLoader.getPieces(this.mName);
+            for(var name:pieces.entrySet()){
+                StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.readStructure(mName).offSet.get(name.getValue());
+                if(!checkPiece(mName, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet)){
+                    return false;
+                };
+            }
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -97,12 +136,14 @@ public abstract class GT_TileEntity_MultiStructureMachine extends
             if (aBaseMetaTileEntity.isClientSide()) {
                 return;
             }
-            LOG.info(
-                "on First Tick machine loaded and registry:" + aBaseMetaTileEntity.getMetaTileEntity()
-                    .getLocalName());
             MultiStructureManager.registryMachine(this);
         }
         super.onPreTick(aBaseMetaTileEntity, aTick);
+    }
+
+    @Override
+    protected void setEnergyHatches(ArrayList<GT_MetaTileEntity_Hatch_Energy> EnergyHatches) {
+        super.setEnergyHatches(EnergyHatches);
     }
 
     @Override
@@ -121,12 +162,27 @@ public abstract class GT_TileEntity_MultiStructureMachine extends
         super.onWorldLoad(aSaveDirectory);
     }
 
-    protected abstract <T extends GT_TileEntity_MultiStructureMachine> IStructureDefinition<T> internalStructureDefine();
+    @Override
+    public void onWorldSave(File aSaveDirectory) {
+        super.onWorldSave(aSaveDirectory);
+    }
 
     @Override
-    public IStructureDefinition<GT_TileEntity_MultiStructureMachine> getStructureDefinition() {
-        return internalStructureDefine();
+    protected void setExoticEnergyHatches(List<GT_MetaTileEntity_Hatch> ExoticEnergyHatches) {
+        var father = MultiStructureManager.getMachine(fatherID);
+        if (father == null) {
+            stopMachine();
+            return;
+        }
+        super.setExoticEnergyHatches(father.getExoticEnergyHatches());
     }
+
+    @Override
+    public ArrayList<ItemStack> getStoredInputs() {
+        var father = MultiStructureManager.getMachine(fatherID);
+        return father != null ? father.getStoredInputs() : super.getStoredInputs();
+    }
+
 
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {

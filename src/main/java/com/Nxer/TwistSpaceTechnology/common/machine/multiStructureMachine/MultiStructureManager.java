@@ -12,7 +12,7 @@ import net.minecraft.world.WorldSavedData;
 
 public class MultiStructureManager extends WorldSavedData {
 
-    private static transient final HashMap<Integer, GT_TileEntity_MultiStructureMachine> machines = new HashMap<>();
+    private static transient final HashMap<Integer, GT_TileEntity_MultiStructureMachine<?>> machines = new HashMap<>();
     private static final HashMap<Integer, HashSet<Integer>> subMachines = new HashMap<>();
 
     private static final HashMap<Integer, ArrayList<Integer>> validSubTypeCode = new HashMap<>();
@@ -22,7 +22,7 @@ public class MultiStructureManager extends WorldSavedData {
         super("MultiStructureManagementSavedData");
     }
 
-    public static GT_TileEntity_MultiStructureMachine getMachine(int ID) {
+    public static GT_TileEntity_MultiStructureMachine<?> getMachine(int ID) {
         if (ID == -1) {
             return null;
         }
@@ -32,7 +32,7 @@ public class MultiStructureManager extends WorldSavedData {
     // any Time a machine is placed in the world or reloaded when chunk or dimension is reloaded, should call these
     // function
     // to let manager manage the structure main block.
-    public static void registryMachine(GT_TileEntity_MultiStructureMachine machine) {
+    public static void registryMachine(GT_TileEntity_MultiStructureMachine<?> machine) {
 
         if (machine == null) {
             LOG.info("unexpected multi-structure registry");
@@ -56,15 +56,14 @@ public class MultiStructureManager extends WorldSavedData {
     }
 
     // create a link between main structure and sub structure
-    public static boolean linkMachine(GT_TileEntity_MultiStructureMachine mainMachine,
-        GT_TileEntity_MultiStructureMachine subMachine) {
+    public static boolean linkMachine(GT_TileEntity_MultiStructureMachine<?> mainMachine,
+        GT_TileEntity_MultiStructureMachine<?> subMachine) {
         if (mainMachine == null || subMachine == null) {
             return false;
         }
         if (mainMachine.checkStructure(false) || subMachine.checkStructure(false)) {
             return false;
         }
-
         int mainID = mainMachine.ID;
         int subID = subMachine.ID;
         if (!validSubTypeCode.get(mainMachine.Type)
@@ -79,8 +78,8 @@ public class MultiStructureManager extends WorldSavedData {
     }
 
     // remove a link between main structure and sub structure
-    public static void removeLink(GT_TileEntity_MultiStructureMachine mainMachine,
-        GT_TileEntity_MultiStructureMachine subMachine) {
+    public static void removeLink(GT_TileEntity_MultiStructureMachine<?> mainMachine,
+        GT_TileEntity_MultiStructureMachine<?> subMachine) {
         if (mainMachine == null || subMachine == null) {
             return;
         }
@@ -92,7 +91,7 @@ public class MultiStructureManager extends WorldSavedData {
     }
 
     // when machine block is destroyed in any case, call this function.
-    public static void removeMachine(GT_TileEntity_MultiStructureMachine machine) {
+    public static void removeMachine(GT_TileEntity_MultiStructureMachine<?> machine) {
         if (machine == null) {
             return;
         }
@@ -103,7 +102,7 @@ public class MultiStructureManager extends WorldSavedData {
         LOG.info("machine removed:" + machine.getLocalName());
     }
 
-    public static boolean isComplete(GT_TileEntity_MultiStructureMachine machine) {
+    public static boolean isComplete(GT_TileEntity_MultiStructureMachine<?> machine) {
         if (machine == null) {
             return false;
         }
