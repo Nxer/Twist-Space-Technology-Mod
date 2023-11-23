@@ -34,13 +34,14 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    api('com.github.GTNewHorizons:GT5-Unofficial:5.09.44.68:dev')
+    api('com.github.GTNewHorizons:GT5-Unofficial:5.09.44.76:dev')
     implementation('com.github.GTNewHorizons:bartworks:0.8.9:dev')
     implementation('com.github.GTNewHorizons:AE2FluidCraft-Rework:1.1.56-gtnh-pre:dev')
     implementation('com.github.GTNewHorizons:GTplusplus:1.10.22-pre:dev')
     implementation('com.github.GTNewHorizons:GoodGenerator:0.7.5:dev')
     implementation('com.github.GTNewHorizons:GTNH-Lanthanides:0.11.2:dev')
     implementation('com.github.GTNewHorizons:GalacticGregGT5:1.0.10:dev')
+    implementation('com.github.GTNewHorizons:Galaxy-Space-GTNH:1.2.12-GTNH:dev')
     implementation('com.github.GTNewHorizons:TecTech:5.3.9:dev')
     implementation('com.github.GTNewHorizons:NewHorizonsCoreMod:2.2.31-pre:dev')
     implementation('com.github.GTNewHorizons:Avaritia:1.46:dev')
@@ -48,6 +49,9 @@ dependencies {
     implementation('com.github.GTNewHorizons:Eternal-Singularity:1.1.2:dev')
     implementation('com.github.GTNewHorizons:Universal-Singularities:8.6.7:dev')
     implementation('com.github.GTNewHorizons:BlockRenderer6343:1.0.3:dev')
+    implementation('com.github.GTNewHorizons:GTNH-Intergalactic:1.2.4:dev')
+    implementation('com.github.GTNewHorizons:amunra:0.5.0:dev')
+//    implementation('com.github.RealSilverMoon:BoxPlusPlus:1.2.0:dev')
 //    implementation('com.github.GTNewHorizons:KubaTech:0.13.4:dev')
 
 }

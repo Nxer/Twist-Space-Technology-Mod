@@ -8,6 +8,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
  * Some Dev Tools about Path.
  */
 public class PathHelper {
+    // spotless:off
 
     /**
      * Auto init the workspace 'resources' folder's path.
@@ -21,14 +22,11 @@ public class PathHelper {
             String tempString;
             if (tempUrl != null) {
                 /* Cut the String. */
-                tempString = tempUrl.getFile()
-                    .substring(
-                        6,
-                        tempUrl.getFile()
-                            .indexOf("build"));
+                tempString = tempUrl.getFile().substring(6, tempUrl.getFile().indexOf("build"));
                 TwistSpaceTechnology.DevResource = tempString + "src/main/resources";
             }
         }
     }
 
+    // spotless:on
 }

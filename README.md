@@ -1,11 +1,22 @@
-# GTNH社区mod ：扭曲空间科技
-## 源自GTNH普通玩家的游戏内容。
-## 每个人都可以在这儿集中实现好的想法。
-### 平衡性太糟糕当然不行。
+## GTNH社区mod ：扭曲空间科技
+* 源自GTNH普通玩家的游戏内容。 
+* 每个人都可以在这儿集中实现好的想法。
+* 平衡性太糟糕当然不行。
+## 版本需求
+* GTNH-2.4.1+ 版本：
+1. 需要升级GTNH-Lanthanides mod至 0.10.8+版本
+* GTNH-2.4.0 版本：
+1. 需要升级GTNH-Lanthanides mod至 0.10.8版本或专门适配版本；
+2. 需要升级GregTech mod至 5.09.44.03+版本
 #
 #
-# GTNH Community Mod :  Twist Space Technology
-## Modded elements from normal players .
-## Everyone can realize ideas here .
-### Just need the balance not too abstract .
-#
+## GTNH Community Mod :  Twist Space Technology
+* Modded elements from normal players .
+* Everyone can realize ideas here .
+* Just need the balance not too abstract .
+## Version Requirements
+* GTNH-2.4.1+ version:
+1. GTNH-Lanthanides mod need version 0.10.8+ .
+* GTNH-2.4.0 verion:
+1. GTNH-Lanthanides mod need version 0.10.8+ .
+2. GregTech mod need version 5.09.44.03+ .

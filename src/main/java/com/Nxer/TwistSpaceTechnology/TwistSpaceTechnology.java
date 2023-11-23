@@ -16,6 +16,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 @Mod(
@@ -50,7 +51,7 @@ public class TwistSpaceTechnology {
     public static final String VERSION = Tags.VERSION;
 
     /**
-     * If you need send a message to the Log, call {@link TwistSpaceTechnology#LOG#info(String message)} .
+     * If you need send a message to the Log, call this.
      */
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 
@@ -109,4 +110,10 @@ public class TwistSpaceTechnology {
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
     }
+
+    @Mod.EventHandler
+    public void serverStarted(FMLServerStartedEvent event) {
+        proxy.serverStarted(event);
+    }
+
 }

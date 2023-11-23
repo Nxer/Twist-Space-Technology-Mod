@@ -42,6 +42,21 @@ public enum GTCMItemList implements IItemContainer {
     MoleculeDeconstructor,
     CrystallineInfinitier,
 
+    // DSP
+    SolarSail,
+    DysonSphereFrameComponent,
+    SmallLaunchVehicle,
+    EmptySmallLaunchVehicle,
+    CriticalPhoton,
+    Antimatter,
+    AnnihilationConstrainer,
+    AntimatterFuelRod,
+    StellarConstructionFrameMaterial,
+    GravitationalLens,
+    DSPLauncher,
+    DSPReceiver,
+    ArtificialStar,
+
     // single block Machines
     InfiniteAirHatch,
 

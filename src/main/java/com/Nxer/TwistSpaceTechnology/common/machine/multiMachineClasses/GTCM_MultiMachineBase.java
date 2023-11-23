@@ -34,6 +34,18 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     // endregion
 
+    // region new methods
+    public void repairMachine() {
+        mHardHammer = true;
+        mSoftHammer = true;
+        mScrewdriver = true;
+        mCrowbar = true;
+        mSolderingTool = true;
+        mWrench = true;
+    }
+
+    // endregion
+
     // region Processing Logic
 
     /**
@@ -60,7 +72,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     /**
      * Proxy Perfect Overclock Supplier.
-     * 
+     *
      * @return If true, enable Perfect Overclock.
      */
     protected abstract boolean isEnablePerfectOverclock();
@@ -77,7 +89,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     /**
      * Proxy Standard Speed Multiplier Supplier.
-     * 
+     *
      * @return The value (or a method to get the value) of Speed Multiplier (dynamically) .
      */
     @ApiStatus.OverrideOnly
@@ -85,7 +97,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     /**
      * Proxy Standard Parallel Supplier.
-     * 
+     *
      * @return The value (or a method to get the value) of Max Parallel (dynamically) .
      */
     @ApiStatus.OverrideOnly
@@ -93,7 +105,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     /**
      * Limit the max parallel to prevent overflow.
-     * 
+     *
      * @return Limited parallel.
      */
     protected int getLimitedMaxParallel() {
@@ -154,8 +166,21 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
+    public boolean addInputBusOrOutputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addInputBusToMachineList(aTileEntity, aBaseCasingIndex)
+            || addOutputBusToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
+        return true;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean doRandomMaintenanceDamage() {
         return true;
     }
 
@@ -184,10 +209,10 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return true;
     }
 
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
-    }
+    // @Override
+    // public boolean supportsBatchMode() {
+    // return true;
+    // }
 
     // endregion
 }
