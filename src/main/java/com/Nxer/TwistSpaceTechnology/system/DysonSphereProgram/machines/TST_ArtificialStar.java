@@ -224,6 +224,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (rewardContinuous != 0 && mMaxProgresstime == 0) rewardContinuous = 0;
         /*
          * if (mMaxProgresstime > 0 && mProgresstime == mMaxProgresstime){
          * // the last tick of a progress
