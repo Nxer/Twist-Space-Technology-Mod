@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_00;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_01;
@@ -24,6 +25,15 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Artifi
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_07;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_05;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_02;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
@@ -426,7 +436,18 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
             .addStructureInfo(Tooltip_ArtificialStar_02_04)
             .addStructureInfo(Tooltip_ArtificialStar_02_05)
             .addStructureInfo(Tooltip_ArtificialStar_02_06)
-            .addStructureInfo(Text_SeparatingLine)
+          .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
+          .addStructureInfo(DSPName + ":")
+          .addStructureInfo(Tooltip_DSPInfo_launch_01)
+          .addStructureInfo(Tooltip_DSPInfo_launch_02)
+          .addStructureInfo(Tooltip_DSPInfo_00)
+          .addStructureInfo(Tooltip_DSPInfo_01)
+          .addStructureInfo(Tooltip_DSPInfo_02)
+          .addStructureInfo(Tooltip_DSPInfo_03)
+          .addStructureInfo(Tooltip_DSPInfo_04)
+          .addStructureInfo(Tooltip_DSPInfo_05)
+          .addStructureInfo(Tooltip_DSPInfo_06)
+          .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)

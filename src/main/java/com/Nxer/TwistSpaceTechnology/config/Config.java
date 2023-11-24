@@ -4,6 +4,9 @@ import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
 
+import static gregtech.api.enums.TierEU.RECIPE_UHV;
+import static gregtech.api.enums.TierEU.RECIPE_UMV;
+
 // spotless:off
 public class Config {
     // region Region
@@ -26,6 +29,10 @@ public class Config {
     public static int overloadSpeedUpMultiplier = 30;
     public static double gravitationalLensSpeedMultiplier = 2;
     public static int secondsOfEveryGravitationalLensProvideToIntensifyTime = 60 * 10;
+    public static double secondsOfLaunchingSolarSail = 120;
+    public static double secondsOfLaunchingNode = 900;
+    public static int EUTOfLaunchingSolarSail = (int) RECIPE_UHV;
+    public static int EUTOfLaunchingNode = (int) RECIPE_UMV;
 
     // endregion
 
@@ -45,6 +52,11 @@ public class Config {
         overloadSpeedUpMultiplier = configuration.getInt("overloadSpeedUpMultiplier", DSP, overloadSpeedUpMultiplier, 1, 256, "How much speed up when overload mode. Type: int");
         gravitationalLensSpeedMultiplier = Double.parseDouble(configuration.getString("gravitationalLensSpeedMultiplier", DSP, String.valueOf(gravitationalLensSpeedMultiplier), "How much of Speed Multiplier when in Gravitational Lens intensify mode. Type: double"));
         secondsOfEveryGravitationalLensProvideToIntensifyTime = configuration.getInt("secondsOfEveryGravitationalLensProvideToIntensifyTime", DSP, secondsOfEveryGravitationalLensProvideToIntensifyTime, 0, Integer.MAX_VALUE, "Intensify Mode Time (second) of every Gravitational Lens will provide. Type: int");
+        secondsOfLaunchingSolarSail = Double.parseDouble(configuration.getString("secondsOfLaunchingSolarSail", DSP, String.valueOf(secondsOfLaunchingSolarSail), "Seconds of launching a Solar Sail."));
+        secondsOfLaunchingNode = Double.parseDouble(configuration.getString("secondsOfLaunchingNode", DSP, String.valueOf(secondsOfLaunchingNode), "Seconds of launching a Dyson Sphere Node."));
+        EUTOfLaunchingSolarSail = configuration.getInt("EUTOfLaunchingSolarSail", DSP, EUTOfLaunchingSolarSail, 1, Integer.MAX_VALUE, "EUt of Launching Solar Sail.");
+        EUTOfLaunchingNode = configuration.getInt("EUTOfLaunchingNode", DSP, EUTOfLaunchingNode, 1, Integer.MAX_VALUE, "EUt of Launching Node.");
+
 
         if (configuration.hasChanged()) {
             configuration.save();

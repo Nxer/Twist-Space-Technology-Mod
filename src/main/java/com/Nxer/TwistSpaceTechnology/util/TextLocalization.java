@@ -364,6 +364,17 @@ public class TextLocalization {
 
     // endregion
 
+    // region Dyson Sphere Program Information
+    public static final String Tooltip_DSPInfo_launch_01 = texter("Launching Solar Sail increase Solar Sail amount of current Galaxy's Dyson Sphere.","Tooltip_DSPInfo_launch_01");
+    public static final String Tooltip_DSPInfo_launch_02 = texter("Launching Small Launch Vehicle increase Node amount of current Galaxy's Dyson Sphere.","Tooltip_DSPInfo_launch_02");
+    public static final String Tooltip_DSPInfo_00 = texter("DSP Power Point = Solar Sail Power Point (default 524288) * Solar Sail amount * (Node + 1)^0.5","Tooltip_DSPInfo_00");
+    public static final String Tooltip_DSPInfo_01 = texter("Every Node can absorb (default) 256 Solar Sails.","Tooltip_DSPInfo_01");
+    public static final String Tooltip_DSPInfo_02 = texter("If unabsorbed solar sails amount is larger than 2048,","Tooltip_DSPInfo_02");
+    public static final String Tooltip_DSPInfo_03 = texter(" the excess may be destroyed.","Tooltip_DSPInfo_03");
+    public static final String Tooltip_DSPInfo_04 = texter("Every 30 minutes has 1/5000 chance to decrease Solar Sail amount.","Tooltip_DSPInfo_04");
+    public static final String Tooltip_DSPInfo_05 = texter("In decreasing, every Dyson Sphere has 1/4 chance to destroyed Solar Sail amount.","Tooltip_DSPInfo_05");
+    public static final String Tooltip_DSPInfo_06 = texter("The amount of destroyed is the excess' 1/2 .","Tooltip_DSPInfo_06");
+
 
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");

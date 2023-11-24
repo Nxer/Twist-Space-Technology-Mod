@@ -54,7 +54,7 @@ public class DSP_SolarSailDecreaser {
 
     private void decreaseSolarSail(DSP_DataCell dsp) {
         if (dsp.getSolarSailToDelete() < 1) return;
-        dsp.addDSPSolarSail(dsp.getSolarSailToDelete() / 2);
+        dsp.addDSPSolarSail(- dsp.getSolarSailToDelete() / 2);
     }
 
     public DSP_SolarSailDecreaser checkFlushed() {

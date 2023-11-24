@@ -315,3 +315,12 @@ Tooltip_ArtificialStar_02_02=Actual Generating EU = recipe value * output multip
 Tooltip_ArtificialStar_02_05=Rewards multiplier 1%% increase per run when continuous operation.
 Tooltip_ArtificialStar_02_04=Input fuels will be consumed at once, process 6.4s (default), and output the corresponding EU.
 Tooltip_ArtificialStar_Controller=Controller block for the Artificial Star
+Tooltip_DSPInfo_00=DSP Power Point = Solar Sail Power Point (default 524288) * Solar Sail amount * (Node + 1)^0.5
+Tooltip_DSPInfo_01=Every Node can absorb (default) 256 Solar Sails.
+Tooltip_DSPInfo_02=If unabsorbed solar sails amount exceeds 2048,
+Tooltip_DSPInfo_03= the excess may be destroyed.
+Tooltip_DSPInfo_04=Every 30 minutes has 1/5000 chance to try decreasing Solar Sail amount.
+Tooltip_DSPInfo_05=In decreasing, every Dyson Sphere has 1/4 chance to destroyed Solar Sail amount.
+Tooltip_DSPInfo_06=The amount of destroyed is the excess' 1/2 .
+Tooltip_DSPInfo_launch_01=Launching Solar Sail increase Solar Sail amount of current Galaxy's Dyson Sphere.
+Tooltip_DSPInfo_launch_02=Launching Small Launch Vehicle increase Node amount of current Galaxy's Dyson Sphere.

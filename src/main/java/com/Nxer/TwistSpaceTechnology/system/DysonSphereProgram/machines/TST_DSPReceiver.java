@@ -5,6 +5,16 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLen
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_05;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_02;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_00;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_01;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02;
@@ -581,7 +591,18 @@ Q -> ofFrame...(NaquadahAlloy, ...);
             .addStructureInfo(Tooltip_DSPReceiver_02_03)
             .addStructureInfo(Tooltip_DSPReceiver_02_04)
             .addStructureInfo(Tooltip_DSPReceiver_02_05)
-            .addStructureInfo("-----------------------------------------")
+          .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
+          .addStructureInfo(DSPName + ":")
+          .addStructureInfo(Tooltip_DSPInfo_launch_01)
+          .addStructureInfo(Tooltip_DSPInfo_launch_02)
+          .addStructureInfo(Tooltip_DSPInfo_00)
+          .addStructureInfo(Tooltip_DSPInfo_01)
+          .addStructureInfo(Tooltip_DSPInfo_02)
+          .addStructureInfo(Tooltip_DSPInfo_03)
+          .addStructureInfo(Tooltip_DSPInfo_04)
+          .addStructureInfo(Tooltip_DSPInfo_05)
+          .addStructureInfo(Tooltip_DSPInfo_06)
+          .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)

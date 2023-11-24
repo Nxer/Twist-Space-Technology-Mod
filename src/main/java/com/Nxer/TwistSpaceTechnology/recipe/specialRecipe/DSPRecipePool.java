@@ -17,11 +17,16 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatter;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingNode;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Containment;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Power;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Spacetime;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
@@ -132,9 +137,11 @@ public class DSPRecipePool implements IRecipePool {
 
                 StellarConstructionFrameMaterial.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 64),
-                lightPlating.getItemStack(64),
+                GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
+                GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
 
+                lightPlating.getItemStack(64),
+                eM_Power.get(64),
                 new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
                 new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9))
             .fluidInputs(
@@ -230,8 +237,8 @@ public class DSPRecipePool implements IRecipePool {
             .noFluidInputs()
             .itemOutputs(SolarSail.get(1))
             .noFluidOutputs()
-            .eut(RECIPE_UHV)
-            .duration(20 * 120)
+            .eut(EUTOfLaunchingSolarSail)
+            .duration(ticksOfLaunchingSolarSail)
             .addTo(DSPLauncherRecipe);
 
         GT_Values.RA.stdBuilder()
@@ -242,8 +249,8 @@ public class DSPRecipePool implements IRecipePool {
                     .setStackDisplayName(
                         texter("99%% Return an Empty Small Launch Vehicle.", "NEI.EmptySmallLaunchVehicleRecipe.0")))
             .noFluidOutputs()
-            .eut(RECIPE_UMV)
-            .duration(20 * 900)
+            .eut(EUTOfLaunchingNode)
+            .duration(ticksOfLaunchingNode)
             .addTo(DSPLauncherRecipe);
 
         // receiver fake recipe
@@ -500,7 +507,7 @@ public class DSPRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.SiliconSG.getMolten(144 * 1024),
                 MaterialsUEVplus.TranscendentMetal.getMolten(144 * 64))
-            .itemOutputs(SolarSail.get(2))
+            .itemOutputs(SolarSail.get(4))
             .noFluidOutputs()
             .noOptimize()
             .eut(RECIPE_UMV)
@@ -514,7 +521,7 @@ public class DSPRecipePool implements IRecipePool {
                 ItemList.Circuit_Silicon_Wafer7.get(12),
                 ItemList.Emitter_UIV.get(12))
             .fluidInputs(Materials.SiliconSG.getMolten(144 * 2048), MaterialsUEVplus.SpaceTime.getMolten(144 * 48))
-            .itemOutputs(SolarSail.get(4))
+            .itemOutputs(SolarSail.get(8))
             .noFluidOutputs()
             .noOptimize()
             .eut(RECIPE_UMV)
@@ -531,7 +538,7 @@ public class DSPRecipePool implements IRecipePool {
                 Materials.SiliconSG.getMolten(144 * 4096),
                 MaterialsUEVplus.PrimordialMatter.getFluid(144 * 16),
                 MaterialsUEVplus.Eternity.getMolten(144 * 16))
-            .itemOutputs(SolarSail.get(8))
+            .itemOutputs(SolarSail.get(16))
             .noFluidOutputs()
             .noOptimize()
             .eut(RECIPE_UMV)
@@ -548,7 +555,7 @@ public class DSPRecipePool implements IRecipePool {
                 Materials.SiliconSG.getMolten(144 * 8192),
                 MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 8),
                 MaterialsUEVplus.Universium.getMolten(144 * 8))
-            .itemOutputs(SolarSail.get(24))
+            .itemOutputs(SolarSail.get(64))
             .noFluidOutputs()
             .noOptimize()
             .eut(RECIPE_UXV)
