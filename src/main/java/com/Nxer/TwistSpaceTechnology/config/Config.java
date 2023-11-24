@@ -27,7 +27,7 @@ public class Config {
     public static double secondsOfArtificialStarProgressCycleTime = 6.4;
     public static int secondsOfEverySpaceWarperProvideToOverloadTime = 60 * 15;
     public static int overloadSpeedUpMultiplier = 30;
-    public static double gravitationalLensSpeedMultiplier = 2;
+    public static double gravitationalLensSpeedMultiplier = 4;
     public static int secondsOfEveryGravitationalLensProvideToIntensifyTime = 60 * 10;
     public static double secondsOfLaunchingSolarSail = 120;
     public static double secondsOfLaunchingNode = 900;

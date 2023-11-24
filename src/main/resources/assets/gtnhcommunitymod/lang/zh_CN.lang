@@ -293,7 +293,7 @@ Tooltip_DSPReceiver_05=同时, 最大请求功率 1024A Max (默认).
 Tooltip_DSPReceiver_06=实际输出功率受恒星系数和行星系数影响.
 Tooltip_DSPReceiver_07=输入引力透镜将启用增强模式. 提高实际输出功率.
 Tooltip_DSPReceiver_08=未安装动力仓时自动进入无线电力网络模式.
-Tooltip_DSPReceiver_02_01=实际产生EU = 已占用产能点数 * 恒星系数 * 行星系数 * 1 或 2 在增强模式时 
+Tooltip_DSPReceiver_02_01=实际产生EU = 已占用产能点数 * 恒星系数 * 行星系数 * 1 或 4 在增强模式时 
 Tooltip_DSPReceiver_02_02=私人维度归类于主世界(地球).
 Tooltip_DSPReceiver_02_03=每个引力透镜可以提供 (默认) 10 分钟的增强模式.
 Tooltip_DSPReceiver_02_04=输入的引力透镜会立刻被消耗.
