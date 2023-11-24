@@ -1,15 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common;
 
-import static gregtech.api.enums.GT_Values.W;
-
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.util.Utils;
+
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Utility;
 
 public enum GTCMItemList {
 
@@ -121,7 +119,6 @@ public enum GTCMItemList {
         return Utils.copyAmount(aAmount, GT_OreDictUnificator.get(mStack));
     }
 
-
     public GTCMItemList set(Item aItem) {
         mHasNotBeenSet = false;
         if (aItem == null) return this;
@@ -129,7 +126,6 @@ public enum GTCMItemList {
         mStack = Utils.copyAmount(1, aStack);
         return this;
     }
-
 
     public GTCMItemList set(ItemStack aStack) {
         if (aStack != null) {

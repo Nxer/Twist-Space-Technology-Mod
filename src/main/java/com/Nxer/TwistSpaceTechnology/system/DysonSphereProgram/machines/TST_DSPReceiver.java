@@ -40,9 +40,8 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
@@ -51,7 +50,6 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import java.util.List;
 import java.util.UUID;
 
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -454,11 +452,12 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                                    .addElement(
 			                           'P',
 			                           GT_HatchElementBuilder.<TST_DSPReceiver>builder()
-			                                                 .atLeast(InputBus, Energy.or(ExoticEnergy))
+			                                                 .atLeast(InputBus, OutputBus)
 			                                                 .adder(TST_DSPReceiver::addToMachineList)
 			                                                 .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
 			                                                 .dot(1)
-			                                                 .buildAndChain(IGBlocks.SpaceElevatorCasing, 0))
+			                                                 .buildAndChain(IGBlocks.SpaceElevatorCasing, 0)
+                                   )
                                    .addElement('Q', ofFrame(Materials.NaquadahAlloy))
                                    .build();
 	}
@@ -591,18 +590,18 @@ Q -> ofFrame...(NaquadahAlloy, ...);
             .addStructureInfo(Tooltip_DSPReceiver_02_03)
             .addStructureInfo(Tooltip_DSPReceiver_02_04)
             .addStructureInfo(Tooltip_DSPReceiver_02_05)
-          .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
-          .addStructureInfo(DSPName + ":")
-          .addStructureInfo(Tooltip_DSPInfo_launch_01)
-          .addStructureInfo(Tooltip_DSPInfo_launch_02)
-          .addStructureInfo(Tooltip_DSPInfo_00)
-          .addStructureInfo(Tooltip_DSPInfo_01)
-          .addStructureInfo(Tooltip_DSPInfo_02)
-          .addStructureInfo(Tooltip_DSPInfo_03)
-          .addStructureInfo(Tooltip_DSPInfo_04)
-          .addStructureInfo(Tooltip_DSPInfo_05)
-          .addStructureInfo(Tooltip_DSPInfo_06)
-          .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(DSPName + ":")
+            .addStructureInfo(Tooltip_DSPInfo_launch_01)
+            .addStructureInfo(Tooltip_DSPInfo_launch_02)
+            .addStructureInfo(Tooltip_DSPInfo_00)
+            .addStructureInfo(Tooltip_DSPInfo_01)
+            .addStructureInfo(Tooltip_DSPInfo_02)
+            .addStructureInfo(Tooltip_DSPInfo_03)
+            .addStructureInfo(Tooltip_DSPInfo_04)
+            .addStructureInfo(Tooltip_DSPInfo_05)
+            .addStructureInfo(Tooltip_DSPInfo_06)
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)

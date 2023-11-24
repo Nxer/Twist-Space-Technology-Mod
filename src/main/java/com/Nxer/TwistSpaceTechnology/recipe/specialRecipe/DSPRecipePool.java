@@ -35,7 +35,6 @@ import static de.katzenpapst.amunra.item.ARItems.jetItemIon;
 import static de.katzenpapst.amunra.item.ARItems.lightPlating;
 import static de.katzenpapst.amunra.item.ARItems.noseCone;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
-import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;

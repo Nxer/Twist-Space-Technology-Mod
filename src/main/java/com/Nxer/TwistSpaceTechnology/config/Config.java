@@ -1,11 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.config;
 
+import static gregtech.api.enums.TierEU.RECIPE_UHV;
+import static gregtech.api.enums.TierEU.RECIPE_UMV;
+
 import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
-
-import static gregtech.api.enums.TierEU.RECIPE_UHV;
-import static gregtech.api.enums.TierEU.RECIPE_UMV;
 
 // spotless:off
 public class Config {
