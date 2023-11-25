@@ -17,6 +17,17 @@ public class PurpleMagnoliaCrop extends BasicGTCMCrop {
     public int tier() {
         return 5;
     }
+    
+    @Override
+    public boolean canGrow(ICropTile crop) {
+        return crop.getSize() < 5;
+    }
+
+    @Override
+    public int getEmittedLight(ICropTile crop) {
+        if (crop.getSize() >= 3) return 2;
+        else return 0;
+    }
 
     @Override
     public int stat(int n) {
@@ -48,7 +59,7 @@ public class PurpleMagnoliaCrop extends BasicGTCMCrop {
 
     @Override
     public String name() {
-        return "Purple Magnolia";
+        return "PurpleMagnolia";
     }
 
     @Override

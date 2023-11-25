@@ -24,15 +24,6 @@ public abstract class BasicGTCMCrop extends CropCard implements ICropCardInfo {
         }
     }
 
-    @Override
-    public boolean canGrow(ICropTile crop) {
-        return crop.getSize() < 5;
-    }
-
-    public int getEmittedLight(ICropTile crop) {
-        if (crop.getSize() >= 3) return 2;
-        else return 0;
-    }
 
     @Override
     public float dropGainChance() {
