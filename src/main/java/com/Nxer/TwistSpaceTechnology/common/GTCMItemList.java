@@ -37,6 +37,7 @@ public enum GTCMItemList {
     SpaceScaler,
     MoleculeDeconstructor,
     CrystallineInfinitier,
+    MiracleDoor,
 
     // DSP
     SolarSail,

@@ -38,6 +38,7 @@ public class TextLocalization {
 
     // region special hatch info
     public static final String Tooltip_DoNotNeedMaintenance = texter("Do Not Need Maintenance!","Tooltip_DoNotNeedMaintenance");
+    public static final String Tooltip_DoNotNeedEnergyHatch = texter("Do Not Need Energy Hatch!","Tooltip_DoNotNeedEnergyHatch");
 
     // endregion
 
@@ -277,6 +278,7 @@ public class TextLocalization {
     public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.","Tooltip_SpaceScaler_04");
     public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.","Tooltip_SpaceScaler_05");
     public static final String Tooltip_SpaceScaler_06 = texter("Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.","Tooltip_SpaceScaler_06");
+    public static final String Tooltip_SpaceScaler_07 = texter("In Particle Collider mode, higher tier has more output.","Tooltip_SpaceScaler_07");
 
     // endregion
 
@@ -375,6 +377,28 @@ public class TextLocalization {
     public static final String Tooltip_DSPInfo_05 = texter("In decreasing, every Dyson Sphere has 1/4 chance to destroyed Solar Sail amount.","Tooltip_DSPInfo_05");
     public static final String Tooltip_DSPInfo_06 = texter("The amount of destroyed is the excess' 1/2 .","Tooltip_DSPInfo_06");
 
+    // endregion
+
+    // region
+    public static final String NameMiracleDoor = texter("Miracle Door", "NameMiracleDoor");
+    public static final String Tooltip_MiracleDoor_MachineType = texter("Stellar Forge | Fluid Alloy Cooker", "Tooltip_MiracleDoor_MachineType");
+    public static final String Tooltip_MiracleDoor_Controller = texter("Controller block for the Miracle Door", "Tooltip_MiracleDoor_Controller");
+    public static final String Tooltip_MiracleDoor_00 = texter(EnumChatFormatting.GOLD+""+EnumChatFormatting.BOLD+"Mere mortals can't even begin to understand the progress we've made.", "Tooltip_MiracleDoor_00");
+    public static final String Tooltip_MiracleDoor_01 = texter("Enslaving Stellaris to work for us.", "Tooltip_MiracleDoor_01");
+    public static final String Tooltip_MiracleDoor_02 = texter("No matter how large the workload, it can be done in one time.", "Tooltip_MiracleDoor_02");
+    public static final String Tooltip_MiracleDoor_03 = texter("No matter how large the workload, it need one Critical Photon to start.", "Tooltip_MiracleDoor_03");
+    public static final String Tooltip_MiracleDoor_04 = texter("Power consumption: §c1600%%", "Tooltip_MiracleDoor_04");
+    public static final String Tooltip_MiracleDoor_05 = texter("Directly get EU from the Wireless EU Net.", "Tooltip_MiracleDoor_05");
+    public static final String Tooltip_MiracleDoor_06 = texter("Warning! If trying to start machine when Wireless EU Net has not enough EU,", "Tooltip_MiracleDoor_06");
+    public static final String Tooltip_MiracleDoor_07 = texter(" the materials will fade.", "Tooltip_MiracleDoor_07");
+    public static final String Tooltip_MiracleDoor_08 = texter("Put Integrated Circuit into Controller block to decrease process time interval.", "Tooltip_MiracleDoor_08");
+    public static final String Tooltip_MiracleDoor_2_01 = texter("Each run takes the same amount of time, 25.6s default.", "Tooltip_MiracleDoor_2_01");
+    public static final String Tooltip_MiracleDoor_2_02 = texter("If putting Integrated Circuit into Controller block slot,", "Tooltip_MiracleDoor_2_02");
+    public static final String Tooltip_MiracleDoor_2_03 = texter(" actual progress time = default / (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_03");
+    public static final String Tooltip_MiracleDoor_2_04 = texter("Actual cost EU = recipe value * 16 * (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_04");
+    public static final String Tooltip_MiracleDoor_2_05 = texter("Each run cost 1 Critical Photon to start.", "Tooltip_MiracleDoor_2_05");
+
+    // endregion
 
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");

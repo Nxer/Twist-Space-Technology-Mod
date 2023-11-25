@@ -1,17 +1,21 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.dreammaster.gthandler.CustomItemList.ElectromagneticSeparatorUHV;
 import static com.dreammaster.gthandler.CustomItemList.FluidExtractorUV;
 import static com.dreammaster.gthandler.CustomItemList.FluidSolidifierUV;
@@ -26,6 +30,8 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Containment_Field;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Spacetime;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Teleportation;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static galaxyspace.core.register.GSMaterials.tantalumCarbideHafniumCarbideMixture;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
@@ -52,6 +58,7 @@ import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -81,6 +88,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.core.material.ALLOY;
 import ic2.core.Ic2Items;
 
 public class GTCMMachineRecipePool implements IRecipePool {
@@ -965,7 +973,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(72)
             .addTo(GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes);
 
-        // endregon
+        // endregion
 
         // region Ta4HfC5
         GT_Values.RA.stdBuilder()
@@ -984,6 +992,78 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // endregion
 
+        // region Miracle Door
+        GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, eM_Teleportation.get(1))
+            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .itemInputs(
+                Mega_AlloyBlastSmelter.get(64),
+                Mega_AlloyBlastSmelter.get(64),
+                Mega_AlloyBlastSmelter.get(64),
+                Mega_AlloyBlastSmelter.get(64),
+
+                StellarConstructionFrameMaterial.get(64),
+                ItemList.Emitter_UMV.get(64),
+                ItemList.Field_Generator_UMV.get(64),
+                eM_Teleportation.get(64),
+
+                CustomItemList.HighEnergyFlowCircuit.get(64),
+                CustomItemList.QuantumCircuit.get(64),
+                CustomItemList.QuantumCircuit.get(64),
+                CustomItemList.HighEnergyFlowCircuit.get(64),
+
+                SpaceWarper.get(64),
+                GravitationalLens.get(64),
+                ParticleTrapTimeSpaceShield.get(64),
+                ItemList.EnergisedTesseract.get(64)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*65536),
+                ALLOY.PIKYONIUM.getFluidStack(144*65536),
+                Materials.UUMatter.getFluid(1000*65536),
+                MaterialsUEVplus.ExcitedDTEC.getFluid(1000*16384)
+            )
+            .itemOutputs(MiracleDoor.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_UXV)
+            .duration(20*3600)
+            .addTo(AssemblyLine);
+
+        // eM_Teleportation blockCasingsTT 10
+        GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, ItemList.Machine_Multi_PlasmaForge.get(1))
+            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .itemInputs(
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 16),
+                eM_Ultimate_Containment.get(4),
+                ItemList.Casing_Dim_Bridge.get(4),
+                ItemList.Casing_Dim_Injector.get(4),
+
+                StellarConstructionFrameMaterial.get(4),
+                ItemList.Field_Generator_UMV.get(3),
+                ItemList.Emitter_UMV.get(6),
+                CustomItemList.PikoCircuit.get(1),
+
+                SpaceWarper.get(24),
+                ParticleTrapTimeSpaceShield.get(32),
+                GT_OreDictUnificator.get(OrePrefixes.ring, MaterialsUEVplus.TranscendentMetal, 16),
+                GT_OreDictUnificator.get(OrePrefixes.stickLong, MaterialsUEVplus.TranscendentMetal, 16),
+
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.TranscendentMetal, 8)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*128),
+                ALLOY.PIKYONIUM.getFluidStack(144*64),
+                Materials.UUMatter.getFluid(1000*64),
+                MaterialsUEVplus.ExcitedDTEC.getFluid(1000*16)
+            )
+            .itemOutputs(eM_Teleportation.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_UMV)
+            .duration(20*120)
+            .addTo(AssemblyLine);
+
+        // endregion
     }
     // spotless:on
 }

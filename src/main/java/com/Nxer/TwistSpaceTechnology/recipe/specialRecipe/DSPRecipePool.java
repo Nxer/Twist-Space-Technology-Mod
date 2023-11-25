@@ -302,7 +302,8 @@ public class DSPRecipePool implements IRecipePool {
                 GT_Utility.getIntegratedCircuit(21),
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 lightPlating.getItemStack(6),
-                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.BlackPlutonium, 16))
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.BlackPlutonium, 16),
+                Materials.Neutronium.getNanite(1))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 16),
                 ASTRAL_TITANIUM.getFluidStack(144 * 18),
@@ -319,7 +320,8 @@ public class DSPRecipePool implements IRecipePool {
                 GT_Utility.getIntegratedCircuit(22),
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 lightPlating.getItemStack(9),
-                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 8))
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 8),
+                Materials.Neutronium.getNanite(1))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 16),
                 ASTRAL_TITANIUM.getFluidStack(144 * 18),
@@ -338,7 +340,8 @@ public class DSPRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 48),
                 lightPlating.getItemStack(36),
                 ItemList.EnergisedTesseract.get(12),
-                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 12))
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 12),
+                Materials.Neutronium.getNanite(1))
             .fluidInputs(
                 MaterialsUEVplus.RawStarMatter.getFluid(144 * 32),
                 ASTRAL_TITANIUM.getFluidStack(144 * 72),
@@ -701,7 +704,7 @@ public class DSPRecipePool implements IRecipePool {
                 copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
                 copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
                 copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)))
-            .fluidInputs(Materials.MysteriousCrystal.getMolten(144 * 9 * 64 * 4))
+            .fluidInputs(Materials.MysteriousCrystal.getMolten(144 * 9 * 64 * 2))
             .itemOutputs(
                 GravitationalLens.get(1),
                 GravitationalLens.get(1),

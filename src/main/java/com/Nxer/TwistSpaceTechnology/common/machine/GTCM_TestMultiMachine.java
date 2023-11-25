@@ -44,12 +44,12 @@ public class GTCM_TestMultiMachine
 	public GTCM_TestMultiMachine(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional);
 	}
-	
+
 	public GTCM_TestMultiMachine(String aName) {
 		super(aName);
 	}
 	// region Processing Logic
-	
+
 	@Override
 	protected boolean isEnablePerfectOverclock(){
 		return true;
@@ -62,9 +62,9 @@ public class GTCM_TestMultiMachine
 	protected int getMaxParallelRecipes() {
 		return Integer.MAX_VALUE;
 	}
-	
+
 	// endregion
-	
+
 	protected int mode = 0;
 	private static final String STRUCTURE_PIECE_MAIN = "main";
 	private final String[][] shape = new String[][] {
@@ -90,18 +90,18 @@ public class GTCM_TestMultiMachine
 					                         .buildAndChain(GregTech_API.sBlockCasings8, 0))
 			       .build();
 	}
-	
+
 	@Override
 	public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
 		return super.addToMachineList(aTileEntity, aBaseCasingIndex)
 			       || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
 	}
-	
+
 	@Override
 	public void construct(ItemStack stackSize, boolean hintsOnly) {
 		buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
 	}
-	
+
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
 		if (this.mMachine) return -1;
@@ -118,14 +118,14 @@ public class GTCM_TestMultiMachine
 			false,
 			true);
 	}
-	
-	
+
+
 	@Override
 	public GT_Recipe.GT_Recipe_Map getRecipeMap() {
 		if (mode == 0) return GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
 		return GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
 	}
-	
+
 	@Override
 	public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
 		if (getBaseMetaTileEntity().isServerSide()) {
@@ -135,80 +135,79 @@ public class GTCM_TestMultiMachine
 				StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
 		}
 	}
-	
+
 	@Override
 	public boolean isCorrectMachinePart(ItemStack aStack) {
 		return true;
 	}
-	
+
 	@Override
 	public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
 		// this.casingAmountActual = 0; // re-init counter
 		return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
 	}
-	
+
 	@Override
 	public int getMaxEfficiency(ItemStack aStack) {
 		return 10000;
 	}
-	
+
 	@Override
 	public int getDamageToComponent(ItemStack aStack) {
 		return 0;
 	}
-	
+
 	@Override
 	public boolean explodesOnComponentBreak(ItemStack aStack) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean supportsVoidProtection() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean supportsInputSeparation() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean supportsBatchMode() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean supportsSingleRecipeLocking() {
 		return true;
 	}
-	
+
 	@Override
 	public void saveNBTData(NBTTagCompound aNBT) {
 		super.saveNBTData(aNBT);
-		
+
 		aNBT.setInteger("mode", mode);
 	}
-	
+
 	@Override
 	public void loadNBTData(final NBTTagCompound aNBT) {
 		super.loadNBTData(aNBT);
-		
+
 		mode = aNBT.getInteger("mode");
 	}
-	
+
 	@Override
 	public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
 		return new GTCM_TestMultiMachine(this.mName);
 	}
-	
+
 	@Override
 	public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
 		int aColorIndex, boolean aActive, boolean aRedstone) {
 		if (side == facing) {
-			if (aActive) return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
-			                                                                              .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE)
-			                                                                              .extFacing()
-				                                                                .build(),
+			if (aActive) return new ITexture[] {
+                casingTexturePages[1][48],
+                TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE).extFacing().build(),
 				TextureFactory.builder()
 				              .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
 				              .extFacing()
@@ -226,7 +225,7 @@ public class GTCM_TestMultiMachine
 		}
 		return new ITexture[] { casingTexturePages[1][48] };
 	}
-	
+
 	// Tooltips
 	@Override
 	protected GT_Multiblock_Tooltip_Builder createTooltip() {
@@ -247,7 +246,7 @@ public class GTCM_TestMultiMachine
 		  .toolTipFinisher(TextLocalization.ModName);
 		return tt;
 	}
-	
+
 }
 
 // spotless:on

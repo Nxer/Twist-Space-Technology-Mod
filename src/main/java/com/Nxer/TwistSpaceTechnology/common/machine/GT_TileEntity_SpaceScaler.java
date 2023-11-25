@@ -135,8 +135,9 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
                     return result;
                 }
 
+                // TODO: Space Scaler output multiplier info
                 // add outputs
-                final int multiplier = (int) Math.pow(2, fieldGeneratorTier - 3);
+                final int multiplier = 4 * Math.max(1, fieldGeneratorTier - 2);
                 // TwistSpaceTechnology.LOG.info("test multiplier: " + multiplier);
 
                 outputItems = new ItemStack[helper.getItemOutputs().length];
@@ -343,8 +344,8 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
         { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "       B               B       ", "      B                 B      ", "      B                 B      ", "      B        B        B      ", "      B       BGB       B      ", "      B        B        B      ", "      B                 B      ", "      B                 B      ", "       B               B       ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
         { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               A               ", "               A               ", "              AAA              ", "            AAAAAAA            ", "              AAA              ", "               A               ", "               A               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
         { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "              AAA              ", "            AAEEEAA            ", "           AEEEEEEEA           ", "           AEECCCEEA           ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "           AEECCCEEA           ", "           AEEEEEEEA           ", "            AAEEEAA            ", "              AAA              ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " } };
-    
-    
+
+
     // spotless:on
     // endregion
 
@@ -361,6 +362,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
             .addInfo(TextLocalization.Tooltip_SpaceScaler_04)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_05)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_06)
+            .addInfo(TextLocalization.Tooltip_SpaceScaler_07)
             .addInfo(TextLocalization.textScrewdriverChangeMode)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
