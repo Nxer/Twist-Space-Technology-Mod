@@ -150,6 +150,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         // check Critical Photon Input
         ItemStack photonStack = null;
         for (ItemStack items : getStoredInputs()) {
+            if (items == null) continue;
             if (metaItemEqual(items, CriticalPhoton.get(1))) {
                 photonStack = items;
                 break;
@@ -170,6 +171,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         if (!result.wasSuccessful()) return result;
 
         for (ItemStack items : getStoredInputs()) {
+            if (items == null) continue;
             if (metaItemEqual(items, CriticalPhoton.get(1))) {
                 photonStack = items;
                 break;

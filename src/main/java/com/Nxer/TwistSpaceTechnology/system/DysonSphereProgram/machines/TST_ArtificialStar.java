@@ -266,6 +266,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        mInputBusses.clear();
         tierDimensionField = -1;
         tierTimeField = -1;
         tierStabilisationField = -1;
