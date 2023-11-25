@@ -1,4 +1,4 @@
-//version: 1699290261
+//version: 1700844281
 /*
  DO NOT CHANGE THIS FILE!
  Also, you may replace this file at any time if there is an update available.
@@ -302,7 +302,7 @@ if (apiPackage) {
 }
 
 if (accessTransformersFile) {
-    for (atFile in accessTransformersFile.split(",")) {
+    for (atFile in accessTransformersFile.split(" ")) {
         String targetFile = "src/main/resources/META-INF/" + atFile.trim()
         if (!getFile(targetFile).exists()) {
             throw new GradleException("Could not resolve \"accessTransformersFile\"! Could not find " + targetFile)
@@ -467,8 +467,8 @@ minecraft {
 
     // Enable assertions in the current mod
     extraRunJvmArguments.add("-ea:${modGroup}")
-//    extraRunJvmArguments.add("-Xmx16G")
-//    extraRunJvmArguments.add("-Xms16G")
+    extraRunJvmArguments.add("-Xmx16G")
+    extraRunJvmArguments.add("-Xms16G")
 
     if (usesMixins.toBoolean() || forceEnableMixins.toBoolean()) {
         if (usesMixinDebug.toBoolean()) {
@@ -1623,5 +1623,3 @@ if (file('addon.late.local.gradle.kts').exists()) {
 } else if (file('addon.late.local.gradle').exists()) {
     apply from: 'addon.late.local.gradle'
 }
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16

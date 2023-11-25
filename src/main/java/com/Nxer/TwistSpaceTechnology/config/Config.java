@@ -11,6 +11,7 @@ import net.minecraftforge.common.config.Configuration;
 public class Config {
     // region Region
     public static final String DSP = "DSP";
+    public static final String GENERAL = "General";
 
     // endregion
 
@@ -36,10 +37,25 @@ public class Config {
 
     // endregion
 
+    // region General
+    public static int MAX_PARALLEL_LIMIT = 8388608;
+    public static double secondsOfMiracleDoorProcessingTime = 25.6;
+    public static int amountOfPhotonsEveryMiracleDoorProcessingCost = 1;
+    public static int multiplierOfMiracleDoorEUCost = 16;
+
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 //        preInitSign = configuration.getString("preInitSign", Configuration.CATEGORY_GENERAL, preInitSign, "GTNH Community Mod preInit Sign");
 
+        // General
+        MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        secondsOfMiracleDoorProcessingTime = Double.parseDouble(configuration.getString("secondsOfMiracleDoorProcessingTime", GENERAL, String.valueOf(secondsOfMiracleDoorProcessingTime), "Seconds of Miracle Door Default Progress Time. Type: double"));
+        amountOfPhotonsEveryMiracleDoorProcessingCost = configuration.getInt("amountOfPhotonsEveryMiracleDoorProcessingCost", GENERAL, amountOfPhotonsEveryMiracleDoorProcessingCost, 0, 64, "Needed Photons amount of Miracle Door each run cost.");
+        multiplierOfMiracleDoorEUCost = configuration.getInt("multiplierOfMiracleDoorEUCost", GENERAL, multiplierOfMiracleDoorEUCost, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier.");
+
+        // DSP
         EUPerCriticalPhoton = Long.parseLong(configuration.getString("EUPerCriticalPhoton", DSP, String.valueOf(EUPerCriticalPhoton), "EU per Critical Photon Cost. Type: long"));
         solarSailPowerPoint = Long.parseLong(configuration.getString("solarSailPowerPoint", DSP, String.valueOf(solarSailPowerPoint), "DSP Power Point per Solar Sail can produce. Type: long"));
         solarSailCanHoldPerNode = Long.parseLong(configuration.getString("solarSailCanHoldPerNode", DSP, String.valueOf(solarSailCanHoldPerNode), "Solar Sail amount per DSP Node can hold. Type: long"));
