@@ -59,7 +59,7 @@ public class PurpleMagnoliaCrop extends BasicGTCMCrop {
 
     @Override
     public String name() {
-        return "PurpleMagnolia";
+        return "Purple Magnolia";
     }
 
     @Override

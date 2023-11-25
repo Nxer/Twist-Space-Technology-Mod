@@ -65,8 +65,4 @@ public abstract class BasicGTCMCrop extends CropCard implements ICropCardInfo {
         return null;
     }
 
-    public ItemStack getDisplayItem() {
-        return OreDict.ISget("crop" + this.name());
-    }
-
 }

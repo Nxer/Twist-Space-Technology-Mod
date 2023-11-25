@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
-import com.Nxer.TwistSpaceTechnology.common.crop.OreDict;
 import com.Nxer.TwistSpaceTechnology.devTools.PathHelper;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
@@ -84,7 +83,6 @@ public class TwistSpaceTechnology {
         MachineLoader.loadMachines();// Load Machines
         NEIHandler.IMCSender();// NEI reg
 
-        OreDict.register();
     }
 
     @Mod.EventHandler

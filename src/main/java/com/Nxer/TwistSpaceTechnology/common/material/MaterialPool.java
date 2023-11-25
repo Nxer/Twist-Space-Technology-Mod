@@ -72,10 +72,10 @@ public class MaterialPool implements Runnable {
         TextHandler.texter("FluxedElementium", "bw.FluxedElementium.notTrans"),
         subscriptNumbers("EfMa3"),
         new Werkstoff.Stats().setBlastFurnace(true)
-            .setMeltingPoint(5300) // EBF recipe's special value
-            .setSpeedOverride(60.0F) // Mining speed
-            .setDurOverride(2180000) // Durability
-            .setQualityOverride((byte) 8), // Mining Level,
+            .setMeltingPoint(5300)
+            .setSpeedOverride(60.0F)
+            .setDurOverride(2180000)
+            .setQualityOverride((byte) 8), 
         Werkstoff.Types.COMPOUND,
         new Werkstoff.GenerationFeatures().addMolten()
             .addMetalItems()
@@ -84,12 +84,46 @@ public class MaterialPool implements Runnable {
             .addMultipleIngotMetalWorkingItems()
             .addMetalCraftingSolidifierRecipes()
             .addMetaSolidifierRecipes()
-            .addCasings(),
+            .addCasings().removeOres(),
         offsetID_01 + 2,
         TextureSet.SET_SHINY,
         new Pair<>(Materials.Alfium, 1),
         new Pair<>(Materials.Magic, 4));
 
+    public static final Werkstoff PureMana = new Werkstoff(
+        new short[] { 176 ,196,222 },//LightSteelBlue
+        TextHandler.texter("PureMana", "bw.PureMana.notTrans"),
+        subscriptNumbers("Ma⨕"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.ELEMENT,
+        new Werkstoff.GenerationFeatures().disable().addCells(),
+        offsetID_01 + 3,
+        TextureSet.SET_FLUID);
+
+    public static final Werkstoff LiquidMana = new Werkstoff(
+        new short[] {135,206,235 },//skyblue
+        TextHandler.texter("LiquidMana", "bw.LiquidMana.notTrans"),
+        subscriptNumbers("??Ma⨕??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable().addCells(),
+        offsetID_01 + 4,
+        TextureSet.SET_FLUID,
+        new Pair<>(PureMana, 1),
+        new Pair<>(Materials.Stone, 2));
+
+    public static final Werkstoff PurifiedMana = new Werkstoff(
+        new short[] {173,216,230},//LightBLue
+        TextHandler.texter("PurifiedMana", "bw.PurifiedMana.notTrans"),
+        subscriptNumbers("??Ma⨕??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable().addCells(),
+        offsetID_01 + 5,
+        TextureSet.SET_FLUID,
+        new Pair<>(PureMana, 1),
+        new Pair<>(Materials.Stone, 2));
+    
     // Bartworks' Material System run on Runnable.class
     @Override
     public void run() {}

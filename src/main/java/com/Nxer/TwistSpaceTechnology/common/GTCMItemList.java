@@ -24,6 +24,7 @@ public enum GTCMItemList {
     PerfectEnergyCrystal,
     PurpleMagnoliaPetal,
     PurpleMagnoliaSapling,
+    VoidPollen,
     // Machines
 
     IntensifyChemicalDistorter,
