@@ -670,8 +670,13 @@ dependencies {
     } else if (forceEnableMixins.toBoolean()) {
         runtimeOnlyNonPublishable(mixinProviderSpec)
     }
+    
 }
+dependencies {
 
+    compile fileTree(dir: 'src/main/libs', includes: ['*.jar'])
+
+}
 pluginManager.withPlugin('org.jetbrains.kotlin.kapt') {
     if (usesMixins.toBoolean()) {
         dependencies {
