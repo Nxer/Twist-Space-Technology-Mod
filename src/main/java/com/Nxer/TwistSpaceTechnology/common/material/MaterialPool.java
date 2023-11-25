@@ -4,7 +4,9 @@ import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
 
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
+import com.github.bartimaeusnek.bartworks.util.Pair;
 
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.TextureSet;
 
 /**
@@ -64,6 +66,29 @@ public class MaterialPool implements Runnable {
             .addMolten(),
         offsetID_01 + 1,
         TextureSet.SET_SHINY);
+
+    public static final Werkstoff FluxedElementium = new Werkstoff(
+        new short[] { 218, 112, 214 },
+        TextHandler.texter("FluxedElementium", "bw.FluxedElementium.notTrans"),
+        subscriptNumbers("EfMa3"),
+        new Werkstoff.Stats().setBlastFurnace(true)
+            .setMeltingPoint(5300) // EBF recipe's special value
+            .setSpeedOverride(60.0F) // Mining speed
+            .setDurOverride(2180000) // Durability
+            .setQualityOverride((byte) 8), // Mining Level,
+        Werkstoff.Types.COMPOUND,
+        new Werkstoff.GenerationFeatures().addMolten()
+            .addMetalItems()
+            .addCraftingMetalWorkingItems()
+            .addSimpleMetalWorkingItems()
+            .addMultipleIngotMetalWorkingItems()
+            .addMetalCraftingSolidifierRecipes()
+            .addMetaSolidifierRecipes()
+            .addCasings(),
+        offsetID_01 + 2,
+        TextureSet.SET_SHINY,
+        new Pair<>(Materials.Alfium, 1),
+        new Pair<>(Materials.Magic, 4));
 
     // Bartworks' Material System run on Runnable.class
     @Override
