@@ -36,6 +36,31 @@ public class TextLocalization {
     public static final String Tooltip_Details = texter(EnumChatFormatting.LIGHT_PURPLE+"Details: ","Tooltip_Details");
     // endregion
 
+    // region Names
+    public static final String name_Nxer = "" + EnumChatFormatting.RED
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "N"
+                                               + EnumChatFormatting.GREEN
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "x"
+                                               + EnumChatFormatting.AQUA
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "e"
+                                               + EnumChatFormatting.BLUE
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "r";
+
+    public static final String authorName_Nxer = "Author: "+name_Nxer;
+    // endregion
+
     // region special hatch info
     public static final String Tooltip_DoNotNeedMaintenance = texter("Do Not Need Maintenance!","Tooltip_DoNotNeedMaintenance");
     public static final String Tooltip_DoNotNeedEnergyHatch = texter("Do Not Need Energy Hatch!","Tooltip_DoNotNeedEnergyHatch");
@@ -379,7 +404,7 @@ public class TextLocalization {
 
     // endregion
 
-    // region
+    // region MiracleDoor
     public static final String NameMiracleDoor = texter("Miracle Door", "NameMiracleDoor");
     public static final String Tooltip_MiracleDoor_MachineType = texter("Stellar Forge | Fluid Alloy Cooker", "Tooltip_MiracleDoor_MachineType");
     public static final String Tooltip_MiracleDoor_Controller = texter("Controller block for the Miracle Door", "Tooltip_MiracleDoor_Controller");
@@ -400,8 +425,14 @@ public class TextLocalization {
 
     // endregion
 
+    // region OreProcessingFactory
+    public static final String NameOreProcessingFactory = texter("TST Ore Processing Factory","NameOreProcessingFactory");
+
+    // endregion
+
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
+    public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
 
     // endregion
 }

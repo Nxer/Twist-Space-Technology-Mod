@@ -5,6 +5,10 @@ import static gregtech.api.util.GT_Utility.filterValidMTEs;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.Lists;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
+import gregtech.common.tileentities.machines.IDualInputHatch;
+import gregtech.common.tileentities.machines.IDualInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -21,6 +25,9 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPow
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable {
@@ -145,6 +152,30 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         mOutputFluids = processingLogic.getOutputFluids();
 
         return result;
+    }
+
+    /**
+     * <p>Get inputting items without DualInputHatch, and no separation mode.
+     * <p>Always used to get some special input items.
+     * @return The inputting items.
+     */
+    public ArrayList<ItemStack> getStoredInputsWithoutDualInputHatch() {
+
+        ArrayList<ItemStack> rList = new ArrayList<>();
+        for (GT_MetaTileEntity_Hatch_InputBus tHatch : filterValidMTEs(mInputBusses)) {
+            tHatch.mRecipeMap = getRecipeMap();
+            IGregTechTileEntity tileEntity = tHatch.getBaseMetaTileEntity();
+            for (int i = tileEntity.getSizeInventory() - 1; i >= 0; i--) {
+                ItemStack itemStack = tileEntity.getStackInSlot(i);
+                if (itemStack != null) {
+                    rList.add(itemStack);
+                }
+            }
+        }
+
+        if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
+                                                          .startsWith("gt.integrated_circuit")) rList.add(getStackInSlot(1));
+        return rList;
     }
 
     // region Overrides

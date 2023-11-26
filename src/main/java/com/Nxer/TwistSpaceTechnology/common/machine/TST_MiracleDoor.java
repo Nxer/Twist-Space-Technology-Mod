@@ -146,21 +146,39 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         return checkProcessing_mode1();
     }
 
-    private CheckRecipeResult checkProcessing_mode1() {
-        // check Critical Photon Input
-        ItemStack photonStack = null;
-        for (ItemStack items : getStoredInputs()) {
+    private boolean checkPhotonsInputting(int amount){
+        int containedAmount = 0;
+        for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
             if (items == null) continue;
             if (metaItemEqual(items, CriticalPhoton.get(1))) {
-                photonStack = items;
-                break;
+                containedAmount += items.stackSize;
+                if (containedAmount >= amount) return true;
             }
         }
-        if (photonStack == null) {
-            // if no photon inputting, return failure
+        return false;
+    }
+
+    private boolean consumePhoton(int amount){
+        int needAmount = amount;
+        for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
+            if (items == null) continue;
+            if (metaItemEqual(items, CriticalPhoton.get(1))) {
+                if (items.stackSize >= needAmount) {
+                    items.stackSize -= needAmount;
+                    return true;
+                } else {
+                    needAmount -= items.stackSize;
+                    items.stackSize = 0;
+                }
+            }
+        }
+        return false;
+    }
+    private CheckRecipeResult checkProcessing_mode1() {
+        // check Critical Photon Input
+        if (!checkPhotonsInputting(amountOfPhotonsEveryMiracleDoorProcessingCost)){
             return SimpleCheckRecipeResult.ofFailure("No_Critical_Photon_Input");
         }
-
         // normal processing logic with infinite parallel
         setupProcessingLogic(processingLogic);
 
@@ -170,19 +188,9 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         updateSlots();
         if (!result.wasSuccessful()) return result;
 
-        for (ItemStack items : getStoredInputs()) {
-            if (items == null) continue;
-            if (metaItemEqual(items, CriticalPhoton.get(1))) {
-                photonStack = items;
-                break;
-            }
-        }
-        if (photonStack == null || photonStack.stackSize < 1) {
-            // sanity check
+        // consume Critical Photon
+        if (!consumePhoton(amountOfPhotonsEveryMiracleDoorProcessingCost)){
             return CheckRecipeResultRegistry.INTERNAL_ERROR;
-        } else {
-            // consume Critical Photon
-            photonStack.stackSize -= amountOfPhotonsEveryMiracleDoorProcessingCost;
         }
 
         mEfficiency = 10000;

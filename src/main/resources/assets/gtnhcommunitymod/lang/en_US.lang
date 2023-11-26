@@ -343,3 +343,5 @@ Tooltip_MiracleDoor_05=Directly get EU from the Wireless EU Net.
 Tooltip_MiracleDoor_Controller=Controller block for the Miracle Door
 Tooltip_MiracleDoor_08=Put Integrated Circuit into Controller block to decrease process time interval.
 Tooltip_MiracleDoor_2_05=Each run cost 1 Critical Photon to start.
+NameInfiniteWirelessDynamoHatch=Infinite Wireless Dynamo Hatch
+NameOreProcessingFactory=TST Ore Processing Factory
