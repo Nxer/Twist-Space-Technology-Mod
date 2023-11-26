@@ -38,6 +38,7 @@ public enum GTCMItemList {
     MoleculeDeconstructor,
     CrystallineInfinitier,
     MiracleDoor,
+    OreProcessingFactory,
 
     // DSP
     SolarSail,
@@ -56,6 +57,7 @@ public enum GTCMItemList {
 
     // single block Machines
     InfiniteAirHatch,
+    InfiniteWirelessDynamoHatch,
 
     // Blocks
 

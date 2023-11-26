@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfin
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
@@ -26,6 +27,7 @@ import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UMV_UIV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UXV_UMV;
 import static com.dreammaster.gthandler.CustomItemList.WiremillUV;
+import static com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Transformer;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Containment_Field;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
@@ -90,6 +92,8 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.material.ALLOY;
 import ic2.core.Ic2Items;
+
+import java.util.Iterator;
 
 public class GTCMMachineRecipePool implements IRecipePool {
 
@@ -1063,6 +1067,38 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20*120)
             .addTo(AssemblyLine);
 
+        // endregion
+
+        // region Infinite Dynamo Hatch
+        GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, ItemList.Wireless_Dynamo_Energy_UXV.get(1))
+            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .itemInputs(
+                CustomItemList.Hatch_Dynamo_UXV.get(1),
+                ItemRefer.Compact_Fusion_Coil_T0.get(1),
+                ItemRefer.Compact_Fusion_Coil_T4.get(4),
+                Machine_Multi_Transformer.get(1),
+
+                eM_Power.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, MaterialsUEVplus.SpaceTime, 16),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 1),
+                CustomItemList.QuantumCircuit.get(16),
+
+                CustomItemList.PikoCircuit.get(32),
+                ItemList.EnergisedTesseract.get(8),
+                ItemList.Tesseract.get(8),
+                GravitationalLens.get(16)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*36),
+                Materials.UUMatter.getFluid(1000*8),
+                MaterialsUEVplus.ExcitedDTSC.getFluid(1000*4)
+            )
+            .itemOutputs(InfiniteWirelessDynamoHatch.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_UXV)
+            .duration(20*20)
+            .addTo(AssemblyLine);
         // endregion
     }
     // spotless:on
