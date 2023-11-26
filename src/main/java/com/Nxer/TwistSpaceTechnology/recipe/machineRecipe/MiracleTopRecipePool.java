@@ -3,17 +3,10 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.DATApipe;
 import static gregtech.api.enums.Mods.GTPlusPlus;
-import static gregtech.api.enums.TierEU.RECIPE_EV;
-import static gregtech.api.enums.TierEU.RECIPE_IV;
-import static gregtech.api.enums.TierEU.RECIPE_LuV;
-import static gregtech.api.enums.TierEU.RECIPE_MAX;
-import static gregtech.api.enums.TierEU.RECIPE_UEV;
-import static gregtech.api.enums.TierEU.RECIPE_UHV;
-import static gregtech.api.enums.TierEU.RECIPE_UIV;
-import static gregtech.api.enums.TierEU.RECIPE_UMV;
-import static gregtech.api.enums.TierEU.RECIPE_UV;
+import static gregtech.api.enums.TierEU.*;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 
+import buildcraft.energy.fuels.CoolantManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -1191,6 +1184,64 @@ public class MiracleTopRecipePool implements IRecipePool {
             .specialValue(13500)
             .eut(RECIPE_MAX)
             .duration(20*1919810)
+            .addTo(MT);
+
+
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                GT_ModHandler.getModItem("bartworks","gt.bwMetaGeneratedItem0",1,32750),
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",64,32073),
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",64,32073),
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",64,32073),
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",64,32073)
+            )
+            .fluidInputs(
+                Materials.ReinforceGlass.getMolten(16*16*288),
+                Materials.Polybenzimidazole.getMolten(16*8*72),
+                Materials.NaquadahEnriched.getMolten(16*4*72),
+                Materials.Silicone.getMolten(16*16*144),
+                Materials.TungstenSteel.getMolten(16*32*18),
+                Materials.GrowthMediumSterilized.getFluid(16 * 250),
+                Materials.UUMatter.getFluid(16*250),
+                new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1000*16)
+            )
+            .itemOutputs(
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32072)
+            )
+            .noFluidOutputs()
+            .eut(RECIPE_ZPM)
+            .duration(20)
+            .addTo(MT);
+
+
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                GT_ModHandler.getModItem("bartworks","gt.bwMetaGeneratedItem0",1,32746),
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",64,32076),
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",64,32076),
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",64,32076),
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",64,32076)
+            )
+            .fluidInputs(
+                Materials.ReinforceGlass.getMolten(16*16*288),
+                Materials.Polybenzimidazole.getMolten(16*16*72),
+                Materials.ElectrumFlux.getMolten(16*16*72),
+                Materials.Silicone.getMolten(16*16*144),
+                Materials.HSSS.getMolten(16*32*18),
+                Materials.BioMediumSterilized.getFluid(16 * 500),
+                Materials.UUMatter.getFluid(16*500),
+                new FluidStack(FluidRegistry.getFluid("ic2coolant"), 2000*16)
+            )
+            .itemOutputs(
+                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32077)
+            )
+            .noFluidOutputs()
+            .eut(RECIPE_UHV)
+            .duration(20)
             .addTo(MT);
 
 
