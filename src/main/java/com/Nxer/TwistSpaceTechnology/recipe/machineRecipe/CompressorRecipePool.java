@@ -26,7 +26,7 @@ public class CompressorRecipePool implements IRecipePool {
             .itemOutputs(IC2Items.getItem("plantBall"))
             .noFluidOutputs()
             .noOptimize()
-            .eut(RECIPE_ULV)
+            .eut(2)
             .duration(15*20)
             .addTo(Compressor);
     }
