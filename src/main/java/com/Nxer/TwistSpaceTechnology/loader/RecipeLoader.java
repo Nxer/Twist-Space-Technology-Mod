@@ -13,16 +13,8 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.GTCMMachineRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IntensifyChemicalDistorterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOPRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
-import com.elisis.gtnhlanth.loader.BotRecipes;
-
-import goodgenerator.items.MyMaterial;
-import gregtech.api.enums.OrePrefixes;
-import magicbees.bees.BeeSpecies;
-import magicbees.main.utils.compat.botania.SpeciesRecipeElvenTrade;
-import vazkii.botania.api.BotaniaAPI;
-
 public class RecipeLoader {
 
     public static void loadRecipes() {
@@ -30,11 +22,11 @@ public class RecipeLoader {
             new IntensifyChemicalDistorterRecipePool(), new ChemicalReactorRecipePool(),
             new PreciseHighEnergyPhotonicQuantumMasterRecipePool(), new CircuitAssemblerRecipePool(),
             new MiracleTopRecipePool(), new FluidSolidifierRecipePool(), new CrystallineInfinitierRecipePool(),
-            new DSPRecipePool(), new DistillationRecipePool(), new ExtractorRecipePool(),new CompressorRecipePool()};
+            new DSPRecipePool(), new DistillationRecipePool(), new ExtractorRecipePool(),new CompressorRecipePool(),new BOTRecipePool()};
 
         for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
         }
-        BotaniaAPI.elvenTradeRecipes.add(new BOPRecipePool(MyMaterial.preciousMetalAlloy.get(OrePrefixes.dust, 1),GTCMItemList.PurpleMagnoliaSapling.get(1)));
+        
     }
 }
