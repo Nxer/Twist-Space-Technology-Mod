@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -101,11 +100,6 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
             true);
     }
 
-    @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        if (mode == 0) return GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
-        return GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
-    }
 
     @Override
     public boolean supportsSingleRecipeLocking() {

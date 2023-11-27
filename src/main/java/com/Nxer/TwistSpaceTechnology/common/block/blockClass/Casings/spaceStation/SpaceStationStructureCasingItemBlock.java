@@ -1,22 +1,19 @@
-package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings;
-
-import java.util.Arrays;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation;
 
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
-public class PhotonControllerUpgradeCasingItemBlock extends ItemBlockBase01 {
+import java.util.Collections;
+import java.util.List;
 
-    public PhotonControllerUpgradeCasingItemBlock(Block aBlock) {
+public class SpaceStationStructureCasingItemBlock extends ItemBlockBase01 {
+    public SpaceStationStructureCasingItemBlock(Block aBlock) {
         super(aBlock);
         this.setCreativeTab(GTCMCreativeTabs.tabGTCMGeneralTab);
     }
@@ -25,10 +22,10 @@ public class PhotonControllerUpgradeCasingItemBlock extends ItemBlockBase01 {
     @Override
     @SuppressWarnings({ "unchecked" })
     public void addInformation(ItemStack aItemStack, EntityPlayer p_77624_2_, List theTooltipsList,
-        boolean p_77624_4_) {
+                               boolean p_77624_4_) {
         if (null == aItemStack) return;
 
-        theTooltipsList.addAll(Arrays.asList(TextLocalization.TooltipsUpgrades[aItemStack.getItemDamage()]));
+        Collections.addAll(theTooltipsList, TextLocalization.TooltipsUpgrades[aItemStack.getItemDamage()]);
 
         theTooltipsList.add(mNoMobsToolTip);
         theTooltipsList.add(mNoTileEntityToolTip);

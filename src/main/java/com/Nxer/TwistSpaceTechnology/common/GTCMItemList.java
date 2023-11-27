@@ -42,6 +42,15 @@ public enum GTCMItemList {
     MiracleDoor,
     OreProcessingFactory,
 
+    // MAX
+    HighDimensionalExtend,
+    HighDimensionalCircuitDoard,
+    HighDimensionalCapacitor,
+    HighDimensionalInterface,
+    HighDimensionalDiode,
+    HighDimensionalResistor,
+    HighDimensionalTransistor,
+
     // DSP
     SolarSail,
     DysonSphereFrameComponent,
@@ -78,12 +87,38 @@ public enum GTCMItemList {
     PhotonControllerUpgradeUMV,
     PhotonControllerUpgradeUXV,
     PhotonControllerUpgradeMAX,
-
+    spaceStationStructureBlockLV,
+    spaceStationStructureBlockMV,
+    spaceStationStructureBlockHV,
+    spaceStationStructureBlockEV,
+    spaceStationStructureBlockIV,
+    spaceStationStructureBlockLuV,
+    spaceStationStructureBlockZPM,
+    spaceStationStructureBlockUV,
+    spaceStationStructureBlockUHV,
+    spaceStationStructureBlockUEV,
+    spaceStationStructureBlockUIV,
+    spaceStationStructureBlockUMV,
+    spaceStationStructureBlockUXV,
+    spaceStationStructureBlockMAX,
+    SpaceStationAntiGravityBlockLV,
+    SpaceStationAntiGravityBlockMV,
+    SpaceStationAntiGravityBlockHV,
+    SpaceStationAntiGravityBlockEV,
+    SpaceStationAntiGravityBlockIV,
+    SpaceStationAntiGravityBlockLuV,
+    SpaceStationAntiGravityBlockZPM,
+    SpaceStationAntiGravityBlockUV,
+    SpaceStationAntiGravityBlockUHV,
+    SpaceStationAntiGravityBlockUEV,
+    SpaceStationAntiGravityBlockUIV,
+    SpaceStationAntiGravityBlockUMV,
+    SpaceStationAntiGravityBlockUXV,
+    SpaceStationAntiGravityBlockMAX,
     // MultiStructure Machine:
     TestMultiStructureMainMachine,
-    TestMultiStructureSubMachine
-
-    ;
+    TestMultiStructureSubMachine,
+    megaUniversalSpaceStation;
 
     // region Member Variables
 

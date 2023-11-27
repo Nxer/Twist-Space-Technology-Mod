@@ -80,16 +80,16 @@ public class OP_NormalProcessing {
             }
         }
 
-        GT_Values.RA
-            .stdBuilder()
-            .itemInputs(inputs)
-            .noFluidInputs()
-            .itemOutputs(outputs.toArray(new ItemStack[]{}))
-            .noFluidOutputs()
-            .noOptimize()
-            .eut(120)
-            .duration(128)
-            .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+//        GT_Values.RA
+//            .stdBuilder()
+//            .itemInputs(inputs)
+//            .noFluidInputs()
+//            .itemOutputs(outputs.toArray(new ItemStack[]{}))
+//            .noFluidOutputs()
+//            .noOptimize()
+//            .eut(120)
+//            .duration(128)
+//            .addTo(GTCMRecipe.instance.OreProcessingRecipes);
     }
 
 

@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructureMachineBuilder;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
@@ -35,12 +34,13 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     // its main structure
     public int ID = -1;
     public int Type = -1;
-
+    public ArrayList<String> pieces = new ArrayList<>();
     public int fatherID = -1;
 
 
     protected GT_TileEntity_MultiStructureMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, "MultiStructure." + aNameRegional);
+        pieces.add(aName);
         setShape();
 
     }
@@ -49,17 +49,6 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
         super(mName);
     }
 
-    public StructureLoader.MultiStructureDefinition getMultiStructureDefinition(){
-        return StructureLoader.readStructure(mName);
-    }
-
-//    @Override
-//    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-//        if (!checkPiece(MainStructName, horizontalOffSet, verticalOffSet, depthOffSet)) {
-//            return false;
-//        }
-//        return MultiStructureManager.isComplete(this);
-//    }
 
     @Override
     public void onBlockDestroyed() {
@@ -74,44 +63,46 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     protected abstract int getMaxParallelRecipes();
 
     public void setShape() {
-//        for (String piece : pieces) {
-//            shape.add(StructureLoader.readStructure(MainStructName));
-//
-//        }
+        for (String piece : pieces) {
+
+            StructureLoader.load(mName, piece);
+        }
     }
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (!this.mMachine) {
-            return -1;
-        }
-        Item item=stackSize.getItem();
-        if(item instanceof ItemMultiStructureMachineBuilder){
-            var pieces = StructureLoader.getPieces(this.mName);
-            for(var name:pieces.entrySet()){
-                StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.readStructure(mName).offSet.get(name.getValue());
-                buildPiece(name.getKey(),stackSize,false,offSet.horizontalOffSet,offSet.verticalOffSet,offSet.depthOffSet);
-            }
-            return 0;
-        }
         return super.survivalConstruct(stackSize, elementBudget, env);
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
+        this.buildPiece(mName, stackSize, hintsOnly, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet);
     }
 
 
     //need to be optimized and rewrite
     @Override
     public boolean checkStructure(boolean aForceReset, IGregTechTileEntity aBaseMetaTileEntity) {
-        if(MultiStructureManager.isComplete(this)){
-            var pieces = StructureLoader.getPieces(this.mName);
-            for(var name:pieces.entrySet()){
-                StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.readStructure(mName).offSet.get(name.getValue());
-                if(!checkPiece(mName, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet)){
-                    return false;
-                };
-            }
-            return true;
-        }
-        return false;
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
+        return checkPiece(mName, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet);
+//        if(MultiStructureManager.isComplete(this)){
+//            var pieces = StructureLoader.getPieces(this.mName);
+//            for(var name:pieces.entrySet()){
+//                StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.readStructure(mName).offSet.get(name.getValue());
+//                if(!checkPiece(name.getKey(), offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet)){
+//                    return false;
+//                };
+//            }
+//            return true;
+//        }
+//        return false;
+    }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
+        return checkPiece(mName, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet);
     }
 
     @Override
@@ -132,40 +123,14 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
 
     @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        if (aTick == 1) {
-            if (aBaseMetaTileEntity.isClientSide()) {
-                return;
-            }
+        if (aTick == 1 && !aBaseMetaTileEntity.isClientSide()) {
+
             MultiStructureManager.registryMachine(this);
         }
         super.onPreTick(aBaseMetaTileEntity, aTick);
     }
 
-    @Override
-    protected void setEnergyHatches(ArrayList<GT_MetaTileEntity_Hatch_Energy> EnergyHatches) {
-        super.setEnergyHatches(EnergyHatches);
-    }
 
-    @Override
-    public void onSetActive(boolean active) {
-        super.onSetActive(active);
-    }
-
-    @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-
-        super.onPreTick(aBaseMetaTileEntity, aTick);
-    }
-
-    @Override
-    public void onWorldLoad(File aSaveDirectory) {
-        super.onWorldLoad(aSaveDirectory);
-    }
-
-    @Override
-    public void onWorldSave(File aSaveDirectory) {
-        super.onWorldSave(aSaveDirectory);
-    }
 
     @Override
     protected void setExoticEnergyHatches(List<GT_MetaTileEntity_Hatch> ExoticEnergyHatches) {
