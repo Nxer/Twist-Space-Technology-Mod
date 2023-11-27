@@ -17,6 +17,10 @@ public final class DSP_Values {
     public static final int overloadSpeedUpMultiplier = Config.overloadSpeedUpMultiplier; // default 30
     public static final double gravitationalLensSpeedMultiplier = Config.gravitationalLensSpeedMultiplier;
     public static final int secondsOfEveryGravitationalLensProvideToIntensifyTime = Config.secondsOfEveryGravitationalLensProvideToIntensifyTime;
+    public static final int ticksOfLaunchingSolarSail = (int) (20 * Config.secondsOfLaunchingSolarSail);
+    public static final int ticksOfLaunchingNode = (int) (20 * Config.secondsOfLaunchingNode);
+    public static final int EUTOfLaunchingSolarSail = Config.EUTOfLaunchingSolarSail;
+    public static final int EUTOfLaunchingNode = Config.EUTOfLaunchingNode;
 
     // spotless:on
 }

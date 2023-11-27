@@ -6,6 +6,7 @@ import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
+import static net.minecraftforge.fluids.FluidRegistry.getFluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -22,6 +23,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechOrePrefixes;
 
 public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
@@ -435,7 +437,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .addTo(ICD);
 
         // endregion
-        
+
         // region Bastnasite
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -443,15 +445,15 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.crushed,Materials.Bastnasite,64),// Bastnasite
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
-                
+
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64),
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 16),
-                
+
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64),
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64)
-                
+
             )
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*768),
@@ -483,22 +485,22 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .eut(RECIPE_UHV)
             .duration(20*20)
             .addTo(ICD);
-        
+
         GT_Values.RA.stdBuilder()
                     .itemInputs(
                         GT_Utility.getIntegratedCircuit(3),
                         GT_OreDictUnificator.get(OrePrefixes.crushed,Materials.Bastnasite,64),// Bastnasite
                         GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
                         GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
-                        
+
                         GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64),
                         GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
                         GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
                         GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 48),
-                        
+
                         GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64),
                         GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64)
-                    
+
                     )
                     .fluidInputs(
                         Materials.Hydrogen.getGas(1000*752),
@@ -530,6 +532,24 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                     .eut(RECIPE_UHV)
                     .duration(20*20)
                     .addTo(ICD);
+
+        // endregion
+
+        // region H2O2
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(16))
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*64),
+                Materials.Oxygen.getGas(1000*64))
+            .noItemOutputs()
+            .fluidOutputs(getFluidStack("fluid.hydrogenperoxide",1000*32))
+            .specialValue(11700)
+            .eut(RECIPE_UHV)
+            .duration(64)
+            .addTo(ICD);
+
+        // endregion
 
     }
     // spotless:on

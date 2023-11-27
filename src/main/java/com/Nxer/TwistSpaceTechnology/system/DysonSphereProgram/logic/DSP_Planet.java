@@ -16,56 +16,56 @@ public enum DSP_Planet implements Serializable {
 
     // SolarSystem
     OverWorld(0, 1, SolarSystem),
-    TheEnd(1, 1.01, SolarSystem),
-    Miranda(86, 1, SolarSystem),
-    Haumea(83, 1, SolarSystem),
-    Pluto(49, 1, SolarSystem),
-    Triton(48, 1, SolarSystem),
-    Proteus(47, 1, SolarSystem),
-    Oberon(46, 1, SolarSystem),
-    Callisto(45, 1, SolarSystem),
-    Titan(44, 1, SolarSystem),
-    Ganymede(43, 1, SolarSystem),
-    Ceres(42, 1, SolarSystem),
-    Enceladus(41, 1, SolarSystem),
-    Deimos(40, 1, SolarSystem),
-    Venus(39, 1, SolarSystem),
-    Phobos(38, 1, SolarSystem),
-    Mercury(37, 1, SolarSystem),
-    Io(36, 1, SolarSystem),
-    Europa(35, 1, SolarSystem),
-    KuiperBelt(33, 1, SolarSystem),
-    Asteroids(30, 1, SolarSystem),
-    Mars(29, 1, SolarSystem),
-    Moon(28, 1, SolarSystem),
-    Makemake(25, 1, SolarSystem),
+    TheEnd(1, 1.07, SolarSystem),
+    Miranda(86, 0.45, SolarSystem),
+    Haumea(83, 0.18, SolarSystem),
+    Pluto(49, 0.2, SolarSystem),
+    Triton(48, 0.35, SolarSystem),
+    Proteus(47, 0.33, SolarSystem),
+    Oberon(46, 0.44, SolarSystem),
+    Callisto(45, 0.67, SolarSystem),
+    Titan(44, 0.56, SolarSystem),
+    Ganymede(43, 0.66, SolarSystem),
+    Ceres(42, 0.7, SolarSystem),
+    Enceladus(41, 0.55, SolarSystem),
+    Deimos(40, 1.01, SolarSystem),
+    Venus(39, 1.6, SolarSystem),
+    Phobos(38, 1.01, SolarSystem),
+    Mercury(37, 2.3, SolarSystem),
+    Io(36, 0.66, SolarSystem),
+    Europa(35, 0.66, SolarSystem),
+    KuiperBelt(33, 0.1, SolarSystem),
+    Asteroids(30, 0.7, SolarSystem),
+    Mars(29, 1.01, SolarSystem),
+    Moon(28, 1.3, SolarSystem),
+    Makemake(25, 0.09, SolarSystem),
     TwilightForest(7, 1, SolarSystem),
 
     // Ross128
     Ross128b(64, 1, Ross128),
-    Ross128ba(63, 1, Ross128),
+    Ross128ba(63, 1.3, Ross128),
 
     // Barnarda
-    BarnardaF(82, 1, Barnarda),
-    BarnardaE(81, 1, Barnarda),
-    BarnardaC(32, 1, Barnarda),
+    BarnardaF(82, 0.8, Barnarda),
+    BarnardaE(81, 0.9, Barnarda),
+    BarnardaC(32, 1.5, Barnarda),
 
     // Vega
-    VegaB(84, 1, Vega),
+    VegaB(84, 2.6, Vega),
 
     // TCeti
-    TCetiE(85, 1, TCeti),
+    TCetiE(85, 1.1, TCeti),
 
     // CentauriB
-    CentauriBb(31, 1, CentauriB),
+    CentauriBb(31, 2.2, CentauriB),
 
     // AmunRa
-    Seth(94, 1, AmunRa),
-    Horus(93, 1, AmunRa),
-    Anubis(92, 1, AmunRa),
-    Maahes(91, 1, AmunRa),
-    Neper(90, 1, AmunRa),
-    MehenBelt(95, 1, AmunRa),
+    Seth(94, 0.79, AmunRa),
+    Horus(93, 2.9, AmunRa),
+    Anubis(92, 0.66, AmunRa),
+    Maahes(91, 0.77, AmunRa),
+    Neper(90, 1.15, AmunRa),
+    MehenBelt(95, 0.8, AmunRa),
 
     //
     DSP_Planet_NULL(-114, 0, DSP_Galaxy_NULL),;

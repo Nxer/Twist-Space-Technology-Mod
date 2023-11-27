@@ -5,19 +5,43 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLen
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_05;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_00;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_05;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_05;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_07;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_08;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentPlanetCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentStellarCoefficient;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
@@ -41,6 +65,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
@@ -99,14 +124,12 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     private boolean isUsing = false;
     private long storageEU = 0;
     private long gravitationalLensTime = 0;
+    private boolean wirelessMode = true;
     private int dimID; // init when load world
+    private double stellarAndPlanetCoefficient = 0;
     private DSP_DataCell dspDataCell; // init when load world
     private byte dataSyncFlag = 0;
     private IGregTechTileEntity baseMetaTileEntity;
-
-    private double getGLensSpeedMultiplier() {
-        return gravitationalLensTime == 0 ? 1 : DSP_Values.gravitationalLensSpeedMultiplier;
-    }
 
     private void decreaseGravitationalLensTime() {
         if (gravitationalLensTime > 0) gravitationalLensTime--;
@@ -144,7 +167,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             currentTip.add(
                 EnumChatFormatting.AQUA + texter("Energy Receiving: ", "Waila.TST_DSPReceiver.1")
                     + EnumChatFormatting.GOLD
-                    + generateTickEU()
+                    + tag.getLong("TickEU")
                     + EnumChatFormatting.RESET
                     + " EU/t");
         }
@@ -179,6 +202,8 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         aNBT.setLong("storageEU", storageEU);
         aNBT.setBoolean("isUsing", isUsing);
         aNBT.setLong("gravitationalLensTime", gravitationalLensTime);
+        aNBT.setBoolean("wirelessMode", wirelessMode);
+        aNBT.setDouble("stellarAndPlanetCoefficient", stellarAndPlanetCoefficient);
     }
 
     @Override
@@ -189,6 +214,8 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         storageEU = aNBT.getLong("storageEU");
         isUsing = aNBT.getBoolean("isUsing");
         gravitationalLensTime = aNBT.getLong("gravitationalLensTime");
+        wirelessMode = aNBT.getBoolean("wirelessMode");
+        stellarAndPlanetCoefficient = aNBT.getDouble("stellarAndPlanetCoefficient");
     }
 
     /**
@@ -262,16 +289,21 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         return CheckRecipeResultRegistry.GENERATING;
     }
 
+    private double getGLensSpeedMultiplier() {
+        return gravitationalLensTime == 0 ? 1 : DSP_Values.gravitationalLensSpeedMultiplier;
+    }
+
     private long generateTickEU() {
-        return (long) (dspDataCell.getGalaxy().stellarCoefficient
-            * DSP_Planet.getPlanetaryCoefficientWithDimID(this.dimID)
-            * getGLensSpeedMultiplier()
-            * this.usedPowerPoint);
+        return (long) (stellarAndPlanetCoefficient * getGLensSpeedMultiplier() * this.usedPowerPoint);
     }
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
-        this.storageEU += this.generateTickEU();
+        if (wirelessMode) {
+            this.storageEU += this.generateTickEU();
+        } else {
+            addEnergyOutput(this.generateTickEU());
+        }
         return true;
     }
 
@@ -284,10 +316,12 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);
             this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
             this.dspDataCell = getOrInitDSPData(ownerName, dimID);
+            this.stellarAndPlanetCoefficient = DSP_Planet.getPlanetaryCoefficientWithDimID(dimID)
+                * DSP_Galaxy.getGalaxyFromDimID(dimID).stellarCoefficient;
         }
     }
 
-    private void checkGLensInput() {
+    private void checkGravitationalLensInput() {
         if (mInputBusses.isEmpty()) return;
         if (getStoredInputs().isEmpty()) return;
         for (ItemStack items : getStoredInputs()) {
@@ -322,22 +356,24 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             if (aTick % 128 == 0) {
                 this.syncDSPData();
 
-                checkGLensInput();
+                checkGravitationalLensInput();
 
                 if (mode == 0) {
-                    // Generate EU directly
-                    if (this.storageEU > 0) {
-                        TwistSpaceTechnology.LOG.info(
-                            "test addEUToGlobalEnergyMap: ownerUUID: " + ownerUUID + " ; storageEU: " + storageEU);
-                        addEUToGlobalEnergyMap(ownerUUID.toString(), this.storageEU);
-                        this.storageEU = 0;
+                    if (wirelessMode) {
+                        // Generate EU directly
+                        if (this.storageEU > 0) {
+                            addEUToGlobalEnergyMap(ownerUUID.toString(), this.storageEU);
+                            this.storageEU = 0;
+                        }
                     }
                 } else if (mode == 1) {
                     // Generate Photon per int.MAX EU
                     if (storageEU >= EUPerCriticalPhoton) {
                         int amount = (int) (storageEU / EUPerCriticalPhoton);
                         if (this.mOutputItems == null) {
-                            this.mOutputItems = new ItemStack[] { CriticalPhoton.get(amount) };
+                            ItemStack output = CriticalPhoton.get(1);
+                            output.stackSize = amount;
+                            this.mOutputItems = new ItemStack[] { output };
                         } else {
                             // safe and more calculate
                             for (ItemStack items : this.mOutputItems) {
@@ -362,7 +398,9 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 	@Override
 	public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-		return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+		if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
+        return true;
 	}
 
 	@Override
@@ -414,11 +452,12 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                                    .addElement(
 			                           'P',
 			                           GT_HatchElementBuilder.<TST_DSPReceiver>builder()
-			                                                 .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
+			                                                 .atLeast(InputBus, OutputBus)
 			                                                 .adder(TST_DSPReceiver::addToMachineList)
 			                                                 .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
 			                                                 .dot(1)
-			                                                 .buildAndChain(IGBlocks.SpaceElevatorCasing, 0))
+			                                                 .buildAndChain(IGBlocks.SpaceElevatorCasing, 0)
+                                   )
                                    .addElement('Q', ofFrame(Materials.NaquadahAlloy))
                                    .build();
 	}
@@ -519,12 +558,54 @@ Q -> ofFrame...(NaquadahAlloy, ...);
     }
 
     @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Test")
+        tt.addMachineType(Tooltip_DSPReceiver_MachineType)
+            .addInfo(Tooltip_DSPReceiver_00)
+            .addInfo(Tooltip_DSPReceiver_01)
+            .addInfo(Tooltip_DSPReceiver_02)
+            .addInfo(Tooltip_DSPReceiver_03)
+            .addInfo(Tooltip_DSPReceiver_04)
+            .addInfo(Tooltip_DSPReceiver_05)
+            .addInfo(Tooltip_DSPReceiver_06)
+            .addInfo(Tooltip_DSPReceiver_07)
+            .addInfo(Tooltip_DSPReceiver_08)
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addSeparator()
+            .addStructureInfo(Tooltip_Details)
+            .addStructureInfo(Tooltip_DSPReceiver_02_06)
+            .addStructureInfo(Tooltip_DSPReceiver_02_01)
+            .addStructureInfo(Tooltip_DSPReceiver_02_02)
+            .addStructureInfo(Tooltip_DSPReceiver_02_03)
+            .addStructureInfo(Tooltip_DSPReceiver_02_04)
+            .addStructureInfo(Tooltip_DSPReceiver_02_05)
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(DSPName + ":")
+            .addStructureInfo(Tooltip_DSPInfo_launch_01)
+            .addStructureInfo(Tooltip_DSPInfo_launch_02)
+            .addStructureInfo(Tooltip_DSPInfo_00)
+            .addStructureInfo(Tooltip_DSPInfo_01)
+            .addStructureInfo(Tooltip_DSPInfo_02)
+            .addStructureInfo(Tooltip_DSPInfo_03)
+            .addStructureInfo(Tooltip_DSPInfo_04)
+            .addStructureInfo(Tooltip_DSPInfo_05)
+            .addStructureInfo(Tooltip_DSPInfo_06)
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addInputBus(textUseBlueprint, 1)
+            .addOutputBus(textUseBlueprint, 1)
+            .addDynamoHatch(textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }

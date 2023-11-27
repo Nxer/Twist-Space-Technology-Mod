@@ -22,6 +22,7 @@ public class TextLocalization {
     public static final String FluidCapacity = texter("Capacity: ", "FluidCapacity");
     public static final String HatchTier = texter("Hatch Tier: ", "HatchTier");
     public static final String Kelvin = texter(" K", "Kelvin");
+    public static final String Text_SeparatingLine = EnumChatFormatting.GOLD + "-----------------------------------------";
     public static final String BLUE_PRINT_INFO = texter(
         "Follow the" + EnumChatFormatting.BLUE
             + " Structure"
@@ -35,8 +36,34 @@ public class TextLocalization {
     public static final String Tooltip_Details = texter(EnumChatFormatting.LIGHT_PURPLE+"Details: ","Tooltip_Details");
     // endregion
 
+    // region Names
+    public static final String name_Nxer = "" + EnumChatFormatting.RED
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "N"
+                                               + EnumChatFormatting.GREEN
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "x"
+                                               + EnumChatFormatting.AQUA
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "e"
+                                               + EnumChatFormatting.BLUE
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "r";
+
+    public static final String authorName_Nxer = "Author: "+name_Nxer;
+    // endregion
+
     // region special hatch info
     public static final String Tooltip_DoNotNeedMaintenance = texter("Do Not Need Maintenance!","Tooltip_DoNotNeedMaintenance");
+    public static final String Tooltip_DoNotNeedEnergyHatch = texter("Do Not Need Energy Hatch!","Tooltip_DoNotNeedEnergyHatch");
 
     // endregion
 
@@ -276,6 +303,7 @@ public class TextLocalization {
     public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.","Tooltip_SpaceScaler_04");
     public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.","Tooltip_SpaceScaler_05");
     public static final String Tooltip_SpaceScaler_06 = texter("Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.","Tooltip_SpaceScaler_06");
+    public static final String Tooltip_SpaceScaler_07 = texter("In Particle Collider mode, higher tier has more output.","Tooltip_SpaceScaler_07");
 
     // endregion
 
@@ -286,7 +314,7 @@ public class TextLocalization {
     public static final String Tooltip_MoleculeDeconstructor_01 = texter(EnumChatFormatting.AQUA+"The lightning seemed to roll down a ladder.","Tooltip_MoleculeDeconstructor_01");
     public static final String Tooltip_MoleculeDeconstructor_02 = texter("Separate the molecules one by one with tweezers.","Tooltip_MoleculeDeconstructor_02");
     public static final String Tooltip_MoleculeDeconstructor_03 = texter("Extra 24x Parallel per Piece. 16 Piece enable Perfect Overclock.","Tooltip_MoleculeDeconstructor_03");
-    public static final String Tooltip_MoleculeDeconstructor_04 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_MoleculeDeconstructor_04");
+    public static final String Tooltip_MoleculeDeconstructor_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.","Tooltip_MoleculeDeconstructor_04");
     public static final String Tooltip_MoleculeDeconstructor_05 = texter("The Glass Tier limit the Energy hatch voltage Tier.","Tooltip_MoleculeDeconstructor_05");
 
     // endregion
@@ -323,18 +351,88 @@ public class TextLocalization {
 
     // region DSPReceiver
     public static final String NameDSPReceiver = texter("Dyson Sphere Ray Receiving Station","NameDSPReceiver");
+    public static final String Tooltip_DSPReceiver_MachineType = texter("Dyson Sphere Program: Ray Receiving Station","Tooltip_DSPReceiver_MachineType");
+    public static final String Tooltip_DSPReceiver_00 = texter("Controller block for the Dyson Sphere Ray Receiving Station.","Tooltip_DSPReceiver_00");
+    public static final String Tooltip_DSPReceiver_01 = texter(EnumChatFormatting.DARK_PURPLE+""+EnumChatFormatting.BOLD+"You hold in your hands the true power of Master Nebula ...","Tooltip_DSPReceiver_01");
+    public static final String Tooltip_DSPReceiver_02 = texter("Receive high-energy rays transmitted back from the Dyson Cloud or the Dyson Sphere.","Tooltip_DSPReceiver_02");
+    public static final String Tooltip_DSPReceiver_03 = texter("The received energy can be exported directly to the Wireless EU Net or Dynamo Hatches or stored as Critical Photons.","Tooltip_DSPReceiver_03");
+    public static final String Tooltip_DSPReceiver_04 = texter("Ratio of the requesting from Dyson Sphere power point can be limited by putting Integrated Circuit into controller block.","Tooltip_DSPReceiver_04");
+    public static final String Tooltip_DSPReceiver_05 = texter("At the same time, the maximum requested power point is 1024A Max (default).","Tooltip_DSPReceiver_05");
+    public static final String Tooltip_DSPReceiver_06 = texter("Actual output power is affected by stellar and planetary coefficients.","Tooltip_DSPReceiver_06");
+    public static final String Tooltip_DSPReceiver_07 = texter("Inputting Gravitational Lens will enable intensify mode. Increase actual output power.","Tooltip_DSPReceiver_07");
+    public static final String Tooltip_DSPReceiver_08 = texter("Joining the wireless EU network when without installing a dynamo hatch.","Tooltip_DSPReceiver_08");
+    public static final String Tooltip_DSPReceiver_02_01 = texter("Actual Generating EU = used power point * stellar coefficient * planet coefficient * 1 or 2 in intensify mode ","Tooltip_DSPReceiver_02_01");
+    public static final String Tooltip_DSPReceiver_02_02 = texter("Personal Dimension was been classified as Overworld(Earth).","Tooltip_DSPReceiver_02_02");
+    public static final String Tooltip_DSPReceiver_02_03 = texter("Every Gravitational Lens will provide (default) 10 minutes of intensify mode.","Tooltip_DSPReceiver_02_03");
+    public static final String Tooltip_DSPReceiver_02_04 = texter("Input Gravitational Lens will be consumed immediately.","Tooltip_DSPReceiver_02_04");
+    public static final String Tooltip_DSPReceiver_02_05 = texter("Converted to remaining time of intensify mode.","Tooltip_DSPReceiver_02_05");
+    public static final String Tooltip_DSPReceiver_02_06 = texter("Requesting ratio = Integrated Circuit Number / Stack Size","Tooltip_DSPReceiver_02_06");
 
     // endregion
 
     // region ArtificialStar
     public static final String NameArtificialStar = texter("Artificial Star","NameArtificialStar");
-
+    public static final String Tooltip_ArtificialStar_MachineType = texter("Dyson Sphere Program: Annihilation Generator","Tooltip_ArtificialStar_MachineType");
+    public static final String Tooltip_ArtificialStar_Controller = texter("Controller block for the Artificial Star","Tooltip_ArtificialStar_Controller");
+    public static final String Tooltip_ArtificialStar_00 = texter(EnumChatFormatting.LIGHT_PURPLE+""+EnumChatFormatting.BOLD+"All you need to do is to let the proton and antiproton beams","Tooltip_ArtificialStar_00");
+    public static final String Tooltip_ArtificialStar_01 = texter(EnumChatFormatting.LIGHT_PURPLE+""+EnumChatFormatting.BOLD+" pass silently from both ends into the annihilation constrainer. Easy peasy!","Tooltip_ArtificialStar_01");
+    public static final String Tooltip_ArtificialStar_02 = texter("It owes its simple shape to the elegance of the theory.","Tooltip_ArtificialStar_02");
+    public static final String Tooltip_ArtificialStar_03 = texter("Actual output power is affected by 3 types tiered block.","Tooltip_ArtificialStar_03");
+    public static final String Tooltip_ArtificialStar_04 = texter("At the same time, higher tier increase the probability of recovering materials.","Tooltip_ArtificialStar_04");
+    public static final String Tooltip_ArtificialStar_05 = texter("Continuous operation improves power generation.","Tooltip_ArtificialStar_05");
+    public static final String Tooltip_ArtificialStar_06 = texter("Only and must install 1 input bus.","Tooltip_ArtificialStar_06");
+    public static final String Tooltip_ArtificialStar_07 = texter("Energy will output to Wireless EU Net directly.","Tooltip_ArtificialStar_07");
+    public static final String Tooltip_ArtificialStar_02_01 = texter("Output multiplier = tTime^0.25 * tDim^0.25 * 1.588186^(tStabilisation - 2)","Tooltip_ArtificialStar_02_01");
+    public static final String Tooltip_ArtificialStar_02_02 = texter("Actual Generating EU = recipe value * output multiplier * Rewards for continuous operation","Tooltip_ArtificialStar_02_02");
+    public static final String Tooltip_ArtificialStar_02_03 = texter("Recovering probability = tTime * tDim * tStabilisation / 1000","Tooltip_ArtificialStar_02_03");
+    public static final String Tooltip_ArtificialStar_02_04 = texter("Input fuels will be consumed at once, process 6.4s (default), and output the corresponding EU.","Tooltip_ArtificialStar_02_04");
+    public static final String Tooltip_ArtificialStar_02_05 = texter("Rewards multiplier 1%% increase per run when continuous operation.","Tooltip_ArtificialStar_02_05");
+    public static final String Tooltip_ArtificialStar_02_06 = texter("Maximum is 150%% , Minimum is 100%% when uncontinuous.","Tooltip_ArtificialStar_02_06");
 
     // endregion
 
+    // region Dyson Sphere Program Information
+    public static final String Tooltip_DSPInfo_launch_01 = texter("Launching Solar Sail increase Solar Sail amount of current Galaxy's Dyson Sphere.","Tooltip_DSPInfo_launch_01");
+    public static final String Tooltip_DSPInfo_launch_02 = texter("Launching Small Launch Vehicle increase Node amount of current Galaxy's Dyson Sphere.","Tooltip_DSPInfo_launch_02");
+    public static final String Tooltip_DSPInfo_00 = texter("DSP Power Point = Solar Sail Power Point (default 524288) * Solar Sail amount * (Node + 1)^0.5","Tooltip_DSPInfo_00");
+    public static final String Tooltip_DSPInfo_01 = texter("Every Node can absorb (default) 256 Solar Sails.","Tooltip_DSPInfo_01");
+    public static final String Tooltip_DSPInfo_02 = texter("If unabsorbed solar sails amount is larger than 2048,","Tooltip_DSPInfo_02");
+    public static final String Tooltip_DSPInfo_03 = texter(" the excess may be destroyed.","Tooltip_DSPInfo_03");
+    public static final String Tooltip_DSPInfo_04 = texter("Every 30 minutes has 1/5000 chance to decrease Solar Sail amount.","Tooltip_DSPInfo_04");
+    public static final String Tooltip_DSPInfo_05 = texter("In decreasing, every Dyson Sphere has 1/4 chance to destroyed Solar Sail amount.","Tooltip_DSPInfo_05");
+    public static final String Tooltip_DSPInfo_06 = texter("The amount of destroyed is the excess' 1/2 .","Tooltip_DSPInfo_06");
+
+    // endregion
+
+    // region MiracleDoor
+    public static final String NameMiracleDoor = texter("Miracle Door", "NameMiracleDoor");
+    public static final String Tooltip_MiracleDoor_MachineType = texter("Stellar Forge | Fluid Alloy Cooker", "Tooltip_MiracleDoor_MachineType");
+    public static final String Tooltip_MiracleDoor_Controller = texter("Controller block for the Miracle Door", "Tooltip_MiracleDoor_Controller");
+    public static final String Tooltip_MiracleDoor_00 = texter(EnumChatFormatting.GOLD+""+EnumChatFormatting.BOLD+"Mere mortals can't even begin to understand the progress we've made.", "Tooltip_MiracleDoor_00");
+    public static final String Tooltip_MiracleDoor_01 = texter("Enslaving Stellaris to work for us.", "Tooltip_MiracleDoor_01");
+    public static final String Tooltip_MiracleDoor_02 = texter("No matter how large the workload, it can be done in one time.", "Tooltip_MiracleDoor_02");
+    public static final String Tooltip_MiracleDoor_03 = texter("No matter how large the workload, it need one Critical Photon to start.", "Tooltip_MiracleDoor_03");
+    public static final String Tooltip_MiracleDoor_04 = texter("Power consumption: §c1600%%", "Tooltip_MiracleDoor_04");
+    public static final String Tooltip_MiracleDoor_05 = texter("Directly get EU from the Wireless EU Net.", "Tooltip_MiracleDoor_05");
+    public static final String Tooltip_MiracleDoor_06 = texter("Warning! If trying to start machine when Wireless EU Net has not enough EU,", "Tooltip_MiracleDoor_06");
+    public static final String Tooltip_MiracleDoor_07 = texter(" the materials will fade.", "Tooltip_MiracleDoor_07");
+    public static final String Tooltip_MiracleDoor_08 = texter("Put Integrated Circuit into Controller block to decrease process time interval.", "Tooltip_MiracleDoor_08");
+    public static final String Tooltip_MiracleDoor_2_01 = texter("Each run takes the same amount of time, 25.6s default.", "Tooltip_MiracleDoor_2_01");
+    public static final String Tooltip_MiracleDoor_2_02 = texter("If putting Integrated Circuit into Controller block slot,", "Tooltip_MiracleDoor_2_02");
+    public static final String Tooltip_MiracleDoor_2_03 = texter(" actual progress time = default / (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_03");
+    public static final String Tooltip_MiracleDoor_2_04 = texter("Actual cost EU = recipe value * 16 * (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_04");
+    public static final String Tooltip_MiracleDoor_2_05 = texter("Each run cost 1 Critical Photon to start.", "Tooltip_MiracleDoor_2_05");
+
+    // endregion
+
+    // region OreProcessingFactory
+    public static final String NameOreProcessingFactory = texter("TST Ore Processing Factory","NameOreProcessingFactory");
+
+    // endregion
 
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
+    public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
 
     // endregion
 }

@@ -125,7 +125,7 @@ public class DSP_DataCell implements Serializable {
                 (long) (
                     solarSailPowerPoint
                         * this.amountDSPSolarSail
-                        * Math.pow(this.amountDSPNode + 1, 0.5)));
+                        * Math.pow(this.amountDSPNode + 1, 0.8)));
         return this;
     }
 

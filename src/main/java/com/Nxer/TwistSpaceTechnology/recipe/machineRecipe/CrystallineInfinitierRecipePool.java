@@ -17,6 +17,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
@@ -137,7 +138,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_UV)
             .duration(20 * 60)
             .addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
-        
+
         // gt++ mixer
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(4), Materials.Holmium.getDust(3), Materials.Sapphire.getDust(5))
@@ -148,7 +149,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-        
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(4),
@@ -161,7 +162,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-        
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(5),
@@ -178,7 +179,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_UV)
             .duration(20 * 30)
             .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
-        
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(5),
@@ -201,7 +202,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         // Chip
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensBlue")) {
             GT_Values.RA.stdBuilder()
-                .itemInputs(GT_Utility.copyAmount(0, itemStack), GTCMItemList.PerfectLapotronCrystal.get(1))
+                .itemInputs(Utils.copyAmount(0, itemStack), GTCMItemList.PerfectLapotronCrystal.get(1))
                 .noFluidInputs()
                 .itemOutputs(
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
@@ -252,7 +253,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         // Chip
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensRed")) {
             GT_Values.RA.stdBuilder()
-                .itemInputs(GT_Utility.copyAmount(0, itemStack), GTCMItemList.PerfectEnergyCrystal.get(1))
+                .itemInputs(Utils.copyAmount(0, itemStack), GTCMItemList.PerfectEnergyCrystal.get(1))
                 .noFluidInputs()
                 .itemOutputs(CustomItemList.EngravedEnergyChip.get(64), CustomItemList.EngravedEnergyChip.get(64))
                 .noFluidOutputs()
@@ -277,9 +278,9 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .addTo(CI);
 
         // endregion
-        
+
         // region Boule
-        
+
         // Monocrystalline Silicon Boule
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -291,7 +292,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_MV)
             .duration(20*450)
             .addTo(CI);
-        
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(2),
@@ -302,7 +303,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_MV)
             .duration(20*450)
             .addTo(CI);
-        
+
         // Phosphorus doped Monocrystalline Silicon Boule
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -315,7 +316,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_HV)
             .duration(20*150)
             .addTo(CI);
-        
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
@@ -327,7 +328,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_HV)
             .duration(20*150)
             .addTo(CI);
-        
+
         // Naquadah doped Monocrystalline Silicon Boule
         GT_Values.RA.stdBuilder()
                     .itemInputs(
@@ -340,7 +341,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_EV)
                     .duration(20*256)
                     .addTo(CI);
-        
+
         GT_Values.RA.stdBuilder()
                     .itemInputs(
                         GT_Utility.getIntegratedCircuit(1),
@@ -352,7 +353,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_EV)
                     .duration(20*256)
                     .addTo(CI);
-        
+
         GT_Values.RA.stdBuilder()
                     .itemInputs(
                         GT_Utility.getIntegratedCircuit(1),
@@ -364,7 +365,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_IV)
                     .duration(20*16)
                     .addTo(CI);
-        
+
         GT_Values.RA.stdBuilder()
                     .itemInputs(
                         GT_Utility.getIntegratedCircuit(1),
@@ -376,7 +377,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_IV)
                     .duration(20*16)
                     .addTo(CI);
-        
+
         // Europium doped Monocrystalline Silicon Boule
         GT_Values.RA.stdBuilder()
                     .itemInputs(
@@ -389,7 +390,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_IV)
                     .duration(20*336)
                     .addTo(CI);
-        
+
         GT_Values.RA.stdBuilder()
                     .itemInputs(
                         GT_Utility.getIntegratedCircuit(1),
@@ -401,7 +402,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_IV)
                     .duration(20*336)
                     .addTo(CI);
-        
+
         // Americium doped Monocrystalline Silicon Boule
         GT_Values.RA.stdBuilder()
                     .itemInputs(
@@ -414,7 +415,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_LuV)
                     .duration(20*450)
                     .addTo(CI);
-        
+
         GT_Values.RA.stdBuilder()
                     .itemInputs(
                         GT_Utility.getIntegratedCircuit(1),
@@ -426,7 +427,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_LuV)
                     .duration(20*450)
                     .addTo(CI);
-        
+
         // Optical Enriched Crystalline Silicon Boule
         GT_Values.RA.stdBuilder()
                     .itemInputs(
@@ -442,7 +443,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_UEV)
                     .duration(20*30)
                     .addTo(CI);
-        
+
         GT_Values.RA.stdBuilder()
                     .itemInputs(
                         GT_Utility.getIntegratedCircuit(3),
@@ -457,9 +458,9 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_UEV)
                     .duration(20*30)
                     .addTo(CI);
-        
+
         // endregion
-        
+
         // region AE Quartz
         // Nether Quartz
         GT_Values.RA.stdBuilder()
@@ -472,7 +473,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_IV)
                     .duration(20*8)
                     .addTo(CI);
-        
+
         // Certus Quartz
         GT_Values.RA.stdBuilder()
                     .itemInputs(Materials.CertusQuartz.getDust(64))
@@ -484,7 +485,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_IV)
                     .duration(20*8)
                     .addTo(CI);
-        
+
         // Fluix Quartz
         GT_Values.RA.stdBuilder()
                     .itemInputs(Materials.Fluix.getDust(64))
@@ -496,7 +497,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_IV)
                     .duration(20*8)
                     .addTo(CI);
-        
+
 
     }
 }

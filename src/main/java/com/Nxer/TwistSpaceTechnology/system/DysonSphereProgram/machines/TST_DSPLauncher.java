@@ -5,7 +5,21 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehic
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingNode;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_02;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_03;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_04;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_05;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_02;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_00;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_01;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_02;
@@ -45,11 +59,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_OverclockCalculator;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
@@ -70,14 +80,12 @@ import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 
 public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
@@ -151,64 +159,89 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         return ret;
     }
 
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
-                // check motor tier
-                if (recipe.mSpecialValue > motorTier) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
-                }
-                // normal energy hatch mode
-                if (!wirelessMode) return super.validateRecipe(recipe);
-                // check wireless EU net
-                if (!addEUToGlobalEnergyMap(ownerUUID, -recipe.mEUt * recipe.mDuration)) {
-                    return CheckRecipeResultRegistry.insufficientPower((long) recipe.mEUt * recipe.mDuration);
-                }
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
-            @Nonnull
-            @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
-                // no generic overclock
-                return GTCM_OverclockCalculator.ofNoOverclock(recipe);
-            }
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                CheckRecipeResult result = super.process();
-                // Power will be directly consumed through wireless if in mode
-                if (wirelessMode) setCalculatedEut(0);
-                return result;
-            }
-        };
-    }
+    /*
+     * protected ProcessingLogic createProcessingLogic() {
+     * return new GTCM_ProcessingLogic() {
+     * @NotNull
+     * @Override
+     * protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+     * // check motor tier
+     * if (recipe.mSpecialValue > motorTier) {
+     * return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
+     * }
+     * // normal energy hatch mode
+     * if (!wirelessMode) return super.validateRecipe(recipe);
+     * // check wireless EU net
+     * if (!addEUToGlobalEnergyMap(ownerUUID, -recipe.mEUt * recipe.mDuration)) {
+     * return CheckRecipeResultRegistry.insufficientPower((long) recipe.mEUt * recipe.mDuration);
+     * }
+     * return CheckRecipeResultRegistry.SUCCESSFUL;
+     * }
+     * @Nonnull
+     * @Override
+     * protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+     * // no generic overclock
+     * return GTCM_OverclockCalculator.ofNoOverclock(recipe);
+     * }
+     * @NotNull
+     * @Override
+     * public CheckRecipeResult process() {
+     * CheckRecipeResult result = super.process();
+     * // Power will be directly consumed through wireless if in mode
+     * if (wirelessMode) setCalculatedEut(0);
+     * return result;
+     * }
+     * };
+     * }
+     */
 
     @Override
     @Nonnull
     public CheckRecipeResult checkProcessing() {
-        setupProcessingLogic(processingLogic);
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // check input Space Warper
+        CheckRecipeResult result = CheckRecipeResultRegistry.NO_RECIPE;
         for (ItemStack items : getStoredInputs()) {
+            // check input Space Warper
             if (metaItemEqual(items, SpaceWarper.get(1))) {
                 overloadTime += 20L * DSP_Values.secondsOfEverySpaceWarperProvideToOverloadTime * items.stackSize;
                 items.stackSize = 0;
+            }
+            // check and process recipe
+            if (!result.wasSuccessful()) {
+                if (metaItemEqual(items, SolarSail.get(1))) {
+                    // launch Solar Sail
+                    result = CheckRecipeResultRegistry.SUCCESSFUL;
+                    items.stackSize -= 1;
+                    mMaxProgresstime = ticksOfLaunchingSolarSail;
+                    lEUt = -EUTOfLaunchingSolarSail;
+                    dspDataCell.addDSPSolarSail(1);
+                } else if (metaItemEqual(items, SmallLaunchVehicle.get(1))) {
+                    // launch DSP Node
+                    result = CheckRecipeResultRegistry.SUCCESSFUL;
+                    items.stackSize -= 1;
+                    mMaxProgresstime = ticksOfLaunchingNode;
+                    lEUt = -EUTOfLaunchingNode;
+                    dspDataCell.addDSPNode(1);
+                    if (1 != XSTR.XSTR_INSTANCE.nextInt(100)) {
+                        // 99% return EmptySmallLaunchVehicle
+                        mOutputItems = new ItemStack[] { EmptySmallLaunchVehicle.get(1) };
+                    }
+                }
             }
         }
         // inputs are consumed at this point
         updateSlots();
         if (!result.wasSuccessful()) return result;
 
-        mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+        // wireless EU net process
+        if (wirelessMode) {
+            if (!addEUToGlobalEnergyMap(ownerUUID, lEUt * mMaxProgresstime)) {
+                return CheckRecipeResultRegistry.insufficientPower(lEUt * mMaxProgresstime);
+            }
+            lEUt = 0;
+        }
+
+        mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration();
-        setEnergyUsage(processingLogic);
 
         // if in overload condition, reduced time to one-sixtieth
         if (overloadTime > 0) {
@@ -217,30 +250,16 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             mMaxProgresstime /= motorTier;
         }
 
-        ItemStack[] outputItems = processingLogic.getOutputItems();
-        for (ItemStack items : outputItems) {
-            if (metaItemEqual(items, SolarSail.get(1))) {
-                dspDataCell.addDSPSolarSail(items.stackSize);
-            } else if (metaItemEqual(items, SmallLaunchVehicle.get(1))) {
-                dspDataCell.addDSPNode(items.stackSize);
-                if (1 != XSTR.XSTR_INSTANCE.nextInt(100)) {
-                    // 99% return EmptySmallLaunchVehicle
-                    mOutputItems = new ItemStack[] { EmptySmallLaunchVehicle.get(items.stackSize) };
-                }
-            }
-        }
-        mOutputFluids = processingLogic.getOutputFluids();
-
         return result;
     }
 
-    @Override
-    protected void setProcessingLogicPower(ProcessingLogic logic) {
-        // The voltage is only used for recipe finding
-        logic.setAvailableVoltage(Long.MAX_VALUE);
-        logic.setAvailableAmperage(1);
-        logic.setAmperageOC(false);
-    }
+    // @Override
+    // protected void setProcessingLogicPower(ProcessingLogic logic) {
+    // // The voltage is only used for recipe finding
+    // logic.setAvailableVoltage(Long.MAX_VALUE);
+    // logic.setAvailableAmperage(1);
+    // logic.setAmperageOC(false);
+    // }
 
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
@@ -272,11 +291,11 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         this.motorTier = 0;
         boolean flag = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
         wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
         if (this.motorTier < 1) return false;
-        repairMachine();
         return flag;
     }
     // endregion
@@ -440,6 +459,16 @@ I -> ofFrame...(NaquadahAlloy);
     }
 
     @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType(Tooltip_DSPLauncher_MachineType)
@@ -458,7 +487,18 @@ I -> ofFrame...(NaquadahAlloy);
             .addStructureInfo(Tooltip_DSPLauncher_2_02)
             .addStructureInfo(Tooltip_DSPLauncher_2_03)
             .addStructureInfo(Tooltip_DSPLauncher_2_04)
-            .addStructureInfo("-----------------------------------------")
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(DSPName + ":")
+            .addStructureInfo(Tooltip_DSPInfo_launch_01)
+            .addStructureInfo(Tooltip_DSPInfo_launch_02)
+            .addStructureInfo(Tooltip_DSPInfo_00)
+            .addStructureInfo(Tooltip_DSPInfo_01)
+            .addStructureInfo(Tooltip_DSPInfo_02)
+            .addStructureInfo(Tooltip_DSPInfo_03)
+            .addStructureInfo(Tooltip_DSPInfo_04)
+            .addStructureInfo(Tooltip_DSPInfo_05)
+            .addStructureInfo(Tooltip_DSPInfo_06)
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
