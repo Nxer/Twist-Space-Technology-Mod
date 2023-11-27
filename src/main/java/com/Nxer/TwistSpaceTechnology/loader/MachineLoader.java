@@ -1,12 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameArtificialStar;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPReceiver;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameInfiniteWirelessDynamoHatch;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameMiracleDoor;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameOreProcessingFactory;
-
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
 import net.minecraft.item.ItemStack;
@@ -31,6 +25,8 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPL
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
+
 public class MachineLoader {
 
     public static ItemStack IntensifyChemicalDistorter; // INTENSIFY_CHEMICAL_DISTORTER
@@ -50,10 +46,12 @@ public class MachineLoader {
     public static ItemStack ArtificialStar;
     public static ItemStack MiracleDoor;
     public static ItemStack OreProcessingFactory;
+    public static ItemStack megaUniversalSpaceStation;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
+
 
     // test
     // public static ItemStack TestMachine;
@@ -158,6 +156,12 @@ public class MachineLoader {
         OreProcessingFactory = new TST_OreProcessingFactory(19017, "NameOreProcessingFactory", NameOreProcessingFactory).getStackForm(1);
         GTCMItemList.OreProcessingFactory.set(OreProcessingFactory);
 
+        megaUniversalSpaceStation=new GT_TileEntity_MegaUniversalSpaceStation(
+            19018,
+            "NameMegaUniversalSpaceStation",
+            NameMegaUniversalSpaceStation
+        ).getStackForm(1);
+        GTCMItemList.megaUniversalSpaceStation.set(megaUniversalSpaceStation);
         // endregion
 
         // region Single block Machine
@@ -177,6 +181,8 @@ public class MachineLoader {
             NameInfiniteWirelessDynamoHatch,
             14).getStackForm(1);
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
+
+
 
 
     }

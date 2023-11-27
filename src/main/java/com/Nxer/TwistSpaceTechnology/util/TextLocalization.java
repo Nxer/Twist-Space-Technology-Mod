@@ -437,7 +437,7 @@ public class TextLocalization {
     // endregion
 
     // region megaUniverseSpaceStation
-    public static final String NameMegaUniversalSpaceStation = texter("Crystalline Infinitier","NameMegaUniversalSpaceStation");
+    public static final String NameMegaUniversalSpaceStation = texter("Mega Universal Space Station","NameMegaUniversalSpaceStation");
     public static final String Tooltip_MegaUniversalSpaceStation_MachineType = texter("","Tooltip_MegaUniversalSpaceStation_MachineType");
     public static final String Tooltip_MegaUniversalSpaceStation_00 = texter("","Tooltip_MegaUniversalSpaceStation_00");
     public static final String Tooltip_MegaUniversalSpaceStation_01 = texter("","Tooltip_MegaUniversalSpaceStation_01");

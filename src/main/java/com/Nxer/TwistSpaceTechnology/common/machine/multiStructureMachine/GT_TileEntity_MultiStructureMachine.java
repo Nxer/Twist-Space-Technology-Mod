@@ -39,8 +39,8 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
 
 
     protected GT_TileEntity_MultiStructureMachine(int aID, String aName, String aNameRegional) {
-        super(aID, aName, "MultiStructure." + aNameRegional);
-        pieces.add(aName);
+        super(aID, aName, aNameRegional);
+        pieces.add(aName.toLowerCase());
         setShape();
 
     }

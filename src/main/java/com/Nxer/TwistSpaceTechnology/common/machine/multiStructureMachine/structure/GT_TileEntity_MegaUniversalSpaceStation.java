@@ -25,9 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import com.github.bartimaeusnek.bartworks.common.blocks.BW_GlasBlocks2;
 
-import java.util.Arrays;
-
-import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static goodgenerator.loader.Loaders.FRF_Casings;
@@ -42,7 +39,7 @@ public class GT_TileEntity_MegaUniversalSpaceStation
     public static IStructureDefinition<GT_TileEntity_MegaUniversalSpaceStation> structureDefinition;
 
     public GT_TileEntity_MegaUniversalSpaceStation(int aID, String mName, String aNameRegional) {
-        super(aID, mName.replace(" ", "_"), aNameRegional);
+        super(aID, mName, aNameRegional);
         StructureLoader.setOffSet(this.mName, this.mName, 213, 45, 223);
     }
 

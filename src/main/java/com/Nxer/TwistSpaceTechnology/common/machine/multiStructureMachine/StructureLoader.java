@@ -89,7 +89,7 @@ public class StructureLoader {
 
     public static String[][] readAndUnzip(String zipFilePath) {
         StringBuilder result = new StringBuilder();
-        if (new File(zipFilePath).isDirectory()) {
+        if (!new File(zipFilePath).exists()) {
             LOG.info("structure file " + zipFilePath + " not find!");
             return null;
         }

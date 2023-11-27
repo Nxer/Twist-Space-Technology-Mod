@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.PhotonControllerUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
@@ -75,19 +74,14 @@ public class SpaceStationAntiGravityCasing extends BlockBase01 {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-//        return meta < iconsBlockPhotonControllerUpgradeMap.size() ? iconsBlockPhotonControllerUpgradeMap.get(meta)
-//            : iconsBlockPhotonControllerUpgradeMap.get(0);
-        return null;
+
+        return Block.getBlockById(1).getIcon(1,0);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
-//        this.blockIcon = reg.registerIcon("gtnhcommunitymod:SpaceStationAntiGravityCasing/0");
-//        for (int Meta : SpaceStationAntiGravityCasingCasingSet) {
-//            iconsBlockPhotonControllerUpgradeMap
-//                .put(Meta, reg.registerIcon("gtnhcommunitymod:SpaceStationAntiGravityCasing/" + Meta));
-//        }
+
 
     }
 

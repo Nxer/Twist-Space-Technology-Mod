@@ -76,19 +76,12 @@ public class SpaceStationStructureCasing extends BlockBase01 {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-//        return meta < iconsBlockPhotonControllerUpgradeMap.size() ? iconsBlockPhotonControllerUpgradeMap.get(meta)
-//            : iconsBlockPhotonControllerUpgradeMap.get(0);
-        return null;
+        return Block.getBlockById(1).getIcon(1,0);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
-//        this.blockIcon = reg.registerIcon("gtnhcommunitymod:SpaceStationStructureCasing/0");
-//        for (int Meta : SpaceStationStructureCasingCasingSet) {
-//            iconsBlockPhotonControllerUpgradeMap
-//                .put(Meta, reg.registerIcon("gtnhcommunitymod:SpaceStationStructureCasing/" + Meta));
-//        }
 
     }
 

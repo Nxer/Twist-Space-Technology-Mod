@@ -9,6 +9,7 @@ import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TextureSet;
 
 import java.util.Arrays;
@@ -74,31 +75,31 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff mNull = new Werkstoff(
         new short[]{255,255,255},
-        TextHandler.texter("nothing but everything", "bw.HolmiumGarnet.notTrans"),
-        subscriptNumbers("null"),
+        TextHandler.texter("nothing but everything", "bw.mNull.notTrans"),
+        subscriptNumbers("nothing but everything"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().disable(),
+        new Werkstoff.GenerationFeatures().addMolten().addMetalItems().addSimpleMetalWorkingItems(),
         offsetID_01 + 2,
         TextureSet.SET_SHINY);
 
     public static final Werkstoff mAll = new Werkstoff(
-        new short[]{255,255,255},
-        TextHandler.texter("everything but nothing", "bw.HolmiumGarnet.notTrans"),
-        subscriptNumbers("All"),
+        new short[]{0,0,0},
+        TextHandler.texter("everything but nothing", "bw.mAll.notTrans"),
+        subscriptNumbers("everything but nothing"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().disable(),
+        new Werkstoff.GenerationFeatures().addMolten().addMetalItems().addSimpleMetalWorkingItems(),
         offsetID_01 + 3,
         TextureSet.SET_SHINY);
 
     public static final Werkstoff mWall = new Werkstoff(
-        new short[]{255,255,255},
-        TextHandler.texter("The fourth wall", "bw.HolmiumGarnet.notTrans"),
-        subscriptNumbers("WALL"),
+        new short[]{127,127,127},
+        TextHandler.texter("The fourth wall", "bw.mWall.notTrans"),
+        subscriptNumbers("The fourth wall"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().disable(),
+        new Werkstoff.GenerationFeatures().addMolten().addMetalItems().addSimpleMetalWorkingItems(),
         offsetID_01 + 4,
         TextureSet.SET_SHINY);
 
