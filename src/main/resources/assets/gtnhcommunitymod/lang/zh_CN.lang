@@ -344,4 +344,5 @@ Tooltip_MiracleDoor_2_03=实际处理时间 = 默认耗时 / (编号 * 物品数
 Tooltip_MiracleDoor_2_04=实际消耗 EU = 配方数值 * 16 * (编号 * 物品数量)
 Tooltip_MiracleDoor_2_05=每次运行需要消耗1颗临界光子.
 NameInfiniteWirelessDynamoHatch=无限无线动力仓
-NameOreProcessingFactory=矿物处理厂
+NameOreProcessingFactory=通用矿物处理厂TST
+NEI.name.OreProcessingRecipes=集成矿物处理

@@ -70,7 +70,7 @@ public class GTCMRecipe {
 
             useModularUI(true);
             // setProgressBarPos(78, getItemRowCount() * 18);
-            setLogoPos(79, (getItemRowCount() + getFluidRowCount()) * 18 - 27);
+            setLogoPos(79, 7);
             setUsualFluidInputCount(aUsualFluidInputCount);
             setUsualFluidOutputCount(aUsualFluidOutputCount);
             setDisableOptimize(disableOptimize);
@@ -299,9 +299,9 @@ public class GTCMRecipe {
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
         1,
-        16,
+        8,
         0,
-        4,
+        0,
         true,
         0,
         0,

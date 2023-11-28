@@ -488,12 +488,12 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             int actualMaxParallel = (int) Math.min(maxParallelBeforeBatchMode, availableEUt / tRecipeEUt);
             currentParallel = recipeCheck.checkRecipeInputs(true, actualMaxParallel, itemInputs, fluidInputs);
         } else {
-            
+
             // Calculate the actual parallel
             {
                 // Sign EUt limit
                 final int canParallelEUt = (int) Math.min(availableEUt / tRecipeEUt, limitParallel);
-                
+
                 // Maintain a Map to contain inputs.
                 Map<ItemId, Integer> itemInputsMap = new HashMap<>();
                 for (ItemStack itemStack : itemInputs) {
@@ -520,9 +520,9 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                         if(recipeItemInputsMap.get(itemId)==0){
                             continue;
                         }
-                        
+
                         int canThisParallel = (int) itemInputsMap.get(itemId) / recipeItemInputsMap.get(itemId);
-                        
+
                         if (canThisParallel < canItemInputsMaxParallel) {
                             canItemInputsMaxParallel = canThisParallel;
                         }
@@ -596,7 +596,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                         long amountNeed = (long) currentParallel * fluidInputStack.amount;
                         for (FluidStack fluidStack : fluidInputs) {// 开始遍历输入仓
                             if (fluidStack == null) continue;
-                            
+
                             if (fluidInputStack.getFluid() == fluidStack.getFluid()) {
                                 // 遍历到输入仓内所需的流体
                                 // 开始比较数量
@@ -608,14 +608,14 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                                     fluidStack.amount = 0;
                                 }
                             }
-                        
+
                         }
                     }
                 }
-                
+
                 // end actual parallel io
             }
-            
+
         }
 
 
@@ -682,8 +682,8 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             long items = 0;
             long remain = 0;
             int itemStackSize = recipe.getOutput(i).stackSize;
-            items = (long)1*currentParallel*itemStackSize * recipe.getOutputChance(i) / 10000;
-            remain = (long)1*currentParallel*itemStackSize * recipe.getOutputChance(i) % 10000;
+            items = (long) currentParallel * itemStackSize * recipe.getOutputChance(i) / 10000;
+            remain = (long) currentParallel * itemStackSize * recipe.getOutputChance(i) % 10000;
             if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
                 items += itemStackSize;
             }
