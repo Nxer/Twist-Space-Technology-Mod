@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
+package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;

@@ -93,8 +93,6 @@ import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.material.ALLOY;
 import ic2.core.Ic2Items;
 
-import java.util.Iterator;
-
 public class GTCMMachineRecipePool implements IRecipePool {
 
     // spotless:off
@@ -644,24 +642,24 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // region PhysicalFormSwitcher
         GT_Values.RA.stdBuilder()
-                    .itemInputs(
-                        GT_Utility.getIntegratedCircuit(10),
-                        GT_OreDictUnificator.get(OrePrefixes.frameGt,Materials.Naquadria,16),
-                        FluidExtractorUV.get(64),
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                GT_OreDictUnificator.get(OrePrefixes.frameGt,Materials.Naquadria,16),
+                FluidExtractorUV.get(64),
 
-                        FluidSolidifierUV.get(64),
-                        ItemList.Field_Generator_UV.get(16),
-                        GT_OreDictUnificator.get(OrePrefixes.plateDense,Materials.NaquadahAlloy,16),
+                FluidSolidifierUV.get(64),
+                ItemList.Field_Generator_UV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense,Materials.NaquadahAlloy,16),
 
-                        new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),16},
-                        GT_OreDictUnificator.get(OrePrefixes.wireGt04,Materials.SuperconductorUV,8)
-                    )
-                    .fluidInputs(Materials.Iridium.getMolten(144*64))
-                    .itemOutputs(PhysicalFormSwitcher.get(1))
-                    .noFluidOutputs()
-                    .eut(RECIPE_UV)
-                    .duration(20*180)
-                    .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),16},
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04,Materials.SuperconductorUV,8)
+            )
+            .fluidInputs(Materials.Iridium.getMolten(144*64))
+            .itemOutputs(PhysicalFormSwitcher.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20*180)
+            .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
 
         // Containment Field casing
         GT_Values.RA.stdBuilder()
@@ -705,17 +703,17 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // region Infinity Air Intake Hatch
         GT_Values.RA.stdBuilder()
-                    .itemInputs(GT_Utility.getIntegratedCircuit(10),
-                                Hatch_Air_Intake_Extreme.get(4),
-                                ItemList.Electric_Pump_UHV.get(16),
-                                new Object[]{OrePrefixes.circuit.get(Materials.Infinite),8},
-                                GT_OreDictUnificator.get(OrePrefixes.plate,Materials.DraconiumAwakened,16))
-                    .fluidInputs(Materials.CosmicNeutronium.getMolten(144*16))
-                    .itemOutputs(InfiniteAirHatch.get(1))
-                    .noFluidOutputs()
-                    .eut(RECIPE_UHV)
-                    .duration(20*30)
-                    .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
+            .itemInputs(GT_Utility.getIntegratedCircuit(10),
+                Hatch_Air_Intake_Extreme.get(4),
+                ItemList.Electric_Pump_UHV.get(16),
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite),8},
+                GT_OreDictUnificator.get(OrePrefixes.plate,Materials.DraconiumAwakened,16))
+            .fluidInputs(Materials.CosmicNeutronium.getMolten(144*16))
+            .itemOutputs(InfiniteAirHatch.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_UHV)
+            .duration(20*30)
+            .addTo(GT_Recipe.GT_Recipe_Map.sAssemblerRecipes);
         // endregion
 
         // region MagneticDomainConstructor

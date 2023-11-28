@@ -204,7 +204,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         {"   DDFFDFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFFFFDD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDFFFFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFDFFDD   "},
         {"     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     "}
     };
-    
+
     /*
     Blocks:
         A -> ofBlock...(BW_GlasBlocks, 14, ...);    // glass
@@ -216,7 +216,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
      */
     @Override
     public IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> getStructureDefinition() {
-        IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> structure = StructureDefinition
+        return StructureDefinition
             .<GT_TileEntity_MagneticDrivePressureFormer>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
             .addElement(
@@ -255,21 +255,19 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                     .casingIndex(183)
                     .buildAndChain(GregTech_API.sBlockCasings8, 7))
             .build();
-            
-        return structure;
     }
-    
+
     @Override
     public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return super.addToMachineList(aTileEntity, aBaseCasingIndex)
             || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
     }
-    
+
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
-    
+
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
         if (this.mMachine) return -1;
@@ -286,7 +284,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             false,
             true);
     }
-    
+
     // spotless:on
 
     // endregion

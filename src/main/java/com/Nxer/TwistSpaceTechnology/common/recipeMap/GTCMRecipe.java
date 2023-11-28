@@ -128,7 +128,6 @@ public class GTCMRecipe {
 
     }
 
-    // region recipe maps
     public final GTCMRecipeMap IntensifyChemicalDistorterRecipes = new GTCMRecipeMap(
         new HashSet<>(),
         "gtcm.recipe.IntensifyChemicalDistorterRecipes",
@@ -289,19 +288,16 @@ public class GTCMRecipe {
         false,
         true);
 
-    // endregion
-
-    // region special recipe maps
-    public final GTCMRecipeMap OreProcessingRecipes = new GTCMRecipeMap(
-        new HashSet<>(1000),
-        "tst.recipe.OreProcessingRecipes",
-        texter("Ore Processing Recipes","NEI.name.OreProcessingRecipes"),
+    public final GTCMRecipeMap megaUniversalSpaceStationRecipePool = new GTCMRecipeMap(
+        new HashSet<>(),
+        "gtcm.recipe.megaUniversalSpaceStationRecipes",
+        NameMegaUniversalSpaceStation,
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
+        4,
+        4,
+        4,
         1,
-        8,
-        0,
-        0,
         true,
         0,
         0,
@@ -311,5 +307,5 @@ public class GTCMRecipe {
         "",
         false,
         true);
-    // endregion
+
 }

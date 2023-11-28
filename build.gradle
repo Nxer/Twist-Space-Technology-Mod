@@ -467,8 +467,6 @@ minecraft {
 
     // Enable assertions in the current mod
     extraRunJvmArguments.add("-ea:${modGroup}")
-    extraRunJvmArguments.add("-Xmx16G")
-    extraRunJvmArguments.add("-Xms16G")
 
     if (usesMixins.toBoolean() || forceEnableMixins.toBoolean()) {
         if (usesMixinDebug.toBoolean()) {

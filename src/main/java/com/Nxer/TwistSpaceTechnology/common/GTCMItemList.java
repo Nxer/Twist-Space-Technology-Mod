@@ -23,6 +23,8 @@ public enum GTCMItemList {
     EnergyCrystalShard,
     PerfectEnergyCrystal,
 
+    MultiStructuresLinkTool,
+
     // Machines
 
     IntensifyChemicalDistorter,
@@ -39,6 +41,15 @@ public enum GTCMItemList {
     CrystallineInfinitier,
     MiracleDoor,
     OreProcessingFactory,
+
+    // MAX
+    HighDimensionalExtend,
+    HighDimensionalCircuitDoard,
+    HighDimensionalCapacitor,
+    HighDimensionalInterface,
+    HighDimensionalDiode,
+    HighDimensionalResistor,
+    HighDimensionalTransistor,
 
     // DSP
     SolarSail,
@@ -75,9 +86,39 @@ public enum GTCMItemList {
     PhotonControllerUpgradeUIV,
     PhotonControllerUpgradeUMV,
     PhotonControllerUpgradeUXV,
-    PhotonControllerUpgradeMAX
-
-    ;
+    PhotonControllerUpgradeMAX,
+    spaceStationStructureBlockLV,
+    spaceStationStructureBlockMV,
+    spaceStationStructureBlockHV,
+    spaceStationStructureBlockEV,
+    spaceStationStructureBlockIV,
+    spaceStationStructureBlockLuV,
+    spaceStationStructureBlockZPM,
+    spaceStationStructureBlockUV,
+    spaceStationStructureBlockUHV,
+    spaceStationStructureBlockUEV,
+    spaceStationStructureBlockUIV,
+    spaceStationStructureBlockUMV,
+    spaceStationStructureBlockUXV,
+    spaceStationStructureBlockMAX,
+    SpaceStationAntiGravityBlockLV,
+    SpaceStationAntiGravityBlockMV,
+    SpaceStationAntiGravityBlockHV,
+    SpaceStationAntiGravityBlockEV,
+    SpaceStationAntiGravityBlockIV,
+    SpaceStationAntiGravityBlockLuV,
+    SpaceStationAntiGravityBlockZPM,
+    SpaceStationAntiGravityBlockUV,
+    SpaceStationAntiGravityBlockUHV,
+    SpaceStationAntiGravityBlockUEV,
+    SpaceStationAntiGravityBlockUIV,
+    SpaceStationAntiGravityBlockUMV,
+    SpaceStationAntiGravityBlockUXV,
+    SpaceStationAntiGravityBlockMAX,
+    // MultiStructure Machine:
+    TestMultiStructureMainMachine,
+    TestMultiStructureSubMachine,
+    megaUniversalSpaceStation;
 
     // region Member Variables
 
