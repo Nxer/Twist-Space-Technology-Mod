@@ -308,4 +308,25 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap OreProcessingRecipes = new GTCMRecipeMap(
+        new HashSet<>(1000),
+        "tst.recipe.OreProcessingRecipes",
+        texter("Ore Processing Recipes","NEI.name.OreProcessingRecipes"),
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        1,
+        8,
+        0,
+        0,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
+    // endregion
 }

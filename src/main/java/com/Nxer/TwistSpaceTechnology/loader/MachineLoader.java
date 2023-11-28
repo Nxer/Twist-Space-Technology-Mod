@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
-
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -26,6 +24,14 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPL
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameArtificialStar;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPReceiver;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameInfiniteWirelessDynamoHatch;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameMegaUniversalSpaceStation;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameMiracleDoor;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameOreProcessingFactory;
 
 public class MachineLoader {
 

@@ -15,14 +15,7 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import java.util.ArrayList;
 import java.util.Set;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.util.GT_ModHandler.getModItem;
-import net.minecraft.item.ItemStack;
-
-import gregtech.api.GregTech_API;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_OreDictUnificator;
 
 public class OP_NormalProcessing {
 
