@@ -3,8 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.struc
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -12,6 +10,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -21,7 +21,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachine<Test_SubStructureMachine> {
@@ -63,8 +62,6 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
     protected int mode = 0;
     private static final String STRUCTURE_PIECE_MAIN = "main";
 
-
-
     @Override
     public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return super.addToMachineList(aTileEntity, aBaseCasingIndex)
@@ -73,10 +70,11 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        StructureLoader.MultiStructureDefinition.OffSet offSet=StructureLoader.getOffSet(this.mName,STRUCTURE_PIECE_MAIN);
-        int horizontalOffSet=offSet.horizontalOffSet;
-        int verticalOffSet=offSet.verticalOffSet;
-        int depthOffSet=offSet.depthOffSet;
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
+            .getOffSet(this.mName, STRUCTURE_PIECE_MAIN);
+        int horizontalOffSet = offSet.horizontalOffSet;
+        int verticalOffSet = offSet.verticalOffSet;
+        int depthOffSet = offSet.depthOffSet;
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
@@ -84,10 +82,11 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
     public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
         if (this.mMachine) return -1;
         int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
-        StructureLoader.MultiStructureDefinition.OffSet offSet=StructureLoader.getOffSet(this.mName,STRUCTURE_PIECE_MAIN);
-        int horizontalOffSet=offSet.horizontalOffSet;
-        int verticalOffSet=offSet.verticalOffSet;
-        int depthOffSet=offSet.depthOffSet;
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
+            .getOffSet(this.mName, STRUCTURE_PIECE_MAIN);
+        int horizontalOffSet = offSet.horizontalOffSet;
+        int verticalOffSet = offSet.verticalOffSet;
+        int depthOffSet = offSet.depthOffSet;
         return this.survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
@@ -100,7 +99,6 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
             false,
             true);
     }
-
 
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
@@ -134,7 +132,6 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
         return true;
     }
 
-
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new Test_SubStructureMachine(this.mName);
@@ -142,19 +139,21 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int aColorIndex, boolean aActive, boolean aRedstone) {
+        int aColorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
-            return new ITexture[]{casingTexturePages[1][48], TextureFactory.builder()
+            return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE)
                 .extFacing()
                 .build(),
                 TextureFactory.builder()
-                    .addIcon(aActive ? OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW : OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
+                    .addIcon(
+                        aActive ? OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW
+                            : OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
                     .extFacing()
                     .glow()
-                    .build()};
+                    .build() };
         }
-        return new ITexture[]{casingTexturePages[1][48]};
+        return new ITexture[] { casingTexturePages[1][48] };
     }
 
     // Tooltips

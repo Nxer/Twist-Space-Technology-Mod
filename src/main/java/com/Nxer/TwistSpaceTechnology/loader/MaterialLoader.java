@@ -19,8 +19,6 @@ public class MaterialLoader {
 
         WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialPool());
 
-
-
     }
 
 }

@@ -93,8 +93,6 @@ import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.material.ALLOY;
 import ic2.core.Ic2Items;
 
-import java.util.Iterator;
-
 public class GTCMMachineRecipePool implements IRecipePool {
 
     // spotless:off

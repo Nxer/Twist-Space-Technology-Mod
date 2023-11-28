@@ -146,7 +146,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         return checkProcessing_mode1();
     }
 
-    private boolean checkPhotonsInputting(int amount){
+    private boolean checkPhotonsInputting(int amount) {
         int containedAmount = 0;
         for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
             if (items == null) continue;
@@ -158,7 +158,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         return false;
     }
 
-    private boolean consumePhoton(int amount){
+    private boolean consumePhoton(int amount) {
         int needAmount = amount;
         for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
             if (items == null) continue;
@@ -174,9 +174,10 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         }
         return false;
     }
+
     private CheckRecipeResult checkProcessing_mode1() {
         // check Critical Photon Input
-        if (!checkPhotonsInputting(amountOfPhotonsEveryMiracleDoorProcessingCost)){
+        if (!checkPhotonsInputting(amountOfPhotonsEveryMiracleDoorProcessingCost)) {
             return SimpleCheckRecipeResult.ofFailure("No_Critical_Photon_Input");
         }
         // normal processing logic with infinite parallel
@@ -189,7 +190,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         if (!result.wasSuccessful()) return result;
 
         // consume Critical Photon
-        if (!consumePhoton(amountOfPhotonsEveryMiracleDoorProcessingCost)){
+        if (!consumePhoton(amountOfPhotonsEveryMiracleDoorProcessingCost)) {
             return CheckRecipeResultRegistry.INTERNAL_ERROR;
         }
 

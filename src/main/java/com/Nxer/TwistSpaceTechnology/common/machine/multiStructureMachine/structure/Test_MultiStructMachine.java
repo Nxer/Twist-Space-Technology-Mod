@@ -4,13 +4,13 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.struc
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -20,7 +20,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 
 public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine<Test_MultiStructMachine> {
 
@@ -72,10 +71,11 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        StructureLoader.MultiStructureDefinition.OffSet offSet=StructureLoader.getOffSet(this.mName,STRUCTURE_PIECE_MAIN);
-        int horizontalOffSet=offSet.horizontalOffSet;
-        int verticalOffSet=offSet.verticalOffSet;
-        int depthOffSet=offSet.depthOffSet;
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
+            .getOffSet(this.mName, STRUCTURE_PIECE_MAIN);
+        int horizontalOffSet = offSet.horizontalOffSet;
+        int verticalOffSet = offSet.verticalOffSet;
+        int depthOffSet = offSet.depthOffSet;
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
@@ -83,10 +83,11 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
         if (this.mMachine) return -1;
         int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
-        StructureLoader.MultiStructureDefinition.OffSet offSet=StructureLoader.getOffSet(this.mName,STRUCTURE_PIECE_MAIN);
-        int horizontalOffSet=offSet.horizontalOffSet;
-        int verticalOffSet=offSet.verticalOffSet;
-        int depthOffSet=offSet.depthOffSet;
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
+            .getOffSet(this.mName, STRUCTURE_PIECE_MAIN);
+        int horizontalOffSet = offSet.horizontalOffSet;
+        int verticalOffSet = offSet.verticalOffSet;
+        int depthOffSet = offSet.depthOffSet;
         return this.survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
@@ -99,7 +100,6 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
             false,
             true);
     }
-
 
     @Override
     public boolean supportsSingleRecipeLocking() {
@@ -122,7 +122,6 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         return true;
     }
-
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {

@@ -1,18 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.material;
 
 import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
-import static gregtech.api.enums.OrePrefixes.mPreventableComponents;
-import static gregtech.api.enums.OrePrefixes.material;
 
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
-import gregtech.api.enums.Dyes;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TextureSet;
-
-import java.util.Arrays;
 
 /**
  * Register new material here by Bartworks Material System
@@ -60,9 +53,8 @@ public class MaterialPool implements Runnable {
      * TextureSet.SET_SHINY); // What Type will the auto Texture be ,SHINY means like Palladium Ingot
      */
 
-
     public static final Werkstoff HolmiumGarnet = new Werkstoff(
-        new short[]{96, 96, 240},
+        new short[] { 96, 96, 240 },
         TextHandler.texter("Holmium Garnet", "bw.HolmiumGarnet.notTrans"),
         subscriptNumbers("Ho3Al5O12"),
         new Werkstoff.Stats(),
@@ -74,44 +66,48 @@ public class MaterialPool implements Runnable {
         TextureSet.SET_SHINY);
 
     public static final Werkstoff mNull = new Werkstoff(
-        new short[]{255,255,255},
+        new short[] { 255, 255, 255 },
         TextHandler.texter("nothing but everything", "bw.mNull.notTrans"),
         subscriptNumbers("nothing but everything"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().addMolten().addMetalItems().addSimpleMetalWorkingItems(),
+        new Werkstoff.GenerationFeatures().addMolten()
+            .addMetalItems()
+            .addSimpleMetalWorkingItems(),
         offsetID_01 + 2,
         TextureSet.SET_SHINY);
 
     public static final Werkstoff mAll = new Werkstoff(
-        new short[]{0,0,0},
+        new short[] { 0, 0, 0 },
         TextHandler.texter("everything but nothing", "bw.mAll.notTrans"),
         subscriptNumbers("everything but nothing"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().addMolten().addMetalItems().addSimpleMetalWorkingItems(),
+        new Werkstoff.GenerationFeatures().addMolten()
+            .addMetalItems()
+            .addSimpleMetalWorkingItems(),
         offsetID_01 + 3,
         TextureSet.SET_SHINY);
 
     public static final Werkstoff mWall = new Werkstoff(
-        new short[]{127,127,127},
+        new short[] { 127, 127, 127 },
         TextHandler.texter("The fourth wall", "bw.mWall.notTrans"),
         subscriptNumbers("The fourth wall"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().addMolten().addMetalItems().addSimpleMetalWorkingItems(),
+        new Werkstoff.GenerationFeatures().addMolten()
+            .addMetalItems()
+            .addSimpleMetalWorkingItems(),
         offsetID_01 + 4,
         TextureSet.SET_SHINY);
-
-
 
     // Bartworks' Material System run on Runnable.class
     @Override
     public void run() {
-//        Materials[] materials=new Materials[]{mAll,mNull,mExist,mTheWall};
-//        for(var prefix :mPreventableComponents){
-//            prefix.mGeneratedItems.addAll(Arrays.asList(materials));
-//        }
+        // Materials[] materials=new Materials[]{mAll,mNull,mExist,mTheWall};
+        // for(var prefix :mPreventableComponents){
+        // prefix.mGeneratedItems.addAll(Arrays.asList(materials));
+        // }
 
     }
 }

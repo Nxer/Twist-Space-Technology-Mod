@@ -3,16 +3,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -20,11 +14,13 @@ import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresL
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 
-public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntity_MultiStructureMachine<T>> extends
-    GTCM_MultiMachineBase<T> implements IConstructable, ISurvivalConstructable {
+public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntity_MultiStructureMachine<T>>
+    extends GTCM_MultiMachineBase<T> implements IConstructable, ISurvivalConstructable {
 
     // ONLY main block can process recipe or do anything machine need to do.
     // the sub structure actually only add functional models or additional
@@ -37,7 +33,6 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     public ArrayList<String> pieces = new ArrayList<>();
     public int fatherID = -1;
 
-
     protected GT_TileEntity_MultiStructureMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         pieces.add(aName.toLowerCase());
@@ -48,7 +43,6 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     public GT_TileEntity_MultiStructureMachine(String mName) {
         super(mName);
     }
-
 
     @Override
     public void onBlockDestroyed() {
@@ -77,26 +71,32 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
-        this.buildPiece(mName, stackSize, hintsOnly, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet);
+        this.buildPiece(
+            mName,
+            stackSize,
+            hintsOnly,
+            offSet.horizontalOffSet,
+            offSet.verticalOffSet,
+            offSet.depthOffSet);
     }
 
-
-    //need to be optimized and rewrite
+    // need to be optimized and rewrite
     @Override
     public boolean checkStructure(boolean aForceReset, IGregTechTileEntity aBaseMetaTileEntity) {
         StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
         return checkPiece(mName, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet);
-//        if(MultiStructureManager.isComplete(this)){
-//            var pieces = StructureLoader.getPieces(this.mName);
-//            for(var name:pieces.entrySet()){
-//                StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.readStructure(mName).offSet.get(name.getValue());
-//                if(!checkPiece(name.getKey(), offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet)){
-//                    return false;
-//                };
-//            }
-//            return true;
-//        }
-//        return false;
+        // if(MultiStructureManager.isComplete(this)){
+        // var pieces = StructureLoader.getPieces(this.mName);
+        // for(var name:pieces.entrySet()){
+        // StructureLoader.MultiStructureDefinition.OffSet offSet =
+        // StructureLoader.readStructure(mName).offSet.get(name.getValue());
+        // if(!checkPiece(name.getKey(), offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet)){
+        // return false;
+        // };
+        // }
+        // return true;
+        // }
+        // return false;
     }
 
     @Override
@@ -130,8 +130,6 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
         super.onPreTick(aBaseMetaTileEntity, aTick);
     }
 
-
-
     @Override
     protected void setExoticEnergyHatches(List<GT_MetaTileEntity_Hatch> ExoticEnergyHatches) {
         var father = MultiStructureManager.getMachine(fatherID);
@@ -147,7 +145,6 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
         var father = MultiStructureManager.getMachine(fatherID);
         return father != null ? father.getStoredInputs() : super.getStoredInputs();
     }
-
 
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {

@@ -3,12 +3,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.MAX_PARALLEL_LIMIT;
 import static gregtech.api.util.GT_Utility.filterValidMTEs;
 
+import java.util.ArrayList;
+
 import javax.annotation.Nonnull;
 
-import com.google.common.collect.Lists;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
-import gregtech.common.tileentities.machines.IDualInputHatch;
-import gregtech.common.tileentities.machines.IDualInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -23,11 +21,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-
-import java.util.ArrayList;
-import java.util.Optional;
 
 public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable {
@@ -155,8 +151,11 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     /**
-     * <p>Get inputting items without DualInputHatch, and no separation mode.
-     * <p>Always used to get some special input items.
+     * <p>
+     * Get inputting items without DualInputHatch, and no separation mode.
+     * <p>
+     * Always used to get some special input items.
+     * 
      * @return The inputting items.
      */
     public ArrayList<ItemStack> getStoredInputsWithoutDualInputHatch() {
@@ -174,7 +173,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         }
 
         if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
-                                                          .startsWith("gt.integrated_circuit")) rList.add(getStackInSlot(1));
+            .startsWith("gt.integrated_circuit")) rList.add(getStackInSlot(1));
         return rList;
     }
 

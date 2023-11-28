@@ -1,10 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation;
 
-import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.GregTech_API;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
+import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,13 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
-import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.GregTech_API;
 
 public class SpaceStationAntiGravityCasing extends BlockBase01 {
 
@@ -75,13 +77,13 @@ public class SpaceStationAntiGravityCasing extends BlockBase01 {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
 
-        return Block.getBlockById(1).getIcon(1,0);
+        return Block.getBlockById(1)
+            .getIcon(1, 0);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
-
 
     }
 

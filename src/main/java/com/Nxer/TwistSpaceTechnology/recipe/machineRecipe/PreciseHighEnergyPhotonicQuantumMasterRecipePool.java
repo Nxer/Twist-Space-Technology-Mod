@@ -174,12 +174,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
             .addTo(PhC);
 
         GT_Values.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Casing_Dim_Bridge.get(1)
-            )
-            .itemOutputs(
-                GTCMItemList.HighDimensionalExtend.get(1)
-            )
+            .itemInputs(ItemList.Casing_Dim_Bridge.get(1))
+            .itemOutputs(GTCMItemList.HighDimensionalExtend.get(1))
             .noFluidOutputs()
             .eut(RECIPE_UXV)
             .duration(20)

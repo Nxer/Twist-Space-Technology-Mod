@@ -1,11 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
+
 public class BasicBlocks {
 
     public static final Block MetaBlock01 = new BlockBase01("MetaBlock01", "MetaBlock01");

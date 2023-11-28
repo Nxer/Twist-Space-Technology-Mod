@@ -10,12 +10,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.ship.component.ShipComponent;
-import com.Nxer.TwistSpaceTechnology.common.ship.system.PropulsionSystem;
-import com.Nxer.TwistSpaceTechnology.common.ship.system.WeaponSystem;
 import com.Nxer.TwistSpaceTechnology.common.ship.system.ControlSystem;
 import com.Nxer.TwistSpaceTechnology.common.ship.system.EnergySystem;
+import com.Nxer.TwistSpaceTechnology.common.ship.system.PropulsionSystem;
 import com.Nxer.TwistSpaceTechnology.common.ship.system.RadarSystem;
 import com.Nxer.TwistSpaceTechnology.common.ship.system.ShieldSystem;
+import com.Nxer.TwistSpaceTechnology.common.ship.system.WeaponSystem;
 
 import gregtech.api.util.GT_Utility;
 
@@ -55,8 +55,6 @@ public class Ship extends Entity implements Runnable {
     public void init() {
 
     }
-
-
 
     @Override
     public void travelToDimension(int dimensionId) {

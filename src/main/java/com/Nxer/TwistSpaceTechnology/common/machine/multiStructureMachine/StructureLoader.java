@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
-import com.Nxer.TwistSpaceTechnology.util.LanguageUtil0;
-
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
 import java.io.BufferedReader;
@@ -14,10 +12,11 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.zip.ZipInputStream;
 
+import com.Nxer.TwistSpaceTechnology.util.LanguageUtil0;
+
 public class StructureLoader {
 
     public static HashMap<String, MultiStructureDefinition> structureDefinition = new HashMap<>();
-
 
     public static MultiStructureDefinition readStructure(String name) {
 
@@ -43,7 +42,8 @@ public class StructureLoader {
         return structure.offSet.get(structure.pieces.get(piece));
     }
 
-    //    public static String assetRoot = "C:\\Users\\bcjPr\\Desktop\\gtnh-astra-migrate\\GTNH-combination\\GTNH_Community_Mod\\src\\main\\resources\\assets\\gtnhcommunitymod\\structure\\";
+    // public static String assetRoot =
+    // "C:\\Users\\bcjPr\\Desktop\\gtnh-astra-migrate\\GTNH-combination\\GTNH_Community_Mod\\src\\main\\resources\\assets\\gtnhcommunitymod\\structure\\";
     public static String assetRoot = "/assets/gtnhcommunitymod/structure/";
 
     public static String[][] getShape(String name, String piece) {
@@ -60,7 +60,7 @@ public class StructureLoader {
         return readStructure(name).pieces;
     }
 
-    //should call in preload;
+    // should call in preload;
     public static void load(String name, String pieces) {
         var structure = readStructure(name);
         if (structure.pieces.get(pieces) != null) {
@@ -94,12 +94,14 @@ public class StructureLoader {
             return null;
         }
         try (ZipInputStream zipInputStream = new ZipInputStream(
-            Objects.requireNonNull(LanguageUtil0.class.getResourceAsStream(zipFilePath)),StandardCharsets.UTF_8)) {
+            Objects.requireNonNull(LanguageUtil0.class.getResourceAsStream(zipFilePath)),
+            StandardCharsets.UTF_8)) {
             zipInputStream.getNextEntry();
             BufferedReader reader = new BufferedReader(new InputStreamReader(zipInputStream, StandardCharsets.UTF_8));
             String line;
             while ((line = reader.readLine()) != null) {
-                result.append(line).append("\n");
+                result.append(line)
+                    .append("\n");
             }
             reader.close();
         } catch (IOException e) {
@@ -121,6 +123,7 @@ public class StructureLoader {
     public static class MultiStructureDefinition {
 
         public static class OffSet {
+
             public int horizontalOffSet;
             public int verticalOffSet;
             public int depthOffSet;

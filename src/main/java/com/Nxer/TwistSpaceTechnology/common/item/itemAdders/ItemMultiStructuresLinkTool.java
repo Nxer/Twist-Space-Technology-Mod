@@ -66,7 +66,6 @@ public class ItemMultiStructuresLinkTool extends Item {
         }
     }
 
-
     @Override
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer player) {
         if (player.isSneaking()) {

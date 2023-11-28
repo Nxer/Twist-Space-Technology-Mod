@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.*;
+
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
@@ -10,8 +12,6 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStatio
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.*;
 
 public class BlockRegister {
 
@@ -64,7 +64,7 @@ public class BlockRegister {
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier UXV Tier", 12));
         GTCMItemList.PhotonControllerUpgradeMAX
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier MAX Tier", 13));
-        //---------------------------------------------------------------------------------------------------------------------------//
+        // ---------------------------------------------------------------------------------------------------------------------------//
         GTCMItemList.spaceStationStructureBlockLV
             .set(SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock LV Tier", 0));
         GTCMItemList.spaceStationStructureBlockMV
@@ -85,43 +85,51 @@ public class BlockRegister {
             .set(SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock UHV Tier", 8));
         GTCMItemList.spaceStationStructureBlockUEV
             .set(SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock UEV Tier", 9));
-        GTCMItemList.spaceStationStructureBlockUIV
-            .set(SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock UIV Tier", 10));
-        GTCMItemList.spaceStationStructureBlockUMV
-            .set(SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock UMV Tier", 11));
-        GTCMItemList.spaceStationStructureBlockUXV
-            .set(SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock UXV Tier", 12));
-        GTCMItemList.spaceStationStructureBlockMAX
-            .set(SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock MAX Tier", 13));
-        //----------------------------------------
-        GTCMItemList.SpaceStationAntiGravityBlockLV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock LV Tier", 0));
-        GTCMItemList.SpaceStationAntiGravityBlockMV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock MV Tier", 1));
-        GTCMItemList.SpaceStationAntiGravityBlockHV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock HV Tier", 2));
-        GTCMItemList.SpaceStationAntiGravityBlockEV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock EV Tier", 3));
-        GTCMItemList.SpaceStationAntiGravityBlockIV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock IV Tier", 4));
-        GTCMItemList.SpaceStationAntiGravityBlockLuV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock LuV Tier", 5));
-        GTCMItemList.SpaceStationAntiGravityBlockZPM
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock ZPM Tier", 6));
-        GTCMItemList.SpaceStationAntiGravityBlockUV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UV Tier", 7));
-        GTCMItemList.SpaceStationAntiGravityBlockUHV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UHV Tier", 8));
-        GTCMItemList.SpaceStationAntiGravityBlockUEV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UEV Tier", 9));
-        GTCMItemList.SpaceStationAntiGravityBlockUIV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UIV Tier", 10));
-        GTCMItemList.SpaceStationAntiGravityBlockUMV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UMV Tier", 11));
-        GTCMItemList.SpaceStationAntiGravityBlockUXV
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UXV Tier", 12));
-        GTCMItemList.SpaceStationAntiGravityBlockMAX
-            .set(SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock MAX Tier", 13));
+        GTCMItemList.spaceStationStructureBlockUIV.set(
+            SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock UIV Tier", 10));
+        GTCMItemList.spaceStationStructureBlockUMV.set(
+            SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock UMV Tier", 11));
+        GTCMItemList.spaceStationStructureBlockUXV.set(
+            SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock UXV Tier", 12));
+        GTCMItemList.spaceStationStructureBlockMAX.set(
+            SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock MAX Tier", 13));
+        // ----------------------------------------
+        GTCMItemList.SpaceStationAntiGravityBlockLV.set(
+            SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock LV Tier", 0));
+        GTCMItemList.SpaceStationAntiGravityBlockMV.set(
+            SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock MV Tier", 1));
+        GTCMItemList.SpaceStationAntiGravityBlockHV.set(
+            SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock HV Tier", 2));
+        GTCMItemList.SpaceStationAntiGravityBlockEV.set(
+            SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock EV Tier", 3));
+        GTCMItemList.SpaceStationAntiGravityBlockIV.set(
+            SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock IV Tier", 4));
+        GTCMItemList.SpaceStationAntiGravityBlockLuV.set(
+            SpaceStationAntiGravityCasing
+                .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock LuV Tier", 5));
+        GTCMItemList.SpaceStationAntiGravityBlockZPM.set(
+            SpaceStationAntiGravityCasing
+                .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock ZPM Tier", 6));
+        GTCMItemList.SpaceStationAntiGravityBlockUV.set(
+            SpaceStationAntiGravityCasing.SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UV Tier", 7));
+        GTCMItemList.SpaceStationAntiGravityBlockUHV.set(
+            SpaceStationAntiGravityCasing
+                .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UHV Tier", 8));
+        GTCMItemList.SpaceStationAntiGravityBlockUEV.set(
+            SpaceStationAntiGravityCasing
+                .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UEV Tier", 9));
+        GTCMItemList.SpaceStationAntiGravityBlockUIV.set(
+            SpaceStationAntiGravityCasing
+                .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UIV Tier", 10));
+        GTCMItemList.SpaceStationAntiGravityBlockUMV.set(
+            SpaceStationAntiGravityCasing
+                .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UMV Tier", 11));
+        GTCMItemList.SpaceStationAntiGravityBlockUXV.set(
+            SpaceStationAntiGravityCasing
+                .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock UXV Tier", 12));
+        GTCMItemList.SpaceStationAntiGravityBlockMAX.set(
+            SpaceStationAntiGravityCasing
+                .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock MAX Tier", 13));
     }
 
     public static void registry() {
