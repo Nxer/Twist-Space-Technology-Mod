@@ -25,8 +25,6 @@ public class SpaceStationStructureCasingItemBlock extends ItemBlockBase01 {
                                boolean p_77624_4_) {
         if (null == aItemStack) return;
 
-        Collections.addAll(theTooltipsList, TextLocalization.TooltipsUpgrades[aItemStack.getItemDamage()]);
-
         theTooltipsList.add(mNoMobsToolTip);
         theTooltipsList.add(mNoTileEntityToolTip);
     }
