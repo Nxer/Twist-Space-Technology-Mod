@@ -1,69 +1,47 @@
 // spotless:off
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
-import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
-import gregtech.api.GregTech_API;
-import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 
 public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntity_MultiStructureMachine<T>>
     extends GTCM_MultiMachineBase<T> implements IConstructable, ISurvivalConstructable {
 
-    public String MainStructName;
-    public int horizontalOffSet;
-    public int verticalOffSet;
-    public int depthOffSet;
     // ONLY main block can process recipe or do anything machine need to do.
     // the sub structure actually only add functional models or additional
     // bonus. once the sub structure registry and link to the main machine,
     // no need to load the chunk or even dimension where substructure is.
     // but every time sub structure reloaded, the main block will also auto reload
     // its main structure
-    public boolean isMainBlock = false;
     public int ID = -1;
     public int Type = -1;
-    public String[][] shape;
+    public ArrayList<String> pieces = new ArrayList<>();
     public int fatherID = -1;
-    // block or materials in Object[0], meta in object[1],if meta not required, use 0;
-    public ArrayList<Object[]> staticStructureDefine;
 
     protected GT_TileEntity_MultiStructureMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        MultiStructureManager.registryMachine(this);
+        pieces.add(aName.toLowerCase());
+        setShape();
+
     }
 
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        if (!checkPiece(MainStructName, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            return false;
-        }
-        return MultiStructureManager.isComplete(this);
+    public GT_TileEntity_MultiStructureMachine(String mName) {
+        super(mName);
     }
 
     @Override
@@ -72,72 +50,65 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
         super.onBlockDestroyed();
     }
 
-    // used for define unique structure blocks
-    public StructureDefinition.Builder<T> additionalStructureDefinition() {
-        return defaultStructureDefinition();
-    };
-
-    // define A as bus and hatch,B as energy, c as Maintenance;
-    public StructureDefinition.Builder<T> defaultStructureDefinition() {
-        StructureDefinition.Builder<T> defaultStructure = StructureDefinition.<T>builder()
-            .addShape("default", transpose(shape))
-            .addElement(
-                'A',
-                GT_HatchElementBuilder.<T>builder()
-                    .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                    .adder(T::addToMachineList)
-                    .dot(1)
-                    .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(2))
-                    .buildAndChain(GregTech_API.sBlockCasings8, 2))
-            .addElement(
-                'B',
-                GT_HatchElementBuilder.<T>builder()
-                    .atLeast(Energy.or(ExoticEnergy))
-                    .adder(T::addToMachineList)
-                    .dot(2)
-                    .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(3))
-                    .buildAndChain(GregTech_API.sBlockCasings8, 3))
-            .addElement(
-                'C',
-                GT_HatchElementBuilder.<T>builder()
-                    .atLeast(Maintenance)
-                    .adder(T::addToMachineList)
-                    .dot(3)
-                    .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
-                    .buildAndChain(GregTech_API.sBlockCasings8, 10));
-        char now = 'D';
-        for (Object[] block : staticStructureDefine) {
-            if (now == 'Z') {
-                now = 'a';
-            }
-            if (block[0].getClass() == Block.class) {
-                defaultStructure.addElement(now, ofBlock((Block) block[0], (int) block[1]));
-            } else if (block[0].getClass() == Materials.class) {
-                defaultStructure.addElement(now, ofFrame((Materials) block[0]));
-            }
-            now++;
-        }
-        return defaultStructure;
-    }
-
     protected abstract boolean isEnablePerfectOverclock();
 
     protected abstract float getSpeedBonus();
 
     protected abstract int getMaxParallelRecipes();
 
-    @Override
-    public IStructureDefinition<T> getStructureDefinition() {
-        return additionalStructureDefinition().build();
+    public void setShape() {
+        for (String piece : pieces) {
+
+            StructureLoader.load(mName, piece);
+        }
     }
 
-    public abstract void setShape();
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return super.survivalConstruct(stackSize, elementBudget, env);
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
+        this.buildPiece(
+            mName,
+            stackSize,
+            hintsOnly,
+            offSet.horizontalOffSet,
+            offSet.verticalOffSet,
+            offSet.depthOffSet);
+    }
+
+    // need to be optimized and rewrite
+    @Override
+    public boolean checkStructure(boolean aForceReset, IGregTechTileEntity aBaseMetaTileEntity) {
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
+        return checkPiece(mName, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet);
+        // if(MultiStructureManager.isComplete(this)){
+        // var pieces = StructureLoader.getPieces(this.mName);
+        // for(var name:pieces.entrySet()){
+        // StructureLoader.MultiStructureDefinition.OffSet offSet =
+        // StructureLoader.readStructure(mName).offSet.get(name.getValue());
+        // if(!checkPiece(name.getKey(), offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet)){
+        // return false;
+        // };
+        // }
+        // return true;
+        // }
+        // return false;
+    }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
+        return checkPiece(mName, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet);
+    }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setInteger("ID", ID);
         aNBT.setInteger("TYPE", Type);
-        aNBT.setBoolean("isMain", isMainBlock);
         aNBT.setInteger("fatherID", fatherID);
         super.saveNBTData(aNBT);
     }
@@ -146,39 +117,64 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     public void loadNBTData(NBTTagCompound aNBT) {
         ID = aNBT.getInteger("ID");
         Type = aNBT.getInteger("TYPE");
-        isMainBlock = aNBT.getBoolean("isMain");
         fatherID = aNBT.getInteger("fatherID");
         super.loadNBTData(aNBT);
     }
 
     @Override
-    public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
-        super.onCreated(aStack, aWorld, aPlayer);
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if (aTick == 1 && !aBaseMetaTileEntity.isClientSide()) {
+
+            MultiStructureManager.registryMachine(this);
+        }
+        super.onPreTick(aBaseMetaTileEntity, aTick);
     }
-    // @Override
-    // public void onLeftclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
-    // ItemStack itemStackInuse = aPlayer.getItemInUse();
-    // if (itemStackInuse.getItem() instanceof ItemMultiStructuresLinkTool tool) {
-    // if (!isMainBlock) {
-    // GT_Utility
-    // .sendChatToPlayer(aPlayer, "can not bind main Structure with left click, use right lick instead");
-    // return;
-    // }
-    // tool.firstPosition = ID;
-    // tool.checkLink(aPlayer);
-    // return;
-    // }
-    // super.onLeftclick(aBaseMetaTileEntity, aPlayer);
-    // }
-    // @Override
-    // public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, ForgeDirection side,
-    // float aX, float aY, float aZ) {
-    // ItemStack itemStackInuse = aPlayer.getItemInUse();
-    // if (itemStackInuse.getItem() instanceof ItemMultiStructuresLinkTool tool) {
-    // tool.secondPosition = ID;
-    // tool.checkLink(aPlayer);
-    // return true;
-    // }
-    // return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
-    // }
+
+    @Override
+    protected void setExoticEnergyHatches(List<GT_MetaTileEntity_Hatch> ExoticEnergyHatches) {
+        var father = MultiStructureManager.getMachine(fatherID);
+        if (father == null) {
+            stopMachine();
+            return;
+        }
+        super.setExoticEnergyHatches(father.getExoticEnergyHatches());
+    }
+
+    @Override
+    public ArrayList<ItemStack> getStoredInputs() {
+        var father = MultiStructureManager.getMachine(fatherID);
+        return father != null ? father.getStoredInputs() : super.getStoredInputs();
+    }
+
+    @Override
+    public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
+        var itemInUse = aPlayer.getHeldItem();
+        if (itemInUse.getItem() != null) {
+            LOG.info(
+                itemInUse.getItem()
+                    .getUnlocalizedName());
+        }
+        if (itemInUse.getItem() instanceof ItemMultiStructuresLinkTool item) {
+            item.secondPosition = ID;
+            item.link(aPlayer);
+            return true;
+        }
+        return super.onRightclick(aBaseMetaTileEntity, aPlayer);
+    }
+
+    @Override
+    public void onLeftclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
+        var itemInUse = aPlayer.getHeldItem();
+        if (itemInUse.getItem() != null) {
+            LOG.info(
+                itemInUse.getItem()
+                    .getUnlocalizedName());
+        }
+        if (itemInUse.getItem() instanceof ItemMultiStructuresLinkTool item) {
+            item.firstPosition = ID;
+            item.link(aPlayer);
+            return;
+        }
+        super.onLeftclick(aBaseMetaTileEntity, aPlayer);
+    }
 }

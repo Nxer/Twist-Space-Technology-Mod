@@ -65,7 +65,49 @@ public class MaterialPool implements Runnable {
         offsetID_01 + 1,
         TextureSet.SET_SHINY);
 
+    public static final Werkstoff mNull = new Werkstoff(
+        new short[] { 255, 255, 255 },
+        TextHandler.texter("nothing but everything", "bw.mNull.notTrans"),
+        subscriptNumbers("nothing but everything"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MATERIAL,
+        new Werkstoff.GenerationFeatures().addMolten()
+            .addMetalItems()
+            .addSimpleMetalWorkingItems(),
+        offsetID_01 + 2,
+        TextureSet.SET_SHINY);
+
+    public static final Werkstoff mAll = new Werkstoff(
+        new short[] { 0, 0, 0 },
+        TextHandler.texter("everything but nothing", "bw.mAll.notTrans"),
+        subscriptNumbers("everything but nothing"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MATERIAL,
+        new Werkstoff.GenerationFeatures().addMolten()
+            .addMetalItems()
+            .addSimpleMetalWorkingItems(),
+        offsetID_01 + 3,
+        TextureSet.SET_SHINY);
+
+    public static final Werkstoff mWall = new Werkstoff(
+        new short[] { 127, 127, 127 },
+        TextHandler.texter("The fourth wall", "bw.mWall.notTrans"),
+        subscriptNumbers("The fourth wall"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MATERIAL,
+        new Werkstoff.GenerationFeatures().addMolten()
+            .addMetalItems()
+            .addSimpleMetalWorkingItems(),
+        offsetID_01 + 4,
+        TextureSet.SET_SHINY);
+
     // Bartworks' Material System run on Runnable.class
     @Override
-    public void run() {}
+    public void run() {
+        // Materials[] materials=new Materials[]{mAll,mNull,mExist,mTheWall};
+        // for(var prefix :mPreventableComponents){
+        // prefix.mGeneratedItems.addAll(Arrays.asList(materials));
+        // }
+
+    }
 }

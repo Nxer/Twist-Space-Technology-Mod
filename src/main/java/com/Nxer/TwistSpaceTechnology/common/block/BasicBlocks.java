@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
 
 public class BasicBlocks {
 
@@ -11,4 +13,12 @@ public class BasicBlocks {
     public static final Block PhotonControllerUpgrade = new PhotonControllerUpgradeCasing(
         "PhotonControllerUpgrades",
         "Photon Controller Upgrade");
+
+    public static final Block spaceStationStructureBlock = new SpaceStationStructureCasing(
+        "SpaceStationStructureBlock",
+        "Space Station Structure Block");
+
+    public static final Block SpaceStationAntiGravityBlock = new SpaceStationAntiGravityCasing(
+        "SpaceStationAntiGravityBlock",
+        "Space Station Anti Gravity Block");
 }

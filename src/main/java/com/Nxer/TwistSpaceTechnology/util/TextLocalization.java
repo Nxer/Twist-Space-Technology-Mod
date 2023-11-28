@@ -435,5 +435,17 @@ public class TextLocalization {
     public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
 
     // endregion
+
+    // region megaUniverseSpaceStation
+    public static final String NameMegaUniversalSpaceStation = texter("Mega Universal Space Station","NameMegaUniversalSpaceStation");
+    public static final String Tooltip_MegaUniversalSpaceStation_MachineType = texter("","Tooltip_MegaUniversalSpaceStation_MachineType");
+    public static final String Tooltip_MegaUniversalSpaceStation_00 = texter("","Tooltip_MegaUniversalSpaceStation_00");
+    public static final String Tooltip_MegaUniversalSpaceStation_01 = texter("","Tooltip_MegaUniversalSpaceStation_01");
+    public static final String Tooltip_MegaUniversalSpaceStation_02 = texter("","Tooltip_MegaUniversalSpaceStation_02");
+    public static final String Tooltip_MegaUniversalSpaceStation_03 = texter("","Tooltip_MegaUniversalSpaceStation_03");
+    public static final String Tooltip_MegaUniversalSpaceStation_04 = texter("","Tooltip_MegaUniversalSpaceStation_04");
+    public static final String Tooltip_MegaUniversalSpaceStation_05 = texter("","Tooltip_MegaUniversalSpaceStation_05");
+    public static final String Tooltip_MegaUniversalSpaceStation_06 = texter("","Tooltip_MegaUniversalSpaceStation_06");
+    //endregion
 }
 // spotless:on

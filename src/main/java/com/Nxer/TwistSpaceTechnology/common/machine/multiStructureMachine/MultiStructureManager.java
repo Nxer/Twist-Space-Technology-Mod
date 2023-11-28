@@ -3,15 +3,24 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class MultiStructureManager {
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.WorldSavedData;
 
-    private static final HashMap<Integer, GT_TileEntity_MultiStructureMachine<?>> machines = new HashMap<>();
-    private static final HashMap<Integer, HashSet<Integer>> mapTree = new HashMap<>();
-    private static final HashMap<Integer, Integer> typeMap = new HashMap<>();
-    private static int endID = 0;
+public class MultiStructureManager extends WorldSavedData {
+
+    private static transient final HashMap<Integer, GT_TileEntity_MultiStructureMachine<?>> machines = new HashMap<>();
+    private static final HashMap<Integer, HashSet<Integer>> subMachines = new HashMap<>();
+
+    private static final HashMap<Integer, ArrayList<Integer>> validSubTypeCode = new HashMap<>();
+    private static Integer endID = 0;
+
+    public MultiStructureManager() {
+        super("MultiStructureManagementSavedData");
+    }
 
     public static GT_TileEntity_MultiStructureMachine<?> getMachine(int ID) {
         if (ID == -1) {
@@ -24,20 +33,26 @@ public class MultiStructureManager {
     // function
     // to let manager manage the structure main block.
     public static void registryMachine(GT_TileEntity_MultiStructureMachine<?> machine) {
+
         if (machine == null) {
             LOG.info("unexpected multi-structure registry");
             return;
         }
         if (machine.ID != -1) {
             machines.put(machine.ID, machine);
-            return;
-        }
-        endID++;
-        machine.ID = endID;
-        machines.put(endID, machine);
-        mapTree.put(endID, new HashSet<>());
-        typeMap.put(endID, machine.Type);
 
+        } else {
+            endID++;
+            machine.ID = endID;
+            machines.put(endID, machine);
+            subMachines.put(endID, new HashSet<>());
+        }
+        LOG.info("machine registered:" + machine.getLocalName() + " with ID:" + endID.toString());
+
+    }
+
+    public static void registryTypeMap(Integer type, ArrayList<Integer> typeCode) {
+        validSubTypeCode.put(type, typeCode);
     }
 
     // create a link between main structure and sub structure
@@ -51,9 +66,14 @@ public class MultiStructureManager {
         }
         int mainID = mainMachine.ID;
         int subID = subMachine.ID;
+        if (!validSubTypeCode.get(mainMachine.Type)
+            .contains(subMachine.Type)) {
+            return false;
+        }
         subMachine.fatherID = mainID;
-        mapTree.get(mainID)
+        subMachines.get(mainID)
             .add(subID);
+        LOG.info("machine linked:" + mainMachine.getLocalName() + " and " + subMachine.getLocalName());
         return true;
     }
 
@@ -66,7 +86,7 @@ public class MultiStructureManager {
         int mainID = mainMachine.ID;
         int subID = subMachine.ID;
         subMachine.fatherID = -1;
-        mapTree.get(mainID)
+        subMachines.get(mainID)
             .remove(subID);
     }
 
@@ -77,12 +97,9 @@ public class MultiStructureManager {
         }
         int ID = machine.ID;
         machines.remove(ID);
-        if (machine.isMainBlock) {
-            mapTree.remove(ID);
-        } else {
-            removeLink(getMachine(machine.fatherID), machine);
-        }
-        typeMap.remove(ID);
+        subMachines.remove(ID);
+        removeLink(getMachine(machine.fatherID), machine);
+        LOG.info("machine removed:" + machine.getLocalName());
     }
 
     public static boolean isComplete(GT_TileEntity_MultiStructureMachine<?> machine) {
@@ -90,7 +107,7 @@ public class MultiStructureManager {
             return false;
         }
         int ID = machine.ID;
-        for (var i : mapTree.get(ID)) {
+        for (var i : subMachines.get(ID)) {
             var subMachine = machines.get(i);
             if (subMachine == null) {
                 continue;
@@ -102,4 +119,13 @@ public class MultiStructureManager {
         return true;
     }
 
+    @Override
+    public void readFromNBT(NBTTagCompound p_76184_1_) {
+
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound p_76187_1_) {
+
+    }
 }

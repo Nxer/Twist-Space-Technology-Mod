@@ -1,8 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 public final class Utils {
 
@@ -28,10 +29,11 @@ public final class Utils {
         return aStack == null || aStack.getItem() == null || aStack.stackSize < 0;
     }
 
-    public static ItemStack setStackSize(ItemStack itemStack, int amount){
+    public static ItemStack setStackSize(ItemStack itemStack, int amount) {
         if (itemStack == null) return null;
-        if (amount < 0){
-            TwistSpaceTechnology.LOG.info("Error! Trying to set a item stack size lower than zero! " + itemStack + " to amount " + amount);
+        if (amount < 0) {
+            TwistSpaceTechnology.LOG
+                .info("Error! Trying to set a item stack size lower than zero! " + itemStack + " to amount " + amount);
             return itemStack;
         }
         itemStack.stackSize = amount;
