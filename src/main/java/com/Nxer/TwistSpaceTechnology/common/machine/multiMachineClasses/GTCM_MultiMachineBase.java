@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.MAX_PARALLEL_LIMIT;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTEs;
 
 import java.util.ArrayList;
 

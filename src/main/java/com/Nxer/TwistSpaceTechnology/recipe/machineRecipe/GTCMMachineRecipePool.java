@@ -1108,7 +1108,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemInputs(
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 ItemList.Ore_Processor.get(64),
-                new Object[] { OrePrefixes.circuit.get(Materials.Bio), 64 },
+                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 64 },
                 GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.Neutronium, 64),
 
                 ItemList.Electric_Motor_UEV.get(64),

@@ -120,7 +120,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     private double outputMultiplier = 1;
     private short recoveryChance = 0;
     private byte rewardContinuous = 0;
-    private long outputEUMax = 0;
+    private long currentOutputEU = 0;
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -131,7 +131,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
             currentTip.add(
                 EnumChatFormatting.AQUA + texter("Current Generating : ", "Waila.TST_ArtificialStar.1")
                     + EnumChatFormatting.GOLD
-                    + tag.getLong("outputEUMax")
+                    + tag.getLong("currentOutputEU")
                     + EnumChatFormatting.GREEN
                     + " * 2147483647"
                     + EnumChatFormatting.RESET
@@ -148,7 +148,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
             if (tileEntity.isActive()) {
-                tag.setLong("outputEUMax", outputEUMax);
+                tag.setLong("currentOutputEU", currentOutputEU);
             }
         }
     }
@@ -176,14 +176,14 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         // consume fuel and generate EU
         boolean flag = false;
         int recoveryAmount = 0;
-        outputEUMax = 0;
+        currentOutputEU = 0;
         for (ItemStack items : getStoredInputs()) {
             if (metaItemEqual(items, Antimatter.get(1))) {
-                outputEUMax += items.stackSize;
+                currentOutputEU += EUEveryAntimatter / Integer.MAX_VALUE  * items.stackSize;
                 consumeAntimatter(items);
                 flag = true;
             } else if (metaItemEqual(items, AntimatterFuelRod.get(1))) {
-                outputEUMax += items.stackSize;
+                currentOutputEU += EUEveryAntimatterFuelRod / Integer.MAX_VALUE * items.stackSize;
                 recoveryAmount += items.stackSize;
                 consumeAntimatterFuelRod(items);
                 flag = true;
@@ -285,7 +285,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         aNBT.setInteger("tierStabilisationField", tierStabilisationField);
         aNBT.setDouble("outputMultiplier", outputMultiplier);
         aNBT.setByte("rewardContinuous", rewardContinuous);
-        aNBT.setLong("outputEUMax", outputEUMax);
+        aNBT.setLong("currentOutputEU", currentOutputEU);
     }
 
     @Override
@@ -297,7 +297,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         tierStabilisationField = aNBT.getInteger("tierStabilisationField");
         outputMultiplier = aNBT.getDouble("outputMultiplier");
         rewardContinuous = aNBT.getByte("rewardContinuous");
-        outputEUMax = aNBT.getLong("outputEUMax");
+        currentOutputEU = aNBT.getLong("currentOutputEU");
     }
 
     // endregion

@@ -2,8 +2,10 @@ package com.Nxer.TwistSpaceTechnology.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
+import gregtech.api.metatileentity.MetaTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -71,6 +73,11 @@ public final class Utils {
         }
         itemStack.stackSize = amount;
         return itemStack;
+    }
+
+    public static <T extends Collection<E>, E extends MetaTileEntity> T filterValidMTEs(T metaTileEntities) {
+        metaTileEntities.removeIf(mte -> mte == null || !mte.isValid());
+        return metaTileEntities;
     }
 
     public static <T> T[] mergeArrays(T[]... arrays) {
