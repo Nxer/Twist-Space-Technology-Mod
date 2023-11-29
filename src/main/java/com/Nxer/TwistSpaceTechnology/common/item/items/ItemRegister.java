@@ -46,6 +46,7 @@ public class ItemRegister {
         GTCMItemList.StellarConstructionFrameMaterial.set(initItem01("Stellar Construction Frame Material", 17, new String[]{texter("Perfect and expensive.", "tooltips.StellarConstructionFrameMaterial.line1"), DSPName}));
         GTCMItemList.GravitationalLens.set(initItem01("Gravitational Lens", 18, new String[]{texter("Its twisted and powerful gravitational field is shielded in a container.", "tooltips.GravitationalLens.line1"), texter("It is usually utilized to work and alter spatial structures, ", "tooltips.GravitationalLens.line2"), texter(" but that doesn't stop some people from taking it and focusing sunlight to light fires for fun.", "tooltips.GravitationalLens.line3"), DSPName}));
 
+
         GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));
         GTCMItemList.HighDimensionalCircuitDoard.set(initItem01("High-dimensional circuit board", 177));
         GTCMItemList.HighDimensionalCapacitor.set(initItem01("High-dimensional capacitor", 178));
@@ -53,6 +54,8 @@ public class ItemRegister {
         GTCMItemList.HighDimensionalDiode.set(initItem01("High-dimensional SMD diode", 180));
         GTCMItemList.HighDimensionalResistor.set(initItem01("High-dimensional Resistor", 181));
         GTCMItemList.HighDimensionalTransistor.set(initItem01("High-dimensional Transistor", 182));
+
+
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
     }
 

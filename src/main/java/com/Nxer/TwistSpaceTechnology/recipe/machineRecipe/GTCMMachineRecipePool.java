@@ -11,6 +11,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePre
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OreProcessingFactory;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
@@ -1097,6 +1098,45 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UXV)
             .duration(20*20)
             .addTo(AssemblyLine);
+        // endregion
+
+        // region Ore Processing Factory
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, ItemList.Ore_Processor.get(1))
+            .metadata(RESEARCH_TIME, 16 * HOURS)
+            .itemInputs(
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
+                ItemList.Ore_Processor.get(64),
+                new Object[] { OrePrefixes.circuit.get(Materials.Bio), 64 },
+                GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.Neutronium, 64),
+
+                ItemList.Electric_Motor_UEV.get(64),
+                ItemList.Electric_Pump_UEV.get(16),
+                ItemList.Conveyor_Module_UEV.get(16),
+                ItemList.Robot_Arm_UEV.get(16),
+
+                Materials.Neutronium.getNanite(16),
+                GT_OreDictUnificator.get(OrePrefixes.pipeHuge, Materials.Infinity, 16),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Iridium, 64),
+
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.StainlessSteel, 64),
+                eM_Power.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*512),
+                Materials.TungstenSteel.getMolten(144*1024),
+                Materials.Neutronium.getMolten(144*1024),
+                Materials.Osmiridium.getMolten(144*1024)
+            )
+            .itemOutputs(OreProcessingFactory.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_UEV)
+            .duration(20*1800)
+            .addTo(AssemblyLine);
+
         // endregion
     }
     // spotless:on

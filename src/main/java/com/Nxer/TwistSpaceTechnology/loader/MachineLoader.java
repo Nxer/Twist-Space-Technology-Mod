@@ -1,5 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameArtificialStar;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPReceiver;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameInfiniteWirelessDynamoHatch;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameMiracleDoor;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameOreProcessingFactory;
+
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -16,7 +23,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
@@ -24,14 +30,6 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPL
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameArtificialStar;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPReceiver;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameInfiniteWirelessDynamoHatch;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameMegaUniversalSpaceStation;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameMiracleDoor;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameOreProcessingFactory;
 
 public class MachineLoader {
 
@@ -162,11 +160,11 @@ public class MachineLoader {
             .getStackForm(1);
         GTCMItemList.OreProcessingFactory.set(OreProcessingFactory);
 
-        megaUniversalSpaceStation = new GT_TileEntity_MegaUniversalSpaceStation(
-            19018,
-            "NameMegaUniversalSpaceStation",
-            NameMegaUniversalSpaceStation).getStackForm(1);
-        GTCMItemList.megaUniversalSpaceStation.set(megaUniversalSpaceStation);
+        // megaUniversalSpaceStation = new GT_TileEntity_MegaUniversalSpaceStation(
+        // 19018,
+        // "NameMegaUniversalSpaceStation",
+        // NameMegaUniversalSpaceStation).getStackForm(1);
+        // GTCMItemList.megaUniversalSpaceStation.set(megaUniversalSpaceStation);
         // endregion
 
         // region Single block Machine

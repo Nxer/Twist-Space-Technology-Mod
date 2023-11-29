@@ -65,6 +65,8 @@ public class MaterialPool implements Runnable {
         offsetID_01 + 1,
         TextureSet.SET_SHINY);
 
+    // spotless:off
+    /*
     public static final Werkstoff mNull = new Werkstoff(
         new short[] { 255, 255, 255 },
         TextHandler.texter("nothing but everything", "bw.mNull.notTrans"),
@@ -100,6 +102,8 @@ public class MaterialPool implements Runnable {
             .addSimpleMetalWorkingItems(),
         offsetID_01 + 4,
         TextureSet.SET_SHINY);
+     */
+    // spotless:on
 
     // Bartworks' Material System run on Runnable.class
     @Override
