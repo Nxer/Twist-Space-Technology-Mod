@@ -61,6 +61,8 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_IntensifyChemicalDistorter>
     implements IConstructable, ISurvivalConstructable {
 
+    // region Class Constructor
+
     public GT_TileEntity_IntensifyChemicalDistorter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -69,19 +71,51 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         super(aName);
     }
 
+    // endregion
+
+    // region Processing Logic
+
+    protected int mode = 0;// 0 means IntensifyChemicalDistorter; 1 means LCR adv
+    private HeatingCoilLevel coilLevel;
+
+    @Override
+    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+        if (mode == 0) return GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
+        return GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @Override
+            protected CheckRecipeResult validateRecipe(GT_Recipe recipe) {
+                return recipe.mSpecialValue <= coilLevel.getHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
+                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+            }
+
+            @Override
+            protected GT_OverclockCalculator createOverclockCalculator(GT_Recipe recipe) {
+                return super.createOverclockCalculator(recipe).setSpeedBoost(mode == 0 ? 1 : 0.1F);
+            }
+
+        }.enablePerfectOverclock()
+            .setMaxParallelSupplier(() -> this.mode == 0 ? 16 : 1024);
+
+    }
+
+    // endregion
+
+    // region Structure
     /**
      * Due to limitation of Java type system, you might need to do an unchecked cast. HOWEVER, the returned
      * IStructureDefinition is expected to be evaluated against current instance only, and should not be used against
      * other instances, even for those of the same class.
      */
-    final int Casing_Index_ChemInsertCasing = 176;// texture of Hatch base Chem Inert Casing
-    // protected int casingAmountInNeed = 8;// casing amount in need
-    protected int casingAmountActual;
-    protected int mode = 0;// 0 means IntensifyChemicalDistorter; 1 means LCR adv
-
-    private HeatingCoilLevel coilLevel;
-
     private static final String STRUCTURE_PIECE_MAIN = "main";
+    private final int horizontalOffSet = 5;
+    private final int verticalOffSet = 12;
+    private final int depthOffSet = 0;
 
     /**
      * <li>'s' = Stainless casing ;
@@ -120,9 +154,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             "     p     ", "     p     ", "     h     ", "           " },
         { "    b~b    ", "  ssvvvss  ", " svvvvvvvs ", " svvvvvvvs ", "bvvvvvvvvvb", "bvvvvevvvvb", "bvvvvvvvvvb",
             " svvvvvvvs ", " svvvvvvvs ", "  ssvvvss  ", "    bbb    " } };
-    private final int horizontalOffSet = 5;
-    private final int verticalOffSet = 12;
-    private final int depthOffSet = 0;
 
     /**
      * <li>√ 's' = Stainless casing ;
@@ -182,6 +213,14 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         return structure;
     }
 
+    public void setCoilLevel(HeatingCoilLevel aCoilLevel) {
+        this.coilLevel = aCoilLevel;
+    }
+
+    public HeatingCoilLevel getCoilLevel() {
+        return this.coilLevel;
+    }
+
     @Override
     public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return super.addToMachineList(aTileEntity, aBaseCasingIndex)
@@ -210,35 +249,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             true);
     }
 
-    @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        if (mode == 0) return GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
-        return GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
-    }
-
-    // Recipe Processing Handler
-    //
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @Override
-            protected CheckRecipeResult validateRecipe(GT_Recipe recipe) {
-                return recipe.mSpecialValue <= coilLevel.getHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
-                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
-            }
-
-            @Override
-            protected GT_OverclockCalculator createOverclockCalculator(GT_Recipe recipe) {
-                return super.createOverclockCalculator(recipe).setSpeedBoost(mode == 0 ? 1 : 0.1F);
-            }
-
-        }.enablePerfectOverclock()
-            .setMaxParallel(this.mode == 0 ? 16 : 1024);
-
-    }
-
-    //
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
@@ -309,11 +319,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     @Override
     public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
         return true;
     }
 
@@ -414,11 +419,4 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         return tt;
     }
 
-    public void setCoilLevel(HeatingCoilLevel aCoilLevel) {
-        this.coilLevel = aCoilLevel;
-    }
-
-    public HeatingCoilLevel getCoilLevel() {
-        return this.coilLevel;
-    }
 }

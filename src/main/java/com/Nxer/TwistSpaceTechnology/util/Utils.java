@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -67,5 +71,13 @@ public final class Utils {
         }
         itemStack.stackSize = amount;
         return itemStack;
+    }
+
+    public static <T> T[] mergeArrays(T[]... arrays) {
+        List<T> totals = new ArrayList<>();
+        for (T[] array : arrays) {
+            totals.addAll(Arrays.asList(array));
+        }
+        return (T[]) totals.toArray(new Object[0]);
     }
 }

@@ -277,6 +277,10 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                 }
             }
 
+            case "dsp_info" -> {
+                TST_CommandMethods.INSTANCE.dsp_info(sender);
+            }
+
             default -> {
                 sender.addChatMessage(
                     new ChatComponentText(
@@ -291,9 +295,9 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
         List<String> l = new ArrayList<>();
         String text = args.length == 0 ? "" : args[0].trim();
         if (args.length == 0 || args.length == 1
-            && (text.isEmpty() || Stream.of("dsp_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode")
+            && (text.isEmpty() || Stream.of("dsp_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode", "dsp_info")
                 .anyMatch(s -> s.startsWith(text)))) {
-            Stream.of("dsp_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode")
+            Stream.of("dsp_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode", "dsp_info")
                 .filter(s -> text.isEmpty() || s.startsWith(text))
                 .forEach(l::add);
         }
