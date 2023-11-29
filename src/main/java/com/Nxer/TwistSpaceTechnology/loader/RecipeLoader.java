@@ -11,6 +11,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
+import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values;
 
 public class RecipeLoader {
 
@@ -26,5 +27,6 @@ public class RecipeLoader {
         }
 
         OP_NormalProcessing.instance.enumOreProcessingRecipes();
+        OP_Values.initOreRecipesInputs();
     }
 }

@@ -454,10 +454,10 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .duration(20)
             .addTo(fs);
 
-        // PhasedIron
+        // PulsatingIron
         GT_Values.RA.stdBuilder()
             .itemInputs(MoldSingularity.get(0))
-            .fluidInputs(Materials.PhasedIron.getMolten(144 * 9 * 912))
+            .fluidInputs(Materials.PulsatingIron.getMolten(144 * 9 * 912))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 4))
             .noFluidOutputs()
             .eut(RECIPE_UV)
@@ -700,7 +700,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
                 Materials.ConductiveIron.getMolten(144 * 9 * 912),
                 Materials.ElectricalSteel.getMolten(144 * 9 * 912),
                 Materials.EnergeticAlloy.getMolten(144 * 9 * 191),
-                Materials.PhasedIron.getMolten(144 * 9 * 912),
+                Materials.PulsatingIron.getMolten(144 * 9 * 912),
                 Materials.DarkSteel.getMolten(144 * 9 * 912),
                 Materials.RedstoneAlloy.getMolten(144 * 9 * 912),
                 Materials.Soularium.getMolten(144 * 9 * 456))

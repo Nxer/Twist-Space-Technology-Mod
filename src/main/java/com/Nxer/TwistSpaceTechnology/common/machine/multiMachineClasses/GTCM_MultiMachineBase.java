@@ -155,7 +155,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * Get inputting items without DualInputHatch, and no separation mode.
      * <p>
      * Always used to get some special input items.
-     * 
+     *
      * @return The inputting items.
      */
     public ArrayList<ItemStack> getStoredInputsWithoutDualInputHatch() {
@@ -198,9 +198,20 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
+    public boolean addEnergyHatchOrExoticEnergyHatchToMachineList(IGregTechTileEntity aTileEntity,
+        int aBaseCasingIndex) {
+        return addEnergyInputToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
     public boolean addInputBusOrOutputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return addInputBusToMachineList(aTileEntity, aBaseCasingIndex)
             || addOutputBusToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public boolean addInputHatchOrOutputHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addInputHatchToMachineList(aTileEntity, aBaseCasingIndex)
+            || addOutputHatchToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
     @Override

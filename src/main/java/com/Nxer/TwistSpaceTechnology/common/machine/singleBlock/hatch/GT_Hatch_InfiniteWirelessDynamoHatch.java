@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.authorName_Nxer;
 
 import net.minecraft.util.EnumChatFormatting;
@@ -87,7 +88,9 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
     public String[] getDescription() {
         return new String[] { EnumChatFormatting.GRAY + "Stores energy globally in a network, up to 2^(2^31) EU.",
             EnumChatFormatting.GRAY + "Does not connect to wires. This block accepts EU into the network.",
-            EnumChatFormatting.WHITE + "Infinite output voltage limit.", authorName_Nxer };
+            EnumChatFormatting.WHITE
+                + texter("Infinite output voltage limit.", "Description.InfiniteWirelessDynamoHatch.1"),
+            authorName_Nxer };
     }
 
     @Override

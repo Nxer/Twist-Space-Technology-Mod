@@ -75,7 +75,7 @@ public class TwistSpaceTechnology {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         // process path
-        if (isInDevMode && useAutoGeneratingDevResourcePath){
+        if (isInDevMode && useAutoGeneratingDevResourcePath) {
             DevResource = PathHelper.initResourceAbsolutePath();
         }
         TextHandler.initLangMap(isInDevMode);

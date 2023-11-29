@@ -11,6 +11,35 @@ public final class Utils {
         return a.getItem() == b.getItem() && a.getItemDamage() == b.getItemDamage();
     }
 
+    /**
+     *
+     * @param isa1 The ItemStack Array 1.
+     * @param isa2 The ItemStack Array 2.
+     * @return The elements of these two arrays are identical and in the same order.
+     */
+    public static boolean itemStackArrayEqualAbsolutely(ItemStack[] isa1, ItemStack[] isa2) {
+        if (isa1.length != isa2.length) return false;
+        for (int i = 0; i < isa1.length; i++) {
+            if (isa1[i] != isa2[i]) return false;
+        }
+        return true;
+    }
+
+    public static boolean itemStackArrayEqualFuzzy(ItemStack[] isa1, ItemStack[] isa2) {
+        if (isa1.length != isa2.length) return false;
+        for (ItemStack itemStack1 : isa1) {
+            boolean flag = false;
+            for (ItemStack itemStack2 : isa2) {
+                if (metaItemEqual(itemStack1, itemStack2)) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) return false;
+        }
+        return true;
+    }
+
     public static boolean fluidEqual(FluidStack a, FluidStack b) {
         return a.getFluid() == b.getFluid();
     }

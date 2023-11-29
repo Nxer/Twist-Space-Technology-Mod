@@ -311,7 +311,7 @@ public class GTCMRecipe {
     public final GTCMRecipeMap OreProcessingRecipes = new GTCMRecipeMap(
         new HashSet<>(1000),
         "tst.recipe.OreProcessingRecipes",
-        texter("Ore Processing Recipes","NEI.name.OreProcessingRecipes"),
+        texter("Ore Processing Recipes", "NEI.name.OreProcessingRecipes"),
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
         1,

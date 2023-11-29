@@ -683,11 +683,11 @@ public class DSPRecipePool implements IRecipePool {
                 ItemList.Timepiece.get(1),
                 StellarConstructionFrameMaterial.get(64),
                 StellarConstructionFrameMaterial.get(64),
-                StellarConstructionFrameMaterial.get(16),
+                StellarConstructionFrameMaterial.get(64),
                 GT_OreDictUnificator
                     .get(OrePrefixes.foil, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 6))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 128))
-            .itemOutputs(AntimatterFuelRod.get(48))
+            .itemOutputs(AntimatterFuelRod.get(64))
             .noFluidOutputs()
             .specialValue(3)
             .noOptimize()

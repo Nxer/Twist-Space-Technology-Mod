@@ -34,6 +34,7 @@ public class TextLocalization {
 
     public static final String DSPName = texter(EnumChatFormatting.BLUE+"Dyson Sphere Program","DSPName");
     public static final String Tooltip_Details = texter(EnumChatFormatting.LIGHT_PURPLE+"Details: ","Tooltip_Details");
+    public static final String Tooltips_JoinWirelessNetWithoutEnergyHatch = texter("Joining the wireless EU network when without installing an energy hatch.","Tooltips_JoinWirelessNetWithoutEnergyHatch");
     // endregion
 
     // region Names
@@ -426,7 +427,15 @@ public class TextLocalization {
     // endregion
 
     // region OreProcessingFactory
-    public static final String NameOreProcessingFactory = texter("TST Ore Processing Factory","NameOreProcessingFactory");
+    public static final String NameOreProcessingFactory = texter("General Ore Processing Factory TST","NameOreProcessingFactory");
+    public static final String Tooltip_OreProcessingFactory_MachineType = texter("Ore Processor","Tooltip_OreProcessingFactory_MachineType");
+    public static final String Tooltip_OreProcessingFactory_Controller = texter("Controller block for the General Ore Processing Factory TST","Tooltip_OreProcessingFactory_Controller");
+    public static final String Tooltip_OreProcessingFactory_01 = texter(EnumChatFormatting.WHITE+"Engineering is the art of directing the great sources of power in nature for the use and convenience of man.","Tooltip_OreProcessingFactory_01");
+    public static final String Tooltip_OreProcessingFactory_02 = texter("The ores will line up and go in through the entrance and out through the exit.","Tooltip_OreProcessingFactory_02");
+    public static final String Tooltip_OreProcessingFactory_03 = texter("This machine will not do overclock. Progress time is always 6.4s (default) .","Tooltip_OreProcessingFactory_03");
+    public static final String Tooltip_OreProcessingFactory_04 = texter("It will process as many inputs as possible at once, if power allow.","Tooltip_OreProcessingFactory_04");
+    public static final String Tooltip_OreProcessingFactory_05 = texter("Consume 3200L Lubricant every 12.8s (default).","Tooltip_OreProcessingFactory_05");
+    public static final String Tooltip_OreProcessingFactory_06 = texter("Non-ore inputs will be transferred to the output bus.","Tooltip_OreProcessingFactory_06");
 
     // endregion
 
