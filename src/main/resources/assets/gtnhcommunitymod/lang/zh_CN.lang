@@ -344,6 +344,7 @@ Tooltip_ArtificialStar_02_04=输入的燃料将会一次性消耗掉, 然后运�
 Tooltip_ArtificialStar_02_05=在连续运行时, 每次运行连续运行奖励系数提高 1%% .
 Tooltip_ArtificialStar_02_06=连续运行奖励系数最大值 150%% , 中断后降到 100%% .
 Tooltip_ArtificialStar_Controller=人造恒星的控制器方块
+Waila.TST_ArtificialStar.1=当前发电 : 
 Tooltip_DSPInfo_00=戴森球产能点数 = 每太阳帆产出 (默认 524288) * 太阳帆数量 * (节点数量 + 1)^0.5
 Tooltip_DSPInfo_01=每个节点可以吸附 (默认) 256 太阳帆.
 Tooltip_DSPInfo_02=如果未吸附的太阳帆数量超过2048,
