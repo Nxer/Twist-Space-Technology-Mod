@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.machines;
 
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.LubricantCost;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
-import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreRecipesInputs;
+import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.moveUnprocessedItemsToOutputs;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.ticksOfPerFluidConsuming;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
@@ -15,7 +15,8 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OrePro
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_MachineType;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -30,10 +31,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -68,7 +68,6 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -151,6 +150,149 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         }
     }
 
+    public CheckRecipeResult OP_Process_Wireless() {
+        GT_Recipe.GT_Recipe_Map recipeMap = getRecipeMap();
+        ArrayList<ItemStack> inputs = getStoredInputs();
+        ArrayList<ItemStack> outputs = new ArrayList<>();
+        long EUt = 0;
+        // check every inputs
+        for (ItemStack items : inputs) {
+            boolean hasNotFound = true;
+            for (GT_Recipe recipe : recipeMap.mRecipeList) {
+                if (metaItemEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
+                    // found the recipe
+                    hasNotFound = false;
+                    ItemStack recipeInput = recipe.mInputs[0];
+                    int parallel = items.stackSize / recipeInput.stackSize;
+
+                    // decrease the input stack amount
+                    items.stackSize -= parallel * recipeInput.stackSize;
+
+                    // add EU cost
+                    EUt += (long) recipe.mEUt * parallel;
+
+                    // process output stacks
+                    for (ItemStack recipeOutput : recipe.mOutputs) {
+                        if (Integer.MAX_VALUE / parallel >= recipeOutput.stackSize) {
+                            // direct output
+                            outputs.add(setStackSize(recipeOutput.copy(), recipeOutput.stackSize * parallel));
+                        } else {
+                            // separate to any integer max stack
+                            long outputAmount = (long) parallel * recipeOutput.stackSize;
+                            while (outputAmount > 0) {
+                                if (outputAmount >= Integer.MAX_VALUE) {
+                                    outputs.add(setStackSize(recipeOutput.copy(), Integer.MAX_VALUE));
+                                    outputAmount -= Integer.MAX_VALUE;
+                                } else {
+                                    outputs.add(setStackSize(recipeOutput.copy(), (int) outputAmount));
+                                    outputAmount = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // If is gt ore but not in recipe map
+            // Handle it specially
+            if (hasNotFound) {
+                if (Objects.equals(items.getUnlocalizedName(), "gt.blockores")) {
+                    TwistSpaceTechnology.LOG.info("OP system recipe has not write this material's: " + items);
+                    outputs.add(items.copy());
+                    items.stackSize = 0;
+                } else if (moveUnprocessedItemsToOutputs) {
+                    outputs.add(items.copy());
+                    items.stackSize = 0;
+                }
+            }
+        }
+        if (outputs.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+
+        usingEU = EUt * OreProcessRecipeDuration;
+        if (!addEUToGlobalEnergyMap(ownerUUID, usingEU)) {
+            return CheckRecipeResultRegistry.insufficientPower(usingEU);
+        }
+        // set these to machine outputs
+        mOutputItems = outputs.toArray(new ItemStack[0]);
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    public void OP_Process_Normal() {
+        GT_Recipe.GT_Recipe_Map recipeMap = getRecipeMap();
+        ArrayList<ItemStack> inputs = getStoredInputs();
+        ArrayList<ItemStack> outputs = new ArrayList<>();
+        long EUtCanUseNow = EUtCanUse;
+        boolean canContinueCheckRecipe = EUtCanUse >= OreProcessRecipeEUt;
+
+        // check every inputs
+        for (ItemStack items : inputs) {
+            if (!canContinueCheckRecipe) break;
+
+            boolean hasNotFound = true;
+            for (GT_Recipe recipe : recipeMap.mRecipeList) {
+                if (metaItemEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
+                    // found the recipe
+                    hasNotFound = false;
+                    ItemStack recipeInput = recipe.mInputs[0];
+                    // check parallel value
+                    long EUtParallel = EUtCanUseNow / recipe.mEUt;
+                    int InputParallel = items.stackSize / recipeInput.stackSize;
+                    int parallel;
+                    if (InputParallel >= EUtParallel) {
+                        // if parallel is limited by EUt, set the flag to stop recipe checking.
+                        canContinueCheckRecipe = false;
+                        parallel = (int) Math.min(EUtParallel, Integer.MAX_VALUE);
+                    } else {
+                        parallel = InputParallel;
+                    }
+
+                    // decrease the input stack amount
+                    items.stackSize -= parallel * recipeInput.stackSize;
+
+                    // flush EUtCanUseNow
+                    EUtCanUseNow -= (long) parallel * recipe.mEUt;
+
+                    // process output stacks
+                    for (ItemStack recipeOutput : recipe.mOutputs) {
+                        if (Integer.MAX_VALUE / parallel >= recipeOutput.stackSize) {
+                            // direct output
+                            outputs.add(setStackSize(recipeOutput.copy(), recipeOutput.stackSize * parallel));
+                        } else {
+                            // separate to any integer max stack
+                            long outputAmount = (long) parallel * recipeOutput.stackSize;
+                            while (outputAmount > 0) {
+                                if (outputAmount >= Integer.MAX_VALUE) {
+                                    outputs.add(setStackSize(recipeOutput.copy(), Integer.MAX_VALUE));
+                                    outputAmount -= Integer.MAX_VALUE;
+                                } else {
+                                    outputs.add(setStackSize(recipeOutput.copy(), (int) outputAmount));
+                                    outputAmount = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // If is gt ore but not in recipe map
+            // Handle it specially
+            if (hasNotFound) {
+                if (Objects.equals(items.getUnlocalizedName(), "gt.blockores")) {
+                    TwistSpaceTechnology.LOG.info("OP system recipe has not write this material's: " + items);
+                    outputs.add(items.copy());
+                    items.stackSize = 0;
+                } else if (moveUnprocessedItemsToOutputs) {
+                    outputs.add(items.copy());
+                    items.stackSize = 0;
+                }
+            }
+        }
+        // set these to machine outputs
+        mOutputItems = outputs.toArray(new ItemStack[0]);
+
+        // set EUt
+        lEUt = EUtCanUseNow - EUtCanUse;
+
+    }
+
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
@@ -158,108 +300,32 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     }
 
     protected CheckRecipeResult checkProcessing_wirelessMode() {
-        // If no inputs
-        if (getStoredInputsWithoutDualInputHatch().isEmpty()) {
-            return CheckRecipeResultRegistry.NO_RECIPE;
-        }
 
-        if (getStoredFluids().isEmpty()) {
-            return SimpleCheckRecipeResult.ofFailure("No_Lubricant_Inputting");
-        }
-
-        setupProcessingLogic(processingLogic);
-        processingLogic.setAvailableVoltage(Long.MAX_VALUE);
-
-        Set<ItemStack> outputItems = new HashSet<>();
-        long useEUt = 0;
-
-        CheckRecipeResult result = doCheckRecipe();
-        ItemStack[] sanityCheckFlag = new ItemStack[] {};
-        while (result.wasSuccessful()) {
-            if (itemStackArrayEqualFuzzy(sanityCheckFlag, processingLogic.getOutputItems())) {
-                TwistSpaceTechnology.LOG
-                    .info("Ore Processing Factory TST may cause an error, broke the CheckRecipeResult cycle.");
-                break;
-            }
-            sanityCheckFlag = processingLogic.getOutputItems();
-            outputItems.addAll(Arrays.asList(sanityCheckFlag));
-            useEUt += processingLogic.getCalculatedEut();
-            result = doCheckRecipe();
-        }
-        if (outputItems.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-
-        if (!addEUToGlobalEnergyMap(ownerUUID, -useEUt * OreProcessRecipeDuration)) {
-            return CheckRecipeResultRegistry.insufficientPower(useEUt * OreProcessRecipeDuration);
-        }
-
-        // inputs with no recipe will be moved into output
-        if (moveUnprocessedItemsToOutputs) {
-            for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
-                if (OreRecipesInputs.contains(items.getUnlocalizedName() + items.getItemDamage())) continue;
-                outputItems.add(items.copy());
-                items.stackSize = 0;
-            }
-        }
-
+        CheckRecipeResult result = OP_Process_Wireless();
+        if (!result.wasSuccessful()) return result;
+        boolean noRecipe = mOutputItems == null || mOutputItems.length < 1;
         updateSlots();
+        if (noRecipe) return CheckRecipeResultRegistry.NO_RECIPE;
 
-        usingEU = useEUt * OreProcessRecipeDuration;
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
-
         mMaxProgresstime = OreProcessRecipeDuration;
-
-        mOutputItems = outputItems.toArray(new ItemStack[] {});
 
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
     protected CheckRecipeResult checkProcessing_normalMode() {
-        // If no inputs
-        if (getStoredInputsWithoutDualInputHatch().isEmpty()) {
-            return CheckRecipeResultRegistry.NO_RECIPE;
-        }
 
-        if (getStoredFluids().isEmpty()) {
-            return SimpleCheckRecipeResult.ofFailure("No_Lubricant_Inputting");
-        }
+        if (EUtCanUse < OreProcessRecipeEUt) return CheckRecipeResultRegistry.insufficientPower(OreProcessRecipeEUt);
 
-        setupProcessingLogic(processingLogic);
-
-        Set<ItemStack> outputItems = new HashSet<>();
-
-        long voltageCanUse = EUtCanUse;
-        processingLogic.setAvailableVoltage(voltageCanUse);
-        CheckRecipeResult result = doCheckRecipe();
-        while (result.wasSuccessful()) {
-            outputItems.addAll(Arrays.asList(processingLogic.getOutputItems()));
-            voltageCanUse -= processingLogic.getCalculatedEut();
-            processingLogic.setAvailableVoltage(voltageCanUse);
-            result = doCheckRecipe();
-        }
-        if (outputItems.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-
-        // inputs with no recipe will be moved into output
-        if (moveUnprocessedItemsToOutputs) {
-            for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
-                if (OreRecipesInputs.contains(items.getUnlocalizedName() + items.getItemDamage())) continue;
-                outputItems.add(items.copy());
-                items.stackSize = 0;
-            }
-        }
-
-        // inputs are consumed at this point
+        OP_Process_Normal();
+        boolean noRecipe = mOutputItems == null || mOutputItems.length < 1;
         updateSlots();
+        if (noRecipe) return CheckRecipeResultRegistry.NO_RECIPE;
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
-
         mMaxProgresstime = OreProcessRecipeDuration;
-
-        // set EUt
-        lEUt = voltageCanUse - EUtCanUse;
-
-        mOutputItems = outputItems.toArray(new ItemStack[] {});
 
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
@@ -420,7 +486,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                                GT_HatchElementBuilder
                                    .<TST_OreProcessingFactory>builder()
                                    .atLeast(InputHatch)
-                                   .adder(TST_OreProcessingFactory::addInputHatchOrOutputHatchToMachineList)
+                                   .adder(TST_OreProcessingFactory::addFluidInputToMachineList)
                                    .dot(1)
                                    .casingIndex(48)
                                    .buildAndChain(GregTech_API.sBlockCasings4,0))

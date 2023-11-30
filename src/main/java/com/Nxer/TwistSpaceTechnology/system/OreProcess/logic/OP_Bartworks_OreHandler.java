@@ -17,6 +17,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.Materials;
 
 public class OP_Bartworks_OreHandler {
 
@@ -57,7 +58,7 @@ public class OP_Bartworks_OreHandler {
             GT_Values.RA.stdBuilder()
                 .itemInputs(werkstoff.get(ore, 1))
                 .itemOutputs(outputs.toArray(new ItemStack[] {}))
-                .noFluidInputs()
+                .fluidInputs(Materials.Lubricant.getFluid(1))
                 .noFluidOutputs()
                 .eut(OreProcessRecipeEUt)
                 .duration(OreProcessRecipeDuration)

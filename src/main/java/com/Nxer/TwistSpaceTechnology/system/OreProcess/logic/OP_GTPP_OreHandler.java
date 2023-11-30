@@ -15,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.Materials;
 import gtPlusPlus.core.material.Material;
 import gtPlusPlus.core.material.ORES;
 
@@ -51,7 +52,7 @@ public class OP_GTPP_OreHandler {
             GT_Values.RA.stdBuilder()
                 .itemInputs(ore.getOre(1))
                 .itemOutputs(ore.getDust(12))
-                .noFluidInputs()
+                .fluidInputs(Materials.Lubricant.getFluid(1))
                 .noFluidOutputs()
                 .eut(120)
                 .duration(OreProcessRecipeDuration)

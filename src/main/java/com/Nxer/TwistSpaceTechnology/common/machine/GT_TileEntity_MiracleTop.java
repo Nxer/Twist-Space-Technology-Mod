@@ -21,14 +21,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -36,18 +32,14 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.block.ModBlocks;
 
-public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_MiracleTop>
-    implements IConstructable, ISurvivalConstructable {
+public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntity_MiracleTop> {
 
     // region Constructors
     public GT_TileEntity_MiracleTop(int aID, String aName, String aNameRegional) {
@@ -254,32 +246,45 @@ public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMul
         return this.speedTotal * 16;
     }
 
+    /*
+     * @Override
+     * protected ProcessingLogic createProcessingLogic() {
+     * return new GTCM_ProcessingLogic() {
+     * @Override
+     * public ProcessingLogic enablePerfectOverclock() {
+     * if (speedTotal < 8) {
+     * return this.setOverclock(1, 2);
+     * }
+     * return this.setOverclock(2, 2);
+     * }
+     * @NotNull
+     * @Override
+     * protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
+     * return super.createOverclockCalculator(recipe).setSpeedBoost(1.0F / (speedTotal * 4));
+     * }
+     * // @Override
+     * // public ProcessingLogic setMaxParallel(int maxParallel) {
+     * // this.maxParallel = maxParallel * 16;
+     * // return this;
+     * // }
+     * }.enablePerfectOverclock()
+     * .setMaxParallel(256);
+     * }
+     */
+
     @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
+    protected boolean isEnablePerfectOverclock() {
+        return speedTotal >= 8;
+    }
 
-            @Override
-            public ProcessingLogic enablePerfectOverclock() {
-                if (speedTotal < 8) {
-                    return this.setOverclock(1, 2);
-                }
-                return this.setOverclock(2, 2);
-            }
+    @Override
+    protected float getSpeedBonus() {
+        return 1.0F / (speedTotal * 4);
+    }
 
-            @NotNull
-            @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
-                return super.createOverclockCalculator(recipe).setSpeedBoost(1.0F / (speedTotal * 4));
-            }
-
-            // @Override
-            // public ProcessingLogic setMaxParallel(int maxParallel) {
-            // this.maxParallel = maxParallel * 16;
-            // return this;
-            // }
-
-        }.enablePerfectOverclock()
-            .setMaxParallel(256);
+    @Override
+    protected int getMaxParallelRecipes() {
+        return 256;
     }
 
     @Override
@@ -546,7 +551,7 @@ public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMul
      * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
      * E -> ofBlock...(tile.quantumGlass, 0, ...);
      */
-    
+
     /*
      * Blocks:
      * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
@@ -732,7 +737,7 @@ public class GT_TileEntity_MiracleTop extends GT_MetaTileEntity_ExtendedPowerMul
         "                     ",
         "                     "
     }} ;
-    
+
     /*
      * Blocks:
      * A -> ofBlock...(gt.blockcasingsTT, 4, ...);

@@ -179,7 +179,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         currentOutputEU = 0;
         for (ItemStack items : getStoredInputs()) {
             if (metaItemEqual(items, Antimatter.get(1))) {
-                currentOutputEU += EUEveryAntimatter / Integer.MAX_VALUE  * items.stackSize;
+                currentOutputEU += EUEveryAntimatter / Integer.MAX_VALUE * items.stackSize;
                 consumeAntimatter(items);
                 flag = true;
             } else if (metaItemEqual(items, AntimatterFuelRod.get(1))) {
