@@ -64,7 +64,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_HatchElementBuilder;
@@ -97,7 +96,8 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     // region Processing Logic
 
     private String ownerUUID;
-    long costingWirelessEUTemp = 0;
+    private long costingWirelessEUTemp = 0;
+    private int needPhotonAmount = 0;
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -127,12 +127,14 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
+        aNBT.setInteger("needPhotonAmount", needPhotonAmount);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         costingWirelessEUTemp = aNBT.getLong("costingWirelessEUTemp");
+        needPhotonAmount = aNBT.getInteger("needPhotonAmount");
     }
 
     @Override
@@ -176,11 +178,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     }
 
     private CheckRecipeResult checkProcessing_mode1() {
-        // check Critical Photon Input
-        if (!checkPhotonsInputting(amountOfPhotonsEveryMiracleDoorProcessingCost)) {
-            return SimpleCheckRecipeResult.ofFailure("No_Critical_Photon_Input");
-        }
-        // normal processing logic with infinite parallel
         setupProcessingLogic(processingLogic);
 
         CheckRecipeResult result = doCheckRecipe();
@@ -188,11 +185,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         // inputs are consumed at this point
         updateSlots();
         if (!result.wasSuccessful()) return result;
-
-        // consume Critical Photon
-        if (!consumePhoton(amountOfPhotonsEveryMiracleDoorProcessingCost)) {
-            return CheckRecipeResultRegistry.INTERNAL_ERROR;
-        }
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
@@ -211,6 +203,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         // normal output
         mOutputItems = processingLogic.getOutputItems();
         mOutputFluids = processingLogic.getOutputFluids();
+        needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
 
         return result;
     }
@@ -261,6 +254,20 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid()
             .toString();
     }
+
+    // @Override
+    // public boolean onRunningTick(ItemStack aStack) {
+    // if (needPhotonAmount > 0){
+    // if (checkPhotonsInputting(needPhotonAmount)){
+    // consumePhoton(needPhotonAmount);
+    // needPhotonAmount = 0;
+    // } else {
+    // criticalStopMachine();
+    // return false;
+    // }
+    // }
+    // return super.onRunningTick(aStack);
+    // }
 
     @Override
     protected boolean isEnablePerfectOverclock() {

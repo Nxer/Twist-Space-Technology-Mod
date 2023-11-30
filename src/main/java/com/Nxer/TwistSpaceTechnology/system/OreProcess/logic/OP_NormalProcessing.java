@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import gregtech.api.util.GT_ModHandler;
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.google.common.collect.Sets;
@@ -52,7 +54,6 @@ public class OP_NormalProcessing {
         Set<Materials> specialProcesses = Sets.newHashSet(
             Materials.Samarium,
             Materials.Cerium,
-            Materials.Cinnabar,
             Materials.Naquadah,
             Materials.NaquadahEnriched,
             Materials.Naquadria);
@@ -69,6 +70,7 @@ public class OP_NormalProcessing {
         }
 
         processSpecialOreRecipe();
+        processInsteadOre();
         OP_GTPP_OreHandler.instance.processGTPPOreRecipes();
         OP_Bartworks_OreHandler.instance.processBWOreRecipes();
 
@@ -78,35 +80,7 @@ public class OP_NormalProcessing {
      * Generate special ores recipes
      */
     public void processSpecialOreRecipe() {
-        // Cinnabar ore
-        {
-            ItemStack[] outputs = new ItemStack[] { getDustStack(Materials.Cinnabar, 4),
-                getDustStack(Materials.Redstone, 2), getDustStack(Materials.Sulfur, 2),
-                getDustStack(Materials.Glowstone, 2), GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Mercury, 4) };
-            ItemStack[] outputsRich = new ItemStack[] { getDustStack(Materials.Cinnabar, 8),
-                getDustStack(Materials.Redstone, 3), getDustStack(Materials.Sulfur, 3),
-                getDustStack(Materials.Glowstone, 3), GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Mercury, 8) };
-            for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GT_OreDictUnificator.get(prefixes, Materials.Cinnabar, 1) == null) continue;
-                GT_Values.RA.stdBuilder()
-                    .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.Cinnabar, 1))
-                    .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .noFluidInputs()
-                    .noFluidOutputs()
-                    .eut(OreProcessRecipeEUt)
-                    .duration(OreProcessRecipeDuration)
-                    .addTo(GTCMRecipe.instance.OreProcessingRecipes);
-            }
-            GT_Values.RA.stdBuilder()
-                .itemInputs(getModItem("gregtech", "gt.blockores", 1, 826))
-                .itemOutputs(outputs)
-                .noFluidInputs()
-                .noFluidOutputs()
-                .eut(OreProcessRecipeEUt)
-                .duration(OreProcessRecipeDuration)
-                .addTo(GTCMRecipe.instance.OreProcessingRecipes);
-
-        }
+        // spotless:off
 
         // Cerium ore
         {
@@ -119,7 +93,7 @@ public class OP_NormalProcessing {
                 GT_Values.RA.stdBuilder()
                     .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.Cerium, 1))
                     .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .noFluidInputs()
+                    .fluidInputs(Materials.Lubricant.getFluid(1))
                     .noFluidOutputs()
                     .eut(OreProcessRecipeEUt)
                     .duration(OreProcessRecipeDuration)
@@ -138,7 +112,7 @@ public class OP_NormalProcessing {
                 GT_Values.RA.stdBuilder()
                     .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.Samarium, 1))
                     .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .noFluidInputs()
+                    .fluidInputs(Materials.Lubricant.getFluid(1))
                     .noFluidOutputs()
                     .eut(OreProcessRecipeEUt)
                     .duration(OreProcessRecipeDuration)
@@ -157,7 +131,7 @@ public class OP_NormalProcessing {
                 GT_Values.RA.stdBuilder()
                     .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.Naquadah, 1))
                     .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .noFluidInputs()
+                    .fluidInputs(Materials.Lubricant.getFluid(1))
                     .noFluidOutputs()
                     .eut(OreProcessRecipeEUt)
                     .duration(OreProcessRecipeDuration)
@@ -176,7 +150,7 @@ public class OP_NormalProcessing {
                 GT_Values.RA.stdBuilder()
                     .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.NaquadahEnriched, 1))
                     .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .noFluidInputs()
+                    .fluidInputs(Materials.Lubricant.getFluid(1))
                     .noFluidOutputs()
                     .eut(OreProcessRecipeEUt)
                     .duration(OreProcessRecipeDuration)
@@ -195,7 +169,7 @@ public class OP_NormalProcessing {
                 GT_Values.RA.stdBuilder()
                     .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.Naquadria, 1))
                     .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .noFluidInputs()
+                    .fluidInputs(Materials.Lubricant.getFluid(1))
                     .noFluidOutputs()
                     .eut(OreProcessRecipeEUt)
                     .duration(OreProcessRecipeDuration)
@@ -203,11 +177,12 @@ public class OP_NormalProcessing {
             }
         }
 
+        // spotless:on
     }
 
     /**
      * Generate normal ore recipes
-     * 
+     *
      * @param material The ore's Material.
      */
     public void processOreRecipe(Materials material) {
@@ -253,7 +228,10 @@ public class OP_NormalProcessing {
         }
 
         for (OrePrefixes prefixes : basicStoneTypes) {
-            if (GT_OreDictUnificator.get(prefixes, material, 1) == null) continue;
+            if (GT_OreDictUnificator.get(prefixes, material, 1) == null) {
+                TwistSpaceTechnology.LOG.info("Failed to get ore: material=" + material + " , prefixes=" + prefixes);
+                continue;
+            }
             List<ItemStack> finalOutputs = new ArrayList<>();
             boolean isRich = isRich(prefixes);
             for (ItemStack items : outputs) {
@@ -263,9 +241,9 @@ public class OP_NormalProcessing {
             }
 
             GT_Values.RA.stdBuilder()
-                .itemInputs(GT_OreDictUnificator.get(prefixes, material, 1))
+                .itemInputs(GT_OreDictUnificator.get(prefixes.get(material), 1))
                 .itemOutputs(finalOutputs.toArray(new ItemStack[] {}))
-                .noFluidInputs()
+                .fluidInputs(Materials.Lubricant.getFluid(1))
                 .noFluidOutputs()
                 .noOptimize()
                 .eut(OreProcessRecipeEUt)
@@ -275,9 +253,69 @@ public class OP_NormalProcessing {
 
     }
 
+    public void processInsteadOre(){
+        // spotless:off
+        int[] metas = {19,20,32,33,35,86,57,89,98,382,500,501,514,522,526,530,540,535,541,542,543,544,545,810,826,884,894,918};
+        for (int ID : metas){
+            TwistSpaceTechnology.LOG.info("Process special instead ore: " + GregTech_API.sGeneratedMaterials[ID]);
+            Materials material = GregTech_API.sGeneratedMaterials[ID];
+
+            List<ItemStack> outputs = new ArrayList<>();
+
+            // check byproduct
+            if (!material.mOreByProducts.isEmpty()) {
+                // the basic output the material
+                outputs.add(getDustStack(material, 4));
+                if (material.mOreByProducts.size() == 1) {
+                    for (Materials byproduct : material.mOreByProducts) {
+                        if (byproduct == null) continue;
+                        outputs.add(getDustStack(byproduct, 3));
+                    }
+                } else {
+                    for (Materials byproduct : material.mOreByProducts) {
+                        if (byproduct == null || byproduct == Materials.Netherrack
+                                || byproduct == Materials.Endstone
+                                || byproduct == Materials.Stone) continue;
+
+                        outputs.add(getDustStack(byproduct, 2));
+                    }
+                }
+
+            } else {
+                outputs.add(getDustStack(material, 8));
+            }
+
+            // check gem style
+            if (GT_OreDictUnificator.get(OrePrefixes.gem, material, 1) != null) {
+                if (GT_OreDictUnificator.get(OrePrefixes.gemExquisite, material, 1) != null) {
+                    // has gem style
+                    outputs.add(GT_OreDictUnificator.get(OrePrefixes.gemExquisite, material, 1));
+                    outputs.add(GT_OreDictUnificator.get(OrePrefixes.gemFlawless, material, 2));
+                    outputs.add(GT_OreDictUnificator.get(OrePrefixes.gem, material, 2));
+
+                } else {
+                    // just normal gem
+                    outputs.add(GT_OreDictUnificator.get(OrePrefixes.gem, material, 4));
+                }
+            }
+
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(GT_ModHandler.getModItem("gregtech","gt.blockores",1,ID))
+                .itemOutputs(outputs.toArray(new ItemStack[] {}))
+                .fluidInputs(Materials.Lubricant.getFluid(1))
+                .noFluidOutputs()
+                .noOptimize()
+                .eut(OreProcessRecipeEUt)
+                .duration(OreProcessRecipeDuration)
+                .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+        }
+        // spotless:on
+    }
+
     /**
      * Check is this OrePrefix is rich ore style.
-     * 
+     *
      * @param prefixes The style to check.
      * @return True is rich.
      */

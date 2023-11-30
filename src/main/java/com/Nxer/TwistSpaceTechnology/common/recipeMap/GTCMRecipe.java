@@ -316,7 +316,7 @@ public class GTCMRecipe {
         "gregtech:textures/gui/basicmachines/LCRNEI",
         1,
         8,
-        0,
+        1,
         0,
         true,
         0,
