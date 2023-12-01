@@ -35,7 +35,7 @@ public class OP_NormalProcessing {
      * Ore stone types enum
      */
     public final Set<OrePrefixes> basicStoneTypes = Sets.newHashSet(
-        OrePrefixes.ore,
+//        OrePrefixes.ore,
         OrePrefixes.oreBasalt,
         OrePrefixes.oreBlackgranite,
         OrePrefixes.oreRedgranite,
@@ -43,10 +43,10 @@ public class OP_NormalProcessing {
         OrePrefixes.oreNetherrack,
         OrePrefixes.oreEndstone);
 
-    public final List<Integer> insteadMaterialOresMetas = Arrays.asList(
-        19, 20, 32, 33, 35, 57, 86, 89, 98, 347, 382, 500, 501, 514, 522, 526, 530,
-        535, 540, 541, 542, 543, 544, 545, 770, 810, 817, 826, 884, 894, 918, 920
-    );
+//    public final List<Integer> insteadMaterialOresMetas = Arrays.asList(
+//        19, 20, 28, 32, 33, 35, 57, 86, 89, 98, 347, 382, 500, 501, 514, 522, 526, 530,
+//        535, 540, 541, 542, 543, 544, 545, 770, 810, 817, 826, 884, 894, 918, 920
+//    );
 
     public static ItemStack getDustStack(Materials material, int amount) {
         return setStackSize(GT_OreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
@@ -66,7 +66,7 @@ public class OP_NormalProcessing {
         // generate normal materials' ore processing recipes
         for (int i=0;i<GregTech_API.sGeneratedMaterials.length;i++){
 
-            if (insteadMaterialOresMetas.contains(i)) continue;
+//            if (insteadMaterialOresMetas.contains(i)) continue;
             if (GregTech_API.sGeneratedMaterials[i] == null) continue;
 
             Materials material = GregTech_API.sGeneratedMaterials[i];
@@ -77,11 +77,10 @@ public class OP_NormalProcessing {
                 continue;
             }
             // generate recipes
-            processOreRecipe(material);
+            processOreRecipe(material, i);
         }
 
         processSpecialOreRecipe();
-        processInsteadOre();
         OP_GTPP_OreHandler.instance.processGTPPOreRecipes();
         OP_Bartworks_OreHandler.instance.processBWOreRecipes();
 
@@ -195,12 +194,20 @@ public class OP_NormalProcessing {
      * Generate normal ore recipes
      *
      * @param material The ore's Material.
+     * @param ID       The material ID.
      */
-    public void processOreRecipe(Materials material) {
+    public void processOreRecipe(Materials material, int ID) {
         if (GT_OreDictUnificator.get(OrePrefixes.ore, material, 1) == null) return;
         ItemStack[] outputs = getOutputs(material,false);
         ItemStack[] outputsRich = getOutputs(material,true);
 
+        // registry normal stone ore
+        registryOreProcessRecipe(
+            GT_ModHandler.getModItem("gregtech","gt.blockores",1,ID),
+            outputs
+        );
+
+        // registry gt stone ore
         for (OrePrefixes prefixes : basicStoneTypes){
             if (GT_OreDictUnificator.get(prefixes, material, 1) == null){
                 TwistSpaceTechnology.LOG.info("Failed to get ore: material=" + material + " , prefixes=" + prefixes);
@@ -213,42 +220,37 @@ public class OP_NormalProcessing {
         }
     }
 
-    /**
-     * <p>
-     *     Process the ore which can be instead by other mods.
-     * <p>
-     *     In GTNH, just use the GT style.
-     */
-    public void processInsteadOre(){
-        final Set<OrePrefixes> basicStoneTypesExceptNormalStone = Sets.newHashSet(
-            OrePrefixes.oreBasalt,
-            OrePrefixes.oreBlackgranite,
-            OrePrefixes.oreRedgranite,
-            OrePrefixes.oreMarble,
-            OrePrefixes.oreNetherrack,
-            OrePrefixes.oreEndstone
-        );
-        for (int ID : insteadMaterialOresMetas){
-            TwistSpaceTechnology.LOG.info("Process special instead ore: " + GregTech_API.sGeneratedMaterials[ID]);
-            Materials material = GregTech_API.sGeneratedMaterials[ID];
-            ItemStack[] outputs = getOutputs(material, false);
-            ItemStack[] outputsRich = getOutputs(material, true);
+//    public void processInsteadOre(){
+//        final Set<OrePrefixes> basicStoneTypesExceptNormalStone = Sets.newHashSet(
+//            OrePrefixes.oreBasalt,
+//            OrePrefixes.oreBlackgranite,
+//            OrePrefixes.oreRedgranite,
+//            OrePrefixes.oreMarble,
+//            OrePrefixes.oreNetherrack,
+//            OrePrefixes.oreEndstone
+//        );
+//        for (int ID : insteadMaterialOresMetas){
+//            TwistSpaceTechnology.LOG.info("Process special instead ore: " + GregTech_API.sGeneratedMaterials[ID]);
+//            Materials material = GregTech_API.sGeneratedMaterials[ID];
+//            ItemStack[] outputs = getOutputs(material, false);
+//            ItemStack[] outputsRich = getOutputs(material, true);
+//
+//            // registry the normal stone type ore
+//            registryOreProcessRecipe(
+//                GT_ModHandler.getModItem("gregtech","gt.blockores",1,ID),
+//                outputs
+//            );
+//
+//            // registry other gt stone types
+//            for (OrePrefixes prefixes : basicStoneTypesExceptNormalStone){
+//                registryOreProcessRecipe(
+//                    GT_OreDictUnificator.get(prefixes, material, 1),
+//                    isRich(prefixes) ? outputsRich : outputs
+//                );
+//            }
+//        }
+//    }
 
-            // registry the normal stone type ore
-            registryOreProcessRecipe(
-                GT_ModHandler.getModItem("gregtech","gt.blockores",1,ID),
-                outputs
-            );
-
-            // registry other gt stone types
-            for (OrePrefixes prefixes : basicStoneTypesExceptNormalStone){
-                registryOreProcessRecipe(
-                    GT_OreDictUnificator.get(prefixes, material, 1),
-                    isRich(prefixes) ? outputsRich : outputs
-                );
-            }
-        }
-    }
 
     public ItemStack[] getOutputs (Materials material, boolean isRich){
         List<ItemStack> outputs = new ArrayList<>();
