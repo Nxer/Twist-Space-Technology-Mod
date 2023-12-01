@@ -35,7 +35,15 @@ public class OP_NormalProcessing {
      * Ore stone types enum
      */
     public final Set<OrePrefixes> basicStoneTypes = Sets.newHashSet(
-//        OrePrefixes.ore,
+        OrePrefixes.ore,
+        OrePrefixes.oreBasalt,
+        OrePrefixes.oreBlackgranite,
+        OrePrefixes.oreRedgranite,
+        OrePrefixes.oreMarble,
+        OrePrefixes.oreNetherrack,
+        OrePrefixes.oreEndstone);
+
+    public final Set<OrePrefixes> basicStoneTypesExceptNormalStone = Sets.newHashSet(
         OrePrefixes.oreBasalt,
         OrePrefixes.oreBlackgranite,
         OrePrefixes.oreRedgranite,
@@ -208,7 +216,7 @@ public class OP_NormalProcessing {
         );
 
         // registry gt stone ore
-        for (OrePrefixes prefixes : basicStoneTypes){
+        for (OrePrefixes prefixes : basicStoneTypesExceptNormalStone){
             if (GT_OreDictUnificator.get(prefixes, material, 1) == null){
                 TwistSpaceTechnology.LOG.info("Failed to get ore: material=" + material + " , prefixes=" + prefixes);
                 continue;
