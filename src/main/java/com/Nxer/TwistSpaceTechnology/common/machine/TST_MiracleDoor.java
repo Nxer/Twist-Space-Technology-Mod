@@ -181,7 +181,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         setupProcessingLogic(processingLogic);
 
         CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
         // inputs are consumed at this point
         updateSlots();
         if (!result.wasSuccessful()) return result;
@@ -255,19 +254,21 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
             .toString();
     }
 
-    // @Override
-    // public boolean onRunningTick(ItemStack aStack) {
-    // if (needPhotonAmount > 0){
-    // if (checkPhotonsInputting(needPhotonAmount)){
-    // consumePhoton(needPhotonAmount);
-    // needPhotonAmount = 0;
-    // } else {
-    // criticalStopMachine();
-    // return false;
-    // }
-    // }
-    // return super.onRunningTick(aStack);
-    // }
+     @Override
+     public boolean onRunningTick(ItemStack aStack) {
+         if (needPhotonAmount > 0){
+             startRecipeProcessing();
+             if (consumePhoton(needPhotonAmount)){
+                 needPhotonAmount = 0;
+                 endRecipeProcessing();
+             } else {
+                 endRecipeProcessing();
+                 criticalStopMachine();
+                 return false;
+             }
+         }
+         return super.onRunningTick(aStack);
+     }
 
     @Override
     protected boolean isEnablePerfectOverclock() {

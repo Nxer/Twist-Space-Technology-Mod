@@ -370,10 +370,13 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         runTicks++;
         if (this.runTicks >= ticksOfPerFluidConsuming) {
             runTicks = 0;
+            startRecipeProcessing();
             if (!consumeFluids()) {
+                endRecipeProcessing();
                 criticalStopMachine();
                 return false;
             }
+            endRecipeProcessing();
         }
         return true;
     }

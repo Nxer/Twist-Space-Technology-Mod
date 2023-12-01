@@ -285,6 +285,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
+        checkGravitationalLensInput();
         mMaxProgresstime = 128;
         return CheckRecipeResultRegistry.GENERATING;
     }
@@ -356,7 +357,6 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             if (aTick % 128 == 0) {
                 this.syncDSPData();
 
-                checkGravitationalLensInput();
 
                 if (mode == 0) {
                     if (wirelessMode) {
