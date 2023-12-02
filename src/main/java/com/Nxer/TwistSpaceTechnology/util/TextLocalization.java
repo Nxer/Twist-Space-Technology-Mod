@@ -456,7 +456,7 @@ public class TextLocalization {
     public static final String Tooltip_MegaUniversalSpaceStation_05 = texter("temp","Tooltip_MegaUniversalSpaceStation_05");
     public static final String Tooltip_MegaUniversalSpaceStation_06 = texter("temp","Tooltip_MegaUniversalSpaceStation_06");
 
-    public static final String NameStellarMaterialSiphon = texter("Stellar Material Siphon","NameMegaUniversalSpaceStation");
+    public static final String NameStellarMaterialSiphon = texter("Stellar Material Siphon","NameStellarMaterialSiphon");
     public static final String Tooltip_NameStellarMaterialSiphon = texter("Siphon","Tooltip_MegaUniversalSpaceStation_MachineType");
 
     //endregion

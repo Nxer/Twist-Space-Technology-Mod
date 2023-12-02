@@ -1,4 +1,4 @@
-//version: 1700844281
+//version: 1701530445
 /*
  DO NOT CHANGE THIS FILE!
  Also, you may replace this file at any time if there is an update available.
@@ -28,27 +28,12 @@ import java.util.concurrent.TimeUnit
 
 buildscript {
     repositories {
-        mavenCentral()
-
-        maven {
-            name 'forge'
-            url 'https://maven.minecraftforge.net'
-        }
         maven {
             // GTNH RetroFuturaGradle and ASM Fork
             name "GTNH Maven"
             url "http://jenkins.usrv.eu:8081/nexus/content/groups/public/"
             allowInsecureProtocol = true
         }
-        maven {
-            name 'sonatype'
-            url 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            name 'Scala CI dependencies'
-            url 'https://repo1.maven.org/maven2/'
-        }
-
         mavenLocal()
     }
 }
@@ -467,8 +452,6 @@ minecraft {
 
     // Enable assertions in the current mod
     extraRunJvmArguments.add("-ea:${modGroup}")
-    extraRunJvmArguments.add("-Xmx16G")
-    extraRunJvmArguments.add("-Xms16G")
 
     if (usesMixins.toBoolean() || forceEnableMixins.toBoolean()) {
         if (usesMixinDebug.toBoolean()) {
@@ -795,12 +778,12 @@ ext.java17PatchDependenciesCfg = configurations.create("java17PatchDependencies"
 }
 
 dependencies {
-    def lwjgl3ifyVersion = '1.5.1'
+    def lwjgl3ifyVersion = '1.5.7'
     if (modId != 'lwjgl3ify') {
         java17Dependencies("com.github.GTNewHorizons:lwjgl3ify:${lwjgl3ifyVersion}")
     }
     if (modId != 'hodgepodge') {
-        java17Dependencies('com.github.GTNewHorizons:Hodgepodge:2.3.17')
+        java17Dependencies('com.github.GTNewHorizons:Hodgepodge:2.3.35')
     }
 
     java17PatchDependencies("com.github.GTNewHorizons:lwjgl3ify:${lwjgl3ifyVersion}:forgePatches") {transitive = false}
@@ -1312,7 +1295,7 @@ def addCurseForgeRelation(String type, String name) {
 
 // Updating
 
-def buildscriptGradleVersion = "8.2.1"
+def buildscriptGradleVersion = "8.5"
 
 tasks.named('wrapper', Wrapper).configure {
     gradleVersion = buildscriptGradleVersion

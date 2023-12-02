@@ -5,6 +5,7 @@ import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TextureSet;
 
 /**
@@ -73,7 +74,9 @@ public class MaterialPool implements Runnable {
         subscriptNumbers("when we face it, we can do nothing before, but not now"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().disable().addMolten()
+        new Werkstoff.GenerationFeatures().disable().addMolten().addPrefix(OrePrefixes.nanite).addPrefix(OrePrefixes.plate)
+            .addPrefix(OrePrefixes.bolt).addPrefix(OrePrefixes.wire).addPrefix(OrePrefixes.wireGt16).addPrefix(OrePrefixes.wireFine)
+            .addPrefix(OrePrefixes.componentCircuit)
             .addMetalItems(),
         offsetID_01 + 2,
         TextureSet.SET_SHINY);
@@ -84,7 +87,9 @@ public class MaterialPool implements Runnable {
         subscriptNumbers("Trying to fight against the demise of the universe"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().disable().addMolten()
+        new Werkstoff.GenerationFeatures().disable().addMolten().addPrefix(OrePrefixes.nanite).addPrefix(OrePrefixes.plate)
+            .addPrefix(OrePrefixes.bolt).addPrefix(OrePrefixes.wire).addPrefix(OrePrefixes.wireGt16).addPrefix(OrePrefixes.wireFine)
+            .addPrefix(OrePrefixes.componentCircuit)
             .addMetalItems(),
         offsetID_01 + 3,
         TextureSet.SET_SHINY);
@@ -95,7 +100,9 @@ public class MaterialPool implements Runnable {
         subscriptNumbers("Not just a compressed body, but a real miniature black hole"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().disable().addMolten()
+        new Werkstoff.GenerationFeatures().disable().addMolten().addPrefix(OrePrefixes.nanite).addPrefix(OrePrefixes.plate)
+            .addPrefix(OrePrefixes.bolt).addPrefix(OrePrefixes.wire).addPrefix(OrePrefixes.wireGt16).addPrefix(OrePrefixes.wireFine)
+            .addPrefix(OrePrefixes.componentCircuit)
             .addMetalItems(),
         offsetID_01 + 4,
         TextureSet.SET_SHINY);
@@ -111,4 +118,6 @@ public class MaterialPool implements Runnable {
         // }
 
     }
+
+
 }
