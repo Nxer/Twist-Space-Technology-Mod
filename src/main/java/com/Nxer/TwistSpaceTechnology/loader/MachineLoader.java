@@ -48,7 +48,7 @@ public class MachineLoader {
 
     public static void loadMachines() {
 
-        EntityList.addMapping(Ship.class,"Ship",201);
+        EntityList.addMapping(Ship.class,"Ship",114);
         // test
         // TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 

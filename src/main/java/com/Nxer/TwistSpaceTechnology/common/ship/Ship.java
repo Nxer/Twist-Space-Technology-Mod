@@ -157,12 +157,12 @@ public class Ship extends EntityMob implements Runnable {
 
     @Override
     public void readEntityFromNBT(NBTTagCompound tagCompound) {
-
+        super.readEntityFromNBT(tagCompound);
     }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound tagCompound) {
-
+        super.writeEntityToNBT(tagCompound);
     }
 
     @Override
