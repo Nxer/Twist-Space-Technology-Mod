@@ -2,6 +2,8 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
+import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -46,6 +48,7 @@ public class MachineLoader {
 
     public static void loadMachines() {
 
+        EntityList.addMapping(Ship.class,"Ship",201);
         // test
         // TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 

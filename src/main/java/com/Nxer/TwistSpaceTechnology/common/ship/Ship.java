@@ -44,9 +44,8 @@ public class Ship extends EntityMob implements Runnable {
     public ShieldSystem shieldSystem = new ShieldSystem();
     public RadarSystem radarSystem = new RadarSystem();
 
-    public Ship(World worldIn, String className) {
+    public Ship(World worldIn) {
         super(worldIn);
-
         this.world = worldIn;
         init();
     }
@@ -164,6 +163,11 @@ public class Ship extends EntityMob implements Runnable {
     @Override
     public void writeEntityToNBT(NBTTagCompound tagCompound) {
 
+    }
+
+    @Override
+    public String toString(){
+        return "MyShip";
     }
 
     @Override
