@@ -7,6 +7,7 @@ import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 import com.github.bartimaeusnek.bartworks.util.Pair;
 
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsBotania;
 import gregtech.api.enums.TextureSet;
 
 /**
@@ -87,7 +88,7 @@ public class MaterialPool implements Runnable {
             .addCasings().removeOres(),
         offsetID_01 + 2,
         TextureSet.SET_SHINY,
-        new Pair<>(Materials.Alfium, 1),
+        new Pair<>(MaterialsBotania.ElvenElementium, 1),
         new Pair<>(Materials.Magic, 4));
 
     public static final Werkstoff PureMana = new Werkstoff(
