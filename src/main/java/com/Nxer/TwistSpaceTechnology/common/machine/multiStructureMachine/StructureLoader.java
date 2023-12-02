@@ -2,17 +2,16 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.zip.ZipInputStream;
-
-import com.Nxer.TwistSpaceTechnology.util.LanguageUtil0;
 
 public class StructureLoader {
 
@@ -34,7 +33,7 @@ public class StructureLoader {
             for (var i : readStructure(name).pieces.keySet()) {
                 LOG.info(i);
             }
-            LOG.error("get pieces is null:" + piece);
+            LOG.error("get OffSet is null:" + name + "->" + piece);
         }
 
         var structure = readStructure(name);
@@ -70,54 +69,52 @@ public class StructureLoader {
         if (!structureDefinition.containsKey(name)) {
             structureDefinition.put(name, new MultiStructureDefinition());
         }
-        structure.shape.add(readAndUnzip(path));
-        structure.pieces.put(pieces, structure.shape.size() - 1);
-        structure.offSet.add(new MultiStructureDefinition.OffSet(0, 0, 0));
-
-    }
-
-    public static void setOffSet(String name, String piece, int x, int y, int z) {
-        if (readStructure(name).pieces.get(piece) == null) {
-            for (var i : readStructure(name).pieces.keySet()) {
-                LOG.info(i);
-            }
-            LOG.error("get pieces is null:" + name + "-" + piece);
+        MultiStructureDefinition.OffSet offSet = structure.machineOffSet;
+        path = "C:\\Users\\bcjPr\\Desktop\\gtnh-astra-migrate\\GTNH-combination\\GTNH_Community_Mod\\src\\main\\resources\\assets\\gtnhcommunitymod\\structure\\namemegauniversalspacestation.zip";
+        if (!new File(path).exists()) {
+            LOG.info("structure file " + path + " not find!");
+            return;
         }
-        int num = readStructure(name).pieces.get(piece);
-        readStructure(name).offSet.set(num, new MultiStructureDefinition.OffSet(x, y, z));
-    }
 
-    public static String[][] readAndUnzip(String zipFilePath) {
-        StringBuilder result = new StringBuilder();
-        if (!new File(zipFilePath).exists()) {
-            LOG.info("structure file " + zipFilePath + " not find!");
-            return null;
-        }
-        try (ZipInputStream zipInputStream = new ZipInputStream(
-            Objects.requireNonNull(LanguageUtil0.class.getResourceAsStream(zipFilePath)),
-            StandardCharsets.UTF_8)) {
+        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(path)
+        // Objects.requireNonNull(LanguageUtil0.class.getResourceAsStream(zipFilePath))
+            , StandardCharsets.UTF_8)) {
             zipInputStream.getNextEntry();
             BufferedReader reader = new BufferedReader(new InputStreamReader(zipInputStream, StandardCharsets.UTF_8));
             String line;
+            int cnt = 0;
             while ((line = reader.readLine()) != null) {
-                result.append(line)
-                    .append("\n");
+                String[] off = line.split(" ");
+                MultiStructureDefinition.OffSet offset = new MultiStructureDefinition.OffSet(
+                    offSet.horizontalOffSet - Integer.parseInt(off[2]),
+                    offSet.verticalOffSet - Integer.parseInt(off[1]),
+                    offSet.depthOffSet - Integer.parseInt(off[0]));
+                line = reader.readLine();
+                String[][] shape = new String[16][16];
+                for (int i = 0; i < 16; i++) {
+                    for (int j = 0; j < 16; j++) {
+                        int t = 256 * i + 16 * j;
+                        shape[i][j] = line.substring(t, t + 16);
+                    }
+                }
+                structure.shape.add(shape);
+                structure.pieces.put(pieces + cnt, structure.pieces.size());
+                structure.offSet.add(offset);
+                LOG.info("loaded :" + name + " with sub pieces:" + pieces + cnt);
+                cnt++;
             }
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String unzippedStructure = result.toString();
-        String[] lines = unzippedStructure.split("\\|\n");
-        String[][] results = new String[lines.length][];
-        for (int i = 0; i < lines.length; i++) {
-            results[i] = lines[i].split("\n");
-            for (int j = 0; j < results[i].length; j++) {
-                results[i][j] = results[i][j].substring(5, results[i][j].length() - 3);
-            }
-        }
-        return results;
 
+    }
+
+    public static void setOffSet(String name, int horizontalOffSet, int verticalOffSet, int depthOffSet) {
+        readStructure(name).machineOffSet = new MultiStructureDefinition.OffSet(
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet);
     }
 
     public static class MultiStructureDefinition {
@@ -142,6 +139,7 @@ public class StructureLoader {
         }
 
         public ArrayList<OffSet> offSet;
+        public OffSet machineOffSet;
         public ArrayList<String[][]> shape;
         public HashMap<String, Integer> pieces;
     }

@@ -33,6 +33,8 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     public ArrayList<String> pieces = new ArrayList<>();
     public int fatherID = -1;
 
+    public boolean isComplete = false;
+
     protected GT_TileEntity_MultiStructureMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         pieces.add(aName.toLowerCase());
@@ -58,7 +60,6 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
 
     public void setShape() {
         for (String piece : pieces) {
-
             StructureLoader.load(mName, piece);
         }
     }
@@ -68,41 +69,64 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
         return super.survivalConstruct(stackSize, elementBudget, env);
     }
 
+    int constructCount = 0;
+
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
-        this.buildPiece(
-            mName,
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
+            .getOffSet(mName, mName + constructCount);
+
+        if (this.buildPiece(
+            mName + constructCount,
             stackSize,
             hintsOnly,
             offSet.horizontalOffSet,
             offSet.verticalOffSet,
-            offSet.depthOffSet);
+            offSet.depthOffSet)) {
+            constructCount++;
+        }
+        if (constructCount == StructureLoader.readStructure(mName).pieces.size()) {
+            constructCount = 0;
+        }
     }
+
+    int checkStructureCount = 0;
 
     // need to be optimized and rewrite
     @Override
     public boolean checkStructure(boolean aForceReset, IGregTechTileEntity aBaseMetaTileEntity) {
-        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
-        return checkPiece(mName, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet);
-        // if(MultiStructureManager.isComplete(this)){
-        // var pieces = StructureLoader.getPieces(this.mName);
-        // for(var name:pieces.entrySet()){
-        // StructureLoader.MultiStructureDefinition.OffSet offSet =
-        // StructureLoader.readStructure(mName).offSet.get(name.getValue());
-        // if(!checkPiece(name.getKey(), offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet)){
-        // return false;
-        // };
-        // }
-        // return true;
-        // }
-        // return false;
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
+            .getOffSet(mName, mName + checkStructureCount);
+        if (checkPiece(
+            mName + checkStructureCount,
+            offSet.horizontalOffSet,
+            offSet.verticalOffSet,
+            offSet.depthOffSet)) {
+            checkStructureCount++;
+            if (constructCount == StructureLoader.readStructure(mName).pieces.size()) {
+                checkStructureCount = 0;
+            }
+            return true;
+        }
+        return false;
+        // return isComplete;
     }
+
+    int checkMachineCount = 0;
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName);
-        return checkPiece(mName, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet);
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
+            .getOffSet(mName, mName + checkMachineCount);
+        if (checkPiece(mName + checkMachineCount, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet)) {
+            checkMachineCount++;
+            if (constructCount == StructureLoader.readStructure(mName).pieces.size()) {
+                checkMachineCount = 0;
+            }
+            return true;
+        }
+        return false;
+        // return isComplete;
     }
 
     @Override

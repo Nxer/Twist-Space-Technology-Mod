@@ -1,28 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameArtificialStar;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPReceiver;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameInfiniteWirelessDynamoHatch;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameMiracleDoor;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameOreProcessingFactory;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticMixer;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MiracleTop;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MoleculeDeconstructor;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PhysicalFormSwitcher;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
+import com.Nxer.TwistSpaceTechnology.common.machine.*;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
@@ -51,6 +35,7 @@ public class MachineLoader {
     public static ItemStack MiracleDoor;
     public static ItemStack OreProcessingFactory;
     public static ItemStack megaUniversalSpaceStation;
+    public static ItemStack stellarMaterialSiphon;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -160,11 +145,17 @@ public class MachineLoader {
             .getStackForm(1);
         GTCMItemList.OreProcessingFactory.set(OreProcessingFactory);
 
-        // megaUniversalSpaceStation = new GT_TileEntity_MegaUniversalSpaceStation(
-        // 19018,
-        // "NameMegaUniversalSpaceStation",
-        // NameMegaUniversalSpaceStation).getStackForm(1);
-        // GTCMItemList.megaUniversalSpaceStation.set(megaUniversalSpaceStation);
+        megaUniversalSpaceStation = new GT_TileEntity_MegaUniversalSpaceStation(
+            19018,
+            "NameMegaUniversalSpaceStation",
+            NameMegaUniversalSpaceStation).getStackForm(1);
+        GTCMItemList.megaUniversalSpaceStation.set(megaUniversalSpaceStation);
+
+        stellarMaterialSiphon = new GT_TileEntity_StellarMaterialSiphon(
+            19019,
+            "NameStellarMaterialSiphon",
+            NameStellarMaterialSiphon).getStackForm(1);
+        GTCMItemList.StellarMaterialSiphon.set(stellarMaterialSiphon);
         // endregion
 
         // region Single block Machine

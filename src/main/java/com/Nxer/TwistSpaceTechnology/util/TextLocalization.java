@@ -447,14 +447,18 @@ public class TextLocalization {
 
     // region megaUniverseSpaceStation
     public static final String NameMegaUniversalSpaceStation = texter("Mega Universal Space Station","NameMegaUniversalSpaceStation");
-    public static final String Tooltip_MegaUniversalSpaceStation_MachineType = texter("temp","Tooltip_MegaUniversalSpaceStation_MachineType");
-    public static final String Tooltip_MegaUniversalSpaceStation_00 = texter("temp","Tooltip_MegaUniversalSpaceStation_00");
-    public static final String Tooltip_MegaUniversalSpaceStation_01 = texter("temp","Tooltip_MegaUniversalSpaceStation_01");
-    public static final String Tooltip_MegaUniversalSpaceStation_02 = texter("temp","Tooltip_MegaUniversalSpaceStation_02");
+    public static final String Tooltip_MegaUniversalSpaceStation_MachineType = texter("space station","Tooltip_MegaUniversalSpaceStation_MachineType");
+    public static final String Tooltip_MegaUniversalSpaceStation_00 = texter("Use auto build item to build instead of build your self","Tooltip_MegaUniversalSpaceStation_00");
+    public static final String Tooltip_MegaUniversalSpaceStation_01 = texter("Auto-SpaceStation build core","Tooltip_MegaUniversalSpaceStation_01");
+    public static final String Tooltip_MegaUniversalSpaceStation_02 = texter("If your station broke, you can put fix block inside the input hatch to fix it","Tooltip_MegaUniversalSpaceStation_02");
     public static final String Tooltip_MegaUniversalSpaceStation_03 = texter("temp","Tooltip_MegaUniversalSpaceStation_03");
     public static final String Tooltip_MegaUniversalSpaceStation_04 = texter("temp","Tooltip_MegaUniversalSpaceStation_04");
     public static final String Tooltip_MegaUniversalSpaceStation_05 = texter("temp","Tooltip_MegaUniversalSpaceStation_05");
     public static final String Tooltip_MegaUniversalSpaceStation_06 = texter("temp","Tooltip_MegaUniversalSpaceStation_06");
+
+    public static final String NameStellarMaterialSiphon = texter("Stellar Material Siphon","NameMegaUniversalSpaceStation");
+    public static final String Tooltip_NameStellarMaterialSiphon = texter("Siphon","Tooltip_MegaUniversalSpaceStation_MachineType");
+
     //endregion
 }
 // spotless:on

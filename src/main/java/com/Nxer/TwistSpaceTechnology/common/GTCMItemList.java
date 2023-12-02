@@ -65,6 +65,7 @@ public enum GTCMItemList {
     DSPLauncher,
     DSPReceiver,
     ArtificialStar,
+    StellarMaterialSiphon,
 
     // single block Machines
     InfiniteAirHatch,

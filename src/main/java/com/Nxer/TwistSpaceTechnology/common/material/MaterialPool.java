@@ -66,43 +66,40 @@ public class MaterialPool implements Runnable {
         TextureSet.SET_SHINY);
 
     // spotless:off
-    /*
-    public static final Werkstoff mNull = new Werkstoff(
+
+    public static final Werkstoff eventHorizonDiffusers = new Werkstoff(
         new short[] { 255, 255, 255 },
-        TextHandler.texter("nothing but everything", "bw.mNull.notTrans"),
-        subscriptNumbers("nothing but everything"),
+        TextHandler.texter("Event Horizon Diffusers", "bw.eventHorizonDiffusers.notTrans"),
+        subscriptNumbers("when we face it, we can do nothing before, but not now"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().addMolten()
-            .addMetalItems()
-            .addSimpleMetalWorkingItems(),
+        new Werkstoff.GenerationFeatures().disable().addMolten()
+            .addMetalItems(),
         offsetID_01 + 2,
         TextureSet.SET_SHINY);
 
-    public static final Werkstoff mAll = new Werkstoff(
+    public static final Werkstoff entropyReductionProcess = new Werkstoff(
         new short[] { 0, 0, 0 },
-        TextHandler.texter("everything but nothing", "bw.mAll.notTrans"),
-        subscriptNumbers("everything but nothing"),
+        TextHandler.texter("Entropy Reduction Process", "bw.entropyReductionProcess.notTrans"),
+        subscriptNumbers("Trying to fight against the demise of the universe"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().addMolten()
-            .addMetalItems()
-            .addSimpleMetalWorkingItems(),
+        new Werkstoff.GenerationFeatures().disable().addMolten()
+            .addMetalItems(),
         offsetID_01 + 3,
         TextureSet.SET_SHINY);
 
-    public static final Werkstoff mWall = new Werkstoff(
+    public static final Werkstoff realSingularity = new Werkstoff(
         new short[] { 127, 127, 127 },
-        TextHandler.texter("The fourth wall", "bw.mWall.notTrans"),
-        subscriptNumbers("The fourth wall"),
+        TextHandler.texter("Real Singularity", "bw.realSingularity.notTrans"),
+        subscriptNumbers("Not just a compressed body, but a real miniature black hole"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
-        new Werkstoff.GenerationFeatures().addMolten()
-            .addMetalItems()
-            .addSimpleMetalWorkingItems(),
+        new Werkstoff.GenerationFeatures().disable().addMolten()
+            .addMetalItems(),
         offsetID_01 + 4,
         TextureSet.SET_SHINY);
-     */
+
     // spotless:on
 
     // Bartworks' Material System run on Runnable.class

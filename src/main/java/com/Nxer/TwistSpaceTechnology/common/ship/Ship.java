@@ -28,9 +28,7 @@ public class Ship extends Entity implements Runnable {
     public String shipName;
 
     public Integer length = 0, height = 0, width = 0;
-
     public Integer dockyard = -1;
-
     public List<Integer> validDimId = new ArrayList<>();
 
     public boolean forceTravel = false;
@@ -188,6 +186,5 @@ public class Ship extends Entity implements Runnable {
 
         }
         setDead();
-
     }
 }
