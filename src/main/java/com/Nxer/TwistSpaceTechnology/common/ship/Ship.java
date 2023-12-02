@@ -46,6 +46,7 @@ public class Ship extends EntityMob implements Runnable {
 
     public Ship(World worldIn, String className) {
         super(worldIn);
+
         this.world = worldIn;
         init();
     }
@@ -152,7 +153,7 @@ public class Ship extends EntityMob implements Runnable {
 
     @Override
     protected void entityInit() {
-
+        super.entityInit();
     }
 
     @Override

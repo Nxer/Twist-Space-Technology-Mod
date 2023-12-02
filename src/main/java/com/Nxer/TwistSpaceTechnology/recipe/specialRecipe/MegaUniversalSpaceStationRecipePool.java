@@ -246,7 +246,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                     Field_Generators[2 + i],
                     Sensors[2 + i],
                     Robot_Arms[2 + i])
-                .fluidInputs()
+                .noFluidInputs()
                 .itemOutputs(SpaceStationAntiGravityBlock[i])
                 .noFluidOutputs()
                 .noOptimize()
