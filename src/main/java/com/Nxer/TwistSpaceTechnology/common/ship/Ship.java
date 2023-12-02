@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.ship;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -19,7 +19,7 @@ import com.Nxer.TwistSpaceTechnology.common.ship.system.WeaponSystem;
 
 import gregtech.api.util.GT_Utility;
 
-public class Ship extends Entity implements Runnable {
+public class Ship extends EntityMob implements Runnable {
 
     public EntityPlayer owner;
     public World world;
@@ -156,12 +156,12 @@ public class Ship extends Entity implements Runnable {
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound tagCompound) {
+    public void readEntityFromNBT(NBTTagCompound tagCompound) {
 
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound tagCompound) {
+    public void writeEntityToNBT(NBTTagCompound tagCompound) {
 
     }
 
