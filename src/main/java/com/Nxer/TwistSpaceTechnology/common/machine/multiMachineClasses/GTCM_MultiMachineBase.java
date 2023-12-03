@@ -187,10 +187,10 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Parallels: "
+        ret[origin.length] = EnumChatFormatting.AQUA + "Parallels: "
             + EnumChatFormatting.GOLD
             + this.getLimitedMaxParallel();
-        ret[origin.length] = EnumChatFormatting.AQUA + "Speed multiplier: "
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Speed multiplier: "
             + EnumChatFormatting.GOLD
             + this.getSpeedBonus();
         return ret;
@@ -317,16 +317,29 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return true;
     }
 
+    /**
+     * Gets the maximum Efficiency that spare Part can get (0 - 10000)
+     *
+     * @param aStack
+     */
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
 
+    /**
+     * Gets the damage to the ItemStack, usually 0 or 1.
+     *
+     * @param aStack
+     */
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
 
+    /**
+     * If it explodes when the Component has to be replaced.
+     */
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
