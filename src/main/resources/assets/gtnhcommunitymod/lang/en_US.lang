@@ -334,3 +334,5 @@ bw.LiquidMana.notTrans=Liquid Mana
 bw.PurifiedMana.notTrans=Purified Mana
 tooltips.VoidPollen.line1=Pollen yet to be arisen.
 MetaItem01.21.name=Void Pollen
+NameElvenWorkshop=Elven Workshop
+Tooltip_ElvenWorkshop_MachineType=Mana Infuser/Rune Engraver

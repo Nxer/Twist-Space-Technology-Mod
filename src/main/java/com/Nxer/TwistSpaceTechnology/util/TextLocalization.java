@@ -375,6 +375,12 @@ public class TextLocalization {
     public static final String Tooltip_DSPInfo_05 = texter("In decreasing, every Dyson Sphere has 1/4 chance to destroyed Solar Sail amount.","Tooltip_DSPInfo_05");
     public static final String Tooltip_DSPInfo_06 = texter("The amount of destroyed is the excess' 1/2 .","Tooltip_DSPInfo_06");
 
+    // endregion
+
+    // region CrystallineInfinitier
+    public static final String NameElvenWorkshop = texter("ElvenWorkshop","NameElvenWorkshop");
+    public static final String Tooltip_ElvenWorkshop_MachineType = texter("Mana Infuser/Rune Engraver","Tooltip_ElvenWorkshop_MachineType");
+    // endregion
 
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");

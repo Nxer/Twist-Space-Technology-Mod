@@ -3,11 +3,13 @@ package com.Nxer.TwistSpaceTechnology.loader;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPLauncher;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameDSPReceiver;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
@@ -42,6 +44,7 @@ public class MachineLoader {
     public static ItemStack DSPLauncher;
     public static ItemStack DSPReceiver;
     public static ItemStack ArtificialStar;
+    public static ItemStack ElvenWorkshop;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -142,6 +145,10 @@ public class MachineLoader {
         //
         ArtificialStar = new TST_ArtificialStar(19015, "NameArtificialStar", NameArtificialStar).getStackForm(1);
         GTCMItemList.ArtificialStar.set(ArtificialStar);
+
+        //
+        ElvenWorkshop = new GTCM_ElvenWorkshop(19016,"NameElvenWorkshop",NameElvenWorkshop).getStackForm(1);
+        GTCMItemList.ElvenWorkshop.set(ElvenWorkshop);
 
         // endregion
 

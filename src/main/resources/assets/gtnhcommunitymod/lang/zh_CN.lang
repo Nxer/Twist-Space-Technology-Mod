@@ -334,3 +334,5 @@ bw.LiquidMana.notTrans=液态魔力
 bw.PurifiedMana.notTrans=纯化魔力
 tooltips.VoidPollen.line1=未有之花的花粉.
 MetaItem01.21.name=虚空花粉
+NameElvenWorkshop=精灵工坊
+Tooltip_ElvenWorkshop_MachineType=魔力灌注/符文雕刻

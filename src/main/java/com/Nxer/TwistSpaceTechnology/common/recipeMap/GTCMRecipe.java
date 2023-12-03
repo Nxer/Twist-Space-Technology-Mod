@@ -268,6 +268,26 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap ElvenWorkshopRecipes = new GTCMRecipeMap(
+        new HashSet<>(1),
+        "gtcm.recipe.ElvenWorkshopRecipes",
+        NameElvenWorkshop,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        1,
+        1,
+        1,
+        0,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
     public final GTCMRecipeMap ArtificialStarGeneratingRecipes = new GTCMRecipeMap(
         new HashSet<>(2),
         "gtcm.recipe.ArtificialStarGeneratingRecipes",

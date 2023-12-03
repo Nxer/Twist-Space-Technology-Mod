@@ -7,6 +7,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CircuitAssemblerRecipe
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CompressorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CrystallineInfinitierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.DistillationRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ElvenWorkshopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ExtractorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.FluidSolidifierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.GTCMMachineRecipePool;
@@ -15,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipePool;
 public class RecipeLoader {
 
     public static void loadRecipes() {
@@ -22,7 +24,8 @@ public class RecipeLoader {
             new IntensifyChemicalDistorterRecipePool(), new ChemicalReactorRecipePool(),
             new PreciseHighEnergyPhotonicQuantumMasterRecipePool(), new CircuitAssemblerRecipePool(),
             new MiracleTopRecipePool(), new FluidSolidifierRecipePool(), new CrystallineInfinitierRecipePool(),
-            new DSPRecipePool(), new DistillationRecipePool(), new ExtractorRecipePool(),new CompressorRecipePool(),new BOTRecipePool()};
+            new DSPRecipePool(), new DistillationRecipePool(), new ExtractorRecipePool(),new CompressorRecipePool(),
+            new BOTRecipePool(), new TCRecipePool(),new ElvenWorkshopRecipePool()};
 
         for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
