@@ -30,6 +30,6 @@ public class RecipeLoader {
         OP_Values.initOreRecipesInputs();
     }
     public static void loadRecipesPostInit() {
-        new MiracleTopRecipePool().loadRecipePostInit();
+        new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
     }
 }
