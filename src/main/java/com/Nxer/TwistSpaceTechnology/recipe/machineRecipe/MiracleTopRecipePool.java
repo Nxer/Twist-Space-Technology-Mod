@@ -1215,6 +1215,9 @@ public class MiracleTopRecipePool implements IRecipePool {
             .addTo(MT);
         // endregion
 
+        loadMaxRecipe();
+    }
+    public void loadRecipePostInit() {
         // region Proof Of Heroes
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -1251,10 +1254,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .eut(RECIPE_MAX)
             .duration(20 * 1919810)
             .addTo(MT);
-
-
         // endregion
-        loadMaxRecipe();
     }
 
     public void loadMaxRecipe() {

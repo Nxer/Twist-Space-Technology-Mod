@@ -29,4 +29,7 @@ public class RecipeLoader {
         OP_NormalProcessing.instance.enumOreProcessingRecipes();
         OP_Values.initOreRecipesInputs();
     }
+    public static void loadRecipesPostInit() {
+        new MiracleTopRecipePool().loadRecipePostInit();
+    }
 }
