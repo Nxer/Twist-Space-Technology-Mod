@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraft.init.Items;
+import net.minecraft.init.Blocks;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.ModItems;
 
@@ -104,7 +105,7 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
             .duration(20 * 1)
             .addTo(EW);
         GT_Values.RA.stdBuilder()
-            .itemInputs(OrePrefixes.glass.get(Materials.Glass))
+            .itemInputs(new ItemStack(Blocks.glass,1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(25))
             .itemOutputs(new ItemStack(ModBlocks.manaGlass,1,0))
             .noFluidOutputs()
