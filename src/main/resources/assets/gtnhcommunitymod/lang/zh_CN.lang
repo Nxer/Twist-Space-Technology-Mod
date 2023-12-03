@@ -128,7 +128,7 @@ Tooltip_MiracleTop_03=整个机器由环部分和传输部分组成.
 Tooltip_MiracleTop_04=环的数量是可变的:  最多16环, 最少2环(第一个环和最后一个环).
 Tooltip_MiracleTop_05=速度倍率 = 环数 x 400%%.
 Tooltip_MiracleTop_06=环数大于等于8时开启无损超频.
-Tooltip_MiracleTop_07=256x 并行.
+Tooltip_MiracleTop_07=每环 128x 并行.
 textMiracleTopHatchLocation=环上最外侧的12个方块(每侧最外边3个).
 tooltips.ProofOfHeroes.line1=你旅途的物理顶点，拥有使神明分崩离析的力量.
 tooltips.ProofOfHeroes.line2=§d你旅途的怨种顶点，拥有使神明笑嘻的力量.

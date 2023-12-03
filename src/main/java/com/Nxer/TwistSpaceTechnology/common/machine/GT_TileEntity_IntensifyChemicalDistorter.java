@@ -3,6 +3,11 @@
  */
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_IntensifyChemicalDistorter;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_ICDMode_IntensifyChemicalDistorter;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_LCRMode_IntensifyChemicalDistorter;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -75,7 +80,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     // region Processing Logic
 
-    protected int mode = 0;// 0 means IntensifyChemicalDistorter; 1 means LCR adv
+    protected int mode = Mode_Default_IntensifyChemicalDistorter;// 0 means IntensifyChemicalDistorter; 1 means LCR adv
     private HeatingCoilLevel coilLevel;
 
     @Override
@@ -96,11 +101,14 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
             @Override
             protected GT_OverclockCalculator createOverclockCalculator(GT_Recipe recipe) {
-                return super.createOverclockCalculator(recipe).setSpeedBoost(mode == 0 ? 1 : 0.1F);
+                return super.createOverclockCalculator(recipe)
+                            .setSpeedBoost(mode == 0 ?
+                                               1F/SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
+                                               : 1F/SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter);
             }
 
         }.enablePerfectOverclock()
-            .setMaxParallelSupplier(() -> this.mode == 0 ? 16 : 1024);
+            .setMaxParallelSupplier(() -> this.mode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter : Parallel_LCRMode_IntensifyChemicalDistorter);
 
     }
 

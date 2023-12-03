@@ -1,5 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EU_Multiplier_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_Coil_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -76,7 +83,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
      * <li>2 = Forming Press
      * <li>3 = Forge Hammer
      */
-    public byte mode = 0;
+    public byte mode = Mode_Default_MagneticDrivePressureFormer;
     public byte glassTier;
     public boolean signHadEnabledPerfectOverclock = false;
     public HeatingCoilLevel coilLevel;
@@ -99,7 +106,9 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             @NotNull
             @Override
             public CheckRecipeResult process() {
-                setSpeedBonus((float) ((mode == 0 ? (1.0 / 8.0) : (1.0 / 16.0)) / (1 + coilLevel.getTier())));
+                setSpeedBonus(
+                    ((mode == 0 ? (1.0F / SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer) : (1.0F / SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer)) / (1 + coilLevel.getTier() * SpeedUpMultiplier_Coil_MagneticDrivePressureFormer))
+                );
                 setPerfectOverclock(isPerfectOverclock());
                 return super.process();
             }
@@ -111,13 +120,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                 return this.setOverclock(1, 2);
             }
 
-            @Override
-            public ProcessingLogic setCalculatedEut(long calculatedEut) {
-                this.calculatedEut = calculatedEut * 3 / 4;
-                return this;
-            }
-
-        }.setMaxParallel(1024);
+        }.setMaxParallel(Parallel_MagneticDrivePressureFormer).setEuModifier(EU_Multiplier_MagneticDrivePressureFormer);
 
     }
 
@@ -144,7 +147,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             return false;
         }
         // Infinity Glass enable Laser Energy Hatch
-        if (this.glassTier < 11) {
+        if (this.glassTier < GlassTier_LimitLaserHatch_MagneticDrivePressureFormer) {
             for (GT_MetaTileEntity_Hatch hatch : this.mExoticEnergyHatches) {
                 if (hatch.getConnectionType() == GT_MetaTileEntity_Hatch.ConnectionType.LASER) {
                     return false;

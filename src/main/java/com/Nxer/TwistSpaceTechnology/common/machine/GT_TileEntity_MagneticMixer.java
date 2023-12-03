@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_MagneticMixer;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_HatchElement.Energy;
@@ -80,7 +81,7 @@ public class GT_TileEntity_MagneticMixer
     }
 
     public float getSpeedBonus() {
-        return (float) Math.pow(0.8, GT_Utility.getTier(this.getAverageInputVoltage()));
+        return (float) Math.pow(SpeedBonus_MultiplyPerTier_MagneticMixer, GT_Utility.getTier(this.getAverageInputVoltage()));
     }
 
     @Override
