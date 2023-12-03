@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_MiracleTop;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerRing_MiracleTop;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.RingsAmount_EnablePerfectOverclock_MiracleTop;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_PerRing_MiracleTop;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.GT_HatchElement.Energy;
@@ -198,7 +202,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
 
         // init the pointer, also the Properties.
-        this.speedTotal = 1;
+        this.amountRings = 1;
 
         // check the Top layer.
         if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
@@ -211,9 +215,9 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             STRUCTURE_PIECE_MIDDLE,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.speedTotal * 8)) {
-            this.speedTotal++;
-            if (speedTotal > 15) {
+            baseDepthOffSet - this.amountRings * 8)) {
+            this.amountRings++;
+            if (amountRings > 15) {
                 return false;
             }
         }
@@ -224,12 +228,12 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             STRUCTURE_PIECE_END,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.speedTotal * 8)) {
+            baseDepthOffSet - this.amountRings * 8)) {
             signal = true;
         }
 
-        // basic two layers: the top and the end, means speedTotal default is 2 .
-        this.speedTotal++;
+        // basic two layers: the top and the end, means amountRings default is 2 .
+        this.amountRings++;
 
         return signal;
     }
@@ -238,13 +242,9 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
 
     // region Processing Logic
 
-    private byte mode = 0;
+    private byte mode = Mode_Default_MiracleTop;
 
-    public int speedTotal = 1;
-
-    public int getParallelSpeedTotal() {
-        return this.speedTotal * 16;
-    }
+    public int amountRings = 1;
 
     /*
      * @Override
@@ -252,7 +252,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
      * return new GTCM_ProcessingLogic() {
      * @Override
      * public ProcessingLogic enablePerfectOverclock() {
-     * if (speedTotal < 8) {
+     * if (amountRings < 8) {
      * return this.setOverclock(1, 2);
      * }
      * return this.setOverclock(2, 2);
@@ -260,7 +260,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
      * @NotNull
      * @Override
      * protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
-     * return super.createOverclockCalculator(recipe).setSpeedBoost(1.0F / (speedTotal * 4));
+     * return super.createOverclockCalculator(recipe).setSpeedBoost(1.0F / (amountRings * 4));
      * }
      * // @Override
      * // public ProcessingLogic setMaxParallel(int maxParallel) {
@@ -274,17 +274,17 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return speedTotal >= 8;
+        return amountRings >= RingsAmount_EnablePerfectOverclock_MiracleTop;
     }
 
     @Override
     protected float getSpeedBonus() {
-        return 1.0F / (speedTotal * 4);
+        return 1.0F / (amountRings * SpeedUpMultiplier_PerRing_MiracleTop);
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return 256;
+        return amountRings * Parallel_PerRing_MiracleTop;
     }
 
     @Override
@@ -304,14 +304,14 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", mode);
-        aNBT.setInteger("speedTotal", speedTotal);
+        aNBT.setInteger("amountRings", amountRings);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         mode = aNBT.getByte("mode");
-        speedTotal = aNBT.getInteger("speedTotal");
+        amountRings = aNBT.getInteger("amountRings");
     }
 
     @Override
@@ -329,58 +329,8 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = "Speed multiplier: " + this.speedTotal;
+        ret[origin.length] = "Speed up multiplier: " + this.amountRings * SpeedUpMultiplier_PerRing_MiracleTop;
         return ret;
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    /**
-     * Gets the maximum Efficiency that spare Part can get (0 - 10000)
-     *
-     * @param aStack
-     */
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    /**
-     * Gets the damage to the ItemStack, usually 0 or 1.
-     *
-     * @param aStack
-     */
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    /**
-     * If it explodes when the Component has to be replaced.
-     *
-     * @param aStack
-     */
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
     }
 
     /**
