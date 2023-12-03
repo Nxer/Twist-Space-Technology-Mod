@@ -1,5 +1,28 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.gthandler.GT_CoreModSupport;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import goodgenerator.items.MyMaterial;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.DATApipe;
 import static gregtech.api.enums.Mods.GTPlusPlus;
@@ -15,31 +38,6 @@ import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.dreammaster.gthandler.CustomItemList;
-import com.dreammaster.gthandler.GT_CoreModSupport;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
-
-import goodgenerator.items.MyMaterial;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
 
 // spotless:off
 public class MiracleTopRecipePool implements IRecipePool {
@@ -1292,6 +1290,277 @@ public class MiracleTopRecipePool implements IRecipePool {
                 .duration(20)
                 .addTo(MT);
         }
+
+
+//我看你东西没加完，我找不到的东西暂时先不加，等你加完再说，先注释掉
+        //以下这三个主机的配方，除了贴片以外的输入数量全部除以2就可以写作下一级的配方，例如：复制粘贴，然后把超级电脑移动到输出，输入的超级电脑改为天顶星处理器集群，同时输入数量和配方耗时除以二，以此类推
+        //如果存在soc，则使用soc的配方在最基础那一级去掉除了纳米蜂群以外的所有输入，耗电提高四倍，时长提高四倍，这很符合GTNH的SOC法
+        //天顶星 UMV主机
+        // GT_Values.RA
+        //     .stdBuilder()
+        //     .itemInputs(
+        //         GT_Utility.getIntegratedCircuit(1),
+        //         ItemList.Field_Generator_UEV.get(16),
+        //         GTCMItemList.HighDimensionalResistor.get(16),
+        //         GTCMItemList.HighDimensionalDiode.get(16),
+        //         GTCMItemList.HighDimensionalTransistor.get(16),
+        //         GTCMItemList.HighDimensionalCapacitor.get(16),
+        //         GTCMItemList.HighDimensionalInterface.get(16),
+        //         //天顶星电路基板 16
+        //         //智能仿中子星核心 8
+        //         //事件视界纳米蜂群 8
+        //        //天顶星超级电脑 2
+        //     )
+        //   .fluidInputs(
+        //         MaterialsUEVplus.SpaceTime.getMolten(144*8*16),
+        //         MaterialsUEVplus.TranscendentMetal.getMolten(144*8*16),
+        //         Materials.Neutronium.getMolten(144*8*16*144),
+        //         Materials.CosmicNeutronium.getMolten(144*8*16*144)
+        //     )
+        //    .itemOutputs(
+        //         GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32169)
+        //     )
+        //     .noFluidOutputs()
+        //    .eut(RECIPE_UMV)
+        //     .duration(20*1000)
+        //     .addTo(MT);
+
+        //寰宇 UXV主机
+        // GT_Values.RA
+        //     .stdBuilder()
+        //     .itemInputs(
+        //         GT_Utility.getIntegratedCircuit(1),
+        //         ItemList.Field_Generator_UIV.get(16),
+        //         GTCMItemList.HighDimensionalResistor.get(32),
+        //         GTCMItemList.HighDimensionalDiode.get(32),
+        //         GTCMItemList.HighDimensionalTransistor.get(32),
+        //         GTCMItemList.HighDimensionalCapacitor.get(32),
+        //         GTCMItemList.HighDimensionalInterface.get(32)
+        //寰宇电路基板 16
+        //口袋维度输出端 8
+        //熵还原物质纳米蜂群 8
+        // 寰宇超级电脑 2
+        //     )
+        //     .fluidInputs(
+        //         MaterialsUEVplus.Time.getMolten(1000*16),
+        //        MaterialsUEVplus.Space.getMolten(1000*16)
+        //     )
+        //     .itemOutputs(
+        //         GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32173)
+        //     )
+        //     .noFluidOutputs()
+        //     .eut(RECIPE_MAX)
+        //     .duration(20*1000)
+        //     .addTo(MT);
+
+        //超时空 MAX主机
+        // GT_Values.RA
+        //     .stdBuilder()
+        //     .itemInputs(
+        //        GT_Utility.getIntegratedCircuit(1),
+        //这是个例外：超时空的soc也不能省去超立方体
+        // ItemList.EnergisedTesseract.get(64),
+        //所有主机的力场也不能省去，但是放在你那个空间站可以节省
+        //         ItemList.Field_Generator_UMV.get(16),
+        //         GTCMItemList.HighDimensionalResistor.get(64),
+        //         GTCMItemList.HighDimensionalDiode.get(64),
+        //         GTCMItemList.HighDimensionalTransistor.get(64),
+        //         GTCMItemList.HighDimensionalCapacitor.get(64),
+        //         GTCMItemList.HighDimensionalInterface.get(64)
+        //超时空电路基板 16
+        //叙事层覆写装置 8
+        //超时空叙事层适应型特种SRA 8
+        //realSingularity纳米蜂群 8
+        //寰宇超级电脑 2
+        //     )
+        //此处流体输入应有蓝框岩浆和你加的三种材料的熔融态
+        //     .fluidInputs(
+        //     )
+        //     .itemOutputs(
+        //         GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32177)
+        //     )
+        //     .noFluidOutputs()
+        //     .eut(RECIPE_MAX*16)
+        //     .duration(20*1500)
+        //     .addTo(MT);
+
+        //MAX电动马达
+        //物品输入：
+        //充能超立方体 4
+        //长realSingularity杆 16
+        //realSingularity环 8
+        //realSingularity滚珠 32
+        //细 熵还原物质导线 64*8
+        //16*时空导线 64
+        //16*无尽导线 64
+        //宇宙素纳米蜂群 4
+        //流体输入：
+        //576mB 熵还原物质
+        //576mB 事件视界
+        //576mB realSingularity
+        //2304mB 蓝框岩浆
+
+        //MAX电动泵
+        //物品输入：
+        //充能超立方体 4
+        //大型realSingularity流体管道 16
+        //realSingularity板 4
+        //realSingularity螺丝 16
+        //拉多X聚合物环 64*4
+        //熵还原物质转子 4
+        //事件视界转子 4
+        //16*时空导线 64
+        //16*无尽导线 64
+        //宇宙素纳米蜂群 4
+        //流体输入：
+        //576mB 熵还原物质
+        //576mB 事件视界
+        //576mB realSingularity
+        //2304mB 蓝框岩浆
+
+        //MAX电动泵
+        //物品输入：
+        //充能超立方体 4
+        //大型realSingularity流体管道 16
+        //realSingularity板 4
+        //realSingularity螺丝 16
+        //拉多X聚合物环 64*4
+        //熵还原物质转子 4
+        //事件视界转子 4
+        //16*时空导线 64
+        //16*无尽导线 64
+        //宇宙素纳米蜂群 4
+        //流体输入：
+        //576mB 熵还原物质
+        //576mB 事件视界
+        //576mB realSingularity
+        //2304mB 蓝框岩浆
+
+        //MAX机械臂
+        //物品输入：
+        //充能超立方体 4
+        //MAX电动马达 2
+        //MAX电动活塞 2
+        //长realSingularity杆 16
+        //realSingularity齿轮 4
+        //熵还原物质齿轮 4
+        //小realSingularity齿轮 16
+        //小熵还原物质齿轮 16
+        //熵还原物质转子 4
+        //事件视界转子 4
+        //MAX电路板 4
+        //UXV电路板 8
+        //UMV电路板 16
+        //16*时空导线 64
+        //16*无尽导线 64
+        //宇宙素纳米蜂群 4
+        //流体输入：
+        //576mB 熵还原物质
+        //576mB 事件视界
+        //576mB realSingularity
+        //2304mB 蓝框岩浆
+
+        //MAX传送带
+        //物品输入：
+        //充能超立方体 4
+        //MAX电动马达 2
+        //致密realSingularity板 4
+        //realSingularity环 16
+        //realSingularity滚珠 64
+        //16*时空导线 64
+        //16*无尽导线 64
+        //致密凯芙拉板 64+32
+        //致密拉多X聚合物板 64+32
+        //宇宙素纳米蜂群 4
+        //流体输入：
+        //576mB 熵还原物质
+        //576mB 事件视界
+        //576mB realSingularity
+        //2304mB 蓝框岩浆
+
+        //MAX电动活塞
+        //物品输入：
+        //充能超立方体 4
+        //MAX电动马达 1
+        //致密realSingularity板 8
+        //realSingularity环 16
+        //realSingularity滚珠 64
+        //realSingularity杆 16
+        //realSingularity齿轮 4
+        //熵还原物质齿轮 4
+        //小型realSingularity齿轮 8
+        //16*时空导线 64
+        //16*无尽导线 64
+        //宇宙素纳米蜂群 4
+        //流体输入：
+        //576mB 熵还原物质
+        //576mB 事件视界
+        //576mB realSingularity
+        //2304mB 蓝框岩浆
+
+        //MAX发射器
+        //物品输入：
+        //充能超立方体 16
+        //MAX电动马达 1
+        //长realSingularity杆 64
+        //扭曲时空之星 64
+        //realSingularity箔 64
+        //熵还原物质箔 64
+        //事件视界物质箔 64
+        //蓝框岩浆箔 64
+        //MAX电路板 16
+        //16*时空导线 64
+        //16*无尽导线 64
+        //宇宙素纳米蜂群 16
+        //流体输入：
+        //576mB 熵还原物质
+        //576mB 事件视界
+        //576mB realSingularity
+        //2304mB 蓝框岩浆
+
+        //MAX传感器
+        //物品输入：
+        //充能超立方体 16
+        //MAX电动马达 1
+        //致密realSingularity板 32
+        //扭曲时空之星 64
+        //realSingularity箔 64
+        //熵还原物质箔 64
+        //事件视界物质箔 64
+        //蓝框岩浆箔 64
+        //MAX电路板 16
+        //16*时空导线 64
+        //16*无尽导线 64
+        //宇宙素纳米蜂群 16
+        //流体输入：
+        //576mB 熵还原物质
+        //576mB 事件视界
+        //576mB realSingularity
+        //2304mB 蓝框岩浆
+
+        //MAX力场发生器
+        //物品输入：
+        //充能超立方体 64
+        //MAX发射器 16
+        //致密realSingularity板 64
+        //扭曲时空之星 64（576mB时空+核能之星，流体固化，UIV20S）
+        //细realSingularity导线 64*2
+        //细熵还原物质导线 64*2
+        //细事件视界物质导线 64*2
+        //细蓝框岩浆导线 64*2
+        //MAX电路板 64
+        //16*时空导线 64
+        //16*无尽导线 64
+        //宇宙素纳米蜂群 32
+        //流体输入：
+        //576mB 熵还原物质
+        //576mB 事件视界
+        //576mB realSingularity
+        //2304mB 蓝框岩浆
+
+//所有的MAX部件配方加工时间均为UXV 50S
+//放进空间站的配方，只需要除了流体输入和合成表中输入的MAX部件以外，其余物品材料数量均除以2
+
 
     }
 
