@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology;
 
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -97,6 +98,7 @@ public class TwistSpaceTechnology {
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
+        RecipeLoader.loadRecipesPostInit();//To init GTCM Recipemap
 
         TextHandler.serializeLangMap(isInDevMode);
 
