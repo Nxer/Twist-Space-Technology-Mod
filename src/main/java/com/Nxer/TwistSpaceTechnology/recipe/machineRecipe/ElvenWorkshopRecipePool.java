@@ -99,7 +99,7 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(Materials.Quartz.getGems(1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(100))
-            .itemOutputs(new ItemStack(ModItems.quartz,1,0))
+            .itemOutputs(new ItemStack(ModItems.quartz,1,1))
             .noFluidOutputs()
             .eut(RECIPE_LV)
             .duration(20 * 1)
