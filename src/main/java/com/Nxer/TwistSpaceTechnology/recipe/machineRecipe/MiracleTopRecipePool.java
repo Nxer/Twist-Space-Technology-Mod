@@ -1291,10 +1291,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 .addTo(MT);
         }
 
-        Info  Plugin  Mod  API
-        Unknown Log
-#u11nFmI
-        266 lines  Raw
+
 //我看你东西没加完，我找不到的东西暂时先不加，等你加完再说，先注释掉
         //以下这三个主机的配方，除了贴片以外的输入数量全部除以2就可以写作下一级的配方，例如：复制粘贴，然后把超级电脑移动到输出，输入的超级电脑改为天顶星处理器集群，同时输入数量和配方耗时除以二，以此类推
         //如果存在soc，则使用soc的配方在最基础那一级去掉除了纳米蜂群以外的所有输入，耗电提高四倍，时长提高四倍，这很符合GTNH的SOC法
@@ -1303,7 +1300,7 @@ public class MiracleTopRecipePool implements IRecipePool {
         //     .stdBuilder()
         //     .itemInputs(
         //         GT_Utility.getIntegratedCircuit(1),
-        //         ItemList.Field_Generator_UIV.get(32),
+        //         ItemList.Field_Generator_UEV.get(16),
         //         GTCMItemList.HighDimensionalResistor.get(16),
         //         GTCMItemList.HighDimensionalDiode.get(16),
         //         GTCMItemList.HighDimensionalTransistor.get(16),
@@ -1333,7 +1330,7 @@ public class MiracleTopRecipePool implements IRecipePool {
         //     .stdBuilder()
         //     .itemInputs(
         //         GT_Utility.getIntegratedCircuit(1),
-        //         ItemList.Field_Generator_UMV.get(32),
+        //         ItemList.Field_Generator_UIV.get(16),
         //         GTCMItemList.HighDimensionalResistor.get(32),
         //         GTCMItemList.HighDimensionalDiode.get(32),
         //         GTCMItemList.HighDimensionalTransistor.get(32),
@@ -1364,7 +1361,7 @@ public class MiracleTopRecipePool implements IRecipePool {
         //这是个例外：超时空的soc也不能省去超立方体
         // ItemList.EnergisedTesseract.get(64),
         //所有主机的力场也不能省去，但是放在你那个空间站可以节省
-        //         ItemList.Field_Generator_UXV.get(32),
+        //         ItemList.Field_Generator_UMV.get(16),
         //         GTCMItemList.HighDimensionalResistor.get(64),
         //         GTCMItemList.HighDimensionalDiode.get(64),
         //         GTCMItemList.HighDimensionalTransistor.get(64),
