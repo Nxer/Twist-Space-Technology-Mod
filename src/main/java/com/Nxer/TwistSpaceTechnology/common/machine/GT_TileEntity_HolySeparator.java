@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_HolySeparator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelPerPiece_HolySeparator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Piece_EnablePerfectOverclock_HolySeparator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_HolySeparator;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -65,7 +69,7 @@ public class GT_TileEntity_HolySeparator
     // endregion
 
     // region Processing Logic
-    private byte mode = 0;
+    private byte mode = Mode_Default_HolySeparator;
     private int piece = 1;
 
     @Override
@@ -76,18 +80,18 @@ public class GT_TileEntity_HolySeparator
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
-                setOverclock(piece > 16 ? 2 : 1, 2);
+                setOverclock(piece > Piece_EnablePerfectOverclock_HolySeparator ? 2 : 1, 2);
                 return super.process();
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
     private int getMaxParallelRecipes() {
-        return 8 * this.piece;
+        return ParallelPerPiece_HolySeparator * this.piece;
     }
 
     private float getSpeedBonus() {
-        return (float) (Math.pow(0.9, GT_Utility.getTier(this.getAverageInputVoltage())));
+        return (float) (Math.pow(SpeedBonus_MultiplyPerTier_HolySeparator, GT_Utility.getTier(this.getAverageInputVoltage())));
     }
 
     @Override
@@ -143,12 +147,12 @@ public class GT_TileEntity_HolySeparator
 		}
 		this.buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, horizontalOffSet, verticalOffSet + piece*4 +4, depthOffSet);
 	}
-	
+
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor){
 		if (this.mMachine) return -1;
 		int built = 0;
-		
+
 		built += survivialBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
@@ -160,7 +164,7 @@ public class GT_TileEntity_HolySeparator
 			actor,
 			false,
 			true);
-		
+
 		int piece = stackSize.stackSize;
 		for (int i=1; i<=piece; i++){
 			built += survivialBuildPiece(
@@ -175,7 +179,7 @@ public class GT_TileEntity_HolySeparator
 				false,
 				true);
 		}
-		
+
 		built += survivialBuildPiece(
 			STRUCTURE_PIECE_END,
 			stackSize,
@@ -187,17 +191,17 @@ public class GT_TileEntity_HolySeparator
 			actor,
 			false,
 			true);
-		
+
 		return built;
 	}
-	
+
 	private static final String STRUCTURE_PIECE_MAIN = "mainHolySeparator";
 	private static final String STRUCTURE_PIECE_MIDDLE = "middleHolySeparator";
 	private static final String STRUCTURE_PIECE_END = "endHolySeparator";
 	private final int horizontalOffSet = 7;
 	private final int verticalOffSet = 2;
 	private final int depthOffSet = 0;
-	
+
 	@Override
 	public IStructureDefinition<GT_TileEntity_HolySeparator> getStructureDefinition() {
 		return StructureDefinition.<GT_TileEntity_HolySeparator>builder()
@@ -219,7 +223,7 @@ public class GT_TileEntity_HolySeparator
 			       .addElement('G',ofBlock(ModBlocks.blockCasings3Misc, 15))
 			       .build();
 	}
-	
+
 	/*
 	Blocks:
 A -> ofBlock...(gt.blockcasings8, 7, ...); // Hatches
@@ -230,7 +234,7 @@ E -> ofBlock...(gt.blockcasingsTT, 6, ...);
 F -> ofBlock...(gt.blockcasingsTT, 8, ...);
 G -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
 	 */
-	
+
 	private final String[][] shapeMain = new String[][]{
 		{"               ","               ","               ","               ","               ","               ","       G       ","      GFG      ","       G       ","               ","               ","               ","               ","               ","               "},
 		{"      AAA      ","      AAA      ","    AABBBAA    ","   ABBBBBBBA   ","  ABBBBBBBBBA  ","  ABBBBBBBBBA  ","AABBBBDDDBBBBAA","AABBBBDDDBBBBAA","AABBBBDDDBBBBAA","  ABBBBBBBBBA  ","  ABBBBBBBBBA  ","   ABBBBBBBA   ","    AABBBAA    ","      AAA      ","      AAA      "},
@@ -248,15 +252,15 @@ G -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
 		{"               ","      CCC      ","    CCDDDCC    ","   CDDDDDDDC   ","  CDDDDDDDDDC  ","  CDDDDDDDDDC  "," CDDDDDEDDDDDC "," CDDDDEEEDDDDC "," CDDDDDEDDDDDC ","  CDDDDDDDDDC  ","  CDDDDDDDDDC  ","   CDDDDDDDC   ","    CCDDDCC    ","      CCC      ","               "},
 		{"               ","               ","               ","               ","               ","               ","       G       ","      GFG      ","       G       ","               ","               ","               ","               ","               ","               "},
 		{"               ","               ","               ","               ","               ","               ","       G       ","      GFG      ","       G       ","               ","               ","               ","               ","               ","               "}
-		
+
 	};
-	
+
 	@Override
 	public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
 		return super.addToMachineList(aTileEntity, aBaseCasingIndex)
 			       || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
 	}
-	
+
 	// spotless:on
     // endregion
 

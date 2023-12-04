@@ -146,12 +146,12 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 4];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 3] = EnumChatFormatting.GOLD + "Owner Name: " + EnumChatFormatting.RESET + ownerName;
-        ret[origin.length - 2] = EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + ownerUUID;
-        ret[origin.length - 1] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
+        ret[origin.length] = EnumChatFormatting.GOLD + "Owner Name: " + EnumChatFormatting.RESET + ownerName;
+        ret[origin.length + 1] = EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + ownerUUID;
+        ret[origin.length + 2] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
             + EnumChatFormatting.RESET
             + dspDataCell;
-        ret[origin.length] = EnumChatFormatting.GOLD + texter("Overload time: ", "TST_DSPLauncher.getInfoData.01")
+        ret[origin.length + 3] = EnumChatFormatting.GOLD + texter("Overload time: ", "TST_DSPLauncher.getInfoData.01")
             + EnumChatFormatting.RESET
             + (overloadTime / 20)
             + " s";

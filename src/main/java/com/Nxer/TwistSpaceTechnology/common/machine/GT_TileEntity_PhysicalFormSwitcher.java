@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_PhysicalFormSwitcher;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -65,7 +67,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     // region Processing Logic
     public byte glassTier;
-    public boolean mode = false; // false = sFluidSolidficationRecipes; true = sFluidExtractionRecipes
+    public boolean mode = Mode_Default_PhysicalFormSwitcher; // false = sFluidSolidficationRecipes; true = sFluidExtractionRecipes
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
@@ -99,7 +101,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     public float getSpeedBonus() {
-        return (float) Math.pow(0.9, GT_Utility.getTier(this.getAverageInputVoltage()));
+        return (float) Math.pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, GT_Utility.getTier(this.getAverageInputVoltage()));
     }
 
     @Override
@@ -151,7 +153,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 	private final int verticalOffSet = 18;
 	private final int depthOffSet = 0;
 	private static final String STRUCTURE_PIECE_MAIN = "main";
-	
+
 	/*
 	Blocks:
 		A -> ofBlock...(BW_GlasBlocks, 14, ...);
@@ -161,9 +163,9 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 		E -> ofBlock...(gt.blockcasings8, 10, ...); // Hatches
 		F -> ofFrame
 	 */
-	
+
 	public IStructureDefinition<GT_TileEntity_PhysicalFormSwitcher> getStructureDefinition() {
-		
+
 		return StructureDefinition
 			       .<GT_TileEntity_PhysicalFormSwitcher>builder()
 			       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
@@ -190,13 +192,13 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 			       .addElement('F', ofFrame(Materials.NaquadahAlloy))
 			       .build();
 	}
-	
+
 	@Override
 	public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
 		return super.addToMachineList(aTileEntity, aBaseCasingIndex)
 			       || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
 	}
-	
+
 	private String[][] shape = new String[][]{
 		{"               ","      EEE      ","      EEE      ","      EEE      ","     EEEEE     ","    EEEEEEE    "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE ","    EEEEEEE    ","     EEEEE     ","      EEE      ","      EEE      ","      EEE      ","               "},
 		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
@@ -246,11 +248,11 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 2] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Parallel: "
+        ret[origin.length] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Parallel: "
             + EnumChatFormatting.GOLD
             + this.getMaxParallelRecipes();
-        ret[origin.length] = EnumChatFormatting.AQUA + "Recipe Time multiplier: "
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Recipe Time multiplier: "
             + EnumChatFormatting.GOLD
             + this.getSpeedBonus();
         return ret;
@@ -281,44 +283,9 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         this.glassTier = 0;
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
     }
 
     @Override

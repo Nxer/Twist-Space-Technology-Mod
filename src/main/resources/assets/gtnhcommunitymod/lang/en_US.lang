@@ -122,7 +122,7 @@ MetaItem01.2.name=Gravitational Constraint Optical Quantum Crystal
 NameMiracleTop=Miracle Top
 Tooltip_MiracleTop_06=Enable Perfect overclock when num of rings >= 8 .
 Tooltip_MiracleTop_05=Total speed multiplier is equal to 400% x num of rings.
-Tooltip_MiracleTop_07=256x Parallel.
+Tooltip_MiracleTop_07=128x Parallel per Ring.
 Tooltip_MiracleTop_02=For absolute precision and efficiency, please abandon traditional manufacturing methods.
 Tooltip_MiracleTop_01=§dI never think about the future because it will come sooner or later.
 Tooltip_MiracleTop_04=The number of rings is variable:  Maximum 16 rings, Minimum 2 rings(the first and the last).

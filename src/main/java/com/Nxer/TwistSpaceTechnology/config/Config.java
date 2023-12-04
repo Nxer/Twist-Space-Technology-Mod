@@ -9,15 +9,26 @@ import net.minecraftforge.common.config.Configuration;
 
 // spotless:off
 public class Config {
-    // region Region
-    public static final String DSP = "DSP";
+    // region Regions enum
     public static final String GENERAL = "General";
+    public static final String DSP = "DSP";
+    public static final String IntensifyChemicalDistorter = "IntensifyChemicalDistorter";
+    public static final String PreciseHighEnergyPhotonicQuantumMaster = "PreciseHighEnergyPhotonicQuantumMaster";
+    public static final String MiracleTop = "MiracleTop";
+    public static final String MagneticDrivePressureFormer = "MagneticDrivePressureFormer";
+    public static final String PhysicalFormSwitcher = "PhysicalFormSwitcher";
+    public static final String MagneticMixer = "MagneticMixer";
+    public static final String HolySeparator = "HolySeparator";
+    public static final String MiracleDoor = "MiracleDoor";
 
     // endregion
 
-//    public static String preInitSign = "pre init GTNH Community Mod";
+    // region General
+    public static int MAX_PARALLEL_LIMIT = 8388608;
 
-    // region DSP
+    // endregion
+
+    // region Dyson Sphere Program
     public static long EUPerCriticalPhoton = Integer.MAX_VALUE;
     public static long solarSailPowerPoint = 524288;
     public static long solarSailCanHoldPerNode = 256;
@@ -37,23 +48,131 @@ public class Config {
 
     // endregion
 
-    // region General
-    public static int MAX_PARALLEL_LIMIT = 8388608;
+    // region Miracle Door
     public static double secondsOfMiracleDoorProcessingTime = 25.6;
     public static int amountOfPhotonsEveryMiracleDoorProcessingCost = 1;
     public static int multiplierOfMiracleDoorEUCost = 16;
 
     // endregion
 
+    // region Holy Separator
+    public static byte Mode_Default_HolySeparator = 0;
+    public static int Piece_EnablePerfectOverclock_HolySeparator = 16;
+    public static int ParallelPerPiece_HolySeparator = 8;
+    public static float SpeedBonus_MultiplyPerTier_HolySeparator = 0.9F;
+    // endregion
+
+    // region Intensify Chemical Distorter
+    public static int Mode_Default_IntensifyChemicalDistorter = 0;
+    public static int Parallel_LCRMode_IntensifyChemicalDistorter = 1024;
+    public static int Parallel_ICDMode_IntensifyChemicalDistorter = 16;
+    public static int SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter = 10;
+    public static int SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter = 1;
+
+    // endregion
+
+    // region Magnetic Drive Pressure Former
+    public static byte Mode_Default_MagneticDrivePressureFormer = 0;
+    public static int SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer = 8;
+    public static int SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer = 16;
+    public static int SpeedUpMultiplier_Coil_MagneticDrivePressureFormer = 1;
+    public static int Parallel_MagneticDrivePressureFormer = 1024;
+    public static float EU_Multiplier_MagneticDrivePressureFormer = 0.75F;
+    public static int GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = 11;
+    // endregion
+
+    // region Miracle Top
+    public static byte Mode_Default_MiracleTop = 0;
+    public static int SpeedUpMultiplier_PerRing_MiracleTop = 4;
+    public static int Parallel_PerRing_MiracleTop = 128;
+    public static int RingsAmount_EnablePerfectOverclock_MiracleTop = 8;
+    // endregion
+
+    // region Physical Form Switcher
+    public static boolean Mode_Default_PhysicalFormSwitcher = false;
+    public static float SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher = 0.9F;
+    // endregion
+
+    // region Magnetic Mixer
+    public static float SpeedBonus_MultiplyPerTier_MagneticMixer = 0.8F;
+    // endregion
+
+    // region Precise High Energy Photonic Quantum Master
+    public static boolean Mode_Default_PreciseHighEnergyPhotonicQuantumMaster = false;
+    public static int SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster = 2;
+    public static int SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = 1;
+    public static int Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster = 256;
+    public static int Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = 16;
+    public static int[] PhotonControllerUpgradeCasingSpeedIncrement = new int[] { /* LV */100, /* MV */200, /* HV */300, /* EV */400, /* IV */500,
+        /* LuV */1000, /* ZPM */2000, /* UV */4000, /* UHV */7000, /* UEV */10000, /* UIV */14000, /* UMV */19000,
+        /* UXV */25000, /* MAX */32000 };
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
-//        preInitSign = configuration.getString("preInitSign", Configuration.CATEGORY_GENERAL, preInitSign, "GTNH Community Mod preInit Sign");
 
-        // General
+        // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
-        secondsOfMiracleDoorProcessingTime = Double.parseDouble(configuration.getString("secondsOfMiracleDoorProcessingTime", GENERAL, String.valueOf(secondsOfMiracleDoorProcessingTime), "Seconds of Miracle Door Default Progress Time. Type: double"));
-        amountOfPhotonsEveryMiracleDoorProcessingCost = configuration.getInt("amountOfPhotonsEveryMiracleDoorProcessingCost", GENERAL, amountOfPhotonsEveryMiracleDoorProcessingCost, 0, 64, "Needed Photons amount of Miracle Door each run cost.");
-        multiplierOfMiracleDoorEUCost = configuration.getInt("multiplierOfMiracleDoorEUCost", GENERAL, multiplierOfMiracleDoorEUCost, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier.");
+
+        // endregion
+
+        // region Precise High Energy Photonic Quantum Master
+        Mode_Default_PreciseHighEnergyPhotonicQuantumMaster = configuration.getBoolean("Mode_Default_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,Mode_Default_PreciseHighEnergyPhotonicQuantumMaster,"The default mode when deploy a machine. true=Photon Controller, false=Laser Engraver. Type: boolean");
+        SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster,1,256,"Speed Multiplier of Precise High Energy Photonic Quantum Master in Laser Engraver mode. Type: int");
+        SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster,1,256,"Speed Multiplier of Precise High Energy Photonic Quantum Master in Photon Controller mode. Type: int");
+        Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster,1,65536,"Parallel of Precise High Energy Photonic Quantum Master in Laser Engraver mode. Type: int");
+        Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster,1,65536,"Parallel of Precise High Energy Photonic Quantum Master in Photon Controller mode. Type: int");
+        PhotonControllerUpgradeCasingSpeedIncrement = configuration.get("PhotonControllerUpgradeCasingSpeedIncrement", PreciseHighEnergyPhotonicQuantumMaster, PhotonControllerUpgradeCasingSpeedIncrement, "Photon Controller Upgrade Casing Speed Increment data.")
+                                                                   .getIntList();
+        // endregion
+
+        // region Magnetic Mixer
+        SpeedBonus_MultiplyPerTier_MagneticMixer = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MagneticMixer",MagneticMixer,String.valueOf(SpeedBonus_MultiplyPerTier_MagneticMixer),"The speed bonus = this ^ tier . Type: float"));
+        // endregion
+
+        // region Physical Form Switcher
+        Mode_Default_PhysicalFormSwitcher = configuration.getBoolean("Mode_Default_PhysicalFormSwitcher",PhysicalFormSwitcher,Mode_Default_PhysicalFormSwitcher,"The default mode when deploy a machine. true=Fluid Extraction, false=Fluid Solidfication. Type: boolean");
+        SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher",PhysicalFormSwitcher,String.valueOf(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher),"The speed bonus = this ^ tier . Type: float"));
+        // endregion
+
+        // region Miracle Top
+        Mode_Default_MiracleTop = Byte.parseByte(configuration.getString("Mode_Default_MiracleTop",MiracleTop,String.valueOf(Mode_Default_MiracleTop),"The default mode when deploy a machine. 0=Circuit Assembler, 1=Gravitation Inversion. Type: byte"));
+        SpeedUpMultiplier_PerRing_MiracleTop = configuration.getInt("SpeedUpMultiplier_PerRing_MiracleTop",MiracleTop,SpeedUpMultiplier_PerRing_MiracleTop,1,64,"Speed Up amount of per Ring. Type: int");
+        Parallel_PerRing_MiracleTop = configuration.getInt("Parallel_PerRing_MiracleTop",MiracleTop,Parallel_PerRing_MiracleTop,1,65536,"Parallel per Ring add. Type: int");
+        RingsAmount_EnablePerfectOverclock_MiracleTop = configuration.getInt("RingsAmount_EnablePerfectOverclock_MiracleTop",MiracleTop,RingsAmount_EnablePerfectOverclock_MiracleTop,1,16,"How many Rings can enable Perfect overclock. Type: int");
+        // endregion
+
+        // region Magnetic Drive Pressure Former
+        Mode_Default_MagneticDrivePressureFormer = Byte.parseByte(configuration.getString("Mode_Default_MagneticDrivePressureFormer",MagneticDrivePressureFormer,String.valueOf(Mode_Default_MagneticDrivePressureFormer),"The default mode when deploy a machine. 0=Extruder, 1=Bender, 2=Press, 3=Hammer. Type: byte"));
+        SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer = configuration.getInt("SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer",MagneticDrivePressureFormer,SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer,1,256,"Speed Multiplier of Magnetic Drive Pressure Former in Extruder mode. Type: int");
+        SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer = configuration.getInt("SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer",MagneticDrivePressureFormer,SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer,1,256,"Speed Multiplier of Magnetic Drive Pressure Former in Other mode. Type: int");
+        SpeedUpMultiplier_Coil_MagneticDrivePressureFormer = configuration.getInt("SpeedUpMultiplier_Coil_MagneticDrivePressureFormer",MagneticDrivePressureFormer,SpeedUpMultiplier_Coil_MagneticDrivePressureFormer,1,256,"Speed Up amount of per Coil tier. Type: int");
+        Parallel_MagneticDrivePressureFormer = configuration.getInt("Parallel_MagneticDrivePressureFormer",MagneticDrivePressureFormer,Parallel_MagneticDrivePressureFormer,1,65536,"Parallel of Magnetic Drive Pressure Former. Type: int");
+        EU_Multiplier_MagneticDrivePressureFormer = Float.parseFloat(configuration.getString("EU_Multiplier_MagneticDrivePressureFormer",MagneticDrivePressureFormer,String.valueOf(EU_Multiplier_MagneticDrivePressureFormer),"EU Multiplier of Magnetic Drive Pressure Former. Type: float"));
+        GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = configuration.getInt("GlassTier_LimitLaserHatch_MagneticDrivePressureFormer",MagneticDrivePressureFormer,GlassTier_LimitLaserHatch_MagneticDrivePressureFormer,1,12,"Glass Tier of Laser Hatch Limit in Magnetic Drive Pressure Former. Type: int");
+        // endregion
+
+        // region IntensifyChemicalDistorter
+        Mode_Default_IntensifyChemicalDistorter = configuration.getInt("Mode_Default_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Mode_Default_IntensifyChemicalDistorter, 0, 1, "The default mode when deploy a machine. 0=ICD, 1=LCR. Type: int");
+        Parallel_LCRMode_IntensifyChemicalDistorter = configuration.getInt("Parallel_LCRMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Parallel_LCRMode_IntensifyChemicalDistorter, 1, 32767, "Parallel of Intensify Chemical Distorter in Large Chemical Reactor mode. Type: int");
+        Parallel_ICDMode_IntensifyChemicalDistorter = configuration.getInt("Parallel_ICDMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Parallel_ICDMode_IntensifyChemicalDistorter, 1, 32767, "Parallel of Intensify Chemical Distorter in Intensify Chemical Distorter mode. Type: int");
+        SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter = configuration.getInt("SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter, 1, 16, "Speed Multiplier of Intensify Chemical Distorter in Large Chemical Reactor mode. Type: int");
+        SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter = configuration.getInt("SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter, 1, 16, "Speed Multiplier of Intensify Chemical Distorter in Intensify Chemical Distorter. Type: int");
+        // endregion
+
+        // region Holy Separator
+        Mode_Default_HolySeparator = Byte.parseByte(configuration.getString("Mode_Default_HolySeparator", HolySeparator, String.valueOf(Mode_Default_HolySeparator), "The default mode when deploy a machine. 0=Cutter, 1=Slicer, 2=Lathe. Type: byte"));
+        Piece_EnablePerfectOverclock_HolySeparator = configuration.getInt("Piece_EnablePerfectOverclock_HolySeparator", HolySeparator, Piece_EnablePerfectOverclock_HolySeparator, 1, 64, "How many piece to enable perfect overclock. Type: int");
+        ParallelPerPiece_HolySeparator = configuration.getInt("ParallelPerPiece_HolySeparator", HolySeparator, ParallelPerPiece_HolySeparator, 1, 255, "How many parallel per tier add. Type: int");
+        SpeedBonus_MultiplyPerTier_HolySeparator = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_HolySeparator", HolySeparator, String.valueOf(SpeedBonus_MultiplyPerTier_HolySeparator), "The speed bonus = this ^ tier . Type: float"));
+        // endregion
+
+        // region Miracle Door
+        secondsOfMiracleDoorProcessingTime = Double.parseDouble(configuration.getString("secondsOfMiracleDoorProcessingTime", MiracleDoor, String.valueOf(secondsOfMiracleDoorProcessingTime), "Seconds of Miracle Door Default Progress Time. Type: double"));
+        amountOfPhotonsEveryMiracleDoorProcessingCost = configuration.getInt("amountOfPhotonsEveryMiracleDoorProcessingCost", MiracleDoor, amountOfPhotonsEveryMiracleDoorProcessingCost, 0, 64, "Needed Photons amount of Miracle Door each run cost.");
+        multiplierOfMiracleDoorEUCost = configuration.getInt("multiplierOfMiracleDoorEUCost", MiracleDoor, multiplierOfMiracleDoorEUCost, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier.");
+
+        // endregion
 
         // DSP
         EUPerCriticalPhoton = Long.parseLong(configuration.getString("EUPerCriticalPhoton", DSP, String.valueOf(EUPerCriticalPhoton), "EU per Critical Photon Cost. Type: long"));

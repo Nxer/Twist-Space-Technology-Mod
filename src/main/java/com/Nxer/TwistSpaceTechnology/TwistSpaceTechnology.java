@@ -97,6 +97,7 @@ public class TwistSpaceTechnology {
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
+        RecipeLoader.loadRecipesPostInit();//To init GTCM Recipemap
 
         TextHandler.serializeLangMap(isInDevMode);
 
