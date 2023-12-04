@@ -91,11 +91,11 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.Water.getFluid(1000 * 5 * 64))
             .itemOutputs(
-                Materials.Calcium.getDust(5),
-                Materials.Calcium.getDust(5),
-                Materials.Calcium.getDust(5),
-                Materials.Calcium.getDust(5),
-                Materials.Calcium.getDust(5))
+                Materials.Calcium.getDust(64),
+                Materials.Calcium.getDust(64),
+                Materials.Calcium.getDust(64),
+                Materials.Calcium.getDust(64),
+                Materials.Calcium.getDust(64))
             .fluidOutputs(
                 Materials.PhosphoricAcid.getFluid(1000 * 3 * 64),
                 Materials.HydrochloricAcid.getFluid(1000 * 1 * 64))
