@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerPiece_Silksong;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerCoilTier_Silksong;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.pressureResistantWalls;
@@ -17,6 +19,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -50,8 +53,7 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings1;
 import gregtech.common.blocks.GT_Block_Casings8;
 
-public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_Silksong>
-    implements IConstructable, ISurvivalConstructable {
+public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_Silksong> {
 
     // region Class Constructor
     public GT_TileEntity_Silksong(int aID, String aName, String aNameRegional) {
@@ -88,12 +90,17 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
-    private int getMaxParallelRecipes() {
-        return this.piece * 8;
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
     }
 
-    private float getSpeedBonus() {
-        return (float) Math.pow(0.9, this.coilLevel.getLevel());
+    protected int getMaxParallelRecipes() {
+        return this.piece * Parallel_PerPiece_Silksong;
+    }
+
+    protected float getSpeedBonus() {
+        return (float) Math.pow(SpeedBonus_MultiplyPerCoilTier_Silksong, this.coilLevel.getLevel());
     }
 
     @Override
@@ -123,7 +130,7 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
 
     // region Structure
     // spotless:off
-    
+
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         int piece = stackSize.stackSize;

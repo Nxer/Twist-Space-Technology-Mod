@@ -71,15 +71,15 @@ public final class ValueEnum {
     public static final float SpeedBonus_MultiplyPerTier_MagneticMixer = Config.SpeedBonus_MultiplyPerTier_MagneticMixer;
     // endregion
 
-    // region Miracle Door
-    /**
-     * Default ticks of Miracle Door per processing cost.
-     * <li>Default 20 * 25.6
-     */
-    public static final int ticksOfMiracleDoorProcessingTime = (int) (20 * Config.secondsOfMiracleDoorProcessingTime);
-    public static final int amountOfPhotonsEveryMiracleDoorProcessingCost = Config.amountOfPhotonsEveryMiracleDoorProcessingCost;
-    public static final int multiplierOfMiracleDoorEUCost = Config.multiplierOfMiracleDoorEUCost;
+    // region Magnetic Domain Constructor
+    public static final byte Mode_Default_MagneticDomainConstructor = Config.Mode_Default_MagneticDomainConstructor;
+    public static final float SpeedBonus_MultiplyPerTier_MagneticDomainConstructor = Config.SpeedBonus_MultiplyPerTier_MagneticDomainConstructor;
+    public static final int Parallel_PerRing_MagneticDomainConstructor = Config.Parallel_PerRing_MagneticDomainConstructor;
+    // endregion
 
+    // region Silksong
+    public static final float SpeedBonus_MultiplyPerCoilTier_Silksong = Config.SpeedBonus_MultiplyPerCoilTier_Silksong;
+    public static final int Parallel_PerPiece_Silksong = Config.Parallel_PerPiece_Silksong;
     // endregion
 
     // region Holy Separator
@@ -109,5 +109,36 @@ public final class ValueEnum {
 
     // endregion
 
+    // region Space Scaler
+    public static final byte Mode_Default_SpaceScaler = Config.Mode_Default_SpaceScaler;
+    public static final int Multiplier_ExtraOutputsPerFieldTier_SpaceScaler = Config.Multiplier_ExtraOutputsPerFieldTier_SpaceScaler;
+    public static final int SpeedMultiplier_Tier1Block_SpaceScaler = Config.SpeedMultiplier_Tier1Block_SpaceScaler;
+    public static final int SpeedMultiplier_BeyondTier2Block_SpaceScaler = Config.SpeedMultiplier_BeyondTier2Block_SpaceScaler;
+    // endregion
 
+    // region Molecule Deconstructor
+    public static final byte Mode_Default_MoleculeDeconstructor = Config.Mode_Default_MoleculeDeconstructor;
+    public static final int PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor = Config.PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor;
+    public static final int Parallel_PerPiece_MoleculeDeconstructor = Config.Parallel_PerPiece_MoleculeDeconstructor;
+    public static final float SpeedBonus_MultiplyPerTier_MoleculeDeconstructor = Config.SpeedBonus_MultiplyPerTier_MoleculeDeconstructor;
+    // endregion
+
+    // region Crystalline Infinitier
+    public static final byte Mode_Default_CrystallineInfinitier = Config.Mode_Default_CrystallineInfinitier;
+    public static final int SpeedMultiplier_AutoclaveMode_CrystallineInfinitier = Config.SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
+    public static final int SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = Config.SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
+    public static final int ParallelMultiplier_CrystallineInfinitier = Config.ParallelMultiplier_CrystallineInfinitier;
+    public static final byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = Config.FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
+    // endregion
+
+    // region Miracle Door
+    /**
+     * Default ticks of Miracle Door per processing cost.
+     * <li>Default 20 * 25.6
+     */
+    public static final int ticksOfMiracleDoorProcessingTime = (int) (20 * Config.secondsOfMiracleDoorProcessingTime);
+    public static final int amountOfPhotonsEveryMiracleDoorProcessingCost = Config.amountOfPhotonsEveryMiracleDoorProcessingCost;
+    public static final int multiplierOfMiracleDoorEUCost = Config.multiplierOfMiracleDoorEUCost;
+
+    // endregion
 }
