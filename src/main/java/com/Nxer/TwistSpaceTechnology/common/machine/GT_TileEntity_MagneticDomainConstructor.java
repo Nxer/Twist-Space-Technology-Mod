@@ -1,5 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_MagneticDomainConstructor;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerRing_MagneticDomainConstructor;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_MagneticDomainConstructor;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static gregtech.api.enums.GT_HatchElement.Energy;
@@ -15,6 +18,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -50,8 +54,7 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings8;
 
 public class GT_TileEntity_MagneticDomainConstructor
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_MagneticDomainConstructor>
-    implements IConstructable, ISurvivalConstructable {
+    extends GTCM_MultiMachineBase<GT_TileEntity_MagneticDomainConstructor> {
 
     // region Class Constructor
     public GT_TileEntity_MagneticDomainConstructor(int aID, String aName, String aNameRegional) {
@@ -64,7 +67,7 @@ public class GT_TileEntity_MagneticDomainConstructor
     // endregion
 
     // region Processing Logic
-    private byte mode = 0;
+    private byte mode = Mode_Default_MagneticDomainConstructor;
     private int rings = 1;
 
     @Override
@@ -80,12 +83,17 @@ public class GT_TileEntity_MagneticDomainConstructor
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
     public int getMaxParallelRecipes() {
-        return this.rings * 8;
+        return this.rings * Parallel_PerRing_MagneticDomainConstructor;
     }
 
     public float getSpeedBonus() {
-        return (float) Math.pow(0.90, GT_Utility.getTier(this.getAverageInputVoltage()));
+        return (float) Math.pow(SpeedBonus_MultiplyPerTier_MagneticDomainConstructor, GT_Utility.getTier(this.getAverageInputVoltage()));
     }
 
     @Override

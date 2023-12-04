@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_SpaceScaler;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Multiplier_ExtraOutputsPerFieldTier_SpaceScaler;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_BeyondTier2Block_SpaceScaler;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_Tier1Block_SpaceScaler;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -73,7 +77,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     // endregion
 
     // region Processing Logic
-    private byte mode = 0;
+    private byte mode = Mode_Default_SpaceScaler;
     private int fieldGeneratorTier = 0;
     private int multiplier = 1;
 
@@ -177,20 +181,16 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     @Override
     protected ProcessingLogic createProcessingLogic() {
 
-        ProcessingLogic ParticalProcessingLogic = new GTCM_ProcessingLogic() {
-
+	    return new GTCM_ProcessingLogic() {
             @NotNull
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
-                setOverclock(fieldGeneratorTier > 1 ? 2 : 1, 2);
+                setOverclock(fieldGeneratorTier >= 2 ? 2 : 1, 2);
                 return super.process();
             }
 
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-
-        // return mode == 3 ? ParticalProcessingLogic : normalProcessingLogic;
-        return ParticalProcessingLogic;
     }
 
     @Override
@@ -203,7 +203,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     }
 
     public float getSpeedBonus() {
-        return 1F / (this.fieldGeneratorTier < 2 ? 1 : 10);
+        return 1F / (this.fieldGeneratorTier < 2 ? SpeedMultiplier_Tier1Block_SpaceScaler : SpeedMultiplier_BeyondTier2Block_SpaceScaler);
     }
 
     @Override
@@ -234,7 +234,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         if (this.fieldGeneratorTier == 0) {
             return false;
         }
-        multiplier = 1 + 4 * Math.max(0, fieldGeneratorTier - 3);
+        multiplier = 1 + Multiplier_ExtraOutputsPerFieldTier_SpaceScaler * Math.max(0, fieldGeneratorTier - 3);
         return sign;
     }
 
@@ -284,6 +284,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         }
         return 0;
     }
+
     @Override
     public IStructureDefinition<GT_TileEntity_SpaceScaler> getStructureDefinition() {
         return StructureDefinition.<GT_TileEntity_SpaceScaler>builder()
@@ -423,36 +424,6 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             + EnumChatFormatting.GOLD
             + this.fieldGeneratorTier;
         return ret;
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
     }
 
     @Override
