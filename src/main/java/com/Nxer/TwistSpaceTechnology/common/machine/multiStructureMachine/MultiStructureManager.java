@@ -133,7 +133,7 @@ public class MultiStructureManager extends WorldSavedData {
 }
 
 class structureChecker implements Runnable {
-
+//TODO
     public static final structureChecker checker = new structureChecker();
     final Object lock = new Object();
     public final Queue<GT_TileEntity_MultiStructureMachine<?>> checkQueue = new ConcurrentLinkedQueue<>();
