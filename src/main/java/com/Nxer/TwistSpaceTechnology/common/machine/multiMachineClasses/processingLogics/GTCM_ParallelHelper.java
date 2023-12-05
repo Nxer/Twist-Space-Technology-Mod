@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -494,20 +495,26 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 // Sign EUt limit
                 final int canParallelEUt = (int) Math.min(availableEUt / tRecipeEUt, limitParallel);
 
-                // Maintain a Map to contain inputs.
-                Map<ItemId, Integer> itemInputsMap = new HashMap<>();
-                for (ItemStack itemStack : itemInputs) {
-                    if (itemStack == null) continue;
-                    itemInputsMap.merge(ItemId.createNoCopy(itemStack), itemStack.stackSize, Integer::sum);
-                }
+                boolean isUsingNBT = false;
 
                 // Maintain a Map to contain recipe item inputs
-                Map<ItemId, Integer> recipeItemInputsMap = new HashMap<>();
+                Map<ItemId, Long> recipeItemInputsMap = new HashMap<>();
                 if (recipe.mInputs != null) {
                     for (ItemStack itemStack : recipe.mInputs) {
                         if (itemStack == null) continue;
-                        recipeItemInputsMap.merge(ItemId.createNoCopy(itemStack), itemStack.stackSize, Integer::sum);
+                        if (itemStack.getTagCompound() != null) isUsingNBT = true;
+                        recipeItemInputsMap.merge(TST_ItemID.create(itemStack), (long) itemStack.stackSize, Long::sum);
                     }
+                }
+
+                // Maintain a Map to contain inputs.
+                Map<ItemId, Long> itemInputsMap = new HashMap<>();
+                for (ItemStack itemStack : itemInputs) {
+                    if (itemStack == null) continue;
+                    ItemId item = isUsingNBT ?
+                                      TST_ItemID.create(itemStack)
+                                      : TST_ItemID.createNoNBT(itemStack);
+                    itemInputsMap.merge(item, (long) itemStack.stackSize, Long::sum);
                 }
 
                 // Catch the minimum parallel of every input item's.
@@ -521,7 +528,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                             continue;
                         }
 
-                        int canThisParallel = (int) itemInputsMap.get(itemId) / recipeItemInputsMap.get(itemId);
+                        int canThisParallel = (int) (itemInputsMap.get(itemId) / recipeItemInputsMap.get(itemId));
 
                         if (canThisParallel < canItemInputsMaxParallel) {
                             canItemInputsMaxParallel = canThisParallel;
