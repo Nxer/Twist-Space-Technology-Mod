@@ -1,10 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-
 import static net.minecraft.util.EnumChatFormatting.BLUE;
 import static net.minecraft.util.EnumChatFormatting.DARK_PURPLE;
 import static net.minecraft.util.EnumChatFormatting.GREEN;
@@ -15,15 +13,11 @@ import static net.minecraft.util.EnumChatFormatting.RESET;
 import static net.minecraft.util.EnumChatFormatting.YELLOW;
 
 import java.util.Map;
-import java.util.Objects;
 
-import com.gtnewhorizon.structurelib.structure.StructureUtility;
-import gregtech.api.util.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -35,6 +29,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonR
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import com.gtnewhorizons.gtnhintergalactic.Tags;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.client.IGTextures;
@@ -53,8 +48,8 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.*;
 import gtPlusPlus.core.block.ModBlocks;
-import micdoodle8.mods.galacticraft.api.world.IOrbitDimension;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public class GT_TileEntity_StellarMaterialSiphon
@@ -74,112 +69,112 @@ public class GT_TileEntity_StellarMaterialSiphon
      */
     private static final double LOG4 = Math.log10(4);
     // region shape
-    private static final String[][] shape = new String[][]{
-        {"               ", "               ", "               ", "               ", "               ",
+    private static final String[][] shape = new String[][] {
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "      LLL      ", "      L~L      ", "KKKKKKKKKKKKKKK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "      FFF      ", "KDDDDDDCDDDDDDK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "      FFF      ", "     FEEEF     ", "KDGGGGDCDGGGGDK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "      AAA      ", "      AAA      ", "      AAA      ",
             "     FEEEF     ", "    FE   EF    ", "KDGGGGDCDGGGGDK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "      HCH      ", "      HCH      ",
             "      HCH      ", "      HCH      ", "     ABBBA     ", "     ABBBA     ", "     ABBBA     ",
             "    FEBBBEF    ", "   FE     EF   ", "KDGGGGDCDGGGGDK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "       C       ", "       C       ",
             "       C       ", "       C       ", "      HCH      ", "     IEEEI     ", "     IEEEI     ",
             "     IEEEI     ", "     IEEEI     ", "    AB   BA    ", "    AB   BA    ", "    AB   BA    ",
             "   FEB   BEF   ", "  FE       EF  ", "KDGGGGDCDGGGGDK", "       M       ", "       M       ",
             "       M       ", "       M       ", "       M       ", "       M       ", "       M       ",
-            "       M       ", "       M       ", "       M       ", "       M       "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "       M       ", "       M       ", "       M       ", "       M       " },
+        { "               ", "               ", "               ", "               ", "               ",
             "       H       ", "       H       ", "       H       ", "      HJH      ", "      HJH      ",
             "      HJH      ", "      HJH      ", "     HHJHH     ", "    HEEJEEH    ", "    HE J EH    ",
             "    HE J EH    ", "    HE J EH    ", "   AB  J  BA   ", "   AB  J  BA   ", "   AB  J  BA   ",
             "  FEB  J  BEF  ", " FE    J    EF ", "KDDDDDDCDDDDDDK", "      MJM      ", "      MJM      ",
             "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      ",
-            "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      "},
-        {"       I       ", "       I       ", "       I       ", "       I       ", "       I       ",
+            "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      " },
+        { "       I       ", "       I       ", "       I       ", "       I       ", "       I       ",
             "      HIH      ", "      HIH      ", "      HIH      ", "     CJJJC     ", "     CJ JC     ",
             "     CJ JC     ", "     CJ JC     ", "     CJ JC     ", "    CEJ JEC    ", "    CEJ JEC    ",
             "    CEJ JEC    ", "    CEJ JEC    ", "   AB J J BA   ", "   AB J J BA   ", "   AB J J BA   ",
             "  FEB J J BEF  ", " FE   J J   EF ", "KCCCCCC CCCCCCK", "     MJ JM     ", "     MJ JM     ",
             "     MJ JM     ", "     MJ JM     ", "     MJ JM     ", "     MJ JM     ", "     MJ JM     ",
-            "     MJ JM     ", "     MJ JM     ", "     MJ JM     ", "     MJ JM     "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "     MJ JM     ", "     MJ JM     ", "     MJ JM     ", "     MJ JM     " },
+        { "               ", "               ", "               ", "               ", "               ",
             "       H       ", "       H       ", "       H       ", "      HJH      ", "      HJH      ",
             "      HJH      ", "      HJH      ", "     HHJMH     ", "    HEEJEEH    ", "    HE J EH    ",
             "    HE J EH    ", "    HE J EH    ", "   AB  J  BA   ", "   AB  J  BA   ", "   AB  J  BA   ",
             "  FEB  J  BEF  ", " FE    J    EF ", "KDDDDDDCDDDDDDK", "      MJM      ", "      MJM      ",
             "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      ",
-            "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "       C       ", "       C       ",
             "       C       ", "       C       ", "      HCH      ", "     IEEEI     ", "     IEEEI     ",
             "     IEEEI     ", "     IEEEI     ", "    AB   BA    ", "    AB   BA    ", "    AB   BA    ",
             "   FEB   BEF   ", "  FE       EF  ", "KDGGGGDCDGGGGDK", "       M       ", "       M       ",
             "       M       ", "       M       ", "       M       ", "       M       ", "       M       ",
-            "       M       ", "       M       ", "       M       ", "       M       "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "       M       ", "       M       ", "       M       ", "       M       " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "      HCH      ", "      HCH      ",
             "      HCH      ", "      HCH      ", "     ABBBA     ", "     ABBBA     ", "     ABBBA     ",
             "    FEBBBEF    ", "   FE     EF   ", "KDGGGGDCDGGGGDK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "      AAA      ", "      AAA      ", "      AAA      ",
             "     FEEEF     ", "    FE   EF    ", "KDGGGGDCDGGGGDK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "      FFF      ", "     FEEEF     ", "KDGGGGDCDGGGGDK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "      FFF      ", "KDDDDDDCDDDDDDK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "},
-        {"               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "KKKKKKKKKKKKKKK", "               ", "               ",
             "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               "}};
+            "               ", "               ", "               ", "               " } };
     // endregion
     private static final String shapeName = "main";
 
@@ -339,9 +334,10 @@ public class GT_TileEntity_StellarMaterialSiphon
                             GT_TileEntity_StellarMaterialSiphon::addOutputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
-                        StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 0)))// L -> ofBlock...(tile.stone, 0, ...);
+                        StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 0)))// L -> ofBlock...(tile.stone, 0,
+                                                                                   // ...);
                 .addElement('M', ofBlock(SpaceStationAntiGravityBlock, 13))
-                .build();//IGBlocks.SpaceElevatorCasing
+                .build();// IGBlocks.SpaceElevatorCasing
         }
         return STRUCTURE_DEFINITION;
     }
@@ -370,21 +366,21 @@ public class GT_TileEntity_StellarMaterialSiphon
      */
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int colorIndex, boolean active, boolean redstone) {
+        int colorIndex, boolean active, boolean redstone) {
         if (side == facing) {
-            if (active) return new ITexture[]{
+            if (active) return new ITexture[] {
                 Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX),
                 TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
-                .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_ACTIVE_GLOW)
-                .glow()
-                .build()};
-            return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX),
+                    .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_ACTIVE_GLOW)
+                    .glow()
+                    .build() };
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX),
                 TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
-                .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_GLOW)
-                .glow()
-                .build()};
+                    .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_GLOW)
+                    .glow()
+                    .build() };
         }
-        return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX)};
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX) };
     }
 
     /**
@@ -411,8 +407,7 @@ public class GT_TileEntity_StellarMaterialSiphon
             resetMachine(true);
             return SimpleCheckRecipeResult.ofFailure("no_mining_pipe");
         }
-        Map<Integer, FluidStack> planetRecipes = StellarMaterialSiphonRecipePool.RECIPES
-            .get("blackHole");
+        Map<Integer, FluidStack> planetRecipes = StellarMaterialSiphonRecipePool.RECIPES.get("blackHole");
 
         GT_MetaTileEntity_Hatch_InputBus bus = mInputBusses.get(0);
 
@@ -429,10 +424,11 @@ public class GT_TileEntity_StellarMaterialSiphon
                 break;
             }
         }
-        FluidStack recipeFluid = planetRecipes.get(1).copy();
+        FluidStack recipeFluid = planetRecipes.get(1)
+            .copy();
         recipeFluid.amount *= (1 << depth);
 
-        if (!canOutputAll(new FluidStack[]{recipeFluid})) {
+        if (!canOutputAll(new FluidStack[] { recipeFluid })) {
             return CheckRecipeResultRegistry.OUTPUT_FULL;
         }
         long recipeEUt = (long) Integer.MAX_VALUE << depth;
@@ -440,7 +436,7 @@ public class GT_TileEntity_StellarMaterialSiphon
         fluid = recipeFluid.copy();
         lEUt = -recipeEUt;
         // success - check again in 20 ticks
-        mOutputFluids = new FluidStack[]{fluid};
+        mOutputFluids = new FluidStack[] { fluid };
         mEfficiency = 10000 - (getIdealStatus() - getRepairStatus()) * 1000;
         mEfficiencyIncrease = 10000;
         mMaxProgresstime = 20;
@@ -542,7 +538,7 @@ public class GT_TileEntity_StellarMaterialSiphon
      */
     @Override
     public boolean onSolderingToolRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer player,
-                                             float x, float y, float z) {
+        float x, float y, float z) {
         if (side == getBaseMetaTileEntity().getFrontFacing()) {
             mChunkLoadingEnabled = !mChunkLoadingEnabled;
             GT_Utility.sendChatToPlayer(
@@ -599,12 +595,12 @@ public class GT_TileEntity_StellarMaterialSiphon
      */
     @Override
     public String[] getInfoData() {
-        return new String[]{LIGHT_PURPLE + "Operational Data:" + RESET, "Depth: " + YELLOW + depth + RESET,
+        return new String[] { LIGHT_PURPLE + "Operational Data:" + RESET, "Depth: " + YELLOW + depth + RESET,
             "Fluid: " + YELLOW + fluid.amount + RESET + "L/s " + BLUE + fluid.getLocalizedName() + RESET,
             "EU/t required: " + YELLOW + GT_Utility.formatNumbers(-mEUt) + RESET + " EU/t",
             "Maintenance Status: " + (getRepairStatus() == getIdealStatus() ? GREEN + "Working perfectly" + RESET
                 : RED + "Has problems" + RESET),
-            "---------------------------------------------"};
+            "---------------------------------------------" };
     }
 
     @Override

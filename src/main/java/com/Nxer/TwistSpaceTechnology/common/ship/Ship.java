@@ -20,6 +20,7 @@ import com.Nxer.TwistSpaceTechnology.common.ship.system.WeaponSystem;
 import gregtech.api.util.GT_Utility;
 
 public class Ship extends EntityMob implements Runnable {
+
     public EntityPlayer owner;
     public World world;
     public String className;
@@ -36,6 +37,7 @@ public class Ship extends EntityMob implements Runnable {
     public WeaponSystem weaponSystem = new WeaponSystem();
     public ShieldSystem shieldSystem = new ShieldSystem();
     public RadarSystem radarSystem = new RadarSystem();
+
     public Ship(World worldIn) {
         super(worldIn);
         this.world = worldIn;
@@ -158,7 +160,7 @@ public class Ship extends EntityMob implements Runnable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "MyShip";
     }
 

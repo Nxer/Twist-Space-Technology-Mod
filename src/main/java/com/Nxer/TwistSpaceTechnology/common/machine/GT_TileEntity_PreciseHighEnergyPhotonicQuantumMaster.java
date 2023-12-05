@@ -23,7 +23,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -32,14 +31,10 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -49,11 +44,8 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
@@ -226,27 +218,27 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         return GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes;
     }
 
-//    @Override
-//    protected ProcessingLogic createProcessingLogic() {
-//        return new GTCM_ProcessingLogic() {
-//
-//            @Override
-//            public ProcessingLogic enablePerfectOverclock() {
-//                if (enablePerfectOverclockSignal) {
-//                    return this.setOverclock(1, 2);
-//                }
-//                return this.setOverclock(2, 2);
-//            }
-//
-//            @NotNull
-//            @Override
-//            protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
-//                return super.createOverclockCalculator(recipe)
-//                    .setSpeedBoost((mode ? 10000F : 5000F) / (10000F + totalSpeedIncrement));
-//            }
-//        }.enablePerfectOverclock()
-//            .setMaxParallel(this.mode ? 16 : 256);
-//    }
+    // @Override
+    // protected ProcessingLogic createProcessingLogic() {
+    // return new GTCM_ProcessingLogic() {
+    //
+    // @Override
+    // public ProcessingLogic enablePerfectOverclock() {
+    // if (enablePerfectOverclockSignal) {
+    // return this.setOverclock(1, 2);
+    // }
+    // return this.setOverclock(2, 2);
+    // }
+    //
+    // @NotNull
+    // @Override
+    // protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
+    // return super.createOverclockCalculator(recipe)
+    // .setSpeedBoost((mode ? 10000F : 5000F) / (10000F + totalSpeedIncrement));
+    // }
+    // }.enablePerfectOverclock()
+    // .setMaxParallel(this.mode ? 16 : 256);
+    // }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -256,15 +248,14 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     @Override
     protected float getSpeedBonus() {
         return 10000F / (10000F + totalSpeedIncrement)
-                   / (mode ? SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
-                          : SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster) ;
+            / (mode ? SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
+                : SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster);
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return this.mode
-                   ? Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
-                   : Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
+        return this.mode ? Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
+            : Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
     }
 
     /**
@@ -316,7 +307,11 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = "Total Speed Increment: " + this.totalSpeedIncrement;
-        ret[origin.length + 1] = "Enable"+EnumChatFormatting.GOLD+" Perfect Overclock"+EnumChatFormatting.RESET+": " + this.enablePerfectOverclockSignal;
+        ret[origin.length + 1] = "Enable" + EnumChatFormatting.GOLD
+            + " Perfect Overclock"
+            + EnumChatFormatting.RESET
+            + ": "
+            + this.enablePerfectOverclockSignal;
         return ret;
     }
 

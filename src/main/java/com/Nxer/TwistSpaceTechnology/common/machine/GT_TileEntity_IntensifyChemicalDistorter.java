@@ -101,14 +101,15 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
             @Override
             protected GT_OverclockCalculator createOverclockCalculator(GT_Recipe recipe) {
-                return super.createOverclockCalculator(recipe)
-                            .setSpeedBoost(mode == 0 ?
-                                               1F/SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
-                                               : 1F/SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter);
+                return super.createOverclockCalculator(recipe).setSpeedBoost(
+                    mode == 0 ? 1F / SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
+                        : 1F / SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter);
             }
 
         }.enablePerfectOverclock()
-            .setMaxParallelSupplier(() -> this.mode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter : Parallel_LCRMode_IntensifyChemicalDistorter);
+            .setMaxParallelSupplier(
+                () -> this.mode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter
+                    : Parallel_LCRMode_IntensifyChemicalDistorter);
 
     }
 

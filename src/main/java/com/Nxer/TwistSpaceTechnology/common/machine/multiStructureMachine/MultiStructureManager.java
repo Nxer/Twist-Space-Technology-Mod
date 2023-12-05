@@ -99,22 +99,22 @@ public class MultiStructureManager extends WorldSavedData {
         LOG.info("machine removed:" + machine.getLocalName());
     }
 
-//    public static boolean isComplete(GT_TileEntity_MultiStructureMachine<?> machine) {
-//        if (machine == null) {
-//            return false;
-//        }
-//        int ID = machine.ID;
-//        for (var i : subMachines.get(ID)) {
-//            var subMachine = machines.get(i);
-//            if (subMachine == null) {
-//                continue;
-//            }
-//            if (!subMachine.checkMachine(subMachine.getBaseMetaTileEntity(), null)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
+    // public static boolean isComplete(GT_TileEntity_MultiStructureMachine<?> machine) {
+    // if (machine == null) {
+    // return false;
+    // }
+    // int ID = machine.ID;
+    // for (var i : subMachines.get(ID)) {
+    // var subMachine = machines.get(i);
+    // if (subMachine == null) {
+    // continue;
+    // }
+    // if (!subMachine.checkMachine(subMachine.getBaseMetaTileEntity(), null)) {
+    // return false;
+    // }
+    // }
+    // return true;
+    // }
 
     @Override
     public void readFromNBT(NBTTagCompound p_76184_1_) {
@@ -127,16 +127,17 @@ public class MultiStructureManager extends WorldSavedData {
     }
 }
 
-class structureChecker implements Runnable{
-    public static structureChecker checker=new structureChecker();
-    public static final Queue<GT_TileEntity_MultiStructureMachine<?>> checkQueue=new PriorityQueue<>();
+class structureChecker implements Runnable {
+
+    public static structureChecker checker = new structureChecker();
+    public static final Queue<GT_TileEntity_MultiStructureMachine<?>> checkQueue = new PriorityQueue<>();
 
     @Override
     public void run() {
-        while(true){
-            if(checkQueue.size()>0){
-                var machine=checkQueue.poll();
-                if(machine!=null){
+        while (true) {
+            if (checkQueue.size() > 0) {
+                var machine = checkQueue.poll();
+                if (machine != null) {
                     machine.checkStructure(false, machine.getBaseMetaTileEntity());
                 }
             }
@@ -147,6 +148,5 @@ class structureChecker implements Runnable{
             }
         }
     }
-
 
 }
