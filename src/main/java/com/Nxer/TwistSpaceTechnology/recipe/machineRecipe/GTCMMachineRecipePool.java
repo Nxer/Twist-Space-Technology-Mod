@@ -1,33 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.dreammaster.gthandler.CustomItemList;
-import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
-import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
-import goodgenerator.items.MyMaterial;
-import goodgenerator.util.ItemRefer;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.interfaces.IItemContainer;
-import gregtech.api.util.GTPP_Recipe;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gtPlusPlus.core.material.ALLOY;
-import ic2.core.Ic2Items;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
@@ -71,7 +43,6 @@ import static com.dreammaster.gthandler.CustomItemList.ElectromagneticSeparatorU
 import static com.dreammaster.gthandler.CustomItemList.ExtractorUHV;
 import static com.dreammaster.gthandler.CustomItemList.FluidExtractorUV;
 import static com.dreammaster.gthandler.CustomItemList.FluidSolidifierUV;
-import static com.dreammaster.gthandler.CustomItemList.Hatch_Dynamo_UXV;
 import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static com.dreammaster.gthandler.CustomItemList.MixerUV;
 import static com.dreammaster.gthandler.CustomItemList.PikoCircuit;
@@ -122,6 +93,36 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Inta
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.dreammaster.gthandler.CustomItemList;
+import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
+
+import goodgenerator.items.MyMaterial;
+import goodgenerator.util.ItemRefer;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.interfaces.IItemContainer;
+import gregtech.api.util.GTPP_Recipe;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
+import gtPlusPlus.core.material.ALLOY;
+import ic2.core.Ic2Items;
 
 public class GTCMMachineRecipePool implements IRecipePool {
 

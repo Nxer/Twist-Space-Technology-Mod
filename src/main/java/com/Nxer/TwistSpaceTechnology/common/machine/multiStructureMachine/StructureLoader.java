@@ -3,14 +3,15 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.zip.ZipInputStream;
+
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 public class StructureLoader {
 
@@ -64,20 +65,17 @@ public class StructureLoader {
         if (structure.pieces.get(pieces) != null) {
             return;
         }
-        String path = assetRoot + name + ".zip";
-        if (!structureDefinition.containsKey(name)) {
-            structureDefinition.put(name, new MultiStructureDefinition());
-        }
         MultiStructureDefinition.OffSet offSet = structure.machineOffSet;
-        path = "C:\\Users\\bcjPr\\Desktop\\gtnh-astra-migrate\\GTNH-combination\\GTNH_Community_Mod\\src\\main\\resources\\assets\\gtnhcommunitymod\\structure\\namemegauniversalspacestation.zip";
-        if (!new File(path).exists()) {
-            LOG.info("structure file " + path + " not find!");
-            return;
-        }
-
-        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(path)
-        // Objects.requireNonNull(LanguageUtil0.class.getResourceAsStream(zipFilePath))
-            , StandardCharsets.UTF_8)) {
+        LOG.info(
+            Objects.requireNonNull(TwistSpaceTechnology.class.getResource(""))
+                .getPath());
+        // path =
+        // "C:\\Users\\bcjPr\\Desktop\\gtnh-astra-migrate\\GTNH-combination\\GTNH_Community_Mod\\src\\main\\resources\\assets\\gtnhcommunitymod\\structure\\namemegauniversalspacestation.zip";
+        try (ZipInputStream zipInputStream = new ZipInputStream(
+            Objects.requireNonNull(TwistSpaceTechnology.class.getResourceAsStream(assetRoot + name + ".zip"))
+            // Objects.requireNonNull(LanguageUtil0.class.getResourceAsStream(zipFilePath))
+            ,
+            StandardCharsets.UTF_8)) {
             zipInputStream.getNextEntry();
             BufferedReader reader = new BufferedReader(new InputStreamReader(zipInputStream, StandardCharsets.UTF_8));
             String line;
@@ -104,7 +102,7 @@ public class StructureLoader {
             }
             reader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.info("structure file " + name + " not find!");
         }
 
     }

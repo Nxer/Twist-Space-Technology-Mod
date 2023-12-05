@@ -5,7 +5,8 @@ import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
-import gregtech.api.enums.*;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TextureSet;
 
 /**
  * Register new material here by Bartworks Material System

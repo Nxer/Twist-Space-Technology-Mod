@@ -3,9 +3,13 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
 
@@ -131,35 +135,37 @@ public class MultiStructureManager extends WorldSavedData {
 class structureChecker implements Runnable {
 
     public static final structureChecker checker = new structureChecker();
-
-    public static Thread thread = new Thread(checker);
+    final Object lock = new Object();
     public final Queue<GT_TileEntity_MultiStructureMachine<?>> checkQueue = new ConcurrentLinkedQueue<>();
 
-    static {
-        thread.start();
+    public static final Thread thread = new Thread(checker);
+
+    public static void add(GT_TileEntity_MultiStructureMachine<?> machine) {
+        checker.checkQueue.add(machine);
     }
 
-    public void add(GT_TileEntity_MultiStructureMachine<?> machine) {
-        checkQueue.add(machine);
+    static {
+        if(Config.activateMegaSpaceStation) {
+            thread.start();
+        }
     }
 
     @Override
     public void run() {
-        synchronized (checker) {
+        synchronized (lock) {
             while (true) {
-                if (checkQueue.size() > 0) {
-                    var machine = checkQueue.poll();
-                    if (machine != null) {
-                        machine.checkStructure(false, machine.getBaseMetaTileEntity());
-                    }
+                var machine = checkQueue.poll();
+                if (machine != null) {
+                    machine.checkStructure(false, machine.getBaseMetaTileEntity());
                 }
                 try {
-                    checker.wait(50);
+                    lock.wait(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
+
     }
 
 }

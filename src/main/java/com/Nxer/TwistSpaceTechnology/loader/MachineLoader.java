@@ -1,16 +1,30 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
+import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01.initItem01;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.machine.*;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticMixer;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MiracleTop;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MoleculeDeconstructor;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PhysicalFormSwitcher;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
@@ -130,34 +144,40 @@ public class MachineLoader {
         GTCMItemList.CrystallineInfinitier.set(CrystallineInfinitier);
 
         //
-        DSPLauncher = new TST_DSPLauncher(19013, "NameDSPLauncher", NameDSPLauncher).getStackForm(1);
+        DSPLauncher = new TST_DSPLauncher(19013, "NameDSPLauncher", TextLocalization.NameDSPLauncher).getStackForm(1);
         GTCMItemList.DSPLauncher.set(DSPLauncher);
 
         //
-        DSPReceiver = new TST_DSPReceiver(19014, "NameDSPReceiver", NameDSPReceiver).getStackForm(1);
+        DSPReceiver = new TST_DSPReceiver(19014, "NameDSPReceiver", TextLocalization.NameDSPReceiver).getStackForm(1);
         GTCMItemList.DSPReceiver.set(DSPReceiver);
 
         //
-        ArtificialStar = new TST_ArtificialStar(19015, "NameArtificialStar", NameArtificialStar).getStackForm(1);
+        ArtificialStar = new TST_ArtificialStar(19015, "NameArtificialStar", TextLocalization.NameArtificialStar)
+            .getStackForm(1);
         GTCMItemList.ArtificialStar.set(ArtificialStar);
 
-        MiracleDoor = new TST_MiracleDoor(19016, "NameMiracleDoor", NameMiracleDoor).getStackForm(1);
+        MiracleDoor = new TST_MiracleDoor(19016, "NameMiracleDoor", TextLocalization.NameMiracleDoor).getStackForm(1);
         GTCMItemList.MiracleDoor.set(MiracleDoor);
 
-        OreProcessingFactory = new TST_OreProcessingFactory(19017, "NameOreProcessingFactory", NameOreProcessingFactory)
-            .getStackForm(1);
+        OreProcessingFactory = new TST_OreProcessingFactory(
+            19017,
+            "NameOreProcessingFactory",
+            TextLocalization.NameOreProcessingFactory).getStackForm(1);
         GTCMItemList.OreProcessingFactory.set(OreProcessingFactory);
-
-        megaUniversalSpaceStation = new GT_TileEntity_MegaUniversalSpaceStation(
-            19018,
-            "NameMegaUniversalSpaceStation",
-            NameMegaUniversalSpaceStation).getStackForm(1);
+        if (Config.activateMegaSpaceStation) {
+            megaUniversalSpaceStation = new GT_TileEntity_MegaUniversalSpaceStation(
+                19018,
+                "NameMegaUniversalSpaceStation",
+                TextLocalization.NameMegaUniversalSpaceStation).getStackForm(1);
+        } else {
+            megaUniversalSpaceStation = initItem01("core of T800", 114);
+        }
         GTCMItemList.megaUniversalSpaceStation.set(megaUniversalSpaceStation);
 
         stellarMaterialSiphon = new GT_TileEntity_StellarMaterialSiphon(
             19019,
             "NameStellarMaterialSiphon",
-            NameStellarMaterialSiphon).getStackForm(1);
+            TextLocalization.NameStellarMaterialSiphon).getStackForm(1);
         GTCMItemList.StellarMaterialSiphon.set(stellarMaterialSiphon);
         // endregion
 
@@ -175,7 +195,7 @@ public class MachineLoader {
         InfiniteWirelessDynamoHatch = new GT_Hatch_InfiniteWirelessDynamoHatch(
             18998,
             "NameInfiniteWirelessDynamoHatch",
-            NameInfiniteWirelessDynamoHatch,
+            TextLocalization.NameInfiniteWirelessDynamoHatch,
             14).getStackForm(1);
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
 
