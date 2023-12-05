@@ -357,7 +357,6 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             if (aTick % 128 == 0) {
                 this.syncDSPData();
 
-
                 if (mode == 0) {
                     if (wirelessMode) {
                         // Generate EU directly

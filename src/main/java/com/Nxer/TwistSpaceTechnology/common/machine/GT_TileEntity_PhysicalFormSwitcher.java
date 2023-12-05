@@ -67,7 +67,8 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     // region Processing Logic
     public byte glassTier;
-    public boolean mode = Mode_Default_PhysicalFormSwitcher; // false = sFluidSolidficationRecipes; true = sFluidExtractionRecipes
+    public boolean mode = Mode_Default_PhysicalFormSwitcher; // false = sFluidSolidficationRecipes; true =
+                                                             // sFluidExtractionRecipes
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
@@ -101,7 +102,8 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     public float getSpeedBonus() {
-        return (float) Math.pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, GT_Utility.getTier(this.getAverageInputVoltage()));
+        return (float) Math
+            .pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, GT_Utility.getTier(this.getAverageInputVoltage()));
     }
 
     @Override

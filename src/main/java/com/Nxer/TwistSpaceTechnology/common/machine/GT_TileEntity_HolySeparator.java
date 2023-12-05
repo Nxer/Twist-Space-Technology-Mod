@@ -91,7 +91,8 @@ public class GT_TileEntity_HolySeparator
     }
 
     private float getSpeedBonus() {
-        return (float) (Math.pow(SpeedBonus_MultiplyPerTier_HolySeparator, GT_Utility.getTier(this.getAverageInputVoltage())));
+        return (float) (Math
+            .pow(SpeedBonus_MultiplyPerTier_HolySeparator, GT_Utility.getTier(this.getAverageInputVoltage())));
     }
 
     @Override

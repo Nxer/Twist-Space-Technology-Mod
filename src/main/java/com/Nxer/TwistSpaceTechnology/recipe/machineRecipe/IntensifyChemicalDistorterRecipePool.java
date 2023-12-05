@@ -25,6 +25,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
+
     final GT_Recipe.GT_Recipe_Map ICD = GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
 
     // spotless:off

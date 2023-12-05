@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
-import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -11,6 +10,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.*;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
+import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
@@ -48,7 +48,7 @@ public class MachineLoader {
 
     public static void loadMachines() {
 
-        EntityList.addMapping(Ship.class,"Ship",114);
+        EntityList.addMapping(Ship.class, "Ship", 114);
         // test
         // TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 

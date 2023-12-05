@@ -45,7 +45,6 @@ public enum GTCMItemList {
 
     spaceStationConstructingMaterialMax,
 
-
     MultiStructuresLinkTool,
 
     // Machines

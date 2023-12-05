@@ -3,8 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.ship.component;
 public class ShieldComponent extends ShipComponent {
 
     public enum ShieldType {
-        ZhuangJia,  //装甲，不是庄稼，更不是金坷垃
-        HuDun  //护盾
+        ZhuangJia, // 装甲，不是庄稼，更不是金坷垃
+        HuDun // 护盾
     }
 
     // charge eu cost for every second

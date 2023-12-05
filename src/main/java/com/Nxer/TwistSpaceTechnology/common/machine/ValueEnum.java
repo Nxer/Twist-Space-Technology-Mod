@@ -27,7 +27,8 @@ public final class ValueEnum {
      * The default mode when deploy a machine.
      * <li>Default 0
      */
-    public static final int Mode_Default_IntensifyChemicalDistorter = Config.Mode_Default_IntensifyChemicalDistorter < 0 || Config.Mode_Default_IntensifyChemicalDistorter > 1 ? 0 : Config.Mode_Default_IntensifyChemicalDistorter;
+    public static final int Mode_Default_IntensifyChemicalDistorter = Config.Mode_Default_IntensifyChemicalDistorter < 0
+        || Config.Mode_Default_IntensifyChemicalDistorter > 1 ? 0 : Config.Mode_Default_IntensifyChemicalDistorter;
     public static final int Parallel_LCRMode_IntensifyChemicalDistorter = Config.Parallel_LCRMode_IntensifyChemicalDistorter;
     public static final int Parallel_ICDMode_IntensifyChemicalDistorter = Config.Parallel_ICDMode_IntensifyChemicalDistorter;
     public static final int SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter = Config.SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter;
@@ -57,10 +58,12 @@ public final class ValueEnum {
     public static final int SpeedUpMultiplier_Coil_MagneticDrivePressureFormer = Config.SpeedUpMultiplier_Coil_MagneticDrivePressureFormer;
     public static final int Parallel_MagneticDrivePressureFormer = Config.Parallel_MagneticDrivePressureFormer;
     public static final float EU_Multiplier_MagneticDrivePressureFormer = Config.EU_Multiplier_MagneticDrivePressureFormer;
-    public static final int GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = Config.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer > 0 && Config.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer <= 12 ? Config.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer : 11;
+    public static final int GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = Config.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer
+        > 0 && Config.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer <= 12
+            ? Config.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer
+            : 11;
 
     // endregion
-
 
     // region Physical Form Switcher
     public static final boolean Mode_Default_PhysicalFormSwitcher = Config.Mode_Default_PhysicalFormSwitcher;
@@ -87,7 +90,8 @@ public final class ValueEnum {
      * The default mode when deploy a machine.
      * <li>Default 0
      */
-    public static final byte Mode_Default_HolySeparator = Config.Mode_Default_HolySeparator <= 2 && Config.Mode_Default_HolySeparator >= 0 ? Config.Mode_Default_HolySeparator : 0;
+    public static final byte Mode_Default_HolySeparator = Config.Mode_Default_HolySeparator <= 2
+        && Config.Mode_Default_HolySeparator >= 0 ? Config.Mode_Default_HolySeparator : 0;
 
     /**
      * How many piece to enable perfect overclock.

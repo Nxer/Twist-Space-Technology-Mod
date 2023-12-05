@@ -80,14 +80,14 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     };
 
     protected float getSpeedBonus() {
-        return 1F / (mode == 0 ? SpeedMultiplier_AutoclaveMode_CrystallineInfinitier : SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier);
+        return 1F / (mode == 0 ? SpeedMultiplier_AutoclaveMode_CrystallineInfinitier
+            : SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier);
     };
 
     protected int getMaxParallelRecipes() {
         return Math.min(
             ValueEnum.MAX_PARALLEL_LIMIT,
-            glassTier
-                * fieldGeneratorTier
+            glassTier * fieldGeneratorTier
                 * GT_Utility.getTier(this.getMaxInputVoltage())
                 * ParallelMultiplier_CrystallineInfinitier);
     };

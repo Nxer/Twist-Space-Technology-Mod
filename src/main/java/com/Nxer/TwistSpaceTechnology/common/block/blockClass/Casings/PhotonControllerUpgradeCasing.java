@@ -56,9 +56,9 @@ public class PhotonControllerUpgradeCasing extends BlockBase01 {
      * Total value 10,000 means time cost *0.5 .
      */
     public static int[] speedIncrement = PhotonControllerUpgradeCasingSpeedIncrement;
-//    public static int[] speedIncrement = new int[] { /* LV */100, /* MV */200, /* HV */300, /* EV */400, /* IV */500,
-//        /* LuV */1000, /* ZPM */2000, /* UV */4000, /* UHV */7000, /* UEV */10000, /* UIV */14000, /* UMV */19000,
-//        /* UXV */25000, /* MAX */32000 };
+    // public static int[] speedIncrement = new int[] { /* LV */100, /* MV */200, /* HV */300, /* EV */400, /* IV */500,
+    // /* LuV */1000, /* ZPM */2000, /* UV */4000, /* UHV */7000, /* UEV */10000, /* UIV */14000, /* UMV */19000,
+    // /* UXV */25000, /* MAX */32000 };
 
     /**
      * Tooltips of these blocks' ItemBlock.

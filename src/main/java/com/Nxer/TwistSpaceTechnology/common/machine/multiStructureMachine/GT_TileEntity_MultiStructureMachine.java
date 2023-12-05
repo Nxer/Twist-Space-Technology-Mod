@@ -3,13 +3,9 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 import static com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structureChecker.checkQueue;
-import static com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structureChecker.checker;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
-import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +17,6 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 
 public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntity_MultiStructureMachine<T>>
     extends GTCM_MultiMachineBase<T> implements IConstructable, ISurvivalConstructable {
@@ -62,7 +57,8 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
 
     public void setShape() {
         StructureLoader.load(mName, mName);
-        var pieces = StructureLoader.getPieces(mName).size();
+        var pieces = StructureLoader.getPieces(mName)
+            .size();
         for (int i = 0; i < pieces; i++) {
             InConstruct.add(i);
         }
@@ -74,12 +70,11 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
         return super.survivalConstruct(stackSize, elementBudget, env);
     }
 
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        int num = InConstruct.iterator().next();
-        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
-            .getOffSet(mName, mName + num);
+        int num = InConstruct.iterator()
+            .next();
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName + num);
         if (this.buildPiece(
             mName + num,
             stackSize,
@@ -93,15 +88,9 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     }
 
     public void repair(int num) {
-        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
-            .getOffSet(mName, mName + num);
-        if (this.buildPiece(
-            mName + num,
-            null,
-            false,
-            offSet.horizontalOffSet,
-            offSet.verticalOffSet,
-            offSet.depthOffSet)) {
+        StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName + num);
+        if (this
+            .buildPiece(mName + num, null, false, offSet.horizontalOffSet, offSet.verticalOffSet, offSet.depthOffSet)) {
             InConstruct.remove(num);
         }
 
@@ -130,7 +119,6 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
         return InConstruct.isEmpty();
         // return isComplete;
     }
-
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
@@ -164,7 +152,6 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
         }
         super.onPreTick(aBaseMetaTileEntity, aTick);
     }
-
 
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {

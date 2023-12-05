@@ -1,29 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.dreammaster.gthandler.CustomItemList;
-import com.dreammaster.gthandler.GT_CoreModSupport;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
-import goodgenerator.items.MyMaterial;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.DATApipe;
 import static gregtech.api.enums.Mods.GTPlusPlus;
@@ -39,6 +15,32 @@ import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.gthandler.GT_CoreModSupport;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+
+import goodgenerator.items.MyMaterial;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 
 // spotless:off
 public class MiracleTopRecipePool implements IRecipePool {
@@ -1300,7 +1302,7 @@ public class MiracleTopRecipePool implements IRecipePool {
         GT_Values.RA
             .stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(1),
+                GT_Utility.getIntegratedCircuit(24),
                 ItemList.Field_Generator_UEV.get(16),
                 GTCMItemList.HighDimensionalResistor.get(16),
                 GTCMItemList.HighDimensionalDiode.get(16),
@@ -1323,6 +1325,93 @@ public class MiracleTopRecipePool implements IRecipePool {
             )
             .noFluidOutputs()
             .eut(RECIPE_UMV)
+            .duration(20 * 1000)
+            .addTo(MT);
+
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(24),
+                ItemList.Field_Generator_UEV.get(12),
+                GTCMItemList.HighDimensionalResistor.get(12),
+                GTCMItemList.HighDimensionalDiode.get(12),
+                GTCMItemList.HighDimensionalTransistor.get(12),
+                GTCMItemList.HighDimensionalCapacitor.get(12),
+                GTCMItemList.HighDimensionalInterface.get(12),
+                GTCMItemList.CosmicCircuitBoard.get(12),
+                GTCMItemList.IntelligentImitationNeutronStarCore.get(12),
+                GTCMItemList.EventHorizonNanoSwarm.get(6),
+                ItemList.Circuit_CosmicAssembly.get(2)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.SpaceTime.getMolten(144 * 8 * 12),
+                MaterialsUEVplus.TranscendentMetal.getMolten(144 * 8 * 12),
+                Materials.Neutronium.getMolten(144 * 8 * 12 * 144),
+                Materials.CosmicNeutronium.getMolten(144 * 8 * 12 * 144)
+            )
+            .itemOutputs(
+                ItemList.Circuit_CosmicComputer.get(1)
+            )
+            .noFluidOutputs()
+            .eut(RECIPE_UXV)
+            .duration(20 * 1000)
+            .addTo(MT);
+
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(24),
+                ItemList.Field_Generator_UEV.get(8),
+                GTCMItemList.HighDimensionalResistor.get(8),
+                GTCMItemList.HighDimensionalDiode.get(8),
+                GTCMItemList.HighDimensionalTransistor.get(8),
+                GTCMItemList.HighDimensionalCapacitor.get(8),
+                GTCMItemList.HighDimensionalInterface.get(8),
+                GTCMItemList.CosmicCircuitBoard.get(8),
+                GTCMItemList.IntelligentImitationNeutronStarCore.get(8),
+                GTCMItemList.EventHorizonNanoSwarm.get(4),
+                ItemList.Circuit_TranscendentProcessor.get(2)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.SpaceTime.getMolten(144 * 8 * 12),
+                MaterialsUEVplus.TranscendentMetal.getMolten(144 * 8 * 12),
+                Materials.Neutronium.getMolten(144 * 8 * 12 * 144),
+                Materials.CosmicNeutronium.getMolten(144 * 8 * 12 * 144)
+            )
+            .itemOutputs(
+                ItemList.Circuit_TranscendentAssembly.get(1)
+            )
+            .noFluidOutputs()
+            .eut(RECIPE_UXV)
+            .duration(20 * 1000)
+            .addTo(MT);
+
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(24),
+                ItemList.Field_Generator_UMV.get(1),
+                GTCMItemList.HighDimensionalResistor.get(2),
+                GTCMItemList.HighDimensionalDiode.get(2),
+                GTCMItemList.HighDimensionalTransistor.get(2),
+                GTCMItemList.HighDimensionalCapacitor.get(2),
+                GTCMItemList.HighDimensionalInterface.get(2),
+                GTCMItemList.CosmicCircuitBoard.get(2),
+                GTCMItemList.IntelligentImitationNeutronStarCore.get(2),
+                GTCMItemList.RealSingularityNanoSwarm.get(4),
+                GTCMItemList.CoreOfT800.get(2)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getFluid(144),
+                MaterialPool.entropyReductionProcess.getMolten(1440),
+                MaterialPool.eventHorizonDiffusers.getMolten(1440),
+                MaterialPool.realSingularity.getMolten(144)
+            )
+            .itemOutputs(
+                ItemList.Circuit_TranscendentProcessor.get(1)
+            )
+            .noFluidOutputs()
+            .eut(RECIPE_UXV)
             .duration(20 * 1000)
             .addTo(MT);
 
