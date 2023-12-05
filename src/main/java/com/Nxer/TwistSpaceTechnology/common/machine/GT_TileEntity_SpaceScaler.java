@@ -102,6 +102,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
+
         setupProcessingLogic(processingLogic);
 
         CheckRecipeResult result = doCheckRecipe();
