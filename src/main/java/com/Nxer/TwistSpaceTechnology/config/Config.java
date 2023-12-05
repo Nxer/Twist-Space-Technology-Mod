@@ -20,6 +20,11 @@ public class Config {
     public static final String MagneticMixer = "MagneticMixer";
     public static final String HolySeparator = "HolySeparator";
     public static final String MiracleDoor = "MiracleDoor";
+    public static final String MagneticDomainConstructor = "MagneticDomainConstructor";
+    public static final String Silksong = "Silksong";
+    public static final String SpaceScaler = "SpaceScaler";
+    public static final String MoleculeDeconstructor = "MoleculeDeconstructor";
+    public static final String CrystallineInfinitier = "CrystallineInfinitier";
 
     // endregion
 
@@ -53,13 +58,6 @@ public class Config {
     public static int amountOfPhotonsEveryMiracleDoorProcessingCost = 1;
     public static int multiplierOfMiracleDoorEUCost = 16;
 
-    // endregion
-
-    // region Holy Separator
-    public static byte Mode_Default_HolySeparator = 0;
-    public static int Piece_EnablePerfectOverclock_HolySeparator = 16;
-    public static int ParallelPerPiece_HolySeparator = 8;
-    public static float SpeedBonus_MultiplyPerTier_HolySeparator = 0.9F;
     // endregion
 
     // region Intensify Chemical Distorter
@@ -108,12 +106,60 @@ public class Config {
         /* UXV */25000, /* MAX */32000 };
     // endregion
 
+    // region Magnetic Domain Constructor
+    public static byte Mode_Default_MagneticDomainConstructor = 0;
+    public static float SpeedBonus_MultiplyPerTier_MagneticDomainConstructor = 0.9F;
+    public static int Parallel_PerRing_MagneticDomainConstructor = 8;
+    // endregion
+
+    // region Silksong
+    public static float SpeedBonus_MultiplyPerCoilTier_Silksong = 0.9F;
+    public static int Parallel_PerPiece_Silksong = 8;
+    // endregion
+
+    // region Holy Separator
+    public static byte Mode_Default_HolySeparator = 0;
+    public static int Piece_EnablePerfectOverclock_HolySeparator = 16;
+    public static int ParallelPerPiece_HolySeparator = 8;
+    public static float SpeedBonus_MultiplyPerTier_HolySeparator = 0.9F;
+    // endregion
+
+    // region Space Scaler
+    public static byte Mode_Default_SpaceScaler = 0;
+    public static int Multiplier_ExtraOutputsPerFieldTier_SpaceScaler = 4;
+    public static int SpeedMultiplier_Tier1Block_SpaceScaler = 1;
+    public static int SpeedMultiplier_BeyondTier2Block_SpaceScaler = 10;
+    // endregion
+
+    // region Molecule Deconstructor
+    public static byte Mode_Default_MoleculeDeconstructor = 0;
+    public static int PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor = 16;
+    public static int Parallel_PerPiece_MoleculeDeconstructor = 24;
+    public static float SpeedBonus_MultiplyPerTier_MoleculeDeconstructor = 0.9F;
+    // endregion
+
+    // region Crystalline Infinitier
+    public static byte Mode_Default_CrystallineInfinitier = 0;
+    public static int SpeedMultiplier_AutoclaveMode_CrystallineInfinitier = 4;
+    public static int SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = 1;
+    public static int ParallelMultiplier_CrystallineInfinitier = 1;
+    public static byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = 3;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
 
+        // endregion
+
+        // region IntensifyChemicalDistorter
+        Mode_Default_IntensifyChemicalDistorter = configuration.getInt("Mode_Default_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Mode_Default_IntensifyChemicalDistorter, 0, 1, "The default mode when deploy a machine. 0=ICD, 1=LCR. Type: int");
+        Parallel_LCRMode_IntensifyChemicalDistorter = configuration.getInt("Parallel_LCRMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Parallel_LCRMode_IntensifyChemicalDistorter, 1, 32767, "Parallel of Intensify Chemical Distorter in Large Chemical Reactor mode. Type: int");
+        Parallel_ICDMode_IntensifyChemicalDistorter = configuration.getInt("Parallel_ICDMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Parallel_ICDMode_IntensifyChemicalDistorter, 1, 32767, "Parallel of Intensify Chemical Distorter in Intensify Chemical Distorter mode. Type: int");
+        SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter = configuration.getInt("SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter, 1, 16, "Speed Multiplier of Intensify Chemical Distorter in Large Chemical Reactor mode. Type: int");
+        SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter = configuration.getInt("SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter, 1, 16, "Speed Multiplier of Intensify Chemical Distorter in Intensify Chemical Distorter. Type: int");
         // endregion
 
         // region Precise High Energy Photonic Quantum Master
@@ -124,15 +170,6 @@ public class Config {
         Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster,1,65536,"Parallel of Precise High Energy Photonic Quantum Master in Photon Controller mode. Type: int");
         PhotonControllerUpgradeCasingSpeedIncrement = configuration.get("PhotonControllerUpgradeCasingSpeedIncrement", PreciseHighEnergyPhotonicQuantumMaster, PhotonControllerUpgradeCasingSpeedIncrement, "Photon Controller Upgrade Casing Speed Increment data.")
                                                                    .getIntList();
-        // endregion
-
-        // region Magnetic Mixer
-        SpeedBonus_MultiplyPerTier_MagneticMixer = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MagneticMixer",MagneticMixer,String.valueOf(SpeedBonus_MultiplyPerTier_MagneticMixer),"The speed bonus = this ^ tier . Type: float"));
-        // endregion
-
-        // region Physical Form Switcher
-        Mode_Default_PhysicalFormSwitcher = configuration.getBoolean("Mode_Default_PhysicalFormSwitcher",PhysicalFormSwitcher,Mode_Default_PhysicalFormSwitcher,"The default mode when deploy a machine. true=Fluid Extraction, false=Fluid Solidfication. Type: boolean");
-        SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher",PhysicalFormSwitcher,String.valueOf(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher),"The speed bonus = this ^ tier . Type: float"));
         // endregion
 
         // region Miracle Top
@@ -152,12 +189,24 @@ public class Config {
         GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = configuration.getInt("GlassTier_LimitLaserHatch_MagneticDrivePressureFormer",MagneticDrivePressureFormer,GlassTier_LimitLaserHatch_MagneticDrivePressureFormer,1,12,"Glass Tier of Laser Hatch Limit in Magnetic Drive Pressure Former. Type: int");
         // endregion
 
-        // region IntensifyChemicalDistorter
-        Mode_Default_IntensifyChemicalDistorter = configuration.getInt("Mode_Default_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Mode_Default_IntensifyChemicalDistorter, 0, 1, "The default mode when deploy a machine. 0=ICD, 1=LCR. Type: int");
-        Parallel_LCRMode_IntensifyChemicalDistorter = configuration.getInt("Parallel_LCRMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Parallel_LCRMode_IntensifyChemicalDistorter, 1, 32767, "Parallel of Intensify Chemical Distorter in Large Chemical Reactor mode. Type: int");
-        Parallel_ICDMode_IntensifyChemicalDistorter = configuration.getInt("Parallel_ICDMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, Parallel_ICDMode_IntensifyChemicalDistorter, 1, 32767, "Parallel of Intensify Chemical Distorter in Intensify Chemical Distorter mode. Type: int");
-        SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter = configuration.getInt("SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter, 1, 16, "Speed Multiplier of Intensify Chemical Distorter in Large Chemical Reactor mode. Type: int");
-        SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter = configuration.getInt("SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter", IntensifyChemicalDistorter, SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter, 1, 16, "Speed Multiplier of Intensify Chemical Distorter in Intensify Chemical Distorter. Type: int");
+        // region Physical Form Switcher
+        Mode_Default_PhysicalFormSwitcher = configuration.getBoolean("Mode_Default_PhysicalFormSwitcher",PhysicalFormSwitcher,Mode_Default_PhysicalFormSwitcher,"The default mode when deploy a machine. true=Fluid Extraction, false=Fluid Solidfication. Type: boolean");
+        SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher",PhysicalFormSwitcher,String.valueOf(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher),"The speed bonus = this ^ tier . Type: float"));
+        // endregion
+
+        // region Magnetic Mixer
+        SpeedBonus_MultiplyPerTier_MagneticMixer = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MagneticMixer",MagneticMixer,String.valueOf(SpeedBonus_MultiplyPerTier_MagneticMixer),"The speed bonus = this ^ tier . Type: float"));
+        // endregion
+
+        // region Magnetic Domain Constructor
+        Mode_Default_MagneticDomainConstructor = (byte) configuration.getInt("Mode_Default_MagneticDomainConstructor",MagneticDomainConstructor,Mode_Default_MagneticDomainConstructor,0,1,"The default mode when deploy a machine. 0=Electro Magnetic Separator, 1=Polarizer. Type: byte");
+        SpeedBonus_MultiplyPerTier_MagneticDomainConstructor = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MagneticDomainConstructor",MagneticDomainConstructor,String.valueOf(SpeedBonus_MultiplyPerTier_MagneticDomainConstructor),"The speed bonus = this ^ tier . Type: float"));
+        Parallel_PerRing_MagneticDomainConstructor = configuration.getInt("Parallel_PerRing_MagneticDomainConstructor",MagneticDomainConstructor,Parallel_PerRing_MagneticDomainConstructor,1,65536,"Parallel per Ring add. Type: int");
+        // endregion
+
+        // region Silksong
+        SpeedBonus_MultiplyPerCoilTier_Silksong = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerCoilTier_Silksong",Silksong,String.valueOf(SpeedBonus_MultiplyPerCoilTier_Silksong),"The speed bonus = this ^ CoilTier . Type: float"));
+        Parallel_PerPiece_Silksong = configuration.getInt("Parallel_PerPiece_Silksong",Silksong,Parallel_PerPiece_Silksong,1,65536,"Parallel per Piece add. Type: int");
         // endregion
 
         // region Holy Separator
@@ -165,6 +214,28 @@ public class Config {
         Piece_EnablePerfectOverclock_HolySeparator = configuration.getInt("Piece_EnablePerfectOverclock_HolySeparator", HolySeparator, Piece_EnablePerfectOverclock_HolySeparator, 1, 64, "How many piece to enable perfect overclock. Type: int");
         ParallelPerPiece_HolySeparator = configuration.getInt("ParallelPerPiece_HolySeparator", HolySeparator, ParallelPerPiece_HolySeparator, 1, 255, "How many parallel per tier add. Type: int");
         SpeedBonus_MultiplyPerTier_HolySeparator = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_HolySeparator", HolySeparator, String.valueOf(SpeedBonus_MultiplyPerTier_HolySeparator), "The speed bonus = this ^ tier . Type: float"));
+        // endregion
+
+        // region Space Scaler
+        Mode_Default_SpaceScaler = (byte) configuration.getInt("Mode_Default_SpaceScaler",SpaceScaler,Mode_Default_SpaceScaler,0,1,"The default mode when deploy a machine. 0=Compressor, 1=Extractor. Can not set the default 2 - Cyclotron, machine will crash directly. Type: byte");
+        Multiplier_ExtraOutputsPerFieldTier_SpaceScaler = configuration.getInt("Multiplier_ExtraOutputsPerFieldTier_SpaceScaler",SpaceScaler,Multiplier_ExtraOutputsPerFieldTier_SpaceScaler,1,64,"Extra outputs multiplier of Cyclotron mode, every higher tier of field block bring this value multiplied extra output items and fluids. Type: int");
+        SpeedMultiplier_Tier1Block_SpaceScaler = configuration.getInt("SpeedMultiplier_Tier1Block_SpaceScaler",SpaceScaler,SpeedMultiplier_Tier1Block_SpaceScaler,1,64,"Speed Multiplier at Tier 1 field generator block. Type: int");
+        SpeedMultiplier_BeyondTier2Block_SpaceScaler = configuration.getInt("SpeedMultiplier_BeyondTier2Block_SpaceScaler",SpaceScaler,SpeedMultiplier_BeyondTier2Block_SpaceScaler,1,64,"Speed Multiplier at beyond Tier 2 field generator block. Type: int");
+        // endregion
+
+        // region Crystalline Infinitier
+        Mode_Default_CrystallineInfinitier = (byte) configuration.getInt("Mode_Default_CrystallineInfinitier",CrystallineInfinitier,Mode_Default_CrystallineInfinitier,0,1,"The default mode when deploy a machine. 0=Autoclave, 1=Crystalline Infinitier. Type: byte");
+        SpeedMultiplier_AutoclaveMode_CrystallineInfinitier = configuration.getInt("SpeedMultiplier_AutoclaveMode_CrystallineInfinitier",CrystallineInfinitier,SpeedMultiplier_AutoclaveMode_CrystallineInfinitier,1,64,"Speed Multiplier of Crystalline Infinitier in Autoclave mode. Type: int");
+        SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = configuration.getInt("SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier",CrystallineInfinitier,SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier,1,64,"Speed Multiplier of Crystalline Infinitier in Crystalline Infinitier mode. Type: int");
+        ParallelMultiplier_CrystallineInfinitier = configuration.getInt("ParallelMultiplier_CrystallineInfinitier",CrystallineInfinitier,ParallelMultiplier_CrystallineInfinitier,1,256,"Parallel Multiplier of Crystalline Infinitier. The final parallel will be multiplied this value. Type: int");
+        FieldTier_EnablePerfectOverclock_CrystallineInfinitier = (byte) configuration.getInt("FieldTier_EnablePerfectOverclock_CrystallineInfinitier",CrystallineInfinitier,FieldTier_EnablePerfectOverclock_CrystallineInfinitier,1,11,"When field generator block tier is beyond this value, machine will enable perfect overclock. 3 is the lowest EOH block. Type: byte");
+        // endregion
+
+        // region Molecule Deconstructor
+        Mode_Default_MoleculeDeconstructor = (byte) configuration.getInt("Mode_Default_MoleculeDeconstructor",MoleculeDeconstructor,Mode_Default_MoleculeDeconstructor,0,1,"The default mode when deploy a machine. 0=Electrolyzer, 1=Centrifuge. Type: byte");
+        PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor = configuration.getInt("PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor",MoleculeDeconstructor,PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor,1,64,"How many piece can enable perfect overclock. Type: int");
+        Parallel_PerPiece_MoleculeDeconstructor = configuration.getInt("Parallel_PerPiece_MoleculeDeconstructor",MoleculeDeconstructor,Parallel_PerPiece_MoleculeDeconstructor,1,65536,"Parallel per piece add. Type: int");
+        SpeedBonus_MultiplyPerTier_MoleculeDeconstructor = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MoleculeDeconstructor",MoleculeDeconstructor,String.valueOf(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor),"The speed bonus = this ^ tier . Type: float"));
         // endregion
 
         // region Miracle Door
