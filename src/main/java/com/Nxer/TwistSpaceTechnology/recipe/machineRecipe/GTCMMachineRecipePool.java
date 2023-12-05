@@ -1,5 +1,34 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.dreammaster.gthandler.CustomItemList;
+import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
+import goodgenerator.items.MyMaterial;
+import goodgenerator.util.ItemRefer;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.interfaces.IItemContainer;
+import gregtech.api.util.GTPP_Recipe;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
+import gtPlusPlus.core.material.ALLOY;
+import ic2.core.Ic2Items;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
@@ -93,36 +122,6 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Inta
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.dreammaster.gthandler.CustomItemList;
-import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
-import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
-
-import goodgenerator.items.MyMaterial;
-import goodgenerator.util.ItemRefer;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.interfaces.IItemContainer;
-import gregtech.api.util.GTPP_Recipe;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gtPlusPlus.core.material.ALLOY;
-import ic2.core.Ic2Items;
 
 public class GTCMMachineRecipePool implements IRecipePool {
 
@@ -1100,17 +1099,17 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // region Infinite Dynamo Hatch
         GT_Values.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, ItemList.Wireless_Dynamo_Energy_UXV.get(1))
+            .metadata(RESEARCH_ITEM, com.github.technus.tectech.thing.CustomItemList.eM_dynamoMulti64_UMV.get(1))
             .metadata(RESEARCH_TIME, 24 * HOURS)
             .itemInputs(
-                Hatch_Dynamo_UXV.get(1),
+                AnnihilationConstrainer.get(1),
                 ItemRefer.Compact_Fusion_Coil_T0.get(1),
                 ItemRefer.Compact_Fusion_Coil_T4.get(4),
                 Machine_Multi_Transformer.get(1),
 
                 eM_Power.get(16),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, MaterialsUEVplus.SpaceTime, 16),
-                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 1),
+                ItemList.Field_Generator_UMV.get(4),
                 QuantumCircuit.get(16),
 
                 PikoCircuit.get(32),
