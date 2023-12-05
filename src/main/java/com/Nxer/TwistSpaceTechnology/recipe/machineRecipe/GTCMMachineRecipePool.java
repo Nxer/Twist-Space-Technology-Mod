@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
@@ -1098,17 +1099,17 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // region Infinite Dynamo Hatch
         GT_Values.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, ItemList.Wireless_Dynamo_Energy_UXV.get(1))
+            .metadata(RESEARCH_ITEM, com.github.technus.tectech.thing.CustomItemList.eM_dynamoMulti64_UMV.get(1))
             .metadata(RESEARCH_TIME, 24 * HOURS)
             .itemInputs(
-                Hatch_Dynamo_UXV.get(1),
+                AnnihilationConstrainer.get(1),
                 ItemRefer.Compact_Fusion_Coil_T0.get(1),
                 ItemRefer.Compact_Fusion_Coil_T4.get(4),
                 Machine_Multi_Transformer.get(1),
 
                 eM_Power.get(16),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, MaterialsUEVplus.SpaceTime, 16),
-                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 1),
+                ItemList.Field_Generator_UMV.get(4),
                 QuantumCircuit.get(16),
 
                 PikoCircuit.get(32),
