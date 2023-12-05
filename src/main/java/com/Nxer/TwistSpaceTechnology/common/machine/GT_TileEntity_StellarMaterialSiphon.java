@@ -48,7 +48,9 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_StructureUtility;
+import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.block.ModBlocks;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 

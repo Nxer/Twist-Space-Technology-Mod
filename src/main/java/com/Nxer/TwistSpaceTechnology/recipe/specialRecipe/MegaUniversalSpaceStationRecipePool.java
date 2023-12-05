@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleTop;
-import static com.github.technus.tectech.thing.CustomItemList.*;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.util.GT_Recipe.GT_Recipe_Map.sAssemblerRecipes;
 
@@ -15,7 +14,11 @@ import com.dreammaster.gthandler.CustomItemList;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
 import goodgenerator.items.MyMaterial;
-import gregtech.api.enums.*;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_Recipe;
 
 public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
@@ -202,15 +205,15 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 CustomItemList.StargateFramePart.get(64),
                 // GT_material.TestMaterial.getPlates(64),
                 CustomItemList.StargateChevron.get(64),
-                Machine_Multi_EyeOfHarmony.get(64),
-                TimeAccelerationFieldGeneratorTier8.get(64),
-                TimeAccelerationFieldGeneratorTier8.get(64),
-                TimeAccelerationFieldGeneratorTier8.get(64),
-                TimeAccelerationFieldGeneratorTier8.get(64),
-                StabilisationFieldGeneratorTier8.get(64),
-                StabilisationFieldGeneratorTier8.get(64),
-                StabilisationFieldGeneratorTier8.get(64),
-                StabilisationFieldGeneratorTier8.get(64),
+                com.github.technus.tectech.thing.CustomItemList.Machine_Multi_EyeOfHarmony.get(64),
+                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
+                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
+                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
+                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
+                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
+                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
+                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
+                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
                 MiracleTop.get(64))
             .noFluidInputs()
             .itemOutputs(GTCMItemList.megaUniversalSpaceStation.get(1))
