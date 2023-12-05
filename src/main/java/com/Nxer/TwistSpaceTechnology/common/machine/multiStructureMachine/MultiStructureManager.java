@@ -4,6 +4,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
@@ -129,22 +130,34 @@ public class MultiStructureManager extends WorldSavedData {
 
 class structureChecker implements Runnable {
 
-    public static structureChecker checker = new structureChecker();
-    public static final Queue<GT_TileEntity_MultiStructureMachine<?>> checkQueue = new PriorityQueue<>();
+    public static final structureChecker checker = new structureChecker();
+
+    public static Thread thread = new Thread(checker);
+    public final Queue<GT_TileEntity_MultiStructureMachine<?>> checkQueue = new ConcurrentLinkedQueue<>();
+
+    static {
+        thread.start();
+    }
+
+    public void add(GT_TileEntity_MultiStructureMachine<?> machine) {
+        checkQueue.add(machine);
+    }
 
     @Override
     public void run() {
-        while (true) {
-            if (checkQueue.size() > 0) {
-                var machine = checkQueue.poll();
-                if (machine != null) {
-                    machine.checkStructure(false, machine.getBaseMetaTileEntity());
+        synchronized (checker) {
+            while (true) {
+                if (checkQueue.size() > 0) {
+                    var machine = checkQueue.poll();
+                    if (machine != null) {
+                        machine.checkStructure(false, machine.getBaseMetaTileEntity());
+                    }
                 }
-            }
-            try {
-                wait(50);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                try {
+                    checker.wait(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;// spotless:off
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.spaceStationConstructingMaterialMax;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.spaceStationStructureBlockMAX;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
 import static com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry.bw_realglas2;
@@ -11,7 +9,6 @@ import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 
 import java.io.File;
-import java.util.Objects;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -21,13 +18,14 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_SpaceStationRepairHatch;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
+import com.gtnewhorizons.gtnhintergalactic.client.IGTextures;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
@@ -37,8 +35,8 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.block.ModBlocks;
 
@@ -74,34 +72,34 @@ public class GT_TileEntity_MegaUniversalSpaceStation
         }
         // return early if no input busses are present, the first bus is invalid or the TE is not on a space station
         if (runningTick % 100 == 0) {
-            GT_Hatch_SpaceStationRepairHatch bus;
-            try {
-                bus = (GT_Hatch_SpaceStationRepairHatch) mInputBusses.get(0);
-            } catch (Exception e) {
-                return SimpleCheckRecipeResult.ofFailure(
-                    "space station is not complete or destroyed by someone, not you right?\n"
-                        + "no repair hatch find, please set one");
-            }
-            ItemStack repairItem = bus.getBaseMetaTileEntity()
-                .getStackInSlot(0);
-            if (repairItem == null) {
-                return SimpleCheckRecipeResult.ofFailure(
-                    "space station is not complete or destroyed by someone, not you right?\n" + "no repair item find!");
-            }
-            if (Objects.equals(repairItem.getItem(), spaceStationConstructingMaterialMax.getItem())
-                && repairItem.stackSize >= 1) {
-                repairItem.stackSize--;
-                int num = InConstruct.iterator()
-                    .next();
-                repair(num);
-                construct(null, false);
-                return SimpleCheckRecipeResult.ofFailure(
-                    "space station is not complete or destroyed by someone, not you right?\n"
-                        + "repairing or constructing space station, please wait");
-            } else {
-                return SimpleCheckRecipeResult.ofFailure(
-                    "space station is not complete or destroyed by someone, not you right?\n" + "repair item not fit!");
-            }
+            // GT_Hatch_SpaceStationRepairHatch bus;
+            // try {
+            // bus = (GT_Hatch_SpaceStationRepairHatch) mInputBusses.get(0);
+            // } catch (Exception e) {
+            // return SimpleCheckRecipeResult.ofFailure(
+            // "space station is not complete or destroyed by someone, not you right?\n"
+            // + "no repair hatch find, please set one");
+            // }
+            // ItemStack repairItem = bus.getBaseMetaTileEntity()
+            // .getStackInSlot(0);
+            // if (repairItem == null) {
+            // return SimpleCheckRecipeResult.ofFailure(
+            // "space station is not complete or destroyed by someone, not you right?\n" + "no repair item find!");
+            // }
+            // if (Objects.equals(repairItem.getItem(), spaceStationConstructingMaterialMax.getItem())
+            // && repairItem.stackSize >= 1) {
+            // repairItem.stackSiz
+            int num = InConstruct.iterator()
+                .next();
+            repair(num);
+            construct(null, false);
+            return SimpleCheckRecipeResult.ofFailure(
+                "space station is not complete or destroyed by someone, not you right?\n"
+                    + "repairing or constructing space station, please wait");
+            // } else {
+            // return SimpleCheckRecipeResult.ofFailure(
+            // "space station is not complete or destroyed by someone, not you right?\n" + "repair item not fit!");
+            // }
             // count mining pipes, get depth
         }
         return SimpleCheckRecipeResult
@@ -170,17 +168,27 @@ public class GT_TileEntity_MegaUniversalSpaceStation
             // Offsets:
             // 215 45 223
             // endregion
-            structureDefinition = builder
+            structureDefinition = builder.addElement('A', ofBlock(bw_realglas2, 0))
                 .addElement(
-                    'A',
-                    GT_HatchElementBuilder.<GT_TileEntity_MegaUniversalSpaceStation>builder()
-                        .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
-                        .adder(GT_TileEntity_MegaUniversalSpaceStation::addToMachineList)
-                        .casingIndex(176)
-                        .dot(1)
-                        .buildAndChain(bw_realglas2, 0))
-                // .addElement('B', ofBlock(SpaceStationAntiGravityBlock, 13))
-                .addElement('C', ofBlock(spaceStationStructureBlock, 13))
+                    'R',
+                    StructureUtility.ofChain(
+                        GT_StructureUtility.ofHatchAdder(
+                            GT_TileEntity_MegaUniversalSpaceStation::addMaintenanceToMachineList,
+                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            1),
+                        GT_StructureUtility.ofHatchAdder(
+                            GT_TileEntity_MegaUniversalSpaceStation::addExoticEnergyInputToMachineList,
+                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            1),
+                        GT_StructureUtility.ofHatchAdder(
+                            GT_TileEntity_MegaUniversalSpaceStation::addInputToMachineList,
+                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            1),
+                        GT_StructureUtility.ofHatchAdder(
+                            GT_TileEntity_MegaUniversalSpaceStation::addOutputToMachineList,
+                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            1),
+                        StructureUtility.ofBlock(SpaceStationAntiGravityBlock, 13)))
                 .addElement('D', ofBlock(GregTech_API.sBlockCasings9, 1))
                 .addElement('E', ofBlock(TT_Container_Casings.sBlockCasingsBA0, 10))
                 .addElement('F', ofBlock(TT_Container_Casings.sBlockCasingsBA0, 12))
@@ -190,13 +198,13 @@ public class GT_TileEntity_MegaUniversalSpaceStation
                 .addElement('J', ofBlock(TT_Container_Casings.sBlockCasingsTT, 3))
                 .addElement('K', ofBlock(GregTech_API.sBlockMetal9, 6))
                 .addElement('L', ofBlock(GregTech_API.sBlockMetal9, 7))
-                .addElement('M', ofBlock(spaceStationStructureBlockMAX.getBlock(), 7))
+                .addElement('M', ofBlock(spaceStationStructureBlock, 13))
                 .addElement('N', ofBlock(ModBlocks.blockCasings5Misc, 10))
                 .addElement('O', ofBlock(ModBlocks.blockCasings5Misc, 14))
                 .addElement('P', ofBlock(ModBlocks.blockCasings6Misc, 0))
                 .addElement('Q', ofBlock(ModBlocks.blockSpecialMultiCasings, 15))
                 .addElement('B', ofBlock(Block.getBlockById(1), 0))
-                .addElement('R', ofBlock(SpaceStationAntiGravityBlock, 13))
+                .addElement('C', ofBlock(spaceStationStructureBlock, 13))
                 // .addElement('C', ofBlock(Block.getBlockById(1),0))
                 // .addElement('D', ofBlock(Block.getBlockById(1),0))
                 // .addElement('E', ofBlock(Block.getBlockById(1),0))
