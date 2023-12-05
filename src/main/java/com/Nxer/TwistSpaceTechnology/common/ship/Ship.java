@@ -20,30 +20,22 @@ import com.Nxer.TwistSpaceTechnology.common.ship.system.WeaponSystem;
 import gregtech.api.util.GT_Utility;
 
 public class Ship extends EntityMob implements Runnable {
-
     public EntityPlayer owner;
     public World world;
-
     public String className;
     public String shipName;
-
     public Integer length = 0, height = 0, width = 0;
     public Integer dockyard = -1;
     public List<Integer> validDimId = new ArrayList<>();
-
     public boolean forceTravel = false;
-
     public static final Integer maxLength = 64, maxHeight = 64, maxWidth = 64;
-
     public List<ShipComponent> structure = new ArrayList<>(maxHeight * maxLength * maxWidth);
-
     public PropulsionSystem propulsionSystem = new PropulsionSystem();
     public EnergySystem energySystem = new EnergySystem();
     public ControlSystem controlSystem = new ControlSystem();
     public WeaponSystem weaponSystem = new WeaponSystem();
     public ShieldSystem shieldSystem = new ShieldSystem();
     public RadarSystem radarSystem = new RadarSystem();
-
     public Ship(World worldIn) {
         super(worldIn);
         this.world = worldIn;
@@ -173,6 +165,7 @@ public class Ship extends EntityMob implements Runnable {
     @Override
     public void run() {
         while (checkComponentStatus()) {
+
             long time = System.currentTimeMillis();
             charge();
             if (checkEnergy()) {

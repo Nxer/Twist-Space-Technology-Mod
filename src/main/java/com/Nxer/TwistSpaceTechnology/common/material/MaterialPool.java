@@ -1,12 +1,24 @@
 package com.Nxer.TwistSpaceTechnology.common.material;
 
+import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
+import static gregtech.api.enums.Mods.GregTech;
 
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.TextureSet;
+import gregtech.api.GregTech_API;
+import gregtech.api.enums.*;
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.interfaces.IMaterialHandler;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.render.items.UniversiumRenderer;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Register new material here by Bartworks Material System
@@ -22,6 +34,9 @@ public class MaterialPool implements Runnable {
 
     // ID manager
     private static final int offsetID_01 = 20_000;
+
+    public static final MaterialPool pool = new MaterialPool();
+
 
     // TODO test demo : use Bartworks Werkstoff to new new Item(Material)
     /*
@@ -55,7 +70,7 @@ public class MaterialPool implements Runnable {
      */
 
     public static final Werkstoff HolmiumGarnet = new Werkstoff(
-        new short[] { 96, 96, 240 },
+        new short[]{96, 96, 240},
         TextHandler.texter("Holmium Garnet", "bw.HolmiumGarnet.notTrans"),
         subscriptNumbers("Ho3Al5O12"),
         new Werkstoff.Stats(),
@@ -69,7 +84,7 @@ public class MaterialPool implements Runnable {
     // spotless:off
 
     public static final Werkstoff eventHorizonDiffusers = new Werkstoff(
-        new short[] { 255, 255, 255 },
+        new short[]{255, 255, 255},
         TextHandler.texter("Event Horizon Diffusers", "bw.eventHorizonDiffusers.notTrans"),
         subscriptNumbers("when we face it, we can do nothing before, but not now"),
         new Werkstoff.Stats(),
@@ -82,7 +97,7 @@ public class MaterialPool implements Runnable {
         TextureSet.SET_SHINY);
 
     public static final Werkstoff entropyReductionProcess = new Werkstoff(
-        new short[] { 0, 0, 0 },
+        new short[]{0, 0, 0},
         TextHandler.texter("Entropy Reduction Process", "bw.entropyReductionProcess.notTrans"),
         subscriptNumbers("Trying to fight against the demise of the universe"),
         new Werkstoff.Stats(),
@@ -95,7 +110,7 @@ public class MaterialPool implements Runnable {
         TextureSet.SET_SHINY);
 
     public static final Werkstoff realSingularity = new Werkstoff(
-        new short[] { 127, 127, 127 },
+        new short[]{127, 127, 127},
         TextHandler.texter("Real Singularity", "bw.realSingularity.notTrans"),
         subscriptNumbers("Not just a compressed body, but a real miniature black hole"),
         new Werkstoff.Stats(),
@@ -107,17 +122,9 @@ public class MaterialPool implements Runnable {
         offsetID_01 + 4,
         TextureSet.SET_SHINY);
 
-    // spotless:on
 
-    // Bartworks' Material System run on Runnable.class
     @Override
     public void run() {
-        // Materials[] materials=new Materials[]{mAll,mNull,mExist,mTheWall};
-        // for(var prefix :mPreventableComponents){
-        // prefix.mGeneratedItems.addAll(Arrays.asList(materials));
-        // }
 
     }
-
-
 }

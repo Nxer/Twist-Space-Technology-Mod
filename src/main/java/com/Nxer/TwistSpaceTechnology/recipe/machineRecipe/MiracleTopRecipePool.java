@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
@@ -1160,56 +1161,56 @@ public class MiracleTopRecipePool implements IRecipePool {
             .stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
-                GT_ModHandler.getModItem("bartworks","gt.bwMetaGeneratedItem0",1,32750),
+                GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32750),
                 ItemList.Circuit_Chip_Stemcell.get(64),
                 ItemList.Circuit_Chip_Stemcell.get(64),
                 ItemList.Circuit_Chip_Stemcell.get(64),
                 ItemList.Circuit_Chip_Stemcell.get(64)
             )
             .fluidInputs(
-                Materials.ReinforceGlass.getMolten(16*16*288),
-                Materials.Polybenzimidazole.getMolten(16*8*72),
-                Materials.NaquadahEnriched.getMolten(16*4*72),
-                Materials.Silicone.getMolten(16*16*144),
-                Materials.TungstenSteel.getMolten(16*32*18),
+                Materials.ReinforceGlass.getMolten(16 * 16 * 288),
+                Materials.Polybenzimidazole.getMolten(16 * 8 * 72),
+                Materials.NaquadahEnriched.getMolten(16 * 4 * 72),
+                Materials.Silicone.getMolten(16 * 16 * 144),
+                Materials.TungstenSteel.getMolten(16 * 32 * 18),
                 Materials.GrowthMediumSterilized.getFluid(16 * 250),
-                Materials.UUMatter.getFluid(16*250),
-                new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1000*16)
+                Materials.UUMatter.getFluid(16 * 250),
+                new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1000 * 16)
             )
             .itemOutputs(
-                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32072)
+                GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 16, 32072)
             )
             .noFluidOutputs()
             .eut(RECIPE_ZPM)
-            .duration(20*30*12)
+            .duration(20 * 30 * 12)
             .addTo(MT);
 
         GT_Values.RA
             .stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
-                GT_ModHandler.getModItem("bartworks","gt.bwMetaGeneratedItem0",1,32746),
+                GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32746),
                 ItemList.Circuit_Chip_Biocell.get(64),
                 ItemList.Circuit_Chip_Biocell.get(64),
                 ItemList.Circuit_Chip_Biocell.get(64),
                 ItemList.Circuit_Chip_Biocell.get(64)
             )
             .fluidInputs(
-                Materials.ReinforceGlass.getMolten(16*16*288),
-                Materials.Polybenzimidazole.getMolten(16*16*72),
-                Materials.ElectrumFlux.getMolten(16*16*72),
-                Materials.Silicone.getMolten(16*16*144),
-                Materials.HSSS.getMolten(16*32*18),
+                Materials.ReinforceGlass.getMolten(16 * 16 * 288),
+                Materials.Polybenzimidazole.getMolten(16 * 16 * 72),
+                Materials.ElectrumFlux.getMolten(16 * 16 * 72),
+                Materials.Silicone.getMolten(16 * 16 * 144),
+                Materials.HSSS.getMolten(16 * 32 * 18),
                 Materials.BioMediumSterilized.getFluid(16 * 500),
-                Materials.UUMatter.getFluid(16*500),
-                new FluidStack(FluidRegistry.getFluid("ic2coolant"), 2000*16)
+                Materials.UUMatter.getFluid(16 * 500),
+                new FluidStack(FluidRegistry.getFluid("ic2coolant"), 2000 * 16)
             )
             .itemOutputs(
-                GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32077)
+                GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 16, 32077)
             )
             .noFluidOutputs()
             .eut(RECIPE_UHV)
-            .duration(20*30*12)
+            .duration(20 * 30 * 12)
             .addTo(MT);
         // endregion
 
@@ -1286,7 +1287,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                     outStack[i]
                 )
                 .noFluidOutputs()
-                .eut(RECIPE_UXV)
+                .eut(RECIPE_UEV)
                 .duration(20)
                 .addTo(MT);
         }
@@ -1296,93 +1297,97 @@ public class MiracleTopRecipePool implements IRecipePool {
         //以下这三个主机的配方，除了贴片以外的输入数量全部除以2就可以写作下一级的配方，例如：复制粘贴，然后把超级电脑移动到输出，输入的超级电脑改为天顶星处理器集群，同时输入数量和配方耗时除以二，以此类推
         //如果存在soc，则使用soc的配方在最基础那一级去掉除了纳米蜂群以外的所有输入，耗电提高四倍，时长提高四倍，这很符合GTNH的SOC法
         //天顶星 UMV主机
-        // GT_Values.RA
-        //     .stdBuilder()
-        //     .itemInputs(
-        //         GT_Utility.getIntegratedCircuit(1),
-        //         ItemList.Field_Generator_UEV.get(16),
-        //         GTCMItemList.HighDimensionalResistor.get(16),
-        //         GTCMItemList.HighDimensionalDiode.get(16),
-        //         GTCMItemList.HighDimensionalTransistor.get(16),
-        //         GTCMItemList.HighDimensionalCapacitor.get(16),
-        //         GTCMItemList.HighDimensionalInterface.get(16),
-        //         //天顶星电路基板 16
-        //         //智能仿中子星核心 8
-        //         //事件视界纳米蜂群 8
-        //        //天顶星超级电脑 2
-        //     )
-        //   .fluidInputs(
-        //         MaterialsUEVplus.SpaceTime.getMolten(144*8*16),
-        //         MaterialsUEVplus.TranscendentMetal.getMolten(144*8*16),
-        //         Materials.Neutronium.getMolten(144*8*16*144),
-        //         Materials.CosmicNeutronium.getMolten(144*8*16*144)
-        //     )
-        //    .itemOutputs(
-        //         GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32169)
-        //     )
-        //     .noFluidOutputs()
-        //    .eut(RECIPE_UMV)
-        //     .duration(20*1000)
-        //     .addTo(MT);
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                ItemList.Field_Generator_UEV.get(16),
+                GTCMItemList.HighDimensionalResistor.get(16),
+                GTCMItemList.HighDimensionalDiode.get(16),
+                GTCMItemList.HighDimensionalTransistor.get(16),
+                GTCMItemList.HighDimensionalCapacitor.get(16),
+                GTCMItemList.HighDimensionalInterface.get(16),
+                GTCMItemList.CosmicCircuitBoard.get(16),
+                GTCMItemList.IntelligentImitationNeutronStarCore.get(16),
+                GTCMItemList.EventHorizonNanoSwarm.get(8),
+                ItemList.Circuit_ExoticComputer.get(2)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.SpaceTime.getMolten(144 * 8 * 16),
+                MaterialsUEVplus.TranscendentMetal.getMolten(144 * 8 * 16),
+                Materials.Neutronium.getMolten(144 * 8 * 16 * 144),
+                Materials.CosmicNeutronium.getMolten(144 * 8 * 16 * 144)
+            )
+            .itemOutputs(
+                ItemList.Circuit_ExoticMainframe.get(1)
+            )
+            .noFluidOutputs()
+            .eut(RECIPE_UMV)
+            .duration(20 * 1000)
+            .addTo(MT);
 
         //寰宇 UXV主机
-        // GT_Values.RA
-        //     .stdBuilder()
-        //     .itemInputs(
-        //         GT_Utility.getIntegratedCircuit(1),
-        //         ItemList.Field_Generator_UIV.get(16),
-        //         GTCMItemList.HighDimensionalResistor.get(32),
-        //         GTCMItemList.HighDimensionalDiode.get(32),
-        //         GTCMItemList.HighDimensionalTransistor.get(32),
-        //         GTCMItemList.HighDimensionalCapacitor.get(32),
-        //         GTCMItemList.HighDimensionalInterface.get(32)
-        //寰宇电路基板 16
-        //口袋维度输出端 8
-        //熵还原物质纳米蜂群 8
-        // 寰宇超级电脑 2
-        //     )
-        //     .fluidInputs(
-        //         MaterialsUEVplus.Time.getMolten(1000*16),
-        //        MaterialsUEVplus.Space.getMolten(1000*16)
-        //     )
-        //     .itemOutputs(
-        //         GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32173)
-        //     )
-        //     .noFluidOutputs()
-        //     .eut(RECIPE_MAX)
-        //     .duration(20*1000)
-        //     .addTo(MT);
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                ItemList.Field_Generator_UIV.get(16),
+                GTCMItemList.HighDimensionalResistor.get(32),
+                GTCMItemList.HighDimensionalDiode.get(32),
+                GTCMItemList.HighDimensionalTransistor.get(32),
+                GTCMItemList.HighDimensionalCapacitor.get(32),
+                GTCMItemList.HighDimensionalInterface.get(32),
+                GTCMItemList.ExoticCircuitBoard.get(16),
+                GTCMItemList.MicroDimensionOutput.get(16),
+                GTCMItemList.EntropyReductionMaterialNanoswarm.get(16),
+                ItemList.Circuit_CosmicComputer.get(2)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.Time.getMolten(1000 * 16),
+                MaterialsUEVplus.Space.getMolten(1000 * 16)
+            )
+            .itemOutputs(
+                ItemList.Circuit_CosmicMainframe.get(1)
+            )
+            .noFluidOutputs()
+            .eut(RECIPE_MAX)
+            .duration(20 * 1000)
+            .addTo(MT);
 
-        //超时空 MAX主机
-        // GT_Values.RA
-        //     .stdBuilder()
-        //     .itemInputs(
-        //        GT_Utility.getIntegratedCircuit(1),
-        //这是个例外：超时空的soc也不能省去超立方体
-        // ItemList.EnergisedTesseract.get(64),
-        //所有主机的力场也不能省去，但是放在你那个空间站可以节省
-        //         ItemList.Field_Generator_UMV.get(16),
-        //         GTCMItemList.HighDimensionalResistor.get(64),
-        //         GTCMItemList.HighDimensionalDiode.get(64),
-        //         GTCMItemList.HighDimensionalTransistor.get(64),
-        //         GTCMItemList.HighDimensionalCapacitor.get(64),
-        //         GTCMItemList.HighDimensionalInterface.get(64)
-        //超时空电路基板 16
-        //叙事层覆写装置 8
-        //超时空叙事层适应型特种SRA 8
-        //realSingularity纳米蜂群 8
-        //寰宇超级电脑 2
-        //     )
-        //此处流体输入应有蓝框岩浆和你加的三种材料的熔融态
-        //     .fluidInputs(
-        //     )
-        //     .itemOutputs(
-        //         GT_ModHandler.getModItem("gregtech","gt.metaitem.03",16,32177)
-        //     )
-        //     .noFluidOutputs()
-        //     .eut(RECIPE_MAX*16)
-        //     .duration(20*1500)
-        //     .addTo(MT);
+//        超时空 MAX主机
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+//        这是个例外：超时空的soc也不能省去超立方体
+                ItemList.EnergisedTesseract.get(64),
+//        所有主机的力场也不能省去，但是放在你那个空间站可以节省
+                ItemList.Field_Generator_UMV.get(16),
+                GTCMItemList.HighDimensionalResistor.get(64),
+                GTCMItemList.HighDimensionalDiode.get(64),
+                GTCMItemList.HighDimensionalTransistor.get(64),
+                GTCMItemList.HighDimensionalCapacitor.get(64),
+                GTCMItemList.HighDimensionalInterface.get(64),
+                GTCMItemList.TranscendentCircuitBoard.get(16),
+                GTCMItemList.NarrativeLayerOverwritingDevice.get(16),
+                GTCMItemList.HyperspaceNarrativeLayerAdaptiveSpecialSRA.get(16),
+                GTCMItemList.RealSingularityNanoSwarm.get(8),
+                ItemList.Circuit_TranscendentComputer.get(2)
+            )
+//        此处流体输入应有蓝框岩浆和你加的三种材料的熔融态
+            .fluidInputs(
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getFluid(1440),
+                MaterialPool.entropyReductionProcess.getMolten(144000),
+                MaterialPool.eventHorizonDiffusers.getMolten(144000),
+                MaterialPool.realSingularity.getMolten(1440)
+            )
+            .itemOutputs(
+                ItemList.Circuit_TranscendentMainframe.get(1)
+            )
+            .noFluidOutputs()
+            .eut(RECIPE_MAX * 16)
+            .duration(20 * 1500)
+            .addTo(MT);
 
         //MAX电动马达
         //物品输入：

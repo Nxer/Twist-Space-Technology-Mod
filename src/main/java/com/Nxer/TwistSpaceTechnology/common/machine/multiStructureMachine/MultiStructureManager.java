@@ -3,18 +3,15 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
 
 public class MultiStructureManager extends WorldSavedData {
 
-    private static transient final HashMap<Integer, GT_TileEntity_MultiStructureMachine<?>> machines = new HashMap<>();
+    private static final HashMap<Integer, GT_TileEntity_MultiStructureMachine<?>> machines = new HashMap<>();
     private static final HashMap<Integer, HashSet<Integer>> subMachines = new HashMap<>();
-
     private static final HashMap<Integer, ArrayList<Integer>> validSubTypeCode = new HashMap<>();
     private static Integer endID = 0;
 
@@ -102,22 +99,22 @@ public class MultiStructureManager extends WorldSavedData {
         LOG.info("machine removed:" + machine.getLocalName());
     }
 
-    public static boolean isComplete(GT_TileEntity_MultiStructureMachine<?> machine) {
-        if (machine == null) {
-            return false;
-        }
-        int ID = machine.ID;
-        for (var i : subMachines.get(ID)) {
-            var subMachine = machines.get(i);
-            if (subMachine == null) {
-                continue;
-            }
-            if (!subMachine.checkMachine(subMachine.getBaseMetaTileEntity(), null)) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    public static boolean isComplete(GT_TileEntity_MultiStructureMachine<?> machine) {
+//        if (machine == null) {
+//            return false;
+//        }
+//        int ID = machine.ID;
+//        for (var i : subMachines.get(ID)) {
+//            var subMachine = machines.get(i);
+//            if (subMachine == null) {
+//                continue;
+//            }
+//            if (!subMachine.checkMachine(subMachine.getBaseMetaTileEntity(), null)) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     @Override
     public void readFromNBT(NBTTagCompound p_76184_1_) {
@@ -128,4 +125,28 @@ public class MultiStructureManager extends WorldSavedData {
     public void writeToNBT(NBTTagCompound p_76187_1_) {
 
     }
+}
+
+class structureChecker implements Runnable{
+    public static structureChecker checker=new structureChecker();
+    public static final Queue<GT_TileEntity_MultiStructureMachine<?>> checkQueue=new PriorityQueue<>();
+
+    @Override
+    public void run() {
+        while(true){
+            if(checkQueue.size()>0){
+                var machine=checkQueue.poll();
+                if(machine!=null){
+                    machine.checkStructure(false, machine.getBaseMetaTileEntity());
+                }
+            }
+            try {
+                wait(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
 }

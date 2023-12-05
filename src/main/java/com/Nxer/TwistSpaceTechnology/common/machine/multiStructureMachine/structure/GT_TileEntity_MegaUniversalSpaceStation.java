@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;// spotless:off
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.spaceStationConstructingMaterialMax;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.spaceStationStructureBlockMAX;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
@@ -9,6 +10,11 @@ import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_SpaceStationRepairHatch;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -17,7 +23,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_Til
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
-import com.gtnewhorizon.structurelib.alignment.IAlignment;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
@@ -31,6 +36,10 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gtPlusPlus.core.block.ModBlocks;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.util.Objects;
 
 // spotless:off
 public class GT_TileEntity_MegaUniversalSpaceStation
@@ -51,19 +60,76 @@ public class GT_TileEntity_MegaUniversalSpaceStation
         super(mName);
     }
 
+
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return super.checkMachine(aBaseMetaTileEntity, aStack);
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+
+        super.onPreTick(aBaseMetaTileEntity, aTick);
+    }
+
+
+    @Override
+    public @NotNull CheckRecipeResult checkProcessing() {
+        if (InConstruct.isEmpty()) {
+            return SimpleCheckRecipeResult.ofSuccess("space station running fine");
+        }
+        // return early if no input busses are present, the first bus is invalid or the TE is not on a space station
+        if (runningTick % 100 == 0) {
+            GT_Hatch_SpaceStationRepairHatch bus;
+            try {
+                bus = (GT_Hatch_SpaceStationRepairHatch) mInputBusses.get(0);
+            } catch (Exception e) {
+                return SimpleCheckRecipeResult.ofFailure(
+                    "space station is not complete or destroyed by someone, not you right?\n" +
+                        "no repair hatch find, please set one");
+            }
+            ItemStack repairItem = bus.getBaseMetaTileEntity().getStackInSlot(0);
+            if (repairItem == null) {
+                return SimpleCheckRecipeResult.ofFailure(
+                    "space station is not complete or destroyed by someone, not you right?\n" +
+                        "no repair item find!");
+            }
+            if (Objects.equals(repairItem.getItem(), spaceStationConstructingMaterialMax.getItem())
+                && repairItem.stackSize >= 1) {
+                repairItem.stackSize--;
+                int num = InConstruct.iterator().next();
+                repair(num);
+                construct(null, false);
+                return SimpleCheckRecipeResult.ofFailure(
+                    "space station is not complete or destroyed by someone, not you right?\n" +
+                        "repairing or constructing space station, please wait");
+            } else {
+                return SimpleCheckRecipeResult.ofFailure(
+                    "space station is not complete or destroyed by someone, not you right?\n" +
+                        "repair item not fit!");
+            }
+            // count mining pipes, get depth
+        }
+        return SimpleCheckRecipeResult.ofFailure("space station is not complete or destroyed by someone, not you right?");
+
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        super.construct(stackSize, hintsOnly);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        GT_Utility.sendChatToPlayer(env.getActor(), "warning! you should not use general method to construct such a " +
+            "big structure! this will still process for you anyway.");
+        elementBudget = Math.max(100, elementBudget);
+        return super.survivalConstruct(stackSize, elementBudget, env);
     }
 
     @Override
     public IStructureDefinition<GT_TileEntity_MegaUniversalSpaceStation> getStructureDefinition() {
         if (structureDefinition == null) {
-
             var builder = StructureDefinition.<GT_TileEntity_MegaUniversalSpaceStation>builder();
             for (int i = 0; i < StructureLoader.readStructure(mName).shape.size(); i++) {
                 builder.addShape(mName + i, StructureLoader.getShape(mName, mName + i));
             }
+            //region structure
             // Structure:
             //
             // Blocks:
@@ -101,6 +167,7 @@ public class GT_TileEntity_MegaUniversalSpaceStation
             //
             // Offsets:
             // 215 45 223
+            //endregion
             structureDefinition = builder
                 .addElement(
                     'A',
@@ -111,7 +178,7 @@ public class GT_TileEntity_MegaUniversalSpaceStation
                         .dot(1)
                         .buildAndChain(bw_realglas2, 0))
                 // .addElement('B', ofBlock(SpaceStationAntiGravityBlock, 13))
-                .addElement('C', ofBlock(spaceStationStructureBlock, 0))
+                .addElement('C', ofBlock(spaceStationStructureBlock, 13))
                 .addElement('D', ofBlock(GregTech_API.sBlockCasings9, 1))
                 .addElement('E', ofBlock(TT_Container_Casings.sBlockCasingsBA0, 10))
                 .addElement('F', ofBlock(TT_Container_Casings.sBlockCasingsBA0, 12))
@@ -174,10 +241,6 @@ public class GT_TileEntity_MegaUniversalSpaceStation
         return new GT_TileEntity_MegaUniversalSpaceStation(this.mName);
     }
 
-    @Override
-    public IAlignment getAlignment() {
-        return super.getAlignment();
-    }
 
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
@@ -208,9 +271,9 @@ public class GT_TileEntity_MegaUniversalSpaceStation
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean aActive, boolean aRedstone) {
+                                 int colorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183),
+            if (aActive) return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(183),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE)
                     .extFacing()
@@ -219,8 +282,8 @@ public class GT_TileEntity_MegaUniversalSpaceStation
                     .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW)
                     .extFacing()
                     .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183), TextureFactory.builder()
+                    .build()};
+            return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(183), TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
                 .extFacing()
                 .build(),
@@ -228,8 +291,13 @@ public class GT_TileEntity_MegaUniversalSpaceStation
                     .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_GLOW)
                     .extFacing()
                     .glow()
-                    .build() };
+                    .build()};
         }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183) };
+        return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(183)};
+    }
+
+    @Override
+    public void onWorldSave(File aSaveDirectory) {
+        super.onWorldSave(aSaveDirectory);
     }
 }

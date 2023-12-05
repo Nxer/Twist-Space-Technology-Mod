@@ -411,24 +411,8 @@ public class GT_TileEntity_StellarMaterialSiphon
             resetMachine(true);
             return SimpleCheckRecipeResult.ofFailure("no_mining_pipe");
         }
-//        var provider=this.getBaseMetaTileEntity()
-//            .getWorld().provider;
-//        if (!(this.getBaseMetaTileEntity()
-//            .getWorld().provider instanceof IOrbitDimension provider)) {
-//            resetMachine(true);
-//            return SimpleCheckRecipeResult.ofFailure("no_space_station");
-//        }
-
         Map<Integer, FluidStack> planetRecipes = StellarMaterialSiphonRecipePool.RECIPES
             .get("blackHole");
-
-        // return early if there are no recipes for the planet the station is orbiting
-//        if (planetRecipes == null) {
-//            planetRecipes = StellarMaterialSiphonRecipePool.RECIPES
-//                .get("BlackHole");
-//            //resetMachine(true);
-//            //return CheckRecipeResultRegistry.NO_RECIPE;
-//        }
 
         GT_MetaTileEntity_Hatch_InputBus bus = mInputBusses.get(0);
 
