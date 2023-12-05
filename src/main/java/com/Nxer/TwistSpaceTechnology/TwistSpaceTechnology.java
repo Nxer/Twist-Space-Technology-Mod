@@ -62,7 +62,7 @@ public class TwistSpaceTechnology {
      */
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 
-    @Mod.Instance
+    @Mod.Instance(Tags.MODID)
     public static TwistSpaceTechnology instance;
 
     @SidedProxy(

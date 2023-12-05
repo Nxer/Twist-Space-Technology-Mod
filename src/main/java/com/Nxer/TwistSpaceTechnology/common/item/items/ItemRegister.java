@@ -55,6 +55,26 @@ public class ItemRegister {
         GTCMItemList.HighDimensionalResistor.set(initItem01("High-dimensional Resistor", 181));
         GTCMItemList.HighDimensionalTransistor.set(initItem01("High-dimensional Transistor", 182));
 
+        GTCMItemList.CosmicCircuitBoard.set(initItem01("Cosmic Circuit Board", 300));
+        GTCMItemList.IntelligentImitationNeutronStarCore.set(initItem01("Intelligent imitation neutron star core", 301));
+        GTCMItemList.EventHorizonNanoSwarm.set(initItem01("Event Horizon Nano Swarm", 302));
+        GTCMItemList.MicroDimensionOutput.set(initItem01("Micro dimension output", 303));
+        GTCMItemList.EntropyReductionMaterialNanoswarm.set(initItem01("Entropy reduction material nanoswarm", 304));
+        GTCMItemList.TranscendentCircuitBoard.set(initItem01("Transcendent Circuit Board", 305));
+        GTCMItemList.NarrativeLayerOverwritingDevice.set(initItem01("Narrative layer overwriting device", 306));
+        GTCMItemList.HyperspaceNarrativeLayerAdaptiveSpecialSRA.set(initItem01("Hyperspace Narrative Layer Adaptive Special SRA", 307));
+        GTCMItemList.RealSingularityNanoSwarm.set(initItem01("Real Singularity Nano Swarm", 308));
+        GTCMItemList.ParadoxEngine.set(initItem01("paradox engine", 309));
+        GTCMItemList.QuasarSoc.set(initItem01("quasar soc", 310));
+        GTCMItemList.MiniatureGalaxy.set(initItem01("miniature galaxy", 311));
+        GTCMItemList.Self_adaptiveAI1.set(initItem01("self-adaptive AI Ⅰ", 312));
+        GTCMItemList.Self_adaptiveAI2.set(initItem01("self-adaptive AI Ⅱ", 313));
+        GTCMItemList.Self_adaptiveAI3.set(initItem01("self-adaptive AI Ⅲ", 314));
+        GTCMItemList.Self_adaptiveAI4.set(initItem01("self-adaptive AI Ⅳ", 315));
+        GTCMItemList.Self_adaptiveAI5.set(initItem01("self-adaptive AI Ⅴ", 316));
+        GTCMItemList.CoreOfT800.set(initItem01("core of T800", 317));
+        GTCMItemList.ExoticCircuitBoard.set(initItem01("Exotic Circuit Board", 318));
+
 
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
     }

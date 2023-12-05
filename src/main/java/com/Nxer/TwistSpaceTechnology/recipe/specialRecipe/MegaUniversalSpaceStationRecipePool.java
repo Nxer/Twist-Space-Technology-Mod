@@ -207,6 +207,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 CustomItemList.StargateFramePart.get(64),
                 CustomItemList.StargateShieldingFoil.get(64),
                 CustomItemList.StargateFramePart.get(64),
+                //GT_material.TestMaterial.getPlates(64),
                 CustomItemList.StargateChevron.get(64),
                 Machine_Multi_EyeOfHarmony.get(64),
                 TimeAccelerationFieldGeneratorTier8.get(64),
@@ -218,12 +219,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 StabilisationFieldGeneratorTier8.get(64),
                 StabilisationFieldGeneratorTier8.get(64),
                 MiracleTop.get(64))
-            .fluidInputs(
-                MaterialsUEVplus.SpaceTime.getFluid(1000000000),
-                MaterialsUEVplus.Time.getFluid(1000000000),
-                MaterialsUEVplus.RawStarMatter.getPlasma(1000000000),
-                MaterialsUEVplus.DimensionallyTranscendentStellarCatalyst.getFluid(1000000000))
-            .itemOutputs(GTCMItemList.megaUniversalSpaceStation.get(1))
+            .noFluidInputs()
+            .itemOutputs(GTCMItemList.megaUniversalSpaceStation.get(1)
+                )
             .noFluidOutputs()
             .noOptimize()
             .eut(1024 * RECIPE_MAX)
