@@ -74,6 +74,7 @@ public class ItemRegister {
         GTCMItemList.Self_adaptiveAI5.set(initItem01("self-adaptive AI Ⅴ", 316));
         GTCMItemList.CoreOfT800.set(initItem01("core of T800", 317));
         GTCMItemList.ExoticCircuitBoard.set(initItem01("Exotic Circuit Board", 318));
+        GTCMItemList.spaceStationConstructingMaterialMax.set(initItem01("very good item", 319));
 
 
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));

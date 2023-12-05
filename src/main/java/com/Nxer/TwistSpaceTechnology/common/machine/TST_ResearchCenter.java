@@ -153,7 +153,7 @@ public class TST_ResearchCenter extends GT_MetaTileEntity_MultiblockBase_EM impl
                 computationRequired = computationRemaining = 10_000_000 * 20L;
                 mMaxProgresstime = 20;
                 mEfficiencyIncrease = 10000;
-                eRequiredData = new Random(114514).nextInt(1000000, Integer.MAX_VALUE);
+                eRequiredData = 1919810;// new Random(114514).nextInt(1000000, Integer.MAX_VALUE);
                 eAmpereFlow = (short) (eRequiredData & 0xFFFF);
                 lEUt = -(2 << 24);
                 eHolders.get(0)

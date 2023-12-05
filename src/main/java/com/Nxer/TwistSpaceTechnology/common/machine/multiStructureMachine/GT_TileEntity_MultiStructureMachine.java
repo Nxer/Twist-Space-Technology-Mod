@@ -2,7 +2,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
-import static com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structureChecker.checkQueue;
+import static com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structureChecker.checker;
 
 import java.util.HashSet;
 
@@ -36,11 +36,12 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     protected GT_TileEntity_MultiStructureMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         setShape();
-
+        turnOffMaintenance();
     }
 
     public GT_TileEntity_MultiStructureMachine(String mName) {
         super(mName);
+        turnOffMaintenance();
     }
 
     @Override
@@ -57,11 +58,12 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
 
     public void setShape() {
         StructureLoader.load(mName, mName);
-        var pieces = StructureLoader.getPieces(mName)
-            .size();
-        for (int i = 0; i < pieces; i++) {
-            InConstruct.add(i);
-        }
+        // var pieces = StructureLoader.getPieces(mName)
+        // .size();
+        // for (int i = 0; i < pieces; i++) {
+        // InConstruct.add(i);
+        //
+        // }
     }
 
     @Override
@@ -72,6 +74,9 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
+        if (InConstruct.isEmpty()) {
+            return;
+        }
         int num = InConstruct.iterator()
             .next();
         StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader.getOffSet(mName, mName + num);
@@ -82,7 +87,10 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
             offSet.horizontalOffSet,
             offSet.verticalOffSet,
             offSet.depthOffSet)) {
-            InConstruct.remove(num);
+            if (!hintsOnly) {
+                //LOG.info("build and remove piece " + mName + num + "from InConstruct set");
+                InConstruct.remove(num);
+            }
         }
 
     }
@@ -103,17 +111,20 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     public boolean checkStructure(boolean aForceReset, IGregTechTileEntity aBaseMetaTileEntity) {
         StructureLoader.MultiStructureDefinition.OffSet offSet = StructureLoader
             .getOffSet(mName, mName + checkStructureCount);
+        //LOG.info("checking structure now: piece" + checkStructureCount);
         if (checkPiece(
             mName + checkStructureCount,
             offSet.horizontalOffSet,
             offSet.verticalOffSet,
             offSet.depthOffSet)) {
+            //LOG.info("checked and remove piece " + mName + checkStructureCount + "from InConstruct set");
             InConstruct.remove(checkStructureCount);
             checkStructureCount++;
             if (checkStructureCount == StructureLoader.readStructure(mName).pieces.size()) {
                 checkStructureCount = 0;
             }
         } else {
+            LOG.info("checked and put " + checkStructureCount + " into the InConstruct set");
             InConstruct.add(checkStructureCount);
         }
         return InConstruct.isEmpty();
@@ -144,8 +155,11 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         runningTick++;
-        if (runningTick % 100 == 0 && checkQueue.size() <= 1000) {
-            checkQueue.add(this);
+        if (runningTick % 20 == 0 && aBaseMetaTileEntity.isServerSide()) {
+            checker.add(this);
+            if (!InConstruct.isEmpty()) {
+                construct(null, false);
+            }
         }
         if (aTick == 1 && aBaseMetaTileEntity.isServerSide()) {
             MultiStructureManager.registryMachine(this);
@@ -156,11 +170,6 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         var itemInUse = aPlayer.getHeldItem();
-        if (itemInUse.getItem() != null) {
-            LOG.info(
-                itemInUse.getItem()
-                    .getUnlocalizedName());
-        }
         if (itemInUse.getItem() instanceof ItemMultiStructuresLinkTool item) {
             item.secondPosition = ID;
             item.link(aPlayer);
@@ -183,5 +192,14 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
             return;
         }
         super.onLeftclick(aBaseMetaTileEntity, aPlayer);
+    }
+
+    protected void turnOffMaintenance() {
+        mWrench = true;
+        mScrewdriver = true;
+        mSoftHammer = true;
+        mHardHammer = true;
+        mSolderingTool = true;
+        mCrowbar = true;
     }
 }
