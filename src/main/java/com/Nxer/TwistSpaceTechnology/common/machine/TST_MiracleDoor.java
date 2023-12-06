@@ -254,21 +254,21 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
             .toString();
     }
 
-     @Override
-     public boolean onRunningTick(ItemStack aStack) {
-         if (needPhotonAmount > 0){
-             startRecipeProcessing();
-             if (consumePhoton(needPhotonAmount)){
-                 needPhotonAmount = 0;
-                 endRecipeProcessing();
-             } else {
-                 endRecipeProcessing();
-                 criticalStopMachine();
-                 return false;
-             }
-         }
-         return super.onRunningTick(aStack);
-     }
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+        if (needPhotonAmount > 0) {
+            startRecipeProcessing();
+            if (consumePhoton(needPhotonAmount)) {
+                needPhotonAmount = 0;
+                endRecipeProcessing();
+            } else {
+                endRecipeProcessing();
+                criticalStopMachine();
+                return false;
+            }
+        }
+        return super.onRunningTick(aStack);
+    }
 
     @Override
     protected boolean isEnablePerfectOverclock() {

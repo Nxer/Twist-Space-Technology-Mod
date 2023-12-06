@@ -27,9 +27,7 @@ public class PhotonControllerUpgradeCasingItemBlock extends ItemBlockBase01 {
     public void addInformation(ItemStack aItemStack, EntityPlayer p_77624_2_, List theTooltipsList,
         boolean p_77624_4_) {
         if (null == aItemStack) return;
-
         theTooltipsList.addAll(Arrays.asList(TextLocalization.TooltipsUpgrades[aItemStack.getItemDamage()]));
-
         theTooltipsList.add(mNoMobsToolTip);
         theTooltipsList.add(mNoTileEntityToolTip);
     }

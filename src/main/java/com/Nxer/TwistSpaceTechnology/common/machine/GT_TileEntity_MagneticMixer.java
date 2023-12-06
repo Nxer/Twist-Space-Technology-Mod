@@ -81,7 +81,8 @@ public class GT_TileEntity_MagneticMixer
     }
 
     public float getSpeedBonus() {
-        return (float) Math.pow(SpeedBonus_MultiplyPerTier_MagneticMixer, GT_Utility.getTier(this.getAverageInputVoltage()));
+        return (float) Math
+            .pow(SpeedBonus_MultiplyPerTier_MagneticMixer, GT_Utility.getTier(this.getAverageInputVoltage()));
     }
 
     @Override

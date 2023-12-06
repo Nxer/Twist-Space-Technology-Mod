@@ -182,7 +182,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     @Override
     protected ProcessingLogic createProcessingLogic() {
 
-	    return new GTCM_ProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
             @NotNull
             @Override
             public CheckRecipeResult process() {
@@ -204,7 +205,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     }
 
     public float getSpeedBonus() {
-        return 1F / (this.fieldGeneratorTier < 2 ? SpeedMultiplier_Tier1Block_SpaceScaler : SpeedMultiplier_BeyondTier2Block_SpaceScaler);
+        return 1F / (this.fieldGeneratorTier < 2 ? SpeedMultiplier_Tier1Block_SpaceScaler
+            : SpeedMultiplier_BeyondTier2Block_SpaceScaler);
     }
 
     @Override

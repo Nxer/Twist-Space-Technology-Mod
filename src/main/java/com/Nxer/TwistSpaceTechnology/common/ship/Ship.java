@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.ship;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -19,26 +19,18 @@ import com.Nxer.TwistSpaceTechnology.common.ship.system.WeaponSystem;
 
 import gregtech.api.util.GT_Utility;
 
-public class Ship extends Entity implements Runnable {
+public class Ship extends EntityMob implements Runnable {
 
     public EntityPlayer owner;
     public World world;
-
     public String className;
     public String shipName;
-
     public Integer length = 0, height = 0, width = 0;
-
     public Integer dockyard = -1;
-
     public List<Integer> validDimId = new ArrayList<>();
-
     public boolean forceTravel = false;
-
     public static final Integer maxLength = 64, maxHeight = 64, maxWidth = 64;
-
     public List<ShipComponent> structure = new ArrayList<>(maxHeight * maxLength * maxWidth);
-
     public PropulsionSystem propulsionSystem = new PropulsionSystem();
     public EnergySystem energySystem = new EnergySystem();
     public ControlSystem controlSystem = new ControlSystem();
@@ -46,7 +38,7 @@ public class Ship extends Entity implements Runnable {
     public ShieldSystem shieldSystem = new ShieldSystem();
     public RadarSystem radarSystem = new RadarSystem();
 
-    public Ship(World worldIn, String className) {
+    public Ship(World worldIn) {
         super(worldIn);
         this.world = worldIn;
         init();
@@ -154,22 +146,28 @@ public class Ship extends Entity implements Runnable {
 
     @Override
     protected void entityInit() {
-
+        super.entityInit();
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound tagCompound) {
-
+    public void readEntityFromNBT(NBTTagCompound tagCompound) {
+        super.readEntityFromNBT(tagCompound);
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound tagCompound) {
+    public void writeEntityToNBT(NBTTagCompound tagCompound) {
+        super.writeEntityToNBT(tagCompound);
+    }
 
+    @Override
+    public String toString() {
+        return "MyShip";
     }
 
     @Override
     public void run() {
         while (checkComponentStatus()) {
+
             long time = System.currentTimeMillis();
             charge();
             if (checkEnergy()) {
@@ -188,6 +186,5 @@ public class Ship extends Entity implements Runnable {
 
         }
         setDead();
-
     }
 }

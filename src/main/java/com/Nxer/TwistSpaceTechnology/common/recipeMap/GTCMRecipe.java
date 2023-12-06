@@ -294,9 +294,9 @@ public class GTCMRecipe {
         NameMegaUniversalSpaceStation,
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
+        16,
         4,
-        4,
-        4,
+        16,
         1,
         true,
         0,
@@ -305,7 +305,7 @@ public class GTCMRecipe {
         "",
         1,
         "",
-        false,
+        true,
         true);
 
     public final GTCMRecipeMap OreProcessingRecipes = new GTCMRecipeMap(

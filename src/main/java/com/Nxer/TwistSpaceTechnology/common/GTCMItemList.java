@@ -23,6 +23,28 @@ public enum GTCMItemList {
     EnergyCrystalShard,
     PerfectEnergyCrystal,
 
+    CosmicCircuitBoard,
+    IntelligentImitationNeutronStarCore,
+    EventHorizonNanoSwarm,
+    MicroDimensionOutput,
+    EntropyReductionMaterialNanoswarm,
+    TranscendentCircuitBoard,
+    NarrativeLayerOverwritingDevice,
+    HyperspaceNarrativeLayerAdaptiveSpecialSRA,
+    RealSingularityNanoSwarm,
+    ParadoxEngine,
+    QuasarSoc,
+    MiniatureGalaxy,
+    Self_adaptiveAI1,
+    Self_adaptiveAI2,
+    Self_adaptiveAI3,
+    Self_adaptiveAI4,
+    Self_adaptiveAI5,
+    CoreOfT800,
+    ExoticCircuitBoard,
+
+    spaceStationConstructingMaterialMax,
+
     MultiStructuresLinkTool,
 
     // Machines
@@ -65,6 +87,7 @@ public enum GTCMItemList {
     DSPLauncher,
     DSPReceiver,
     ArtificialStar,
+    StellarMaterialSiphon,
 
     // single block Machines
     InfiniteAirHatch,

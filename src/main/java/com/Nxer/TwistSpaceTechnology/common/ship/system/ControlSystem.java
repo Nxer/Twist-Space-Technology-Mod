@@ -1,6 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.ship.system;
 
-import com.Nxer.TwistSpaceTechnology.common.ship.component.ShipComponent;
+public class ControlSystem extends energyConsumer {
 
-public class ControlSystem extends ShipComponent {
+    public long droneCapacity;
+    public long droneBroadband;
+    public long cpuCapacity;
+
+    @Override
+    void getEnengyConsumeinAFrame() {
+        // TODO
+    }
 }

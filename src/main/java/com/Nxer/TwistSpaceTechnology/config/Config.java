@@ -26,6 +26,8 @@ public class Config {
     public static final String MoleculeDeconstructor = "MoleculeDeconstructor";
     public static final String CrystallineInfinitier = "CrystallineInfinitier";
 
+    public static final String spaceStation="spaceStation";
+
     // endregion
 
     // region General
@@ -146,6 +148,8 @@ public class Config {
     public static byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = 3;
     // endregion
 
+
+    public static boolean activateMegaSpaceStation=false;
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -263,6 +267,7 @@ public class Config {
         EUTOfLaunchingSolarSail = configuration.getInt("EUTOfLaunchingSolarSail", DSP, EUTOfLaunchingSolarSail, 1, Integer.MAX_VALUE, "EUt of Launching Solar Sail.");
         EUTOfLaunchingNode = configuration.getInt("EUTOfLaunchingNode", DSP, EUTOfLaunchingNode, 1, Integer.MAX_VALUE, "EUt of Launching Node.");
 
+        activateMegaSpaceStation = configuration.getBoolean("activateMegaSpaceStation",spaceStation,activateMegaSpaceStation,"decide weather can use mega space station");
 
         if (configuration.hasChanged()) {
             configuration.save();

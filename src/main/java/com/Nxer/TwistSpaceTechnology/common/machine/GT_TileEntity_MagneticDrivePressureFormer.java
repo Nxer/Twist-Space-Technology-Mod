@@ -107,8 +107,9 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(
-                    ((mode == 0 ? (1.0F / SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer) : (1.0F / SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer)) / (1 + coilLevel.getTier() * SpeedUpMultiplier_Coil_MagneticDrivePressureFormer))
-                );
+                    ((mode == 0 ? (1.0F / SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer)
+                        : (1.0F / SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer))
+                        / (1 + coilLevel.getTier() * SpeedUpMultiplier_Coil_MagneticDrivePressureFormer)));
                 setPerfectOverclock(isPerfectOverclock());
                 return super.process();
             }
@@ -120,7 +121,8 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                 return this.setOverclock(1, 2);
             }
 
-        }.setMaxParallel(Parallel_MagneticDrivePressureFormer).setEuModifier(EU_Multiplier_MagneticDrivePressureFormer);
+        }.setMaxParallel(Parallel_MagneticDrivePressureFormer)
+            .setEuModifier(EU_Multiplier_MagneticDrivePressureFormer);
 
     }
 

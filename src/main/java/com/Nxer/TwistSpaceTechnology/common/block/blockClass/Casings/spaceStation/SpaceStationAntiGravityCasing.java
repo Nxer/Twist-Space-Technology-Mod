@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
+import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClientOnly.iconsSpaceStationAntiGravityCasingMap;
 import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 
@@ -46,7 +47,6 @@ public class SpaceStationAntiGravityCasing extends BlockBase01 {
      * Tooltips of these blocks' ItemBlock.
      */
     public static String[][] SpaceStationAntiGravityCasingTooltipsArray = new String[14][];
-    private IIcon blockIcon;
     private String unlocalizedName;
 
     // endregion
@@ -76,15 +76,8 @@ public class SpaceStationAntiGravityCasing extends BlockBase01 {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-
-        return Block.getBlockById(1)
-            .getIcon(1, 0);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg) {
-
+        return meta < iconsSpaceStationAntiGravityCasingMap.size() ? iconsSpaceStationAntiGravityCasingMap.get(meta)
+            : iconsSpaceStationAntiGravityCasingMap.get(0);
     }
 
     @Override
@@ -106,6 +99,16 @@ public class SpaceStationAntiGravityCasing extends BlockBase01 {
     public void getSubBlocks(Item aItem, CreativeTabs aCreativeTabs, List list) {
         for (int Meta : SpaceStationAntiGravityCasingCasingSet) {
             list.add(new ItemStack(aItem, 1, Meta));
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister reg) {
+        this.blockIcon = reg.registerIcon("gtnhcommunitymod:SpaceStationAntiGravityCasing/0");
+        for (int Meta : SpaceStationAntiGravityCasingCasingSet) {
+            iconsSpaceStationAntiGravityCasingMap
+                .put(Meta, reg.registerIcon("gtnhcommunitymod:SpaceStationAntiGravityCasing/" + Meta));
         }
     }
 
