@@ -79,6 +79,7 @@ public class Config {
     public static int Parallel_MagneticDrivePressureFormer = 1024;
     public static float EU_Multiplier_MagneticDrivePressureFormer = 0.75F;
     public static int GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = 11;
+    public static int CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer = 11;
     // endregion
 
     // region Miracle Top
@@ -191,6 +192,7 @@ public class Config {
         Parallel_MagneticDrivePressureFormer = configuration.getInt("Parallel_MagneticDrivePressureFormer",MagneticDrivePressureFormer,Parallel_MagneticDrivePressureFormer,1,65536,"Parallel of Magnetic Drive Pressure Former. Type: int");
         EU_Multiplier_MagneticDrivePressureFormer = Float.parseFloat(configuration.getString("EU_Multiplier_MagneticDrivePressureFormer",MagneticDrivePressureFormer,String.valueOf(EU_Multiplier_MagneticDrivePressureFormer),"EU Multiplier of Magnetic Drive Pressure Former. Type: float"));
         GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = configuration.getInt("GlassTier_LimitLaserHatch_MagneticDrivePressureFormer",MagneticDrivePressureFormer,GlassTier_LimitLaserHatch_MagneticDrivePressureFormer,1,12,"Glass Tier of Laser Hatch Limit in Magnetic Drive Pressure Former. Type: int");
+        CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer = configuration.getInt("CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer",MagneticDomainConstructor,CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer,0,13,"The Coil Tier can enable perfect overclock in Extruder mode. 0 is Cupronickel Coil, 13 is Eternal Coil, default 11 is Infinity Coil. Type: int");
         // endregion
 
         // region Physical Form Switcher
