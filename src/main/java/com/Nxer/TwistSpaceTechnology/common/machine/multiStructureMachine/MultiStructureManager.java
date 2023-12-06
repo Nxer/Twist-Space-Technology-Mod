@@ -9,9 +9,10 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
+
+import com.Nxer.TwistSpaceTechnology.config.Config;
 
 public class MultiStructureManager extends WorldSavedData {
 
@@ -133,7 +134,8 @@ public class MultiStructureManager extends WorldSavedData {
 }
 
 class structureChecker implements Runnable {
-//TODO
+
+    // TODO
     public static final structureChecker checker = new structureChecker();
     final Object lock = new Object();
     public final Queue<GT_TileEntity_MultiStructureMachine<?>> checkQueue = new ConcurrentLinkedQueue<>();
@@ -145,7 +147,7 @@ class structureChecker implements Runnable {
     }
 
     static {
-        if(Config.activateMegaSpaceStation) {
+        if (Config.activateMegaSpaceStation) {
             thread.start();
         }
     }

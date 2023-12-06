@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
@@ -1249,6 +1250,31 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(GTPP_Recipe.GTPP_Recipe_Map.sAlloyBlastSmelterRecipes);
 
         // endregion
+
+        // region Circuit Converter
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Iridium, 1),
+                ItemList.Casing_Processor.get(3),
+                ItemList.Machine_IV_Boxinator.get(1),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Elite),1},
+                new Object[]{OrePrefixes.circuit.get(Materials.Data),2},
+                new Object[]{OrePrefixes.circuit.get(Materials.Advanced),4},
+
+                GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Titanium, 4),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 8))
+            .fluidInputs(Materials.SolderingAlloy.getMolten(144*32))
+            .itemOutputs(CircuitConverter.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_IV)
+            .duration(20*30)
+            .addTo(sAssemblerRecipes);
+
+        // endregion
+
     }
     // spotless:on
 }

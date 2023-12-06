@@ -8,10 +8,11 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.interfaces.tileentity.IRecipeLockable;
 import gregtech.api.interfaces.tileentity.IVoidable;

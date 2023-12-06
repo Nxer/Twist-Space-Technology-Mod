@@ -439,6 +439,14 @@ public class TextLocalization {
 
     // endregion
 
+    // region CircuitConverter
+    public static final String NameCircuitConverter = texter("General Circuit Converter","NameCircuitConverter");
+    public static final String Tooltip_CircuitConverter_MachineType = texter("Circuit Converter","Tooltip_CircuitConverter_MachineType");
+    public static final String Tooltip_CircuitConverter_Controller = texter("Controller block for the General Circuit Converter","Tooltip_CircuitConverter_Controller");
+    public static final String Tooltip_CircuitConverter_01 = texter("Transform input circuits to Any Circuit.","Tooltip_CircuitConverter_01");
+    public static final String Tooltip_CircuitConverter_2_01 = texter("Maximum 8 In/Output Buses.","Tooltip_CircuitConverter_2_01");
+    // endregion
+
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
