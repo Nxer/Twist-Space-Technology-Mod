@@ -437,7 +437,15 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         this.mEnergyHatches.clear();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
-        EUtCanUse = getMaxInputEu();
+        if (isWirelessMode){
+            EUtCanUse = 0;
+        } else if (this.mExoticEnergyHatches.isEmpty() && this.mEnergyHatches.size() == 1){
+            // 1/16 Power losing region with single normal energy hatch
+            EUtCanUse = this.mEnergyHatches.get(0).maxEUInput() * 15 / 16;
+        } else {
+            // 1/32 Power losing region with multi energy hatch
+            EUtCanUse = getMaxInputEu() * 31 / 32;
+        }
         return true;
     }
 
