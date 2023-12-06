@@ -17,6 +17,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhoto
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCResearches;
 public class RecipeLoader {
 
     public static void loadRecipes() {
@@ -27,6 +28,7 @@ public class RecipeLoader {
             new DSPRecipePool(), new DistillationRecipePool(), new ExtractorRecipePool(),new CompressorRecipePool(),
             new BOTRecipePool(), new TCRecipePool(),new ElvenWorkshopRecipePool()};
 
+        new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
         }

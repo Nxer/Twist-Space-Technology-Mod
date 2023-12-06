@@ -83,7 +83,7 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
 
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes;
+        return GTCMRecipe.instance.ElvenWorkshopRecipes;
     }
 
     

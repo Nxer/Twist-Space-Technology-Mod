@@ -22,7 +22,7 @@ public class TCRecipePool implements IRecipePool{
     @Override
     public void loadRecipes() {
         /*Elven Workshop */
-        ThaumcraftApi.addInfusionCraftingRecipe("Research",GTCMItemList.ElvenWorkshop.get(1, 0),
+        ThaumcraftApi.addInfusionCraftingRecipe("BH_ELVEN_WORKSHOP",GTCMItemList.ElvenWorkshop.get(1, 0),
         10, 
         (new AspectList()).merge(Aspect.LIFE, 64).merge(Aspect.EARTH, 64).merge(Aspect.MAGIC, 64).merge(Aspect.MECHANISM, 64),
         new ItemStack(ModBlocks.terraPlate.getItemDropped(0, null, 0))

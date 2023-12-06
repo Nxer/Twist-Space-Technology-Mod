@@ -11,6 +11,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_ULV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
+import static gregtech.api.util.GT_RecipeConstants.OREDICT_INPUT;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,7 @@ import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
+import cofh.lib.util.helpers.ItemHelper;
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -38,6 +40,7 @@ import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.blocks.GT_Block_Stones;
 
 // spotless:off
 public class ElvenWorkshopRecipePool implements IRecipePool {
@@ -127,6 +130,38 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
             .noFluidOutputs()
             .eut(RECIPE_LV)
             .duration(20 * 1)
+            .addTo(EW);
+        GT_Values.RA.stdBuilder()
+            .itemInputs(new ItemStack(Items.ender_pearl, 1))
+            .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(1500))
+            .itemOutputs(new ItemStack(ModItems.manaResource,1,1))
+            .noFluidOutputs()
+            .eut(RECIPE_LV)
+            .duration(20 * 1)
+            .addTo(EW);
+        GT_Values.RA.stdBuilder()
+            .itemInputs(ItemHelper.cloneStack((ItemStack)OreDictionary.getOres("logWood").get(0), 16))
+            .noFluidInputs()
+            .itemOutputs(new ItemStack(ModBlocks.livingwood,16,0))
+            .noFluidOutputs()
+            .eut(RECIPE_HV)
+            .duration(20 * 30)
+            .addTo(EW);
+        GT_Values.RA.stdBuilder()
+            .itemInputs(ItemHelper.cloneStack((ItemStack)OreDictionary.getOres("stone").get(0), 16))
+            .noFluidInputs()
+            .itemOutputs(new ItemStack(ModBlocks.livingrock,16,0))
+            .noFluidOutputs()
+            .eut(RECIPE_HV)
+            .duration(20 * 30)
+            .addTo(EW);
+        GT_Values.RA.stdBuilder()
+            .itemInputs(new ItemStack(Blocks.end_stone,16),new ItemStack(Items.glass_bottle, 16))
+            .noFluidInputs()
+            .itemOutputs(new ItemStack(GT_Block_Stones.getBlockById(8),16,8),new ItemStack(ModItems.manaResource,16,15))
+            .noFluidOutputs()
+            .eut(RECIPE_HV)
+            .duration(20 * 30)
             .addTo(EW);
     }
 }
