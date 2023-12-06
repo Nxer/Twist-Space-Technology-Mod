@@ -158,7 +158,7 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(new ItemStack(Blocks.end_stone,16),new ItemStack(Items.glass_bottle, 16))
             .noFluidInputs()
-            .itemOutputs(new ItemStack(GT_Block_Stones.getBlockById(8),16,8),new ItemStack(ModItems.manaResource,16,15))
+            .itemOutputs(new ItemStack(GT_Block_Stones.getBlockById(8),16),new ItemStack(ModItems.manaResource,16,15))
             .noFluidOutputs()
             .eut(RECIPE_HV)
             .duration(20 * 30)
