@@ -23,7 +23,6 @@ public class MaterialPool implements Runnable {
     // ID manager
     private static final int offsetID_01 = 20_000;
 
-    public static final MaterialPool pool = new MaterialPool();
 
     public static final Werkstoff HolmiumGarnet = new Werkstoff(
         new short[] { 96, 96, 240 },
@@ -76,5 +75,6 @@ public class MaterialPool implements Runnable {
         for (var prefix : OrePrefixes.values()) {
             gf.addPrefix(prefix);
         }
+        gf.removePrefix(OrePrefixes.ore);
     }
 }

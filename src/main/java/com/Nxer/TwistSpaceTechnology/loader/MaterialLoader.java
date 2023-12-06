@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import static com.Nxer.TwistSpaceTechnology.common.material.MaterialPool.pool;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BlockRegister;
 import com.Nxer.TwistSpaceTechnology.common.item.items.ItemRegister;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
 
 /**
@@ -18,7 +18,7 @@ public class MaterialLoader {
         ItemRegister.registry();
         BlockRegister.registry();
 
-        WerkstoffAdderRegistry.addWerkstoffAdder(pool);
+        WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialPool());
 
     }
 
