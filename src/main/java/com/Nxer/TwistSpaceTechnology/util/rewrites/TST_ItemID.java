@@ -1,14 +1,17 @@
 package com.Nxer.TwistSpaceTechnology.util.rewrites;
 
-import gregtech.api.util.GT_Utility;
+import java.util.Objects;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
+import gregtech.api.util.GT_Utility;
 
 public class TST_ItemID extends GT_Utility.ItemId {
+
     // region Member Variables
     private Item item;
     private int metaData;
@@ -32,8 +35,7 @@ public class TST_ItemID extends GT_Utility.ItemId {
         this.metaData = 0;
     }
 
-    public TST_ItemID() {
-    }
+    public TST_ItemID() {}
     // endregion
 
     // region Static Methods
@@ -47,8 +49,8 @@ public class TST_ItemID extends GT_Utility.ItemId {
     // endregion
 
     // region Special Methods
-    public ItemStack getItemStack(int amount){
-        return new ItemStack(item,amount,metaData);
+    public ItemStack getItemStack(int amount) {
+        return new ItemStack(item, amount, metaData);
     }
 
     // endregion
@@ -107,7 +109,8 @@ public class TST_ItemID extends GT_Utility.ItemId {
             return false;
         }
         TST_ItemID tstItemID = (TST_ItemID) o;
-        return metaData == tstItemID.metaData && Objects.equals(item, tstItemID.item) && Objects.equals(nbt, tstItemID.nbt);
+        return metaData == tstItemID.metaData && Objects.equals(item, tstItemID.item)
+            && Objects.equals(nbt, tstItemID.nbt);
     }
 
     @Override

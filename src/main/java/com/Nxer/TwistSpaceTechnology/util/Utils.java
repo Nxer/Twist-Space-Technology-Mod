@@ -54,7 +54,7 @@ public final class Utils {
     public static ItemStack copyAmount(int aAmount, ItemStack aStack) {
         ItemStack rStack = aStack.copy();
         if (isStackInvalid(rStack)) return null;
-        if (aAmount > 64) aAmount = 64;
+        // if (aAmount > 64) aAmount = 64;
         else if (aAmount == -1) aAmount = 111;
         else if (aAmount < 0) aAmount = 0;
         rStack.stackSize = aAmount;

@@ -12,6 +12,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhoto
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.MegaUniversalSpaceStationRecipePool;
+import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values;
 
@@ -27,6 +28,8 @@ public class RecipeLoader {
         for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
         }
+
+        StaticMiscs.init();
 
         OP_NormalProcessing.instance.enumOreProcessingRecipes();
         OP_Values.initOreRecipesInputs();

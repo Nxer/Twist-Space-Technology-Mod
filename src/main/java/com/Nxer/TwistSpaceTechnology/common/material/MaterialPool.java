@@ -23,7 +23,6 @@ public class MaterialPool implements Runnable {
     // ID manager
     private static final int offsetID_01 = 20_000;
 
-
     public static final Werkstoff HolmiumGarnet = new Werkstoff(
         new short[] { 96, 96, 240 },
         TextHandler.texter("Holmium Garnet", "bw.HolmiumGarnet.notTrans"),

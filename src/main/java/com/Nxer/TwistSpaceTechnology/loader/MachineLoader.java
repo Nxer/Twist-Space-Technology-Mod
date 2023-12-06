@@ -25,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_I
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
@@ -52,6 +53,7 @@ public class MachineLoader {
     public static ItemStack OreProcessingFactory;
     public static ItemStack megaUniversalSpaceStation;
     public static ItemStack stellarMaterialSiphon;
+    public static ItemStack CircuitConverter;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -156,14 +158,18 @@ public class MachineLoader {
             .getStackForm(1);
         GTCMItemList.ArtificialStar.set(ArtificialStar);
 
+        //
         MiracleDoor = new TST_MiracleDoor(19016, "NameMiracleDoor", TextLocalization.NameMiracleDoor).getStackForm(1);
         GTCMItemList.MiracleDoor.set(MiracleDoor);
 
+        //
         OreProcessingFactory = new TST_OreProcessingFactory(
             19017,
             "NameOreProcessingFactory",
             TextLocalization.NameOreProcessingFactory).getStackForm(1);
         GTCMItemList.OreProcessingFactory.set(OreProcessingFactory);
+
+        // Space Station Systems
         if (Config.activateMegaSpaceStation) {
             megaUniversalSpaceStation = new GT_TileEntity_MegaUniversalSpaceStation(
                 19018,
@@ -179,6 +185,14 @@ public class MachineLoader {
             "NameStellarMaterialSiphon",
             TextLocalization.NameStellarMaterialSiphon).getStackForm(1);
         GTCMItemList.StellarMaterialSiphon.set(stellarMaterialSiphon);
+
+        //
+        CircuitConverter = new TST_CircuitConverter(
+            19020,
+            "NameCircuitConverter",
+            TextLocalization.NameCircuitConverter).getStackForm(1);
+        GTCMItemList.CircuitConverter.set(CircuitConverter);
+
         // endregion
 
         // region Single block Machine
