@@ -36,6 +36,7 @@ import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
@@ -95,7 +96,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
     // region Processing Logic
 
-    private String ownerUUID;
+    private UUID ownerUUID;
     private long costingWirelessEUTemp = 0;
     private int needPhotonAmount = 0;
 
@@ -250,8 +251,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
-        this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid()
-            .toString();
+        this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
     }
 
     @Override
