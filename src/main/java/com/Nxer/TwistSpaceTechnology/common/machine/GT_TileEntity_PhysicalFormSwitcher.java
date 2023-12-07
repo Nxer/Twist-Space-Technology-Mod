@@ -67,8 +67,9 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     // region Processing Logic
     public byte glassTier;
-    public boolean mode = Mode_Default_PhysicalFormSwitcher; // false = sFluidSolidficationRecipes; true =
-                                                             // sFluidExtractionRecipes
+    // false = sFluidSolidficationRecipes;
+    // true = sFluidExtractionRecipes
+    public boolean mode = Mode_Default_PhysicalFormSwitcher;
 
     @Override
     protected ProcessingLogic createProcessingLogic() {

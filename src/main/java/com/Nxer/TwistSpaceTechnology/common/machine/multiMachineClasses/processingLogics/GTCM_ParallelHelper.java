@@ -24,7 +24,6 @@ import gregtech.api.recipe.check.SingleRecipeCheck;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_ParallelHelper;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility.ItemId;
 import gregtech.api.util.VoidProtectionHelper;
 
 // spotless:off
@@ -448,6 +447,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         if (maxParallel > limitParallel) {
             maxParallel = limitParallel;
         }
+
         // Turn to Single Recipe Mode if enabled.
         SingleRecipeCheck recipeCheck = null;
         SingleRecipeCheck.Builder tSingleRecipeCheckBuilder = null;
@@ -499,7 +499,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 boolean isUsingNBT = false;
 
                 // Maintain a Map to contain recipe item inputs
-                Map<ItemId, Long> recipeItemInputsMap = new HashMap<>();
+                Map<TST_ItemID, Long> recipeItemInputsMap = new HashMap<>();
                 if (recipe.mInputs != null) {
                     for (ItemStack itemStack : recipe.mInputs) {
                         if (itemStack == null) continue;
@@ -509,19 +509,17 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 }
 
                 // Maintain a Map to contain inputs.
-                Map<ItemId, Long> itemInputsMap = new HashMap<>();
+                Map<TST_ItemID, Long> itemInputsMap = new HashMap<>();
                 for (ItemStack itemStack : itemInputs) {
                     if (itemStack == null) continue;
-                    ItemId item = isUsingNBT ?
-                                      TST_ItemID.create(itemStack)
-                                      : TST_ItemID.createNoNBT(itemStack);
+                    TST_ItemID item = isUsingNBT ? TST_ItemID.create(itemStack) : TST_ItemID.createNoNBT(itemStack);
                     itemInputsMap.merge(item, (long) itemStack.stackSize, Long::sum);
                 }
 
                 // Catch the minimum parallel of every input item's.
                 int canItemInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canParallelEUt);
                 if (!recipeItemInputsMap.isEmpty() && recipe.mInputs != null) {
-                    for (ItemId itemId : recipeItemInputsMap.keySet()) {
+                    for (TST_ItemID itemId : recipeItemInputsMap.keySet()) {
                         if (itemId == null){
                             continue;
                         }
@@ -576,12 +574,12 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
 
                 // Prepare a map of actual consume of item
                 if (!recipeItemInputsMap.isEmpty()){
-                    for (ItemId itemInput : recipeItemInputsMap.keySet()) {
+                    for (TST_ItemID itemInput : recipeItemInputsMap.keySet()) {
                         long amountNeed = (long) currentParallel * recipeItemInputsMap.get(itemInput);
                         for (ItemStack itemStack : itemInputs) {
                             if (itemStack == null) continue;// All inputs iterating need check null
                             // catch the input slot of items in need
-                            if (itemInput.equals(ItemId.createNoCopy(itemStack))) {
+                            if (itemInput.equalItemStack(itemStack)) {
                                 if (itemStack.stackSize >= amountNeed) {
                                     // if stack size is enough to consume
                                     // then consume and break
