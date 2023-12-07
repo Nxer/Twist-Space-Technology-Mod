@@ -89,4 +89,24 @@ public final class Utils {
         return (T[]) totals.toArray(new Object[0]);
     }
 
+    public static int min(int... values) {
+        Arrays.sort(values);
+        return values[0];
+    }
+
+    public static int max(int... values) {
+        Arrays.sort(values);
+        return values[values.length - 1];
+    }
+
+    public static long min(long... values) {
+        Arrays.sort(values);
+        return values[0];
+    }
+
+    public static long max(long... values) {
+        Arrays.sort(values);
+        return values[values.length - 1];
+    }
+
 }

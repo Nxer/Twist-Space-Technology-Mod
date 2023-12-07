@@ -100,6 +100,10 @@ public class TST_ItemID extends GT_Utility.ItemId {
         return metaData;
     }
 
+    public boolean equalItemStack(ItemStack itemStack) {
+        return this.equals(createNoNBT(itemStack));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
