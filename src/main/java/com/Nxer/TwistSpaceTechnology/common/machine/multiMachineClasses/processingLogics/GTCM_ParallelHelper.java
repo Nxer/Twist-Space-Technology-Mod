@@ -536,24 +536,25 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 }
 
                 // Maintain a Map to contain fluid inputs
-                Map<Fluid, Integer> fluidInputsMap = new HashMap<>();
+                Map<Fluid, Long> fluidInputsMap = new HashMap<>();
                 for (FluidStack fluidStack : fluidInputs) {
                     if (fluidStack == null){
                         continue;
                     }
-                    fluidInputsMap.put(fluidStack.getFluid(), fluidStack.amount);
+                    fluidInputsMap.merge(fluidStack.getFluid(), (long) fluidStack.amount, Long::sum);
                 }
                 // Catch the minimum parallel of every input fluid's.
                 int canFluidInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canItemInputsMaxParallel);
 
                 if (!fluidInputsMap.isEmpty() && recipe.mFluidInputs != null) {
                     for (FluidStack fluidStack : recipe.mFluidInputs) {
-                        int canThisParallel = fluidInputsMap.get(fluidStack.getFluid()) / fluidStack.amount;
+                        int canThisParallel = (int) Math.min(Integer.MAX_VALUE, (fluidInputsMap.get(fluidStack.getFluid()) / fluidStack.amount));
                         if (canThisParallel < canFluidInputsMaxParallel) {
                             canFluidInputsMaxParallel = canThisParallel;
                         }
                     }
                 }
+
                 // sanity check
                 if (canFluidInputsMaxParallel <= 0) {
                     result = CheckRecipeResultRegistry.INTERNAL_ERROR;

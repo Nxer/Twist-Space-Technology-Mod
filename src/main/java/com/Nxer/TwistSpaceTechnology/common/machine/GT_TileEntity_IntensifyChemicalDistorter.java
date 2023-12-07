@@ -32,11 +32,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.jetbrains.annotations.NotNull;
+
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -47,13 +48,11 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
@@ -63,8 +62,7 @@ import gregtech.api.util.GT_Utility;
 //
 // GT_TileEntity_IntensifyChemicalDistorter
 public class GT_TileEntity_IntensifyChemicalDistorter
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_IntensifyChemicalDistorter>
-    implements IConstructable, ISurvivalConstructable {
+    extends GTCM_MultiMachineBase<GT_TileEntity_IntensifyChemicalDistorter> {
 
     // region Class Constructor
 
@@ -93,24 +91,42 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
+            @NotNull
             @Override
-            protected CheckRecipeResult validateRecipe(GT_Recipe recipe) {
+            public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
+                return super.process();
+            }
+
+            @Override
+            protected @NotNull CheckRecipeResult validateRecipe(GT_Recipe recipe) {
                 return recipe.mSpecialValue <= coilLevel.getHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
                     : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
             }
 
-            @Override
-            protected GT_OverclockCalculator createOverclockCalculator(GT_Recipe recipe) {
-                return super.createOverclockCalculator(recipe).setSpeedBoost(
-                    mode == 0 ? 1F / SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
-                        : 1F / SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter);
-            }
-
         }.enablePerfectOverclock()
-            .setMaxParallelSupplier(
-                () -> this.mode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter
-                    : Parallel_LCRMode_IntensifyChemicalDistorter);
+            .setMaxParallelSupplier(this::getMaxParallelRecipes);
 
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return true;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return mode == 0 ? 1F / SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
+            : 1F / SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter;
+    }
+
+    @Override
+    protected int getMaxParallelRecipes() {
+        return this.mode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter
+            : Parallel_LCRMode_IntensifyChemicalDistorter;
     }
 
     // endregion
