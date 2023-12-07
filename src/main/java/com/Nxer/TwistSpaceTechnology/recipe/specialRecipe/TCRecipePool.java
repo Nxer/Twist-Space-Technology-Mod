@@ -25,8 +25,8 @@ public class TCRecipePool implements IRecipePool{
         ThaumcraftApi.addInfusionCraftingRecipe("BH_ELVEN_WORKSHOP",GTCMItemList.ElvenWorkshop.get(1, 0),
         10, 
         (new AspectList()).merge(Aspect.LIFE, 64).merge(Aspect.EARTH, 64).merge(Aspect.MAGIC, 64).merge(Aspect.MECHANISM, 64),
-        new ItemStack(ModBlocks.terraPlate.getItemDropped(0, null, 0))
-        ,new ItemStack[]{ItemList.Field_Generator_EV.get(2, null),ItemList.Casing_IV.get(2,null),Materials.Steeleaf.getPlates(2),new ItemStack(ModItems.spawnerMover,2)});
+        new ItemStack(ModBlocks.terraPlate)
+        ,new ItemStack[]{ItemList.Field_Generator_EV.get(1, null),ItemList.Casing_IV.get(1,null),Materials.Steeleaf.getPlates(1),new ItemStack(ModItems.spawnerMover,1),ItemList.Field_Generator_EV.get(1, null),ItemList.Casing_IV.get(1,null),Materials.Steeleaf.getPlates(1),new ItemStack(ModItems.spawnerMover,1)});
     }
     
 }

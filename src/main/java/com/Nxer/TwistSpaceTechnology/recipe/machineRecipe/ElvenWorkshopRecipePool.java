@@ -139,16 +139,17 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
             .eut(RECIPE_LV)
             .duration(20 * 1)
             .addTo(EW);
+        for(ItemStack woods : OreDictionary.getOres("logWood")){
         GT_Values.RA.stdBuilder()
-            .itemInputs(ItemHelper.cloneStack((ItemStack)OreDictionary.getOres("logWood").get(0), 16))
+            .itemInputs(ItemHelper.cloneStack(woods, 16))
             .noFluidInputs()
             .itemOutputs(new ItemStack(ModBlocks.livingwood,16,0))
             .noFluidOutputs()
             .eut(RECIPE_HV)
             .duration(20 * 30)
-            .addTo(EW);
+            .addTo(EW);}
         GT_Values.RA.stdBuilder()
-            .itemInputs(ItemHelper.cloneStack((ItemStack)OreDictionary.getOres("stone").get(0), 16))
+            .itemInputs(new ItemStack(Blocks.stone,16))
             .noFluidInputs()
             .itemOutputs(new ItemStack(ModBlocks.livingrock,16,0))
             .noFluidOutputs()
@@ -163,6 +164,15 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
             .eut(RECIPE_HV)
             .duration(20 * 30)
             .addTo(EW);
+        GT_Values.RA.stdBuilder()
+            .itemInputs(new ItemStack(Blocks.end_stone,16),new ItemStack(Items.glass_bottle, 16))
+            .noFluidInputs()
+            .itemOutputs(new ItemStack(GT_Block_Stones.getBlockById(8),16),new ItemStack(ModItems.manaResource,16,15))
+            .noFluidOutputs()
+            .eut(RECIPE_HV)
+            .duration(20 * 30)
+            .addTo(EW);
+        
     }
 }
 // spotless:on
