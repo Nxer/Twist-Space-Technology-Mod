@@ -251,7 +251,7 @@ public class Config {
 
         // endregion
 
-        // DSP
+        // region DSP
         EUPerCriticalPhoton = Long.parseLong(configuration.getString("EUPerCriticalPhoton", DSP, String.valueOf(EUPerCriticalPhoton), "EU per Critical Photon Cost. Type: long"));
         solarSailPowerPoint = Long.parseLong(configuration.getString("solarSailPowerPoint", DSP, String.valueOf(solarSailPowerPoint), "DSP Power Point per Solar Sail can produce. Type: long"));
         solarSailCanHoldPerNode = Long.parseLong(configuration.getString("solarSailCanHoldPerNode", DSP, String.valueOf(solarSailCanHoldPerNode), "Solar Sail amount per DSP Node can hold. Type: long"));
@@ -268,8 +268,11 @@ public class Config {
         secondsOfLaunchingNode = Double.parseDouble(configuration.getString("secondsOfLaunchingNode", DSP, String.valueOf(secondsOfLaunchingNode), "Seconds of launching a Dyson Sphere Node."));
         EUTOfLaunchingSolarSail = configuration.getInt("EUTOfLaunchingSolarSail", DSP, EUTOfLaunchingSolarSail, 1, Integer.MAX_VALUE, "EUt of Launching Solar Sail.");
         EUTOfLaunchingNode = configuration.getInt("EUTOfLaunchingNode", DSP, EUTOfLaunchingNode, 1, Integer.MAX_VALUE, "EUt of Launching Node.");
+        // endregion
 
-        activateMegaSpaceStation = configuration.getBoolean("activateMegaSpaceStation",spaceStation,activateMegaSpaceStation,"decide weather can use mega space station");
+        // region Space Station
+        activateMegaSpaceStation = configuration.getBoolean("activateMegaSpaceStation",spaceStation,activateMegaSpaceStation,"decide whether can use mega space station");
+        // endregion
 
         if (configuration.hasChanged()) {
             configuration.save();
