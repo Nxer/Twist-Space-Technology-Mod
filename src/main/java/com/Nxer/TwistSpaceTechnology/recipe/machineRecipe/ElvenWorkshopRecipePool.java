@@ -19,6 +19,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraft.init.Items;
 import net.minecraft.init.Blocks;
 import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.block.ModFluffBlocks;
 import vazkii.botania.common.item.ModItems;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -29,7 +30,6 @@ import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
-import cofh.lib.util.helpers.ItemHelper;
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -140,8 +140,10 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
             .duration(20 * 1)
             .addTo(EW);
         for(ItemStack woods : OreDictionary.getOres("logWood")){
+            ItemStack tempwoods=woods.copy();
+            tempwoods.stackSize=16;
         GT_Values.RA.stdBuilder()
-            .itemInputs(ItemHelper.cloneStack(woods, 16))
+            .itemInputs(tempwoods)
             .noFluidInputs()
             .itemOutputs(new ItemStack(ModBlocks.livingwood,16,0))
             .noFluidOutputs()
@@ -159,15 +161,7 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(new ItemStack(Blocks.end_stone,16),new ItemStack(Items.glass_bottle, 16))
             .noFluidInputs()
-            .itemOutputs(new ItemStack(GT_Block_Stones.getBlockById(8),16),new ItemStack(ModItems.manaResource,16,15))
-            .noFluidOutputs()
-            .eut(RECIPE_HV)
-            .duration(20 * 30)
-            .addTo(EW);
-        GT_Values.RA.stdBuilder()
-            .itemInputs(new ItemStack(Blocks.end_stone,16),new ItemStack(Items.glass_bottle, 16))
-            .noFluidInputs()
-            .itemOutputs(new ItemStack(GT_Block_Stones.getBlockById(8),16),new ItemStack(ModItems.manaResource,16,15))
+            .itemOutputs(new ItemStack(ModFluffBlocks.stone,16,1),new ItemStack(ModItems.manaResource,16,15))
             .noFluidOutputs()
             .eut(RECIPE_HV)
             .duration(20 * 30)

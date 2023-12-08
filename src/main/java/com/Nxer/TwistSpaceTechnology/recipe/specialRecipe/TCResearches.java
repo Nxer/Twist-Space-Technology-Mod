@@ -19,7 +19,7 @@ public class TCResearches {
     {
         ResearchItem ElvenWorkshopResearch = new ResearchItem("BH_ELVEN_WORKSHOP","botanichorizons",new AspectList(),6,-12,3,GTCMItemList.ElvenWorkshop.get(1, 0));
         ElvenWorkshopResearch.setParents("BH_GAIA_PYLON");
-        ElvenWorkshopResearch.setPages(new ResearchPage("TwistSpaceTechnology.BH_ELVEN_WORKSHOP.text.1"),
+        ElvenWorkshopResearch.setPages(new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.1"),
         new ResearchPage(
             new InfusionRecipe("BH_ELVEN_WORKSHOP",
             GTCMItemList.ElvenWorkshop.get(1, 0),
