@@ -8,6 +8,9 @@
 * GTNH-2.4.0 版本：
 1. 需要升级GTNH-Lanthanides mod至 0.10.8版本或专门适配版本；
 2. 需要升级GregTech mod至 5.09.44.03+版本
+* GTNH-2.4.2 测试版本：
+1. 暂时不兼容测试版
+2. 暂时未兼容新的GT配方系统
 #
 #
 ## GTNH Community Mod :  Twist Space Technology
@@ -20,3 +23,6 @@
 * GTNH-2.4.0 verion:
 1. GTNH-Lanthanides mod need version 0.10.8+ .
 2. GregTech mod need version 5.09.44.03+ .
+* GTNH-2.4.2 beta version：
+1. Temporarily not compatible with the beta version.
+2. Temporarily not compatible with the new GT recipe map system.
