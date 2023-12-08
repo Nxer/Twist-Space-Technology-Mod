@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.config;
 
-import static gregtech.api.enums.TierEU.RECIPE_UHV;
-import static gregtech.api.enums.TierEU.RECIPE_UMV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 
 import java.io.File;
 
