@@ -180,7 +180,6 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
             .addInfo(Tooltip_CircuitConverter_Controller)
             .addInfo(Tooltip_CircuitConverter_01)
             .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addStructureInfo(Tooltip_CircuitConverter_2_01)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
