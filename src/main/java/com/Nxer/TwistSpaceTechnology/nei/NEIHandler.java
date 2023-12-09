@@ -21,6 +21,7 @@ public class NEIHandler {
         sendHandler("gtcm.recipe.DSPReceiverRecipes", "gregtech:gt.blockmachines:19014");
         sendHandler("gtcm.recipe.ArtificialStarGeneratingRecipes", "gregtech:gt.blockmachines:19015");
         sendHandler("gtcm.recipe.ElvenWorkshopRecipes", "gregtech:gt.blockmachines:19016");
+        sendHandler("gtcm.recipe.RuneEngraverRecipes", "gregtech:gt.blockmachines:19016");
 
         sendCatalyst("gtcm.recipe.IntensifyChemicalDistorterRecipes", "gregtech:gt.blockmachines:19001");
         sendCatalyst("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes", "gregtech:gt.blockmachines:19002");
