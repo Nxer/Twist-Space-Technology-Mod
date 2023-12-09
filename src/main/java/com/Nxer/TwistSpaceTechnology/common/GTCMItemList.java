@@ -47,6 +47,10 @@ public enum GTCMItemList {
 
     MultiStructuresLinkTool,
 
+    PurpleMagnoliaPetal,
+    PurpleMagnoliaSapling,
+    VoidPollen,
+
     // Machines
 
     IntensifyChemicalDistorter,
@@ -89,6 +93,7 @@ public enum GTCMItemList {
     DSPReceiver,
     ArtificialStar,
     StellarMaterialSiphon,
+    ElvenWorkshop,
 
     // single block Machines
     InfiniteAirHatch,

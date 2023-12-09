@@ -1,12 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01.initItem01;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
@@ -54,6 +56,7 @@ public class MachineLoader {
     public static ItemStack megaUniversalSpaceStation;
     public static ItemStack stellarMaterialSiphon;
     public static ItemStack CircuitConverter;
+    public static ItemStack ElvenWorkshop;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -192,6 +195,10 @@ public class MachineLoader {
             "NameCircuitConverter",
             TextLocalization.NameCircuitConverter).getStackForm(1);
         GTCMItemList.CircuitConverter.set(CircuitConverter);
+
+        //
+        ElvenWorkshop = new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", NameElvenWorkshop).getStackForm(1);
+        GTCMItemList.ElvenWorkshop.set(ElvenWorkshop);
 
         // endregion
 

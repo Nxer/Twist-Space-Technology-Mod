@@ -447,6 +447,11 @@ public class TextLocalization {
     public static final String Tooltip_CircuitConverter_2_01 = texter("Maximum 8 In/Output Buses.","Tooltip_CircuitConverter_2_01");
     // endregion
 
+    // region Elvenworkshop
+    public static final String NameElvenWorkshop = texter("ElvenWorkshop","NameElvenWorkshop");
+    public static final String Tooltip_ElvenWorkshop_MachineType = texter("Mana Infuser/Rune Engraver","Tooltip_ElvenWorkshop_MachineType");
+    // endregion
+
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");

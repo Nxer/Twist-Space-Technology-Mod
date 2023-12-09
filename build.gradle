@@ -655,8 +655,8 @@ dependencies {
     } else if (forceEnableMixins.toBoolean()) {
         runtimeOnlyNonPublishable(mixinProviderSpec)
     }
+    
 }
-
 pluginManager.withPlugin('org.jetbrains.kotlin.kapt') {
     if (usesMixins.toBoolean()) {
         dependencies {

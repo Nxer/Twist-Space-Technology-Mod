@@ -4,7 +4,9 @@ import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
 
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
+import com.github.bartimaeusnek.bartworks.util.Pair;
 
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TextureSet;
 
@@ -69,6 +71,44 @@ public class MaterialPool implements Runnable {
         offsetID_01 + 4,
         TextureSet.SET_SHINY);
 
+    public static final Werkstoff PureMana = new Werkstoff(
+        new short[] { 176, 196, 222 }, // LightSteelBlue
+        TextHandler.texter("PureMana", "bw.PureMana.notTrans"),
+        subscriptNumbers("Ma⨕"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.ELEMENT,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 5,
+        TextureSet.SET_FLUID);
+
+    public static final Werkstoff LiquidMana = new Werkstoff(
+        new short[] { 135, 206, 235 }, // skyblue
+        TextHandler.texter("LiquidMana", "bw.LiquidMana.notTrans"),
+        subscriptNumbers("??Ma⨕??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 6,
+        TextureSet.SET_FLUID,
+        new Pair<>(PureMana, 1),
+        new Pair<>(Materials.Stone, 2));
+
+    public static final Werkstoff PurifiedMana = new Werkstoff(
+        new short[] { 173, 216, 230 }, // LightBLue
+        TextHandler.texter("PurifiedMana", "bw.PurifiedMana.notTrans"),
+        subscriptNumbers("??Ma⨕??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 7,
+        TextureSet.SET_FLUID,
+        new Pair<>(PureMana, 1),
+        new Pair<>(Materials.Stone, 2));
+
+    // Bartworks' Material System run on Runnable.class
     @Override
     public void run() {
         for (var prefix : OrePrefixes.values()) {

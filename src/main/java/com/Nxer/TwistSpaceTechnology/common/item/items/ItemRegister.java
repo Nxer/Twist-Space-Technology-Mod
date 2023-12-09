@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -45,7 +46,9 @@ public class ItemRegister {
         GTCMItemList.AntimatterFuelRod.set(initItem01("Antimatter Fuel Rod", 16, new String[]{texter("More...", "tooltips.AntimatterFuelRod.line1"), DSPName}));
         GTCMItemList.StellarConstructionFrameMaterial.set(initItem01("Stellar Construction Frame Material", 17, new String[]{texter("Perfect and expensive.", "tooltips.StellarConstructionFrameMaterial.line1"), DSPName}));
         GTCMItemList.GravitationalLens.set(initItem01("Gravitational Lens", 18, new String[]{texter("Its twisted and powerful gravitational field is shielded in a container.", "tooltips.GravitationalLens.line1"), texter("It is usually utilized to work and alter spatial structures, ", "tooltips.GravitationalLens.line2"), texter(" but that doesn't stop some people from taking it and focusing sunlight to light fires for fun.", "tooltips.GravitationalLens.line3"), DSPName}));
-
+        GTCMItemList.PurpleMagnoliaPetal.set(initItem01("Purple Magnolia Petal", 19, new String[]{ TextHandler.texter("Petals falling from Alfheim...", "tooltips.PurpleMagnoliaPetal.line1")}));
+        GTCMItemList.PurpleMagnoliaSapling.set(initItem01("Purple Magnolia Sapling", 20, new String[]{ TextHandler.texter("Not plantable. Need to be on ic2 crop sticks.", "tooltips.PurpleMagnoliaSapling.line1")}));    
+        GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{ TextHandler.texter(EnumChatFormatting.ITALIC+""+EnumChatFormatting.DARK_GRAY+"Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
 
         GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));
         GTCMItemList.HighDimensionalCircuitDoard.set(initItem01("High-dimensional circuit board", 177));
@@ -76,7 +79,7 @@ public class ItemRegister {
         GTCMItemList.ExoticCircuitBoard.set(initItem01("Exotic Circuit Board", 318));
         GTCMItemList.spaceStationConstructingMaterialMax.set(initItem01("very good item", 319));
 
-
+        
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
     }
 
