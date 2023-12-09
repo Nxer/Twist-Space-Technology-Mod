@@ -1,47 +1,23 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
-import static gregtech.api.enums.TierEU.RECIPE_IV;
 import static gregtech.api.enums.TierEU.RECIPE_LV;
-import static gregtech.api.enums.TierEU.RECIPE_LuV;
-import static gregtech.api.enums.TierEU.RECIPE_MV;
-import static gregtech.api.enums.TierEU.RECIPE_UEV;
-import static gregtech.api.enums.TierEU.RECIPE_UHV;
-import static gregtech.api.enums.TierEU.RECIPE_ULV;
-import static gregtech.api.enums.TierEU.RECIPE_UV;
-import static gregtech.api.enums.TierEU.RECIPE_ZPM;
-import static gregtech.api.util.GT_RecipeConstants.OREDICT_INPUT;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraft.init.Items;
 import net.minecraft.init.Blocks;
-import vazkii.botania.common.block.ModBlocks;
-import vazkii.botania.common.block.ModFluffBlocks;
-import vazkii.botania.common.item.ModItems;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.dreammaster.gthandler.CustomItemList;
-import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
-import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsBotania;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GTPP_Recipe;
-import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Stones;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
+import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.block.ModFluffBlocks;
+import vazkii.botania.common.item.ModItems;
 
 // spotless:off
 public class ElvenWorkshopRecipePool implements IRecipePool {
@@ -149,19 +125,24 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
             .eut(RECIPE_LV)
             .duration(20 * 1)
             .addTo(EW);
+        GT_Values.RA.stdBuilder()
+            .itemInputs(new ItemStack(Items.glowstone_dust, 1))
+            .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(75))
+            .itemOutputs(new ItemStack(ModItems.manaResource,1,23))
+            .noFluidOutputs()
+            .eut(RECIPE_LV)
+            .duration(20 * 1)
+            .addTo(EW);
         
         //pure daisy recipe
-        for(ItemStack woods : OreDictionary.getOres("logWood"))
-        {
             GT_Values.RA.stdBuilder()
-            .itemInputs(ItemUtils.getSimpleStack(woods, 16))
+            .itemInputs(new ItemStack(Items.stick,16,0))
             .noFluidInputs()
             .itemOutputs(new ItemStack(ModBlocks.livingwood,16,0))
             .noFluidOutputs()
             .eut(RECIPE_HV)
             .duration(20 * 30)
             .addTo(EW);
-        }
         GT_Values.RA.stdBuilder()
             .itemInputs(new ItemStack(Blocks.stone,16))
             .noFluidInputs()

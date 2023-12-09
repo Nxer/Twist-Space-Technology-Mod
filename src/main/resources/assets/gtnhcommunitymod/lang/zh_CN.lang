@@ -456,3 +456,5 @@ tc.research_name.BH_ELVEN_WORKSHOP=精灵工坊
 tc.research_text.BH_ELVEN_WORKSHOP=GT化魔力池的第一次尝试
 tc.research_text.BH_ELVEN_WORKSHOP.1=在掌控了盖亚之魂的力量之后，你终于探索出一种能够机械化植物魔法的设施的方法。魔力池的速度被限制在1个配方/t，使得其不适用于大规模处理。然而，这台机器仍然无法执行精灵配方。精灵们对魔法的掌控过于精准以至于超过了机器的精度。
 tc.research_text.BH_ELVEN_WORKSHOP.2=好在天无绝人之路。
+ElvenWorkshop.modeMsg.0=符文雕刻模式
+ElvenWorkshop.modeMsg.1=魔力灌注模式

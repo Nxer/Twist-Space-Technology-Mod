@@ -6,16 +6,8 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
-import net.minecraft.item.ItemStack;
-
 import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.Materials;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-
-import forestry.apiculture.items.EnumPropolis;
-import forestry.apiculture.items.ItemRegistryApiculture;
-import forestry.core.fluids.Fluids;
 import magicbees.item.types.CombType;
 import magicbees.main.Config;
 
@@ -33,7 +25,7 @@ public class ExtractorRecipePool implements IRecipePool {
             .fluidOutputs(MaterialPool.LiquidMana.getFluidOrGas(10))
             .noOptimize()
             .eut(RECIPE_LV)
-            .duration(30* 20)
+            .duration(30 * 20)
             .addTo(Extractor);
         GT_Values.RA.stdBuilder()
             .itemInputs(GTCMItemList.PurpleMagnoliaPetal.get(1))
@@ -42,7 +34,7 @@ public class ExtractorRecipePool implements IRecipePool {
             .fluidOutputs(MaterialPool.LiquidMana.getFluidOrGas(5))
             .noOptimize()
             .eut(RECIPE_LV)
-            .duration(10* 20)
+            .duration(10 * 20)
             .addTo(Extractor);
     }
 }

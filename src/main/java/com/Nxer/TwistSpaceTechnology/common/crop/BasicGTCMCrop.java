@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.crop;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
@@ -23,7 +22,6 @@ public abstract class BasicGTCMCrop extends CropCard implements ICropCardInfo {
             textures[i - 1] = iconRegister.registerIcon("gtnhcommunitymod:crop/blockCrop." + name() + "." + i);
         }
     }
-
 
     @Override
     public float dropGainChance() {

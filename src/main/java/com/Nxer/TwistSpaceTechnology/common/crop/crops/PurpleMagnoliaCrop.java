@@ -17,7 +17,7 @@ public class PurpleMagnoliaCrop extends BasicGTCMCrop {
     public int tier() {
         return 5;
     }
-    
+
     @Override
     public boolean canGrow(ICropTile crop) {
         return crop.getSize() < 5;

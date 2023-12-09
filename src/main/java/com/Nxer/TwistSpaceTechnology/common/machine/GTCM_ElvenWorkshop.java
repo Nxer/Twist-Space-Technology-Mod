@@ -10,8 +10,6 @@ import static gregtech.api.enums.GT_HatchElement.InputHatch;
 import static gregtech.api.enums.GT_HatchElement.Maintenance;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.ElvenWorkshopTexture;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -19,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.ElvenWorkshopTexture;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -43,6 +41,7 @@ import vazkii.botania.common.block.ModBlocks;
 public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop> {
 
     private byte mode = 1;
+
     // region Class Constructor
     public GTCM_ElvenWorkshop(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -78,11 +77,9 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
 
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            GT_Utility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + this.mode));
-        
+        this.mode = (byte) ((this.mode + 1) % 2);
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + this.mode));
+
     }
 
     @Override
@@ -208,9 +205,10 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
                 .glow()
                 .build() };
     }
+
     @Override
     public boolean supportsBatchMode() {
-    return true;
+        return true;
     }
     // endregion
 }

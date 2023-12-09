@@ -6,12 +6,8 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
-import net.minecraft.item.ItemStack;
-
 import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.Materials;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
 
 public class DistillationRecipePool implements IRecipePool {
 
@@ -23,8 +19,7 @@ public class DistillationRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .noItemInputs()
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(1000))
-            .itemOutputs(
-                GTCMItemList.VoidPollen.get(1))
+            .itemOutputs(GTCMItemList.VoidPollen.get(1))
             .fluidOutputs(MaterialPool.PurifiedMana.getFluidOrGas(800))
             .outputChances(100)
             .noOptimize()

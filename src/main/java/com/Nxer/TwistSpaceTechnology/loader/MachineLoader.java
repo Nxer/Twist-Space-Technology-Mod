@@ -197,10 +197,7 @@ public class MachineLoader {
         GTCMItemList.CircuitConverter.set(CircuitConverter);
 
         //
-        ElvenWorkshop = new GTCM_ElvenWorkshop(
-            19500,
-            "NameElvenWorkshop",
-            NameElvenWorkshop).getStackForm(1);
+        ElvenWorkshop = new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", NameElvenWorkshop).getStackForm(1);
         GTCMItemList.ElvenWorkshop.set(ElvenWorkshop);
 
         // endregion
