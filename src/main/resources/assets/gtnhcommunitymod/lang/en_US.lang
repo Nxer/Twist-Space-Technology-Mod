@@ -336,3 +336,7 @@ tooltips.VoidPollen.line1=Pollen yet to be arisen.
 MetaItem01.21.name=Void Pollen
 NameElvenWorkshop=Elven Workshop
 Tooltip_ElvenWorkshop_MachineType=Mana Infuser/Rune Engraver
+tc.research_name.BH_ELVEN_WORKSHOP=Elven Workshop
+tc.research_text.BH_ELVEN_WORKSHOP=First attempt of GT-styled Mana Pool
+tc.research_text.BH_ELVEN_WORKSHOP.1=After harness the power of Gaia Spirit, you've finally figured out a way to mechanize the facilities of Botania. Mana Pool's speed is limited to one recipe per tick, which is not suitable for large-scale processing. However, The Elven recipe still cannot be executed. The elves' mastery of magic is so precise that it exceeds the accuracy of current machines.
+tc.research_text.BH_ELVEN_WORKSHOP.2=Forturately, there is always a way out.

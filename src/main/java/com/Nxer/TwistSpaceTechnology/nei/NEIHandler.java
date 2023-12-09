@@ -52,6 +52,7 @@ public class NEIHandler {
         sendCatalyst("gtcm.recipe.DSPReceiverRecipes", "gregtech:gt.blockmachines:19014");
         sendCatalyst("gtcm.recipe.ArtificialStarGeneratingRecipes", "gregtech:gt.blockmachines:19015");
         sendCatalyst("gtcm.recipe.ElvenWorkshopRecipes", "gregtech:gt.blockmachines:19016");
+        sendCatalyst("gtcm.recipe.RuneEngraverRecipes", "gregtech:gt.blockmachines:19016");
 
     }
 

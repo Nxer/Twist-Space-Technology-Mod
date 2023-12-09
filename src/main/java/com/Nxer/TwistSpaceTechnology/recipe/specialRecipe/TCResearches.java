@@ -17,9 +17,9 @@ import vazkii.botania.common.item.ModItems;
 public class TCResearches {
     public void loadResearches()
     {
-        ResearchItem ElvenWorkshopResearch = new ResearchItem("BH_ELVEN_WORKSHOP","botanichorizons",new AspectList(),6,-12,3,GTCMItemList.ElvenWorkshop.get(1, 0));
+        ResearchItem ElvenWorkshopResearch = new ResearchItem("BH_ELVEN_WORKSHOP","botanichorizons",new AspectList(),4,-9,3,GTCMItemList.ElvenWorkshop.get(1, 0));
         ElvenWorkshopResearch.setParents("BH_GAIA_PYLON");
-        ElvenWorkshopResearch.setPages(new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.1"),
+        ElvenWorkshopResearch.setPages(new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.1"),new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.2"),
         new ResearchPage(
             new InfusionRecipe("BH_ELVEN_WORKSHOP",
             GTCMItemList.ElvenWorkshop.get(1, 0),

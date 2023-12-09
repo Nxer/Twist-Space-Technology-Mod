@@ -14,6 +14,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.GTCMMachineRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IntensifyChemicalDistorterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.RuneEngraverRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipePool;
@@ -26,7 +27,7 @@ public class RecipeLoader {
             new PreciseHighEnergyPhotonicQuantumMasterRecipePool(), new CircuitAssemblerRecipePool(),
             new MiracleTopRecipePool(), new FluidSolidifierRecipePool(), new CrystallineInfinitierRecipePool(),
             new DSPRecipePool(), new DistillationRecipePool(), new ExtractorRecipePool(),new CompressorRecipePool(),
-            new BOTRecipePool(), new TCRecipePool(),new ElvenWorkshopRecipePool()};
+            new BOTRecipePool(), new TCRecipePool(),new ElvenWorkshopRecipePool(),new RuneEngraverRecipePool()};
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {

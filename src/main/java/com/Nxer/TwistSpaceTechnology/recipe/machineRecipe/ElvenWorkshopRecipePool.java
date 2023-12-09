@@ -41,6 +41,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Stones;
+import gtPlusPlus.core.util.minecraft.ItemUtils;
 
 // spotless:off
 public class ElvenWorkshopRecipePool implements IRecipePool {
@@ -49,8 +50,17 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
     public void loadRecipes() {
 
         final GT_Recipe.GT_Recipe_Map EW=GTCMRecipe.instance.ElvenWorkshopRecipes;
-        // region Lapotron circuit
-        // Shard
+        //terrastrial recipe
+        GT_Values.RA.stdBuilder()
+            .itemInputs(MaterialsBotania.Manasteel.getIngots(1),MaterialsBotania.ManaDiamond.getGems(1),new ItemStack(ModItems.manaResource,1,1))
+            .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(50000))
+            .itemOutputs(MaterialsBotania.Terrasteel.getIngots(1))
+            .noFluidOutputs()
+            .eut(RECIPE_HV)
+            .duration(20 * 1)
+            .addTo(EW);
+
+        //mana infusion recipe
         GT_Values.RA.stdBuilder()
             .itemInputs(Materials.Steel.getIngots(1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(300))
@@ -139,17 +149,19 @@ public class ElvenWorkshopRecipePool implements IRecipePool {
             .eut(RECIPE_LV)
             .duration(20 * 1)
             .addTo(EW);
-        for(ItemStack woods : OreDictionary.getOres("logWood")){
-            ItemStack tempwoods=woods.copy();
-            tempwoods.stackSize=16;
-        GT_Values.RA.stdBuilder()
-            .itemInputs(tempwoods)
+        
+        //pure daisy recipe
+        for(ItemStack woods : OreDictionary.getOres("logWood"))
+        {
+            GT_Values.RA.stdBuilder()
+            .itemInputs(ItemUtils.getSimpleStack(woods, 16))
             .noFluidInputs()
             .itemOutputs(new ItemStack(ModBlocks.livingwood,16,0))
             .noFluidOutputs()
             .eut(RECIPE_HV)
             .duration(20 * 30)
-            .addTo(EW);}
+            .addTo(EW);
+        }
         GT_Values.RA.stdBuilder()
             .itemInputs(new ItemStack(Blocks.stone,16))
             .noFluidInputs()
