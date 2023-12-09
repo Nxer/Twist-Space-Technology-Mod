@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.material;
 
 import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
 
-import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 import com.github.bartimaeusnek.bartworks.util.Pair;
 

@@ -41,8 +41,8 @@ public class TCResearches {
                     new ItemStack(ModBlocks.terraPlate),
                     new ItemStack[] { ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1),
                         Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1),
-                        ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1),
-                        Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1) })));
+                        ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1), Materials.Steeleaf.getPlates(1),
+                        new ItemStack(ModItems.spawnerMover, 1) })));
         ElvenWorkshopResearch.registerResearchItem();
     }
 }
