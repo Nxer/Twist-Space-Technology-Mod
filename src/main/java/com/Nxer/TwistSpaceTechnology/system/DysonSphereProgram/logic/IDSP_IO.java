@@ -15,7 +15,7 @@ import gregtech.api.interfaces.tileentity.IHasWorldObjectAndCoords;
 public interface IDSP_IO {
 
     default void joinUserTeam(String userUUID, String userUUIDTeam) {
-        DSP_TeamName.put(userUUID, userUUIDTeam);
+        DSP_TeamName.put(userUUID, getOrInitTeamName(userUUIDTeam));
     }
 
     /**

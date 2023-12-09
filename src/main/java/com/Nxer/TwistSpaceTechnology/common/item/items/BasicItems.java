@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01;
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemProofOfHeroes;
 
 public final class BasicItems {
@@ -17,5 +18,10 @@ public final class BasicItems {
         "英雄の証",
         "ProofOfHeroes",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:ProofOfHeroes");
+
+    public static final Item MultiStructuresLinkTool = new ItemMultiStructuresLinkTool(
+        "Multi-Structures Link Tool",
+        "MultiStructuresLinkTool",
+        GTCMCreativeTabs.tabMultiStructures);
 
 }

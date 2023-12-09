@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_SpaceScaler;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Multiplier_ExtraOutputsPerFieldTier_SpaceScaler;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_BeyondTier2Block_SpaceScaler;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_Tier1Block_SpaceScaler;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -18,6 +22,10 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -31,6 +39,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
@@ -45,19 +54,16 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_ParallelHelper;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
-public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_SpaceScaler>
+public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEntity_SpaceScaler>
     implements IConstructable, ISurvivalConstructable {
 
     // region Class Constructor
@@ -71,96 +77,127 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
     // endregion
 
     // region Processing Logic
-    private byte mode = 0;
+    private byte mode = Mode_Default_SpaceScaler;
     private int fieldGeneratorTier = 0;
+    private int multiplier = 1;
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setByte("mode", mode);
+        aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
+        aNBT.setInteger("multiplier", multiplier);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        mode = aNBT.getByte("mode");
+        fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
+        multiplier = aNBT.getInteger("multiplier");
+    }
+
+    @NotNull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+
+        setupProcessingLogic(processingLogic);
+
+        CheckRecipeResult result = doCheckRecipe();
+        result = postCheckRecipe(result, processingLogic);
+        // inputs are consumed at this point
+        updateSlots();
+        if (!result.wasSuccessful()) return result;
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+        mMaxProgresstime = processingLogic.getDuration();
+        setEnergyUsage(processingLogic);
+
+        // if in this state , no extra settings is in need.
+        if (fieldGeneratorTier < 4) {
+            mOutputItems = processingLogic.getOutputItems();
+            mOutputFluids = processingLogic.getOutputFluids();
+            return result;
+        }
+
+        ItemStack[] outputItemStack = processingLogic.getOutputItems();
+        FluidStack[] outputFluidStack = processingLogic.getOutputFluids();
+
+        if (mode != 2) {
+            // compressor mode and extractor mode
+            mOutputItems = outputItemStack;
+            mOutputFluids = outputFluidStack;
+        } else {
+            // check in particle mode
+            if (fieldGeneratorTier < 3) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+
+            // process Items
+            List<ItemStack> extraItems = new ArrayList<>();
+            for (ItemStack items : outputItemStack) {
+                if (items.stackSize <= Integer.MAX_VALUE / multiplier) {
+                    // set amount directly if in integer area
+                    items.stackSize *= multiplier;
+                } else {
+                    for (int i = 0; i < multiplier - 1; i++) {
+                        extraItems.add(items.copy());
+                    }
+                }
+            }
+
+            if (extraItems.isEmpty()) {
+                // no over integer amount
+                mOutputItems = outputItemStack;
+            } else {
+                extraItems.addAll(Arrays.asList(outputItemStack));
+                mOutputItems = extraItems.toArray(new ItemStack[] {});
+            }
+
+            // process Fluids
+            List<FluidStack> extraFluids = new ArrayList<>();
+            for (FluidStack fluids : outputFluidStack) {
+                if (fluids.amount <= Integer.MAX_VALUE / multiplier) {
+                    fluids.amount *= multiplier;
+                } else {
+                    for (int i = 0; i < multiplier - 1; i++) {
+                        extraFluids.add(fluids.copy());
+                    }
+                }
+            }
+
+            if (extraFluids.isEmpty()) {
+                mOutputFluids = outputFluidStack;
+            } else {
+                extraFluids.addAll(Arrays.asList(outputFluidStack));
+                mOutputFluids = extraFluids.toArray(new FluidStack[] {});
+            }
+
+        }
+
+        return result;
+    }
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        /*
-         * ProcessingLogic normalProcessingLogic = new GTCM_ProcessingLogic() {
-         * @NotNull
-         * @Override
-         * public CheckRecipeResult process() {
-         * setSpeedBonus(getSpeedBonus());
-         * setOverclock(fieldGeneratorTier > 1 ? 2 : 1, 2);
-         * return super.process();
-         * }
-         * }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-         */
 
-        ProcessingLogic ParticalProcessingLogic = new GTCM_ProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
 
             @NotNull
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
-                setOverclock(fieldGeneratorTier > 1 ? 2 : 1, 2);
+                setOverclock(fieldGeneratorTier >= 2 ? 2 : 1, 2);
                 return super.process();
             }
 
-            protected CheckRecipeResult applyRecipe(@NotNull GT_Recipe recipe, GT_ParallelHelper helper,
-                GT_OverclockCalculator calculator, CheckRecipeResult result) {
-                if (!helper.getResult()
-                    .wasSuccessful()) {
-                    return helper.getResult();
-                }
-
-                if (recipe.mCanBeBuffered) {
-                    lastRecipe = recipe;
-                } else {
-                    lastRecipe = null;
-                }
-                calculatedParallels = helper.getCurrentParallel();
-
-                if (calculator.getConsumption() == Long.MAX_VALUE) {
-                    return CheckRecipeResultRegistry.POWER_OVERFLOW;
-                }
-                if (calculator.getDuration() == Integer.MAX_VALUE) {
-                    return CheckRecipeResultRegistry.DURATION_OVERFLOW;
-                }
-
-                calculatedEut = calculator.getConsumption();
-
-                double finalDuration = calculateDuration(recipe, helper, calculator);
-                if (finalDuration >= Integer.MAX_VALUE) {
-                    return CheckRecipeResultRegistry.DURATION_OVERFLOW;
-                }
-                duration = (int) finalDuration;
-
-                // normal mode
-                if (mode != 2) {
-                    outputItems = helper.getItemOutputs();
-                    outputFluids = helper.getFluidOutputs();
-
-                    return result;
-                }
-
-                // add outputs
-                final int multiplier = (int) Math.pow(2, fieldGeneratorTier - 3);
-                // TwistSpaceTechnology.LOG.info("test multiplier: " + multiplier);
-
-                outputItems = new ItemStack[helper.getItemOutputs().length];
-                // TwistSpaceTechnology.LOG.info("test before outputItems: " + outputItems);
-                for (int i = 0; i < helper.getItemOutputs().length; i++) {
-                    ItemStack itemStack = helper.getItemOutputs()[i];
-                    itemStack.stackSize = (int) Math.min(Integer.MAX_VALUE, (long) multiplier * itemStack.stackSize);
-                    outputItems[i] = itemStack;
-                }
-                // TwistSpaceTechnology.LOG.info("test after outputItems: " + outputItems);
-
-                outputFluids = new FluidStack[helper.getFluidOutputs().length];
-                for (int i = 0; i < helper.getFluidOutputs().length; i++) {
-                    FluidStack fluidStack = helper.getFluidOutputs()[i];
-                    fluidStack.amount = (int) Math.min(Integer.MAX_VALUE, (long) multiplier * fluidStack.amount);
-                    outputFluids[i] = fluidStack;
-                }
-
-                return result;
-            }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    }
 
-        // return mode == 3 ? ParticalProcessingLogic : normalProcessingLogic;
-        return ParticalProcessingLogic;
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
     }
 
     public int getMaxParallelRecipes() {
@@ -168,8 +205,8 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
     }
 
     public float getSpeedBonus() {
-        return 1.0F;
-        // return (float) (1 / (this.fieldGeneratorTier < 2 ? 1 : 16));
+        return 1F / (this.fieldGeneratorTier < 2 ? SpeedMultiplier_Tier1Block_SpaceScaler
+            : SpeedMultiplier_BeyondTier2Block_SpaceScaler);
     }
 
     @Override
@@ -194,11 +231,13 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         this.fieldGeneratorTier = 0;
         boolean sign = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
         if (this.fieldGeneratorTier == 0) {
             return false;
         }
+        multiplier = 1 + Multiplier_ExtraOutputsPerFieldTier_SpaceScaler * Math.max(0, fieldGeneratorTier - 3);
         return sign;
     }
 
@@ -248,6 +287,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
         }
         return 0;
     }
+
     @Override
     public IStructureDefinition<GT_TileEntity_SpaceScaler> getStructureDefinition() {
         return StructureDefinition.<GT_TileEntity_SpaceScaler>builder()
@@ -343,8 +383,8 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
         { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "       B               B       ", "      B                 B      ", "      B                 B      ", "      B        B        B      ", "      B       BGB       B      ", "      B        B        B      ", "      B                 B      ", "      B                 B      ", "       B               B       ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
         { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               A               ", "               A               ", "              AAA              ", "            AAAAAAA            ", "              AAA              ", "               A               ", "               A               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
         { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "              AAA              ", "            AAEEEAA            ", "           AEEEEEEEA           ", "           AEECCCEEA           ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "           AEECCCEEA           ", "           AEEEEEEEA           ", "            AAEEEAA            ", "              AAA              ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " } };
-    
-    
+
+
     // spotless:on
     // endregion
 
@@ -361,6 +401,7 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
             .addInfo(TextLocalization.Tooltip_SpaceScaler_04)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_05)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_06)
+            .addInfo(TextLocalization.Tooltip_SpaceScaler_07)
             .addInfo(TextLocalization.textScrewdriverChangeMode)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
@@ -377,69 +418,15 @@ public class GT_TileEntity_SpaceScaler extends GT_MetaTileEntity_ExtendedPowerMu
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-
-        aNBT.setByte("mode", mode);
-        aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-
-        mode = aNBT.getByte("mode");
-        fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
-    }
-
-    @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 3];
+        String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 2] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD + this.mode;
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "fieldGeneratorTier: "
+        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD + this.mode;
+        ret[origin.length] = EnumChatFormatting.AQUA + "fieldGeneratorTier: "
             + EnumChatFormatting.GOLD
             + this.fieldGeneratorTier;
-        ret[origin.length] = EnumChatFormatting.AQUA + "Parallel: "
-            + EnumChatFormatting.GOLD
-            + this.getMaxParallelRecipes();
         return ret;
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
     }
 
     @Override

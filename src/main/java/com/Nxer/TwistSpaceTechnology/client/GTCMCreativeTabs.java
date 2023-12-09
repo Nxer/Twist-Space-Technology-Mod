@@ -49,5 +49,14 @@ public class GTCMCreativeTabs {
             return BasicItems.MetaItem01;
         }
     };
+    public static final CreativeTabs tabMultiStructures = new CreativeTabs(
+        texter("MultiStructures", "itemGroup.MultiStructures")) {
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Item getTabIconItem() {
+            return BasicItems.MetaItem01;
+        }
+    };
 
 }

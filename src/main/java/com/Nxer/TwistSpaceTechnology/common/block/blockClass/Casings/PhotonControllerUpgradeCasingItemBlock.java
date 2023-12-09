@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -26,11 +27,7 @@ public class PhotonControllerUpgradeCasingItemBlock extends ItemBlockBase01 {
     public void addInformation(ItemStack aItemStack, EntityPlayer p_77624_2_, List theTooltipsList,
         boolean p_77624_4_) {
         if (null == aItemStack) return;
-
-        for (String s : TextLocalization.TooltipsUpgrades[aItemStack.getItemDamage()]) {
-            theTooltipsList.add(s);
-        }
-
+        theTooltipsList.addAll(Arrays.asList(TextLocalization.TooltipsUpgrades[aItemStack.getItemDamage()]));
         theTooltipsList.add(mNoMobsToolTip);
         theTooltipsList.add(mNoTileEntityToolTip);
     }

@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_MoleculeDeconstructor;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerPiece_MoleculeDeconstructor;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -37,9 +41,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -53,10 +55,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_HatchElementBuilder;
@@ -64,8 +63,7 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
-public class GT_TileEntity_MoleculeDeconstructor
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_MoleculeDeconstructor>
+public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<GT_TileEntity_MoleculeDeconstructor>
     implements IConstructable, ISurvivalConstructable {
 
     // region Class Constructor
@@ -82,28 +80,20 @@ public class GT_TileEntity_MoleculeDeconstructor
     // region Processing Logic
     private byte glassTier = 0;
     private int piece = 1;
-    private byte mode = 0;
+    private byte mode = Mode_Default_MoleculeDeconstructor;
 
     @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus(getSpeedBonus());
-                setOverclock(piece > 16 ? 2 : 1, 2);
-                return super.process();
-            }
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    protected boolean isEnablePerfectOverclock() {
+        return piece >= PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor;
     }
 
-    private int getMaxParallelRecipes() {
-        return 24 * this.piece;
+    protected int getMaxParallelRecipes() {
+        return Parallel_PerPiece_MoleculeDeconstructor * this.piece;
     }
 
-    private float getSpeedBonus() {
-        return (float) (Math.pow(0.90, GT_Utility.getTier(this.getAverageInputVoltage())));
+    protected float getSpeedBonus() {
+        return (float) (Math
+            .pow(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor, GT_Utility.getTier(this.getAverageInputVoltage())));
     }
 
     @Override
@@ -156,7 +146,7 @@ public class GT_TileEntity_MoleculeDeconstructor
 
     // region Structure
     // spotless:off
-	
+
 	@Override
 	public void construct(ItemStack stackSize, boolean hintsOnly) {
 		this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -166,12 +156,12 @@ public class GT_TileEntity_MoleculeDeconstructor
 		}
 		this.buildPiece(STRUCTURE_PIECE_END, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet - piece*4);
 	}
-	
+
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
 		if (this.mMachine) return -1;
 		int built = 0;
-		
+
 		built += survivialBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
@@ -183,7 +173,7 @@ public class GT_TileEntity_MoleculeDeconstructor
 			actor,
 			false,
 			true);
-		
+
 		int piece = stackSize.stackSize;
 		if (piece>1) {
 			for (int i = 1; i < piece; i++) {
@@ -200,7 +190,7 @@ public class GT_TileEntity_MoleculeDeconstructor
 					true);
 			}
 		}
-		
+
 		built += survivialBuildPiece(
 			STRUCTURE_PIECE_END,
 			stackSize,
@@ -212,7 +202,7 @@ public class GT_TileEntity_MoleculeDeconstructor
 			actor,
 			false,
 			true);
-		
+
 		return built;
 	}
 	private static final String STRUCTURE_PIECE_MAIN = "mainMoleculeDeconstructor";
@@ -270,8 +260,8 @@ public class GT_TileEntity_MoleculeDeconstructor
 			       .addElement('I', ofFrame(Materials.CosmicNeutronium))
 			       .build();
 	}
-	
-	
+
+
 	/*
 	Blocks:
 A -> ofBlock...(BW_GlasBlocks, 14, ...); // glass
@@ -329,7 +319,7 @@ I -> ofFrame...();
 		"IFD   CCC   DFI",
 		"CCD         DCC"
 	}};
-	
+
 	private final String[][] shapeMiddle = new String[][]{{
 		"               ",
 		"               ",
@@ -375,7 +365,7 @@ I -> ofFrame...();
 		"IFD   CCC   DFI",
 		"CCD         DCC"
 	}};
-	
+
 	private final String[][] shapeEnd = new String[][]{{
 		"               ",
 		"               ",
@@ -393,7 +383,7 @@ I -> ofFrame...();
 		return super.addToMachineList(aTileEntity, aBaseCasingIndex)
 			       || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
 	}
-	
+
 	// spotless:on
     // endregion
 
@@ -453,41 +443,6 @@ I -> ofFrame...();
             .addEnergyHatch(textUseBlueprint, 1)
             .toolTipFinisher(ModName);
         return tt;
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
     }
 
     @Override

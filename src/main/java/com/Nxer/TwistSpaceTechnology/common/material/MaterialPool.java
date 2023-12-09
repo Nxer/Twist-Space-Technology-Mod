@@ -6,6 +6,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 import com.github.bartimaeusnek.bartworks.util.Pair;
 
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsBotania;
 import gregtech.api.enums.TextureSet;
@@ -25,37 +26,6 @@ public class MaterialPool implements Runnable {
     // ID manager
     private static final int offsetID_01 = 20_000;
 
-    // TODO test demo : use Bartworks Werkstoff to new new Item(Material)
-    /*
-     * public static final Werkstoff TestingMaterial = new Werkstoff(
-     * new short[] { 216, 240, 240 }, // RGB for auto texture
-     * // Name, if text need i18n, please use the method Texthandler.texter(String textAsDefault, String i18nKey)
-     * // Also don't at this mod translate the auto generator extend gt.materials
-     * // These material name will be the baseName.
-     * // Translate these text when in GregTech.lang .
-     * TextHandler.texter("Testing Material", "bw.Testing Material.notTrans"),
-     * subscriptNumbers("Tt"), // Chemical formula
-     * new Werkstoff.Stats().setBlastFurnace(true) // Auto generate the Properties , auto generate EBF recipe
-     * .setProtons(0)
-     * .setMass(0)
-     * .setMeltingPoint(11451) // EBF recipe's special value
-     * .setSpeedOverride(1919.0F) // Mining speed
-     * .setDurOverride(19198100) // Durability
-     * .setQualityOverride((byte) 114), // Mining Level
-     * Werkstoff.Types.ELEMENT, // Choose Type of generation , there 'ELEMENT' means a new matter
-     * // What Pattern want to auto generate , onlyDust means has Dust pattern not 'only'
-     * new Werkstoff.GenerationFeatures().onlyDust()
-     * .addMolten() // has Molten
-     * .addMetalItems()
-     * .addCraftingMetalWorkingItems()
-     * .addSimpleMetalWorkingItems()
-     * .addMultipleIngotMetalWorkingItems()
-     * .addMetalCraftingSolidifierRecipes()
-     * .addMetaSolidifierRecipes(),
-     * offsetID_01, // manage ID here, some IDs has been used , read the README.md
-     * TextureSet.SET_SHINY); // What Type will the auto Texture be ,SHINY means like Palladium Ingot
-     */
-
     public static final Werkstoff HolmiumGarnet = new Werkstoff(
         new short[] { 96, 96, 240 },
         TextHandler.texter("Holmium Garnet", "bw.HolmiumGarnet.notTrans"),
@@ -68,28 +38,40 @@ public class MaterialPool implements Runnable {
         offsetID_01 + 1,
         TextureSet.SET_SHINY);
 
-    public static final Werkstoff FluxedElementium = new Werkstoff(
-        new short[] { 218, 112, 214 },
-        TextHandler.texter("FluxedElementium", "bw.FluxedElementium.notTrans"),
-        subscriptNumbers("EfMa3"),
-        new Werkstoff.Stats().setBlastFurnace(true)
-            .setMeltingPoint(5300)
-            .setSpeedOverride(60.0F)
-            .setDurOverride(2180000)
-            .setQualityOverride((byte) 8), 
-        Werkstoff.Types.COMPOUND,
-        new Werkstoff.GenerationFeatures().addMolten()
-            .addMetalItems()
-            .addCraftingMetalWorkingItems()
-            .addSimpleMetalWorkingItems()
-            .addMultipleIngotMetalWorkingItems()
-            .addMetalCraftingSolidifierRecipes()
-            .addMetaSolidifierRecipes()
-            .addCasings().removeOres(),
+    // spotless:off
+
+    public static final Werkstoff.GenerationFeatures gf = new Werkstoff.GenerationFeatures();
+
+    public static final Werkstoff eventHorizonDiffusers = new Werkstoff(
+        new short[] { 255, 255, 255 },
+        TextHandler.texter("Event Horizon Diffusers", "bw.eventHorizonDiffusers.notTrans"),
+        subscriptNumbers("when we face it, we can do nothing before, but not now"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MATERIAL,
+        gf,
         offsetID_01 + 2,
-        TextureSet.SET_SHINY,
-        new Pair<>(MaterialsBotania.ElvenElementium, 1),
-        new Pair<>(Materials.Magic, 4));
+        TextureSet.SET_SHINY);
+
+    public static final Werkstoff entropyReductionProcess = new Werkstoff(
+        new short[] { 0, 0, 0 },
+        TextHandler.texter("Entropy Reduction Process", "bw.entropyReductionProcess.notTrans"),
+        subscriptNumbers("Trying to fight against the demise of the universe"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MATERIAL,
+        gf,
+        offsetID_01 + 3,
+        TextureSet.SET_SHINY);
+
+    public static final Werkstoff realSingularity = new Werkstoff(
+        new short[] { 127, 127, 127 },
+        TextHandler.texter("Real Singularity", "bw.realSingularity.notTrans"),
+        subscriptNumbers("Not just a compressed body, but a real miniature black hole"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MATERIAL,
+        gf,
+        offsetID_01 + 4,
+        TextureSet.SET_SHINY);
+
 
     public static final Werkstoff PureMana = new Werkstoff(
         new short[] { 176 ,196,222 },//LightSteelBlue
@@ -98,7 +80,7 @@ public class MaterialPool implements Runnable {
         new Werkstoff.Stats(),
         Werkstoff.Types.ELEMENT,
         new Werkstoff.GenerationFeatures().disable().addCells(),
-        offsetID_01 + 3,
+        offsetID_01 + 5,
         TextureSet.SET_FLUID);
 
     public static final Werkstoff LiquidMana = new Werkstoff(
@@ -108,7 +90,7 @@ public class MaterialPool implements Runnable {
         new Werkstoff.Stats(),
         Werkstoff.Types.MIXTURE,
         new Werkstoff.GenerationFeatures().disable().addCells(),
-        offsetID_01 + 4,
+        offsetID_01 + 6,
         TextureSet.SET_FLUID,
         new Pair<>(PureMana, 1),
         new Pair<>(Materials.Stone, 2));
@@ -120,12 +102,17 @@ public class MaterialPool implements Runnable {
         new Werkstoff.Stats(),
         Werkstoff.Types.MIXTURE,
         new Werkstoff.GenerationFeatures().disable().addCells(),
-        offsetID_01 + 5,
+        offsetID_01 + 7,
         TextureSet.SET_FLUID,
         new Pair<>(PureMana, 1),
         new Pair<>(Materials.Stone, 2));
     
     // Bartworks' Material System run on Runnable.class
     @Override
-    public void run() {}
+    public void run() {
+        for (var prefix : OrePrefixes.values()) {
+            gf.addPrefix(prefix);
+        }
+        gf.removePrefix(OrePrefixes.ore);
+    }
 }

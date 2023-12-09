@@ -22,6 +22,30 @@ public enum GTCMItemList {
     PerfectLapotronCrystal,
     EnergyCrystalShard,
     PerfectEnergyCrystal,
+
+    CosmicCircuitBoard,
+    IntelligentImitationNeutronStarCore,
+    EventHorizonNanoSwarm,
+    MicroDimensionOutput,
+    EntropyReductionMaterialNanoswarm,
+    TranscendentCircuitBoard,
+    NarrativeLayerOverwritingDevice,
+    HyperspaceNarrativeLayerAdaptiveSpecialSRA,
+    RealSingularityNanoSwarm,
+    ParadoxEngine,
+    QuasarSoc,
+    MiniatureGalaxy,
+    Self_adaptiveAI1,
+    Self_adaptiveAI2,
+    Self_adaptiveAI3,
+    Self_adaptiveAI4,
+    Self_adaptiveAI5,
+    CoreOfT800,
+    ExoticCircuitBoard,
+
+    spaceStationConstructingMaterialMax,
+
+    MultiStructuresLinkTool,
     PurpleMagnoliaPetal,
     PurpleMagnoliaSapling,
     VoidPollen,
@@ -39,7 +63,6 @@ public enum GTCMItemList {
     SpaceScaler,
     MoleculeDeconstructor,
     CrystallineInfinitier,
-    ElvenWorkshop,
 
     // DSP
     SolarSail,
@@ -55,9 +78,11 @@ public enum GTCMItemList {
     DSPLauncher,
     DSPReceiver,
     ArtificialStar,
+    StellarMaterialSiphon,
 
     // single block Machines
     InfiniteAirHatch,
+    InfiniteWirelessDynamoHatch,
 
     // Blocks
 
@@ -75,9 +100,39 @@ public enum GTCMItemList {
     PhotonControllerUpgradeUIV,
     PhotonControllerUpgradeUMV,
     PhotonControllerUpgradeUXV,
-    PhotonControllerUpgradeMAX
-
-    ;
+    PhotonControllerUpgradeMAX,
+    spaceStationStructureBlockLV,
+    spaceStationStructureBlockMV,
+    spaceStationStructureBlockHV,
+    spaceStationStructureBlockEV,
+    spaceStationStructureBlockIV,
+    spaceStationStructureBlockLuV,
+    spaceStationStructureBlockZPM,
+    spaceStationStructureBlockUV,
+    spaceStationStructureBlockUHV,
+    spaceStationStructureBlockUEV,
+    spaceStationStructureBlockUIV,
+    spaceStationStructureBlockUMV,
+    spaceStationStructureBlockUXV,
+    spaceStationStructureBlockMAX,
+    SpaceStationAntiGravityBlockLV,
+    SpaceStationAntiGravityBlockMV,
+    SpaceStationAntiGravityBlockHV,
+    SpaceStationAntiGravityBlockEV,
+    SpaceStationAntiGravityBlockIV,
+    SpaceStationAntiGravityBlockLuV,
+    SpaceStationAntiGravityBlockZPM,
+    SpaceStationAntiGravityBlockUV,
+    SpaceStationAntiGravityBlockUHV,
+    SpaceStationAntiGravityBlockUEV,
+    SpaceStationAntiGravityBlockUIV,
+    SpaceStationAntiGravityBlockUMV,
+    SpaceStationAntiGravityBlockUXV,
+    SpaceStationAntiGravityBlockMAX,
+    // MultiStructure Machine:
+    TestMultiStructureMainMachine,
+    TestMultiStructureSubMachine,
+    megaUniversalSpaceStation;
 
     // region Member Variables
 

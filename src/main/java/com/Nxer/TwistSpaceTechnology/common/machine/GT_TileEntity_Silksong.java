@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerPiece_Silksong;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerCoilTier_Silksong;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.pressureResistantWalls;
@@ -22,12 +24,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -39,9 +37,6 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
-import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -50,8 +45,7 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings1;
 import gregtech.common.blocks.GT_Block_Casings8;
 
-public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_Silksong>
-    implements IConstructable, ISurvivalConstructable {
+public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_Silksong> {
 
     // region Class Constructor
     public GT_TileEntity_Silksong(int aID, String aName, String aNameRegional) {
@@ -76,24 +70,16 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
     }
 
     @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus(getSpeedBonus());
-                return super.process();
-            }
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    protected boolean isEnablePerfectOverclock() {
+        return false;
     }
 
-    private int getMaxParallelRecipes() {
-        return this.piece * 8;
+    protected int getMaxParallelRecipes() {
+        return this.piece * Parallel_PerPiece_Silksong;
     }
 
-    private float getSpeedBonus() {
-        return (float) Math.pow(0.9, this.coilLevel.getLevel());
+    protected float getSpeedBonus() {
+        return (float) Math.pow(SpeedBonus_MultiplyPerCoilTier_Silksong, this.coilLevel.getLevel());
     }
 
     @Override
@@ -103,7 +89,10 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
+
         this.piece = 0;
+
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
             return false;
         }
@@ -123,7 +112,7 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
 
     // region Structure
     // spotless:off
-    
+
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         int piece = stackSize.stackSize;
@@ -345,11 +334,6 @@ public class GT_TileEntity_Silksong extends GT_MetaTileEntity_ExtendedPowerMulti
 
     @Override
     public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
         return true;
     }
 

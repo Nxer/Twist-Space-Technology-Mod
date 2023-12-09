@@ -70,7 +70,7 @@ public class GTCMRecipe {
 
             useModularUI(true);
             // setProgressBarPos(78, getItemRowCount() * 18);
-            setLogoPos(79, (getItemRowCount() + getFluidRowCount()) * 18 - 27);
+            setLogoPos(79, 7);
             setUsualFluidInputCount(aUsualFluidInputCount);
             setUsualFluidOutputCount(aUsualFluidOutputCount);
             setDisableOptimize(disableOptimize);
@@ -327,4 +327,45 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap megaUniversalSpaceStationRecipePool = new GTCMRecipeMap(
+        new HashSet<>(),
+        "gtcm.recipe.megaUniversalSpaceStationRecipes",
+        NameMegaUniversalSpaceStation,
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        16,
+        4,
+        16,
+        1,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        true,
+        true);
+
+    public final GTCMRecipeMap OreProcessingRecipes = new GTCMRecipeMap(
+        new HashSet<>(1000),
+        "tst.recipe.OreProcessingRecipes",
+        texter("Ore Processing Recipes", "NEI.name.OreProcessingRecipes"),
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        1,
+        8,
+        1,
+        0,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
+    // endregion
 }

@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock;
+package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;

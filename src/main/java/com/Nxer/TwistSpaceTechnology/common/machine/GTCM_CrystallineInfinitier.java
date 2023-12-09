@@ -1,5 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_CrystallineInfinitier;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiplier_CrystallineInfinitier;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -66,7 +71,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     // endregion
 
     // region Processing Logic
-    private byte mode = 0;
+    private byte mode = Mode_Default_CrystallineInfinitier;
     public byte glassTier = 0;
     private int fieldGeneratorTier = 0;
 
@@ -75,17 +80,20 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     };
 
     protected float getSpeedBonus() {
-        return mode == 0 ? 0.25F : 1.0F;
+        return 1F / (mode == 0 ? SpeedMultiplier_AutoclaveMode_CrystallineInfinitier
+            : SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier);
     };
 
     protected int getMaxParallelRecipes() {
         return Math.min(
             ValueEnum.MAX_PARALLEL_LIMIT,
-            glassTier * fieldGeneratorTier * GT_Utility.getTier(this.getMaxInputVoltage()));
+            glassTier * fieldGeneratorTier
+                * GT_Utility.getTier(this.getMaxInputVoltage())
+                * ParallelMultiplier_CrystallineInfinitier);
     };
 
     protected boolean isEnablePerfectOverclock() {
-        return fieldGeneratorTier >= 3;
+        return fieldGeneratorTier >= FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
     };
 
     @Override
@@ -131,7 +139,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 	public void construct(ItemStack stackSize, boolean hintsOnly) {
 		this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
 	}
-	
+
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
 		if (this.mMachine) return -1;
@@ -148,7 +156,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 			false,
 			true);
 	}
-	
+
 	public static int getBlockFieldGeneratorTier(Block block, int meta){
 		if (block == sBlockCasingsTT){
 			switch (meta) {
@@ -274,7 +282,7 @@ G -> ofFrame;
 		{"              B~B              ","             BBBBB             ","             BBBBB             ","             BBBBB             ","             BBBBB             ","            BBBBBBB            ","            BBBBBBB            ","            BBBBBBB            ","           BBBBBBBBB           ","           BBBBBBBBB           ","          BBBBBBBBBBB          ","         BBBBBBBBBBBBB         ","       BBBBBBBBBBBBBBBBB       ","    BBBBBBBBBBBBBBBBBBBBBBB    ","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","    BBBBBBBBBBBBBBBBBBBBBBB    ","       BBBBBBBBBBBBBBBBB       ","         BBBBBBBBBBBBB         ","          BBBBBBBBBBB          ","           BBBBBBBBB           ","           BBBBBBBBB           ","            BBBBBBB            ","            BBBBBBB            ","            BBBBBBB            ","             BBBBB             ","             BBBBB             ","             BBBBB             ","             BBBBB             "},
 		{"              BBB              ","             BBBBB             ","             BBBBB             ","             BBBBB             ","             BBBBB             ","            BBBBBBB            ","            BBBBBBB            ","            BBBBBBB            ","           BBBBBBBBB           ","           BBBBBBBBB           ","          BBBBBBBBBBB          ","         BBBBBBBBBBBBB         ","       BBBBBBBBBBBBBBBBB       ","    BBBBBBBBBBBBBBBBBBBBBBB    ","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","    BBBBBBBBBBBBBBBBBBBBBBB    ","       BBBBBBBBBBBBBBBBB       ","         BBBBBBBBBBBBB         ","          BBBBBBBBBBB          ","           BBBBBBBBB           ","           BBBBBBBBB           ","            BBBBBBB            ","            BBBBBBB            ","            BBBBBBB            ","             BBBBB             ","             BBBBB             ","             BBBBB             ","             BBBBB             "}
 	};
-	
+
 	// spotless:on
     // endregion
 

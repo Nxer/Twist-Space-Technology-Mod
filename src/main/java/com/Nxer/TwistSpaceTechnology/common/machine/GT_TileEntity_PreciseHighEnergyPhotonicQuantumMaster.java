@@ -1,6 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.PhotonControllerUpgrade;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_PreciseHighEnergyPhotonicQuantumMaster;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -22,17 +27,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -42,18 +44,14 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
 
 public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster>
-    implements IConstructable, ISurvivalConstructable {
+    extends GTCM_MultiMachineBase<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster> {
 
     // region ClassConstructors
     public GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster(int aID, String aName, String aNameRegional) {
@@ -68,8 +66,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
 
     // region Member Variables
 
-    private boolean mode = false;
-
+    private boolean mode = Mode_Default_PreciseHighEnergyPhotonicQuantumMaster;
     private boolean enablePerfectOverclockSignal = false;
     private int totalSpeedIncrement = 0;
 
@@ -92,7 +89,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         { "     DMMMD     ", "DDDDDCCCCCDDDDD", "DBBBBBBBBBBBBBD", " I           I ", " I           I ", " I           I ", "DBBBBBBBBBBBBBD", "DDDDDCCCCCDDDDD", "DDDDDDAAADDDDDD" },
         { "     DDDDD     ", "D   DCCCCCD   D", "DEEEEEEEEEEEEED", "DXXXXXXXXXXXXXD", "DXXXXXXXXXXXXXD", "DXXXXXXXXXXXXXD", "DEEEEEEEEEEEEED", "DDDDDCCCCCDDDDD", "     DAAAD     " },
         { "               ", "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD", "               ", "               ", "               ", "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD", "     DDDDD     " } };
-    
+
     // spotless:on
     private final int horizontalOffSet = 7;
     private final int verticalOffSet = 3;
@@ -221,26 +218,44 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         return GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes;
     }
 
+    // @Override
+    // protected ProcessingLogic createProcessingLogic() {
+    // return new GTCM_ProcessingLogic() {
+    //
+    // @Override
+    // public ProcessingLogic enablePerfectOverclock() {
+    // if (enablePerfectOverclockSignal) {
+    // return this.setOverclock(1, 2);
+    // }
+    // return this.setOverclock(2, 2);
+    // }
+    //
+    // @NotNull
+    // @Override
+    // protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
+    // return super.createOverclockCalculator(recipe)
+    // .setSpeedBoost((mode ? 10000F : 5000F) / (10000F + totalSpeedIncrement));
+    // }
+    // }.enablePerfectOverclock()
+    // .setMaxParallel(this.mode ? 16 : 256);
+    // }
+
     @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
+    protected boolean isEnablePerfectOverclock() {
+        return enablePerfectOverclockSignal;
+    }
 
-            @Override
-            public ProcessingLogic enablePerfectOverclock() {
-                if (enablePerfectOverclockSignal) {
-                    return this.setOverclock(1, 2);
-                }
-                return this.setOverclock(2, 2);
-            }
+    @Override
+    protected float getSpeedBonus() {
+        return 10000F / (10000F + totalSpeedIncrement)
+            / (mode ? SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
+                : SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster);
+    }
 
-            @NotNull
-            @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
-                return super.createOverclockCalculator(recipe)
-                    .setSpeedBoost((mode ? 10000F : 5000F) / (10000F + totalSpeedIncrement));
-            }
-        }.enablePerfectOverclock()
-            .setMaxParallel(this.mode ? 16 : 256);
+    @Override
+    protected int getMaxParallelRecipes() {
+        return this.mode ? Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
+            : Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
     }
 
     /**
@@ -291,8 +306,12 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 1] = "Total Speed Increment: " + String.valueOf(this.totalSpeedIncrement);
-        ret[origin.length] = "Enable Perfect Overclock: " + String.valueOf(this.enablePerfectOverclockSignal);
+        ret[origin.length] = "Total Speed Increment: " + this.totalSpeedIncrement;
+        ret[origin.length + 1] = "Enable" + EnumChatFormatting.GOLD
+            + " Perfect Overclock"
+            + EnumChatFormatting.RESET
+            + ": "
+            + this.enablePerfectOverclockSignal;
         return ret;
     }
 
@@ -300,46 +319,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return super.addToMachineList(aTileEntity, aBaseCasingIndex)
             || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
     }
 
     // tooltips

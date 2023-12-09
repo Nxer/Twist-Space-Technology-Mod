@@ -54,13 +54,16 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -86,6 +89,8 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar> implements IGlobalWirelessEnergy {
 
@@ -115,6 +120,38 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     private double outputMultiplier = 1;
     private short recoveryChance = 0;
     private byte rewardContinuous = 0;
+    private long currentOutputEU = 0;
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.getBoolean("isActive")) {
+            currentTip.add(
+                EnumChatFormatting.AQUA + texter("Current Generating : ", "Waila.TST_ArtificialStar.1")
+                    + EnumChatFormatting.GOLD
+                    + tag.getLong("currentOutputEU")
+                    + EnumChatFormatting.GREEN
+                    + " * 2147483647"
+                    + EnumChatFormatting.RESET
+                    + " EU / "
+                    + secondsOfArtificialStarProgressCycleTime
+                    + " s");
+        }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            if (tileEntity.isActive()) {
+                tag.setLong("currentOutputEU", currentOutputEU);
+            }
+        }
+    }
 
     @Override
     public String[] getInfoData() {
@@ -122,12 +159,12 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 6];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 5] = EnumChatFormatting.GOLD+texter("Reward for continuous operation","TST_ArtificialStar.getInfoData.00")+EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+(rewardContinuous+100)+"%";
-        ret[origin.length - 4] = EnumChatFormatting.GOLD+texter("Generating Multiplier","TST_ArtificialStar.getInfoData.01")+EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+outputMultiplier;
-        ret[origin.length - 3] = EnumChatFormatting.GOLD+texter("Dimension Field Tier","TST_ArtificialStar.getInfoData.02")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierDimensionField;
-        ret[origin.length - 2] = EnumChatFormatting.GOLD+texter("Time Field Tier","TST_ArtificialStar.getInfoData.03")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierTimeField;
-        ret[origin.length - 1] = EnumChatFormatting.GOLD+texter("Stabilisation Field Tier","TST_ArtificialStar.getInfoData.04")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierStabilisationField;
-        ret[origin.length] = EnumChatFormatting.GOLD+texter("Recover material chance","TST_ArtificialStar.getInfoData.05")+EnumChatFormatting.RESET+": "+EnumChatFormatting.AQUA+recoveryChance+EnumChatFormatting.RESET+"/"+EnumChatFormatting.AQUA+"1000";
+        ret[origin.length] = EnumChatFormatting.GOLD+texter("Reward for continuous operation","TST_ArtificialStar.getInfoData.00")+EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+(rewardContinuous+100)+"%";
+        ret[origin.length + 1] = EnumChatFormatting.GOLD+texter("Generating Multiplier","TST_ArtificialStar.getInfoData.01")+EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+outputMultiplier;
+        ret[origin.length + 2] = EnumChatFormatting.GOLD+texter("Dimension Field Tier","TST_ArtificialStar.getInfoData.02")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierDimensionField;
+        ret[origin.length + 3] = EnumChatFormatting.GOLD+texter("Time Field Tier","TST_ArtificialStar.getInfoData.03")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierTimeField;
+        ret[origin.length + 4] = EnumChatFormatting.GOLD+texter("Stabilisation Field Tier","TST_ArtificialStar.getInfoData.04")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierStabilisationField;
+        ret[origin.length + 5] = EnumChatFormatting.GOLD+texter("Recover material chance","TST_ArtificialStar.getInfoData.05")+EnumChatFormatting.RESET+": "+EnumChatFormatting.AQUA+recoveryChance+EnumChatFormatting.RESET+"/"+EnumChatFormatting.AQUA+"1000";
         return ret;
        // spotless:on
     }
@@ -139,11 +176,14 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         // consume fuel and generate EU
         boolean flag = false;
         int recoveryAmount = 0;
+        currentOutputEU = 0;
         for (ItemStack items : getStoredInputs()) {
             if (metaItemEqual(items, Antimatter.get(1))) {
+                currentOutputEU += EUEveryAntimatter / Integer.MAX_VALUE * items.stackSize;
                 consumeAntimatter(items);
                 flag = true;
             } else if (metaItemEqual(items, AntimatterFuelRod.get(1))) {
+                currentOutputEU += EUEveryAntimatterFuelRod / Integer.MAX_VALUE * items.stackSize;
                 recoveryAmount += items.stackSize;
                 consumeAntimatterFuelRod(items);
                 flag = true;
@@ -162,15 +202,19 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         // set progress time with cfg
         mMaxProgresstime = (int) (20 * secondsOfArtificialStarProgressCycleTime);
         // chance to recover FrameMaterial
-        if (XSTR.XSTR_INSTANCE.nextInt(1000) < recoveryChance) {
+        if (recoveryChance == 1000) {
+            ItemStack recoverItem = StellarConstructionFrameMaterial.get(1);
+            recoverItem.stackSize = recoveryAmount;
+            mOutputItems = new ItemStack[] { recoverItem.copy(), recoverItem.copy(), recoverItem.copy() };
+        } else if (XSTR.XSTR_INSTANCE.nextInt(1000) < recoveryChance) {
             ItemStack recoverItem = StellarConstructionFrameMaterial.get(1);
             recoverItem.stackSize = recoveryAmount;
             mOutputItems = new ItemStack[] { recoverItem.copy(), recoverItem.copy(), recoverItem.copy() };
         }
+
         // increase multiplier of rewarding continuous operation
         if (rewardContinuous < 50) rewardContinuous++;
         return CheckRecipeResultRegistry.GENERATING;
-        // return super.checkProcessing();
     }
 
     // Artificial Star Output multiplier
@@ -241,6 +285,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         aNBT.setInteger("tierStabilisationField", tierStabilisationField);
         aNBT.setDouble("outputMultiplier", outputMultiplier);
         aNBT.setByte("rewardContinuous", rewardContinuous);
+        aNBT.setLong("currentOutputEU", currentOutputEU);
     }
 
     @Override
@@ -252,6 +297,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         tierStabilisationField = aNBT.getInteger("tierStabilisationField");
         outputMultiplier = aNBT.getDouble("outputMultiplier");
         rewardContinuous = aNBT.getByte("rewardContinuous");
+        currentOutputEU = aNBT.getLong("currentOutputEU");
     }
 
     // endregion
@@ -266,6 +312,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        mInputBusses.clear();
         tierDimensionField = -1;
         tierTimeField = -1;
         tierStabilisationField = -1;

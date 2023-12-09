@@ -7,11 +7,35 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 
 public class TST_CommandMethods implements IDSP_IO {
 
     public static final TST_CommandMethods INSTANCE = new TST_CommandMethods();
+
+    public void dsp_info(ICommandSender sender) {
+        int dim = sender.getEntityWorld().provider.dimensionId;
+        DSP_Galaxy galaxy = DSP_Galaxy.getGalaxyFromDimID(dim);
+        DSP_Planet planet = DSP_Planet.getPlanetFromDimID(dim);
+        sender.addChatMessage(
+            new ChatComponentText(
+                "Current Galaxy: " + EnumChatFormatting.GOLD
+                    + galaxy
+                    + EnumChatFormatting.RESET
+                    + " , Stellar Coefficient : "
+                    + EnumChatFormatting.GREEN
+                    + galaxy.stellarCoefficient));
+        sender.addChatMessage(
+            new ChatComponentText(
+                "Current Planet: " + EnumChatFormatting.GOLD
+                    + planet
+                    + EnumChatFormatting.RESET
+                    + " , Planetary Coefficient : "
+                    + EnumChatFormatting.GREEN
+                    + planet.planetaryCoefficient));
+    }
 
     public void dsp_setNode(ICommandSender sender, String amount, String dim, String aName) {
         if (amount == null) {

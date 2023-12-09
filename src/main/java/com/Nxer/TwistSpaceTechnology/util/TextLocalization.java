@@ -34,10 +34,37 @@ public class TextLocalization {
 
     public static final String DSPName = texter(EnumChatFormatting.BLUE+"Dyson Sphere Program","DSPName");
     public static final String Tooltip_Details = texter(EnumChatFormatting.LIGHT_PURPLE+"Details: ","Tooltip_Details");
+    public static final String Tooltips_JoinWirelessNetWithoutEnergyHatch = texter("Joining the wireless EU network when without installing an energy hatch.","Tooltips_JoinWirelessNetWithoutEnergyHatch");
+    // endregion
+
+    // region Names
+    public static final String name_Nxer = "" + EnumChatFormatting.RED
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "N"
+                                               + EnumChatFormatting.GREEN
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "x"
+                                               + EnumChatFormatting.AQUA
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "e"
+                                               + EnumChatFormatting.BLUE
+                                               + EnumChatFormatting.BOLD
+                                               + EnumChatFormatting.ITALIC
+                                               + EnumChatFormatting.UNDERLINE
+                                               + "r";
+
+    public static final String authorName_Nxer = "Author: "+name_Nxer;
     // endregion
 
     // region special hatch info
     public static final String Tooltip_DoNotNeedMaintenance = texter("Do Not Need Maintenance!","Tooltip_DoNotNeedMaintenance");
+    public static final String Tooltip_DoNotNeedEnergyHatch = texter("Do Not Need Energy Hatch!","Tooltip_DoNotNeedEnergyHatch");
 
     // endregion
 
@@ -186,7 +213,7 @@ public class TextLocalization {
     public static final String Tooltip_MiracleTop_04 = texter("The number of rings is variable:  Maximum 16 rings, Minimum 2 rings(the first and the last).", "Tooltip_MiracleTop_04");
     public static final String Tooltip_MiracleTop_05 = texter("Total speed multiplier is equal to 400%% x num of rings.", "Tooltip_MiracleTop_05");
     public static final String Tooltip_MiracleTop_06 = texter("Enable Perfect overclock when num of rings >= 8 .", "Tooltip_MiracleTop_06");
-    public static final String Tooltip_MiracleTop_07 = texter("256x Parallel.", "Tooltip_MiracleTop_07");
+    public static final String Tooltip_MiracleTop_07 = texter("128x Parallel per Ring.", "Tooltip_MiracleTop_07");
     public static final String textMiracleTopHatchLocation = texter("Outermost 12 blocks on the ring (outermost 3 on each side).", "textMiracleTopHatchLocation");
 
     // endregion
@@ -277,6 +304,7 @@ public class TextLocalization {
     public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.","Tooltip_SpaceScaler_04");
     public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.","Tooltip_SpaceScaler_05");
     public static final String Tooltip_SpaceScaler_06 = texter("Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.","Tooltip_SpaceScaler_06");
+    public static final String Tooltip_SpaceScaler_07 = texter("In Particle Collider mode, higher tier has more output.","Tooltip_SpaceScaler_07");
 
     // endregion
 
@@ -377,14 +405,73 @@ public class TextLocalization {
 
     // endregion
 
-    // region CrystallineInfinitier
+    // region MiracleDoor
+    public static final String NameMiracleDoor = texter("Miracle Door", "NameMiracleDoor");
+    public static final String Tooltip_MiracleDoor_MachineType = texter("Stellar Forge | Fluid Alloy Cooker", "Tooltip_MiracleDoor_MachineType");
+    public static final String Tooltip_MiracleDoor_Controller = texter("Controller block for the Miracle Door", "Tooltip_MiracleDoor_Controller");
+    public static final String Tooltip_MiracleDoor_00 = texter(EnumChatFormatting.GOLD+""+EnumChatFormatting.BOLD+"Mere mortals can't even begin to understand the progress we've made.", "Tooltip_MiracleDoor_00");
+    public static final String Tooltip_MiracleDoor_01 = texter("Enslaving Stellaris to work for us.", "Tooltip_MiracleDoor_01");
+    public static final String Tooltip_MiracleDoor_02 = texter("No matter how large the workload, it can be done in one time.", "Tooltip_MiracleDoor_02");
+    public static final String Tooltip_MiracleDoor_03 = texter("No matter how large the workload, it need one Critical Photon to start.", "Tooltip_MiracleDoor_03");
+    public static final String Tooltip_MiracleDoor_04 = texter("Power consumption: §c1600%%", "Tooltip_MiracleDoor_04");
+    public static final String Tooltip_MiracleDoor_05 = texter("Directly get EU from the Wireless EU Net.", "Tooltip_MiracleDoor_05");
+    public static final String Tooltip_MiracleDoor_06 = texter("Warning! If trying to start machine when Wireless EU Net has not enough EU,", "Tooltip_MiracleDoor_06");
+    public static final String Tooltip_MiracleDoor_07 = texter(" the materials will fade.", "Tooltip_MiracleDoor_07");
+    public static final String Tooltip_MiracleDoor_08 = texter("Put Integrated Circuit into Controller block to decrease process time interval.", "Tooltip_MiracleDoor_08");
+    public static final String Tooltip_MiracleDoor_2_01 = texter("Each run takes the same amount of time, 25.6s default.", "Tooltip_MiracleDoor_2_01");
+    public static final String Tooltip_MiracleDoor_2_02 = texter("If putting Integrated Circuit into Controller block slot,", "Tooltip_MiracleDoor_2_02");
+    public static final String Tooltip_MiracleDoor_2_03 = texter(" actual progress time = default / (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_03");
+    public static final String Tooltip_MiracleDoor_2_04 = texter("Actual cost EU = recipe value * 16 * (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_04");
+    public static final String Tooltip_MiracleDoor_2_05 = texter("Each run cost 1 Critical Photon to start.", "Tooltip_MiracleDoor_2_05");
+
+    // endregion
+
+    // region OreProcessingFactory
+    public static final String NameOreProcessingFactory = texter("General Ore Processing Factory TST","NameOreProcessingFactory");
+    public static final String Tooltip_OreProcessingFactory_MachineType = texter("Ore Processor","Tooltip_OreProcessingFactory_MachineType");
+    public static final String Tooltip_OreProcessingFactory_Controller = texter("Controller block for the General Ore Processing Factory TST","Tooltip_OreProcessingFactory_Controller");
+    public static final String Tooltip_OreProcessingFactory_01 = texter(EnumChatFormatting.WHITE+"Engineering is the art of directing the great sources of power in nature for the use and convenience of man.","Tooltip_OreProcessingFactory_01");
+    public static final String Tooltip_OreProcessingFactory_02 = texter("The ores will line up and go in through the entrance and out through the exit.","Tooltip_OreProcessingFactory_02");
+    public static final String Tooltip_OreProcessingFactory_03 = texter("This machine will not do overclock. Progress time is always 6.4s (default) .","Tooltip_OreProcessingFactory_03");
+    public static final String Tooltip_OreProcessingFactory_04 = texter("It will process as many inputs as possible at once, if power allow.","Tooltip_OreProcessingFactory_04");
+    public static final String Tooltip_OreProcessingFactory_05 = texter("Consume 3200L Lubricant every 12.8s (default).","Tooltip_OreProcessingFactory_05");
+    public static final String Tooltip_OreProcessingFactory_06 = texter("Non-ore inputs will be transferred to the output bus.","Tooltip_OreProcessingFactory_06");
+
+    // endregion
+
+    // region CircuitConverter
+    public static final String NameCircuitConverter = texter("General Circuit Converter","NameCircuitConverter");
+    public static final String Tooltip_CircuitConverter_MachineType = texter("Circuit Converter","Tooltip_CircuitConverter_MachineType");
+    public static final String Tooltip_CircuitConverter_Controller = texter("Controller block for the General Circuit Converter","Tooltip_CircuitConverter_Controller");
+    public static final String Tooltip_CircuitConverter_01 = texter("Transform input circuits to Any Circuit.","Tooltip_CircuitConverter_01");
+    public static final String Tooltip_CircuitConverter_2_01 = texter("Maximum 8 In/Output Buses.","Tooltip_CircuitConverter_2_01");
+    // endregion
+
+    // region Elvenworkshop
     public static final String NameElvenWorkshop = texter("ElvenWorkshop","NameElvenWorkshop");
     public static final String Tooltip_ElvenWorkshop_MachineType = texter("Mana Infuser/Rune Engraver","Tooltip_ElvenWorkshop_MachineType");
     // endregion
 
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
+    public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
 
     // endregion
+
+    // region megaUniverseSpaceStation
+    public static final String NameMegaUniversalSpaceStation = texter("Mega Universal Space Station","NameMegaUniversalSpaceStation");
+    public static final String Tooltip_MegaUniversalSpaceStation_MachineType = texter("space station","Tooltip_MegaUniversalSpaceStation_MachineType");
+    public static final String Tooltip_MegaUniversalSpaceStation_00 = texter("Use auto build item to build instead of build your self","Tooltip_MegaUniversalSpaceStation_00");
+    public static final String Tooltip_MegaUniversalSpaceStation_01 = texter("Auto-SpaceStation build core","Tooltip_MegaUniversalSpaceStation_01");
+    public static final String Tooltip_MegaUniversalSpaceStation_02 = texter("If your station broke, you can put fix block inside the input hatch to fix it","Tooltip_MegaUniversalSpaceStation_02");
+    public static final String Tooltip_MegaUniversalSpaceStation_03 = texter("temp","Tooltip_MegaUniversalSpaceStation_03");
+    public static final String Tooltip_MegaUniversalSpaceStation_04 = texter("temp","Tooltip_MegaUniversalSpaceStation_04");
+    public static final String Tooltip_MegaUniversalSpaceStation_05 = texter("temp","Tooltip_MegaUniversalSpaceStation_05");
+    public static final String Tooltip_MegaUniversalSpaceStation_06 = texter("temp","Tooltip_MegaUniversalSpaceStation_06");
+
+    public static final String NameStellarMaterialSiphon = texter("Stellar Material Siphon","NameStellarMaterialSiphon");
+    public static final String Tooltip_NameStellarMaterialSiphon = texter("Siphon","Tooltip_MegaUniversalSpaceStation_MachineType");
+
+    //endregion
 }
 // spotless:on

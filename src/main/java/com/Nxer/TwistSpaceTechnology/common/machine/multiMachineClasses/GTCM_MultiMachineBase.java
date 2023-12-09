@@ -1,7 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.MAX_PARALLEL_LIMIT;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTEs;
+
+import java.util.ArrayList;
 
 import javax.annotation.Nonnull;
 
@@ -15,10 +17,15 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
@@ -147,16 +154,43 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return result;
     }
 
+    /**
+     * <p>
+     * Get inputting items without DualInputHatch, and no separation mode.
+     * <p>
+     * Always used to get some special input items.
+     *
+     * @return The inputting items.
+     */
+    public ArrayList<ItemStack> getStoredInputsWithoutDualInputHatch() {
+
+        ArrayList<ItemStack> rList = new ArrayList<>();
+        for (GT_MetaTileEntity_Hatch_InputBus tHatch : filterValidMTEs(mInputBusses)) {
+            tHatch.mRecipeMap = getRecipeMap();
+            IGregTechTileEntity tileEntity = tHatch.getBaseMetaTileEntity();
+            for (int i = tileEntity.getSizeInventory() - 1; i >= 0; i--) {
+                ItemStack itemStack = tileEntity.getStackInSlot(i);
+                if (itemStack != null) {
+                    rList.add(itemStack);
+                }
+            }
+        }
+
+        if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
+            .startsWith("gt.integrated_circuit")) rList.add(getStackInSlot(1));
+        return rList;
+    }
+
     // region Overrides
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Parallels: "
+        ret[origin.length] = EnumChatFormatting.AQUA + "Parallels: "
             + EnumChatFormatting.GOLD
             + this.getLimitedMaxParallel();
-        ret[origin.length] = EnumChatFormatting.AQUA + "Speed multiplier: "
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Speed multiplier: "
             + EnumChatFormatting.GOLD
             + this.getSpeedBonus();
         return ret;
@@ -168,9 +202,35 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
+    public boolean addEnergyHatchOrExoticEnergyHatchToMachineList(IGregTechTileEntity aTileEntity,
+        int aBaseCasingIndex) {
+        return addEnergyInputToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
     public boolean addInputBusOrOutputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return addInputBusToMachineList(aTileEntity, aBaseCasingIndex)
             || addOutputBusToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public boolean addInputHatchOrOutputHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addInputHatchToMachineList(aTileEntity, aBaseCasingIndex)
+            || addOutputHatchToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public boolean addFluidInputToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Input) {
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            ((GT_MetaTileEntity_Hatch_Input) aMetaTileEntity).mRecipeMap = getRecipeMap();
+            return mInputHatches.add((GT_MetaTileEntity_Hatch_Input) aMetaTileEntity);
+        } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Muffler) {
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            return mMufflerHatches.add((GT_MetaTileEntity_Hatch_Muffler) aMetaTileEntity);
+        }
+        return false;
     }
 
     @Override
@@ -257,16 +317,29 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return true;
     }
 
+    /**
+     * Gets the maximum Efficiency that spare Part can get (0 - 10000)
+     *
+     * @param aStack
+     */
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
 
+    /**
+     * Gets the damage to the ItemStack, usually 0 or 1.
+     *
+     * @param aStack
+     */
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
 
+    /**
+     * If it explodes when the Component has to be replaced.
+     */
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;

@@ -1,5 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EU_Multiplier_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_Coil_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -25,13 +33,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -42,10 +46,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -53,8 +54,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 public class GT_TileEntity_MagneticDrivePressureFormer
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_MagneticDrivePressureFormer>
-    implements IConstructable, ISurvivalConstructable {
+    extends GTCM_MultiMachineBase<GT_TileEntity_MagneticDrivePressureFormer> {
 
     // region Class Constructor
     public GT_TileEntity_MagneticDrivePressureFormer(int aID, String aName, String aNameRegional) {
@@ -76,9 +76,8 @@ public class GT_TileEntity_MagneticDrivePressureFormer
      * <li>2 = Forming Press
      * <li>3 = Forge Hammer
      */
-    public byte mode = 0;
+    public byte mode = Mode_Default_MagneticDrivePressureFormer;
     public byte glassTier;
-    public boolean signHadEnabledPerfectOverclock = false;
     public HeatingCoilLevel coilLevel;
 
     public HeatingCoilLevel getCoilLevel() {
@@ -93,47 +92,26 @@ public class GT_TileEntity_MagneticDrivePressureFormer
 
     // region Processing Logic
     @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus((float) ((mode == 0 ? (1.0 / 8.0) : (1.0 / 16.0)) / (1 + coilLevel.getTier())));
-                setPerfectOverclock(isPerfectOverclock());
-                return super.process();
-            }
-
-            public ProcessingLogic setPerfectOverclock(boolean isPerfectOverclock) {
-                if (isPerfectOverclock) {
-                    return this.setOverclock(2, 2);
-                }
-                return this.setOverclock(1, 2);
-            }
-
-            @Override
-            public ProcessingLogic setCalculatedEut(long calculatedEut) {
-                this.calculatedEut = calculatedEut * 3 / 4;
-                return this;
-            }
-
-        }.setMaxParallel(1024);
-
+    protected float getEuModifier() {
+        return EU_Multiplier_MagneticDrivePressureFormer;
     }
 
-    public boolean isPerfectOverclock() {
-        boolean sign = false;
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return mode != 0
+            || coilLevel.getTier() >= CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer;
+    }
 
-        if (mode != 0) {
-            // Bending & Forming Press mode
-            sign = true;
-        } else if (this.coilLevel.getLevel() >= 14) {
-            // Extruder Mode
-            // Enable Perfect overclock when Infinity Coil
-            sign = true;
-        }
-        this.signHadEnabledPerfectOverclock = sign;
-        return sign;
+    @Override
+    protected float getSpeedBonus() {
+        return ((mode == 0 ? (1.0F / SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer)
+            : (1.0F / SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer))
+            / (1 + coilLevel.getTier() * SpeedUpMultiplier_Coil_MagneticDrivePressureFormer));
+    }
+
+    @Override
+    protected int getMaxParallelRecipes() {
+        return Parallel_MagneticDrivePressureFormer;
     }
 
     @Override
@@ -144,7 +122,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             return false;
         }
         // Infinity Glass enable Laser Energy Hatch
-        if (this.glassTier < 11) {
+        if (this.glassTier < GlassTier_LimitLaserHatch_MagneticDrivePressureFormer) {
             for (GT_MetaTileEntity_Hatch hatch : this.mExoticEnergyHatches) {
                 if (hatch.getConnectionType() == GT_MetaTileEntity_Hatch.ConnectionType.LASER) {
                     return false;
@@ -204,7 +182,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         {"   DDFFDFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFFFFDD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDFFFFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFDFFDD   "},
         {"     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     "}
     };
-    
+
     /*
     Blocks:
         A -> ofBlock...(BW_GlasBlocks, 14, ...);    // glass
@@ -216,7 +194,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
      */
     @Override
     public IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> getStructureDefinition() {
-        IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> structure = StructureDefinition
+        return StructureDefinition
             .<GT_TileEntity_MagneticDrivePressureFormer>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
             .addElement(
@@ -255,21 +233,19 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                     .casingIndex(183)
                     .buildAndChain(GregTech_API.sBlockCasings8, 7))
             .build();
-            
-        return structure;
     }
-    
+
     @Override
     public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return super.addToMachineList(aTileEntity, aBaseCasingIndex)
             || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
     }
-    
+
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
-    
+
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
         if (this.mMachine) return -1;
@@ -286,7 +262,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             false,
             true);
     }
-    
+
     // spotless:on
 
     // endregion
@@ -299,13 +275,13 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 2] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Coil Level: "
+        ret[origin.length] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Coil Level: "
             + EnumChatFormatting.GOLD
-            + this.coilLevel.getLevel();
-        ret[origin.length] = EnumChatFormatting.AQUA + "Enabled Perfect Overclock: "
+            + this.coilLevel.getTier();
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Enabled Perfect Overclock: "
             + EnumChatFormatting.GOLD
-            + this.signHadEnabledPerfectOverclock;
+            + this.isEnablePerfectOverclock();
         return ret;
     }
 

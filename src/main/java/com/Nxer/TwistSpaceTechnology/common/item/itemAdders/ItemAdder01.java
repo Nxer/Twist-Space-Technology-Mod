@@ -107,7 +107,7 @@ public class ItemAdder01 extends ItemAdder_Basic {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIconFromDamage(int aMetaData) {
-        return aMetaData < ItemStaticDataClientOnly.iconsMap01.size()
+        return ItemStaticDataClientOnly.iconsMap01.containsKey(aMetaData)
             ? ItemStaticDataClientOnly.iconsMap01.get(aMetaData)
             : ItemStaticDataClientOnly.iconsMap01.get(0);
     }
