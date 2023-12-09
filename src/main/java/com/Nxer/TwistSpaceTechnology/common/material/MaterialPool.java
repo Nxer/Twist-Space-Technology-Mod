@@ -27,7 +27,7 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff HolmiumGarnet = new Werkstoff(
         new short[] { 96, 96, 240 },
-        TextHandler.texter("Holmium Garnet", "bw.HolmiumGarnet.notTrans"),
+        "Holmium Garnet",
         subscriptNumbers("Ho3Al5O12"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
@@ -43,7 +43,7 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff eventHorizonDiffusers = new Werkstoff(
         new short[] { 255, 255, 255 },
-        TextHandler.texter("Event Horizon Diffusers", "bw.eventHorizonDiffusers.notTrans"),
+        "Event Horizon Diffusers",
         subscriptNumbers("when we face it, we can do nothing before, but not now"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
@@ -53,7 +53,7 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff entropyReductionProcess = new Werkstoff(
         new short[] { 0, 0, 0 },
-        TextHandler.texter("Entropy Reduction Process", "bw.entropyReductionProcess.notTrans"),
+        "Entropy Reduction Process",
         subscriptNumbers("Trying to fight against the demise of the universe"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
@@ -63,7 +63,7 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff realSingularity = new Werkstoff(
         new short[] { 127, 127, 127 },
-        TextHandler.texter("Real Singularity", "bw.realSingularity.notTrans"),
+        "Real Singularity",
         subscriptNumbers("Not just a compressed body, but a real miniature black hole"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MATERIAL,
@@ -73,7 +73,7 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff PureMana = new Werkstoff(
         new short[] { 176, 196, 222 }, // LightSteelBlue
-        TextHandler.texter("PureMana", "bw.PureMana.notTrans"),
+        "Pure Mana",
         subscriptNumbers("Ma⨕"),
         new Werkstoff.Stats(),
         Werkstoff.Types.ELEMENT,
@@ -84,7 +84,7 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff LiquidMana = new Werkstoff(
         new short[] { 135, 206, 235 }, // skyblue
-        TextHandler.texter("LiquidMana", "bw.LiquidMana.notTrans"),
+        "Liquid Mana",
         subscriptNumbers("??Ma⨕??"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MIXTURE,
@@ -97,7 +97,7 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff PurifiedMana = new Werkstoff(
         new short[] { 173, 216, 230 }, // LightBLue
-        TextHandler.texter("PurifiedMana", "bw.PurifiedMana.notTrans"),
+        "Purified Mana",
         subscriptNumbers("??Ma⨕??"),
         new Werkstoff.Stats(),
         Werkstoff.Types.MIXTURE,

@@ -1,4 +1,4 @@
-//version: 1701530445
+//version: 1702141377
 /*
  DO NOT CHANGE THIS FILE!
  Also, you may replace this file at any time if there is an update available.
@@ -54,7 +54,7 @@ plugins {
     id 'com.diffplug.spotless' version '6.13.0' apply false // 6.13.0 is the last jvm8 supporting version
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
-    id 'com.gtnewhorizons.retrofuturagradle' version '1.3.24'
+    id 'com.gtnewhorizons.retrofuturagradle' version '1.3.26'
 }
 
 print("You might want to check out './gradlew :faq' if your build fails.\n")
@@ -452,8 +452,6 @@ minecraft {
 
     // Enable assertions in the current mod
     extraRunJvmArguments.add("-ea:${modGroup}")
-    extraRunJvmArguments.add("-Xmx16G")
-    extraRunJvmArguments.add("-Xms16G")
 
     if (usesMixins.toBoolean() || forceEnableMixins.toBoolean()) {
         if (usesMixinDebug.toBoolean()) {
@@ -615,7 +613,7 @@ repositories {
         }
         maven {
             name = "ic2"
-            url = getURL("https://maven.ic2.player.to/", "https://maven2.ic2.player.to/")
+            url = getURL("https://maven2.ic2.player.to/", "https://maven.ic2.player.to/")
             content {
                 includeGroup "net.industrial-craft"
             }
@@ -655,8 +653,8 @@ dependencies {
     } else if (forceEnableMixins.toBoolean()) {
         runtimeOnlyNonPublishable(mixinProviderSpec)
     }
-    
 }
+
 pluginManager.withPlugin('org.jetbrains.kotlin.kapt') {
     if (usesMixins.toBoolean()) {
         dependencies {
@@ -674,6 +672,8 @@ configurations.all {
         substitute module('com.github.GTNewHorizons:SpongePoweredMixin') using module(mixinProviderSpecNoClassifer) withClassifier("dev") because("Unimixins replaces other mixin mods")
         substitute module('com.github.GTNewHorizons:SpongeMixins') using module(mixinProviderSpecNoClassifer) withClassifier("dev") because("Unimixins replaces other mixin mods")
         substitute module('io.github.legacymoddingmc:unimixins') using module(mixinProviderSpecNoClassifer) withClassifier("dev") because("Our previous unimixins upload was missing the dev classifier")
+
+        substitute module('org.scala-lang:scala-library:2.11.1') using module('org.scala-lang:scala-library:2.11.5') because('To allow mixing with Java 8 targets')
     }
 }
 

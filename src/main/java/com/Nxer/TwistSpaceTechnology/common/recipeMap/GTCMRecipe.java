@@ -274,7 +274,7 @@ public class GTCMRecipe {
         NameElvenWorkshop,
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
-        1,
+        4,
         1,
         1,
         0,

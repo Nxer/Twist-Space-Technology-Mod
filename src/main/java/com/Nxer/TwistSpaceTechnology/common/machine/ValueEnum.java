@@ -146,4 +146,9 @@ public final class ValueEnum {
     public static final int multiplierOfMiracleDoorEUCost = Config.multiplierOfMiracleDoorEUCost;
 
     // endregion
+
+    // region Infinite Air Hatch
+    public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
+    // endregion
+
 }

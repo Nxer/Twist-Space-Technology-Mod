@@ -25,6 +25,7 @@ public class Config {
     public static final String SpaceScaler = "SpaceScaler";
     public static final String MoleculeDeconstructor = "MoleculeDeconstructor";
     public static final String CrystallineInfinitier = "CrystallineInfinitier";
+    public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
 
@@ -149,6 +150,9 @@ public class Config {
     public static byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = 3;
     // endregion
 
+    // region Infinite Air Hatch
+    public static double secondsOfInfiniteAirHatchFillFull = 1;
+    // endregion
 
     public static boolean activateMegaSpaceStation=false;
     public static void synchronizeConfiguration(File configFile) {
@@ -249,6 +253,10 @@ public class Config {
         amountOfPhotonsEveryMiracleDoorProcessingCost = configuration.getInt("amountOfPhotonsEveryMiracleDoorProcessingCost", MiracleDoor, amountOfPhotonsEveryMiracleDoorProcessingCost, 0, 64, "Needed Photons amount of Miracle Door each run cost.");
         multiplierOfMiracleDoorEUCost = configuration.getInt("multiplierOfMiracleDoorEUCost", MiracleDoor, multiplierOfMiracleDoorEUCost, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier.");
 
+        // endregion
+
+        // region Single Blocks
+        secondsOfInfiniteAirHatchFillFull = Double.parseDouble(configuration.getString("secondsOfInfiniteAirHatchFillFull", SingleBlocks, String.valueOf(secondsOfInfiniteAirHatchFillFull), "How many seconds Infinite Air Hatch fill itself to max capacity. Type:double"));
         // endregion
 
         // region DSP
