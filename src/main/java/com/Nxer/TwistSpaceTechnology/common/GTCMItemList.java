@@ -46,9 +46,11 @@ public enum GTCMItemList {
     spaceStationConstructingMaterialMax,
 
     MultiStructuresLinkTool,
+
     PurpleMagnoliaPetal,
     PurpleMagnoliaSapling,
     VoidPollen,
+
     // Machines
 
     IntensifyChemicalDistorter,
@@ -63,6 +65,18 @@ public enum GTCMItemList {
     SpaceScaler,
     MoleculeDeconstructor,
     CrystallineInfinitier,
+    MiracleDoor,
+    OreProcessingFactory,
+    CircuitConverter,
+
+    // MAX
+    HighDimensionalExtend,
+    HighDimensionalCircuitDoard,
+    HighDimensionalCapacitor,
+    HighDimensionalInterface,
+    HighDimensionalDiode,
+    HighDimensionalResistor,
+    HighDimensionalTransistor,
 
     // DSP
     SolarSail,
@@ -79,6 +93,7 @@ public enum GTCMItemList {
     DSPReceiver,
     ArtificialStar,
     StellarMaterialSiphon,
+    ElvenWorkshop,
 
     // single block Machines
     InfiniteAirHatch,
