@@ -164,6 +164,14 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .eut(RECIPE_IV)
             .duration(20 * 10)
             .addTo(RE);
+
+        //end region
+
+        //region legendary rune
+
+        GT_Values.RA.stdBuilder();
+
+        //end region
     }
 }
 // spotless:on

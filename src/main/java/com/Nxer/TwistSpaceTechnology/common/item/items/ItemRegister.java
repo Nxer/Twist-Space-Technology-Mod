@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.item.items;
 
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01.initItem01;
+import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderRune.initItemRune;
 import static com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems.MultiStructuresLinkTool;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
@@ -17,7 +18,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemRegister {
 
     public static void registryItems() {
-        Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes, MultiStructuresLinkTool };
+        Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes, MultiStructuresLinkTool,
+            BasicItems.MetaItemRune };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.getUnlocalizedName());
@@ -48,7 +50,7 @@ public class ItemRegister {
         GTCMItemList.GravitationalLens.set(initItem01("Gravitational Lens", 18, new String[]{texter("Its twisted and powerful gravitational field is shielded in a container.", "tooltips.GravitationalLens.line1"), texter("It is usually utilized to work and alter spatial structures, ", "tooltips.GravitationalLens.line2"), texter(" but that doesn't stop some people from taking it and focusing sunlight to light fires for fun.", "tooltips.GravitationalLens.line3"), DSPName}));
         GTCMItemList.PurpleMagnoliaPetal.set(initItem01("Purple Magnolia Petal", 19, new String[]{ TextHandler.texter("Petals falling from Alfheim...", "tooltips.PurpleMagnoliaPetal.line1")}));
         GTCMItemList.PurpleMagnoliaSapling.set(initItem01("Purple Magnolia Sapling", 20, new String[]{ TextHandler.texter("Not plantable. Need to be on ic2 crop sticks.", "tooltips.PurpleMagnoliaSapling.line1")}));    
-        GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{ TextHandler.texter(EnumChatFormatting.ITALIC+""+EnumChatFormatting.DARK_GRAY+"Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
+        GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{ TextHandler.texter("Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
 
         GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));
         GTCMItemList.HighDimensionalCircuitDoard.set(initItem01("High-dimensional circuit board", 177));
@@ -79,7 +81,11 @@ public class ItemRegister {
         GTCMItemList.ExoticCircuitBoard.set(initItem01("Exotic Circuit Board", 318));
         GTCMItemList.spaceStationConstructingMaterialMax.set(initItem01("very good item", 319));
 
-        
+        GTCMItemList.Rune_of_Vigilance.set(initItemRune("Rune of Vigilance", 0, new String[]{ TextHandler.texter("Vigilance.", "tooltips.Rune_of_Vigilance.line1")}));
+        GTCMItemList.Rune_of_Erelong.set(initItemRune("Rune of Erelong", 1, new String[]{ TextHandler.texter("Erelong.", "tooltips.Rune_of_Erelong.line1")}));
+        GTCMItemList.Rune_of_Ether.set(initItemRune("Rune of Ether", 2, new String[]{ TextHandler.texter("Ether.", "tooltips.Rune_of_Ether.line1")}));
+        GTCMItemList.Rune_of_Perdition.set(initItemRune("Rune of Perdition", 3, new String[]{ TextHandler.texter("Perdition.", "tooltips.Rune_of_Perdition.line1")}));
+
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
     }
 

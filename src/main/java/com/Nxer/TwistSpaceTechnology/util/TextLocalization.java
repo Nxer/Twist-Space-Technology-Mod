@@ -454,6 +454,7 @@ public class TextLocalization {
 
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
+    public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
     public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
 
     // endregion

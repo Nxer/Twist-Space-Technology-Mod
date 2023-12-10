@@ -25,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
@@ -60,6 +61,7 @@ public class MachineLoader {
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
+    public static ItemStack ManaHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
 
     // test
@@ -220,5 +222,8 @@ public class MachineLoader {
             14).getStackForm(1);
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
 
+        //
+        ManaHatch = new GT_MetaTileEntity_Hatch_Mana(18997, "NameManaHatch", TextLocalization.NameManaHatch, 9).getStackForm(1);
+        GTCMItemList.ManaHatch.set(ManaHatch);
     }
 }
