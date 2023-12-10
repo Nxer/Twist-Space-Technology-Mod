@@ -10,10 +10,11 @@ public final class ValueEnum {
     // region General and misc
     /**
      * The max parallel number.(now Deprecated)
-     * <li>Default 8388608
+     * <li>Default Integer.MAX_VALUE
      */
     @Deprecated
-    public static final int MAX_PARALLEL_LIMIT = Config.MAX_PARALLEL_LIMIT; // default 8388608
+    public static final int MAX_PARALLEL_LIMIT = Config.MAX_PARALLEL_LIMIT; // default 8388608 // now is
+                                                                            // Integer.MAX_VALUE
 
     /**
      * Casing index of space elevator bas casing.

@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
@@ -497,6 +498,8 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 final int canParallelEUt = (int) Math.min(availableEUt / tRecipeEUt, limitParallel);
 
                 boolean isUsingNBT = false;
+                boolean isUsingOreDict = false;
+                final short WildcardMeta = OreDictionary.WILDCARD_VALUE;
 
                 // Maintain a Map to contain recipe item inputs
                 Map<TST_ItemID, Long> recipeItemInputsMap = new HashMap<>();
@@ -504,30 +507,34 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                     for (ItemStack itemStack : recipe.mInputs) {
                         if (itemStack == null) continue;
                         if (itemStack.getTagCompound() != null) isUsingNBT = true;
+                        if (itemStack.getItemDamage() == WildcardMeta) isUsingOreDict = true;
                         recipeItemInputsMap.merge(TST_ItemID.create(itemStack), (long) itemStack.stackSize, Long::sum);
                     }
                 }
 
                 // Maintain a Map to contain inputs.
                 Map<TST_ItemID, Long> itemInputsMap = new HashMap<>();
+                // a Map to contain OreDict inputs.
+                Map<TST_ItemID, Long> oreDictInputsMap = new HashMap<>();
                 for (ItemStack itemStack : itemInputs) {
                     if (itemStack == null) continue;
                     TST_ItemID item = isUsingNBT ? TST_ItemID.create(itemStack) : TST_ItemID.createNoNBT(itemStack);
                     itemInputsMap.merge(item, (long) itemStack.stackSize, Long::sum);
+                    if (isUsingOreDict) {
+                        oreDictInputsMap.merge(TST_ItemID.createAsWildcard(itemStack), (long) itemStack.stackSize, Long::sum);
+                    }
                 }
 
                 // Catch the minimum parallel of every input item's.
                 int canItemInputsMaxParallel = Math.min(maxParallelBeforeBatchMode, canParallelEUt);
                 if (!recipeItemInputsMap.isEmpty() && recipe.mInputs != null) {
                     for (TST_ItemID itemId : recipeItemInputsMap.keySet()) {
-                        if (itemId == null){
-                            continue;
-                        }
-                        if(recipeItemInputsMap.get(itemId)==0){
-                            continue;
-                        }
+                        if (itemId == null) continue;
+                        if(recipeItemInputsMap.get(itemId)==0) continue;
 
-                        int canThisParallel = (int) (itemInputsMap.get(itemId) / recipeItemInputsMap.get(itemId));
+                        Map<TST_ItemID, Long> inputsMap = itemId.isWildcard() ? oreDictInputsMap : itemInputsMap;
+
+                        int canThisParallel = (int) (inputsMap.get(itemId) / recipeItemInputsMap.get(itemId));
 
                         if (canThisParallel < canItemInputsMaxParallel) {
                             canItemInputsMaxParallel = canThisParallel;
@@ -577,6 +584,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 if (!recipeItemInputsMap.isEmpty()){
                     for (TST_ItemID itemInput : recipeItemInputsMap.keySet()) {
                         long amountNeed = (long) currentParallel * recipeItemInputsMap.get(itemInput);
+
                         for (ItemStack itemStack : itemInputs) {
                             if (itemStack == null) continue;// All inputs iterating need check null
                             // catch the input slot of items in need
@@ -585,6 +593,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                                     // if stack size is enough to consume
                                     // then consume and break
                                     itemStack.stackSize -= (int) amountNeed;
+                                    amountNeed = 0;
                                     break;
                                 } else {
                                     // if not enough
@@ -592,6 +601,11 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                                     itemStack.stackSize = 0;
                                 }
                             }
+                        }
+
+                        if (amountNeed > 0) {
+                            result = CheckRecipeResultRegistry.INTERNAL_ERROR;
+                            return;
                         }
                     }
                 }

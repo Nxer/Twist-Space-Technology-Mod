@@ -367,5 +367,25 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap CokingFactoryRecipes = new GTCMRecipeMap(
+        new HashSet<>(),
+        "tst.recipe.CokingFactoryRecipes",
+        texter("Coking Factory Recipes", "NEI.name.CokingFactoryRecipes"),
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        2,
+        2,
+        1,
+        1,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
     // endregion
 }

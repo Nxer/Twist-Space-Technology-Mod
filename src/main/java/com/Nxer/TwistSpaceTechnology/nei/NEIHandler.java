@@ -24,6 +24,7 @@ public class NEIHandler {
         sendHandler("gtcm.recipe.megaUniversalSpaceStationRecipes", "gregtech:gt.blockmachines:19018");
         sendHandler("gtcm.recipe.ElvenWorkshopRecipes", "gregtech:gt.blockmachines:19500");
         sendHandler("gtcm.recipe.RuneEngraverRecipes", "gregtech:gt.blockmachines:19500");
+        sendHandler("tst.recipe.CokingFactoryRecipes", "gregtech:gt.blockmachines:19021");
 
         sendCatalyst("gtcm.recipe.IntensifyChemicalDistorterRecipes", "gregtech:gt.blockmachines:19001");
         sendCatalyst("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes", "gregtech:gt.blockmachines:19002");
@@ -59,6 +60,7 @@ public class NEIHandler {
         sendCatalyst("gtcm.recipe.megaUniversalSpaceStationRecipes", "gregtech:gt.blockmachines:19018");
         sendCatalyst("gtcm.recipe.ElvenWorkshopRecipes", "gregtech:gt.blockmachines:19500");
         sendCatalyst("gtcm.recipe.RuneEngraverRecipes", "gregtech:gt.blockmachines:19500");
+        sendCatalyst("tst.recipe.CokingFactoryRecipes", "gregtech:gt.blockmachines:19021");
 
     }
 
