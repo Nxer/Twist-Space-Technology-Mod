@@ -5,6 +5,7 @@ import java.util.Objects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -46,6 +47,10 @@ public class TST_ItemID extends GT_Utility.ItemId {
     public static TST_ItemID createNoNBT(ItemStack itemStack) {
         return new TST_ItemID(itemStack.getItem(), itemStack.getItemDamage());
     }
+
+    public static TST_ItemID createAsWildcard(ItemStack itemStack) {
+        return new TST_ItemID(itemStack.getItem(), OreDictionary.WILDCARD_VALUE);
+    }
     // endregion
 
     // region Special Methods
@@ -56,6 +61,10 @@ public class TST_ItemID extends GT_Utility.ItemId {
     // endregion
 
     // region General Methods
+    public boolean isWildcard() {
+        return this.metaData == OreDictionary.WILDCARD_VALUE;
+    }
+
     public TST_ItemID setItem(Item item) {
         this.item = item;
         return this;
@@ -101,7 +110,7 @@ public class TST_ItemID extends GT_Utility.ItemId {
     }
 
     public boolean equalItemStack(ItemStack itemStack) {
-        return this.equals(createNoNBT(itemStack));
+        return this.equals(isWildcard() ? createAsWildcard(itemStack) : createNoNBT(itemStack));
     }
 
     @Override

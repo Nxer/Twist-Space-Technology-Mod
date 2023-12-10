@@ -452,6 +452,8 @@ minecraft {
 
     // Enable assertions in the current mod
     extraRunJvmArguments.add("-ea:${modGroup}")
+    extraRunJvmArguments.add("-Xmx16G")
+    extraRunJvmArguments.add("-Xms16G")
 
     if (usesMixins.toBoolean() || forceEnableMixins.toBoolean()) {
         if (usesMixinDebug.toBoolean()) {
@@ -613,7 +615,7 @@ repositories {
         }
         maven {
             name = "ic2"
-            url = getURL("https://maven2.ic2.player.to/", "https://maven.ic2.player.to/")
+            url = getURL("https://maven.ic2.player.to/", "https://maven2.ic2.player.to/")
             content {
                 includeGroup "net.industrial-craft"
             }

@@ -267,7 +267,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             true);
     }
 
-    private static final String STRUCTURE_PIECE_MAIN = "mainSpaceScaler";
+    private final String STRUCTURE_PIECE_MAIN = "mainSpaceScaler";
     private final int horizontalOffSet = 15;
     private final int verticalOffSet = 15;
     private final int depthOffSet = 0;
