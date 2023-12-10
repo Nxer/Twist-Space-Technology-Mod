@@ -449,9 +449,11 @@ public class TextLocalization {
 
     // region LargeIndustrialCokingFactory
     public static final String NameLargeIndustrialCokingFactory = texter("Large Industrial Coking Factory","NameLargeIndustrialCokingFactory");
-    public static final String Tooltip_LargeIndustrialCokingFactory_MachineType = texter("Circuit Converter","Tooltip_LargeIndustrialCokingFactory_MachineType");
+    public static final String Tooltip_LargeIndustrialCokingFactory_MachineType = texter("Coke Oven","Tooltip_LargeIndustrialCokingFactory_MachineType");
     public static final String Tooltip_LargeIndustrialCokingFactory_Controller = texter("Controller block for the Large Industrial Coking Factory","Tooltip_LargeIndustrialCokingFactory_Controller");
-    public static final String Tooltip_LargeIndustrialCokingFactory_01 = texter("Plundering took everything, squandered away like dirt.","Tooltip_LargeIndustrialCokingFactory_01");
+    public static final String Tooltip_LargeIndustrialCokingFactory_01 = texter(""+EnumChatFormatting.DARK_AQUA+EnumChatFormatting.BOLD+"Seizing like a ravenous beast, lavishing like a breezing east.", "Tooltip_LargeIndustrialCokingFactory_01");
+    public static final String Tooltip_LargeIndustrialCokingFactory_02 = texter("Process endless inputs in one time.","Tooltip_LargeIndustrialCokingFactory_02");
+    public static final String Tooltip_LargeIndustrialCokingFactory_03 = texter("Higher tier of coil make machine more faster.","Tooltip_LargeIndustrialCokingFactory_03");
     // endregion
 
     // region Elvenworkshop

@@ -35,23 +35,32 @@ import gregtech.api.objects.GT_ChunkManager;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import mods.railcraft.common.items.RailcraftToolItems;
 
 public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase<GT_TileEntity_MegaBrickedBlastFurnace>
     implements ISurvivalConstructable {
 
     // coke coal
-    private static final ItemStack cokeCoal = RailcraftToolItems.getCoalCoke(1);
+    private static ItemStack cokeCoal;
     // irons
-    private static final ItemStack iron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L);
-    private static final ItemStack wroughtIron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.WroughtIron, 1L);
+    private static ItemStack iron;
+    private static ItemStack wroughtIron;
     // steel
-    private static final ItemStack steel = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L);
+    private static ItemStack steel;
     // ash
-    private static final ItemStack ash = GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 1L);
+    private static ItemStack ash;
+
+    public static void initStatics() {
+        cokeCoal = GT_ModHandler.getModItem("Railcraft", "fuel.coke", 1);
+        if (cokeCoal == null) cokeCoal = Materials.Coal.getGems(1);
+        iron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L);
+        wroughtIron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.WroughtIron, 1L);
+        steel = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L);
+        ash = GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 1L);
+    }
 
     private static final int max_input_bus = 6;
     private static final int max_output_bus = 6;

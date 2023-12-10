@@ -52,6 +52,7 @@ dependencies {
     implementation('com.github.GTNewHorizons:GTNH-Intergalactic:1.2.4:dev')
     implementation('com.github.GTNewHorizons:amunra:0.5.0:dev')
     implementation('com.github.GTNewHorizons:MagicBees:2.7.1-GTNH:dev')
+    implementation('com.github.GTNewHorizons:Railcraft:9.15.2:dev')
     implementation('thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev')
     implementation('com.github.GTNewHorizons:Botania:1.10.3-GTNH:dev')
 //    implementation('com.github.RealSilverMoon:BoxPlusPlus:1.2.0:dev')
