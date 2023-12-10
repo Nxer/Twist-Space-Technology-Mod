@@ -223,7 +223,8 @@ public class MachineLoader {
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
 
         //
-        ManaHatch = new GT_MetaTileEntity_Hatch_Mana(18997, "NameManaHatch", TextLocalization.NameManaHatch, 9).getStackForm(1);
+        ManaHatch = new GT_MetaTileEntity_Hatch_Mana(18997, "NameManaHatch", TextLocalization.NameManaHatch, 9)
+            .getStackForm(1);
         GTCMItemList.ManaHatch.set(ManaHatch);
     }
 }

@@ -3,16 +3,17 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
+import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import vazkii.botania.api.mana.spark.ISparkAttachable;
-import vazkii.botania.api.mana.spark.ISparkEntity;
+
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -21,21 +22,24 @@ import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
+import vazkii.botania.api.mana.spark.ISparkAttachable;
+import vazkii.botania.api.mana.spark.ISparkEntity;
 
-
-
-import java.util.List;
-import net.minecraft.entity.Entity;
-
-public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidGenerator implements ISparkAttachable{
+public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidGenerator implements ISparkAttachable {
 
     public static final int MAX_MANA = 1000000;
     int mana;
-    int tX = this.getBaseMetaTileEntity().getXCoord();
-    int tY = this.getBaseMetaTileEntity().getYCoord();
-    int tZ = this.getBaseMetaTileEntity().getZCoord();
-    World tWorld = this.getBaseMetaTileEntity().getWorld();
-    public GT_MetaTileEntity_Hatch_Mana(final int aID, final String aName, final String aNameRegional, final int aTier) {
+    int tX = this.getBaseMetaTileEntity()
+        .getXCoord();
+    int tY = this.getBaseMetaTileEntity()
+        .getYCoord();
+    int tZ = this.getBaseMetaTileEntity()
+        .getZCoord();
+    World tWorld = this.getBaseMetaTileEntity()
+        .getWorld();
+
+    public GT_MetaTileEntity_Hatch_Mana(final int aID, final String aName, final String aNameRegional,
+        final int aTier) {
         super(aID, aName, aNameRegional, aTier);
     }
 
@@ -73,7 +77,8 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public Fluid getFluidToGenerate() {
-        return MaterialPool.LiquidMana.getFluidOrGas(0).getFluid();
+        return MaterialPool.LiquidMana.getFluidOrGas(0)
+            .getFluid();
     }
 
     @Override
@@ -83,8 +88,8 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public boolean canFill(ForgeDirection aSide, Fluid aFluid) {
-      return true;
-   }
+        return true;
+    }
 
     @Override
     public int getMaxTickTime() {
@@ -117,14 +122,20 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
     @Override
     public boolean addFluidToHatch(long aTick) {
         if (!this.doesHatchMeetConditionsToGenerate()) {
-           return false;
+            return false;
         } else {
-           int aFillAmount = super.fill(FluidUtils.getFluidStack(this.getFluidToGenerate(), (int)(mana/10>getCapacity()-this.getFluidAmount()?mana/10>getCapacity()-this.getFluidAmount():mana/10)), true);
-        //    if (aFillAmount > 0 && this.getBaseMetaTileEntity().isClientSide()) {
-        //       this.generateParticles(this.getBaseMetaTileEntity().getWorld(), "cloud");
-        //    }
-            mana-=aFillAmount*10;
-           return aFillAmount > 0;
+            int aFillAmount = super.fill(
+                FluidUtils.getFluidStack(
+                    this.getFluidToGenerate(),
+                    (int) (mana / 10 > getCapacity() - this.getFluidAmount()
+                        ? mana / 10 > getCapacity() - this.getFluidAmount()
+                        : mana / 10)),
+                true);
+            // if (aFillAmount > 0 && this.getBaseMetaTileEntity().isClientSide()) {
+            // this.generateParticles(this.getBaseMetaTileEntity().getWorld(), "cloud");
+            // }
+            mana -= aFillAmount * 10;
+            return aFillAmount > 0;
         }
     }
 
@@ -132,21 +143,21 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if (!aBaseMetaTileEntity.isAllowedToWork()) {
-           aBaseMetaTileEntity.setActive(false);
-           this.mProgresstime = 0;
-           this.mMaxProgresstime = 0;
+            aBaseMetaTileEntity.setActive(false);
+            this.mProgresstime = 0;
+            this.mMaxProgresstime = 0;
         } else {
-           aBaseMetaTileEntity.setActive(true);
-           this.mMaxProgresstime = this.getMaxTickTime();
-           if (++this.mProgresstime >= this.mMaxProgresstime) {
-              if (this.canTankBeFilled()) {
-                 this.addFluidToHatch(aTick);
-              }
-  
-              this.mProgresstime = 0;
-           }
+            aBaseMetaTileEntity.setActive(true);
+            this.mMaxProgresstime = this.getMaxTickTime();
+            if (++this.mProgresstime >= this.mMaxProgresstime) {
+                if (this.canTankBeFilled()) {
+                    this.addFluidToHatch(aTick);
+                }
+
+                this.mProgresstime = 0;
+            }
         }
-  
+
     }
 
     @Override
@@ -156,7 +167,7 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public boolean isFull() {
-        return mana==MAX_MANA;
+        return mana == MAX_MANA;
     }
 
     @Override
@@ -177,7 +188,7 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public void attachSpark(ISparkEntity arg0) {
-        
+
     }
 
     @Override
@@ -187,13 +198,15 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public ISparkEntity getAttachedSpark() {
-        List<ISparkEntity> sparks = tWorld.getEntitiesWithinAABB(ISparkEntity.class, AxisAlignedBB.getBoundingBox(tX,tY + 1, tZ, tX + 1, tY + 2, tZ + 1));
-		if(sparks.size() == 1) {
-			Entity e = (Entity) sparks.get(0);
-			return (ISparkEntity) e;
-		}
+        List<ISparkEntity> sparks = tWorld.getEntitiesWithinAABB(
+            ISparkEntity.class,
+            AxisAlignedBB.getBoundingBox(tX, tY + 1, tZ, tX + 1, tY + 2, tZ + 1));
+        if (sparks.size() == 1) {
+            Entity e = (Entity) sparks.get(0);
+            return (ISparkEntity) e;
+        }
 
-		return null;
+        return null;
     }
 
     @Override
