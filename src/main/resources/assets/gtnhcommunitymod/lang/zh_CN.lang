@@ -445,6 +445,16 @@ Tooltip_CircuitConverter_MachineType=电路板转换器
 Tooltip_CircuitConverter_Controller=通用电路板转换器的控制器方块
 Tooltip_CircuitConverter_01=将输入的电路板转换成通用电路板.
 Tooltip_CircuitConverter_2_01=最多 8 个输入总线或输出总线.
+NameMegaBrickedBlastFurnace=巨型砖高炉
+Tooltip_MegaBrickedBlastFurnace_MachineType=高炉
+Tooltip_MegaBrickedBlastFurnace_Controller=巨型砖高炉的控制器方块 
+Tooltip_MegaBrickedBlastFurnace_00=§f谁能想象出蒸汽时代之伟力?
+Tooltip_MegaBrickedBlastFurnace_01=消耗铁/锻铁锭与焦煤炼钢(与灰烬副产物).
+Tooltip_MegaBrickedBlastFurnace_02=初始配方时间为240s. 输入更多锻铁与焦煤以减少处理时间.
+Tooltip_MegaBrickedBlastFurnace_03=实际处理时间 = 初始值 x 并行 / ((1 + 3 x 输入锻铁比例) x sqrt(输入焦煤))
+Tooltip_MegaBrickedBlastFurnace_04=一次性消耗输入的(锻)铁锭的50%%与输入的全部焦煤.
+Tooltip_MegaBrickedBlastFurnace_05=焦煤的最小需求量: 2 x 处理的(锻)铁锭的量
+textMegaBrickedBlastFurnaceLocation=任意镀铜机械方块, 0-6x
 bw.PureMana.notTrans=Pure Mana
 bw.LiquidMana.notTrans=Liquid Mana
 bw.PurifiedMana.notTrans=Purified Mana
