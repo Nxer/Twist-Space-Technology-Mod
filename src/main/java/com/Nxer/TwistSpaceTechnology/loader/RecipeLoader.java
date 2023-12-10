@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ChemicalReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CircuitAssemblerRecipePool;
@@ -43,6 +44,7 @@ public class RecipeLoader {
         }
 
         StaticMiscs.init();
+        GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
         OP_NormalProcessing.instance.enumOreProcessingRecipes();
         OP_Values.initOreRecipesInputs();

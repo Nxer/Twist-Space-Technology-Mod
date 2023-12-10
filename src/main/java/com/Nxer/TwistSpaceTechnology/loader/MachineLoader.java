@@ -213,7 +213,7 @@ public class MachineLoader {
 
         //
         MegaBrickedBlastFurnace = new GT_TileEntity_MegaBrickedBlastFurnace(
-            19030,
+            19022,
             "NameMegaBrickedBlastFurnace",
             TextLocalization.NameMegaBrickedBlastFurnace).getStackForm(1);
         GTCMItemList.MegaBrickedBlastFurnace.set(MegaBrickedBlastFurnace);

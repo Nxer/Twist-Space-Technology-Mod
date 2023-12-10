@@ -201,7 +201,11 @@ I -> ofFrame...(Materials.Steel, ...);
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("test")
+        tt.addMachineType(TextLocalization.Tooltip_LargeIndustrialCokingFactory_MachineType)
+            .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_Controller)
+            .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_01)
+            .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_02)
+            .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_03)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
