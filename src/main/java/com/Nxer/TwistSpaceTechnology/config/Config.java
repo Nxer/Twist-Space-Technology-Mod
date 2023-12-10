@@ -32,7 +32,7 @@ public class Config {
     // endregion
 
     // region General
-    public static int MAX_PARALLEL_LIMIT = 8388608;
+    public static int MAX_PARALLEL_LIMIT = Integer.MAX_VALUE;
 
     // endregion
 

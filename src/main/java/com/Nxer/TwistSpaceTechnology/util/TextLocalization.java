@@ -447,6 +447,13 @@ public class TextLocalization {
     public static final String Tooltip_CircuitConverter_2_01 = texter("Maximum 8 In/Output Buses.","Tooltip_CircuitConverter_2_01");
     // endregion
 
+    // region LargeIndustrialCokingFactory
+    public static final String NameLargeIndustrialCokingFactory = texter("Large Industrial Coking Factory","NameLargeIndustrialCokingFactory");
+    public static final String Tooltip_LargeIndustrialCokingFactory_MachineType = texter("Circuit Converter","Tooltip_LargeIndustrialCokingFactory_MachineType");
+    public static final String Tooltip_LargeIndustrialCokingFactory_Controller = texter("Controller block for the Large Industrial Coking Factory","Tooltip_LargeIndustrialCokingFactory_Controller");
+    public static final String Tooltip_LargeIndustrialCokingFactory_01 = texter("Plundering took everything, squandered away like dirt.","Tooltip_LargeIndustrialCokingFactory_01");
+    // endregion
+
     // region Elvenworkshop
     public static final String NameElvenWorkshop = texter("ElvenWorkshop","NameElvenWorkshop");
     public static final String Tooltip_ElvenWorkshop_MachineType = texter("Mana Infuser/Rune Engraver","Tooltip_ElvenWorkshop_MachineType");

@@ -22,6 +22,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
@@ -59,6 +60,7 @@ public class MachineLoader {
     public static ItemStack CircuitConverter;
     public static ItemStack ElvenWorkshop;
     public static ItemStack MegaBrickedBlastFurnace;
+    public static ItemStack LargeIndustrialCokingFactory;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -197,6 +199,13 @@ public class MachineLoader {
             "NameCircuitConverter",
             TextLocalization.NameCircuitConverter).getStackForm(1);
         GTCMItemList.CircuitConverter.set(CircuitConverter);
+
+        //
+        LargeIndustrialCokingFactory = new TST_LargeIndustrialCokingFactory(
+            19021,
+            "NameLargeIndustrialCokingFactory",
+            TextLocalization.NameLargeIndustrialCokingFactory).getStackForm(1);
+        GTCMItemList.LargeIndustrialCokingFactory.set(LargeIndustrialCokingFactory);
 
         //
         ElvenWorkshop = new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", NameElvenWorkshop).getStackForm(1);
