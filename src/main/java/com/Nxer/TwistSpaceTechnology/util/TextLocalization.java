@@ -496,6 +496,7 @@ public class TextLocalization {
     public static final String Tooltip_MegaBrickedBlastFurnace_06 = texter("Takes "+EnumChatFormatting.RED + "8" +EnumChatFormatting.GRAY+" hours of continuous run time to achieve maximum efficiency.","Tooltip_MegaBrickedBlastFurnace_06");
     public static final String Tooltip_MegaBrickedBlastFurnace_07 = texter("This improve coal efficiency by up to "+EnumChatFormatting.RED+"800%"+EnumChatFormatting.GRAY+". Reduce minimum coal requirement and calculate in actual progress time.","Tooltip_MegaBrickedBlastFurnace_07");
     public static final String Tooltip_MegaBrickedBlastFurnace_08 = texter(EnumChatFormatting.YELLOW+"It is recommended not to force yourself to build it until you have enough resources.","Tooltip_MegaBrickedBlastFurnace_08");
+    public static final String textMegaBrickedBlastFurnaceTips = texter(EnumChatFormatting.YELLOW+"Dirt must be Horizontal dirt in Chisel Mod!","textMegaBrickedBlastFurnaceTips");
     public static final String textMegaBrickedBlastFurnaceLocation = texter("any Bronze Plated Bricks, 0-6x","textMegaBrickedBlastFurnaceLocation");
 
     //endregion
