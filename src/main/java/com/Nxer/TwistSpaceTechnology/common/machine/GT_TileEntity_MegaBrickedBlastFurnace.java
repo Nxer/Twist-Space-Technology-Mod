@@ -549,7 +549,6 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         return 0;
     }
 
-
     @Override
     public IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> getStructureDefinition() {
         return STRUCTURE_DEFINITION;
