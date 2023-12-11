@@ -3,13 +3,16 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.Mods.Chisel;
 import static gregtech.api.enums.Textures.BlockIcons;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
@@ -39,12 +42,22 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Pollution;
 
 public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase<GT_TileEntity_MegaBrickedBlastFurnace>
     implements ISurvivalConstructable {
 
+    // 3600 seconds in an hour, 8 hours, 20 ticks in a second.
+    private static final double max_efficiency_time_in_ticks = 3600d * 8d * 20d;
+    private static final double maximum_fuelEfficiency = 8d;
+
+    // Current efficiency
+    private double fuelEfficiency = 1;
+    private long running_time = 0;
+
     // coke coal
     private static ItemStack cokeCoal;
+    private static ItemStack cokeCoalBlock;
     // irons
     private static ItemStack iron;
     private static ItemStack wroughtIron;
@@ -56,6 +69,8 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     public static void initStatics() {
         cokeCoal = GT_ModHandler.getModItem("Railcraft", "fuel.coke", 1);
         if (cokeCoal == null) cokeCoal = Materials.Coal.getGems(1);
+        cokeCoalBlock = GT_ModHandler.getModItem("Railcraft", "cube", 1);
+        if (cokeCoalBlock == null) cokeCoalBlock = Materials.Coal.getBlocks(1);
         iron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L);
         wroughtIron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.WroughtIron, 1L);
         steel = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L);
@@ -471,12 +486,16 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     private static final int BRONZE_PLATED_BRICKS_INDEX = 10;
     private static final int FIREBRICK_METAID = 15;
     private boolean isMultiChunkloaded = true;
-
+    private static final int HORIZONTAL_DIRT_METAID = 9;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     private static final IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> STRUCTURE_DEFINITION = StructureDefinition
         .<GT_TileEntity_MegaBrickedBlastFurnace>builder()
         .addShape(STRUCTURE_PIECE_MAIN, structure_string)
-        .addElement('C', ofBlock(Blocks.dirt, 0))
+        .addElement(
+            'C',
+            (Chisel.isModLoaded() && Block.getBlockFromName(Chisel.ID + ":dirt") != null)
+                ? ofBlock(Block.getBlockFromName(Chisel.ID + ":dirt"), HORIZONTAL_DIRT_METAID)
+                : ofBlock(Blocks.dirt, 0))
         .addElement(
             'b',
             buildHatchAdder(GT_TileEntity_MegaBrickedBlastFurnace.class).atLeast(InputBus, OutputBus)
@@ -526,9 +545,14 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_03)
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_04)
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_05)
+            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_06)
+            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_07)
+            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_08)
+            .addPollutionAmount(getPollutionPerSecond(null))
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addSeparator()
+            .addStructureInfo(TextLocalization.textMegaBrickedBlastFurnaceTips)
             .addInputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
             .addOutputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
             .toolTipFinisher(TextLocalization.ModName);
@@ -546,7 +570,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
     @Override
     public int getPollutionPerSecond(ItemStack aStack) {
-        return 0;
+        return 30000;
     }
 
     @Override
@@ -559,6 +583,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     public CheckRecipeResult checkProcessing() {
         ArrayList<ItemStack> tInputList = getStoredInputs();
         if (tInputList.isEmpty()) {
+            resetEfficiency();
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
 
@@ -571,6 +596,9 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             if (item != null) {
                 if (item.isItemEqual(cokeCoal)) {
                     coalAmount += item.stackSize;
+                } else if (item.isItemEqual(cokeCoalBlock)) {
+                    // Every coal block is considered as 10 coal
+                    coalAmount += item.stackSize * 10;
                 } else if (item.isItemEqual(iron)) {
                     ironAmount += item.stackSize;
                 } else if (item.isItemEqual(wroughtIron)) {
@@ -579,23 +607,43 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             }
         }
 
+        // Calculate fuel efficiency here.
+        //
+        // coal amount is considered as (original amount * fuelEfficiency)
+        // for recipe check and duration calculation, but it doesn't affect ash output.
+        //
+        // If running for max_efficiency_time_in_ticks then fuelEfficiency is at maximum.
+        double time_percentage = running_time / max_efficiency_time_in_ticks;
+        time_percentage = Math.min(time_percentage, 1.0d);
+        fuelEfficiency = 1 + time_percentage * 7;
+        fuelEfficiency = Math.min(maximum_fuelEfficiency, fuelEfficiency);
+
         final int consumeTotalIron = Math.max((ironAmount + wroughtIronAmount) / 2, 1);
         int consumeCoal = calculateConsumeCoal(coalAmount, consumeTotalIron);
 
-        if (coalAmount < consumeCoal) return CheckRecipeResultRegistry.NO_RECIPE;
+        if (coalAmount < consumeCoal) {
+            resetEfficiency();
+            return CheckRecipeResultRegistry.NO_RECIPE;
+        }
 
         double WroughtIronRatio = (double) wroughtIronAmount / (ironAmount + wroughtIronAmount);
 
         int consumeIron = (int) (consumeTotalIron * (1 - WroughtIronRatio));
-        int consumeWroughtIron = consumeTotalIron - consumeIron;
+        int consumeWroughtIron = Math.min(consumeTotalIron - consumeIron, wroughtIronAmount);
+        consumeIron = consumeTotalIron - consumeWroughtIron;
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
         mOutputItems = calculateOutputs(consumeTotalIron, consumeCoal);
-        mMaxProgresstime = calculateDuration(originalDuration, WroughtIronRatio, consumeTotalIron, coalAmount);
-        consumeInputs(consumeIron, consumeWroughtIron, consumeCoal, tInputList);
+        mMaxProgresstime = calculateDuration(
+            originalDuration,
+            WroughtIronRatio,
+            consumeTotalIron,
+            (int) (consumeCoal * fuelEfficiency));
+        consumeInputs(consumeIron, consumeWroughtIron, tInputList);
 
         updateSlots();
+        running_time += mMaxProgresstime;
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
@@ -604,7 +652,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         outputSteel.stackSize = consumeTotalIron;
         ItemStack outputAsh = ash.copy();
         outputAsh.stackSize = consumeCoal / 9;
-        double remain = (1.0 / consumeCoal % 9) * 10000;
+        double remain = (1.0 / (consumeCoal % 9)) * 10000;
         if (getBaseMetaTileEntity().getRandomNumber(10000) < remain) {
             outputAsh.stackSize += 1;
         }
@@ -613,18 +661,21 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
     protected int calculateDuration(double originalDuration, double wroughtIronRatio, int consumeTotalIron,
         int coalAmount) {
-        return (int) (originalDuration * consumeTotalIron / ((1 + 3 * wroughtIronRatio) * Math.sqrt(coalAmount)));
+        return (int) (originalDuration * consumeTotalIron / ((1 + 4 * wroughtIronRatio) * Math.sqrt(coalAmount)));
     }
 
-    protected void consumeInputs(int consumeIron, int consumeWroughtIron, int consumeCoal,
-        ArrayList<ItemStack> tInputList) {
-        int[] consumeAmounts = new int[] { consumeIron, consumeWroughtIron, consumeCoal };
+    protected void consumeInputs(int consumeIron, int consumeWroughtIron, ArrayList<ItemStack> tInputList) {
+        int[] consumeAmounts = new int[] { consumeIron, consumeWroughtIron };
         int i;
         for (ItemStack item : tInputList) {
             if (item != null) {
+                // consume all coke coal (block)
+                if (item.isItemEqual(cokeCoal) || item.isItemEqual(cokeCoalBlock)) {
+                    item.stackSize = 0;
+                    continue;
+                }
                 if (item.isItemEqual(iron)) i = 0;
                 else if (item.isItemEqual(wroughtIron)) i = 1;
-                else if (item.isItemEqual(cokeCoal)) i = 2;
                 else continue;
 
                 if (consumeAmounts[i] >= item.stackSize) {
@@ -639,7 +690,12 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     }
 
     protected int calculateConsumeCoal(int coalAmount, int consumeTotalIron) {
-        return Math.max(coalAmount, consumeTotalIron * 2);
+        return (int) Math.max(coalAmount, consumeTotalIron * 2 / fuelEfficiency);
+    }
+
+    protected void resetEfficiency() {
+        running_time = 0;
+        fuelEfficiency = 1;
     }
 
     @Override
@@ -647,28 +703,34 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         repairMachine();
         // Check the main structure
         if (!checkPiece(STRUCTURE_PIECE_MAIN, 16, 21, 16)) return false;
-
         // Item input bus check.
         if (mInputBusses.size() > max_input_bus) return false;
-
         // Item output bus check.
         if (mOutputBusses.size() > max_output_bus) return false;
-
         // All structure checks passed, return true.
         return true;
     }
 
     @Override
     public String[] getInfoData() {
-        return new String[] { StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
-            + EnumChatFormatting.GREEN
-            + GT_Utility.formatNumbers(mProgresstime)
-            + EnumChatFormatting.RESET
-            + "t / "
-            + EnumChatFormatting.YELLOW
-            + GT_Utility.formatNumbers(mMaxProgresstime)
-            + EnumChatFormatting.RESET
-            + "t" };
+        return new String[] {
+            StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
+                + EnumChatFormatting.GREEN
+                + GT_Utility.formatNumbers(mProgresstime)
+                + EnumChatFormatting.RESET
+                + "t / "
+                + EnumChatFormatting.YELLOW
+                + GT_Utility.formatNumbers(mMaxProgresstime)
+                + EnumChatFormatting.RESET
+                + "t",
+            "Ticks run: " + EnumChatFormatting.GREEN
+                + GT_Utility.formatNumbers(running_time)
+                + EnumChatFormatting.RESET
+                + ", Fuel Efficiency: "
+                + EnumChatFormatting.RED
+                + GT_Utility.formatNumbers(100 * fuelEfficiency)
+                + EnumChatFormatting.RESET
+                + "%" };
     }
 
     @Override
@@ -714,8 +776,14 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
             isMultiChunkloaded = true;
         }
-
         super.onPostTick(aBaseMetaTileEntity, aTick);
+    }
+
+    // No muffler hatch needed.
+    @Override
+    public boolean polluteEnvironment(int aPollutionLevel) {
+        GT_Pollution.addPollution(getBaseMetaTileEntity(), getPollutionPerTick(null));
+        return true;
     }
 
     @Override
@@ -728,6 +796,20 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         if (mMachine) return -1;
         int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
         return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 16, 21, 16, realBudget, env, false, true);
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        aNBT.setLong("eRunningTime", running_time);
+        aNBT.setDouble("eLongEfficiencyValue", fuelEfficiency);
+        super.saveNBTData(aNBT);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        running_time = aNBT.getLong("eRunningTime");
+        fuelEfficiency = aNBT.getDouble("eLongEfficiencyValue");
+        super.loadNBTData(aNBT);
     }
 
     @Override
