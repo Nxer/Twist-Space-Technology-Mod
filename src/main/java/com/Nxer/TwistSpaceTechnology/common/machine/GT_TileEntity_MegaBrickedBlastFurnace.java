@@ -549,20 +549,6 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         return 0;
     }
 
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
 
     @Override
     public IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> getStructureDefinition() {
@@ -604,7 +590,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         int consumeIron = (int) (consumeTotalIron * (1 - WroughtIronRatio));
         int consumeWroughtIron = consumeTotalIron - consumeIron;
 
-        mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+        mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
         mOutputItems = calculateOutputs(consumeTotalIron, consumeCoal);
         mMaxProgresstime = calculateDuration(originalDuration, WroughtIronRatio, consumeTotalIron, coalAmount);
@@ -659,6 +645,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         // Check the main structure
         if (!checkPiece(STRUCTURE_PIECE_MAIN, 16, 21, 16)) return false;
 
@@ -669,18 +656,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         if (mOutputBusses.size() > max_output_bus) return false;
 
         // All structure checks passed, return true.
-        repairMachine();
         return true;
-    }
-
-    @Override
-    public boolean doRandomMaintenanceDamage() {
-        return true;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
     }
 
     @Override
