@@ -488,11 +488,14 @@ public class TextLocalization {
     public static final String Tooltip_MegaBrickedBlastFurnace_MachineType = texter("Blast Furnace","Tooltip_MegaBrickedBlastFurnace_MachineType");
     public static final String Tooltip_MegaBrickedBlastFurnace_Controller = texter("Controller block for the Mega Bricked Blast Furnace","Tooltip_MegaBrickedBlastFurnace_Controller");
     public static final String Tooltip_MegaBrickedBlastFurnace_00 = texter(EnumChatFormatting.WHITE+"Who could ever imagine the power of the Steam Age?","Tooltip_MegaBrickedBlastFurnace_00");
-    public static final String Tooltip_MegaBrickedBlastFurnace_01 = texter("consume iron/wrought iron ingots and coke coals to produce steel (and ash byproduct)","Tooltip_MegaBrickedBlastFurnace_01");
+    public static final String Tooltip_MegaBrickedBlastFurnace_01 = texter("consume iron/wrought iron ingots and coke coals (blocks) to produce steel (and ash byproduct)","Tooltip_MegaBrickedBlastFurnace_01");
     public static final String Tooltip_MegaBrickedBlastFurnace_02 = texter("Default recipe time is 240s. More wrought iron and coal input will reduce process time.","Tooltip_MegaBrickedBlastFurnace_02");
-    public static final String Tooltip_MegaBrickedBlastFurnace_03 = texter("actual progress time = default x parallels /((1 + 3 x Ratio of wrought iron input) x sqrt(Coke coal input))","Tooltip_MegaBrickedBlastFurnace_03");
+    public static final String Tooltip_MegaBrickedBlastFurnace_03 = texter("actual progress time = default x parallels /((1 + 4 x Ratio of wrought iron input) x sqrt(Coke coal input))","Tooltip_MegaBrickedBlastFurnace_03");
     public static final String Tooltip_MegaBrickedBlastFurnace_04 = texter("process 50% of (wrought) iron input and consume all coke coal input at once.","Tooltip_MegaBrickedBlastFurnace_04");
     public static final String Tooltip_MegaBrickedBlastFurnace_05 = texter("minimum coke coal requirement:2 x (wrought) iron processed","Tooltip_MegaBrickedBlastFurnace_05");
+    public static final String Tooltip_MegaBrickedBlastFurnace_06 = texter("Takes "+EnumChatFormatting.RED + "8" +EnumChatFormatting.GRAY+" hours of continuous run time to achieve maximum efficiency.","Tooltip_MegaBrickedBlastFurnace_06");
+    public static final String Tooltip_MegaBrickedBlastFurnace_07 = texter("This improve coal efficiency by up to "+EnumChatFormatting.RED+"800%"+EnumChatFormatting.GRAY+". Reduce minimum coal requirement and calculate in actual progress time.","Tooltip_MegaBrickedBlastFurnace_07");
+    public static final String Tooltip_MegaBrickedBlastFurnace_08 = texter(EnumChatFormatting.YELLOW+"It is recommended not to force yourself to build it until you have enough resources.","Tooltip_MegaBrickedBlastFurnace_08");
     public static final String textMegaBrickedBlastFurnaceLocation = texter("any Bronze Plated Bricks, 0-6x","textMegaBrickedBlastFurnaceLocation");
 
     //endregion
