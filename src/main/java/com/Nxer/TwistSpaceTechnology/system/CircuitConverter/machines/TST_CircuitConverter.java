@@ -61,6 +61,12 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     // endregion
 
     // region Processing Logic
+
+    @Override
+    protected boolean supportsCraftingMEBuffer() {
+        return false;
+    }
+
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
