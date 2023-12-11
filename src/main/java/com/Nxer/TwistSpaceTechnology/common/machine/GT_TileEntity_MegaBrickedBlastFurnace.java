@@ -3,11 +3,13 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.Mods.Chisel;
 import static gregtech.api.enums.Textures.BlockIcons;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -484,12 +486,16 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     private static final int BRONZE_PLATED_BRICKS_INDEX = 10;
     private static final int FIREBRICK_METAID = 15;
     private boolean isMultiChunkloaded = true;
-
+    private static final int HORIZONTAL_DIRT_METAID = 9;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     private static final IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> STRUCTURE_DEFINITION = StructureDefinition
         .<GT_TileEntity_MegaBrickedBlastFurnace>builder()
         .addShape(STRUCTURE_PIECE_MAIN, structure_string)
-        .addElement('C', ofBlock(Blocks.dirt, 0))
+        .addElement(
+            'C',
+            (Chisel.isModLoaded() && Block.getBlockFromName(Chisel.ID + ":dirt") != null)
+                ? ofBlock(Block.getBlockFromName(Chisel.ID + ":dirt"), HORIZONTAL_DIRT_METAID)
+                : ofBlock(Blocks.dirt, 0))
         .addElement(
             'b',
             buildHatchAdder(GT_TileEntity_MegaBrickedBlastFurnace.class).atLeast(InputBus, OutputBus)
@@ -546,6 +552,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addSeparator()
+            .addStructureInfo(TextLocalization.textMegaBrickedBlastFurnaceTips)
             .addInputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
             .addOutputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
             .toolTipFinisher(TextLocalization.ModName);
@@ -696,13 +703,10 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         repairMachine();
         // Check the main structure
         if (!checkPiece(STRUCTURE_PIECE_MAIN, 16, 21, 16)) return false;
-
         // Item input bus check.
         if (mInputBusses.size() > max_input_bus) return false;
-
         // Item output bus check.
         if (mOutputBusses.size() > max_output_bus) return false;
-
         // All structure checks passed, return true.
         return true;
     }
