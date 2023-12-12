@@ -61,6 +61,10 @@ public final class Utils {
         return rStack;
     }
 
+    public static boolean isStackValid(ItemStack aStack) {
+        return (aStack != null) && aStack.getItem() != null && aStack.stackSize >= 0;
+    }
+
     public static boolean isStackInvalid(ItemStack aStack) {
         return aStack == null || aStack.getItem() == null || aStack.stackSize < 0;
     }
