@@ -40,8 +40,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -54,6 +52,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -75,6 +74,7 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -132,7 +132,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode",mode);
+        aNBT.setByte("mode", mode);
         aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
         aNBT.setInteger("needPhotonAmount", needPhotonAmount);
     }
@@ -155,11 +155,10 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 2);
-            GT_Utility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("MiracleDoor.modeMsg." + this.mode));
+            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MiracleDoor.modeMsg." + this.mode));
         }
     }
+
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
@@ -238,8 +237,8 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
         // process wireless EU cost
         costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration()
-                                    * multiplierOfMiracleDoorEUCost
-                                    * getOverclockEUCostMultiplier();
+            * multiplierOfMiracleDoorEUCost
+            * getOverclockEUCostMultiplier();
         if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
             return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
         }
