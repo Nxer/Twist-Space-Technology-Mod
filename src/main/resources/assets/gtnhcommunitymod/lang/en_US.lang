@@ -478,12 +478,11 @@ Tooltip_MegaBrickedBlastFurnace_03=actual progress time = default x parallels /(
 Tooltip_MegaBrickedBlastFurnace_04=process 50% of (wrought) iron input and consume all coke coal input at once.
 Tooltip_MegaBrickedBlastFurnace_05=minimum coke coal requirement:2 x (wrought) iron processed
 textMegaBrickedBlastFurnaceLocation=any Bronze Plated Bricks, 0-6x
-
 MetaItemRune.0.name=Rune of Vigilance
 MetaItemRune.1.name=Rune of Erelong
 MetaItemRune.2.name=Rune of Ether
 MetaItemRune.3.name=Rune of Perdition
 tooltips.Rune_of_Vigilance.line1=§cA caged bird do never realize the importance of alertness.
-tooltips.Rune_of_Erelong.line1=§bReal generosity toward the future lies in giving all to the present.
-tooltips.Rune_of_Ether.line1=§1Your buried past comes to light in this moment.
+tooltips.Rune_of_Erelong.line1=§1Eternity is but a microcosm of a moment.
+tooltips.Rune_of_Ether.line1=§bReal generosity toward the future lies in giving all to the present.
 tooltips.Rune_of_Perdition.line1=§4Never pray for salvation that does not exist.
