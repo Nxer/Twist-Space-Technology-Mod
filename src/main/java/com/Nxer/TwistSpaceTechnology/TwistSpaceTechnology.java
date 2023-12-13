@@ -1,5 +1,12 @@
 package com.Nxer.TwistSpaceTechnology;
 
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_Recipe;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,6 +26,10 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 @Mod(
     modid = Tags.MODID,
@@ -107,11 +118,11 @@ public class TwistSpaceTechnology {
         // TwistSpaceTechnology.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
     }
 
+    public static Collection<GT_Recipe> temp = new HashSet<>();
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
         TwistSpaceTechnology.LOG.info("Start Complete Init.");
         RecipeLoader.loadRecipes();// Load Recipes
-
         // reflect
 
         //
@@ -122,11 +133,20 @@ public class TwistSpaceTechnology {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
+        TwistSpaceTechnology.LOG.info("serverStarting");
     }
 
     @Mod.EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
         proxy.serverStarted(event);
+        new StellarForgeRecipePool().loadRecipes();
+        TwistSpaceTechnology.LOG.info("StellarForgeRecipePool map size: " + GTCMRecipe.instance.StellarForgeRecipes.mRecipeList.size());
+        for (GT_Recipe recipe : GTCMRecipe.instance.StellarForgeRecipes.mRecipeList) {
+            for (FluidStack fluidStack : recipe.mFluidOutputs) {
+                TwistSpaceTechnology.LOG.info(fluidStack.getLocalizedName());
+            }
+        }
     }
+
 
 }

@@ -16,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IntensifyChemicalDisto
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.RuneEngraverRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
