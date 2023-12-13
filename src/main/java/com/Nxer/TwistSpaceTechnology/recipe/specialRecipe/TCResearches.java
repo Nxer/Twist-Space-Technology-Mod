@@ -17,32 +17,33 @@ import vazkii.botania.common.item.ModItems;
 public class TCResearches {
 
     public void loadResearches() {
-        ResearchItem ElvenWorkshopResearch = new ResearchItem(
+        new ResearchItem(
             "BH_ELVEN_WORKSHOP",
             "botanichorizons",
-            new AspectList(),
+            (new AspectList()).merge(Aspect.EARTH, 1)
+                .merge(Aspect.MECHANISM, 1)
+                .merge(Aspect.MAGIC, 1),
             4,
             -9,
             3,
-            GTCMItemList.ElvenWorkshop.get(1, 0));
-        ElvenWorkshopResearch.setParents("BH_GAIA_PYLON");
-        ElvenWorkshopResearch.setPages(
-            new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.1"),
-            new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.2"),
-            new ResearchPage(
-                new InfusionRecipe(
-                    "BH_ELVEN_WORKSHOP",
-                    GTCMItemList.ElvenWorkshop.get(1, 0),
-                    10,
-                    (new AspectList()).merge(Aspect.LIFE, 64)
-                        .merge(Aspect.EARTH, 64)
-                        .merge(Aspect.MAGIC, 64)
-                        .merge(Aspect.MECHANISM, 64),
-                    new ItemStack(ModBlocks.terraPlate),
-                    new ItemStack[] { ItemList.Field_Generator_EV.get(1, null), ItemList.Casing_IV.get(1, null),
-                        Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1),
-                        ItemList.Field_Generator_EV.get(1, null), ItemList.Casing_IV.get(1, null),
-                        Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1) })));
-        ElvenWorkshopResearch.registerResearchItem();
+            GTCMItemList.ElvenWorkshop.get(1, 0)).setParents("BH_GAIA_PYLON")
+                .setPages(
+                    new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.1"),
+                    new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.2"),
+                    new ResearchPage(
+                        new InfusionRecipe(
+                            "BH_ELVEN_WORKSHOP",
+                            GTCMItemList.ElvenWorkshop.get(1, 0),
+                            10,
+                            (new AspectList()).merge(Aspect.LIFE, 64)
+                                .merge(Aspect.EARTH, 64)
+                                .merge(Aspect.MAGIC, 64)
+                                .merge(Aspect.MECHANISM, 64),
+                            new ItemStack(ModBlocks.terraPlate),
+                            new ItemStack[] { ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1),
+                                Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1),
+                                ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1),
+                                Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1) })))
+                .registerResearchItem();
     }
 }
