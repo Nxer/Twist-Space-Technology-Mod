@@ -1,5 +1,8 @@
 package com.Nxer.TwistSpaceTechnology;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,6 +12,7 @@ import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 
 import cpw.mods.fml.common.Mod;
@@ -19,16 +23,17 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import gregtech.api.util.GT_Recipe;
 
 @Mod(
     modid = Tags.MODID,
     version = Tags.VERSION,
     name = Tags.MODNAME,
-    dependencies = "required-after:IC2; " + "required-after:gregtech; "
-        + "required-after:bartworks; "
-        + "required-after:tectech; "
+    dependencies = "required-before:IC2; " + "required-before:gregtech; "
+        + "required-before:bartworks; "
+        + "required-before:tectech; "
         + "before:miscutils; "
-        + "after:dreamcraft;",
+        + "before:dreamcraft;",
     acceptedMinecraftVersions = "[1.7.10]")
 public class TwistSpaceTechnology {
 
@@ -107,11 +112,12 @@ public class TwistSpaceTechnology {
         // TwistSpaceTechnology.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
     }
 
+    public static Collection<GT_Recipe> temp = new HashSet<>();
+
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
         TwistSpaceTechnology.LOG.info("Start Complete Init.");
         RecipeLoader.loadRecipes();// Load Recipes
-
         // reflect
 
         //
@@ -122,11 +128,14 @@ public class TwistSpaceTechnology {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
+        TwistSpaceTechnology.LOG.info("serverStarting");
     }
 
     @Mod.EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
         proxy.serverStarted(event);
+        new StellarForgeRecipePool().loadRecipes();
+
     }
 
 }

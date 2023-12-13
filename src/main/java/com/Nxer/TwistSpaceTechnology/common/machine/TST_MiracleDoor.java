@@ -40,16 +40,19 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -71,6 +74,7 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -96,6 +100,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
     // region Processing Logic
 
+    private byte mode = 0;
     private UUID ownerUUID;
     private long costingWirelessEUTemp = 0;
     private int needPhotonAmount = 0;
@@ -127,6 +132,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
+        aNBT.setByte("mode", mode);
         aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
         aNBT.setInteger("needPhotonAmount", needPhotonAmount);
     }
@@ -134,19 +140,29 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+        mode = aNBT.getByte("mode");
         costingWirelessEUTemp = aNBT.getLong("costingWirelessEUTemp");
         needPhotonAmount = aNBT.getInteger("needPhotonAmount");
     }
 
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+        if (mode == 1) return GTCMRecipe.instance.StellarForgeRecipes;
         return GTPP_Recipe.GTPP_Recipe_Map.sAlloyBlastSmelterRecipes;
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.mode = (byte) ((this.mode + 1) % 2);
+            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MiracleDoor.modeMsg." + this.mode));
+        }
     }
 
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        return checkProcessing_mode1();
+        return mode == 1 ? checkProcessing_mode2() : checkProcessing_mode1();
     }
 
     private boolean checkPhotonsInputting(int amount) {
@@ -179,6 +195,36 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     }
 
     private CheckRecipeResult checkProcessing_mode1() {
+        setupProcessingLogic(processingLogic);
+
+        CheckRecipeResult result = doCheckRecipe();
+        // inputs are consumed at this point
+        updateSlots();
+        if (!result.wasSuccessful()) return result;
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+
+        // process wireless EU cost
+        costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration()
+            * multiplierOfMiracleDoorEUCost
+            * getOverclockEUCostMultiplier();
+        if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
+            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+        }
+
+        // set progress time a fixed value
+        mMaxProgresstime = getProgressTime();
+
+        // normal output
+        mOutputItems = processingLogic.getOutputItems();
+        mOutputFluids = processingLogic.getOutputFluids();
+        needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
+
+        return result;
+    }
+
+    private CheckRecipeResult checkProcessing_mode2() {
         setupProcessingLogic(processingLogic);
 
         CheckRecipeResult result = doCheckRecipe();

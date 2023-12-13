@@ -387,5 +387,25 @@ public class GTCMRecipe {
         false,
         true);
 
+    public final GTCMRecipeMap StellarForgeRecipes = new GTCMRecipeMap(
+        new HashSet<>(),
+        "tst.recipe.StellarForgeRecipes",
+        texter("Stellar Forge", "NEI.name.StellarForgeRecipes"),
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        4,
+        4,
+        4,
+        4,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
+
     // endregion
 }

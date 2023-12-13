@@ -377,6 +377,9 @@ Tooltip_MiracleDoor_2_02=如果在控制器方块输入槽放置编程电路,
 Tooltip_MiracleDoor_2_03=实际处理时间 = 默认耗时 / (编号 * 物品数量)
 Tooltip_MiracleDoor_2_04=实际消耗 EU = 配方数值 * 16 * (编号 * 物品数量)
 Tooltip_MiracleDoor_2_05=每次运行需要消耗1颗临界光子.
+MiracleDoor.modeMsg.0=合金冶炼炉模式
+MiracleDoor.modeMsg.1=恒星锻炉模式
+NEI.name.StellarForgeRecipes=恒星锻炉
 Waila.TST_MiracleDoor.1=当前EU消耗: 
 NameInfiniteWirelessDynamoHatch=无限无线动力仓
 NameOreProcessingFactory=通用矿物处理厂TST
