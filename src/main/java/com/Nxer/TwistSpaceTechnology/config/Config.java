@@ -57,9 +57,12 @@ public class Config {
     // endregion
 
     // region Miracle Door
-    public static double secondsOfMiracleDoorProcessingTime = 25.6;
+    public static double secondsOfMiracleDoorProcessingTimeABSMode = 25.6;
+    public static double secondsOfMiracleDoorProcessingTimeEBFMode = 128;
     public static int amountOfPhotonsEveryMiracleDoorProcessingCost = 1;
-    public static int multiplierOfMiracleDoorEUCost = 16;
+    public static int multiplierOfMiracleDoorEUCostABSMode = 16;
+    public static int multiplierOfMiracleDoorEUCostEBFMode = 64;
+    public static boolean OutputMoltenFluidInsteadIngotInStellarForgeRecipe = true;
 
     // endregion
 
@@ -249,9 +252,12 @@ public class Config {
         // endregion
 
         // region Miracle Door
-        secondsOfMiracleDoorProcessingTime = Double.parseDouble(configuration.getString("secondsOfMiracleDoorProcessingTime", MiracleDoor, String.valueOf(secondsOfMiracleDoorProcessingTime), "Seconds of Miracle Door Default Progress Time. Type: double"));
-        amountOfPhotonsEveryMiracleDoorProcessingCost = configuration.getInt("amountOfPhotonsEveryMiracleDoorProcessingCost", MiracleDoor, amountOfPhotonsEveryMiracleDoorProcessingCost, 0, 64, "Needed Photons amount of Miracle Door each run cost.");
-        multiplierOfMiracleDoorEUCost = configuration.getInt("multiplierOfMiracleDoorEUCost", MiracleDoor, multiplierOfMiracleDoorEUCost, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier.");
+        secondsOfMiracleDoorProcessingTimeABSMode = Double.parseDouble(configuration.getString("secondsOfMiracleDoorProcessingTimeABSMode", MiracleDoor, String.valueOf(secondsOfMiracleDoorProcessingTimeABSMode), "Seconds of Miracle Door Default Progress Time in Alloy Blast Smelter mode. Type: double"));
+        secondsOfMiracleDoorProcessingTimeEBFMode = Double.parseDouble(configuration.getString("secondsOfMiracleDoorProcessingTimeEBFMode", MiracleDoor, String.valueOf(secondsOfMiracleDoorProcessingTimeEBFMode), "Seconds of Miracle Door Default Progress Time in Electric Blast Furnace mode. Type: double"));
+        amountOfPhotonsEveryMiracleDoorProcessingCost = configuration.getInt("amountOfPhotonsEveryMiracleDoorProcessingCost", MiracleDoor, amountOfPhotonsEveryMiracleDoorProcessingCost, 0, 64, "Needed Photons amount of Miracle Door each run cost. Type: int");
+        multiplierOfMiracleDoorEUCostABSMode = configuration.getInt("multiplierOfMiracleDoorEUCostABSMode", MiracleDoor, multiplierOfMiracleDoorEUCostABSMode, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier in Alloy Blast Smelter mode. Type: int");
+        multiplierOfMiracleDoorEUCostEBFMode = configuration.getInt("multiplierOfMiracleDoorEUCostEBFMode", MiracleDoor, multiplierOfMiracleDoorEUCostEBFMode, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier in Electric Blast Furnace mode. Type: int");
+        OutputMoltenFluidInsteadIngotInStellarForgeRecipe = configuration.getBoolean("OutputMoltenFluidInsteadIngotInStellarForgeRecipe", MiracleDoor, OutputMoltenFluidInsteadIngotInStellarForgeRecipe, "Set the Stellar Forge recipe output material type. true = output molten fluid ; false = output ingot . Type: boolean");
 
         // endregion
 

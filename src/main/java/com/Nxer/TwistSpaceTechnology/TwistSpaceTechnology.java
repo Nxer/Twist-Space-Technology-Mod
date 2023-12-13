@@ -116,7 +116,6 @@ public class TwistSpaceTechnology {
 
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
-        TwistSpaceTechnology.LOG.info("Start Complete Init.");
         RecipeLoader.loadRecipes();// Load Recipes
         // reflect
 
@@ -128,13 +127,12 @@ public class TwistSpaceTechnology {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
-        TwistSpaceTechnology.LOG.info("serverStarting");
     }
 
     @Mod.EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
         proxy.serverStarted(event);
-        new StellarForgeRecipePool().loadRecipes();
+        new StellarForgeRecipePool().loadOnServerStarted();
 
     }
 

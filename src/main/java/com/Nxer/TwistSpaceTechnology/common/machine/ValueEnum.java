@@ -139,12 +139,16 @@ public final class ValueEnum {
 
     // region Miracle Door
     /**
-     * Default ticks of Miracle Door per processing cost.
+     * Default ticks of Miracle Door per processing cost in mode ABS.
      * <li>Default 20 * 25.6
      */
-    public static final int ticksOfMiracleDoorProcessingTime = (int) (20 * Config.secondsOfMiracleDoorProcessingTime);
+    public static final int ticksOfMiracleDoorProcessingTimeABSMode = (int) (20
+        * Config.secondsOfMiracleDoorProcessingTimeABSMode);
+    public static final int ticksOfMiracleDoorProcessingTimeEBFMode = (int) (20
+        * Config.secondsOfMiracleDoorProcessingTimeEBFMode);
     public static final int amountOfPhotonsEveryMiracleDoorProcessingCost = Config.amountOfPhotonsEveryMiracleDoorProcessingCost;
-    public static final int multiplierOfMiracleDoorEUCost = Config.multiplierOfMiracleDoorEUCost;
+    public static final int multiplierOfMiracleDoorEUCostABSMode = Config.multiplierOfMiracleDoorEUCostABSMode;
+    public static final int multiplierOfMiracleDoorEUCostEBFMode = Config.multiplierOfMiracleDoorEUCostEBFMode;
 
     // endregion
 
