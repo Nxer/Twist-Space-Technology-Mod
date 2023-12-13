@@ -1,5 +1,5 @@
 ## GTNH社区mod ：扭曲空间科技
-* 源自GTNH普通玩家的游戏内容。 
+* 源自GTNH普通玩家的游戏内容。
 * 每个人都可以在这儿集中实现好的想法。
 * 平衡性太糟糕当然不行。
 ## 版本需求
@@ -11,6 +11,8 @@
 * GTNH-2.4.2 测试版本：
 1. 暂时不兼容测试版
 2. 暂时未兼容新的GT配方系统
+## 更新此mod
+* 更新时请重置GT语言文件 GregTech.lang
 #
 #
 ## GTNH Community Mod :  Twist Space Technology
@@ -26,3 +28,5 @@
 * GTNH-2.4.2 beta version：
 1. Temporarily not compatible with the beta version.
 2. Temporarily not compatible with the new GT recipe map system.
+## Update this mod
+* Please reset the GT lang file (GregTech.lang) when update this mod.

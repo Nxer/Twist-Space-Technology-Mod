@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +17,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
@@ -29,7 +31,7 @@ import gregtech.api.util.GT_Utility;
 
 public class StellarForgeRecipePool implements IRecipePool {
 
-    public static final boolean OutputMoltenFluidInsteadIngotInStellarForgeRecipe = true;
+    public static final boolean OutputMoltenFluidInsteadIngotInStellarForgeRecipe = Config.OutputMoltenFluidInsteadIngotInStellarForgeRecipe;
     public static final HashSet<String> IngotHotOreDictNames = new HashSet<>();
     public static final HashSet<String> IngotOreDictNames = new HashSet<>();
     public static final HashSet<TST_ItemID> IngotHots = new HashSet<>();
@@ -269,9 +271,25 @@ public class StellarForgeRecipePool implements IRecipePool {
         return out;
     }
 
+    public static Collection<GT_Recipe> stellarForgeRecipeListCache;
+
+    private void cacheRecipeList() {
+        stellarForgeRecipeListCache = new HashSet<>(GTCMRecipe.instance.StellarForgeRecipes.mRecipeList);
+    }
+
+    private void loadRecipeListCache() {
+        GTCMRecipe.instance.StellarForgeRecipes.mRecipeList.addAll(stellarForgeRecipeListCache);
+    }
+
     @Override
     public void loadRecipes() {
         initData();
         prepareEBFRecipes();
+        cacheRecipeList();
+    }
+
+    public void loadOnServerStarted() {
+        prepareEBFRecipes();
+        loadRecipeListCache();
     }
 }
