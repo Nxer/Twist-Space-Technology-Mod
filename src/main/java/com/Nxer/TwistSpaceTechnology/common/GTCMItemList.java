@@ -51,6 +51,11 @@ public enum GTCMItemList {
     PurpleMagnoliaSapling,
     VoidPollen,
 
+    Rune_of_Vigilance,
+    Rune_of_Erelong,
+    Rune_of_Ether,
+    Rune_of_Perdition,
+
     // Machines
 
     IntensifyChemicalDistorter,
@@ -100,6 +105,7 @@ public enum GTCMItemList {
     // single block Machines
     InfiniteAirHatch,
     InfiniteWirelessDynamoHatch,
+    ManaHatch,
 
     // Blocks
 

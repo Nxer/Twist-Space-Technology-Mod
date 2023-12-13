@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01;
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderRune;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemProofOfHeroes;
 
@@ -13,6 +14,11 @@ public final class BasicItems {
         "MetaItem01Base",
         "MetaItem01",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItem01/0");
+
+    public static final Item MetaItemRune = new ItemAdderRune(
+        "MetaItemRuneBase",
+        "MetaItemRune",
+        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItemRune/Rune0");
 
     public static final Item ProofOfHeroes = new ItemProofOfHeroes(
         "英雄の証",

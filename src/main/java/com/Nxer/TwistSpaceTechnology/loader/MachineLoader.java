@@ -237,6 +237,5 @@ public class MachineLoader {
             TextLocalization.NameInfiniteWirelessDynamoHatch,
             14).getStackForm(1);
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
-
     }
 }
