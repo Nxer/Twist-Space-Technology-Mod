@@ -97,10 +97,10 @@ public class ItemAdderRune extends ItemAdder_Basic {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iconRegister) {
         super.registerIcons(iconRegister);
-        this.itemIcon = iconRegister.registerIcon("gtnhcommunitymod:MetaItemRune/0");
+        this.itemIcon = iconRegister.registerIcon("gtnhcommunitymod:MetaItemRune/Rune0");
         for (int meta : Meta01Set) {
             ItemStaticDataClientOnly.iconsMap01
-                .put(meta, iconRegister.registerIcon("gtnhcommunitymod:MetaItemRune/" + meta));
+                .put(meta, iconRegister.registerIcon("gtnhcommunitymod:MetaItemRune/Rune" + meta));
         }
     }
 
