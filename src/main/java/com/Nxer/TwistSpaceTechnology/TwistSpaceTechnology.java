@@ -35,11 +35,11 @@ import java.util.HashSet;
     modid = Tags.MODID,
     version = Tags.VERSION,
     name = Tags.MODNAME,
-    dependencies = "required-after:IC2; " + "required-after:gregtech; "
-        + "required-after:bartworks; "
-        + "required-after:tectech; "
+    dependencies = "required-before:IC2; " + "required-before:gregtech; "
+        + "required-before:bartworks; "
+        + "required-before:tectech; "
         + "before:miscutils; "
-        + "after:dreamcraft;",
+        + "before:dreamcraft;",
     acceptedMinecraftVersions = "[1.7.10]")
 public class TwistSpaceTechnology {
 
@@ -140,12 +140,14 @@ public class TwistSpaceTechnology {
     public void serverStarted(FMLServerStartedEvent event) {
         proxy.serverStarted(event);
         new StellarForgeRecipePool().loadRecipes();
-        TwistSpaceTechnology.LOG.info("StellarForgeRecipePool map size: " + GTCMRecipe.instance.StellarForgeRecipes.mRecipeList.size());
-        for (GT_Recipe recipe : GTCMRecipe.instance.StellarForgeRecipes.mRecipeList) {
-            for (FluidStack fluidStack : recipe.mFluidOutputs) {
-                TwistSpaceTechnology.LOG.info(fluidStack.getLocalizedName());
-            }
-        }
+
+//        new StellarForgeRecipePool().loadRecipes();
+//        TwistSpaceTechnology.LOG.info("StellarForgeRecipePool map size: " + GTCMRecipe.instance.StellarForgeRecipes.mRecipeList.size());
+//        for (GT_Recipe recipe : GTCMRecipe.instance.StellarForgeRecipes.mRecipeList) {
+//            for (FluidStack fluidStack : recipe.mFluidOutputs) {
+//                TwistSpaceTechnology.LOG.info(fluidStack.getLocalizedName());
+//            }
+//        }
     }
 
 

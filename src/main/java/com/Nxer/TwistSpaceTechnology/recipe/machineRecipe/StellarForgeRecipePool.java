@@ -188,16 +188,13 @@ public class StellarForgeRecipePool implements IRecipePool {
             FluidStack[] outputFluidsArray = outputFluids.toArray(new FluidStack[0]);
             boolean canAddNewRecipe = true;
 
-
+            int duration = Math.max(1, recipe.mDuration / 3);
             if (integrateNum != 0 ){
                 for (GT_Recipe recipeCheck : GTCMRecipe.instance.StellarForgeRecipes.mRecipeList) {
                     if (!itemStackArrayEqualFuzzy(recipeCheck.mInputs, inputItemsArray)) continue;
                     if (!fluidStackEqualFuzzy(recipeCheck.mFluidOutputs, outputFluidsArray)) continue;
-                    if (recipeCheck.mDuration > Math.max(1,recipe.mDuration/3)) {
-                        GTCMRecipe.instance.StellarForgeRecipes.mRecipeList.remove(recipeCheck);
-                    } else {
-                        canAddNewRecipe = false;
-                    }
+                    canAddNewRecipe = false;
+	                recipeCheck.mDuration = Math.min(recipeCheck.mDuration, duration);
                     break;
                 }
             }
