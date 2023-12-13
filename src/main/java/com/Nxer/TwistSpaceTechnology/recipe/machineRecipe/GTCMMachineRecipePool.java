@@ -8,9 +8,11 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LargeIndustrialCokingFactory;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaBrickedBlastFurnace;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OpticalSOC;
@@ -35,6 +37,20 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.CustomItemList.AutoclaveUHV;
 import static com.dreammaster.gthandler.CustomItemList.CentrifugeUV;
 import static com.dreammaster.gthandler.CustomItemList.CompressorUHV;
@@ -71,20 +87,6 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Contai
 import static galaxyspace.core.register.GSMaterials.tantalumCarbideHafniumCarbideMixture;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static gregtech.api.enums.Mods.GTPlusPlus;
-import static gregtech.api.enums.TierEU.RECIPE_EV;
-import static gregtech.api.enums.TierEU.RECIPE_HV;
-import static gregtech.api.enums.TierEU.RECIPE_IV;
-import static gregtech.api.enums.TierEU.RECIPE_LV;
-import static gregtech.api.enums.TierEU.RECIPE_LuV;
-import static gregtech.api.enums.TierEU.RECIPE_MAX;
-import static gregtech.api.enums.TierEU.RECIPE_MV;
-import static gregtech.api.enums.TierEU.RECIPE_UEV;
-import static gregtech.api.enums.TierEU.RECIPE_UHV;
-import static gregtech.api.enums.TierEU.RECIPE_UIV;
-import static gregtech.api.enums.TierEU.RECIPE_UMV;
-import static gregtech.api.enums.TierEU.RECIPE_UV;
-import static gregtech.api.enums.TierEU.RECIPE_UXV;
-import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static gregtech.api.util.GT_Recipe.GT_Recipe_Map.sAssemblerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
@@ -123,6 +125,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.material.ALLOY;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import ic2.core.Ic2Items;
 
 public class GTCMMachineRecipePool implements IRecipePool {
@@ -1273,6 +1276,52 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20*30)
             .addTo(sAssemblerRecipes);
 
+        // endregion
+
+        // region Large Industrial Coking Factory
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                GregtechItemList.Industrial_CokeOven.get(64),
+                ItemList.PyrolyseOven.get(64),
+
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackSteel, 16),
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),16},
+                HighEnergyFlowCircuit.get(16),
+
+                ItemList.Electric_Pump_UV.get(6),
+                GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.BlackSteel, 64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUV, 8)
+            )
+            .fluidInputs(Materials.SolderingAlloy.getMolten(144*96))
+            .itemOutputs(LargeIndustrialCokingFactory.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_UHV)
+            .duration(20*128)
+            .addTo(sAssemblerRecipes);
+        // endregion
+
+        // region Mega Bricked Blast Furnace
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                ItemList.Casing_Firebricks.get(64),
+                ItemList.Machine_Bricked_BlastFurnace.get(64),
+                ItemList.Casing_Firebricks.get(64),
+
+                ItemList.Machine_Bricked_BlastFurnace.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Steel, 16),
+                ItemList.Machine_Bricked_BlastFurnace.get(64)
+            )
+            .noFluidInputs()
+            .itemOutputs(MegaBrickedBlastFurnace.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_LV)
+            .duration(20*114)
+            .addTo(sAssemblerRecipes);
         // endregion
 
     }

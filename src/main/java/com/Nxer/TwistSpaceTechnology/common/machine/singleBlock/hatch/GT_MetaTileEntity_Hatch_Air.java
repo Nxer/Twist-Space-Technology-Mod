@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfInfiniteAirHatchFillFull;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
@@ -49,7 +50,7 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
     public String[] getCustomTooltip() {
         String[] aTooltip = new String[3];
         aTooltip[0] = texter("Infinite air supply hatch", "GT_MetaTileEntity_Hatch_Air.Tooltip0");
-        aTooltip[1] = texter("Fills to max capacity every 5 seconds", "GT_MetaTileEntity_Hatch_Air.Tooltip1");
+        aTooltip[1] = texter("Fills to max capacity every second", "GT_MetaTileEntity_Hatch_Air.Tooltip1");
         return aTooltip;
     }
 
@@ -66,7 +67,7 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
 
     @Override
     public int getMaxTickTime() {
-        return 100;
+        return ticksOfInfiniteAirHatchFillFull;
     }
 
     @Override

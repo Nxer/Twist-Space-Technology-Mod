@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Circui
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.isStackInvalid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
@@ -61,6 +62,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     // endregion
 
     // region Processing Logic
+
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
@@ -71,6 +73,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         Set<ItemStack> outputs = new HashSet<>();
         // check every input
         for (ItemStack items : inputs) {
+            if (isStackInvalid(items)) continue;
             boolean isNotCircuit = true;
             for (TieredCircuits cir : TieredCircuits.values()) {
                 if (cir.contains(items)) {
@@ -180,7 +183,6 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
             .addInfo(Tooltip_CircuitConverter_Controller)
             .addInfo(Tooltip_CircuitConverter_01)
             .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addStructureInfo(Tooltip_CircuitConverter_2_01)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)

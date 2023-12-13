@@ -447,6 +447,15 @@ public class TextLocalization {
     public static final String Tooltip_CircuitConverter_2_01 = texter("Maximum 8 In/Output Buses.","Tooltip_CircuitConverter_2_01");
     // endregion
 
+    // region LargeIndustrialCokingFactory
+    public static final String NameLargeIndustrialCokingFactory = texter("Large Industrial Coking Factory","NameLargeIndustrialCokingFactory");
+    public static final String Tooltip_LargeIndustrialCokingFactory_MachineType = texter("Coke Oven","Tooltip_LargeIndustrialCokingFactory_MachineType");
+    public static final String Tooltip_LargeIndustrialCokingFactory_Controller = texter("Controller block for the Large Industrial Coking Factory","Tooltip_LargeIndustrialCokingFactory_Controller");
+    public static final String Tooltip_LargeIndustrialCokingFactory_01 = texter(""+EnumChatFormatting.DARK_AQUA+EnumChatFormatting.BOLD+"Seizing like a ravenous beast, lavishing like a breezing east.", "Tooltip_LargeIndustrialCokingFactory_01");
+    public static final String Tooltip_LargeIndustrialCokingFactory_02 = texter("Process endless inputs in one time.","Tooltip_LargeIndustrialCokingFactory_02");
+    public static final String Tooltip_LargeIndustrialCokingFactory_03 = texter("Higher tier of coil make machine more faster.","Tooltip_LargeIndustrialCokingFactory_03");
+    // endregion
+
     // region Elvenworkshop
     public static final String NameElvenWorkshop = texter("ElvenWorkshop","NameElvenWorkshop");
     public static final String Tooltip_ElvenWorkshop_MachineType = texter("Mana Infuser/Rune Engraver","Tooltip_ElvenWorkshop_MachineType");
@@ -472,6 +481,24 @@ public class TextLocalization {
 
     public static final String NameStellarMaterialSiphon = texter("Stellar Material Siphon","NameStellarMaterialSiphon");
     public static final String Tooltip_NameStellarMaterialSiphon = texter("Siphon","Tooltip_MegaUniversalSpaceStation_MachineType");
+
+    //endregion
+
+    //region MegaPrimitiveBlastFurnace
+    public static String NameMegaBrickedBlastFurnace = texter("Mega Bricked Blast Furnace","NameMegaBrickedBlastFurnace");
+    public static final String Tooltip_MegaBrickedBlastFurnace_MachineType = texter("Blast Furnace","Tooltip_MegaBrickedBlastFurnace_MachineType");
+    public static final String Tooltip_MegaBrickedBlastFurnace_Controller = texter("Controller block for the Mega Bricked Blast Furnace","Tooltip_MegaBrickedBlastFurnace_Controller");
+    public static final String Tooltip_MegaBrickedBlastFurnace_00 = texter(EnumChatFormatting.WHITE+"Who could ever imagine the power of the Steam Age?","Tooltip_MegaBrickedBlastFurnace_00");
+    public static final String Tooltip_MegaBrickedBlastFurnace_01 = texter("consume iron/wrought iron ingots and coke coals (blocks) to produce steel (and ash byproduct)","Tooltip_MegaBrickedBlastFurnace_01");
+    public static final String Tooltip_MegaBrickedBlastFurnace_02 = texter("Default recipe time is 240s. More wrought iron and coal input will reduce process time.","Tooltip_MegaBrickedBlastFurnace_02");
+    public static final String Tooltip_MegaBrickedBlastFurnace_03 = texter("actual progress time = default x parallels /((1 + 4 x Ratio of wrought iron input) x sqrt(Coke coal input))","Tooltip_MegaBrickedBlastFurnace_03");
+    public static final String Tooltip_MegaBrickedBlastFurnace_04 = texter("process 50% of (wrought) iron input and consume all coke coal input at once.","Tooltip_MegaBrickedBlastFurnace_04");
+    public static final String Tooltip_MegaBrickedBlastFurnace_05 = texter("minimum coke coal requirement:2 x (wrought) iron processed","Tooltip_MegaBrickedBlastFurnace_05");
+    public static final String Tooltip_MegaBrickedBlastFurnace_06 = texter("Takes "+EnumChatFormatting.RED + "8" +EnumChatFormatting.GRAY+" hours of continuous run time to achieve maximum efficiency.","Tooltip_MegaBrickedBlastFurnace_06");
+    public static final String Tooltip_MegaBrickedBlastFurnace_07 = texter("This improve coal efficiency by up to "+EnumChatFormatting.RED+"800%"+EnumChatFormatting.GRAY+". Reduce minimum coal requirement and calculate in actual progress time.","Tooltip_MegaBrickedBlastFurnace_07");
+    public static final String Tooltip_MegaBrickedBlastFurnace_08 = texter(EnumChatFormatting.YELLOW+"It is recommended not to force yourself to build it until you have enough resources.","Tooltip_MegaBrickedBlastFurnace_08");
+    public static final String textMegaBrickedBlastFurnaceTips = texter(EnumChatFormatting.YELLOW+"Dirt must be Horizontal dirt in Chisel Mod!","textMegaBrickedBlastFurnaceTips");
+    public static final String textMegaBrickedBlastFurnaceLocation = texter("any Bronze Plated Bricks, 0-6x","textMegaBrickedBlastFurnaceLocation");
 
     //endregion
 }

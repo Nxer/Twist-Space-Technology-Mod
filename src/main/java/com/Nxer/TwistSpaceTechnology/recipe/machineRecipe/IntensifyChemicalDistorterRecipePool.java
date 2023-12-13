@@ -60,6 +60,48 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
         // endregion
 
+        // region Phthalic acid
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(6),
+                Materials.Potassiumdichromate.getDust(0),
+                Materials.Carbon.getDust(8))
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*6),
+                Materials.Oxygen.getGas(1000*4))
+            .noItemOutputs()
+            .fluidOutputs(Materials.PhthalicAcid.getFluid(1000))
+            .noOptimize()
+            .specialValue(9900)
+            .eut(RECIPE_UV)
+            .duration(32)
+            .addTo(ICD);
+
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(7),
+                Materials.Potassiumdichromate.getDust(0),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64),
+                Materials.Carbon.getDust(64))
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*6*64),
+                Materials.Oxygen.getGas(1000*4*64))
+            .noItemOutputs()
+            .fluidOutputs(Materials.PhthalicAcid.getFluid(1000*64))
+            .noOptimize()
+            .specialValue(9900)
+            .eut(RECIPE_UHV)
+            .duration(32*16)
+            .addTo(ICD);
+
         // region Phosphoric Acid
         GT_Values.RA.stdBuilder()
             .itemInputs(

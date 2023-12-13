@@ -1,8 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ChemicalReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CircuitAssemblerRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CokingFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CompressorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CrystallineInfinitierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.DistillationRecipePool;
@@ -33,7 +35,8 @@ public class RecipeLoader {
             new MiracleTopRecipePool(), new FluidSolidifierRecipePool(), new CrystallineInfinitierRecipePool(),
             new DSPRecipePool(), new MegaUniversalSpaceStationRecipePool(), new StellarMaterialSiphonRecipePool(),
             new DistillationRecipePool(), new ExtractorRecipePool(), new CompressorRecipePool(), new BOTRecipePool(),
-            new TCRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool() };
+            new TCRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
+            new CokingFactoryRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
@@ -41,6 +44,7 @@ public class RecipeLoader {
         }
 
         StaticMiscs.init();
+        GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
         OP_NormalProcessing.instance.enumOreProcessingRecipes();
         OP_Values.initOreRecipesInputs();

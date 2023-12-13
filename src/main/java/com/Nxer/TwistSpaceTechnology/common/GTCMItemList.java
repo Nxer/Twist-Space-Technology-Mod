@@ -73,6 +73,8 @@ public enum GTCMItemList {
     MiracleDoor,
     OreProcessingFactory,
     CircuitConverter,
+    MegaBrickedBlastFurnace,
+    LargeIndustrialCokingFactory,
 
     // MAX
     HighDimensionalExtend,

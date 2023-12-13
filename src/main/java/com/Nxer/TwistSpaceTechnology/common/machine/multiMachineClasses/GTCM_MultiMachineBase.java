@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.MAX_PARALLEL_LIMIT;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTEs;
 
 import java.util.ArrayList;
@@ -118,7 +117,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return Limited parallel.
      */
     protected int getLimitedMaxParallel() {
-        return Math.min(MAX_PARALLEL_LIMIT, getMaxParallelRecipes());
+        return getMaxParallelRecipes();
     }
 
     /**
