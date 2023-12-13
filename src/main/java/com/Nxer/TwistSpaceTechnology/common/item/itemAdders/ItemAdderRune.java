@@ -99,7 +99,7 @@ public class ItemAdderRune extends ItemAdder_Basic {
         super.registerIcons(iconRegister);
         this.itemIcon = iconRegister.registerIcon("gtnhcommunitymod:MetaItemRune/Rune0");
         for (int meta : Meta01Set) {
-            ItemStaticDataClientOnly.iconsMap01
+            ItemStaticDataClientOnly.iconsMapRune
                 .put(meta, iconRegister.registerIcon("gtnhcommunitymod:MetaItemRune/Rune" + meta));
         }
     }
@@ -107,9 +107,9 @@ public class ItemAdderRune extends ItemAdder_Basic {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIconFromDamage(int aMetaData) {
-        return ItemStaticDataClientOnly.iconsMap01.containsKey(aMetaData)
-            ? ItemStaticDataClientOnly.iconsMap01.get(aMetaData)
-            : ItemStaticDataClientOnly.iconsMap01.get(0);
+        return ItemStaticDataClientOnly.iconsMapRune.containsKey(aMetaData)
+            ? ItemStaticDataClientOnly.iconsMapRune.get(aMetaData)
+            : ItemStaticDataClientOnly.iconsMapRune.get(0);
     }
 
     /**
