@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 
 import java.util.ArrayList;
@@ -194,6 +195,21 @@ public class OP_NormalProcessing {
             }
         }
 
+        // Tinker Construct
+        // Cobalt ore
+        processOreRecipe(
+            GT_ModHandler.getModItem("TConstruct","SearedBrick", 1, 1),
+            Materials.Cobalt,
+            true
+        );
+
+        // Ardite ore
+        processOreRecipe(
+            GT_ModHandler.getModItem("TConstruct","SearedBrick", 1, 2),
+            Materials.Ardite,
+            true
+        );
+
         // spotless:on
     }
 
@@ -223,36 +239,19 @@ public class OP_NormalProcessing {
         }
     }
 
-    // public void processInsteadOre(){
-    // final Set<OrePrefixes> basicStoneTypesExceptNormalStone = Sets.newHashSet(
-    // OrePrefixes.oreBasalt,
-    // OrePrefixes.oreBlackgranite,
-    // OrePrefixes.oreRedgranite,
-    // OrePrefixes.oreMarble,
-    // OrePrefixes.oreNetherrack,
-    // OrePrefixes.oreEndstone
-    // );
-    // for (int ID : insteadMaterialOresMetas){
-    // TwistSpaceTechnology.LOG.info("Process special instead ore: " + GregTech_API.sGeneratedMaterials[ID]);
-    // Materials material = GregTech_API.sGeneratedMaterials[ID];
-    // ItemStack[] outputs = getOutputs(material, false);
-    // ItemStack[] outputsRich = getOutputs(material, true);
-    //
-    // // registry the normal stone type ore
-    // registryOreProcessRecipe(
-    // GT_ModHandler.getModItem("gregtech","gt.blockores",1,ID),
-    // outputs
-    // );
-    //
-    // // registry other gt stone types
-    // for (OrePrefixes prefixes : basicStoneTypesExceptNormalStone){
-    // registryOreProcessRecipe(
-    // GT_OreDictUnificator.get(prefixes, material, 1),
-    // isRich(prefixes) ? outputsRich : outputs
-    // );
-    // }
-    // }
-    // }
+    /**
+     * Process other mods' ore but normal style.
+     *
+     * @param inputOreItems Input ore item stack.
+     * @param material      Input ore's material in GT design.
+     * @param isRich        Is this ore a rich type.
+     */
+    public void processOreRecipe(ItemStack inputOreItems, Materials material, boolean isRich) {
+        registryOreProcessRecipe(
+            inputOreItems,
+            getOutputs(material, isRich));
+    }
+
 
     public ItemStack[] getOutputs(Materials material, boolean isRich) {
         List<ItemStack> outputs = new ArrayList<>();
