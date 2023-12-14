@@ -104,15 +104,11 @@ public class OP_NormalProcessing {
             ItemStack[] outputsRich = new ItemStack[] {
                 WerkstoffMaterialPool.CeriumOreConcentrate.get(OrePrefixes.dust, 22) };
             for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GT_OreDictUnificator.get(prefixes, Materials.Cinnabar, 1) == null) continue;
-                GT_Values.RA.stdBuilder()
-                    .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.Cerium, 1))
-                    .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .fluidInputs(Materials.Lubricant.getFluid(1))
-                    .noFluidOutputs()
-                    .eut(OreProcessRecipeEUt)
-                    .duration(OreProcessRecipeDuration)
-                    .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+                if (GT_OreDictUnificator.get(prefixes, Materials.Cerium, 1) == null) continue;
+                registryOreProcessRecipe(
+                    GT_OreDictUnificator.get(prefixes, Materials.Cerium, 1),
+                    isRich(prefixes) ? outputsRich : outputs
+                );
             }
         }
 
@@ -123,15 +119,11 @@ public class OP_NormalProcessing {
             ItemStack[] outputsRich = new ItemStack[] {
                 WerkstoffMaterialPool.SamariumOreConcentrate.get(OrePrefixes.dust, 22) };
             for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GT_OreDictUnificator.get(prefixes, Materials.Cinnabar, 1) == null) continue;
-                GT_Values.RA.stdBuilder()
-                    .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.Samarium, 1))
-                    .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .fluidInputs(Materials.Lubricant.getFluid(1))
-                    .noFluidOutputs()
-                    .eut(OreProcessRecipeEUt)
-                    .duration(OreProcessRecipeDuration)
-                    .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+                if (GT_OreDictUnificator.get(prefixes, Materials.Samarium, 1) == null) continue;
+                registryOreProcessRecipe(
+                    GT_OreDictUnificator.get(prefixes, Materials.Samarium, 1),
+                    isRich(prefixes) ? outputsRich : outputs
+                );
             }
         }
 
@@ -142,15 +134,11 @@ public class OP_NormalProcessing {
             ItemStack[] outputsRich = new ItemStack[] { MyMaterial.naquadahEarth.get(OrePrefixes.dust, 16),
                 MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 8), };
             for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GT_OreDictUnificator.get(prefixes, Materials.Cinnabar, 1) == null) continue;
-                GT_Values.RA.stdBuilder()
-                    .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.Naquadah, 1))
-                    .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .fluidInputs(Materials.Lubricant.getFluid(1))
-                    .noFluidOutputs()
-                    .eut(OreProcessRecipeEUt)
-                    .duration(OreProcessRecipeDuration)
-                    .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+                if (GT_OreDictUnificator.get(prefixes, Materials.Naquadah, 1) == null) continue;
+                registryOreProcessRecipe(
+                    GT_OreDictUnificator.get(prefixes, Materials.Naquadah, 1),
+                    isRich(prefixes) ? outputsRich : outputs
+                );
             }
         }
 
@@ -161,15 +149,11 @@ public class OP_NormalProcessing {
             ItemStack[] outputsRich = new ItemStack[] { MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 16),
                 MyMaterial.naquadriaEarth.get(OrePrefixes.dust, 6) };
             for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GT_OreDictUnificator.get(prefixes, Materials.Cinnabar, 11) == null) continue;
-                GT_Values.RA.stdBuilder()
-                    .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.NaquadahEnriched, 1))
-                    .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .fluidInputs(Materials.Lubricant.getFluid(1))
-                    .noFluidOutputs()
-                    .eut(OreProcessRecipeEUt)
-                    .duration(OreProcessRecipeDuration)
-                    .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+                if (GT_OreDictUnificator.get(prefixes, Materials.NaquadahEnriched, 1) == null) continue;
+                registryOreProcessRecipe(
+                    GT_OreDictUnificator.get(prefixes, Materials.NaquadahEnriched, 1),
+                    isRich(prefixes) ? outputsRich : outputs
+                );
             }
         }
 
@@ -180,15 +164,11 @@ public class OP_NormalProcessing {
             ItemStack[] outputsRich = new ItemStack[] { MyMaterial.naquadriaEarth.get(OrePrefixes.dust, 16),
                 MyMaterial.naquadriaEarth.get(OrePrefixes.dust, 6), };
             for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GT_OreDictUnificator.get(prefixes, Materials.Cinnabar, 16) == null) continue;
-                GT_Values.RA.stdBuilder()
-                    .itemInputs(GT_OreDictUnificator.get(prefixes, Materials.Naquadria, 1))
-                    .itemOutputs(isRich(prefixes) ? outputsRich : outputs)
-                    .fluidInputs(Materials.Lubricant.getFluid(1))
-                    .noFluidOutputs()
-                    .eut(OreProcessRecipeEUt)
-                    .duration(OreProcessRecipeDuration)
-                    .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+                if (GT_OreDictUnificator.get(prefixes, Materials.Naquadria, 1) == null) continue;
+                registryOreProcessRecipe(
+                    GT_OreDictUnificator.get(prefixes, Materials.Naquadria, 1),
+                    isRich(prefixes) ? outputsRich : outputs
+                );
             }
         }
 
