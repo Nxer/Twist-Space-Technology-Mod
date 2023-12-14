@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
@@ -65,7 +66,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(6),
-                Materials.Potassiumdichromate.getDust(0),
+                copyAmount(0,Materials.Potassiumdichromate.getDust(1)),
                 Materials.Carbon.getDust(8))
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*6),
@@ -82,7 +83,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(7),
-                Materials.Potassiumdichromate.getDust(0),
+                copyAmount(0,Materials.Potassiumdichromate.getDust(1)),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),

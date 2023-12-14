@@ -27,6 +27,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
@@ -65,6 +66,10 @@ public class MachineLoader {
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
+    public static ItemStack DualInputBuffer_LuV;
+    public static ItemStack DualInputBuffer_ZPM;
+    public static ItemStack DualInputBuffer_UV;
+    public static ItemStack DualInputBuffer_UHV;
 
     // test
     // public static ItemStack TestMachine;
@@ -237,5 +242,37 @@ public class MachineLoader {
             TextLocalization.NameInfiniteWirelessDynamoHatch,
             14).getStackForm(1);
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
+
+        //
+        DualInputBuffer_LuV = new GT_MetaTileEntity_Hatch_DualInput(
+            18980,
+            "NameDualInputBuffer_LuV",
+            TextLocalization.NameDualInputBuffer_LuV,
+            6).getStackForm(1);
+        GTCMItemList.DualInputBuffer_LuV.set(DualInputBuffer_LuV);
+
+        //
+        DualInputBuffer_ZPM = new GT_MetaTileEntity_Hatch_DualInput(
+            18981,
+            "NameDualInputBuffer_ZPM",
+            TextLocalization.NameDualInputBuffer_ZPM,
+            7).getStackForm(1);
+        GTCMItemList.DualInputBuffer_ZPM.set(DualInputBuffer_ZPM);
+
+        //
+        DualInputBuffer_UV = new GT_MetaTileEntity_Hatch_DualInput(
+            18982,
+            "NameDualInputBuffer_UV",
+            TextLocalization.NameDualInputBuffer_UV,
+            8).getStackForm(1);
+        GTCMItemList.DualInputBuffer_UV.set(DualInputBuffer_UV);
+
+        //
+        DualInputBuffer_UHV = new GT_MetaTileEntity_Hatch_DualInput(
+            18983,
+            "NameDualInputBuffer_UHV",
+            TextLocalization.NameDualInputBuffer_UHV,
+            9).getStackForm(1);
+        GTCMItemList.DualInputBuffer_UHV.set(DualInputBuffer_UHV);
     }
 }

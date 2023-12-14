@@ -2,8 +2,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.amountOfPhotonsEveryMiracleDoorProcessingCost;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCost;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTime;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostABSMode;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostEBFMode;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeABSMode;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
@@ -101,6 +103,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     // region Processing Logic
 
     private byte mode = 0;
+    private int overclockParameter = 1;
     private UUID ownerUUID;
     private long costingWirelessEUTemp = 0;
     private int needPhotonAmount = 0;
@@ -111,12 +114,21 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(
-            EnumChatFormatting.AQUA + texter("Current EU cost: ", "Waila.TST_MiracleDoor.1")
+            EnumChatFormatting.AQUA + texter("Current EU cost", "Waila.TST_MiracleDoor.1")
+                + EnumChatFormatting.RESET
+                + ": "
                 + EnumChatFormatting.GOLD
                 + tag.getLong("costingWirelessEUTemp")
                 + EnumChatFormatting.RESET
                 + " EU");
-
+        if (tag.getBoolean("isActive")) {
+            currentTip.add(
+                EnumChatFormatting.AQUA + texter("Current Overclock Parameter", "Waila.TST_MiracleDoor.2")
+                    + EnumChatFormatting.RESET
+                    + ": "
+                    + EnumChatFormatting.GOLD
+                    + tag.getLong("overclockParameter"));
+        }
     }
 
     @Override
@@ -126,6 +138,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
             tag.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
+            tag.setInteger("overclockParameter", overclockParameter);
         }
     }
 
@@ -135,6 +148,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         aNBT.setByte("mode", mode);
         aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
         aNBT.setInteger("needPhotonAmount", needPhotonAmount);
+        aNBT.setInteger("overclockParameter", overclockParameter);
     }
 
     @Override
@@ -143,6 +157,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         mode = aNBT.getByte("mode");
         costingWirelessEUTemp = aNBT.getLong("costingWirelessEUTemp");
         needPhotonAmount = aNBT.getInteger("needPhotonAmount");
+        overclockParameter = aNBT.getInteger("overclockParameter");
     }
 
     @Override
@@ -162,20 +177,20 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        return mode == 1 ? checkProcessing_mode2() : checkProcessing_mode1();
+        return mode == 1 ? checkProcessing_EBF() : checkProcessing_ABS();
     }
 
-    private boolean checkPhotonsInputting(int amount) {
-        int containedAmount = 0;
-        for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
-            if (items == null) continue;
-            if (metaItemEqual(items, CriticalPhoton.get(1))) {
-                containedAmount += items.stackSize;
-                if (containedAmount >= amount) return true;
-            }
-        }
-        return false;
-    }
+    // private boolean checkPhotonsInputting(int amount) {
+    // int containedAmount = 0;
+    // for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
+    // if (items == null) continue;
+    // if (metaItemEqual(items, CriticalPhoton.get(1))) {
+    // containedAmount += items.stackSize;
+    // if (containedAmount >= amount) return true;
+    // }
+    // }
+    // return false;
+    // }
 
     private boolean consumePhoton(int amount) {
         int needAmount = amount;
@@ -194,7 +209,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         return false;
     }
 
-    private CheckRecipeResult checkProcessing_mode1() {
+    private CheckRecipeResult checkProcessing_ABS() {
         setupProcessingLogic(processingLogic);
 
         CheckRecipeResult result = doCheckRecipe();
@@ -206,15 +221,16 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         mEfficiencyIncrease = 10000;
 
         // process wireless EU cost
+        flushOverclockParameter();
         costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration()
-            * multiplierOfMiracleDoorEUCost
+            * multiplierOfMiracleDoorEUCostABSMode
             * getOverclockEUCostMultiplier();
         if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
             return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
         }
 
         // set progress time a fixed value
-        mMaxProgresstime = getProgressTime();
+        mMaxProgresstime = getProgressTime(ticksOfMiracleDoorProcessingTimeABSMode);
 
         // normal output
         mOutputItems = processingLogic.getOutputItems();
@@ -224,7 +240,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         return result;
     }
 
-    private CheckRecipeResult checkProcessing_mode2() {
+    private CheckRecipeResult checkProcessing_EBF() {
         setupProcessingLogic(processingLogic);
 
         CheckRecipeResult result = doCheckRecipe();
@@ -236,42 +252,42 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         mEfficiencyIncrease = 10000;
 
         // process wireless EU cost
+        flushOverclockParameter();
         costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration()
-            * multiplierOfMiracleDoorEUCost
+            * multiplierOfMiracleDoorEUCostEBFMode
             * getOverclockEUCostMultiplier();
         if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
             return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
         }
 
         // set progress time a fixed value
-        mMaxProgresstime = getProgressTime();
+        mMaxProgresstime = getProgressTime(ticksOfMiracleDoorProcessingTimeEBFMode);
 
         // normal output
         mOutputItems = processingLogic.getOutputItems();
         mOutputFluids = processingLogic.getOutputFluids();
-        needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
+        // needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
 
         return result;
+    }
+
+    private void flushOverclockParameter() {
+        ItemStack items = getControllerSlot();
+        if (items != null && items.getItem() instanceof GT_IntegratedCircuit_Item
+            && items.getItemDamage() > 0
+            && items.stackSize > 0) {
+            this.overclockParameter = items.getItemDamage() * items.stackSize;
+        } else {
+            this.overclockParameter = 1;
+        }
     }
 
     private int getOverclockEUCostMultiplier() {
-        ItemStack items = getControllerSlot();
-        if (items != null && items.getItem() instanceof GT_IntegratedCircuit_Item
-            && items.getItemDamage() > 0
-            && items.stackSize > 0) {
-            return items.getItemDamage() * items.stackSize;
-        }
-        return 1;
+        return this.overclockParameter;
     }
 
-    private int getProgressTime() {
-        ItemStack items = getControllerSlot();
-        if (items != null && items.getItem() instanceof GT_IntegratedCircuit_Item
-            && items.getItemDamage() > 0
-            && items.stackSize > 0) {
-            return Math.max(1, ticksOfMiracleDoorProcessingTime / items.getItemDamage() / items.stackSize);
-        }
-        return ticksOfMiracleDoorProcessingTime;
+    private int getProgressTime(int basicTickCost) {
+        return Math.max(1, basicTickCost / this.overclockParameter);
     }
 
     @Override

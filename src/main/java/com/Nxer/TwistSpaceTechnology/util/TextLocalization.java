@@ -413,16 +413,16 @@ public class TextLocalization {
     public static final String Tooltip_MiracleDoor_01 = texter("Enslaving Stellaris to work for us.", "Tooltip_MiracleDoor_01");
     public static final String Tooltip_MiracleDoor_02 = texter("No matter how large the workload, it can be done in one time.", "Tooltip_MiracleDoor_02");
     public static final String Tooltip_MiracleDoor_03 = texter("No matter how large the workload, it need one Critical Photon to start.", "Tooltip_MiracleDoor_03");
-    public static final String Tooltip_MiracleDoor_04 = texter("Power consumption: §c1600%%", "Tooltip_MiracleDoor_04");
+    public static final String Tooltip_MiracleDoor_04 = texter("Power consumption: Fluid Alloy Cooker §c1600%% | Stellar Forge §c6400%%", "Tooltip_MiracleDoor_04");
     public static final String Tooltip_MiracleDoor_05 = texter("Directly get EU from the Wireless EU Net.", "Tooltip_MiracleDoor_05");
     public static final String Tooltip_MiracleDoor_06 = texter("Warning! If trying to start machine when Wireless EU Net has not enough EU,", "Tooltip_MiracleDoor_06");
     public static final String Tooltip_MiracleDoor_07 = texter(" the materials will fade.", "Tooltip_MiracleDoor_07");
     public static final String Tooltip_MiracleDoor_08 = texter("Put Integrated Circuit into Controller block to decrease process time interval.", "Tooltip_MiracleDoor_08");
-    public static final String Tooltip_MiracleDoor_2_01 = texter("Each run takes the same amount of time, 25.6s default.", "Tooltip_MiracleDoor_2_01");
+    public static final String Tooltip_MiracleDoor_2_01 = texter("Each run takes the same amount of time, (ABS) 25.6s | (EBF) 128s default.", "Tooltip_MiracleDoor_2_01");
     public static final String Tooltip_MiracleDoor_2_02 = texter("If putting Integrated Circuit into Controller block slot,", "Tooltip_MiracleDoor_2_02");
     public static final String Tooltip_MiracleDoor_2_03 = texter(" actual progress time = default / (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_03");
     public static final String Tooltip_MiracleDoor_2_04 = texter("Actual cost EU = recipe value * 16 * (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_04");
-    public static final String Tooltip_MiracleDoor_2_05 = texter("Each run cost 1 Critical Photon to start.", "Tooltip_MiracleDoor_2_05");
+    public static final String Tooltip_MiracleDoor_2_05 = texter("ABS mode each run cost 1 Critical Photon to start.", "Tooltip_MiracleDoor_2_05");
 
     // endregion
 
@@ -465,6 +465,10 @@ public class TextLocalization {
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
     public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
+    public static final String NameDualInputBuffer_LuV = texter("Dual Input Buffer (LuV)", "NameDualInputBuffer_LuV");
+    public static final String NameDualInputBuffer_ZPM = texter("Dual Input Buffer (ZPM)", "NameDualInputBuffer_ZPM");
+    public static final String NameDualInputBuffer_UV = texter("Dual Input Buffer (UV)",   "NameDualInputBuffer_UV");
+    public static final String NameDualInputBuffer_UHV = texter("Dual Input Buffer (UHV)", "NameDualInputBuffer_UHV");
 
     // endregion
 
