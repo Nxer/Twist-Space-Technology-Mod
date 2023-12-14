@@ -465,6 +465,10 @@ public class TextLocalization {
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
     public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
+    public static final String NameDualInputBuffer_LuV = texter("Dual Input Buffer (LuV)", "NameDualInputBuffer_LuV");
+    public static final String NameDualInputBuffer_ZPM = texter("Dual Input Buffer (ZPM)", "NameDualInputBuffer_ZPM");
+    public static final String NameDualInputBuffer_UV = texter("Dual Input Buffer (UV)",   "NameDualInputBuffer_UV");
+    public static final String NameDualInputBuffer_UHV = texter("Dual Input Buffer (UHV)", "NameDualInputBuffer_UHV");
 
     // endregion
 

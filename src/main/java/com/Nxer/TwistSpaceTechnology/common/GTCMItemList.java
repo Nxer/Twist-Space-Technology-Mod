@@ -106,6 +106,10 @@ public enum GTCMItemList {
     InfiniteAirHatch,
     InfiniteWirelessDynamoHatch,
     ManaHatch,
+    DualInputBuffer_LuV,
+    DualInputBuffer_ZPM,
+    DualInputBuffer_UV,
+    DualInputBuffer_UHV,
 
     // Blocks
 
