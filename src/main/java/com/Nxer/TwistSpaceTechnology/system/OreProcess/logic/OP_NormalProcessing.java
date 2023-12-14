@@ -72,8 +72,6 @@ public class OP_NormalProcessing {
 
         // generate normal materials' ore processing recipes
         for (int i = 0; i < GregTech_API.sGeneratedMaterials.length; i++) {
-
-            // if (insteadMaterialOresMetas.contains(i)) continue;
             if (GregTech_API.sGeneratedMaterials[i] == null) continue;
 
             Materials material = GregTech_API.sGeneratedMaterials[i];
@@ -88,8 +86,8 @@ public class OP_NormalProcessing {
         }
 
         processSpecialOreRecipe();
-        OP_GTPP_OreHandler.instance.processGTPPOreRecipes();
-        OP_Bartworks_OreHandler.instance.processBWOreRecipes();
+        new OP_GTPP_OreHandler().processGTPPOreRecipes();
+        new OP_Bartworks_OreHandler().processBWOreRecipes();
 
     }
 

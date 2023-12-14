@@ -21,8 +21,6 @@ import gtPlusPlus.core.material.ORES;
 
 public class OP_GTPP_OreHandler {
 
-    public static final OP_GTPP_OreHandler instance = new OP_GTPP_OreHandler();
-
     public Set<Material> addSpecials(Set<Material> set) {
         set.add(RARE_EARTH_LOW);
         set.add(RARE_EARTH_MID);
