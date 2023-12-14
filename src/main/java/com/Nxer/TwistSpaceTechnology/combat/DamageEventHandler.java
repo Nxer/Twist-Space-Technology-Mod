@@ -5,13 +5,14 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class DamageEventHandler {
 
     public static final DamageEventHandler instance = new DamageEventHandler();
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onHurting(LivingHurtEvent event) {
         float damage = event.ammount;
         if (event.source.getEntity() instanceof EntityPlayer) {
