@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 
 import java.util.ArrayList;
@@ -247,11 +246,8 @@ public class OP_NormalProcessing {
      * @param isRich        Is this ore a rich type.
      */
     public void processOreRecipe(ItemStack inputOreItems, Materials material, boolean isRich) {
-        registryOreProcessRecipe(
-            inputOreItems,
-            getOutputs(material, isRich));
+        registryOreProcessRecipe(inputOreItems, getOutputs(material, isRich));
     }
-
 
     public ItemStack[] getOutputs(Materials material, boolean isRich) {
         List<ItemStack> outputs = new ArrayList<>();
