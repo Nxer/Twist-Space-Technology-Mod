@@ -1,8 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.command;
 
 import java.util.Map;
-import java.util.Arrays;
-import java.util.ArrayList;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
