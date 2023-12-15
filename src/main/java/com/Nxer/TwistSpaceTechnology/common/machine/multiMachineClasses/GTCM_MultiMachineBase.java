@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTEs;
 
 import java.util.ArrayList;
@@ -184,14 +185,20 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 2];
+        String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + "Parallels: "
+        ret[origin.length] = EnumChatFormatting.AQUA + texter("Parallels", "MachineInfoData.Parallels")
+            + ": "
             + EnumChatFormatting.GOLD
             + this.getLimitedMaxParallel();
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Speed multiplier: "
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + texter("Speed multiplier", "MachineInfoData.SpeedMultiplier")
+            + ": "
             + EnumChatFormatting.GOLD
             + this.getSpeedBonus();
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + texter("EU Modifier", "MachineInfoData.EuModifier")
+            + ": "
+            + EnumChatFormatting.GOLD
+            + this.getEuModifier();
         return ret;
     }
 

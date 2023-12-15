@@ -461,6 +461,16 @@ public class TextLocalization {
     public static final String Tooltip_ElvenWorkshop_MachineType = texter("Mana Infuser/Rune Engraver","Tooltip_ElvenWorkshop_MachineType");
     // endregion
 
+    // region Scavenger
+    public static final String NameScavenger = texter("Scavenger","NameScavenger");
+    public static final String Tooltip_Scavenger_MachineType = texter("Sifter","Tooltip_Scavenger_MachineType");
+    public static final String Tooltip_Scavenger_Controller = texter("Controller block for the Scavenger","Tooltip_Scavenger_Controller");
+    public static final String Tooltip_Scavenger_01 = texter(EnumChatFormatting.BOLD+"I like pigs. Dogs look up to us. Cats look down on us. Pigs treat us as equals.","Tooltip_Scavenger_01");
+    public static final String Tooltip_Scavenger_02 = texter("Has parallel equivalent to Perfect Overclock.","Tooltip_Scavenger_02");
+    public static final String Tooltip_Scavenger_03 = texter("Only uses 60%% of the EU/t normally required.","Tooltip_Scavenger_03");
+    public static final String Tooltip_Scavenger_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.","Tooltip_Scavenger_04");
+    // endregion
+
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
