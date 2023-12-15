@@ -291,7 +291,7 @@ public class Config {
         // endregion
 
         // region CombatRework
-        activateCombatStats = configuration.getBoolean("activateCombatStats",CombatStats,activateCombatStats,"decide whether whether to enable the combatstats system(WIP).");
+        activateCombatStats = configuration.getBoolean("activateCombatStats",CombatStats,activateCombatStats,"decide whether to enable the combatstats system(WIP).");
         // endregion
 
         if (configuration.hasChanged()) {
