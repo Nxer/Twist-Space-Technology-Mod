@@ -1,5 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_Scavenger;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_Scavenger;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_Scavenger;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -70,12 +73,12 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
 
     @Override
     protected float getEuModifier() {
-        return 0.6F;
+        return EuModifier_Scavenger;
     }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return false;
+        return EnablePerfectOverclock_Scavenger;
     }
 
     @Override
@@ -106,7 +109,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        this.speedBonus = (float) Math.pow(0.8F, GT_Utility.getTier(this.getMaxInputEu()));
+        this.speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_Scavenger, GT_Utility.getTier(this.getMaxInputEu()));
         return true;
     }
 

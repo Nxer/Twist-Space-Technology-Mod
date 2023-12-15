@@ -25,6 +25,7 @@ public class Config {
     public static final String SpaceScaler = "SpaceScaler";
     public static final String MoleculeDeconstructor = "MoleculeDeconstructor";
     public static final String CrystallineInfinitier = "CrystallineInfinitier";
+    public static final String Scavenger = "Scavenger";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -154,6 +155,12 @@ public class Config {
     public static byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = 3;
     // endregion
 
+    // region Scavenger
+    public static boolean EnablePerfectOverclock_Scavenger = false;
+    public static float EuModifier_Scavenger = 0.6F;
+    public static double SpeedBonus_MultiplyPerTier_Scavenger = 0.8D;
+    // endregion
+
     // region Infinite Air Hatch
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
@@ -166,6 +173,12 @@ public class Config {
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
 
+        // endregion
+
+        // region Scavenger
+        EnablePerfectOverclock_Scavenger = configuration.getBoolean("EnablePerfectOverclock_Scavenger", Scavenger, EnablePerfectOverclock_Scavenger, "Enable perfect overclock of Scavenger.");
+        EuModifier_Scavenger = Float.parseFloat(configuration.getString("EuModifier_Scavenger", Scavenger, String.valueOf(EuModifier_Scavenger), "EU Modifier of Scavenger. Type: float"));
+        SpeedBonus_MultiplyPerTier_Scavenger = Double.parseDouble(configuration.getString("SpeedBonus_MultiplyPerTier_Scavenger", Scavenger, String.valueOf(SpeedBonus_MultiplyPerTier_Scavenger), "The speed bonus = this ^ tier . Type: double"));
         // endregion
 
         // region IntensifyChemicalDistorter
