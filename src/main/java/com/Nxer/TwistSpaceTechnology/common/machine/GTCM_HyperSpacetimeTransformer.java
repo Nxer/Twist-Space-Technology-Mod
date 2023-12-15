@@ -4,7 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiplier_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer;
 import static com.github.technus.tectech.thing.block.QuantumGlassBlock.INSTANCE;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.*;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -82,7 +82,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 
     protected float getSpeedBonus() {
         return 1F / (mode == 0 ? SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer
-            : SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer);
+            : SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer);
     };
 
     protected int getMaxParallelRecipes() {
@@ -103,7 +103,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         switch (mode) {
             case 1:
-                return GTPP_Recipe.GTPP_Recipe_Map.sQuantumForceTransformerRecipes;
+                return GTPP_Recipe.GTPP_Recipe_Map.sMolecularTransformerRecipes;
             default:
                 return GTPP_Recipe.GTPP_Recipe_Map.sMolecularTransformerRecipes;
         }

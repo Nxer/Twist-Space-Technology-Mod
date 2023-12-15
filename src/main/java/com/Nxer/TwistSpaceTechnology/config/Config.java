@@ -144,7 +144,7 @@ public class Config {
  public static byte Mode_Default_HyperSpacetimeTransformer=0;
  public static int ParallelMultiplier_HyperSpacetimeTransformer=1;
  public static int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=5;
- public static int SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer=1;
+ public static int SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=1;
  public static boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer= true;
  // endregion
     // region Molecule Deconstructor
@@ -318,7 +318,7 @@ public class Config {
         Mode_Default_HyperSpacetimeTransformer=                                      (byte) configuration.getInt( "Mode_Default_HyperSpacetimeTransformer", HyperSpacetimeTransformer,Mode_Default_HyperSpacetimeTransformer, 0,1,"");;
         ParallelMultiplier_HyperSpacetimeTransformer=                                configuration.getInt(        "ParallelMultiplier_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,ParallelMultiplier_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
         SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=          configuration.getInt(        "SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
-        SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer=       configuration.getInt(        "SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
+        SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=       configuration.getInt(        "SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
         EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer=   configuration.getBoolean(    "EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer",    HyperSpacetimeTransformer,EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer,"");;
         // endregion
 

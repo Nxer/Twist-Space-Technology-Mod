@@ -138,10 +138,10 @@ public final class ValueEnum {
     // endregion
 
     // region Hyper Spacetime Transformer
-    public static final byte Mode_Default_HyperSpacetimeTransformer = Config.Mode_Default_CrystallineInfinitier;
-    public static final int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer = Config.SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
-    public static final int SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer = Config.SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
-    public static final int ParallelMultiplier_HyperSpacetimeTransformer = Config.ParallelMultiplier_CrystallineInfinitier;
+    public static final byte Mode_Default_HyperSpacetimeTransformer = Config.Mode_Default_HyperSpacetimeTransformer;
+    public static final int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer = Config.SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer;
+    public static final int SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer = Config.SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer;
+    public static final int ParallelMultiplier_HyperSpacetimeTransformer = Config.ParallelMultiplier_HyperSpacetimeTransformer;
     public static final boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer = Config.EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer;
     // endregion
 
