@@ -39,7 +39,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(19),
-                Materials.Potassiumdichromate.getDust(16),
+                copyAmount(0, Materials.Potassiumdichromate.getDust(1)),
                 Materials.Copper.getDust(16),
                 Materials.Zinc.getDust(64),
                 Materials.Zinc.getDust(64),
@@ -114,7 +114,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Calcium.getDust(5))
             .fluidOutputs(
                 Materials.PhosphoricAcid.getFluid(1000 * 3),
-                Materials.HydrochloricAcid.getFluid(1000 * 1))
+                Materials.HydrochloricAcid.getFluid(1000))
             .specialValue(3600)
             .eut(RECIPE_MV)
             .duration(20 * 8)
