@@ -22,7 +22,7 @@ public class BaseDamageHandler {
                     .isRiding())
                 damage = (float) (damage + 1.5
                     * (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0));
-            damage = (float) (damage + SourceStats.CombatStats.get("BaseDamage")
+            else damage = (float) (damage + SourceStats.CombatStats.get("BaseDamage")
                 + SourceStats.CombatStats.get("Strength") / 50.0);
         }
         event.ammount = damage;
