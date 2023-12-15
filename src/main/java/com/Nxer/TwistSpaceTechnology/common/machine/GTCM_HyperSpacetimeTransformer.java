@@ -72,17 +72,11 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 
     protected float getEuModifier() {
         float EuUsage = 1.0F;
-        if(mode == 0)
-        {
-        if(SCfieldGeneratorTier==9)
-        EuUsage-=0.25F;
-        if(TAfieldGeneratorTier==9)
-        EuUsage-=0.25F;
-        if(STfieldGeneratorTier==9)
-        EuUsage-=0.25F;
-        }
-        else
-        {}
+        if (mode == 0) {
+            if (SCfieldGeneratorTier == 9) EuUsage -= 0.25F;
+            if (TAfieldGeneratorTier == 9) EuUsage -= 0.25F;
+            if (STfieldGeneratorTier == 9) EuUsage -= 0.25F;
+        } else {}
         return EuUsage;
     };
 
@@ -92,15 +86,12 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     };
 
     protected int getMaxParallelRecipes() {
-        if(mode==0)
-        return Math.min(
+        if (mode == 0) return Math.min(
             ValueEnum.MAX_PARALLEL_LIMIT,
-            Math.min(SCfieldGeneratorTier * TAfieldGeneratorTier
-                * STfieldGeneratorTier,512)
+            Math.min(SCfieldGeneratorTier * TAfieldGeneratorTier * STfieldGeneratorTier, 512)
                 * GT_Utility.getTier(this.getMaxInputVoltage())
                 * ParallelMultiplier_HyperSpacetimeTransformer);
-        else
-        return 1;
+        else return 1;
     };
 
     protected boolean isEnablePerfectOverclock() {
