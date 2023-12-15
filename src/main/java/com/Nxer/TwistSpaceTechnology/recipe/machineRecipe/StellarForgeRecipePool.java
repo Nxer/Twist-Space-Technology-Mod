@@ -15,7 +15,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -70,42 +69,6 @@ public class StellarForgeRecipePool implements IRecipePool {
 
         }
 
-    }
-
-    public void testPrepareEBFRecipes() {
-        for (GT_Recipe recipe : GT_Recipe.GT_Recipe_Map.sBlastRecipes.mRecipeList) {
-            for (ItemStack itemStack : recipe.mInputs) {
-                if (TST_ItemID.createNoNBT(itemStack)
-                    .equalItemStack(Materials.Osmium.getDust(1))) {
-                    TwistSpaceTechnology.LOG.info("catch Osmium EBF recipe");
-                }
-            }
-
-            var ra = GT_Values.RA.stdBuilder();
-            if (recipe.mInputs != null && recipe.mInputs.length > 0) {
-                ra.itemInputs(recipe.mInputs);
-            } else {
-                ra.noItemInputs();
-            }
-            if (recipe.mOutputs != null && recipe.mOutputs.length > 0) {
-                ra.itemOutputs(recipe.mOutputs);
-            } else {
-                ra.noItemOutputs();
-            }
-            if (recipe.mFluidInputs != null && recipe.mFluidInputs.length > 0) {
-                ra.fluidInputs(recipe.mFluidInputs);
-            } else {
-                ra.noFluidInputs();
-            }
-            if (recipe.mFluidOutputs != null && recipe.mFluidOutputs.length > 0) {
-                ra.fluidOutputs(recipe.mFluidOutputs);
-            } else {
-                ra.noFluidOutputs();
-            }
-            ra.eut(recipe.mEUt)
-                .duration(recipe.mDuration)
-                .addTo(GTCMRecipe.instance.StellarForgeRecipes);
-        }
     }
 
     public void prepareEBFRecipes() {
