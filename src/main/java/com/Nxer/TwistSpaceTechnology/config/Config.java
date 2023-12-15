@@ -25,11 +25,8 @@ public class Config {
     public static final String SpaceScaler = "SpaceScaler";
     public static final String MoleculeDeconstructor = "MoleculeDeconstructor";
     public static final String CrystallineInfinitier = "CrystallineInfinitier";
-<<<<<<< HEAD
     public static final String HyperSpacetimeTransformer = "HyperSpacetimeTransformer";
-=======
     public static final String Scavenger = "Scavenger";
->>>>>>> main
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -143,7 +140,13 @@ public class Config {
     public static int SpeedMultiplier_Tier1Block_SpaceScaler = 1;
     public static int SpeedMultiplier_BeyondTier2Block_SpaceScaler = 10;
     // endregion
-
+ // region Hyper Spacetime Transformer
+ public static byte Mode_Default_HyperSpacetimeTransformer=0;
+ public static int ParallelMultiplier_HyperSpacetimeTransformer=1;
+ public static int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=5;
+ public static int SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer=1;
+ public static boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer= true;
+ // endregion
     // region Molecule Deconstructor
     public static byte Mode_Default_MoleculeDeconstructor = 0;
     public static int PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor = 16;
