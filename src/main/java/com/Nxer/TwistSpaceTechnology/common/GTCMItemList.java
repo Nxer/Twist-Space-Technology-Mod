@@ -75,6 +75,7 @@ public enum GTCMItemList {
     CircuitConverter,
     MegaBrickedBlastFurnace,
     LargeIndustrialCokingFactory,
+    Scavenger,
 
     // MAX
     HighDimensionalExtend,

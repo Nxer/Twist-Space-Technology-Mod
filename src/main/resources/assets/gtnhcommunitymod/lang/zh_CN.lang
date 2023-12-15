@@ -504,4 +504,15 @@ Tooltip_HyperSpacetimeTransformer_02=并行：时空场发生器等级的乘积�
 Tooltip_HyperSpacetimeTransformer_03=9级时空场会带来额外的能耗降低，最多降低75%。
 Tooltip_HyperSpacetimeTransformer_04=-------coming soon--------
 Tooltip_HyperSpacetimeTransformer_05=
-Tooltip_HyperSpacetimeTransformer_06=
+Tooltip_HyperSpacetimeTransformer_06=MetaItemRune.name=MetaItemRuneBase
+NameManaHatch=Mana Hatch
+NameScavenger=拾荒者
+MachineInfoData.SpeedMultiplier=耗时倍率
+MachineInfoData.Parallels=最大并行
+MachineInfoData.EuModifier=耗电倍率
+Tooltip_Scavenger_MachineType=筛选机
+Tooltip_Scavenger_Controller=拾荒者的控制器方块
+Tooltip_Scavenger_01=§l我喜欢猪. 狗崇拜人类. 猫鄙视人类. 猪对我们一视同仁.
+Tooltip_Scavenger_02=拥有与无损超频等效的并行(但有损超频).
+Tooltip_Scavenger_03=只需要使用配方要求功率的60%% .
+Tooltip_Scavenger_04=电压每提高1级, 额外降低20%%配方耗时, 叠乘计算.

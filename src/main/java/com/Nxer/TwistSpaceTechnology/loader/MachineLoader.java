@@ -25,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
@@ -64,6 +65,7 @@ public class MachineLoader {
     public static ItemStack HyperSpacetimeTransformer;
     public static ItemStack MegaBrickedBlastFurnace;
     public static ItemStack LargeIndustrialCokingFactory;
+    public static ItemStack Scavenger;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -230,6 +232,10 @@ public class MachineLoader {
             "NameMegaBrickedBlastFurnace",
             TextLocalization.NameMegaBrickedBlastFurnace).getStackForm(1);
         GTCMItemList.MegaBrickedBlastFurnace.set(MegaBrickedBlastFurnace);
+
+        //
+        Scavenger = new TST_Scavenger(19023, "NameScavenger", TextLocalization.NameScavenger).getStackForm(1);
+        GTCMItemList.Scavenger.set(Scavenger);
 
         // endregion
 
