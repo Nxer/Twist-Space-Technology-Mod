@@ -507,4 +507,4 @@ Tooltip_Scavenger_Controller=拾荒者的控制器方块
 Tooltip_Scavenger_01=§l我喜欢猪. 狗崇拜人类. 猫鄙视人类. 猪对我们一视同仁.
 Tooltip_Scavenger_02=拥有与无损超频等效的并行(但有损超频).
 Tooltip_Scavenger_03=只需要使用配方要求功率的60%% .
-Tooltip_Scavenger_04=电压每提高1级, 额外降低10%%配方耗时, 叠乘计算.
+Tooltip_Scavenger_04=电压每提高1级, 额外降低20%%配方耗时, 叠乘计算.

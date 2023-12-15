@@ -152,6 +152,12 @@ public final class ValueEnum {
 
     // endregion
 
+    // region Scavenger
+    public static final boolean EnablePerfectOverclock_Scavenger = Config.EnablePerfectOverclock_Scavenger;
+    public static final float EuModifier_Scavenger = Config.EuModifier_Scavenger;
+    public static final double SpeedBonus_MultiplyPerTier_Scavenger = Config.SpeedBonus_MultiplyPerTier_Scavenger;
+    // endregion
+
     // region Infinite Air Hatch
     public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
     // endregion
