@@ -18,6 +18,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhoto
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.RuneEngraverRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.MegaUniversalSpaceStationRecipePool;
@@ -37,7 +38,7 @@ public class RecipeLoader {
             new DSPRecipePool(), new MegaUniversalSpaceStationRecipePool(), new StellarMaterialSiphonRecipePool(),
             new DistillationRecipePool(), new ExtractorRecipePool(), new CompressorRecipePool(), new BOTRecipePool(),
             new TCRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
-            new CokingFactoryRecipePool(), new StellarForgeRecipePool() };
+            new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
