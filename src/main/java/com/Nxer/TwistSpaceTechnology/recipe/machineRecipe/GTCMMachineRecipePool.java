@@ -3,6 +3,10 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_LuV;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UHV;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UV;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_ZPM;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
@@ -33,6 +37,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonController
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUXV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeZPM;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhysicalFormSwitcher;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Scavenger;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
@@ -110,6 +115,7 @@ import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import goodgenerator.items.MyMaterial;
 import goodgenerator.util.ItemRefer;
@@ -1321,6 +1327,104 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_LV)
             .duration(20*114)
+            .addTo(sAssemblerRecipes);
+        // endregion
+
+        // region Dual Input Buffer
+        // LuV
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, ItemList.Hatch_Input_Multi_2x2_LuV.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .itemInputs(
+                ItemList.Hatch_Input_Bus_LuV.get(1),
+                ItemList.Hatch_Input_Multi_2x2_LuV.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.Master),1},
+                WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.plate, 4)
+            )
+            .fluidInputs(new FluidStack(solderIndAlloy, 144*2))
+            .itemOutputs(DualInputBuffer_LuV.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_LuV)
+            .duration(20*15)
+            .addTo(AssemblyLine);
+
+        // ZPM
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, DualInputBuffer_LuV.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .itemInputs(
+                ItemList.Hatch_Input_Bus_ZPM.get(1),
+                ItemList.Hatch_Input_Multi_2x2_ZPM.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate),1},
+                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iridium, 4)
+            )
+            .fluidInputs(new FluidStack(solderIndAlloy, 144*4))
+            .itemOutputs(DualInputBuffer_ZPM.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_ZPM)
+            .duration(20*15)
+            .addTo(AssemblyLine);
+
+        // UV
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, DualInputBuffer_ZPM.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .itemInputs(
+                ItemList.Hatch_Input_Bus_UV.get(1),
+                ItemList.Hatch_Input_Multi_2x2_UV.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),1},
+                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Osmium, 4)
+            )
+            .fluidInputs(new FluidStack(solderIndAlloy, 144*8))
+            .itemOutputs(DualInputBuffer_UV.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_UV)
+            .duration(20*15)
+            .addTo(AssemblyLine);
+
+        // UHV
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, DualInputBuffer_UV.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .itemInputs(
+                ItemList.Hatch_Input_Bus_MAX.get(1),
+                ItemList.Hatch_Input_Multi_2x2_UHV.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite),1},
+                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 4)
+            )
+            .fluidInputs(new FluidStack(solderIndAlloy, 144*16))
+            .itemOutputs(DualInputBuffer_UHV.get(1))
+            .noFluidOutputs()
+            .eut(RECIPE_UHV)
+            .duration(20*15)
+            .addTo(AssemblyLine);
+
+        // endregion
+
+        // region Scavenger
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                GregtechItemList.Industrial_Sifter.get(64),
+                CustomItemList.SiftingMachineZPM.get(16),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 16},
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 9),
+                Utils.copyAmount(36,Ic2Items.iridiumPlate),
+
+                GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorZPM, 8)
+            )
+            .fluidInputs(Materials.SolderingAlloy.getMolten(144*32))
+            .itemOutputs(Scavenger.get(1))
+            .noFluidOutputs()
+            .noOptimize()
+            .eut(RECIPE_ZPM)
+            .duration(20*60)
             .addTo(sAssemblerRecipes);
         // endregion
 

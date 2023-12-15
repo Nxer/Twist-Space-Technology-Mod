@@ -63,6 +63,7 @@ public class NEIHandler {
         sendCatalyst("gtcm.recipe.RuneEngraverRecipes", "gregtech:gt.blockmachines:19500");
         sendCatalyst("tst.recipe.CokingFactoryRecipes", "gregtech:gt.blockmachines:19021");
         sendCatalyst("tst.recipe.StellarForgeRecipes", "gregtech:gt.blockmachines:19016");
+        sendCatalyst("gt.recipe.sifter", "gregtech:gt.blockmachines:19023");
 
     }
 
