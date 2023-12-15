@@ -101,6 +101,7 @@ public enum GTCMItemList {
     ArtificialStar,
     StellarMaterialSiphon,
     ElvenWorkshop,
+    HyperSpacetimeTransformer,
 
     // single block Machines
     InfiniteAirHatch,

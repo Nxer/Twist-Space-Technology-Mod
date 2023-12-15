@@ -137,6 +137,14 @@ public final class ValueEnum {
     public static final byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = Config.FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
     // endregion
 
+    // region Hyper Spacetime Transformer
+    public static final byte Mode_Default_HyperSpacetimeTransformer = Config.Mode_Default_CrystallineInfinitier;
+    public static final int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer = Config.SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
+    public static final int SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer = Config.SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
+    public static final int ParallelMultiplier_HyperSpacetimeTransformer = Config.ParallelMultiplier_CrystallineInfinitier;
+    public static final boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer = Config.EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer;
+    // endregion
+
     // region Miracle Door
     /**
      * Default ticks of Miracle Door per processing cost in mode ABS.

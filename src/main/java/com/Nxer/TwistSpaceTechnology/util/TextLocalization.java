@@ -461,6 +461,18 @@ public class TextLocalization {
     public static final String Tooltip_ElvenWorkshop_MachineType = texter("Mana Infuser/Rune Engraver","Tooltip_ElvenWorkshop_MachineType");
     // endregion
 
+    // region HyperSpacetimeTransformer
+    public static final String NameHyperSpacetimeTransformer = texter("HyperSpacetimeTransformer","NameHyperSpacetimeTransformer");
+    public static final String Tooltip_HyperSpacetimeTransformer_MachineType = texter("HyperSpacetimeTransformer","Tooltip_HyperSpacetimeTransformer_MachineType");
+    public static final String Tooltip_HyperSpacetimeTransformer_00= texter("","Tooltip_HyperSpacetimeTransformer_00");
+    public static final String Tooltip_HyperSpacetimeTransformer_01= texter("","Tooltip_HyperSpacetimeTransformer_01");
+    public static final String Tooltip_HyperSpacetimeTransformer_02= texter("","Tooltip_HyperSpacetimeTransformer_02");
+    public static final String Tooltip_HyperSpacetimeTransformer_03= texter("","Tooltip_HyperSpacetimeTransformer_03");
+    public static final String Tooltip_HyperSpacetimeTransformer_04= texter("","Tooltip_HyperSpacetimeTransformer_04");
+    public static final String Tooltip_HyperSpacetimeTransformer_05= texter("","Tooltip_HyperSpacetimeTransformer_05");
+    public static final String Tooltip_HyperSpacetimeTransformer_06= texter("","Tooltip_HyperSpacetimeTransformer_06");
+    // endregion
+
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
@@ -489,7 +501,7 @@ public class TextLocalization {
     //endregion
 
     //region MegaPrimitiveBlastFurnace
-    public static String NameMegaBrickedBlastFurnace = texter("Mega Bricked Blast Furnace","NameMegaBrickedBlastFurnace");
+    public static final String NameMegaBrickedBlastFurnace = texter("Mega Bricked Blast Furnace","NameMegaBrickedBlastFurnace");
     public static final String Tooltip_MegaBrickedBlastFurnace_MachineType = texter("Blast Furnace","Tooltip_MegaBrickedBlastFurnace_MachineType");
     public static final String Tooltip_MegaBrickedBlastFurnace_Controller = texter("Controller block for the Mega Bricked Blast Furnace","Tooltip_MegaBrickedBlastFurnace_Controller");
     public static final String Tooltip_MegaBrickedBlastFurnace_00 = texter(EnumChatFormatting.WHITE+"Who could ever imagine the power of the Steam Age?","Tooltip_MegaBrickedBlastFurnace_00");

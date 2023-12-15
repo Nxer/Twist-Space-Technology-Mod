@@ -25,6 +25,7 @@ public class Config {
     public static final String SpaceScaler = "SpaceScaler";
     public static final String MoleculeDeconstructor = "MoleculeDeconstructor";
     public static final String CrystallineInfinitier = "CrystallineInfinitier";
+    public static final String HyperSpacetimeTransformer = "HyperSpacetimeTransformer";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -154,6 +155,13 @@ public class Config {
     public static byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = 3;
     // endregion
 
+    // region Hyper Spacetime Transformer
+    public static byte Mode_Default_HyperSpacetimeTransformer=0;
+    public static int ParallelMultiplier_HyperSpacetimeTransformer=1;
+    public static int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=5;
+    public static int SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer=1;
+    public static boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer= true;
+    // endregion
     // region Infinite Air Hatch
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
@@ -292,6 +300,14 @@ public class Config {
 
         // region CombatRework
         activateCombatStats = configuration.getBoolean("activateCombatStats",CombatStats,activateCombatStats,"decide whether to enable the combatstats system(WIP).");
+        // endregion
+
+        // region Hyper Spacetime Transformer
+        Mode_Default_HyperSpacetimeTransformer=                                      (byte) configuration.getInt( "Mode_Default_HyperSpacetimeTransformer", HyperSpacetimeTransformer,Mode_Default_HyperSpacetimeTransformer, 0,1,"");;
+        ParallelMultiplier_HyperSpacetimeTransformer=                                configuration.getInt(        "ParallelMultiplier_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,ParallelMultiplier_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
+        SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=          configuration.getInt(        "SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
+        SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer=       configuration.getInt(        "SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_QuantumForceTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
+        EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer=   configuration.getBoolean(    "EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer",    HyperSpacetimeTransformer,EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer,"");;
         // endregion
 
         if (configuration.hasChanged()) {
