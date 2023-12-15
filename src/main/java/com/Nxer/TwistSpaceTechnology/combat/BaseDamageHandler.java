@@ -19,7 +19,8 @@ public class BaseDamageHandler {
                 .from((EntityPlayer) event.source.getEntity());
             if ((event.source.getEntity().motionY < (double) 0) && !event.source.getEntity().onGround
                 && !event.source.getEntity()
-                    .isRiding())
+                    .isRiding()
+                && event.source.damageType == "player")
                 damage = (float) (damage + 1.5
                     * (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0));
             else damage = (float) (damage + SourceStats.CombatStats.get("BaseDamage")

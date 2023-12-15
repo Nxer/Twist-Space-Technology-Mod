@@ -496,7 +496,15 @@ tooltips.Rune_of_Erelong.line1=§1Eternity is but a microcosm of a moment.
 tooltips.Rune_of_Ether.line1=§bReal generosity toward the future lies in giving all to the present.
 tooltips.Rune_of_Perdition.line1=§4Never pray for salvation that does not exist.
 ElvenWorkshopStructureNote=For its unique structure, you may need to use Blueprint to build the machine.
-MetaItemRune.name=MetaItemRuneBase
+NameHyperSpacetimeTransformer=Hyper Spacetime Transformer（WIP）
+Tooltip_HyperSpacetimeTransformer_MachineType=Molecular Transformer/SpaceTime Transformer
+Tooltip_HyperSpacetimeTransformer_00=§cSpaceTime Transformer mode isn't completed！
+Tooltip_HyperSpacetimeTransformer_01=Molecular Transformer Mode
+Tooltip_HyperSpacetimeTransformer_02=Parallel:Product of three types of field generators
+Tooltip_HyperSpacetimeTransformer_03=Tier 9 field generator will decrease energy use by 25%, max 75%.
+Tooltip_HyperSpacetimeTransformer_04=-------coming soon--------
+Tooltip_HyperSpacetimeTransformer_05=
+Tooltip_HyperSpacetimeTransformer_06=MetaItemRune.name=MetaItemRuneBase
 NameManaHatch=Mana Hatch
 NameScavenger=Scavenger
 MachineInfoData.SpeedMultiplier=Speed multiplier

@@ -30,7 +30,7 @@ public class DamageEventHandler {
                     damage *= (float) (SourceStats.CombatStats.get("MagicDamageMultipiler") / 100.0 + 1);
                     break;
                 }
-                default: {
+                case "player": {
                     damage *= (float) (SourceStats.CombatStats.get("MeleeDamageMultipiler") / 100.0 + 1);
                     break;
                 }
