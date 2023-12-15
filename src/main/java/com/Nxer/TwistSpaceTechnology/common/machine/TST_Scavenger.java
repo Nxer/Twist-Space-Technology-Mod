@@ -109,7 +109,8 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        this.speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_Scavenger, GT_Utility.getTier(this.getMaxInputEu()));
+        this.speedBonus = (float) Math
+            .pow(SpeedBonus_MultiplyPerTier_Scavenger, GT_Utility.getTier(this.getMaxInputEu()));
         return true;
     }
 
