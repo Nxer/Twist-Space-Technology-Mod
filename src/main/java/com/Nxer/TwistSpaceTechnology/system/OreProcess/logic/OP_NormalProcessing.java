@@ -2,12 +2,14 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import ic2.core.Ic2Items;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -185,6 +187,13 @@ public class OP_NormalProcessing {
             GT_ModHandler.getModItem("TConstruct","SearedBrick", 1, 2),
             Materials.Ardite,
             true
+        );
+
+        // IC2 Uranium ore
+        processOreRecipe(
+            copyAmount(1,Ic2Items.uraniumOre),
+            Materials.Uranium,
+            false
         );
 
         // spotless:on

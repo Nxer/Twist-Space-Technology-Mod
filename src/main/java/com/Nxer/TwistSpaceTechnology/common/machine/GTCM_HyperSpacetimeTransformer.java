@@ -121,8 +121,9 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        boolean sign = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
-        return sign;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        /* if - return 之间执行额外处理 */
+        return true;
     }
     // endregion
 
