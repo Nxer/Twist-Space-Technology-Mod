@@ -19,8 +19,7 @@ public class DamageEventHandler {
 
             PlayerExtendedProperties SourceStats = PlayerExtendedProperties.instance
                 .from((EntityPlayer) event.source.getEntity());
-            damage = (damage + SourceStats.CombatStats.get("BaseDamage"))
-                * (float) (SourceStats.CombatStats.get("Strength") / 100.0 + 1)
+            damage = damage * (float) (SourceStats.CombatStats.get("Strength") / 100.0 + 1)
                 * (float) (SourceStats.CombatStats.get("BaseDamageMultipiler") / 100.0 + 1);
             switch (event.source.damageType) {
                 case "arrow": {

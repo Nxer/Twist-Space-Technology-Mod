@@ -29,6 +29,7 @@ public class Config {
 
     public static final String spaceStation="spaceStation";
 
+    public static final String CombatStats="CombatStats";
     // endregion
 
     // region General
@@ -158,6 +159,7 @@ public class Config {
     // endregion
 
     public static boolean activateMegaSpaceStation=false;
+    public static boolean activateCombatStats=false;
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -285,7 +287,11 @@ public class Config {
         // endregion
 
         // region Space Station
-        activateMegaSpaceStation = configuration.getBoolean("activateMegaSpaceStation",spaceStation,activateMegaSpaceStation,"decide whether can use mega space station");
+        activateMegaSpaceStation = configuration.getBoolean("activateMegaSpaceStation",spaceStation,activateMegaSpaceStation,"decide whether can use mega space station.");
+        // endregion
+
+        // region CombatRework
+        activateCombatStats = configuration.getBoolean("activateCombatStats",CombatStats,activateCombatStats,"decide whether whether to enable the combatstats system(WIP).");
         // endregion
 
         if (configuration.hasChanged()) {
