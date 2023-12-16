@@ -13,18 +13,20 @@ public class BaseDamageHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHurting(LivingHurtEvent event) {
         float damage = event.ammount;
-        if (event.source.getEntity() instanceof EntityPlayer && event.source.damageType != "indirectMagic") {
+        if (event.source.getEntity() instanceof EntityPlayer) {
             ArmorEventHandler.INSTANCE.updatePlayerStats((EntityPlayer) event.source.getEntity());
-            PlayerExtendedProperties SourceStats = PlayerExtendedProperties.instance
-                .from((EntityPlayer) event.source.getEntity());
-            if ((event.source.getEntity().motionY < (double) 0) && !event.source.getEntity().onGround
-                && !event.source.getEntity()
-                    .isRiding()
-                && event.source.damageType == "player")
-                damage = (float) (damage + 1.5
-                    * (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0));
-            else damage = (float) (damage + SourceStats.CombatStats.get("BaseDamage")
-                + SourceStats.CombatStats.get("Strength") / 50.0);
+            if (event.source.damageType != "indirectMagic") {
+                PlayerExtendedProperties SourceStats = PlayerExtendedProperties.instance
+                    .from((EntityPlayer) event.source.getEntity());
+                if ((event.source.getEntity().motionY < (double) 0) && !event.source.getEntity().onGround
+                    && !event.source.getEntity()
+                        .isRiding()
+                    && event.source.damageType == "player")
+                    damage = (float) (damage + 1.5
+                        * (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0));
+                else damage = (float) (damage + SourceStats.CombatStats.get("BaseDamage")
+                    + SourceStats.CombatStats.get("Strength") / 50.0);
+            }
         }
         event.ammount = damage;
     }

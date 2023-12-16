@@ -20,18 +20,22 @@ public class DamageEventHandler {
 
             PlayerExtendedProperties SourceStats = PlayerExtendedProperties.instance
                 .from((EntityPlayer) event.source.getEntity());
-            damage = damage * (float) (SourceStats.CombatStats.get("Strength") / 100.0 + 1)
-                * (float) (SourceStats.CombatStats.get("BaseDamageMultipiler") / 100.0 + 1);
             switch (event.source.damageType) {
                 case "arrow": {
+                    damage = damage * (float) (SourceStats.CombatStats.get("Strength") / 100.0 + 1)
+                        * (float) (SourceStats.CombatStats.get("BaseDamageMultipiler") / 100.0 + 1);
                     damage *= (float) (SourceStats.CombatStats.get("RangeDamageMultipiler") / 100.0 + 1);
                     break;
                 }
                 case "indirectMagic": {
+                    damage = damage * (float) (SourceStats.CombatStats.get("Intelligence") / 100.0 + 1)
+                        * (float) (SourceStats.CombatStats.get("BaseDamageMultipiler") / 100.0 + 1);
                     damage *= (float) (SourceStats.CombatStats.get("MagicDamageMultipiler") / 100.0 + 1);
                     break;
                 }
                 case "player": {
+                    damage = damage * (float) (SourceStats.CombatStats.get("Strength") / 100.0 + 1)
+                        * (float) (SourceStats.CombatStats.get("BaseDamageMultipiler") / 100.0 + 1);
                     damage *= (float) (SourceStats.CombatStats.get("MeleeDamageMultipiler") / 100.0 + 1);
                     break;
                 }

@@ -25,10 +25,16 @@ public class ArmorEventHandler {
         final Item sniper = weildedItem != null ? weildedItem.getItem() : null;
         if (weildedItem != null) {
             switch (weildedItem.getUnlocalizedName()) {
-                case "item.swordGold":
+                case "item.swordGold": {
                     PlayerExtendedProperties.addBonusPlayerStat(pl, "Strength", 50);
-                case "item.swordDiamond":
+                    break;
+                }
+                case "item.swordDiamond": {
                     PlayerExtendedProperties.addBonusPlayerStat(pl, "Strength", 100);
+                    break;
+                }
+                default:
+                    break;
             }
         }
     }
