@@ -516,4 +516,5 @@ Tooltip_Scavenger_03=Only uses 60%% of the EU/t normally required.
 Tooltip_Scavenger_04=Additional 20%% reduction in time per Voltage Tier, multiplication calculus.
 Tooltip_Scavenger_Controller=Controller block for the Scavenger
 Tooltip_Scavenger_01=§lI like pigs. Dogs look up to us. Cats look down on us. Pigs treat us as equals.
-Tooltip_Scavenger_02=Has parallel equivalent to Perfect Overclock.
+Tooltip_Scavenger_02=Has parallel equivalent to Perfect Overclock..
+NEI.name.HyperSpacetimeTransformerRecipe=Hyper Spacetime Transformer
