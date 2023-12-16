@@ -35,12 +35,12 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     protected GT_TileEntity_MultiStructureMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         setShape();
-        turnOffMaintenance();
+
     }
 
     public GT_TileEntity_MultiStructureMachine(String mName) {
         super(mName);
-        turnOffMaintenance();
+
     }
 
     @Override
@@ -155,7 +155,7 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         runningTick++;
         if (runningTick % 20 == 0 && aBaseMetaTileEntity.isServerSide()) {
-            structureChecker.add(this);
+            checkStructure(false, getBaseMetaTileEntity());
             if (!InConstruct.isEmpty()) {
                 construct(null, false);
             }
@@ -181,12 +181,7 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     @Override
     public void onLeftclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         var itemInUse = aPlayer.getHeldItem();
-        if (itemInUse.getItem() != null) {
-            LOG.info(
-                itemInUse.getItem()
-                    .getUnlocalizedName());
-        }
-        if (itemInUse.getItem() instanceof ItemMultiStructuresLinkTool item) {
+        if (itemInUse != null && itemInUse.getItem() instanceof ItemMultiStructuresLinkTool item) {
             item.firstPosition = ID;
             item.link(aPlayer);
             return;

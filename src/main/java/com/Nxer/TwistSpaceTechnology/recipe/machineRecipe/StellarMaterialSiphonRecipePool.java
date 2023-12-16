@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.common.material.MaterialPool.eventHo
 import java.util.HashMap;
 import java.util.Map;
 
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -66,6 +67,8 @@ public class StellarMaterialSiphonRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
-        addPumpingRecipes();
+        if (Config.activateMegaSpaceStation) {
+            addPumpingRecipes();
+        }
     }
 }
