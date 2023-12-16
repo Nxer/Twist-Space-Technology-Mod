@@ -12,9 +12,8 @@ public class BaseDamageHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHurting(LivingHurtEvent event) {
-        ;
         float damage = event.ammount;
-        if (event.source.getEntity() instanceof EntityPlayer) {
+        if (event.source.getEntity() instanceof EntityPlayer && event.source.damageType != "indirectMagic") {
             PlayerExtendedProperties SourceStats = PlayerExtendedProperties.instance
                 .from((EntityPlayer) event.source.getEntity());
             if ((event.source.getEntity().motionY < (double) 0) && !event.source.getEntity().onGround

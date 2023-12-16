@@ -7,6 +7,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import gregtech.api.util.GT_Utility;
 
 public class DamageEventHandler {
 
@@ -26,7 +27,7 @@ public class DamageEventHandler {
                     damage *= (float) (SourceStats.CombatStats.get("RangeDamageMultipiler") / 100.0 + 1);
                     break;
                 }
-                case "magic": {
+                case "indirectMagic": {
                     damage *= (float) (SourceStats.CombatStats.get("MagicDamageMultipiler") / 100.0 + 1);
                     break;
                 }
@@ -35,15 +36,17 @@ public class DamageEventHandler {
                     break;
                 }
             }
-            if (new Random().nextInt(99) < SourceStats.CombatStats.get("CritChance")) {
+            if (new Random().nextInt(100) < SourceStats.CombatStats.get("CritChance")) {
                 damage *= (float) (SourceStats.CombatStats.get("CritDamage") / 100.0 + 1);
             }
+            // debug info
+            GT_Utility.sendChatToPlayer((EntityPlayer) event.source.getEntity(), event.source.damageType);
         }
         if (event.entityLiving instanceof EntityPlayer) {
             damage *= (float) (1
                 - PlayerExtendedProperties.instance.from((EntityPlayer) event.entityLiving).CombatStats.get("Resistant")
                     / 100.0);
         }
-        event.ammount = damage;
+        event.ammount = damage * (1F + (new Random().nextFloat() - 0.5F) * 0.1F);
     }
 }

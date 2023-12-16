@@ -9,12 +9,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
-public final class PlayerExtendedProperties implements IExtendedEntityProperties {
+public final class BasicPlayerExtendedProperties implements IExtendedEntityProperties {
 
-    public static final PlayerExtendedProperties instance = new PlayerExtendedProperties();
+    public static final BasicPlayerExtendedProperties instance = new BasicPlayerExtendedProperties();
     public Map<String, Integer> CombatStats = new HashMap<String, Integer>();
 
-    public PlayerExtendedProperties() {
+    public BasicPlayerExtendedProperties() {
         for (String name : StatsDefination.BaseStats) {
             CombatStats.put(name, 0);
         }
@@ -43,8 +43,8 @@ public final class PlayerExtendedProperties implements IExtendedEntityProperties
 
     }
 
-    public static PlayerExtendedProperties from(EntityPlayer player) {
-        return ((PlayerExtendedProperties) player.getExtendedProperties("COMBAT_STATS"));
+    public static BasicPlayerExtendedProperties from(EntityPlayer player) {
+        return ((BasicPlayerExtendedProperties) player.getExtendedProperties("BASIC_COMBAT_STATS"));
     }
 
     public static Map<String, Integer> getStats(EntityPlayer player) {
@@ -57,11 +57,6 @@ public final class PlayerExtendedProperties implements IExtendedEntityProperties
 
     public static void setPlayerStat(EntityPlayer player, String statName, int value) {
         from(player).CombatStats.put(statName, value);
-    }
-
-    public static void setBonusPlayerStat(EntityPlayer player, String statName, int value) {
-        Map<String, Integer> BasicStats = BasicPlayerExtendedProperties.getStats(player);
-        from(player).CombatStats.put(statName, value + BasicStats.get(statName));
     }
 
     public static void setPlayerStats(EntityPlayer player, int aStrength, int aIntelligence, int aCritChance,
@@ -77,26 +72,5 @@ public final class PlayerExtendedProperties implements IExtendedEntityProperties
         from(player).CombatStats.put("MeleeDamageMultipiler", aMeleeDamageMultipiler);
         from(player).CombatStats.put("RangeDamageMultipiler", aRangeDamageMultipiler);
         from(player).CombatStats.put("MagicDamageMultipiler", aMagicDamageMultipiler);
-    }
-
-    public static void setBonusPlayerStats(EntityPlayer player, int aStrength, int aIntelligence, int aCritChance,
-        int aCritDamage, int aResistance, int aBaseDamage, int aBaseDamageMultipiler, int aMeleeDamageMultipiler,
-        int aRangeDamageMultipiler, int aMagicDamageMultipiler) {
-
-        Map<String, Integer> BasicStats = BasicPlayerExtendedProperties.getStats(player);
-        from(player).CombatStats.put("Strength", aStrength + BasicStats.get("Strength"));
-        from(player).CombatStats.put("Intelligence", aIntelligence + BasicStats.get("Intelligence"));
-        from(player).CombatStats.put("CritChance", aCritChance + BasicStats.get("CritChance"));
-        from(player).CombatStats.put("CritDamage", aCritDamage + BasicStats.get("CritDamage"));
-        from(player).CombatStats.put("Resistance", aResistance + BasicStats.get("Resistance"));
-        from(player).CombatStats.put("BaseDamage", aBaseDamage + BasicStats.get("BaseDamage"));
-        from(player).CombatStats
-            .put("BaseDamageMultipiler", aBaseDamageMultipiler + BasicStats.get("BaseDamageMultipiler"));
-        from(player).CombatStats
-            .put("MeleeDamageMultipiler", aMeleeDamageMultipiler + BasicStats.get("MeleeDamageMultipiler"));
-        from(player).CombatStats
-            .put("RangeDamageMultipiler", aRangeDamageMultipiler + BasicStats.get("RangeDamageMultipiler"));
-        from(player).CombatStats
-            .put("MagicDamageMultipiler", aMagicDamageMultipiler + BasicStats.get("MagicDamageMultipiler"));
     }
 }

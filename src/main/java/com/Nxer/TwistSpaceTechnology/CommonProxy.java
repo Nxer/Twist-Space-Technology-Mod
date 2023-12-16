@@ -4,6 +4,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.combat.BaseDamageHandler;
 import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
+import com.Nxer.TwistSpaceTechnology.combat.FMLEventHandler;
 import com.Nxer.TwistSpaceTechnology.combat.PlayerEventHandler;
 import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
@@ -25,7 +26,12 @@ public class CommonProxy {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
-        if (Config.activateCombatStats) MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
+        if (Config.activateCombatStats) {
+            MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
+            FMLCommonHandler.instance()
+                .bus()
+                .register(FMLEventHandler.INSTANCE);
+        }
         TwistSpaceTechnology.LOG.info(Tags.MODNAME + " at version " + Tags.VERSION);
     }
 
