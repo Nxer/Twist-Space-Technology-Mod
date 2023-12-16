@@ -271,7 +271,7 @@ public class GTCMRecipe {
     public final GTCMRecipeMap ElvenWorkshopRecipes = new GTCMRecipeMap(
         new HashSet<>(1),
         "gtcm.recipe.ElvenWorkshopRecipes",
-        NameElvenWorkshop,
+        texter("Mana Infusion", "NEI.name.ManaInfusion"),
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
         4,
@@ -290,7 +290,7 @@ public class GTCMRecipe {
     public final GTCMRecipeMap RuneEngraverRecipes = new GTCMRecipeMap(
         new HashSet<>(1),
         "gtcm.recipe.RuneEngraverRecipes",
-        NameElvenWorkshop,
+        texter("Rune Engrave", "NEI.name.RuneEngrave"),
         null,
         "gregtech:textures/gui/basicmachines/LCRNEI",
         8,
