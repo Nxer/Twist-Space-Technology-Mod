@@ -406,6 +406,25 @@ public class GTCMRecipe {
         "",
         false,
         true);
+    public final GTCMRecipeMap HyperSpacetimeTransformerRecipe = new GTCMRecipeMap(
+        new HashSet<>(),
+        "tst.recipe.HyperSpacetimeTransformerRecipe",
+        texter("Hyper Spacetime Transformer", "NEI.name.HyperSpacetimeTransformerRecipe"),
+        null,
+        "gregtech:textures/gui/basicmachines/LCRNEI",
+        4,
+        4,
+        4,
+        4,
+        true,
+        0,
+        0,
+        1,
+        "",
+        1,
+        "",
+        false,
+        true);
 
     // endregion
 }
