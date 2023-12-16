@@ -31,13 +31,13 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event) {
         NBTTagCompound data = new NBTTagCompound();
-        PlayerExtendedProperties.from(event.original)
-            .saveNBTData(data);
         BasicPlayerExtendedProperties.from(event.original)
             .saveNBTData(data);
-        PlayerExtendedProperties.from(event.entityPlayer)
-            .loadNBTData(data);
+        PlayerExtendedProperties.from(event.original)
+            .saveNBTData(data);
         BasicPlayerExtendedProperties.from(event.entityPlayer)
+            .loadNBTData(data);
+        PlayerExtendedProperties.from(event.entityPlayer)
             .loadNBTData(data);
     }
 }

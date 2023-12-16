@@ -59,8 +59,8 @@ public final class PlayerExtendedProperties implements IExtendedEntityProperties
         from(player).CombatStats.put(statName, value);
     }
 
-    public static void setBonusPlayerStat(EntityPlayer player, String statName, int value) {
-        Map<String, Integer> BasicStats = BasicPlayerExtendedProperties.getStats(player);
+    public static void addBonusPlayerStat(EntityPlayer player, String statName, int value) {
+        Map<String, Integer> BasicStats = PlayerExtendedProperties.getStats(player);
         from(player).CombatStats.put(statName, value + BasicStats.get(statName));
     }
 
@@ -79,11 +79,11 @@ public final class PlayerExtendedProperties implements IExtendedEntityProperties
         from(player).CombatStats.put("MagicDamageMultipiler", aMagicDamageMultipiler);
     }
 
-    public static void setBonusPlayerStats(EntityPlayer player, int aStrength, int aIntelligence, int aCritChance,
+    public static void addBonusPlayerStats(EntityPlayer player, int aStrength, int aIntelligence, int aCritChance,
         int aCritDamage, int aResistance, int aBaseDamage, int aBaseDamageMultipiler, int aMeleeDamageMultipiler,
         int aRangeDamageMultipiler, int aMagicDamageMultipiler) {
 
-        Map<String, Integer> BasicStats = BasicPlayerExtendedProperties.getStats(player);
+        Map<String, Integer> BasicStats = PlayerExtendedProperties.getStats(player);
         from(player).CombatStats.put("Strength", aStrength + BasicStats.get("Strength"));
         from(player).CombatStats.put("Intelligence", aIntelligence + BasicStats.get("Intelligence"));
         from(player).CombatStats.put("CritChance", aCritChance + BasicStats.get("CritChance"));

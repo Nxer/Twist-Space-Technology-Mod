@@ -16,25 +16,28 @@ public final class BasicPlayerExtendedProperties implements IExtendedEntityPrope
 
     public BasicPlayerExtendedProperties() {
         for (String name : StatsDefination.BaseStats) {
-            CombatStats.put(name, 0);
+            CombatStats.put("Basic" + name, 0);
         }
-        for (String name : StatsDefination.DamageStats) CombatStats.put(name, 0);
+        for (String name : StatsDefination.DamageStats) CombatStats.put("Basic" + name, 0);
     }
 
     @Override
     public void saveNBTData(NBTTagCompound compound) {
-        for (String stat : CombatStats.keySet()) {
-            compound.setInteger(stat, CombatStats.get(stat));
+        for (String stat : StatsDefination.BaseStats) {
+            compound.setInteger("Basic" + stat, CombatStats.get(stat));
+        }
+        for (String stat : StatsDefination.DamageStats) {
+            compound.setInteger("Basic" + stat, CombatStats.get(stat));
         }
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
         for (String stat : StatsDefination.BaseStats) {
-            CombatStats.put(stat, compound.getInteger(stat));
+            CombatStats.put("Basic" + stat, compound.getInteger(stat));
         }
         for (String stat : StatsDefination.DamageStats) {
-            CombatStats.put(stat, compound.getInteger(stat));
+            CombatStats.put("Basic" + stat, compound.getInteger(stat));
         }
     }
 
@@ -52,25 +55,25 @@ public final class BasicPlayerExtendedProperties implements IExtendedEntityPrope
     }
 
     public static Integer getStat(EntityPlayer player, String statName) {
-        return from(player).CombatStats.get(statName);
+        return from(player).CombatStats.get("Basic" + statName);
     }
 
     public static void setPlayerStat(EntityPlayer player, String statName, int value) {
-        from(player).CombatStats.put(statName, value);
+        from(player).CombatStats.put("Basic" + statName, value);
     }
 
     public static void setPlayerStats(EntityPlayer player, int aStrength, int aIntelligence, int aCritChance,
         int aCritDamage, int aResistance, int aBaseDamage, int aBaseDamageMultipiler, int aMeleeDamageMultipiler,
         int aRangeDamageMultipiler, int aMagicDamageMultipiler) {
-        from(player).CombatStats.put("Strength", aStrength);
-        from(player).CombatStats.put("Intelligence", aIntelligence);
-        from(player).CombatStats.put("CritChance", aCritChance);
-        from(player).CombatStats.put("CritDamage", aCritDamage);
-        from(player).CombatStats.put("Resistance", aResistance);
-        from(player).CombatStats.put("BaseDamage", aBaseDamage);
-        from(player).CombatStats.put("BaseDamageMultipiler", aBaseDamageMultipiler);
-        from(player).CombatStats.put("MeleeDamageMultipiler", aMeleeDamageMultipiler);
-        from(player).CombatStats.put("RangeDamageMultipiler", aRangeDamageMultipiler);
-        from(player).CombatStats.put("MagicDamageMultipiler", aMagicDamageMultipiler);
+        from(player).CombatStats.put("BasicStrength", aStrength);
+        from(player).CombatStats.put("BasicIntelligence", aIntelligence);
+        from(player).CombatStats.put("BasicCritChance", aCritChance);
+        from(player).CombatStats.put("BasicCritDamage", aCritDamage);
+        from(player).CombatStats.put("BasicResistance", aResistance);
+        from(player).CombatStats.put("BasicBaseDamage", aBaseDamage);
+        from(player).CombatStats.put("BasicBaseDamageMultipiler", aBaseDamageMultipiler);
+        from(player).CombatStats.put("BasicMeleeDamageMultipiler", aMeleeDamageMultipiler);
+        from(player).CombatStats.put("BasicRangeDamageMultipiler", aRangeDamageMultipiler);
+        from(player).CombatStats.put("BasicMagicDamageMultipiler", aMagicDamageMultipiler);
     }
 }

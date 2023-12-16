@@ -4,16 +4,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+public class ArmorEventHandler {
 
-public class FMLEventHandler {
+    public static final ArmorEventHandler INSTANCE = new ArmorEventHandler();
 
-    public static final FMLEventHandler INSTANCE = new FMLEventHandler();
-
-    @SubscribeEvent
-    public void onPlayerUpdate(TickEvent.PlayerTickEvent event) {
-        EntityPlayer pl = event.player;
+    public void updatePlayerStats(EntityPlayer pl) {
+        for (String stat : PlayerExtendedProperties.from(pl).CombatStats.keySet())
+            PlayerExtendedProperties.from(pl).CombatStats
+                .put(stat, BasicPlayerExtendedProperties.from(pl).CombatStats.get("Basic" + stat));
         final ItemStack stackBoots = pl.inventory.armorItemInSlot(0);
         final ItemStack stackLegs = pl.inventory.armorItemInSlot(1);
         final ItemStack stackBody = pl.inventory.armorItemInSlot(2);
@@ -27,10 +25,10 @@ public class FMLEventHandler {
         final Item sniper = weildedItem != null ? weildedItem.getItem() : null;
         if (weildedItem != null) {
             switch (weildedItem.getUnlocalizedName()) {
-                case "swordGold":
-                    PlayerExtendedProperties.setBonusPlayerStat(pl, "Strength", 50);
-                case "swordDiamond":
-                    PlayerExtendedProperties.setBonusPlayerStat(pl, "Strength", 100);
+                case "item.swordGold":
+                    PlayerExtendedProperties.addBonusPlayerStat(pl, "Strength", 50);
+                case "item.swordDiamond":
+                    PlayerExtendedProperties.addBonusPlayerStat(pl, "Strength", 100);
             }
         }
     }
