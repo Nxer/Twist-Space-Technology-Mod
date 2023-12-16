@@ -24,20 +24,20 @@ public final class BasicPlayerExtendedProperties implements IExtendedEntityPrope
     @Override
     public void saveNBTData(NBTTagCompound compound) {
         for (String stat : StatsDefination.BaseStats) {
-            compound.setInteger("Basic" + stat, CombatStats.get(stat));
+            compound.setInteger("Basic" + stat, CombatStats.get("Basic" + stat));
         }
         for (String stat : StatsDefination.DamageStats) {
-            compound.setInteger("Basic" + stat, CombatStats.get(stat));
+            compound.setInteger("Basic" + stat, CombatStats.get("Basic" + stat));
         }
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
         for (String stat : StatsDefination.BaseStats) {
-            CombatStats.put("Basic" + stat, compound.getInteger(stat));
+            CombatStats.put("Basic" + stat, compound.getInteger("Basic" + stat));
         }
         for (String stat : StatsDefination.DamageStats) {
-            CombatStats.put("Basic" + stat, compound.getInteger(stat));
+            CombatStats.put("Basic" + stat, compound.getInteger("Basic" + stat));
         }
     }
 
