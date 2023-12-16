@@ -464,10 +464,10 @@ public class TextLocalization {
     // region HyperSpacetimeTransformer
     public static final String NameHyperSpacetimeTransformer = texter("HyperSpacetimeTransformer","NameHyperSpacetimeTransformer");
     public static final String Tooltip_HyperSpacetimeTransformer_MachineType = texter("HyperSpacetimeTransformer","Tooltip_HyperSpacetimeTransformer_MachineType");
-    public static final String Tooltip_HyperSpacetimeTransformer_00= texter("","Tooltip_HyperSpacetimeTransformer_00");
-    public static final String Tooltip_HyperSpacetimeTransformer_01= texter("","Tooltip_HyperSpacetimeTransformer_01");
-    public static final String Tooltip_HyperSpacetimeTransformer_02= texter("","Tooltip_HyperSpacetimeTransformer_02");
-    public static final String Tooltip_HyperSpacetimeTransformer_03= texter("","Tooltip_HyperSpacetimeTransformer_03");
+    public static final String Tooltip_HyperSpacetimeTransformer_00= texter("To change the material itself in a higher dimension.","Tooltip_HyperSpacetimeTransformer_00");
+    public static final String Tooltip_HyperSpacetimeTransformer_01= texter("Molecular Transformer Mode","Tooltip_HyperSpacetimeTransformer_01");
+    public static final String Tooltip_HyperSpacetimeTransformer_02= texter("Parallel:Product of three types of field generators.","Tooltip_HyperSpacetimeTransformer_02");
+    public static final String Tooltip_HyperSpacetimeTransformer_03= texter("Tier 9 field generator will decrease energy use by 25%, max 75%.","Tooltip_HyperSpacetimeTransformer_03");
     public static final String Tooltip_HyperSpacetimeTransformer_04= texter("","Tooltip_HyperSpacetimeTransformer_04");
     public static final String Tooltip_HyperSpacetimeTransformer_05= texter("","Tooltip_HyperSpacetimeTransformer_05");
     public static final String Tooltip_HyperSpacetimeTransformer_06= texter("","Tooltip_HyperSpacetimeTransformer_06");
