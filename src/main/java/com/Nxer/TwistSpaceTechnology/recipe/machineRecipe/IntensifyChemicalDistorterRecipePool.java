@@ -121,7 +121,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_UV)
-            .duration(32)
+            .duration(5)
             .addTo(ICD);
 
         GT_Values.RA
@@ -145,7 +145,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_UHV)
-            .duration(32*16)
+            .duration(20)
             .addTo(ICD);
 
         // region Phosphoric Acid

@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import ic2.core.Ic2Items;
 
 public class OP_NormalProcessing {
 
@@ -185,6 +187,13 @@ public class OP_NormalProcessing {
             GT_ModHandler.getModItem("TConstruct","SearedBrick", 1, 2),
             Materials.Ardite,
             true
+        );
+
+        // IC2 Uranium ore
+        processOreRecipe(
+            copyAmount(1,Ic2Items.uraniumOre),
+            Materials.Uranium,
+            false
         );
 
         // spotless:on
