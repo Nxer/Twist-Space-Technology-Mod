@@ -14,8 +14,8 @@ public class BaseDamageHandler {
     public void onHurting(LivingHurtEvent event) {
         float damage = event.ammount;
         if (event.source.getEntity() instanceof EntityPlayer) {
-            StatsDefination.ArmorStats.updatePlayerStats((EntityPlayer) event.source.getEntity());
-            if (event.source.damageType != "indirectMagic") {
+            ArmorEventHandler.INSTANCE.updatePlayerStats((EntityPlayer) event.source.getEntity());
+
                 PlayerExtendedProperties SourceStats = PlayerExtendedProperties.instance
                     .from((EntityPlayer) event.source.getEntity());
                 if ((event.source.getEntity().motionY < (double) 0) && !event.source.getEntity().onGround
@@ -24,9 +24,18 @@ public class BaseDamageHandler {
                     && event.source.damageType == "player")
                     damage = (float) (damage + 1.5
                         * (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0));
-                else damage = (float) (damage + SourceStats.CombatStats.get("BaseDamage")
+                else if (event.source.damageType != "indirectMagic") damage = (float) (SourceStats.CombatStats.get("BaseDamage")
                     + SourceStats.CombatStats.get("Strength") / 50.0);
-            }
+                else damage=SourceStats.CombatStats.get("BaseDamage");
+
+        }
+        if (event.entityLiving instanceof EntityPlayer && event.source.damageType != "outOfWorld"
+            && event.source.damageType != "generic") {
+            ArmorEventHandler.INSTANCE.updatePlayerStats((EntityPlayer) event.entityLiving);
+            damage *= 1.0F/(1.0F
+                + (PlayerExtendedProperties.instance.from((EntityPlayer) event.entityLiving).CombatStats.get("Defence")
+                    / 100.0F));
+            event.source.setDamageBypassesArmor();
         }
         event.ammount = damage;
     }

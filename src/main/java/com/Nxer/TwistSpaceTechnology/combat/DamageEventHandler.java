@@ -52,7 +52,7 @@ public class DamageEventHandler {
         }
         if (event.entityLiving instanceof EntityPlayer && event.source.damageType != "outOfWorld"
             && event.source.damageType != "generic") {
-            StatsDefination.ArmorStats.updatePlayerStats((EntityPlayer) event.entityLiving);
+            ArmorEventHandler.INSTANCE.updatePlayerStats((EntityPlayer) event.entityLiving);
             damage *= (float) (1
                 - PlayerExtendedProperties.instance.from((EntityPlayer) event.entityLiving).CombatStats.get("Resistant")
                     / 100.0);

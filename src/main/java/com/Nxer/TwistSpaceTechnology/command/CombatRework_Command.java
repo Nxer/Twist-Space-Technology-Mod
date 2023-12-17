@@ -57,7 +57,7 @@ public class CombatRework_Command extends CommandBase {
                     break;
                 }
                 BasicPlayerExtendedProperties
-                    .setPlayerStat(getCommandSenderAsPlayer(sender), "Basic" + args[1], Integer.parseInt(args[2]));
+                    .setPlayerStat(getCommandSenderAsPlayer(sender), args[1], Integer.parseInt(args[2]));
                 break;
             }
             default: {

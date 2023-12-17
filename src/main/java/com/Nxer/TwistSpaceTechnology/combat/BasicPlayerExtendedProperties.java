@@ -61,19 +61,4 @@ public final class BasicPlayerExtendedProperties implements IExtendedEntityPrope
     public static void setPlayerStat(EntityPlayer player, String statName, int value) {
         from(player).CombatStats.put("Basic" + statName, value);
     }
-
-    public static void setPlayerStats(EntityPlayer player, int aStrength, int aIntelligence, int aCritChance,
-        int aCritDamage, int aResistance, int aBaseDamage, int aBaseDamageMultipiler, int aMeleeDamageMultipiler,
-        int aRangeDamageMultipiler, int aMagicDamageMultipiler) {
-        from(player).CombatStats.put("BasicStrength", aStrength);
-        from(player).CombatStats.put("BasicIntelligence", aIntelligence);
-        from(player).CombatStats.put("BasicCritChance", aCritChance);
-        from(player).CombatStats.put("BasicCritDamage", aCritDamage);
-        from(player).CombatStats.put("BasicResistance", aResistance);
-        from(player).CombatStats.put("BasicBaseDamage", aBaseDamage);
-        from(player).CombatStats.put("BasicBaseDamageMultipiler", aBaseDamageMultipiler);
-        from(player).CombatStats.put("BasicMeleeDamageMultipiler", aMeleeDamageMultipiler);
-        from(player).CombatStats.put("BasicRangeDamageMultipiler", aRangeDamageMultipiler);
-        from(player).CombatStats.put("BasicMagicDamageMultipiler", aMagicDamageMultipiler);
-    }
 }
