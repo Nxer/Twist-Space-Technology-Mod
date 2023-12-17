@@ -36,7 +36,8 @@ public class ArmorEventHandler {
         final Item sniper = weildedItem != null ? weildedItem.getItem() : null;
         if (weildedItem != null) {
             if (ArmorStats.containsKey(weildedItem.getUnlocalizedName())) {
-                PlayerExtendedProperties.addBonusPlayerStats(pl, ArmorEventHandler.ArmorStats.get(weildedItem.getUnlocalizedName()));
+                PlayerExtendedProperties
+                    .addBonusPlayerStats(pl, ArmorEventHandler.ArmorStats.get(weildedItem.getUnlocalizedName()));
             }
         }
     }
