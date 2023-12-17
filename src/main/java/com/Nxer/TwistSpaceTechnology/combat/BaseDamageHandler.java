@@ -14,7 +14,7 @@ public class BaseDamageHandler {
     public void onHurting(LivingHurtEvent event) {
         float damage = event.ammount;
         if (event.source.getEntity() instanceof EntityPlayer) {
-            ArmorEventHandler.INSTANCE.updatePlayerStats((EntityPlayer) event.source.getEntity());
+            StatsDefination.ArmorStats.updatePlayerStats((EntityPlayer) event.source.getEntity());
             if (event.source.damageType != "indirectMagic") {
                 PlayerExtendedProperties SourceStats = PlayerExtendedProperties.instance
                     .from((EntityPlayer) event.source.getEntity());

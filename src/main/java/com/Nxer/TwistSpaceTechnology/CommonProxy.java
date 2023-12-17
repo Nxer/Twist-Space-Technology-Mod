@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import com.Nxer.TwistSpaceTechnology.combat.BaseDamageHandler;
 import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
 import com.Nxer.TwistSpaceTechnology.combat.PlayerEventHandler;
+import com.Nxer.TwistSpaceTechnology.combat.StatsDefination;
 import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -38,6 +39,7 @@ public class CommonProxy {
         if (Config.activateCombatStats) {
             MinecraftForge.EVENT_BUS.register(DamageEventHandler.instance);
             MinecraftForge.EVENT_BUS.register(BaseDamageHandler.instance);
+            StatsDefination.ArmorStats.init();
         }
         FMLCommonHandler.instance()
             .bus()

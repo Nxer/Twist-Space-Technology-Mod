@@ -20,4 +20,5 @@ public class StatsDefination {
             "MeleeDamageMultipiler",
             "RangeDamageMultipiler",
             "MagicDamageMultipiler"));
+    public static ArmorEventHandler ArmorStats;
 }

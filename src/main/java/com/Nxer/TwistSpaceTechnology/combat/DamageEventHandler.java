@@ -44,7 +44,7 @@ public class DamageEventHandler {
                 damage *= (float) (SourceStats.CombatStats.get("CritDamage") / 100.0 + 1);
             }
             // debug info
-            GT_Utility.sendChatToPlayer(
+            if (((EntityPlayer) event.source.getEntity()).getHeldItem() != null) GT_Utility.sendChatToPlayer(
                 (EntityPlayer) event.source.getEntity(),
                 event.source.damageType + " by "
                     + ((EntityPlayer) event.source.getEntity()).getHeldItem()
@@ -52,7 +52,7 @@ public class DamageEventHandler {
         }
         if (event.entityLiving instanceof EntityPlayer && event.source.damageType != "outOfWorld"
             && event.source.damageType != "generic") {
-            ArmorEventHandler.INSTANCE.updatePlayerStats((EntityPlayer) event.entityLiving);
+            StatsDefination.ArmorStats.updatePlayerStats((EntityPlayer) event.entityLiving);
             damage *= (float) (1
                 - PlayerExtendedProperties.instance.from((EntityPlayer) event.entityLiving).CombatStats.get("Resistant")
                     / 100.0);
