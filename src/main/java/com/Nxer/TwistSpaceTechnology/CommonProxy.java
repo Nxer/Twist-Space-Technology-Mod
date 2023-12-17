@@ -2,6 +2,10 @@ package com.Nxer.TwistSpaceTechnology;
 
 import net.minecraftforge.common.MinecraftForge;
 
+import com.Nxer.TwistSpaceTechnology.combat.BaseDamageHandler;
+import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
+import com.Nxer.TwistSpaceTechnology.combat.PlayerEventHandler;
+import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
@@ -21,7 +25,7 @@ public class CommonProxy {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
-
+        if (Config.activateCombatStats) MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
         TwistSpaceTechnology.LOG.info(Tags.MODNAME + " at version " + Tags.VERSION);
     }
 
@@ -29,6 +33,10 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
 
         MinecraftForge.EVENT_BUS.register(new DSP_WorldSavedData());
+        if (Config.activateCombatStats) {
+            MinecraftForge.EVENT_BUS.register(DamageEventHandler.instance);
+            MinecraftForge.EVENT_BUS.register(BaseDamageHandler.instance);
+        }
         FMLCommonHandler.instance()
             .bus()
             .register(new TickingEvent());
@@ -41,6 +49,7 @@ public class CommonProxy {
     public void serverStarting(FMLServerStartingEvent event) {
         TwistSpaceTechnology.LOG.info("Ok, " + Tags.MODNAME + " at version " + Tags.VERSION + " load success .");
         event.registerServerCommand(new TST_Command());
+        event.registerServerCommand(new CombatRework_Command());
     }
 
     public void serverStarted(FMLServerStartedEvent event) {

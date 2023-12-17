@@ -21,8 +21,6 @@ import gregtech.api.enums.Materials;
 
 public class OP_Bartworks_OreHandler {
 
-    public static final OP_Bartworks_OreHandler instance = new OP_Bartworks_OreHandler();
-
     public void processBWOreRecipes() {
         for (Werkstoff werkstoff : Werkstoff.werkstoffHashSet) {
             if (!werkstoff.hasItemType(ore)) continue;

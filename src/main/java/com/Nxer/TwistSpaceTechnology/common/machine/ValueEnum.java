@@ -137,6 +137,14 @@ public final class ValueEnum {
     public static final byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = Config.FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
     // endregion
 
+    // region Hyper Spacetime Transformer
+    public static final byte Mode_Default_HyperSpacetimeTransformer = Config.Mode_Default_HyperSpacetimeTransformer;
+    public static final int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer = Config.SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer;
+    public static final int SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer = Config.SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer;
+    public static final int ParallelMultiplier_HyperSpacetimeTransformer = Config.ParallelMultiplier_HyperSpacetimeTransformer;
+    public static final boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer = Config.EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer;
+    // endregion
+
     // region Miracle Door
     /**
      * Default ticks of Miracle Door per processing cost in mode ABS.
@@ -150,6 +158,12 @@ public final class ValueEnum {
     public static final int multiplierOfMiracleDoorEUCostABSMode = Config.multiplierOfMiracleDoorEUCostABSMode;
     public static final int multiplierOfMiracleDoorEUCostEBFMode = Config.multiplierOfMiracleDoorEUCostEBFMode;
 
+    // endregion
+
+    // region Scavenger
+    public static final boolean EnablePerfectOverclock_Scavenger = Config.EnablePerfectOverclock_Scavenger;
+    public static final float EuModifier_Scavenger = Config.EuModifier_Scavenger;
+    public static final double SpeedBonus_MultiplyPerTier_Scavenger = Config.SpeedBonus_MultiplyPerTier_Scavenger;
     // endregion
 
     // region Infinite Air Hatch

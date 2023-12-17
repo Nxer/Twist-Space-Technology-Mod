@@ -26,6 +26,7 @@ public class NEIHandler {
         sendHandler("gtcm.recipe.RuneEngraverRecipes", "gregtech:gt.blockmachines:19500");
         sendHandler("tst.recipe.CokingFactoryRecipes", "gregtech:gt.blockmachines:19021");
         sendHandler("tst.recipe.StellarForgeRecipes", "gregtech:gt.blockmachines:19016");
+        sendHandler("tst.recipe.HyperSpacetimeTransformerRecipe", "gregtech:gt.blockmachines:19501");
 
         sendCatalyst("gtcm.recipe.IntensifyChemicalDistorterRecipes", "gregtech:gt.blockmachines:19001");
         sendCatalyst("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes", "gregtech:gt.blockmachines:19002");
@@ -50,7 +51,8 @@ public class NEIHandler {
         sendCatalyst("gt.recipe.compressor", "gregtech:gt.blockmachines:19010", -10);
         sendCatalyst("gtpp.recipe.cyclotron", "gregtech:gt.blockmachines:19010", -10);
         sendCatalyst("gtpp.recipe.multicentrifuge", "gregtech:gt.blockmachines:19011", -10);
-        sendCatalyst("gtpp.recipe.multielectro", "gregtech:gt.blockmachines:19011", -10);
+        sendCatalyst("gtpp.recipe.multielectro", "gregtech:gt.blockmachines:19011", -10);;
+        sendCatalyst("gtpp.recipe.moleculartransformer", "gregtech:gt.blockmachines:19501", -10);
         sendCatalyst("gt.recipe.autoclave", "gregtech:gt.blockmachines:19012", -10);
         sendCatalyst("gtcm.recipe.CrystallineInfinitierRecipes", "gregtech:gt.blockmachines:19012");
         sendCatalyst("gtcm.recipe.DSPLauncherRecipes", "gregtech:gt.blockmachines:19013");
@@ -63,6 +65,8 @@ public class NEIHandler {
         sendCatalyst("gtcm.recipe.RuneEngraverRecipes", "gregtech:gt.blockmachines:19500");
         sendCatalyst("tst.recipe.CokingFactoryRecipes", "gregtech:gt.blockmachines:19021");
         sendCatalyst("tst.recipe.StellarForgeRecipes", "gregtech:gt.blockmachines:19016");
+        sendCatalyst("gt.recipe.sifter", "gregtech:gt.blockmachines:19023");
+        sendCatalyst("tst.recipe.HyperSpacetimeTransformerRecipe", "gregtech:gt.blockmachines:19501");
 
     }
 

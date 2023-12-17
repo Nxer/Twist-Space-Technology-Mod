@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
@@ -38,7 +39,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(19),
-                Materials.Potassiumdichromate.getDust(16),
+                copyAmount(0, Materials.Potassiumdichromate.getDust(1)),
                 Materials.Copper.getDust(16),
                 Materials.Zinc.getDust(64),
                 Materials.Zinc.getDust(64),
@@ -51,12 +52,57 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Nitrogen.getGas(576000),
                 Materials.Oxygen.getGas(2016000))
             .noItemOutputs()
-            .fluidOutputs(Materials.Polybenzimidazole.getMolten(144000), Materials.HydrochloricAcid.getFluid(288000))
+            .fluidOutputs(Materials.Polybenzimidazole.getMolten(216000), Materials.HydrochloricAcid.getFluid(288000))
             .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_UV)
             .duration(96)
             .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(19),
+                        Materials.Copper.getDust(16),
+                        Materials.Zinc.getDust(64),
+                        Materials.Zinc.getDust(64),
+                        Materials.Zinc.getDust(16))
+                    .fluidInputs(
+                        Materials.PhthalicAcid.getFluid(144000),
+                        Materials.Chlorobenzene.getFluid(288000),
+                        Materials.SulfuricAcid.getFluid(144000),
+                        Materials.Hydrogen.getGas(1728000),
+                        Materials.Nitrogen.getGas(576000),
+                        Materials.Oxygen.getGas(1152000))
+                    .noItemOutputs()
+                    .fluidOutputs(Materials.Polybenzimidazole.getMolten(216000), Materials.HydrochloricAcid.getFluid(288000))
+                    .noOptimize()
+                    .specialValue(9900)
+                    .eut(RECIPE_UV)
+                    .duration(96)
+                    .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(18),
+                        copyAmount(0, Materials.Potassiumdichromate.getDust(1)),
+                        Materials.Diamond.getDust(18),
+                        Materials.Copper.getDust(16),
+                        Materials.Zinc.getDust(64),
+                        Materials.Zinc.getDust(64),
+                        Materials.Zinc.getDust(16))
+                    .fluidInputs(
+                        Materials.Chlorobenzene.getFluid(288000),
+                        Materials.SulfuricAcid.getFluid(144000),
+                        Materials.Hydrogen.getGas(3168000),
+                        Materials.Nitrogen.getGas(576000),
+                        Materials.Oxygen.getGas(2016000))
+                    .noItemOutputs()
+                    .fluidOutputs(Materials.Polybenzimidazole.getMolten(216000), Materials.HydrochloricAcid.getFluid(288000))
+                    .noOptimize()
+                    .specialValue(9900)
+                    .eut(RECIPE_UV)
+                    .duration(96)
+                    .addTo(ICD);
 
         // endregion
 
@@ -65,7 +111,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(6),
-                Materials.Potassiumdichromate.getDust(0),
+                copyAmount(0,Materials.Potassiumdichromate.getDust(1)),
                 Materials.Carbon.getDust(8))
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*6),
@@ -75,14 +121,14 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_UV)
-            .duration(32)
+            .duration(5)
             .addTo(ICD);
 
         GT_Values.RA
             .stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(7),
-                Materials.Potassiumdichromate.getDust(0),
+                copyAmount(0,Materials.Potassiumdichromate.getDust(1)),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64),
@@ -99,7 +145,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_UHV)
-            .duration(32*16)
+            .duration(20)
             .addTo(ICD);
 
         // region Phosphoric Acid
@@ -113,7 +159,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Calcium.getDust(5))
             .fluidOutputs(
                 Materials.PhosphoricAcid.getFluid(1000 * 3),
-                Materials.HydrochloricAcid.getFluid(1000 * 1))
+                Materials.HydrochloricAcid.getFluid(1000))
             .specialValue(3600)
             .eut(RECIPE_MV)
             .duration(20 * 8)
@@ -239,8 +285,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.MeatRaw.getDust(64))
             .fluidInputs(
                 Materials.SulfuricAcid.getFluid(4000 * 64),
-                Materials.PhosphoricAcid.getFluid(64000),
-                Materials.Water.getFluid(8000 * 64))
+                Materials.PhosphoricAcid.getFluid(64000))
             .itemOutputs(
                 GT_ModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2),
                 GT_ModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2),
@@ -254,7 +299,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .noOptimize()
             .specialValue(10800)
             .eut(RECIPE_IV)
-            .duration(256 * 48)
+            .duration(256 * 36)
             .addTo(ICD);
         // endregion
 
@@ -499,8 +544,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000 * 768),
                 Materials.Nitrogen.getGas(1000 * 210),
-                Materials.Chlorine.getGas(1000 * 260),
-                Materials.Fluorine.getGas(1000 * 75)
+                Materials.Chlorine.getGas(1000 * 260)
             )
             .itemOutputs(
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 64),
@@ -520,6 +564,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 35)
             )
             .fluidOutputs(
+                Materials.Fluorine.getGas(1000 * 12),
                 Materials.Oxygen.getGas(1000 * 150)
             )
             .specialValue(11700)
@@ -546,8 +591,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000 * 752),
                 Materials.Nitrogen.getGas(1000 * 210),
-                Materials.Chlorine.getGas(1000 * 260),
-                Materials.Fluorine.getGas(1000 * 75)
+                Materials.Chlorine.getGas(1000 * 260)
             )
             .itemOutputs(
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 64),
@@ -567,12 +611,106 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 35)
             )
             .fluidOutputs(
+                Materials.Fluorine.getGas(1000 * 12),
                 Materials.Oxygen.getGas(1000 * 166)
             )
             .specialValue(11700)
             .eut(RECIPE_UHV)
             .duration(20 * 20)
             .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(3),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Bastnasite, 64),// Bastnasite
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
+
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 16),
+
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64)
+                    )
+                    .fluidInputs(
+                        Materials.Hydrogen.getGas(1000 * 768),
+                        Materials.Nitrogen.getGas(1000 * 210),
+                        Materials.Chlorine.getGas(1000 * 260)
+                    )
+                    .itemOutputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 15),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
+                        WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 35)
+                    )
+                    .fluidOutputs(
+                        Materials.Fluorine.getGas(1000 * 12),
+                        Materials.Oxygen.getGas(1000 * 150)
+                    )
+                    .specialValue(11700)
+                    .eut(RECIPE_UHV)
+                    .duration(20 * 20)
+                    .addTo(ICD);
+
+        GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                        GT_Utility.getIntegratedCircuit(3),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Bastnasite, 64),// Bastnasite
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), // Carbon
+
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 48),
+
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 64)
+
+                    )
+                    .fluidInputs(
+                        Materials.Hydrogen.getGas(1000 * 752),
+                        Materials.Nitrogen.getGas(1000 * 210),
+                        Materials.Chlorine.getGas(1000 * 260)
+                    )
+                    .itemOutputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Cerium, 15),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
+                        WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 64),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Titanium, 35)
+                    )
+                    .fluidOutputs(
+                        Materials.Fluorine.getGas(1000 * 12),
+                        Materials.Oxygen.getGas(1000 * 166)
+                    )
+                    .specialValue(11700)
+                    .eut(RECIPE_UHV)
+                    .duration(20 * 20)
+                    .addTo(ICD);
 
         // endregion
 
@@ -583,13 +721,13 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(16))
             .fluidInputs(
-                Materials.Hydrogen.getGas(1000*64),
-                Materials.Oxygen.getGas(1000*64))
+                Materials.Hydrogen.getGas(1000*128),
+                Materials.Oxygen.getGas(1000*128))
             .noItemOutputs()
-            .fluidOutputs(getFluidStack("fluid.hydrogenperoxide",1000*32))
-            .specialValue(11700)
+            .fluidOutputs(getFluidStack("fluid.hydrogenperoxide",1000*64))
+            .specialValue(10800)
             .eut(RECIPE_UHV)
-            .duration(64)
+            .duration(32)
             .addTo(ICD);
 
         // endregion

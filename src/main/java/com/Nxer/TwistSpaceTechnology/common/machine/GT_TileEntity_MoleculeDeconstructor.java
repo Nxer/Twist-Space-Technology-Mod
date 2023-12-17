@@ -93,7 +93,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
 
     protected float getSpeedBonus() {
         return (float) (Math
-            .pow(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor, GT_Utility.getTier(this.getAverageInputVoltage())));
+            .pow(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor, GT_Utility.getTier(this.getMaxInputEu())));
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
@@ -24,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
@@ -60,8 +62,10 @@ public class MachineLoader {
     public static ItemStack stellarMaterialSiphon;
     public static ItemStack CircuitConverter;
     public static ItemStack ElvenWorkshop;
+    public static ItemStack HyperSpacetimeTransformer;
     public static ItemStack MegaBrickedBlastFurnace;
     public static ItemStack LargeIndustrialCokingFactory;
+    public static ItemStack Scavenger;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -217,11 +221,21 @@ public class MachineLoader {
         GTCMItemList.ElvenWorkshop.set(ElvenWorkshop);
 
         //
+        HyperSpacetimeTransformer = new GTCM_HyperSpacetimeTransformer(
+            19501,
+            "NameHyperSpacetimeTransformer",
+            TextLocalization.NameHyperSpacetimeTransformer).getStackForm(1);
+        GTCMItemList.HyperSpacetimeTransformer.set(HyperSpacetimeTransformer);
+        //
         MegaBrickedBlastFurnace = new GT_TileEntity_MegaBrickedBlastFurnace(
             19022,
             "NameMegaBrickedBlastFurnace",
             TextLocalization.NameMegaBrickedBlastFurnace).getStackForm(1);
         GTCMItemList.MegaBrickedBlastFurnace.set(MegaBrickedBlastFurnace);
+
+        //
+        Scavenger = new TST_Scavenger(19023, "NameScavenger", TextLocalization.NameScavenger).getStackForm(1);
+        GTCMItemList.Scavenger.set(Scavenger);
 
         // endregion
 

@@ -75,6 +75,7 @@ public enum GTCMItemList {
     CircuitConverter,
     MegaBrickedBlastFurnace,
     LargeIndustrialCokingFactory,
+    Scavenger,
 
     // MAX
     HighDimensionalExtend,
@@ -101,6 +102,7 @@ public enum GTCMItemList {
     ArtificialStar,
     StellarMaterialSiphon,
     ElvenWorkshop,
+    HyperSpacetimeTransformer,
 
     // single block Machines
     InfiniteAirHatch,
