@@ -202,7 +202,7 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
     public int getFluidSlot(FluidStack tFluid) {
         if (tFluid == null) return -1;
         for (int i = 0; i < getMaxType(); i++) {
-            if (tFluid.equals(mStoredFluid[i])) return i;
+            if (tFluid.isFluidEqual(mStoredFluid[i])) return i;
         }
         return -1;
     }
@@ -318,11 +318,13 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
     }
 
     /**
-     * Fluid slots is intended to not being updated here to lock fluid slots.
+     * Fluid slots is intended to not be updated here to lock fluid slots.
      */
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        super.onPostTick(aBaseMetaTileEntity, aTimer);
+        if (getBaseMetaTileEntity().isServerSide() && aTimer % 10 == 0) {
+            updateSlots();
+        }
     }
 
     @Override
