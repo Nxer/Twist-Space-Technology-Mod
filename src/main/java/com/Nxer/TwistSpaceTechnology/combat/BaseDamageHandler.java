@@ -16,7 +16,7 @@ public class BaseDamageHandler {
         if (event.source.getEntity() instanceof EntityPlayer) {
             ArmorEventHandler.INSTANCE.updatePlayerStats((EntityPlayer) event.source.getEntity());
 
-            PlayerExtendedPropertSourceStats = PlayerExtendedProperties.instance
+            PlayerExtendedProperties SourceStats = PlayerExtendedProperties.instance
                 .from((EntityPlayer) event.source.getEntity());
             if ((event.source.getEntity().motionY < (double) 0) && !event.source.getEntity().onGround
                 && !event.source.getEntity()
