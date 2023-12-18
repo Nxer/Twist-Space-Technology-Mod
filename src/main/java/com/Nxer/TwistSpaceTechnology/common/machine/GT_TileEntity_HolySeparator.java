@@ -44,11 +44,12 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings8;
 import gtPlusPlus.core.block.ModBlocks;
@@ -96,14 +97,14 @@ public class GT_TileEntity_HolySeparator
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+    public RecipeMap<?> getRecipeMap() {
         switch (mode) {
             case 1:
-                return GT_Recipe.GT_Recipe_Map.sSlicerRecipes;
+                return RecipeMaps.slicerRecipes;
             case 2:
-                return GT_Recipe.GT_Recipe_Map.sLatheRecipes;
+                return RecipeMaps.latheRecipes;
             default:
-                return GT_Recipe.GT_Recipe_Map.sCutterRecipes;
+                return RecipeMaps.cutterRecipes;
         }
     }
 

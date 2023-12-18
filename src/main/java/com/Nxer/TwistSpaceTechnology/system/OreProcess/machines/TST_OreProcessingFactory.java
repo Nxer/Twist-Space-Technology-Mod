@@ -66,6 +66,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.multitileentity.multiblock.casing.Glasses;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -151,14 +152,14 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     }
 
     public CheckRecipeResult OP_Process_Wireless() {
-        GT_Recipe.GT_Recipe_Map recipeMap = getRecipeMap();
+        RecipeMap<?> recipeMap = getRecipeMap();
         ArrayList<ItemStack> inputs = getStoredInputs();
         ArrayList<ItemStack> outputs = new ArrayList<>();
         long EUt = 0;
         // check every inputs
         for (ItemStack items : inputs) {
             boolean hasNotFound = true;
-            for (GT_Recipe recipe : recipeMap.mRecipeList) {
+            for (GT_Recipe recipe : recipeMap.getAllRecipes()) {
                 if (metaItemEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
                     hasNotFound = false;
@@ -217,7 +218,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     }
 
     public void OP_Process_Normal() {
-        GT_Recipe.GT_Recipe_Map recipeMap = getRecipeMap();
+        RecipeMap<?> recipeMap = getRecipeMap();
         ArrayList<ItemStack> inputs = getStoredInputs();
         ArrayList<ItemStack> outputs = new ArrayList<>();
         long EUtCanUseNow = EUtCanUse;
@@ -228,7 +229,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             if (!canContinueCheckRecipe) break;
 
             boolean hasNotFound = true;
-            for (GT_Recipe recipe : recipeMap.mRecipeList) {
+            for (GT_Recipe recipe : recipeMap.getAllRecipes()) {
                 if (metaItemEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
                     hasNotFound = false;
@@ -350,8 +351,8 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return GTCMRecipe.instance.OreProcessingRecipes;
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.OreProcessingRecipes;
     }
 
     @Override

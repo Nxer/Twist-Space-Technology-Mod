@@ -24,6 +24,7 @@ import com.google.common.collect.Sets;
 
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_Utility;
@@ -55,7 +56,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         }
 
         // iterate Vacuum Freezer recipes
-        for (GT_Recipe recipeFreezer : GT_Recipe.GT_Recipe_Map.sVacuumRecipes.mRecipeList) {
+        for (GT_Recipe recipeFreezer : RecipeMaps.vacuumFreezerRecipes.getAllRecipes()) {
             if (recipeFreezer.mInputs == null || recipeFreezer.mInputs.length < 1
                 || recipeFreezer.mOutputs == null
                 || recipeFreezer.mOutputs.length < 1) continue;
@@ -88,7 +89,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             Materials.Argon.mGas,
             Materials.Helium.mGas);
 
-        for (GT_Recipe recipe : GT_Recipe.GT_Recipe_Map.sBlastRecipes.mRecipeList) {
+        for (GT_Recipe recipe : RecipeMaps.blastFurnaceRecipes.getAllRecipes()) {
             Set<ItemStack> inputItems = new HashSet<>();
             Set<FluidStack> inputFluids = new HashSet<>();
             Set<ItemStack> outputItems = new HashSet<>();
@@ -164,7 +165,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             int duration = Math.max(1, recipe.mDuration / 3);
             if (integrateNum != 0) {
-                for (GT_Recipe recipeCheck : GTCMRecipe.instance.StellarForgeRecipes.mRecipeList) {
+                for (GT_Recipe recipeCheck : GTCMRecipe.StellarForgeRecipes.getAllRecipes()) {
                     if (!itemStackArrayEqualFuzzy(recipeCheck.mInputs, inputItemsArray)) continue;
                     if (!fluidStackEqualFuzzy(recipeCheck.mFluidOutputs, outputFluidsArray)) continue;
                     canAddNewRecipe = false;
@@ -193,36 +194,28 @@ public class StellarForgeRecipePool implements IRecipePool {
 
         if (inputItems != null && inputItems.length > 0) {
             ra.itemInputs(inputItems);
-        } else {
-            ra.noItemInputs();
         }
 
         if (inputFluids != null && inputFluids.length > 0) {
             ra.fluidInputs(inputFluids);
-        } else {
-            ra.noFluidInputs();
         }
 
         if (outputItems != null && outputItems.length > 0) {
             ra.itemOutputs(outputItems);
-        } else {
-            ra.noItemOutputs();
         }
 
         if (outputFluids != null && outputFluids.length > 0) {
             ra.fluidOutputs(outputFluids);
-        } else {
-            ra.noFluidOutputs();
         }
 
         ra.eut(eut)
             .duration(duration)
-            .addTo(GTCMRecipe.instance.StellarForgeRecipes);
+            .addTo(GTCMRecipe.StellarForgeRecipes);
     }
 
     public FluidStack getMoltenFluids(ItemStack ingot, int ingotAmount) {
         FluidStack out = null;
-        for (GT_Recipe recipeMolten : GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes.mRecipeList) {
+        for (GT_Recipe recipeMolten : RecipeMaps.fluidExtractionRecipes.getAllRecipes()) {
             if (metaItemEqual(ingot, recipeMolten.mInputs[0])) {
                 if (recipeMolten.mFluidOutputs[0] != null) {
                     out = recipeMolten.mFluidOutputs[0].copy();
@@ -237,11 +230,13 @@ public class StellarForgeRecipePool implements IRecipePool {
     public static Collection<GT_Recipe> stellarForgeRecipeListCache;
 
     private void cacheRecipeList() {
-        stellarForgeRecipeListCache = new HashSet<>(GTCMRecipe.instance.StellarForgeRecipes.mRecipeList);
+        stellarForgeRecipeListCache = new HashSet<>(GTCMRecipe.StellarForgeRecipes.getAllRecipes());
     }
 
     private void loadRecipeListCache() {
-        GTCMRecipe.instance.StellarForgeRecipes.mRecipeList.addAll(stellarForgeRecipeListCache);
+        for (GT_Recipe recipe : stellarForgeRecipeListCache) {
+            GTCMRecipe.StellarForgeRecipes.addRecipe(recipe);
+        }
     }
 
     @Override

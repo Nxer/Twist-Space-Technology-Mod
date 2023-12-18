@@ -57,10 +57,10 @@ public class OP_Bartworks_OreHandler {
                 .itemInputs(werkstoff.get(ore, 1))
                 .itemOutputs(outputs.toArray(new ItemStack[] {}))
                 .fluidInputs(Materials.Lubricant.getFluid(1))
-                .noFluidOutputs()
+
                 .eut(OreProcessRecipeEUt)
                 .duration(OreProcessRecipeDuration)
-                .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+                .addTo(GTCMRecipe.OreProcessingRecipes);
         }
     }
 }

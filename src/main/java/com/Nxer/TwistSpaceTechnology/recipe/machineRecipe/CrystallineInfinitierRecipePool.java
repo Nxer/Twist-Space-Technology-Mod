@@ -26,10 +26,11 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GTPP_Recipe;
+import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 // spotless:off
 public class CrystallineInfinitierRecipePool implements IRecipePool {
@@ -37,18 +38,16 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-        final GT_Recipe.GT_Recipe_Map AC = GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes;
-        final GT_Recipe.GT_Recipe_Map LE = GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes;
-        final GT_Recipe.GT_Recipe_Map HM = GT_Recipe.GT_Recipe_Map.sHammerRecipes;
-        final GT_Recipe.GT_Recipe_Map CI = GTCMRecipe.instance.CrystallineInfinitierRecipes;
+        final IRecipeMap AC = RecipeMaps.autoclaveRecipes;
+        final IRecipeMap LE = RecipeMaps.laserEngraverRecipes;
+        final IRecipeMap HM = RecipeMaps.hammerRecipes;
+        final IRecipeMap CI = GTCMRecipe.CrystallineInfinitierRecipes;
 
         // region Lapotron circuit
         // Shard
         GT_Values.RA.stdBuilder()
             .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(1))
-            .noFluidInputs()
             .itemOutputs(GTCMItemList.LapotronShard.get(64))
-            .noFluidOutputs()
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(HM);
@@ -58,7 +57,6 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .itemInputs(GTCMItemList.LapotronShard.get(1), MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
             .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 2))
             .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(1))
-            .noFluidOutputs()
             .eut(RECIPE_UHV)
             .duration(20 * 30)
             .addTo(CI);
@@ -72,7 +70,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                 CustomItemList.LapotronDust.get(64))
             .fluidInputs(MaterialPool.HolmiumGarnet.getMolten(144 * 256))
             .itemOutputs(GTCMItemList.LapotronShard.get(1))
-            .noFluidOutputs()
+
             .outputChances(999)
             .eut(RECIPE_UHV)
             .duration(20 * 3000)
@@ -82,26 +80,26 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         // gt mixer
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(4), Materials.Holmium.getDust(3), Materials.Sapphire.getDust(5))
-            .noFluidInputs()
+
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
-            .addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
+            .addTo(RecipeMaps.mixerRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(4),
                 Materials.Holmium.getDust(3),
                 Materials.GreenSapphire.getDust(10))
-            .noFluidInputs()
+
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
-            .addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
+            .addTo(RecipeMaps.mixerRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -109,16 +107,16 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                 Materials.Holmium.getDust(60),
                 Materials.Sapphire.getDust(64),
                 Materials.Sapphire.getDust(36))
-            .noFluidInputs()
+
             .itemOutputs(
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 30)
-            .addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
+            .addTo(RecipeMaps.mixerRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -128,40 +126,40 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                 Materials.GreenSapphire.getDust(64),
                 Materials.GreenSapphire.getDust(64),
                 Materials.GreenSapphire.getDust(8))
-            .noFluidInputs()
+
             .itemOutputs(
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 60)
-            .addTo(GT_Recipe.GT_Recipe_Map.sMixerRecipes);
+            .addTo(RecipeMaps.mixerRecipes);
 
         // gt++ mixer
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(4), Materials.Holmium.getDust(3), Materials.Sapphire.getDust(5))
-            .noFluidInputs()
+
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(4),
                 Materials.Holmium.getDust(3),
                 Materials.GreenSapphire.getDust(10))
-            .noFluidInputs()
+
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -169,16 +167,16 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                 Materials.Holmium.getDust(60),
                 Materials.Sapphire.getDust(64),
                 Materials.Sapphire.getDust(36))
-            .noFluidInputs()
+
             .itemOutputs(
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 30)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -188,28 +186,28 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                 Materials.GreenSapphire.getDust(64),
                 Materials.GreenSapphire.getDust(64),
                 Materials.GreenSapphire.getDust(8))
-            .noFluidInputs()
+
             .itemOutputs(
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 60)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         // Chip
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensBlue")) {
             GT_Values.RA.stdBuilder()
                 .itemInputs(Utils.copyAmount(0, itemStack), GTCMItemList.PerfectLapotronCrystal.get(1))
-                .noFluidInputs()
+
                 .itemOutputs(
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64))
-                .noFluidOutputs()
+
                 .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20 * 15)
@@ -222,9 +220,9 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         // Shard
         GT_Values.RA.stdBuilder()
             .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(1))
-            .noFluidInputs()
+
             .itemOutputs(GTCMItemList.EnergyCrystalShard.get(64))
-            .noFluidOutputs()
+
             .eut(RECIPE_ZPM)
             .duration(20 * 5)
             .addTo(HM);
@@ -234,7 +232,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .itemInputs(GTCMItemList.EnergyCrystalShard.get(1), ItemList.IC2_Energium_Dust.get(64))
             .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 2))
             .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_ZPM)
             .duration(20 * 30)
             .addTo(CI);
@@ -244,7 +242,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .itemInputs(ItemList.IC2_Energium_Dust.get(64), ItemList.IC2_Energium_Dust.get(64))
             .fluidInputs(Materials.Redstone.getMolten(144 * 1024))
             .itemOutputs(GTCMItemList.EnergyCrystalShard.get(1))
-            .noFluidOutputs()
+
             .outputChances(1111)
             .eut(RECIPE_ZPM)
             .duration(20 * 3000)
@@ -254,9 +252,9 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensRed")) {
             GT_Values.RA.stdBuilder()
                 .itemInputs(Utils.copyAmount(0, itemStack), GTCMItemList.PerfectEnergyCrystal.get(1))
-                .noFluidInputs()
+
                 .itemOutputs(CustomItemList.EngravedEnergyChip.get(64), CustomItemList.EngravedEnergyChip.get(64))
-                .noFluidOutputs()
+
                 .noOptimize()
                 .eut(RECIPE_UV)
                 .duration(20 * 15)
@@ -272,7 +270,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .itemOutputs(
                 WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 64),
                 WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 64))
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 10)
             .addTo(CI);
@@ -288,7 +286,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                 Materials.GalliumArsenide.getDust(1))
             .fluidInputs(Materials.SiliconSG.getMolten(144*64))
             .itemOutputs(ItemList.Circuit_Silicon_Ingot.get(4))
-            .noFluidOutputs()
+
             .eut(RECIPE_MV)
             .duration(20*450)
             .addTo(CI);
@@ -299,7 +297,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                 Materials.GalliumArsenide.getDust(1))
             .fluidInputs(Materials.Silicon.getMolten(144*64))
             .itemOutputs(ItemList.Circuit_Silicon_Ingot.get(2))
-            .noFluidOutputs()
+
             .eut(RECIPE_MV)
             .duration(20*450)
             .addTo(CI);
@@ -312,7 +310,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                 Materials.Phosphorus.getDust(16))
             .fluidInputs(Materials.SiliconSG.getMolten(144*128))
             .itemOutputs(ItemList.Circuit_Silicon_Ingot2.get(4))
-            .noFluidOutputs()
+
             .eut(RECIPE_HV)
             .duration(20*150)
             .addTo(CI);
@@ -324,7 +322,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                 Materials.Phosphorus.getDust(16))
             .fluidInputs(Materials.Silicon.getMolten(144*128))
             .itemOutputs(ItemList.Circuit_Silicon_Ingot2.get(2))
-            .noFluidOutputs()
+
             .eut(RECIPE_HV)
             .duration(20*150)
             .addTo(CI);
@@ -337,7 +335,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         Materials.Naquadah.getDust(2))
                     .fluidInputs(Materials.SiliconSG.getMolten(144*256))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(4))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_EV)
                     .duration(20*256)
                     .addTo(CI);
@@ -349,7 +347,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         Materials.Naquadah.getDust(2))
                     .fluidInputs(Materials.Silicon.getMolten(144*256))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(2))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_EV)
                     .duration(20*256)
                     .addTo(CI);
@@ -361,7 +359,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         MyMaterial.naquadahine.get(OrePrefixes.dust, 6))
                     .fluidInputs(Materials.SiliconSG.getMolten(144*256))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(4))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_IV)
                     .duration(20*16)
                     .addTo(CI);
@@ -373,7 +371,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         MyMaterial.naquadahine.get(OrePrefixes.dust, 6))
                     .fluidInputs(Materials.Silicon.getMolten(144*256))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(2))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_IV)
                     .duration(20*16)
                     .addTo(CI);
@@ -386,7 +384,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         Materials.Europium.getDust(4))
                     .fluidInputs(Materials.SiliconSG.getMolten(144*512))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot4.get(4))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_IV)
                     .duration(20*336)
                     .addTo(CI);
@@ -398,7 +396,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         Materials.Europium.getDust(4))
                     .fluidInputs(Materials.Silicon.getMolten(144*512))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot4.get(2))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_IV)
                     .duration(20*336)
                     .addTo(CI);
@@ -411,7 +409,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         Materials.Americium.getDust(4))
                     .fluidInputs(Materials.SiliconSG.getMolten(144*1024))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot5.get(4))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_LuV)
                     .duration(20*450)
                     .addTo(CI);
@@ -423,7 +421,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         Materials.Americium.getDust(4))
                     .fluidInputs(Materials.Silicon.getMolten(144*1024))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot5.get(2))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_LuV)
                     .duration(20*450)
                     .addTo(CI);
@@ -439,7 +437,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         Materials.SiliconSG.getMolten(144*1024),
                         Materials.UUMatter.getFluid(1000*32))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot6.get(4))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_UEV)
                     .duration(20*30)
                     .addTo(CI);
@@ -454,7 +452,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                         Materials.Silicon.getMolten(144*1024),
                         Materials.UUMatter.getFluid(1000*32))
                     .itemOutputs(ItemList.Circuit_Silicon_Ingot6.get(2))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_UEV)
                     .duration(20*30)
                     .addTo(CI);
@@ -469,7 +467,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .itemOutputs(
                         GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,11),
                         GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,11))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_IV)
                     .duration(20*8)
                     .addTo(CI);
@@ -481,7 +479,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .itemOutputs(
                         GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,10),
                         GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,10))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_IV)
                     .duration(20*8)
                     .addTo(CI);
@@ -493,7 +491,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .itemOutputs(
                         GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,12),
                         GT_ModHandler.getModItem("appliedenergistics2","item.ItemMultiMaterial",64,12))
-                    .noFluidOutputs()
+
                     .eut(RECIPE_IV)
                     .duration(20*8)
                     .addTo(CI);

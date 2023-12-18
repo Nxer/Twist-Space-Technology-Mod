@@ -14,23 +14,24 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GTPP_Recipe;
+import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class FluidSolidifierRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
-        final GT_Recipe.GT_Recipe_Map fs = GT_Recipe.GT_Recipe_Map.sFluidSolidficationRecipes;
+        final IRecipeMap fs = RecipeMaps.fluidSolidifierRecipes;
         // Mold Singularity
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Bedrockium.getMolten(144 * 1919))
             .itemOutputs(MoldSingularity.get(1))
-            .noFluidOutputs()
+
             .eut(19198100)
             .duration(20 * 514)
             .addTo(fs);
@@ -39,7 +40,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Iron.getMolten(144 * 9 * 7296))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 0))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -48,7 +49,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Gold.getMolten(144 * 9 * 1215))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -57,7 +58,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(new FluidStack(FluidRegistry.getFluid("dye.chemical.dyeblue"), 72 * 9 * 1215))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 2))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -67,7 +68,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Redstone.getMolten(144 * 9 * 7296))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 3))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -77,7 +78,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Copper.getMolten(144 * 9 * 3648))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 5))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -87,7 +88,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Tin.getMolten(144 * 9 * 3648))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 6))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -97,7 +98,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Lead.getMolten(144 * 9 * 3648))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 7))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -107,7 +108,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Silver.getMolten(144 * 9 * 7296))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 8))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -117,7 +118,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Nickel.getMolten(144 * 9 * 3648))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 9))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -127,7 +128,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Enderium.getMolten(144 * 9 * 608))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 10))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -137,7 +138,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Aluminium.getMolten(144 * 9 * 1824))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 0))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -147,7 +148,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Brass.getMolten(144 * 9 * 1824))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -157,7 +158,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Bronze.getMolten(144 * 9 * 1824))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 2))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -167,7 +168,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Electrum.getMolten(144 * 9 * 912))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 4))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -177,7 +178,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Invar.getMolten(144 * 9 * 1824))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 5))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -187,7 +188,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Magnesium.getMolten(144 * 9 * 3648))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 6))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -197,7 +198,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Osmium.getMolten(144 * 9 * 406))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 7))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -207,7 +208,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Steel.getMolten(144 * 9 * 912))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 11))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -217,7 +218,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Titanium.getMolten(144 * 9 * 2024))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 12))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -227,7 +228,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Tungsten.getMolten(144 * 9 * 244))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 13))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -237,7 +238,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Uranium.getMolten(144 * 9 * 507))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 14))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -247,7 +248,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Zinc.getMolten(144 * 9 * 3648))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 15))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -257,7 +258,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Palladium.getMolten(144 * 9 * 136))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 17))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -267,7 +268,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.DamascusSteel.getMolten(144 * 9 * 153))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 18))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -277,7 +278,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.BlackSteel.getMolten(144 * 9 * 304))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 19))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -287,7 +288,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.ElectrumFlux.getMolten(144 * 9 * 16))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 20))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -297,7 +298,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Mercury.getFluid(1000 * 9 * 1824))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 21))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -307,7 +308,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.ShadowSteel.getMolten(144 * 9 * 406))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 22))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -317,7 +318,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Iridium.getMolten(144 * 9 * 62))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 23))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -327,7 +328,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Platinum.getMolten(144 * 9 * 406))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 25))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -337,7 +338,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Naquadria.getMolten(144 * 9 * 66))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 26))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -347,7 +348,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Plutonium.getMolten(144 * 9 * 244))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 27))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -357,7 +358,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.MeteoricIron.getMolten(144 * 9 * 912))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 28))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -367,7 +368,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Desh.getMolten(144 * 9 * 203))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 29))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -377,7 +378,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Europium.getMolten(144 * 9 * 62))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 30))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -388,7 +389,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .fluidInputs(Materials.Draconium.getMolten(144 * 9 * 1296))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.draconicEvolution.singularity", 1, 0))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -399,7 +400,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .fluidInputs(Materials.DraconiumAwakened.getMolten(144 * 9 * 760))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.draconicEvolution.singularity", 1, 1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -409,7 +410,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.ConductiveIron.getMolten(144 * 9 * 912))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 0))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -419,7 +420,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.ElectricalSteel.getMolten(144 * 9 * 912))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -429,7 +430,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 9 * 191))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 2))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -439,7 +440,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.DarkSteel.getMolten(144 * 9 * 912))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 3))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -449,7 +450,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.RedstoneAlloy.getMolten(144 * 9 * 912))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 5))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -459,7 +460,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.PulsatingIron.getMolten(144 * 9 * 912))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 4))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -469,7 +470,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Soularium.getMolten(144 * 9 * 456))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 6))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -479,7 +480,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 9 * 145))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.enderIO.singularity", 1, 7))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -489,7 +490,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(MoldSingularity.get(0))
             .fluidInputs(Materials.Electrotine.getMolten(144 * 9 * 1215))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.projectRed.singularity", 1, 0))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -500,7 +501,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .fluidInputs(Materials.Aluminium.getMolten(144 * 9 * 1824))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 0))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -511,7 +512,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .fluidInputs(Materials.Alumite.getMolten(144 * 9 * 229))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -522,7 +523,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .fluidInputs(Materials.Ardite.getMolten(144 * 9 * 304))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 2))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -533,7 +534,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .fluidInputs(Materials.Cobalt.getMolten(144 * 9 * 1824))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 3))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -544,7 +545,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .fluidInputs(Materials.Manyullyn.getMolten(144 * 9 * 380))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 6))
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20)
             .addTo(fs);
@@ -571,11 +572,11 @@ public class FluidSolidifierRecipePool implements IRecipePool {
                 Materials.Copper.getMolten(144 * 9 * 3648),
                 Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 0))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UEV)
             .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -598,11 +599,11 @@ public class FluidSolidifierRecipePool implements IRecipePool {
                 Materials.Bronze.getMolten(144 * 9 * 1824),
                 Materials.Infinity.getMolten(144 * 2 * 4))
             .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 1))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UEV)
             .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -625,11 +626,11 @@ public class FluidSolidifierRecipePool implements IRecipePool {
                 Materials.Titanium.getMolten(144 * 9 * 2024),
                 Materials.Infinity.getMolten(144 * 2 * 3))
             .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 2))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UEV)
             .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -651,11 +652,11 @@ public class FluidSolidifierRecipePool implements IRecipePool {
                 Materials.Mercury.getFluid(1000 * 9 * 1824),
                 Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 3))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UEV)
             .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -679,11 +680,11 @@ public class FluidSolidifierRecipePool implements IRecipePool {
                 Materials.Europium.getMolten(144 * 9 * 62),
                 Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 4))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UEV)
             .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -705,11 +706,11 @@ public class FluidSolidifierRecipePool implements IRecipePool {
                 Materials.RedstoneAlloy.getMolten(144 * 9 * 912),
                 Materials.Soularium.getMolten(144 * 9 * 456))
             .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 5))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UEV)
             .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -733,11 +734,11 @@ public class FluidSolidifierRecipePool implements IRecipePool {
                 Materials.Manyullyn.getMolten(144 * 9 * 380),
                 Materials.Infinity.getMolten(144 * 2 * 2))
             .itemOutputs(GT_ModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 6))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UEV)
             .duration(200)
-            .addTo(GTPP_Recipe.GTPP_Recipe_Map.sMultiblockMixerRecipes_GT);
+            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         // other singularity(no molten)
 
@@ -745,81 +746,81 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Quartz, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("Avaritia", "Singularity", 1, 4))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.vanilla.singularity", 1, 0))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Emerald, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.vanilla.singularity", 1, 1))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Diamond, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.vanilla.singularity", 1, 2))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Charcoal, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 3))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Olivine, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 8))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Ruby, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 9))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Sapphire, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 10))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -827,43 +828,43 @@ public class FluidSolidifierRecipePool implements IRecipePool {
                 MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 16))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.NetherStar, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(GT_ModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 24))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Unstable, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.extraUtilities.singularity", 1, 0))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.EnderPearl, 64), MoldSingularity.get(0))
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 4))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
-            .addTo(GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes);
+            .addTo(RecipeMaps.autoclaveRecipes);
 
     }
 }

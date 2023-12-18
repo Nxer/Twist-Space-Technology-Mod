@@ -56,12 +56,12 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<GT_TileEntity_MoleculeDeconstructor>
     implements IConstructable, ISurvivalConstructable {
@@ -97,12 +97,12 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+    public RecipeMap<?> getRecipeMap() {
         switch (mode) {
             case 1:
-                return GTPP_Recipe.GTPP_Recipe_Map.sMultiblockCentrifugeRecipes_GT;
+                return GTPPRecipeMaps.centrifugeNonCellRecipes;
             default:
-                return GTPP_Recipe.GTPP_Recipe_Map.sMultiblockElectrolyzerRecipes_GT;
+                return GTPPRecipeMaps.electrolyzerNonCellRecipes;
         }
     }
 

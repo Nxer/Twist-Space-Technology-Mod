@@ -6,7 +6,8 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_Utility;
 
 public class ChemicalReactorRecipePool implements IRecipePool {
@@ -14,7 +15,7 @@ public class ChemicalReactorRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-        final GT_Recipe.GT_Recipe_Map LCR = GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
+        final IRecipeMap LCR = RecipeMaps.multiblockChemicalReactorRecipes;
 
         GT_Values.RA.stdBuilder()
             .itemInputs(

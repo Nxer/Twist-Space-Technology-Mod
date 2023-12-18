@@ -21,8 +21,8 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipePool {
@@ -32,7 +32,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
 
         TwistSpaceTechnology.LOG.info("PreciseHighEnergyPhotonicQuantumMasterRecipePool loading recipes.");
 
-        final GT_Recipe.GT_Recipe_Map PhC = GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes;
+        final IRecipeMap PhC = GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes;
 
         Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
 
@@ -52,7 +52,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
             .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
             .eut(RECIPE_UIV)
             .duration(512 * 20)
-            .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
+            .addTo(PhC);
 
         // UIV
         GT_Values.RA.stdBuilder()
@@ -68,7 +68,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
             .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
             .eut(RECIPE_UMV)
             .duration(256 * 20)
-            .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
+            .addTo(PhC);
 
         // UMV
         GT_Values.RA.stdBuilder()
@@ -84,7 +84,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
             .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
             .eut(RECIPE_UXV)
             .duration(128 * 20)
-            .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
+            .addTo(PhC);
 
         // UXV
         GT_Values.RA.stdBuilder()
@@ -104,7 +104,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
             .fluidOutputs(Materials.Hydrogen.getPlasma(1000 * 128))
             .eut(RECIPE_MAX)
             .duration(64 * 20)
-            .addTo(GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes);
+            .addTo(PhC);
         // endregion
 
         // Optical SoC

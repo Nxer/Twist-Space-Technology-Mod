@@ -22,7 +22,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -32,10 +31,10 @@ import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 // spotless:off
@@ -124,9 +123,8 @@ public class GTCM_TestMultiMachine
 
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        if (mode == 0) return GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
-        return GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
+    public RecipeMap<?> getRecipeMap() {
+        return null;
     }
 
     @Override

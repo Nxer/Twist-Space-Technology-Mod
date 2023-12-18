@@ -48,6 +48,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -82,9 +84,9 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     private HeatingCoilLevel coilLevel;
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        if (mode == 0) return GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
-        return GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes;
+    public RecipeMap<?> getRecipeMap() {
+        if (mode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
+        return RecipeMaps.multiblockChemicalReactorRecipes;
     }
 
     @Override

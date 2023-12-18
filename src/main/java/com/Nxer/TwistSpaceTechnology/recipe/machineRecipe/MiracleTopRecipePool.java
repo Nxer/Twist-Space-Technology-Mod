@@ -36,14 +36,14 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 // spotless:off
 public class MiracleTopRecipePool implements IRecipePool {
-    static final GT_Recipe.GT_Recipe_Map MT = GTCMRecipe.instance.MiracleTopRecipes;
+    static final IRecipeMap MT = GTCMRecipe.MiracleTopRecipes;
 
     @Override
     public void loadRecipes() {
@@ -97,7 +97,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Lanthanum.getMolten(144 * 2)
             )
             .itemOutputs(GT_ModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UMV)
             .duration(20 * 1000)
             .addTo(MT);
@@ -124,7 +124,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Lanthanum.getMolten(144 * 8)
             )
             .itemOutputs(GT_ModHandler.getModItem("dreamcraft", "item.PikoCircuit", 1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UMV)
             .duration(20 * 500)
             .addTo(MT);
@@ -177,7 +177,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Polybenzimidazole.getMolten(144 * 32)
             )
             .itemOutputs(ItemList.Circuit_OpticalMainframe.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UEV)
             .duration(20 * 500)
             .addTo(MT);
@@ -204,7 +204,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Polybenzimidazole.getMolten(144 * 32)
             )
             .itemOutputs(ItemList.Circuit_OpticalMainframe.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UEV)
             .duration(20 * 500)
             .addTo(MT);
@@ -231,7 +231,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Polybenzimidazole.getMolten(144 * 32)
             )
             .itemOutputs(ItemList.Circuit_OpticalMainframe.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UEV)
             .duration(20 * 500)
             .addTo(MT);
@@ -258,7 +258,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Polybenzimidazole.getMolten(144 * 32)
             )
             .itemOutputs(ItemList.Circuit_OpticalMainframe.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UEV)
             .duration(20 * 500)
             .addTo(MT);
@@ -285,7 +285,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Polybenzimidazole.getMolten(144 * 32)
             )
             .itemOutputs(ItemList.Circuit_OpticalMainframe.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UEV)
             .duration(20 * 500)
             .addTo(MT);
@@ -312,7 +312,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Polybenzimidazole.getMolten(144 * 32)
             )
             .itemOutputs(ItemList.Circuit_OpticalMainframe.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UEV)
             .duration(20 * 500)
             .addTo(MT);
@@ -340,7 +340,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Polybenzimidazole.getMolten(144 * 16)
             )
             .itemOutputs(ItemList.Circuit_OpticalComputer.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 200)
             .addTo(MT);
@@ -367,7 +367,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Polybenzimidazole.getMolten(144 * 16)
             )
             .itemOutputs(ItemList.Circuit_OpticalComputer.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 200)
             .addTo(MT);
@@ -393,7 +393,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Silicone.getMolten(144 * 16)
             )
             .itemOutputs(ItemList.Circuit_OpticalAssembly.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 20)
             .addTo(MT);
@@ -418,7 +418,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.StyreneButadieneRubber.getMolten(144 * 16)
             )
             .itemOutputs(ItemList.Circuit_OpticalAssembly.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 20)
             .addTo(MT);
@@ -438,7 +438,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.EnrichedHolmium.getMolten(144 * 8)
             )
             .itemOutputs(ItemList.Circuit_OpticalProcessor.get(16))
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 240)
             .addTo(MT);
@@ -455,7 +455,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.EnrichedHolmium.getMolten(144 * 2)
             )
             .itemOutputs(ItemList.Circuit_OpticalProcessor.get(16))
-            .noFluidOutputs()
+
             .eut(9830400)
             .duration(20 * 10)
             .addTo(MT);
@@ -476,7 +476,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 ItemList.Circuit_OpticalProcessor.get(64),
                 ItemList.Circuit_OpticalProcessor.get(64),
                 ItemList.Circuit_OpticalProcessor.get(64))
-            .noFluidOutputs()
+
             .eut(9830400 * 4)
             .duration(20 * 10 * 4)
             .addTo(MT);
@@ -514,7 +514,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biomainframe.get(1L)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 300)
             .addTo(MT);
@@ -547,7 +547,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biomainframe.get(1L)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 150)
             .addTo(MT);
@@ -580,7 +580,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biomainframe.get(1L)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 300)
             .addTo(MT);
@@ -613,7 +613,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biomainframe.get(1L)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 150)
             .addTo(MT);
@@ -641,7 +641,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biowaresupercomputer.get(1L)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20 * 200)
             .addTo(MT);
@@ -668,7 +668,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biowaresupercomputer.get(1L)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20 * 100)
             .addTo(MT);
@@ -695,7 +695,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biowaresupercomputer.get(1L)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20 * 200)
             .addTo(MT);
@@ -722,7 +722,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biowaresupercomputer.get(1L)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20 * 100)
             .addTo(MT);
@@ -744,7 +744,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biowarecomputer.get(16)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20 * 240)
             .addTo(MT);
@@ -765,7 +765,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Biowarecomputer.get(16)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 30)
             .addTo(MT);
@@ -787,7 +787,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Bioprocessor.get(16)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UV)
             .duration(20 * 180)
             .addTo(MT);
@@ -808,7 +808,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Bioprocessor.get(16)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(444)
             .addTo(MT);
@@ -827,7 +827,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Bioprocessor.get(16)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UEV)
             .duration(450)
             .addTo(MT);
@@ -849,7 +849,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 ItemList.Circuit_Bioprocessor.get(64),
                 ItemList.Circuit_Bioprocessor.get(64)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UIV)
             .duration(450 * 3)
             .addTo(MT);
@@ -871,7 +871,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Neuroprocessor.get(16)
             )
-            .noFluidOutputs()
+
             .eut(614400)
             .duration(20 * 15)
             .addTo(MT);
@@ -893,7 +893,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 ItemList.Circuit_Neuroprocessor.get(64),
                 ItemList.Circuit_Neuroprocessor.get(64)
             )
-            .noFluidOutputs()
+
             .eut(614400 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -914,7 +914,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Crystalprocessor.get(16)
             )
-            .noFluidOutputs()
+
             .eut(153600)
             .duration(20 * 15)
             .addTo(MT);
@@ -935,7 +935,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 ItemList.Circuit_Crystalprocessor.get(64),
                 ItemList.Circuit_Crystalprocessor.get(64)
             )
-            .noFluidOutputs()
+
             .eut(153600 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -957,7 +957,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Quantumprocessor.get(16)
             )
-            .noFluidOutputs()
+
             .eut(38400)
             .duration(20 * 15)
             .addTo(MT);
@@ -979,7 +979,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 ItemList.Circuit_Quantumprocessor.get(64),
                 ItemList.Circuit_Quantumprocessor.get(64)
             )
-            .noFluidOutputs()
+
             .eut(38400 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -1001,7 +1001,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Nanoprocessor.get(16)
             )
-            .noFluidOutputs()
+
             .eut(9600)
             .duration(20 * 15)
             .addTo(MT);
@@ -1023,7 +1023,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 ItemList.Circuit_Nanoprocessor.get(64),
                 ItemList.Circuit_Nanoprocessor.get(64)
             )
-            .noFluidOutputs()
+
             .eut(9600 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -1045,7 +1045,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 16)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_IV)
             .duration(20 * 720)
             .addTo(MT);
@@ -1068,7 +1068,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64)
 
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_LuV)
             .duration(20 * 720 * 3)
             .addTo(MT);
@@ -1103,7 +1103,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 CustomItemList.NandChipBoard.get(64),
                 CustomItemList.NandChipBoard.get(64)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_EV)
             .duration(20 * 90 * 4)
             .addTo(MT);
@@ -1128,7 +1128,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 ItemList.Circuit_Microprocessor.get(64),
                 ItemList.Circuit_Microprocessor.get(64)
             )
-            .noFluidOutputs()
+
             .eut(600)
             .duration(20 * 30 * 4)
             .addTo(MT);
@@ -1150,7 +1150,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 64, 32080),
                 GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 64, 32080)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_EV)
             .duration(20 * 90 * 4)
             .addTo(MT);
@@ -1181,7 +1181,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 16, 32072)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_ZPM)
             .duration(20 * 30 * 12)
             .addTo(MT);
@@ -1209,7 +1209,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 16, 32077)
             )
-            .noFluidOutputs()
+
             .eut(RECIPE_UHV)
             .duration(20 * 30 * 12)
             .addTo(MT);
@@ -1245,7 +1245,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 MaterialsUEVplus.PrimordialMatter.getFluid(1000 * 114514)
             )
             .itemOutputs(GTCMItemList.ProofOfHeroes.get(1))
-            .noFluidOutputs()
+
             .noOptimize()
             .specialValue(13500)
             .eut(RECIPE_MAX)
@@ -1289,7 +1289,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 .itemOutputs(
                     outStack[i]
                 )
-                .noFluidOutputs()
+
                 .eut(RECIPE_UEV)
                 .duration(20)
                 .addTo(MT);
@@ -1314,7 +1314,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
 
             )
-            .noFluidOutputs()
+
             .eut()
             .duration(20)
             .addTo(MT);

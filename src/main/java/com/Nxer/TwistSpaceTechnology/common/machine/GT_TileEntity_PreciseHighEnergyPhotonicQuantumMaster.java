@@ -44,9 +44,10 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
 
@@ -211,11 +212,11 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     // region Processing Logic
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+    public RecipeMap<?> getRecipeMap() {
         if (this.mode) {
-            return GTCMRecipe.instance.PreciseHighEnergyPhotonicQuantumMasterRecipes;
+            return GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes;
         }
-        return GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes;
+        return RecipeMaps.laserEngraverRecipes;
     }
 
     // @Override

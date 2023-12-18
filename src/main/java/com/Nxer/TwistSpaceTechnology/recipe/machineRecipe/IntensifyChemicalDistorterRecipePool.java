@@ -20,14 +20,14 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
-    final GT_Recipe.GT_Recipe_Map ICD = GTCMRecipe.instance.IntensifyChemicalDistorterRecipes;
+    final IRecipeMap ICD = GTCMRecipe.IntensifyChemicalDistorterRecipes;
 
     // spotless:off
     @Override
@@ -51,7 +51,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Hydrogen.getGas(1728000),
                 Materials.Nitrogen.getGas(576000),
                 Materials.Oxygen.getGas(2016000))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.Polybenzimidazole.getMolten(216000), Materials.HydrochloricAcid.getFluid(288000))
             .noOptimize()
             .specialValue(9900)
@@ -73,7 +73,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                         Materials.Hydrogen.getGas(1728000),
                         Materials.Nitrogen.getGas(576000),
                         Materials.Oxygen.getGas(1152000))
-                    .noItemOutputs()
+
                     .fluidOutputs(Materials.Polybenzimidazole.getMolten(216000), Materials.HydrochloricAcid.getFluid(288000))
                     .noOptimize()
                     .specialValue(9900)
@@ -96,7 +96,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                         Materials.Hydrogen.getGas(3168000),
                         Materials.Nitrogen.getGas(576000),
                         Materials.Oxygen.getGas(2016000))
-                    .noItemOutputs()
+
                     .fluidOutputs(Materials.Polybenzimidazole.getMolten(216000), Materials.HydrochloricAcid.getFluid(288000))
                     .noOptimize()
                     .specialValue(9900)
@@ -116,7 +116,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*6),
                 Materials.Oxygen.getGas(1000*4))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.PhthalicAcid.getFluid(1000))
             .noOptimize()
             .specialValue(9900)
@@ -140,7 +140,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*6*64),
                 Materials.Oxygen.getGas(1000*4*64))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.PhthalicAcid.getFluid(1000*64))
             .noOptimize()
             .specialValue(9900)
@@ -202,7 +202,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Silicon.getDust(3),
                 Materials.Carbon.getDust(6))
             .fluidInputs(Materials.Hydrogen.getGas(12000), Materials.Water.getFluid(3000))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.Silicone.getMolten(1296))
             .noOptimize()
             .specialValue(400)
@@ -224,7 +224,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64))
             .fluidInputs(Materials.Hydrogen.getGas(12000 * 64), Materials.Water.getFluid(3000 * 64))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.Silicone.getMolten(1296 * 64))
             .noOptimize()
             .specialValue(800)
@@ -238,7 +238,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.Sulfur.getDust(1))
             .fluidInputs(Materials.Benzene.getFluid(1000))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.PolyphenyleneSulfide.getMolten(1500), Materials.Hydrogen.getGas(2000))
             .noOptimize()
             .specialValue(400)
@@ -249,7 +249,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(19), Materials.Sulfur.getDust(64))
             .fluidInputs(Materials.Benzene.getFluid(64000))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.PolyphenyleneSulfide.getMolten(96000), Materials.Hydrogen.getGas(128000))
             .noOptimize()
             .specialValue(800)
@@ -267,7 +267,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.PhosphoricAcid.getFluid(1000),
                 Materials.Water.getFluid(8000))
             .itemOutputs(GT_ModHandler.getModItem("dreamcraft", "GTNHBioItems", 8, 2))
-            .noFluidOutputs()
+
             .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_IV)
@@ -295,7 +295,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 GT_ModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2),
                 GT_ModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2),
                 GT_ModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2))
-            .noFluidOutputs()
+
             .noOptimize()
             .specialValue(10800)
             .eut(RECIPE_IV)
@@ -322,7 +322,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.WovenKevlar.get(64),
                 ItemList.WovenKevlar.get(61))
-            .noFluidOutputs()
+
             .noOptimize()
             .specialValue(11700)
             .eut(RECIPE_UIV)
@@ -345,7 +345,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Hydrogen.getGas(1000 * 5292),
                 Materials.Chlorine.getGas(1000 * 87),
                 Materials.Nitrogen.getGas(1000 * 450))
-            .noItemOutputs()
+
             .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(1000 * 45))
             .specialValue(11700)
             .eut(RECIPE_UIV)
@@ -358,7 +358,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.Carbon.getDust(2 * 9))
             .fluidInputs(Materials.Fluorine.getGas(4000 * 9), Materials.Oxygen.getGas(125000))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.Polytetrafluoroethylene.getMolten(36000))
             .noOptimize()
             .specialValue(1800)
@@ -379,7 +379,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(64))
             .fluidInputs(Materials.Fluorine.getGas(4000 * 9 * 32), Materials.Oxygen.getGas(125000 * 32))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.Polytetrafluoroethylene.getMolten(36000 * 32))
             .noOptimize()
             .specialValue(1800)
@@ -393,7 +393,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(10), Materials.Antimony.getDust(12))
             .fluidInputs(Materials.Fluorine.getGas(1000 * 5 * 12), Materials.HydrofluoricAcid.getFluid(1000 * 12))
-            .noItemOutputs()
+
             .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
             .specialValue(9900)
             .eut(RECIPE_UHV)
@@ -418,7 +418,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.Fluorine.getGas(1000 * 5 * 12 * 64),
                 Materials.HydrofluoricAcid.getFluid(1000 * 12 * 64))
-            .noItemOutputs()
+
             .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
             .specialValue(9900)
             .eut(RECIPE_UHV)
@@ -428,7 +428,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.Antimony.getDust(12))
             .fluidInputs(Materials.Fluorine.getGas(1000 * 6 * 12), Materials.Hydrogen.getGas(1000 * 12))
-            .noItemOutputs()
+
             .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
             .specialValue(9900)
             .eut(RECIPE_UHV)
@@ -451,7 +451,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Antimony.getDust(64),
                 Materials.Antimony.getDust(64))
             .fluidInputs(Materials.Fluorine.getGas(1000 * 6 * 12 * 64), Materials.Hydrogen.getGas(1000 * 12 * 64))
-            .noItemOutputs()
+
             .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
             .specialValue(9900)
             .eut(RECIPE_UHV)
@@ -464,7 +464,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(3), Materials.Carbon.getDust(21))
             .fluidInputs(Materials.Hydrogen.getGas(1000 * 24), Materials.Oxygen.getGas(1000 * 4))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.Epoxid.getMolten(1000))
             .eut(RECIPE_HV)
             .duration(128)
@@ -486,7 +486,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(52))
             .fluidInputs(Materials.Hydrogen.getGas(1000 * 24 * 36), Materials.Oxygen.getGas(1000 * 4 * 36))
-            .noItemOutputs()
+
             .fluidOutputs(Materials.Epoxid.getMolten(1000 * 36))
             .specialValue(5400)
             .eut(RECIPE_HV)
@@ -516,7 +516,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.EpoxidFiberReinforced.getPlates(64),
                 Materials.EpoxidFiberReinforced.getPlates(64),
                 Materials.EpoxidFiberReinforced.getPlates(58))
-            .noFluidOutputs()
+
             .specialValue(5400)
             .eut(RECIPE_HV)
             .duration(128 * 36)
@@ -723,7 +723,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*128),
                 Materials.Oxygen.getGas(1000*128))
-            .noItemOutputs()
+
             .fluidOutputs(getFluidStack("fluid.hydrogenperoxide",1000*64))
             .specialValue(10800)
             .eut(RECIPE_UHV)

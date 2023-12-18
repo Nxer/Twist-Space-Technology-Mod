@@ -13,8 +13,9 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
 
 public class CircuitAssemblerRecipePool implements IRecipePool {
 
@@ -22,6 +23,8 @@ public class CircuitAssemblerRecipePool implements IRecipePool {
     public void loadRecipes() {
 
         Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
+
+        final IRecipeMap circuitAssembler = RecipeMaps.circuitAssemblerRecipes;
 
         // Optical Soc Circuit Assembly Line
         GT_Values.RA.stdBuilder()
@@ -32,10 +35,9 @@ public class CircuitAssemblerRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.stick, Materials.EnrichedHolmium, 64))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 2))
             .itemOutputs(ItemList.Circuit_OpticalProcessor.get(16))
-            .noFluidOutputs()
             .eut(RECIPE_UIV)
             .duration(20 * 90)
-            .addTo(GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes);
+            .addTo(circuitAssembler);
 
     }
 }

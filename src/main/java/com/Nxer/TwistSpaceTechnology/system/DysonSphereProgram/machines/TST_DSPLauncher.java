@@ -81,12 +81,12 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.XSTR;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 
 public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     implements IConstructable, ISurvivalConstructable, IDSP_IO, IGlobalWirelessEnergy {
@@ -262,8 +262,8 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     // }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return GTCMRecipe.instance.DSP_LauncherRecipes;
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.DSP_LauncherRecipes;
     }
 
     /**
