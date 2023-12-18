@@ -6,9 +6,9 @@ import static com.Nxer.TwistSpaceTechnology.common.material.MaterialPool.eventHo
 import java.util.HashMap;
 import java.util.Map;
 
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 

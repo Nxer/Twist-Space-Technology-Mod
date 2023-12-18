@@ -13,7 +13,8 @@ import gregtech.api.util.GT_Utility;
 
 public class StatsDefination {
 
-    public final static String[] BaseStats = {"Defence", "Strength", "Intelligence", "CritChance", "CritDamage", "Resistance" };
+    public final static String[] BaseStats = { "Defence", "Strength", "Intelligence", "CritChance", "CritDamage",
+        "Resistance" };
     public final static String[] DamageStats = { "BaseDamage", "BaseDamageMultipiler", "MeleeDamageMultipiler",
         "RangeDamageMultipiler", "MagicDamageMultipiler" };
     public final static ArrayList<String> AllStats = new ArrayList<String>(

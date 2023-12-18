@@ -48,7 +48,7 @@ public class MaterialPool implements Runnable {
     public static Werkstoff realSingularity;
 
     static {
-        if(Config.activateMegaSpaceStation){
+        if (Config.activateMegaSpaceStation) {
             eventHorizonDiffusers = new Werkstoff(
                 new short[] { 255, 255, 255 },
                 "Event Horizon Diffusers",

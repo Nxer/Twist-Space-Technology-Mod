@@ -93,7 +93,6 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
         ItemList.Circuit_TranscendentAssembly.get(4), ItemList.Circuit_TranscendentComputer.get(2),
         ItemList.Circuit_TranscendentMainframe.get(1) };
 
-
     // endregion
 
     @Override
@@ -110,16 +109,19 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             SpaceStationAntiGravityBlock = new ItemStack[] { GTCMItemList.SpaceStationAntiGravityBlockLV.get(1),
                 GTCMItemList.SpaceStationAntiGravityBlockMV.get(1), GTCMItemList.SpaceStationAntiGravityBlockHV.get(1),
                 GTCMItemList.SpaceStationAntiGravityBlockEV.get(1), GTCMItemList.SpaceStationAntiGravityBlockIV.get(1),
-                GTCMItemList.SpaceStationAntiGravityBlockLuV.get(1), GTCMItemList.SpaceStationAntiGravityBlockZPM.get(1),
-                GTCMItemList.SpaceStationAntiGravityBlockUV.get(1), GTCMItemList.SpaceStationAntiGravityBlockUHV.get(1),
-                GTCMItemList.SpaceStationAntiGravityBlockUEV.get(1), GTCMItemList.SpaceStationAntiGravityBlockUIV.get(1),
-                GTCMItemList.SpaceStationAntiGravityBlockUMV.get(1), GTCMItemList.SpaceStationAntiGravityBlockUXV.get(1),
+                GTCMItemList.SpaceStationAntiGravityBlockLuV.get(1),
+                GTCMItemList.SpaceStationAntiGravityBlockZPM.get(1), GTCMItemList.SpaceStationAntiGravityBlockUV.get(1),
+                GTCMItemList.SpaceStationAntiGravityBlockUHV.get(1),
+                GTCMItemList.SpaceStationAntiGravityBlockUEV.get(1),
+                GTCMItemList.SpaceStationAntiGravityBlockUIV.get(1),
+                GTCMItemList.SpaceStationAntiGravityBlockUMV.get(1),
+                GTCMItemList.SpaceStationAntiGravityBlockUXV.get(1),
                 GTCMItemList.SpaceStationAntiGravityBlockMAX.get(1) };
             highDimensionalItem = new ItemStack[] { GTCMItemList.HighDimensionalCapacitor.get(64),
                 GTCMItemList.HighDimensionalInterface.get(64), GTCMItemList.HighDimensionalDiode.get(64),
                 GTCMItemList.HighDimensionalResistor.get(64), GTCMItemList.HighDimensionalTransistor.get(64) };
-            maxMaterials = new Werkstoff[] { MaterialPool.eventHorizonDiffusers,
-                MaterialPool.entropyReductionProcess, MaterialPool.realSingularity, };
+            maxMaterials = new Werkstoff[] { MaterialPool.eventHorizonDiffusers, MaterialPool.entropyReductionProcess,
+                MaterialPool.realSingularity, };
             loadOriginalRecipeForConstruct();
             loadCircuitRecipe();
         }
