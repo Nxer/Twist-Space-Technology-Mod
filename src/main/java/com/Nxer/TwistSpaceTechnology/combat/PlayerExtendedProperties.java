@@ -58,4 +58,41 @@ public final class PlayerExtendedProperties implements IExtendedEntityProperties
     public static void setPlayerStat(EntityPlayer player, String statName, int value) {
         from(player).CombatStats.put(statName, value);
     }
+
+    public static void addBonusPlayerStat(EntityPlayer player, String statName, int value) {
+        Map<String, Integer> BasicStats = PlayerExtendedProperties.getStats(player);
+        from(player).CombatStats.put(statName, value + BasicStats.get(statName));
+    }
+
+    public static void setPlayerStats(EntityPlayer player,int aBaseDamage,int aDefence, int aStrength, int aIntelligence, int aCritChance,
+        int aCritDamage, int aResistance,  int aBaseDamageMultipiler, int aMeleeDamageMultipiler,
+        int aRangeDamageMultipiler, int aMagicDamageMultipiler) {
+        from(player).CombatStats.put("BaseDamage", aBaseDamage);
+        from(player).CombatStats.put("Defence", aDefence);
+        from(player).CombatStats.put("Strength", aStrength);
+        from(player).CombatStats.put("Intelligence", aIntelligence);
+        from(player).CombatStats.put("CritChance", aCritChance);
+        from(player).CombatStats.put("CritDamage", aCritDamage);
+        from(player).CombatStats.put("Resistance", aResistance);
+        from(player).CombatStats.put("BaseDamageMultipiler", aBaseDamageMultipiler);
+        from(player).CombatStats.put("MeleeDamageMultipiler", aMeleeDamageMultipiler);
+        from(player).CombatStats.put("RangeDamageMultipiler", aRangeDamageMultipiler);
+        from(player).CombatStats.put("MagicDamageMultipiler", aMagicDamageMultipiler);
+    }
+
+    public static void addBonusPlayerStats(EntityPlayer player, int[] a) {
+
+        Map<String, Integer> BasicStats = PlayerExtendedProperties.getStats(player);
+        from(player).CombatStats.put("BaseDamage", a[0] + BasicStats.get("BaseDamage"));
+        from(player).CombatStats.put("Defence", a[1] + BasicStats.get("Defence"));
+        from(player).CombatStats.put("Strength", a[2] + BasicStats.get("Strength"));
+        from(player).CombatStats.put("Intelligence", a[3] + BasicStats.get("Intelligence"));
+        from(player).CombatStats.put("CritChance", a[4] + BasicStats.get("CritChance"));
+        from(player).CombatStats.put("CritDamage", a[5] + BasicStats.get("CritDamage"));
+        from(player).CombatStats.put("Resistance", a[6] + BasicStats.get("Resistance"));
+        from(player).CombatStats.put("BaseDamageMultipiler", a[7] + BasicStats.get("BaseDamageMultipiler"));
+        from(player).CombatStats.put("MeleeDamageMultipiler", a[8] + BasicStats.get("MeleeDamageMultipiler"));
+        from(player).CombatStats.put("RangeDamageMultipiler", a[9] + BasicStats.get("RangeDamageMultipiler"));
+        from(player).CombatStats.put("MagicDamageMultipiler", a[10] + BasicStats.get("MagicDamageMultipiler"));
+    }
 }

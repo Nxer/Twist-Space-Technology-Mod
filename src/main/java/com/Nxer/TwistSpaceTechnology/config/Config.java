@@ -311,7 +311,7 @@ public class Config {
         // endregion
 
         // region CombatRework
-        activateCombatStats = configuration.getBoolean("activateCombatStats",CombatStats,activateCombatStats,"decide whether to enable the combatstats system(WIP).");
+        activateCombatStats = configuration.getBoolean("activateCombatStats",CombatStats,activateCombatStats,"decide whether to enable the combatstats system(WIP).DO NOT USE IT FOR NOW!");
         // endregion
 
         // region Hyper Spacetime Transformer
