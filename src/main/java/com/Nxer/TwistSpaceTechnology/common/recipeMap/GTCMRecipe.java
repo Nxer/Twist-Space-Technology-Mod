@@ -498,7 +498,7 @@ public class GTCMRecipe {
         .of("tst.recipe.StellarForgeRecipes")
         .maxIO(4, 4, 1, 2)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
         .disableOptimize()
         .build();
 
