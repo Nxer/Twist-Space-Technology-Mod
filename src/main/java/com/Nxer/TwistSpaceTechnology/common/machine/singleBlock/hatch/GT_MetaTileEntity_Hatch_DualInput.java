@@ -49,13 +49,17 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
         @Override
         public ItemStack[] getItemInputs() {
             if (isEmpty()) return new ItemStack[0];
-            return itemInventory;
+            return Arrays.stream(itemInventory)
+                .filter(Objects::nonNull)
+                .toArray(ItemStack[]::new);
         }
 
         @Override
         public FluidStack[] getFluidInputs() {
             if (isEmpty()) return new FluidStack[0];
-            return fluidInventory;
+            return Arrays.stream(fluidInventory)
+                .filter(Objects::nonNull)
+                .toArray(FluidStack[]::new);
         }
 
         public boolean isEmpty() {
