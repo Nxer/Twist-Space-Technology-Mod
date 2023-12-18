@@ -42,12 +42,12 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
@@ -104,12 +104,12 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     };
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+    public RecipeMap<?> getRecipeMap() {
         switch (mode) {
             case 1:
-                return GTCMRecipe.instance.HyperSpacetimeTransformerRecipe;
+                return GTCMRecipe.HyperSpacetimeTransformerRecipe;
             default:
-                return GTPP_Recipe.GTPP_Recipe_Map.sMolecularTransformerRecipes;
+                return GTPPRecipeMaps.molecularTransformerRecipes;
         }
     }
 

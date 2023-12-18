@@ -44,6 +44,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -108,11 +110,11 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+    public RecipeMap<?> getRecipeMap() {
 
-        if (mode) return GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes;
+        if (mode) return RecipeMaps.fluidExtractionRecipes;
 
-        return GT_Recipe.GT_Recipe_Map.sFluidSolidficationRecipes;
+        return RecipeMaps.fluidSolidifierRecipes;
     }
 
     @Override

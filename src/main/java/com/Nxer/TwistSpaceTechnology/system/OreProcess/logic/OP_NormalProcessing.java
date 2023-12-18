@@ -296,11 +296,10 @@ public class OP_NormalProcessing {
             .itemInputs(input)
             .itemOutputs(output)
             .fluidInputs(Materials.Lubricant.getFluid(1))
-            .noFluidOutputs()
             .noOptimize()
             .eut(OreProcessRecipeEUt)
             .duration(OreProcessRecipeDuration)
-            .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+            .addTo(GTCMRecipe.OreProcessingRecipes);
     }
 
     /**

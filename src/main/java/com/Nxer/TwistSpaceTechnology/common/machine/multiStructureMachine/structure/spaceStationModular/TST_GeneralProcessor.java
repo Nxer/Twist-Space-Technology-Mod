@@ -17,9 +17,9 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_LargeChemicalReactor;
 
 public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TST_GeneralProcessor> {
@@ -40,7 +40,7 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+    public RecipeMap<?> getRecipeMap() {
         return monitor.getRecipeMap();
     }
 

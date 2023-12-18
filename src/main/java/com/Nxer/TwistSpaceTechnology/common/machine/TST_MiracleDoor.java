@@ -68,16 +68,17 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTPP_Recipe;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
+import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -161,9 +162,9 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        if (mode == 1) return GTCMRecipe.instance.StellarForgeRecipes;
-        return GTPP_Recipe.GTPP_Recipe_Map.sAlloyBlastSmelterRecipes;
+    public RecipeMap<?> getRecipeMap() {
+        if (mode == 1) return GTCMRecipe.StellarForgeRecipes;
+        return GTPPRecipeMaps.alloyBlastSmelterRecipes;
     }
 
     @Override

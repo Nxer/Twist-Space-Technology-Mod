@@ -37,10 +37,10 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gtPlusPlus.core.block.ModBlocks;
 
 public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_LargeIndustrialCokingFactory> {
@@ -75,8 +75,8 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return GTCMRecipe.instance.CokingFactoryRecipes;
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.CokingFactoryRecipes;
     }
 
     @Override

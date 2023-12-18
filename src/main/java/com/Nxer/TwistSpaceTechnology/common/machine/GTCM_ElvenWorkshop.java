@@ -31,10 +31,10 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings8;
 import vazkii.botania.common.block.ModBlocks;
@@ -67,12 +67,12 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
     };
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+    public RecipeMap<?> getRecipeMap() {
         switch (mode) {
             case 1:
-                return GTCMRecipe.instance.ElvenWorkshopRecipes;
+                return GTCMRecipe.ElvenWorkshopRecipes;
             default:
-                return GTCMRecipe.instance.RuneEngraverRecipes;
+                return GTCMRecipe.RuneEngraverRecipes;
         }
     }
 
@@ -96,7 +96,7 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
 	public void construct(ItemStack stackSize, boolean hintsOnly) {
 		this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
 	}
-	
+
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
 		if (this.mMachine) return -1;
@@ -150,7 +150,7 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
         {"C   C"," D D ","  ~  "," D D ","C   C"},
         {"EAAAE","AFEFA","AEBEA","AFEFA","EAAAE"}
     };
-	
+
 	// spotless:on
     // endregion
 

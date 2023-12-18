@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleTop;
 import static gregtech.api.enums.TierEU.*;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
-import static gregtech.api.util.GT_Recipe.GT_Recipe_Map.sAssemblerRecipes;
 
 import net.minecraft.item.ItemStack;
 
@@ -21,13 +20,14 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.util.GT_RecipeConstants;
 import gregtech.api.util.GT_Utility;
 
 public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
 
-    final GT_Recipe.GT_Recipe_Map stationRecipe = GTCMRecipe.instance.megaUniversalSpaceStationRecipePool;
-    static final GT_Recipe.GT_Recipe_Map MT = GTCMRecipe.instance.MiracleTopRecipes;
+    final IRecipeMap stationRecipe = GTCMRecipe.megaUniversalSpaceStationRecipePool;
+    static final IRecipeMap MT = GTCMRecipe.MiracleTopRecipes;
     // region item
 
     static ItemStack[] spaceStationStructureBlock;
@@ -143,7 +143,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 MyMaterial.shirabon.get(OrePrefixes.plate, 64))
             .fluidInputs(MaterialsUEVplus.Universium.getFluid(1440))
             .itemOutputs(processor)
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UMV)
             .duration(20)
@@ -162,7 +162,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 MaterialPool.entropyReductionProcess.getBridgeMaterial()
                     .getFluid(1440))
             .itemOutputs(assembly)
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UMV)
             .duration(200)
@@ -183,7 +183,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 MaterialPool.realSingularity.getBridgeMaterial()
                     .getFluid(1440))
             .itemOutputs(computer)
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(RECIPE_UMV)
             .duration(2000)
@@ -207,7 +207,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 Materials.Neutronium.getMolten(144 * 8 * 16 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 16 * 144))
             .itemOutputs(ItemList.Circuit_ExoticMainframe.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UMV)
             .duration(20 * 1000)
             .addTo(MT);
@@ -234,7 +234,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 Materials.Neutronium.getMolten(144 * 8 * 6 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 6 * 144))
             .itemOutputs(ItemList.Circuit_CosmicProcessor.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UXV)
             .duration(1600)
             .addTo(MT);
@@ -258,7 +258,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 Materials.Neutronium.getMolten(144 * 8 * 6 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 6 * 144))
             .itemOutputs(ItemList.Circuit_CosmicAssembly.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UXV)
             .duration(1600)
             .addTo(MT);
@@ -281,7 +281,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 Materials.Neutronium.getMolten(144 * 8 * 12 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 12 * 144))
             .itemOutputs(ItemList.Circuit_CosmicComputer.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UXV)
             .duration(20 * 1000)
             .addTo(MT);
@@ -301,7 +301,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 ItemList.Circuit_CosmicComputer.get(2))
             .fluidInputs(MaterialsUEVplus.Time.getMolten(1000 * 16), MaterialsUEVplus.Space.getMolten(1000 * 16))
             .itemOutputs(ItemList.Circuit_CosmicMainframe.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_MAX)
             .duration(20 * 1000)
             .addTo(MT);
@@ -328,7 +328,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 MaterialPool.eventHorizonDiffusers.getMolten(1440),
                 MaterialPool.realSingularity.getMolten(144))
             .itemOutputs(ItemList.Circuit_TranscendentProcessor.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UXV)
             .duration(20 * 1000)
             .addTo(MT);
@@ -352,7 +352,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 Materials.Neutronium.getMolten(144 * 8 * 12 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 12 * 144))
             .itemOutputs(ItemList.Circuit_TranscendentAssembly.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UXV)
             .duration(20 * 1000)
             .addTo(MT);
@@ -377,7 +377,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 MaterialPool.eventHorizonDiffusers.getMolten(1440000),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 20 * 144))
             .itemOutputs(ItemList.Circuit_TranscendentComputer.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_UXV)
             .duration(20 * 1000)
             .addTo(MT);
@@ -403,7 +403,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 MaterialPool.eventHorizonDiffusers.getMolten(14400000),
                 MaterialPool.realSingularity.getMolten(144000))
             .itemOutputs(ItemList.Circuit_TranscendentMainframe.get(1))
-            .noFluidOutputs()
+
             .eut(RECIPE_MAX * 16)
             .duration(20 * 1500)
             .addTo(MT);
@@ -609,37 +609,37 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
                 com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
                 MiracleTop.get(64))
-            .noFluidInputs()
+
             .itemOutputs(GTCMItemList.megaUniversalSpaceStation.get(1))
-            .noFluidOutputs()
+
             .noOptimize()
             .eut(1024 * RECIPE_MAX)
             .duration(20 * 1000)
-            .addTo(GTCMRecipe.instance.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipes);
 
         for (int i = 0; i < 10; i++) {
             GT_Values.RA.stdBuilder()
                 .itemInputs(blockCasings[i], blockCasing6s[i], processor[Math.max(i - 3, 0)])
                 .fluidInputs(Materials.Plastic.getFluid(1440 * i))
                 .itemOutputs(spaceStationStructureBlock[i])
-                .noFluidOutputs()
+
                 .noOptimize()
                 .eut((int) (32 * Math.pow(4, i)))
                 .duration(20 * 10 * i)
-                .addTo(sAssemblerRecipes);
+                .addTo(GT_RecipeConstants.AssemblerOD);
             GT_Values.RA.stdBuilder()
                 .itemInputs(
                     spaceStationStructureBlock[2 + i],
                     Field_Generators[2 + i],
                     Sensors[2 + i],
                     Robot_Arms[2 + i])
-                .noFluidInputs()
+
                 .itemOutputs(SpaceStationAntiGravityBlock[i])
-                .noFluidOutputs()
+
                 .noOptimize()
                 .eut((long) (32 * Math.pow(2, i)))
                 .duration(20 * 10 * i)
-                .addTo(sAssemblerRecipes);
+                .addTo(GT_RecipeConstants.AssemblerOD);
         }
         for (int i = 10; i < 12; i++) {
             GT_Values.RA.stdBuilder()
@@ -654,11 +654,11 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 )
                 .fluidInputs(MaterialsUEVplus.TranscendentMetal.getFluid(1440 * i))
                 .itemOutputs(spaceStationStructureBlock[i])
-                .noFluidOutputs()
+
                 .noOptimize()
                 .eut((long) (Math.pow(16, i)))
                 .duration(200 * 10 * i)
-                .addTo(GTCMRecipe.instance.MiracleTopRecipes);
+                .addTo(GTCMRecipe.MiracleTopRecipes);
             GT_Values.RA.stdBuilder()
                 .itemInputs(
                     spaceStationStructureBlock[i],
@@ -669,11 +669,11 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                         .getPlates(64))
                 .fluidInputs()
                 .itemOutputs(SpaceStationAntiGravityBlock[i])
-                .noFluidOutputs()
+
                 .noOptimize()
                 .eut((long) (32 * Math.pow(2, i)))
                 .duration(20 * 10 * i)
-                .addTo(sAssemblerRecipes);
+                .addTo(GT_RecipeConstants.AssemblerOD);
         }
 
     }

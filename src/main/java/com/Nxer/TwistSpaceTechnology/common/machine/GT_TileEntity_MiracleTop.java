@@ -36,9 +36,9 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.block.ModBlocks;
@@ -296,8 +296,8 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return this.mode == 0 ? GTCMRecipe.instance.MiracleTopRecipes : GTCMRecipe.instance.QuantumInversionRecipes;
+    public RecipeMap<?> getRecipeMap() {
+        return this.mode == 0 ? GTCMRecipe.MiracleTopRecipes : GTCMRecipe.QuantumInversionRecipes;
     }
 
     @Override

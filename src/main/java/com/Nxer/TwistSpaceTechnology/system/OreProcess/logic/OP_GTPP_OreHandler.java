@@ -51,10 +51,9 @@ public class OP_GTPP_OreHandler {
                 .itemInputs(ore.getOre(1))
                 .itemOutputs(ore.getDust(12))
                 .fluidInputs(Materials.Lubricant.getFluid(1))
-                .noFluidOutputs()
                 .eut(120)
                 .duration(OreProcessRecipeDuration)
-                .addTo(GTCMRecipe.instance.OreProcessingRecipes);
+                .addTo(GTCMRecipe.OreProcessingRecipes);
         }
     }
 

@@ -27,7 +27,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCResearches;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
-import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values;
 
 public class RecipeLoader {
 
@@ -51,7 +50,6 @@ public class RecipeLoader {
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
         OP_NormalProcessing.instance.enumOreProcessingRecipes();
-        OP_Values.initOreRecipesInputs();
     }
 
     public static void loadRecipesPostInit() {

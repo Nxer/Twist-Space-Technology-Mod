@@ -47,10 +47,11 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 public class GT_TileEntity_MagneticDrivePressureFormer
@@ -133,16 +134,16 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+    public RecipeMap<?> getRecipeMap() {
         switch (mode) {
             case 1:
-                return GT_Recipe.GT_Recipe_Map.sBenderRecipes;
+                return RecipeMaps.benderRecipes;
             case 2:
-                return GT_Recipe.GT_Recipe_Map.sPressRecipes;
+                return RecipeMaps.formingPressRecipes;
             case 3:
-                return GT_Recipe.GT_Recipe_Map.sHammerRecipes;
+                return RecipeMaps.hammerRecipes;
             default:
-                return GT_Recipe.GT_Recipe_Map.sExtruderRecipes;
+                return RecipeMaps.extruderRecipes;
         }
     }
 
