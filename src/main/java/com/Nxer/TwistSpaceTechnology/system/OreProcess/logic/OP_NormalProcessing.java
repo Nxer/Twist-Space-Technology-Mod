@@ -196,6 +196,12 @@ public class OP_NormalProcessing {
             false
         );
 
+        // HEE end powder
+        registryOreProcessRecipe(
+            GT_ModHandler.getModItem("HardcoreEnderExpansion","end_powder_ore",1),
+            new ItemStack[]{GT_ModHandler.getModItem("HardcoreEnderExpansion", "end_powder", 24)}
+        );
+
         // spotless:on
     }
 
