@@ -10,6 +10,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -42,6 +43,17 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         final IRecipeMap LE = RecipeMaps.laserEngraverRecipes;
         final IRecipeMap HM = RecipeMaps.hammerRecipes;
         final IRecipeMap CI = GTCMRecipe.CrystallineInfinitierRecipes;
+
+        // region Cubic Zirconia
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust,10))
+            .fluidInputs(Materials.Oxygen.getGas(1000*20))
+            .itemOutputs(WerkstoffLoader.CubicZirconia.get(OrePrefixes.gem, 30))
+            .eut(RECIPE_HV)
+            .duration(20 * 144)
+            .addTo(CI);
+        // endregion
 
         // region Lapotron circuit
         // Shard
