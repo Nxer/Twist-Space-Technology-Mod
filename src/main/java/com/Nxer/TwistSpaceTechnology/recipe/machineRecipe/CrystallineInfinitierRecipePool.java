@@ -20,6 +20,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
@@ -42,6 +43,17 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         final IRecipeMap LE = RecipeMaps.laserEngraverRecipes;
         final IRecipeMap HM = RecipeMaps.hammerRecipes;
         final IRecipeMap CI = GTCMRecipe.CrystallineInfinitierRecipes;
+
+        // region Cubic Zirconia
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust,10))
+            .fluidInputs(Materials.Oxygen.getGas(1000*20))
+            .itemOutputs(WerkstoffLoader.CubicZirconia.get(OrePrefixes.gem, 30))
+            .eut(RECIPE_HV)
+            .duration(20 * 144)
+            .addTo(CI);
+        // endregion
 
         // region Lapotron circuit
         // Shard

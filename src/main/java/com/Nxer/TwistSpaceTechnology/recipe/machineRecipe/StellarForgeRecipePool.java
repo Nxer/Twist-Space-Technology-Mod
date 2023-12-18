@@ -24,6 +24,7 @@ import com.google.common.collect.Sets;
 
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
@@ -37,6 +38,7 @@ public class StellarForgeRecipePool implements IRecipePool {
     public static final HashSet<TST_ItemID> IngotHots = new HashSet<>();
     public static final HashSet<TST_ItemID> Ingots = new HashSet<>();
     public static final HashMap<TST_ItemID, ItemStack> IngotHotToIngot = new HashMap<>();
+    public static final HashSet<TST_ItemID> SpecialRecipeOutputs = new HashSet<>();
 
     public void initData() {
         //
@@ -70,6 +72,9 @@ public class StellarForgeRecipePool implements IRecipePool {
 
         }
 
+        // add SpecialRecipeOutputs
+        SpecialRecipeOutputs.add(TST_ItemID.create(WerkstoffLoader.CubicZirconia.get(OrePrefixes.gemFlawed, 1)));
+
     }
 
     public void prepareEBFRecipes() {
@@ -90,6 +95,9 @@ public class StellarForgeRecipePool implements IRecipePool {
             Materials.Helium.mGas);
 
         for (GT_Recipe recipe : RecipeMaps.blastFurnaceRecipes.getAllRecipes()) {
+            if (recipe.mOutputs.length == 1 && SpecialRecipeOutputs.contains(TST_ItemID.create(recipe.mOutputs[0])))
+                continue;
+
             Set<ItemStack> inputItems = new HashSet<>();
             Set<FluidStack> inputFluids = new HashSet<>();
             Set<ItemStack> outputItems = new HashSet<>();
