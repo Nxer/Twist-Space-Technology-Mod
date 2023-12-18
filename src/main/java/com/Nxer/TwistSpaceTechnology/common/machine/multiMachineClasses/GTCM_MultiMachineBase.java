@@ -361,10 +361,15 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return true;
     }
 
-    // @Override
-    // public boolean supportsBatchMode() {
-    // return true;
-    // }
+    @Override
+    public boolean supportsBatchMode() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return true;
+    }
 
     // endregion
 }
