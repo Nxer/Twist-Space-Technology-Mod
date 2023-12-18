@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01.initItem01;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
 import net.minecraft.entity.EntityList;
@@ -26,7 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMateria
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.GT_TileEntity_MegaUniversalSpaceStation;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
@@ -66,7 +65,6 @@ public class MachineLoader {
     public static ItemStack MegaBrickedBlastFurnace;
     public static ItemStack LargeIndustrialCokingFactory;
     public static ItemStack Scavenger;
-
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
@@ -187,20 +185,17 @@ public class MachineLoader {
 
         // Space Station Systems
         if (Config.activateMegaSpaceStation) {
-            megaUniversalSpaceStation = new GT_TileEntity_MegaUniversalSpaceStation(
+            megaUniversalSpaceStation = new TST_MegaUniversalSpaceStation(
                 19018,
                 "NameMegaUniversalSpaceStation",
                 TextLocalization.NameMegaUniversalSpaceStation).getStackForm(1);
-        } else {
-            megaUniversalSpaceStation = initItem01("core of T800", 114);
+            GTCMItemList.megaUniversalSpaceStation.set(megaUniversalSpaceStation);
+            stellarMaterialSiphon = new GT_TileEntity_StellarMaterialSiphon(
+                19019,
+                "NameStellarMaterialSiphon",
+                TextLocalization.NameStellarMaterialSiphon).getStackForm(1);
+            GTCMItemList.StellarMaterialSiphon.set(stellarMaterialSiphon);
         }
-        GTCMItemList.megaUniversalSpaceStation.set(megaUniversalSpaceStation);
-
-        stellarMaterialSiphon = new GT_TileEntity_StellarMaterialSiphon(
-            19019,
-            "NameStellarMaterialSiphon",
-            TextLocalization.NameStellarMaterialSiphon).getStackForm(1);
-        GTCMItemList.StellarMaterialSiphon.set(stellarMaterialSiphon);
 
         //
         CircuitConverter = new TST_CircuitConverter(
@@ -233,8 +228,8 @@ public class MachineLoader {
             TextLocalization.NameMegaBrickedBlastFurnace).getStackForm(1);
         GTCMItemList.MegaBrickedBlastFurnace.set(MegaBrickedBlastFurnace);
 
-        //
         Scavenger = new TST_Scavenger(19023, "NameScavenger", TextLocalization.NameScavenger).getStackForm(1);
+
         GTCMItemList.Scavenger.set(Scavenger);
 
         // endregion

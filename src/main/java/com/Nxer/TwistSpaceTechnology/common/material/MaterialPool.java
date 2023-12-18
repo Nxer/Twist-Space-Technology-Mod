@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.material;
 
 import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
 
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 import com.github.bartimaeusnek.bartworks.util.Pair;
 
@@ -40,35 +41,43 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff.GenerationFeatures gf = new Werkstoff.GenerationFeatures();
 
-    public static final Werkstoff eventHorizonDiffusers = new Werkstoff(
-        new short[] { 255, 255, 255 },
-        "Event Horizon Diffusers",
-        subscriptNumbers("when we face it, we can do nothing before, but not now"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.MATERIAL,
-        gf,
-        offsetID_01 + 2,
-        TextureSet.SET_SHINY);
+    public static Werkstoff eventHorizonDiffusers;
 
-    public static final Werkstoff entropyReductionProcess = new Werkstoff(
-        new short[] { 0, 0, 0 },
-        "Entropy Reduction Process",
-        subscriptNumbers("Trying to fight against the demise of the universe"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.MATERIAL,
-        gf,
-        offsetID_01 + 3,
-        TextureSet.SET_SHINY);
+    public static Werkstoff entropyReductionProcess;
 
-    public static final Werkstoff realSingularity = new Werkstoff(
-        new short[] { 127, 127, 127 },
-        "Real Singularity",
-        subscriptNumbers("Not just a compressed body, but a real miniature black hole"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.MATERIAL,
-        gf,
-        offsetID_01 + 4,
-        TextureSet.SET_SHINY);
+    public static Werkstoff realSingularity;
+
+    static {
+        if(Config.activateMegaSpaceStation){
+            eventHorizonDiffusers = new Werkstoff(
+                new short[] { 255, 255, 255 },
+                "Event Horizon Diffusers",
+                subscriptNumbers("when we face it, we can do nothing before, but not now"),
+                new Werkstoff.Stats(),
+                Werkstoff.Types.MATERIAL,
+                gf,
+                offsetID_01 + 2,
+                TextureSet.SET_SHINY);
+            entropyReductionProcess = new Werkstoff(
+                new short[] { 0, 0, 0 },
+                "Entropy Reduction Process",
+                subscriptNumbers("Trying to fight against the demise of the universe"),
+                new Werkstoff.Stats(),
+                Werkstoff.Types.MATERIAL,
+                gf,
+                offsetID_01 + 3,
+                TextureSet.SET_SHINY);
+            realSingularity = new Werkstoff(
+                new short[] { 127, 127, 127 },
+                "Real Singularity",
+                subscriptNumbers("Not just a compressed body, but a real miniature black hole"),
+                new Werkstoff.Stats(),
+                Werkstoff.Types.MATERIAL,
+                gf,
+                offsetID_01 + 4,
+                TextureSet.SET_SHINY);
+        }
+    }
 
     public static final Werkstoff PureMana = new Werkstoff(
         new short[] { 176, 196, 222 }, // LightSteelBlue

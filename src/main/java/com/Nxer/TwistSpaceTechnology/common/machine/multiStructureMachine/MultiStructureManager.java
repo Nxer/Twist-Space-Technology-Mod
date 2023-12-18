@@ -6,13 +6,9 @@ import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
-
-import com.Nxer.TwistSpaceTechnology.config.Config;
 
 public class MultiStructureManager extends WorldSavedData {
 
@@ -131,43 +127,4 @@ public class MultiStructureManager extends WorldSavedData {
     public void writeToNBT(NBTTagCompound p_76187_1_) {
 
     }
-}
-
-class structureChecker implements Runnable {
-
-    // TODO
-    public static final structureChecker checker = new structureChecker();
-    final Object lock = new Object();
-    public final Queue<GT_TileEntity_MultiStructureMachine<?>> checkQueue = new ConcurrentLinkedQueue<>();
-
-    public static final Thread thread = new Thread(checker);
-
-    public static void add(GT_TileEntity_MultiStructureMachine<?> machine) {
-        checker.checkQueue.add(machine);
-    }
-
-    static {
-        if (Config.activateMegaSpaceStation) {
-            thread.start();
-        }
-    }
-
-    @Override
-    public void run() {
-        synchronized (lock) {
-            while (true) {
-                var machine = checkQueue.poll();
-                if (machine != null) {
-                    machine.checkStructure(false, machine.getBaseMetaTileEntity());
-                }
-                try {
-                    lock.wait(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-
-    }
-
 }

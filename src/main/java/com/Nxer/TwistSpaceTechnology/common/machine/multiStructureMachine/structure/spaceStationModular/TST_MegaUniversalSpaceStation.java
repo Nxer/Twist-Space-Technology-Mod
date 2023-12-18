@@ -1,10 +1,9 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;// spotless:off
+package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular;// spotless:off
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
 import static com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry.bw_realglas2;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 
@@ -41,22 +40,22 @@ import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.block.ModBlocks;
 
 // spotless:off
-public class GT_TileEntity_MegaUniversalSpaceStation
-    extends GT_TileEntity_MultiStructureMachine<GT_TileEntity_MegaUniversalSpaceStation> {
+public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureMachine<TST_MegaUniversalSpaceStation> {
 
-    public static IStructureDefinition<GT_TileEntity_MegaUniversalSpaceStation> structureDefinition;
+    public static IStructureDefinition<TST_MegaUniversalSpaceStation> structureDefinition;
 
     static {
         StructureLoader.setOffSet("namemegauniversalspacestation", 215, 45, 223);
     }
 
-    public GT_TileEntity_MegaUniversalSpaceStation(int aID, String mName, String aNameRegional) {
+    public TST_MegaUniversalSpaceStation(int aID, String mName, String aNameRegional) {
         super(aID, mName, aNameRegional);
-
+        turnOffMaintenance();
     }
 
-    public GT_TileEntity_MegaUniversalSpaceStation(String mName) {
+    public TST_MegaUniversalSpaceStation(String mName) {
         super(mName);
+        turnOffMaintenance();
     }
 
     @Override
@@ -113,6 +112,11 @@ public class GT_TileEntity_MegaUniversalSpaceStation
     }
 
     @Override
+    public boolean addInputBusOrOutputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addInputBusOrOutputBusToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         GT_Utility.sendChatToPlayer(
             env.getActor(),
@@ -123,9 +127,9 @@ public class GT_TileEntity_MegaUniversalSpaceStation
     }
 
     @Override
-    public IStructureDefinition<GT_TileEntity_MegaUniversalSpaceStation> getStructureDefinition() {
+    public IStructureDefinition<TST_MegaUniversalSpaceStation> getStructureDefinition() {
         if (structureDefinition == null) {
-            var builder = StructureDefinition.<GT_TileEntity_MegaUniversalSpaceStation>builder();
+            var builder = StructureDefinition.<TST_MegaUniversalSpaceStation>builder();
             for (int i = 0; i < StructureLoader.readStructure(mName).shape.size(); i++) {
                 builder.addShape(mName + i, StructureLoader.getShape(mName, mName + i));
             }
@@ -173,19 +177,19 @@ public class GT_TileEntity_MegaUniversalSpaceStation
                     'R',
                     StructureUtility.ofChain(
                         GT_StructureUtility.ofHatchAdder(
-                            GT_TileEntity_MegaUniversalSpaceStation::addMaintenanceToMachineList,
+                            TST_MegaUniversalSpaceStation::addMaintenanceToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
                         GT_StructureUtility.ofHatchAdder(
-                            GT_TileEntity_MegaUniversalSpaceStation::addExoticEnergyInputToMachineList,
+                            TST_MegaUniversalSpaceStation::addExoticEnergyInputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
                         GT_StructureUtility.ofHatchAdder(
-                            GT_TileEntity_MegaUniversalSpaceStation::addInputToMachineList,
+                            TST_MegaUniversalSpaceStation::addInputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
                         GT_StructureUtility.ofHatchAdder(
-                            GT_TileEntity_MegaUniversalSpaceStation::addOutputToMachineList,
+                            TST_MegaUniversalSpaceStation::addOutputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
                         StructureUtility.ofBlock(SpaceStationAntiGravityBlock, 13)))
@@ -248,7 +252,7 @@ public class GT_TileEntity_MegaUniversalSpaceStation
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TileEntity_MegaUniversalSpaceStation(this.mName);
+        return new TST_MegaUniversalSpaceStation(this.mName);
     }
 
     @Override
