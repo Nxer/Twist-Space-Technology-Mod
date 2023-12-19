@@ -207,14 +207,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             }
             // check and process recipe
             if (!result.wasSuccessful()) {
-                if (metaItemEqual(items, SolarSail.get(1))) {
-                    // launch Solar Sail
-                    result = CheckRecipeResultRegistry.SUCCESSFUL;
-                    items.stackSize -= 1;
-                    mMaxProgresstime = ticksOfLaunchingSolarSail;
-                    lEUt = -EUTOfLaunchingSolarSail;
-                    dspDataCell.addDSPSolarSail(1);
-                } else if (metaItemEqual(items, SmallLaunchVehicle.get(1))) {
+                if (metaItemEqual(items, SmallLaunchVehicle.get(1))) {
                     // launch DSP Node
                     result = CheckRecipeResultRegistry.SUCCESSFUL;
                     items.stackSize -= 1;
@@ -225,6 +218,13 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
                         // 99% return EmptySmallLaunchVehicle
                         mOutputItems = new ItemStack[] { EmptySmallLaunchVehicle.get(1) };
                     }
+                } else if (metaItemEqual(items, SolarSail.get(1))) {
+                    // launch Solar Sail
+                    result = CheckRecipeResultRegistry.SUCCESSFUL;
+                    items.stackSize -= 1;
+                    mMaxProgresstime = ticksOfLaunchingSolarSail;
+                    lEUt = -EUTOfLaunchingSolarSail;
+                    dspDataCell.addDSPSolarSail(1);
                 }
             }
         }
