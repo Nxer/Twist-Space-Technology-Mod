@@ -17,7 +17,7 @@ public class ExtractorRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-        final IRecipeMap Extractor = RecipeMaps.extractorRecipes;
+        final IRecipeMap Extractor = RecipeMaps.fluidExtractionRecipes;
 
         GT_Values.RA.stdBuilder()
             .itemInputs(Config.combs.getStackForType(CombType.OTHERWORLDLY))
