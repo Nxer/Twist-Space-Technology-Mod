@@ -15,22 +15,20 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
-import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
+import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
+import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
@@ -42,7 +40,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TooltipMultiBlockBase;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
@@ -57,7 +54,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
     private static final int maxY = 64;
     private static final int maxZ = 63;
 
-    //private static long bufferedEU = 0;
+    // private static long bufferedEU = 0;
 
     private final Set<ICleanroomReceiver> cleanroomReceivers = new HashSet<>();
     private int mHeight = -1;
@@ -145,28 +142,28 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
 
     @Override
     public String[] getStructureDescription(ItemStack itemStack) {
-        return new String[]{"The base can be rectangular."};
+        return new String[] { "The base can be rectangular." };
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-//        long v = getMaxInputVoltage();
-//        long maxBufferedEU = 1024 * v;
-//        bufferedEU = (long) (Math.min(maxBufferedEU, bufferedEU) * 0.9999);
-//        long increase = maxBufferedEU - bufferedEU;
-//        for (var tHatch : filterValidMTEs(mEnergyHatches)) {
-//            long decrease = Math.min(increase, tHatch.getEUVar());
-//            if (tHatch.getBaseMetaTileEntity()
-//                .decreaseStoredEnergyUnits(decrease, false)) increase -= decrease;
-//        }
-//        for (var tHatch : filterValidMTEs(mExoticEnergyHatches)) {
-//            long decrease = Math.min(increase, tHatch.getEUVar());
-//            if (tHatch.getBaseMetaTileEntity()
-//                .decreaseStoredEnergyUnits(decrease, false)) increase -= decrease;
-//        }
-//        bufferedEU = maxBufferedEU - increase;
-//        bufferedEU -= outputToDynamo(Math.min(bufferedEU, maxBufferedEU / 2));
+        // long v = getMaxInputVoltage();
+        // long maxBufferedEU = 1024 * v;
+        // bufferedEU = (long) (Math.min(maxBufferedEU, bufferedEU) * 0.9999);
+        // long increase = maxBufferedEU - bufferedEU;
+        // for (var tHatch : filterValidMTEs(mEnergyHatches)) {
+        // long decrease = Math.min(increase, tHatch.getEUVar());
+        // if (tHatch.getBaseMetaTileEntity()
+        // .decreaseStoredEnergyUnits(decrease, false)) increase -= decrease;
+        // }
+        // for (var tHatch : filterValidMTEs(mExoticEnergyHatches)) {
+        // long decrease = Math.min(increase, tHatch.getEUVar());
+        // if (tHatch.getBaseMetaTileEntity()
+        // .decreaseStoredEnergyUnits(decrease, false)) increase -= decrease;
+        // }
+        // bufferedEU = maxBufferedEU - increase;
+        // bufferedEU -= outputToDynamo(Math.min(bufferedEU, maxBufferedEU / 2));
         if (aTick % 20 == 0) {
             var a = filterValidMTEs(mInputHatches);
             var b = filterValidMTEs(mOutputHatches);
@@ -184,8 +181,8 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
                             item.stackSize -= ((GT_MetaTileEntity_Hatch_OutputBus_ME) d.get(0)).store(item);
                         } else if (d.get(i)
                             .storeAll(item.copy())) {
-                            item.stackSize = 0;
-                        }
+                                item.stackSize = 0;
+                            }
                     }
                 }
             }
@@ -194,10 +191,10 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
                     .getFluid() == null) continue;
                 a.get(i)
                     .getFluid().amount -= b.get(i)
-                    .fill(
-                        a.get(i)
-                            .getFluid(),
-                        true);
+                        .fill(
+                            a.get(i)
+                                .getFluid(),
+                            true);
             }
         }
     }
@@ -251,7 +248,6 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
         }
         return aEU - injected;
     }
-
 
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
@@ -364,9 +360,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
                             if (aBaseMetaTileEntity instanceof GT_MetaTileEntity_Hatch_OutputData) {
                                 return false;
                             }
-                            if (!this.addToMachineList(tTileEntity, 210) && (
-                                !this.addExoticEnergyInputToMachineList(tTileEntity, 210)
-                            )) {
+                            if (!this.addToMachineList(tTileEntity, 210)) {
                                 if (tBlock instanceof ic2.core.block.BlockIC2Door) {
                                     if ((tMeta & 8) == 0) {
                                         // let's not fiddle with bits anymore.
@@ -469,14 +463,13 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
 
     private void setCleanroomReceivers(int x, int y, int z, IGregTechTileEntity aBaseMetaTileEntity) {
         for (int dX = -x + 1; dX <= x - 1; dX++) {
-            for (int dZ = -z + 1; dZ <= z - 1; dZ++)
-                for (int dY = -1; dY >= y + 1; dY--) {
-                    TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityOffset(dX, dY, dZ);
-                    if (tTileEntity instanceof ICleanroomReceiver receiver) {
-                        receiver.setCleanroom(this);
-                        cleanroomReceivers.add(receiver);
-                    }
+            for (int dZ = -z + 1; dZ <= z - 1; dZ++) for (int dY = -1; dY >= y + 1; dY--) {
+                TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityOffset(dX, dY, dZ);
+                if (tTileEntity instanceof ICleanroomReceiver receiver) {
+                    receiver.setCleanroom(this);
+                    cleanroomReceivers.add(receiver);
                 }
+            }
         }
     }
 
@@ -487,23 +480,23 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
-                                 ForgeDirection facingDirection, int colorIndex, boolean active, boolean redstoneLevel) {
+        ForgeDirection facingDirection, int colorIndex, boolean active, boolean redstoneLevel) {
         if ((sideDirection.flag & (ForgeDirection.UP.flag | ForgeDirection.DOWN.flag)) != 0) {
-            return new ITexture[]{TextureFactory.of(BLOCK_PLASCRETE), active
+            return new ITexture[] { TextureFactory.of(BLOCK_PLASCRETE), active
                 ? TextureFactory.of(
-                TextureFactory.of(OVERLAY_TOP_CLEANROOM_ACTIVE),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW)
-                    .glow()
-                    .build())
+                    TextureFactory.of(OVERLAY_TOP_CLEANROOM_ACTIVE),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW)
+                        .glow()
+                        .build())
                 : TextureFactory.of(
-                TextureFactory.of(OVERLAY_TOP_CLEANROOM),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_TOP_CLEANROOM_GLOW)
-                    .glow()
-                    .build())};
+                    TextureFactory.of(OVERLAY_TOP_CLEANROOM),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_TOP_CLEANROOM_GLOW)
+                        .glow()
+                        .build()) };
         }
-        return new ITexture[]{TextureFactory.of(BLOCK_PLASCRETE)};
+        return new ITexture[] { TextureFactory.of(BLOCK_PLASCRETE) };
     }
 
     @Override
@@ -535,31 +528,29 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
         int y = baseEntity.getYCoord();
         int z = baseEntity.getZCoord();
         int yoff = Math.max(i * 2, 3);
-        for (int X = x - i; X <= x + i; X++)
-            for (int Y = y; Y >= y - yoff; Y--)
-                for (int Z = z - i; Z <= z + i; Z++) {
-                    if (X == x && Y == y && Z == z) continue;
-                    if (X == x - i || X == x + i || Z == z - i || Z == z + i || Y == y - yoff) {
-                        if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockReinforced, 2);
-                        else world.setBlock(X, Y, Z, GregTech_API.sBlockReinforced, 2, 2);
-                    } else if (Y == y) {
-                        if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockCasings3, 11);
-                        else world.setBlock(X, Y, Z, GregTech_API.sBlockCasings3, 11, 2);
-                    }
-                }
+        for (int X = x - i; X <= x + i; X++) for (int Y = y; Y >= y - yoff; Y--) for (int Z = z - i; Z <= z + i; Z++) {
+            if (X == x && Y == y && Z == z) continue;
+            if (X == x - i || X == x + i || Z == z - i || Z == z + i || Y == y - yoff) {
+                if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockReinforced, 2);
+                else world.setBlock(X, Y, Z, GregTech_API.sBlockReinforced, 2, 2);
+            } else if (Y == y) {
+                if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockCasings3, 11);
+                else world.setBlock(X, Y, Z, GregTech_API.sBlockCasings3, 11, 2);
+            }
+        }
     }
 
-//    @Override
-//    public void loadNBTData(NBTTagCompound aNBT) {
-//        aNBT.getLong("bufferedEU");
-//        super.loadNBTData(aNBT);
-//    }
+    // @Override
+    // public void loadNBTData(NBTTagCompound aNBT) {
+    // aNBT.getLong("bufferedEU");
+    // super.loadNBTData(aNBT);
+    // }
 
-//    @Override
-//    public void saveNBTData(NBTTagCompound aNBT) {
-////        aNBT.setLong("bufferedEU", bufferedEU);
-//        super.saveNBTData(aNBT);
-//    }
+    // @Override
+    // public void saveNBTData(NBTTagCompound aNBT) {
+    //// aNBT.setLong("bufferedEU", bufferedEU);
+    // super.saveNBTData(aNBT);
+    // }
 
     private static class ConfigEntry {
 
@@ -606,7 +597,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
                 if (cc.containsKey("Meta")) config.put(
                     name + ":"
                         + cc.get("Meta")
-                        .getInt(),
+                            .getInt(),
                     new ConfigEntry(
                         0,
                         cc.get("Count")
@@ -621,7 +612,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
                 if (cc.containsKey("Meta")) config.put(
                     name + ":"
                         + cc.get("Meta")
-                        .getInt(),
+                            .getInt(),
                     new ConfigEntry(
                         cc.get("Percentage")
                             .getInt(),
