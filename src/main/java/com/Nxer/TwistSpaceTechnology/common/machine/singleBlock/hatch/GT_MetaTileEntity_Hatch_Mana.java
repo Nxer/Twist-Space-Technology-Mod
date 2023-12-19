@@ -22,13 +22,11 @@ import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
-import vazkii.botania.api.mana.spark.ISparkAttachable;
-import vazkii.botania.api.mana.spark.ISparkEntity;
+import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.block.tile.mana.TilePool;
 
 public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidGenerator{
 
-    public static final int MAX_MANA = 1000000;
-    int mana;
 
     public GT_MetaTileEntity_Hatch_Mana(final int aID, final String aName, final String aNameRegional,
         final int aTier) {
@@ -85,17 +83,17 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public int getMaxTickTime() {
-        return 20;
+        return 4;
     }
 
     @Override
     public int getCapacity() {
-        return 128_000;
+        return 100_000;
     }
 
     @Override
     public boolean doesHatchMeetConditionsToGenerate() {
-        return true;
+        return this.getBaseMetaTileEntity().getBlockAtSide(this.getBaseMetaTileEntity().getFrontFacing())==ModBlocks.pool;
     }
 
     @Override
@@ -116,6 +114,12 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
         if (!this.doesHatchMeetConditionsToGenerate()) {
             return false;
         } else {
+            // int tX = this.getBaseMetaTileEntity().getXCoord();
+            // int tY = this.getBaseMetaTileEntity().getYCoord();
+            // int tZ = this.getBaseMetaTileEntity().getZCoord();
+            
+            // World tWorld = this.getBaseMetaTileEntity().getWorld();
+            int mana=((TilePool)this.getBaseMetaTileEntity().getTileEntityAtSideAndDistance(this.getBaseMetaTileEntity().getFrontFacing(),1)).getCurrentMana();
             int aFillAmount = super.fill(
                 FluidUtils.getFluidStack(
                     this.getFluidToGenerate(),
@@ -126,7 +130,7 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
             // if (aFillAmount > 0 && this.getBaseMetaTileEntity().isClientSide()) {
             // this.generateParticles(this.getBaseMetaTileEntity().getWorld(), "cloud");
             // }
-            mana -= aFillAmount * 10;
+            ((TilePool)this.getBaseMetaTileEntity().getTileEntityAtSideAndDistance(this.getBaseMetaTileEntity().getFrontFacing(),1)).recieveMana( - aFillAmount * 10);
             return aFillAmount > 0;
         }
     }
