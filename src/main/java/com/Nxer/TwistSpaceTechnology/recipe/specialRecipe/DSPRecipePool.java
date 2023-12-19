@@ -68,9 +68,9 @@ import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_RecipeConstants;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.Particle;
@@ -83,7 +83,7 @@ public class DSPRecipePool implements IRecipePool {
 
         final IRecipeMap DSPLauncherRecipe = GTCMRecipe.DSP_LauncherRecipes;
         final IRecipeMap SpaceAssembler = IGRecipeMaps.spaceAssemblerRecipes;
-        final IRecipeMap Assembler = GT_RecipeConstants.AssemblerOD;
+        final IRecipeMap Assembler = RecipeMaps.assemblerRecipes;
         final Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
 
         // DSP Ray Receiving Station
