@@ -15,8 +15,14 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
+import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
+import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
+import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.ConfigCategory;
@@ -36,7 +42,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TooltipMultiBlockBase;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
@@ -45,24 +50,35 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_OutputBus_ME;
 
-public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
+public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
     implements IConstructable, ISecondaryDescribable, ICleanroom {
 
     private static final int maxX = 63;
     private static final int maxY = 64;
     private static final int maxZ = 63;
 
-    private static long bufferedEU = 0;
+    //private static long bufferedEU = 0;
 
     private final Set<ICleanroomReceiver> cleanroomReceivers = new HashSet<>();
     private int mHeight = -1;
 
     public TST_CleanRoom(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+
     }
 
     public TST_CleanRoom(String aName) {
         super(aName);
+    }
+
+    public void init() {
+        ePowerPass = true;
+        useLongPower = true;
+    }
+
+    @Override
+    public IStructureDefinition<? extends GT_MetaTileEntity_MultiblockBase_EM> getStructure_EM() {
+        return null;
     }
 
     @Override
@@ -129,23 +145,28 @@ public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
 
     @Override
     public String[] getStructureDescription(ItemStack itemStack) {
-        return new String[] { "The base can be rectangular." };
+        return new String[]{"The base can be rectangular."};
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        long v = getMaxInputVoltage();
-        long maxBufferedEU = 1024 * v;
-        bufferedEU = Math.min(maxBufferedEU, bufferedEU);
-        long increase = maxBufferedEU - bufferedEU;
-        for (GT_MetaTileEntity_Hatch_Energy tHatch : filterValidMTEs(mEnergyHatches)) {
-            long decrease = Math.min(increase, tHatch.getEUVar());
-            if (tHatch.getBaseMetaTileEntity()
-                .decreaseStoredEnergyUnits(decrease, false)) increase -= decrease;
-        }
-        bufferedEU = maxBufferedEU - increase;
-        bufferedEU -= outputToDynamo(Math.min(bufferedEU, maxBufferedEU / 2));
+//        long v = getMaxInputVoltage();
+//        long maxBufferedEU = 1024 * v;
+//        bufferedEU = (long) (Math.min(maxBufferedEU, bufferedEU) * 0.9999);
+//        long increase = maxBufferedEU - bufferedEU;
+//        for (var tHatch : filterValidMTEs(mEnergyHatches)) {
+//            long decrease = Math.min(increase, tHatch.getEUVar());
+//            if (tHatch.getBaseMetaTileEntity()
+//                .decreaseStoredEnergyUnits(decrease, false)) increase -= decrease;
+//        }
+//        for (var tHatch : filterValidMTEs(mExoticEnergyHatches)) {
+//            long decrease = Math.min(increase, tHatch.getEUVar());
+//            if (tHatch.getBaseMetaTileEntity()
+//                .decreaseStoredEnergyUnits(decrease, false)) increase -= decrease;
+//        }
+//        bufferedEU = maxBufferedEU - increase;
+//        bufferedEU -= outputToDynamo(Math.min(bufferedEU, maxBufferedEU / 2));
         if (aTick % 20 == 0) {
             var a = filterValidMTEs(mInputHatches);
             var b = filterValidMTEs(mOutputHatches);
@@ -163,34 +184,44 @@ public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
                             item.stackSize -= ((GT_MetaTileEntity_Hatch_OutputBus_ME) d.get(0)).store(item);
                         } else if (d.get(i)
                             .storeAll(item.copy())) {
-                                item.stackSize = 0;
-                            }
+                            item.stackSize = 0;
+                        }
                     }
                 }
             }
             for (int i = 0; i < a.size(); i++) {
+                if (a.get(i)
+                    .getFluid() == null) continue;
                 a.get(i)
                     .getFluid().amount -= b.get(i)
-                        .fill(
-                            a.get(i)
-                                .getFluid(),
-                            true);
+                    .fill(
+                        a.get(i)
+                            .getFluid(),
+                        true);
             }
         }
     }
 
     @Nonnull
     @Override
-    public CheckRecipeResult checkProcessing() {
+    public CheckRecipeResult checkProcessing_EM() {
         mEfficiencyIncrease = 100;
 
         // use the standard overclock mechanism to determine duration and estimate a maximum consumption
         calculateOverclockedNessMultiInternal(40, 45 * Math.max(1, mHeight - 1), 1, getMaxInputVoltage(), false);
         // negate it to trigger the special energy consumption function. divide by 10 to get the actual final
         // consumption.
-        mEUt /= -10;
-
-        return SimpleCheckRecipeResult.ofSuccess("cleanroom_running");
+        lEUt /= -10;
+        if (ePowerPass) {
+            mMaxProgresstime = 20;
+        } else {
+            mEfficiencyIncrease = 0;
+            mMaxProgresstime = 0;
+        }
+        eAmpereFlow = 0;
+        mEUt = 0;
+        return ePowerPass ? SimpleCheckRecipeResult.ofSuccess("routing")
+            : SimpleCheckRecipeResult.ofFailure("running fine");
     }
 
     public long outputToDynamo(long aEU) {
@@ -221,13 +252,9 @@ public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
         return aEU - injected;
     }
 
-    @Override
-    public boolean isFacingValid(ForgeDirection facing) {
-        return (facing.flag & (ForgeDirection.UP.flag | ForgeDirection.DOWN.flag)) == 0;
-    }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int x = 1;
         int z = 1;
         int y = 1;
@@ -331,7 +358,15 @@ public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
                         } else {
                             final IGregTechTileEntity tTileEntity = aBaseMetaTileEntity
                                 .getIGregTechTileEntityOffset(dX, dY, dZ);
-                            if (!this.addToMachineList(tTileEntity, 210)) {
+                            if (aBaseMetaTileEntity instanceof GT_MetaTileEntity_Hatch_InputData) {
+                                return false;
+                            }
+                            if (aBaseMetaTileEntity instanceof GT_MetaTileEntity_Hatch_OutputData) {
+                                return false;
+                            }
+                            if (!this.addToMachineList(tTileEntity, 210) && (
+                                !this.addExoticEnergyInputToMachineList(tTileEntity, 210)
+                            )) {
                                 if (tBlock instanceof ic2.core.block.BlockIC2Door) {
                                     if ((tMeta & 8) == 0) {
                                         // let's not fiddle with bits anymore.
@@ -434,13 +469,14 @@ public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
 
     private void setCleanroomReceivers(int x, int y, int z, IGregTechTileEntity aBaseMetaTileEntity) {
         for (int dX = -x + 1; dX <= x - 1; dX++) {
-            for (int dZ = -z + 1; dZ <= z - 1; dZ++) for (int dY = -1; dY >= y + 1; dY--) {
-                TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityOffset(dX, dY, dZ);
-                if (tTileEntity instanceof ICleanroomReceiver receiver) {
-                    receiver.setCleanroom(this);
-                    cleanroomReceivers.add(receiver);
+            for (int dZ = -z + 1; dZ <= z - 1; dZ++)
+                for (int dY = -1; dY >= y + 1; dY--) {
+                    TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityOffset(dX, dY, dZ);
+                    if (tTileEntity instanceof ICleanroomReceiver receiver) {
+                        receiver.setCleanroom(this);
+                        cleanroomReceivers.add(receiver);
+                    }
                 }
-            }
         }
     }
 
@@ -451,23 +487,23 @@ public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
-        ForgeDirection facingDirection, int colorIndex, boolean active, boolean redstoneLevel) {
+                                 ForgeDirection facingDirection, int colorIndex, boolean active, boolean redstoneLevel) {
         if ((sideDirection.flag & (ForgeDirection.UP.flag | ForgeDirection.DOWN.flag)) != 0) {
-            return new ITexture[] { TextureFactory.of(BLOCK_PLASCRETE), active
+            return new ITexture[]{TextureFactory.of(BLOCK_PLASCRETE), active
                 ? TextureFactory.of(
-                    TextureFactory.of(OVERLAY_TOP_CLEANROOM_ACTIVE),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW)
-                        .glow()
-                        .build())
+                TextureFactory.of(OVERLAY_TOP_CLEANROOM_ACTIVE),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW)
+                    .glow()
+                    .build())
                 : TextureFactory.of(
-                    TextureFactory.of(OVERLAY_TOP_CLEANROOM),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_TOP_CLEANROOM_GLOW)
-                        .glow()
-                        .build()) };
+                TextureFactory.of(OVERLAY_TOP_CLEANROOM),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_TOP_CLEANROOM_GLOW)
+                    .glow()
+                    .build())};
         }
-        return new ITexture[] { TextureFactory.of(BLOCK_PLASCRETE) };
+        return new ITexture[]{TextureFactory.of(BLOCK_PLASCRETE)};
     }
 
     @Override
@@ -499,17 +535,31 @@ public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
         int y = baseEntity.getYCoord();
         int z = baseEntity.getZCoord();
         int yoff = Math.max(i * 2, 3);
-        for (int X = x - i; X <= x + i; X++) for (int Y = y; Y >= y - yoff; Y--) for (int Z = z - i; Z <= z + i; Z++) {
-            if (X == x && Y == y && Z == z) continue;
-            if (X == x - i || X == x + i || Z == z - i || Z == z + i || Y == y - yoff) {
-                if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockReinforced, 2);
-                else world.setBlock(X, Y, Z, GregTech_API.sBlockReinforced, 2, 2);
-            } else if (Y == y) {
-                if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockCasings3, 11);
-                else world.setBlock(X, Y, Z, GregTech_API.sBlockCasings3, 11, 2);
-            }
-        }
+        for (int X = x - i; X <= x + i; X++)
+            for (int Y = y; Y >= y - yoff; Y--)
+                for (int Z = z - i; Z <= z + i; Z++) {
+                    if (X == x && Y == y && Z == z) continue;
+                    if (X == x - i || X == x + i || Z == z - i || Z == z + i || Y == y - yoff) {
+                        if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockReinforced, 2);
+                        else world.setBlock(X, Y, Z, GregTech_API.sBlockReinforced, 2, 2);
+                    } else if (Y == y) {
+                        if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockCasings3, 11);
+                        else world.setBlock(X, Y, Z, GregTech_API.sBlockCasings3, 11, 2);
+                    }
+                }
     }
+
+//    @Override
+//    public void loadNBTData(NBTTagCompound aNBT) {
+//        aNBT.getLong("bufferedEU");
+//        super.loadNBTData(aNBT);
+//    }
+
+//    @Override
+//    public void saveNBTData(NBTTagCompound aNBT) {
+////        aNBT.setLong("bufferedEU", bufferedEU);
+//        super.saveNBTData(aNBT);
+//    }
 
     private static class ConfigEntry {
 
@@ -556,7 +606,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
                 if (cc.containsKey("Meta")) config.put(
                     name + ":"
                         + cc.get("Meta")
-                            .getInt(),
+                        .getInt(),
                     new ConfigEntry(
                         0,
                         cc.get("Count")
@@ -571,7 +621,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_TooltipMultiBlockBase
                 if (cc.containsKey("Meta")) config.put(
                     name + ":"
                         + cc.get("Meta")
-                            .getInt(),
+                        .getInt(),
                     new ConfigEntry(
                         cc.get("Percentage")
                             .getInt(),
