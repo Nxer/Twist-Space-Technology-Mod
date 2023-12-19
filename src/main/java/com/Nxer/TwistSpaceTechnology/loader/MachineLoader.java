@@ -22,10 +22,12 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
@@ -65,6 +67,7 @@ public class MachineLoader {
     public static ItemStack MegaBrickedBlastFurnace;
     public static ItemStack LargeIndustrialCokingFactory;
     public static ItemStack Scavenger;
+    public static ItemStack superCleanRoom;
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
@@ -72,6 +75,21 @@ public class MachineLoader {
     public static ItemStack DualInputBuffer_ZPM;
     public static ItemStack DualInputBuffer_UV;
     public static ItemStack DualInputBuffer_UHV;
+
+    public static ItemStack BufferedEnergyHatchLV;
+    public static ItemStack BufferedEnergyHatchMV;
+    public static ItemStack BufferedEnergyHatchHV;
+    public static ItemStack BufferedEnergyHatchEV;
+    public static ItemStack BufferedEnergyHatchIV;
+    public static ItemStack BufferedEnergyHatchLuV;
+    public static ItemStack BufferedEnergyHatchZPM;
+    public static ItemStack BufferedEnergyHatchUV;
+    public static ItemStack BufferedEnergyHatchUHV;
+    public static ItemStack BufferedEnergyHatchUEV;
+    public static ItemStack BufferedEnergyHatchUIV;
+    public static ItemStack BufferedEnergyHatchUMV;
+    public static ItemStack BufferedEnergyHatchUXV;
+    public static ItemStack BufferedEnergyHatchMAX;
 
     // test
     // public static ItemStack TestMachine;
@@ -232,6 +250,10 @@ public class MachineLoader {
 
         GTCMItemList.Scavenger.set(Scavenger);
 
+        superCleanRoom = new TST_CleanRoom(19024, "multimachine.cleanroom", "Cleanroom Controller").getStackForm(1);
+        // ItemList.Machine_Multi_Cleanroom.set(superCleanRoom);
+        GTCMItemList.superCleanRoom.set(superCleanRoom);
+
         // endregion
 
         // region Single block Machine
@@ -283,5 +305,119 @@ public class MachineLoader {
             TextLocalization.NameDualInputBuffer_UHV,
             9).getStackForm(1);
         GTCMItemList.DualInputBuffer_UHV.set(DualInputBuffer_UHV);
+
+        BufferedEnergyHatchLV = new GT_Hatch_BufferedEnergyHatch(
+            18984,
+            "NameBufferedEnergyHatchLV",
+            "Buffered Energy Hatch LV",
+            1,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchMV = new GT_Hatch_BufferedEnergyHatch(
+            18985,
+            "NameBufferedEnergyHatchMV",
+            "Buffered Energy Hatch MV",
+            2,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchHV = new GT_Hatch_BufferedEnergyHatch(
+            18986,
+            "NameBufferedEnergyHatchHV",
+            "Buffered Energy Hatch HV",
+            3,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchEV = new GT_Hatch_BufferedEnergyHatch(
+            18987,
+            "NameBufferedEnergyHatchEV",
+            "Buffered Energy Hatch EV",
+            4,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchIV = new GT_Hatch_BufferedEnergyHatch(
+            18988,
+            "NameBufferedEnergyHatchIV",
+            "Buffered Energy Hatch IV",
+            5,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchLuV = new GT_Hatch_BufferedEnergyHatch(
+            18989,
+            "NameBufferedEnergyHatchLuV",
+            "Buffered Energy Hatch LuV",
+            6,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchZPM = new GT_Hatch_BufferedEnergyHatch(
+            18990,
+            "NameBufferedEnergyHatchZPM",
+            "Buffered Energy Hatch ZPM",
+            7,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchUV = new GT_Hatch_BufferedEnergyHatch(
+            18991,
+            "NameBufferedEnergyHatchUV",
+            "Buffered Energy Hatch UV",
+            8,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchUHV = new GT_Hatch_BufferedEnergyHatch(
+            18992,
+            "NameBufferedEnergyHatchUHV",
+            "Buffered Energy Hatch UHV",
+            9,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchUEV = new GT_Hatch_BufferedEnergyHatch(
+            18993,
+            "NameBufferedEnergyHatchUEV",
+            "Buffered Energy Hatch UEV",
+            10,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchUIV = new GT_Hatch_BufferedEnergyHatch(
+            18994,
+            "NameBufferedEnergyHatchUIV",
+            "Buffered Energy Hatch UIV",
+            11,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchUMV = new GT_Hatch_BufferedEnergyHatch(
+            18995,
+            "NameBufferedEnergyHatchUMV",
+            "Buffered Energy Hatch UMV",
+            12,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchUXV = new GT_Hatch_BufferedEnergyHatch(
+            18996,
+            "NameBufferedEnergyHatchUXV",
+            "Buffered Energy Hatch UXV",
+            13,
+            16,
+            null).getStackForm(1);
+        BufferedEnergyHatchMAX = new GT_Hatch_BufferedEnergyHatch(
+            18997,
+            "NameBufferedEnergyHatchMAX",
+            "Buffered Energy Hatch MAX",
+            14,
+            16,
+            null).getStackForm(1);
+        GTCMItemList.BufferedEnergyHatchLV.set(BufferedEnergyHatchLV);
+        GTCMItemList.BufferedEnergyHatchMV.set(BufferedEnergyHatchMV);
+        GTCMItemList.BufferedEnergyHatchHV.set(BufferedEnergyHatchHV);
+        GTCMItemList.BufferedEnergyHatchEV.set(BufferedEnergyHatchEV);
+        GTCMItemList.BufferedEnergyHatchIV.set(BufferedEnergyHatchIV);
+        GTCMItemList.BufferedEnergyHatchLuV.set(BufferedEnergyHatchLuV);
+        GTCMItemList.BufferedEnergyHatchZPM.set(BufferedEnergyHatchZPM);
+        GTCMItemList.BufferedEnergyHatchUV.set(BufferedEnergyHatchUV);
+        GTCMItemList.BufferedEnergyHatchUHV.set(BufferedEnergyHatchUHV);
+        GTCMItemList.BufferedEnergyHatchUEV.set(BufferedEnergyHatchUEV);
+        GTCMItemList.BufferedEnergyHatchUIV.set(BufferedEnergyHatchUIV);
+        GTCMItemList.BufferedEnergyHatchUMV.set(BufferedEnergyHatchUMV);
+        GTCMItemList.BufferedEnergyHatchUXV.set(BufferedEnergyHatchUXV);
+        GTCMItemList.BufferedEnergyHatchMAX.set(BufferedEnergyHatchMAX);
+
     }
 }

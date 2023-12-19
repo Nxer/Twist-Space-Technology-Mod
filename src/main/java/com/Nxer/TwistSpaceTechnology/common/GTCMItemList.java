@@ -176,6 +176,8 @@ public enum GTCMItemList {
     LargeIndustrialCokingFactory,
     Scavenger,
 
+    superCleanRoom,
+
     // MAX
     HighDimensionalExtend,
     HighDimensionalCircuitDoard,
@@ -211,6 +213,20 @@ public enum GTCMItemList {
     DualInputBuffer_ZPM,
     DualInputBuffer_UV,
     DualInputBuffer_UHV,
+    BufferedEnergyHatchLV,
+    BufferedEnergyHatchMV,
+    BufferedEnergyHatchHV,
+    BufferedEnergyHatchEV,
+    BufferedEnergyHatchIV,
+    BufferedEnergyHatchLuV,
+    BufferedEnergyHatchZPM,
+    BufferedEnergyHatchUV,
+    BufferedEnergyHatchUHV,
+    BufferedEnergyHatchUEV,
+    BufferedEnergyHatchUIV,
+    BufferedEnergyHatchUMV,
+    BufferedEnergyHatchUXV,
+    BufferedEnergyHatchMAX,
 
     // Blocks
 
