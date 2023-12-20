@@ -23,6 +23,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
@@ -70,6 +71,8 @@ public class MachineLoader {
     public static ItemStack Scavenger;
     public static ItemStack superCleanRoom;
     public static ItemStack MegaEggGenerator;
+    public static ItemStack BiosphereIII;
+  
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
@@ -252,16 +255,20 @@ public class MachineLoader {
 
         GTCMItemList.Scavenger.set(Scavenger);
 
-        MegaEggGenerator = new GT_TileEntity_MegaEggGenerator(
-            19025,
-            "NameMegaEggGenerator",
-            TextLocalization.NameMegaEggGenerator).getStackForm(1);
-        GTCMItemList.MegaEggGenerator.set(MegaEggGenerator);
-
         superCleanRoom = new TST_CleanRoom(19024, "multimachine.cleanroom", "Cleanroom Controller").getStackForm(1);
         // ItemList.Machine_Multi_Cleanroom.set(superCleanRoom);
         GTCMItemList.superCleanRoom.set(superCleanRoom);
 
+        //
+        BiosphereIII = new TST_BiosphereIII(19025, "nameBiosphereIII", TextLocalization.NameBiosphereIII)
+            .getStackForm(1);
+        GTCMItemList.BiosphereIII.set(BiosphereIII);
+      
+        MegaEggGenerator = new GT_TileEntity_MegaEggGenerator(
+            19026,
+            "NameMegaEggGenerator",
+            TextLocalization.NameMegaEggGenerator).getStackForm(1);
+        GTCMItemList.MegaEggGenerator.set(MegaEggGenerator);
         // endregion
 
         // region Single block Machine

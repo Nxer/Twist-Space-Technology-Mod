@@ -178,6 +178,7 @@ public enum GTCMItemList {
     MegaEggGenerator,
 
     superCleanRoom,
+    BiosphereIII,
 
     // MAX
     HighDimensionalExtend,
