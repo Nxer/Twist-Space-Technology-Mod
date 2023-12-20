@@ -72,7 +72,7 @@ public class MachineLoader {
     public static ItemStack superCleanRoom;
     public static ItemStack MegaEggGenerator;
     public static ItemStack BiosphereIII;
-  
+
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
@@ -263,7 +263,7 @@ public class MachineLoader {
         BiosphereIII = new TST_BiosphereIII(19025, "nameBiosphereIII", TextLocalization.NameBiosphereIII)
             .getStackForm(1);
         GTCMItemList.BiosphereIII.set(BiosphereIII);
-      
+
         MegaEggGenerator = new GT_TileEntity_MegaEggGenerator(
             19026,
             "NameMegaEggGenerator",

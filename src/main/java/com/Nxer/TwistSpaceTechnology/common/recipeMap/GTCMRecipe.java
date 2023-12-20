@@ -124,9 +124,9 @@ public class GTCMRecipe {
     //
     // }
 
-
     public static final RecipeMap<RecipeMapBackend> IntensifyChemicalDistorterRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.IntensifyChemicalDistorterRecipes") // At the same time , the localization key of the NEI Name of this page.
+        .of("gtcm.recipe.IntensifyChemicalDistorterRecipes") // At the same time , the localization key of the NEI Name
+                                                             // of this page.
         .maxIO(16, 16, 16, 16)
         .neiSpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
