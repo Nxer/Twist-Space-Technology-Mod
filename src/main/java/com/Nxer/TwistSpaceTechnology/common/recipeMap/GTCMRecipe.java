@@ -1,11 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
-
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMaprecipeMapFrontends.TST_GeneralFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 
 import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.recipe.RecipeMap;
