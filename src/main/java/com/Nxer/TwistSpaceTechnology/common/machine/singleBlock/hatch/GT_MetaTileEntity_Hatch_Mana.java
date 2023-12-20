@@ -28,6 +28,7 @@ import vazkii.botania.common.block.tile.mana.TilePool;
 public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidGenerator{
 
 
+    int mode=0;
     public GT_MetaTileEntity_Hatch_Mana(final int aID, final String aName, final String aNameRegional,
         final int aTier) {
         super(aID, aName, aNameRegional, aTier);
@@ -110,15 +111,19 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
     }
 
     @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+            this.mode = (this.mode + 1) % 3;
+            GT_Utility.sendChatToPlayer(
+                aPlayer,
+                StatCollector.translateToLocal("Mana_Hatch.modeMsg." + this.mode));
+        }
+    }
+    
+    @Override
     public boolean addFluidToHatch(long aTick) {
         if (!this.doesHatchMeetConditionsToGenerate()) {
             return false;
         } else {
-            // int tX = this.getBaseMetaTileEntity().getXCoord();
-            // int tY = this.getBaseMetaTileEntity().getYCoord();
-            // int tZ = this.getBaseMetaTileEntity().getZCoord();
-            
-            // World tWorld = this.getBaseMetaTileEntity().getWorld();
             int mana=((TilePool)this.getBaseMetaTileEntity().getTileEntityAtSideAndDistance(this.getBaseMetaTileEntity().getFrontFacing(),1)).getCurrentMana();
             int aFillAmount = super.fill(
                 FluidUtils.getFluidStack(
