@@ -132,7 +132,9 @@ public class GTCMRecipe {
         .neiSpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IntensifyChemicalDistorter.get(1)))
+        .neiHandlerInfo(
+            builder -> builder.setDisplayStack(GTCMItemList.IntensifyChemicalDistorter.get(1))
+                .setMaxRecipesPerPage(1))
         .disableOptimize()
         .build();
 
@@ -161,7 +163,9 @@ public class GTCMRecipe {
         .maxIO(16, 16, 16, 16)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.get(1)))
+        .neiHandlerInfo(
+            builder -> builder.setDisplayStack(GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.get(1))
+                .setMaxRecipesPerPage(1))
         .disableOptimize()
         .build();
 
@@ -190,7 +194,9 @@ public class GTCMRecipe {
         .maxIO(16, 16, 16, 4)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
+        .neiHandlerInfo(
+            builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1))
+                .setMaxRecipesPerPage(1))
         .disableOptimize()
         .build();
 
@@ -247,7 +253,7 @@ public class GTCMRecipe {
         .maxIO(4, 4, 4, 1)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.CrystallineInfinitier.get(1)))
         .disableOptimize()
         .build();
 
@@ -498,7 +504,7 @@ public class GTCMRecipe {
         .of("tst.recipe.StellarForgeRecipes")
         .maxIO(4, 4, 1, 2)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
         .disableOptimize()
         .build();
 
@@ -527,7 +533,7 @@ public class GTCMRecipe {
         .maxIO(4, 4, 4, 4)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HyperSpacetimeTransformer.get(1)))
         .disableOptimize()
         .build();
 
