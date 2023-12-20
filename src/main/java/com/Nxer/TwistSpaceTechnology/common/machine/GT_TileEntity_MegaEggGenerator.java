@@ -282,7 +282,7 @@ public class GT_TileEntity_MegaEggGenerator
         if (side == facing) {
             if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183),
                 TextureFactory.builder()
-                    .addIcon(MACHINE_CASING_DRAGONEGG)
+                    .addIcon(MACHINE_CASING_DRAGONEGG_GLOW)
                     .extFacing()
                     .build(),
                 TextureFactory.builder()
