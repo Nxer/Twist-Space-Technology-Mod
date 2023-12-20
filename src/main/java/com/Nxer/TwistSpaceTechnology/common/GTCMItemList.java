@@ -177,6 +177,7 @@ public enum GTCMItemList {
     Scavenger,
 
     superCleanRoom,
+    BiosphereIII,
 
     // MAX
     HighDimensionalExtend,
