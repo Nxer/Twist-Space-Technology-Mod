@@ -645,3 +645,15 @@ NameBufferedEnergyHatchUIV=Buffered Energy Hatch UIV
 NameBufferedEnergyHatchUMV=Buffered Energy Hatch UMV
 NameBufferedEnergyHatchUXV=Buffered Energy Hatch UXV
 NameBufferedEnergyHatchMAX=Buffered Energy Hatch MAX
+
+Tooltip_MegaEggGenerator_00=Where all your dragon egg goes.
+Tooltip_MegaEggGenerator_MachineType=Magical Energy Absorber
+Tooltip_MegaEggGenerator_02=Every dragon egg generates 1A EV, so one piece generates 1A Luv.
+Tooltip_MegaEggGenerator_Controller=Controller block for the Tower of Abstraction
+Tooltip_MegaEggGenerator_01=Get free energy from dragon eggs, just as Magical Energy Absorber does.
+Tooltip_MegaEggGenerator_04=pieces of the generator give √(Pieces - 1)% bonus to final output.
+Tooltip_MegaEggGenerator_03=But quantitative change leads to qualitative change,
+Tooltip_MegaEggGenerator_M=No need for maintenance hatch.
+Tooltip_MegaEggGenerator_D=Any Magical Casing.
+Tooltip_MegaEggGenerator_05=Note its warm-up process is quite slow, about 500 secs in need.
+NameMegaEggGenerator=Tower of Abstraction

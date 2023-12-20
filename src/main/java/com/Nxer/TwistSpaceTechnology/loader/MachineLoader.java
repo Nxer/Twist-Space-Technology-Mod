@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaEggGenerator;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -68,6 +69,7 @@ public class MachineLoader {
     public static ItemStack LargeIndustrialCokingFactory;
     public static ItemStack Scavenger;
     public static ItemStack superCleanRoom;
+    public static ItemStack MegaEggGenerator;
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
@@ -249,6 +251,9 @@ public class MachineLoader {
         Scavenger = new TST_Scavenger(19023, "NameScavenger", TextLocalization.NameScavenger).getStackForm(1);
 
         GTCMItemList.Scavenger.set(Scavenger);
+
+        MegaEggGenerator = new GT_TileEntity_MegaEggGenerator(19025, "NameMegaEggGenerator", TextLocalization.NameMegaEggGenerator).getStackForm(1);
+        GTCMItemList.MegaEggGenerator.set(MegaEggGenerator);
 
         superCleanRoom = new TST_CleanRoom(19024, "multimachine.cleanroom", "Cleanroom Controller").getStackForm(1);
         // ItemList.Machine_Multi_Cleanroom.set(superCleanRoom);
