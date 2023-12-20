@@ -23,11 +23,10 @@ public class BaseDamageHandler {
                     .isRiding()
                 && event.source.damageType == "player")
                 damage = (float) (1.5
-                    * ( SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0));
+                    * (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0));
             else if (event.source.damageType != "indirectMagic")
                 damage = (float) (SourceStats.CombatStats.get("BaseDamage")
-                    + SourceStats.CombatStats.get("Strength") / 50.0
-                    );
+                    + SourceStats.CombatStats.get("Strength") / 50.0);
             else damage = SourceStats.CombatStats.get("BaseDamage");
 
         }

@@ -3,12 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
-import java.util.List;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -27,10 +22,11 @@ import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.mana.TilePool;
 
-public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidGenerator{
+public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidGenerator {
 
+    int mode = 0;
+    int maxtrans = 1000;
 
-    int mode=0;
     public GT_MetaTileEntity_Hatch_Mana(final int aID, final String aName, final String aNameRegional,
         final int aTier) {
         super(aID, aName, aNameRegional, aTier);
@@ -96,7 +92,11 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public boolean doesHatchMeetConditionsToGenerate() {
-        return this.getBaseMetaTileEntity().getBlockAtSide(this.getBaseMetaTileEntity().getFrontFacing())==ModBlocks.pool;
+        return this.getBaseMetaTileEntity()
+            .getBlockAtSide(
+                this.getBaseMetaTileEntity()
+                    .getFrontFacing())
+            == ModBlocks.pool;
     }
 
     @Override
@@ -114,35 +114,40 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-            this.mode = (this.mode + 1) % 3;
-            GT_Utility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("Mana_Hatch.modeMsg." + this.mode));
+        this.mode = (this.mode + 1) % 3;
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("Mana_Hatch.modeMsg." + this.mode));
     }
-    
+
     @Override
     public boolean addFluidToHatch(long aTick) {
         if (!this.doesHatchMeetConditionsToGenerate()) {
             return false;
         } else {
-            int mana=((TilePool)this.getBaseMetaTileEntity().getTileEntityAtSideAndDistance(this.getBaseMetaTileEntity().getFrontFacing(),1)).getCurrentMana();
+            int mana = ((TilePool) this.getBaseMetaTileEntity()
+                .getTileEntityAtSideAndDistance(
+                    this.getBaseMetaTileEntity()
+                        .getFrontFacing(),
+                    1)).getCurrentMana();
             int aFillAmount;
-            if(mode==0)
-            aFillAmount = super.fill(
+            if (mode == 0) aFillAmount = super.fill(
                 FluidUtils.getFluidStack(
                     this.getFluidToGenerate(),
-                    (int) (mana / 10 > getCapacity() - this.getFluidAmount()
-                        ? mana / 10 > getCapacity() - this.getFluidAmount()
-                        : mana / 10)),
+                    (int) Math.min(Math.min(mana / 10, maxtrans), getCapacity() - this.getFluidAmount())),
                 true);
-            else if(mode==1)
-                aFillAmount = 0;
-            else
-                aFillAmount = 0;
-            
-            ((TilePool)this.getBaseMetaTileEntity().getTileEntityAtSideAndDistance(this.getBaseMetaTileEntity().getFrontFacing(),1)).recieveMana( - aFillAmount * 10);
-            if (aFillAmount > 0 && this.getBaseMetaTileEntity().isClientSide()) {
-            this.generateParticles(this.getBaseMetaTileEntity().getWorld(), "cloud");
+            else if (mode == 1) aFillAmount = 0;
+            else aFillAmount = 0;
+
+            ((TilePool) this.getBaseMetaTileEntity()
+                .getTileEntityAtSideAndDistance(
+                    this.getBaseMetaTileEntity()
+                        .getFrontFacing(),
+                    1)).recieveMana(-aFillAmount * 10);
+            if (aFillAmount > 0 && this.getBaseMetaTileEntity()
+                .isClientSide()) {
+                this.generateParticles(
+                    this.getBaseMetaTileEntity()
+                        .getWorld(),
+                    "cloud");
             }
             return aFillAmount != 0;
         }
