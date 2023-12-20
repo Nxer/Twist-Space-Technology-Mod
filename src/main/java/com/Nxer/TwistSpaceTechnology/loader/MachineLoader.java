@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaEggGenerator;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -16,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomain
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticMixer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaEggGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MiracleTop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MoleculeDeconstructor;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PhysicalFormSwitcher;
@@ -252,7 +252,10 @@ public class MachineLoader {
 
         GTCMItemList.Scavenger.set(Scavenger);
 
-        MegaEggGenerator = new GT_TileEntity_MegaEggGenerator(19025, "NameMegaEggGenerator", TextLocalization.NameMegaEggGenerator).getStackForm(1);
+        MegaEggGenerator = new GT_TileEntity_MegaEggGenerator(
+            19025,
+            "NameMegaEggGenerator",
+            TextLocalization.NameMegaEggGenerator).getStackForm(1);
         GTCMItemList.MegaEggGenerator.set(MegaEggGenerator);
 
         superCleanRoom = new TST_CleanRoom(19024, "multimachine.cleanroom", "Cleanroom Controller").getStackForm(1);

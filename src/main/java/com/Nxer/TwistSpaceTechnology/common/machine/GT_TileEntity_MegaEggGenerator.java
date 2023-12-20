@@ -1,5 +1,23 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.GT_HatchElement.Dynamo;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG_GLOW;
+import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
+import static gregtech.api.util.GT_StructureUtility.ofFrame;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -7,6 +25,7 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
@@ -19,22 +38,6 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.jetbrains.annotations.NotNull;
-
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Dynamo;
-import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG;
-import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG_GLOW;
-import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
 public class GT_TileEntity_MegaEggGenerator
     extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_TileEntity_MegaEggGenerator>
@@ -57,13 +60,13 @@ public class GT_TileEntity_MegaEggGenerator
     @Override
     @NotNull
     public CheckRecipeResult checkProcessing() {
-            this.mEfficiencyIncrease = 1;
-            this.mMaxProgresstime = 1;
-            this.mEUt = (int) (2048 * 16 * mPieces * getEuBuff());
-            return CheckRecipeResultRegistry.GENERATING;
+        this.mEfficiencyIncrease = 1;
+        this.mMaxProgresstime = 1;
+        this.mEUt = (int) (2048 * 16 * mPieces * getEuBuff());
+        return CheckRecipeResultRegistry.GENERATING;
     }
 
-    private double getEuBuff(){
+    private double getEuBuff() {
         return 1 + Math.sqrt(mPieces - 1) / 100;
     }
 
@@ -90,11 +93,7 @@ public class GT_TileEntity_MegaEggGenerator
         if (mPieces < 1) {
             return false;
         }
-        return checkPiece(
-            STRUCTURE_PIECE_TOP,
-            horizontalOffSet,
-            verticalOffSet + this.mPieces * 2 + 1,
-            depthOffSet);
+        return checkPiece(STRUCTURE_PIECE_TOP, horizontalOffSet, verticalOffSet + this.mPieces * 2 + 1, depthOffSet);
     }
 
     // endregion
