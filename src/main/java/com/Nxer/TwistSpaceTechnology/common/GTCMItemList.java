@@ -175,6 +175,7 @@ public enum GTCMItemList {
     MegaBrickedBlastFurnace,
     LargeIndustrialCokingFactory,
     Scavenger,
+    MegaEggGenerator,
 
     superCleanRoom,
     BiosphereIII,

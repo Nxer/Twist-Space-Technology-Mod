@@ -668,3 +668,15 @@ NameBufferedEnergyHatchUIV=缓存能源仓 UIV
 NameBufferedEnergyHatchUMV=缓存能源仓 UMV
 NameBufferedEnergyHatchUXV=缓存能源仓 UXV
 NameBufferedEnergyHatchMAX=缓存能源仓 MAX
+
+Tooltip_MegaEggGenerator_00=你所有龙蛋的最终去处.
+Tooltip_MegaEggGenerator_MachineType=魔法能源吸收者
+Tooltip_MegaEggGenerator_02=每个龙蛋将产生1A EV,故每层将产生1A Luv.
+Tooltip_MegaEggGenerator_Controller=抽象之塔的控制器
+Tooltip_MegaEggGenerator_01=从龙蛋获取免费能源,就像魔法能源吸收者那样.
+Tooltip_MegaEggGenerator_04=没2^n层提供2%的最大效率加成.
+Tooltip_MegaEggGenerator_03=但量变引起质变,
+Tooltip_MegaEggGenerator_M=不需要维护仓
+Tooltip_MegaEggGenerator_D=任何魔法机械外壳
+Tooltip_MegaEggGenerator_05=注意它的预热过程非常慢，大约需要500秒.
+NameMegaEggGenerator=抽象之塔

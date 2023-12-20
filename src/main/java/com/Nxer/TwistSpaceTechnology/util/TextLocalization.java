@@ -548,5 +548,19 @@ public class TextLocalization {
     public static final String textBiosphereIIIHatchLocation = texter("Any Bottom Clean Stainless Steel Machine Casing","textBiosphereIIIHatchLocation");
     public static final String BiosphereIIIEfficiency = texter("Efficiency: ","BiosphereIIIEfficiency");
     //endregion
+
+    // region Egg Generator
+    public static final String NameMegaEggGenerator = texter("Tower of Abstraction", "NameMegaEggGenerator");
+    public static final String Tooltip_MegaEggGenerator_MachineType = texter("Magical Energy Absorber", "Tooltip_MegaEggGenerator_MachineType");
+    public static final String Tooltip_MegaEggGenerator_Controller = texter("Controller block for the Tower of Abstraction", "Tooltip_MegaEggGenerator_Controller");
+    public static final String Tooltip_MegaEggGenerator_00 = texter("Where all your dragon egg goes.", "Tooltip_MegaEggGenerator_00");
+    public static final String Tooltip_MegaEggGenerator_01 = texter("Get free energy from dragon eggs, just as Magical Energy Absorber does.", "Tooltip_MegaEggGenerator_01");
+    public static final String Tooltip_MegaEggGenerator_02 = texter("Every dragon egg generates 1A EV, so one piece generates 1A Luv.", "Tooltip_MegaEggGenerator_02");
+    public static final String Tooltip_MegaEggGenerator_03 = texter("But quantitative change leads to qualitative change,", "Tooltip_MegaEggGenerator_03");
+    public static final String Tooltip_MegaEggGenerator_04 = texter("Every 2^n pieces give 2% max efficiency bonus.", "Tooltip_MegaEggGenerator_04");
+    public static final String Tooltip_MegaEggGenerator_05 = texter("Note its warm-up process is quite slow, about 500 secs in need.", "Tooltip_MegaEggGenerator_05");
+    public static final String Tooltip_MegaEggGenerator_M = texter("No need for maintenance hatch.", "Tooltip_MegaEggGenerator_M");
+    public static final String Tooltip_MegaEggGenerator_D = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_D");
+    // endregion
 }
 // spotless:on
