@@ -6,8 +6,10 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -116,7 +118,6 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
             GT_Utility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("Mana_Hatch.modeMsg." + this.mode));
-        }
     }
     
     @Override
