@@ -62,12 +62,15 @@ public class GT_TileEntity_MegaEggGenerator
     public CheckRecipeResult checkProcessing() {
         this.mEfficiencyIncrease = 1;
         this.mMaxProgresstime = 1;
-        this.mEUt = (int) (2048 * 16 * mPieces * getEuBuff());
+        this.mEUt = 2048 * 16 * mPieces;
         return CheckRecipeResultRegistry.GENERATING;
     }
 
-    private double getEuBuff() {
-        return 1 + Math.sqrt(mPieces - 1) / 100;
+    /**
+     * 2% max efficiency buff every 2^n pieces.
+     */
+    private int getBuffedEfficiency() {
+        return 10000 + 200 * (int) (Math.log(mPieces) / Math.log(2));
     }
 
     @Override
@@ -210,9 +213,8 @@ public class GT_TileEntity_MegaEggGenerator
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 2];
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.mPieces;
-        ret[origin.length] = EnumChatFormatting.AQUA + "Bonus: " + EnumChatFormatting.GOLD + getEuBuff() * 100 + "%";
+        String[] ret = new String[origin.length + 1];
+        ret[origin.length] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.mPieces;
         return ret;
     }
 
@@ -257,7 +259,7 @@ public class GT_TileEntity_MegaEggGenerator
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
+        return getBuffedEfficiency();
     }
 
     @Override
