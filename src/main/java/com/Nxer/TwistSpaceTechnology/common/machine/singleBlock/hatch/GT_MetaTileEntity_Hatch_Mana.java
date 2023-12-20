@@ -125,18 +125,25 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
             return false;
         } else {
             int mana=((TilePool)this.getBaseMetaTileEntity().getTileEntityAtSideAndDistance(this.getBaseMetaTileEntity().getFrontFacing(),1)).getCurrentMana();
-            int aFillAmount = super.fill(
+            int aFillAmount;
+            if(mode==0)
+            aFillAmount = super.fill(
                 FluidUtils.getFluidStack(
                     this.getFluidToGenerate(),
                     (int) (mana / 10 > getCapacity() - this.getFluidAmount()
                         ? mana / 10 > getCapacity() - this.getFluidAmount()
                         : mana / 10)),
                 true);
-            // if (aFillAmount > 0 && this.getBaseMetaTileEntity().isClientSide()) {
-            // this.generateParticles(this.getBaseMetaTileEntity().getWorld(), "cloud");
-            // }
+            else if(mode==1)
+                aFillAmount = 0;
+            else
+                aFillAmount = 0;
+            
             ((TilePool)this.getBaseMetaTileEntity().getTileEntityAtSideAndDistance(this.getBaseMetaTileEntity().getFrontFacing(),1)).recieveMana( - aFillAmount * 10);
-            return aFillAmount > 0;
+            if (aFillAmount > 0 && this.getBaseMetaTileEntity().isClientSide()) {
+            this.generateParticles(this.getBaseMetaTileEntity().getWorld(), "cloud");
+            }
+            return aFillAmount != 0;
         }
     }
 
