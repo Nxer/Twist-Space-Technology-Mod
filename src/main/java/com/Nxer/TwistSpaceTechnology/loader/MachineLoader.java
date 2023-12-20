@@ -22,6 +22,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
@@ -68,6 +69,7 @@ public class MachineLoader {
     public static ItemStack LargeIndustrialCokingFactory;
     public static ItemStack Scavenger;
     public static ItemStack superCleanRoom;
+    public static ItemStack BiosphereIII;
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
@@ -254,6 +256,10 @@ public class MachineLoader {
         // ItemList.Machine_Multi_Cleanroom.set(superCleanRoom);
         GTCMItemList.superCleanRoom.set(superCleanRoom);
 
+        //
+        BiosphereIII = new TST_BiosphereIII(19025, "nameBiosphereIII", TextLocalization.NameBiosphereIII)
+            .getStackForm(1);
+        GTCMItemList.BiosphereIII.set(BiosphereIII);
         // endregion
 
         // region Single block Machine
