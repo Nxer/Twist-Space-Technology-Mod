@@ -19,7 +19,6 @@ import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
-import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.mana.TilePool;
 
 public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidGenerator {
@@ -92,11 +91,11 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public boolean doesHatchMeetConditionsToGenerate() {
-        return  this.getBaseMetaTileEntity()
-                .getTileEntityAtSideAndDistance(
-                    this.getBaseMetaTileEntity()
-                        .getFrontFacing(),
-                    1) instanceof TilePool;
+        return this.getBaseMetaTileEntity()
+            .getTileEntityAtSideAndDistance(
+                this.getBaseMetaTileEntity()
+                    .getFrontFacing(),
+                1) instanceof TilePool;
     }
 
     @Override
@@ -123,7 +122,7 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
         if (!this.doesHatchMeetConditionsToGenerate()) {
             return false;
         } else {
-            TilePool pool=((TilePool) this.getBaseMetaTileEntity()
+            TilePool pool = ((TilePool) this.getBaseMetaTileEntity()
                 .getTileEntityAtSideAndDistance(
                     this.getBaseMetaTileEntity()
                         .getFrontFacing(),
@@ -135,17 +134,21 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
                     this.getFluidToGenerate(),
                     (int) Math.min(Math.min(mana / 10, maxtrans), getCapacity() - this.getFluidAmount())),
                 true);
-            else if (mode == 1) aFillAmount = super.fill(
-                FluidUtils.getFluidStack(
-                    this.getFluidToGenerate(),
-                    (int) -Math.min(Math.min(pool.getAvailableSpaceForMana()/10, maxtrans),this.getFluidAmount())),
-                true);
+            else if (mode == 1)
+                aFillAmount = super.fill(
+                    FluidUtils.getFluidStack(
+                        this.getFluidToGenerate(),
+                        (int) -Math
+                            .min(Math.min(pool.getAvailableSpaceForMana() / 10, maxtrans), this.getFluidAmount())),
+                    true);
             else {
-                aFillAmount= super.fill(
-                FluidUtils.getFluidStack(
-                    this.getFluidToGenerate(),
-                    (int)Math.max(Math.min((this.getFluidAmount()+mana/10)/2-this.getFluidAmount(), maxtrans),-maxtrans)),
-                true);
+                aFillAmount = super.fill(
+                    FluidUtils.getFluidStack(
+                        this.getFluidToGenerate(),
+                        (int) Math.max(
+                            Math.min((this.getFluidAmount() + mana / 10) / 2 - this.getFluidAmount(), maxtrans),
+                            -maxtrans)),
+                    true);
             }
 
             ((TilePool) this.getBaseMetaTileEntity()
