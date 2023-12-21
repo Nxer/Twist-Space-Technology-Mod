@@ -1,11 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
-
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMaprecipeMapFrontends.TST_GeneralFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 
 import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.recipe.RecipeMap;
@@ -127,7 +125,8 @@ public class GTCMRecipe {
     // }
 
     public static final RecipeMap<RecipeMapBackend> IntensifyChemicalDistorterRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.IntensifyChemicalDistorterRecipes")
+        .of("gtcm.recipe.IntensifyChemicalDistorterRecipes") // At the same time , the localization key of the NEI Name
+                                                             // of this page.
         .maxIO(16, 16, 16, 16)
         .neiSpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)

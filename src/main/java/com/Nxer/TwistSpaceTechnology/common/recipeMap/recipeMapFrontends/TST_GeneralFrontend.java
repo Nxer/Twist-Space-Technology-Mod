@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMaprecipeMapFrontends;
+package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 
 import java.util.List;
 

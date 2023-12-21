@@ -471,7 +471,7 @@ public class TextLocalization {
     public static final String Tooltip_HyperSpacetimeTransformer_04= texter("","Tooltip_HyperSpacetimeTransformer_04");
     public static final String Tooltip_HyperSpacetimeTransformer_05= texter("","Tooltip_HyperSpacetimeTransformer_05");
     public static final String Tooltip_HyperSpacetimeTransformer_06= texter("","Tooltip_HyperSpacetimeTransformer_06");
-    
+
     // region Scavenger
     public static final String NameScavenger = texter("Scavenger","NameScavenger");
     public static final String Tooltip_Scavenger_MachineType = texter("Sifter","Tooltip_Scavenger_MachineType");
@@ -525,6 +525,42 @@ public class TextLocalization {
     public static final String textMegaBrickedBlastFurnaceTips = texter(EnumChatFormatting.YELLOW+"Dirt must be Horizontal dirt in Chisel Mod!","textMegaBrickedBlastFurnaceTips");
     public static final String textMegaBrickedBlastFurnaceLocation = texter("any Bronze Plated Bricks, 0-6x","textMegaBrickedBlastFurnaceLocation");
 
+    //region BiosphereIII
+    public static final String NameBiosphereIII = texter("Biosphere III","NameBiosphereIII");
+    public static final String Tooltip_BiosphereIII_MachineType = texter("Bacterial Vat | Brewing Machine | Fermenter","Tooltip_BiosphereIII_MachineType");
+    public static final String Tooltip_BiosphereIII_Controller = texter("Controller block for Biosphere III","Tooltip_BiosphereIII_Controller");
+    public static final String Tooltip_BiosphereIII_00 = texter(""+EnumChatFormatting.AQUA+EnumChatFormatting.BOLD+"Control the thoughts of those microorganisms...","Tooltip_BiosphereIII_00");
+    public static final String BiosphereIII_Mode_00 = texter(EnumChatFormatting.GOLD+"----- Bacterial Vat Mode -----","BiosphereIII_Mode_00");
+    public static final String Tooltip_BiosphereIII_Mode0_00 = texter("Need Petri Dish in controller slot","Tooltip_BiosphereIII_Mode0_00");
+    public static final String Tooltip_BiosphereIII_Mode0_01 = texter("Every Petri Dish provides 4 parallel","Tooltip_BiosphereIII_Mode0_01");
+    public static final String Tooltip_BiosphereIII_Mode0_02 = texter("Keep the Output Hatch always half filled for maximum efficiency","Tooltip_BiosphereIII_Mode0_02");
+    public static final String BiosphereIII_Mode_01 = texter(EnumChatFormatting.GOLD+"----- Bacterial Vat Automation Mode -----","BiosphereIII_Mode_01");
+    public static final String Tooltip_BiosphereIII_Mode1_00 = texter("Need Petri Dish in controller slot","Tooltip_BiosphereIII_Mode1_00");
+    public static final String Tooltip_BiosphereIII_Mode1_01 = texter("Every Petri Dish provides 1 parallel","Tooltip_BiosphereIII_Mode1_01");
+    public static final String Tooltip_BiosphereIII_Mode1_02 = texter("Advanced artificial intelligence controls the breeding of bacteria","Tooltip_BiosphereIII_Mode1_02");
+    public static final String Tooltip_BiosphereIII_Mode1_03 = texter("Original efficiency of control is 40% of the maximum. Each glass tier over recipe requirement improve the efficiency by 15%.","Tooltip_BiosphereIII_Mode1_03");
+    public static final String BiosphereIII_Mode_02 = texter(EnumChatFormatting.GOLD+"----- Brewing Machine Mode -----","BiosphereIII_Mode_02");
+    public static final String BiosphereIII_Mode_03 = texter(EnumChatFormatting.GOLD+"----- Fermenter Mode -----","BiosphereIII_Mode_03");
+    public static final String Tooltip_BiosphereIII_Mode2n3_00 = texter("Don't need Petri Dish","Tooltip_BiosphereIII_Mode2n3_00");
+    public static final String Tooltip_BiosphereIII_Mode2n3_01 = texter("Each glass tier over HV provides 4 times parallel","Tooltip_BiosphereIII_Mode2n3_01");
+    public static final String Tooltip_BiosphereIII_Mode2n3_02 = texter("EV glass provides 4 parallel, IV glass provides 16 parallel, etc.","Tooltip_BiosphereIII_Mode2n3_02");
+    public static final String textBiosphereIIIRadioHatch = texter("Radiation Hatch: 0-1x","textBiosphereIIIRadioHatch");
+    public static final String textBiosphereIIIHatchLocation = texter("Any Bottom Clean Stainless Steel Machine Casing","textBiosphereIIIHatchLocation");
+    public static final String BiosphereIIIEfficiency = texter("Efficiency: ","BiosphereIIIEfficiency");
     //endregion
+
+    // region Egg Generator
+    public static final String NameMegaEggGenerator = texter("Tower of Abstraction", "NameMegaEggGenerator");
+    public static final String Tooltip_MegaEggGenerator_MachineType = texter("Magical Energy Absorber", "Tooltip_MegaEggGenerator_MachineType");
+    public static final String Tooltip_MegaEggGenerator_Controller = texter("Controller block for the Tower of Abstraction", "Tooltip_MegaEggGenerator_Controller");
+    public static final String Tooltip_MegaEggGenerator_00 = texter("Where all your dragon egg goes.", "Tooltip_MegaEggGenerator_00");
+    public static final String Tooltip_MegaEggGenerator_01 = texter("Get free energy from dragon eggs, just as Magical Energy Absorber does.", "Tooltip_MegaEggGenerator_01");
+    public static final String Tooltip_MegaEggGenerator_02 = texter("Every dragon egg generates 1A EV, so one piece generates 1A Luv.", "Tooltip_MegaEggGenerator_02");
+    public static final String Tooltip_MegaEggGenerator_03 = texter("But quantitative change leads to qualitative change,", "Tooltip_MegaEggGenerator_03");
+    public static final String Tooltip_MegaEggGenerator_04 = texter("Every 2^n pieces give 2% max efficiency bonus.", "Tooltip_MegaEggGenerator_04");
+    public static final String Tooltip_MegaEggGenerator_05 = texter("Note its warm-up process is quite slow, about 500 secs in need.", "Tooltip_MegaEggGenerator_05");
+    public static final String Tooltip_MegaEggGenerator_M = texter("No need for maintenance hatch.", "Tooltip_MegaEggGenerator_M");
+    public static final String Tooltip_MegaEggGenerator_D = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_D");
+    // endregion
 }
 // spotless:on

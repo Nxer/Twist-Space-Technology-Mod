@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BiosphereIII;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_LuV;
@@ -42,6 +43,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
@@ -101,6 +103,7 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Ext
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -110,9 +113,10 @@ import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
+import com.github.bartimaeusnek.bartworks.common.loaders.BioItemList;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
@@ -184,7 +188,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(10),
-                Utils.copyAmount(1, ItemRegistry.megaMachines[3]),
+                copyAmount(1, ItemRegistry.megaMachines[3]),
                 Materials.Carbon.getNanite(16),
                 ItemList.Emitter_UV.get(16),
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),16})
@@ -208,11 +212,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 ItemList.Emitter_UV.get(5),
                 ItemList.Field_Generator_UV.get(1),
                 new Object[] { OrePrefixes.circuit.get(Materials.SuperconductorUHV), 4 },
-                Utils.copyAmount(64, Ic2Items.iridiumPlate),
+                copyAmount(64, Ic2Items.iridiumPlate),
                 GT_Utility.getIntegratedCircuit(10))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 128))
 
-            .itemOutputs(Utils.copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
+            .itemOutputs(copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20 * 120)
@@ -379,7 +383,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // Upgrade UHV
         GT_Values.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, Utils.copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
+            .metadata(RESEARCH_ITEM, copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
             .metadata(RESEARCH_TIME, 2 * HOURS)
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
@@ -600,7 +604,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 Materials.SuperconductorUEVBase.getMolten(512 * 144)
             )
             .itemOutputs(
-                Utils.copyAmount(1, MachineLoader.MiracleTop)
+                copyAmount(1, MachineLoader.MiracleTop)
             )
 
             .eut(RECIPE_UMV)
@@ -828,7 +832,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
                 new Object[]{OrePrefixes.circuit.get(Materials.Bio),16},
                 new Object[]{OrePrefixes.circuit.get(Materials.Infinite),16},
-                Utils.copyAmount(64, Ic2Items.iridiumPlate),
+                copyAmount(64, Ic2Items.iridiumPlate),
                 GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 16),
 
                 GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 16)
@@ -1071,7 +1075,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MaterialsUEVplus.ExcitedDTEC.getFluid(1000*16384)
             )
             .itemOutputs(MiracleDoor.get(1))
-
             .eut(RECIPE_UXV)
             .duration(20*3600)
             .addTo(AssemblyLine);
@@ -1105,7 +1108,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MaterialsUEVplus.ExcitedDTEC.getFluid(1000*16)
             )
             .itemOutputs(eM_Teleportation.get(1))
-
             .eut(RECIPE_UMV)
             .duration(20*120)
             .addTo(AssemblyLine);
@@ -1419,17 +1421,54 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
                 new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 16},
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 9),
-                Utils.copyAmount(36,Ic2Items.iridiumPlate),
+                copyAmount(36,Ic2Items.iridiumPlate),
 
                 GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorZPM, 8)
             )
             .fluidInputs(Materials.SolderingAlloy.getMolten(144*32))
             .itemOutputs(Scavenger.get(1))
-
             .noOptimize()
             .eut(RECIPE_ZPM)
             .duration(20*60)
             .addTo(assembler);
+        // endregion
+
+        // region BiosphereIII
+        ItemStack bioVat = GT_ModHandler.getModItem("gregtech","gt.blockmahines",1,ConfigHandler.IDOffset + GT_Values.VN.length * 7, CustomItemList.BreweryUHV.get(1));
+
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, bioVat.copy())
+            .metadata(RESEARCH_TIME, 16 * HOURS)
+            .itemInputs(
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 64),
+                copyAmount(64, bioVat),
+                copyAmount(64, BioItemList.getPetriDish(null)),
+                GT_OreDictUnificator.get(OrePrefixes.pipeHuge, Materials.Infinity, 3),
+
+                ItemList.Electric_Pump_UHV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.CosmicNeutronium, 16),
+                GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.Neutronium, 16),
+                GT_OreDictUnificator.get(OrePrefixes.pipeTiny, Materials.Polybenzimidazole, 64),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Bio), 8},
+                ItemList.Circuit_Wafer_Bioware.get(64),
+                ItemList.Circuit_Parts_Chip_Bioware.get(64),
+                HighEnergyFlowCircuit.get(16),
+
+                copyAmount(64,Ic2Items.iridiumPlate),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUHV, 16)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*64),
+                Materials.Naquadria.getMolten(144*64),
+                Materials.CosmicNeutronium.getMolten(144*64),
+                MyMaterial.metastableOganesson.getMolten(144*32)
+            )
+            .itemOutputs(BiosphereIII.get(1))
+            .eut(RECIPE_UEV)
+            .duration(20*900)
+            .addTo(AssemblyLine);
         // endregion
 
     }

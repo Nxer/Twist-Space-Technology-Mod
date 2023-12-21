@@ -23,6 +23,7 @@ import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
@@ -136,7 +137,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
             .addStructureInfo("Up to 10 Machine Hulls for Item & Energy transfer through walls")
             .addStructureInfo("You can also use Diodes for more power")
             .addStructureInfo("Diodes also count towards 10 Machine Hulls count limit")
-            .toolTipFinisher("Gregtech");
+            .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
 
