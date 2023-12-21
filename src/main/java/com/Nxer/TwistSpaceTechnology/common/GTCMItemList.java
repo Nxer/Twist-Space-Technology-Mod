@@ -209,8 +209,8 @@ public enum GTCMItemList {
 
     // single block Machines
     InfiniteAirHatch,
-    InfiniteWirelessDynamoHatch,
     ManaHatch,
+    InfiniteWirelessDynamoHatch,
     DualInputBuffer_LuV,
     DualInputBuffer_ZPM,
     DualInputBuffer_UV,

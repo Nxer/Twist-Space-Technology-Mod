@@ -668,7 +668,11 @@ NameBufferedEnergyHatchUIV=缓存能源仓 UIV
 NameBufferedEnergyHatchUMV=缓存能源仓 UMV
 NameBufferedEnergyHatchUXV=缓存能源仓 UXV
 NameBufferedEnergyHatchMAX=缓存能源仓 MAX
-
+GT_MetaTileEntity_Hatch_Mana.Tooltip0=魔力转换阀
+GT_MetaTileEntity_Hatch_Mana.Tooltip1=每秒至多转换1000L液态魔力/10000mana.
+GT_MetaTileEntity_Hatch_Mana.Tooltip2=需要正面朝向魔力池来工作.
+Mana_Hatch.modeMsg.0=Liquidizer Mode
+Mana_Hatch.modeMsg.1=Magicalizer Mode
 Tooltip_MegaEggGenerator_00=你所有龙蛋的最终去处.
 Tooltip_MegaEggGenerator_MachineType=魔法能源吸收者
 Tooltip_MegaEggGenerator_02=每个龙蛋将产生1A EV,而爬行者蛋产生1A HV.

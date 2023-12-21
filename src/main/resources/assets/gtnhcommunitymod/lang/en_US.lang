@@ -683,3 +683,8 @@ Tooltip_MegaEggGenerator_D=Dynamo or TT Dynamo, one only
 Tooltip_MegaEggGenerator_L=Lasers unlock at >=16 pieces.
 Tooltip_MegaEggGenerator_06=Note its warm-up process is quite slow, about 500 secs in need.
 NameMegaEggGenerator=Tower of Abstraction
+GT_MetaTileEntity_Hatch_Mana.Tooltip0=Mana transform hatch
+GT_MetaTileEntity_Hatch_Mana.Tooltip1=Transform mana up to 10000 mana or 1000L every second.
+GT_MetaTileEntity_Hatch_Mana.Tooltip2=Need to facing at a mana pool to work.
+Mana_Hatch.modeMsg.0=Liquidizer Mode
+Mana_Hatch.modeMsg.1=Magicalizer Mode
