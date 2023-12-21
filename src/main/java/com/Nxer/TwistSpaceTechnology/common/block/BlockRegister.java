@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.block;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.*;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStar;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
@@ -10,6 +11,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStatio
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
+import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -32,6 +34,8 @@ public class BlockRegister {
             SpaceStationAntiGravityCasingItemBlock.class,
             SpaceStationAntiGravityBlock.getUnlocalizedName());
 
+        BlockStar = new BlockStar();
+        GameRegistry.registerTileEntity(TileStar.class, "StarRender");
     }
 
     public static void registryBlockContainers() {
