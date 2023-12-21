@@ -5,7 +5,6 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.onlyIf;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_HatchElement.Dynamo;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG;
@@ -280,9 +279,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
                            onElementPass(k -> ++k.mAirPosed, isAir()),
                            onElementPass(k -> ++k.mCrepperEggs, ofBlock(MarsBlocks.creeperEgg, 0)),
                            onElementPass(k -> ++k.mDragonEggs, ofBlock(Blocks.dragon_egg,0)),
-                           onlyIf(t -> Mods.Witchery.isModLoaded(),
-                               onElementPass(k -> ++k.mInfinityEggs, ofBlock(InfinityEgg(), 0))
-                           )
+                           onElementPass(k -> ++k.mInfinityEggs, ofBlock(InfinityEgg(), 0))
                        )
                    )
 			       .build();}
