@@ -8,6 +8,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 
@@ -34,6 +35,11 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
     public GT_MetaTileEntity_Hatch_Mana(final String aName, final int aTier, final String[] aDescription,
         final ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
+    }
+
+    @Override
+    public int getTankPressure() {
+        return -100;
     }
 
     @Override
@@ -76,7 +82,7 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public boolean canFill(ForgeDirection aSide, Fluid aFluid) {
-        return true;
+        return aFluid == getFluidToGenerate();
     }
 
     @Override
@@ -91,11 +97,16 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public boolean doesHatchMeetConditionsToGenerate() {
+        FluidStack fluid = this.getFluid();
+        boolean temp = false;
+        if (fluid == null) temp = true;
+        else temp = fluid.getFluid() == getFluidToGenerate();
         return this.getBaseMetaTileEntity()
             .getTileEntityAtSideAndDistance(
                 this.getBaseMetaTileEntity()
                     .getFrontFacing(),
-                1) instanceof TilePool;
+                1) instanceof TilePool
+            && temp;
     }
 
     @Override
@@ -113,7 +124,7 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        this.mode = (this.mode + 1) % 3;
+        this.mode = (this.mode + 1) % 2;
         GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("Mana_Hatch.modeMsg." + this.mode));
     }
 
@@ -128,40 +139,22 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
                         .getFrontFacing(),
                     1));
             int mana = pool.getCurrentMana();
-            int aFillAmount;
-            if (mode == 0) aFillAmount = super.fill(
-                FluidUtils.getFluidStack(
-                    this.getFluidToGenerate(),
-                    (int) Math.min(Math.min(mana / 10, maxtrans), getCapacity() - this.getFluidAmount())),
-                true);
-            else if (mode == 1)
+            int aFillAmount = 0;
+            if (mode == 0) {
                 aFillAmount = super.fill(
                     FluidUtils.getFluidStack(
                         this.getFluidToGenerate(),
-                        (int) -Math
-                            .min(Math.min(pool.getAvailableSpaceForMana() / 10, maxtrans), this.getFluidAmount())),
+                        (int) Math.min(Math.min(mana / 10, maxtrans), getCapacity() - this.getFluidAmount())),
                     true);
-            else {
-                aFillAmount = super.fill(
-                    FluidUtils.getFluidStack(
-                        this.getFluidToGenerate(),
-                        (int) Math.max(
-                            Math.min((this.getFluidAmount() + mana / 10) / 2 - this.getFluidAmount(), maxtrans),
-                            -maxtrans)),
-                    true);
-            }
 
-            ((TilePool) this.getBaseMetaTileEntity()
-                .getTileEntityAtSideAndDistance(
-                    this.getBaseMetaTileEntity()
-                        .getFrontFacing(),
-                    1)).recieveMana(-aFillAmount * 10);
-            if (aFillAmount != 0 && this.getBaseMetaTileEntity()
-                .isClientSide()) {
-                this.generateParticles(
-                    this.getBaseMetaTileEntity()
-                        .getWorld(),
-                    "cloud");
+                pool.recieveMana(-aFillAmount * 10);
+            } else {
+                if (this.getFluidAmount() != 0) {
+                    aFillAmount = super.drain(
+                        (int) Math.min(Math.min(pool.getAvailableSpaceForMana() / 10, maxtrans), this.getFluidAmount()),
+                        true).amount;
+                    pool.recieveMana(aFillAmount * 10);
+                }
             }
             return aFillAmount != 0;
         }
