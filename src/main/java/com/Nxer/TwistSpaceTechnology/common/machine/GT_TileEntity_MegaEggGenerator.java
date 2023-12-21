@@ -5,12 +5,14 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.onlyIf;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_HatchElement.Dynamo;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.emoniph.witchery.Witchery;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
@@ -35,6 +38,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -243,6 +247,15 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
 	private final int verticalOffSet = 0;
 	private final int depthOffSet = 6;
 
+    /**
+     * I have to add this shit to deal with runtime conflicts that have nothing to do with TST.
+     */
+    private Block InfinityEgg() {
+        if (Mods.Witchery.isModLoaded()) {
+            return Witchery.Blocks.INFINITY_EGG;
+        } else return BasicBlocks.PhotonControllerUpgrade;
+    }
+
 	@Override
 	public IStructureDefinition<GT_TileEntity_MegaEggGenerator> getStructure_EM() {
         if (structureDef == null) {
@@ -267,7 +280,9 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
                            onElementPass(k -> ++k.mAirPosed, isAir()),
                            onElementPass(k -> ++k.mCrepperEggs, ofBlock(MarsBlocks.creeperEgg, 0)),
                            onElementPass(k -> ++k.mDragonEggs, ofBlock(Blocks.dragon_egg,0)),
-                           onElementPass(k -> ++k.mInfinityEggs, ofBlock(Witchery.Blocks.INFINITY_EGG, 0))
+                           onlyIf(t -> Mods.Witchery.isModLoaded(),
+                               onElementPass(k -> ++k.mInfinityEggs, ofBlock(InfinityEgg(), 0))
+                           )
                        )
                    )
 			       .build();}
