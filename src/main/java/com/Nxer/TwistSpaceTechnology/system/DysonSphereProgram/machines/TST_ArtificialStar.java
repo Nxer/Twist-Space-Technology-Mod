@@ -59,6 +59,7 @@ import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -69,6 +70,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
@@ -214,6 +216,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
 
         // increase multiplier of rewarding continuous operation
         if (rewardContinuous < 50) rewardContinuous++;
+        createRenderBlock();
         return CheckRecipeResultRegistry.GENERATING;
     }
 
@@ -268,12 +271,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if (rewardContinuous != 0 && mMaxProgresstime == 0) rewardContinuous = 0;
-        /*
-         * if (mMaxProgresstime > 0 && mProgresstime == mMaxProgresstime){
-         * // the last tick of a progress
-         * // destroy render block here
-         * }
-         */
+        if (mMaxProgresstime > 0 && mMaxProgresstime - mProgresstime == 1) destroyRenderBlock();
     }
 
     @Override
@@ -600,5 +598,48 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
         }
 
         return new ITexture[] { casingTexturePages[0][12] };
+    }
+
+    public void createRenderBlock() {
+        int x = getBaseMetaTileEntity().getXCoord();
+        int y = getBaseMetaTileEntity().getYCoord();
+        int z = getBaseMetaTileEntity().getZCoord();
+
+        double xOffset = 3 * getExtendedFacing().getRelativeBackInWorld().offsetX
+            + 26 * getExtendedFacing().getRelativeUpInWorld().offsetX;
+        double zOffset = 3 * getExtendedFacing().getRelativeBackInWorld().offsetZ
+            + 26 * getExtendedFacing().getRelativeUpInWorld().offsetZ;
+        double yOffset = 3 * getExtendedFacing().getRelativeBackInWorld().offsetY
+            + 26 * getExtendedFacing().getRelativeUpInWorld().offsetY;
+
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), Blocks.air);
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), BasicBlocks.BlockStar);
+        /*
+         * This wouldn't work since there are no Network System. Todo: Add a message to SERVER.
+         * if (getBaseMetaTileEntity().getWorld()
+         * .getTileEntity((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset)) instanceof TileStar star)
+         * star.size = Math.min(currentOutputEU, 1024) / 204.8;
+         */
+    }
+
+    public void destroyRenderBlock() {
+        int x = getBaseMetaTileEntity().getXCoord();
+        int y = getBaseMetaTileEntity().getYCoord();
+        int z = getBaseMetaTileEntity().getZCoord();
+
+        double xOffset = 3 * getExtendedFacing().getRelativeBackInWorld().offsetX
+            + 26 * getExtendedFacing().getRelativeUpInWorld().offsetX;
+        double zOffset = 3 * getExtendedFacing().getRelativeBackInWorld().offsetZ
+            + 26 * getExtendedFacing().getRelativeUpInWorld().offsetZ;
+        double yOffset = 3 * getExtendedFacing().getRelativeBackInWorld().offsetY
+            + 26 * getExtendedFacing().getRelativeUpInWorld().offsetY;
+
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), Blocks.air);
     }
 }

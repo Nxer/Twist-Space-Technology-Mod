@@ -21,4 +21,5 @@ public class BasicBlocks {
     public static final Block SpaceStationAntiGravityBlock = new SpaceStationAntiGravityCasing(
         "SpaceStationAntiGravityBlock",
         "Space Station Anti Gravity Block");
+    public static Block BlockStar;
 }
