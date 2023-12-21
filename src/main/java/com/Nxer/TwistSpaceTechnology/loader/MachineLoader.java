@@ -277,7 +277,7 @@ public class MachineLoader {
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
 
         //
-        ManaHatch = new GT_MetaTileEntity_Hatch_Mana(18979, "NameInfiniteAirHatch", TextLocalization.NameManaHatch, 9)
+        ManaHatch = new GT_MetaTileEntity_Hatch_Mana(18979, "NameManaHatch", TextLocalization.NameManaHatch, 9)
             .getStackForm(1);
         GTCMItemList.ManaHatch.set(ManaHatch);
 

@@ -11,6 +11,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -63,9 +64,13 @@ public class GT_MetaTileEntity_Hatch_Mana extends GT_MetaTileEntity_Hatch_FluidG
 
     @Override
     public String[] getCustomTooltip() {
-        String[] aTooltip = new String[3];
+        String[] aTooltip = new String[5];
         aTooltip[0] = texter("Mana transform hatch", "GT_MetaTileEntity_Hatch_Mana.Tooltip0");
-        aTooltip[1] = texter("Transform mana up to 10000 every second", "GT_MetaTileEntity_Hatch_Mana.Tooltip1");
+        aTooltip[1] = texter(
+            "Transform mana up to 10000 mana or 1000L every second",
+            "GT_MetaTileEntity_Hatch_Mana.Tooltip1");
+        aTooltip[2] = texter("Need to facing at a mana pool to work.", "GT_MetaTileEntity_Hatch_Mana.Tooltip2");
+        aTooltip[3] = TextLocalization.textScrewdriverChangeMode;
         return aTooltip;
     }
 
