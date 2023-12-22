@@ -553,14 +553,15 @@ public class TextLocalization {
     public static final String NameMegaEggGenerator = texter("Tower of Abstraction", "NameMegaEggGenerator");
     public static final String Tooltip_MegaEggGenerator_MachineType = texter("Magical Energy Absorber", "Tooltip_MegaEggGenerator_MachineType");
     public static final String Tooltip_MegaEggGenerator_Controller = texter("Controller block for the Tower of Abstraction", "Tooltip_MegaEggGenerator_Controller");
-    public static final String Tooltip_MegaEggGenerator_00 = texter("Where all your dragon egg goes.", "Tooltip_MegaEggGenerator_00");
-    public static final String Tooltip_MegaEggGenerator_01 = texter("Get free energy from magical eggs, just as Magical Energy Absorber does.", "Tooltip_MegaEggGenerator_01");
+    public static final String Tooltip_MegaEggGenerator_00 = texter("This is where the "+EnumChatFormatting.RED+" ulti "+ EnumChatFormatting.AQUA +"mate"+ EnumChatFormatting.GOLD +"destiny "+EnumChatFormatting.BLUE+" destiny "+EnumChatFormatting.GRAY+" of the Dragon's Children lies.", "Tooltip_MegaEggGenerator_00");
+    public static final String Tooltip_MegaEggGenerator_01 = texter("With the help of the Magic Egg, it draws in endless magical power as effortlessly as a soul-sucking sorcerer.", "Tooltip_MegaEggGenerator_01");
     public static final String Tooltip_MegaEggGenerator_02 = texter("Every dragon egg generates 1A EV & every creeper's generates 1A HV.", "Tooltip_MegaEggGenerator_02");
     public static final String Tooltip_MegaEggGenerator_03 = texter("Infinity egg generates 2A IV, but you can put only one for one each piece you add.", "Tooltip_MegaEggGenerator_03");
     public static final String Tooltip_MegaEggGenerator_04 = texter("But quantitative change leads to qualitative change,", "Tooltip_MegaEggGenerator_04");
     public static final String Tooltip_MegaEggGenerator_05 = texter("Every 2^n pieces give 2% max efficiency bonus, and every infinity egg gives 1%.", "Tooltip_MegaEggGenerator_05");
     public static final String Tooltip_MegaEggGenerator_06 = texter("Note its warm-up process is quite slow, about 500 secs in need.", "Tooltip_MegaEggGenerator_06");
     public static final String Tooltip_MegaEggGenerator_07 = texter("You can also put nothing on the egg pos, but every empty pos decreases 5% max efficiency.", "Tooltip_MegaEggGenerator_07");
+    public static final String Tooltip_MegaEggGenerator_08 = texter("Whether it is the"+EnumChatFormatting.DARK_PURPLE+" Dragon Egg,"+EnumChatFormatting.DARK_GREEN+" Creeper Egg, or the "+EnumChatFormatting.GOLD+"Egg of Infinity, "+EnumChatFormatting.GRAY+"only their presence can drive the full circulation of power.", "Tooltip_MegaEggGenerator_08");
     public static final String Tooltip_MegaEggGenerator_D = texter("Dynamo or TT Dynamo, one only", "Tooltip_MegaEggGenerator_D");
     public static final String Tooltip_MegaEggGenerator_M = texter("No need for maintenance hatch.", "Tooltip_MegaEggGenerator_M");
     public static final String Tooltip_MegaEggGenerator_L = texter("Lasers unlock at >=16 pieces.", "Tooltip_MegaEggGenerator_L");

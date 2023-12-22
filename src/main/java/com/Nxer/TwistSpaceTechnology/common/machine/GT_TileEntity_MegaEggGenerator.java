@@ -351,6 +351,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_05)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_06)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_07)
+            .addInfo(TextLocalization.Tooltip_MegaEggGenerator_08)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
