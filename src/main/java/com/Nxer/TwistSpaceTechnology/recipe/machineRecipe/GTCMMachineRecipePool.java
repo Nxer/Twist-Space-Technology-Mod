@@ -1350,7 +1350,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.plate, 4)
             )
             .fluidInputs(new FluidStack(solderIndAlloy, 144*2))
-            .itemOutputs(DualInputBuffer_LuV.get(1))
+            .itemOutputs(DualInputBuffer_LuV.get(4))
 
             .eut(RECIPE_LuV)
             .duration(20*15)
@@ -1368,7 +1368,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iridium, 4)
             )
             .fluidInputs(new FluidStack(solderIndAlloy, 144*4))
-            .itemOutputs(DualInputBuffer_ZPM.get(1))
+            .itemOutputs(DualInputBuffer_ZPM.get(4))
 
             .eut(RECIPE_ZPM)
             .duration(20*15)
@@ -1386,7 +1386,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Osmium, 4)
             )
             .fluidInputs(new FluidStack(solderIndAlloy, 144*8))
-            .itemOutputs(DualInputBuffer_UV.get(1))
+            .itemOutputs(DualInputBuffer_UV.get(4))
 
             .eut(RECIPE_UV)
             .duration(20*15)
@@ -1404,7 +1404,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 4)
             )
             .fluidInputs(new FluidStack(solderIndAlloy, 144*16))
-            .itemOutputs(DualInputBuffer_UHV.get(1))
+            .itemOutputs(DualInputBuffer_UHV.get(4))
 
             .eut(RECIPE_UHV)
             .duration(20*15)
