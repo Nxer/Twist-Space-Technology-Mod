@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AdvancedMegaOilCracker;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BiosphereIII;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
@@ -1469,6 +1470,23 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UEV)
             .duration(20*900)
             .addTo(AssemblyLine);
+        // endregion
+
+        // region Advanced Oil Cracker
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                ItemRegistry.megaMachines[4],
+                new Object[]{OrePrefixes.circuit.get(Materials.Elite), 4},
+                new Object[]{OrePrefixes.circuit.get(Materials.Data), 16},
+                ItemList.Electric_Pump_IV.get(4)
+            )
+            .fluidInputs(Materials.SolderingAlloy.getMolten(144*16))
+            .itemOutputs(AdvancedMegaOilCracker.get(1))
+            .eut(RECIPE_EV)
+            .duration(20*3600)
+            .addTo(assembler);
         // endregion
 
     }

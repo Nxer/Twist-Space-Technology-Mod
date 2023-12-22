@@ -482,6 +482,14 @@ public class TextLocalization {
     public static final String Tooltip_Scavenger_04 = texter("Additional 20%% reduction in time per Voltage Tier, multiplication calculus.","Tooltip_Scavenger_04");
     // endregion
 
+    // region AdvancedMegaOilCracker
+    public static final String NameAdvancedMegaOilCracker = texter("Advanced Mega Oil Cracker","NameAdvancedMegaOilCracker");
+    public static final String Tooltips_AdvancedMegaOilCracker_MachineType = texter("Cracker","Tooltips_AdvancedMegaOilCracker_MachineType");
+    public static final String Tooltips_AdvancedMegaOilCracker_Controller = texter("Controller block for the Advanced Mega Oil Cracker","Tooltips_AdvancedMegaOilCracker_Controller");
+    public static final String Tooltips_AdvancedMegaOilCracker_01 = texter(EnumChatFormatting.ITALIC+"Freedom as a basis for self-government.","Tooltips_AdvancedMegaOilCracker_01");
+    public static final String Tooltips_AdvancedMegaOilCracker_02 = texter("As the Mega Oil Cracker do.","Tooltips_AdvancedMegaOilCracker_02");
+    // endregion
+
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
