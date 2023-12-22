@@ -23,6 +23,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
@@ -73,6 +74,7 @@ public class MachineLoader {
     public static ItemStack superCleanRoom;
     public static ItemStack MegaEggGenerator;
     public static ItemStack BiosphereIII;
+    public static ItemStack AdvancedMegaOilCracker;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -271,6 +273,14 @@ public class MachineLoader {
             "NameMegaEggGenerator",
             TextLocalization.NameMegaEggGenerator).getStackForm(1);
         GTCMItemList.MegaEggGenerator.set(MegaEggGenerator);
+
+        //
+        AdvancedMegaOilCracker = new TST_AdvancedMegaOilCracker(
+            19027,
+            "NameAdvancedMegaOilCracker",
+            TextLocalization.NameAdvancedMegaOilCracker).getStackForm(1);
+        GTCMItemList.AdvancedMegaOilCracker.set(AdvancedMegaOilCracker);
+
         // endregion
 
         // region Single block Machine

@@ -27,6 +27,7 @@ public class Config {
     public static final String CrystallineInfinitier = "CrystallineInfinitier";
     public static final String HyperSpacetimeTransformer = "HyperSpacetimeTransformer";
     public static final String Scavenger = "Scavenger";
+    public static final String AdvancedMegaOilCracker = "AdvancedMegaOilCracker";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -140,13 +141,15 @@ public class Config {
     public static int SpeedMultiplier_Tier1Block_SpaceScaler = 1;
     public static int SpeedMultiplier_BeyondTier2Block_SpaceScaler = 10;
     // endregion
- // region Hyper Spacetime Transformer
- public static byte Mode_Default_HyperSpacetimeTransformer=0;
- public static int ParallelMultiplier_HyperSpacetimeTransformer=1;
- public static int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=5;
- public static int SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=1;
- public static boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer= true;
- // endregion
+
+    // region Hyper Spacetime Transformer
+    public static byte Mode_Default_HyperSpacetimeTransformer=0;
+    public static int ParallelMultiplier_HyperSpacetimeTransformer=1;
+    public static int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=5;
+    public static int SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=1;
+    public static boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer= true;
+    // endregion
+
     // region Molecule Deconstructor
     public static byte Mode_Default_MoleculeDeconstructor = 0;
     public static int PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor = 16;
@@ -168,6 +171,12 @@ public class Config {
     public static double SpeedBonus_MultiplyPerTier_Scavenger = 0.8D;
     // endregion
 
+    // region AdvancedMegaOilCracker
+    public static boolean EnablePerfectOverclock_AdvancedMegaOilCracker = false;
+    public static float SpeedBonus_AdvancedMegaOilCracker = 0.5F;
+    public static int Parallel_AdvancedMegaOilCracker = 256;
+    // endregion
+
     // region Infinite Air Hatch
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
@@ -179,7 +188,12 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
 
+        // region AdvancedMegaOilCracker
+        EnablePerfectOverclock_AdvancedMegaOilCracker = configuration.getBoolean("EnablePerfectOverclock_AdvancedMegaOilCracker", AdvancedMegaOilCracker, EnablePerfectOverclock_AdvancedMegaOilCracker, "Enable Advanced Mega Oil Cracker Perfect Overclock. Type: boolean");
+        SpeedBonus_AdvancedMegaOilCracker = Float.parseFloat(configuration.getString("SpeedBonus_AdvancedMegaOilCracker", AdvancedMegaOilCracker, String.valueOf(SpeedBonus_AdvancedMegaOilCracker), "Speed Bonus of Advanced Mega Oil Cracker. Type: float"));
+        Parallel_AdvancedMegaOilCracker = configuration.getInt("Parallel_AdvancedMegaOilCracker", AdvancedMegaOilCracker, Parallel_AdvancedMegaOilCracker, 1, 65536, "Parallel of Advanced Mega Oil Cracker. Type: int");
         // endregion
 
         // region Scavenger
