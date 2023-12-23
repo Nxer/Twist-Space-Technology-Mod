@@ -40,7 +40,7 @@ public class WorldProviderAlfheim extends WorldProviderSurface {
 
     @Override
     public void registerWorldChunkManager() {
-        this.worldChunkMgr = null;// new TFWorldChunkManager(worldObj);
+        this.worldChunkMgr = new WorldChunkManagerAlfheim(worldObj);// new TFWorldChunkManager(worldObj);
         this.dimensionId = WorldStats.dimensionID;
     }
 
