@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology;
 
+import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
+
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -12,7 +14,6 @@ import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 
 import cpw.mods.fml.common.Mod;
@@ -132,8 +133,7 @@ public class TwistSpaceTechnology {
     @Mod.EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
         proxy.serverStarted(event);
-        new StellarForgeRecipePool().loadOnServerStarted();
-
+        loadRecipesServerStarted();
     }
 
 }

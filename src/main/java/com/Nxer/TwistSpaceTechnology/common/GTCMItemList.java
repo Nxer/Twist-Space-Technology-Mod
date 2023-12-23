@@ -179,6 +179,7 @@ public enum GTCMItemList {
     superCleanRoom,
     BiosphereIII,
     AdvancedMegaOilCracker,
+    IndistinctTentacle,
 
     // MAX
     HighDimensionalExtend,

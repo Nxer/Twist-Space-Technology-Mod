@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.DATApipe;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
@@ -15,6 +16,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 
+import net.glease.ggfab.GGItemList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -31,6 +33,7 @@ import com.dreammaster.gthandler.GT_CoreModSupport;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import goodgenerator.items.MyMaterial;
+import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -75,6 +78,46 @@ public class MiracleTopRecipePool implements IRecipePool {
 
         final ItemStack Wrapped_Circuit_Board_Bio_Ultra = GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32746);
 
+        // region Indistinct Tentacle
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GGItemList.AdvAssLine.get(64),
+                ItemRefer.Component_Assembly_Line.get(64),
+                CustomItemList.AssemblingMachineUMV.get(64),
+                ItemRefer.Precise_Assembler.get(64),
+
+                GTCMItemList.StellarConstructionFrameMaterial.get(64),
+                GTCMItemList.AnnihilationConstrainer.get(64),
+                GTCMItemList.AnnihilationConstrainer.get(64),
+                GTCMItemList.StellarConstructionFrameMaterial.get(64),
+
+                GTCMItemList.DysonSphereFrameComponent.get(64),
+                GTCMItemList.SpaceWarper.get(64),
+                GTCMItemList.GravitationalLens.get(64),
+                GTCMItemList.DysonSphereFrameComponent.get(64),
+
+                CustomItemList.QuantumCircuit.get(64),
+                eM_Ultimate_Containment_Advanced.get(64),
+                eM_Ultimate_Containment_Advanced.get(64),
+                CustomItemList.QuantumCircuit.get(64)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.SpaceTime.getMolten(144*131072),
+                MaterialsUEVplus.Space.getMolten(144*131072),
+                MaterialsUEVplus.Time.getMolten(144*131072),
+                MaterialsUEVplus.Eternity.getMolten(144*131072),
+
+                MyMaterial.metastableOganesson.getMolten(144*131072),
+                MyMaterial.shirabon.getMolten(144*131072)
+            )
+            .itemOutputs(GTCMItemList.IndistinctTentacle.get(1))
+            .eut(RECIPE_MAX)
+            .duration(20 * 14400)
+            .addTo(MT);
+
+        // endregion
+
         // region Quantum Circuit and Piko Circuit
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -97,7 +140,6 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Lanthanum.getMolten(144 * 2)
             )
             .itemOutputs(GT_ModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 1))
-
             .eut(RECIPE_UMV)
             .duration(20 * 1000)
             .addTo(MT);

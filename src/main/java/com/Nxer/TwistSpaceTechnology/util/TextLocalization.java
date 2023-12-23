@@ -575,5 +575,21 @@ public class TextLocalization {
     public static final String Tooltip_MegaEggGenerator_L = texter("Lasers unlock at >=16 pieces.", "Tooltip_MegaEggGenerator_L");
     public static final String Tooltip_MegaEggGenerator_C = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_D");
     // endregion
+
+    // region IndistinctTentacle
+    public static final String NameIndistinctTentacle = texter(""+EnumChatFormatting.BOLD+EnumChatFormatting.BLACK+"Indistinct Tentacle","NameIndistinctTentacle");
+    public static final String Tooltip_IndistinctTentacle_MachineType = texter("Assembly Line | Component Assembly Line | Assembler | Precise Assembler","Tooltip_IndistinctTentacle_MachineType");
+    public static final String Tooltip_IndistinctTentacle_Controller = texter("Controller block for the Indistinct Tentacle","Tooltip_IndistinctTentacle_Controller");
+    public static final String Tooltip_IndistinctTentacle_01 = texter(""+EnumChatFormatting.BOLD+EnumChatFormatting.ITALIC+"In the midst of this sea and endless solitude there appears a dim road, a road without human footprints.","Tooltip_IndistinctTentacle_01");
+    public static final String Tooltip_IndistinctTentacle_02 = texter(""+EnumChatFormatting.BOLD+EnumChatFormatting.ITALIC+"No man has ever passed this place; no ship has ever sailed here.","Tooltip_IndistinctTentacle_02");
+    public static final String Tooltip_IndistinctTentacle_03 = texter("Made everything in its where should be.","Tooltip_IndistinctTentacle_03");
+    public static final String Tooltip_IndistinctTentacle_04 = texter("Glass tier limit energy hatch, laser hatch need 8, and 12 allow Wireless mode by placing no energy hatch.","Tooltip_IndistinctTentacle_04");
+    public static final String Tooltip_IndistinctTentacle_05 = texter("Component Casing tier limit recipe can process. Casing tier require at least the recipe voltage level -1 .","Tooltip_IndistinctTentacle_05");
+    public static final String Tooltip_IndistinctTentacle_06 = texter("If Component Casing tier is higher than recipe voltage, enable Perfect Overclock.","Tooltip_IndistinctTentacle_06");
+    public static final String Tooltip_IndistinctTentacle_07 = texter("Progressing time is fixed at 6.4s in Wireless mode.","Tooltip_IndistinctTentacle_07");
+    public static final String Tooltip_IndistinctTentacle_08 = texter("Watch out your Global energy storage if use wireless mode, you should not want to see the power drain's landscape.","Tooltip_IndistinctTentacle_08");
+    public static final String Tooltip_IndistinctTentacle_2_01 = texter("Speed (default) of mode: Assembly Line = 100%%; Component Assembly Line = 200%%; Assembler = 400%%; Precise Assembler = 400%%.","Tooltip_IndistinctTentacle_2_01");
+    public static final String Tooltip_IndistinctTentacle_2_02 = texter("Default power mode parallel 256.","Tooltip_IndistinctTentacle_2_02");
+    // endregion
 }
 // spotless:on
