@@ -26,6 +26,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMateria
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
@@ -75,6 +76,7 @@ public class MachineLoader {
     public static ItemStack MegaEggGenerator;
     public static ItemStack BiosphereIII;
     public static ItemStack AdvancedMegaOilCracker;
+    public static ItemStack IndistinctTentacle;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -280,6 +282,13 @@ public class MachineLoader {
             "NameAdvancedMegaOilCracker",
             TextLocalization.NameAdvancedMegaOilCracker).getStackForm(1);
         GTCMItemList.AdvancedMegaOilCracker.set(AdvancedMegaOilCracker);
+
+        //
+        IndistinctTentacle = new TST_IndistinctTentacle(
+            19028,
+            "NameIndistinctTentacle",
+            TextLocalization.NameIndistinctTentacle).getStackForm(1);
+        GTCMItemList.IndistinctTentacle.set(IndistinctTentacle);
 
         // endregion
 

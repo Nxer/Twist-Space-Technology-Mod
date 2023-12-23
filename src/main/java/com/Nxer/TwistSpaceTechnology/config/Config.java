@@ -28,6 +28,7 @@ public class Config {
     public static final String HyperSpacetimeTransformer = "HyperSpacetimeTransformer";
     public static final String Scavenger = "Scavenger";
     public static final String AdvancedMegaOilCracker = "AdvancedMegaOilCracker";
+    public static final String IndistinctTentacle = "IndistinctTentacle";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -177,6 +178,18 @@ public class Config {
     public static int Parallel_AdvancedMegaOilCracker = 256;
     // endregion
 
+    // region IndistinctTentacle
+    public static byte Mode_Default_IndistinctTentacle = 0;
+    public static int SpeedMultiplier_AssemblyLine_IndistinctTentacle = 1;
+    public static int SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle = 2;
+    public static int SpeedMultiplier_Assembler_IndistinctTentacle = 4;
+    public static int SpeedMultiplier_PreciseAssembler_IndistinctTentacle = 4;
+    public static int Parallel_Default_IndistinctTentacle = 256;
+    public static int TickEveryProcess_WirelessMode_IndistinctTentacle = 128;
+    public static byte GlassTierLimit_WirelessMode_IndistinctTentacle = 12;
+    public static byte GlassTierLimit_LaserHatch_IndistinctTentacle = 8;
+    // endregion
+
     // region Infinite Air Hatch
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
@@ -188,6 +201,18 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region IndistinctTentacle
+        Mode_Default_IndistinctTentacle = (byte) configuration.getInt("Mode_Default_IndistinctTentacle", IndistinctTentacle, Mode_Default_IndistinctTentacle, 0, 3, "Default mode when placing a Indistinct Tentacle controller block. 0=AL; 1=CAL; 2=Assembler; 3=PreciseAssembler; Type: byte");
+        SpeedMultiplier_AssemblyLine_IndistinctTentacle = configuration.getInt("SpeedMultiplier_AssemblyLine_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_AssemblyLine_IndistinctTentacle, 1, 256, "Speed Multiplier of Indistinct Tentacle Assembly Line mode. Type: int");
+        SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle = configuration.getInt("SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle, 1, 256, "Speed Multiplier of IndistinctTentacle Component Assembly Line mode. Type: int");
+        SpeedMultiplier_Assembler_IndistinctTentacle = configuration.getInt("SpeedMultiplier_Assembler_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_Assembler_IndistinctTentacle, 1, 256, "Speed Multiplier of Indistinct Tentacle Assembler mode. Type: int");
+        SpeedMultiplier_PreciseAssembler_IndistinctTentacle = configuration.getInt("SpeedMultiplier_PreciseAssembler_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_PreciseAssembler_IndistinctTentacle, 1, 256, "Speed Multiplier of Indistinct Tentacle Precise Assembler mode. Type: int");
+        Parallel_Default_IndistinctTentacle = configuration.getInt("Parallel_Default_IndistinctTentacle", IndistinctTentacle, Parallel_Default_IndistinctTentacle, 1, 65536, "Parallel of Indistinct Tentacle default power mode. Type: int");
+        TickEveryProcess_WirelessMode_IndistinctTentacle = configuration.getInt("TickEveryProcess_WirelessMode_IndistinctTentacle", IndistinctTentacle, TickEveryProcess_WirelessMode_IndistinctTentacle, 1, 65536, "Indistinct Tentacle in Wireless Mode every process cost the ticks. Type: int");
+        GlassTierLimit_WirelessMode_IndistinctTentacle = (byte) configuration.getInt("GlassTierLimit_WirelessMode_IndistinctTentacle", IndistinctTentacle, GlassTierLimit_WirelessMode_IndistinctTentacle, 0, 12, "Glass Tier Limit of Indistinct Tentacle Wireless Mode. Type: byte");
+        GlassTierLimit_LaserHatch_IndistinctTentacle = (byte) configuration.getInt("GlassTierLimit_LaserHatch_IndistinctTentacle", IndistinctTentacle, GlassTierLimit_LaserHatch_IndistinctTentacle, 0, 12, "Glass Tier Limit of Indistinct Tentacle Laser Hatch permission. Type: byte");
         // endregion
 
         // region AdvancedMegaOilCracker

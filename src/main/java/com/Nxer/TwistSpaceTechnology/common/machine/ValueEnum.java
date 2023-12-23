@@ -173,6 +173,19 @@ public final class ValueEnum {
 
     // endregion
 
+    // region Indistinct Tentacle
+    public static final byte Mode_Default_IndistinctTentacle = Config.Mode_Default_IndistinctTentacle;
+    public static final int SpeedMultiplier_AssemblyLine_IndistinctTentacle = Config.SpeedMultiplier_AssemblyLine_IndistinctTentacle;
+    public static final int SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle = Config.SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle;
+    public static final int SpeedMultiplier_Assembler_IndistinctTentacle = Config.SpeedMultiplier_Assembler_IndistinctTentacle;
+    public static final int SpeedMultiplier_PreciseAssembler_IndistinctTentacle = Config.SpeedMultiplier_PreciseAssembler_IndistinctTentacle;
+    public static final int Parallel_Default_IndistinctTentacle = Config.Parallel_Default_IndistinctTentacle;
+    public static final int TickEveryProcess_WirelessMode_IndistinctTentacle = Config.TickEveryProcess_WirelessMode_IndistinctTentacle;
+    public static final byte GlassTierLimit_WirelessMode_IndistinctTentacle = Config.GlassTierLimit_WirelessMode_IndistinctTentacle;
+    public static final byte GlassTierLimit_LaserHatch_IndistinctTentacle = Config.GlassTierLimit_LaserHatch_IndistinctTentacle;
+
+    // endregion
+
     // region Infinite Air Hatch
     public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
     // endregion

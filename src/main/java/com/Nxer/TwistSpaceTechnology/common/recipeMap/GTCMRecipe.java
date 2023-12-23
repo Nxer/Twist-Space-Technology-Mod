@@ -9,6 +9,7 @@ import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
+import gregtech.api.recipe.maps.AssemblyLineFrontend;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 
 public class GTCMRecipe {
@@ -555,6 +556,22 @@ public class GTCMRecipe {
     // "",
     // false,
     // true);
+
+    public static final RecipeMap<RecipeMapBackend> AssemblyLineWithoutResearchRecipe = RecipeMapBuilder
+        .of("tst.recipe.AssemblyLineWithoutResearchRecipe")
+        .maxIO(16, 1, 4, 0)
+        .maxIO(16, 1, 4, 0)
+        .minInputs(1, 0)
+        .useSpecialSlot()
+        // .slotOverlays((index, isFluid, isOutput, isSpecial) -> isSpecial ? GT_UITextures.OVERLAY_SLOT_DATA_ORB :
+        // null)
+        .disableOptimize()
+        .neiTransferRect(88, 8, 18, 72)
+        .neiTransferRect(124, 8, 18, 72)
+        .neiTransferRect(142, 26, 18, 18)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndistinctTentacle.get(1)))
+        .frontend(AssemblyLineFrontend::new)
+        .build();
 
     // endregion
 }

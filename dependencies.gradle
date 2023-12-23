@@ -52,7 +52,8 @@ dependencies {
     implementation('com.github.GTNewHorizons:GTNH-Intergalactic:1.2.8:dev')
     implementation('com.github.GTNewHorizons:amunra:0.5.0:dev')
     implementation('com.github.GTNewHorizons:MagicBees:2.7.1-GTNH:dev')
-    implementation('com.github.GTNewHorizons:Railcraft:9.15.3:dev')
+    implementation('com.github.GTNewHorizons:GigaGramFab:0.3.9:dev')
+//    implementation('com.github.GTNewHorizons:Railcraft:9.15.3:dev')
     implementation('thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev')
     implementation('com.github.GTNewHorizons:Botania:1.10.3-GTNH:dev')
     //These 2 deps have conflicts with Amun-Ra by default, see Twist-Space-Technology-Mod#150
