@@ -22,7 +22,6 @@ public enum GTCMItemList {
     PerfectLapotronCrystal,
     EnergyCrystalShard,
     PerfectEnergyCrystal,
-
     CosmicCircuitBoard,
     IntelligentImitationNeutronStarCore,
     EventHorizonNanoSwarm,
@@ -179,6 +178,7 @@ public enum GTCMItemList {
 
     superCleanRoom,
     BiosphereIII,
+    AdvancedMegaOilCracker,
 
     // MAX
     HighDimensionalExtend,
