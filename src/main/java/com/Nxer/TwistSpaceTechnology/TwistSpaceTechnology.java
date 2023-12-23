@@ -3,6 +3,8 @@ package com.Nxer.TwistSpaceTechnology;
 import java.util.Collection;
 import java.util.HashSet;
 
+import net.minecraftforge.common.DimensionManager;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,6 +16,9 @@ import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
+import com.Nxer.world.WorldProviderAlfheim;
+import com.Nxer.world.WorldStats;
+import com.Nxer.world.biomes.BiomeBaseAlfheim;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -97,6 +102,10 @@ public class TwistSpaceTechnology {
         MachineLoader.loadMachines();// Load Machines
         NEIHandler.IMCSender();// NEI reg
 
+        // dimension provider
+        DimensionManager.registerProviderType(WorldStats.dimensionProviderID, WorldProviderAlfheim.class, false);
+        // enter biomes into dictionary
+        BiomeBaseAlfheim.registerWithBiomeDictionary();
     }
 
     @Mod.EventHandler
@@ -109,6 +118,8 @@ public class TwistSpaceTechnology {
 
         CropLoader.register();
         CropLoader.registerBaseSeed();
+        // dimension provider
+        DimensionManager.registerDimension(WorldStats.dimensionID, WorldStats.dimensionProviderID);
         // TwistSpaceTechnology.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
     }
 
