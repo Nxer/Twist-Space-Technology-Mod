@@ -56,6 +56,7 @@ dependencies {
     implementation('thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev')
     implementation('com.github.GTNewHorizons:Botania:1.10.3-GTNH:dev')
     implementation('com.github.GTNewHorizons:twilightforest:2.5.1:dev')
+    implementation('com.github.GTNewHorizons:Realistic-World-Gen:alpha-1.3.9-pre:dev')
 //    implementation('com.github.RealSilverMoon:BoxPlusPlus:1.2.0:dev')
 //    implementation('com.github.GTNewHorizons:KubaTech:0.13.4:dev')
 

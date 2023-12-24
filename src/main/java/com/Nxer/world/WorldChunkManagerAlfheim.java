@@ -2,24 +2,22 @@ package com.Nxer.world;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeCache;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
 import com.Nxer.world.biomes.BiomeBaseAlfheim;
 import com.Nxer.world.layer.GenLayerAlfheim;
 
-import scala.util.Random;
-import twilightforest.TFFeature;
+import rwg.world.ChunkManagerRealistic;
 
-public class WorldChunkManagerAlfheim extends WorldChunkManager {
+public class WorldChunkManagerAlfheim extends ChunkManagerRealistic {
 
     private GenLayer unzoomedBiomes;
 
@@ -241,24 +239,6 @@ public class WorldChunkManagerAlfheim extends WorldChunkManager {
      */
     public void cleanupCache() {
         myBiomeCache.cleanupCache();
-    }
-
-    /**
-     * Returns feature ID at the specified location
-     */
-
-    /**
-     * Checks if the coordinates are in a feature chunk.
-     * 
-     * @param world
-     */
-    public boolean isInFeatureChunk(World world, int mapX, int mapZ) {
-
-        int chunkX = mapX >> 4;
-        int chunkZ = mapZ >> 4;
-        ChunkCoordinates cc = TFFeature.getNearestCenterXYZ(chunkX, chunkZ, world);
-
-        return chunkX == (cc.posX >> 4) && chunkZ == (cc.posZ >> 4);
     }
 
 }
