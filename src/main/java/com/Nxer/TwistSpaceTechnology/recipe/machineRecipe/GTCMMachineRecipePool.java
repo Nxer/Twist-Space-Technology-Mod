@@ -1551,7 +1551,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 ItemList.MagicEnergyConverter_MV.get(4),
                 ItemList.MagicEnergyConverter_HV.get(4),
                 Materials.Thaumium.getPlates(16),
-                new Object[]{OrePrefixes.circuit.get(Materials.Master), 2}
+                GTCMItemList.VoidPollen.get(4)
             )
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(16 * 1000))
             .itemOutputs(GTCMItemList.MegaEggGenerator.get(1))
