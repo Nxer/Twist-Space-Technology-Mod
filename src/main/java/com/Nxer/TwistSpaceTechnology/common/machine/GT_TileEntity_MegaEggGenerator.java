@@ -305,6 +305,10 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     };
 
 	// spotless:on
+    @Override
+    public boolean isRotationChangeAllowed() {
+        return ValueEnum.MEG_AllowRotation;
+    }
     // endregion
 
     // region Overrides

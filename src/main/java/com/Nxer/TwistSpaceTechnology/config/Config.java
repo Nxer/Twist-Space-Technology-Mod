@@ -201,6 +201,7 @@ public class Config {
     public static int MEG_Efficiency_InfinityEggBuff = 100;
     public static int MEG_Efficiency_Lost = 500;
     public static double MEG_Overall_Multiply = 1.0D;
+    public static boolean MEG_Rotation = false;
     // endregion
 
     // region Infinite Air Hatch
@@ -384,6 +385,7 @@ public class Config {
         MEG_Efficiency_InfinityEggBuff = configuration.getInt("MEG_Efficiency_InfinityEggBuff", MEG, 100, 0, Integer.MAX_VALUE, "Every n infinity eggs bring n*this max efficiency buff");
         MEG_Efficiency_Lost = configuration.getInt("MEG_Efficiency_Lost", MEG, 500, 0, Integer.MAX_VALUE, "Every n empty position bring n*this max efficiency loss");
         MEG_Overall_Multiply = Double.parseDouble(configuration.getString("MEG_Overall_Multiply", MEG, String.valueOf(MEG_Overall_Multiply), "Overall multiply of EUt, type: double"));
+        MEG_Rotation = configuration.getBoolean("MEG_Rotation", MEG, false, "If rotation allowed");
         // endregion
 
         if (configuration.hasChanged()) {

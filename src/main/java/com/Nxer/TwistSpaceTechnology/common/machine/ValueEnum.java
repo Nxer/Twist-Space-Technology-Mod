@@ -197,6 +197,7 @@ public final class ValueEnum {
     public static final int MEG_Efficiency_InfinityEggBuff = Config.MEG_Efficiency_InfinityEggBuff;
     public static final int MEG_Efficiency_Lost = Config.MEG_Efficiency_Lost;
     public static final double MEG_Overall_Multiply = Config.MEG_Overall_Multiply;
+    public static final boolean MEG_AllowRotation = Config.MEG_Rotation;
     // endregion
 
     // region Infinite Air Hatch
