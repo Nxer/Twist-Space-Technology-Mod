@@ -1540,6 +1540,26 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // endregion
 
+        // region MEG
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                ItemList.MagicEnergyAbsorber_LV.get(4),
+                ItemList.MagicEnergyAbsorber_MV.get(4),
+                ItemList.MagicEnergyAbsorber_HV.get(4),
+                ItemList.MagicEnergyAbsorber_EV.get(4),
+                ItemList.MagicEnergyConverter_LV.get(4),
+                ItemList.MagicEnergyConverter_MV.get(4),
+                ItemList.MagicEnergyConverter_HV.get(4),
+                Materials.Thaumium.getPlates(16),
+                new Object[]{OrePrefixes.circuit.get(Materials.Master), 2}
+            )
+            .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(16 * 1000))
+            .itemOutputs(GTCMItemList.MegaEggGenerator.get(1))
+            .eut(TierEU.RECIPE_LuV)
+            .duration(120 * 20)
+            .addTo(assembler);
+        // endregion
+
     }
     // spotless:on
 }
