@@ -186,6 +186,19 @@ public final class ValueEnum {
 
     // endregion
 
+    // region Mega Egg Generator
+
+    public static final int MEG_Laser_Pieces = Config.MEG_Laser_Pieces;
+    public static final int MEG_Dynamo_Limit = Config.MEG_Dynamo_Limit;
+    public static final long MEG_CrepperEgg_Gen = Config.MEG_CrepperEgg_Gen;
+    public static final long MEG_DragonEgg_Gen = Config.MEG_DragonEgg_Gen;
+    public static final long MEG_InfinityEgg_Gen = Config.MEG_InfinityEgg_Gen;
+    public static final int MEG_Efficiency_PiecesBuff = Config.MEG_Efficiency_PiecesBuff;
+    public static final int MEG_Efficiency_InfinityEggBuff = Config.MEG_Efficiency_InfinityEggBuff;
+    public static final int MEG_Efficiency_Lost = Config.MEG_Efficiency_Lost;
+    public static final double MEG_Overall_Multiply = Config.MEG_Overall_Multiply;
+    // endregion
+
     // region Infinite Air Hatch
     public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
     // endregion

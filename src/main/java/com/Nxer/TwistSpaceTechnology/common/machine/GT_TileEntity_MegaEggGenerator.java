@@ -92,9 +92,12 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      * 1A HV Crepper egg
      * 1A EV Dragon egg
      * 2A IV Infinite egg
+     * Can be defined in config
      */
     private void getOutput() {
-        lEUt = 512L * mCrepperEggs + 2048L * mDragonEggs + 2 * 8192L * mInfinityEggs;
+        lEUt = (long) (ValueEnum.MEG_Overall_Multiply
+            * (ValueEnum.MEG_CrepperEgg_Gen * mCrepperEggs + ValueEnum.MEG_DragonEgg_Gen * mDragonEggs
+                + ValueEnum.MEG_InfinityEgg_Gen * mInfinityEggs));
     }
 
     /**
@@ -102,8 +105,12 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      * 1% max efficiency every 1 infinity egg.
      */
     private int getCalculatedEfficiency() {
-        return Math.max(0, 10000 + 200 * (int) (Math.log(mPieces) / Math.log(2)) - 500 * mAirPosed)
-            + 100 * mInfinityEggs;
+        return Math
+            .max(
+                0,
+                10000 + ValueEnum.MEG_Efficiency_PiecesBuff * (int) (Math.log(mPieces) / Math.log(2))
+                    - ValueEnum.MEG_Efficiency_Lost * mAirPosed)
+            + ValueEnum.MEG_Efficiency_InfinityEggBuff * mInfinityEggs;
     }
 
     @Override
@@ -157,7 +164,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      * @return If laser is allowed
      */
     private boolean checkLaser() {
-        if (mPieces < 16) {
+        if (mPieces < ValueEnum.MEG_Laser_Pieces) {
             for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : eDynamoMulti) {
                 if (tHatch instanceof GT_MetaTileEntity_Hatch_DynamoTunnel) {
                     return false;
@@ -173,7 +180,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      * @return If dynamo is allowed
      */
     private boolean checkDynamo() {
-        return (mDynamoHatches.size() + eDynamoMulti.size()) == 1;
+        return (mDynamoHatches.size() + eDynamoMulti.size()) == ValueEnum.MEG_Dynamo_Limit;
     }
 
     // endregion

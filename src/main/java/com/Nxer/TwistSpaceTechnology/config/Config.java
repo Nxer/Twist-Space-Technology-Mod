@@ -29,6 +29,7 @@ public class Config {
     public static final String Scavenger = "Scavenger";
     public static final String AdvancedMegaOilCracker = "AdvancedMegaOilCracker";
     public static final String IndistinctTentacle = "IndistinctTentacle";
+    public static final String MEG = "TowerOFAbstraction";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -188,6 +189,18 @@ public class Config {
     public static int TickEveryProcess_WirelessMode_IndistinctTentacle = 128;
     public static byte GlassTierLimit_WirelessMode_IndistinctTentacle = 12;
     public static byte GlassTierLimit_LaserHatch_IndistinctTentacle = 8;
+    // endregion
+
+    // region Mega Egg Generator
+    public static int MEG_Laser_Pieces = 16;
+    public static int MEG_Dynamo_Limit = 1;
+    public static long MEG_CrepperEgg_Gen = 512L;
+    public static long MEG_DragonEgg_Gen = 2048L;
+    public static long MEG_InfinityEgg_Gen = 16384L;
+    public static int MEG_Efficiency_PiecesBuff = 200;
+    public static int MEG_Efficiency_InfinityEggBuff = 100;
+    public static int MEG_Efficiency_Lost = 500;
+    public static double MEG_Overall_Multiply = 1.0D;
     // endregion
 
     // region Infinite Air Hatch
@@ -359,6 +372,18 @@ public class Config {
         SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=          configuration.getInt(        "SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
         SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=       configuration.getInt(        "SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
         EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer=   configuration.getBoolean(    "EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer",    HyperSpacetimeTransformer,EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer,"");;
+        // endregion
+
+        // region Mega Egg Generator
+        MEG_CrepperEgg_Gen = Long.parseLong(configuration.getString("MEG_CrepperEgg_Gen", MEG, String.valueOf(MEG_CrepperEgg_Gen), "EUt of Crepper eggs, type: long"));
+        MEG_DragonEgg_Gen = Long.parseLong(configuration.getString("MEG_DragonEgg_Gen", MEG, String.valueOf(MEG_DragonEgg_Gen), "EUt of Dragon eggs, type: long"));
+        MEG_InfinityEgg_Gen = Long.parseLong(configuration.getString("MEG_InfinityEgg_Gen", MEG, String.valueOf(MEG_InfinityEgg_Gen), "EUt of Crepper eggs, type: long"));
+        MEG_Laser_Pieces = configuration.getInt("MEG_Laser_Pieces", MEG, 16, 1, Integer.MAX_VALUE, "Piece num when unlock laser");
+        MEG_Dynamo_Limit = configuration.getInt("MEG_Dynamo_Limit", MEG, 1, 1, Integer.MAX_VALUE, "How many dynamo allowed in total");
+        MEG_Efficiency_PiecesBuff = configuration.getInt("MEG_Efficiency_PiecesBuff", MEG, 200, 0, Integer.MAX_VALUE, "Every 2^n pieces bring n*this max efficiency buff");
+        MEG_Efficiency_InfinityEggBuff = configuration.getInt("MEG_Efficiency_InfinityEggBuff", MEG, 100, 0, Integer.MAX_VALUE, "Every n infinity eggs bring n*this max efficiency buff");
+        MEG_Efficiency_Lost = configuration.getInt("MEG_Efficiency_Lost", MEG, 500, 0, Integer.MAX_VALUE, "Every n empty position bring n*this max efficiency loss");
+        MEG_Overall_Multiply = Double.parseDouble(configuration.getString("MEG_Overall_Multiply", MEG, String.valueOf(MEG_Overall_Multiply), "Overall multiply of EUt, type: double"));
         // endregion
 
         if (configuration.hasChanged()) {
