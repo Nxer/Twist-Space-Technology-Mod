@@ -696,6 +696,7 @@ Tooltips_AdvancedMegaOilCracker_Controller=进阶巨型石油裂化机的控制�
 Tooltips_AdvancedMegaOilCracker_01=§o自由是自制之基础.
 Tooltips_AdvancedMegaOilCracker_02=就像巨型石油裂化机那样.
 NameIndistinctTentacle=§8§l不可视之触§r
+Waila.TST_IndistinctTentacle.1=无线模式
 tst.recipe.AssemblyLineWithoutResearchRecipe=巨型装配线
 IndistinctTentacle.modeMsg.0=装配线模式
 IndistinctTentacle.modeMsg.1=部件装配线模式
