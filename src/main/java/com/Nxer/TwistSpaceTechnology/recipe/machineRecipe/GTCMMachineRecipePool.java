@@ -91,6 +91,7 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Spacetime;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Teleportation;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static galaxyspace.core.register.GSMaterials.tantalumCarbideHafniumCarbideMixture;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
@@ -104,12 +105,14 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Ext
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 
+import net.glease.ggfab.GGItemList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
@@ -128,6 +131,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IItemContainer;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -1487,6 +1491,53 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_EV)
             .duration(20*3600)
             .addTo(assembler);
+        // endregion
+
+        // region Indistinct Tentacle
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GGItemList.AdvAssLine.get(64),
+                ItemRefer.Component_Assembly_Line.get(64),
+                CustomItemList.AssemblingMachineUMV.get(64),
+                ItemRefer.Precise_Assembler.get(64),
+
+                GTCMItemList.StellarConstructionFrameMaterial.get(64),
+                GTCMItemList.AnnihilationConstrainer.get(64),
+                GTCMItemList.AnnihilationConstrainer.get(64),
+                GTCMItemList.StellarConstructionFrameMaterial.get(64),
+
+                GTCMItemList.DysonSphereFrameComponent.get(64),
+                GTCMItemList.SpaceWarper.get(64),
+                GTCMItemList.GravitationalLens.get(64),
+                GTCMItemList.DysonSphereFrameComponent.get(64),
+
+                CustomItemList.QuantumCircuit.get(64),
+                eM_Ultimate_Containment_Advanced.get(64),
+                eM_Ultimate_Containment_Advanced.get(64),
+                CustomItemList.QuantumCircuit.get(64)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.SpaceTime.getMolten(144*524288),
+                MaterialsUEVplus.Space.getMolten(144*524288),
+                MaterialsUEVplus.Time.getMolten(144*524288),
+                MaterialsUEVplus.Eternity.getMolten(144*524288),
+
+                MaterialsUEVplus.WhiteDwarfMatter.getMolten(144*524288),
+                MaterialsUEVplus.BlackDwarfMatter.getMolten(144*524288),
+                MaterialsUEVplus.Universium.getMolten(144*524288),
+                MaterialsUEVplus.RawStarMatter.getFluid(1000*524288),
+
+                MyMaterial.metastableOganesson.getMolten(144*524288),
+                MyMaterial.shirabon.getMolten(144*524288),
+                Materials.UUMatter.getFluid(1000*2097152),
+                new FluidStack(solderPlasma, 144*2097152)
+            )
+            .itemOutputs(GTCMItemList.IndistinctTentacle.get(1))
+            .eut(TierEU.RECIPE_MAX)
+            .duration(20 * 14400)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
         // endregion
 
     }
