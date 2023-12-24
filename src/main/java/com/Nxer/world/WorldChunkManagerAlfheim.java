@@ -9,15 +9,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeCache;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
 import com.Nxer.world.biomes.BiomeBaseAlfheim;
 import com.Nxer.world.layer.GenLayerAlfheim;
 
-import rwg.world.ChunkManagerRealistic;
 
-public class WorldChunkManagerAlfheim extends ChunkManagerRealistic {
+public class WorldChunkManagerAlfheim extends WorldChunkManager {
 
     private GenLayer unzoomedBiomes;
 

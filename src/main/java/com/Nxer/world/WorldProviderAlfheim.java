@@ -5,6 +5,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.IRenderHandler;
 
 import com.Nxer.world.biomes.BiomeBaseAlfheim;
@@ -13,6 +14,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import twilightforest.client.renderer.TFSkyRenderer;
 import twilightforest.client.renderer.TFWeatherRenderer;
+import twilightforest.world.ChunkProviderTwilightForest;
 
 public class WorldProviderAlfheim extends WorldProviderSurface {
 
@@ -42,6 +44,14 @@ public class WorldProviderAlfheim extends WorldProviderSurface {
     public void registerWorldChunkManager() {
         this.worldChunkMgr = new WorldChunkManagerAlfheim(worldObj);// new TFWorldChunkManager(worldObj);
         this.dimensionId = WorldStats.dimensionID;
+    }
+    @Override
+    public IChunkProvider createChunkGenerator()
+    {
+        return new ChunkProviderAlfheim(
+                    worldObj,
+                    worldObj.getSeed(),
+                    worldObj.getWorldInfo().isMapFeaturesEnabled());
     }
 
     /**
