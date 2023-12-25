@@ -124,6 +124,39 @@ public final class Utils {
 
     // region Generals
 
+    public static ItemStack[] sortNoNullArray(ItemStack... itemStacks) {
+        if (itemStacks == null) return null;
+        List<ItemStack> list = new ArrayList<>();
+        for (int i = 0; i < itemStacks.length; i++) {
+            if (itemStacks[i] == null) continue;
+            list.add(itemStacks[i]);
+        }
+        if (list.isEmpty()) return new ItemStack[0];
+        return list.toArray(new ItemStack[0]);
+    }
+
+    public static FluidStack[] sortNoNullArray(FluidStack... fluidStacks) {
+        if (fluidStacks == null) return null;
+        List<FluidStack> list = new ArrayList<>();
+        for (int i = 0; i < fluidStacks.length; i++) {
+            if (fluidStacks[i] == null) continue;
+            list.add(fluidStacks[i]);
+        }
+        if (list.isEmpty()) return new FluidStack[0];
+        return list.toArray(new FluidStack[0]);
+    }
+
+    public static Object[] sortNoNullArray(Object... objects) {
+        if (objects == null) return null;
+        List<Object> list = new ArrayList<>();
+        for (int i = 0; i < objects.length; i++) {
+            if (objects[i] == null) continue;
+            list.add(objects[i]);
+        }
+        if (list.isEmpty()) return new Object[0];
+        return list.toArray(new Object[0]);
+    }
+
     public static <T extends Collection<E>, E extends MetaTileEntity> T filterValidMTEs(T metaTileEntities) {
         metaTileEntities.removeIf(mte -> mte == null || !mte.isValid());
         return metaTileEntities;

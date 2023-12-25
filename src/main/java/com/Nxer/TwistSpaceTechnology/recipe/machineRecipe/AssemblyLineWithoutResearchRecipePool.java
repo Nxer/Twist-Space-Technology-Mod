@@ -14,6 +14,7 @@ import com.Nxer.TwistSpaceTechnology.util.Utils;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_RecipeBuilder;
 
 public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
@@ -93,14 +94,17 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             }
 
             if (!hasCustomWildcardItemList) {
-                GT_Values.RA.stdBuilder()
-                    .itemInputs(inputItems)
-                    .itemOutputs(recipe.mOutput)
-                    .fluidInputs(recipe.mFluidInputs)
-                    .noOptimize()
+                GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
+                ra.itemInputs(inputItems)
+                    .itemOutputs(recipe.mOutput);
+                if (recipe.mFluidInputs != null) {
+                    ra.fluidInputs(Utils.sortNoNullArray(recipe.mFluidInputs));
+                }
+                ra.noOptimize()
                     .eut(recipe.mEUt)
                     .duration(recipe.mDuration)
                     .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
+
             } else {
                 for (int i = 0; i < inputItems.length; i++) {
                     if (inputItems[i] == null) {
@@ -109,11 +113,13 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 }
                 List<ItemStack[]> inputCombine = generateAllItemInput(inputItems, inputWildcards);
                 for (ItemStack[] inputs : inputCombine) {
-                    GT_Values.RA.stdBuilder()
-                        .itemInputs(inputs)
-                        .itemOutputs(recipe.mOutput)
-                        .fluidInputs(recipe.mFluidInputs)
-                        .noOptimize()
+                    GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
+                    ra.itemInputs(inputs)
+                        .itemOutputs(recipe.mOutput);
+                    if (recipe.mFluidInputs != null) {
+                        ra.fluidInputs(Utils.sortNoNullArray(recipe.mFluidInputs));
+                    }
+                    ra.noOptimize()
                         .eut(recipe.mEUt)
                         .duration(recipe.mDuration)
                         .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
