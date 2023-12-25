@@ -181,6 +181,9 @@ public final class ValueEnum {
     public static final int SpeedMultiplier_PreciseAssembler_IndistinctTentacle = Config.SpeedMultiplier_PreciseAssembler_IndistinctTentacle;
     public static final int Parallel_Default_IndistinctTentacle = Config.Parallel_Default_IndistinctTentacle;
     public static final int TickEveryProcess_WirelessMode_IndistinctTentacle = Config.TickEveryProcess_WirelessMode_IndistinctTentacle;
+    public static final int AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle = Config.AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle;
+    public static final int ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle = Config.ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle;
+    public static final byte ComponentCasingTierLimit_WirelessMode_IndistinctTentacle = Config.ComponentCasingTierLimit_WirelessMode_IndistinctTentacle;
     public static final byte GlassTierLimit_WirelessMode_IndistinctTentacle = Config.GlassTierLimit_WirelessMode_IndistinctTentacle;
     public static final byte GlassTierLimit_LaserHatch_IndistinctTentacle = Config.GlassTierLimit_LaserHatch_IndistinctTentacle;
 

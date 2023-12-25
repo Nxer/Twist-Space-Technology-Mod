@@ -53,15 +53,14 @@ public class RecipeLoader {
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
         OP_NormalProcessing.instance.enumOreProcessingRecipes();
+        new AssemblyLineWithoutResearchRecipePool().loadRecipes();
     }
 
     public static void loadRecipesPostInit() {
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
-
     }
 
     public static void loadRecipesServerStarted() {
-        new AssemblyLineWithoutResearchRecipePool().loadRecipes();
         new StellarForgeRecipePool().loadOnServerStarted();
     }
 }
