@@ -198,6 +198,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
+        aNBT.setByte("mode", mode);
         aNBT.setBoolean("isWirelessMode", isWirelessMode);
         aNBT.setInteger("tierComponentCasing", tierComponentCasing);
         aNBT.setByte("glassTier", glassTier);
@@ -208,6 +209,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+        mode = aNBT.getByte("mode");
         isWirelessMode = aNBT.getBoolean("isWirelessMode");
         tierComponentCasing = aNBT.getInteger("tierComponentCasing");
         glassTier = aNBT.getByte("glassTier");

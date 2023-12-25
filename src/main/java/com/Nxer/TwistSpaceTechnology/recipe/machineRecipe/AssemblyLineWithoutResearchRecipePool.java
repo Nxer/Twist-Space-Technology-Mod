@@ -95,7 +95,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
             if (!hasCustomWildcardItemList) {
                 GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
-                ra.itemInputs(inputItems)
+                ra.itemInputs(Utils.sortNoNullArray(inputItems))
                     .itemOutputs(recipe.mOutput);
                 if (recipe.mFluidInputs != null) {
                     ra.fluidInputs(Utils.sortNoNullArray(recipe.mFluidInputs));
@@ -114,7 +114,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 List<ItemStack[]> inputCombine = generateAllItemInput(inputItems, inputWildcards);
                 for (ItemStack[] inputs : inputCombine) {
                     GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
-                    ra.itemInputs(inputs)
+                    ra.itemInputs(Utils.sortNoNullArray(inputs))
                         .itemOutputs(recipe.mOutput);
                     if (recipe.mFluidInputs != null) {
                         ra.fluidInputs(Utils.sortNoNullArray(recipe.mFluidInputs));
