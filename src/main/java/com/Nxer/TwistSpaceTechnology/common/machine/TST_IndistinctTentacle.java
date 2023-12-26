@@ -28,6 +28,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -293,10 +294,33 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                 mMaxProgresstime = ValueEnum.TickEveryProcess_WirelessMode_IndistinctTentacle;
                 extraEuCostMultiplier = 1;
             }
-            costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration()
-                * extraEuCostMultiplier;
-            if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
-                return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+
+            long originEUCost = processingLogic.getCalculatedEut() * processingLogic.getDuration();
+            if (processingLogic.getCalculatedEut() > Long.MAX_VALUE / processingLogic.getDuration()) {
+                // total eu cost has overflowed
+                costingWirelessEUTemp = 1145141919810L;
+                BigInteger finalCostEU = BigInteger.valueOf(-1)
+                    .multiply(BigInteger.valueOf(processingLogic.getCalculatedEut()))
+                    .multiply(BigInteger.valueOf(processingLogic.getDuration()))
+                    .multiply(BigInteger.valueOf(extraEuCostMultiplier));
+                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU)) {
+                    return CheckRecipeResultRegistry.insufficientPower(1145141919810L);
+                }
+            } else if (originEUCost < Long.MAX_VALUE / extraEuCostMultiplier) {
+                // not overflow
+                costingWirelessEUTemp = originEUCost * extraEuCostMultiplier;
+                if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
+                    return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+                }
+            } else {
+                // overflow because multiply extraCost
+                costingWirelessEUTemp = 1145141919810L;
+                BigInteger finalCostEU = BigInteger.valueOf(-1)
+                    .multiply(BigInteger.valueOf(originEUCost))
+                    .multiply(BigInteger.valueOf(extraEuCostMultiplier));
+                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU)) {
+                    return CheckRecipeResultRegistry.insufficientPower(1145141919810L);
+                }
             }
         } else {
             mMaxProgresstime = processingLogic.getDuration();
