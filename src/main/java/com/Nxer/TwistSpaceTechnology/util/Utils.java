@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.isInDevMode;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -122,7 +124,23 @@ public final class Utils {
 
     // endregion
 
+    // region Rewrites
+
+    // endregion
+
     // region Generals
+
+    public static void debugLogInfo(String... strings) {
+        if (isInDevMode) {
+            for (String msg : strings) {
+                TwistSpaceTechnology.LOG.info(msg);
+            }
+        }
+    }
+
+    public static int safeInt(long number, int margin) {
+        return number > Integer.MAX_VALUE - margin ? Integer.MAX_VALUE - margin : (int) number;
+    }
 
     public static ItemStack[] sortNoNullArray(ItemStack... itemStacks) {
         if (itemStacks == null) return null;

@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.debugLogInfo;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.*;
@@ -13,6 +14,7 @@ import static gregtech.api.util.GT_ModHandler.getModItem;
 import static gtPlusPlus.core.material.MISC_MATERIALS.MUTATED_LIVING_SOLDER;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -95,10 +97,14 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
         // start check assembly line recipes
         checkRecipe: for (var recipe : GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes) {
+            debugLogInfo("Recipe output: " + recipe.mOutput);
 
             for (ItemStack skip : skipRecipeOutputs) {
                 // skip recipes need skip
-                if (Utils.metaItemEqual(recipe.mOutput, skip)) continue checkRecipe;
+                if (Utils.metaItemEqual(recipe.mOutput, skip)) {
+                    debugLogInfo("Skip recipe.");
+                    continue checkRecipe;
+                }
             }
 
             ItemStack[] inputItems = new ItemStack[recipe.mInputs.length];
@@ -130,6 +136,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             }
 
             if (!hasCustomWildcardItemList) {
+                debugLogInfo("Normal recipe generating.");
                 GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
                 ra.itemInputs(Utils.sortNoNullArray(inputItems))
                     .itemOutputs(recipe.mOutput);
@@ -142,13 +149,20 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
 
             } else {
+                debugLogInfo("Wildcard recipe generating.");
                 for (int i = 0; i < inputItems.length; i++) {
                     if (inputItems[i] == null) {
                         inputItems[i] = inputWildcards[i][0];
                     }
                 }
                 List<ItemStack[]> inputCombine = generateAllItemInput(inputItems, inputWildcards);
+                debugLogInfo("inputCombine.size " + inputCombine.size());
+                int loopFlag = 1;
                 for (ItemStack[] inputs : inputCombine) {
+                    debugLogInfo("generate " + loopFlag);
+                    debugLogInfo("Input item list: " + Arrays.toString(inputs));
+                    loopFlag++;
+
                     GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
                     ra.itemInputs(Utils.sortNoNullArray(inputs))
                         .itemOutputs(recipe.mOutput);
@@ -163,8 +177,12 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             }
         }
 
+        TwistSpaceTechnology.LOG.info("load Special Recipes.");
         loadSpecialRecipes();
         TwistSpaceTechnology.LOG.info("Mega Assembly Line Recipes loading complete.");
+        debugLogInfo(
+            "Mega Assembly Line Recipe List size: " + GTCMRecipe.AssemblyLineWithoutResearchRecipe.getAllRecipes()
+                .size());
     }
 
     public void loadSpecialRecipes() {
