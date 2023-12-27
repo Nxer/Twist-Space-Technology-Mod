@@ -180,6 +180,7 @@ public class Config {
     // endregion
 
     // region IndistinctTentacle
+    public static boolean EnableRecipeRegistry_IndistinctTentacle = true;
     public static byte Mode_Default_IndistinctTentacle = 0;
     public static int SpeedMultiplier_AssemblyLine_IndistinctTentacle = 1;
     public static int SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle = 2;
@@ -221,6 +222,7 @@ public class Config {
         // endregion
 
         // region IndistinctTentacle
+        EnableRecipeRegistry_IndistinctTentacle = configuration.getBoolean("EnableRecipeRegistry_IndistinctTentacle", IndistinctTentacle, EnableRecipeRegistry_IndistinctTentacle, "Enable Indistinct Tentacle Recipe Registry.");
         Mode_Default_IndistinctTentacle = (byte) configuration.getInt("Mode_Default_IndistinctTentacle", IndistinctTentacle, Mode_Default_IndistinctTentacle, 0, 3, "Default mode when placing a Indistinct Tentacle controller block. 0=AL; 1=CAL; 2=Assembler; 3=PreciseAssembler; Type: byte");
         SpeedMultiplier_AssemblyLine_IndistinctTentacle = configuration.getInt("SpeedMultiplier_AssemblyLine_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_AssemblyLine_IndistinctTentacle, 1, 256, "Speed Multiplier of Indistinct Tentacle Assembly Line mode. Type: int");
         SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle = configuration.getInt("SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle, 1, 256, "Speed Multiplier of IndistinctTentacle Component Assembly Line mode. Type: int");
