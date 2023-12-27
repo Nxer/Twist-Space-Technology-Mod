@@ -1,7 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.debugLogInfo;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.*;
 import static com.google.common.math.LongMath.pow;
@@ -11,13 +14,16 @@ import static gregtech.api.enums.Mods.GraviSuite;
 import static gregtech.api.enums.Mods.GregTech;
 import static gregtech.api.enums.Mods.SuperSolarPanels;
 import static gregtech.api.util.GT_ModHandler.getModItem;
+import static gtPlusPlus.core.material.ALLOY.INDALLOY_140;
 import static gtPlusPlus.core.material.MISC_MATERIALS.MUTATED_LIVING_SOLDER;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -93,16 +99,21 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             StabilisationFieldGeneratorTier1.get(1), StabilisationFieldGeneratorTier2.get(1),
             StabilisationFieldGeneratorTier3.get(1), StabilisationFieldGeneratorTier4.get(1),
             StabilisationFieldGeneratorTier5.get(1), StabilisationFieldGeneratorTier6.get(1),
-            StabilisationFieldGeneratorTier7.get(1), StabilisationFieldGeneratorTier8.get(1), };
+            StabilisationFieldGeneratorTier7.get(1), StabilisationFieldGeneratorTier8.get(1),
+            ItemList.Hatch_Energy_LuV.get(1), ItemList.Hatch_Energy_ZPM.get(1), ItemList.Hatch_Energy_UV.get(1),
+            ItemList.Hatch_Energy_MAX.get(1), ItemList.Hatch_Dynamo_LuV.get(1), ItemList.Hatch_Dynamo_ZPM.get(1),
+            ItemList.Hatch_Dynamo_UV.get(1), ItemList.Hatch_Dynamo_MAX.get(1),
+
+        };
 
         // start check assembly line recipes
         checkRecipe: for (var recipe : GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes) {
-            debugLogInfo("Recipe output: " + recipe.mOutput);
+            // debugLogInfo("Recipe output: " + recipe.mOutput.getDisplayName());
 
             for (ItemStack skip : skipRecipeOutputs) {
                 // skip recipes need skip
                 if (Utils.metaItemEqual(recipe.mOutput, skip)) {
-                    debugLogInfo("Skip recipe.");
+                    // debugLogInfo("Skip recipe.");
                     continue checkRecipe;
                 }
             }
@@ -136,7 +147,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             }
 
             if (!hasCustomWildcardItemList) {
-                debugLogInfo("Normal recipe generating.");
+                // debugLogInfo("Normal recipe generating.");
                 GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
                 ra.itemInputs(Utils.sortNoNullArray(inputItems))
                     .itemOutputs(recipe.mOutput);
@@ -149,19 +160,19 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
 
             } else {
-                debugLogInfo("Wildcard recipe generating.");
+                // debugLogInfo("Wildcard recipe generating.");
                 for (int i = 0; i < inputItems.length; i++) {
                     if (inputItems[i] == null) {
                         inputItems[i] = inputWildcards[i][0];
                     }
                 }
                 List<ItemStack[]> inputCombine = generateAllItemInput(inputItems, inputWildcards);
-                debugLogInfo("inputCombine.size " + inputCombine.size());
-                int loopFlag = 1;
+                // debugLogInfo("inputCombine.size " + inputCombine.size());
+                // int loopFlag = 1;
                 for (ItemStack[] inputs : inputCombine) {
-                    debugLogInfo("generate " + loopFlag);
-                    debugLogInfo("Input item list: " + Arrays.toString(inputs));
-                    loopFlag++;
+                    // debugLogInfo("generate " + loopFlag);
+                    // debugLogInfo("Input item list: " + Arrays.toString(inputs));
+                    // loopFlag++;
 
                     GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
                     ra.itemInputs(Utils.sortNoNullArray(inputs))
@@ -180,13 +191,137 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
         TwistSpaceTechnology.LOG.info("load Special Recipes.");
         loadSpecialRecipes();
         TwistSpaceTechnology.LOG.info("Mega Assembly Line Recipes loading complete.");
-        debugLogInfo(
-            "Mega Assembly Line Recipe List size: " + GTCMRecipe.AssemblyLineWithoutResearchRecipe.getAllRecipes()
-                .size());
+        // debugLogInfo(
+        // "Mega Assembly Line Recipe List size: " + GTCMRecipe.AssemblyLineWithoutResearchRecipe.getAllRecipes()
+        // .size());
     }
 
     public void loadSpecialRecipes() {
         final IRecipeMap MASL = GTCMRecipe.AssemblyLineWithoutResearchRecipe;
+
+        // Energy hatch and dynamo hatch of LuV - UHV
+        {
+            final Fluid ic2coolant = FluidRegistry.getFluid("ic2coolant");
+            final Fluid solderIndalloy = INDALLOY_140.getFluid();
+
+            // LuV energy hatch
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    ItemList.Hull_LuV.get(1),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 2),
+                    ItemList.Circuit_Chip_UHPIC.get(2),
+                    new Object[] { OrePrefixes.circuit.get(Materials.Master), 2 },
+                    ItemList.LuV_Coil.get(2),
+                    ItemList.Electric_Pump_LuV.get(1))
+                .itemOutputs(ItemList.Hatch_Energy_LuV.get(1))
+                .fluidInputs(new FluidStack(ic2coolant, 2000), new FluidStack(solderIndalloy, 720))
+                .duration(20 * 20)
+                .eut(RECIPE_LuV)
+                .addTo(MASL);
+            // ZPM energy hatch
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    ItemList.Hull_ZPM.get(1),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorZPM, 2),
+                    ItemList.Circuit_Chip_NPIC.get(2),
+                    new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 2 },
+                    ItemList.ZPM_Coil.get(2),
+                    ItemList.Electric_Pump_ZPM.get(1))
+                .itemOutputs(ItemList.Hatch_Energy_ZPM.get(1))
+                .fluidInputs(new FluidStack(ic2coolant, 4000), new FluidStack(solderIndalloy, 1440))
+                .duration(30 * 20)
+                .eut(RECIPE_ZPM)
+                .addTo(MASL);
+            // UV energy hatch
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    ItemList.Hull_UV.get(1),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUV, 2),
+                    ItemList.Circuit_Chip_PPIC.get(2),
+                    new Object[] { OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2 },
+                    ItemList.UV_Coil.get(2),
+                    ItemList.Electric_Pump_UV.get(1))
+                .itemOutputs(ItemList.Hatch_Energy_UV.get(1))
+                .fluidInputs(new FluidStack(ic2coolant, 8000), new FluidStack(solderIndalloy, 2880))
+                .duration(40 * 20)
+                .eut(RECIPE_UV)
+                .addTo(MASL);
+            // UHV energy hatch
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    ItemList.Hull_MAX.get(1L),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 2L),
+                    ItemList.Circuit_Chip_QPIC.get(2L),
+                    new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
+                    ItemList.UHV_Coil.get(2L),
+                    ItemList.Electric_Pump_UHV.get(1L))
+                .itemOutputs(ItemList.Hatch_Energy_MAX.get(1))
+                .fluidInputs(new FluidStack(ic2coolant, 16000), new FluidStack(solderIndalloy, 40 * 144))
+                .duration(50 * 20)
+                .eut(RECIPE_UHV)
+                .addTo(MASL);
+
+            // LuV dynamo hatch
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    ItemList.Hull_LuV.get(1),
+                    GT_OreDictUnificator.get(
+                        OrePrefixes.spring,
+                        Materials.Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid,
+                        2),
+                    ItemList.Circuit_Chip_UHPIC.get(2),
+                    new Object[] { OrePrefixes.circuit.get(Materials.Master), 2 },
+                    ItemList.LuV_Coil.get(2),
+                    ItemList.Electric_Pump_LuV.get(1))
+                .itemOutputs(ItemList.Hatch_Dynamo_LuV.get(1))
+                .fluidInputs(new FluidStack(ic2coolant, 2000), new FluidStack(solderIndalloy, 720))
+                .duration(20 * 20)
+                .eut(RECIPE_LuV)
+                .addTo(MASL);
+            // ZPM dynamo hatch
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    ItemList.Hull_ZPM.get(1),
+                    GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Tetranaquadahdiindiumhexaplatiumosminid, 4),
+                    ItemList.Circuit_Chip_NPIC.get(2),
+                    new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 2 },
+                    ItemList.ZPM_Coil.get(2),
+                    ItemList.Electric_Pump_ZPM.get(1))
+                .itemOutputs(ItemList.Hatch_Dynamo_ZPM.get(1))
+                .fluidInputs(new FluidStack(ic2coolant, 4000), new FluidStack(solderIndalloy, 1440))
+                .duration(30 * 20)
+                .eut(RECIPE_ZPM)
+                .addTo(MASL);
+            // UV dynamo hatch
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    ItemList.Hull_UV.get(1),
+                    GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuvwire, 4),
+                    ItemList.Circuit_Chip_PPIC.get(2),
+                    new Object[] { OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2 },
+                    ItemList.UV_Coil.get(2),
+                    ItemList.Electric_Pump_UV.get(1))
+                .itemOutputs(ItemList.Hatch_Dynamo_UV.get(1))
+                .fluidInputs(new FluidStack(ic2coolant, 8000), new FluidStack(solderIndalloy, 2880))
+                .duration(40 * 20)
+                .eut(RECIPE_UV)
+                .addTo(MASL);
+            // UHV dynamo hatch
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    ItemList.Hull_MAX.get(1L),
+                    GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuhvwire, 8L),
+                    ItemList.Circuit_Chip_QPIC.get(2L),
+                    new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
+                    ItemList.UHV_Coil.get(2L),
+                    ItemList.Electric_Pump_UHV.get(1L))
+                .itemOutputs(ItemList.Hatch_Dynamo_MAX.get(1))
+                .fluidInputs(new FluidStack(ic2coolant, 16000), new FluidStack(solderIndalloy, 40 * 144))
+                .duration(50 * 20)
+                .eut(RECIPE_UHV)
+                .addTo(MASL);
+
+        }
 
         // EOH Blocks
         {
