@@ -397,7 +397,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
             .specialValue(9900)
             .eut(RECIPE_UHV)
-            .duration(64)
+            .duration(16)
             .addTo(ICD);
 
         GT_Values.RA.stdBuilder()
@@ -422,7 +422,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
             .specialValue(9900)
             .eut(RECIPE_UHV)
-            .duration(64 * 64)
+            .duration(16 * 64)
             .addTo(ICD);
 
         GT_Values.RA.stdBuilder()
@@ -432,7 +432,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
             .specialValue(9900)
             .eut(RECIPE_UHV)
-            .duration(64)
+            .duration(16)
             .addTo(ICD);
 
         GT_Values.RA.stdBuilder()
@@ -455,7 +455,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
             .specialValue(9900)
             .eut(RECIPE_UHV)
-            .duration(64 * 64)
+            .duration(16 * 64)
             .addTo(ICD);
 
         // endregion
