@@ -1,11 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ComponentCasingTierLimit_WirelessMode_IndistinctTentacle;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_LaserHatch_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_WirelessMode_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.github.technus.tectech.thing.CustomItemList.astralArrayFabricator;
 import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsBA0;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
@@ -25,6 +28,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,6 +53,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -102,6 +107,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
     public byte glassTier = 0;
     private UUID ownerUUID;
     private long costingWirelessEUTemp = 0;
+    private int extraEuCostMultiplier = 1;
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -138,16 +144,17 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
         String modeName;
         switch (tag.getByte("mode")) {
             case 1:
-                modeName = translateToLocalFormatted("gg.recipe.componentassemblyline");
+                modeName = EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.componentassemblyline");
                 break;
             case 2:
-                modeName = translateToLocalFormatted("gt.recipe.assembler");
+                modeName = EnumChatFormatting.BOLD + translateToLocalFormatted("gt.recipe.assembler");
                 break;
             case 3:
-                modeName = translateToLocalFormatted("gg.recipe.precise_assembler");
+                modeName = EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.precise_assembler");
                 break;
             default:
-                modeName = translateToLocalFormatted("tst.recipe.AssemblyLineWithoutResearchRecipe");
+                modeName = EnumChatFormatting.BOLD
+                    + translateToLocalFormatted("tst.recipe.AssemblyLineWithoutResearchRecipe");
         }
         currentTip.add(modeName);
         if (tag.getBoolean("isWirelessMode")) {
@@ -160,6 +167,19 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                     + tag.getLong("costingWirelessEUTemp")
                     + EnumChatFormatting.RESET
                     + " EU");
+
+            if (1 != tag.getInteger("extraEuCostMultiplier")) {
+                currentTip.add(
+                    "" + EnumChatFormatting.BLUE
+                        + EnumChatFormatting.BOLD
+                        + texter("    Extra EU cost multiplier", "Waila.TST_IndistinctTentacle.2")
+                        + EnumChatFormatting.RESET
+                        + ": "
+                        + EnumChatFormatting.GOLD
+                        + EnumChatFormatting.BOLD
+                        + tag.getInteger("extraEuCostMultiplier")
+                        + EnumChatFormatting.RESET);
+            }
         }
     }
 
@@ -172,25 +192,30 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
             tag.setByte("mode", mode);
             tag.setBoolean("isWirelessMode", isWirelessMode);
             tag.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
+            tag.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
         }
     }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
+        aNBT.setByte("mode", mode);
         aNBT.setBoolean("isWirelessMode", isWirelessMode);
         aNBT.setInteger("tierComponentCasing", tierComponentCasing);
         aNBT.setByte("glassTier", glassTier);
         aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
+        aNBT.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+        mode = aNBT.getByte("mode");
         isWirelessMode = aNBT.getBoolean("isWirelessMode");
         tierComponentCasing = aNBT.getInteger("tierComponentCasing");
         glassTier = aNBT.getByte("glassTier");
         costingWirelessEUTemp = aNBT.getLong("costingWirelessEUTemp");
+        extraEuCostMultiplier = aNBT.getInteger("extraEuCostMultiplier");
     }
 
     @Override
@@ -262,10 +287,40 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
         if (isWirelessMode) {
-            mMaxProgresstime = ValueEnum.TickEveryProcess_WirelessMode_IndistinctTentacle;
-            costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration();
-            if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
-                return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+            if (Utils.metaItemEqual(getControllerSlot(), astralArrayFabricator.get(1))) {
+                mMaxProgresstime = ValueEnum.AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle;
+                extraEuCostMultiplier = ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle;
+            } else {
+                mMaxProgresstime = ValueEnum.TickEveryProcess_WirelessMode_IndistinctTentacle;
+                extraEuCostMultiplier = 1;
+            }
+
+            long originEUCost = processingLogic.getCalculatedEut() * processingLogic.getDuration();
+            if (processingLogic.getCalculatedEut() > Long.MAX_VALUE / processingLogic.getDuration()) {
+                // total eu cost has overflowed
+                costingWirelessEUTemp = 1145141919810L;
+                BigInteger finalCostEU = BigInteger.valueOf(-1)
+                    .multiply(BigInteger.valueOf(processingLogic.getCalculatedEut()))
+                    .multiply(BigInteger.valueOf(processingLogic.getDuration()))
+                    .multiply(BigInteger.valueOf(extraEuCostMultiplier));
+                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU)) {
+                    return CheckRecipeResultRegistry.insufficientPower(1145141919810L);
+                }
+            } else if (originEUCost < Long.MAX_VALUE / extraEuCostMultiplier) {
+                // not overflow
+                costingWirelessEUTemp = originEUCost * extraEuCostMultiplier;
+                if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
+                    return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+                }
+            } else {
+                // overflow because multiply extraCost
+                costingWirelessEUTemp = 1145141919810L;
+                BigInteger finalCostEU = BigInteger.valueOf(-1)
+                    .multiply(BigInteger.valueOf(originEUCost))
+                    .multiply(BigInteger.valueOf(extraEuCostMultiplier));
+                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU)) {
+                    return CheckRecipeResultRegistry.insufficientPower(1145141919810L);
+                }
             }
         } else {
             mMaxProgresstime = processingLogic.getDuration();
@@ -306,7 +361,8 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
 
         // trans metal allow use wireless mode
-        if (glassTier < GlassTierLimit_WirelessMode_IndistinctTentacle) {
+        if (glassTier < GlassTierLimit_WirelessMode_IndistinctTentacle
+            || tierComponentCasing + 1 < ComponentCasingTierLimit_WirelessMode_IndistinctTentacle) {
             // normal mode
             // glass tier limit hatch tier
             isWirelessMode = false;
@@ -492,12 +548,22 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_06)
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_07)
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_08)
+            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_09)
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addSeparator()
             .addStructureInfo(TextLocalization.Tooltip_Details)
             .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_01)
             .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_02)
+            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_03)
+            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_04)
+            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_05)
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_06)
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_07)
+            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_08)
+            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_09)
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addInputBus(textUseBlueprint, 2)

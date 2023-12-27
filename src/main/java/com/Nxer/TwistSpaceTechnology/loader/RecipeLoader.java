@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.AssemblyLineWithoutResearchRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CentrifugeRecipePool;
@@ -53,15 +54,16 @@ public class RecipeLoader {
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
         OP_NormalProcessing.instance.enumOreProcessingRecipes();
+        if (Config.EnableRecipeRegistry_IndistinctTentacle) {
+            new AssemblyLineWithoutResearchRecipePool().loadRecipes();
+        }
     }
 
     public static void loadRecipesPostInit() {
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
-
     }
 
     public static void loadRecipesServerStarted() {
-        new AssemblyLineWithoutResearchRecipePool().loadRecipes();
         new StellarForgeRecipePool().loadOnServerStarted();
     }
 }

@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.isInDevMode;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,8 +16,20 @@ import gregtech.api.metatileentity.MetaTileEntity;
 
 public final class Utils {
 
+    // region about ItemStack
     public static boolean metaItemEqual(ItemStack a, ItemStack b) {
+        if (a == b) return true;
+        if (a == null || b == null) return false;
         return a.getItem() == b.getItem() && a.getItemDamage() == b.getItemDamage();
+    }
+
+    public static ItemStack[] copyItemStackArray(ItemStack... array) {
+        ItemStack[] result = new ItemStack[array.length];
+        for (int i = 0; i < result.length; i++) {
+            if (array[i] == null) continue;
+            result[i] = array[i].copy();
+        }
+        return result;
     }
 
     /**
@@ -48,6 +62,38 @@ public final class Utils {
         return true;
     }
 
+    public static ItemStack copyAmount(int aAmount, ItemStack aStack) {
+        ItemStack rStack = aStack.copy();
+        if (isStackInvalid(rStack)) return null;
+        // if (aAmount > 64) aAmount = 64;
+        else if (aAmount == -1) aAmount = 111;
+        else if (aAmount < 0) aAmount = 0;
+        rStack.stackSize = aAmount;
+        return rStack;
+    }
+
+    public static boolean isStackValid(ItemStack aStack) {
+        return (aStack != null) && aStack.getItem() != null && aStack.stackSize >= 0;
+    }
+
+    public static boolean isStackInvalid(ItemStack aStack) {
+        return aStack == null || aStack.getItem() == null || aStack.stackSize < 0;
+    }
+
+    public static ItemStack setStackSize(ItemStack itemStack, int amount) {
+        if (itemStack == null) return null;
+        if (amount < 0) {
+            TwistSpaceTechnology.LOG
+                .info("Error! Trying to set a item stack size lower than zero! " + itemStack + " to amount " + amount);
+            return itemStack;
+        }
+        itemStack.stackSize = amount;
+        return itemStack;
+    }
+    // endregion
+
+    // region About FluidStack
+
     public static boolean fluidStackEqualAbsolutely(FluidStack[] fsa1, FluidStack[] fsa2) {
         if (fsa1.length != fsa2.length) return false;
         for (int i = 0; i < fsa1.length; i++) {
@@ -76,33 +122,57 @@ public final class Utils {
         return a.getFluid() == b.getFluid();
     }
 
-    public static ItemStack copyAmount(int aAmount, ItemStack aStack) {
-        ItemStack rStack = aStack.copy();
-        if (isStackInvalid(rStack)) return null;
-        // if (aAmount > 64) aAmount = 64;
-        else if (aAmount == -1) aAmount = 111;
-        else if (aAmount < 0) aAmount = 0;
-        rStack.stackSize = aAmount;
-        return rStack;
-    }
+    // endregion
 
-    public static boolean isStackValid(ItemStack aStack) {
-        return (aStack != null) && aStack.getItem() != null && aStack.stackSize >= 0;
-    }
+    // region Rewrites
 
-    public static boolean isStackInvalid(ItemStack aStack) {
-        return aStack == null || aStack.getItem() == null || aStack.stackSize < 0;
-    }
+    // endregion
 
-    public static ItemStack setStackSize(ItemStack itemStack, int amount) {
-        if (itemStack == null) return null;
-        if (amount < 0) {
-            TwistSpaceTechnology.LOG
-                .info("Error! Trying to set a item stack size lower than zero! " + itemStack + " to amount " + amount);
-            return itemStack;
+    // region Generals
+
+    public static void debugLogInfo(String... strings) {
+        if (isInDevMode) {
+            for (String msg : strings) {
+                TwistSpaceTechnology.LOG.info(msg);
+            }
         }
-        itemStack.stackSize = amount;
-        return itemStack;
+    }
+
+    public static int safeInt(long number, int margin) {
+        return number > Integer.MAX_VALUE - margin ? Integer.MAX_VALUE - margin : (int) number;
+    }
+
+    public static ItemStack[] sortNoNullArray(ItemStack... itemStacks) {
+        if (itemStacks == null) return null;
+        List<ItemStack> list = new ArrayList<>();
+        for (int i = 0; i < itemStacks.length; i++) {
+            if (itemStacks[i] == null) continue;
+            list.add(itemStacks[i]);
+        }
+        if (list.isEmpty()) return new ItemStack[0];
+        return list.toArray(new ItemStack[0]);
+    }
+
+    public static FluidStack[] sortNoNullArray(FluidStack... fluidStacks) {
+        if (fluidStacks == null) return null;
+        List<FluidStack> list = new ArrayList<>();
+        for (int i = 0; i < fluidStacks.length; i++) {
+            if (fluidStacks[i] == null) continue;
+            list.add(fluidStacks[i]);
+        }
+        if (list.isEmpty()) return new FluidStack[0];
+        return list.toArray(new FluidStack[0]);
+    }
+
+    public static Object[] sortNoNullArray(Object... objects) {
+        if (objects == null) return null;
+        List<Object> list = new ArrayList<>();
+        for (int i = 0; i < objects.length; i++) {
+            if (objects[i] == null) continue;
+            list.add(objects[i]);
+        }
+        if (list.isEmpty()) return new Object[0];
+        return list.toArray(new Object[0]);
     }
 
     public static <T extends Collection<E>, E extends MetaTileEntity> T filterValidMTEs(T metaTileEntities) {
