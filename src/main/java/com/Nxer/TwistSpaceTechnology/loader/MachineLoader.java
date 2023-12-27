@@ -78,6 +78,8 @@ public class MachineLoader {
     public static ItemStack AdvancedMegaOilCracker;
     public static ItemStack IndistinctTentacle;
 
+    public static ItemStack NuclearReactor;
+
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
@@ -289,7 +291,8 @@ public class MachineLoader {
             "NameIndistinctTentacle",
             TextLocalization.NameIndistinctTentacle).getStackForm(1);
         GTCMItemList.IndistinctTentacle.set(IndistinctTentacle);
-
+        // NuclearReactor = new TST_NuclearReactor(19029, "nuclea reactor", "nuclear reactor").getStackForm(1);
+        // GTCMItemList.NuclearReactor.set(IndistinctTentacle);
         // endregion
 
         // region Single block Machine
