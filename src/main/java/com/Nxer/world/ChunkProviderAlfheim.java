@@ -104,8 +104,7 @@ private Random rand;
 
     @Override
     public boolean saveChunks(boolean p_73151_1_, IProgressUpdate p_73151_2_) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveChunks'");
+        return true;
     }
 
     @Override
@@ -130,7 +129,7 @@ private Random rand;
         if (biome == null) {
             return null;
         } else
-            if (mapY < TFWorld.SEALEVEL && creatureType == EnumCreatureType.monster) {
+            if (mapY < WorldStats.SEALEVEL && creatureType == EnumCreatureType.monster) {
                 // cave monsters!
                 return ((BiomeBaseAlfheim) biome).getUndergroundSpawnableList();
             } else {

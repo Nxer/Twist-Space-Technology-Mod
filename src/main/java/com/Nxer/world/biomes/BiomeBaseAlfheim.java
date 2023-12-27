@@ -16,16 +16,40 @@ public abstract class BiomeBaseAlfheim extends BiomeGenBase{
         super(p_i1971_1_);
         //TODO Auto-generated constructor stub
     }
+    protected List<SpawnListEntry> undergroundMonsterList;
 
-    public static final BiomeGenBase erosion_lake = (new TFBiomeTwilightForest(WorldStats.biomeIDoffset + 0))
-        .setColor(0x005500)
-        .setBiomeName("Erosion Lake Test");
+    //Northern Biomes
+    public static final BiomeGenBase erosion_lake = null;
+    public static final BiomeGenBase high_land =null;
+    public static final BiomeGenBase glacier =null;
+    public static final BiomeGenBase snowy_meadow =null;
 
+    public static final BiomeGenBase inferno_abyss =null;
+
+    //Sorthern Biomes
+    public static final BiomeGenBase clover_patch =null;
+    public static final BiomeGenBase fungal_jungle =null;
+    public static final BiomeGenBase blossom_spring=null;
+
+    public static final BiomeGenBase eclipse_garden=null;
+
+    //Westren Biomes
+    public static final BiomeGenBase fairy_wilderness=null;
+    public static final BiomeGenBase flower_meadow=null;
+    public static final BiomeGenBase primitive_valley=null;
+    
+    public static final BiomeGenBase temporal_field=null;
+
+    //Eastern Biomes
+    public static final BiomeGenBase reed_field=null;
+    public static final BiomeGenBase prismatic_lake=null;
+    public static final BiomeGenBase pasture=null;
+
+    public static final BiomeGenBase eternal_spring=null;
     public static void registerWithBiomeDictionary() {
         BiomeDictionary.registerBiomeType(erosion_lake, Type.OCEAN, Type.SNOWY);
     }
-
     public List<SpawnListEntry> getUndergroundSpawnableList() {
-        return null;
+    	return this.undergroundMonsterList;
     }
 }
