@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -27,6 +26,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMateria
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
@@ -297,7 +297,8 @@ public class MachineLoader {
         // NuclearReactor = new TST_NuclearReactor(19029, "nuclea reactor", "nuclear reactor").getStackForm(1);
         // GTCMItemList.NuclearReactor.set(IndistinctTentacle);
 
-        AstralComputingArray = new TST_Computer(19029, "NameAstralComputingArray", "Astral Computing Array").getStackForm(1);
+        AstralComputingArray = new TST_Computer(19029, "NameAstralComputingArray", "Astral Computing Array")
+            .getStackForm(1);
         GTCMItemList.AstralComputingArray.set(AstralComputingArray);
         // endregion
 
@@ -348,7 +349,7 @@ public class MachineLoader {
             8).getStackForm(1);
         GTCMItemList.DualInputBuffer_UV.set(DualInputBuffer_UV);
 
-        //region buffered energy hatch
+        // region buffered energy hatch
         DualInputBuffer_UHV = new GT_MetaTileEntity_Hatch_DualInput(
             18983,
             "NameDualInputBuffer_UHV",
@@ -468,7 +469,7 @@ public class MachineLoader {
         GTCMItemList.BufferedEnergyHatchUMV.set(BufferedEnergyHatchUMV);
         GTCMItemList.BufferedEnergyHatchUXV.set(BufferedEnergyHatchUXV);
         GTCMItemList.BufferedEnergyHatchMAX.set(BufferedEnergyHatchMAX);
-        //endregion
+        // endregion
 
     }
 }

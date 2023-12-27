@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
-import static com.github.technus.tectech.thing.CustomItemList.LASERpipeBlock;
 import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
 import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
@@ -13,12 +11,9 @@ import static com.github.technus.tectech.util.CommonValues.V;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static goodgenerator.loader.Loaders.*;
-import static gregtech.api.GregTech_API.sBlockCasings3;
 import static gregtech.api.enums.GT_HatchElement.*;
-import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 import static gregtech.api.util.GT_Utility.filterValidMTEs;
 import static gtPlusPlus.core.block.ModBlocks.blockCasings3Misc;
-import static gtPlusPlus.core.block.ModBlocks.blockCasings4Misc;
 import static net.minecraft.util.StatCollector.translateToLocal;
 import static vazkii.botania.common.block.ModBlocks.pylon;
 
@@ -26,17 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
-import com.gtnewhorizon.structurelib.structure.StructureUtility;
-import com.gtnewhorizons.gtnhintergalactic.client.IGTextures;
-import crazypants.enderio.Log;
-import gregtech.api.enums.Materials;
-import gregtech.api.util.GT_StructureUtility;
-import gtPlusPlus.GTplusplus;
-import ic2.api.item.IC2Items;
-import ic2.core.IC2;
-import ic2.core.init.BlocksItems;
-import ic2.core.init.InternalName;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -45,12 +29,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.github.technus.tectech.mechanics.dataTransport.QuantumDataPacket;
+import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_Rack;
@@ -65,11 +50,13 @@ import com.github.technus.tectech.util.CommonValues;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import com.gtnewhorizon.structurelib.util.Vec3Impl;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
@@ -81,7 +68,10 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.IGT_HatchAdder;
+import ic2.core.init.BlocksItems;
+import ic2.core.init.InternalName;
 
 /**
  * Created by danie_000 on 17.12.2016.
@@ -96,7 +86,7 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
     private static Textures.BlockIcons.CustomIcon ScreenOFF;
     private static Textures.BlockIcons.CustomIcon ScreenON;
     // endregion
-    private static final String[] description = new String[]{
+    private static final String[] description = new String[] {
         EnumChatFormatting.AQUA + translateToLocal("tt.keyphrase.Hint_Details") + ":",
         translateToLocal("gt.blockmachines.multimachine.em.computer.hint.0"), // 1 - Classic/Data Hatches or
         // Computer casing
@@ -105,9 +95,9 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
     };
 
     public static final int offsetX = 23, offsetY = 34, offsetZ = 0;
-    //region structure
-    public static final String[][] shape = new String[][]{
-        {"                                               ", "                                               ",
+    // region structure
+    public static final String[][] shape = new String[][] {
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -124,8 +114,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
-            "EEEEEEEEEEEEEEEEEEEEEEE~EEEEEEEEEEEEEEEEEEEEEEE"},
-        {"                                               ", "                                               ",
+            "EEEEEEEEEEEEEEEEEEEEEEE~EEEEEEEEEEEEEEEEEEEEEEE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -142,8 +132,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
-            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE"},
-        {"                                               ", "                                               ",
+            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -160,8 +150,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
-            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE"},
-        {"                                               ", "                                               ",
+            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -178,8 +168,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                     CCCCC                     ",
-            "EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -196,8 +186,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                      CCC                      ", "    PPEEEPPPPPPPPPPPCCCCCCCPPPPPPPPPPPEEEPP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -214,8 +204,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                       M                       ", "      JJJ                             JJJ      ",
             "                                               ", "                      CCC                      ",
             "      BBB            C   C            BBB      ", "    PEEEEE         CCCCCCCCC         EEEEEP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -232,8 +222,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                      MMM                      ", "     J L J                           J L J     ",
             "                      CCC                      ", "                     C   C                     ",
             "     B   B          C     C          B   B     ", "    EEBBBEEPPPPPPPPCCCCCCCCCPPPPPPPPEEBBBEE    ",
-            "EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE"},
-        {"                                               ", "                                               ",
+            "EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -250,8 +240,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "       A             MMMMM             A       ", "     JLALJ             C             JLALJ     ",
             "       A              CCC              A       ", "       A             C C C             A       ",
             "     B A B          C  C  C          B A B     ", "    EEBABEE       PCCCCCCCCCP       EEBABEE    ",
-            "EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -268,8 +258,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                      MMM                      ", "     J L J                           J L J     ",
             "                      CCC                      ", "                     C   C                     ",
             "     B   B          C     C          B   B     ", "    EEBBBEEPPPPPP PCCCCCCCCCP PPPPPPEEBBBEE    ",
-            "EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE"},
-        {"                                               ", "                                               ",
+            "EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -286,8 +276,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                       M                       ", "      JJJ                             JJJ      ",
             "                                               ", "                      CCC                      ",
             "      BBB            C   C            BBB      ", "    PEEEEE      P PCCCCCCCCCP P      EEEEEP    ",
-            "EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -304,8 +294,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                      CCC                      ", "    P EEE       P P CCCCCCC P P       EEE P    ",
-            "EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -322,8 +312,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P PCCCCCP P P       P P P    ",
-            "EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -340,8 +330,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -358,8 +348,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -376,8 +366,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -394,8 +384,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -412,8 +402,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                KKKKKKKKKKKKKKK                ",
             "                KKKKKKKKKKKKKKK                ", "    P P PPPPPPPPPKPKPKPKPKPKPKPPPPPPPPP P P    ",
-            "EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -430,8 +420,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                     MMMMM                     ", "                KKKKKKKKKKKKKKK                ",
             "                KIHHHHHHHHHHHIK                ", "    P P         KHQQQQQQQQQQQHK         P P    ",
-            "EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                     MMMMM                     ",
             "                     MMMMM                     ", "                      MMM                      ",
             "                                               ", "                                               ",
@@ -448,8 +438,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                     MMMMM                     ",
             "                   MM     MM                   ", "                KKKKKKKKKKKKKKK                ",
             "                KHIHHHHHHHHHIHK                ", "    P PPPPPPPPPPPQHQQQQQQQQQHQPPPPPPPPPPP P    ",
-            "EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                    M     M                    ",
             "                    M     M                    ", "                    MM   MM                    ",
             "                     MMMMM                     ", "                                               ",
@@ -466,8 +456,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                     MMMMM                     ", "                    M     M                    ",
             "                  M         M                  ", "                KKKKKKKKKKKKKKK                ",
             "                KHHIHHHHHHHIHHK                ", "    PCCCCC      KQQHQQQQQQQHQQK      CCCCCP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                      III                      ", "                   M  III  M                   ",
             "                   M  III  M                   ", "                   M       M                   ",
             "                    M     M                    ", "                     MMMMM                     ",
@@ -484,8 +474,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                    M     M                    ", "                   M       M                   ",
             "                  M         M                  ", "                KKKKKKKKKKKKKKK                ",
             "      CCC       KHHHIHHHHHIHHHK       CCC      ", "    CCCCCCCPPPPPPQQQHQQQQQHQQQPPPPPPCCCCCCC    ",
-            "EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE"},
-        {"                                               ", "                     IIIII                     ",
+            "EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE" },
+        { "                                               ", "                     IIIII                     ",
             "                     IIIII                     ", "                  M  IIIII  M                  ",
             "                  M  IIIII  M                  ", "                   M IIIII M                   ",
             "                   M       M                   ", "                    MM   MM                    ",
@@ -502,8 +492,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "       M           M       M           M       ", "                  M         M                  ",
             "                 M           M                 ", "      CCC       KKKKKKKKKKKKKKK       CCC      ",
             "     C   C      KHHHHIHHHIHHHHK      C   C     ", "   CCCCCCCCC    KQQQQHQQQHQQQQK    CCCCCCCCC   ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE"},
-        {"                      III                      ", "                     IIIII                     ",
+            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
+        { "                      III                      ", "                     IIIII                     ",
             "                    IIIIIII                    ", "                  M IIIIIII M                  ",
             "                  M IIIIIII M                  ", "                  M  IIIII  M                  ",
             "                   M  III  M                   ", "                    M     M                    ",
@@ -520,8 +510,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "      MMM          M       M          MMM      ", "                  M         M                  ",
             "      CCC        M           M        CCC      ", "     C   C      KKKKKKKKKKKKKKK      C   C     ",
             "    C     C     KHHHHHIHIHHHHHK     C     C    ", "   CCCCCCCCCPPPPPQQQQQHQHQQQQQPPPPPCCCCCCCCC   ",
-            "EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE"},
-        {"                      III                      ", "                     IIIII                     ",
+            "EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE" },
+        { "                      III                      ", "                     IIIII                     ",
             "                    IIIIIII                    ", "                  M IIIIIII M                  ",
             "                  M IIIIIII M                  ", "                  M  IIIII  M                  ",
             "                   M  III  M                   ", "                    M     M                    ",
@@ -538,8 +528,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "     MMMMM         M   D   M         MMMMM     ", "       C          M    D    M          C       ",
             "      CCC        M     D     M        CCC      ", "     C C C      KKKKKKKDKKKKKKK      C C C     ",
             "    C  C  C     KHHHHHHDHHHHHHK     C  C  C    ", "   CCCCCCCCC    KQQQQQQDQQQQQQK    CCCCCCCCC   ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE"},
-        {"                      III                      ", "                     IIIII                     ",
+            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
+        { "                      III                      ", "                     IIIII                     ",
             "                    IIIIIII                    ", "                  M IIIIIII M                  ",
             "                  M IIIIIII M                  ", "                  M  IIIII  M                  ",
             "                   M  III  M                   ", "                    M     M                    ",
@@ -556,8 +546,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "      MMM          M       M          MMM      ", "                  M         M                  ",
             "      CCC        M           M        CCC      ", "     C   C      KKKKKKKKKKKKKKK      C   C     ",
             "    C     C     KHHHHHIHIHHHHHK     C     C    ", "   CCCCCCCCCPPPPPQQQQQHQHQQQQQPPPPPCCCCCCCCC   ",
-            "EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE"},
-        {"                                               ", "                     IIIII                     ",
+            "EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE" },
+        { "                                               ", "                     IIIII                     ",
             "                     IIIII                     ", "                  M  IIIII  M                  ",
             "                  M  IIIII  M                  ", "                   M IIIII M                   ",
             "                   M       M                   ", "                    MM   MM                    ",
@@ -574,8 +564,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "       M           M       M           M       ", "                  M         M                  ",
             "                 M           M                 ", "      CCC       KKKKKKKKKKKKKKK       CCC      ",
             "     C   C      KHHHHIHHHIHHHHK      C   C     ", "   CCCCCCCCC    KQQQQHQQQHQQQQK    CCCCCCCCC   ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                      III                      ", "                   M  III  M                   ",
             "                   M  III  M                   ", "                   M       M                   ",
             "                    M     M                    ", "                     MMMMM                     ",
@@ -592,8 +582,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                    M     M                    ", "                   M       M                   ",
             "                  M         M                  ", "                KKKKKKKKKKKKKKK                ",
             "      CCC       KHHHIHHHHHIHHHK       CCC      ", "    CCCCCCCPPPPPPQQQHQQQQQHQQQPPPPPPCCCCCCC    ",
-            "EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE"},
-        {"                                               ", "                                               ",
+            "EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE" },
+        { "                                               ", "                                               ",
             "                                               ", "                    M     M                    ",
             "                    M     M                    ", "                    MM   MM                    ",
             "                     MMMMM                     ", "                                               ",
@@ -610,8 +600,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                     MMMMM                     ", "                    M     M                    ",
             "                  M         M                  ", "                KKKKKKKKKKKKKKK                ",
             "                KHHIHHHHHHHIHHK                ", "    PCCCCC      KQQHQQQQQQQHQQK      CCCCCP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                     MMMMM                     ",
             "                     MMMMM                     ", "                      MMM                      ",
             "                                               ", "                                               ",
@@ -628,8 +618,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                     MMMMM                     ",
             "                   MM     MM                   ", "                KKKKKKKKKKKKKKK                ",
             "                KHIHHHHHHHHHIHK                ", "    P PPPPPPPPPPPQHQQQQQQQQQHQPPPPPPPPPPP P    ",
-            "EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -646,8 +636,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                     MMMMM                     ", "                KKKKKKKKKKKKKKK                ",
             "                KIHHHHHHHHHHHIK                ", "    P P         KHQQQQQQQQQQQHK         P P    ",
-            "EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -664,8 +654,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                KKKKKKKKKKKKKKK                ",
             "                KKKKKKKKKKKKKKK                ", "    P P PPPPPPPPPKPKPKPKPKPKPKPPPPPPPPP P P    ",
-            "EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -682,8 +672,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -700,8 +690,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -718,8 +708,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -736,8 +726,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -754,8 +744,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "    P P P       P P PCCCCCP P P       P P P    ",
-            "EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -772,8 +762,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                      CCC                      ", "    P EEE       P P CCCCCCC P P       EEE P    ",
-            "EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -790,8 +780,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                       M                       ", "      JJJ                             JJJ      ",
             "                                               ", "                      CCC                      ",
             "      BBB            C   C            BBB      ", "    PEEEEE      P PCCCCCCCCCP P      EEEEEP    ",
-            "EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -808,8 +798,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                      MMM                      ", "     J L J                           J L J     ",
             "                      CCC                      ", "                     C   C                     ",
             "     B   B          C     C          B   B     ", "    EEBBBEEPPPPPP PCCCCCCCCCP PPPPPPEEBBBEE    ",
-            "EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE"},
-        {"                                               ", "                                               ",
+            "EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -826,8 +816,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "       A             MMMMM             A       ", "     JLALJ             C             JLALJ     ",
             "       A              CCC              A       ", "       A             C C C             A       ",
             "     B A B          C  C  C          B A B     ", "    EEBABEE       PCCCCCCCCCP       EEBABEE    ",
-            "EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -844,8 +834,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                      MMM                      ", "     J L J                           J L J     ",
             "                      CCC                      ", "                     C   C                     ",
             "     B   B          C     C          B   B     ", "    EEBBBEEPPPPPPPPCCCCCCCCCPPPPPPPPEEBBBEE    ",
-            "EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE"},
-        {"                                               ", "                                               ",
+            "EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -862,8 +852,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                       M                       ", "      JJJ                             JJJ      ",
             "                                               ", "                      CCC                      ",
             "      BBB            C   C            BBB      ", "    PEEEEE         CCCCCCCCC         EEEEEP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -880,8 +870,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                      CCC                      ", "    PPEEEPPPPPPPPPPPCCCCCCCPPPPPPPPPPPEEEPP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -898,8 +888,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                     CCCCC                     ",
-            "EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE"},
-        {"                                               ", "                                               ",
+            "EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -916,8 +906,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
-            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE"},
-        {"                                               ", "                                               ",
+            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -934,8 +924,8 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
-            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE"},
-        {"                                               ", "                                               ",
+            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE" },
+        { "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
@@ -952,11 +942,10 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             "                                               ", "                                               ",
             "                                               ", "                                               ",
             "                                               ", "                                               ",
-            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"}};
+            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" } };
     // Structure:
     //
     // Blocks:
-
 
     //
     // Tiles:
@@ -978,13 +967,13 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
     protected Parameters.Group.ParameterOut maxCurrentTemp, availableData;
 
     private static final INameFunction<TST_Computer> OC_NAME = (base,
-                                                                p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgi.0"); // Overclock ratio
+        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgi.0"); // Overclock ratio
     private static final INameFunction<TST_Computer> OV_NAME = (base,
-                                                                p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgi.1"); // Overvoltage ratio
+        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgi.1"); // Overvoltage ratio
     private static final INameFunction<TST_Computer> MAX_TEMP_NAME = (base,
-                                                                      p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgo.0"); // Current max. heat
+        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgo.0"); // Current max. heat
     private static final INameFunction<TST_Computer> COMPUTE_NAME = (base,
-                                                                     p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgo.1"); // Produced computation
+        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgo.1"); // Produced computation
     private static final IStatusFunction<TST_Computer> OC_STATUS = (base, p) -> LedStatus
         .fromLimitsInclusiveOuterBoundary(p.get(), 0, 1, 1, 3);
     private static final IStatusFunction<TST_Computer> OV_STATUS = (base, p) -> LedStatus
@@ -1099,11 +1088,11 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                 }
 
                 rackComputation = rack.tickComponents((float) overClockRatio, (float) overVoltageRatio);
-                //LOG.info("preview heat:" + rack.heat + "/preview rackComputation:" + rackComputation);
+                // LOG.info("preview heat:" + rack.heat + "/preview rackComputation:" + rackComputation);
                 mOutputFluids = null;
                 rack.heat = coolTheRackHatchByAnyCoolant(rack.heat);
                 rackComputation *= multiplier;
-                //LOG.info("preview heat:" + rack.heat + "/after rackComputation:" + rackComputation);
+                // LOG.info("preview heat:" + rack.heat + "/after rackComputation:" + rackComputation);
                 if (rackComputation > 0) {
                     eAvailableData += rackComputation;
                     thingsActive += 4;
@@ -1180,8 +1169,7 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
     public static Fluid getCoolantTransform(Fluid fluid) {
         if (fluid == BlocksItems.getFluid(InternalName.fluidCoolant))
             return BlocksItems.getFluid(InternalName.fluidHotCoolant);
-        if (fluid == Materials.SuperCoolant.mFluid)
-            return BlocksItems.getFluid(InternalName.fluidCoolant);
+        if (fluid == Materials.SuperCoolant.mFluid) return BlocksItems.getFluid(InternalName.fluidCoolant);
         return null;
     }
 
@@ -1258,12 +1246,12 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int colorIndex, boolean aActive, boolean aRedstone) {
+        int colorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
-            return new ITexture[]{Textures.BlockIcons.casingTexturePages[texturePage][3],
-                new TT_RenderedExtendedFacingTexture(aActive ? ScreenON : ScreenOFF)};
+            return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3],
+                new TT_RenderedExtendedFacingTexture(aActive ? ScreenON : ScreenOFF) };
         }
-        return new ITexture[]{Textures.BlockIcons.casingTexturePages[texturePage][3]};
+        return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3] };
     }
 
     @Override
@@ -1352,54 +1340,42 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
 
     @Override
     public IStructureDefinition<TST_Computer> getStructure_EM() {
-        return IStructureDefinition
-            .<TST_Computer>builder()
-            .addShape(MAIN, shape)//FRF_Coil_1
+        return IStructureDefinition.<TST_Computer>builder()
+            .addShape(MAIN, shape)// FRF_Coil_1
             .addElement('A', ofBlock(FRF_Coil_1, 0))// A -> ofBlock...(FRF_Coil_1, 0, ...);
             .addElement('B', ofBlock(compactFusionCoil, 0))// B -> ofBlock...(compactFusionCoil, 2, ...);
             .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
             .addElement('D', ofBlock(IGBlocks.SpaceElevatorCasing, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
-            //.addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// E -> ofBlock...(gt.blockcasingsSE, 2, ...);
+            // .addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// E -> ofBlock...(gt.blockcasingsSE, 2, ...);
             .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
             .addElement('G', ofBlock(sBlockCasingsTT, 1))// G -> ofBlock...(gt.blockcasingsTT, 1, ...);
             .addElement('H', ofBlock(sBlockCasingsTT, 2))// H -> ofBlock...(gt.blockcasingsTT, 2, ...);
             .addElement('I', ofBlock(sBlockCasingsTT, 3))// I -> ofBlock...(gt.blockcasingsTT, 3, ...);
             .addElement('J', ofBlock(sBlockCasingsTT, 7))// J -> ofBlock...(gt.blockcasingsTT, 7, ...);
-            .addElement('L', ofBlock(radiationProtectionSteelFrame, 0))    // L -> ofBlock...(radiationProtectionSteelFrame, 0, ...);
-            .addElement('K', ofBlock(blockCasings3Misc, 15))    // K -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
-            .addElement('M', ofBlock(QuantumGlassBlock.INSTANCE, 0))    // M -> ofBlock...(tile.quantumGlass, 0, ...);
+            .addElement('L', ofBlock(radiationProtectionSteelFrame, 0)) // L ->
+                                                                        // ofBlock...(radiationProtectionSteelFrame, 0,
+                                                                        // ...);
+            .addElement('K', ofBlock(blockCasings3Misc, 15)) // K -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
+            .addElement('M', ofBlock(QuantumGlassBlock.INSTANCE, 0)) // M -> ofBlock...(tile.quantumGlass, 0, ...);
             .addElement('O', ofBlock(pylon, 1))
-            //.addElement('N', ofBlock(Block.getBlockById(1), 0))
+            // .addElement('N', ofBlock(Block.getBlockById(1), 0))
             .addElement('P', ofBlock(Block.getBlockById(0), 0))
-            //.addElement('P', ofBlock(LASERpipeBlock.getBlock(), 15472))
-            //.addElement('K', ofBlock(Block.getBlockById(1), 0))
+            // .addElement('P', ofBlock(LASERpipeBlock.getBlock(), 15472))
+            // .addElement('K', ofBlock(Block.getBlockById(1), 0))
             // .addElement('k', ofBlock(, 7))
             .addElement(
                 'E',
                 StructureUtility.ofChain(
-                    GT_StructureUtility.ofHatchAdder(
-                        TST_Computer::addMaintenanceToMachineList,
-                        textureOffset + 2,
-                        1),
-                    GT_StructureUtility.ofHatchAdder(
-                        TST_Computer::addExoticEnergyInputToMachineList,
-                        textureOffset + 2,
-                        1),
-                    GT_StructureUtility.ofHatchAdder(
-                        TST_Computer::addInputToMachineList,
-                        textureOffset + 2,
-                        1),
-                    GT_StructureUtility.ofHatchAdder(
-                        TST_Computer::addOutputToMachineList,
-                        textureOffset + 2,
-                        1),
-                    GT_StructureUtility.ofHatchAdder(
-                        TST_Computer::addDataConnectorToMachineList,
-                        textureOffset + 2,
-                        1),
+                    GT_StructureUtility.ofHatchAdder(TST_Computer::addMaintenanceToMachineList, textureOffset + 2, 1),
+                    GT_StructureUtility
+                        .ofHatchAdder(TST_Computer::addExoticEnergyInputToMachineList, textureOffset + 2, 1),
+                    GT_StructureUtility.ofHatchAdder(TST_Computer::addInputToMachineList, textureOffset + 2, 1),
+                    GT_StructureUtility.ofHatchAdder(TST_Computer::addOutputToMachineList, textureOffset + 2, 1),
+                    GT_StructureUtility.ofHatchAdder(TST_Computer::addDataConnectorToMachineList, textureOffset + 2, 1),
                     StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 2)))
-            .addElement('Q', ofChain(RackHatchElement.INSTANCE.newAny(textureOffset + 3, 2),
-                ofBlock(sBlockCasingsTT, 3)))
+            .addElement(
+                'Q',
+                ofChain(RackHatchElement.INSTANCE.newAny(textureOffset + 3, 2), ofBlock(sBlockCasingsTT, 3)))
             .build();
     }
 
