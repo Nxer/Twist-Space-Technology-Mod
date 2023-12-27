@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -79,6 +80,8 @@ public class MachineLoader {
     public static ItemStack IndistinctTentacle;
 
     public static ItemStack NuclearReactor;
+
+    public static ItemStack AstralComputingArray;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -293,6 +296,9 @@ public class MachineLoader {
         GTCMItemList.IndistinctTentacle.set(IndistinctTentacle);
         // NuclearReactor = new TST_NuclearReactor(19029, "nuclea reactor", "nuclear reactor").getStackForm(1);
         // GTCMItemList.NuclearReactor.set(IndistinctTentacle);
+
+        AstralComputingArray = new TST_Computer(19029, "NameAstralComputingArray", "Astral Computing Array").getStackForm(1);
+        GTCMItemList.AstralComputingArray.set(AstralComputingArray);
         // endregion
 
         // region Single block Machine
@@ -342,7 +348,7 @@ public class MachineLoader {
             8).getStackForm(1);
         GTCMItemList.DualInputBuffer_UV.set(DualInputBuffer_UV);
 
-        //
+        //region buffered energy hatch
         DualInputBuffer_UHV = new GT_MetaTileEntity_Hatch_DualInput(
             18983,
             "NameDualInputBuffer_UHV",
@@ -462,6 +468,7 @@ public class MachineLoader {
         GTCMItemList.BufferedEnergyHatchUMV.set(BufferedEnergyHatchUMV);
         GTCMItemList.BufferedEnergyHatchUXV.set(BufferedEnergyHatchUXV);
         GTCMItemList.BufferedEnergyHatchMAX.set(BufferedEnergyHatchMAX);
+        //endregion
 
     }
 }

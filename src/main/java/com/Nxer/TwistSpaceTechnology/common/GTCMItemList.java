@@ -175,6 +175,7 @@ public enum GTCMItemList {
     LargeIndustrialCokingFactory,
     Scavenger,
     MegaEggGenerator,
+    AstralComputingArray,
 
     superCleanRoom,
     BiosphereIII,
