@@ -297,6 +297,7 @@ public class MachineLoader {
         // NuclearReactor = new TST_NuclearReactor(19029, "nuclea reactor", "nuclear reactor").getStackForm(1);
         // GTCMItemList.NuclearReactor.set(IndistinctTentacle);
 
+        //
         AstralComputingArray = new TST_Computer(19029, "NameAstralComputingArray", "Astral Computing Array")
             .getStackForm(1);
         GTCMItemList.AstralComputingArray.set(AstralComputingArray);

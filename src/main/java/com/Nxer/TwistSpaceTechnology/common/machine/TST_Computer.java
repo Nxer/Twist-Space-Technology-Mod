@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -73,9 +74,6 @@ import gregtech.api.util.IGT_HatchAdder;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
 
-/**
- * Created by danie_000 on 17.12.2016.
- */
 public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements ISurvivalConstructable {
 
     // region variables
@@ -1232,7 +1230,7 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                 2) // Parametrizer: (optional) Any Computer Casing on first or last slice
             .addEnergyHatch(translateToLocal("tt.keyword.Structure.AnyComputerCasingFirstOrLastSlice"), 1) // Energy
             .addMaintenanceHatch(translateToLocal("tt.keyword.Structure.AnyComputerCasingFirstOrLastSlice"), 1) // Maintenance
-            .toolTipFinisher(CommonValues.TEC_MARK_EM);
+            .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
 
