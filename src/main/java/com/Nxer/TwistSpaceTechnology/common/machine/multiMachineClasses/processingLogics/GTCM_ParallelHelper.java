@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.interfaces.tileentity.IRecipeLockable;
@@ -123,7 +124,8 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
     /**
      * Method for calculating max parallel from given inputs.
      */
-    private MaxParallelCalculator maxParallelCalculator = GT_Recipe::maxParallelCalculatedByInputs;
+    private MaxParallelCalculator maxParallelCalculator = GTCM_ParallelHelper::maxParallelCalculatedByInputs;
+//    private MaxParallelCalculator maxParallelCalculator = GT_Recipe::maxParallelCalculatedByInputs;
     /**
      * Method for consuming inputs after determining how many parallels it can execute.
      */
@@ -662,6 +664,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
 
         if (aInputs != null) {
             for (ItemStack recipeItemCost : recipe.mInputs) {
+                if (recipeItemCost.stackSize == 0) continue;
                 ItemStack unifiedItemCost = GT_OreDictUnificator.get_nocopy(recipeItemCost);
                 if (unifiedItemCost != null) {
                     remainingCost = (long) recipeItemCost.stackSize * amountMultiplier;
@@ -699,31 +702,31 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
      * Returns the number of parallel recipes, or 0 if recipe is not satisfied at all. 0 < number < 1 means that inputs
      * are found but not enough. Refer to SingleRecipeCheck#checkRecipeInputs.
      */
-    public double maxParallelCalculatedByInputs(GT_Recipe recipe, int maxParallel, FluidStack[] aFluidInputs, ItemStack... aInputs) {
+    public static double maxParallelCalculatedByInputs(GT_Recipe recipe, int maxParallel, FluidStack[] aFluidInputs, ItemStack... aInputs) {
         if (recipe.mInputs.length > 0 && aInputs == null) return 0;
         if (recipe.mFluidInputs.length > 0 && aFluidInputs == null) return 0;
 
         double currentParallel = maxParallel;
 
-        if (aFluidInputs != null) {
+        if (recipe.mFluidInputs.length > 0) {
             // Create map for fluid -> stored amount
-            Map<Fluid, Integer> fluidMap = new HashMap<>();
-            Map<Fluid, Integer> fluidCost = new HashMap<>();
+            Map<Fluid, Long> fluidMap = new HashMap<>();
+            Map<Fluid, Long> fluidCost = new HashMap<>();
             for (FluidStack fluidStack : aFluidInputs) {
                 if (fluidStack == null) continue;
-                fluidMap.merge(fluidStack.getFluid(), fluidStack.amount, Integer::sum);
+                fluidMap.merge(fluidStack.getFluid(), (long) fluidStack.amount, Long::sum);
             }
             for (FluidStack fluidStack : recipe.mFluidInputs) {
                 if (fluidStack == null) continue;
-                fluidCost.merge(fluidStack.getFluid(), fluidStack.amount, Integer::sum);
+                fluidCost.merge(fluidStack.getFluid(), (long) fluidStack.amount, Long::sum);
             }
 
             // Check how many parallels can it perform for each fluid
-            for (Map.Entry<Fluid, Integer> costEntry : fluidCost.entrySet()) {
+            for (Map.Entry<Fluid, Long> costEntry : fluidCost.entrySet()) {
                 if (costEntry.getValue() > 0) {
                     currentParallel = Math.min(
                         currentParallel,
-                        (double) fluidMap.getOrDefault(costEntry.getKey(), 0) / costEntry.getValue());
+                        (double) fluidMap.getOrDefault(costEntry.getKey(), 0L) / costEntry.getValue());
                 }
                 if (currentParallel <= 0) {
                     return 0;
@@ -731,44 +734,93 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             }
         }
 
+        boolean isNBTSensitive = recipe.isNBTSensitive;
         double remainingCost;
         int providedAmount;
-        if (aInputs != null) {
-            nextRecipeItemCost: for (ItemStack recipeItemCost : recipe.mInputs) {
-
-                ItemStack unifiedItemCost = GT_OreDictUnificator.get_nocopy(recipeItemCost);
-                if (unifiedItemCost != null) {
-                    remainingCost = recipeItemCost.stackSize * currentParallel;
-                    providedAmount = 0;
-
-                    for (ItemStack providedItem : aInputs) {
-                        if (recipe.isNBTSensitive && !GT_Utility.areStacksEqual(providedItem, unifiedItemCost, false)) {
-                            continue;
-                        } else if (!recipe.isNBTSensitive
-                                       && !GT_OreDictUnificator.isInputStackEqual(providedItem, unifiedItemCost)) {
-                            continue;
-                        }
-
-                        if (GTppRecipeHelper) { // Please see JavaDoc on GTppRecipeHelper for why this is here.
-                            if (GT_Utility.areStacksEqual(providedItem, Ic2Items.FluidCell.copy(), true)
-                                    || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataStick.get(1L), true)
-                                    || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataOrb.get(1L), true)) {
-                                if (!GT_Utility.areStacksEqual(providedItem, recipeItemCost, false)) continue;
-                            }
-                        }
-                        // for non-consumed input
-                        if (recipeItemCost.stackSize == 0) continue nextRecipeItemCost;
-
-                        providedAmount += providedItem.stackSize;
-
-                        if (providedAmount >= remainingCost) continue nextRecipeItemCost;
-                    }
-                    if (providedAmount == 0) return 0;
-                    currentParallel = Math.min(currentParallel, (double) providedAmount / recipeItemCost.stackSize);
+        if (recipe.mInputs.length > 0) {
+            Map<TST_ItemID, Long> itemCost = new HashMap<>();
+            if (isNBTSensitive) {
+                for (ItemStack recipeItemCost : recipe.mInputs) {
+                    // for non-consumed input
+                    if (recipeItemCost.stackSize == 0) continue;
+                    itemCost.merge(TST_ItemID.create(recipeItemCost), (long) recipeItemCost.stackSize, Long::sum);
+                }
+            } else {
+                for (ItemStack recipeItemCost : recipe.mInputs) {
+                    // for non-consumed input
+                    if (recipeItemCost.stackSize == 0) continue;
+                    itemCost.merge(TST_ItemID.createNoNBT(recipeItemCost), (long) recipeItemCost.stackSize, Long::sum);
                 }
             }
+
+            nextRecipeItemCost: for (Map.Entry<TST_ItemID, Long> itemID : itemCost.entrySet()) {
+                ItemStack unifiedItemCost;
+                if (isNBTSensitive) {
+                    unifiedItemCost = GT_OreDictUnificator.get_nocopy(itemID.getKey().getItemStackWithNBT());
+                } else {
+                    unifiedItemCost = GT_OreDictUnificator.get_nocopy(itemID.getKey().getItemStack());
+                }
+                remainingCost = itemID.getValue() * currentParallel;
+                providedAmount = 0;
+                for (ItemStack providedItem : aInputs) {
+                    if (isNBTSensitive && !GT_Utility.areStacksEqual(providedItem, unifiedItemCost, false)) {
+                        continue;
+                    } else if (!isNBTSensitive
+                                   && !GT_OreDictUnificator.isInputStackEqual(providedItem, unifiedItemCost)) {
+                        continue;
+                    }
+
+                    providedAmount += providedItem.stackSize;
+
+                    if (providedAmount >= remainingCost) continue nextRecipeItemCost;
+                }
+                if (providedAmount == 0) return 0;
+                currentParallel = Math.min(currentParallel, (double) providedAmount / itemID.getValue());
+            }
         }
+
         return currentParallel;
+
+
+
+
+//        if (aInputs != null) {
+//            nextRecipeItemCost: for (ItemStack recipeItemCost : recipe.mInputs) {
+//
+//                // for non-consumed input
+//                if (recipeItemCost.stackSize == 0) continue;
+//
+//                ItemStack unifiedItemCost = GT_OreDictUnificator.get_nocopy(recipeItemCost);
+//                if (unifiedItemCost != null) {
+//                    remainingCost = recipeItemCost.stackSize * currentParallel;
+//                    providedAmount = 0;
+//
+//                    for (ItemStack providedItem : aInputs) {
+//                        if (isNBTSensitive && !GT_Utility.areStacksEqual(providedItem, unifiedItemCost, false)) {
+//                            continue;
+//                        } else if (!isNBTSensitive
+//                                       && !GT_OreDictUnificator.isInputStackEqual(providedItem, unifiedItemCost)) {
+//                            continue;
+//                        }
+//
+//                        if (GTppRecipeHelper) { // Please see JavaDoc on GTppRecipeHelper for why this is here.
+//                            if (GT_Utility.areStacksEqual(providedItem, Ic2Items.FluidCell.copy(), true)
+//                                    || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataStick.get(1L), true)
+//                                    || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataOrb.get(1L), true)) {
+//                                if (!GT_Utility.areStacksEqual(providedItem, recipeItemCost, false)) continue;
+//                            }
+//                        }
+//
+//                        providedAmount += providedItem.stackSize;
+//
+//                        if (providedAmount >= remainingCost) continue nextRecipeItemCost;
+//                    }
+//                    if (providedAmount == 0) return 0;
+//                    currentParallel = Math.min(currentParallel, (double) providedAmount / recipeItemCost.stackSize);
+//                }
+//            }
+//        }
+
     }
 
 
