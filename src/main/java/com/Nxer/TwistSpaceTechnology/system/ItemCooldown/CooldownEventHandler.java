@@ -29,6 +29,8 @@ public class CooldownEventHandler {
     public static void drawCooldown(Minecraft mc, ScaledResolution scale) {
         int k = scale.getScaledWidth();
         int l = scale.getScaledHeight();
+        if(mc.thePlayer.getCurrentEquippedItem()==null)
+        return;
         Item holditem = mc.thePlayer.getCurrentEquippedItem()
             .getItem();
         if (!(holditem instanceof IItemHasCooldown)) {
