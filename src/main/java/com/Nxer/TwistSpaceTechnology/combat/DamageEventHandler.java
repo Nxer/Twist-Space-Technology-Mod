@@ -54,8 +54,7 @@ public class DamageEventHandler {
             && event.source.damageType != "generic") {
             ArmorEventHandler.INSTANCE.updatePlayerStats((EntityPlayer) event.entityLiving);
             damage *= (float) (1
-                - PlayerExtendedProperties.instance.from((EntityPlayer) event.entityLiving).CombatStats.get("Resistant")
-                    / 100.0);
+                - PlayerExtendedProperties.getStat((EntityPlayer) event.entityLiving, "Resistance") / 100.0);
         }
         event.ammount = damage * (1F + (new Random().nextFloat() - 0.5F) * 0.1F);
     }

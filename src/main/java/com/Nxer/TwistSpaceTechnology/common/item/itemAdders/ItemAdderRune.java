@@ -158,15 +158,17 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer player) {
-        if (!ItemCooldownSaver.isUsable(itemStackIn.getItem())) {
+        if (!ItemCooldownSaver.isUsable(itemStackIn.getItem(), player)) {
             GT_Utility.sendChatToPlayer(
                 player,
-                "The item has a cooldown of "
-                    + (getCooldown() - ItemCooldownSaver.getPastTime(itemStackIn.getItem())) / 1000F
+                "This item has a cooldown of "
+                    + (getCooldown() - ItemCooldownSaver.getPastTime(itemStackIn.getItem(), player)) / 1000F
                     + 's');
             return itemStackIn;
         }
-        ItemCooldownSaver.onUse(itemStackIn.getItem());
+        // test
+        GT_Utility.sendChatToPlayer(player, "Egg lanuched.");
+        ItemCooldownSaver.onUse(itemStackIn.getItem(), player);
         worldIn.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
         if (!worldIn.isRemote) {
