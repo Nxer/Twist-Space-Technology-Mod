@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.ItemCooldown;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -37,8 +38,8 @@ public class CooldownEventHandler {
         }
         float cooldown = ((IItemHasCooldown) holditem).getCooldown();
         GL11.glColor4f(0.5f, 0.5f, 1f, 1f);
-        // mc.getTextureManager()
-        // .bindTexture(new ResourceLocation("gtnhcommunitymod", "textures/HUD/cooldown_bar.png"));
+        mc.getTextureManager()
+            .bindTexture(Gui.icons);
         mc.ingameGUI.drawTexturedModalRect(k / 2 - 91, l - 32 + 3, 0, 64, 182, 5);
         mc.ingameGUI.drawTexturedModalRect(
             k / 2 - 91,
@@ -50,8 +51,7 @@ public class CooldownEventHandler {
                     * ((float) Math.max(ItemCooldownSaver.getPastTime(holditem, mc.thePlayer), 0) / (float) cooldown)),
                 182),
             5);
-        // mc.getTextureManager()
-        // .bindTexture(Gui.icons);
+
         GL11.glColor4f(1f, 1f, 1f, 1f);
     }
 }
