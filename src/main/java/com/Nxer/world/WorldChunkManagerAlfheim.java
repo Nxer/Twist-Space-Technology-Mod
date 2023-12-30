@@ -16,7 +16,6 @@ import net.minecraft.world.gen.layer.IntCache;
 import com.Nxer.world.biomes.BiomeBaseAlfheim;
 import com.Nxer.world.layer.GenLayerAlfheim;
 
-
 public class WorldChunkManagerAlfheim extends WorldChunkManager {
 
     private GenLayer unzoomedBiomes;

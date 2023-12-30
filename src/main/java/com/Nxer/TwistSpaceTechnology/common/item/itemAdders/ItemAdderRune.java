@@ -10,22 +10,27 @@ import java.util.Set;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
+import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.IItemHasCooldown;
+import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.ItemCooldownSaver;
 import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.util.GT_Utility;
 
 /**
  * An ItemStack Generator used Meta Item System.
  * <li>Use {@link ItemAdderRune#initItem01(String, int)} to create your Item at ItemList01.
  *
  */
-public class ItemAdderRune extends ItemAdder_Basic {
+public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
 
     /**
      * An Item Map for managing basic items
@@ -145,4 +150,29 @@ public class ItemAdderRune extends ItemAdder_Basic {
         }
     }
     // endregion
+
+    @Override
+    public int getCooldown() {
+        return 2000;
+    }
+
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer player) {
+        if (!ItemCooldownSaver.isUsable(itemStackIn.getItem())) {
+            GT_Utility.sendChatToPlayer(
+                player,
+                "The item has a cooldown of "
+                    + (getCooldown() - ItemCooldownSaver.getPastTime(itemStackIn.getItem())) / 1000F
+                    + 's');
+            return itemStackIn;
+        }
+        ItemCooldownSaver.onUse(itemStackIn.getItem());
+        worldIn.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+
+        if (!worldIn.isRemote) {
+            worldIn.spawnEntityInWorld(new EntityEgg(worldIn, player));
+        }
+
+        return itemStackIn;
+    }
 }

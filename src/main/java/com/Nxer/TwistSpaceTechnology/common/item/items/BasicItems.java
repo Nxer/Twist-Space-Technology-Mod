@@ -18,7 +18,7 @@ public final class BasicItems {
     public static final Item MetaItemRune = new ItemAdderRune(
         "MetaItemRuneBase",
         "MetaItemRune",
-        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItemRune/Rune0");
+        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItem01/0");
 
     public static final Item ProofOfHeroes = new ItemProofOfHeroes(
         "英雄の証",

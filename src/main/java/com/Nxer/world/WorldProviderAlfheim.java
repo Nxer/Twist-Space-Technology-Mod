@@ -14,7 +14,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import twilightforest.client.renderer.TFSkyRenderer;
 import twilightforest.client.renderer.TFWeatherRenderer;
-import twilightforest.world.ChunkProviderTwilightForest;
 
 public class WorldProviderAlfheim extends WorldProviderSurface {
 
@@ -45,13 +44,14 @@ public class WorldProviderAlfheim extends WorldProviderSurface {
         this.worldChunkMgr = new WorldChunkManagerAlfheim(worldObj);// new TFWorldChunkManager(worldObj);
         this.dimensionId = WorldStats.dimensionID;
     }
+
     @Override
-    public IChunkProvider createChunkGenerator()
-    {
+    public IChunkProvider createChunkGenerator() {
         return new ChunkProviderAlfheim(
-                    worldObj,
-                    worldObj.getSeed(),
-                    worldObj.getWorldInfo().isMapFeaturesEnabled());
+            worldObj,
+            worldObj.getSeed(),
+            worldObj.getWorldInfo()
+                .isMapFeaturesEnabled());
     }
 
     /**

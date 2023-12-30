@@ -8,7 +8,6 @@ import com.Nxer.TwistSpaceTechnology.combat.PlayerEventHandler;
 import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
 import com.Nxer.TwistSpaceTechnology.command.CombatRework_Info;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
-import com.Nxer.TwistSpaceTechnology.command.alftest_Command;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
 import com.Nxer.TwistSpaceTechnology.event.TickingEvent;
@@ -59,7 +58,7 @@ public class CommonProxy {
             event.registerServerCommand(new CombatRework_Command());
         }
         // test
-        event.registerServerCommand(new alftest_Command());
+        // *Unfinished */ event.registerServerCommand(new alftest_Command());
     }
 
     public void serverStarted(FMLServerStartedEvent event) {
