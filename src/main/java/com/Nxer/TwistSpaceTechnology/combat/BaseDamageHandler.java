@@ -18,16 +18,16 @@ public class BaseDamageHandler {
 
             PlayerExtendedProperties SourceStats = PlayerExtendedProperties.instance
                 .from((EntityPlayer) event.source.getEntity());
-            if ((event.source.getEntity().motionY < (double) 0) && !event.source.getEntity().onGround
-                && !event.source.getEntity()
-                    .isRiding()
-                && event.source.damageType == "player")
-                damage = (float) (1.5
-                    * (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0));
-            else if (event.source.damageType != "indirectMagic")
+            if (event.source.damageType == "player") {
+                damage = (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0F);
+                if ((event.source.getEntity().motionY < (double) 0) && !event.source.getEntity().onGround
+                    && !event.source.getEntity()
+                        .isRiding())
+                    damage *= 1.5F;
+            } else if (event.source.damageType != "indirectMagic")
                 damage = (float) (SourceStats.CombatStats.get("BaseDamage")
                     + SourceStats.CombatStats.get("Strength") / 50.0);
-            else damage = SourceStats.CombatStats.get("BaseDamage");
+            else damage = SourceStats.CombatStats.get("BaseDamage") * (damage / 8.0F);
 
         }
         if (event.entityLiving instanceof EntityPlayer && event.source.damageType != "outOfWorld"

@@ -59,8 +59,7 @@ public class ItemCooldownSaver {
         long time = player.worldObj.getWorldInfo()
             .getWorldTime();
         Map<Integer, Long> temp = ItemCooldownSaver.Cooldown.get(player.getPersistentID());
-        if(temp.get(item.hashCode())>time)
-        {
+        if (temp.get(item.hashCode()) > time) {
             temp.put(item.hashCode(), time);
             Cooldown.put(player.getPersistentID(), temp);
         }
