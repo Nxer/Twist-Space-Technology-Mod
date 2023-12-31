@@ -55,6 +55,12 @@ public class ItemCooldownSaver {
 
     /** Returns the number of ticks since the last time used */
     public static int getPastTime(Item item, EntityPlayer player) {
+        if (item == null) {
+            return 0;
+        }
+        if (!(item instanceof IItemHasCooldown)) {
+            return 0;
+        }
         ItemCooldownSaver.init(player);
         long time = player.worldObj.getWorldInfo()
             .getWorldTime();
