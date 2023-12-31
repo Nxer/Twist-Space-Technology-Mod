@@ -65,11 +65,12 @@ public class ItemCooldownSaver {
         long time = player.worldObj.getWorldInfo()
             .getWorldTime();
         Map<Integer, Long> temp = ItemCooldownSaver.Cooldown.get(player.getPersistentID());
-        if (temp.get(item.hashCode()) > time) {
-            temp.put(item.hashCode(), time);
-            Cooldown.put(player.getPersistentID(), temp);
-        }
-        if (temp.containsKey(item.hashCode())) return (int) (time - temp.get(item.hashCode()));
-        else return ((IItemHasCooldown) item).getCooldown();
+        if (temp.containsKey(item.hashCode())) {
+            if (temp.get(item.hashCode()) > time) {
+                temp.put(item.hashCode(), time);
+                Cooldown.put(player.getPersistentID(), temp);
+            }
+            return (int) (time - temp.get(item.hashCode()));
+        } else return ((IItemHasCooldown) item).getCooldown();
     }
 }
