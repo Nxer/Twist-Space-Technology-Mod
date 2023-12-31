@@ -76,8 +76,7 @@ public class GT_TileEntity_MagneticMixer
     }
 
     public int getMaxParallelRecipes() {
-        return (int) Math
-            .min(ValueEnum.MAX_PARALLEL_LIMIT, Math.pow(2, GT_Utility.getTier(this.getAverageInputVoltage())));
+        return Integer.MAX_VALUE;
     }
 
     public float getSpeedBonus() {
@@ -207,10 +206,10 @@ public class GT_TileEntity_MagneticMixer
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Parallel: "
+        ret[origin.length] = EnumChatFormatting.AQUA + "Parallel: "
             + EnumChatFormatting.GOLD
             + this.getMaxParallelRecipes();
-        ret[origin.length] = EnumChatFormatting.AQUA + "Recipe Time multiplier: "
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Recipe Time multiplier: "
             + EnumChatFormatting.GOLD
             + this.getSpeedBonus();
         return ret;
