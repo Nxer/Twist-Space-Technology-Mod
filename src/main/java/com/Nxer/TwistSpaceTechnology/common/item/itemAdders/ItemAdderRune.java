@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.IItemHasCooldown;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.ItemCooldownSaver;
@@ -158,7 +159,6 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer player) {
-        GT_Utility.sendChatToPlayer(player, "PreCheck:" + ItemCooldownSaver.getPastTime(itemStackIn.getItem(), player));
         if (!ItemCooldownSaver.isUsable(itemStackIn.getItem(), player)) {
             GT_Utility.sendChatToPlayer(
                 player,
@@ -168,7 +168,7 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
             return itemStackIn;
         }
         // test
-        GT_Utility.sendChatToPlayer(player, "Egg lanuched.");
+        TwistSpaceTechnology.LOG.info("Egg lanuched.");
         ItemCooldownSaver.onUse(itemStackIn.getItem(), player);
         worldIn.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
