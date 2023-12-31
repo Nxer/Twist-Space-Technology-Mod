@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.system.ItemCooldown;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -10,23 +11,25 @@ import gregtech.api.util.GT_Utility;
 
 public class ItemCooldownSaver {
 
-    private static Map<Integer, Map<String, Long>> Cooldown = new HashMap<Integer, Map<String, Long>>();
+    private static Map<UUID, Map<Integer, Long>> Cooldown = new HashMap<UUID, Map<Integer, Long>>();
 
     public static void init(EntityPlayer player) {
-        if (!Cooldown.containsKey(
-            player.getPersistentID()
-                .hashCode()))
-            Cooldown.put(
-                player.getPersistentID()
-                    .hashCode(),
-                new HashMap<String, Long>());
+        if (!Cooldown.containsKey(player.getPersistentID())) {
+            Cooldown.put(player.getPersistentID(), new HashMap<Integer, Long>());
+            GT_Utility.sendChatToPlayer(
+                player,
+                "Init:" + player.worldObj.getWorldInfo()
+                    .getWorldTime());
+        }
     }
 
     public static boolean isUsable(Item item, EntityPlayer player) {
 
         ItemCooldownSaver.init(player);
+        long time = player.worldObj.getWorldInfo()
+            .getWorldTime();
         if (item instanceof IItemHasCooldown) {
-            GT_Utility.sendChatToPlayer(player, "Check:" + System.currentTimeMillis());
+            GT_Utility.sendChatToPlayer(player, "Check:" + time);
             return getPastTime(item, player) >= ((IItemHasCooldown) item).getCooldown();
         }
         return true;
@@ -34,30 +37,23 @@ public class ItemCooldownSaver {
 
     public static void onUse(Item item, EntityPlayer player) {
         ItemCooldownSaver.init(player);
+        long time = player.worldObj.getWorldInfo()
+            .getWorldTime();
         if (item instanceof IItemHasCooldown) {
-            GT_Utility.sendChatToPlayer(player, "Use:" + System.currentTimeMillis());
-            Map<String, Long> temp = Cooldown.get(
-                player.getPersistentID()
-                    .hashCode());
-            temp.put(item.getUnlocalizedName(), System.currentTimeMillis());
-            Cooldown.put(
-                player.getPersistentID()
-                    .hashCode(),
-                temp);
+            GT_Utility.sendChatToPlayer(player, "Use:" + time);
+            Map<Integer, Long> temp = Cooldown.get(player.getPersistentID());
+            temp.put(item.hashCode(), time);
+            Cooldown.put(player.getPersistentID(), temp);
         }
     }
 
-    /** Returns the number of milliseconds since the last time used */
+    /** Returns the number of ticks since the last time used */
     public static int getPastTime(Item item, EntityPlayer player) {
         ItemCooldownSaver.init(player);
-        if (ItemCooldownSaver.Cooldown.get(
-            player.getPersistentID()
-                .hashCode())
-            .containsKey(item.getUnlocalizedName()))
-            return (int) (System.currentTimeMillis() - ItemCooldownSaver.Cooldown.get(
-                player.getPersistentID()
-                    .hashCode())
-                .get(item.getUnlocalizedName()));
+        long time = player.worldObj.getWorldInfo()
+            .getWorldTime();
+        Map<Integer, Long> temp = ItemCooldownSaver.Cooldown.get(player.getPersistentID());
+        if (temp.containsKey(item.hashCode())) return (int) (time - temp.get(item.hashCode()));
         else return ((IItemHasCooldown) item).getCooldown();
     }
 }
