@@ -25,8 +25,9 @@ public class BaseDamageHandler {
                         .isRiding())
                     damage *= 1.5F;
             } else if (event.source.damageType == "indirectMagic") damage = SourceStats.CombatStats.get("BaseDamage");
-            else damage = (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0F)
-                * (damage / 8.0F);
+            else if (event.source.damageType == "arrow")
+                damage = (SourceStats.CombatStats.get("BaseDamage") + SourceStats.CombatStats.get("Strength") / 50.0F)
+                    * (damage / 8.0F);
 
         }
         if (event.entityLiving instanceof EntityPlayer && event.source.damageType != "outOfWorld"
