@@ -59,6 +59,10 @@ public class OP_NormalProcessing {
         processingLineMaterials.put(Materials.Palladium, WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 1));
         processingLineMaterials.put(Materials.Iridium, WerkstoffLoader.IrLeachResidue.get(OrePrefixes.dust, 1));
         processingLineMaterials.put(Materials.Osmium, WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 1));
+        processingLineMaterials
+            .put(Materials.Samarium, WerkstoffMaterialPool.SamariumOreConcentrate.get(OrePrefixes.dust, 1));
+        processingLineMaterials
+            .put(Materials.Cerium, WerkstoffMaterialPool.CeriumOreConcentrate.get(OrePrefixes.dust, 1));
     }
 
     // public final List<Integer> insteadMaterialOresMetas = Arrays.asList(
@@ -70,7 +74,7 @@ public class OP_NormalProcessing {
         if (SpecialProcessingLineMaterialInstead) {
             ItemStack t = processingLineMaterials.get(material);
             if (t != null) {
-                return Utils.copyAmount(amount * 2, t);
+                return Utils.copyAmount(amount * 3, t);
             }
         }
         return setStackSize(GT_OreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
@@ -80,6 +84,7 @@ public class OP_NormalProcessing {
      * Generate recipes.
      */
     public void enumOreProcessingRecipes() {
+        initProcessingLineMaterials();
         Set<Materials> specialProcesses = Sets.newHashSet(
             Materials.Samarium,
             Materials.Cerium,
