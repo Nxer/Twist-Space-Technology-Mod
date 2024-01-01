@@ -99,8 +99,8 @@ public class StatsDefination {
         // MV
         ArmorStats.put("item.ItemBowBone", new int[] { 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
         // EV
-        ArmorStats.put("item.tripleBow", new int[] { 33, 0, 0, 40, 60, 0, 0, 0, 0, 0, 0 });
-        ArmorStats.put("item.seekerBow", new int[] { 66, 0, 0, 40, 60, 0, 0, 0, 0, 0, 0 });
+        ArmorStats.put("item.tripleBow", new int[] { 33, 0, 0, 0, 40, 60, 0, 0, 0, 0, 0 });
+        ArmorStats.put("item.seekerBow", new int[] { 100, 0, 0, 0, 40, 60, 0, 0, 0, 0, 0 });
         ArmorStats.put("item.iceBow", new int[] { 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
         // End
         ArmorStats.put("item.infinity_bow", new int[] { 500, 0, 200, 100, 200, 0, 0, 0, 0, 0, 0 });
