@@ -2,18 +2,23 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
+import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.SpecialProcessingLineMaterialInstead;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.google.common.collect.Sets;
 
 import goodgenerator.items.MyMaterial;
@@ -26,11 +31,6 @@ import gregtech.api.util.GT_OreDictUnificator;
 import ic2.core.Ic2Items;
 
 public class OP_NormalProcessing {
-
-    /**
-     * Instance of this class.
-     */
-    public static final OP_NormalProcessing instance = new OP_NormalProcessing();
 
     /**
      * Ore stone types enum
@@ -52,12 +52,27 @@ public class OP_NormalProcessing {
         OrePrefixes.oreNetherrack,
         OrePrefixes.oreEndstone);
 
+    public final Map<Materials, ItemStack> processingLineMaterials = new HashMap<>();
+
+    public void initProcessingLineMaterials() {
+        processingLineMaterials.put(Materials.Platinum, WerkstoffLoader.PTMetallicPowder.get(OrePrefixes.dust, 1));
+        processingLineMaterials.put(Materials.Palladium, WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 1));
+        processingLineMaterials.put(Materials.Iridium, WerkstoffLoader.IrLeachResidue.get(OrePrefixes.dust, 1));
+        processingLineMaterials.put(Materials.Osmium, WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 1));
+    }
+
     // public final List<Integer> insteadMaterialOresMetas = Arrays.asList(
     // 19, 20, 28, 32, 33, 35, 57, 86, 89, 98, 347, 382, 500, 501, 514, 522, 526, 530,
     // 535, 540, 541, 542, 543, 544, 545, 770, 810, 817, 826, 884, 894, 918, 920
     // );
 
-    public static ItemStack getDustStack(Materials material, int amount) {
+    public ItemStack getDustStack(Materials material, int amount) {
+        if (SpecialProcessingLineMaterialInstead) {
+            ItemStack t = processingLineMaterials.get(material);
+            if (t != null) {
+                return Utils.copyAmount(amount * 2, t);
+            }
+        }
         return setStackSize(GT_OreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
     }
 
