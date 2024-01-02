@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.DATApipe;
 import static gregtech.api.enums.Mods.GTPlusPlus;
@@ -26,6 +27,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 import com.dreammaster.gthandler.GT_CoreModSupport;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
@@ -36,14 +38,14 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 
 // spotless:off
 public class MiracleTopRecipePool implements IRecipePool {
-    static final IRecipeMap MT = GTCMRecipe.MiracleTopRecipes;
+    static final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipes;
 
     @Override
     public void loadRecipes() {
@@ -461,7 +463,8 @@ public class MiracleTopRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 Utils.copyAmount(16, Wrapped_Circuit_Board_Optical),
@@ -472,12 +475,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 new FluidStack(solderPlasma, 144 * 32),
                 Materials.EnrichedHolmium.getMolten(144 * 16)
             )
-            .itemOutputs(
-                ItemList.Circuit_OpticalProcessor.get(64),
-                ItemList.Circuit_OpticalProcessor.get(64),
-                ItemList.Circuit_OpticalProcessor.get(64),
-                ItemList.Circuit_OpticalProcessor.get(64))
-
+            .itemOutputs(setStackSize(ItemList.Circuit_OpticalProcessor.get(64), 64*4))
             .eut(9830400 * 4)
             .duration(20 * 10 * 4)
             .addTo(MT);
@@ -833,7 +831,8 @@ public class MiracleTopRecipePool implements IRecipePool {
             .duration(450)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 Utils.copyAmount(12, Wrapped_Circuit_Board_Bio_Ultra),
@@ -844,13 +843,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 new FluidStack(FluidRegistry.getFluid("molten.chromaticglass"), 144 * 8 * 12),
                 Materials.NiobiumTitanium.getMolten(144 * 32 * 12)
             )
-            .itemOutputs(
-                ItemList.Circuit_Bioprocessor.get(64),
-                ItemList.Circuit_Bioprocessor.get(64),
-                ItemList.Circuit_Bioprocessor.get(64),
-                ItemList.Circuit_Bioprocessor.get(64)
-            )
-
+            .itemOutputs(setStackSize(ItemList.Circuit_Bioprocessor.get(64), 64*4))
             .eut(RECIPE_UIV)
             .duration(450 * 3)
             .addTo(MT);
@@ -872,12 +865,12 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Neuroprocessor.get(16)
             )
-
             .eut(614400)
             .duration(20 * 15)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32750),
@@ -888,13 +881,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.YttriumBariumCuprate.getMolten(144 * 16 * 12),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 12)
             )
-            .itemOutputs(
-                ItemList.Circuit_Neuroprocessor.get(64),
-                ItemList.Circuit_Neuroprocessor.get(64),
-                ItemList.Circuit_Neuroprocessor.get(64),
-                ItemList.Circuit_Neuroprocessor.get(64)
-            )
-
+            .itemOutputs(setStackSize(ItemList.Circuit_Neuroprocessor.get(64), 64*4))
             .eut(614400 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -920,7 +907,8 @@ public class MiracleTopRecipePool implements IRecipePool {
             .duration(20 * 15)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32753),
@@ -930,13 +918,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 new FluidStack(solderIndAlloy, 72 * 12),
                 Materials.NiobiumTitanium.getMolten(144 * 16 * 12),
                 Materials.YttriumBariumCuprate.getMolten(144 * 8 * 12))
-            .itemOutputs(
-                ItemList.Circuit_Crystalprocessor.get(64),
-                ItemList.Circuit_Crystalprocessor.get(64),
-                ItemList.Circuit_Crystalprocessor.get(64),
-                ItemList.Circuit_Crystalprocessor.get(64)
-            )
-
+            .itemOutputs(setStackSize(ItemList.Circuit_Crystalprocessor.get(64), 64*4))
             .eut(153600 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -963,7 +945,8 @@ public class MiracleTopRecipePool implements IRecipePool {
             .duration(20 * 15)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32754),
@@ -974,13 +957,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Platinum.getMolten(144 * 32 * 12),
                 Materials.NiobiumTitanium.getMolten(144 * 8 * 12)
             )
-            .itemOutputs(
-                ItemList.Circuit_Quantumprocessor.get(64),
-                ItemList.Circuit_Quantumprocessor.get(64),
-                ItemList.Circuit_Quantumprocessor.get(64),
-                ItemList.Circuit_Quantumprocessor.get(64)
-            )
-
+            .itemOutputs(setStackSize(ItemList.Circuit_Quantumprocessor.get(64), 64*4))
             .eut(38400 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -1002,12 +979,12 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemOutputs(
                 ItemList.Circuit_Nanoprocessor.get(16)
             )
-
             .eut(9600)
             .duration(20 * 15)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32756),
@@ -1018,13 +995,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Electrum.getMolten(144 * 16 * 12),
                 Materials.Platinum.getMolten(144 * 8 * 12)
             )
-            .itemOutputs(
-                ItemList.Circuit_Nanoprocessor.get(64),
-                ItemList.Circuit_Nanoprocessor.get(64),
-                ItemList.Circuit_Nanoprocessor.get(64),
-                ItemList.Circuit_Nanoprocessor.get(64)
-            )
-
+            .itemOutputs(setStackSize(ItemList.Circuit_Nanoprocessor.get(64), 64*4))
             .eut(9600 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -1051,7 +1022,8 @@ public class MiracleTopRecipePool implements IRecipePool {
             .duration(20 * 720)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32753),
@@ -1062,20 +1034,14 @@ public class MiracleTopRecipePool implements IRecipePool {
                 new FluidStack(solderIndAlloy, 288 * 12),
                 Materials.Infinity.getMolten(144 * 12)
             )
-            .itemOutputs(
-                GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64),
-                GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64),
-                GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64),
-                GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64)
-
-            )
-
+            .itemOutputs(setStackSize(GT_ModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64),64*4))
             .eut(RECIPE_LuV)
             .duration(20 * 720 * 3)
             .addTo(MT);
 
-//ULV LV and MV circuit
-        GT_Values.RA.stdBuilder()
+        //ULV LV and MV circuit
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32756),
@@ -1086,30 +1052,13 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.AnnealedCopper.getMolten(144 * 2 * 4),
                 Materials.RedAlloy.getMolten(144 * 8)
             )
-            .itemOutputs(
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64),
-                CustomItemList.NandChipBoard.get(64)
-            )
-
+            .itemOutputs(setStackSize(CustomItemList.NandChipBoard.get(64), 64*16))
             .eut(RECIPE_EV)
             .duration(20 * 90 * 4)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32748),
@@ -1119,22 +1068,13 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.SolderingAlloy.getMolten(72 * 12),
                 Materials.Copper.getMolten(144 * 96)
             )
-            .itemOutputs(
-                ItemList.Circuit_Microprocessor.get(64),
-                ItemList.Circuit_Microprocessor.get(64),
-                ItemList.Circuit_Microprocessor.get(64),
-                ItemList.Circuit_Microprocessor.get(64),
-                ItemList.Circuit_Microprocessor.get(64),
-                ItemList.Circuit_Microprocessor.get(64),
-                ItemList.Circuit_Microprocessor.get(64),
-                ItemList.Circuit_Microprocessor.get(64)
-            )
-
+            .itemOutputs(setStackSize(ItemList.Circuit_Microprocessor.get(64),64*8))
             .eut(600)
             .duration(20 * 30 * 4)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(16),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32748),
@@ -1145,13 +1085,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.AnnealedCopper.getMolten(144 * 8 * 12),
                 Materials.RedAlloy.getMolten(144 * 24)
             )
-            .itemOutputs(
-                GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 64, 32080),
-                GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 64, 32080),
-                GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 64, 32080),
-                GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 64, 32080)
-            )
-
+            .itemOutputs(setStackSize(ItemList.Circuit_Processor.get(1), 64*4))
             .eut(RECIPE_EV)
             .duration(20 * 90 * 4)
             .addTo(MT);
@@ -1159,15 +1093,12 @@ public class MiracleTopRecipePool implements IRecipePool {
         // endregion
 
         // region Neuro Processing Unit and Bio Processing Unit
-        GT_Values.RA
-            .stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32750),
-                ItemList.Circuit_Chip_Stemcell.get(64),
-                ItemList.Circuit_Chip_Stemcell.get(64),
-                ItemList.Circuit_Chip_Stemcell.get(64),
-                ItemList.Circuit_Chip_Stemcell.get(64)
+                setStackSize(ItemList.Circuit_Chip_Stemcell.get(64), 64*4)
             )
             .fluidInputs(
                 Materials.ReinforceGlass.getMolten(16 * 16 * 288),
@@ -1179,23 +1110,17 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.UUMatter.getFluid(16 * 250),
                 new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1000 * 16)
             )
-            .itemOutputs(
-                GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 16, 32072)
-            )
-
+            .itemOutputs(ItemList.Circuit_Chip_NeuroCPU.get(16))
             .eut(RECIPE_ZPM)
             .duration(20 * 30 * 12)
             .addTo(MT);
 
-        GT_Values.RA
-            .stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
                 GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32746),
-                ItemList.Circuit_Chip_Biocell.get(64),
-                ItemList.Circuit_Chip_Biocell.get(64),
-                ItemList.Circuit_Chip_Biocell.get(64),
-                ItemList.Circuit_Chip_Biocell.get(64)
+                setStackSize(ItemList.Circuit_Chip_Biocell.get(64), 64*4)
             )
             .fluidInputs(
                 Materials.ReinforceGlass.getMolten(16 * 16 * 288),
@@ -1207,10 +1132,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.UUMatter.getFluid(16 * 500),
                 new FluidStack(FluidRegistry.getFluid("ic2coolant"), 2000 * 16)
             )
-            .itemOutputs(
-                GT_ModHandler.getModItem("gregtech", "gt.metaitem.03", 16, 32077)
-            )
-
+            .itemOutputs(ItemList.Circuit_Chip_BioCPU.get(16))
             .eut(RECIPE_UHV)
             .duration(20 * 30 * 12)
             .addTo(MT);
@@ -1246,7 +1168,6 @@ public class MiracleTopRecipePool implements IRecipePool {
                 MaterialsUEVplus.PrimordialMatter.getFluid(1000 * 114514)
             )
             .itemOutputs(GTCMItemList.ProofOfHeroes.get(1))
-
             .noOptimize()
             .specialValue(13500)
             .eut(RECIPE_MAX)
@@ -1290,7 +1211,6 @@ public class MiracleTopRecipePool implements IRecipePool {
                 .itemOutputs(
                     outStack[i]
                 )
-
                 .eut(RECIPE_UEV)
                 .duration(20)
                 .addTo(MT);

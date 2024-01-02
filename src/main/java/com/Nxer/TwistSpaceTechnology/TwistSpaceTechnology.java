@@ -119,9 +119,6 @@ public class TwistSpaceTechnology {
     public void completeInit(FMLLoadCompleteEvent event) {
         RecipeLoader.loadRecipes();// Load Recipes
         // reflect
-
-        //
-
     }
 
     @Mod.EventHandler
