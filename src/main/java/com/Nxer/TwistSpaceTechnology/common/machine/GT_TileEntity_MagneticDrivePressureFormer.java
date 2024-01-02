@@ -117,6 +117,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         this.glassTier = 0;
         this.coilLevel = HeatingCoilLevel.None;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {

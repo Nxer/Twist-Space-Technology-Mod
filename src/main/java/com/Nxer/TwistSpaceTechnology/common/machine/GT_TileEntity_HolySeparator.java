@@ -29,10 +29,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -43,7 +42,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -54,9 +52,7 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings8;
 import gtPlusPlus.core.block.ModBlocks;
 
-public class GT_TileEntity_HolySeparator
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_HolySeparator>
-    implements IConstructable, ISurvivalConstructable {
+public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEntity_HolySeparator> {
 
     // region Class Constructor
     public GT_TileEntity_HolySeparator(int aID, String aName, String aNameRegional) {
@@ -81,17 +77,22 @@ public class GT_TileEntity_HolySeparator
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
-                setOverclock(piece > Piece_EnablePerfectOverclock_HolySeparator ? 2 : 1, 2);
+                setOverclock(piece >= Piece_EnablePerfectOverclock_HolySeparator ? 2 : 1, 2);
                 return super.process();
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
-    private int getMaxParallelRecipes() {
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return piece >= Piece_EnablePerfectOverclock_HolySeparator;
+    }
+
+    public int getMaxParallelRecipes() {
         return ParallelPerPiece_HolySeparator * this.piece;
     }
 
-    private float getSpeedBonus() {
+    public float getSpeedBonus() {
         return (float) (Math
             .pow(SpeedBonus_MultiplyPerTier_HolySeparator, GT_Utility.getTier(this.getAverageInputVoltage())));
     }
@@ -119,6 +120,7 @@ public class GT_TileEntity_HolySeparator
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         this.piece = 0;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
             return false;
@@ -273,13 +275,13 @@ G -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 2] = EnumChatFormatting.AQUA + "Parallels: "
+        ret[origin.length] = EnumChatFormatting.AQUA + "Parallels: "
             + EnumChatFormatting.GOLD
             + this.getMaxParallelRecipes();
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Speed multiplier: "
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Speed multiplier: "
             + EnumChatFormatting.GOLD
             + this.getSpeedBonus();
-        ret[origin.length] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.piece;
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.piece;
         return ret;
     }
 

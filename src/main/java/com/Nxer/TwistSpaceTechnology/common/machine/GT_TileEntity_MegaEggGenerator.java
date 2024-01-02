@@ -317,15 +317,13 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 5];
-        ret[origin.length - 4] = EnumChatFormatting.AQUA + "Infinity Eggs: "
-            + EnumChatFormatting.GOLD
-            + this.mInfinityEggs;
-        ret[origin.length - 3] = EnumChatFormatting.AQUA + "Dragon Eggs: " + EnumChatFormatting.GOLD + this.mDragonEggs;
-        ret[origin.length - 2] = EnumChatFormatting.AQUA + "Crepper Eggs: "
+        ret[origin.length] = EnumChatFormatting.AQUA + "Infinity Eggs: " + EnumChatFormatting.GOLD + this.mInfinityEggs;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Dragon Eggs: " + EnumChatFormatting.GOLD + this.mDragonEggs;
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Crepper Eggs: "
             + EnumChatFormatting.GOLD
             + this.mCrepperEggs;
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Air Voids: " + EnumChatFormatting.GOLD + this.mAirPosed;
-        ret[origin.length] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.mPieces;
+        ret[origin.length + 3] = EnumChatFormatting.AQUA + "Air Voids: " + EnumChatFormatting.GOLD + this.mAirPosed;
+        ret[origin.length + 4] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.mPieces;
         return ret;
     }
 
