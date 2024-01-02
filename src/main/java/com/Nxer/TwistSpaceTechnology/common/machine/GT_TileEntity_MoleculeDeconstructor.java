@@ -394,13 +394,13 @@ I -> ofFrame...();
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 2] = EnumChatFormatting.AQUA + "Parallels: "
+        ret[origin.length] = EnumChatFormatting.AQUA + "Parallels: "
             + EnumChatFormatting.GOLD
             + this.getMaxParallelRecipes();
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Speed multiplier: "
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Speed multiplier: "
             + EnumChatFormatting.GOLD
             + this.getSpeedBonus();
-        ret[origin.length] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.piece;
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.piece;
         return ret;
     }
 

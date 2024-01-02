@@ -310,11 +310,11 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         mInputBusses.clear();
         tierDimensionField = -1;
         tierTimeField = -1;
         tierStabilisationField = -1;
-        repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         if (tierDimensionField < 0 || tierTimeField < 0 || tierStabilisationField < 0) return false;
         // Only allow and must be 1 input bus

@@ -22,10 +22,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -36,7 +35,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
@@ -47,9 +45,7 @@ import gregtech.common.blocks.GT_Block_Casings8;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.block.ModBlocks;
 
-public class GT_TileEntity_MagneticMixer
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_MagneticMixer>
-    implements IConstructable, ISurvivalConstructable {
+public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEntity_MagneticMixer> {
 
     // region Class Constructor
     public GT_TileEntity_MagneticMixer(int aID, String aName, String aNameRegional) {
@@ -75,6 +71,11 @@ public class GT_TileEntity_MagneticMixer
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
     public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
@@ -91,6 +92,7 @@ public class GT_TileEntity_MagneticMixer
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
