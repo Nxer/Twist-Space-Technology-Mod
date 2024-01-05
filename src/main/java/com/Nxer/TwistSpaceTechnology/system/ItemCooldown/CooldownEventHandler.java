@@ -3,7 +3,8 @@ package com.Nxer.TwistSpaceTechnology.system.ItemCooldown;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import org.lwjgl.opengl.GL11;
@@ -20,7 +21,6 @@ public class CooldownEventHandler {
         if (event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE) return;
 
         Minecraft mc = Minecraft.getMinecraft();
-        ItemCooldownSaver.init(mc.thePlayer);
         ScaledResolution scale = event.resolution;
 
         drawCooldown(mc, scale);
@@ -31,12 +31,19 @@ public class CooldownEventHandler {
         int k = scale.getScaledWidth();
         int l = scale.getScaledHeight();
         if (mc.thePlayer.getCurrentEquippedItem() == null) return;
-        Item holditem = mc.thePlayer.getCurrentEquippedItem()
-            .getItem();
-        if (!(holditem instanceof IItemHasCooldown)) {
+        ItemStack holditem = mc.thePlayer.getCurrentEquippedItem();
+        if (!(holditem.getItem() instanceof IItemHasCooldown)) {
             return;
         }
-        float cooldown = ((IItemHasCooldown) holditem).getCooldown();
+        long cooldown = ((IItemHasCooldown) holditem.getItem()).getCooldown();
+        NBTTagCompound itemNBT = holditem.getTagCompound();
+        long pasttime;
+        if (!itemNBT.hasKey("LastUse")) {
+            pasttime = cooldown;
+        } else {
+            pasttime = mc.theWorld.getWorldInfo()
+                .getWorldTime() - itemNBT.getLong("LastUse");
+        }
         GL11.glColor4f(0.5f, 0.5f, 1f, 1f);
         mc.getTextureManager()
             .bindTexture(Gui.icons);
@@ -46,10 +53,7 @@ public class CooldownEventHandler {
             l - 32 + 3,
             0,
             69,
-            Math.min(
-                (int) (183F
-                    * ((float) Math.max(ItemCooldownSaver.getPastTime(holditem, mc.thePlayer), 0) / (float) cooldown)),
-                182),
+            Math.min((int) (183F * ((float) Math.max(pasttime, 0) / (float) cooldown)), 182),
             5);
 
         GL11.glColor4f(1f, 1f, 1f, 1f);

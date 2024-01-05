@@ -13,13 +13,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.IItemHasCooldown;
-import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.ItemCooldownSaver;
 import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
 
 import cpw.mods.fml.relauncher.Side;
@@ -153,23 +153,28 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
     // endregion
 
     @Override
-    public int getCooldown() {
+    public long getCooldown() {
         return 60;
     }
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer player) {
-        if (!ItemCooldownSaver.isUsable(itemStackIn.getItem(), player)) {
+        NBTTagCompound itemNBT = itemStackIn.getTagCompound();
+        long time = worldIn.getWorldInfo()
+            .getWorldTime();
+        if (!itemNBT.hasKey("LastUse")) {
+            itemNBT.setLong("LastUse", time);
+        } else if (time - itemNBT.getLong("LastUse") < getCooldown()) {
             GT_Utility.sendChatToPlayer(
                 player,
-                "This item has a cooldown of "
-                    + (getCooldown() - ItemCooldownSaver.getPastTime(itemStackIn.getItem(), player)) / 20F
+                "This item has a cooldown of " + (float) (getCooldown() - time + itemNBT.getLong("LastUse")) / 20.0F
                     + 's');
             return itemStackIn;
+        } else {
+            if (worldIn.isRemote) itemNBT.setLong("LastUse", time);
         }
-        // test
+        if (worldIn.isRemote) itemStackIn.writeToNBT(itemNBT);
         TwistSpaceTechnology.LOG.info("Egg lanuched.");
-        ItemCooldownSaver.onUse(itemStackIn.getItem(), player);
         worldIn.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
         if (!worldIn.isRemote) {
