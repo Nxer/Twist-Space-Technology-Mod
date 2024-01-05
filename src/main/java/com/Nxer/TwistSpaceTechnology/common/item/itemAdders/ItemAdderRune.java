@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.item.itemAdders;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +22,6 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.IItemHasCooldown;
 import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
-import com.ibm.icu.util.Calendar;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
