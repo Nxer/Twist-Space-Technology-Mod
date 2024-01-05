@@ -38,12 +38,11 @@ public class CooldownEventHandler {
         long cooldown = ((IItemHasCooldown) holditem.getItem()).getCooldown();
         NBTTagCompound itemNBT = holditem.getTagCompound();
         long pasttime;
-        if (!itemNBT.hasKey("LastUse")) {
-            pasttime = cooldown;
-        } else {
-            pasttime = mc.theWorld.getWorldInfo()
-                .getWorldTime() - itemNBT.getLong("LastUse");
-        }
+        if (itemNBT == null) pasttime = cooldown;
+        else if (!itemNBT.hasKey("LastUse")) pasttime = cooldown;
+        else pasttime = mc.theWorld.getWorldInfo()
+            .getWorldTime() - itemNBT.getLong("LastUse");
+
         GL11.glColor4f(0.5f, 0.5f, 1f, 1f);
         mc.getTextureManager()
             .bindTexture(Gui.icons);

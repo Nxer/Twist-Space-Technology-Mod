@@ -162,6 +162,7 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
         NBTTagCompound itemNBT = itemStackIn.getTagCompound();
         long time = worldIn.getWorldInfo()
             .getWorldTime();
+        if (itemNBT == null) itemNBT = new NBTTagCompound();
         if (!itemNBT.hasKey("LastUse")) {
             itemNBT.setLong("LastUse", time);
         } else if (time - itemNBT.getLong("LastUse") < getCooldown()) {
