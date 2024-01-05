@@ -9,6 +9,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import org.lwjgl.opengl.GL11;
 
+import com.ibm.icu.util.Calendar;
+
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -40,8 +42,8 @@ public class CooldownEventHandler {
         long pasttime;
         if (itemNBT == null) pasttime = cooldown;
         else if (!itemNBT.hasKey("LastUse")) pasttime = cooldown;
-        else pasttime = mc.theWorld.getWorldInfo()
-            .getWorldTime() - itemNBT.getLong("LastUse");
+        else pasttime = Calendar.getInstance()
+            .getTimeInMillis() - itemNBT.getLong("LastUse");
 
         GL11.glColor4f(0.5f, 0.5f, 1f, 1f);
         mc.getTextureManager()

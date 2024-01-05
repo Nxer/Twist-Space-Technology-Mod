@@ -21,6 +21,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.IItemHasCooldown;
 import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
+import com.ibm.icu.util.Calendar;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -52,6 +53,7 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
     public ItemAdderRune(String aName, String aMetaName, CreativeTabs aCreativeTabs) {
         super(aName, aMetaName, aCreativeTabs);
         this.unlocalizedName = aMetaName;
+        this.maxStackSize = 1;
     }
 
     /**
@@ -154,27 +156,30 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
 
     @Override
     public long getCooldown() {
-        return 60;
+        return 2000;
     }
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer player) {
         NBTTagCompound itemNBT = itemStackIn.getTagCompound();
-        long time = worldIn.getWorldInfo()
-            .getWorldTime();
+        long time = Calendar.getInstance()
+            .getTimeInMillis();
         if (itemNBT == null) itemNBT = new NBTTagCompound();
+        TwistSpaceTechnology.LOG.info(itemNBT.toString());
         if (!itemNBT.hasKey("LastUse")) {
             itemNBT.setLong("LastUse", time);
         } else if (time - itemNBT.getLong("LastUse") < getCooldown()) {
+            if (time - itemNBT.getLong("LastUse") < 0) itemNBT.setLong("LastUse", time);
+            itemStackIn.setTagCompound(itemNBT);
             GT_Utility.sendChatToPlayer(
                 player,
-                "This item has a cooldown of " + (float) (getCooldown() - time + itemNBT.getLong("LastUse")) / 20.0F
+                "This item has a cooldown of " + (float) (getCooldown() - time + itemNBT.getLong("LastUse")) / 1000.0F
                     + 's');
             return itemStackIn;
         } else {
-            if (worldIn.isRemote) itemNBT.setLong("LastUse", time);
+            itemNBT.setLong("LastUse", time);
         }
-        if (worldIn.isRemote) itemStackIn.setTagCompound(itemNBT);
+        itemStackIn.setTagCompound(itemNBT);
         TwistSpaceTechnology.LOG.info("Egg lanuched.");
         worldIn.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
