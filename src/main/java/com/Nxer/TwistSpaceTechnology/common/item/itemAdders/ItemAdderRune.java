@@ -174,7 +174,7 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
         } else {
             if (worldIn.isRemote) itemNBT.setLong("LastUse", time);
         }
-        if (worldIn.isRemote) itemStackIn.writeToNBT(itemNBT);
+        if (worldIn.isRemote) itemStackIn.setTagCompound(itemNBT);
         TwistSpaceTechnology.LOG.info("Egg lanuched.");
         worldIn.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
