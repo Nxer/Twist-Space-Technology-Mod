@@ -1,14 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.command;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 
-import com.Nxer.TwistSpaceTechnology.combat.ArmorEventHandler;
-import com.Nxer.TwistSpaceTechnology.combat.BasicPlayerExtendedProperties;
 import com.Nxer.TwistSpaceTechnology.combat.PlayerExtendedProperties;
 import com.Nxer.TwistSpaceTechnology.combat.StatsDefination;
 
@@ -26,16 +24,27 @@ public class CombatRework_Command extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        ArmorEventHandler.INSTANCE.updatePlayerStats(getCommandSenderAsPlayer(sender));
+        PlayerExtendedProperties stats = (PlayerExtendedProperties) getCommandSenderAsPlayer(sender)
+            .getExtendedProperties("COMBAT_STATS");
+
         if (args.length < 1) {
-            Map<String, Integer> BasicStats = BasicPlayerExtendedProperties.getStats(getCommandSenderAsPlayer(sender));
-            Map<String, Integer> Stats = PlayerExtendedProperties.getStats(getCommandSenderAsPlayer(sender));
             sender.addChatMessage(new ChatComponentText("Basic Stats"));
-            for (String statName : BasicStats.keySet())
-                sender.addChatMessage(new ChatComponentText(statName + ':' + BasicStats.get(statName)));
+            for (String statName : stats.CombatStats.keySet())
+                sender.addChatMessage(new ChatComponentText(statName + ':' + stats.CombatStats.get(statName)));
             sender.addChatMessage(new ChatComponentText("§eFinal Stats"));
-            for (String statName : Stats.keySet())
-                sender.addChatMessage(new ChatComponentText("§e" + statName + ':' + Stats.get(statName)));
+            sender.addChatMessage(new ChatComponentText("§e" + "Strength" + ':' + stats.getStrength()));
+            sender.addChatMessage(new ChatComponentText("§e" + "Defence" + ':' + stats.getDefence()));
+            sender.addChatMessage(new ChatComponentText("§e" + "Intelligence" + ':' + stats.getIntelligence()));
+            sender.addChatMessage(new ChatComponentText("§e" + "CritChance" + ':' + stats.getCritChance()));
+            sender.addChatMessage(new ChatComponentText("§e" + "CritDamage" + ':' + stats.getCritDamage()));
+            sender.addChatMessage(new ChatComponentText("§e" + "Resistance" + ':' + stats.getResistance()));
+            List<ItemStack> gears = stats.getGears();
+            for (ItemStack gear : gears) {
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        gear.getEnchantmentTagList()
+                            .toString()));
+            }
             return;
         }
 
@@ -44,20 +53,12 @@ public class CombatRework_Command extends CommandBase {
                 TST_CommandMethods.INSTANCE.printHelp(sender);
                 break;
             }
-            case "reset": {
-                BasicPlayerExtendedProperties
-                    .from(getCommandSenderAsPlayer(sender)).CombatStats = new HashMap<String, Integer>();
-                PlayerExtendedProperties
-                    .from(getCommandSenderAsPlayer(sender)).CombatStats = new HashMap<String, Integer>();
-                break;
-            }
             case "set": {
                 if (args.length != 3 || !args[2].matches("[+-]?\\d+") || !StatsDefination.AllStats.contains(args[1])) {
                     TST_CommandMethods.INSTANCE.printHelp(sender);
                     break;
                 }
-                BasicPlayerExtendedProperties
-                    .setPlayerStat(getCommandSenderAsPlayer(sender), args[1], Integer.parseInt(args[2]));
+                stats.setPlayerStat(args[1], Integer.parseInt(args[2]));
                 break;
             }
             default: {

@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.item.itemAdders;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.Set;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.item.Item;
@@ -138,6 +138,17 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
         }
     }
 
+    @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int p_77663_4_, boolean p_77663_5_) {
+        NBTTagCompound itemNBT = stack.getTagCompound();
+        if (itemNBT == null) itemNBT = new NBTTagCompound();
+        if (!itemNBT.hasKey("CurrentCooldown")) itemNBT.setLong("CurrentCooldown", 0);
+        if (itemNBT.getLong("CurrentCooldown") > 0) {
+            itemNBT.setLong("CurrentCooldown", itemNBT.getLong("CurrentCooldown") - 1);
+            stack.setTagCompound(itemNBT);
+        }
+    }
+
     /**
      * Override this method to show all ItemStack of MetaItem01.
      *
@@ -156,28 +167,23 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
 
     @Override
     public long getCooldown() {
-        return 2000;
+        return 60;
     }
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer player) {
         NBTTagCompound itemNBT = itemStackIn.getTagCompound();
-        long time = Calendar.getInstance()
-            .getTimeInMillis();
         if (itemNBT == null) itemNBT = new NBTTagCompound();
         TwistSpaceTechnology.LOG.info(itemNBT.toString());
-        if (!itemNBT.hasKey("LastUse")) {
-            itemNBT.setLong("LastUse", time);
-        } else if (time - itemNBT.getLong("LastUse") < getCooldown()) {
-            if (time - itemNBT.getLong("LastUse") < 0) itemNBT.setLong("LastUse", time);
-            itemStackIn.setTagCompound(itemNBT);
+        if (!itemNBT.hasKey("CurrentCooldown")) {
+            itemNBT.setLong("CurrentCooldown", getCooldown());
+        } else if (itemNBT.getLong("CurrentCooldown") > 0) {
             GT_Utility.sendChatToPlayer(
                 player,
-                "This item has a cooldown of " + (float) (getCooldown() - time + itemNBT.getLong("LastUse")) / 1000.0F
-                    + 's');
+                "This item has a cooldown of " + (float) (itemNBT.getLong("CurrentCooldown")) / 20.0F + 's');
             return itemStackIn;
         } else {
-            itemNBT.setLong("LastUse", time);
+            itemNBT.setLong("CurrentCooldown", getCooldown());
         }
         itemStackIn.setTagCompound(itemNBT);
         TwistSpaceTechnology.LOG.info("Egg lanuched.");

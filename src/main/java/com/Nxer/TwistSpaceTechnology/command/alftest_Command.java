@@ -4,7 +4,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.world.Teleporter;
 
-import com.Nxer.TwistSpaceTechnology.combat.ArmorEventHandler;
 import com.Nxer.world.TestUseOnly;
 import com.Nxer.world.WorldStats;
 
@@ -22,7 +21,6 @@ public class alftest_Command extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        ArmorEventHandler.INSTANCE.updatePlayerStats(getCommandSenderAsPlayer(sender));
         if (args.length == 0) {
             if (getCommandSenderAsPlayer(sender).dimension != WorldStats.dimensionID)
                 getCommandSenderAsPlayer(sender).mcServer.getConfigurationManager()

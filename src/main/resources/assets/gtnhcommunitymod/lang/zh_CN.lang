@@ -684,3 +684,5 @@ Tooltip_MegaEggGenerator_M=不需要维护仓
 Tooltip_MegaEggGenerator_D=任何魔法机械外壳
 Tooltip_MegaEggGenerator_05=注意它的预热过程非常慢，大约需要500秒.
 NameMegaEggGenerator=抽象之塔
+itemGroup.itemGroup.TSTGears=TST装备
+item.combatrework.swordWooden.name=木剑

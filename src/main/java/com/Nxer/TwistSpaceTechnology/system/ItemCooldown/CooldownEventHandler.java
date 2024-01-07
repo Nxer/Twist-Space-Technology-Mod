@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.system.ItemCooldown;
 
-import java.util.Calendar;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -39,11 +37,10 @@ public class CooldownEventHandler {
         }
         long cooldown = ((IItemHasCooldown) holditem.getItem()).getCooldown();
         NBTTagCompound itemNBT = holditem.getTagCompound();
-        long pasttime;
-        if (itemNBT == null) pasttime = cooldown;
-        else if (!itemNBT.hasKey("LastUse")) pasttime = cooldown;
-        else pasttime = Calendar.getInstance()
-            .getTimeInMillis() - itemNBT.getLong("LastUse");
+        long currentcooldown;
+        if (itemNBT == null) currentcooldown = 0;
+        else if (!itemNBT.hasKey("CurrentCooldown")) currentcooldown = 0;
+        else currentcooldown = itemNBT.getLong("CurrentCooldown");
 
         GL11.glColor4f(0.5f, 0.5f, 1f, 1f);
         mc.getTextureManager()
@@ -54,7 +51,7 @@ public class CooldownEventHandler {
             l - 32 + 3,
             0,
             69,
-            Math.min((int) (183F * ((float) Math.max(pasttime, 0) / (float) cooldown)), 182),
+            Math.min((int) (183F * ((float) Math.max(cooldown - currentcooldown, 0) / (float) cooldown)), 182),
             5);
 
         GL11.glColor4f(1f, 1f, 1f, 1f);

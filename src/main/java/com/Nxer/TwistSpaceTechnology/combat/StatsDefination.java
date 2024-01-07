@@ -5,18 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
-
-import gregtech.api.util.GT_Utility;
-
 public class StatsDefination {
 
-    public final static String[] BaseStats = { "Defence", "Strength", "Intelligence", "CritChance", "CritDamage",
-        "Resistance" };
-    public final static String[] DamageStats = { "BaseDamage", "BaseDamageMultipiler", "MeleeDamageMultipiler",
-        "RangeDamageMultipiler", "MagicDamageMultipiler" };
     public final static ArrayList<String> AllStats = new ArrayList<String>(
         Arrays.asList(
             "Defence",
@@ -25,7 +15,6 @@ public class StatsDefination {
             "CritChance",
             "CritDamage",
             "Resistance",
-            "BaseDamage",
             "BaseDamageMultipiler",
             "MeleeDamageMultipiler",
             "RangeDamageMultipiler",
@@ -110,41 +99,4 @@ public class StatsDefination {
         ArmorStats.put("item.scepterTwilight", new int[] { 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
         ArmorStats.put("item.scepterLifeDrain", new int[] { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
     }
-
-    public static void printWeaponStats(ItemStack weapon, EntityPlayer pl) {
-        String itemname = weapon.getUnlocalizedName();
-        if (!ArmorStats.containsKey(itemname)) {
-            GT_Utility.sendChatToPlayer(pl, "Damage: +0");
-            return;
-        }
-        int[] itemstats = ArmorStats.get(itemname);
-        GT_Utility.sendChatToPlayer(pl, "Damage: +" + itemstats[0]);
-        if (itemstats[2] != 0) GT_Utility.sendChatToPlayer(pl, "Strength: +" + itemstats[2]);
-        if (itemstats[3] != 0) GT_Utility.sendChatToPlayer(pl, "Intelligence: +" + itemstats[3]);
-        if (itemstats[4] != 0) GT_Utility.sendChatToPlayer(pl, "Crit Chance: +" + itemstats[4]);
-        if (itemstats[5] != 0) GT_Utility.sendChatToPlayer(pl, "Crit Damage: +" + itemstats[5]);
-        if (itemstats[1] != 0) GT_Utility.sendChatToPlayer(pl, "Defence: +" + itemstats[1]);
-        if (itemstats[6] != 0) GT_Utility.sendChatToPlayer(pl, "Resistance: +" + itemstats[6]);
-    }
-
-    public static void printArmorStats(ItemStack armor, EntityPlayer pl) {
-        String itemname = armor.getUnlocalizedName();
-        int defence = 0;
-        if (!ArmorStats.containsKey(itemname)) {
-            if (armor.getItem() instanceof ItemArmor) {
-                defence = ((ItemArmor) armor.getItem()).getArmorMaterial()
-                    .getDamageReductionAmount(((ItemArmor) armor.getItem()).armorType) * 5;
-            }
-            GT_Utility.sendChatToPlayer(pl, "Defence: +" + defence);
-            return;
-        }
-        int[] itemstats = ArmorStats.get(itemname);
-        GT_Utility.sendChatToPlayer(pl, "Defence: +" + itemstats[1]);
-        if (itemstats[2] != 0) GT_Utility.sendChatToPlayer(pl, "Strength: +" + itemstats[2]);
-        if (itemstats[3] != 0) GT_Utility.sendChatToPlayer(pl, "Intelligence: +" + itemstats[3]);
-        if (itemstats[4] != 0) GT_Utility.sendChatToPlayer(pl, "Crit Chance: +" + itemstats[4]);
-        if (itemstats[5] != 0) GT_Utility.sendChatToPlayer(pl, "Crit Damage: +" + itemstats[5]);
-        if (itemstats[6] != 0) GT_Utility.sendChatToPlayer(pl, "Resistance: +" + itemstats[6]);
-    }
-
 }

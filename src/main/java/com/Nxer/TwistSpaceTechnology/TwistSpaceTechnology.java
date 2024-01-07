@@ -8,7 +8,9 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.devTools.PathHelper;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
@@ -91,6 +93,9 @@ public class TwistSpaceTechnology {
 
         proxy.preInit(event);
         MaterialLoader.load();// Load MaterialPool
+        if (Config.activateCombatStats) {
+            ItemRegister.registry();
+        }
     }
 
     @Mod.EventHandler
