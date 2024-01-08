@@ -1,4 +1,4 @@
-//version: 1702141377
+//version: 1704650211
 /*
  DO NOT CHANGE THIS FILE!
  Also, you may replace this file at any time if there is an update available.
@@ -31,8 +31,7 @@ buildscript {
         maven {
             // GTNH RetroFuturaGradle and ASM Fork
             name "GTNH Maven"
-            url "http://jenkins.usrv.eu:8081/nexus/content/groups/public/"
-            allowInsecureProtocol = true
+            url "https://nexus.gtnewhorizons.com/repository/public/"
         }
         mavenLocal()
     }
@@ -49,12 +48,12 @@ plugins {
     id 'org.ajoberstar.grgit' version '4.1.1' // 4.1.1 is the last jvm8 supporting version, unused, available for addon.gradle
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
     id 'com.palantir.git-version' version '3.0.0' apply false
-    id 'de.undercouch.download' version '5.4.0'
+    id 'de.undercouch.download' version '5.5.0'
     id 'com.github.gmazzo.buildconfig' version '3.1.0' apply false // Unused, available for addon.gradle
     id 'com.diffplug.spotless' version '6.13.0' apply false // 6.13.0 is the last jvm8 supporting version
-    id 'com.modrinth.minotaur' version '2.8.7' apply false
+    id 'com.modrinth.minotaur' version '2.+' apply false
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
-    id 'com.gtnewhorizons.retrofuturagradle' version '1.3.26'
+    id 'com.gtnewhorizons.retrofuturagradle' version '1.3.27'
 }
 
 print("You might want to check out './gradlew :faq' if your build fails.\n")
@@ -118,7 +117,7 @@ propertyDefaultIfUnset("forceEnableMixins", false)
 propertyDefaultIfUnset("channel", "stable")
 propertyDefaultIfUnset("mappingsVersion", "12")
 propertyDefaultIfUnset("usesMavenPublishing", true)
-propertyDefaultIfUnset("mavenPublishUrl", "http://jenkins.usrv.eu:8081/nexus/content/repositories/releases")
+propertyDefaultIfUnset("mavenPublishUrl", "https://nexus.gtnewhorizons.com/repository/releases/")
 propertyDefaultIfUnset("modrinthProjectId", "")
 propertyDefaultIfUnset("modrinthRelations", "")
 propertyDefaultIfUnset("curseForgeProjectId", "")
@@ -452,8 +451,6 @@ minecraft {
 
     // Enable assertions in the current mod
     extraRunJvmArguments.add("-ea:${modGroup}")
-    extraRunJvmArguments.add("-Xmx16G")
-    extraRunJvmArguments.add("-Xms16G")
 
     if (usesMixins.toBoolean() || forceEnableMixins.toBoolean()) {
         if (usesMixinDebug.toBoolean()) {
@@ -575,13 +572,15 @@ afterEvaluate {
 
 repositories {
     maven {
-        name 'Overmind forge repo mirror'
-        url 'https://gregtech.overminddl1.com/'
+        name = "GTNH Maven"
+        url = "https://nexus.gtnewhorizons.com/repository/public/"
+        // Links for convenience:
+        // Simple HTML browsing: https://nexus.gtnewhorizons.com/service/rest/repository/browse/releases/
+        // Rich web UI browsing: https://nexus.gtnewhorizons.com/#browse/browse:releases
     }
     maven {
-        name = "GTNH Maven"
-        url = "http://jenkins.usrv.eu:8081/nexus/content/groups/public/"
-        allowInsecureProtocol = true
+        name 'Overmind forge repo mirror'
+        url 'https://gregtech.overminddl1.com/'
     }
     maven {
         name 'sonatype'
@@ -615,7 +614,7 @@ repositories {
         }
         maven {
             name = "ic2"
-            url = getURL("https://maven.ic2.player.to/", "https://maven2.ic2.player.to/")
+            url = getURL("https://maven2.ic2.player.to/", "https://maven.ic2.player.to/")
             content {
                 includeGroup "net.industrial-craft"
             }
@@ -962,8 +961,7 @@ if (usesShadowedDependencies.toBoolean()) {
     configurations.runtimeElements.outgoing.artifact(tasks.named("shadowJar", ShadowJar))
     configurations.apiElements.outgoing.artifact(tasks.named("shadowJar", ShadowJar))
     tasks.named("jar", Jar) {
-        enabled = false
-        finalizedBy(tasks.shadowJar)
+        archiveClassifier.set('dev-preshadow')
     }
     tasks.named("reobfJar", ReobfuscatedJar) {
         inputJar.set(tasks.named("shadowJar", ShadowJar).flatMap({it.archiveFile}))
@@ -971,11 +969,6 @@ if (usesShadowedDependencies.toBoolean()) {
     AdhocComponentWithVariants javaComponent = (AdhocComponentWithVariants) project.components.findByName("java")
     javaComponent.withVariantsFromConfiguration(configurations.shadowRuntimeElements) {
         skip()
-    }
-    for (runTask in ["runClient", "runServer", "runClient17", "runServer17"]) {
-        tasks.named(runTask).configure {
-            dependsOn("shadowJar")
-        }
     }
 }
 ext.publishableDevJar = usesShadowedDependencies.toBoolean() ? tasks.shadowJar : tasks.jar
@@ -1180,7 +1173,7 @@ publishing {
         if (usesMavenPublishing.toBoolean() && System.getenv("MAVEN_USER") != null) {
             maven {
                 url = mavenPublishUrl
-                allowInsecureProtocol = mavenPublishUrl.startsWith("http://") // Mostly for the GTNH maven
+                allowInsecureProtocol = mavenPublishUrl.startsWith("http://")
                 credentials {
                     username = System.getenv("MAVEN_USER") ?: "NONE"
                     password = System.getenv("MAVEN_PASSWORD") ?: "NONE"
