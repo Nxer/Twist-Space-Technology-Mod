@@ -1,6 +1,9 @@
 package com.Nxer.TwistSpaceTechnology;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
+import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.CooldownEventHandler;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 
@@ -12,5 +15,6 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
         new ArtificialStarRender();
+        MinecraftForge.EVENT_BUS.register(new CooldownEventHandler());// load cooldown HUD
     }
 }

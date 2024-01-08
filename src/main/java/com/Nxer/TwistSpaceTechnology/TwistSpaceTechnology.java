@@ -5,8 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServe
 import java.util.Collection;
 import java.util.HashSet;
 
-import net.minecraftforge.common.MinecraftForge;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +16,6 @@ import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
-import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.CooldownEventHandler;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 
 import cpw.mods.fml.common.Mod;
@@ -105,7 +102,6 @@ public class TwistSpaceTechnology {
         proxy.init(event);
         MachineLoader.loadMachines();// Load Machines
         NEIHandler.IMCSender();// NEI reg
-        MinecraftForge.EVENT_BUS.register(new CooldownEventHandler());// load cooldown HUD
         // dimension provider
         // *unfinished */ DimensionManager.registerProviderType(WorldStats.dimensionProviderID,
         // WorldProviderAlfheim.class, false);
