@@ -8,7 +8,9 @@ import java.util.HashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.devTools.PathHelper;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
@@ -89,6 +91,9 @@ public class TwistSpaceTechnology {
 
         proxy.preInit(event);
         MaterialLoader.load();// Load MaterialPool
+        if (Config.activateCombatStats) {
+            ItemRegister.registry();
+        }
     }
 
     @Mod.EventHandler
@@ -97,7 +102,11 @@ public class TwistSpaceTechnology {
         proxy.init(event);
         MachineLoader.loadMachines();// Load Machines
         NEIHandler.IMCSender();// NEI reg
-
+        // dimension provider
+        // *unfinished */ DimensionManager.registerProviderType(WorldStats.dimensionProviderID,
+        // WorldProviderAlfheim.class, false);
+        // enter biomes into dictionary
+        // *unfinished */ BiomeBaseAlfheim.registerWithBiomeDictionary();
     }
 
     @Mod.EventHandler
@@ -110,6 +119,8 @@ public class TwistSpaceTechnology {
 
         CropLoader.register();
         CropLoader.registerBaseSeed();
+        // dimension provider
+        // *unfinished */ DimensionManager.registerDimension(WorldStats.dimensionID, WorldStats.dimensionProviderID);
         // TwistSpaceTechnology.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
     }
 

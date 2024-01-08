@@ -1,98 +1,135 @@
 package com.Nxer.TwistSpaceTechnology.combat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
+import com.Nxer.TwistSpaceTechnology.combat.items.ICombatGear;
+
 public final class PlayerExtendedProperties implements IExtendedEntityProperties {
 
-    public static final PlayerExtendedProperties instance = new PlayerExtendedProperties();
-    public Map<String, Integer> CombatStats = new HashMap<String, Integer>();
+    public Map<String, Float> CombatStats = new HashMap<String, Float>();
+    private final EntityPlayer player;
 
-    public PlayerExtendedProperties() {
-        for (String name : StatsDefination.BaseStats) {
-            CombatStats.put(name, 0);
+    public PlayerExtendedProperties(EntityPlayer pl) {
+        for (String name : StatsDefination.AllStats) {
+            CombatStats.put(name, 0F);
         }
-        for (String name : StatsDefination.DamageStats) CombatStats.put(name, 0);
+        player = pl;
     }
 
     @Override
     public void saveNBTData(NBTTagCompound compound) {
-        for (String stat : CombatStats.keySet()) {
-            compound.setInteger(stat, CombatStats.get(stat));
+        NBTTagCompound stats = new NBTTagCompound();
+        for (String stat : StatsDefination.AllStats) {
+            stats.setFloat(stat, CombatStats.get(stat));
         }
+        compound.setTag("CombatStats", stats);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
-        for (String stat : StatsDefination.BaseStats) {
-            CombatStats.put(stat, compound.getInteger(stat));
-        }
-        for (String stat : StatsDefination.DamageStats) {
-            CombatStats.put(stat, compound.getInteger(stat));
+        NBTTagCompound stats = (NBTTagCompound) compound.getTag("CombatStats");
+        for (String stat : StatsDefination.AllStats) {
+            CombatStats.put(stat, stats.getFloat(stat));
         }
     }
 
     @Override
-    public void init(Entity entity, World world) {
+    public void init(Entity entity, World world) {}
 
+    public void setPlayerStat(String statName, float value) {
+        CombatStats.put(statName, value);
     }
 
-    public static PlayerExtendedProperties from(EntityPlayer player) {
-        return ((PlayerExtendedProperties) player.getExtendedProperties("COMBAT_STATS"));
+    public List<ItemStack> getGears() {
+        List<ItemStack> gears = new ArrayList<ItemStack>();
+        gears.add(player.getCurrentArmor(0));
+        gears.add(player.getCurrentArmor(1));
+        gears.add(player.getCurrentArmor(2));
+        gears.add(player.getCurrentArmor(3));
+        gears.add(player.getCurrentEquippedItem());
+        gears.removeIf(Objects::isNull);
+        return gears;
     }
 
-    public static Map<String, Integer> getStats(EntityPlayer player) {
-        return from(player).CombatStats;
+    public float getStrength() {
+        float value = CombatStats.get("Strength");
+        List<ItemStack> gears = getGears();
+        for (ItemStack gear : gears) {
+            if (gear.getItem() instanceof ICombatGear) value += ((ICombatGear) gear.getItem()).getStrength();
+        }
+        return value;
     }
 
-    public static Integer getStat(EntityPlayer player, String statName) {
-        return from(player).CombatStats.get(statName);
+    public float getDefence() {
+        float value = CombatStats.get("Defence");
+        List<ItemStack> gears = getGears();
+        for (ItemStack gear : gears) {
+            if (gear.getItem() instanceof ICombatGear) value += ((ICombatGear) gear.getItem()).getDefence();
+        }
+        return value;
     }
 
-    public static void setPlayerStat(EntityPlayer player, String statName, int value) {
-        from(player).CombatStats.put(statName, value);
+    public float getIntelligence() {
+        float value = CombatStats.get("Intelligence");
+        List<ItemStack> gears = getGears();
+        for (ItemStack gear : gears) {
+            if (gear.getItem() instanceof ICombatGear) value += ((ICombatGear) gear.getItem()).getIntelligence();
+        }
+        return value;
     }
 
-    public static void addBonusPlayerStat(EntityPlayer player, String statName, int value) {
-        Map<String, Integer> BasicStats = PlayerExtendedProperties.getStats(player);
-        from(player).CombatStats.put(statName, value + BasicStats.get(statName));
+    public float getResistance() {
+        float value = CombatStats.get("Resistance");
+        List<ItemStack> gears = getGears();
+        for (ItemStack gear : gears) {
+            if (gear.getItem() instanceof ICombatGear) value += ((ICombatGear) gear.getItem()).getResistance();
+        }
+        return value;
     }
 
-    public static void setPlayerStats(EntityPlayer player, int aBaseDamage, int aDefence, int aStrength,
-        int aIntelligence, int aCritChance, int aCritDamage, int aResistance, int aBaseDamageMultipiler,
-        int aMeleeDamageMultipiler, int aRangeDamageMultipiler, int aMagicDamageMultipiler) {
-        from(player).CombatStats.put("BaseDamage", aBaseDamage);
-        from(player).CombatStats.put("Defence", aDefence);
-        from(player).CombatStats.put("Strength", aStrength);
-        from(player).CombatStats.put("Intelligence", aIntelligence);
-        from(player).CombatStats.put("CritChance", aCritChance);
-        from(player).CombatStats.put("CritDamage", aCritDamage);
-        from(player).CombatStats.put("Resistance", aResistance);
-        from(player).CombatStats.put("BaseDamageMultipiler", aBaseDamageMultipiler);
-        from(player).CombatStats.put("MeleeDamageMultipiler", aMeleeDamageMultipiler);
-        from(player).CombatStats.put("RangeDamageMultipiler", aRangeDamageMultipiler);
-        from(player).CombatStats.put("MagicDamageMultipiler", aMagicDamageMultipiler);
+    public float getCritChance() {
+        float value = CombatStats.get("CritChance");
+        List<ItemStack> gears = getGears();
+        for (ItemStack gear : gears) {
+            if (gear.getItem() instanceof ICombatGear) value += ((ICombatGear) gear.getItem()).getCritChance();
+        }
+        return value;
     }
 
-    public static void addBonusPlayerStats(EntityPlayer player, int[] a) {
-
-        Map<String, Integer> BasicStats = PlayerExtendedProperties.getStats(player);
-        from(player).CombatStats.put("BaseDamage", a[0] + BasicStats.get("BaseDamage"));
-        from(player).CombatStats.put("Defence", a[1] + BasicStats.get("Defence"));
-        from(player).CombatStats.put("Strength", a[2] + BasicStats.get("Strength"));
-        from(player).CombatStats.put("Intelligence", a[3] + BasicStats.get("Intelligence"));
-        from(player).CombatStats.put("CritChance", a[4] + BasicStats.get("CritChance"));
-        from(player).CombatStats.put("CritDamage", a[5] + BasicStats.get("CritDamage"));
-        from(player).CombatStats.put("Resistance", a[6] + BasicStats.get("Resistance"));
-        from(player).CombatStats.put("BaseDamageMultipiler", a[7] + BasicStats.get("BaseDamageMultipiler"));
-        from(player).CombatStats.put("MeleeDamageMultipiler", a[8] + BasicStats.get("MeleeDamageMultipiler"));
-        from(player).CombatStats.put("RangeDamageMultipiler", a[9] + BasicStats.get("RangeDamageMultipiler"));
-        from(player).CombatStats.put("MagicDamageMultipiler", a[10] + BasicStats.get("MagicDamageMultipiler"));
+    public float getCritDamage() {
+        float value = CombatStats.get("CritDamage");
+        List<ItemStack> gears = getGears();
+        for (ItemStack gear : gears) {
+            if (gear.getItem() instanceof ICombatGear) value += ((ICombatGear) gear.getItem()).getCritDamage();
+        }
+        return value;
     }
+
+    public float getRangeDamageMultipiler() {
+        return CombatStats.get("RangeDamageMultipiler");
+    }
+
+    public float getMeleeDamageMultipiler() {
+        return CombatStats.get("MeleeDamageMultipiler");
+    }
+
+    public float getMagicDamageMultipiler() {
+        return CombatStats.get("MagicDamageMultipiler");
+    }
+
+    public float getBaseDamageMultipiler() {
+        return CombatStats.get("BaseDamageMultipiler");
+    }
+
 }

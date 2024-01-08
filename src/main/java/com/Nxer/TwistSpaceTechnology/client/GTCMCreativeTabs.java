@@ -24,6 +24,14 @@ public class GTCMCreativeTabs {
             return BasicItems.MetaItem01;
         }
     };
+    public static final CreativeTabs tabGears = new CreativeTabs(texter("TSTGears", "itemGroup.TSTGears")) {
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Item getTabIconItem() {
+            return BasicItems.MetaItem01;
+        }
+    };
 
     /**
      * Creative Tab for MetaBlock01
