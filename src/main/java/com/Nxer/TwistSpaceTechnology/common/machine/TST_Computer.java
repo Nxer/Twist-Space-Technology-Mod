@@ -50,6 +50,7 @@ import com.github.technus.tectech.thing.metaTileEntity.multi.base.render.TT_Rend
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import com.gtnewhorizon.structurelib.util.Vec3Impl;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
@@ -1345,6 +1346,12 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         structureBuild_EM(MAIN, offsetX, offsetY, offsetZ, stackSize, hintsOnly);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivialBuildPiece(MAIN, stackSize, offsetX, offsetY, offsetZ, elementBudget, env, false, true);
     }
 
     @Override

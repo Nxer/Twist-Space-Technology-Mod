@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_AdvancedMegaOilCracker;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_AdvancedMegaOilCracker;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_AdvancedMegaOilCracker;
+import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static gregtech.api.enums.GT_HatchElement.Energy;
@@ -21,6 +22,7 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -113,6 +115,18 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         return Parallel_AdvancedMegaOilCracker;
     }
 
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = EnumChatFormatting.AQUA + texter("Glass Tier", "MachineInfoData.GlassTier")
+            + ": "
+            + EnumChatFormatting.GOLD
+            + this.glassTier;
+        return ret;
+    }
+
     // endregion
 
     // region Structure
@@ -152,6 +166,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         this.glassTier = 0;
         clearHatches();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (this.glassTier <= 0) return false;
         this.euModifier = 1F / (coilLevel.getTier() + 1);
         return true;
     }

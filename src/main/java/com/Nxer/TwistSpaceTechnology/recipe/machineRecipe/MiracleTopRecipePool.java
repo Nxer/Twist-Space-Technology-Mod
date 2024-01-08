@@ -1156,7 +1156,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 21),
                 GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 17),
                 ItemList.ZPM6.get(64),
-                GTCMItemList.ArtificialStar.get(64)
+                GTCMItemList.IndistinctTentacle.get(64)
             )
             .fluidInputs(
                 MaterialsUEVplus.Time.getMolten(1000 * 114514),

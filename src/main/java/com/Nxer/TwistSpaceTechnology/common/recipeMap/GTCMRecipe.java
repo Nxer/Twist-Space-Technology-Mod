@@ -159,8 +159,8 @@ public class GTCMRecipe {
     // false,
     // true);
 
-    public static final RecipeMap<RecipeMapBackend> PreciseHighEnergyPhotonicQuantumMasterRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes")
+    public static final RecipeMap<TST_RecipeMapBackend> PreciseHighEnergyPhotonicQuantumMasterRecipes = RecipeMapBuilder
+        .of("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 16)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
@@ -190,8 +190,8 @@ public class GTCMRecipe {
     // false,
     // true);
 
-    public static final RecipeMap<RecipeMapBackend> MiracleTopRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.MiracleTopRecipes")
+    public static final RecipeMap<TST_RecipeMapBackend> MiracleTopRecipes = RecipeMapBuilder
+        .of("gtcm.recipe.MiracleTopRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 4)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)

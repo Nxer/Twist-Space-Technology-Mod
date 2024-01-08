@@ -123,7 +123,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         this.fieldGeneratorTier = 0;
         this.glassTier = 0;
         boolean sign = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
-        if (this.fieldGeneratorTier == 0) {
+        if (this.fieldGeneratorTier == 0 || this.glassTier <= 0) {
             return false;
         }
         if (glassTier < 12) {

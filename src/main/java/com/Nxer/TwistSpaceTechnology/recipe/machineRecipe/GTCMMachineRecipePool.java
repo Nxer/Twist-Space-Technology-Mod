@@ -1510,8 +1510,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 setStackSize(GTCMItemList.SpaceWarper.get(64),128),
 
                 setStackSize(GTCMItemList.GravitationalLens.get(64),128),
-                CustomItemList.QuantumCircuit.get(64),
-                setStackSize(eM_Ultimate_Containment_Advanced.get(64),192)
+                setStackSize(CustomItemList.QuantumCircuit.get(1),128),
+                setStackSize(eM_Ultimate_Containment_Advanced.get(64),128)
             )
             .fluidInputs(
                 MaterialsUEVplus.SpaceTime.getMolten(144*524288),
