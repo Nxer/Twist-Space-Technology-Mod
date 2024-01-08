@@ -1,8 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.*;
+import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.BlockNuclearReactor.NuclearReactorBlockMeta;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStar;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.BlockNuclearReactor;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
@@ -10,6 +13,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStatio
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
+import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -31,7 +35,12 @@ public class BlockRegister {
             SpaceStationAntiGravityBlock,
             SpaceStationAntiGravityCasingItemBlock.class,
             SpaceStationAntiGravityBlock.getUnlocalizedName());
-
+        GameRegistry.registerBlock(
+            NuclearReactorBlock,
+            BlockNuclearReactor.innerItemBlock.class,
+            NuclearReactorBlock.getUnlocalizedName());
+        BlockStar = new BlockStar();
+        GameRegistry.registerTileEntity(TileStar.class, "StarRender");
     }
 
     public static void registryBlockContainers() {
@@ -138,6 +147,10 @@ public class BlockRegister {
             GTCMItemList.SpaceStationAntiGravityBlockMAX.set(
                 SpaceStationAntiGravityCasing
                     .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock MAX Tier", 13));
+            GTCMItemList.NuclearReactorStructure0.set(NuclearReactorBlockMeta("Nuclear Reactor structure block0", 0));
+            GTCMItemList.NuclearReactorStructure1.set(NuclearReactorBlockMeta("Nuclear Reactor structure block1", 1));
+            GTCMItemList.NuclearReactorStructure2.set(NuclearReactorBlockMeta("Nuclear Reactor structure block2", 2));
+            GTCMItemList.NuclearReactorStructure3.set(NuclearReactorBlockMeta("Nuclear Reactor structure block3", 3));
         }
     }
 

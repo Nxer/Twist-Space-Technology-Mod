@@ -606,7 +606,9 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
                 }
             }
         }
-
+        if (ironAmount == 0 && wroughtIronAmount == 0) {
+            return CheckRecipeResultRegistry.NO_RECIPE;
+        }
         // Calculate fuel efficiency here.
         //
         // coal amount is considered as (original amount * fuelEfficiency)

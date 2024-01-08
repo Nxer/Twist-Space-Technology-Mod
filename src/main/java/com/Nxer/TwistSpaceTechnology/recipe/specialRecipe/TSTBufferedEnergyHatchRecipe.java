@@ -53,7 +53,7 @@ public class TSTBufferedEnergyHatchRecipe implements IRecipePool {
         new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 1 },
         new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 1 },
         new Object[] { OrePrefixes.circuit.get(Materials.Bio), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Nano), 1 },
+        new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
         new Object[] { OrePrefixes.circuit.get(Materials.Piko), 1 },
         new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 1 },
         new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },

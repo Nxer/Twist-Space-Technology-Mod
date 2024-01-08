@@ -27,6 +27,9 @@ public class Config {
     public static final String CrystallineInfinitier = "CrystallineInfinitier";
     public static final String HyperSpacetimeTransformer = "HyperSpacetimeTransformer";
     public static final String Scavenger = "Scavenger";
+    public static final String AdvancedMegaOilCracker = "AdvancedMegaOilCracker";
+    public static final String IndistinctTentacle = "IndistinctTentacle";
+    public static final String MEG = "TowerOFAbstraction";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -140,13 +143,15 @@ public class Config {
     public static int SpeedMultiplier_Tier1Block_SpaceScaler = 1;
     public static int SpeedMultiplier_BeyondTier2Block_SpaceScaler = 10;
     // endregion
- // region Hyper Spacetime Transformer
- public static byte Mode_Default_HyperSpacetimeTransformer=0;
- public static int ParallelMultiplier_HyperSpacetimeTransformer=1;
- public static int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=5;
- public static int SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=1;
- public static boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer= true;
- // endregion
+
+    // region Hyper Spacetime Transformer
+    public static byte Mode_Default_HyperSpacetimeTransformer=0;
+    public static int ParallelMultiplier_HyperSpacetimeTransformer=1;
+    public static int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=5;
+    public static int SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=1;
+    public static boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer= true;
+    // endregion
+
     // region Molecule Deconstructor
     public static byte Mode_Default_MoleculeDeconstructor = 0;
     public static int PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor = 16;
@@ -168,6 +173,41 @@ public class Config {
     public static double SpeedBonus_MultiplyPerTier_Scavenger = 0.8D;
     // endregion
 
+    // region AdvancedMegaOilCracker
+    public static boolean EnablePerfectOverclock_AdvancedMegaOilCracker = false;
+    public static float SpeedBonus_AdvancedMegaOilCracker = 0.5F;
+    public static int Parallel_AdvancedMegaOilCracker = 256;
+    // endregion
+
+    // region IndistinctTentacle
+    public static boolean EnableRecipeRegistry_IndistinctTentacle = true;
+    public static byte Mode_Default_IndistinctTentacle = 0;
+    public static int SpeedMultiplier_AssemblyLine_IndistinctTentacle = 1;
+    public static int SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle = 2;
+    public static int SpeedMultiplier_Assembler_IndistinctTentacle = 4;
+    public static int SpeedMultiplier_PreciseAssembler_IndistinctTentacle = 4;
+    public static int Parallel_Default_IndistinctTentacle = 256;
+    public static int TickEveryProcess_WirelessMode_IndistinctTentacle = 512;
+    public static int AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle = 20;
+    public static int ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle = 64;
+    public static byte ComponentCasingTierLimit_WirelessMode_IndistinctTentacle = 12;
+    public static byte GlassTierLimit_WirelessMode_IndistinctTentacle = 12;
+    public static byte GlassTierLimit_LaserHatch_IndistinctTentacle = 8;
+    // endregion
+
+    // region Mega Egg Generator
+    public static int MEG_Laser_Pieces = 16;
+    public static int MEG_Dynamo_Limit = 1;
+    public static long MEG_CrepperEgg_Gen = 512L;
+    public static long MEG_DragonEgg_Gen = 2048L;
+    public static long MEG_InfinityEgg_Gen = 16384L;
+    public static int MEG_Efficiency_PiecesBuff = 200;
+    public static int MEG_Efficiency_InfinityEggBuff = 100;
+    public static int MEG_Efficiency_Lost = 500;
+    public static double MEG_Overall_Multiply = 1.0D;
+    public static boolean MEG_Rotation = false;
+    // endregion
+
     // region Infinite Air Hatch
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
@@ -179,7 +219,26 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
 
+        // region IndistinctTentacle
+        EnableRecipeRegistry_IndistinctTentacle = configuration.getBoolean("EnableRecipeRegistry_IndistinctTentacle", IndistinctTentacle, EnableRecipeRegistry_IndistinctTentacle, "Enable Indistinct Tentacle Recipe Registry.");
+        Mode_Default_IndistinctTentacle = (byte) configuration.getInt("Mode_Default_IndistinctTentacle", IndistinctTentacle, Mode_Default_IndistinctTentacle, 0, 3, "Default mode when placing a Indistinct Tentacle controller block. 0=AL; 1=CAL; 2=Assembler; 3=PreciseAssembler; Type: byte");
+        SpeedMultiplier_AssemblyLine_IndistinctTentacle = configuration.getInt("SpeedMultiplier_AssemblyLine_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_AssemblyLine_IndistinctTentacle, 1, 256, "Speed Multiplier of Indistinct Tentacle Assembly Line mode. Type: int");
+        SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle = configuration.getInt("SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle, 1, 256, "Speed Multiplier of IndistinctTentacle Component Assembly Line mode. Type: int");
+        SpeedMultiplier_Assembler_IndistinctTentacle = configuration.getInt("SpeedMultiplier_Assembler_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_Assembler_IndistinctTentacle, 1, 256, "Speed Multiplier of Indistinct Tentacle Assembler mode. Type: int");
+        SpeedMultiplier_PreciseAssembler_IndistinctTentacle = configuration.getInt("SpeedMultiplier_PreciseAssembler_IndistinctTentacle", IndistinctTentacle, SpeedMultiplier_PreciseAssembler_IndistinctTentacle, 1, 256, "Speed Multiplier of Indistinct Tentacle Precise Assembler mode. Type: int");
+        Parallel_Default_IndistinctTentacle = configuration.getInt("Parallel_Default_IndistinctTentacle", IndistinctTentacle, Parallel_Default_IndistinctTentacle, 1, 65536, "Parallel of Indistinct Tentacle default power mode. Type: int");
+        TickEveryProcess_WirelessMode_IndistinctTentacle = configuration.getInt("TickEveryProcess_WirelessMode_IndistinctTentacle", IndistinctTentacle, TickEveryProcess_WirelessMode_IndistinctTentacle, 1, 65536, "Indistinct Tentacle in Wireless Mode every process cost the ticks. Type: int");
+        ComponentCasingTierLimit_WirelessMode_IndistinctTentacle = (byte) configuration.getInt("ComponentCasingTierLimit_WirelessMode_IndistinctTentacle", IndistinctTentacle, ComponentCasingTierLimit_WirelessMode_IndistinctTentacle, 0, 14, "Component Casing Tier Limit of Indistinct Tentacle Wireless Mode. LV=1; MAX=14; UMV=12. Type: byte");
+        GlassTierLimit_WirelessMode_IndistinctTentacle = (byte) configuration.getInt("GlassTierLimit_WirelessMode_IndistinctTentacle", IndistinctTentacle, GlassTierLimit_WirelessMode_IndistinctTentacle, 0, 12, "Glass Tier Limit of Indistinct Tentacle Wireless Mode. Type: byte");
+        GlassTierLimit_LaserHatch_IndistinctTentacle = (byte) configuration.getInt("GlassTierLimit_LaserHatch_IndistinctTentacle", IndistinctTentacle, GlassTierLimit_LaserHatch_IndistinctTentacle, 0, 12, "Glass Tier Limit of Indistinct Tentacle Laser Hatch permission. Type: byte");
+        // endregion
+
+        // region AdvancedMegaOilCracker
+        EnablePerfectOverclock_AdvancedMegaOilCracker = configuration.getBoolean("EnablePerfectOverclock_AdvancedMegaOilCracker", AdvancedMegaOilCracker, EnablePerfectOverclock_AdvancedMegaOilCracker, "Enable Advanced Mega Oil Cracker Perfect Overclock. Type: boolean");
+        SpeedBonus_AdvancedMegaOilCracker = Float.parseFloat(configuration.getString("SpeedBonus_AdvancedMegaOilCracker", AdvancedMegaOilCracker, String.valueOf(SpeedBonus_AdvancedMegaOilCracker), "Speed Bonus of Advanced Mega Oil Cracker. Type: float"));
+        Parallel_AdvancedMegaOilCracker = configuration.getInt("Parallel_AdvancedMegaOilCracker", AdvancedMegaOilCracker, Parallel_AdvancedMegaOilCracker, 1, 65536, "Parallel of Advanced Mega Oil Cracker. Type: int");
         // endregion
 
         // region Scavenger
@@ -320,6 +379,19 @@ public class Config {
         SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=          configuration.getInt(        "SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
         SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=       configuration.getInt(        "SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
         EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer=   configuration.getBoolean(    "EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer",    HyperSpacetimeTransformer,EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer,"");;
+        // endregion
+
+        // region Mega Egg Generator
+        MEG_CrepperEgg_Gen = Long.parseLong(configuration.getString("MEG_CrepperEgg_Gen", MEG, String.valueOf(MEG_CrepperEgg_Gen), "EUt of Crepper eggs, type: long"));
+        MEG_DragonEgg_Gen = Long.parseLong(configuration.getString("MEG_DragonEgg_Gen", MEG, String.valueOf(MEG_DragonEgg_Gen), "EUt of Dragon eggs, type: long"));
+        MEG_InfinityEgg_Gen = Long.parseLong(configuration.getString("MEG_InfinityEgg_Gen", MEG, String.valueOf(MEG_InfinityEgg_Gen), "EUt of Crepper eggs, type: long"));
+        MEG_Laser_Pieces = configuration.getInt("MEG_Laser_Pieces", MEG, 16, 1, Integer.MAX_VALUE, "Piece num when unlock laser");
+        MEG_Dynamo_Limit = configuration.getInt("MEG_Dynamo_Limit", MEG, 1, 1, Integer.MAX_VALUE, "How many dynamo allowed in total");
+        MEG_Efficiency_PiecesBuff = configuration.getInt("MEG_Efficiency_PiecesBuff", MEG, 200, 0, Integer.MAX_VALUE, "Every 2^n pieces bring n*this max efficiency buff");
+        MEG_Efficiency_InfinityEggBuff = configuration.getInt("MEG_Efficiency_InfinityEggBuff", MEG, 100, 0, Integer.MAX_VALUE, "Every n infinity eggs bring n*this max efficiency buff");
+        MEG_Efficiency_Lost = configuration.getInt("MEG_Efficiency_Lost", MEG, 500, 0, Integer.MAX_VALUE, "Every n empty position bring n*this max efficiency loss");
+        MEG_Overall_Multiply = Double.parseDouble(configuration.getString("MEG_Overall_Multiply", MEG, String.valueOf(MEG_Overall_Multiply), "Overall multiply of EUt, type: double"));
+        MEG_Rotation = configuration.getBoolean("MEG_Rotation", MEG, false, "If rotation allowed");
         // endregion
 
         if (configuration.hasChanged()) {

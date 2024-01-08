@@ -22,7 +22,6 @@ public enum GTCMItemList {
     PerfectLapotronCrystal,
     EnergyCrystalShard,
     PerfectEnergyCrystal,
-
     CosmicCircuitBoard,
     IntelligentImitationNeutronStarCore,
     EventHorizonNanoSwarm,
@@ -176,9 +175,12 @@ public enum GTCMItemList {
     LargeIndustrialCokingFactory,
     Scavenger,
     MegaEggGenerator,
+    AstralComputingArray,
 
     superCleanRoom,
     BiosphereIII,
+    AdvancedMegaOilCracker,
+    IndistinctTentacle,
 
     // MAX
     HighDimensionalExtend,
@@ -278,7 +280,13 @@ public enum GTCMItemList {
     // MultiStructure Machine:
     TestMultiStructureMainMachine,
     TestMultiStructureSubMachine,
-    megaUniversalSpaceStation;
+    megaUniversalSpaceStation,
+
+    NuclearReactor,
+    NuclearReactorStructure0,
+    NuclearReactorStructure1,
+    NuclearReactorStructure2,
+    NuclearReactorStructure3;
 
     // region Member Variables
 

@@ -23,8 +23,11 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
@@ -73,6 +76,12 @@ public class MachineLoader {
     public static ItemStack superCleanRoom;
     public static ItemStack MegaEggGenerator;
     public static ItemStack BiosphereIII;
+    public static ItemStack AdvancedMegaOilCracker;
+    public static ItemStack IndistinctTentacle;
+
+    public static ItemStack NuclearReactor;
+
+    public static ItemStack AstralComputingArray;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -271,6 +280,27 @@ public class MachineLoader {
             "NameMegaEggGenerator",
             TextLocalization.NameMegaEggGenerator).getStackForm(1);
         GTCMItemList.MegaEggGenerator.set(MegaEggGenerator);
+
+        //
+        AdvancedMegaOilCracker = new TST_AdvancedMegaOilCracker(
+            19027,
+            "NameAdvancedMegaOilCracker",
+            TextLocalization.NameAdvancedMegaOilCracker).getStackForm(1);
+        GTCMItemList.AdvancedMegaOilCracker.set(AdvancedMegaOilCracker);
+
+        //
+        IndistinctTentacle = new TST_IndistinctTentacle(
+            19028,
+            "NameIndistinctTentacle",
+            TextLocalization.NameIndistinctTentacle).getStackForm(1);
+        GTCMItemList.IndistinctTentacle.set(IndistinctTentacle);
+        // NuclearReactor = new TST_NuclearReactor(19029, "nuclea reactor", "nuclear reactor").getStackForm(1);
+        // GTCMItemList.NuclearReactor.set(IndistinctTentacle);
+
+        //
+        AstralComputingArray = new TST_Computer(19029, "NameAstralComputingArray", "Astral Computing Array")
+            .getStackForm(1);
+        GTCMItemList.AstralComputingArray.set(AstralComputingArray);
         // endregion
 
         // region Single block Machine
@@ -320,7 +350,7 @@ public class MachineLoader {
             8).getStackForm(1);
         GTCMItemList.DualInputBuffer_UV.set(DualInputBuffer_UV);
 
-        //
+        // region buffered energy hatch
         DualInputBuffer_UHV = new GT_MetaTileEntity_Hatch_DualInput(
             18983,
             "NameDualInputBuffer_UHV",
@@ -440,6 +470,7 @@ public class MachineLoader {
         GTCMItemList.BufferedEnergyHatchUMV.set(BufferedEnergyHatchUMV);
         GTCMItemList.BufferedEnergyHatchUXV.set(BufferedEnergyHatchUXV);
         GTCMItemList.BufferedEnergyHatchMAX.set(BufferedEnergyHatchMAX);
+        // endregion
 
     }
 }

@@ -166,6 +166,43 @@ public final class ValueEnum {
     public static final double SpeedBonus_MultiplyPerTier_Scavenger = Config.SpeedBonus_MultiplyPerTier_Scavenger;
     // endregion
 
+    // region Advanced Mega Oil Cracker
+    public static final boolean EnablePerfectOverclock_AdvancedMegaOilCracker = Config.EnablePerfectOverclock_AdvancedMegaOilCracker;
+    public static final float SpeedBonus_AdvancedMegaOilCracker = Config.SpeedBonus_AdvancedMegaOilCracker;
+    public static final int Parallel_AdvancedMegaOilCracker = Config.Parallel_AdvancedMegaOilCracker;
+
+    // endregion
+
+    // region Indistinct Tentacle
+    public static final byte Mode_Default_IndistinctTentacle = Config.Mode_Default_IndistinctTentacle;
+    public static final int SpeedMultiplier_AssemblyLine_IndistinctTentacle = Config.SpeedMultiplier_AssemblyLine_IndistinctTentacle;
+    public static final int SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle = Config.SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle;
+    public static final int SpeedMultiplier_Assembler_IndistinctTentacle = Config.SpeedMultiplier_Assembler_IndistinctTentacle;
+    public static final int SpeedMultiplier_PreciseAssembler_IndistinctTentacle = Config.SpeedMultiplier_PreciseAssembler_IndistinctTentacle;
+    public static final int Parallel_Default_IndistinctTentacle = Config.Parallel_Default_IndistinctTentacle;
+    public static final int TickEveryProcess_WirelessMode_IndistinctTentacle = Config.TickEveryProcess_WirelessMode_IndistinctTentacle;
+    public static final int AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle = Config.AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle;
+    public static final int ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle = Config.ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle;
+    public static final byte ComponentCasingTierLimit_WirelessMode_IndistinctTentacle = Config.ComponentCasingTierLimit_WirelessMode_IndistinctTentacle;
+    public static final byte GlassTierLimit_WirelessMode_IndistinctTentacle = Config.GlassTierLimit_WirelessMode_IndistinctTentacle;
+    public static final byte GlassTierLimit_LaserHatch_IndistinctTentacle = Config.GlassTierLimit_LaserHatch_IndistinctTentacle;
+
+    // endregion
+
+    // region Mega Egg Generator
+
+    public static final int MEG_Laser_Pieces = Config.MEG_Laser_Pieces;
+    public static final int MEG_Dynamo_Limit = Config.MEG_Dynamo_Limit;
+    public static final long MEG_CrepperEgg_Gen = Config.MEG_CrepperEgg_Gen;
+    public static final long MEG_DragonEgg_Gen = Config.MEG_DragonEgg_Gen;
+    public static final long MEG_InfinityEgg_Gen = Config.MEG_InfinityEgg_Gen;
+    public static final int MEG_Efficiency_PiecesBuff = Config.MEG_Efficiency_PiecesBuff;
+    public static final int MEG_Efficiency_InfinityEggBuff = Config.MEG_Efficiency_InfinityEggBuff;
+    public static final int MEG_Efficiency_Lost = Config.MEG_Efficiency_Lost;
+    public static final double MEG_Overall_Multiply = Config.MEG_Overall_Multiply;
+    public static final boolean MEG_AllowRotation = Config.MEG_Rotation;
+    // endregion
+
     // region Infinite Air Hatch
     public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
     // endregion

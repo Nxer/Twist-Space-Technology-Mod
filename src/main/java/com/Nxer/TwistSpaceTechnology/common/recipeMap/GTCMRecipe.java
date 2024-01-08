@@ -9,6 +9,7 @@ import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
+import gregtech.api.recipe.maps.AssemblyLineFrontend;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 
 public class GTCMRecipe {
@@ -124,9 +125,10 @@ public class GTCMRecipe {
     //
     // }
 
-    public static final RecipeMap<RecipeMapBackend> IntensifyChemicalDistorterRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.IntensifyChemicalDistorterRecipes") // At the same time , the localization key of the NEI Name
-                                                             // of this page.
+    public static final RecipeMap<TST_RecipeMapBackend> IntensifyChemicalDistorterRecipes = RecipeMapBuilder
+        // At the same time , the localization key of the NEI Name
+        // of this page.
+        .of("gtcm.recipe.IntensifyChemicalDistorterRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 16)
         .neiSpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
@@ -157,8 +159,8 @@ public class GTCMRecipe {
     // false,
     // true);
 
-    public static final RecipeMap<RecipeMapBackend> PreciseHighEnergyPhotonicQuantumMasterRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes")
+    public static final RecipeMap<TST_RecipeMapBackend> PreciseHighEnergyPhotonicQuantumMasterRecipes = RecipeMapBuilder
+        .of("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 16)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
@@ -188,8 +190,8 @@ public class GTCMRecipe {
     // false,
     // true);
 
-    public static final RecipeMap<RecipeMapBackend> MiracleTopRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.MiracleTopRecipes")
+    public static final RecipeMap<TST_RecipeMapBackend> MiracleTopRecipes = RecipeMapBuilder
+        .of("gtcm.recipe.MiracleTopRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 4)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
@@ -555,6 +557,22 @@ public class GTCMRecipe {
     // "",
     // false,
     // true);
+
+    public static final RecipeMap<RecipeMapBackend> AssemblyLineWithoutResearchRecipe = RecipeMapBuilder
+        .of("tst.recipe.AssemblyLineWithoutResearchRecipe")
+        .maxIO(16, 1, 4, 0)
+        .maxIO(16, 1, 4, 0)
+        .minInputs(1, 0)
+        .useSpecialSlot()
+        // .slotOverlays((index, isFluid, isOutput, isSpecial) -> isSpecial ? GT_UITextures.OVERLAY_SLOT_DATA_ORB :
+        // null)
+        .disableOptimize()
+        .neiTransferRect(88, 8, 18, 72)
+        .neiTransferRect(124, 8, 18, 72)
+        .neiTransferRect(142, 26, 18, 18)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndistinctTentacle.get(1)))
+        .frontend(AssemblyLineFrontend::new)
+        .build();
 
     // endregion
 }

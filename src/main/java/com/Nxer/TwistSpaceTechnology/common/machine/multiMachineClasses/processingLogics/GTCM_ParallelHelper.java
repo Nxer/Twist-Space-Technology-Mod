@@ -1,15 +1,24 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics;
 
+import static gregtech.api.util.GT_Recipe.GTppRecipeHelper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+
+import gregtech.api.enums.ItemList;
 import gregtech.api.interfaces.tileentity.IRecipeLockable;
 import gregtech.api.interfaces.tileentity.IVoidable;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
@@ -18,10 +27,13 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SingleRecipeCheck;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_ParallelHelper;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import gregtech.api.util.VoidProtectionHelper;
+import ic2.core.Ic2Items;
 
 // spotless:off
 public class GTCM_ParallelHelper extends GT_ParallelHelper {
@@ -112,11 +124,12 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
     /**
      * Method for calculating max parallel from given inputs.
      */
-    private MaxParallelCalculator maxParallelCalculator = GT_Recipe::maxParallelCalculatedByInputs;
+    private MaxParallelCalculator maxParallelCalculator = GTCM_ParallelHelper::maxParallelCalculatedByInputs;
+//    private MaxParallelCalculator maxParallelCalculator = GT_Recipe::maxParallelCalculatedByInputs;
     /**
      * Method for consuming inputs after determining how many parallels it can execute.
      */
-    private InputConsumer inputConsumer = GT_Recipe::consumeInput;
+    private InputConsumer inputConsumer = GTCM_ParallelHelper::consumeInput;
 
     /**
      * Calculator to use for overclocking
@@ -435,12 +448,12 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         double tickTimeAfterOC = calculator.setParallel(originalMaxParallel)
                                            .calculateDurationUnderOneTick();
         if (tickTimeAfterOC < 1) {
-            maxParallel = (int) (maxParallel / tickTimeAfterOC);
+            maxParallel = Utils.safeInt((long) (maxParallel / tickTimeAfterOC), 1);
         }
 
         int maxParallelBeforeBatchMode = maxParallel;
         if (batchMode) {
-            maxParallel *= batchModifier;
+            maxParallel = Utils.safeInt((long) maxParallel * batchModifier, 1);
         }
 
         final ItemStack[] truncatedItemOutputs = recipe.mOutputs != null
@@ -620,5 +633,198 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         }
         fluidOutputs = tempFluidStack.toArray(new FluidStack[0]);
     }
+
+    /**
+     * Rewrite from {@link GT_Recipe#consumeInput(int, FluidStack[], ItemStack...)}
+     */
+    public static void consumeInput(GT_Recipe recipe, int amountMultiplier, FluidStack[] aFluidInputs, ItemStack... aInputs) {
+        if (amountMultiplier <= 0) return;
+
+        long remainingCost;
+
+        if (aFluidInputs != null) {
+            for (FluidStack recipeFluidCost : recipe.mFluidInputs) {
+                if (recipeFluidCost != null) {
+                    remainingCost = (long) recipeFluidCost.amount * amountMultiplier;
+
+                    for (FluidStack providedFluid : aFluidInputs) {
+                        if (providedFluid != null && providedFluid.isFluidEqual(recipeFluidCost)) {
+                            if (providedFluid.amount >= remainingCost) {
+                                providedFluid.amount -= (int) remainingCost;
+                                break;
+                            } else {
+                                remainingCost -= providedFluid.amount;
+                                providedFluid.amount = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (aInputs != null) {
+            for (ItemStack recipeItemCost : recipe.mInputs) {
+                if (recipeItemCost.stackSize == 0) continue;
+                ItemStack unifiedItemCost = GT_OreDictUnificator.get_nocopy(recipeItemCost);
+                if (unifiedItemCost != null) {
+                    remainingCost = (long) recipeItemCost.stackSize * amountMultiplier;
+
+                    for (ItemStack providedItem : aInputs) {
+                        if (recipe.isNBTSensitive && !GT_Utility.areStacksEqual(providedItem, unifiedItemCost, false)) {
+                            continue;
+                        } else if (!recipe.isNBTSensitive
+                                       && !GT_OreDictUnificator.isInputStackEqual(providedItem, unifiedItemCost)) {
+                            continue;
+                        }
+
+                        if (GTppRecipeHelper) { // Please see JavaDoc on GTppRecipeHelper for why this is here.
+                            if (GT_Utility.areStacksEqual(providedItem, Ic2Items.FluidCell.copy(), true)
+                                    || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataStick.get(1L), true)
+                                    || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataOrb.get(1L), true)) {
+                                if (!GT_Utility.areStacksEqual(providedItem, recipeItemCost, false)) continue;
+                            }
+                        }
+
+                        if (providedItem.stackSize >= remainingCost) {
+                            providedItem.stackSize -= (int) remainingCost;
+                            break;
+                        } else {
+                            remainingCost -= providedItem.stackSize;
+                            providedItem.stackSize = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the number of parallel recipes, or 0 if recipe is not satisfied at all. 0 < number < 1 means that inputs
+     * are found but not enough. Refer to SingleRecipeCheck#checkRecipeInputs.
+     */
+    public static double maxParallelCalculatedByInputs(GT_Recipe recipe, int maxParallel, FluidStack[] aFluidInputs, ItemStack... aInputs) {
+        if (recipe.mInputs.length > 0 && aInputs == null) return 0;
+        if (recipe.mFluidInputs.length > 0 && aFluidInputs == null) return 0;
+
+        double currentParallel = maxParallel;
+
+        if (recipe.mFluidInputs.length > 0) {
+            // Create map for fluid -> stored amount
+            Map<Fluid, Long> fluidMap = new HashMap<>();
+            Map<Fluid, Long> fluidCost = new HashMap<>();
+            for (FluidStack fluidStack : aFluidInputs) {
+                if (fluidStack == null) continue;
+                fluidMap.merge(fluidStack.getFluid(), (long) fluidStack.amount, Long::sum);
+            }
+            for (FluidStack fluidStack : recipe.mFluidInputs) {
+                if (fluidStack == null) continue;
+                fluidCost.merge(fluidStack.getFluid(), (long) fluidStack.amount, Long::sum);
+            }
+
+            // Check how many parallels can it perform for each fluid
+            for (Map.Entry<Fluid, Long> costEntry : fluidCost.entrySet()) {
+                if (costEntry.getValue() > 0) {
+                    currentParallel = Math.min(
+                        currentParallel,
+                        (double) fluidMap.getOrDefault(costEntry.getKey(), 0L) / costEntry.getValue());
+                }
+                if (currentParallel <= 0) {
+                    return 0;
+                }
+            }
+        }
+
+        boolean isNBTSensitive = recipe.isNBTSensitive;
+        double remainingCost;
+        int providedAmount;
+        if (recipe.mInputs.length > 0) {
+            Map<TST_ItemID, Long> itemCost = new HashMap<>();
+            if (isNBTSensitive) {
+                for (ItemStack recipeItemCost : recipe.mInputs) {
+                    // for non-consumed input
+                    if (recipeItemCost.stackSize == 0) continue;
+                    itemCost.merge(TST_ItemID.create(recipeItemCost), (long) recipeItemCost.stackSize, Long::sum);
+                }
+            } else {
+                for (ItemStack recipeItemCost : recipe.mInputs) {
+                    // for non-consumed input
+                    if (recipeItemCost.stackSize == 0) continue;
+                    itemCost.merge(TST_ItemID.createNoNBT(recipeItemCost), (long) recipeItemCost.stackSize, Long::sum);
+                }
+            }
+
+            nextRecipeItemCost: for (Map.Entry<TST_ItemID, Long> itemID : itemCost.entrySet()) {
+                ItemStack unifiedItemCost;
+                if (isNBTSensitive) {
+                    unifiedItemCost = GT_OreDictUnificator.get_nocopy(itemID.getKey().getItemStackWithNBT());
+                } else {
+                    unifiedItemCost = GT_OreDictUnificator.get_nocopy(itemID.getKey().getItemStack());
+                }
+                remainingCost = itemID.getValue() * currentParallel;
+                providedAmount = 0;
+                for (ItemStack providedItem : aInputs) {
+                    if (isNBTSensitive && !GT_Utility.areStacksEqual(providedItem, unifiedItemCost, false)) {
+                        continue;
+                    } else if (!isNBTSensitive
+                                   && !GT_OreDictUnificator.isInputStackEqual(providedItem, unifiedItemCost)) {
+                        continue;
+                    }
+
+                    providedAmount += providedItem.stackSize;
+
+                    if (providedAmount >= remainingCost) continue nextRecipeItemCost;
+                }
+                if (providedAmount == 0) return 0;
+                currentParallel = Math.min(currentParallel, (double) providedAmount / itemID.getValue());
+            }
+        }
+
+        return currentParallel;
+
+
+
+
+//        if (aInputs != null) {
+//            nextRecipeItemCost: for (ItemStack recipeItemCost : recipe.mInputs) {
+//
+//                // for non-consumed input
+//                if (recipeItemCost.stackSize == 0) continue;
+//
+//                ItemStack unifiedItemCost = GT_OreDictUnificator.get_nocopy(recipeItemCost);
+//                if (unifiedItemCost != null) {
+//                    remainingCost = recipeItemCost.stackSize * currentParallel;
+//                    providedAmount = 0;
+//
+//                    for (ItemStack providedItem : aInputs) {
+//                        if (isNBTSensitive && !GT_Utility.areStacksEqual(providedItem, unifiedItemCost, false)) {
+//                            continue;
+//                        } else if (!isNBTSensitive
+//                                       && !GT_OreDictUnificator.isInputStackEqual(providedItem, unifiedItemCost)) {
+//                            continue;
+//                        }
+//
+//                        if (GTppRecipeHelper) { // Please see JavaDoc on GTppRecipeHelper for why this is here.
+//                            if (GT_Utility.areStacksEqual(providedItem, Ic2Items.FluidCell.copy(), true)
+//                                    || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataStick.get(1L), true)
+//                                    || GT_Utility.areStacksEqual(providedItem, ItemList.Tool_DataOrb.get(1L), true)) {
+//                                if (!GT_Utility.areStacksEqual(providedItem, recipeItemCost, false)) continue;
+//                            }
+//                        }
+//
+//                        providedAmount += providedItem.stackSize;
+//
+//                        if (providedAmount >= remainingCost) continue nextRecipeItemCost;
+//                    }
+//                    if (providedAmount == 0) return 0;
+//                    currentParallel = Math.min(currentParallel, (double) providedAmount / recipeItemCost.stackSize);
+//                }
+//            }
+//        }
+
+    }
+
+
+
+
 }
 // spotless:on

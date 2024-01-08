@@ -252,6 +252,12 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
 
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        mHardHammer = true;
+        mSoftHammer = true;
+        mScrewdriver = true;
+        mCrowbar = true;
+        mSolderingTool = true;
+        mWrench = true;
         int x = 1;
         int z = 1;
         int y = 1;

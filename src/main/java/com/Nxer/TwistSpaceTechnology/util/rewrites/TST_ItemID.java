@@ -54,8 +54,24 @@ public class TST_ItemID extends GT_Utility.ItemId {
     // endregion
 
     // region Special Methods
+    public ItemStack getItemStack() {
+        return new ItemStack(item, 1, metaData);
+    }
+
     public ItemStack getItemStack(int amount) {
         return new ItemStack(item, amount, metaData);
+    }
+
+    public ItemStack getItemStackWithNBT() {
+        ItemStack itemStack = new ItemStack(item, 1, metaData);
+        itemStack.setTagCompound(nbt);
+        return itemStack;
+    }
+
+    public ItemStack getItemStackWithNBT(int amount) {
+        ItemStack itemStack = new ItemStack(item, amount, metaData);
+        itemStack.setTagCompound(nbt);
+        return itemStack;
     }
 
     // endregion

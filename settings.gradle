@@ -1,13 +1,21 @@
 
 pluginManagement {
     repositories {
+//        maven {
+//            // RetroFuturaGradle
+//            name "GTNH Maven"
+//            url "http://jenkins.usrv.eu:8081/nexus/content/groups/public/"
+//            allowInsecureProtocol = true
+//            mavenContent {
+//                includeGroup("com.gtnewhorizons.retrofuturagradle")
+//            }
+//        }
         maven {
             // RetroFuturaGradle
             name "GTNH Maven"
-            url "http://jenkins.usrv.eu:8081/nexus/content/groups/public/"
-            allowInsecureProtocol = true
+            url "https://nexus.gtnewhorizons.com/repository/public/"
             mavenContent {
-                includeGroup("com.gtnewhorizons.retrofuturagradle")
+                includeGroupByRegex("com\\.gtnewhorizons\\..+")
             }
         }
         gradlePluginPortal()
@@ -17,9 +25,13 @@ pluginManagement {
 }
 
 plugins {
-    id 'com.diffplug.blowdryerSetup' version '1.6.0'
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0' // Provides java toolchains
+    id 'com.diffplug.blowdryerSetup' version '1.7.1'
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0' // Provides java toolchains
 }
+//plugins {
+//    id 'com.diffplug.blowdryerSetup' version '1.6.0'
+//    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0' // Provides java toolchains
+//}
 
 blowdryerSetup {
     repoSubfolder 'gtnhShared'

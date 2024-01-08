@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AdvancedMegaOilCracker;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BiosphereIII;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
@@ -44,6 +45,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
@@ -90,6 +92,7 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Spacetime;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Teleportation;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment;
+import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static galaxyspace.core.register.GSMaterials.tantalumCarbideHafniumCarbideMixture;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
@@ -103,16 +106,19 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Ext
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 
+import net.glease.ggfab.GGItemList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
@@ -127,6 +133,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IItemContainer;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -1349,7 +1356,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.plate, 4)
             )
             .fluidInputs(new FluidStack(solderIndAlloy, 144*2))
-            .itemOutputs(DualInputBuffer_LuV.get(1))
+            .itemOutputs(DualInputBuffer_LuV.get(4))
 
             .eut(RECIPE_LuV)
             .duration(20*15)
@@ -1367,7 +1374,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iridium, 4)
             )
             .fluidInputs(new FluidStack(solderIndAlloy, 144*4))
-            .itemOutputs(DualInputBuffer_ZPM.get(1))
+            .itemOutputs(DualInputBuffer_ZPM.get(4))
 
             .eut(RECIPE_ZPM)
             .duration(20*15)
@@ -1385,7 +1392,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Osmium, 4)
             )
             .fluidInputs(new FluidStack(solderIndAlloy, 144*8))
-            .itemOutputs(DualInputBuffer_UV.get(1))
+            .itemOutputs(DualInputBuffer_UV.get(4))
 
             .eut(RECIPE_UV)
             .duration(20*15)
@@ -1403,7 +1410,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 4)
             )
             .fluidInputs(new FluidStack(solderIndAlloy, 144*16))
-            .itemOutputs(DualInputBuffer_UHV.get(1))
+            .itemOutputs(DualInputBuffer_UHV.get(4))
 
             .eut(RECIPE_UHV)
             .duration(20*15)
@@ -1469,6 +1476,84 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UEV)
             .duration(20*900)
             .addTo(AssemblyLine);
+        // endregion
+
+        // region Advanced Oil Cracker
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                ItemRegistry.megaMachines[4],
+                new Object[]{OrePrefixes.circuit.get(Materials.Elite), 4},
+                new Object[]{OrePrefixes.circuit.get(Materials.Data), 16},
+                ItemList.Electric_Pump_IV.get(4)
+            )
+            .fluidInputs(Materials.SolderingAlloy.getMolten(144*16))
+            .itemOutputs(AdvancedMegaOilCracker.get(1))
+            .eut(RECIPE_EV)
+            .duration(20*3600)
+            .addTo(assembler);
+        // endregion
+
+        // region Indistinct Tentacle
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GGItemList.AdvAssLine.get(64),
+                ItemRefer.Component_Assembly_Line.get(64),
+                CustomItemList.AssemblingMachineUMV.get(64),
+                ItemRefer.Precise_Assembler.get(64),
+
+                setStackSize(GTCMItemList.StellarConstructionFrameMaterial.get(64),128),
+                setStackSize(GTCMItemList.AnnihilationConstrainer.get(64),128),
+                setStackSize(GTCMItemList.DysonSphereFrameComponent.get(64),128),
+                setStackSize(GTCMItemList.SpaceWarper.get(64),128),
+
+                setStackSize(GTCMItemList.GravitationalLens.get(64),128),
+                setStackSize(CustomItemList.QuantumCircuit.get(1),128),
+                setStackSize(eM_Ultimate_Containment_Advanced.get(64),128)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.SpaceTime.getMolten(144*524288),
+                MaterialsUEVplus.Space.getMolten(144*524288),
+                MaterialsUEVplus.Time.getMolten(144*524288),
+                MaterialsUEVplus.Eternity.getMolten(144*524288),
+
+                MaterialsUEVplus.WhiteDwarfMatter.getMolten(144*524288),
+                MaterialsUEVplus.BlackDwarfMatter.getMolten(144*524288),
+                MaterialsUEVplus.Universium.getMolten(144*524288),
+                MaterialsUEVplus.RawStarMatter.getFluid(1000*524288),
+
+                MyMaterial.metastableOganesson.getMolten(144*524288),
+                MyMaterial.shirabon.getMolten(144*524288),
+                Materials.UUMatter.getFluid(1000*2097152),
+                new FluidStack(solderPlasma, 144*2097152)
+            )
+            .itemOutputs(GTCMItemList.IndistinctTentacle.get(1))
+            .eut(TierEU.RECIPE_MAX)
+            .duration(20 * 14400)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
+        // endregion
+
+        // region MEG
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                ItemList.MagicEnergyAbsorber_LV.get(4),
+                ItemList.MagicEnergyAbsorber_MV.get(4),
+                ItemList.MagicEnergyAbsorber_HV.get(4),
+                ItemList.MagicEnergyAbsorber_EV.get(4),
+                ItemList.MagicEnergyConverter_LV.get(4),
+                ItemList.MagicEnergyConverter_MV.get(4),
+                ItemList.MagicEnergyConverter_HV.get(4),
+                Materials.Thaumium.getPlates(16),
+                GTCMItemList.VoidPollen.get(4)
+            )
+            .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(16 * 1000))
+            .itemOutputs(GTCMItemList.MegaEggGenerator.get(1))
+            .eut(TierEU.RECIPE_LuV)
+            .duration(120 * 20)
+            .addTo(assembler);
         // endregion
 
     }

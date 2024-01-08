@@ -1,7 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.AssemblyLineWithoutResearchRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CentrifugeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ChemicalReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CircuitAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CokingFactoryRecipePool;
@@ -40,7 +43,7 @@ public class RecipeLoader {
             new DistillationRecipePool(), new ExtractorRecipePool(), new CompressorRecipePool(), new BOTRecipePool(),
             new TCRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
             new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool(),
-            new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe() };
+            new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
@@ -50,11 +53,17 @@ public class RecipeLoader {
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
-        OP_NormalProcessing.instance.enumOreProcessingRecipes();
+        new OP_NormalProcessing().enumOreProcessingRecipes();
+        if (Config.EnableRecipeRegistry_IndistinctTentacle) {
+            new AssemblyLineWithoutResearchRecipePool().loadRecipes();
+        }
     }
 
     public static void loadRecipesPostInit() {
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
+    }
 
+    public static void loadRecipesServerStarted() {
+        new StellarForgeRecipePool().loadOnServerStarted();
     }
 }

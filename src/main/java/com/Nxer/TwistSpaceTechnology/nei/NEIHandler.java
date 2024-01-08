@@ -70,6 +70,10 @@ public class NEIHandler {
         sendCatalyst("gt.recipe.fermenter", "gregtech:gt.blockmachines:19025");
         sendCatalyst("gt.recipe.brewer", "gregtech:gt.blockmachines:19025");
         sendCatalyst("bw.recipe.BacteriaVat", "gregtech:gt.blockmachines:19025");
+        sendCatalyst("tst.recipe.AssemblyLineWithoutResearchRecipe", "gregtech:gt.blockmachines:19028");
+        sendCatalyst("gg.recipe.componentassemblyline", "gregtech:gt.blockmachines:19028");
+        sendCatalyst("gt.recipe.assembler", "gregtech:gt.blockmachines:19028");
+        sendCatalyst("gg.recipe.precise_assembler", "gregtech:gt.blockmachines:19028");
 
     }
 

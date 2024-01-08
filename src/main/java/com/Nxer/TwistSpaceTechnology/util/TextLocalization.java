@@ -482,6 +482,14 @@ public class TextLocalization {
     public static final String Tooltip_Scavenger_04 = texter("Additional 20%% reduction in time per Voltage Tier, multiplication calculus.","Tooltip_Scavenger_04");
     // endregion
 
+    // region AdvancedMegaOilCracker
+    public static final String NameAdvancedMegaOilCracker = texter("Advanced Mega Oil Cracker","NameAdvancedMegaOilCracker");
+    public static final String Tooltips_AdvancedMegaOilCracker_MachineType = texter("Cracker","Tooltips_AdvancedMegaOilCracker_MachineType");
+    public static final String Tooltips_AdvancedMegaOilCracker_Controller = texter("Controller block for the Advanced Mega Oil Cracker","Tooltips_AdvancedMegaOilCracker_Controller");
+    public static final String Tooltips_AdvancedMegaOilCracker_01 = texter(EnumChatFormatting.ITALIC+"Freedom as a basis for self-government.","Tooltips_AdvancedMegaOilCracker_01");
+    public static final String Tooltips_AdvancedMegaOilCracker_02 = texter("As the Mega Oil Cracker do.","Tooltips_AdvancedMegaOilCracker_02");
+    // endregion
+
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
@@ -553,14 +561,44 @@ public class TextLocalization {
     public static final String NameMegaEggGenerator = texter("Tower of Abstraction", "NameMegaEggGenerator");
     public static final String Tooltip_MegaEggGenerator_MachineType = texter("Magical Energy Absorber", "Tooltip_MegaEggGenerator_MachineType");
     public static final String Tooltip_MegaEggGenerator_Controller = texter("Controller block for the Tower of Abstraction", "Tooltip_MegaEggGenerator_Controller");
-    public static final String Tooltip_MegaEggGenerator_00 = texter("Where all your dragon egg goes.", "Tooltip_MegaEggGenerator_00");
-    public static final String Tooltip_MegaEggGenerator_01 = texter("Get free energy from dragon eggs, just as Magical Energy Absorber does.", "Tooltip_MegaEggGenerator_01");
-    public static final String Tooltip_MegaEggGenerator_02 = texter("Every dragon egg generates 1A EV, so one piece generates 1A Luv.", "Tooltip_MegaEggGenerator_02");
-    public static final String Tooltip_MegaEggGenerator_03 = texter("But quantitative change leads to qualitative change,", "Tooltip_MegaEggGenerator_03");
-    public static final String Tooltip_MegaEggGenerator_04 = texter("Every 2^n pieces give 2% max efficiency bonus.", "Tooltip_MegaEggGenerator_04");
-    public static final String Tooltip_MegaEggGenerator_05 = texter("Note its warm-up process is quite slow, about 500 secs in need.", "Tooltip_MegaEggGenerator_05");
+    public static final String Tooltip_MegaEggGenerator_00 = texter("This is where the "+EnumChatFormatting.RED+"ulti"+EnumChatFormatting.AQUA+"mate"+ EnumChatFormatting.GOLD +" des"+EnumChatFormatting.BLUE+"tiny"+EnumChatFormatting.GRAY+" of the Dragon's Children lies.", "Tooltip_MegaEggGenerator_00");
+    public static final String Tooltip_MegaEggGenerator_01 = texter("With the help of the Magic Egg, it draws in endless magical power as effortlessly as a soul-sucking sorcerer.", "Tooltip_MegaEggGenerator_01");
+    public static final String Tooltip_MegaEggGenerator_02 = texter("Every dragon egg generates 1A EV & every creeper's generates 1A HV.", "Tooltip_MegaEggGenerator_02");
+    public static final String Tooltip_MegaEggGenerator_03 = texter("Infinity egg generates 2A IV, but you can put only one for one each piece you add.", "Tooltip_MegaEggGenerator_03");
+    public static final String Tooltip_MegaEggGenerator_04 = texter("But quantitative change leads to qualitative change,", "Tooltip_MegaEggGenerator_04");
+    public static final String Tooltip_MegaEggGenerator_05 = texter("Every 2^n pieces give 2% max efficiency bonus, and every infinity egg gives 1%.", "Tooltip_MegaEggGenerator_05");
+    public static final String Tooltip_MegaEggGenerator_06 = texter("Note its warm-up process is quite slow, about 500 secs in need.", "Tooltip_MegaEggGenerator_06");
+    public static final String Tooltip_MegaEggGenerator_07 = texter("You can also put nothing on the egg pos, but every empty pos decreases 5% max efficiency.", "Tooltip_MegaEggGenerator_07");
+    public static final String Tooltip_MegaEggGenerator_08 = texter("Whether it is the"+EnumChatFormatting.DARK_PURPLE+" Dragon Egg,"+EnumChatFormatting.DARK_GREEN+" Creeper Egg, or the "+EnumChatFormatting.GOLD+"Egg of Infinity, "+EnumChatFormatting.GRAY+"only their presence can drive the full circulation of power.", "Tooltip_MegaEggGenerator_08");
+    public static final String Tooltip_MegaEggGenerator_D = texter("Dynamo or TT Dynamo, one only", "Tooltip_MegaEggGenerator_D");
     public static final String Tooltip_MegaEggGenerator_M = texter("No need for maintenance hatch.", "Tooltip_MegaEggGenerator_M");
-    public static final String Tooltip_MegaEggGenerator_D = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_D");
+    public static final String Tooltip_MegaEggGenerator_L = texter("Lasers unlock at >=16 pieces.", "Tooltip_MegaEggGenerator_L");
+    public static final String Tooltip_MegaEggGenerator_C = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_D");
+    // endregion
+
+    // region IndistinctTentacle
+    public static final String NameIndistinctTentacle = texter(""+EnumChatFormatting.BOLD+EnumChatFormatting.BLACK+"Indistinct Tentacle","NameIndistinctTentacle");
+    public static final String Tooltip_IndistinctTentacle_MachineType = texter("Assembly Line | Component Assembly Line | Assembler | Precise Assembler","Tooltip_IndistinctTentacle_MachineType");
+    public static final String Tooltip_IndistinctTentacle_Controller = texter("Controller block for the Indistinct Tentacle","Tooltip_IndistinctTentacle_Controller");
+    public static final String Tooltip_IndistinctTentacle_01 = texter(""+EnumChatFormatting.BOLD+EnumChatFormatting.ITALIC+"In the midst of this sea and endless solitude there appears a dim road, a road without human footprints.","Tooltip_IndistinctTentacle_01");
+    public static final String Tooltip_IndistinctTentacle_02 = texter(""+EnumChatFormatting.BOLD+EnumChatFormatting.ITALIC+"No man has ever passed this place; no ship has ever sailed here.","Tooltip_IndistinctTentacle_02");
+    public static final String Tooltip_IndistinctTentacle_03 = texter("Made everything in its where should be.","Tooltip_IndistinctTentacle_03");
+    public static final String Tooltip_IndistinctTentacle_04 = texter("Glass tier limit energy hatch, laser hatch need UV glass.","Tooltip_IndistinctTentacle_04");
+    public static final String Tooltip_IndistinctTentacle_05 = texter("Component Casing tier limit recipe can process. Casing tier require at least the recipe voltage level -1 .","Tooltip_IndistinctTentacle_05");
+    public static final String Tooltip_IndistinctTentacle_06 = texter("If Component Casing tier is higher than recipe voltage, enable §cPerfect Overclock§7.","Tooltip_IndistinctTentacle_06");
+    public static final String Tooltip_IndistinctTentacle_07 = texter("UMV+ glass and Component Casing allow Wireless mode by placing no energy hatch.","Tooltip_IndistinctTentacle_07");
+    public static final String Tooltip_IndistinctTentacle_08 = texter("Progressing time is fixed in Wireless mode.","Tooltip_IndistinctTentacle_08");
+    public static final String Tooltip_IndistinctTentacle_09 = texter("Watch out your Global energy storage if use wireless mode, you should not want to see the power drain's landscape.","Tooltip_IndistinctTentacle_09");
+    public static final String Tooltip_IndistinctTentacle_2_01 = texter("Speed (default) of mode:","Tooltip_IndistinctTentacle_2_01");
+    public static final String Tooltip_IndistinctTentacle_2_02 = texter("    Assembly Line = 100%%","Tooltip_IndistinctTentacle_2_02");
+    public static final String Tooltip_IndistinctTentacle_2_03 = texter("    Component Assembly Line = 200%%;","Tooltip_IndistinctTentacle_2_03");
+    public static final String Tooltip_IndistinctTentacle_2_04 = texter("    Assembler = 400%%","Tooltip_IndistinctTentacle_2_04");
+    public static final String Tooltip_IndistinctTentacle_2_05 = texter("    Precise Assembler = 400%%","Tooltip_IndistinctTentacle_2_05");
+    public static final String Tooltip_IndistinctTentacle_2_06 = texter("Default power mode parallel 256.","Tooltip_IndistinctTentacle_2_06");
+    public static final String Tooltip_IndistinctTentacle_2_07 = texter("Progressing time is fixed at 25.6s in Wireless mode.","Tooltip_IndistinctTentacle_2_07");
+    public static final String Tooltip_IndistinctTentacle_2_08 = texter("Put an Astral Array Fabricator into controller slot,","Tooltip_IndistinctTentacle_2_08");
+    public static final String Tooltip_IndistinctTentacle_2_09 = texter("  the Progressing time will be fixed at 1.0s, and EU cost increase to 64 times.","Tooltip_IndistinctTentacle_2_09");
+
     // endregion
 }
 // spotless:on
