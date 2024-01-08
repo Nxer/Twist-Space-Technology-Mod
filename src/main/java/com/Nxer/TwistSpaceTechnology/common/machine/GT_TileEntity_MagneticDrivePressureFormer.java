@@ -120,9 +120,8 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         repairMachine();
         this.glassTier = 0;
         this.coilLevel = HeatingCoilLevel.None;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            return false;
-        }
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (this.glassTier <= 0) return false;
         // Infinity Glass enable Laser Energy Hatch
         if (this.glassTier < GlassTier_LimitLaserHatch_MagneticDrivePressureFormer) {
             for (GT_MetaTileEntity_Hatch hatch : this.mExoticEnergyHatches) {

@@ -132,6 +132,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
             return false;
         }
 
+        if (this.glassTier <= 0) return false;
         if (glassTier < 12) {
             for (GT_MetaTileEntity_Hatch hatch : this.mExoticEnergyHatches) {
                 if (this.glassTier < hatch.mTier) {
