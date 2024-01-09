@@ -314,7 +314,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                     .buildAndChain(sBlockCasingsTT, 4))
             .addElement(
                 'G',
-                withChannel("fieldGeneratorTier",
+                withChannel("fieldgeneratortier",
                             ofBlocksTiered(
                                 GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
                                 ImmutableList.of(

@@ -211,7 +211,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 						   .buildAndChain(sBlockCasingsTT, 4))
 			       .addElement(
 					   'D',
-					   withChannel("fieldGeneratorTier",
+					   withChannel("fieldgeneratortier",
 					               ofBlocksTiered(
 						               GTCM_CrystallineInfinitier::getBlockFieldGeneratorTier,
 						               ImmutableList.of(
