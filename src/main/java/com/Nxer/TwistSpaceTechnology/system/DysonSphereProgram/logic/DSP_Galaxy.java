@@ -3,7 +3,48 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic;
 
 import java.io.Serializable;
 
-import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.*;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Anubis;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Asteroids;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.BarnardaC;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.BarnardaE;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.BarnardaF;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Callisto;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.CentauriBb;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Ceres;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.DSP_Planet_NULL;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Deimos;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Enceladus;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Europa;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Ganymede;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Haumea;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Horus;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Io;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.KuiperBelt;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Maahes;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Makemake;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Mars;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.MehenBelt;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Mercury;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Miranda;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Moon;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Neper;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Oberon;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.OverWorld;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Phobos;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Pluto;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Proteus;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Ross128b;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Ross128ba;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Seth;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.TCetiE;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.TheEnd;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Titan;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Triton;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.TwilightForest;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.VegaB;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet.Venus;
+
+
 // spotless:on
 public enum DSP_Galaxy implements Serializable {
 

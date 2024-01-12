@@ -2,7 +2,9 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfInfiniteAirHatchFillFull;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.HatchTier;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
