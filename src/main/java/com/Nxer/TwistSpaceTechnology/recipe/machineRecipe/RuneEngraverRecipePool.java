@@ -64,7 +64,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
         //region advanced rune
 
         GT_Values.RA.stdBuilder()
-            .itemInputs(Materials.SterlingSilver.getPlates(1),new ItemStack(ModItems.rune,1,0),new ItemStack(ModItems.rune,1,1),Materials.Olivine.getGems(1),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(Materials.SterlingSilver.getPlates(1),new ItemStack(ModItems.rune,0,0),new ItemStack(ModItems.rune,0,1),Materials.Olivine.getGems(1),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(1500))
             .itemOutputs(new ItemStack(ModItems.rune,4,4))
 
@@ -72,7 +72,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 15)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(Materials.SterlingSilver.getPlates(1),new ItemStack(ModItems.rune,1,2),new ItemStack(ModItems.rune,1,3),Materials.Jasper.getGems(1),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(Materials.SterlingSilver.getPlates(1),new ItemStack(ModItems.rune,0,2),new ItemStack(ModItems.rune,0,3),Materials.Jasper.getGems(1),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(1500))
             .itemOutputs(new ItemStack(ModItems.rune,4,5))
 
@@ -80,7 +80,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 15)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(Materials.SterlingSilver.getPlates(1),new ItemStack(ModItems.rune,1,1),new ItemStack(ModItems.rune,1,3),Materials.Topaz.getGems(1),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(Materials.SterlingSilver.getPlates(1),new ItemStack(ModItems.rune,0,1),new ItemStack(ModItems.rune,0,3),Materials.Topaz.getGems(1),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(1500))
             .itemOutputs(new ItemStack(ModItems.rune,4,6))
 
@@ -88,7 +88,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 15)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(Materials.SterlingSilver.getPlates(1),new ItemStack(ModItems.rune,1,0),new ItemStack(ModItems.rune,1,2),Materials.Amethyst.getGems(1),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(Materials.SterlingSilver.getPlates(1),new ItemStack(ModItems.rune,0,0),new ItemStack(ModItems.rune,0,2),Materials.Amethyst.getGems(1),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(1500))
             .itemOutputs(new ItemStack(ModItems.rune,4,7))
 
@@ -109,7 +109,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 20)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(3),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,1,3),new ItemStack(ModItems.rune,1,5),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(GT_Utility.getIntegratedCircuit(3),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,0,3),new ItemStack(ModItems.rune,0,5),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(3000))
             .itemOutputs(new ItemStack(ModItems.rune,3,9))
 
@@ -117,7 +117,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(1),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,1,1),new ItemStack(ModItems.rune,1,7),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(GT_Utility.getIntegratedCircuit(1),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,0,1),new ItemStack(ModItems.rune,0,7),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(3000))
             .itemOutputs(new ItemStack(ModItems.rune,3,10))
 
@@ -125,7 +125,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(0),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,1,0),new ItemStack(ModItems.rune,1,4),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(GT_Utility.getIntegratedCircuit(0),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,0,0),new ItemStack(ModItems.rune,0,4),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(3000))
             .itemOutputs(new ItemStack(ModItems.rune,3,11))
 
@@ -133,7 +133,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(3),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,1,3),new ItemStack(ModItems.rune,1,6),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(GT_Utility.getIntegratedCircuit(3),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,0,3),new ItemStack(ModItems.rune,0,6),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(3000))
             .itemOutputs(new ItemStack(ModItems.rune,3,12))
 
@@ -141,7 +141,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(2),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,1,2),new ItemStack(ModItems.rune,1,7),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(GT_Utility.getIntegratedCircuit(2),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,0,2),new ItemStack(ModItems.rune,0,7),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(3000))
             .itemOutputs(new ItemStack(ModItems.rune,3,13))
 
@@ -149,7 +149,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(0),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,1,0),new ItemStack(ModItems.rune,1,7),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(GT_Utility.getIntegratedCircuit(0),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,0,0),new ItemStack(ModItems.rune,0,7),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(3000))
             .itemOutputs(new ItemStack(ModItems.rune,3,14))
 
@@ -157,7 +157,7 @@ public class RuneEngraverRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(RE);
         GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(1),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,1,1),new ItemStack(ModItems.rune,1,5),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(GT_Utility.getIntegratedCircuit(1),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,0,1),new ItemStack(ModItems.rune,0,5),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(3000))
             .itemOutputs(new ItemStack(ModItems.rune,3,15))
 

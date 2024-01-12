@@ -15,15 +15,10 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public void onPlayerConstruction(EntityEvent.EntityConstructing event) {
         if (event.entity instanceof EntityPlayer) {
-            IExtendedEntityProperties basicstats = event.entity.getExtendedProperties("BASIC_COMBAT_STATS");
             IExtendedEntityProperties stats = event.entity.getExtendedProperties("COMBAT_STATS");
             if (stats == null) {
-                stats = new PlayerExtendedProperties();
+                stats = new PlayerExtendedProperties((EntityPlayer) event.entity);
                 event.entity.registerExtendedProperties("COMBAT_STATS", stats);
-            }
-            if (basicstats == null) {
-                basicstats = new BasicPlayerExtendedProperties();
-                event.entity.registerExtendedProperties("BASIC_COMBAT_STATS", basicstats);
             }
         }
     }
@@ -31,13 +26,9 @@ public class PlayerEventHandler {
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event) {
         NBTTagCompound data = new NBTTagCompound();
-        BasicPlayerExtendedProperties.from(event.original)
+        event.original.getExtendedProperties("COMBAT_STATS")
             .saveNBTData(data);
-        PlayerExtendedProperties.from(event.original)
-            .saveNBTData(data);
-        BasicPlayerExtendedProperties.from(event.entityPlayer)
-            .loadNBTData(data);
-        PlayerExtendedProperties.from(event.entityPlayer)
+        event.entityPlayer.getExtendedProperties("COMBAT_STATS")
             .loadNBTData(data);
     }
 }

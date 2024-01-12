@@ -314,7 +314,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                     .buildAndChain(sBlockCasingsTT, 4))
             .addElement(
                 'G',
-                withChannel("fieldGeneratorTier",
+                withChannel("fieldgeneratortier",
                             ofBlocksTiered(
                                 GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
                                 ImmutableList.of(
@@ -423,8 +423,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length - 1] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD + this.mode;
-        ret[origin.length] = EnumChatFormatting.AQUA + "fieldGeneratorTier: "
+        ret[origin.length] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD + this.mode;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "fieldGeneratorTier: "
             + EnumChatFormatting.GOLD
             + this.fieldGeneratorTier;
         return ret;

@@ -129,6 +129,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         this.SCfieldGeneratorTier = 0;
         this.TAfieldGeneratorTier = 0;
         this.STfieldGeneratorTier = 0;

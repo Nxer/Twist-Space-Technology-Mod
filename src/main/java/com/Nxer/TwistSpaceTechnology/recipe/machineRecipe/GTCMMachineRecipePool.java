@@ -45,6 +45,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
@@ -117,6 +118,7 @@ import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
@@ -1494,28 +1496,22 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region Indistinct Tentacle
-        GT_Values.RA
-            .stdBuilder()
+        TST_RecipeBuilder
+            .builder()
             .itemInputs(
                 GGItemList.AdvAssLine.get(64),
                 ItemRefer.Component_Assembly_Line.get(64),
                 CustomItemList.AssemblingMachineUMV.get(64),
                 ItemRefer.Precise_Assembler.get(64),
 
-                GTCMItemList.StellarConstructionFrameMaterial.get(64),
-                GTCMItemList.AnnihilationConstrainer.get(64),
-                GTCMItemList.AnnihilationConstrainer.get(64),
-                GTCMItemList.StellarConstructionFrameMaterial.get(64),
+                setStackSize(GTCMItemList.StellarConstructionFrameMaterial.get(64),128),
+                setStackSize(GTCMItemList.AnnihilationConstrainer.get(64),128),
+                setStackSize(GTCMItemList.DysonSphereFrameComponent.get(64),128),
+                setStackSize(GTCMItemList.SpaceWarper.get(64),128),
 
-                GTCMItemList.DysonSphereFrameComponent.get(64),
-                GTCMItemList.SpaceWarper.get(64),
-                GTCMItemList.GravitationalLens.get(64),
-                GTCMItemList.DysonSphereFrameComponent.get(64),
-
-                CustomItemList.QuantumCircuit.get(64),
-                eM_Ultimate_Containment_Advanced.get(64),
-                eM_Ultimate_Containment_Advanced.get(64),
-                CustomItemList.QuantumCircuit.get(64)
+                setStackSize(GTCMItemList.GravitationalLens.get(64),128),
+                setStackSize(CustomItemList.QuantumCircuit.get(1),128),
+                setStackSize(eM_Ultimate_Containment_Advanced.get(64),128)
             )
             .fluidInputs(
                 MaterialsUEVplus.SpaceTime.getMolten(144*524288),

@@ -267,6 +267,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
      */
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         this.totalSpeedIncrement = 0;
         this.enablePerfectOverclockSignal = false;
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);

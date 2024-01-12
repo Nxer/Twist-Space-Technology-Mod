@@ -119,6 +119,7 @@ public class GT_TileEntity_MagneticDomainConstructor
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
 
         this.rings = 1;
 
