@@ -431,7 +431,7 @@ public class GT_TileEntity_StellarMaterialSiphon
         recipeFluid.amount *= (1 << depth);
 
         if (!canOutputAll(new FluidStack[] { recipeFluid })) {
-            return CheckRecipeResultRegistry.OUTPUT_FULL;
+            return CheckRecipeResultRegistry.FLUID_OUTPUT_FULL;
         }
         long recipeEUt = (long) Integer.MAX_VALUE << depth;
         // calculate overclockedness

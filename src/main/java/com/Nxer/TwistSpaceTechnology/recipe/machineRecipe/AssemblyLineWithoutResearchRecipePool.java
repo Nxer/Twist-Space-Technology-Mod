@@ -6,7 +6,34 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
-import static com.github.technus.tectech.thing.CustomItemList.*;
+import static com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
+import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier0;
+import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier1;
+import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier2;
+import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier3;
+import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier4;
+import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier5;
+import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier6;
+import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier7;
+import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8;
+import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier0;
+import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier1;
+import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier2;
+import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier3;
+import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier4;
+import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier5;
+import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier6;
+import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier7;
+import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8;
+import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier0;
+import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier1;
+import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2;
+import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier3;
+import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier4;
+import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier5;
+import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier6;
+import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier7;
+import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8;
 import static com.google.common.math.LongMath.pow;
 import static gregtech.api.enums.Mods.GalaxySpace;
 import static gregtech.api.enums.Mods.GoodGenerator;
@@ -589,15 +616,11 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     getModItem(GoodGenerator.ID, "compactFusionCoil", 3, 3) };
 
                 final ItemStack[] researchStuff = new ItemStack[] { baseCasing,
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier0.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier1.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier3.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier4.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier5.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier6.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier7.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(1) };
+                    TimeAccelerationFieldGeneratorTier0.get(1), TimeAccelerationFieldGeneratorTier1.get(1),
+                    TimeAccelerationFieldGeneratorTier2.get(1), TimeAccelerationFieldGeneratorTier3.get(1),
+                    TimeAccelerationFieldGeneratorTier4.get(1), TimeAccelerationFieldGeneratorTier5.get(1),
+                    TimeAccelerationFieldGeneratorTier6.get(1), TimeAccelerationFieldGeneratorTier7.get(1),
+                    TimeAccelerationFieldGeneratorTier8.get(1) };
 
                 for (int absoluteTier = 0; absoluteTier < 9; absoluteTier++) {
                     GT_Values.RA.stdBuilder()
@@ -650,38 +673,23 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 // T7 - Black Dwarf Matter
                 // T8 - MHDCSM.
 
-                final ItemStack[] researchStuff = new ItemStack[] { baseCasing,
-                    com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier0.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier1.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier2.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier3.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier4.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier5.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier6.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier7.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(1) };
+                final ItemStack[] researchStuff = new ItemStack[] { baseCasing, StabilisationFieldGeneratorTier0.get(1),
+                    StabilisationFieldGeneratorTier1.get(1), StabilisationFieldGeneratorTier2.get(1),
+                    StabilisationFieldGeneratorTier3.get(1), StabilisationFieldGeneratorTier4.get(1),
+                    StabilisationFieldGeneratorTier5.get(1), StabilisationFieldGeneratorTier6.get(1),
+                    StabilisationFieldGeneratorTier7.get(1), StabilisationFieldGeneratorTier8.get(1) };
 
-                final ItemStack[] timeCasings = new ItemStack[] {
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier0.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier1.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier3.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier4.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier5.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier6.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier7.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(1) };
+                final ItemStack[] timeCasings = new ItemStack[] { TimeAccelerationFieldGeneratorTier0.get(1),
+                    TimeAccelerationFieldGeneratorTier1.get(1), TimeAccelerationFieldGeneratorTier2.get(1),
+                    TimeAccelerationFieldGeneratorTier3.get(1), TimeAccelerationFieldGeneratorTier4.get(1),
+                    TimeAccelerationFieldGeneratorTier5.get(1), TimeAccelerationFieldGeneratorTier6.get(1),
+                    TimeAccelerationFieldGeneratorTier7.get(1), TimeAccelerationFieldGeneratorTier8.get(1) };
 
-                final ItemStack[] spatialCasings = new ItemStack[] {
-                    com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier0.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier1.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier2.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier3.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier4.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier5.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier6.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier7.get(1),
-                    com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8.get(1) };
+                final ItemStack[] spatialCasings = new ItemStack[] { SpacetimeCompressionFieldGeneratorTier0.get(1),
+                    SpacetimeCompressionFieldGeneratorTier1.get(1), SpacetimeCompressionFieldGeneratorTier2.get(1),
+                    SpacetimeCompressionFieldGeneratorTier3.get(1), SpacetimeCompressionFieldGeneratorTier4.get(1),
+                    SpacetimeCompressionFieldGeneratorTier5.get(1), SpacetimeCompressionFieldGeneratorTier6.get(1),
+                    SpacetimeCompressionFieldGeneratorTier7.get(1), SpacetimeCompressionFieldGeneratorTier8.get(1) };
 
                 for (int absoluteTier = 0; absoluteTier < 9; absoluteTier++) {
                     GT_Values.RA.stdBuilder()

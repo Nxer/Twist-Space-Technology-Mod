@@ -1,6 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.*;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockStar;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlock01;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.NuclearReactorBlock;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.PhotonControllerUpgrade;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.BlockNuclearReactor.NuclearReactorBlockMeta;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;

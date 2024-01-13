@@ -2,8 +2,10 @@ package com.Nxer.TwistSpaceTechnology.common.ship.test.ship;
 
 import java.util.ArrayList;
 
-import com.Nxer.TwistSpaceTechnology.common.ship.test.ship.component.*;
-import com.Nxer.TwistSpaceTechnology.common.ship.test.ship.system.*;
+import com.Nxer.TwistSpaceTechnology.common.ship.test.ship.component.ShieldComponent;
+import com.Nxer.TwistSpaceTechnology.common.ship.test.ship.component.WeaponComponent;
+import com.Nxer.TwistSpaceTechnology.common.ship.test.ship.system.ShieldSystem;
+import com.Nxer.TwistSpaceTechnology.common.ship.test.ship.system.WeaponSystem;
 
 public class Ship {
 

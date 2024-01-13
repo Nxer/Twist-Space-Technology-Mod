@@ -6,7 +6,11 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMul
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer;
 import static com.github.technus.tectech.thing.block.QuantumGlassBlock.INSTANCE;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.*;
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.SpacetimeCompressionFieldGenerators;
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.TimeAccelerationFieldGenerator;
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsBA0;
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
