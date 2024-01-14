@@ -1576,7 +1576,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
       GT_Values.RA
             .stdBuilder()
-            .metadata(RESEARCH_ITEM, GTCMItemList.InfManaHatch.get(1))
+            .metadata(RESEARCH_ITEM, GTCMItemList.ManaHatch.get(1))
             .metadata(RESEARCH_TIME, 16 * HOURS)
             .itemInputs(
                 GTCMItemList.ManaHatch.get(64),
