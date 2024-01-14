@@ -6,7 +6,16 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 import java.io.Serializable;
 
-import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.*;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.AmunRa;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.Barnarda;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.CentauriB;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.DSP_Galaxy_NULL;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.Ross128;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.SolarSystem;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.TCeti;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy.Vega;
+
+
 // spotless:on
 
 /**

@@ -1,7 +1,15 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
-import static gregtech.api.enums.Textures.BlockIcons.*;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textCasing;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

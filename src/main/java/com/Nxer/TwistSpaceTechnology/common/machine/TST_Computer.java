@@ -10,8 +10,9 @@ import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStat
 import static com.github.technus.tectech.util.CommonValues.*;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
-import static goodgenerator.loader.Loaders.*;
-import static gregtech.api.enums.GT_HatchElement.*;
+import static goodgenerator.loader.Loaders.FRF_Coil_1;
+import static goodgenerator.loader.Loaders.compactFusionCoil;
+import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
 import static gregtech.api.util.GT_Utility.filterValidMTEs;
 import static gtPlusPlus.core.block.ModBlocks.blockCasings3Misc;
 import static net.minecraft.util.StatCollector.translateToLocal;

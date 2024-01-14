@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
-import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClientOnly.*;
+import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClientOnly.iconsSpaceStationStructureCasingMap;
 import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 

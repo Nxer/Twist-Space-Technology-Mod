@@ -32,7 +32,7 @@ public class LanguageUtil {
 
     /**
      * Construct a LanguageUtil object with language map of "reveal all the details"
-     * 
+     *
      * @param fullSafetyLangPath full language file resource path, for example "/assets/minecraft/lang/en_US.lang"
      */
     public LanguageUtil(String fullSafetyLangPath) {
@@ -41,7 +41,7 @@ public class LanguageUtil {
 
     /**
      * Construct a LanguageUtil object with language map of "reveal all the details"
-     * 
+     *
      * @param safetyLangPath for example "/assets/minecraft/lang/"
      * @param safetyLangCode for example "zh_CN"
      */
@@ -59,7 +59,7 @@ public class LanguageUtil {
 
     /**
      * get the value through I18n, if cannot be obtained correctly, obtain the value through safetyLangMap.
-     * 
+     *
      * @param safetyLangMap a language map of "reveal all the details", ensure language integrity when I18n cannot get
      *                      value of resources correctly
      * @param key           for example "item.gold_ingot.name=Gold Ingot", "item.gold_ingot.name" is the key.
@@ -87,7 +87,7 @@ public class LanguageUtil {
 
     /**
      * get a language resource map through fullLangPath.
-     * 
+     *
      * @param fullLangPath full language file resource path, for example "/assets/minecraft/lang/en_US.lang".
      * @return a language resource map.
      */
