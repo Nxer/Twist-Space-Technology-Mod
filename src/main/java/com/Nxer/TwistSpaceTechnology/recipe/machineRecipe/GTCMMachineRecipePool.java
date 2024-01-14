@@ -11,6 +11,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_ZPM;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfManaHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
@@ -111,6 +112,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.item.ModItems;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -131,6 +134,7 @@ import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsBotania;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
@@ -1556,6 +1560,95 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(assembler);
         // endregion
 
+        // region Mana Hatch
+        GT_Values.RA.stdBuilder()
+        .itemInputs(
+            new ItemStack(ModBlocks.pool,1,1),
+            Materials.Steeleaf.getPlates(16),
+            ItemList.Electric_Pump_IV.get(4),
+            ItemList.Hatch_Input_IV.get(1),
+            GTCMItemList.VoidPollen.get(4)
+        )
+        .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(16 * 1000))
+        .itemOutputs(GTCMItemList.ManaHatch.get(1))
+        .eut(TierEU.RECIPE_IV)
+        .duration(120 * 20)
+        .addTo(assembler);
+
+      GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, GTCMItemList.InfManaHatch.get(1))
+            .metadata(RESEARCH_TIME, 16 * HOURS)
+            .itemInputs(
+                GTCMItemList.ManaHatch.get(64),
+                GTCMItemList.ManaHatch.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.pipeHuge, MaterialsUEVplus.SpaceTime, 3),
+                new ItemStack(ModBlocks.pool,1,3),
+                ItemList.Electric_Pump_UMV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.CosmicNeutronium, 16),
+                GT_OreDictUnificator.get(OrePrefixes.rotor, MaterialsUEVplus.SpaceTime, 16),
+                GT_OreDictUnificator.get(OrePrefixes.pipeTiny, Materials.Polybenzimidazole, 64),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Cosmic), 8},
+                ItemList.Circuit_Wafer_Bioware.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.gearGt, MaterialsBotania.GaiaSpirit, 16),
+
+                copyAmount(64,Ic2Items.iridiumPlate),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUMV, 16)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*64),
+                Materials.Naquadria.getMolten(144*64),
+                Materials.CosmicNeutronium.getMolten(144*64)
+            )
+            .itemOutputs(InfManaHatch.get(1))
+            .eut(RECIPE_UMV)
+            .duration(20*120)
+            .addTo(AssemblyLine);
+
+        // endregion
+
+        // region HST
+
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GGItemList.AdvAssLine.get(64),
+                ItemRefer.Component_Assembly_Line.get(64),
+                CustomItemList.AssemblingMachineUMV.get(64),
+                ItemRefer.Precise_Assembler.get(64),
+
+                setStackSize(GTCMItemList.StellarConstructionFrameMaterial.get(64),128),
+                setStackSize(GTCMItemList.AnnihilationConstrainer.get(64),128),
+                setStackSize(GTCMItemList.DysonSphereFrameComponent.get(64),128),
+                setStackSize(GTCMItemList.SpaceWarper.get(64),128),
+
+                setStackSize(GTCMItemList.GravitationalLens.get(64),128),
+                setStackSize(CustomItemList.QuantumCircuit.get(1),128),
+                setStackSize(eM_Ultimate_Containment_Advanced.get(64),128)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.SpaceTime.getMolten(144*524288),
+                MaterialsUEVplus.Space.getMolten(144*524288),
+                MaterialsUEVplus.Time.getMolten(144*524288),
+                MaterialsUEVplus.Eternity.getMolten(144*524288),
+
+                MaterialsUEVplus.WhiteDwarfMatter.getMolten(144*524288),
+                MaterialsUEVplus.BlackDwarfMatter.getMolten(144*524288),
+                MaterialsUEVplus.Universium.getMolten(144*524288),
+                MaterialsUEVplus.RawStarMatter.getFluid(1000*524288),
+
+                MyMaterial.metastableOganesson.getMolten(144*524288),
+                MyMaterial.shirabon.getMolten(144*524288),
+                Materials.UUMatter.getFluid(1000*2097152),
+                new FluidStack(solderPlasma, 144*2097152)
+            )
+            .itemOutputs(GTCMItemList.HyperSpacetimeTransformer.get(1))
+            .eut(TierEU.RECIPE_MAX)
+            .duration(20 * 14400)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
+        // endregion
     }
     // spotless:on
 }

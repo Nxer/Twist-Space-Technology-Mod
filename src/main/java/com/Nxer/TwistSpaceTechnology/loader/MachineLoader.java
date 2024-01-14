@@ -86,6 +86,7 @@ public class MachineLoader {
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
+    public static ItemStack InfManaHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
     public static ItemStack DualInputBuffer_LuV;
     public static ItemStack DualInputBuffer_ZPM;
@@ -320,6 +321,11 @@ public class MachineLoader {
             TextLocalization.NameInfiniteWirelessDynamoHatch,
             14).getStackForm(1);
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
+
+        //
+        InfManaHatch = new GT_MetaTileEntity_Hatch_Mana(18978, "NameInfManaHatch", TextLocalization.NameInfManaHatch, 9)
+            .getStackForm(1);
+        GTCMItemList.InfManaHatch.set(InfManaHatch);
 
         //
         ManaHatch = new GT_MetaTileEntity_Hatch_Mana(18979, "NameManaHatch", TextLocalization.NameManaHatch, 9)

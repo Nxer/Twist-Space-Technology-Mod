@@ -467,7 +467,7 @@ public class TextLocalization {
     public static final String Tooltip_HyperSpacetimeTransformer_00= texter("To change the material itself in a higher dimension.","Tooltip_HyperSpacetimeTransformer_00");
     public static final String Tooltip_HyperSpacetimeTransformer_01= texter("Molecular Transformer Mode","Tooltip_HyperSpacetimeTransformer_01");
     public static final String Tooltip_HyperSpacetimeTransformer_02= texter("Parallel:Product of three types of field generators.","Tooltip_HyperSpacetimeTransformer_02");
-    public static final String Tooltip_HyperSpacetimeTransformer_03= texter("Tier 9 field generator will decrease energy use by 25%, max 75%.","Tooltip_HyperSpacetimeTransformer_03");
+    public static final String Tooltip_HyperSpacetimeTransformer_03= texter("Tier 9 field generator will decrease energy use by 25%, max 75%. Upgrade field generator also reduce processing time.","Tooltip_HyperSpacetimeTransformer_03");
     public static final String Tooltip_HyperSpacetimeTransformer_04= texter("","Tooltip_HyperSpacetimeTransformer_04");
     public static final String Tooltip_HyperSpacetimeTransformer_05= texter("","Tooltip_HyperSpacetimeTransformer_05");
     public static final String Tooltip_HyperSpacetimeTransformer_06= texter("","Tooltip_HyperSpacetimeTransformer_06");
@@ -493,6 +493,7 @@ public class TextLocalization {
     // region InfiniteAirHatch
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
+    public static final String NameInfManaHatch = texter("Infinite Mana Hatch", "NameInfManaHatch");
     public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
     public static final String NameDualInputBuffer_LuV = texter("Dual Input Buffer (LuV)", "NameDualInputBuffer_LuV");
     public static final String NameDualInputBuffer_ZPM = texter("Dual Input Buffer (ZPM)", "NameDualInputBuffer_ZPM");
