@@ -4,27 +4,25 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfInfi
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 
-import org.jetbrains.annotations.ApiStatus.OverrideOnly;
-
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import vazkii.botania.api.mana.spark.ISparkAttachable;
-import vazkii.botania.common.block.tile.mana.TilePool;
+
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
+import vazkii.botania.api.mana.spark.ISparkAttachable;
 
 public class GT_MetaTileEntity_Hatch_InfMana extends GT_MetaTileEntity_Hatch_FluidGenerator {
 
-    public GT_MetaTileEntity_Hatch_InfMana(final int aID, final String aName, final String aNameRegional, final int aTier) {
+    public GT_MetaTileEntity_Hatch_InfMana(final int aID, final String aName, final String aNameRegional,
+        final int aTier) {
         super(aID, aName, aNameRegional, aTier);
     }
 
@@ -87,23 +85,21 @@ public class GT_MetaTileEntity_Hatch_InfMana extends GT_MetaTileEntity_Hatch_Flu
     }
 
     @Override
-    public boolean addFluidToHatch(long tick)
-    {
-        TileEntity manate=this.getBaseMetaTileEntity()
+    public boolean addFluidToHatch(long tick) {
+        TileEntity manate = this.getBaseMetaTileEntity()
             .getTileEntityAtSideAndDistance(
                 this.getBaseMetaTileEntity()
                     .getFrontFacing(),
                 1);
-                if(manate==null)
-                {
-                    return super.addFluidToHatch(tick);
-                }
-        if(manate instanceof ISparkAttachable)
-                {
-                    ((ISparkAttachable)manate).recieveMana(((ISparkAttachable)manate).getAvailableSpaceForMana());
-                }
+        if (manate == null) {
+            return super.addFluidToHatch(tick);
+        }
+        if (manate instanceof ISparkAttachable) {
+            ((ISparkAttachable) manate).recieveMana(((ISparkAttachable) manate).getAvailableSpaceForMana());
+        }
         return super.addFluidToHatch(tick);
     }
+
     @Override
     public void generateParticles(World aWorld, String name) {}
 
