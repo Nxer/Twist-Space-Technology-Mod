@@ -36,6 +36,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_B
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_InfMana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -323,8 +324,11 @@ public class MachineLoader {
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
 
         //
-        InfManaHatch = new GT_MetaTileEntity_Hatch_Mana(18978, "NameInfManaHatch", TextLocalization.NameInfManaHatch, 9)
-            .getStackForm(1);
+        InfManaHatch = new GT_MetaTileEntity_Hatch_InfMana(
+            18978,
+            "NameInfManaHatch",
+            TextLocalization.NameInfManaHatch,
+            9).getStackForm(1);
         GTCMItemList.InfManaHatch.set(InfManaHatch);
 
         //

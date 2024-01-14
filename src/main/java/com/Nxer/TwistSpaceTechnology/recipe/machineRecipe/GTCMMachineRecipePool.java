@@ -1562,7 +1562,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region Mana Hatch
         GT_Values.RA.stdBuilder()
         .itemInputs(
-            new ItemStack(ModBlocks.pool,1,1),
+            new ItemStack(ModBlocks.pool,1,0),
             Materials.Steeleaf.getPlates(16),
             ItemList.Electric_Pump_IV.get(4),
             ItemList.Hatch_Input_IV.get(1),
@@ -1582,7 +1582,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTCMItemList.ManaHatch.get(64),
                 GTCMItemList.ManaHatch.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.pipeHuge, MaterialsUEVplus.SpaceTime, 3),
-                new ItemStack(ModBlocks.pool,1,3),
+                new ItemStack(ModBlocks.pool,1,1),
                 ItemList.Electric_Pump_UMV.get(16),
                 GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.CosmicNeutronium, 16),
                 GT_OreDictUnificator.get(OrePrefixes.rotor, MaterialsUEVplus.SpaceTime, 16),
