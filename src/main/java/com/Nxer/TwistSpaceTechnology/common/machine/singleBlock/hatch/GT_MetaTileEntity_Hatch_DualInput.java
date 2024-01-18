@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_CRAFTING_INPUT_BUFFER;
 
 import java.util.Arrays;
@@ -93,7 +94,8 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
             getSlots(aTier) + 1,
             new String[] { "Advanced input for Multiblocks", "Capacity: " + getCapacityPerTank(aTier) + " L",
                 "Can hold " + getSlots(aTier) + " types of item and " + getFluidSlotsAmount(aTier) + " types of fluid ",
-                "Automatically separate inputs and lock fluid slots. Break and replace to unlock." });
+                "Automatically separate inputs and lock fluid slots. Break and replace to unlock." ,
+                ModNameDesc});
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];
         fluidTanks = new FluidStackTank[getFluidSlotsAmount(aTier)];
         mCapacityPer = getCapacityPerTank(aTier);
