@@ -93,8 +93,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
             EnumChatFormatting.GRAY + "Does not connect to wires. This block accepts EU into the network.",
             EnumChatFormatting.WHITE
                 + texter("Infinite output voltage limit.", "Description.InfiniteWirelessDynamoHatch.1"),
-            ModNameDesc,
-            authorName_Nxer };
+            ModNameDesc, authorName_Nxer };
     }
 
     @Override
