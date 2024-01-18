@@ -160,6 +160,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         for (ItemStack items : inputs) {
             boolean hasNotFound = true;
             for (GT_Recipe recipe : recipeMap.getAllRecipes()) {
+                if (recipe.mInputs == null || recipe.mInputs.length < 1) continue;
                 if (metaItemEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
                     hasNotFound = false;
