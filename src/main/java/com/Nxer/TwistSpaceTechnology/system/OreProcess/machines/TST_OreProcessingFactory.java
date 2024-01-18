@@ -348,6 +348,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
                 return GT_OverclockCalculator.ofNoOverclock(recipe);
             }
+
         }.setMaxParallel(Integer.MAX_VALUE);
     }
 
