@@ -76,6 +76,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -164,7 +165,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                     + EnumChatFormatting.RESET
                     + ": "
                     + EnumChatFormatting.GOLD
-                    + tag.getLong("costingWirelessEUTemp")
+                    + GT_Utility.formatNumbers(tag.getLong("costingWirelessEUTemp"))
                     + EnumChatFormatting.RESET
                     + " EU");
 
@@ -256,6 +257,13 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                 setEuModifier(getEuModifier());
                 setSpeedBonus(getSpeedBonus());
                 return super.process();
+            }
+
+            @Nonnull
+            @Override
+            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+                // disable overclock calculation
+                return super.createOverclockCalculator(recipe).setNoOverclock(true);
             }
 
         }.setMaxParallelSupplier(this::getLimitedMaxParallel);
