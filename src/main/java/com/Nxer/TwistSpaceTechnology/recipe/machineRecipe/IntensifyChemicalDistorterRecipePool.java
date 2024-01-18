@@ -5,10 +5,13 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
+import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static net.minecraftforge.fluids.FluidRegistry.getFluidStack;
+
+import net.minecraftforge.fluids.FluidRegistry;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -26,6 +29,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.core.material.MISC_MATERIALS;
 
 public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
@@ -560,6 +564,52 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .duration(20 * 20)
             .addTo(ICD);
 
+        // endregion
+
+        // region Living Solder
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                ItemList.Circuit_Chip_Biocell.get(64),
+                GT_OreDictUnificator.get(ItemList.QuantumStar.get(8)),
+                Materials.InfinityCatalyst.getDust(2)
+            )
+            .fluidInputs(
+                Materials.Tin.getPlasma(1000*18),
+                Materials.Bismuth.getPlasma(1000*18),
+                FluidRegistry.getFluidStack("cryotheum", 1000 * 4),
+                Materials.Neutronium.getMolten(144*16)
+            )
+            .fluidOutputs(
+                MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144*280*2)
+            )
+            .specialValue(11700)
+            .eut(RECIPE_UEV)
+            .duration(20*400)
+            .addTo(ICD);
+
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(9),
+                setStackSize(ItemList.Circuit_Chip_Biocell.get(64),64*12),
+                setStackSize(GT_OreDictUnificator.get(ItemList.QuantumStar.get(8)),8*12),
+                Materials.InfinityCatalyst.getDust(2*12)
+            )
+            .fluidInputs(
+                Materials.Tin.getPlasma(1000*18*12),
+                Materials.Bismuth.getPlasma(1000*18*12),
+                FluidRegistry.getFluidStack("cryotheum", 1000 * 4 *12),
+                Materials.Neutronium.getMolten(144*16*12)
+            )
+            .fluidOutputs(
+                MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144*280*2*16)
+            )
+            .specialValue(12600)
+            .eut(RECIPE_UEV)
+            .duration(20*1600)
+            .addTo(ICD);
         // endregion
 
     }

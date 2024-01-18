@@ -1128,18 +1128,18 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemInputs(
                 AnnihilationConstrainer.get(1),
                 ItemRefer.Compact_Fusion_Coil_T0.get(1),
-                ItemRefer.Compact_Fusion_Coil_T4.get(4),
+                ItemRefer.Compact_Fusion_Coil_T4.get(1),
                 Machine_Multi_Transformer.get(1),
 
                 eM_Power.get(16),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, MaterialsUEVplus.SpaceTime, 16),
-                ItemList.Field_Generator_UMV.get(4),
-                QuantumCircuit.get(16),
+                ItemList.Field_Generator_UMV.get(2),
+                QuantumCircuit.get(4),
 
-                PikoCircuit.get(32),
-                ItemList.EnergisedTesseract.get(8),
-                ItemList.Tesseract.get(8),
-                GravitationalLens.get(16)
+                PikoCircuit.get(4),
+                ItemList.EnergisedTesseract.get(4),
+                ItemList.Tesseract.get(4),
+                GravitationalLens.get(8)
             )
             .fluidInputs(
                 new FluidStack(solderPlasma, 144*36),
@@ -1147,7 +1147,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MaterialsUEVplus.ExcitedDTSC.getFluid(1000*4)
             )
             .itemOutputs(InfiniteWirelessDynamoHatch.get(1))
-
             .eut(RECIPE_UXV)
             .duration(20*20)
             .addTo(AssemblyLine);
@@ -1459,7 +1458,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.pipeTiny, Materials.Polybenzimidazole, 64),
 
                 new Object[]{OrePrefixes.circuit.get(Materials.Bio), 8},
-                ItemList.Circuit_Wafer_Bioware.get(64),
+                ItemList.Circuit_Silicon_Wafer7.get(64),
                 ItemList.Circuit_Parts_Chip_Bioware.get(64),
                 HighEnergyFlowCircuit.get(16),
 
