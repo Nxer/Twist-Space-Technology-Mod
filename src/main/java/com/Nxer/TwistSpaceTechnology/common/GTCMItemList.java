@@ -153,7 +153,7 @@ public enum GTCMItemList {
     Rune_of_Erelong,
     Rune_of_Ether,
     Rune_of_Perdition,
-
+    PowerChair,
     // Machines
 
     IntensifyChemicalDistorter,

@@ -6,6 +6,7 @@ import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderRune;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresLinkTool;
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemProofOfHeroes;
 
 public final class BasicItems {
@@ -29,5 +30,10 @@ public final class BasicItems {
         "Multi-Structures Link Tool",
         "MultiStructuresLinkTool",
         GTCMCreativeTabs.tabMultiStructures);
+
+    public static final Item PowerChair = new ItemPowerChair(
+        "Power Chair",
+        "PowerChair",
+        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:PowerChair");
 
 }
