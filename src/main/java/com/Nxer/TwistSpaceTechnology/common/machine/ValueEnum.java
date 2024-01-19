@@ -207,6 +207,7 @@ public final class ValueEnum {
     public static final byte Mode_Default_ThermalEnergyDevourer = Config.Mode_Default_ThermalEnergyDevourer;
     public static final int Parallel_HighSpeedMode_ThermalEnergyDevourer = Config.Parallel_HighSpeedMode_ThermalEnergyDevourer;
     public static final int Parallel_HighParallelMode_ThermalEnergyDevourer = Config.Parallel_HighParallelMode_ThermalEnergyDevourer;
+    public static final int TickPerProgressing_WirelessMode_ThermalEnergyDevourer = Config.TickPerProgressing_WirelessMode_ThermalEnergyDevourer;
 
     // endregion
 

@@ -17,15 +17,29 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static net.minecraft.util.StatCollector.translateToLocalFormatted;
+
+import java.math.BigInteger;
+import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -33,18 +47,26 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OverclockCalculator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings2;
 import gregtech.common.blocks.GT_Block_Casings8;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_ThermalEnergyDevourer> {
 
@@ -72,6 +94,42 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
      */
     private byte mode = ValueEnum.Mode_Default_ThermalEnergyDevourer;
     private int coefficientMultiplier = 1;
+    private boolean isWirelessMode = false;
+    private UUID ownerUUID;
+    private long costingWirelessEUTemp = 0;
+
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.getBoolean("isWirelessMode")) {
+            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + TextLocalization.Waila_WirelessMode);
+            currentTip.add(
+                EnumChatFormatting.AQUA + TextLocalization.Waila_CurrentEuCost
+                    + EnumChatFormatting.RESET
+                    + ": "
+                    + EnumChatFormatting.GOLD
+                    + GT_Utility.formatNumbers(tag.getLong("costingWirelessEUTemp"))
+                    + EnumChatFormatting.RESET
+                    + " EU");
+        } else {
+            currentTip.add(
+                EnumChatFormatting.GOLD
+                    + translateToLocalFormatted("ThermalEnergyDevourer.modeMsg." + tag.getByte("mode")));
+        }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            tag.setByte("mode", mode);
+            tag.setBoolean("isWirelessMode", isWirelessMode);
+            tag.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
+        }
+    }
 
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
@@ -90,6 +148,8 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", mode);
         aNBT.setInteger("coefficientMultiplier", coefficientMultiplier);
+        aNBT.setBoolean("isWirelessMode", isWirelessMode);
+        aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
     }
 
     @Override
@@ -97,6 +157,8 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
         super.loadNBTData(aNBT);
         mode = aNBT.getByte("mode");
         coefficientMultiplier = aNBT.getInteger("coefficientMultiplier");
+        isWirelessMode = aNBT.getBoolean("isWirelessMode");
+        costingWirelessEUTemp = aNBT.getLong("costingWirelessEUTemp");
     }
 
     @Override
@@ -107,6 +169,89 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
                 aPlayer,
                 StatCollector.translateToLocal("ThermalEnergyDevourer.modeMsg." + this.mode));
         }
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                if (!isWirelessMode) {
+                    setEuModifier(getEuModifier());
+                    setSpeedBonus(getSpeedBonus());
+                    setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
+                }
+                return super.process();
+            }
+
+            @Nonnull
+            @Override
+            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+                return isWirelessMode ? GT_OverclockCalculator.ofNoOverclock(recipe)
+                    : super.createOverclockCalculator(recipe);
+            }
+        }.setMaxParallelSupplier(this::getLimitedMaxParallel);
+    }
+
+    @Override
+    protected void setProcessingLogicPower(ProcessingLogic logic) {
+        if (isWirelessMode) {
+            // wireless mode ignore voltage limit
+            logic.setAvailableVoltage(Long.MAX_VALUE);
+            logic.setAvailableAmperage(1);
+            logic.setAmperageOC(false);
+        } else {
+            super.setProcessingLogicPower(logic);
+        }
+    }
+
+    @Nonnull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+        if (!isWirelessMode) return super.checkProcessing();
+
+        // wireless mode
+        setupProcessingLogic(processingLogic);
+
+        CheckRecipeResult result = doCheckRecipe();
+        result = postCheckRecipe(result, processingLogic);
+        // inputs are consumed at this point
+        updateSlots();
+        if (!result.wasSuccessful()) return result;
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+
+        if (processingLogic.getCalculatedEut() > Long.MAX_VALUE / processingLogic.getDuration()) {
+            // total eu cost has overflowed
+            costingWirelessEUTemp = 1145141919810L;
+            BigInteger finalCostEU = BigInteger.valueOf(-1)
+                .multiply(BigInteger.valueOf(processingLogic.getCalculatedEut()))
+                .multiply(BigInteger.valueOf(processingLogic.getDuration()));
+            if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU)) {
+                return CheckRecipeResultRegistry.insufficientPower(1145141919810L);
+            }
+        } else {
+            // fine
+            costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration();
+            if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
+                return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+            }
+        }
+        mMaxProgresstime = ValueEnum.TickPerProgressing_WirelessMode_ThermalEnergyDevourer;
+
+        mOutputItems = processingLogic.getOutputItems();
+        mOutputFluids = processingLogic.getOutputFluids();
+
+        return result;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
     }
 
     @Override
@@ -131,6 +276,7 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
 
     @Override
     protected int getMaxParallelRecipes() {
+        if (isWirelessMode) return Integer.MAX_VALUE;
         return mode == 1 ? ValueEnum.Parallel_HighParallelMode_ThermalEnergyDevourer
             : ValueEnum.Parallel_HighSpeedMode_ThermalEnergyDevourer;
     }
@@ -140,6 +286,9 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         coefficientMultiplier = 1 + getExtraCoefficientMultiplierByVoltageTier();
+        ItemStack controllerSlot = getControllerSlot();
+        isWirelessMode = controllerSlot != null && controllerSlot.stackSize > 0
+            && Utils.metaItemEqual(controllerSlot, ItemList.EnergisedTesseract.get(1));
         return true;
     }
 
@@ -262,9 +411,15 @@ F -> ofFrame...(Materials.NaquadahAlloy);
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_08)
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_09)
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_10)
+            .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_11)
+            .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_12)
+            .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_13)
+            .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_14)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            .addStructureInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_2_01)
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(15, 37, 15, false)
             .addController(TextLocalization.textFrontBottom)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
@@ -272,7 +427,6 @@ F -> ofFrame...(Materials.NaquadahAlloy);
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
