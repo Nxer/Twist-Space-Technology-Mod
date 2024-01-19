@@ -751,3 +751,5 @@ Waila.General.WirelessMode=无线模式
 Waila.General.CurrentEuCost=当前EU消耗
 Tooltip_ThermalEnergyDevourer_2_01=检查结构时检测是否进入无线模式.
 PowerChair.name=Power Chair
+tooltips.PowerChair.page1.line1=Your portal opening day's over.
+tooltips.PowerChair.page2.line1=§dIf you want it, then you'll have to take it.
