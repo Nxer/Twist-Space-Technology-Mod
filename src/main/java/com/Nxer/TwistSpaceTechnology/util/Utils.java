@@ -16,6 +16,8 @@ import gregtech.api.metatileentity.MetaTileEntity;
 
 public final class Utils {
 
+    private static final double LOG2 = Math.log(2);
+
     // region about ItemStack
     public static boolean metaItemEqual(ItemStack a, ItemStack b) {
         if (a == b) return true;
@@ -206,6 +208,10 @@ public final class Utils {
     public static long max(long... values) {
         Arrays.sort(values);
         return values[values.length - 1];
+    }
+
+    public static double calculatePowerTier(double voltage) {
+        return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
     }
 
 }

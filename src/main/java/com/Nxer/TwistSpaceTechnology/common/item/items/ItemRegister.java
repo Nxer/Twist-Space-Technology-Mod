@@ -20,7 +20,7 @@ public class ItemRegister {
 
     public static void registryItems() {
         Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes, MultiStructuresLinkTool,
-            BasicItems.MetaItemRune };
+            BasicItems.MetaItemRune, BasicItems.PowerChair };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.getUnlocalizedName());
@@ -190,6 +190,7 @@ public class ItemRegister {
         GTCMItemList.Rune_of_Perdition.set(initItemRune("Rune of Perdition", 3, new String[]{ TextHandler.texter("Perdition.", "tooltips.Rune_of_Perdition.line1")}));
 
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
+        GTCMItemList.PowerChair.set(new ItemStack(BasicItems.PowerChair, 1));
     }
 
     // spotless:on
