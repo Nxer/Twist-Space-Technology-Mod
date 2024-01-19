@@ -32,7 +32,7 @@ public class DSP_WorldSavedData extends WorldSavedData {
     private static final String NBTTag_UUID_Name = "TST_NBTTag_UUID_Name";
 
     private static void loadInstance(World world) {
-        TwistSpaceTechnology.LOG.info("loadInstance");
+        TwistSpaceTechnology.LOG.info("TST DSP_WorldSavedData loadInstance");
         DysonSpheres.clear();
         DSP_TeamName.clear();
         UUID_Name.clear();
@@ -115,7 +115,7 @@ public class DSP_WorldSavedData extends WorldSavedData {
     @Override
     public void writeToNBT(NBTTagCompound nbtTagCompound) {
 
-        TwistSpaceTechnology.LOG.info("try writeToNBT");
+        // TwistSpaceTechnology.LOG.info("try writeToNBT");
 
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

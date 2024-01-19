@@ -600,5 +600,21 @@ public class TextLocalization {
     public static final String Tooltip_IndistinctTentacle_2_09 = texter("  the Progressing time will be fixed at 1.0s, and EU cost increase to 64 times.","Tooltip_IndistinctTentacle_2_09");
 
     // endregion
+
+    // region ThermalEnergyDevourer
+    public static final String NameThermalEnergyDevourer = texter("Thermal Energy Devourer","NameThermalEnergyDevourer");
+    public static final String Tooltip_ThermalEnergyDevourer_MachineType = texter("Vacuum Freezer","Tooltip_ThermalEnergyDevourer_MachineType");
+    public static final String Tooltip_ThermalEnergyDevourer_Controller = texter("Controller block for the Thermal Energy Devourer","Tooltip_ThermalEnergyDevourer_Controller");
+    public static final String Tooltip_ThermalEnergyDevourer_01 = texter(""+EnumChatFormatting.WHITE+EnumChatFormatting.BOLD+EnumChatFormatting.ITALIC+" It's White Album season again.","Tooltip_ThermalEnergyDevourer_01");
+    public static final String Tooltip_ThermalEnergyDevourer_02 = texter("The thermal energy it greedily devours.","Tooltip_ThermalEnergyDevourer_02");
+    public static final String Tooltip_ThermalEnergyDevourer_03 = texter("But overall it's still a Freezer, and works well.","Tooltip_ThermalEnergyDevourer_03");
+    public static final String Tooltip_ThermalEnergyDevourer_04 = texter("Increasing the input power will also increase the operating efficiency.","Tooltip_ThermalEnergyDevourer_04");
+    public static final String Tooltip_ThermalEnergyDevourer_05 = texter(EnumChatFormatting.GOLD+" ----- High Speed Mode -----","Tooltip_ThermalEnergyDevourer_05");
+    public static final String Tooltip_ThermalEnergyDevourer_06 = texter("Operating efficiency decrease the progress time directly.","Tooltip_ThermalEnergyDevourer_06");
+    public static final String Tooltip_ThermalEnergyDevourer_07 = texter("1024x parallel.","Tooltip_ThermalEnergyDevourer_07");
+    public static final String Tooltip_ThermalEnergyDevourer_08 = texter(EnumChatFormatting.GOLD+" ----- High Parallel Mode -----","Tooltip_ThermalEnergyDevourer_08");
+    public static final String Tooltip_ThermalEnergyDevourer_09 = texter("Operating efficiency decrease the EU cost.","Tooltip_ThermalEnergyDevourer_09");
+    public static final String Tooltip_ThermalEnergyDevourer_10 = texter("Almost infinite parallel.","Tooltip_ThermalEnergyDevourer_10");
+    // endregion
 }
 // spotless:on

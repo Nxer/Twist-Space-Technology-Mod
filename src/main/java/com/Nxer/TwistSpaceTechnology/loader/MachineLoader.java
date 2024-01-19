@@ -31,6 +31,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
@@ -78,6 +79,7 @@ public class MachineLoader {
     public static ItemStack BiosphereIII;
     public static ItemStack AdvancedMegaOilCracker;
     public static ItemStack IndistinctTentacle;
+    public static ItemStack ThermalEnergyDevourer;
 
     public static ItemStack NuclearReactor;
 
@@ -301,6 +303,14 @@ public class MachineLoader {
         AstralComputingArray = new TST_Computer(19029, "NameAstralComputingArray", "Astral Computing Array")
             .getStackForm(1);
         GTCMItemList.AstralComputingArray.set(AstralComputingArray);
+
+        //
+        ThermalEnergyDevourer = new TST_ThermalEnergyDevourer(
+            19030,
+            "NameThermalEnergyDevourer",
+            TextLocalization.NameThermalEnergyDevourer).getStackForm(1);
+        GTCMItemList.ThermalEnergyDevourer.set(ThermalEnergyDevourer);
+
         // endregion
 
         // region Single block Machine
