@@ -213,6 +213,7 @@ public class Config {
     public static byte Mode_Default_ThermalEnergyDevourer = 0;
     public static int Parallel_HighSpeedMode_ThermalEnergyDevourer = 1024;
     public static int Parallel_HighParallelMode_ThermalEnergyDevourer = Integer.MAX_VALUE;
+    public static int TickPerProgressing_WirelessMode_ThermalEnergyDevourer = 128;
     // endregion
 
     // region Infinite Air Hatch
@@ -233,6 +234,7 @@ public class Config {
         if (Mode_Default_ThermalEnergyDevourer < 0 || Mode_Default_ThermalEnergyDevourer > 1) Mode_Default_ThermalEnergyDevourer = 0;
         Parallel_HighSpeedMode_ThermalEnergyDevourer = configuration.getInt("Parallel_HighSpeedMode_ThermalEnergyDevourer", ThermalEnergyDevourer, Parallel_HighSpeedMode_ThermalEnergyDevourer, 1, Integer.MAX_VALUE, "Max Parallel of Thermal Energy Devourer high speed mode. Type: int");
         Parallel_HighParallelMode_ThermalEnergyDevourer = configuration.getInt("Parallel_HighParallelMode_ThermalEnergyDevourer", ThermalEnergyDevourer, Parallel_HighParallelMode_ThermalEnergyDevourer, 1, Integer.MAX_VALUE, "Max Parallel of Thermal Energy Devourer high parallel mode. Type: int");
+        TickPerProgressing_WirelessMode_ThermalEnergyDevourer = configuration.getInt("TickPerProgressing_WirelessMode_ThermalEnergyDevourer", ThermalEnergyDevourer, TickPerProgressing_WirelessMode_ThermalEnergyDevourer, 1, 16384, "How many ticks per progressing cost in Wireless mode of Thermal Energy Devourer. Type: int");
         // endregion
 
         // region IndistinctTentacle

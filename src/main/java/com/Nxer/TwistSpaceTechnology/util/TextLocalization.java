@@ -37,6 +37,11 @@ public class TextLocalization {
     public static final String Tooltips_JoinWirelessNetWithoutEnergyHatch = texter("Joining the wireless EU network when without installing an energy hatch.","Tooltips_JoinWirelessNetWithoutEnergyHatch");
     // endregion
 
+    // region Waila
+    public static final String Waila_WirelessMode = texter("Wireless Mode","Waila.General.WirelessMode");
+    public static final String Waila_CurrentEuCost = texter("Current EU Cost","Waila.General.CurrentEuCost");
+    // endregion
+
     // region Names
     public static final String name_Nxer = "" + EnumChatFormatting.RED
                                                + EnumChatFormatting.BOLD
@@ -615,6 +620,11 @@ public class TextLocalization {
     public static final String Tooltip_ThermalEnergyDevourer_08 = texter(EnumChatFormatting.GOLD+" ----- High Parallel Mode -----","Tooltip_ThermalEnergyDevourer_08");
     public static final String Tooltip_ThermalEnergyDevourer_09 = texter("Operating efficiency decrease the EU cost.","Tooltip_ThermalEnergyDevourer_09");
     public static final String Tooltip_ThermalEnergyDevourer_10 = texter("Almost infinite parallel.","Tooltip_ThermalEnergyDevourer_10");
+    public static final String Tooltip_ThermalEnergyDevourer_11 = texter(EnumChatFormatting.GOLD+" ----- Wireless Mode -----","Tooltip_ThermalEnergyDevourer_11");
+    public static final String Tooltip_ThermalEnergyDevourer_12 = texter("Put Energised Tesseract into controller slot to turn into Wireless mode.","Tooltip_ThermalEnergyDevourer_12");
+    public static final String Tooltip_ThermalEnergyDevourer_13 = texter("Directly consume required EU from wireless EU network.","Tooltip_ThermalEnergyDevourer_13");
+    public static final String Tooltip_ThermalEnergyDevourer_14 = texter("Progress time is fixed at 6.4s .","Tooltip_ThermalEnergyDevourer_14");
+    public static final String Tooltip_ThermalEnergyDevourer_2_01 = texter("Check whether turn into Wireless mode when checking structure.","Tooltip_ThermalEnergyDevourer_2_01");
     // endregion
 }
 // spotless:on
