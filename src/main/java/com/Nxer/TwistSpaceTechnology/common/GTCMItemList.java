@@ -181,6 +181,7 @@ public enum GTCMItemList {
     BiosphereIII,
     AdvancedMegaOilCracker,
     IndistinctTentacle,
+    ThermalEnergyDevourer,
 
     // MAX
     HighDimensionalExtend,
