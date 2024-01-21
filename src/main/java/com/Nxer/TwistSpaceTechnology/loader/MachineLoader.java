@@ -38,6 +38,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_I
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
@@ -108,6 +109,7 @@ public class MachineLoader {
     public static ItemStack BufferedEnergyHatchUMV;
     public static ItemStack BufferedEnergyHatchUXV;
     public static ItemStack BufferedEnergyHatchMAX;
+    public static ItemStack DebugUncertaintyHatch;
 
     // test
     // public static ItemStack TestMachine;
@@ -480,6 +482,14 @@ public class MachineLoader {
         GTCMItemList.BufferedEnergyHatchUMV.set(BufferedEnergyHatchUMV);
         GTCMItemList.BufferedEnergyHatchUXV.set(BufferedEnergyHatchUXV);
         GTCMItemList.BufferedEnergyHatchMAX.set(BufferedEnergyHatchMAX);
+
+        //
+        DebugUncertaintyHatch = new GT_MetaTileEntity_Hatch_UncertaintyDebug(
+            18978,
+            "NameDebugUncertaintyHatch",
+            TextLocalization.NameDebugUncertaintyHatch,
+            12).getStackForm(1);
+        GTCMItemList.DebugUncertaintyHatch.set(DebugUncertaintyHatch);
         // endregion
 
     }

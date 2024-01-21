@@ -232,6 +232,7 @@ public enum GTCMItemList {
     BufferedEnergyHatchUMV,
     BufferedEnergyHatchUXV,
     BufferedEnergyHatchMAX,
+    DebugUncertaintyHatch,
 
     // Blocks
 

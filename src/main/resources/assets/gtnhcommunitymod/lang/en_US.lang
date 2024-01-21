@@ -753,3 +753,6 @@ Tooltip_ThermalEnergyDevourer_2_01=Check whether turn into Wireless mode when ch
 PowerChair.name=Power Chair
 tooltips.PowerChair.page1.line1=Your portal opening day's over.
 tooltips.PowerChair.page2.line1=§dIf you want it, then you'll have to take it.
+NameDebugUncertaintyHatch=Debug Uncertainty Hatch
+DebugUncertaintyHatch.getDescription.01=The quantum world collapses.
+DebugUncertaintyHatch.getDescription.02=Solve the impossible.
