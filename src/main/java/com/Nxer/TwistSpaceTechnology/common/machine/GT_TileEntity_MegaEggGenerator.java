@@ -42,6 +42,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -72,7 +73,6 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     @Override
     @NotNull
     public CheckRecipeResult checkProcessing_EM() {
-        this.useLongPower = true;
         this.mMaxProgresstime = 20;
         getEfficiencyIncrease();
         getOutput();
@@ -93,11 +93,30 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      * 1A EV Dragon egg
      * 2A IV Infinite egg
      * Can be defined in config
+     * 2024.1.21 Fix vol explode
      */
     private void getOutput() {
-        lEUt = (long) (ValueEnum.MEG_Overall_Multiply
+        long vol = 0, amp = 0, tOutput = 0;
+        for (GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
+            vol += tHatch.maxEUOutput();
+            amp += tHatch.maxAmperesOut();
+        }
+        for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : eDynamoMulti) {
+            vol += tHatch.maxEUOutput();
+            amp += tHatch.maxAmperesOut();
+        }
+        if (vol > Integer.MAX_VALUE) vol = Integer.MAX_VALUE;
+        if (amp > Integer.MAX_VALUE) amp = Integer.MAX_VALUE;
+
+        tOutput = (long) (ValueEnum.MEG_Overall_Multiply
             * (ValueEnum.MEG_CrepperEgg_Gen * mCrepperEggs + ValueEnum.MEG_DragonEgg_Gen * mDragonEggs
                 + ValueEnum.MEG_InfinityEgg_Gen * mInfinityEggs));
+        if (tOutput > vol) {
+            mEUt = (int) vol;
+            eAmpereFlow = Math.min(tOutput / vol, amp);
+        } else {
+            mEUt = (int) tOutput;
+        }
     }
 
     /**

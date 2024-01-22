@@ -59,7 +59,7 @@ public class ItemPowerChair extends Item {
                     EnumChatFormatting.LIGHT_PURPLE + "If you want it, then you'll have to take it.",
                     "tooltips.PowerChair.page2.line1"));
         } else {
-            toolTip.add(texter("Your portal opening day's over. ", "tooltips.PowerChair.page1.line1"));
+            toolTip.add(texter("Your portal opening day's over.", "tooltips.PowerChair.page1.line1"));
         }
     }
 }

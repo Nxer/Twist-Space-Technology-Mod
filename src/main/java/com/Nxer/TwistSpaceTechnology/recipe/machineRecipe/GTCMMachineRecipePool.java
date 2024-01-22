@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationCons
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BiosphereIII;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DebugUncertaintyHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_LuV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UHV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UV;
@@ -87,6 +88,7 @@ import static com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Tran
 import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8;
 import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8;
 import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8;
+import static com.github.technus.tectech.thing.CustomItemList.UncertaintyX_Hatch;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Containment_Field;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
@@ -95,6 +97,7 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Teleportation;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
+import static com.github.technus.tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static galaxyspace.core.register.GSMaterials.tantalumCarbideHafniumCarbideMixture;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static gregtech.api.enums.Mods.GTPlusPlus;
@@ -145,6 +148,7 @@ import gregtech.api.util.GT_RecipeConstants;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.ALLOY;
+import gtPlusPlus.core.material.MISC_MATERIALS;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import ic2.core.Ic2Items;
 
@@ -1575,6 +1579,36 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UEV)
             .duration(20*900)
             .addTo(AssemblyLine);
+        // endregion
+
+        // region Debug uncertainty hatch
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(5),
+                UncertaintyX_Hatch.get(1),
+                hatch_CreativeMaintenance.get(1),
+                ItemList.Tool_DataOrb.get(1)
+            )
+            .fluidInputs(MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144*128))
+            .itemOutputs(DebugUncertaintyHatch.get(1))
+            .eut(RECIPE_UEV)
+            .duration(20*120)
+            .addTo(assembler);
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(6),
+                UncertaintyX_Hatch.get(1),
+                hatch_CreativeMaintenance.get(1),
+                ItemList.Tool_DataOrb.get(1),
+                ItemList.Timepiece.get(1)
+            )
+            .fluidInputs(MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144*128))
+            .itemOutputs(DebugUncertaintyHatch.get(16))
+            .eut(RECIPE_UXV)
+            .duration(20*120)
+            .addTo(assembler);
         // endregion
 
     }
