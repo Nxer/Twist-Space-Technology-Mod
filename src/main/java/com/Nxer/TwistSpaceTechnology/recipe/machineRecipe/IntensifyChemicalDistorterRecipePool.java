@@ -572,7 +572,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
                 ItemList.Circuit_Chip_Biocell.get(64),
-                GT_OreDictUnificator.get(ItemList.QuantumStar.get(8)),
+                GT_OreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8),
                 Materials.InfinityCatalyst.getDust(2)
             )
             .fluidInputs(
@@ -594,7 +594,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(9),
                 setStackSize(ItemList.Circuit_Chip_Biocell.get(64),64*12),
-                setStackSize(GT_OreDictUnificator.get(ItemList.QuantumStar.get(8)),8*12),
+                setStackSize(GT_OreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8),8*12),
                 Materials.InfinityCatalyst.getDust(2*12)
             )
             .fluidInputs(
