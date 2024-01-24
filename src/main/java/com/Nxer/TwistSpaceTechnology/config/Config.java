@@ -128,7 +128,7 @@ public class Config {
 
     // region Silksong
     public static float SpeedBonus_MultiplyPerCoilTier_Silksong = 0.9F;
-    public static int Parallel_PerPiece_Silksong = 8;
+    public static int Parallel_PerPiece_Silksong = 24;
     // endregion
 
     // region Holy Separator
