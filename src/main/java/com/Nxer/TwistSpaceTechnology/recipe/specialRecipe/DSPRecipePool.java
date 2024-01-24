@@ -594,9 +594,7 @@ public class DSPRecipePool implements IRecipePool {
                 CustomItemList.QuantumCircuit.get(1),
                 ItemList.EnergisedTesseract.get(1),
                 MyMaterial.shirabon.get(OrePrefixes.foil, 64))
-            .fluidInputs(
-                new FluidStack(solderPlasma, 144 * 16),
-                MaterialsUEVplus.RawStarMatter.getFluid(144 * 16))
+            .fluidInputs(new FluidStack(solderPlasma, 144 * 16), MaterialsUEVplus.RawStarMatter.getFluid(144 * 16))
             .itemOutputs(AnnihilationConstrainer.get(8))
 
             .specialValue(2)
