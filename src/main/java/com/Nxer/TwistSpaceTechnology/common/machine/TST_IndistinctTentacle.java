@@ -262,7 +262,11 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
             @Nonnull
             @Override
             protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
-                return GT_OverclockCalculator.ofNoOverclock(recipe);
+                if (isWirelessMode) {
+                    return GT_OverclockCalculator.ofNoOverclock(recipe);
+                } else {
+                    return super.createOverclockCalculator(recipe);
+                }
             }
 
         }.setMaxParallelSupplier(this::getLimitedMaxParallel);
