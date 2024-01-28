@@ -3,8 +3,10 @@
 * 每个人都可以在这儿集中实现好的想法。
 * 平衡性太糟糕当然不行。
 ## 版本需求
-* GTNH-2.5.0 版本：
-1. 此mod 0.4.0 版本以上直接添加即可
+* GTNH-nightly 版本：
+1. 此mod 0.4.12 版本以上版本直接添加即可
+* GTNH-2.5.1 版本：
+1. 此mod 0.4.0 版本以上 2.5.1适配版本直接添加即可
 * GTNH-2.4.0 版本：
 1. 需要升级GTNH-Lanthanides mod至 0.11.0+版本或专门适配版本；
 2. 需要升级GregTech mod至 5.09.44.03+版本
@@ -20,8 +22,10 @@
 * Everyone can realize ideas here .
 * Just need the balance not too abstract .
 ## Version Requirements
-* GTNH-2.5.0 version:
-1. Directly add this mod 0.4.0+.
+* GTNH-nightly version:
+1. Directly add this mod 0.4.12+ version.
+* GTNH-2.5.1 version:
+1. Directly add this mod 0.4.0+ 2.5.1 fitted version.
 * GTNH-2.4.0 version:
 1. GTNH-Lanthanides mod need version 0.11.0+ .
 2. GregTech mod need version 5.09.44.03+ .
