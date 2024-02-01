@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 
 import java.io.File;
+import java.math.BigInteger;
 
 import net.minecraftforge.common.config.Configuration;
 
@@ -46,6 +47,7 @@ public class Config {
     // region Dyson Sphere Program
     public static long EUPerCriticalPhoton = Integer.MAX_VALUE;
     public static long solarSailPowerPoint = 524288;
+    public static BigInteger solarSailPowerPoint_BigInteger = BigInteger.valueOf(524288);
     public static long solarSailCanHoldPerNode = 256;
     public static long solarSailCanHoldDefault = 2048;
     public static long maxPowerPointPerReceiver = 1024L * Integer.MAX_VALUE;
@@ -366,6 +368,7 @@ public class Config {
         // region DSP
         EUPerCriticalPhoton = Long.parseLong(configuration.getString("EUPerCriticalPhoton", DSP, String.valueOf(EUPerCriticalPhoton), "EU per Critical Photon Cost. Type: long"));
         solarSailPowerPoint = Long.parseLong(configuration.getString("solarSailPowerPoint", DSP, String.valueOf(solarSailPowerPoint), "DSP Power Point per Solar Sail can produce. Type: long"));
+        solarSailPowerPoint_BigInteger = BigInteger.valueOf(solarSailPowerPoint);
         solarSailCanHoldPerNode = Long.parseLong(configuration.getString("solarSailCanHoldPerNode", DSP, String.valueOf(solarSailCanHoldPerNode), "Solar Sail amount per DSP Node can hold. Type: long"));
         solarSailCanHoldDefault = Long.parseLong(configuration.getString("solarSailCanHoldDefault", DSP, String.valueOf(solarSailCanHoldDefault), "Default Solar Sail amount can hold. Type: long"));
         maxPowerPointPerReceiver = Long.parseLong(configuration.getString("maxPowerPointPerReceiver", DSP, String.valueOf(maxPowerPointPerReceiver), "Max DSP Power Point per DSP Receiver can request. Type: long"));
