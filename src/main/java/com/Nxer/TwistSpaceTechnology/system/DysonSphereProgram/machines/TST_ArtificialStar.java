@@ -23,6 +23,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Artifi
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_05;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_06;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_07;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_08;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_MachineType;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
@@ -532,6 +533,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
             .addInfo(Tooltip_ArtificialStar_05)
             .addInfo(Tooltip_ArtificialStar_06)
             .addInfo(Tooltip_ArtificialStar_07)
+            .addInfo(Tooltip_ArtificialStar_08)
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addSeparator()
