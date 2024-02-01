@@ -21,6 +21,7 @@ public final class DSP_Values {
     public static final int ticksOfLaunchingNode = (int) (20 * Config.secondsOfLaunchingNode);
     public static final int EUTOfLaunchingSolarSail = Config.EUTOfLaunchingSolarSail;
     public static final int EUTOfLaunchingNode = Config.EUTOfLaunchingNode;
+    public static final byte EnableRenderDefaultArtificialStar = (byte) (Config.EnableRenderDefaultArtificialStar ? 1 : 0);
 
     // spotless:on
 }

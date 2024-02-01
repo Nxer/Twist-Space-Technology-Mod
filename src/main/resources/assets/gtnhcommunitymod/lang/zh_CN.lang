@@ -345,6 +345,7 @@ Tooltip_ArtificialStar_04=同时, 更高等级会提高回收原料的概率.
 Tooltip_ArtificialStar_05=保持连续运行也会提高能量输出.
 Tooltip_ArtificialStar_06=只允许且必须安装一个输入总线.
 Tooltip_ArtificialStar_07=能量将直接输出到无线EU网络.
+Tooltip_ArtificialStar_08=使用螺丝刀开启/关闭动画特效.
 Tooltip_ArtificialStar_02_01=输出系数 = 时间场等级^0.25 * 空间场等级^0.25 * 1.588186^(稳定场等级 - 2)
 Tooltip_ArtificialStar_02_02=实际输出EU = 配方数值 * 输出系数 * 连续运行奖励系数
 Tooltip_ArtificialStar_02_03=原料回收概率 = 时间场等级 * 空间场等级 * 稳定场等级 / 1000
@@ -756,3 +757,5 @@ tooltips.PowerChair.page2.line1=§dIf you want it, then you'll have to take it.
 NameDebugUncertaintyHatch=Debug未定元解析器
 DebugUncertaintyHatch.getDescription.01=量子世界坍塌.
 DebugUncertaintyHatch.getDescription.02=解决不可能解决的问题.
+ArtificialStar.enableRender.0=关闭特效渲染
+ArtificialStar.enableRender.1=开启特效渲染

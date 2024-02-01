@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AntimatterFuelRo
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatter;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
+import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EnableRenderDefaultArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
@@ -54,16 +55,19 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -91,6 +95,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_Utility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -123,6 +128,10 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     private short recoveryChance = 0;
     private byte rewardContinuous = 0;
     private long currentOutputEU = 0;
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.0");
+    private boolean isRendering = false;
+    private byte enableRender = EnableRenderDefaultArtificialStar;
+    public static final BigInteger BIG_INTEGER_100 = BigInteger.valueOf(100);
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -134,6 +143,9 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
                 EnumChatFormatting.AQUA + texter("Current Generating : ", "Waila.TST_ArtificialStar.1")
                     + EnumChatFormatting.GOLD
                     + tag.getLong("currentOutputEU")
+                    + EnumChatFormatting.RED
+                    + " * "
+                    + decimalFormat.format(tag.getDouble("outputMultiplier"))
                     + EnumChatFormatting.GREEN
                     + " * 2147483647"
                     + EnumChatFormatting.RESET
@@ -151,6 +163,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         if (tileEntity != null) {
             if (tileEntity.isActive()) {
                 tag.setLong("currentOutputEU", currentOutputEU);
+                tag.setDouble("outputMultiplier", (outputMultiplier * (rewardContinuous + 100) / 100));
             }
         }
     }
@@ -169,6 +182,20 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         ret[origin.length + 5] = EnumChatFormatting.GOLD+texter("Recover material chance","TST_ArtificialStar.getInfoData.05")+EnumChatFormatting.RESET+": "+EnumChatFormatting.AQUA+recoveryChance+EnumChatFormatting.RESET+"/"+EnumChatFormatting.AQUA+"1000";
         return ret;
        // spotless:on
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.enableRender = (byte) ((this.enableRender + 1) % 2);
+            GT_Utility.sendChatToPlayer(
+                aPlayer,
+                StatCollector.translateToLocal("ArtificialStar.enableRender." + this.enableRender));
+            if (enableRender == 0 && isRendering) {
+                destroyRenderBlock();
+                isRendering = false;
+            }
+        }
     }
 
     @NotNull
@@ -196,6 +223,11 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         if (!flag) {
             // set 0 to multiplier of rewarding continuous operation
             rewardContinuous = 0;
+            // stop render
+            if (isRendering) {
+                destroyRenderBlock();
+                isRendering = false;
+            }
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
 
@@ -216,7 +248,12 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
 
         // increase multiplier of rewarding continuous operation
         if (rewardContinuous < 50) rewardContinuous++;
-        createRenderBlock();
+
+        // start render
+        if (enableRender != 0 && !isRendering) {
+            createRenderBlock();
+            isRendering = true;
+        }
         return CheckRecipeResultRegistry.GENERATING;
     }
 
@@ -234,10 +271,14 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
             < antimatter.stackSize) {
             addEUToGlobalEnergyMap(
                 ownerUUID,
-                BigInteger.valueOf((long) (outputMultiplier * EUEveryAntimatter))
-                    .multiply(BigInteger.valueOf(antimatter.stackSize)));
+                BigInteger.valueOf((long) (EUEveryAntimatter * outputMultiplier))
+                    .multiply(BigInteger.valueOf(antimatter.stackSize))
+                    .multiply(BigInteger.valueOf(rewardContinuous + 100))
+                    .divide(BIG_INTEGER_100));
         } else {
-            addEUToGlobalEnergyMap(ownerUUID, (long) (outputMultiplier * antimatter.stackSize * EUEveryAntimatter));
+            addEUToGlobalEnergyMap(
+                ownerUUID,
+                (long) (EUEveryAntimatter * antimatter.stackSize * outputMultiplier * (rewardContinuous + 100) / 100));
         }
         antimatter.stackSize = 0;
     }
@@ -247,13 +288,17 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
             < antimatterFuelRod.stackSize) {
             addEUToGlobalEnergyMap(
                 ownerUUID,
-                BigInteger.valueOf(EUEveryAntimatterFuelRod)
+                BigInteger.valueOf((long) (EUEveryAntimatterFuelRod * outputMultiplier))
                     .multiply(BigInteger.valueOf(antimatterFuelRod.stackSize))
-                    .multiply(BigInteger.valueOf(rewardContinuous + 100)));
+                    .multiply(BigInteger.valueOf(rewardContinuous + 100))
+                    .divide(BIG_INTEGER_100));
         } else {
             addEUToGlobalEnergyMap(
                 ownerUUID,
-                antimatterFuelRod.stackSize * EUEveryAntimatterFuelRod * (rewardContinuous + 100));
+                (long) (EUEveryAntimatterFuelRod * antimatterFuelRod.stackSize
+                    * outputMultiplier
+                    * (rewardContinuous + 100)
+                    / 100));
         }
         antimatterFuelRod.stackSize = 0;
     }
@@ -271,7 +316,19 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if (rewardContinuous != 0 && mMaxProgresstime == 0) rewardContinuous = 0;
-        if (mMaxProgresstime > 0 && mMaxProgresstime - mProgresstime == 1) destroyRenderBlock();
+        if (isRendering && mMaxProgresstime == 0) {
+            isRendering = false;
+            destroyRenderBlock();
+        }
+    }
+
+    @Override
+    public void onBlockDestroyed() {
+        if (isRendering) {
+            isRendering = false;
+            destroyRenderBlock();
+        }
+        super.onBlockDestroyed();
     }
 
     @Override
@@ -284,6 +341,8 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         aNBT.setDouble("outputMultiplier", outputMultiplier);
         aNBT.setByte("rewardContinuous", rewardContinuous);
         aNBT.setLong("currentOutputEU", currentOutputEU);
+        aNBT.setBoolean("isRendering", isRendering);
+        aNBT.setByte("enableRender", enableRender);
     }
 
     @Override
@@ -296,6 +355,8 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         outputMultiplier = aNBT.getDouble("outputMultiplier");
         rewardContinuous = aNBT.getByte("rewardContinuous");
         currentOutputEU = aNBT.getLong("currentOutputEU");
+        isRendering = aNBT.getBoolean("isRendering");
+        enableRender = aNBT.getByte("enableRender");
     }
 
     // endregion
@@ -572,6 +633,16 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
 
     @Override
     public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
         return false;
     }
 

@@ -388,6 +388,7 @@ public class TextLocalization {
     public static final String Tooltip_ArtificialStar_05 = texter("Continuous operation improves power generation.","Tooltip_ArtificialStar_05");
     public static final String Tooltip_ArtificialStar_06 = texter("Only and must install 1 input bus.","Tooltip_ArtificialStar_06");
     public static final String Tooltip_ArtificialStar_07 = texter("Energy will output to Wireless EU Net directly.","Tooltip_ArtificialStar_07");
+    public static final String Tooltip_ArtificialStar_08 = texter("Use screwdriver to enable/disable animations.","Tooltip_ArtificialStar_08");
     public static final String Tooltip_ArtificialStar_02_01 = texter("Output multiplier = tTime^0.25 * tDim^0.25 * 1.588186^(tStabilisation - 2)","Tooltip_ArtificialStar_02_01");
     public static final String Tooltip_ArtificialStar_02_02 = texter("Actual Generating EU = recipe value * output multiplier * Rewards for continuous operation","Tooltip_ArtificialStar_02_02");
     public static final String Tooltip_ArtificialStar_02_03 = texter("Recovering probability = tTime * tDim * tStabilisation / 1000","Tooltip_ArtificialStar_02_03");
