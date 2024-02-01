@@ -60,6 +60,7 @@ public class Config {
     public static double secondsOfLaunchingNode = 900;
     public static int EUTOfLaunchingSolarSail = (int) RECIPE_UHV;
     public static int EUTOfLaunchingNode = (int) RECIPE_UMV;
+    public static boolean EnableRenderDefaultArtificialStar = true;
 
     // endregion
 
@@ -379,6 +380,7 @@ public class Config {
         secondsOfLaunchingNode = Double.parseDouble(configuration.getString("secondsOfLaunchingNode", DSP, String.valueOf(secondsOfLaunchingNode), "Seconds of launching a Dyson Sphere Node."));
         EUTOfLaunchingSolarSail = configuration.getInt("EUTOfLaunchingSolarSail", DSP, EUTOfLaunchingSolarSail, 1, Integer.MAX_VALUE, "EUt of Launching Solar Sail.");
         EUTOfLaunchingNode = configuration.getInt("EUTOfLaunchingNode", DSP, EUTOfLaunchingNode, 1, Integer.MAX_VALUE, "EUt of Launching Node.");
+        EnableRenderDefaultArtificialStar = configuration.getBoolean("EnableRenderDefaultArtificialStar", DSP, EnableRenderDefaultArtificialStar, "Enable Render of Artificial Star when placing a new one.");
         // endregion
 
         // region Space Station
