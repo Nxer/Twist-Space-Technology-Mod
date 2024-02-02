@@ -293,7 +293,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
 
         aNBT.setBoolean("mode", mode);
         aNBT.setBoolean("enablePerfectOverclockSignal", enablePerfectOverclockSignal);
-        aNBT.setInteger("totalSpeedIncrement",totalSpeedIncrement);
+        aNBT.setInteger("totalSpeedIncrement", totalSpeedIncrement);
     }
 
     @Override
