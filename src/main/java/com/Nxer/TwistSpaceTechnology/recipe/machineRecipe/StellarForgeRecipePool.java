@@ -4,12 +4,16 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.TST_Recipe;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.ibm.icu.text.UFormat;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -74,6 +78,8 @@ public class StellarForgeRecipePool implements IRecipePool {
 
         // add SpecialRecipeOutputs
         SpecialRecipeOutputs.add(TST_ItemID.create(WerkstoffLoader.CubicZirconia.get(OrePrefixes.gemFlawed, 1)));
+        SpecialRecipeOutputs.add(TST_ItemID.create(Materials.MeteoricIron.getIngots(1)));
+        SpecialRecipeOutputs.add(TST_ItemID.create(Materials.MeteoricSteel.getIngots(1)));
 
     }
 
@@ -235,6 +241,44 @@ public class StellarForgeRecipePool implements IRecipePool {
         return out;
     }
 
+    public void loadManualRecipes() {
+
+        // Meteoric Iron and Meteoric Steel
+        // Meteoric Iron
+        TST_RecipeBuilder bd = TST_RecipeBuilder
+                                   .builder()
+                                   .itemInputs(
+                                       GT_Utility.getIntegratedCircuit(1),
+                                       Materials.MeteoricIron.getDust(1)
+                                   );
+        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
+            bd.fluidOutputs(Materials.MeteoricIron.getMolten(144));
+        } else {
+            bd.itemOutputs(Materials.MeteoricIron.getIngots(1));
+        }
+        bd.eut(RECIPE_MV)
+            .duration(20*25)
+            .addTo(GTCMRecipe.StellarForgeRecipes);
+
+        // Meteoric Steel
+        bd = TST_RecipeBuilder
+                 .builder()
+                 .itemInputs(
+                     GT_Utility.getIntegratedCircuit(2),
+                     Materials.MeteoricIron.getDust(1)
+                 );
+
+        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
+            bd.fluidOutputs(Materials.MeteoricSteel.getMolten(144));
+        } else {
+            bd.itemOutputs(Materials.MeteoricSteel.getIngots(1));
+        }
+        bd.eut(RECIPE_MV)
+          .duration(20*10)
+          .addTo(GTCMRecipe.StellarForgeRecipes);
+
+    }
+
     public static Collection<GT_Recipe> stellarForgeRecipeListCache;
 
     private void cacheRecipeList() {
@@ -251,6 +295,7 @@ public class StellarForgeRecipePool implements IRecipePool {
     public void loadRecipes() {
         initData();
         prepareEBFRecipes();
+        loadManualRecipes();
         cacheRecipeList();
     }
 
