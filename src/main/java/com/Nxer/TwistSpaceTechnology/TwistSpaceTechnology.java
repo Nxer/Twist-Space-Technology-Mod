@@ -44,7 +44,7 @@ public class TwistSpaceTechnology {
      * <li>The signal of whether in Development Mode.
      * <li>Keep care to set 'false' when dev complete.
      */
-    public static final boolean isInDevMode = true;
+    public static final boolean isInDevMode = false;
 
     /**
      * The absolute Path of your workspace/resources folder.
