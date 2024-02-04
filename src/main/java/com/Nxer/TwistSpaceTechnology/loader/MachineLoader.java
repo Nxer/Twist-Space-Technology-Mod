@@ -32,6 +32,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFac
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
@@ -51,7 +52,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 public class MachineLoader {
 
     public static ItemStack IntensifyChemicalDistorter; // INTENSIFY_CHEMICAL_DISTORTER
-    public static ItemStack PreciseHighEnergyPhotonicQuantumMaster; // INTENSIFY_CHEMICAL_DISTORTER
+    public static ItemStack PreciseHighEnergyPhotonicQuantumMaster;
     public static ItemStack MiracleTop;
     public static ItemStack MagneticDrivePressureFormer;
     public static ItemStack PhysicalFormSwitcher;
@@ -85,6 +86,7 @@ public class MachineLoader {
     public static ItemStack NuclearReactor;
 
     public static ItemStack AstralComputingArray;
+    public static ItemStack VacuumFilterExtractor;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -312,6 +314,13 @@ public class MachineLoader {
             "NameThermalEnergyDevourer",
             TextLocalization.NameThermalEnergyDevourer).getStackForm(1);
         GTCMItemList.ThermalEnergyDevourer.set(ThermalEnergyDevourer);
+
+        //
+        VacuumFilterExtractor = new TST_VacuumFilterExtractor(
+            19031,
+            "NameVacuumFilterExtractor",
+            TextLocalization.NameVacuumFilterExtractor).getStackForm(1);
+        GTCMItemList.VacuumFilterExtractor.set(VacuumFilterExtractor);
 
         // endregion
 

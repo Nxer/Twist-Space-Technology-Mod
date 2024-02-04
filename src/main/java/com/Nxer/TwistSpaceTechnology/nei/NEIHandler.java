@@ -74,6 +74,8 @@ public class NEIHandler {
         sendCatalyst("gg.recipe.componentassemblyline", "gregtech:gt.blockmachines:19028");
         sendCatalyst("gt.recipe.assembler", "gregtech:gt.blockmachines:19028");
         sendCatalyst("gg.recipe.precise_assembler", "gregtech:gt.blockmachines:19028");
+        sendCatalyst("gt.recipe.distillery", "gregtech:gt.blockmachines:19031");
+        sendCatalyst("gt.recipe.distillationtower", "gregtech:gt.blockmachines:19031");
 
     }
 

@@ -622,7 +622,7 @@ public class TextLocalization {
     public static final String Tooltip_ThermalEnergyDevourer_09 = texter("Operating efficiency decrease the EU cost.","Tooltip_ThermalEnergyDevourer_09");
     public static final String Tooltip_ThermalEnergyDevourer_10 = texter("Almost infinite parallel.","Tooltip_ThermalEnergyDevourer_10");
     public static final String Tooltip_ThermalEnergyDevourer_11 = texter(EnumChatFormatting.GOLD+" ----- Wireless Mode -----","Tooltip_ThermalEnergyDevourer_11");
-    public static final String Tooltip_ThermalEnergyDevourer_12 = texter("Put Energised Tesseract into controller slot to turn into Wireless mode.","Tooltip_ThermalEnergyDevourer_12");
+    public static final String Tooltip_ThermalEnergyDevourer_12 = texter("Put "+EnumChatFormatting.AQUA+"Energised Tesseract"+EnumChatFormatting.GRAY+" into controller slot to turn into Wireless mode.","Tooltip_ThermalEnergyDevourer_12");
     public static final String Tooltip_ThermalEnergyDevourer_13 = texter("Directly consume required EU from wireless EU network.","Tooltip_ThermalEnergyDevourer_13");
     public static final String Tooltip_ThermalEnergyDevourer_14 = texter("Progress time is fixed at 6.4s .","Tooltip_ThermalEnergyDevourer_14");
     public static final String Tooltip_ThermalEnergyDevourer_2_01 = texter("Check whether turn into Wireless mode when checking structure.","Tooltip_ThermalEnergyDevourer_2_01");
@@ -630,6 +630,10 @@ public class TextLocalization {
 
     // region Debug Uncertainty Hatch
     public static final String NameDebugUncertaintyHatch = texter("Debug Uncertainty Hatch","NameDebugUncertaintyHatch");
+    // endregion
+
+    //region Vacuum Filter Extractor
+    public static final String NameVacuumFilterExtractor = texter("Vacuum Filter Extractor","NameVacuumFilterExtractor");
     // endregion
 
 }
