@@ -572,7 +572,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
                 ItemList.Circuit_Chip_Biocell.get(64),
-                GT_OreDictUnificator.get(ItemList.QuantumStar.get(8)),
+                GT_OreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8),
                 Materials.InfinityCatalyst.getDust(2)
             )
             .fluidInputs(
@@ -594,7 +594,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(9),
                 setStackSize(ItemList.Circuit_Chip_Biocell.get(64),64*12),
-                setStackSize(GT_OreDictUnificator.get(ItemList.QuantumStar.get(8)),8*12),
+                setStackSize(GT_OreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8),8*12),
                 Materials.InfinityCatalyst.getDust(2*12)
             )
             .fluidInputs(
@@ -609,6 +609,26 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .specialValue(12600)
             .eut(RECIPE_UEV)
             .duration(20*1600)
+            .addTo(ICD);
+        // endregion
+
+        // region Ethyl Cyanoacrylate Super Glue
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(15),
+                Materials.Carbon.getDust(41)
+            )
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*142),
+                Materials.Oxygen.getGas(1000*41)
+            )
+            .fluidOutputs(
+                MISC_MATERIALS.ETHYL_CYANOACRYLATE.getFluidStack(1000*10)
+            )
+            .specialValue(11700)
+            .eut(RECIPE_UEV)
+            .duration(20*8)
             .addTo(ICD);
         // endregion
 

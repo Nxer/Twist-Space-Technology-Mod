@@ -213,6 +213,11 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     // region General
 
     @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType(TextLocalization.Tooltip_Scavenger_MachineType)

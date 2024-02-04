@@ -202,7 +202,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     }
 
     public int getMaxParallelRecipes() {
-        return (int) Math.min(ValueEnum.MAX_PARALLEL_LIMIT, Math.pow(2, GT_Utility.getTier(this.getMaxInputVoltage())));
+        return Integer.MAX_VALUE;
     }
 
     public float getSpeedBonus() {

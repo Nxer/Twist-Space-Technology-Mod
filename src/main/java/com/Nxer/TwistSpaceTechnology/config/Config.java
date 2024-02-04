@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 
 import java.io.File;
+import java.math.BigInteger;
 
 import net.minecraftforge.common.config.Configuration;
 
@@ -30,6 +31,7 @@ public class Config {
     public static final String AdvancedMegaOilCracker = "AdvancedMegaOilCracker";
     public static final String IndistinctTentacle = "IndistinctTentacle";
     public static final String ThermalEnergyDevourer = "ThermalEnergyDevourer";
+    public static final String VacuumFilterExtractor = "VacuumFilterExtractor";
     public static final String MEG = "TowerOFAbstraction";
     public static final String SingleBlocks = "SingleBlocks";
 
@@ -46,6 +48,7 @@ public class Config {
     // region Dyson Sphere Program
     public static long EUPerCriticalPhoton = Integer.MAX_VALUE;
     public static long solarSailPowerPoint = 524288;
+    public static BigInteger solarSailPowerPoint_BigInteger = BigInteger.valueOf(524288);
     public static long solarSailCanHoldPerNode = 256;
     public static long solarSailCanHoldDefault = 2048;
     public static long maxPowerPointPerReceiver = 1024L * Integer.MAX_VALUE;
@@ -60,6 +63,7 @@ public class Config {
     public static double secondsOfLaunchingNode = 900;
     public static int EUTOfLaunchingSolarSail = (int) RECIPE_UHV;
     public static int EUTOfLaunchingNode = (int) RECIPE_UMV;
+    public static boolean EnableRenderDefaultArtificialStar = true;
 
     // endregion
 
@@ -128,7 +132,7 @@ public class Config {
 
     // region Silksong
     public static float SpeedBonus_MultiplyPerCoilTier_Silksong = 0.9F;
-    public static int Parallel_PerPiece_Silksong = 8;
+    public static int Parallel_PerPiece_Silksong = 24;
     // endregion
 
     // region Holy Separator
@@ -216,6 +220,11 @@ public class Config {
     public static int TickPerProgressing_WirelessMode_ThermalEnergyDevourer = 128;
     // endregion
 
+    // region VacuumFilterExtractor
+    public static byte Mode_Default_VacuumFilterExtractor = 0;
+    public static float EuModifier_VacuumFilterExtractor = 0.5F;
+    // endregion
+
     // region Infinite Air Hatch
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
@@ -227,6 +236,11 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region VacuumFilterExtractor
+        Mode_Default_VacuumFilterExtractor = (byte) configuration.getInt("Mode_Default_VacuumFilterExtractor", VacuumFilterExtractor, Mode_Default_VacuumFilterExtractor, 0, 1, "Default mode when placing a Vacuum Filter Extractor controller block. 0=Distillation Tower; 1=Distillery. Type: byte");
+        EuModifier_VacuumFilterExtractor = Float.parseFloat(configuration.getString("EuModifier_VacuumFilterExtractor", VacuumFilterExtractor, String.valueOf(EuModifier_VacuumFilterExtractor), "Eu Modifier of Vacuum Filter Extractor. Type: float"));
         // endregion
 
         // region ThermalEnergyDevourer
@@ -365,6 +379,7 @@ public class Config {
         // region DSP
         EUPerCriticalPhoton = Long.parseLong(configuration.getString("EUPerCriticalPhoton", DSP, String.valueOf(EUPerCriticalPhoton), "EU per Critical Photon Cost. Type: long"));
         solarSailPowerPoint = Long.parseLong(configuration.getString("solarSailPowerPoint", DSP, String.valueOf(solarSailPowerPoint), "DSP Power Point per Solar Sail can produce. Type: long"));
+        solarSailPowerPoint_BigInteger = BigInteger.valueOf(solarSailPowerPoint);
         solarSailCanHoldPerNode = Long.parseLong(configuration.getString("solarSailCanHoldPerNode", DSP, String.valueOf(solarSailCanHoldPerNode), "Solar Sail amount per DSP Node can hold. Type: long"));
         solarSailCanHoldDefault = Long.parseLong(configuration.getString("solarSailCanHoldDefault", DSP, String.valueOf(solarSailCanHoldDefault), "Default Solar Sail amount can hold. Type: long"));
         maxPowerPointPerReceiver = Long.parseLong(configuration.getString("maxPowerPointPerReceiver", DSP, String.valueOf(maxPowerPointPerReceiver), "Max DSP Power Point per DSP Receiver can request. Type: long"));
@@ -379,6 +394,7 @@ public class Config {
         secondsOfLaunchingNode = Double.parseDouble(configuration.getString("secondsOfLaunchingNode", DSP, String.valueOf(secondsOfLaunchingNode), "Seconds of launching a Dyson Sphere Node."));
         EUTOfLaunchingSolarSail = configuration.getInt("EUTOfLaunchingSolarSail", DSP, EUTOfLaunchingSolarSail, 1, Integer.MAX_VALUE, "EUt of Launching Solar Sail.");
         EUTOfLaunchingNode = configuration.getInt("EUTOfLaunchingNode", DSP, EUTOfLaunchingNode, 1, Integer.MAX_VALUE, "EUt of Launching Node.");
+        EnableRenderDefaultArtificialStar = configuration.getBoolean("EnableRenderDefaultArtificialStar", DSP, EnableRenderDefaultArtificialStar, "Enable Render of Artificial Star when placing a new one.");
         // endregion
 
         // region Space Station

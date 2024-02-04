@@ -15,7 +15,6 @@ import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR;
@@ -199,8 +198,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         /* index of chem inert casing */
         /* preview channel of blueprint */
         // Structure def
-        IStructureDefinition<GT_TileEntity_IntensifyChemicalDistorter> structure = StructureDefinition
-            .<GT_TileEntity_IntensifyChemicalDistorter>builder()
+        return StructureDefinition.<GT_TileEntity_IntensifyChemicalDistorter>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
             .addElement('s', ofBlock(GregTech_API.sBlockCasings4, 1))
             .addElement('v', ofBlock(GregTech_API.sBlockCasings8, 0))
@@ -223,7 +221,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             .addElement(
                 'b',
                 GT_HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
-                    .atLeast(InputBus, OutputBus, Maintenance)
+                    .atLeast(InputBus, OutputBus)
                     .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                     .casingIndex(49)/* index of chem inert casing */
                     .dot(2)/* preview channel of blueprint */
@@ -237,7 +235,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                     .dot(3)
                     .buildAndChain(GregTech_API.sBlockCasings1, 11))
             .build();
-        return structure;
     }
 
     public void setCoilLevel(HeatingCoilLevel aCoilLevel) {

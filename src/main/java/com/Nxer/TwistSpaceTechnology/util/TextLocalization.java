@@ -283,7 +283,7 @@ public class TextLocalization {
     public static final String Tooltip_Silksong_00 = texter("Controller block for the Silksong","Tooltip_Silksong_00");
     public static final String Tooltip_Silksong_01 = texter(EnumChatFormatting.WHITE+"Maybe dreams aren't such a good thing ......","Tooltip_Silksong_01");
     public static final String Tooltip_Silksong_02 = texter("Endless cables spew from this machine.","Tooltip_Silksong_02");
-    public static final String Tooltip_Silksong_03 = texter("8x Parallel per piece.","Tooltip_Silksong_03");
+    public static final String Tooltip_Silksong_03 = texter("24x Parallel per piece.","Tooltip_Silksong_03");
     public static final String Tooltip_Silksong_04 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_Silksong_04");
     // endregion
 
@@ -388,6 +388,7 @@ public class TextLocalization {
     public static final String Tooltip_ArtificialStar_05 = texter("Continuous operation improves power generation.","Tooltip_ArtificialStar_05");
     public static final String Tooltip_ArtificialStar_06 = texter("Only and must install 1 input bus.","Tooltip_ArtificialStar_06");
     public static final String Tooltip_ArtificialStar_07 = texter("Energy will output to Wireless EU Net directly.","Tooltip_ArtificialStar_07");
+    public static final String Tooltip_ArtificialStar_08 = texter("Use screwdriver to enable/disable animations.","Tooltip_ArtificialStar_08");
     public static final String Tooltip_ArtificialStar_02_01 = texter("Output multiplier = tTime^0.25 * tDim^0.25 * 1.588186^(tStabilisation - 2)","Tooltip_ArtificialStar_02_01");
     public static final String Tooltip_ArtificialStar_02_02 = texter("Actual Generating EU = recipe value * output multiplier * Rewards for continuous operation","Tooltip_ArtificialStar_02_02");
     public static final String Tooltip_ArtificialStar_02_03 = texter("Recovering probability = tTime * tDim * tStabilisation / 1000","Tooltip_ArtificialStar_02_03");
@@ -621,7 +622,7 @@ public class TextLocalization {
     public static final String Tooltip_ThermalEnergyDevourer_09 = texter("Operating efficiency decrease the EU cost.","Tooltip_ThermalEnergyDevourer_09");
     public static final String Tooltip_ThermalEnergyDevourer_10 = texter("Almost infinite parallel.","Tooltip_ThermalEnergyDevourer_10");
     public static final String Tooltip_ThermalEnergyDevourer_11 = texter(EnumChatFormatting.GOLD+" ----- Wireless Mode -----","Tooltip_ThermalEnergyDevourer_11");
-    public static final String Tooltip_ThermalEnergyDevourer_12 = texter("Put Energised Tesseract into controller slot to turn into Wireless mode.","Tooltip_ThermalEnergyDevourer_12");
+    public static final String Tooltip_ThermalEnergyDevourer_12 = texter("Put "+EnumChatFormatting.AQUA+"Energised Tesseract"+EnumChatFormatting.GRAY+" into controller slot to turn into Wireless mode.","Tooltip_ThermalEnergyDevourer_12");
     public static final String Tooltip_ThermalEnergyDevourer_13 = texter("Directly consume required EU from wireless EU network.","Tooltip_ThermalEnergyDevourer_13");
     public static final String Tooltip_ThermalEnergyDevourer_14 = texter("Progress time is fixed at 6.4s .","Tooltip_ThermalEnergyDevourer_14");
     public static final String Tooltip_ThermalEnergyDevourer_2_01 = texter("Check whether turn into Wireless mode when checking structure.","Tooltip_ThermalEnergyDevourer_2_01");
@@ -629,6 +630,18 @@ public class TextLocalization {
 
     // region Debug Uncertainty Hatch
     public static final String NameDebugUncertaintyHatch = texter("Debug Uncertainty Hatch","NameDebugUncertaintyHatch");
+    // endregion
+
+    //region Vacuum Filter Extractor
+    public static final String NameVacuumFilterExtractor = texter("Vacuum Filter Extractor","NameVacuumFilterExtractor");
+    public static final String Tooltip_VacuumFilterExtractor_MachineType = texter("Distillation Tower | Distillery","Tooltip_VacuumFilterExtractor_MachineType");
+    public static final String Tooltip_VacuumFilterExtractor_Controller = texter("Controller block for the Vacuum Filter Extractor","Tooltip_VacuumFilterExtractor_Controller");
+    public static final String Tooltip_VacuumFilterExtractor_01 = texter(EnumChatFormatting.ITALIC+"Engineers think something isn't broken because it has too few features.","Tooltip_VacuumFilterExtractor_01");
+    public static final String Tooltip_VacuumFilterExtractor_02 = texter("By manipulating space in order to achieve separation of matter ","Tooltip_VacuumFilterExtractor_02");
+    public static final String Tooltip_VacuumFilterExtractor_03 = texter("  rather than direct manipulation of matter.","Tooltip_VacuumFilterExtractor_03");
+    public static final String Tooltip_VacuumFilterExtractor_04 = texter("Recipe voltage is only 50%% of normal.","Tooltip_VacuumFilterExtractor_04");
+    public static final String Tooltip_VacuumFilterExtractor_05 = texter("Increasing the energy input will result in more speed boosts.","Tooltip_VacuumFilterExtractor_05");
+    public static final String Tooltip_VacuumFilterExtractor_06 = texter("In distillery mode, machine will enable "+EnumChatFormatting.AQUA+"Perfect Overclock"+EnumChatFormatting.GRAY+".","Tooltip_VacuumFilterExtractor_06");
     // endregion
 
 }
