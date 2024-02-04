@@ -1,17 +1,50 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.InputHatch;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.getCasingTextureForId;
+import static gregtech.api.util.GT_StructureUtility.ofFrame;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import gregtech.api.GregTech_API;
+import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.blocks.GT_Block_Casings4;
+import gregtech.common.blocks.GT_Block_Casings8;
 
+// 真空抽滤器
 public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumFilterExtractor> {
 
     // region Class Constructor
@@ -30,38 +63,155 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     // endregion
 
     // region Processing Logic
+    /**
+     * 0 = distillation tower ; 1 = distil
+     */
+    private byte mode = 0;
+    /**
+     * coefficient = input voltage tier
+     */
+    private int coefficientMultiplier = 1;
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mode", mode);
+        aNBT.setInteger("coefficientMultiplier", coefficientMultiplier);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        mode = aNBT.getByte("mode");
+        coefficientMultiplier = aNBT.getInteger("coefficientMultiplier");
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.mode = (byte) ((this.mode + 1) % 2);
+            GT_Utility.sendChatToPlayer(
+                aPlayer,
+                StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + this.mode));
+        }
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        if (mode == 1) {
+            return RecipeMaps.distilleryRecipes;
+        }
+        return RecipeMaps.distillationTowerRecipes;
+    }
+
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return false;
+        // distillery has perfect overclock
+        return mode == 1;
     }
 
     @Override
     protected float getSpeedBonus() {
-        return 0;
+        return 1F / coefficientMultiplier;
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return 0;
+        return Integer.MAX_VALUE;
     }
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return false;
+        repairMachine();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        coefficientMultiplier = 1 + (int) Utils.calculatePowerTier(getMaxInputEu());
+        return true;
     }
     // endregion
 
     // region Structure
     // spotless:off
+    private final int horizontalOffSet = 6;
+    private final int verticalOffSet = 20;
+    private final int depthOffSet = 0;
+    private static final String STRUCTURE_PIECE_MAIN = "mainVacuumFilterExtractor";
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
     }
 
     @Override
     public IStructureDefinition<TST_VacuumFilterExtractor> getStructureDefinition() {
-        return null;
+        return StructureDefinition
+                   .<TST_VacuumFilterExtractor>builder()
+                   .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE))
+                   .addElement('A', ofBlock(GregTech_API.sBlockCasings2, 8))
+                   .addElement(
+                       'B',
+                       GT_HatchElementBuilder
+                           .<TST_VacuumFilterExtractor>builder()
+                           .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                           .adder(TST_VacuumFilterExtractor::addToMachineList)
+                           .dot(1)
+                           .casingIndex(((GT_Block_Casings4)GregTech_API.sBlockCasings4).getTextureIndex(10))
+                           .buildAndChain(GregTech_API.sBlockCasings4, 10))
+                   .addElement(
+                       'C',
+                       GT_HatchElementBuilder
+                           .<TST_VacuumFilterExtractor>builder()
+                           .atLeast(Energy.or(ExoticEnergy))
+                           .adder(TST_VacuumFilterExtractor::addToMachineList)
+                           .dot(2)
+                           .casingIndex(((GT_Block_Casings8)GregTech_API.sBlockCasings8).getTextureIndex(3))
+                           .buildAndChain(GregTech_API.sBlockCasings8, 3))
+                   .addElement('D', ofBlock(GregTech_API.sBlockCasings9, 0))
+                   .addElement('E', ofBlock(sBlockCasingsTT, 8))
+                   .addElement('F', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                   .addElement('G', ofFrame(Materials.Neutronium))
+                   .build();
     }
+
+    private final String[][] SHAPE = new String[][]{
+        {"             ","   CCCCCCC   ","  CCCCCCCCC  "," CCCCCCCCCCC ","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC"," CCCCCCCCCCC ","  CCCCCCCCC  ","   CCCCCCC   "},
+        {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G         G ","      F      ","     FEF     ","      F      "," G         G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G         G ","      A      ","     AEA     ","      A      "," G         G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G   AAA   G ","    AA AA    ","    A   A    ","    AA AA    "," G   AAA   G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","      A      "," G  AA AA  G ","    A   A    ","   A     A   ","    A   A    "," G  AA AA  G ","      A      ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","     AAA     "," G  A   A  G ","   A     A   ","   A     A   ","   A     A   "," G  A   A  G ","     AAA     ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","      A      "," G  AA AA  G ","    A   A    ","   A     A   ","    A   A    "," G  AA AA  G ","      A      ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G   AAA   G ","    AA AA    ","    A   A    ","    AA AA    "," G   AAA   G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G         G ","      A      ","     AEA     ","      A      "," G         G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G         G ","      F      ","     FEF     ","      F      "," G         G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"     CCC     ","     CCC     ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
+        {"     C~C     ","   CCCCCCC   ","  CCCCCCCCC  "," CCCCCCCCCCC ","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC"," CCCCCCCCCCC ","  CCCCCCCCC  ","   CCCCCCC   "},
+        {"     CCC     ","   CCCCCCC   ","  CCCCCCCCC  "," CCCCCCCCCCC ","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC"," CCCCCCCCCCC ","  CCCCCCCCC  ","   CCCCCCC   "}
+    };
+
+
+    /*
+    Blocks:
+A -> ofBlock...(gt.blockcasings2, 8, ...);
+B -> ofBlock...(gt.blockcasings4, 10, ...); // IO hatch
+C -> ofBlock...(gt.blockcasings8, 3, ...);  // energy hatch
+D -> ofBlock...(gt.blockcasings9, 0, ...);
+E -> ofBlock...(gt.blockcasingsTT, 8, ...);
+F -> ofBlock...(tile.quantumGlass, 0, ...);
+G -> ofFrame...(Materials.Neutronium);
+     */
     // spotless:on
     // endregion
 
@@ -75,22 +225,47 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addStructureInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_2_01)
             .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
-            // .beginStructureBlock(15, 37, 15, false)
-            // .addController(TextLocalization.textFrontBottom)
-            // .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            // .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            // .addInputBus(TextLocalization.textUseBlueprint, 1)
-            // .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            // .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
+            .beginStructureBlock(13, 22, 14, false)
+            .addController(TextLocalization.textUseBlueprint)
+            .addInputHatch(TextLocalization.textUseBlueprint, 1)
+            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+            .addInputBus(TextLocalization.textUseBlueprint, 1)
+            .addOutputBus(TextLocalization.textUseBlueprint, 1)
+            .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstoneLevel) {
-        return new ITexture[0];
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
+        int colorIndex, boolean aActive, boolean redstoneLevel) {
+        ITexture[] rTexture;
+        if (side == aFacing) {
+            if (aActive) {
+                rTexture = new ITexture[] { getCasingTextureForId(179), TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ORE_DRILL_ACTIVE)
+                    .extFacing()
+                    .build(),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            } else {
+                rTexture = new ITexture[] { getCasingTextureForId(179), TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ORE_DRILL)
+                    .extFacing()
+                    .build(),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FRONT_ORE_DRILL_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            }
+        } else {
+            rTexture = new ITexture[] { getCasingTextureForId(179) };
+        }
+        return rTexture;
     }
 }

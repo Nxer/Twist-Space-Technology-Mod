@@ -177,11 +177,15 @@ public enum GTCMItemList {
     MegaEggGenerator,
     AstralComputingArray,
 
+    StellarMaterialSiphon,
+    ElvenWorkshop,
+    HyperSpacetimeTransformer,
     superCleanRoom,
     BiosphereIII,
     AdvancedMegaOilCracker,
     IndistinctTentacle,
     ThermalEnergyDevourer,
+    VacuumFilterExtractor,
 
     // MAX
     HighDimensionalExtend,
@@ -206,9 +210,6 @@ public enum GTCMItemList {
     DSPLauncher,
     DSPReceiver,
     ArtificialStar,
-    StellarMaterialSiphon,
-    ElvenWorkshop,
-    HyperSpacetimeTransformer,
 
     // single block Machines
     InfiniteAirHatch,
