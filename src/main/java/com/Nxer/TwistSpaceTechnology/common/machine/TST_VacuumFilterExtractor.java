@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_VacuumFilterExtractor;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_VacuumFilterExtractor;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -64,9 +66,9 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
 
     // region Processing Logic
     /**
-     * 0 = distillation tower ; 1 = distil
+     * 0 = distillation tower ; 1 = distillery
      */
-    private byte mode = 0;
+    private byte mode = Mode_Default_VacuumFilterExtractor;
     /**
      * coefficient = input voltage tier
      */
@@ -122,7 +124,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
 
     @Override
     protected float getEuModifier() {
-        return 0.5F;
+        return EuModifier_VacuumFilterExtractor;
     }
 
     @Override
@@ -224,9 +226,15 @@ G -> ofFrame...(Materials.Neutronium);
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Tooltip_MachineType")
-            .addInfo("Tooltip_Controller")
-            .addInfo("Tooltip_01")
+        tt.addMachineType(TextLocalization.Tooltip_VacuumFilterExtractor_MachineType)
+            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_Controller)
+            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_01)
+            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_02)
+            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_03)
+            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_04)
+            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_05)
+            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_06)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)

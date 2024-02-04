@@ -46,6 +46,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ThermalEnergyDevourer;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.VacuumFilterExtractor;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
@@ -82,6 +83,7 @@ import static com.dreammaster.gthandler.CustomItemList.Transformer_UIV_UEV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UMV_UIV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UXV_UMV;
 import static com.dreammaster.gthandler.CustomItemList.WiremillUV;
+import static com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry.megaMachines;
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
 import static com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Transformer;
@@ -108,6 +110,7 @@ import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 
 import net.glease.ggfab.GGItemList;
@@ -127,7 +130,6 @@ import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
 import com.github.bartimaeusnek.bartworks.common.loaders.BioItemList;
-import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import appeng.items.materials.MaterialType;
@@ -201,7 +203,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(10),
-                copyAmount(1, ItemRegistry.megaMachines[3]),
+                copyAmount(1, megaMachines[3]),
                 Materials.Carbon.getNanite(16),
                 ItemList.Emitter_UV.get(16),
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),16})
@@ -1479,7 +1481,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(10),
-                ItemRegistry.megaMachines[4],
+                megaMachines[4],
                 new Object[]{OrePrefixes.circuit.get(Materials.Elite), 4},
                 new Object[]{OrePrefixes.circuit.get(Materials.Data), 16},
                 ItemList.Electric_Pump_IV.get(4)
@@ -1555,11 +1557,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region ThermalEnergyDevourer
         GT_Values.RA
             .stdBuilder()
-            .metadata(RESEARCH_ITEM, ItemRegistry.megaMachines[1])
+            .metadata(RESEARCH_ITEM, megaMachines[1])
             .metadata(RESEARCH_TIME, 8 * HOURS)
             .itemInputs(
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 64),
-                copyAmount(64,ItemRegistry.megaMachines[1]),
+                copyAmount(64, megaMachines[1]),
                 ItemList.Field_Generator_UHV.get(16),
                 ItemList.Electric_Pump_UHV.get(64),
 
@@ -1609,6 +1611,39 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UXV)
             .duration(20*120)
             .addTo(assembler);
+        // endregion
+
+        // region VacuumFilterExtractor
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, CustomItemList.DistilleryUV.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .itemInputs(
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackPlutonium, 64),
+                copyAmount(64,megaMachines[2]),
+                Materials.Carbon.getNanite(64),
+                ItemList.Field_Generator_UHV.get(8),
+
+                ItemList.Electric_Pump_UHV.get(64),
+                ItemList.Electric_Pump_UHV.get(64),
+                ItemList.Electric_Pump_UHV.get(64),
+                ItemList.Electric_Pump_UHV.get(64),
+
+                Laser_Lens_Special.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 16},
+                HighEnergyFlowCircuit.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.BlackPlutonium, 64),
+
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 16)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*128),
+                Materials.Neutronium.getMolten(144*64),
+                Materials.BlackPlutonium.getMolten(144*64))
+            .itemOutputs(VacuumFilterExtractor.get(1))
+            .eut(RECIPE_UEV)
+            .duration(20*900)
+            .addTo(AssemblyLine);
         // endregion
 
     }
