@@ -211,6 +211,11 @@ public final class ValueEnum {
 
     // endregion
 
+    // region Vacuum Filter Extractor
+    public static final byte Mode_Default_VacuumFilterExtractor = Config.Mode_Default_VacuumFilterExtractor;
+    public static final float EuModifier_VacuumFilterExtractor = Config.EuModifier_VacuumFilterExtractor;
+    // endregion
+
     // region Infinite Air Hatch
     public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
     // endregion

@@ -634,6 +634,14 @@ public class TextLocalization {
 
     //region Vacuum Filter Extractor
     public static final String NameVacuumFilterExtractor = texter("Vacuum Filter Extractor","NameVacuumFilterExtractor");
+    public static final String Tooltip_VacuumFilterExtractor_MachineType = texter("Distillation Tower | Distillery","Tooltip_VacuumFilterExtractor_MachineType");
+    public static final String Tooltip_VacuumFilterExtractor_Controller = texter("Controller block for the Vacuum Filter Extractor","Tooltip_VacuumFilterExtractor_Controller");
+    public static final String Tooltip_VacuumFilterExtractor_01 = texter(EnumChatFormatting.ITALIC+"Engineers think something isn't broken because it has too few features.","Tooltip_VacuumFilterExtractor_01");
+    public static final String Tooltip_VacuumFilterExtractor_02 = texter("By manipulating space in order to achieve separation of matter ","Tooltip_VacuumFilterExtractor_02");
+    public static final String Tooltip_VacuumFilterExtractor_03 = texter("  rather than direct manipulation of matter.","Tooltip_VacuumFilterExtractor_03");
+    public static final String Tooltip_VacuumFilterExtractor_04 = texter("Recipe voltage is only 50%% of normal.","Tooltip_VacuumFilterExtractor_04");
+    public static final String Tooltip_VacuumFilterExtractor_05 = texter("Increasing the energy input will result in more speed boosts.","Tooltip_VacuumFilterExtractor_05");
+    public static final String Tooltip_VacuumFilterExtractor_06 = texter("In distillery mode, machine will enable "+EnumChatFormatting.AQUA+"Perfect Overclock"+EnumChatFormatting.GRAY+".","Tooltip_VacuumFilterExtractor_06");
     // endregion
 
 }

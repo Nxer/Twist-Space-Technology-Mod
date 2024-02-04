@@ -31,6 +31,7 @@ public class Config {
     public static final String AdvancedMegaOilCracker = "AdvancedMegaOilCracker";
     public static final String IndistinctTentacle = "IndistinctTentacle";
     public static final String ThermalEnergyDevourer = "ThermalEnergyDevourer";
+    public static final String VacuumFilterExtractor = "VacuumFilterExtractor";
     public static final String MEG = "TowerOFAbstraction";
     public static final String SingleBlocks = "SingleBlocks";
 
@@ -219,6 +220,11 @@ public class Config {
     public static int TickPerProgressing_WirelessMode_ThermalEnergyDevourer = 128;
     // endregion
 
+    // region VacuumFilterExtractor
+    public static byte Mode_Default_VacuumFilterExtractor = 0;
+    public static float EuModifier_VacuumFilterExtractor = 0.5F;
+    // endregion
+
     // region Infinite Air Hatch
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
@@ -230,6 +236,11 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region VacuumFilterExtractor
+        Mode_Default_VacuumFilterExtractor = (byte) configuration.getInt("Mode_Default_VacuumFilterExtractor", VacuumFilterExtractor, Mode_Default_VacuumFilterExtractor, 0, 1, "Default mode when placing a Vacuum Filter Extractor controller block. 0=Distillation Tower; 1=Distillery. Type: byte");
+        EuModifier_VacuumFilterExtractor = Float.parseFloat(configuration.getString("EuModifier_VacuumFilterExtractor", VacuumFilterExtractor, String.valueOf(EuModifier_VacuumFilterExtractor), "Eu Modifier of Vacuum Filter Extractor. Type: float"));
         // endregion
 
         // region ThermalEnergyDevourer
