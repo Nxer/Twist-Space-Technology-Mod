@@ -100,8 +100,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     public int getMaxParallelRecipes() {
-        return (int) Math
-            .min(ValueEnum.MAX_PARALLEL_LIMIT, Math.pow(2, GT_Utility.getTier(this.getAverageInputVoltage())));
+        return Integer.MAX_VALUE;
     }
 
     public float getSpeedBonus() {
