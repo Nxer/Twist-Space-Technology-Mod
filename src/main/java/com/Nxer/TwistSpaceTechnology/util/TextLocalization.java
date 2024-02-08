@@ -632,7 +632,7 @@ public class TextLocalization {
     public static final String NameDebugUncertaintyHatch = texter("Debug Uncertainty Hatch","NameDebugUncertaintyHatch");
     // endregion
 
-    //region Vacuum Filter Extractor
+    // region Vacuum Filter Extractor
     public static final String NameVacuumFilterExtractor = texter("Vacuum Filter Extractor","NameVacuumFilterExtractor");
     public static final String Tooltip_VacuumFilterExtractor_MachineType = texter("Distillation Tower | Distillery","Tooltip_VacuumFilterExtractor_MachineType");
     public static final String Tooltip_VacuumFilterExtractor_Controller = texter("Controller block for the Vacuum Filter Extractor","Tooltip_VacuumFilterExtractor_Controller");
@@ -642,6 +642,13 @@ public class TextLocalization {
     public static final String Tooltip_VacuumFilterExtractor_04 = texter("Recipe voltage is only 50%% of normal.","Tooltip_VacuumFilterExtractor_04");
     public static final String Tooltip_VacuumFilterExtractor_05 = texter("Increasing the energy input will result in more speed boosts.","Tooltip_VacuumFilterExtractor_05");
     public static final String Tooltip_VacuumFilterExtractor_06 = texter("In distillery mode, machine will enable "+EnumChatFormatting.AQUA+"Perfect Overclock"+EnumChatFormatting.GRAY+".","Tooltip_VacuumFilterExtractor_06");
+    // endregion
+
+    // region Large Steam Forge Hammer
+    public static final String NameLargeSteamForgeHammer = texter("Large Steam Forge Hammer", "NameLargeSteamForgeHammer");
+    public static final String Tooltip_LargeSteamForgeHammer_MachineType = texter("Forge Hammer", "Tooltip_LargeSteamForgeHammer_MachineType");
+    public static final String Tooltip_LargeSteamForgeHammer_Controller = texter("Controller block for the Large Steam Forge Hammer", "Tooltip_LargeSteamForgeHammer_Controller");
+    public static final String Tooltip_LargeSteamForgeHammer_01 = texter("He has a hammer. Who has the Sickle?", "Tooltip_LargeSteamForgeHammer_01");
     // endregion
 
 }

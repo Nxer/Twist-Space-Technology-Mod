@@ -29,6 +29,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
@@ -87,6 +88,7 @@ public class MachineLoader {
 
     public static ItemStack AstralComputingArray;
     public static ItemStack VacuumFilterExtractor;
+    public static ItemStack LargeSteamForgeHammer;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -321,6 +323,13 @@ public class MachineLoader {
             "NameVacuumFilterExtractor",
             TextLocalization.NameVacuumFilterExtractor).getStackForm(1);
         GTCMItemList.VacuumFilterExtractor.set(VacuumFilterExtractor);
+
+        //
+        LargeSteamForgeHammer = new TST_LargeSteamForgeHammer(
+            19032,
+            "NameLargeSteamForgeHammer",
+            TextLocalization.NameLargeSteamForgeHammer).getStackForm(1);
+        GTCMItemList.LargeSteamForgeHammer.set(LargeSteamForgeHammer);
 
         // endregion
 

@@ -770,3 +770,7 @@ Tooltip_VacuumFilterExtractor_03=  而非直接操控物质.
 Tooltip_VacuumFilterExtractor_05=提高能量输入将提供更多的速度提升.
 Tooltip_VacuumFilterExtractor_04=只需要正常配方电压的50%%.
 Tooltip_VacuumFilterExtractor_06=蒸馏室模式将启用§b无损超频§7.
+NameLargeSteamForgeHammer=大型蒸汽锻造锤
+Tooltip_LargeSteamForgeHammer_MachineType=锻造锤
+Tooltip_LargeSteamForgeHammer_Controller=大型蒸汽锻造锤的控制器方块
+Tooltip_LargeSteamForgeHammer_01=他有一柄锤子. 谁有镰刀?
