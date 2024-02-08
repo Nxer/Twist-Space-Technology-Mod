@@ -186,6 +186,7 @@ public enum GTCMItemList {
     IndistinctTentacle,
     ThermalEnergyDevourer,
     VacuumFilterExtractor,
+    LargeSteamForgeHammer,
 
     // MAX
     HighDimensionalExtend,

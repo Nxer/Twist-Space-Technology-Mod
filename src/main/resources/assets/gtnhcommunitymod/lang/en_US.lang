@@ -769,3 +769,7 @@ Tooltip_VacuumFilterExtractor_MachineType=Distillation Tower | Distillery
 Tooltip_VacuumFilterExtractor_05=Increasing the energy input will result in more speed boosts.
 Tooltip_VacuumFilterExtractor_04=Recipe voltage is only 50%% of normal.
 Tooltip_VacuumFilterExtractor_06=In distillery mode, machine will enable §bPerfect Overclock§7.
+Tooltip_LargeSteamForgeHammer_Controller=Controller block for the Large Steam Forge Hammer
+NameLargeSteamForgeHammer=Large Steam Forge Hammer
+Tooltip_LargeSteamForgeHammer_MachineType=Forge Hammer
+Tooltip_LargeSteamForgeHammer_01=He has a hammer. Who has the Sickle?
