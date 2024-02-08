@@ -119,9 +119,9 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     @Override
     protected float getSpeedBonus() {
         return switch (mode) {
-            case 0 -> 2; // Bio Vat normal
+            case 0 -> 0.5f; // Bio Vat normal
             case 1 -> 1; // Bio Vat automation
-            default -> 4; // Brewing && Fermenting
+            default -> 0.25f; // Brewing && Fermenting
         };
     }
 
