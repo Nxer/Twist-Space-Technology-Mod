@@ -67,9 +67,6 @@ public class NEIHandler {
         sendCatalyst("tst.recipe.StellarForgeRecipes", "gregtech:gt.blockmachines:19016");
         sendCatalyst("gt.recipe.sifter", "gregtech:gt.blockmachines:19023");
         sendCatalyst("tst.recipe.HyperSpacetimeTransformerRecipe", "gregtech:gt.blockmachines:19501");
-        sendCatalyst("gt.recipe.fermenter", "gregtech:gt.blockmachines:19025");
-        sendCatalyst("gt.recipe.brewer", "gregtech:gt.blockmachines:19025");
-        sendCatalyst("bw.recipe.BacteriaVat", "gregtech:gt.blockmachines:19025");
         sendCatalyst("tst.recipe.AssemblyLineWithoutResearchRecipe", "gregtech:gt.blockmachines:19028");
         sendCatalyst("gg.recipe.componentassemblyline", "gregtech:gt.blockmachines:19028");
         sendCatalyst("gt.recipe.assembler", "gregtech:gt.blockmachines:19028");
