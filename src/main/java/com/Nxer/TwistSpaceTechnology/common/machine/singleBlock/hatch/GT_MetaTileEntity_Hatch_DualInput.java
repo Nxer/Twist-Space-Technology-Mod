@@ -94,7 +94,7 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
             getSlots(aTier) + 1,
             new String[] { "Advanced input for Multiblocks", "Capacity: " + getCapacityPerTank(aTier) + " L",
                 "Can hold " + getSlots(aTier) + " types of item and " + getFluidSlotsAmount(aTier) + " types of fluid ",
-                "Automatically separate inputs and lock fluid slots. Break and replace to unlock.", ModNameDesc });
+                "Automatically separate inputs", ModNameDesc });
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];
         fluidTanks = new FluidStackTank[getFluidSlotsAmount(aTier)];
         mCapacityPer = getCapacityPerTank(aTier);
@@ -216,6 +216,11 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
         return 0;
     }
 
+    public void setFluid(FluidStack aFluid, int aSlot) {
+        if (aSlot < 0 || aSlot >= getMaxType()) return;
+        mStoredFluid[aSlot] = aFluid;
+    }
+
     public void addFluid(FluidStack aFluid, int aSlot) {
         if (aSlot < 0 || aSlot >= getMaxType()) return;
         if (aFluid.equals(mStoredFluid[aSlot])) mStoredFluid[aSlot].amount += aFluid.amount;
@@ -290,14 +295,7 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
 
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        if (getFluid() == null || !canTankBeEmptied()) return null;
-        FluidStack tRemove = getFluid().copy();
-        tRemove.amount = Math.min(maxDrain, tRemove.amount);
-        if (doDrain) {
-            getFluid().amount -= tRemove.amount;
-            getBaseMetaTileEntity().markDirty();
-        }
-        return tRemove;
+        return drain(ForgeDirection.UNKNOWN, new FluidStack(getFluid().getFluid(), maxDrain), doDrain);
     }
 
     @Override
@@ -309,23 +307,34 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
     public FluidStack drain(ForgeDirection from, FluidStack aFluid, boolean doDrain) {
         if (aFluid == null || !hasFluid(aFluid)) return null;
         FluidStack tStored = mStoredFluid[getFluidSlot(aFluid)];
+        if (tStored.amount <= 0 && isFluidChangingAllowed()) {
+            setFluid(null, getFluidSlot(tStored));
+            getBaseMetaTileEntity().markDirty();
+            return null;
+        }
         FluidStack tRemove = tStored.copy();
         tRemove.amount = Math.min(aFluid.amount, tRemove.amount);
         if (doDrain) {
             tStored.amount -= tRemove.amount;
             getBaseMetaTileEntity().markDirty();
         }
+        if (tStored.amount <= 0 && isFluidChangingAllowed()) {
+            setFluid(null, getFluidSlot(tStored));
+            getBaseMetaTileEntity().markDirty();
+        }
         return tRemove;
     }
 
-    /**
-     * Fluid slots is intended to not be updated here to lock fluid slots.
-     */
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if (getBaseMetaTileEntity().isServerSide() && aTimer % 10 == 0) {
-            updateSlots();
+        if (aBaseMetaTileEntity.isServerSide() && mStoredFluid != null) {
+            for (int i = 0; i < getMaxType(); i++) {
+                if (mStoredFluid[i] != null && mStoredFluid[i].amount <= 0) {
+                    mStoredFluid[i] = null;
+                }
+            }
         }
+        super.onPostTick(aBaseMetaTileEntity, aTimer);
     }
 
     @Override
@@ -343,16 +352,22 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
 
     public static int getFluidSlotsAmount(int tier) {
         return switch (tier) {
-            case 6 -> 2;
-            case 7 -> 3;
-            case 8 -> 4;
-            case 9 -> 6;
+            case 5 -> 2;
+            case 6 -> 3;
+            case 7 -> 4;
+            case 8 -> 6;
             default -> 0;
         };
     }
 
     public static int getCapacityPerTank(int aTier) {
-        return 2000 << aTier;
+        return switch (aTier) {
+            case 5 -> 20000;
+            case 6 -> 60000;
+            case 7 -> 180000;
+            case 8 -> 540000;
+            default -> 0;
+        };
     }
 
     @Override
@@ -373,7 +388,6 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
         };
 
         for (int i = 0; i < SLOT_NUMBER; i++) {
-            fluidTanks[i].setPreventDraining(true);
             builder.widget(
                 new FluidSlotWidget(fluidTanks[i]).setBackground(ModularUITextures.FLUID_SLOT)
                     .setPos(positions[i]));
