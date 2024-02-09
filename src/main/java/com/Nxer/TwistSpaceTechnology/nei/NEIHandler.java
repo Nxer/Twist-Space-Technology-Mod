@@ -7,7 +7,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import com.Nxer.TwistSpaceTechnology.Tags;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
+import gregtech.api.interfaces.tileentity.RecipeMapWorkable;
 
+/**
+ * Handle NEI tags.
+ * <li>Rewrite {@link RecipeMapWorkable#getAvailableRecipeMaps()} to auto handle GT machine's NEI tag if you are working
+ * on a new GT machine which can process many recipe maps.
+ */
 public class NEIHandler {
 
     public static void IMCSender() {
