@@ -167,7 +167,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             currentTip.add(
                 EnumChatFormatting.AQUA + texter("Energy Receiving: ", "Waila.TST_DSPReceiver.1")
                     + EnumChatFormatting.GOLD
-                    + tag.getLong("TickEU")
+                    + GT_Utility.formatNumbers(tag.getLong("TickEU"))
                     + EnumChatFormatting.RESET
                     + " EU/t");
         }

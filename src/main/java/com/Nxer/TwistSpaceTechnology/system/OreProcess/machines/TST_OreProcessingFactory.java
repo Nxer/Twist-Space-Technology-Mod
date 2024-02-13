@@ -74,6 +74,7 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -132,7 +133,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             currentTip.add(
                 EnumChatFormatting.AQUA + texter("Current Using EU: ", "Waila.TST_OreProcessingFactory.2")
                     + EnumChatFormatting.GOLD
-                    + tag.getLong("usingEU")
+                    + GT_Utility.formatNumbers(tag.getLong("usingEU"))
                     + EnumChatFormatting.RESET
                     + " EU");
         }
