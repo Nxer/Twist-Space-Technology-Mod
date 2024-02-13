@@ -579,7 +579,7 @@ public class TextLocalization {
     public static final String Tooltip_MegaEggGenerator_D = texter("Dynamo or TT Dynamo, one only", "Tooltip_MegaEggGenerator_D");
     public static final String Tooltip_MegaEggGenerator_M = texter("No need for maintenance hatch.", "Tooltip_MegaEggGenerator_M");
     public static final String Tooltip_MegaEggGenerator_L = texter("Lasers unlock at >=16 pieces.", "Tooltip_MegaEggGenerator_L");
-    public static final String Tooltip_MegaEggGenerator_C = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_D");
+    public static final String Tooltip_MegaEggGenerator_C = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_C");
     // endregion
 
     // region IndistinctTentacle
