@@ -100,7 +100,6 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Contai
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static com.github.technus.tectech.thing.CustomItemList.hatch_CreativeMaintenance;
-import static galaxyspace.core.register.GSMaterials.tantalumCarbideHafniumCarbideMixture;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
@@ -1023,30 +1022,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         GT_Values.RA.stdBuilder()
             .itemInputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 1))
-
-
             .fluidOutputs(MaterialPool.HolmiumGarnet.getMolten(144))
             .noOptimize()
             .eut(96)
             .duration(72)
             .addTo(RecipeMaps.fluidExtractionRecipes);
-
-        // endregion
-
-        // region Ta4HfC5
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(1),
-                WerkstoffMaterialPool.Hafnium.get(OrePrefixes.dust,1),
-                Materials.Tantalum.getDust(4),
-                Materials.Carbon.getDust(5))
-
-            .itemOutputs(tantalumCarbideHafniumCarbideMixture.get(OrePrefixes.dust,10))
-
-            .noOptimize()
-            .eut(RECIPE_EV)
-            .duration(20*10)
-            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         // endregion
 

@@ -4,6 +4,10 @@
 每个人都可以在这儿集中实现好的想法。
 
 平衡性太糟糕当然不行。
+
+### 注意
+这是一个非官方mod，讨论此mod时请注意场合。
+
 ## 版本需求
 * GTNH-nightly 版本：
   * 此mod 0.4.12 版本以上版本直接添加即可
@@ -17,15 +21,17 @@
 * 更新时请重置GT语言文件 GregTech.lang
 * 同时重置本mod配置文件 TwistSpaceTechnology.cfg
 ### 大多数参数都可以在配置文件直接修改
-#
 ***
-#
 ## GTNH Community Mod :  Twist Space Technology
 Modded elements from normal players .
 
 Everyone can realize ideas here .
 
 Just need the balance not too abstract .
+
+### Attention
+This is an unofficial mod, please be aware of the occasion when discussing this mod.
+
 ## Version Requirements
 * GTNH-nightly version:
   * Directly add this mod 0.4.12+ version.
@@ -387,3 +393,135 @@ __默认配置的机器性能参数：__
 
 ***
 ### Debug未定元解析器
+
+***
+## 新的物品和方块
+***
+### 光量子增幅器
+
+***
+### 空间站方块
+
+***
+### 空间翘曲器
+
+***
+### 引力约束光量子晶体
+
+***
+### 模具(奇点)
+
+***
+### 粒子阱 - 时空鞘
+
+***
+### 兰波顿碎片
+
+***
+### 完美兰波顿水晶
+
+***
+### 能量水晶碎片
+
+***
+### 完美能量水晶
+
+***
+### 戴森球计划系列物品
+* 太阳帆
+* 戴森球框架部件
+* 小型运载火箭
+* 空的小型运载火箭
+* 临界光子
+* 反物质
+* 湮灭约束器
+* 反物质燃料棒
+* 恒星结构框架材料
+* 引力透镜
+
+***
+### 紫玉兰花瓣
+
+***
+### 紫玉兰树苗
+
+***
+### 虚空花粉
+
+***
+### 恂戒符文
+
+***
+### 须臾符文
+
+***
+### 以太符文
+
+***
+### 永劫符文
+
+***
+### 英雄の証
+meme
+
+***
+### 抛瓦椅
+meme
+
+***
+## 新的材料
+***
+### 钬石榴石
+
+***
+### 液态魔力
+
+***
+## 功能系统
+***
+### 光学SoC
+
+***
+### 戴森球
+
+***
+### 寰宇空间站
+
+***
+## 额外的配方
+***
+### 新增的配方池
+* 深度化学扭曲仪："gtcm.recipe.IntensifyChemicalDistorterRecipes"
+* 光子掌控者："gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes"
+* 奇迹顶点电路组装机模式："gtcm.recipe.MiracleTopRecipes"
+* 奇迹定点量子逆变器模式："gtcm.recipe.QuantumInversionRecipes"
+* 无限晶胞："gtcm.recipe.CrystallineInfinitierRecipes"
+* 戴森球模块发射场虚拟配方："gtcm.recipe.DSPLauncherRecipes"
+* 戴森球射线接收站虚拟配方："gtcm.recipe.DSPReceiverRecipes"
+* 人造恒星虚拟配方："gtcm.recipe.ArtificialStarGeneratingRecipes"
+* 精灵工坊魔力灌注模式："gtcm.recipe.ElvenWorkshopRecipes"
+* 精灵工坊符文雕刻模式："gtcm.recipe.RuneEngraverRecipes"
+* 寰宇空间站："gtcm.recipe.megaUniversalSpaceStationRecipePool"
+* 通用矿石处理厂："tst.recipe.OreProcessingRecipes"
+* 大型工业炼焦厂："tst.recipe.CokingFactoryRecipes"
+* 恒星锻炉："tst.recipe.StellarForgeRecipes"
+* 极限时空转换仪："tst.recipe.HyperSpacetimeTransformerRecipe"
+* 巨型装配线："tst.recipe.AssemblyLineWithoutResearchRecipe"
+*
+
+***
+### 奇点配方
+永恒奇点 + 1919*144L熔融基岩 → 奇点模具
+
+使用奇点模具在 搅拌机/流体固化机/高压釜 中制作奇点
+
+***
+### 火药离心
+6火药 → 1硫粉 + 2硝石粉 3木炭粉/煤粉/碳粉
+
+***
+### 重铬酸钾单步配方
+32铬粉 + 160硝石粉 + 96kL氧 + 16kL水 → 176重铬酸钾粉 + 32kL硝酸
+
+***
+###
