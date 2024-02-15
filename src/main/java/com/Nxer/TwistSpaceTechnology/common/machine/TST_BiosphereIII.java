@@ -22,6 +22,8 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -90,7 +92,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     private int mNeededGlassTier = 0;
     private int mSievert = 0;
     private int mNeededSievert = 0;
-    private int mEfficiency = 1;
+    private int efficiency = 1;
     private ArrayList<GT_MetaTileEntity_RadioHatch> mRadHatches = new ArrayList<>();
 
     @Override
@@ -102,6 +104,13 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         };
     }
 
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays
+            .asList(BartWorksRecipeMaps.bacterialVatRecipes, RecipeMaps.brewingRecipes, RecipeMaps.fermentingRecipes);
+    }
+
     @Override
     protected boolean isEnablePerfectOverclock() {
         return false;
@@ -109,7 +118,11 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
     @Override
     protected float getSpeedBonus() {
-        return 1f;
+        return switch (mode) {
+            case 0 -> 0.5f; // Bio Vat normal
+            case 1 -> 1; // Bio Vat automation
+            default -> 0.25f; // Brewing && Fermenting
+        };
     }
 
     @Override
@@ -177,11 +190,11 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         if (mode == 2 || mode == 3) return recipe;
 
         GT_Recipe tRecipe = recipe.copy();
-        if (mode == 0) mEfficiency = getExpectedMultiplier(tRecipe.mFluidOutputs[0]);// Bio Vat Normal
-        else mEfficiency = (int) (((mGlassTier - mNeededGlassTier) * 150.0 + 401.0) / 1000
+        if (mode == 0) efficiency = getExpectedMultiplier(tRecipe.mFluidOutputs[0]);// Bio Vat Normal
+        else efficiency = (int) (((mGlassTier - mNeededGlassTier) * 600 + 1601.0) / 1000
             * ConfigHandler.bioVatMaxParallelBonus);// Bio Vat Automation
-        tRecipe.mFluidInputs[0].amount *= mEfficiency;
-        tRecipe.mFluidOutputs[0].amount *= mEfficiency;
+        tRecipe.mFluidInputs[0].amount *= efficiency;
+        tRecipe.mFluidOutputs[0].amount *= efficiency;
         return tRecipe;
     }
 
@@ -446,7 +459,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         // Brewing & Fermenting
             (EnumChatFormatting.GREEN + "100" + EnumChatFormatting.RESET + "%") :
             // Bio Vat
-            (EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mEfficiency) + EnumChatFormatting.RESET + "x"));
+            (EnumChatFormatting.GREEN + GT_Utility.formatNumbers(efficiency) + EnumChatFormatting.RESET + "x"));
         return ret;
     }
 }

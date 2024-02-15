@@ -6,8 +6,8 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BiosphereIII;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DebugUncertaintyHatch;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_IV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_LuV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UHV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_ZPM;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
@@ -100,7 +100,6 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Contai
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static com.github.technus.tectech.thing.CustomItemList.hatch_CreativeMaintenance;
-import static galaxyspace.core.register.GSMaterials.tantalumCarbideHafniumCarbideMixture;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
@@ -1023,30 +1022,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         GT_Values.RA.stdBuilder()
             .itemInputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 1))
-
-
             .fluidOutputs(MaterialPool.HolmiumGarnet.getMolten(144))
             .noOptimize()
             .eut(96)
             .duration(72)
             .addTo(RecipeMaps.fluidExtractionRecipes);
-
-        // endregion
-
-        // region Ta4HfC5
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(1),
-                WerkstoffMaterialPool.Hafnium.get(OrePrefixes.dust,1),
-                Materials.Tantalum.getDust(4),
-                Materials.Carbon.getDust(5))
-
-            .itemOutputs(tantalumCarbideHafniumCarbideMixture.get(OrePrefixes.dust,10))
-
-            .noOptimize()
-            .eut(RECIPE_EV)
-            .duration(20*10)
-            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
         // endregion
 
@@ -1343,76 +1323,66 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region Dual Input Buffer
+        // IV
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                ItemList.Hatch_Input_Bus_IV.get(1),
+                ItemList.Hatch_Input_Multi_2x2_IV.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.Master),1},
+                Materials.TungstenSteel.getPlates(4)
+            )
+            .fluidInputs(new FluidStack(solderIndAlloy, 144*4))
+            .itemOutputs(DualInputBuffer_IV.get(1))
+            .eut(RECIPE_IV)
+            .duration(20*15)
+            .addTo(assembler);
+
         // LuV
         GT_Values.RA
             .stdBuilder()
-            .metadata(RESEARCH_ITEM, ItemList.Hatch_Input_Multi_2x2_LuV.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
             .itemInputs(
                 ItemList.Hatch_Input_Bus_LuV.get(1),
                 ItemList.Hatch_Input_Multi_2x2_LuV.get(1),
-                new Object[]{OrePrefixes.circuit.get(Materials.Master),1},
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate),1},
                 WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.plate, 4)
             )
-            .fluidInputs(new FluidStack(solderIndAlloy, 144*2))
-            .itemOutputs(DualInputBuffer_LuV.get(4))
-
+            .fluidInputs(new FluidStack(solderIndAlloy, 144*8))
+            .itemOutputs(DualInputBuffer_LuV.get(1))
             .eut(RECIPE_LuV)
             .duration(20*15)
-            .addTo(AssemblyLine);
+            .addTo(assembler);
 
         // ZPM
         GT_Values.RA
             .stdBuilder()
-            .metadata(RESEARCH_ITEM, DualInputBuffer_LuV.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
             .itemInputs(
                 ItemList.Hatch_Input_Bus_ZPM.get(1),
                 ItemList.Hatch_Input_Multi_2x2_ZPM.get(1),
-                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate),1},
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),1},
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iridium, 4)
-            )
-            .fluidInputs(new FluidStack(solderIndAlloy, 144*4))
-            .itemOutputs(DualInputBuffer_ZPM.get(4))
 
+            )
+            .fluidInputs(new FluidStack(solderIndAlloy, 144*16))
+            .itemOutputs(DualInputBuffer_ZPM.get(1))
             .eut(RECIPE_ZPM)
             .duration(20*15)
-            .addTo(AssemblyLine);
+            .addTo(assembler);
 
         // UV
         GT_Values.RA
             .stdBuilder()
-            .metadata(RESEARCH_ITEM, DualInputBuffer_ZPM.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
             .itemInputs(
                 ItemList.Hatch_Input_Bus_UV.get(1),
                 ItemList.Hatch_Input_Multi_2x2_UV.get(1),
-                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV),1},
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite),1},
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Osmium, 4)
             )
-            .fluidInputs(new FluidStack(solderIndAlloy, 144*8))
-            .itemOutputs(DualInputBuffer_UV.get(4))
+            .fluidInputs(new FluidStack(solderIndAlloy, 144*32))
+            .itemOutputs(DualInputBuffer_UV.get(1))
             .eut(RECIPE_UV)
             .duration(20*15)
-            .addTo(AssemblyLine);
-
-        // UHV
-        GT_Values.RA
-            .stdBuilder()
-            .metadata(RESEARCH_ITEM, DualInputBuffer_UV.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
-            .itemInputs(
-                ItemList.Hatch_Input_Bus_MAX.get(1),
-                ItemList.Hatch_Input_Multi_2x2_UHV.get(1),
-                new Object[]{OrePrefixes.circuit.get(Materials.Infinite),1},
-                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 4)
-            )
-            .fluidInputs(new FluidStack(solderIndAlloy, 144*16))
-            .itemOutputs(DualInputBuffer_UHV.get(4))
-
-            .eut(RECIPE_UHV)
-            .duration(20*15)
-            .addTo(AssemblyLine);
+            .addTo(assembler);
 
         // endregion
 

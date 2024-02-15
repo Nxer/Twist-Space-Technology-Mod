@@ -500,10 +500,10 @@ public class TextLocalization {
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
     public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
+    public static final String NameDualInputBuffer_IV = texter("Dual Input Buffer (IV)", "NameDualInputBuffer_IV");
     public static final String NameDualInputBuffer_LuV = texter("Dual Input Buffer (LuV)", "NameDualInputBuffer_LuV");
     public static final String NameDualInputBuffer_ZPM = texter("Dual Input Buffer (ZPM)", "NameDualInputBuffer_ZPM");
     public static final String NameDualInputBuffer_UV = texter("Dual Input Buffer (UV)",   "NameDualInputBuffer_UV");
-    public static final String NameDualInputBuffer_UHV = texter("Dual Input Buffer (UHV)", "NameDualInputBuffer_UHV");
 
     // endregion
 
@@ -579,7 +579,7 @@ public class TextLocalization {
     public static final String Tooltip_MegaEggGenerator_D = texter("Dynamo or TT Dynamo, one only", "Tooltip_MegaEggGenerator_D");
     public static final String Tooltip_MegaEggGenerator_M = texter("No need for maintenance hatch.", "Tooltip_MegaEggGenerator_M");
     public static final String Tooltip_MegaEggGenerator_L = texter("Lasers unlock at >=16 pieces.", "Tooltip_MegaEggGenerator_L");
-    public static final String Tooltip_MegaEggGenerator_C = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_D");
+    public static final String Tooltip_MegaEggGenerator_C = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_C");
     // endregion
 
     // region IndistinctTentacle
@@ -632,7 +632,7 @@ public class TextLocalization {
     public static final String NameDebugUncertaintyHatch = texter("Debug Uncertainty Hatch","NameDebugUncertaintyHatch");
     // endregion
 
-    //region Vacuum Filter Extractor
+    // region Vacuum Filter Extractor
     public static final String NameVacuumFilterExtractor = texter("Vacuum Filter Extractor","NameVacuumFilterExtractor");
     public static final String Tooltip_VacuumFilterExtractor_MachineType = texter("Distillation Tower | Distillery","Tooltip_VacuumFilterExtractor_MachineType");
     public static final String Tooltip_VacuumFilterExtractor_Controller = texter("Controller block for the Vacuum Filter Extractor","Tooltip_VacuumFilterExtractor_Controller");
@@ -642,6 +642,13 @@ public class TextLocalization {
     public static final String Tooltip_VacuumFilterExtractor_04 = texter("Recipe voltage is only 50%% of normal.","Tooltip_VacuumFilterExtractor_04");
     public static final String Tooltip_VacuumFilterExtractor_05 = texter("Increasing the energy input will result in more speed boosts.","Tooltip_VacuumFilterExtractor_05");
     public static final String Tooltip_VacuumFilterExtractor_06 = texter("In distillery mode, machine will enable "+EnumChatFormatting.AQUA+"Perfect Overclock"+EnumChatFormatting.GRAY+".","Tooltip_VacuumFilterExtractor_06");
+    // endregion
+
+    // region Large Steam Forge Hammer
+    public static final String NameLargeSteamForgeHammer = texter("Large Steam Forge Hammer", "NameLargeSteamForgeHammer");
+    public static final String Tooltip_LargeSteamForgeHammer_MachineType = texter("Forge Hammer", "Tooltip_LargeSteamForgeHammer_MachineType");
+    public static final String Tooltip_LargeSteamForgeHammer_Controller = texter("Controller block for the Large Steam Forge Hammer", "Tooltip_LargeSteamForgeHammer_Controller");
+    public static final String Tooltip_LargeSteamForgeHammer_01 = texter("He has a hammer. Who has the Sickle?", "Tooltip_LargeSteamForgeHammer_01");
     // endregion
 
 }

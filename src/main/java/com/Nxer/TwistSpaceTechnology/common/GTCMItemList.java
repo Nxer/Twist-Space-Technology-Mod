@@ -186,6 +186,7 @@ public enum GTCMItemList {
     IndistinctTentacle,
     ThermalEnergyDevourer,
     VacuumFilterExtractor,
+    LargeSteamForgeHammer,
 
     // MAX
     HighDimensionalExtend,
@@ -215,10 +216,10 @@ public enum GTCMItemList {
     InfiniteAirHatch,
     ManaHatch,
     InfiniteWirelessDynamoHatch,
+    DualInputBuffer_IV,
     DualInputBuffer_LuV,
     DualInputBuffer_ZPM,
     DualInputBuffer_UV,
-    DualInputBuffer_UHV,
     BufferedEnergyHatchLV,
     BufferedEnergyHatchMV,
     BufferedEnergyHatchHV,

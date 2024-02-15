@@ -29,6 +29,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
@@ -87,15 +88,16 @@ public class MachineLoader {
 
     public static ItemStack AstralComputingArray;
     public static ItemStack VacuumFilterExtractor;
+    public static ItemStack LargeSteamForgeHammer;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
+    public static ItemStack DualInputBuffer_IV;
     public static ItemStack DualInputBuffer_LuV;
     public static ItemStack DualInputBuffer_ZPM;
     public static ItemStack DualInputBuffer_UV;
-    public static ItemStack DualInputBuffer_UHV;
 
     public static ItemStack BufferedEnergyHatchLV;
     public static ItemStack BufferedEnergyHatchMV;
@@ -322,6 +324,13 @@ public class MachineLoader {
             TextLocalization.NameVacuumFilterExtractor).getStackForm(1);
         GTCMItemList.VacuumFilterExtractor.set(VacuumFilterExtractor);
 
+        //
+        LargeSteamForgeHammer = new TST_LargeSteamForgeHammer(
+            19032,
+            "NameLargeSteamForgeHammer",
+            TextLocalization.NameLargeSteamForgeHammer).getStackForm(1);
+        GTCMItemList.LargeSteamForgeHammer.set(LargeSteamForgeHammer);
+
         // endregion
 
         // region Single block Machine
@@ -347,38 +356,36 @@ public class MachineLoader {
             .getStackForm(1);
         GTCMItemList.ManaHatch.set(ManaHatch);
 
-        //
-        DualInputBuffer_LuV = new GT_MetaTileEntity_Hatch_DualInput(
+        // region Dual Input Buffer
+        DualInputBuffer_IV = new GT_MetaTileEntity_Hatch_DualInput(
             18980,
+            "NameDualInputBuffer_IV",
+            TextLocalization.NameDualInputBuffer_IV,
+            5).getStackForm(1);
+        GTCMItemList.DualInputBuffer_IV.set(DualInputBuffer_IV);
+
+        DualInputBuffer_LuV = new GT_MetaTileEntity_Hatch_DualInput(
+            18981,
             "NameDualInputBuffer_LuV",
             TextLocalization.NameDualInputBuffer_LuV,
             6).getStackForm(1);
         GTCMItemList.DualInputBuffer_LuV.set(DualInputBuffer_LuV);
 
-        //
         DualInputBuffer_ZPM = new GT_MetaTileEntity_Hatch_DualInput(
-            18981,
+            18982,
             "NameDualInputBuffer_ZPM",
             TextLocalization.NameDualInputBuffer_ZPM,
             7).getStackForm(1);
         GTCMItemList.DualInputBuffer_ZPM.set(DualInputBuffer_ZPM);
 
-        //
         DualInputBuffer_UV = new GT_MetaTileEntity_Hatch_DualInput(
-            18982,
+            18983,
             "NameDualInputBuffer_UV",
             TextLocalization.NameDualInputBuffer_UV,
             8).getStackForm(1);
         GTCMItemList.DualInputBuffer_UV.set(DualInputBuffer_UV);
 
         // region buffered energy hatch
-        DualInputBuffer_UHV = new GT_MetaTileEntity_Hatch_DualInput(
-            18983,
-            "NameDualInputBuffer_UHV",
-            TextLocalization.NameDualInputBuffer_UHV,
-            9).getStackForm(1);
-        GTCMItemList.DualInputBuffer_UHV.set(DualInputBuffer_UHV);
-
         BufferedEnergyHatchLV = new GT_Hatch_BufferedEnergyHatch(
             18984,
             "NameBufferedEnergyHatchLV",

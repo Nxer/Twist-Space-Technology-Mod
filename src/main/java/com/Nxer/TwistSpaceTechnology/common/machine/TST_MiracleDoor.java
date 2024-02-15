@@ -119,7 +119,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD
-                + tag.getLong("costingWirelessEUTemp")
+                + GT_Utility.formatNumbers(tag.getLong("costingWirelessEUTemp"))
                 + EnumChatFormatting.RESET
                 + " EU");
         if (tag.getBoolean("isActive")) {
