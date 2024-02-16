@@ -19,14 +19,15 @@ public class ShapedCraftRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
-        //
+
+        // Large Steam Forge Hammer
         addCraftingRecipe(
             GTCMItemList.LargeSteamForgeHammer.get(1),
             new Object[] { "ABA", "CDC", "ABA", 'A', ItemList.Casing_BronzePlatedBricks, 'B',
                 new ItemStack(Blocks.anvil, 1, 0), 'C', OreDictNames.craftingPiston, 'D',
                 ALLOY.TUMBAGA.getFrameBox(1) });
 
-        //
+        // Large Steam Alloy Smelter
         addCraftingRecipe(
             GTCMItemList.LargeSteamAlloySmelter.get(1),
             new Object[] { "ABA", "BCB", "ABA", 'A',
