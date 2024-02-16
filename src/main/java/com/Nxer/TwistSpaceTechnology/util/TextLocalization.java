@@ -651,5 +651,12 @@ public class TextLocalization {
     public static final String Tooltip_LargeSteamForgeHammer_01 = texter("He has a hammer. Who has the Sickle?", "Tooltip_LargeSteamForgeHammer_01");
     // endregion
 
+    // region Large Steam Alloy Smelter
+    public static final String NameLargeSteamAlloySmelter = texter("Large Steam Alloy Smelter", "NameLargeSteamAlloySmelter");
+    public static final String Tooltip_LargeSteamAlloySmelter_MachineType = texter("Alloy Smelter","Tooltip_LargeSteamAlloySmelter_MachineType");
+    public static final String Tooltip_LargeSteamAlloySmelter_Controller = texter("Controller block for the Large Steam Alloy Smelter","Tooltip_LargeSteamAlloySmelter_Controller");
+    public static final String Tooltip_LargeSteamAlloySmelter_01 = texter("Steam Tech Operational","Tooltip_LargeSteamAlloySmelter_01");
+    // endregion
+
 }
 // spotless:on

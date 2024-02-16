@@ -187,6 +187,7 @@ public enum GTCMItemList {
     ThermalEnergyDevourer,
     VacuumFilterExtractor,
     LargeSteamForgeHammer,
+    LargeSteamAlloySmelter,
 
     // MAX
     HighDimensionalExtend,
