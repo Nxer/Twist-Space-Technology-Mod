@@ -324,7 +324,7 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
 
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        FulidStack nowFluid = getFluid();
+        FluidStack nowFluid = getFluid();
         if (nowFluid == null) return null;
         else return drain(ForgeDirection.UNKNOWN, new FluidStack(nowFluid.getFluid(), maxDrain), doDrain);
     }
