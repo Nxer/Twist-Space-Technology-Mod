@@ -774,3 +774,7 @@ NameLargeSteamForgeHammer=大型蒸汽锻造锤
 Tooltip_LargeSteamForgeHammer_MachineType=锻造锤
 Tooltip_LargeSteamForgeHammer_Controller=大型蒸汽锻造锤的控制器方块
 Tooltip_LargeSteamForgeHammer_01=他有一柄锤子. 谁有镰刀?
+NameLargeSteamAlloySmelter=大型蒸汽合金炉
+Tooltip_LargeSteamAlloySmelter_MachineType=合金炉
+Tooltip_LargeSteamAlloySmelter_Controller=大型蒸汽合金炉的控制器方块
+Tooltip_LargeSteamAlloySmelter_01=蒸汽科技，启动！

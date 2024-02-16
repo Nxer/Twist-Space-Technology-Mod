@@ -773,3 +773,7 @@ Tooltip_LargeSteamForgeHammer_Controller=Controller block for the Large Steam Fo
 NameLargeSteamForgeHammer=Large Steam Forge Hammer
 Tooltip_LargeSteamForgeHammer_MachineType=Forge Hammer
 Tooltip_LargeSteamForgeHammer_01=He has a hammer. Who has the Sickle?
+Tooltip_LargeSteamAlloySmelter_MachineType=Alloy Smelter
+Tooltip_LargeSteamAlloySmelter_Controller=Controller block for the Large Steam Alloy Smelter
+Tooltip_LargeSteamAlloySmelter_01=Steam Tech Operational
+NameLargeSteamAlloySmelter=Large Steam Alloy Smelter
