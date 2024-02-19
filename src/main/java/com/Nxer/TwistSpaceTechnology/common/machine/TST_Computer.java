@@ -1372,48 +1372,55 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
 
     }
 
+    private static IStructureDefinition<TST_Computer> STRUCTURE_DEFINITION = null;
+
     @Override
     public IStructureDefinition<TST_Computer> getStructure_EM() {
-        return IStructureDefinition.<TST_Computer>builder()
-            .addShape(MAIN, shape)// FRF_Coil_1
-            .addElement('A', ofBlock(FRF_Coil_1, 0))// A -> ofBlock...(FRF_Coil_1, 0, ...);
-            .addElement('B', ofBlock(compactFusionCoil, 0))// B -> ofBlock...(compactFusionCoil, 2, ...);
-            .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
-            .addElement('D', ofBlock(IGBlocks.SpaceElevatorCasing, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
-            // .addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// E -> ofBlock...(gt.blockcasingsSE, 2, ...);
-            .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
-            .addElement('G', ofBlock(sBlockCasingsTT, 1))// G -> ofBlock...(gt.blockcasingsTT, 1, ...);
-            .addElement('H', ofBlock(sBlockCasingsTT, 2))// H -> ofBlock...(gt.blockcasingsTT, 2, ...);
-            .addElement('I', ofBlock(sBlockCasingsTT, 3))// I -> ofBlock...(gt.blockcasingsTT, 3, ...);
-            .addElement('J', ofBlock(sBlockCasingsTT, 7))// J -> ofBlock...(gt.blockcasingsTT, 7, ...);
-            .addElement('L', ofBlock(radiationProtectionSteelFrame, 0)) // L ->
-            // ofBlock...(radiationProtectionSteelFrame, 0,
-            // ...);
-            .addElement('K', ofBlock(blockCasings3Misc, 15)) // K -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
-            .addElement('M', ofBlock(QuantumGlassBlock.INSTANCE, 0)) // M -> ofBlock...(tile.quantumGlass, 0, ...);
-            .addElement('O', ofBlock(pylon, 1))
-            // .addElement('N', ofBlock(Block.getBlockById(1), 0))
-            .addElement(
-                'P',
-                ofChain(RackHatchElement.INSTANCE.newAny(textureOffset + 3, 2), ofBlock(Block.getBlockById(0), 0)))
-            // .addElement('P', ofBlock(LASERpipeBlock.getBlock(), 15472))
-            // .addElement('K', ofBlock(Block.getBlockById(1), 0))
-            // .addElement('k', ofBlock(, 7))
-            .addElement(
-                'E',
-                StructureUtility.ofChain(
-                    GT_StructureUtility.ofHatchAdder(TST_Computer::addToMachineList, textureOffset + 2, 1),
-                    // GT_StructureUtility
-                    // .ofHatchAdder(TST_Computer::addExoticEnergyInputToMachineList, textureOffset + 2, 1),
-                    // GT_StructureUtility.ofHatchAdder(TST_Computer::addInputToMachineList, textureOffset + 2, 1),
-                    // GT_StructureUtility.ofHatchAdder(TST_Computer::addOutputToMachineList, textureOffset + 2, 1),
-                    // GT_StructureUtility.ofHatchAdder(TST_Computer::addDataConnectorToMachineList, textureOffset + 2,
-                    // 1),
-                    StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 2)))
-            .addElement(
-                'Q',
-                ofChain(RackHatchElement.INSTANCE.newAny(textureOffset + 3, 2), ofBlock(sBlockCasingsTT, 3)))
-            .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = IStructureDefinition.<TST_Computer>builder()
+                .addShape(MAIN, shape)// FRF_Coil_1
+                .addElement('A', ofBlock(FRF_Coil_1, 0))// A -> ofBlock...(FRF_Coil_1, 0, ...);
+                .addElement('B', ofBlock(compactFusionCoil, 0))// B -> ofBlock...(compactFusionCoil, 2, ...);
+                .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
+                .addElement('D', ofBlock(IGBlocks.SpaceElevatorCasing, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
+                // .addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// E -> ofBlock...(gt.blockcasingsSE, 2,
+                // ...);
+                .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
+                .addElement('G', ofBlock(sBlockCasingsTT, 1))// G -> ofBlock...(gt.blockcasingsTT, 1, ...);
+                .addElement('H', ofBlock(sBlockCasingsTT, 2))// H -> ofBlock...(gt.blockcasingsTT, 2, ...);
+                .addElement('I', ofBlock(sBlockCasingsTT, 3))// I -> ofBlock...(gt.blockcasingsTT, 3, ...);
+                .addElement('J', ofBlock(sBlockCasingsTT, 7))// J -> ofBlock...(gt.blockcasingsTT, 7, ...);
+                .addElement('L', ofBlock(radiationProtectionSteelFrame, 0)) // L ->
+                // ofBlock...(radiationProtectionSteelFrame, 0,
+                // ...);
+                .addElement('K', ofBlock(blockCasings3Misc, 15)) // K -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
+                .addElement('M', ofBlock(QuantumGlassBlock.INSTANCE, 0)) // M -> ofBlock...(tile.quantumGlass, 0, ...);
+                .addElement('O', ofBlock(pylon, 1))
+                // .addElement('N', ofBlock(Block.getBlockById(1), 0))
+                .addElement(
+                    'P',
+                    ofChain(RackHatchElement.INSTANCE.newAny(textureOffset + 3, 2), ofBlock(Block.getBlockById(0), 0)))
+                // .addElement('P', ofBlock(LASERpipeBlock.getBlock(), 15472))
+                // .addElement('K', ofBlock(Block.getBlockById(1), 0))
+                // .addElement('k', ofBlock(, 7))
+                .addElement(
+                    'E',
+                    StructureUtility.ofChain(
+                        GT_StructureUtility.ofHatchAdder(TST_Computer::addToMachineList, textureOffset + 2, 1),
+                        // GT_StructureUtility
+                        // .ofHatchAdder(TST_Computer::addExoticEnergyInputToMachineList, textureOffset + 2, 1),
+                        // GT_StructureUtility.ofHatchAdder(TST_Computer::addInputToMachineList, textureOffset + 2, 1),
+                        // GT_StructureUtility.ofHatchAdder(TST_Computer::addOutputToMachineList, textureOffset + 2, 1),
+                        // GT_StructureUtility.ofHatchAdder(TST_Computer::addDataConnectorToMachineList, textureOffset +
+                        // 2,
+                        // 1),
+                        StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 2)))
+                .addElement(
+                    'Q',
+                    ofChain(RackHatchElement.INSTANCE.newAny(textureOffset + 3, 2), ofBlock(sBlockCasingsTT, 3)))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     @Override

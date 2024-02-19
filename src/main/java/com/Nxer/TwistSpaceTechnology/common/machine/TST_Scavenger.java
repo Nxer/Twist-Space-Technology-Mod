@@ -105,6 +105,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     private final int verticalOffSet = 8;
     private final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainScavenger";
+    private static IStructureDefinition<TST_Scavenger> STRUCTURE_DEFINITION = null;
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
@@ -140,35 +141,40 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
 
     @Override
     public IStructureDefinition<TST_Scavenger> getStructureDefinition() {
-        return StructureDefinition.<TST_Scavenger>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-            .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 7))
-            .addElement(
-                'B',
-                GT_HatchElementBuilder.<TST_Scavenger>builder()
-                    .atLeast(OutputBus, OutputHatch, Energy.or(ExoticEnergy))
-                    .adder(TST_Scavenger::addToMachineList)
-                    .dot(2)
-                    .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-                    .buildAndChain(GregTech_API.sBlockCasings8, 7))
-            .addElement(
-                'C',
-                GT_HatchElementBuilder.<TST_Scavenger>builder()
-                    .atLeast(InputBus, InputHatch)
-                    .adder(TST_Scavenger::addToMachineList)
-                    .dot(1)
-                    .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-                    .buildAndChain(BorosilicateGlass.ofBoroGlassAnyTier(), ofBlock(GregTech_API.sBlockCasings4, 14)))
-            .addElement(
-                'D',
-                GT_HatchElementBuilder.<TST_Scavenger>builder()
-                    .atLeast(InputBus, InputHatch)
-                    .adder(TST_Scavenger::addToMachineList)
-                    .dot(1)
-                    .casingIndex(((GT_Block_Casings4) GregTech_API.sBlockCasings4).getTextureIndex(14))
-                    .buildAndChain(GregTech_API.sBlockCasings4, 14))
-            .addElement('E', ofFrame(Materials.Osmiridium))
-            .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_Scavenger>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 7))
+                .addElement(
+                    'B',
+                    GT_HatchElementBuilder.<TST_Scavenger>builder()
+                        .atLeast(OutputBus, OutputHatch, Energy.or(ExoticEnergy))
+                        .adder(TST_Scavenger::addToMachineList)
+                        .dot(2)
+                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
+                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                .addElement(
+                    'C',
+                    GT_HatchElementBuilder.<TST_Scavenger>builder()
+                        .atLeast(InputBus, InputHatch)
+                        .adder(TST_Scavenger::addToMachineList)
+                        .dot(1)
+                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
+                        .buildAndChain(
+                            BorosilicateGlass.ofBoroGlassAnyTier(),
+                            ofBlock(GregTech_API.sBlockCasings4, 14)))
+                .addElement(
+                    'D',
+                    GT_HatchElementBuilder.<TST_Scavenger>builder()
+                        .atLeast(InputBus, InputHatch)
+                        .adder(TST_Scavenger::addToMachineList)
+                        .dot(1)
+                        .casingIndex(((GT_Block_Casings4) GregTech_API.sBlockCasings4).getTextureIndex(14))
+                        .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                .addElement('E', ofFrame(Materials.Osmiridium))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     /*

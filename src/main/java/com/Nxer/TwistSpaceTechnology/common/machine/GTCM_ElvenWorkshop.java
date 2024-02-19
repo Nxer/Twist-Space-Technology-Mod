@@ -117,24 +117,28 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
 	private final int horizontalOffSet = 2;
 	private final int verticalOffSet = 1;
 	private final int depthOffSet = 2;
+    private static IStructureDefinition<GTCM_ElvenWorkshop> STRUCTURE_DEFINITION = null;
 	@Override
 	public IStructureDefinition<GTCM_ElvenWorkshop> getStructureDefinition() {
-		return StructureDefinition.<GTCM_ElvenWorkshop>builder()
-			       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                   .addElement(
-					   'A',
-					   GT_HatchElementBuilder.<GTCM_ElvenWorkshop>builder()
-						   .atLeast(Maintenance, Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch)
-						   .adder(GTCM_ElvenWorkshop::addToMachineList)
-						   .dot(1)
-						   .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(2))
-						   .buildAndChain(GregTech_API.sBlockStones, 7))
-			       .addElement('B',ofBlock(ModBlocks.storage, 4))
-			       .addElement('C',ofBlockAnyMeta(ModBlocks.prism))
-			       .addElement('D',ofBlock(ModBlocks.pylon, 0))
-			       .addElement('E',ofBlock(ModBlocks.livingwood,5))
-			       .addElement('F',ofBlockAnyMeta(ModBlocks.manaGlass))
-			       .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GTCM_ElvenWorkshop>builder()
+                                                      .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                                                      .addElement(
+                                                          'A',
+                                                          GT_HatchElementBuilder.<GTCM_ElvenWorkshop>builder()
+                                                                                .atLeast(Maintenance, Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch)
+                                                                                .adder(GTCM_ElvenWorkshop::addToMachineList)
+                                                                                .dot(1)
+                                                                                .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(2))
+                                                                                .buildAndChain(GregTech_API.sBlockStones, 7))
+                                                      .addElement('B',ofBlock(ModBlocks.storage, 4))
+                                                      .addElement('C',ofBlockAnyMeta(ModBlocks.prism))
+                                                      .addElement('D',ofBlock(ModBlocks.pylon, 0))
+                                                      .addElement('E',ofBlock(ModBlocks.livingwood,5))
+                                                      .addElement('F',ofBlockAnyMeta(ModBlocks.manaGlass))
+                                                      .build();
+        }
+		return STRUCTURE_DEFINITION;
 	}
 	/*
 	Blocks:

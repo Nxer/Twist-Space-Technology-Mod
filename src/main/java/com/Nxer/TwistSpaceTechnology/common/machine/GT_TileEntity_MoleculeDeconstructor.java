@@ -213,54 +213,58 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
 	private final int horizontalOffSet = 7;
 	private final int verticalOffSet = 9;
 	private final int depthOffSet = 0;
+    private static IStructureDefinition<GT_TileEntity_MoleculeDeconstructor> STRUCTURE_DEFINITION = null;
 	@Override
 	public IStructureDefinition<GT_TileEntity_MoleculeDeconstructor> getStructureDefinition() {
-		return StructureDefinition.<GT_TileEntity_MoleculeDeconstructor>builder()
-			       .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
-			       .addShape(STRUCTURE_PIECE_MIDDLE, shapeMiddle)
-			       .addShape(STRUCTURE_PIECE_END, shapeEnd)
-			       .addElement('A',
-			                   withChannel("glass",
-			                               BorosilicateGlass.ofBoroGlass(
-				                               (byte) 0,
-				                               (byte) 1,
-				                               Byte.MAX_VALUE,
-				                               (te, t) -> te.glassTier = t,
-				                               te -> te.glassTier
-			                               )))
-			       .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 15))
-			       .addElement('C', ofBlock(GregTech_API.sBlockCasings4, 14))
-			       .addElement('D',
-			                   GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
-			                                         .atLeast(Energy.or(ExoticEnergy))
-									                 .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
-									                 .dot(1)
-									                 .casingIndex(1024)
-									                 .buildAndChain(sBlockCasingsTT, 0))
-			       .addElement('E', ofBlock(sBlockCasingsTT, 8))
-			       .addElement('F',
-			                   GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
-			                                         .atLeast(OutputBus, OutputHatch)
-			                                         .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
-			                                         .dot(2)
-			                                         .casingIndex(62)
-			                                         .buildAndChain(GregTech_API.sBlockCasings4, 14))
-			       .addElement('G',
-			                   GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
-			                                         .atLeast(Maintenance)
-			                                         .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
-			                                         .dot(3)
-			                                         .casingIndex(62)
-			                                         .buildAndChain(GregTech_API.sBlockCasings4, 14))
-			       .addElement('H',
-			                   GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
-			                                         .atLeast(InputBus, InputHatch)
-			                                         .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
-			                                         .dot(4)
-			                                         .casingIndex(62)
-			                                         .buildAndChain(GregTech_API.sBlockCasings4, 14))
-			       .addElement('I', ofFrame(Materials.CosmicNeutronium))
-			       .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_MoleculeDeconstructor>builder()
+                                                      .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
+                                                      .addShape(STRUCTURE_PIECE_MIDDLE, shapeMiddle)
+                                                      .addShape(STRUCTURE_PIECE_END, shapeEnd)
+                                                      .addElement('A',
+                                                                  withChannel("glass",
+                                                                              BorosilicateGlass.ofBoroGlass(
+                                                                                  (byte) 0,
+                                                                                  (byte) 1,
+                                                                                  Byte.MAX_VALUE,
+                                                                                  (te, t) -> te.glassTier = t,
+                                                                                  te -> te.glassTier
+                                                                              )))
+                                                      .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 15))
+                                                      .addElement('C', ofBlock(GregTech_API.sBlockCasings4, 14))
+                                                      .addElement('D',
+                                                                  GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
+                                                                                        .atLeast(Energy.or(ExoticEnergy))
+                                                                                        .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
+                                                                                        .dot(1)
+                                                                                        .casingIndex(1024)
+                                                                                        .buildAndChain(sBlockCasingsTT, 0))
+                                                      .addElement('E', ofBlock(sBlockCasingsTT, 8))
+                                                      .addElement('F',
+                                                                  GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
+                                                                                        .atLeast(OutputBus, OutputHatch)
+                                                                                        .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
+                                                                                        .dot(2)
+                                                                                        .casingIndex(62)
+                                                                                        .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                                                      .addElement('G',
+                                                                  GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
+                                                                                        .atLeast(Maintenance)
+                                                                                        .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
+                                                                                        .dot(3)
+                                                                                        .casingIndex(62)
+                                                                                        .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                                                      .addElement('H',
+                                                                  GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
+                                                                                        .atLeast(InputBus, InputHatch)
+                                                                                        .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
+                                                                                        .dot(4)
+                                                                                        .casingIndex(62)
+                                                                                        .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                                                      .addElement('I', ofFrame(Materials.CosmicNeutronium))
+                                                      .build();
+        }
+		return STRUCTURE_DEFINITION;
 	}
 
 

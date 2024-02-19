@@ -255,40 +255,43 @@ public class GT_TileEntity_MagneticDomainConstructor
      */
     @Override
     public IStructureDefinition<GT_TileEntity_MagneticDomainConstructor> getStructureDefinition() {
-        return StructureDefinition.<GT_TileEntity_MagneticDomainConstructor>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
-            .addShape(STRUCTURE_PIECE_MIDDLE, shapeMiddle)
-            .addShape(STRUCTURE_PIECE_END, shapeEnd)
-            .addElement('A', ofBlock(compactFusionCoil, 0))
-            .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 8))
-            .addElement('C', ofBlock(GregTech_API.sBlockCasings8, 7))
-            .addElement(
-                'D', // Energy Hatch, Maintenance
-                GT_HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
-                    .atLeast(Energy.or(ExoticEnergy), Maintenance)
-                    .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                    .dot(1)
-                    .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
-                    .buildAndChain(GregTech_API.sBlockCasings8, 10))
-            .addElement(
-                'E',
-                GT_HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
-                    .atLeast(InputBus, InputHatch)
-                    .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                    .dot(2)
-                    .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-                    .buildAndChain(GregTech_API.sBlockCasings8, 7))
-            .addElement(
-                'O',
-                GT_HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
-                    .atLeast(OutputBus, OutputHatch)
-                    .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                    .dot(3)
-                    .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-                    .buildAndChain(GregTech_API.sBlockCasings8, 7))
-            .addElement('F', ofFrame(Materials.NaquadahAlloy))
-            .addElement('G', ofFrame(Materials.TengamAttuned))
-            .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_MagneticDomainConstructor>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
+                .addShape(STRUCTURE_PIECE_MIDDLE, shapeMiddle)
+                .addShape(STRUCTURE_PIECE_END, shapeEnd)
+                .addElement('A', ofBlock(compactFusionCoil, 0))
+                .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 8))
+                .addElement('C', ofBlock(GregTech_API.sBlockCasings8, 7))
+                .addElement(
+                    'D', // Energy Hatch, Maintenance
+                    GT_HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
+                        .atLeast(Energy.or(ExoticEnergy), Maintenance)
+                        .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
+                        .dot(1)
+                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
+                        .buildAndChain(GregTech_API.sBlockCasings8, 10))
+                .addElement(
+                    'E',
+                    GT_HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
+                        .atLeast(InputBus, InputHatch)
+                        .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
+                        .dot(2)
+                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
+                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                .addElement(
+                    'O',
+                    GT_HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
+                        .atLeast(OutputBus, OutputHatch)
+                        .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
+                        .dot(3)
+                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
+                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                .addElement('F', ofFrame(Materials.NaquadahAlloy))
+                .addElement('G', ofFrame(Materials.TengamAttuned))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     private final int baseHorizontalOffSet = 7;
@@ -298,6 +301,8 @@ public class GT_TileEntity_MagneticDomainConstructor
     private static final String STRUCTURE_PIECE_MAIN = "mainMagneticDomainConstructor";
     private static final String STRUCTURE_PIECE_MIDDLE = "middleMagneticDomainConstructor";
     private static final String STRUCTURE_PIECE_END = "endMagneticDomainConstructor";
+
+    private static IStructureDefinition<GT_TileEntity_MagneticDomainConstructor> STRUCTURE_DEFINITION = null;
 
     /**
      * The first piece of Structure

@@ -142,6 +142,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     private final int verticalOffSet = 20;
     private final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainVacuumFilterExtractor";
+    private static IStructureDefinition<TST_VacuumFilterExtractor> STRUCTURE_DEFINITION = null;
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -154,33 +155,36 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
 
     @Override
     public IStructureDefinition<TST_VacuumFilterExtractor> getStructureDefinition() {
-        return StructureDefinition
-                   .<TST_VacuumFilterExtractor>builder()
-                   .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE))
-                   .addElement('A', ofBlock(GregTech_API.sBlockCasings2, 8))
-                   .addElement(
-                       'B',
-                       GT_HatchElementBuilder
-                           .<TST_VacuumFilterExtractor>builder()
-                           .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                           .adder(TST_VacuumFilterExtractor::addToMachineList)
-                           .dot(1)
-                           .casingIndex(((GT_Block_Casings4)GregTech_API.sBlockCasings4).getTextureIndex(10))
-                           .buildAndChain(GregTech_API.sBlockCasings4, 10))
-                   .addElement(
-                       'C',
-                       GT_HatchElementBuilder
-                           .<TST_VacuumFilterExtractor>builder()
-                           .atLeast(Energy.or(ExoticEnergy))
-                           .adder(TST_VacuumFilterExtractor::addToMachineList)
-                           .dot(2)
-                           .casingIndex(((GT_Block_Casings8)GregTech_API.sBlockCasings8).getTextureIndex(3))
-                           .buildAndChain(GregTech_API.sBlockCasings8, 3))
-                   .addElement('D', ofBlock(GregTech_API.sBlockCasings9, 0))
-                   .addElement('E', ofBlock(sBlockCasingsTT, 8))
-                   .addElement('F', ofBlock(QuantumGlassBlock.INSTANCE, 0))
-                   .addElement('G', ofFrame(Materials.Neutronium))
-                   .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition
+                                       .<TST_VacuumFilterExtractor>builder()
+                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE))
+                                       .addElement('A', ofBlock(GregTech_API.sBlockCasings2, 8))
+                                       .addElement(
+                                           'B',
+                                           GT_HatchElementBuilder
+                                               .<TST_VacuumFilterExtractor>builder()
+                                               .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                                               .adder(TST_VacuumFilterExtractor::addToMachineList)
+                                               .dot(1)
+                                               .casingIndex(((GT_Block_Casings4)GregTech_API.sBlockCasings4).getTextureIndex(10))
+                                               .buildAndChain(GregTech_API.sBlockCasings4, 10))
+                                       .addElement(
+                                           'C',
+                                           GT_HatchElementBuilder
+                                               .<TST_VacuumFilterExtractor>builder()
+                                               .atLeast(Energy.or(ExoticEnergy))
+                                               .adder(TST_VacuumFilterExtractor::addToMachineList)
+                                               .dot(2)
+                                               .casingIndex(((GT_Block_Casings8)GregTech_API.sBlockCasings8).getTextureIndex(3))
+                                               .buildAndChain(GregTech_API.sBlockCasings8, 3))
+                                       .addElement('D', ofBlock(GregTech_API.sBlockCasings9, 0))
+                                       .addElement('E', ofBlock(sBlockCasingsTT, 8))
+                                       .addElement('F', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                                       .addElement('G', ofFrame(Materials.Neutronium))
+                                       .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     private final String[][] SHAPE = new String[][]{
