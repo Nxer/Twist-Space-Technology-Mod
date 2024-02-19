@@ -126,6 +126,7 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
         {"CCCCCCCCCCCCCCC"," FFFFFFFFFFFFF ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," FFFFFFFFFFFFF ","CCCCCCCCCCCCCCC"},
         {"CCCCCCC~CCCCCCC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CCCCCCCCCCCCCCC"}
     };
+    private static IStructureDefinition<TST_LargeIndustrialCokingFactory> STRUCTURE_DEFINITION = null;
 
 
 
@@ -165,33 +166,36 @@ I -> ofFrame...(Materials.Steel, ...);
      */
     @Override
     public IStructureDefinition<TST_LargeIndustrialCokingFactory> getStructureDefinition() {
-        return StructureDefinition
-                   .<TST_LargeIndustrialCokingFactory>builder()
-                   .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                   .addElement('A', ofBlock(GregTech_API.sBlockCasings2, 15))
-                   .addElement('B', ofBlock(GregTech_API.sBlockCasings3, 15))
-                   .addElement(
-                       'C',
-                       GT_HatchElementBuilder
-                           .<TST_LargeIndustrialCokingFactory>builder()
-                           .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
-                           .adder(TST_LargeIndustrialCokingFactory::addToMachineList)
-                           .dot(1)
-                           .casingIndex(48)
-                           .buildAndChain(GregTech_API.sBlockCasings4, 0))
-                   .addElement(
-                       'D',
-                       withChannel(
-                           "coil",
-                           ofCoil(
-                               TST_LargeIndustrialCokingFactory::setCoilLevel,
-                               TST_LargeIndustrialCokingFactory::getCoilLevel)))
-                   .addElement('E', ofBlockUnlocalizedName("dreamcraft", "gt.blockcasingsNH", 2))
-                   .addElement('F', ofBlock(ModBlocks.blockCasingsMisc, 1))
-                   .addElement('G', ofBlock(ModBlocks.blockCasingsMisc, 3))
-                   .addElement('H', ofFrame(Materials.BlackSteel))
-                   .addElement('I', ofFrame(Materials.Steel))
-                   .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition
+                                       .<TST_LargeIndustrialCokingFactory>builder()
+                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                                       .addElement('A', ofBlock(GregTech_API.sBlockCasings2, 15))
+                                       .addElement('B', ofBlock(GregTech_API.sBlockCasings3, 15))
+                                       .addElement(
+                                           'C',
+                                           GT_HatchElementBuilder
+                                               .<TST_LargeIndustrialCokingFactory>builder()
+                                               .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
+                                               .adder(TST_LargeIndustrialCokingFactory::addToMachineList)
+                                               .dot(1)
+                                               .casingIndex(48)
+                                               .buildAndChain(GregTech_API.sBlockCasings4, 0))
+                                       .addElement(
+                                           'D',
+                                           withChannel(
+                                               "coil",
+                                               ofCoil(
+                                                   TST_LargeIndustrialCokingFactory::setCoilLevel,
+                                                   TST_LargeIndustrialCokingFactory::getCoilLevel)))
+                                       .addElement('E', ofBlockUnlocalizedName("dreamcraft", "gt.blockcasingsNH", 2))
+                                       .addElement('F', ofBlock(ModBlocks.blockCasingsMisc, 1))
+                                       .addElement('G', ofBlock(ModBlocks.blockCasingsMisc, 3))
+                                       .addElement('H', ofFrame(Materials.BlackSteel))
+                                       .addElement('I', ofFrame(Materials.Steel))
+                                       .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     // spotless:on

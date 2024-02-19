@@ -272,6 +272,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     private final int horizontalOffSet = 15;
     private final int verticalOffSet = 15;
     private final int depthOffSet = 0;
+    private static IStructureDefinition<GT_TileEntity_SpaceScaler> STRUCTURE_DEFINITION = null;
     public static int getBlockFieldGeneratorTier(Block block, int meta){
         if (block == sBlockCasingsTT){
             switch (meta) {
@@ -291,50 +292,53 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
 
     @Override
     public IStructureDefinition<GT_TileEntity_SpaceScaler> getStructureDefinition() {
-        return StructureDefinition.<GT_TileEntity_SpaceScaler>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-            .addElement(
-                'A',
-                GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
-                    .atLeast(Energy.or(ExoticEnergy))
-                    .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                    .dot(1)
-                    .casingIndex(1024)
-                    .buildAndChain(sBlockCasingsTT, 0))
-            .addElement('B', ofBlock(sBlockCasingsTT, 4))
-            .addElement('C', ofBlock(sBlockCasingsTT, 6))
-            .addElement('D', ofBlock(QuantumGlassBlock.INSTANCE, 0))
-            .addElement(
-                'E',
-                GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
-                    .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance)
-                    .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                    .dot(2)
-                    .casingIndex(1028)
-                    .buildAndChain(sBlockCasingsTT, 4))
-            .addElement(
-                'G',
-                withChannel("fieldgeneratortier",
-                            ofBlocksTiered(
-                                GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
-                                ImmutableList.of(
-                                    Pair.of(sBlockCasingsTT, 6),
-                                    Pair.of(sBlockCasingsTT, 14),
-                                    Pair.of(StabilisationFieldGenerators, 0),
-                                    Pair.of(StabilisationFieldGenerators, 1),
-                                    Pair.of(StabilisationFieldGenerators, 2),
-                                    Pair.of(StabilisationFieldGenerators, 3),
-                                    Pair.of(StabilisationFieldGenerators, 4),
-                                    Pair.of(StabilisationFieldGenerators, 5),
-                                    Pair.of(StabilisationFieldGenerators, 6),
-                                    Pair.of(StabilisationFieldGenerators, 7),
-                                    Pair.of(StabilisationFieldGenerators, 8)
-                                ),
-                                0,
-                                (m, t) -> m.fieldGeneratorTier = t,
-                                m -> m.fieldGeneratorTier))
-                )
-            .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_SpaceScaler>builder()
+                               .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                               .addElement(
+                                   'A',
+                                   GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+                                                         .atLeast(Energy.or(ExoticEnergy))
+                                                         .adder(GT_TileEntity_SpaceScaler::addToMachineList)
+                                                         .dot(1)
+                                                         .casingIndex(1024)
+                                                         .buildAndChain(sBlockCasingsTT, 0))
+                               .addElement('B', ofBlock(sBlockCasingsTT, 4))
+                               .addElement('C', ofBlock(sBlockCasingsTT, 6))
+                               .addElement('D', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                               .addElement(
+                                   'E',
+                                   GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance)
+                                                         .adder(GT_TileEntity_SpaceScaler::addToMachineList)
+                                                         .dot(2)
+                                                         .casingIndex(1028)
+                                                         .buildAndChain(sBlockCasingsTT, 4))
+                               .addElement(
+                                   'G',
+                                   withChannel("fieldgeneratortier",
+                                               ofBlocksTiered(
+                                                   GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
+                                                   ImmutableList.of(
+                                                       Pair.of(sBlockCasingsTT, 6),
+                                                       Pair.of(sBlockCasingsTT, 14),
+                                                       Pair.of(StabilisationFieldGenerators, 0),
+                                                       Pair.of(StabilisationFieldGenerators, 1),
+                                                       Pair.of(StabilisationFieldGenerators, 2),
+                                                       Pair.of(StabilisationFieldGenerators, 3),
+                                                       Pair.of(StabilisationFieldGenerators, 4),
+                                                       Pair.of(StabilisationFieldGenerators, 5),
+                                                       Pair.of(StabilisationFieldGenerators, 6),
+                                                       Pair.of(StabilisationFieldGenerators, 7),
+                                                       Pair.of(StabilisationFieldGenerators, 8)
+                                                   ),
+                                                   0,
+                                                   (m, t) -> m.fieldGeneratorTier = t,
+                                                   m -> m.fieldGeneratorTier))
+                               )
+                               .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
     /*
      * Blocks:

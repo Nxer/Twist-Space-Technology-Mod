@@ -150,6 +150,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
             " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
         { "DDDDDD~DDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD",
             "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD" } };
+    private static IStructureDefinition<TST_AdvancedMegaOilCracker> STRUCTURE_DEFINITION = null;
 
     /*
      * Blocks:
@@ -195,33 +196,36 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
 
     @Override
     public IStructureDefinition<TST_AdvancedMegaOilCracker> getStructureDefinition() {
-        return StructureDefinition.<TST_AdvancedMegaOilCracker>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-            .addElement(
-                'A',
-                withChannel(
-                    "glass",
-                    BorosilicateGlass.ofBoroGlass(
-                        (byte) 0,
-                        (byte) 1,
-                        Byte.MAX_VALUE,
-                        (te, t) -> te.glassTier = t,
-                        te -> te.glassTier)))
-            .addElement(
-                'C',
-                withChannel(
-                    "coil",
-                    ofCoil(TST_AdvancedMegaOilCracker::setCoilLevel, TST_AdvancedMegaOilCracker::getCoilLevel)))
-            .addElement(
-                'D',
-                GT_HatchElementBuilder.<TST_AdvancedMegaOilCracker>builder()
-                    .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
-                    .adder(TST_AdvancedMegaOilCracker::addToMachineList)
-                    .dot(1)
-                    .casingIndex(49)
-                    .buildAndChain(GregTech_API.sBlockCasings4, 1))
-            .addElement('F', ofFrame(Materials.Vanadium))
-            .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_AdvancedMegaOilCracker>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement(
+                    'A',
+                    withChannel(
+                        "glass",
+                        BorosilicateGlass.ofBoroGlass(
+                            (byte) 0,
+                            (byte) 1,
+                            Byte.MAX_VALUE,
+                            (te, t) -> te.glassTier = t,
+                            te -> te.glassTier)))
+                .addElement(
+                    'C',
+                    withChannel(
+                        "coil",
+                        ofCoil(TST_AdvancedMegaOilCracker::setCoilLevel, TST_AdvancedMegaOilCracker::getCoilLevel)))
+                .addElement(
+                    'D',
+                    GT_HatchElementBuilder.<TST_AdvancedMegaOilCracker>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
+                        .adder(TST_AdvancedMegaOilCracker::addToMachineList)
+                        .dot(1)
+                        .casingIndex(49)
+                        .buildAndChain(GregTech_API.sBlockCasings4, 1))
+                .addElement('F', ofFrame(Materials.Vanadium))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     // endregion

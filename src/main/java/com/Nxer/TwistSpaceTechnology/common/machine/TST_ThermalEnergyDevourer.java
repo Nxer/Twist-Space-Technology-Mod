@@ -303,6 +303,8 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
     private final int verticalOffSet = 36;
     private final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainThermalEnergyDevourer";
+    private static IStructureDefinition<TST_ThermalEnergyDevourer> STRUCTURE_DEFINITION = null;
+
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -314,6 +316,72 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
     }
     @Override
     public IStructureDefinition<TST_ThermalEnergyDevourer> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition
+                .<TST_ThermalEnergyDevourer>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                    {"     CCCCC     ","   CCEEEEECC   ","  CEEEEEEEEEC  "," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC"," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","  CEEEEEEEEEC  ","   CCEEEEECC   ","     CCCCC     "},
+                    {"               ","       B       ","       B       ","       B       ","     FFBFF     ","    FFADAFF    ","    FA F AF    "," BBBBDF FDBBBB ","    FA F AF    ","    FFADAFF    ","     FFBFF     ","       B       ","       B       ","       B       ","               "},
+                    {"               ","               ","       B       ","       B       ","       B       ","      ADA      ","     A F A     ","  BBBDF FDBBB  ","     A F A     ","      ADA      ","       B       ","       B       ","       B       ","               ","               "},
+                    {"               ","               ","               ","       B       ","       B       ","      ADA      ","     A F A     ","   BBDF FDBB   ","     A F A     ","      ADA      ","       B       ","       B       ","               ","               ","               "},
+                    {"               ","               ","               ","       B       ","       B       ","      ADA      ","     A F A     ","   BBDF FDBB   ","     A F A     ","      ADA      ","       B       ","       B       ","               ","               ","               "},
+                    {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","               ","       D       ","       F       ","     DF FD     ","       F       ","       D       ","               ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","               ","               ","       F       ","      F F      ","       F       ","               ","               ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","               ","               ","       F       ","      F F      ","       F       ","               ","               ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","               ","               ","      FFF      ","      F F      ","      FFF      ","               ","               ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","      F F      ","      F F      ","    FF D FF    ","      DDD      ","    FF D FF    ","      F F      ","      F F      ","               ","               ","               ","               "},
+                    {"               ","               ","               ","      F F      ","       D       ","       D       ","   F       F   ","    DD   DD    ","   F       F   ","       D       ","       D       ","      F F      ","               ","               ","               "},
+                    {"               ","               ","      F F      ","       D       ","               ","               ","  F         F  ","   D       D   ","  F         F  ","               ","               ","       D       ","      F F      ","               ","               "},
+                    {"               ","      F F      ","       D       ","               ","               ","               "," F           F ","  D         D  "," F           F ","               ","               ","               ","       D       ","      F F      ","               "},
+                    {"               ","      F F      ","       D       ","               ","               ","               "," F           F ","  D         D  "," F           F ","               ","               ","               ","       D       ","      F F      ","               "},
+                    {"      FFF      ","    FF D FF    ","   F       F   ","  F         F  "," F           F "," F           F ","F             F","FD           DF","F             F"," F           F "," F           F ","  F         F  ","   F       F   ","    FF D FF    ","      FFF      "},
+                    {"      F F      ","      DDD      ","    DD   DD    ","   D       D   ","  D         D  ","  D         D  ","FD           DF"," D           D ","FD           DF","  D         D  ","  D         D  ","   D       D   ","    DD   DD    ","      DDD      ","      F F      "},
+                    {"      FFF      ","    FF D FF    ","   F       F   ","  F         F  "," F           F "," F           F ","F             F","FD           DF","F             F"," F           F "," F           F ","  F         F  ","   F       F   ","    FF D FF    ","      FFF      "},
+                    {"               ","      F F      ","       D       ","               ","               ","               "," F           F ","  D         D  "," F           F ","               ","               ","               ","       D       ","      F F      ","               "},
+                    {"               ","      F F      ","       D       ","               ","               ","               "," F           F ","  D         D  "," F           F ","               ","               ","               ","       D       ","      F F      ","               "},
+                    {"               ","               ","      F F      ","       D       ","               ","               ","  F         F  ","   D       D   ","  F         F  ","               ","               ","       D       ","      F F      ","               ","               "},
+                    {"               ","               ","               ","      F F      ","       D       ","       D       ","   F       F   ","    DD   DD    ","   F       F   ","       D       ","       D       ","      F F      ","               ","               ","               "},
+                    {"               ","               ","               ","               ","      F F      ","      F F      ","    FF D FF    ","      DDD      ","    FF D FF    ","      F F      ","      F F      ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","               ","               ","      FFF      ","      F F      ","      FFF      ","               ","               ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","               ","               ","       F       ","      F F      ","       F       ","               ","               ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","               ","               ","       F       ","      F F      ","       F       ","               ","               ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","               ","       D       ","       F       ","     DF FD     ","       F       ","       D       ","               ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
+                    {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
+                    {"               ","               ","               ","       B       ","       B       ","      ADA      ","     A F A     ","   BBDF FDBB   ","     A F A     ","      ADA      ","       B       ","       B       ","               ","               ","               "},
+                    {"               ","               ","               ","       B       ","       B       ","      ADA      ","     A F A     ","   BBDF FDBB   ","     A F A     ","      ADA      ","       B       ","       B       ","               ","               ","               "},
+                    {"               ","               ","       B       ","       B       ","       B       ","      ADA      ","     A F A     ","  BBBDF FDBBB  ","     A F A     ","      ADA      ","       B       ","       B       ","       B       ","               ","               "},
+                    {"               ","       B       ","       B       ","       B       ","     FFBFF     ","    FFADAFF    ","    FA F AF    "," BBBBDF FDBBBB ","    FA F AF    ","    FFADAFF    ","     FFBFF     ","       B       ","       B       ","       B       ","               "},
+                    {"     CC~CC     ","   CCEEEEECC   ","  CEEEEEEEEEC  "," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC"," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","  CEEEEEEEEEC  ","   CCEEEEECC   ","     CCCCC     "}
+                }))
+                .addElement('A', ofBlock(MAR_Casing,0))
+                .addElement('B', ofBlock(GregTech_API.sBlockCasings1, 11))
+                .addElement(
+                    'C',
+                    GT_HatchElementBuilder
+                        .<TST_ThermalEnergyDevourer>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                        .adder(TST_ThermalEnergyDevourer::addToMachineList)
+                        .dot(1)
+                        .casingIndex(((GT_Block_Casings2) GregTech_API.sBlockCasings2).getTextureIndex(1))
+                        .buildAndChain(ofBlock(GregTech_API.sBlockCasings2, 1)))
+                .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 8))
+                .addElement(
+                    'E',
+                    GT_HatchElementBuilder
+                        .<TST_ThermalEnergyDevourer>builder()
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .adder(TST_ThermalEnergyDevourer::addToMachineList)
+                        .dot(2)
+                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(3))
+                        .buildAndChain(ofBlock(GregTech_API.sBlockCasings8, 3)))
+                .addElement('F', ofFrame(Materials.NaquadahAlloy))
+                .build();
+        }
         return STRUCTURE_DEFINITION;
     }
 
@@ -326,71 +394,7 @@ D -> ofBlock...(gt.blockcasings2, 8, ...);
 E -> ofBlock...(gt.blockcasings8, 3, ...); // energy hatch
 F -> ofFrame...(Materials.NaquadahAlloy);
  */
-    private final IStructureDefinition<TST_ThermalEnergyDevourer> STRUCTURE_DEFINITION =
-    StructureDefinition
-        .<TST_ThermalEnergyDevourer>builder()
-        .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
-            {"     CCCCC     ","   CCEEEEECC   ","  CEEEEEEEEEC  "," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC"," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","  CEEEEEEEEEC  ","   CCEEEEECC   ","     CCCCC     "},
-            {"               ","       B       ","       B       ","       B       ","     FFBFF     ","    FFADAFF    ","    FA F AF    "," BBBBDF FDBBBB ","    FA F AF    ","    FFADAFF    ","     FFBFF     ","       B       ","       B       ","       B       ","               "},
-            {"               ","               ","       B       ","       B       ","       B       ","      ADA      ","     A F A     ","  BBBDF FDBBB  ","     A F A     ","      ADA      ","       B       ","       B       ","       B       ","               ","               "},
-            {"               ","               ","               ","       B       ","       B       ","      ADA      ","     A F A     ","   BBDF FDBB   ","     A F A     ","      ADA      ","       B       ","       B       ","               ","               ","               "},
-            {"               ","               ","               ","       B       ","       B       ","      ADA      ","     A F A     ","   BBDF FDBB   ","     A F A     ","      ADA      ","       B       ","       B       ","               ","               ","               "},
-            {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","               ","       D       ","       F       ","     DF FD     ","       F       ","       D       ","               ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","               ","               ","       F       ","      F F      ","       F       ","               ","               ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","               ","               ","       F       ","      F F      ","       F       ","               ","               ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","               ","               ","      FFF      ","      F F      ","      FFF      ","               ","               ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","      F F      ","      F F      ","    FF D FF    ","      DDD      ","    FF D FF    ","      F F      ","      F F      ","               ","               ","               ","               "},
-            {"               ","               ","               ","      F F      ","       D       ","       D       ","   F       F   ","    DD   DD    ","   F       F   ","       D       ","       D       ","      F F      ","               ","               ","               "},
-            {"               ","               ","      F F      ","       D       ","               ","               ","  F         F  ","   D       D   ","  F         F  ","               ","               ","       D       ","      F F      ","               ","               "},
-            {"               ","      F F      ","       D       ","               ","               ","               "," F           F ","  D         D  "," F           F ","               ","               ","               ","       D       ","      F F      ","               "},
-            {"               ","      F F      ","       D       ","               ","               ","               "," F           F ","  D         D  "," F           F ","               ","               ","               ","       D       ","      F F      ","               "},
-            {"      FFF      ","    FF D FF    ","   F       F   ","  F         F  "," F           F "," F           F ","F             F","FD           DF","F             F"," F           F "," F           F ","  F         F  ","   F       F   ","    FF D FF    ","      FFF      "},
-            {"      F F      ","      DDD      ","    DD   DD    ","   D       D   ","  D         D  ","  D         D  ","FD           DF"," D           D ","FD           DF","  D         D  ","  D         D  ","   D       D   ","    DD   DD    ","      DDD      ","      F F      "},
-            {"      FFF      ","    FF D FF    ","   F       F   ","  F         F  "," F           F "," F           F ","F             F","FD           DF","F             F"," F           F "," F           F ","  F         F  ","   F       F   ","    FF D FF    ","      FFF      "},
-            {"               ","      F F      ","       D       ","               ","               ","               "," F           F ","  D         D  "," F           F ","               ","               ","               ","       D       ","      F F      ","               "},
-            {"               ","      F F      ","       D       ","               ","               ","               "," F           F ","  D         D  "," F           F ","               ","               ","               ","       D       ","      F F      ","               "},
-            {"               ","               ","      F F      ","       D       ","               ","               ","  F         F  ","   D       D   ","  F         F  ","               ","               ","       D       ","      F F      ","               ","               "},
-            {"               ","               ","               ","      F F      ","       D       ","       D       ","   F       F   ","    DD   DD    ","   F       F   ","       D       ","       D       ","      F F      ","               ","               ","               "},
-            {"               ","               ","               ","               ","      F F      ","      F F      ","    FF D FF    ","      DDD      ","    FF D FF    ","      F F      ","      F F      ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","               ","               ","      FFF      ","      F F      ","      FFF      ","               ","               ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","               ","               ","       F       ","      F F      ","       F       ","               ","               ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","               ","               ","       F       ","      F F      ","       F       ","               ","               ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","               ","       D       ","       F       ","     DF FD     ","       F       ","       D       ","               ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
-            {"               ","               ","               ","               ","       B       ","      ADA      ","     A F A     ","    BDF FDB    ","     A F A     ","      ADA      ","       B       ","               ","               ","               ","               "},
-            {"               ","               ","               ","       B       ","       B       ","      ADA      ","     A F A     ","   BBDF FDBB   ","     A F A     ","      ADA      ","       B       ","       B       ","               ","               ","               "},
-            {"               ","               ","               ","       B       ","       B       ","      ADA      ","     A F A     ","   BBDF FDBB   ","     A F A     ","      ADA      ","       B       ","       B       ","               ","               ","               "},
-            {"               ","               ","       B       ","       B       ","       B       ","      ADA      ","     A F A     ","  BBBDF FDBBB  ","     A F A     ","      ADA      ","       B       ","       B       ","       B       ","               ","               "},
-            {"               ","       B       ","       B       ","       B       ","     FFBFF     ","    FFADAFF    ","    FA F AF    "," BBBBDF FDBBBB ","    FA F AF    ","    FFADAFF    ","     FFBFF     ","       B       ","       B       ","       B       ","               "},
-            {"     CC~CC     ","   CCEEEEECC   ","  CEEEEEEEEEC  "," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC"," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","  CEEEEEEEEEC  ","   CCEEEEECC   ","     CCCCC     "}
-        }))
-        .addElement('A', ofBlock(MAR_Casing,0))
-        .addElement('B', ofBlock(GregTech_API.sBlockCasings1, 11))
-        .addElement(
-            'C',
-            GT_HatchElementBuilder
-                .<TST_ThermalEnergyDevourer>builder()
-                .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                .adder(TST_ThermalEnergyDevourer::addToMachineList)
-                .dot(1)
-                .casingIndex(((GT_Block_Casings2) GregTech_API.sBlockCasings2).getTextureIndex(1))
-                .buildAndChain(ofBlock(GregTech_API.sBlockCasings2, 1)))
-        .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 8))
-        .addElement(
-            'E',
-            GT_HatchElementBuilder
-                .<TST_ThermalEnergyDevourer>builder()
-                .atLeast(Energy.or(ExoticEnergy))
-                .adder(TST_ThermalEnergyDevourer::addToMachineList)
-                .dot(2)
-                .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(3))
-                .buildAndChain(ofBlock(GregTech_API.sBlockCasings8, 3)))
-        .addElement('F', ofFrame(Materials.NaquadahAlloy))
-        .build();
+
     // spotless:on
     // endregion
 

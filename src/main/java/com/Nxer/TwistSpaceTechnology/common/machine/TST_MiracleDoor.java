@@ -361,6 +361,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     private final int horizontalOffSet = 20;
     private final int verticalOffSet = 52;
     private final int depthOffSet = 8;
+    private static IStructureDefinition<TST_MiracleDoor> STRUCTURE_DEFINITION = null;
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
@@ -386,29 +387,32 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
     @Override
     public IStructureDefinition<TST_MiracleDoor> getStructureDefinition() {
-        return IStructureDefinition
-                   .<TST_MiracleDoor>builder()
-                   .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                   .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 13))
-                   .addElement('B', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
-                   .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 2))
-                   .addElement('D', ofBlock(sBlockCasingsTT, 4))
-                   .addElement('E', ofBlock(sBlockCasingsTT, 6))
-                   .addElement('F', ofBlock(sBlockCasingsTT, 9))
-                   .addElement('G', ofBlock(sBlockCasingsTT, 10))
-                   .addElement('H', ofBlock(sBlockCasingsTT, 12))
-                   .addElement('I', ofBlock(sBlockCasingsTT, 14))
-                   .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
-                   .addElement('K', ofBlock(QuantumGlassBlock.INSTANCE, 0))
-                   .addElement('L',
-                               GT_HatchElementBuilder
-                                   .<TST_MiracleDoor>builder()
-                                   .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                                   .adder(TST_MiracleDoor::addToMachineList)
-                                   .dot(1)
-                                   .casingIndex(1024+12)
-                                   .buildAndChain(sBlockCasingsTT, 12))
-                   .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = IStructureDefinition
+                                       .<TST_MiracleDoor>builder()
+                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                                       .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 13))
+                                       .addElement('B', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
+                                       .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 2))
+                                       .addElement('D', ofBlock(sBlockCasingsTT, 4))
+                                       .addElement('E', ofBlock(sBlockCasingsTT, 6))
+                                       .addElement('F', ofBlock(sBlockCasingsTT, 9))
+                                       .addElement('G', ofBlock(sBlockCasingsTT, 10))
+                                       .addElement('H', ofBlock(sBlockCasingsTT, 12))
+                                       .addElement('I', ofBlock(sBlockCasingsTT, 14))
+                                       .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                                       .addElement('K', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                                       .addElement('L',
+                                                   GT_HatchElementBuilder
+                                                       .<TST_MiracleDoor>builder()
+                                                       .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                                                       .adder(TST_MiracleDoor::addToMachineList)
+                                                       .dot(1)
+                                                       .casingIndex(1024+12)
+                                                       .buildAndChain(sBlockCasingsTT, 12))
+                                       .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 /*
 Blocks:
