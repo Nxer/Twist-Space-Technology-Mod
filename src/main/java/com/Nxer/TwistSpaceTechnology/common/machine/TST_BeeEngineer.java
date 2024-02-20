@@ -180,7 +180,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     private final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_BE";
     private final int hOffset = 1, vOffset = 1, dOffset = 0;
     private final int sCasingIndex = 10;
-    private IStructureDefinition<TST_BeeEngineer> structureDef = null;
+    private static IStructureDefinition<TST_BeeEngineer> structureDef = null;
 
     // spotless:off
     protected final String[][] STRUCTURE = new String[][]{
