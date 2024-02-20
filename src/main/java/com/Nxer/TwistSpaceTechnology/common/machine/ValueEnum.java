@@ -216,6 +216,14 @@ public final class ValueEnum {
     public static final float EuModifier_VacuumFilterExtractor = Config.EuModifier_VacuumFilterExtractor;
     // endregion
 
+    // region Bee Engineer
+    public static final double BE_pChance = Config.BE_pChance;
+    public static final double BE_pChanceEnhanced = Config.BE_pChanceEnhanced;
+    public static final int BE_pHoneyCost = Config.BE_pHoneyCost;
+    public static final int BE_pUUMCost = Config.BE_pUUMCost;
+    public static final int BE_pEachProcessTime = Config.BE_pEachProcessTime;
+    // endregion
+
     // region Infinite Air Hatch
     public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
     // endregion
