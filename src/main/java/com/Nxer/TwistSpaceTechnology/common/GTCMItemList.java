@@ -190,6 +190,7 @@ public enum GTCMItemList {
     LargeSteamForgeHammer,
     LargeSteamAlloySmelter,
     EyeOfWood,
+    BeeEngineer,
 
     // MAX
     HighDimensionalExtend,

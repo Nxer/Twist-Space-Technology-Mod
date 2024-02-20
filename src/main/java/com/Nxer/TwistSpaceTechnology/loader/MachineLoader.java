@@ -24,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
@@ -93,6 +94,7 @@ public class MachineLoader {
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
     public static ItemStack EyeOfWood;
+    public static ItemStack BeeEngineer;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -346,6 +348,10 @@ public class MachineLoader {
         //
         EyeOfWood = new TST_EyeOfWood(19034, "NameEyeOfWood", TextLocalization.NameEyeOfWood).getStackForm(1);
         GTCMItemList.EyeOfWood.set(EyeOfWood);
+
+        //
+        BeeEngineer = new TST_BeeEngineer(19035, "NameBeeEngineer", TextLocalization.NameBeeEngineer).getStackForm(1);
+        GTCMItemList.BeeEngineer.set(BeeEngineer);
 
         // endregion
 
