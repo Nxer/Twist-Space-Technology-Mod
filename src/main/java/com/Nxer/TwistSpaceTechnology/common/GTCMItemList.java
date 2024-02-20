@@ -188,6 +188,7 @@ public enum GTCMItemList {
     VacuumFilterExtractor,
     LargeSteamForgeHammer,
     LargeSteamAlloySmelter,
+    BeeEngineer,
 
     // MAX
     HighDimensionalExtend,

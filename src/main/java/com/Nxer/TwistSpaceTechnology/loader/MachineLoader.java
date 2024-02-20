@@ -24,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
@@ -92,6 +93,7 @@ public class MachineLoader {
     public static ItemStack VacuumFilterExtractor;
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
+    public static ItemStack BeeEngineer;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -341,6 +343,10 @@ public class MachineLoader {
             "NameLargeSteamAlloySmelter",
             TextLocalization.NameLargeSteamAlloySmelter).getStackForm(1);
         GTCMItemList.LargeSteamAlloySmelter.set(LargeSteamAlloySmelter);
+
+        //
+        BeeEngineer = new TST_BeeEngineer(19034, "NameBeeEngineer", TextLocalization.NameBeeEngineer).getStackForm(1);
+        GTCMItemList.BeeEngineer.set(BeeEngineer);
 
         // endregion
 

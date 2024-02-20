@@ -660,5 +660,18 @@ public class TextLocalization {
     public static final String Tooltip_LargeSteamAlloySmelter_01 = texter("Steam Tech Operational","Tooltip_LargeSteamAlloySmelter_01");
     // endregion
 
+    // region Bee Engineer
+    public static final String NameBeeEngineer = texter("Bee Engineer (Prototype)", "NameBeeEngineer");
+    public static final String Tooltip_BeeEngineer_Type = texter("Bee Engineer", "Tooltip_BeeEngineer_Type");
+    public static final String Tooltip_BeeEngineer_Controller = texter("Controller of the Bee Engineer", "Tooltip_BeeEngineer_Controller");
+    public static final String Tooltip_BeeEngineer_01 = texter("Still in test.", "Tooltip_BeeEngineer_01");
+    public static final String Tooltip_BeeEngineer_02 = texter("Transforming drones into princesses.", "Tooltip_BeeEngineer_02");
+    public static final String Tooltip_BeeEngineer_03 = texter("Who knows how many drones became stepping stones for the Last Queen?", "Tooltip_BeeEngineer_03");
+    public static final String Tooltip_BeeEngineer_04 = texter("Cost 128kL Honey to transform a drone into princess, but with 40% failing chance.", "Tooltip_BeeEngineer_04");
+    public static final String Tooltip_BeeEngineer_05 = texter("Will try to consume 32kL UUM (if exists) to increase success rate to 80%.", "Tooltip_BeeEngineer_05");
+    public static final String Tooltip_BeeEngineer_06 = texter("In case of failure, all consumed ingredients will not be returned.", "Tooltip_BeeEngineer_06");
+    public static final String Tooltip_BeeEngineer_07 = texter("Don't put too many drones in at once, that will result in a long run time!", "Tooltip_BeeEngineer_07");
+    // endregion
+
 }
 // spotless:on
