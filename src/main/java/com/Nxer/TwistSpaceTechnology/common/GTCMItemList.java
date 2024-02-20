@@ -154,6 +154,7 @@ public enum GTCMItemList {
     Rune_of_Ether,
     Rune_of_Perdition,
     PowerChair,
+    PrimitiveMansSpaceTimeDistortionDevice,
     // Machines
 
     IntensifyChemicalDistorter,
@@ -188,6 +189,7 @@ public enum GTCMItemList {
     VacuumFilterExtractor,
     LargeSteamForgeHammer,
     LargeSteamAlloySmelter,
+    EyeOfWood,
 
     // MAX
     HighDimensionalExtend,
