@@ -28,6 +28,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
@@ -88,11 +89,11 @@ public class MachineLoader {
     public static ItemStack ThermalEnergyDevourer;
 
     public static ItemStack NuclearReactor;
-
     public static ItemStack AstralComputingArray;
     public static ItemStack VacuumFilterExtractor;
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
+    public static ItemStack EyeOfWood;
     public static ItemStack BeeEngineer;
 
     // Single Block
@@ -345,7 +346,11 @@ public class MachineLoader {
         GTCMItemList.LargeSteamAlloySmelter.set(LargeSteamAlloySmelter);
 
         //
-        BeeEngineer = new TST_BeeEngineer(19034, "NameBeeEngineer", TextLocalization.NameBeeEngineer).getStackForm(1);
+        EyeOfWood = new TST_EyeOfWood(19034, "NameEyeOfWood", TextLocalization.NameEyeOfWood).getStackForm(1);
+        GTCMItemList.EyeOfWood.set(EyeOfWood);
+
+        //
+        BeeEngineer = new TST_BeeEngineer(19035, "NameBeeEngineer", TextLocalization.NameBeeEngineer).getStackForm(1);
         GTCMItemList.BeeEngineer.set(BeeEngineer);
 
         // endregion
