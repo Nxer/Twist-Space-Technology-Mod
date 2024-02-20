@@ -211,7 +211,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         if (outputs.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
 
         usingEU = EUt * OreProcessRecipeDuration;
-        if (!addEUToGlobalEnergyMap(ownerUUID, usingEU)) {
+        if (!addEUToGlobalEnergyMap(ownerUUID, -usingEU)) {
             return CheckRecipeResultRegistry.insufficientPower(usingEU);
         }
         // set these to machine outputs
