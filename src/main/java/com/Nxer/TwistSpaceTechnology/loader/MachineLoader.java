@@ -42,6 +42,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
@@ -116,6 +117,7 @@ public class MachineLoader {
     public static ItemStack BufferedEnergyHatchUXV;
     public static ItemStack BufferedEnergyHatchMAX;
     public static ItemStack DebugUncertaintyHatch;
+    public static ItemStack LaserSmartPipe;
 
     // test
     // public static ItemStack TestMachine;
@@ -515,6 +517,13 @@ public class MachineLoader {
             TextLocalization.NameDebugUncertaintyHatch,
             12).getStackForm(1);
         GTCMItemList.DebugUncertaintyHatch.set(DebugUncertaintyHatch);
+
+        //
+        LaserSmartPipe = new GT_MetaTileEntity_Pipe_EnergySmart(
+            18960,
+            "NameLaserSmartPipe",
+            TextLocalization.NameLaserSmartPipe).getStackForm(1);
+        GTCMItemList.LaserSmartPipe.set(LaserSmartPipe);
         // endregion
 
     }
