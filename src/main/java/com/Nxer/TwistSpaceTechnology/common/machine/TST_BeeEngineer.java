@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static forestry.api.apiculture.BeeManager.beeRoot;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
@@ -70,8 +69,28 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         return 0;
     }
 
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
     private ArrayList<ItemStack> outputStacks = new ArrayList<>();
     private int processSize = 0;
+    private final double pChance = ValueEnum.BE_pChance;
+    private final double pChanceEnhanced = ValueEnum.BE_pChanceEnhanced;
+    private final int pHoneyCost = ValueEnum.BE_pHoneyCost;
+    private final int pUUMCost = ValueEnum.BE_pUUMCost;
+    private final int pEachProcessTime = ValueEnum.BE_pEachProcessTime;
 
     @Override
     @NotNull
@@ -110,7 +129,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     private boolean consumeHoney() {
         if (getStoredFluids() == null || getStoredFluids().isEmpty()) return false;
-        int cost = 128000;
+        int cost = pHoneyCost;
         for (FluidStack fluid : getStoredFluids()) {
             if (fluid.getFluid() == Materials.Honey.mFluid) {
                 if (fluid.amount >= cost) {
@@ -127,7 +146,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     private boolean consumeUUM() {
         if (getStoredFluids() == null || getStoredFluids().isEmpty()) return false;
-        int cost = 32000;
+        int cost = pUUMCost;
         for (FluidStack fluid : getStoredFluids()) {
             if (fluid.getFluid() == Materials.UUMatter.mFluid) {
                 if (fluid.amount >= cost) {
@@ -144,14 +163,14 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     private boolean calculateSuccess(boolean enhance) {
         double r = Math.random();
-        return r <= (enhance ? 0.40 : 0.80);
+        return r <= (enhance ? pChance : pChanceEnhanced);
     }
 
     private void calculateTime(int size) {
         if (size <= 0) {
             mMaxProgresstime = 20;
         } else {
-            mMaxProgresstime = size * 200;
+            mMaxProgresstime = size * pEachProcessTime;
         }
     }
 
@@ -161,12 +180,12 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     private final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_BE";
     private final int hOffset = 1, vOffset = 1, dOffset = 0;
     private final int sCasingIndex = 10;
-    private IStructureDefinition<TST_BeeEngineer> structureDef = null;
+    private static IStructureDefinition<TST_BeeEngineer> structureDef = null;
 
     // spotless:off
     protected final String[][] STRUCTURE = new String[][]{
         {"CCC","CCC","CCC"},
-        {"C~C","CBC","CCC"},
+        {"C~C","C C","CCC"},
         {"CCC","CCC","CCC"}
     };
     // spotless:on
@@ -176,7 +195,6 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         if (structureDef == null) {
             structureDef = StructureDefinition.<TST_BeeEngineer>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(STRUCTURE))
-                .addElement('B', isAir())
                 .addElement(
                     'C',
                     GT_HatchElementBuilder.<TST_BeeEngineer>builder()
