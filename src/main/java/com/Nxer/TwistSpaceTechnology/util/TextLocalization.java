@@ -660,5 +660,12 @@ public class TextLocalization {
     public static final String Tooltip_LargeSteamAlloySmelter_01 = texter("Steam Tech Operational","Tooltip_LargeSteamAlloySmelter_01");
     // endregion
 
+    // region Eye Of Wood
+    public static final String NameEyeOfWood = texter("Eye of Wood","NameEyeOfWood");
+    public static final String Tooltip_EyeOfWood_MachineType = texter("Happiness Master", "Tooltip_EyeOfWood_MachineType");
+    public static final String Tooltip_EyeOfWood_Controller = texter("Controller block for the Eye of Wood", "Tooltip_EyeOfWood_Controller");
+    public static final String Tooltip_EyeOfWood_01 = texter("You'd better to do a sanity check, if you are looking at this.", "Tooltip_EyeOfWood_01");
+    // endregion
+
 }
 // spotless:on

@@ -27,6 +27,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
@@ -87,11 +88,11 @@ public class MachineLoader {
     public static ItemStack ThermalEnergyDevourer;
 
     public static ItemStack NuclearReactor;
-
     public static ItemStack AstralComputingArray;
     public static ItemStack VacuumFilterExtractor;
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
+    public static ItemStack EyeOfWood;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -341,6 +342,10 @@ public class MachineLoader {
             "NameLargeSteamAlloySmelter",
             TextLocalization.NameLargeSteamAlloySmelter).getStackForm(1);
         GTCMItemList.LargeSteamAlloySmelter.set(LargeSteamAlloySmelter);
+
+        //
+        EyeOfWood = new TST_EyeOfWood(19034, "NameEyeOfWood", TextLocalization.NameEyeOfWood).getStackForm(1);
+        GTCMItemList.EyeOfWood.set(EyeOfWood);
 
         // endregion
 

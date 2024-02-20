@@ -104,6 +104,7 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Contai
 import static com.github.technus.tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static gregtech.api.enums.Mods.GTPlusPlus;
+import static gregtech.api.util.GT_ModHandler.addCraftingRecipe;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
@@ -115,6 +116,8 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Spe
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 
 import net.glease.ggfab.GGItemList;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -1631,6 +1634,31 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UEV)
             .duration(20*900)
             .addTo(AssemblyLine);
+        // endregion
+
+        // region Eye of Wood
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(17),
+                new ItemStack(Items.golden_apple, 1, 1),
+                ItemList.Emitter_LV.get(64),
+                ItemList.Field_Generator_LV.get(64),
+                new Object[]{OrePrefixes.circuit.get(Materials.Basic), 64}
+            )
+            .itemOutputs(GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.get(1))
+            .eut(RECIPE_LV)
+            .duration(20*114)
+            .addTo(assembler);
+
+        addCraftingRecipe(
+            GTCMItemList.EyeOfWood.get(1),
+            new Object[] { "ABA", "BCB", "ABA",
+                'A', new ItemStack(Blocks.brick_block),
+                'B', "plankWood",
+                'C', GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.get(1)
+            });
+
         // endregion
 
     }
