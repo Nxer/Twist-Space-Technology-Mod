@@ -16,6 +16,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LargeIndustrialCokingFactory;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LaserSmartPipe;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
@@ -86,6 +87,7 @@ import static com.dreammaster.gthandler.CustomItemList.WiremillUV;
 import static com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry.megaMachines;
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
+import static com.github.technus.tectech.thing.CustomItemList.LASERpipe;
 import static com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Transformer;
 import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8;
 import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8;
@@ -1580,6 +1582,21 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(DebugUncertaintyHatch.get(16))
             .eut(RECIPE_UXV)
             .duration(20*120)
+            .addTo(assembler);
+        // endregion
+
+        // region LaserSmartPipe
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                LASERpipe.get(64),
+                Laser_Lens_Special.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1}
+            )
+            .fluidInputs(MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144))
+            .itemOutputs(LaserSmartPipe.get(4))
+            .eut(RECIPE_UHV)
+            .duration(20*5)
             .addTo(assembler);
         // endregion
 
