@@ -6,6 +6,8 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.authorName_Nxe
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser;
 
+import java.util.UUID;
+
 import net.minecraft.util.EnumChatFormatting;
 
 import gregtech.api.enums.Textures;
@@ -13,8 +15,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Wireless_Dynamo;
-
-import java.util.UUID;
 
 public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wireless_Dynamo {
 
