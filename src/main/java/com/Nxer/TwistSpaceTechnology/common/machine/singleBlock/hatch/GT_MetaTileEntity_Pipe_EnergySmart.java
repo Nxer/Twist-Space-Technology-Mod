@@ -208,6 +208,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
                         } else break;
                     }
                 } else {
+                    // Search for energy receiver
                     for (short dist = 1; dist < 1000; dist++) {
                         IGregTechTileEntity tGTTileEntity = aBaseMetaTileEntity
                             .getIGregTechTileEntityAtSideAndDistance(side, dist);
