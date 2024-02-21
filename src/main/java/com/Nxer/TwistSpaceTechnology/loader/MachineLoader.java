@@ -24,14 +24,19 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
@@ -39,6 +44,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
@@ -51,7 +57,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 public class MachineLoader {
 
     public static ItemStack IntensifyChemicalDistorter; // INTENSIFY_CHEMICAL_DISTORTER
-    public static ItemStack PreciseHighEnergyPhotonicQuantumMaster; // INTENSIFY_CHEMICAL_DISTORTER
+    public static ItemStack PreciseHighEnergyPhotonicQuantumMaster;
     public static ItemStack MiracleTop;
     public static ItemStack MagneticDrivePressureFormer;
     public static ItemStack PhysicalFormSwitcher;
@@ -83,17 +89,21 @@ public class MachineLoader {
     public static ItemStack ThermalEnergyDevourer;
 
     public static ItemStack NuclearReactor;
-
     public static ItemStack AstralComputingArray;
+    public static ItemStack VacuumFilterExtractor;
+    public static ItemStack LargeSteamForgeHammer;
+    public static ItemStack LargeSteamAlloySmelter;
+    public static ItemStack EyeOfWood;
+    public static ItemStack BeeEngineer;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
     public static ItemStack InfiniteWirelessDynamoHatch;
+    public static ItemStack DualInputBuffer_IV;
     public static ItemStack DualInputBuffer_LuV;
     public static ItemStack DualInputBuffer_ZPM;
     public static ItemStack DualInputBuffer_UV;
-    public static ItemStack DualInputBuffer_UHV;
 
     public static ItemStack BufferedEnergyHatchLV;
     public static ItemStack BufferedEnergyHatchMV;
@@ -110,6 +120,7 @@ public class MachineLoader {
     public static ItemStack BufferedEnergyHatchUXV;
     public static ItemStack BufferedEnergyHatchMAX;
     public static ItemStack DebugUncertaintyHatch;
+    public static ItemStack LaserSmartPipe;
 
     // test
     // public static ItemStack TestMachine;
@@ -313,6 +324,35 @@ public class MachineLoader {
             TextLocalization.NameThermalEnergyDevourer).getStackForm(1);
         GTCMItemList.ThermalEnergyDevourer.set(ThermalEnergyDevourer);
 
+        //
+        VacuumFilterExtractor = new TST_VacuumFilterExtractor(
+            19031,
+            "NameVacuumFilterExtractor",
+            TextLocalization.NameVacuumFilterExtractor).getStackForm(1);
+        GTCMItemList.VacuumFilterExtractor.set(VacuumFilterExtractor);
+
+        //
+        LargeSteamForgeHammer = new TST_LargeSteamForgeHammer(
+            19032,
+            "NameLargeSteamForgeHammer",
+            TextLocalization.NameLargeSteamForgeHammer).getStackForm(1);
+        GTCMItemList.LargeSteamForgeHammer.set(LargeSteamForgeHammer);
+
+        //
+        LargeSteamAlloySmelter = new TST_LargeSteamAlloySmelter(
+            19033,
+            "NameLargeSteamAlloySmelter",
+            TextLocalization.NameLargeSteamAlloySmelter).getStackForm(1);
+        GTCMItemList.LargeSteamAlloySmelter.set(LargeSteamAlloySmelter);
+
+        //
+        EyeOfWood = new TST_EyeOfWood(19034, "NameEyeOfWood", TextLocalization.NameEyeOfWood).getStackForm(1);
+        GTCMItemList.EyeOfWood.set(EyeOfWood);
+
+        //
+        BeeEngineer = new TST_BeeEngineer(19035, "NameBeeEngineer", TextLocalization.NameBeeEngineer).getStackForm(1);
+        GTCMItemList.BeeEngineer.set(BeeEngineer);
+
         // endregion
 
         // region Single block Machine
@@ -338,38 +378,36 @@ public class MachineLoader {
             .getStackForm(1);
         GTCMItemList.ManaHatch.set(ManaHatch);
 
-        //
-        DualInputBuffer_LuV = new GT_MetaTileEntity_Hatch_DualInput(
+        // region Dual Input Buffer
+        DualInputBuffer_IV = new GT_MetaTileEntity_Hatch_DualInput(
             18980,
+            "NameDualInputBuffer_IV",
+            TextLocalization.NameDualInputBuffer_IV,
+            5).getStackForm(1);
+        GTCMItemList.DualInputBuffer_IV.set(DualInputBuffer_IV);
+
+        DualInputBuffer_LuV = new GT_MetaTileEntity_Hatch_DualInput(
+            18981,
             "NameDualInputBuffer_LuV",
             TextLocalization.NameDualInputBuffer_LuV,
             6).getStackForm(1);
         GTCMItemList.DualInputBuffer_LuV.set(DualInputBuffer_LuV);
 
-        //
         DualInputBuffer_ZPM = new GT_MetaTileEntity_Hatch_DualInput(
-            18981,
+            18982,
             "NameDualInputBuffer_ZPM",
             TextLocalization.NameDualInputBuffer_ZPM,
             7).getStackForm(1);
         GTCMItemList.DualInputBuffer_ZPM.set(DualInputBuffer_ZPM);
 
-        //
         DualInputBuffer_UV = new GT_MetaTileEntity_Hatch_DualInput(
-            18982,
+            18983,
             "NameDualInputBuffer_UV",
             TextLocalization.NameDualInputBuffer_UV,
             8).getStackForm(1);
         GTCMItemList.DualInputBuffer_UV.set(DualInputBuffer_UV);
 
         // region buffered energy hatch
-        DualInputBuffer_UHV = new GT_MetaTileEntity_Hatch_DualInput(
-            18983,
-            "NameDualInputBuffer_UHV",
-            TextLocalization.NameDualInputBuffer_UHV,
-            9).getStackForm(1);
-        GTCMItemList.DualInputBuffer_UHV.set(DualInputBuffer_UHV);
-
         BufferedEnergyHatchLV = new GT_Hatch_BufferedEnergyHatch(
             18984,
             "NameBufferedEnergyHatchLV",
@@ -490,6 +528,13 @@ public class MachineLoader {
             TextLocalization.NameDebugUncertaintyHatch,
             12).getStackForm(1);
         GTCMItemList.DebugUncertaintyHatch.set(DebugUncertaintyHatch);
+
+        //
+        LaserSmartPipe = new GT_MetaTileEntity_Pipe_EnergySmart(
+            18960,
+            "NameLaserSmartPipe",
+            TextLocalization.NameLaserSmartPipe).getStackForm(1);
+        GTCMItemList.LaserSmartPipe.set(LaserSmartPipe);
         // endregion
 
     }

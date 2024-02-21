@@ -29,6 +29,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.core.item.chemistry.GenericChem;
 import gtPlusPlus.core.material.MISC_MATERIALS;
 
 public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
@@ -609,6 +610,70 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .specialValue(12600)
             .eut(RECIPE_UEV)
             .duration(20*1600)
+            .addTo(ICD);
+        // endregion
+
+        // region Ethyl Cyanoacrylate Super Glue
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(15),
+                Materials.Carbon.getDust(41)
+            )
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*142),
+                Materials.Oxygen.getGas(1000*41)
+            )
+            .fluidOutputs(
+                MISC_MATERIALS.ETHYL_CYANOACRYLATE.getFluidStack(1000*10)
+            )
+            .specialValue(11700)
+            .eut(RECIPE_UEV)
+            .duration(20*8)
+            .addTo(ICD);
+        // endregion
+
+        // region Potassium Ethyl Xanthate
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(14),
+                Materials.Carbon.getDust(3),
+                Materials.Sulfur.getDust(2),
+                Materials.Potassium.getDust(1)
+            )
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*5),
+                Materials.Oxygen.getGas(1000)
+            )
+            .itemOutputs(
+                copyAmount(12,GenericChem.mPotassiumEthylXanthate)
+            )
+            .specialValue(9000)
+            .eut(RECIPE_HV)
+            .duration(20*30)
+            .addTo(ICD);
+        // endregion
+
+        // region Sodium Ethyl Xanthate
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(14),
+                Materials.Carbon.getDust(3),
+                Materials.Sulfur.getDust(2),
+                Materials.Sodium.getDust(1)
+            )
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*5),
+                Materials.Oxygen.getGas(1000)
+            )
+            .itemOutputs(
+                copyAmount(12,GenericChem.mSodiumEthylXanthate)
+            )
+            .specialValue(9000)
+            .eut(RECIPE_HV)
+            .duration(20*30)
             .addTo(ICD);
         // endregion
 

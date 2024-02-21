@@ -154,6 +154,7 @@ public enum GTCMItemList {
     Rune_of_Ether,
     Rune_of_Perdition,
     PowerChair,
+    PrimitiveMansSpaceTimeDistortionDevice,
     // Machines
 
     IntensifyChemicalDistorter,
@@ -177,11 +178,19 @@ public enum GTCMItemList {
     MegaEggGenerator,
     AstralComputingArray,
 
+    StellarMaterialSiphon,
+    ElvenWorkshop,
+    HyperSpacetimeTransformer,
     superCleanRoom,
     BiosphereIII,
     AdvancedMegaOilCracker,
     IndistinctTentacle,
     ThermalEnergyDevourer,
+    VacuumFilterExtractor,
+    LargeSteamForgeHammer,
+    LargeSteamAlloySmelter,
+    EyeOfWood,
+    BeeEngineer,
 
     // MAX
     HighDimensionalExtend,
@@ -206,18 +215,15 @@ public enum GTCMItemList {
     DSPLauncher,
     DSPReceiver,
     ArtificialStar,
-    StellarMaterialSiphon,
-    ElvenWorkshop,
-    HyperSpacetimeTransformer,
 
     // single block Machines
     InfiniteAirHatch,
     ManaHatch,
     InfiniteWirelessDynamoHatch,
+    DualInputBuffer_IV,
     DualInputBuffer_LuV,
     DualInputBuffer_ZPM,
     DualInputBuffer_UV,
-    DualInputBuffer_UHV,
     BufferedEnergyHatchLV,
     BufferedEnergyHatchMV,
     BufferedEnergyHatchHV,
@@ -233,6 +239,7 @@ public enum GTCMItemList {
     BufferedEnergyHatchUXV,
     BufferedEnergyHatchMAX,
     DebugUncertaintyHatch,
+    LaserSmartPipe,
 
     // Blocks
 

@@ -7,7 +7,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import com.Nxer.TwistSpaceTechnology.Tags;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
+import gregtech.api.interfaces.tileentity.RecipeMapWorkable;
 
+/**
+ * Handle NEI tags.
+ * <li>Rewrite {@link RecipeMapWorkable#getAvailableRecipeMaps()} to auto handle GT machine's NEI tag if you are working
+ * on a new GT machine which can process many recipe maps.
+ */
 public class NEIHandler {
 
     public static void IMCSender() {
@@ -67,13 +73,12 @@ public class NEIHandler {
         sendCatalyst("tst.recipe.StellarForgeRecipes", "gregtech:gt.blockmachines:19016");
         sendCatalyst("gt.recipe.sifter", "gregtech:gt.blockmachines:19023");
         sendCatalyst("tst.recipe.HyperSpacetimeTransformerRecipe", "gregtech:gt.blockmachines:19501");
-        sendCatalyst("gt.recipe.fermenter", "gregtech:gt.blockmachines:19025");
-        sendCatalyst("gt.recipe.brewer", "gregtech:gt.blockmachines:19025");
-        sendCatalyst("bw.recipe.BacteriaVat", "gregtech:gt.blockmachines:19025");
         sendCatalyst("tst.recipe.AssemblyLineWithoutResearchRecipe", "gregtech:gt.blockmachines:19028");
         sendCatalyst("gg.recipe.componentassemblyline", "gregtech:gt.blockmachines:19028");
         sendCatalyst("gt.recipe.assembler", "gregtech:gt.blockmachines:19028");
         sendCatalyst("gg.recipe.precise_assembler", "gregtech:gt.blockmachines:19028");
+        sendCatalyst("gt.recipe.distillery", "gregtech:gt.blockmachines:19031");
+        sendCatalyst("gt.recipe.distillationtower", "gregtech:gt.blockmachines:19031");
 
     }
 

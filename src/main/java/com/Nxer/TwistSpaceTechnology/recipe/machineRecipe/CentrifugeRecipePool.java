@@ -27,6 +27,7 @@ public class CentrifugeRecipePool implements IRecipePool {
             .eut(RECIPE_LV)
             .duration(70)
             .addTo(centrifuge);
+
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(2), Materials.Gunpowder.getDust(6))
             .itemOutputs(Materials.Sulfur.getDust(1), Materials.Carbon.getDust(3), Materials.Saltpeter.getDust(2))
@@ -34,6 +35,7 @@ public class CentrifugeRecipePool implements IRecipePool {
             .eut(RECIPE_LV)
             .duration(70)
             .addTo(centrifuge);
+
         GT_Values.RA.stdBuilder()
             .itemInputs(GT_Utility.getIntegratedCircuit(3), Materials.Gunpowder.getDust(6))
             .itemOutputs(Materials.Sulfur.getDust(1), Materials.Charcoal.getDust(3), Materials.Saltpeter.getDust(2))
@@ -41,6 +43,7 @@ public class CentrifugeRecipePool implements IRecipePool {
             .eut(RECIPE_LV)
             .duration(70)
             .addTo(centrifuge);
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(11),
@@ -56,6 +59,7 @@ public class CentrifugeRecipePool implements IRecipePool {
             .eut(RECIPE_EV)
             .duration(30)
             .addTo(centrifuge);
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(12),
@@ -71,6 +75,7 @@ public class CentrifugeRecipePool implements IRecipePool {
             .eut(RECIPE_EV)
             .duration(30)
             .addTo(centrifuge);
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(13),

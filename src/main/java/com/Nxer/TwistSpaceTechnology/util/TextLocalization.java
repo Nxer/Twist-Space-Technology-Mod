@@ -500,10 +500,10 @@ public class TextLocalization {
     public static final String NameInfiniteAirHatch = texter("Infinite Air Hatch", "NameInfiniteAirHatch");
     public static final String NameManaHatch = texter("Mana Hatch", "NameManaHatch");
     public static final String NameInfiniteWirelessDynamoHatch = texter("Infinite Wireless Dynamo Hatch", "NameInfiniteWirelessDynamoHatch");
+    public static final String NameDualInputBuffer_IV = texter("Dual Input Buffer (IV)", "NameDualInputBuffer_IV");
     public static final String NameDualInputBuffer_LuV = texter("Dual Input Buffer (LuV)", "NameDualInputBuffer_LuV");
     public static final String NameDualInputBuffer_ZPM = texter("Dual Input Buffer (ZPM)", "NameDualInputBuffer_ZPM");
     public static final String NameDualInputBuffer_UV = texter("Dual Input Buffer (UV)",   "NameDualInputBuffer_UV");
-    public static final String NameDualInputBuffer_UHV = texter("Dual Input Buffer (UHV)", "NameDualInputBuffer_UHV");
 
     // endregion
 
@@ -579,7 +579,7 @@ public class TextLocalization {
     public static final String Tooltip_MegaEggGenerator_D = texter("Dynamo or TT Dynamo, one only", "Tooltip_MegaEggGenerator_D");
     public static final String Tooltip_MegaEggGenerator_M = texter("No need for maintenance hatch.", "Tooltip_MegaEggGenerator_M");
     public static final String Tooltip_MegaEggGenerator_L = texter("Lasers unlock at >=16 pieces.", "Tooltip_MegaEggGenerator_L");
-    public static final String Tooltip_MegaEggGenerator_C = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_D");
+    public static final String Tooltip_MegaEggGenerator_C = texter("Any Magical Casing.", "Tooltip_MegaEggGenerator_C");
     // endregion
 
     // region IndistinctTentacle
@@ -622,7 +622,7 @@ public class TextLocalization {
     public static final String Tooltip_ThermalEnergyDevourer_09 = texter("Operating efficiency decrease the EU cost.","Tooltip_ThermalEnergyDevourer_09");
     public static final String Tooltip_ThermalEnergyDevourer_10 = texter("Almost infinite parallel.","Tooltip_ThermalEnergyDevourer_10");
     public static final String Tooltip_ThermalEnergyDevourer_11 = texter(EnumChatFormatting.GOLD+" ----- Wireless Mode -----","Tooltip_ThermalEnergyDevourer_11");
-    public static final String Tooltip_ThermalEnergyDevourer_12 = texter("Put Energised Tesseract into controller slot to turn into Wireless mode.","Tooltip_ThermalEnergyDevourer_12");
+    public static final String Tooltip_ThermalEnergyDevourer_12 = texter("Put "+EnumChatFormatting.AQUA+"Energised Tesseract"+EnumChatFormatting.GRAY+" into controller slot to turn into Wireless mode.","Tooltip_ThermalEnergyDevourer_12");
     public static final String Tooltip_ThermalEnergyDevourer_13 = texter("Directly consume required EU from wireless EU network.","Tooltip_ThermalEnergyDevourer_13");
     public static final String Tooltip_ThermalEnergyDevourer_14 = texter("Progress time is fixed at 6.4s .","Tooltip_ThermalEnergyDevourer_14");
     public static final String Tooltip_ThermalEnergyDevourer_2_01 = texter("Check whether turn into Wireless mode when checking structure.","Tooltip_ThermalEnergyDevourer_2_01");
@@ -630,6 +630,54 @@ public class TextLocalization {
 
     // region Debug Uncertainty Hatch
     public static final String NameDebugUncertaintyHatch = texter("Debug Uncertainty Hatch","NameDebugUncertaintyHatch");
+    // endregion
+
+    public static final String NameLaserSmartPipe = texter("Laser Vacuum Smart Node","NameLaserSmartPipe");
+
+    // region Vacuum Filter Extractor
+    public static final String NameVacuumFilterExtractor = texter("Vacuum Filter Extractor","NameVacuumFilterExtractor");
+    public static final String Tooltip_VacuumFilterExtractor_MachineType = texter("Distillation Tower | Distillery","Tooltip_VacuumFilterExtractor_MachineType");
+    public static final String Tooltip_VacuumFilterExtractor_Controller = texter("Controller block for the Vacuum Filter Extractor","Tooltip_VacuumFilterExtractor_Controller");
+    public static final String Tooltip_VacuumFilterExtractor_01 = texter(EnumChatFormatting.ITALIC+"Engineers think something isn't broken because it has too few features.","Tooltip_VacuumFilterExtractor_01");
+    public static final String Tooltip_VacuumFilterExtractor_02 = texter("By manipulating space in order to achieve separation of matter ","Tooltip_VacuumFilterExtractor_02");
+    public static final String Tooltip_VacuumFilterExtractor_03 = texter("  rather than direct manipulation of matter.","Tooltip_VacuumFilterExtractor_03");
+    public static final String Tooltip_VacuumFilterExtractor_04 = texter("Recipe voltage is only 50%% of normal.","Tooltip_VacuumFilterExtractor_04");
+    public static final String Tooltip_VacuumFilterExtractor_05 = texter("Increasing the energy input will result in more speed boosts.","Tooltip_VacuumFilterExtractor_05");
+    public static final String Tooltip_VacuumFilterExtractor_06 = texter("In distillery mode, machine will enable "+EnumChatFormatting.AQUA+"Perfect Overclock"+EnumChatFormatting.GRAY+".","Tooltip_VacuumFilterExtractor_06");
+    // endregion
+
+    // region Large Steam Forge Hammer
+    public static final String NameLargeSteamForgeHammer = texter("Large Steam Forge Hammer", "NameLargeSteamForgeHammer");
+    public static final String Tooltip_LargeSteamForgeHammer_MachineType = texter("Forge Hammer", "Tooltip_LargeSteamForgeHammer_MachineType");
+    public static final String Tooltip_LargeSteamForgeHammer_Controller = texter("Controller block for the Large Steam Forge Hammer", "Tooltip_LargeSteamForgeHammer_Controller");
+    public static final String Tooltip_LargeSteamForgeHammer_01 = texter("He has a hammer. Who has the Sickle?", "Tooltip_LargeSteamForgeHammer_01");
+    // endregion
+
+    // region Large Steam Alloy Smelter
+    public static final String NameLargeSteamAlloySmelter = texter("Large Steam Alloy Smelter", "NameLargeSteamAlloySmelter");
+    public static final String Tooltip_LargeSteamAlloySmelter_MachineType = texter("Alloy Smelter","Tooltip_LargeSteamAlloySmelter_MachineType");
+    public static final String Tooltip_LargeSteamAlloySmelter_Controller = texter("Controller block for the Large Steam Alloy Smelter","Tooltip_LargeSteamAlloySmelter_Controller");
+    public static final String Tooltip_LargeSteamAlloySmelter_01 = texter("Steam Tech Operational","Tooltip_LargeSteamAlloySmelter_01");
+    // endregion
+
+    // region Eye Of Wood
+    public static final String NameEyeOfWood = texter("Eye of Wood","NameEyeOfWood");
+    public static final String Tooltip_EyeOfWood_MachineType = texter("Happiness Master", "Tooltip_EyeOfWood_MachineType");
+    public static final String Tooltip_EyeOfWood_Controller = texter("Controller block for the Eye of Wood", "Tooltip_EyeOfWood_Controller");
+    public static final String Tooltip_EyeOfWood_01 = texter("You'd better to do a sanity check, if you are looking at this.", "Tooltip_EyeOfWood_01");
+    // endregion
+
+    // region Bee Engineer
+    public static final String NameBeeEngineer = texter("Bee Engineer (Prototype)", "NameBeeEngineer");
+    public static final String Tooltip_BeeEngineer_Type = texter("Bee Engineer", "Tooltip_BeeEngineer_Type");
+    public static final String Tooltip_BeeEngineer_Controller = texter("Controller of the Bee Engineer", "Tooltip_BeeEngineer_Controller");
+    public static final String Tooltip_BeeEngineer_01 = texter("Still in test.", "Tooltip_BeeEngineer_01");
+    public static final String Tooltip_BeeEngineer_02 = texter("Transforming drones into princesses.", "Tooltip_BeeEngineer_02");
+    public static final String Tooltip_BeeEngineer_03 = texter("Who knows how many drones became stepping stones for the Last Queen?", "Tooltip_BeeEngineer_03");
+    public static final String Tooltip_BeeEngineer_04 = texter("Cost 128kL Honey to transform a drone into princess, but with 40% failing chance.", "Tooltip_BeeEngineer_04");
+    public static final String Tooltip_BeeEngineer_05 = texter("Will try to consume 32kL UUM (if exists) to increase success rate to 80%.", "Tooltip_BeeEngineer_05");
+    public static final String Tooltip_BeeEngineer_06 = texter("In case of failure, all consumed ingredients will not be returned.", "Tooltip_BeeEngineer_06");
+    public static final String Tooltip_BeeEngineer_07 = texter("Don't put too many drones in at once, that will result in a long run time!", "Tooltip_BeeEngineer_07");
     // endregion
 
 }

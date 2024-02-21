@@ -95,6 +95,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     private final int horizontalOffSet = 7;
     private final int verticalOffSet = 3;
     private final int depthOffSet = 0;
+    private static IStructureDefinition<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster> STRUCTURE_DEFINITION = null;
 
     /**
      * Due to limitation of Java type system, you might need to do an unchecked cast. HOWEVER, the returned
@@ -103,86 +104,86 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
      */
     @Override
     public IStructureDefinition<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster> getStructureDefinition() {
-        IStructureDefinition<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster> Structure = StructureDefinition
-            .<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-            .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 5))
-            .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 9))
-            .addElement('D', ofBlock(GregTech_API.sBlockCasings8, 7))
-            .addElement('E', ofBlock(GregTech_API.sBlockCasings9, 1))
-            .addElement(
-                'M',
-                GT_StructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
-                    .atLeast(Maintenance)
-                    .dot(1)
-                    .casingIndex(183)
-                    .buildAndChain(GregTech_API.sBlockCasings8, 7))
-            .addElement(
-                'I',
-                GT_StructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
-                    .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
-                    .dot(2)
-                    .casingIndex(183)
-                    .buildAndChain(GregTech_API.sBlockCasings8, 7))
-            .addElement(
-                'X',
-                GT_StructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
-                    .atLeast(Energy.or(ExoticEnergy))
-                    .dot(3)
-                    .casingIndex(1024)
-                    .buildAndChain(sBlockCasingsTT, 0))
-            .addElement(
-                'A',
-                ofChain(
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[0],
-                        ofBlock(PhotonControllerUpgrade, 0)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[1],
-                        ofBlock(PhotonControllerUpgrade, 1)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[2],
-                        ofBlock(PhotonControllerUpgrade, 2)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[3],
-                        ofBlock(PhotonControllerUpgrade, 3)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[4],
-                        ofBlock(PhotonControllerUpgrade, 4)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[5],
-                        ofBlock(PhotonControllerUpgrade, 5)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[6],
-                        ofBlock(PhotonControllerUpgrade, 6)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[7],
-                        ofBlock(PhotonControllerUpgrade, 7)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[8],
-                        ofBlock(PhotonControllerUpgrade, 8)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[9],
-                        ofBlock(PhotonControllerUpgrade, 9)),
-                    onElementPass(
-                        x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[10],
-                        ofBlock(PhotonControllerUpgrade, 10)),
-                    onElementPass(x -> {
-                        x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[11];
-                        x.enablePerfectOverclockSignal = true;
-                    }, ofBlock(PhotonControllerUpgrade, 11)),
-                    onElementPass(x -> {
-                        x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[12];
-                        x.enablePerfectOverclockSignal = true;
-                    }, ofBlock(PhotonControllerUpgrade, 12)),
-                    onElementPass(x -> {
-                        x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[13];
-                        x.enablePerfectOverclockSignal = true;
-                    }, ofBlock(PhotonControllerUpgrade, 13)),
-                    ofBlock(GregTech_API.sBlockCasings8, 7)))
-            .build();
-
-        return Structure;
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 5))
+                .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 9))
+                .addElement('D', ofBlock(GregTech_API.sBlockCasings8, 7))
+                .addElement('E', ofBlock(GregTech_API.sBlockCasings9, 1))
+                .addElement(
+                    'M',
+                    GT_StructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
+                        .atLeast(Maintenance)
+                        .dot(1)
+                        .casingIndex(183)
+                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                .addElement(
+                    'I',
+                    GT_StructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
+                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
+                        .dot(2)
+                        .casingIndex(183)
+                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                .addElement(
+                    'X',
+                    GT_StructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .dot(3)
+                        .casingIndex(1024)
+                        .buildAndChain(sBlockCasingsTT, 0))
+                .addElement(
+                    'A',
+                    ofChain(
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[0],
+                            ofBlock(PhotonControllerUpgrade, 0)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[1],
+                            ofBlock(PhotonControllerUpgrade, 1)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[2],
+                            ofBlock(PhotonControllerUpgrade, 2)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[3],
+                            ofBlock(PhotonControllerUpgrade, 3)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[4],
+                            ofBlock(PhotonControllerUpgrade, 4)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[5],
+                            ofBlock(PhotonControllerUpgrade, 5)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[6],
+                            ofBlock(PhotonControllerUpgrade, 6)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[7],
+                            ofBlock(PhotonControllerUpgrade, 7)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[8],
+                            ofBlock(PhotonControllerUpgrade, 8)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[9],
+                            ofBlock(PhotonControllerUpgrade, 9)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[10],
+                            ofBlock(PhotonControllerUpgrade, 10)),
+                        onElementPass(x -> {
+                            x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[11];
+                            x.enablePerfectOverclockSignal = true;
+                        }, ofBlock(PhotonControllerUpgrade, 11)),
+                        onElementPass(x -> {
+                            x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[12];
+                            x.enablePerfectOverclockSignal = true;
+                        }, ofBlock(PhotonControllerUpgrade, 12)),
+                        onElementPass(x -> {
+                            x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[13];
+                            x.enablePerfectOverclockSignal = true;
+                        }, ofBlock(PhotonControllerUpgrade, 13)),
+                        ofBlock(GregTech_API.sBlockCasings8, 7)))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     @Override

@@ -179,62 +179,66 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 	private final int horizontalOffSet = 15;
 	private final int verticalOffSet = 34;
 	private final int depthOffSet = 0;
+    private static IStructureDefinition<GTCM_CrystallineInfinitier> STRUCTURE_DEFINITION = null;
 	@Override
 	public IStructureDefinition<GTCM_CrystallineInfinitier> getStructureDefinition() {
-		return StructureDefinition.<GTCM_CrystallineInfinitier>builder()
-			       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-			       .addElement(
-				       'A',
-				       withChannel("glass",
-				                   BorosilicateGlass.ofBoroGlass(
-					                   (byte) 0,
-					                   (byte) 1,
-					                   Byte.MAX_VALUE,
-					                   (te, t) -> te.glassTier = t,
-					                   te -> te.glassTier
-				                   )))
-			       .addElement(
-					   'B',
-					   GT_HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
-						   .atLeast(Maintenance, Energy.or(ExoticEnergy))
-						   .adder(GTCM_CrystallineInfinitier::addToMachineList)
-						   .dot(1)
-						   .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
-						   .buildAndChain(GregTech_API.sBlockCasings8, 10))
-			       .addElement(
-					   'C',
-					   GT_HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
-						   .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-						   .adder(GTCM_CrystallineInfinitier::addToMachineList)
-						   .dot(2)
-						   .casingIndex(1028)
-						   .buildAndChain(sBlockCasingsTT, 4))
-			       .addElement(
-					   'D',
-					   withChannel("fieldgeneratortier",
-					               ofBlocksTiered(
-						               GTCM_CrystallineInfinitier::getBlockFieldGeneratorTier,
-						               ImmutableList.of(
-							               Pair.of(sBlockCasingsTT, 6),
-							               Pair.of(sBlockCasingsTT, 14),
-							               Pair.of(StabilisationFieldGenerators, 0),
-							               Pair.of(StabilisationFieldGenerators, 1),
-							               Pair.of(StabilisationFieldGenerators, 2),
-							               Pair.of(StabilisationFieldGenerators, 3),
-							               Pair.of(StabilisationFieldGenerators, 4),
-							               Pair.of(StabilisationFieldGenerators, 5),
-							               Pair.of(StabilisationFieldGenerators, 6),
-							               Pair.of(StabilisationFieldGenerators, 7),
-							               Pair.of(StabilisationFieldGenerators, 8)
-						               ),
-						               0,
-						               (m, t) -> m.fieldGeneratorTier = t,
-						               m -> m.fieldGeneratorTier))
-					   )
-			       .addElement('E',ofBlock(sBlockCasingsTT, 8))
-			       .addElement('F',ofBlock(sBlockCasingsTT, 9))
-			       .addElement('G',ofFrame(Materials.NaquadahAlloy))
-			       .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GTCM_CrystallineInfinitier>builder()
+                                                      .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                                                      .addElement(
+                                                          'A',
+                                                          withChannel("glass",
+                                                                      BorosilicateGlass.ofBoroGlass(
+                                                                          (byte) 0,
+                                                                          (byte) 1,
+                                                                          Byte.MAX_VALUE,
+                                                                          (te, t) -> te.glassTier = t,
+                                                                          te -> te.glassTier
+                                                                      )))
+                                                      .addElement(
+                                                          'B',
+                                                          GT_HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
+                                                                                .atLeast(Maintenance, Energy.or(ExoticEnergy))
+                                                                                .adder(GTCM_CrystallineInfinitier::addToMachineList)
+                                                                                .dot(1)
+                                                                                .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
+                                                                                .buildAndChain(GregTech_API.sBlockCasings8, 10))
+                                                      .addElement(
+                                                          'C',
+                                                          GT_HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
+                                                                                .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                                                                                .adder(GTCM_CrystallineInfinitier::addToMachineList)
+                                                                                .dot(2)
+                                                                                .casingIndex(1028)
+                                                                                .buildAndChain(sBlockCasingsTT, 4))
+                                                      .addElement(
+                                                          'D',
+                                                          withChannel("fieldgeneratortier",
+                                                                      ofBlocksTiered(
+                                                                          GTCM_CrystallineInfinitier::getBlockFieldGeneratorTier,
+                                                                          ImmutableList.of(
+                                                                              Pair.of(sBlockCasingsTT, 6),
+                                                                              Pair.of(sBlockCasingsTT, 14),
+                                                                              Pair.of(StabilisationFieldGenerators, 0),
+                                                                              Pair.of(StabilisationFieldGenerators, 1),
+                                                                              Pair.of(StabilisationFieldGenerators, 2),
+                                                                              Pair.of(StabilisationFieldGenerators, 3),
+                                                                              Pair.of(StabilisationFieldGenerators, 4),
+                                                                              Pair.of(StabilisationFieldGenerators, 5),
+                                                                              Pair.of(StabilisationFieldGenerators, 6),
+                                                                              Pair.of(StabilisationFieldGenerators, 7),
+                                                                              Pair.of(StabilisationFieldGenerators, 8)
+                                                                          ),
+                                                                          0,
+                                                                          (m, t) -> m.fieldGeneratorTier = t,
+                                                                          m -> m.fieldGeneratorTier))
+                                                      )
+                                                      .addElement('E',ofBlock(sBlockCasingsTT, 8))
+                                                      .addElement('F',ofBlock(sBlockCasingsTT, 9))
+                                                      .addElement('G',ofFrame(Materials.NaquadahAlloy))
+                                                      .build();
+        }
+		return STRUCTURE_DEFINITION;
 	}
 	/*
 	Blocks:

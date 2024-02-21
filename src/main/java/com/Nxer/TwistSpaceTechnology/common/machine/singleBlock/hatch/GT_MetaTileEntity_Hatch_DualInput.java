@@ -20,7 +20,9 @@ import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.fluid.FluidStackTank;
 import com.gtnewhorizons.modularui.common.widget.FluidSlotWidget;
+import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 
+import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -36,6 +38,9 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
     private final FluidStack[] mStoredFluid;
     private final FluidStackTank[] fluidTanks;
     public final int mCapacityPer;
+    private static final int ITEM_SLOT_AMOUNT = 19;
+    private static final int CATALYST_SLOT_1 = 16;
+    private static final int CATALYST_SLOT_2 = 17;
 
     public static class Inventory implements IDualInputInventory {
 
@@ -65,8 +70,9 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
 
         public boolean isEmpty() {
             if (itemInventory != null) {
-                // circuit slot is the last slot. Will not check it
-                for (int i = 0; i < itemInventory.length - 1; i++) {
+                // Circuit slot is the last slot; catalyst slots are the second & third to last slots. Will not check
+                // them
+                for (int i = 0; i < itemInventory.length - 3; i++) {
                     if (itemInventory[i] != null && itemInventory[i].stackSize > 0) {
                         return false;
                     }
@@ -91,10 +97,10 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
             aName,
             aNameRegional,
             aTier,
-            getSlots(aTier) + 1,
+            ITEM_SLOT_AMOUNT,
             new String[] { "Advanced input for Multiblocks", "Capacity: " + getCapacityPerTank(aTier) + " L",
                 "Can hold " + getSlots(aTier) + " types of item and " + getFluidSlotsAmount(aTier) + " types of fluid ",
-                "Automatically separate inputs and lock fluid slots. Break and replace to unlock.", ModNameDesc });
+                "Automatically separate inputs", ModNameDesc });
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];
         fluidTanks = new FluidStackTank[getFluidSlotsAmount(aTier)];
         mCapacityPer = getCapacityPerTank(aTier);
@@ -102,7 +108,7 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
     }
 
     public GT_MetaTileEntity_Hatch_DualInput(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, getSlots(aTier) + 1, aDescription, aTextures);
+        super(aName, aTier, ITEM_SLOT_AMOUNT, aDescription, aTextures);
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];
         fluidTanks = new FluidStackTank[getFluidSlotsAmount(aTier)];
         mCapacityPer = getCapacityPerTank(aTier);
@@ -167,6 +173,20 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
         return null;
     }
 
+    @Override
+    public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
+        ItemStack aStack) {
+        return super.allowPullStack(aBaseMetaTileEntity, aIndex, side, aStack) && aIndex != CATALYST_SLOT_1
+            && aIndex != CATALYST_SLOT_2;
+    }
+
+    @Override
+    public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
+        ItemStack aStack) {
+        return aIndex != CATALYST_SLOT_1 && aIndex != CATALYST_SLOT_2
+            && super.allowPutStack(aBaseMetaTileEntity, aIndex, side, aStack);
+    }
+
     public FluidStack getFluid(int aSlot) {
         if (mStoredFluid == null || aSlot < 0 || aSlot >= getMaxType()) return null;
         return mStoredFluid[aSlot];
@@ -216,6 +236,11 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
         return 0;
     }
 
+    public void setFluid(FluidStack aFluid, int aSlot) {
+        if (aSlot < 0 || aSlot >= getMaxType()) return;
+        mStoredFluid[aSlot] = aFluid;
+    }
+
     public void addFluid(FluidStack aFluid, int aSlot) {
         if (aSlot < 0 || aSlot >= getMaxType()) return;
         if (aFluid.equals(mStoredFluid[aSlot])) mStoredFluid[aSlot].amount += aFluid.amount;
@@ -261,6 +286,11 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
     }
 
     @Override
+    public int getCircuitSlot() {
+        return ITEM_SLOT_AMOUNT - 1;
+    }
+
+    @Override
     public int fill(FluidStack aFluid, boolean doFill) {
         if (aFluid == null || aFluid.getFluid()
             .getID() <= 0 || aFluid.amount <= 0 || !canTankBeFilled() || !isFluidInputAllowed(aFluid)) return 0;
@@ -290,14 +320,9 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
 
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        if (getFluid() == null || !canTankBeEmptied()) return null;
-        FluidStack tRemove = getFluid().copy();
-        tRemove.amount = Math.min(maxDrain, tRemove.amount);
-        if (doDrain) {
-            getFluid().amount -= tRemove.amount;
-            getBaseMetaTileEntity().markDirty();
-        }
-        return tRemove;
+        FluidStack nowFluid = getFluid();
+        if (nowFluid == null) return null;
+        else return drain(ForgeDirection.UNKNOWN, new FluidStack(nowFluid.getFluid(), maxDrain), doDrain);
     }
 
     @Override
@@ -309,22 +334,42 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
     public FluidStack drain(ForgeDirection from, FluidStack aFluid, boolean doDrain) {
         if (aFluid == null || !hasFluid(aFluid)) return null;
         FluidStack tStored = mStoredFluid[getFluidSlot(aFluid)];
+        if (tStored.amount <= 0 && isFluidChangingAllowed()) {
+            setFluid(null, getFluidSlot(tStored));
+            getBaseMetaTileEntity().markDirty();
+            return null;
+        }
         FluidStack tRemove = tStored.copy();
         tRemove.amount = Math.min(aFluid.amount, tRemove.amount);
         if (doDrain) {
             tStored.amount -= tRemove.amount;
             getBaseMetaTileEntity().markDirty();
         }
+        if (tStored.amount <= 0 && isFluidChangingAllowed()) {
+            setFluid(null, getFluidSlot(tStored));
+            getBaseMetaTileEntity().markDirty();
+        }
         return tRemove;
     }
 
-    /**
-     * Fluid slots is intended to not be updated here to lock fluid slots.
-     */
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if (getBaseMetaTileEntity().isServerSide() && aTimer % 10 == 0) {
+        if (aBaseMetaTileEntity.isServerSide()) {
             updateSlots();
+        }
+    }
+
+    public void updateSlots() {
+        // items
+        if (mInventory != null) {
+            for (int i = 0; i < mInventory.length - 1; i++)
+                if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
+        }
+        // fluids
+        if (mStoredFluid != null) {
+            for (int i = 0; i < getMaxType(); i++) {
+                if (mStoredFluid[i] != null && mStoredFluid[i].amount <= 0) mStoredFluid[i] = null;
+            }
         }
     }
 
@@ -343,16 +388,22 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
 
     public static int getFluidSlotsAmount(int tier) {
         return switch (tier) {
-            case 6 -> 2;
-            case 7 -> 3;
-            case 8 -> 4;
-            case 9 -> 6;
+            case 5 -> 2;
+            case 6 -> 3;
+            case 7 -> 4;
+            case 8 -> 6;
             default -> 0;
         };
     }
 
     public static int getCapacityPerTank(int aTier) {
-        return 2000 << aTier;
+        return switch (aTier) {
+            case 5 -> 20000;
+            case 6 -> 60000;
+            case 7 -> 180000;
+            case 8 -> 540000;
+            default -> 0;
+        };
     }
 
     @Override
@@ -373,11 +424,17 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
         };
 
         for (int i = 0; i < SLOT_NUMBER; i++) {
-            fluidTanks[i].setPreventDraining(true);
             builder.widget(
                 new FluidSlotWidget(fluidTanks[i]).setBackground(ModularUITextures.FLUID_SLOT)
                     .setPos(positions[i]));
         }
-        super.addUIWidgets(builder, buildContext);
+        builder.widget(
+            SlotGroup.ofItemHandler(inventoryHandler, 2)
+                .startFromSlot(CATALYST_SLOT_1)
+                .endAtSlot(CATALYST_SLOT_2)
+                .background(ModularUITextures.ITEM_SLOT, GT_UITextures.OVERLAY_SLOT_MOLECULAR_1)
+                .build()
+                .setPos(7, 7));
+        getBaseMetaTileEntity().add4by4Slots(builder);
     }
 }

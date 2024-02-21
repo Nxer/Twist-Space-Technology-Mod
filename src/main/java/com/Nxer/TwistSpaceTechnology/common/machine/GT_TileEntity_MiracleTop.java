@@ -62,6 +62,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     private static final String STRUCTURE_PIECE_MAIN = "mainMiracleTop";
     private static final String STRUCTURE_PIECE_MIDDLE = "middleMiracleTop";
     private static final String STRUCTURE_PIECE_END = "endMiracleTop";
+    private static IStructureDefinition<GT_TileEntity_MiracleTop> STRUCTURE_DEFINITION = null;
 
     /*
      * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
@@ -74,33 +75,33 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
      */
     @Override
     public IStructureDefinition<GT_TileEntity_MiracleTop> getStructureDefinition() {
-        IStructureDefinition<GT_TileEntity_MiracleTop> Structure = StructureDefinition
-            .<GT_TileEntity_MiracleTop>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
-            .addShape(STRUCTURE_PIECE_MIDDLE, shapeMiddle)
-            .addShape(STRUCTURE_PIECE_END, shapeEnd)
-            .addElement('A', ofBlock(sBlockCasingsTT, 4))
-            .addElement('B', ofBlock(sBlockCasingsTT, 7))
-            .addElement('C', ofBlock(sBlockCasingsTT, 9))
-            .addElement('D', ofBlock(ModBlocks.blockCasings4Misc, 4))
-            .addElement('E', ofBlock(QuantumGlassBlock.INSTANCE, 0))
-            .addElement(
-                'M',
-                GT_StructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
-                    .atLeast(Maintenance)
-                    .dot(1)
-                    .casingIndex(1028)
-                    .buildAndChain(sBlockCasingsTT, 4))
-            .addElement(
-                'H',
-                GT_StructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
-                    .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
-                    .dot(2)
-                    .casingIndex(1028)
-                    .buildAndChain(sBlockCasingsTT, 4))
-            .build();
-
-        return Structure;
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_MiracleTop>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
+                .addShape(STRUCTURE_PIECE_MIDDLE, shapeMiddle)
+                .addShape(STRUCTURE_PIECE_END, shapeEnd)
+                .addElement('A', ofBlock(sBlockCasingsTT, 4))
+                .addElement('B', ofBlock(sBlockCasingsTT, 7))
+                .addElement('C', ofBlock(sBlockCasingsTT, 9))
+                .addElement('D', ofBlock(ModBlocks.blockCasings4Misc, 4))
+                .addElement('E', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                .addElement(
+                    'M',
+                    GT_StructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
+                        .atLeast(Maintenance)
+                        .dot(1)
+                        .casingIndex(1028)
+                        .buildAndChain(sBlockCasingsTT, 4))
+                .addElement(
+                    'H',
+                    GT_StructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
+                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
+                        .dot(2)
+                        .casingIndex(1028)
+                        .buildAndChain(sBlockCasingsTT, 4))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     @Override
