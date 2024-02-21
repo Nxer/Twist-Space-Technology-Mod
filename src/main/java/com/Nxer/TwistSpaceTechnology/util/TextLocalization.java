@@ -632,7 +632,7 @@ public class TextLocalization {
     public static final String NameDebugUncertaintyHatch = texter("Debug Uncertainty Hatch","NameDebugUncertaintyHatch");
     // endregion
 
-    public static final String NameLaserSmartPipe = texter("Laser Vacuum Smart Node","NameLaserSmartPipe");
+    public static final String NameLaserSmartNode = texter("Laser Smart Node","NameLaserSmartPipe");
 
     // region Vacuum Filter Extractor
     public static final String NameVacuumFilterExtractor = texter("Vacuum Filter Extractor","NameVacuumFilterExtractor");

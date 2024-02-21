@@ -16,7 +16,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LargeIndustrialCokingFactory;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LaserSmartPipe;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LaserSmartNode;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
@@ -65,6 +65,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.CustomItemList.AutoclaveUHV;
+import static com.dreammaster.gthandler.CustomItemList.Casing_UEV;
 import static com.dreammaster.gthandler.CustomItemList.CentrifugeUV;
 import static com.dreammaster.gthandler.CustomItemList.CompressorUHV;
 import static com.dreammaster.gthandler.CustomItemList.CuttingMachineUHV;
@@ -1592,12 +1593,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GT_Values.RA
             .stdBuilder()
             .itemInputs(
-                LASERpipe.get(64),
-                Laser_Lens_Special.get(1),
-                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1}
+                LASERpipe.get(32),
+                Laser_Lens_Special.get(0),
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1},
+                Casing_UEV.get(1)
             )
             .fluidInputs(MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144))
-            .itemOutputs(LaserSmartPipe.get(4))
+            .itemOutputs(LaserSmartNode.get(1))
             .eut(RECIPE_UHV)
             .duration(20*5)
             .addTo(assembler);

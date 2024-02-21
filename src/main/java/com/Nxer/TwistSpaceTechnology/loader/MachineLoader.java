@@ -120,7 +120,7 @@ public class MachineLoader {
     public static ItemStack BufferedEnergyHatchUXV;
     public static ItemStack BufferedEnergyHatchMAX;
     public static ItemStack DebugUncertaintyHatch;
-    public static ItemStack LaserSmartPipe;
+    public static ItemStack LaserSmartNode;
 
     // test
     // public static ItemStack TestMachine;
@@ -530,11 +530,11 @@ public class MachineLoader {
         GTCMItemList.DebugUncertaintyHatch.set(DebugUncertaintyHatch);
 
         //
-        LaserSmartPipe = new GT_MetaTileEntity_Pipe_EnergySmart(
+        LaserSmartNode = new GT_MetaTileEntity_Pipe_EnergySmart(
             18960,
-            "NameLaserSmartPipe",
-            TextLocalization.NameLaserSmartPipe).getStackForm(1);
-        GTCMItemList.LaserSmartPipe.set(LaserSmartPipe);
+            "NameLaserSmartNode",
+            TextLocalization.NameLaserSmartNode).getStackForm(1);
+        GTCMItemList.LaserSmartNode.set(LaserSmartNode);
         // endregion
 
     }
