@@ -239,7 +239,7 @@ public enum GTCMItemList {
     BufferedEnergyHatchUXV,
     BufferedEnergyHatchMAX,
     DebugUncertaintyHatch,
-    LaserSmartPipe,
+    LaserSmartNode,
 
     // Blocks
 
