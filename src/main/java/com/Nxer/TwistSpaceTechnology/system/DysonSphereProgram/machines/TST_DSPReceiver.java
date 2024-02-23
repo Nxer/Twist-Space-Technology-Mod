@@ -37,6 +37,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_Curre
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentStellarCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -47,6 +48,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -286,6 +288,24 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     @Override
     public CheckRecipeResult checkProcessing() {
         checkGravitationalLensInput();
+        this.syncDSPData();
+
+        if (mode == 0) {
+            if (wirelessMode) {
+                // Generate EU directly
+                if (this.storageEU > 0) {
+                    addEUToGlobalEnergyMap(ownerUUID.toString(), this.storageEU);
+                    this.storageEU = 0;
+                }
+            }
+        } else if (mode == 1) {
+            // Generate Photon per int.MAX EU
+            if (storageEU >= EUPerCriticalPhoton) {
+                int amount = (int) (storageEU / EUPerCriticalPhoton);
+                mOutputItems = new ItemStack[] { setStackSize(CriticalPhoton.get(1), amount) };
+                storageEU -= EUPerCriticalPhoton * amount;
+            }
+        }
         mMaxProgresstime = 128;
         return CheckRecipeResultRegistry.GENERATING;
     }
@@ -323,9 +343,9 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     }
 
     private void checkGravitationalLensInput() {
-        if (mInputBusses.isEmpty()) return;
-        if (getStoredInputs().isEmpty()) return;
-        for (ItemStack items : getStoredInputs()) {
+        ArrayList<ItemStack> storedInputs = getStoredInputs();
+        if (storedInputs.isEmpty()) return;
+        for (ItemStack items : storedInputs) {
             if (metaItemEqual(items, GravitationalLens.get(1))) {
                 gravitationalLensTime += 20L * items.stackSize
                     * DSP_Values.secondsOfEveryGravitationalLensProvideToIntensifyTime;
@@ -354,39 +374,6 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
             decreaseGravitationalLensTime();
 
-            if (aTick % 128 == 0) {
-                this.syncDSPData();
-
-                if (mode == 0) {
-                    if (wirelessMode) {
-                        // Generate EU directly
-                        if (this.storageEU > 0) {
-                            addEUToGlobalEnergyMap(ownerUUID.toString(), this.storageEU);
-                            this.storageEU = 0;
-                        }
-                    }
-                } else if (mode == 1) {
-                    // Generate Photon per int.MAX EU
-                    if (storageEU >= EUPerCriticalPhoton) {
-                        int amount = (int) (storageEU / EUPerCriticalPhoton);
-                        if (this.mOutputItems == null) {
-                            ItemStack output = CriticalPhoton.get(1);
-                            output.stackSize = amount;
-                            this.mOutputItems = new ItemStack[] { output };
-                        } else {
-                            // safe and more calculate
-                            for (ItemStack items : this.mOutputItems) {
-                                if (metaItemEqual(items, CriticalPhoton.get(1))) {
-                                    items.stackSize += amount;
-                                }
-                            }
-                            // unsafe, low calculate and enough
-                            // this.mOutputItems[0].stackSize += amount;
-                        }
-                        storageEU -= EUPerCriticalPhoton * amount;
-                    }
-                }
-            }
         }
     }
 
@@ -564,6 +551,16 @@ Q -> ofFrame...(NaquadahAlloy, ...);
 
     @Override
     public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
         return false;
     }
 
