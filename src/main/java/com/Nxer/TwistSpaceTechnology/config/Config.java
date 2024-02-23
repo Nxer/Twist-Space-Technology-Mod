@@ -47,6 +47,7 @@ public class Config {
     // endregion
 
     // region Dyson Sphere Program
+    public static boolean EnableDysonSphereProgramSystem = true;
     public static long EUPerCriticalPhoton = Integer.MAX_VALUE;
     public static long solarSailPowerPoint = 524288;
     public static BigInteger solarSailPowerPoint_BigInteger = BigInteger.valueOf(524288);
@@ -386,6 +387,7 @@ public class Config {
         // endregion
 
         // region DSP
+        EnableDysonSphereProgramSystem = configuration.getBoolean("EnableDysonSphereProgramSystem", DSP, EnableDysonSphereProgramSystem, "Enable Dyson Sphere Program System. Type: boolean");
         EUPerCriticalPhoton = Long.parseLong(configuration.getString("EUPerCriticalPhoton", DSP, String.valueOf(EUPerCriticalPhoton), "EU per Critical Photon Cost. Type: long"));
         solarSailPowerPoint = Long.parseLong(configuration.getString("solarSailPowerPoint", DSP, String.valueOf(solarSailPowerPoint), "DSP Power Point per Solar Sail can produce. Type: long"));
         solarSailPowerPoint_BigInteger = BigInteger.valueOf(solarSailPowerPoint);
