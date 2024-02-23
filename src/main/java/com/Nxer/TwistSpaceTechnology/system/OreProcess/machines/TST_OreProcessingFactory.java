@@ -386,10 +386,11 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     }
 
     private boolean consumeFluids() {
-        if (getStoredFluids() == null || getStoredFluids().isEmpty()) return false;
+        ArrayList<FluidStack> storedFluids = getStoredFluids();
+        if (storedFluids == null || storedFluids.isEmpty()) return false;
 
         int amount = LubricantCost;
-        for (FluidStack fluid : getStoredFluids()) {
+        for (FluidStack fluid : storedFluids) {
             if (fluid.getFluid() == Materials.Lubricant.mFluid) {
                 if (fluid.amount >= amount) {
                     fluid.amount -= amount;
