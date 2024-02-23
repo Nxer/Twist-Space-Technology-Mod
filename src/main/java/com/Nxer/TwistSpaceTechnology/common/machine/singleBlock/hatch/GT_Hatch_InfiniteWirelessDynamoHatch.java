@@ -4,8 +4,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.authorName_Nxer;
 
-import java.util.UUID;
-
 import net.minecraft.util.EnumChatFormatting;
 
 import gregtech.api.enums.Textures;
