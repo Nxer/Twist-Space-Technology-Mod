@@ -37,6 +37,7 @@ import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,8 +107,9 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     private byte mode = 0;
     private int overclockParameter = 1;
     private UUID ownerUUID;
-    private long costingWirelessEUTemp = 0;
     private int needPhotonAmount = 0;
+    private String costingWirelessEU = "0";
+    private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -119,7 +121,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD
-                + GT_Utility.formatNumbers(tag.getLong("costingWirelessEUTemp"))
+                + tag.getString("costingWirelessEU")
                 + EnumChatFormatting.RESET
                 + " EU");
         if (tag.getBoolean("isActive")) {
@@ -138,7 +140,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
+            tag.setString("costingWirelessEU", costingWirelessEU);
             tag.setInteger("overclockParameter", overclockParameter);
         }
     }
@@ -147,7 +149,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", mode);
-        aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
         aNBT.setInteger("needPhotonAmount", needPhotonAmount);
         aNBT.setInteger("overclockParameter", overclockParameter);
     }
@@ -156,7 +157,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         mode = aNBT.getByte("mode");
-        costingWirelessEUTemp = aNBT.getLong("costingWirelessEUTemp");
         needPhotonAmount = aNBT.getInteger("needPhotonAmount");
         overclockParameter = aNBT.getInteger("overclockParameter");
     }
@@ -223,11 +223,12 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
         // process wireless EU cost
         flushOverclockParameter();
-        costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration()
-            * multiplierOfMiracleDoorEUCostABSMode
-            * getOverclockEUCostMultiplier();
-        if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
-            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+        BigInteger costingWirelessEUTemp = BigInteger.valueOf(processingLogic.getCalculatedEut())
+            .multiply(BigInteger.valueOf(processingLogic.getDuration()))
+            .multiply(BigInteger.valueOf((long) multiplierOfMiracleDoorEUCostABSMode * getOverclockEUCostMultiplier()));
+        costingWirelessEU = GT_Utility.formatNumbers(costingWirelessEUTemp);
+        if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
+            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
         }
 
         // set progress time a fixed value
@@ -254,11 +255,12 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
         // process wireless EU cost
         flushOverclockParameter();
-        costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration()
-            * multiplierOfMiracleDoorEUCostEBFMode
-            * getOverclockEUCostMultiplier();
-        if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
-            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+        BigInteger costingWirelessEUTemp = BigInteger.valueOf(processingLogic.getCalculatedEut())
+            .multiply(BigInteger.valueOf(processingLogic.getDuration()))
+            .multiply(BigInteger.valueOf((long) multiplierOfMiracleDoorEUCostEBFMode * getOverclockEUCostMultiplier()));
+        costingWirelessEU = GT_Utility.formatNumbers(costingWirelessEUTemp);
+        if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
+            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
         }
 
         // set progress time a fixed value
