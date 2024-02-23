@@ -24,11 +24,14 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
@@ -41,6 +44,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
@@ -85,10 +89,12 @@ public class MachineLoader {
     public static ItemStack ThermalEnergyDevourer;
 
     public static ItemStack NuclearReactor;
-
     public static ItemStack AstralComputingArray;
     public static ItemStack VacuumFilterExtractor;
     public static ItemStack LargeSteamForgeHammer;
+    public static ItemStack LargeSteamAlloySmelter;
+    public static ItemStack EyeOfWood;
+    public static ItemStack BeeEngineer;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -114,6 +120,7 @@ public class MachineLoader {
     public static ItemStack BufferedEnergyHatchUXV;
     public static ItemStack BufferedEnergyHatchMAX;
     public static ItemStack DebugUncertaintyHatch;
+    public static ItemStack LaserSmartNode;
 
     // test
     // public static ItemStack TestMachine;
@@ -331,6 +338,21 @@ public class MachineLoader {
             TextLocalization.NameLargeSteamForgeHammer).getStackForm(1);
         GTCMItemList.LargeSteamForgeHammer.set(LargeSteamForgeHammer);
 
+        //
+        LargeSteamAlloySmelter = new TST_LargeSteamAlloySmelter(
+            19033,
+            "NameLargeSteamAlloySmelter",
+            TextLocalization.NameLargeSteamAlloySmelter).getStackForm(1);
+        GTCMItemList.LargeSteamAlloySmelter.set(LargeSteamAlloySmelter);
+
+        //
+        EyeOfWood = new TST_EyeOfWood(19034, "NameEyeOfWood", TextLocalization.NameEyeOfWood).getStackForm(1);
+        GTCMItemList.EyeOfWood.set(EyeOfWood);
+
+        //
+        BeeEngineer = new TST_BeeEngineer(19035, "NameBeeEngineer", TextLocalization.NameBeeEngineer).getStackForm(1);
+        GTCMItemList.BeeEngineer.set(BeeEngineer);
+
         // endregion
 
         // region Single block Machine
@@ -506,6 +528,13 @@ public class MachineLoader {
             TextLocalization.NameDebugUncertaintyHatch,
             12).getStackForm(1);
         GTCMItemList.DebugUncertaintyHatch.set(DebugUncertaintyHatch);
+
+        //
+        LaserSmartNode = new GT_MetaTileEntity_Pipe_EnergySmart(
+            18960,
+            "NameLaserSmartNode",
+            TextLocalization.NameLaserSmartNode).getStackForm(1);
+        GTCMItemList.LaserSmartNode.set(LaserSmartNode);
         // endregion
 
     }

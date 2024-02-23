@@ -157,6 +157,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 	private final int verticalOffSet = 18;
 	private final int depthOffSet = 0;
 	private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static IStructureDefinition<GT_TileEntity_PhysicalFormSwitcher> STRUCTURE_DEFINITION = null;
 
 	/*
 	Blocks:
@@ -169,32 +170,35 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 	 */
 
 	public IStructureDefinition<GT_TileEntity_PhysicalFormSwitcher> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition
+                                       .<GT_TileEntity_PhysicalFormSwitcher>builder()
+                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                                       .addElement(
+                                           'A',
+                                           withChannel("glass",
+                                                       BorosilicateGlass.ofBoroGlass(
+                                                           (byte) 0,
+                                                           (byte) 1,
+                                                           Byte.MAX_VALUE,
+                                                           (te, t) -> te.glassTier = t,
+                                                           te -> te.glassTier
+                                                       )))
+                                       .addElement('B', ofBlock(MAR_Casing,0))
+                                       .addElement('C', ofBlock(GregTech_API.sBlockCasings2,8))
+                                       .addElement('D', ofBlock(GregTech_API.sBlockCasings2,15))
+                                       .addElement('E',
+                                                   GT_HatchElementBuilder.<GT_TileEntity_PhysicalFormSwitcher>builder()
+                                                                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Maintenance,Energy.or(ExoticEnergy))
+                                                                         .adder(GT_TileEntity_PhysicalFormSwitcher::addToMachineList)
+                                                                         .dot(1)
+                                                                         .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
+                                                                         .buildAndChain(GregTech_API.sBlockCasings8,10))
+                                       .addElement('F', ofFrame(Materials.NaquadahAlloy))
+                                       .build();
+        }
 
-		return StructureDefinition
-			       .<GT_TileEntity_PhysicalFormSwitcher>builder()
-			       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-			       .addElement(
-					   'A',
-					   withChannel("glass",
-					               BorosilicateGlass.ofBoroGlass(
-						               (byte) 0,
-						               (byte) 1,
-						               Byte.MAX_VALUE,
-						               (te, t) -> te.glassTier = t,
-						               te -> te.glassTier
-					               )))
-			       .addElement('B', ofBlock(MAR_Casing,0))
-			       .addElement('C', ofBlock(GregTech_API.sBlockCasings2,8))
-			       .addElement('D', ofBlock(GregTech_API.sBlockCasings2,15))
-			       .addElement('E',
-	                    GT_HatchElementBuilder.<GT_TileEntity_PhysicalFormSwitcher>builder()
-		                    .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Maintenance,Energy.or(ExoticEnergy))
-		                    .adder(GT_TileEntity_PhysicalFormSwitcher::addToMachineList)
-		                    .dot(1)
-		                    .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
-		                    .buildAndChain(GregTech_API.sBlockCasings8,10))
-			       .addElement('F', ofFrame(Materials.NaquadahAlloy))
-			       .build();
+		return STRUCTURE_DEFINITION;
 	}
 
 	@Override

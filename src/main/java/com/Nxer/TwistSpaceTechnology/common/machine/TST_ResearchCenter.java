@@ -60,9 +60,6 @@ import gregtech.api.util.IGT_HatchAdder;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-/**
- * Created by danie_000 on 17.12.2016.
- */
 @SuppressWarnings("unchecked")
 public class TST_ResearchCenter extends GT_MetaTileEntity_MultiblockBase_EM implements ISurvivalConstructable {
 

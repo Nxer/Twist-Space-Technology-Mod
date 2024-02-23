@@ -275,6 +275,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         { "                 ", "       H~H       ", "     HHDDDHH     ", "    HDDDDDDDH    ", "    HDDDDDDDH    ", "EJ HDDDDDDDDDH JE", "JBBBBBBBBBBBBBBBJ", "EJ HDDDDDDDDDH JE", "    HDDDDDDDH    ", "    HDDDDDDDH    ", "     HHDDDHH     ", "       HHH       ", "                 " },
         { "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF", "FFFFFFFFFFFFFFFFF" } };
     private static final int STAINLESS_STEEL_CASING_INDEX = 49;
+    private static IStructureDefinition<TST_BiosphereIII> STRUCTURE_DEFINITION = null;
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
@@ -290,36 +291,39 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
     @Override
     public IStructureDefinition<TST_BiosphereIII> getStructureDefinition() {
-        return StructureDefinition.<TST_BiosphereIII>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-            .addElement(
-                'A',
-                withChannel(
-                    "glass",
-                    BorosilicateGlass.ofBoroGlass(
-                        (byte) 0,
-                        (byte) 1,
-                        Byte.MAX_VALUE,
-                        (te, t) -> te.mGlassTier = t,
-                        te -> te.mGlassTier)))
-            .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 15))
-            .addElement('C', ofBlock(GregTech_API.sBlockCasings4, 1))
-            .addElement('D', ofBlock(GregTech_API.sBlockCasings8, 0))
-            .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 6))
-            .addElement('F', ofBlock(GregTech_API.sBlockCasings8, 5))
-            .addElement(
-                'H',
-                ofChain(
-                    ofHatchAdder(TST_BiosphereIII::addRadiationInputToMachineList, STAINLESS_STEEL_CASING_INDEX, 1),
-                    GT_HatchElementBuilder.<TST_BiosphereIII>builder()
-                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance, Energy.or(ExoticEnergy))
-                        .adder(TST_BiosphereIII::addToMachineList)
-                        .dot(1)
-                        .casingIndex(STAINLESS_STEEL_CASING_INDEX)
-                        .buildAndChain(GregTech_API.sBlockCasings4, 1)))
-            .addElement('I', isAir())
-            .addElement('J', ofFrame(Materials.Osmiridium))
-            .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_BiosphereIII>builder()
+                                                      .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                                                      .addElement(
+                                                          'A',
+                                                          withChannel(
+                                                              "glass",
+                                                              BorosilicateGlass.ofBoroGlass(
+                                                                  (byte) 0,
+                                                                  (byte) 1,
+                                                                  Byte.MAX_VALUE,
+                                                                  (te, t) -> te.mGlassTier = t,
+                                                                  te -> te.mGlassTier)))
+                                                      .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 15))
+                                                      .addElement('C', ofBlock(GregTech_API.sBlockCasings4, 1))
+                                                      .addElement('D', ofBlock(GregTech_API.sBlockCasings8, 0))
+                                                      .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 6))
+                                                      .addElement('F', ofBlock(GregTech_API.sBlockCasings8, 5))
+                                                      .addElement(
+                                                          'H',
+                                                          ofChain(
+                                                              ofHatchAdder(TST_BiosphereIII::addRadiationInputToMachineList, STAINLESS_STEEL_CASING_INDEX, 1),
+                                                              GT_HatchElementBuilder.<TST_BiosphereIII>builder()
+                                                                                    .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance, Energy.or(ExoticEnergy))
+                                                                                    .adder(TST_BiosphereIII::addToMachineList)
+                                                                                    .dot(1)
+                                                                                    .casingIndex(STAINLESS_STEEL_CASING_INDEX)
+                                                                                    .buildAndChain(GregTech_API.sBlockCasings4, 1)))
+                                                      .addElement('I', isAir())
+                                                      .addElement('J', ofFrame(Materials.Osmiridium))
+                                                      .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     private boolean addRadiationInputToMachineList(IGregTechTileEntity aTileEntity, int CasingIndex) {

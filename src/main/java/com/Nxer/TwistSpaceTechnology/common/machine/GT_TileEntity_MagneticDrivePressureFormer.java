@@ -184,6 +184,8 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         {"     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     "}
     };
 
+    private static IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> STRUCTURE_DEFINITION = null;
+
     /*
     Blocks:
         A -> ofBlock...(BW_GlasBlocks, 14, ...);    // glass
@@ -195,45 +197,48 @@ public class GT_TileEntity_MagneticDrivePressureFormer
      */
     @Override
     public IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> getStructureDefinition() {
-        return StructureDefinition
-            .<GT_TileEntity_MagneticDrivePressureFormer>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-            .addElement(
-                'A',
-                withChannel("glass",
-                    BorosilicateGlass.ofBoroGlass(
-                        (byte) 0,
-                        (byte) 1,
-                        Byte.MAX_VALUE,
-                        (te, t) -> te.glassTier = t,
-                        te -> te.glassTier
-                    ))
-            )
-            .addElement('B', ofBlock(compactFusionCoil,0))
-            .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 5))
-            .addElement(
-                'D',
-                GT_HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
-                    .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Maintenance)
-                    .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
-                    .dot(1)
-                    .casingIndex(62)
-                    .buildAndChain(GregTech_API.sBlockCasings4, 14))
-            .addElement(
-                'E',
-                withChannel("coil",
-                ofCoil(
-                    GT_TileEntity_MagneticDrivePressureFormer::setCoilLevel,
-                    GT_TileEntity_MagneticDrivePressureFormer::getCoilLevel)))
-            .addElement(
-                'F',
-                GT_HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
-                    .atLeast(Energy.or(ExoticEnergy))
-                    .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
-                    .dot(2)
-                    .casingIndex(183)
-                    .buildAndChain(GregTech_API.sBlockCasings8, 7))
-            .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition
+                                       .<GT_TileEntity_MagneticDrivePressureFormer>builder()
+                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                                       .addElement(
+                                           'A',
+                                           withChannel("glass",
+                                                       BorosilicateGlass.ofBoroGlass(
+                                                           (byte) 0,
+                                                           (byte) 1,
+                                                           Byte.MAX_VALUE,
+                                                           (te, t) -> te.glassTier = t,
+                                                           te -> te.glassTier
+                                                       ))
+                                       )
+                                       .addElement('B', ofBlock(compactFusionCoil,0))
+                                       .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 5))
+                                       .addElement(
+                                           'D',
+                                           GT_HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
+                                                                 .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Maintenance)
+                                                                 .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
+                                                                 .dot(1)
+                                                                 .casingIndex(62)
+                                                                 .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                                       .addElement(
+                                           'E',
+                                           withChannel("coil",
+                                                       ofCoil(
+                                                           GT_TileEntity_MagneticDrivePressureFormer::setCoilLevel,
+                                                           GT_TileEntity_MagneticDrivePressureFormer::getCoilLevel)))
+                                       .addElement(
+                                           'F',
+                                           GT_HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
+                                                                 .atLeast(Energy.or(ExoticEnergy))
+                                                                 .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
+                                                                 .dot(2)
+                                                                 .casingIndex(183)
+                                                                 .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                                       .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     @Override

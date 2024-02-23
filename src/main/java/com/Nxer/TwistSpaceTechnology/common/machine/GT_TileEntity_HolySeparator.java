@@ -205,27 +205,31 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
 	private final int horizontalOffSet = 7;
 	private final int verticalOffSet = 2;
 	private final int depthOffSet = 0;
+    private static IStructureDefinition<GT_TileEntity_HolySeparator> STRUCTURE_DEFINITION = null;
 
 	@Override
 	public IStructureDefinition<GT_TileEntity_HolySeparator> getStructureDefinition() {
-		return StructureDefinition.<GT_TileEntity_HolySeparator>builder()
-			       .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-			       .addShape(STRUCTURE_PIECE_MIDDLE, transpose(shapeMiddle))
-			       .addShape(STRUCTURE_PIECE_END, transpose(shapeEnd))
-			       .addElement('A',
-			                   GT_HatchElementBuilder.<GT_TileEntity_HolySeparator>builder()
-				                   .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance, Energy.or(ExoticEnergy))
-				                   .adder(GT_TileEntity_HolySeparator::addToMachineList)
-				                   .dot(1)
-				                   .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-				                   .buildAndChain(GregTech_API.sBlockCasings8, 7))
-			       .addElement('B',ofBlock(GregTech_API.sBlockCasings8, 10))
-			       .addElement('C',ofBlock(sBlockCasingsTT, 0))
-			       .addElement('D',ofBlock(sBlockCasingsTT, 4))
-			       .addElement('E',ofBlock(sBlockCasingsTT, 6))
-			       .addElement('F',ofBlock(sBlockCasingsTT, 8))
-			       .addElement('G',ofBlock(ModBlocks.blockCasings3Misc, 15))
-			       .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_HolySeparator>builder()
+                                                      .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                                                      .addShape(STRUCTURE_PIECE_MIDDLE, transpose(shapeMiddle))
+                                                      .addShape(STRUCTURE_PIECE_END, transpose(shapeEnd))
+                                                      .addElement('A',
+                                                                  GT_HatchElementBuilder.<GT_TileEntity_HolySeparator>builder()
+                                                                                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance, Energy.or(ExoticEnergy))
+                                                                                        .adder(GT_TileEntity_HolySeparator::addToMachineList)
+                                                                                        .dot(1)
+                                                                                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
+                                                                                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                                                      .addElement('B',ofBlock(GregTech_API.sBlockCasings8, 10))
+                                                      .addElement('C',ofBlock(sBlockCasingsTT, 0))
+                                                      .addElement('D',ofBlock(sBlockCasingsTT, 4))
+                                                      .addElement('E',ofBlock(sBlockCasingsTT, 6))
+                                                      .addElement('F',ofBlock(sBlockCasingsTT, 8))
+                                                      .addElement('G',ofBlock(ModBlocks.blockCasings3Misc, 15))
+                                                      .build();
+        }
+		return STRUCTURE_DEFINITION;
 	}
 
 	/*

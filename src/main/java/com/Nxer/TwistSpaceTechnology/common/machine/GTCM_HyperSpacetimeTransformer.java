@@ -184,115 +184,119 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 	private final int horizontalOffSet = 22;
 	private final int verticalOffSet = 5;
 	private final int depthOffSet = 0;
+    private static IStructureDefinition<GTCM_HyperSpacetimeTransformer> STRUCTURE_DEFINITION = null;
 	@Override
 	public IStructureDefinition<GTCM_HyperSpacetimeTransformer> getStructureDefinition() {
-		return StructureDefinition.<GTCM_HyperSpacetimeTransformer>builder()
-			       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-			       .addElement(
-				       'A',GT_HatchElementBuilder.<GTCM_HyperSpacetimeTransformer>builder()
-                       .atLeast(Maintenance, Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch, OutputHatch)
-                       .adder(GTCM_HyperSpacetimeTransformer::addToMachineList)
-                       .dot(1)
-                       .casingIndex(1028)
-                       .buildAndChain(sBlockCasingsBA0, 11))
-			       .addElement(
-					   'B',
-					   ofBlock(sBlockCasingsBA0, 12))
-			       .addElement(
-					   'C',
-					   ofBlock(sBlockCasingsTT, 10))
-			       .addElement(
-					   'D',
-					   withChannel("fieldgeneratortier",
-					               ofBlocksTiered(
-						               GTCM_HyperSpacetimeTransformer::getBlockFieldGeneratorTier,
-						               ImmutableList.of(
-							               Pair.of(SpacetimeCompressionFieldGenerators, 0),
-							               Pair.of(SpacetimeCompressionFieldGenerators, 1),
-							               Pair.of(SpacetimeCompressionFieldGenerators, 2),
-							               Pair.of(SpacetimeCompressionFieldGenerators, 3),
-							               Pair.of(SpacetimeCompressionFieldGenerators, 4),
-							               Pair.of(SpacetimeCompressionFieldGenerators, 5),
-							               Pair.of(SpacetimeCompressionFieldGenerators, 6),
-							               Pair.of(SpacetimeCompressionFieldGenerators, 7),
-							               Pair.of(SpacetimeCompressionFieldGenerators, 8)
-						               ),
-						               0,
-						               (m, t) -> m.SCfieldGeneratorTier = t,
-						               m -> m.SCfieldGeneratorTier))
-					   ).addElement(
-					   'E',
-					   withChannel("fieldgeneratortier",
-					               ofBlocksTiered(
-						               GTCM_HyperSpacetimeTransformer::getBlockFieldGeneratorTier,
-						               ImmutableList.of(
-							               Pair.of(StabilisationFieldGenerators, 0),
-							               Pair.of(StabilisationFieldGenerators, 1),
-							               Pair.of(StabilisationFieldGenerators, 2),
-							               Pair.of(StabilisationFieldGenerators, 3),
-							               Pair.of(StabilisationFieldGenerators, 4),
-							               Pair.of(StabilisationFieldGenerators, 5),
-							               Pair.of(StabilisationFieldGenerators, 6),
-							               Pair.of(StabilisationFieldGenerators, 7),
-							               Pair.of(StabilisationFieldGenerators, 8)
-						               ),
-						               0,
-						               (m, t) -> m.STfieldGeneratorTier = t,
-						               m -> m.STfieldGeneratorTier))
-					   ).addElement(
-					   'F',
-					   withChannel("fieldgeneratortier",
-					               ofBlocksTiered(
-						               GTCM_HyperSpacetimeTransformer::getBlockFieldGeneratorTier,
-						               ImmutableList.of(
-							               Pair.of(TimeAccelerationFieldGenerator, 0),
-							               Pair.of(TimeAccelerationFieldGenerator, 1),
-							               Pair.of(TimeAccelerationFieldGenerator, 2),
-							               Pair.of(TimeAccelerationFieldGenerator, 3),
-							               Pair.of(TimeAccelerationFieldGenerator, 4),
-							               Pair.of(TimeAccelerationFieldGenerator, 5),
-							               Pair.of(TimeAccelerationFieldGenerator, 6),
-							               Pair.of(TimeAccelerationFieldGenerator, 7),
-							               Pair.of(TimeAccelerationFieldGenerator, 8)
-						               ),
-						               0,
-						               (m, t) -> m.TAfieldGeneratorTier = t,
-						               m -> m.TAfieldGeneratorTier))
-					   ).addElement(
-					   'G',
-					   ofBlock(ModBlocks.blockCasings4Misc,4)
-					   ).addElement(
-					   'H',
-					   withChannel("manipulator",
-					               ofBlocksTiered(
-						               GTCM_HyperSpacetimeTransformer::getBlockTier,
-						               ImmutableList.of(
-							               Pair.of(ModBlocks.blockCasings5Misc, 7),
-							               Pair.of(ModBlocks.blockCasings5Misc, 8),
-							               Pair.of(ModBlocks.blockCasings5Misc, 9),
-							               Pair.of(ModBlocks.blockCasings5Misc, 10)
-						               ),
-						               0,
-						               (m, t) -> m.mCraftingTier = t,
-						               m -> m.mCraftingTier))
-					   ).addElement(
-					   'I',
-					   withChannel("shielding",
-					               ofBlocksTiered(
-						               GTCM_HyperSpacetimeTransformer::getBlockTier,
-						               ImmutableList.of(
-							               Pair.of(ModBlocks.blockCasings5Misc, 11),
-							               Pair.of(ModBlocks.blockCasings5Misc, 12),
-							               Pair.of(ModBlocks.blockCasings5Misc, 13),
-							               Pair.of(ModBlocks.blockCasings5Misc, 14)
-						               ),
-						               0,
-						               (m, t) -> m.mFocusingTier = t,
-						               m -> m.mFocusingTier))
-					   ).addElement(
-					   'J',ofBlockAnyMeta(INSTANCE)
-					   )
-			       .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GTCM_HyperSpacetimeTransformer>builder()
+                                                      .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                                                      .addElement(
+                                                          'A',GT_HatchElementBuilder.<GTCM_HyperSpacetimeTransformer>builder()
+                                                                                    .atLeast(Maintenance, Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch, OutputHatch)
+                                                                                    .adder(GTCM_HyperSpacetimeTransformer::addToMachineList)
+                                                                                    .dot(1)
+                                                                                    .casingIndex(1028)
+                                                                                    .buildAndChain(sBlockCasingsBA0, 11))
+                                                      .addElement(
+                                                          'B',
+                                                          ofBlock(sBlockCasingsBA0, 12))
+                                                      .addElement(
+                                                          'C',
+                                                          ofBlock(sBlockCasingsTT, 10))
+                                                      .addElement(
+                                                          'D',
+                                                          withChannel("fieldgeneratortier",
+                                                                      ofBlocksTiered(
+                                                                          GTCM_HyperSpacetimeTransformer::getBlockFieldGeneratorTier,
+                                                                          ImmutableList.of(
+                                                                              Pair.of(SpacetimeCompressionFieldGenerators, 0),
+                                                                              Pair.of(SpacetimeCompressionFieldGenerators, 1),
+                                                                              Pair.of(SpacetimeCompressionFieldGenerators, 2),
+                                                                              Pair.of(SpacetimeCompressionFieldGenerators, 3),
+                                                                              Pair.of(SpacetimeCompressionFieldGenerators, 4),
+                                                                              Pair.of(SpacetimeCompressionFieldGenerators, 5),
+                                                                              Pair.of(SpacetimeCompressionFieldGenerators, 6),
+                                                                              Pair.of(SpacetimeCompressionFieldGenerators, 7),
+                                                                              Pair.of(SpacetimeCompressionFieldGenerators, 8)
+                                                                          ),
+                                                                          0,
+                                                                          (m, t) -> m.SCfieldGeneratorTier = t,
+                                                                          m -> m.SCfieldGeneratorTier))
+                                                      ).addElement(
+                    'E',
+                    withChannel("fieldgeneratortier",
+                                ofBlocksTiered(
+                                    GTCM_HyperSpacetimeTransformer::getBlockFieldGeneratorTier,
+                                    ImmutableList.of(
+                                        Pair.of(StabilisationFieldGenerators, 0),
+                                        Pair.of(StabilisationFieldGenerators, 1),
+                                        Pair.of(StabilisationFieldGenerators, 2),
+                                        Pair.of(StabilisationFieldGenerators, 3),
+                                        Pair.of(StabilisationFieldGenerators, 4),
+                                        Pair.of(StabilisationFieldGenerators, 5),
+                                        Pair.of(StabilisationFieldGenerators, 6),
+                                        Pair.of(StabilisationFieldGenerators, 7),
+                                        Pair.of(StabilisationFieldGenerators, 8)
+                                    ),
+                                    0,
+                                    (m, t) -> m.STfieldGeneratorTier = t,
+                                    m -> m.STfieldGeneratorTier))
+                ).addElement(
+                    'F',
+                    withChannel("fieldgeneratortier",
+                                ofBlocksTiered(
+                                    GTCM_HyperSpacetimeTransformer::getBlockFieldGeneratorTier,
+                                    ImmutableList.of(
+                                        Pair.of(TimeAccelerationFieldGenerator, 0),
+                                        Pair.of(TimeAccelerationFieldGenerator, 1),
+                                        Pair.of(TimeAccelerationFieldGenerator, 2),
+                                        Pair.of(TimeAccelerationFieldGenerator, 3),
+                                        Pair.of(TimeAccelerationFieldGenerator, 4),
+                                        Pair.of(TimeAccelerationFieldGenerator, 5),
+                                        Pair.of(TimeAccelerationFieldGenerator, 6),
+                                        Pair.of(TimeAccelerationFieldGenerator, 7),
+                                        Pair.of(TimeAccelerationFieldGenerator, 8)
+                                    ),
+                                    0,
+                                    (m, t) -> m.TAfieldGeneratorTier = t,
+                                    m -> m.TAfieldGeneratorTier))
+                ).addElement(
+                    'G',
+                    ofBlock(ModBlocks.blockCasings4Misc,4)
+                ).addElement(
+                    'H',
+                    withChannel("manipulator",
+                                ofBlocksTiered(
+                                    GTCM_HyperSpacetimeTransformer::getBlockTier,
+                                    ImmutableList.of(
+                                        Pair.of(ModBlocks.blockCasings5Misc, 7),
+                                        Pair.of(ModBlocks.blockCasings5Misc, 8),
+                                        Pair.of(ModBlocks.blockCasings5Misc, 9),
+                                        Pair.of(ModBlocks.blockCasings5Misc, 10)
+                                    ),
+                                    0,
+                                    (m, t) -> m.mCraftingTier = t,
+                                    m -> m.mCraftingTier))
+                ).addElement(
+                    'I',
+                    withChannel("shielding",
+                                ofBlocksTiered(
+                                    GTCM_HyperSpacetimeTransformer::getBlockTier,
+                                    ImmutableList.of(
+                                        Pair.of(ModBlocks.blockCasings5Misc, 11),
+                                        Pair.of(ModBlocks.blockCasings5Misc, 12),
+                                        Pair.of(ModBlocks.blockCasings5Misc, 13),
+                                        Pair.of(ModBlocks.blockCasings5Misc, 14)
+                                    ),
+                                    0,
+                                    (m, t) -> m.mFocusingTier = t,
+                                    m -> m.mFocusingTier))
+                ).addElement(
+                    'J',ofBlockAnyMeta(INSTANCE)
+                )
+                                                      .build();
+        }
+		return STRUCTURE_DEFINITION;
 	}
 	/*
 	Blocks:

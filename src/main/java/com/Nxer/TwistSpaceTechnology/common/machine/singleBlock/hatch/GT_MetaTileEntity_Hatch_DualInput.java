@@ -3,11 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_CRAFTING_INPUT_BUFFER;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -32,7 +29,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Utility;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
 
@@ -43,8 +39,8 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
     private final FluidStackTank[] fluidTanks;
     public final int mCapacityPer;
     private static final int ITEM_SLOT_AMOUNT = 19;
-    private static int CATALYST_SLOT_1 = 16;
-    private static int CATALYST_SLOT_2 = 17;
+    private static final int CATALYST_SLOT_1 = 16;
+    private static final int CATALYST_SLOT_2 = 17;
 
     public static class Inventory implements IDualInputInventory {
 
@@ -324,7 +320,9 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
 
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        return drain(ForgeDirection.UNKNOWN, new FluidStack(getFluid().getFluid(), maxDrain), doDrain);
+        FluidStack nowFluid = getFluid();
+        if (nowFluid == null) return null;
+        else return drain(ForgeDirection.UNKNOWN, new FluidStack(nowFluid.getFluid(), maxDrain), doDrain);
     }
 
     @Override
@@ -355,47 +353,24 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
     }
 
     @Override
-    protected void fillStacksIntoFirstSlots() {
-        final int L = mInventory.length - 3;
-        HashMap<GT_Utility.ItemId, Integer> slots = new HashMap<>(L);
-        HashMap<GT_Utility.ItemId, ItemStack> stacks = new HashMap<>(L);
-        List<GT_Utility.ItemId> order = new ArrayList<>(L);
-        List<Integer> validSlots = new ArrayList<>(L);
-        for (int i = 0; i < L; i++) {
-            if (!isValidSlot(i)) continue;
-            validSlots.add(i);
-            ItemStack s = mInventory[i];
-            if (s == null) continue;
-            GT_Utility.ItemId sID = GT_Utility.ItemId.createNoCopy(s);
-            slots.merge(sID, s.stackSize, Integer::sum);
-            if (!stacks.containsKey(sID)) stacks.put(sID, s);
-            order.add(sID);
-            mInventory[i] = null;
-        }
-        int slotindex = 0;
-        for (GT_Utility.ItemId sID : order) {
-            int toSet = slots.get(sID);
-            if (toSet == 0) continue;
-            int slot = validSlots.get(slotindex);
-            slotindex++;
-            mInventory[slot] = stacks.get(sID)
-                .copy();
-            toSet = Math.min(toSet, mInventory[slot].getMaxStackSize());
-            mInventory[slot].stackSize = toSet;
-            slots.merge(sID, toSet, (a, b) -> a - b);
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
+        if (aBaseMetaTileEntity.isServerSide()) {
+            updateSlots();
         }
     }
 
-    @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if (aBaseMetaTileEntity.isServerSide() && mStoredFluid != null) {
+    public void updateSlots() {
+        // items
+        if (mInventory != null) {
+            for (int i = 0; i < mInventory.length - 1; i++)
+                if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
+        }
+        // fluids
+        if (mStoredFluid != null) {
             for (int i = 0; i < getMaxType(); i++) {
-                if (mStoredFluid[i] != null && mStoredFluid[i].amount <= 0) {
-                    mStoredFluid[i] = null;
-                }
+                if (mStoredFluid[i] != null && mStoredFluid[i].amount <= 0) mStoredFluid[i] = null;
             }
         }
-        super.onPostTick(aBaseMetaTileEntity, aTimer);
     }
 
     @Override
@@ -460,6 +435,6 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
                 .background(ModularUITextures.ITEM_SLOT, GT_UITextures.OVERLAY_SLOT_MOLECULAR_1)
                 .build()
                 .setPos(7, 7));
-        super.addUIWidgets(builder, buildContext);
+        getBaseMetaTileEntity().add4by4Slots(builder);
     }
 }

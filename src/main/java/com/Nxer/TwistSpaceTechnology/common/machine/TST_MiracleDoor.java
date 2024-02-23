@@ -37,6 +37,7 @@ import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,8 +107,9 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     private byte mode = 0;
     private int overclockParameter = 1;
     private UUID ownerUUID;
-    private long costingWirelessEUTemp = 0;
     private int needPhotonAmount = 0;
+    private String costingWirelessEU = "0";
+    private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -119,7 +121,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD
-                + GT_Utility.formatNumbers(tag.getLong("costingWirelessEUTemp"))
+                + tag.getString("costingWirelessEU")
                 + EnumChatFormatting.RESET
                 + " EU");
         if (tag.getBoolean("isActive")) {
@@ -138,7 +140,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
+            tag.setString("costingWirelessEU", costingWirelessEU);
             tag.setInteger("overclockParameter", overclockParameter);
         }
     }
@@ -147,7 +149,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", mode);
-        aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
         aNBT.setInteger("needPhotonAmount", needPhotonAmount);
         aNBT.setInteger("overclockParameter", overclockParameter);
     }
@@ -156,7 +157,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         mode = aNBT.getByte("mode");
-        costingWirelessEUTemp = aNBT.getLong("costingWirelessEUTemp");
         needPhotonAmount = aNBT.getInteger("needPhotonAmount");
         overclockParameter = aNBT.getInteger("overclockParameter");
     }
@@ -223,11 +223,12 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
         // process wireless EU cost
         flushOverclockParameter();
-        costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration()
-            * multiplierOfMiracleDoorEUCostABSMode
-            * getOverclockEUCostMultiplier();
-        if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
-            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+        BigInteger costingWirelessEUTemp = BigInteger.valueOf(processingLogic.getCalculatedEut())
+            .multiply(BigInteger.valueOf(processingLogic.getDuration()))
+            .multiply(BigInteger.valueOf((long) multiplierOfMiracleDoorEUCostABSMode * getOverclockEUCostMultiplier()));
+        costingWirelessEU = GT_Utility.formatNumbers(costingWirelessEUTemp);
+        if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
+            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
         }
 
         // set progress time a fixed value
@@ -254,11 +255,12 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
         // process wireless EU cost
         flushOverclockParameter();
-        costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration()
-            * multiplierOfMiracleDoorEUCostEBFMode
-            * getOverclockEUCostMultiplier();
-        if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
-            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+        BigInteger costingWirelessEUTemp = BigInteger.valueOf(processingLogic.getCalculatedEut())
+            .multiply(BigInteger.valueOf(processingLogic.getDuration()))
+            .multiply(BigInteger.valueOf((long) multiplierOfMiracleDoorEUCostEBFMode * getOverclockEUCostMultiplier()));
+        costingWirelessEU = GT_Utility.formatNumbers(costingWirelessEUTemp);
+        if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
+            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
         }
 
         // set progress time a fixed value
@@ -361,6 +363,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     private final int horizontalOffSet = 20;
     private final int verticalOffSet = 52;
     private final int depthOffSet = 8;
+    private static IStructureDefinition<TST_MiracleDoor> STRUCTURE_DEFINITION = null;
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
@@ -386,29 +389,32 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
     @Override
     public IStructureDefinition<TST_MiracleDoor> getStructureDefinition() {
-        return IStructureDefinition
-                   .<TST_MiracleDoor>builder()
-                   .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                   .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 13))
-                   .addElement('B', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
-                   .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 2))
-                   .addElement('D', ofBlock(sBlockCasingsTT, 4))
-                   .addElement('E', ofBlock(sBlockCasingsTT, 6))
-                   .addElement('F', ofBlock(sBlockCasingsTT, 9))
-                   .addElement('G', ofBlock(sBlockCasingsTT, 10))
-                   .addElement('H', ofBlock(sBlockCasingsTT, 12))
-                   .addElement('I', ofBlock(sBlockCasingsTT, 14))
-                   .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
-                   .addElement('K', ofBlock(QuantumGlassBlock.INSTANCE, 0))
-                   .addElement('L',
-                               GT_HatchElementBuilder
-                                   .<TST_MiracleDoor>builder()
-                                   .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                                   .adder(TST_MiracleDoor::addToMachineList)
-                                   .dot(1)
-                                   .casingIndex(1024+12)
-                                   .buildAndChain(sBlockCasingsTT, 12))
-                   .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = IStructureDefinition
+                                       .<TST_MiracleDoor>builder()
+                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                                       .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 13))
+                                       .addElement('B', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
+                                       .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 2))
+                                       .addElement('D', ofBlock(sBlockCasingsTT, 4))
+                                       .addElement('E', ofBlock(sBlockCasingsTT, 6))
+                                       .addElement('F', ofBlock(sBlockCasingsTT, 9))
+                                       .addElement('G', ofBlock(sBlockCasingsTT, 10))
+                                       .addElement('H', ofBlock(sBlockCasingsTT, 12))
+                                       .addElement('I', ofBlock(sBlockCasingsTT, 14))
+                                       .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                                       .addElement('K', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                                       .addElement('L',
+                                                   GT_HatchElementBuilder
+                                                       .<TST_MiracleDoor>builder()
+                                                       .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                                                       .adder(TST_MiracleDoor::addToMachineList)
+                                                       .dot(1)
+                                                       .casingIndex(1024+12)
+                                                       .buildAndChain(sBlockCasingsTT, 12))
+                                       .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 /*
 Blocks:

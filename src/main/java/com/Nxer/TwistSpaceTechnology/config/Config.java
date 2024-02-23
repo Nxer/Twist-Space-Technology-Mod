@@ -33,6 +33,7 @@ public class Config {
     public static final String ThermalEnergyDevourer = "ThermalEnergyDevourer";
     public static final String VacuumFilterExtractor = "VacuumFilterExtractor";
     public static final String MEG = "TowerOFAbstraction";
+    public static final String BeeEngineer = "BeeEngineer";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -46,6 +47,7 @@ public class Config {
     // endregion
 
     // region Dyson Sphere Program
+    public static boolean EnableDysonSphereProgramSystem = true;
     public static long EUPerCriticalPhoton = Integer.MAX_VALUE;
     public static long solarSailPowerPoint = 524288;
     public static BigInteger solarSailPowerPoint_BigInteger = BigInteger.valueOf(524288);
@@ -225,6 +227,14 @@ public class Config {
     public static float EuModifier_VacuumFilterExtractor = 0.5F;
     // endregion
 
+    // region BeeEngineer
+    public static double BE_pChance = 0.4;
+    public static double BE_pChanceEnhanced = 0.8;
+    public static int BE_pHoneyCost = 128000;
+    public static int BE_pUUMCost = 32000;
+    public static int BE_pEachProcessTime = 20 * 10;
+    // endregion
+
     // region Infinite Air Hatch
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
@@ -377,6 +387,7 @@ public class Config {
         // endregion
 
         // region DSP
+        EnableDysonSphereProgramSystem = configuration.getBoolean("EnableDysonSphereProgramSystem", DSP, EnableDysonSphereProgramSystem, "Enable Dyson Sphere Program System. Type: boolean");
         EUPerCriticalPhoton = Long.parseLong(configuration.getString("EUPerCriticalPhoton", DSP, String.valueOf(EUPerCriticalPhoton), "EU per Critical Photon Cost. Type: long"));
         solarSailPowerPoint = Long.parseLong(configuration.getString("solarSailPowerPoint", DSP, String.valueOf(solarSailPowerPoint), "DSP Power Point per Solar Sail can produce. Type: long"));
         solarSailPowerPoint_BigInteger = BigInteger.valueOf(solarSailPowerPoint);
@@ -424,6 +435,14 @@ public class Config {
         MEG_Efficiency_Lost = configuration.getInt("MEG_Efficiency_Lost", MEG, 500, 0, Integer.MAX_VALUE, "Every n empty position bring n*this max efficiency loss");
         MEG_Overall_Multiply = Double.parseDouble(configuration.getString("MEG_Overall_Multiply", MEG, String.valueOf(MEG_Overall_Multiply), "Overall multiply of EUt, type: double"));
         MEG_Rotation = configuration.getBoolean("MEG_Rotation", MEG, false, "If rotation allowed");
+        // endregion
+
+        // region Bee Engineer
+        BE_pChance = Double.parseDouble(configuration.getString("BE_pChance", BeeEngineer, String.valueOf(BE_pChance), "Chance to successfully transform, type: double, 0.0 - 1.0"));
+        BE_pChanceEnhanced = Double.parseDouble(configuration.getString("BE_pChanceEnhanced", BeeEngineer, String.valueOf(BE_pChanceEnhanced), "Chance to successfully transform with UUM, type: double, 0.0 - 1.0"));
+        BE_pHoneyCost = configuration.getInt("BE_pHoneyCost", BeeEngineer, BE_pHoneyCost, 0, Integer.MAX_VALUE, "Honey needed for each try to transform drone.");
+        BE_pUUMCost = configuration.getInt("BE_pUUMCost", BeeEngineer, BE_pUUMCost, 0, Integer.MAX_VALUE, "UUM needed for each try to enhance.");
+        BE_pEachProcessTime = configuration.getInt("BE_pEachProcessTime", BeeEngineer, BE_pEachProcessTime, 1, 65536 * 20, "Time needed for each try to transform drone, in ticks.");
         // endregion
 
         if (configuration.hasChanged()) {

@@ -16,6 +16,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LargeIndustrialCokingFactory;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LaserSmartNode;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
@@ -64,6 +65,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.CustomItemList.AutoclaveUHV;
+import static com.dreammaster.gthandler.CustomItemList.Casing_UEV;
 import static com.dreammaster.gthandler.CustomItemList.CentrifugeUV;
 import static com.dreammaster.gthandler.CustomItemList.CompressorUHV;
 import static com.dreammaster.gthandler.CustomItemList.CuttingMachineUHV;
@@ -86,6 +88,7 @@ import static com.dreammaster.gthandler.CustomItemList.WiremillUV;
 import static com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry.megaMachines;
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
+import static com.github.technus.tectech.thing.CustomItemList.LASERpipe;
 import static com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Transformer;
 import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8;
 import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8;
@@ -102,6 +105,7 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Contai
 import static com.github.technus.tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static gregtech.api.enums.Mods.GTPlusPlus;
+import static gregtech.api.util.GT_ModHandler.addCraftingRecipe;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
@@ -113,6 +117,8 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Spe
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 
 import net.glease.ggfab.GGItemList;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -1583,6 +1589,22 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(assembler);
         // endregion
 
+        // region LaserSmartPipe
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                LASERpipe.get(32),
+                Laser_Lens_Special.get(0),
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1},
+                Casing_UEV.get(1)
+            )
+            .fluidInputs(MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144))
+            .itemOutputs(LaserSmartNode.get(1))
+            .eut(RECIPE_UHV)
+            .duration(20*5)
+            .addTo(assembler);
+        // endregion
+
         // region VacuumFilterExtractor
         GT_Values.RA
             .stdBuilder()
@@ -1614,6 +1636,31 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UEV)
             .duration(20*900)
             .addTo(AssemblyLine);
+        // endregion
+
+        // region Eye of Wood
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(17),
+                new ItemStack(Items.golden_apple, 1, 1),
+                ItemList.Emitter_LV.get(64),
+                ItemList.Field_Generator_LV.get(64),
+                new Object[]{OrePrefixes.circuit.get(Materials.Basic), 64}
+            )
+            .itemOutputs(GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.get(1))
+            .eut(RECIPE_LV)
+            .duration(20*114)
+            .addTo(assembler);
+
+        addCraftingRecipe(
+            GTCMItemList.EyeOfWood.get(1),
+            new Object[] { "ABA", "BCB", "ABA",
+                'A', new ItemStack(Blocks.brick_block),
+                'B', "plankWood",
+                'C', GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.get(1)
+            });
+
         // endregion
 
     }
