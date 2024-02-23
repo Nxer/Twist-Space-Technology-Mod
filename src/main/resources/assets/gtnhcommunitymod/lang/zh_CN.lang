@@ -295,6 +295,7 @@ TST_ArtificialStar.getInfoData.05=回收原料几率
 TST_DSPReceiver.getInfoData.01=实际接收 EU/t: 
 TST_DSPReceiver.getInfoData.02=已占用产能点数: 
 TST_DSPReceiver.getInfoData.03=引力透镜增强模式剩余时间: 
+TST_DSPReceiver.getInfoData.04=过载倍率: 
 DSPDataCell.getInfoData=戴森球信息: 
 NEI.AntimatterFuelRodGeneratingRecipe.01=有概率回收部分材料. 概率受模块等级影响.
 TST_DSPLauncher.getInfoData.01=剩余过载时间: 
@@ -336,6 +337,8 @@ Tooltip_DSPReceiver_02_03=每个引力透镜可以提供 (默认) 10 分钟的�
 Tooltip_DSPReceiver_02_04=输入的引力透镜会立刻被消耗.
 Tooltip_DSPReceiver_02_05=转换成剩余的增强模式时间.
 Tooltip_DSPReceiver_02_06=请求比率 = 编程电路编号 / 堆叠数量
+Tooltip_DSPReceiver_02_07=在控制器内放入 §b§l§o星阵§7 可以使此机器请求超过1024A Max的能量点数.
+Tooltip_DSPReceiver_02_08=最终请求能量点数上限 = 星阵数量 * 1024A Max
 Tooltip_ArtificialStar_MachineType=戴森球计划: 湮灭发电机
 Tooltip_ArtificialStar_00=§d§l你只需要让正反质子束从两端静静地穿
 Tooltip_ArtificialStar_01=§d§l 过磁场进入约束球就可以了, 轻松愉快!

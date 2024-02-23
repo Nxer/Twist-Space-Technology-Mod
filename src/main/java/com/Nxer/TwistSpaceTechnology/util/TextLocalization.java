@@ -373,6 +373,8 @@ public class TextLocalization {
     public static final String Tooltip_DSPReceiver_02_04 = texter("Input Gravitational Lens will be consumed immediately.","Tooltip_DSPReceiver_02_04");
     public static final String Tooltip_DSPReceiver_02_05 = texter("Converted to remaining time of intensify mode.","Tooltip_DSPReceiver_02_05");
     public static final String Tooltip_DSPReceiver_02_06 = texter("Requesting ratio = Integrated Circuit Number / Stack Size","Tooltip_DSPReceiver_02_06");
+    public static final String Tooltip_DSPReceiver_02_07 = texter("Put §b§l§oAstral Array Fabricator§7 into controller slot then this machine can request over 1024A Max power point.","Tooltip_DSPReceiver_02_07");
+    public static final String Tooltip_DSPReceiver_02_08 = texter("Final requesting power point limit = Astral Array Fabricator amount * 1024A Max","Tooltip_DSPReceiver_02_08");
 
     // endregion
 
