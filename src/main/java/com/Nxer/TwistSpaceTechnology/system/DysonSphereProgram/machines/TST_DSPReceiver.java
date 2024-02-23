@@ -24,6 +24,8 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPRec
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_04;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_05;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_06;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_07;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_08;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_03;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_04;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_05;
@@ -38,6 +40,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_Curre
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
+import static com.github.technus.tectech.thing.CustomItemList.astralArrayFabricator;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -119,6 +122,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     // region Processing Logic
 
+    private static ItemStack ASTRAL_ARRAY_FABRICATOR;
     private String ownerName; // init when load world
     private UUID ownerUUID; // init when load world
     private byte mode = 0;
@@ -127,6 +131,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     private long storageEU = 0;
     private long gravitationalLensTime = 0;
     private boolean wirelessMode = true;
+    private int astralArrayOverloadMultiplier = 1;
     private int dimID; // init when load world
     private double stellarAndPlanetCoefficient = 0;
     private DSP_DataCell dspDataCell; // init when load world
@@ -141,7 +146,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     public String[] getInfoData() {
         // spotless:off
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 6];
+        String[] ret = new String[origin.length + 7];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.GOLD + texter("Generating EU/t: ", "TST_DSPReceiver.getInfoData.01")
             + EnumChatFormatting.RESET
@@ -151,9 +156,10 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             + EnumChatFormatting.RESET
             + usedPowerPoint;
         ret[origin.length + 2] = EnumChatFormatting.GOLD + texter("Gravitational Lens Intensify Mode remaining time: ","TST_DSPReceiver.getInfoData.03") + EnumChatFormatting.RESET + (gravitationalLensTime/20) + " s";
-        ret[origin.length + 3] = EnumChatFormatting.GOLD + infoText_CurrentStellarCoefficient + EnumChatFormatting.RESET + dspDataCell.getGalaxy() + " -> " + EnumChatFormatting.YELLOW + dspDataCell.getGalaxy().stellarCoefficient;
-        ret[origin.length + 4] = EnumChatFormatting.GOLD + infoText_CurrentPlanetCoefficient + EnumChatFormatting.RESET + DSP_Planet.getPlanetFromDimID(dimID) + " -> " + EnumChatFormatting.YELLOW + DSP_Planet.getPlanetaryCoefficientWithDimID(dimID);
-        ret[origin.length + 5] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
+        ret[origin.length + 3] = EnumChatFormatting.GOLD + texter("Overload Multiplier: ", "TST_DSPReceiver.getInfoData.04") + EnumChatFormatting.RESET + astralArrayOverloadMultiplier;
+        ret[origin.length + 4] = EnumChatFormatting.GOLD + infoText_CurrentStellarCoefficient + EnumChatFormatting.RESET + dspDataCell.getGalaxy() + " -> " + EnumChatFormatting.YELLOW + dspDataCell.getGalaxy().stellarCoefficient;
+        ret[origin.length + 5] = EnumChatFormatting.GOLD + infoText_CurrentPlanetCoefficient + EnumChatFormatting.RESET + DSP_Planet.getPlanetFromDimID(dimID) + " -> " + EnumChatFormatting.YELLOW + DSP_Planet.getPlanetaryCoefficientWithDimID(dimID);
+        ret[origin.length + 6] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
             + EnumChatFormatting.RESET
             + dspDataCell;
         return ret;
@@ -232,14 +238,24 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         ItemStack controllerStack = getControllerSlot();
         long maxPowerPointLimit = dspDataCell.getMaxDSPPowerPoint();
         long canUse = dspDataCell.getDSPPowerPointCanUse();
-        if (controllerStack != null && controllerStack.getItem() instanceof GT_IntegratedCircuit_Item) {
+
+        if (controllerStack == null) {
+            // normal
+            astralArrayOverloadMultiplier = 1;
+            return Math.min(DSP_Values.maxPowerPointPerReceiver, canUse);
+        } else if (controllerStack.getItem() instanceof GT_IntegratedCircuit_Item) {
+            // use integrated circuit to limit
             double multiplier = Math
                 .min(1, ((double) controllerStack.getItemDamage()) / ((double) controllerStack.stackSize));
             long limited = (long) (multiplier * maxPowerPointLimit);
+            astralArrayOverloadMultiplier = 1;
             return Math.min(DSP_Values.maxPowerPointPerReceiver, Math.min(limited, canUse));
-        } else if (controllerStack == null) {
-            return Math.min(DSP_Values.maxPowerPointPerReceiver, canUse);
+        } else if (metaItemEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
+            // use Astral Array Fabricator to overload over max input limitation
+            astralArrayOverloadMultiplier = controllerStack.stackSize * 2;
+            return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
         } else {
+            astralArrayOverloadMultiplier = 1;
             return 0;
         }
     }
@@ -270,6 +286,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             dspDataCell.setUsedPowerPointUnsafely(0);
         }
         usedPowerPoint = 0;
+        astralArrayOverloadMultiplier = 1;
     }
 
     @Override
@@ -279,9 +296,24 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     }
 
     private void syncDSPData() {
-        if (this.dataSyncFlag == dspDataCell.getDataSyncFlag()) return;
-        this.stopUsingDSP();
-        this.startUsingDSP();
+        if (this.dataSyncFlag != dspDataCell.getDataSyncFlag()) {
+            this.stopUsingDSP();
+            this.startUsingDSP();
+            return;
+        }
+
+        final ItemStack controllerSlot = getControllerSlot();
+        if (astralArrayOverloadMultiplier > 1) {
+            if (controllerSlot == null || !metaItemEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)
+                || controllerSlot.stackSize * 2 != astralArrayOverloadMultiplier) {
+                this.stopUsingDSP();
+                this.startUsingDSP();
+            }
+        } else if (controllerSlot != null && metaItemEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)) {
+            this.stopUsingDSP();
+            this.startUsingDSP();
+        }
+
     }
 
     @NotNull
@@ -331,6 +363,9 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
+        if (ASTRAL_ARRAY_FABRICATOR == null) {
+            ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
+        }
         if (aBaseMetaTileEntity.isServerSide()) {
             this.baseMetaTileEntity = aBaseMetaTileEntity;
             this.dimID = getDimID(aBaseMetaTileEntity);
@@ -587,6 +622,8 @@ Q -> ofFrame...(NaquadahAlloy, ...);
             .addStructureInfo(Tooltip_DSPReceiver_02_03)
             .addStructureInfo(Tooltip_DSPReceiver_02_04)
             .addStructureInfo(Tooltip_DSPReceiver_02_05)
+            .addStructureInfo(Tooltip_DSPReceiver_02_07)
+            .addStructureInfo(Tooltip_DSPReceiver_02_08)
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             .addStructureInfo(DSPName + ":")
             .addStructureInfo(Tooltip_DSPInfo_launch_01)

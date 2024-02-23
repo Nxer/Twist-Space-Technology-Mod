@@ -295,6 +295,7 @@ TST_ArtificialStar.getInfoData.05=Chance of material recovery
 TST_DSPReceiver.getInfoData.01=Receiving EU/t: 
 TST_DSPReceiver.getInfoData.02=Used Energy Credit: 
 TST_DSPReceiver.getInfoData.03=Graviton Lens enhancement mode remaining time: 
+TST_DSPReceiver.getInfoData.04=Overload Multiplier: 
 DSPDataCell.getInfoData=Dyson Sphere Data: 
 NEI.AntimatterFuelRodGeneratingRecipe.01=Chance to recover some raw materials. Probability is affected by module tier.
 TST_DSPLauncher.getInfoData.01=Remaining overload time: 
@@ -336,6 +337,8 @@ Tooltip_DSPReceiver_02_03=Every Graviton Lens will provide 10 minutes (by defaul
 Tooltip_DSPReceiver_02_04=Graviton Lens will be consumed immediately upon input.
 Tooltip_DSPReceiver_02_05=Converted to enhancement mode duration.
 Tooltip_DSPReceiver_02_06=Request ratio = Programmed Circuit Number / Stack Size
+Tooltip_DSPReceiver_02_07=Put §b§l§oAstral Array Fabricator§7 into controller slot then this machine can request over 1024A Max power point.
+Tooltip_DSPReceiver_02_08=Final requesting power point limit = Astral Array Fabricator amount * 1024A Max
 Tooltip_ArtificialStar_MachineType=Dyson Sphere Program: Annihilation Generator
 Tooltip_ArtificialStar_00=§d§lAll you have to do is just let the positive and negative proton beams pass
 Tooltip_ArtificialStar_01=§d§l silently through the magnetic field from both ends into the confining sphere, easy peasy!
