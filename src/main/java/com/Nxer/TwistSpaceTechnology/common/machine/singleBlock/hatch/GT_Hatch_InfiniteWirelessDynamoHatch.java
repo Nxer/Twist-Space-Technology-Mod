@@ -35,6 +35,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
 
     // region IO info
     private String owner_uuid;
+    private String owner_name;
 
     @Override
     public long getMinimumStoredEU() {
@@ -64,8 +65,9 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
             // UUID and username of the owner.
             this.owner_uuid = aBaseMetaTileEntity.getOwnerUuid()
                 .toString();
+            owner_name = aBaseMetaTileEntity.getOwnerName();
 
-            strongCheckOrAddUser(UUID.fromString(owner_uuid));
+            strongCheckOrAddUser(owner_uuid, owner_name);
         }
     }
 
@@ -76,7 +78,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
         if (aBaseMetaTileEntity.isServerSide()) {
             // Every ticks_between_energy_addition ticks change the energy content of the machine.
             if (aTick % ticks_between_energy_addition == 0L) {
-                addEUToGlobalEnergyMap(UUID.fromString(owner_uuid), getEUVar());
+                addEUToGlobalEnergyMap(owner_uuid, getEUVar());
                 setEUVar(0L);
             }
         }
