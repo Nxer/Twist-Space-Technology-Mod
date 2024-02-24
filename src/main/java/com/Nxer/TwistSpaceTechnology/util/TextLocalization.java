@@ -680,6 +680,17 @@ public class TextLocalization {
     public static final String Tooltip_BeeEngineer_05 = texter("Will try to consume 32kL UUM (if exists) to increase success rate to 80%.", "Tooltip_BeeEngineer_05");
     public static final String Tooltip_BeeEngineer_06 = texter("In case of failure, all consumed ingredients will not be returned.", "Tooltip_BeeEngineer_06");
     public static final String Tooltip_BeeEngineer_07 = texter("Don't put too many drones in at once, that will result in a long run time!", "Tooltip_BeeEngineer_07");
+
+    // region Mega Macerator
+    public static final String NameMegaMacerator = texter("\"Mini\" Household Cell Fragmentizer", "NameMegaMacerator");
+    public static final String Tooltip_MegaMacerator_MachineType = texter("Macerator", "Tooltip_MegaMacerator_Type");
+    public static final String Tooltip_MegaMacerator_Controller = texter("Controller block of the \"Mini\" Household Cell Fragmentizer", "Tooltip_MegaMacerator_Controller");
+    public static final String Tooltip_MegaMacerator_01 = texter("Text1.", "Tooltip_MegaMacerator_01");
+    public static final String Tooltip_MegaMacerator_02 = texter("Text2.", "Tooltip_MegaMacerator_02");
+    public static final String Tooltip_MegaMacerator_03 = texter("Text3.", "Tooltip_MegaMacerator_03");
+    public static final String Tooltip_MegaMacerator_04 = texter("Text4.", "Tooltip_MegaMacerator_04");
+    public static final String Tooltip_MegaMacerator_05 = texter("Text5.", "Tooltip_MegaMacerator_05");
+
     // endregion
 
 }

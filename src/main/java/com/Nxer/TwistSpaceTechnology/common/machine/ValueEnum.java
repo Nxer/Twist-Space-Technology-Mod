@@ -224,6 +224,11 @@ public final class ValueEnum {
     public static final int BE_pEachProcessTime = Config.BE_pEachProcessTime;
     // endregion
 
+    // region Mega Macerator
+    public static final float speedMultiplier_MegaMacerator = Config.MM_speedBouns;
+    public static final float EuModifier_MegaMacerator = Config.MM_EuModifier;
+    public static final boolean EnablePerfectOverclock_MegaMacerator = Config.MM_EnablePerfectOverclock;
+
     // region Infinite Air Hatch
     public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
     // endregion

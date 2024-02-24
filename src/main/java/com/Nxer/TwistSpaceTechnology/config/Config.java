@@ -235,12 +235,19 @@ public class Config {
     public static int BE_pEachProcessTime = 20 * 10;
     // endregion
 
+    // region Mega Macerator
+    public static float MM_speedBouns = 1;
+    public static float MM_EuModifier = 1;
+    public static boolean MM_EnablePerfectOverclock=false;
     // region Infinite Air Hatch
+
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
 
     public static boolean activateMegaSpaceStation=false;
     public static boolean activateCombatStats=false;
+
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
