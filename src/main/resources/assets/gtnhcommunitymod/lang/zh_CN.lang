@@ -585,6 +585,7 @@ Tooltip_MegaBrickedBlastFurnace_05=焦煤的最低需求量: 2 x 处理的(锻)�
 Tooltip_MegaBrickedBlastFurnace_06=需要连续运行§c8§7小时来达到最大效率.
 Tooltip_MegaBrickedBlastFurnace_07=最多可使焦煤的使用效率提高至§c800%%§7,降低焦煤最低需求量并计入处理时间计算
 Tooltip_MegaBrickedBlastFurnace_08=§e建议在你有充足的资源之前不要强迫自己建造它!
+Tooltip_MegaBrickedBlastFurnace_09=使用螺丝刀切换到土高模式以处理原本的土高炉配方，但不再能通过锻铁加速
 textMegaBrickedBlastFurnaceTips=§e泥土必须为Chisel模组中的水平花纹泥土!
 textMegaBrickedBlastFurnaceLocation=任意镀铜机械方块, 0-6x
 MetaItemRune.0.name=恂戒符文

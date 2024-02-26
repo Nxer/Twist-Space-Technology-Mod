@@ -585,6 +585,7 @@ Tooltip_MegaBrickedBlastFurnace_05=Minimum coke coal requirement: 2 x (wrought) 
 Tooltip_MegaBrickedBlastFurnace_06=Takes §c8§7 hours of continuous run time to achieve maximum efficiency.
 Tooltip_MegaBrickedBlastFurnace_07=This improve coal efficiency by up to §c800%%§7. Reduce minimum coal requirement and calculate actual processing time accordingly.
 Tooltip_MegaBrickedBlastFurnace_08=§eIt is recommended that you don't force yourself to build it until you have sufficient resources to do so.
+Tooltip_MegaBrickedBlastFurnace_09=Use a screwdriver to switch to primitive mode so you can process all primitive recipes here, but you cannot use wrought iron anymore
 textMegaBrickedBlastFurnaceTips=§eDirt must be Horizontal dirt in Chisel Mod!
 textMegaBrickedBlastFurnaceLocation=Any Bronze Plated Bricks, 0-6x
 MetaItemRune.0.name=Rune of Vigilance

@@ -7,10 +7,13 @@ import static gregtech.api.enums.Mods.Chisel;
 import static gregtech.api.enums.Textures.BlockIcons;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.util.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -23,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.google.common.collect.Sets;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -35,13 +39,13 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ChunkManager;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMapBackend;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.*;
 import gregtech.common.GT_Pollution;
 
 public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase<GT_TileEntity_MegaBrickedBlastFurnace>
@@ -58,6 +62,12 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     // coke coal
     private static ItemStack cokeCoal;
     private static ItemStack cokeCoalBlock;
+
+    private boolean usePrimitiveRecipes = false;
+
+    // needed to calculate fuel/material ratio
+    private static Set<ItemWithDamage> fuels;
+
     // irons
     private static ItemStack iron;
     private static ItemStack wroughtIron;
@@ -71,6 +81,29 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         if (cokeCoal == null) cokeCoal = Materials.Coal.getGems(1);
         cokeCoalBlock = GT_ModHandler.getModItem("Railcraft", "cube", 1);
         if (cokeCoalBlock == null) cokeCoalBlock = Materials.Coal.getBlocks(1);
+
+        ItemStack charCoal = Materials.Charcoal.getGems(1);
+        ItemStack charCoalBlock = Materials.Charcoal.getBlocks(1);
+        ItemStack dustCoal = Materials.Coal.getDust(1);
+        ItemStack dustCharCoal = Materials.Charcoal.getDust(1);
+        ItemStack cactusCoke = GT_ModHandler.getModItem("miscutils", "itemCactusCoke", 1);
+        ItemStack cactusCharCoal = GT_ModHandler.getModItem("miscutils", "itemCactusCharcoal", 1);
+        ItemStack sugarCharCoal = GT_ModHandler.getModItem("miscutils", "itemSugarCharcoal", 1);
+        ItemStack sugarCoke = GT_ModHandler.getModItem("miscutils", "itemSugarCoke", 1);
+
+        fuels = Sets.newHashSet(
+            new ItemWithDamage(cokeCoal.getItem(), cokeCoal.getItemDamage()),
+            new ItemWithDamage(cokeCoalBlock.getItem(), cokeCoal.getItemDamage()),
+            new ItemWithDamage(cokeCoal.getItem(), cokeCoal.getItemDamage()),
+            new ItemWithDamage(dustCoal.getItem(), dustCoal.getItemDamage()),
+            new ItemWithDamage(charCoal.getItem(), charCoal.getItemDamage()),
+            new ItemWithDamage(charCoalBlock.getItem(), charCoalBlock.getItemDamage()),
+            new ItemWithDamage(dustCharCoal.getItem(), dustCharCoal.getItemDamage()),
+            new ItemWithDamage(cactusCoke.getItem(), cactusCoke.getItemDamage()),
+            new ItemWithDamage(cactusCharCoal.getItem(), cactusCharCoal.getItemDamage()),
+            new ItemWithDamage(sugarCharCoal.getItem(), sugarCharCoal.getItemDamage()),
+            new ItemWithDamage(sugarCoke.getItem(), sugarCoke.getItemDamage()));
+
         iron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L);
         wroughtIron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.WroughtIron, 1L);
         steel = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L);
@@ -548,6 +581,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_06)
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_07)
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_08)
+            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_09)
             .addPollutionAmount(getPollutionPerSecond(null))
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
@@ -557,6 +591,15 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             .addOutputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
+    }
+
+    @Override
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        usePrimitiveRecipes = !usePrimitiveRecipes;
+        GT_Utility.sendChatToPlayer(
+            aPlayer,
+            usePrimitiveRecipes ? "Now Bricked DTPF accepts primitive blast furnace recipes"
+                : "Now Bricked DTPF only accepts iron/wrought iron and charcoal");
     }
 
     @Override
@@ -578,6 +621,121 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         return STRUCTURE_DEFINITION;
     }
 
+    private GT_Recipe findRecipe(ArrayList<ItemStack> inputList) {
+        RecipeMap<RecipeMapBackend> primitiveBlastRecipes = RecipeMaps.primitiveBlastRecipes;
+        ItemStack[] inputArr = inputList.toArray(new ItemStack[inputList.size()]);
+        return primitiveBlastRecipes.findRecipe(null, false, 0, null, inputArr);
+    }
+
+    /*
+     * calculate parallelism, material/fuel ratio
+     * if there're multiple materials, use that of the largest amount
+     */
+    static MaterialConsumption calculateMaterialConsumption(GT_Recipe recipe, List<ItemStack> inputList) {
+        // merge stacks
+        MaterialConsumption result = new MaterialConsumption();
+        Map<ItemWithDamage, Integer> itemCountInput = new HashMap<>();
+        Map<ItemWithDamage, Integer> recipeItems = new HashMap<>();
+
+        int recipefuelAmount = 0;
+        ItemWithDamage fuelItem = null;
+        for (ItemStack ingredient : recipe.mInputs) {
+            if (ingredient != null) {
+                ItemWithDamage itemWithDamage = new ItemWithDamage(ingredient.getItem(), ingredient.getItemDamage());
+                recipeItems.put(itemWithDamage, ingredient.stackSize);
+                if (fuels.contains(itemWithDamage)) {
+                    recipefuelAmount = ingredient.stackSize;
+                    fuelItem = itemWithDamage;
+                }
+            }
+        }
+
+        for (ItemStack ingredient : recipe.mInputs) {
+            if (ingredient != null) {
+                ItemWithDamage itemWithDamage = new ItemWithDamage(ingredient.getItem(), ingredient.getItemDamage());
+                if (!fuels.contains(itemWithDamage)) {
+                    result.originalRatio.put(itemWithDamage, ingredient.stackSize / (double) recipefuelAmount);
+                }
+            }
+        }
+
+        for (ItemStack itemStack : inputList) {
+            ItemWithDamage itemWithDamage = new ItemWithDamage(itemStack.getItem(), itemStack.getItemDamage());
+            int itemCount = itemCountInput.getOrDefault(itemWithDamage, 0) + itemStack.stackSize;
+            itemCountInput.put(itemWithDamage, itemCount);
+        }
+
+        // get parallelism
+        int fuelAmount = itemCountInput.get(fuelItem);
+        int parallelism = Integer.MAX_VALUE;
+        for (ItemWithDamage item : recipeItems.keySet()) {
+            if (item != null) {
+                parallelism = Math.min(itemCountInput.get(item) / recipeItems.get(item), parallelism);
+                if (!fuels.contains(item)) {
+                    result.actualRatio.put(item, itemCountInput.get(item) / (double) fuelAmount);
+                }
+            }
+        }
+        result.parallelism = parallelism;
+        result.fuelToBeConsumed = new ItemStack(fuelItem.item, fuelAmount, fuelItem.damage);
+
+        for (ItemStack ingredient : recipe.mInputs) {
+            if (ingredient != null) {
+                ItemWithDamage itemWithDamage = new ItemWithDamage(ingredient.getItem(), ingredient.getItemDamage());
+                if (!fuels.contains(itemWithDamage)) {
+                    result.materialToBeConsumed
+                        .add(new ItemStack(ingredient.getItem(), parallelism * ingredient.stackSize));
+                }
+            }
+        }
+        return result;
+    }
+
+    public ItemStack[] getPrimitiveOutputs(GT_Recipe recipe, int parallelism) {
+        List<ItemStack> result = new ArrayList<>();
+        for (ItemStack output : recipe.mOutputs) {
+            if (output != null) {
+                int count = output.stackSize * parallelism;
+                while (count > 0) {
+                    ItemStack copy = output.copy();
+                    copy.stackSize = Math.min(64, count);
+                    result.add(copy);
+                    count -= 64;
+                }
+            }
+        }
+        return result.toArray(new ItemStack[0]);
+    }
+
+    public void consumePrimitiveInput(MaterialConsumption materialConsumption, List<ItemStack> inputList) {
+        for (int i = 0; i < inputList.size(); i++) {
+            ItemStack input = inputList.get(i);
+            if (input != null) {
+                if (input.getItem() == materialConsumption.fuelToBeConsumed.getItem()
+                    && input.getItemDamage() == materialConsumption.fuelToBeConsumed.getItemDamage()) {
+                    input.stackSize = 0;
+                }
+            }
+        }
+        for (ItemStack toBeConsumed : materialConsumption.materialToBeConsumed) {
+            int consumeSize = toBeConsumed.stackSize;
+            while (consumeSize > 0) {
+                int consumeThisTime = Math.min(64, consumeSize);
+                for (int i = 0; i < inputList.size(); i++) {
+                    ItemStack input = inputList.get(i);
+                    if (input != null && input.getItem() == toBeConsumed.getItem()
+                        && input.getItemDamage() == toBeConsumed.getItemDamage()) {
+                        input.stackSize -= consumeThisTime;
+                        if (input.stackSize <= 0) {
+                            input.stackSize = 0;
+                        }
+                    }
+                }
+                consumeSize -= 64;
+            }
+        }
+    }
+
     @Override
     @NotNull
     public CheckRecipeResult checkProcessing() {
@@ -586,67 +744,105 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             resetEfficiency();
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
+        if (usePrimitiveRecipes) {
+            GT_Recipe recipe = findRecipe(tInputList);
+            if (recipe == null) return CheckRecipeResultRegistry.NO_RECIPE;
+            MaterialConsumption materialConsumption = calculateMaterialConsumption(recipe, tInputList);
+            double time_percentage = running_time / max_efficiency_time_in_ticks;
+            time_percentage = Math.min(time_percentage, 1.0d);
+            fuelEfficiency = 1 + time_percentage * 7;
+            fuelEfficiency = Math.min(maximum_fuelEfficiency, fuelEfficiency);
 
-        int coalAmount = 0;
-        int ironAmount = 0;
-        int wroughtIronAmount = 0;
-        double originalDuration = 240d * 20d;
+            ItemStack fuelToBeConsumed = materialConsumption.fuelToBeConsumed;
 
-        for (ItemStack item : tInputList) {
-            if (item != null) {
-                if (item.isItemEqual(cokeCoal)) {
-                    coalAmount += item.stackSize;
-                } else if (item.isItemEqual(cokeCoalBlock)) {
-                    // Every coal block is considered as 10 coal
-                    coalAmount += item.stackSize * 10;
-                } else if (item.isItemEqual(iron)) {
-                    ironAmount += item.stackSize;
-                } else if (item.isItemEqual(wroughtIron)) {
-                    wroughtIronAmount += item.stackSize;
+            for (ItemWithDamage item : materialConsumption.actualRatio.keySet()) {
+                double originalRatio = materialConsumption.originalRatio.get(item);
+                double actualRatio = materialConsumption.actualRatio.get(item);
+                if (actualRatio > originalRatio) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
                 }
             }
+
+            int consumeTotalMaterial = 0;
+            for (ItemStack itemStack : materialConsumption.materialToBeConsumed) {
+                consumeTotalMaterial += itemStack.stackSize;
+            }
+
+            mEfficiency = 10000;
+            mEfficiencyIncrease = 10000;
+            mOutputItems = getPrimitiveOutputs(recipe, materialConsumption.parallelism);
+            mMaxProgresstime = calculateDuration(
+                recipe.mDuration,
+                0,
+                consumeTotalMaterial,
+                (int) (fuelToBeConsumed.stackSize * fuelEfficiency));
+            consumePrimitiveInput(materialConsumption, tInputList);
+
+            updateSlots();
+            running_time += mMaxProgresstime;
+            return CheckRecipeResultRegistry.SUCCESSFUL;
+        } else {
+            int coalAmount = 0;
+            int ironAmount = 0;
+            int wroughtIronAmount = 0;
+            double originalDuration = 240d * 20d;
+
+            for (ItemStack item : tInputList) {
+                if (item != null) {
+                    if (item.isItemEqual(cokeCoal)) {
+                        coalAmount += item.stackSize;
+                    } else if (item.isItemEqual(cokeCoalBlock)) {
+                        // Every coal block is considered as 10 coal
+                        coalAmount += item.stackSize * 10;
+                    } else if (item.isItemEqual(iron)) {
+                        ironAmount += item.stackSize;
+                    } else if (item.isItemEqual(wroughtIron)) {
+                        wroughtIronAmount += item.stackSize;
+                    }
+                }
+            }
+            if (ironAmount == 0 && wroughtIronAmount == 0) {
+                return CheckRecipeResultRegistry.NO_RECIPE;
+            }
+            // Calculate fuel efficiency here.
+            //
+            // coal amount is considered as (original amount * fuelEfficiency)
+            // for recipe check and duration calculation, but it doesn't affect ash output.
+            //
+            // If running for max_efficiency_time_in_ticks then fuelEfficiency is at maximum.
+            double time_percentage = running_time / max_efficiency_time_in_ticks;
+            time_percentage = Math.min(time_percentage, 1.0d);
+            fuelEfficiency = 1 + time_percentage * 7;
+            fuelEfficiency = Math.min(maximum_fuelEfficiency, fuelEfficiency);
+
+            final int consumeTotalIron = Math.max((ironAmount + wroughtIronAmount) / 2, 1);
+            int consumeCoal = calculateConsumeCoal(coalAmount, consumeTotalIron);
+
+            if (coalAmount < consumeCoal) {
+                resetEfficiency();
+                return CheckRecipeResultRegistry.NO_RECIPE;
+            }
+
+            double WroughtIronRatio = (double) wroughtIronAmount / (ironAmount + wroughtIronAmount);
+
+            int consumeIron = (int) (consumeTotalIron * (1 - WroughtIronRatio));
+            int consumeWroughtIron = Math.min(consumeTotalIron - consumeIron, wroughtIronAmount);
+            consumeIron = consumeTotalIron - consumeWroughtIron;
+
+            mEfficiency = 10000;
+            mEfficiencyIncrease = 10000;
+            mOutputItems = calculateOutputs(consumeTotalIron, consumeCoal);
+            mMaxProgresstime = calculateDuration(
+                originalDuration,
+                WroughtIronRatio,
+                consumeTotalIron,
+                (int) (consumeCoal * fuelEfficiency));
+            consumeInputs(consumeIron, consumeWroughtIron, tInputList);
+
+            updateSlots();
+            running_time += mMaxProgresstime;
+            return CheckRecipeResultRegistry.SUCCESSFUL;
         }
-        if (ironAmount == 0 && wroughtIronAmount == 0) {
-            return CheckRecipeResultRegistry.NO_RECIPE;
-        }
-        // Calculate fuel efficiency here.
-        //
-        // coal amount is considered as (original amount * fuelEfficiency)
-        // for recipe check and duration calculation, but it doesn't affect ash output.
-        //
-        // If running for max_efficiency_time_in_ticks then fuelEfficiency is at maximum.
-        double time_percentage = running_time / max_efficiency_time_in_ticks;
-        time_percentage = Math.min(time_percentage, 1.0d);
-        fuelEfficiency = 1 + time_percentage * 7;
-        fuelEfficiency = Math.min(maximum_fuelEfficiency, fuelEfficiency);
-
-        final int consumeTotalIron = Math.max((ironAmount + wroughtIronAmount) / 2, 1);
-        int consumeCoal = calculateConsumeCoal(coalAmount, consumeTotalIron);
-
-        if (coalAmount < consumeCoal) {
-            resetEfficiency();
-            return CheckRecipeResultRegistry.NO_RECIPE;
-        }
-
-        double WroughtIronRatio = (double) wroughtIronAmount / (ironAmount + wroughtIronAmount);
-
-        int consumeIron = (int) (consumeTotalIron * (1 - WroughtIronRatio));
-        int consumeWroughtIron = Math.min(consumeTotalIron - consumeIron, wroughtIronAmount);
-        consumeIron = consumeTotalIron - consumeWroughtIron;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        mOutputItems = calculateOutputs(consumeTotalIron, consumeCoal);
-        mMaxProgresstime = calculateDuration(
-            originalDuration,
-            WroughtIronRatio,
-            consumeTotalIron,
-            (int) (consumeCoal * fuelEfficiency));
-        consumeInputs(consumeIron, consumeWroughtIron, tInputList);
-
-        updateSlots();
-        running_time += mMaxProgresstime;
-        return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
     protected ItemStack[] calculateOutputs(int consumeTotalIron, int consumeCoal) {
@@ -736,6 +932,11 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     }
 
     @Override
+    public void onWorldSave(File aSaveDirectory) {
+        super.onWorldSave(aSaveDirectory);
+    }
+
+    @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide() && !aBaseMetaTileEntity.isAllowedToWork()) {
             // If machine has stopped, stop chunkloading.
@@ -804,6 +1005,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setLong("eRunningTime", running_time);
         aNBT.setDouble("eLongEfficiencyValue", fuelEfficiency);
+        aNBT.setBoolean("usePrimitiveRecipes", usePrimitiveRecipes);
         super.saveNBTData(aNBT);
     }
 
@@ -811,6 +1013,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     public void loadNBTData(final NBTTagCompound aNBT) {
         running_time = aNBT.getLong("eRunningTime");
         fuelEfficiency = aNBT.getDouble("eLongEfficiencyValue");
+        usePrimitiveRecipes = aNBT.getBoolean("usePrimitiveRecipes");
         super.loadNBTData(aNBT);
     }
 
@@ -822,5 +1025,48 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     @Override
     public boolean supportsInputSeparation() {
         return false;
+    }
+
+    static class MaterialConsumption {
+
+        public int parallelism = 1;
+        Map<ItemWithDamage, Double> originalRatio = new HashMap<>();
+        Map<ItemWithDamage, Double> actualRatio = new HashMap<>();
+        List<ItemStack> materialToBeConsumed = new ArrayList<>();
+        ItemStack fuelToBeConsumed;
+    }
+
+    /*
+     * helper class used for hashing with items
+     */
+    static class ItemWithDamage {
+
+        public Item item;
+        public int damage;
+
+        public ItemWithDamage(Item item, int damage) {
+            this.item = item;
+            this.damage = damage;
+        }
+
+        @Override
+        public int hashCode() {
+            return 100 * damage + item.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null) {
+                return false;
+            }
+            if (o == this) {
+                return true;
+            }
+            if (!(o instanceof ItemWithDamage)) {
+                return false;
+            }
+            ItemWithDamage o1 = (ItemWithDamage) o;
+            return damage == o1.damage && item == o1.item;
+        }
     }
 }
