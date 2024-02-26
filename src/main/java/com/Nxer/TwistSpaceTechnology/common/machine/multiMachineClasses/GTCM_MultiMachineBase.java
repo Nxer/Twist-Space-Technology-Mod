@@ -184,6 +184,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     // region Overrides
     @Override
     public String[] getInfoData() {
+        String dSpeed = String.format("%.3f", this.getSpeedBonus() * 100) + "%";
+        String dEUMod = String.format("%.3f", this.getEuModifier() * 100) + "%";
+
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
@@ -194,11 +197,11 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         ret[origin.length + 1] = EnumChatFormatting.AQUA + texter("Speed multiplier", "MachineInfoData.SpeedMultiplier")
             + ": "
             + EnumChatFormatting.GOLD
-            + this.getSpeedBonus();
+            + dSpeed;
         ret[origin.length + 2] = EnumChatFormatting.AQUA + texter("EU Modifier", "MachineInfoData.EuModifier")
             + ": "
             + EnumChatFormatting.GOLD
-            + this.getEuModifier();
+            + dEUMod;
         return ret;
     }
 
