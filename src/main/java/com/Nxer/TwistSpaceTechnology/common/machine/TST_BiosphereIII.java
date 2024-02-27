@@ -462,6 +462,11 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     }
 
     @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
