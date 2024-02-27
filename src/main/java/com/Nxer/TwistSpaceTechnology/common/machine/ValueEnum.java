@@ -225,7 +225,9 @@ public final class ValueEnum {
     // endregion
 
     // region Mega Macerator
-    public static final float speedMultiplier_MegaMacerator = Config.MM_speedBouns;
+
+    public static final int BlockTier1Parallel_MegaMacerator = Config.MM_BlockTier1Parallel;
+    public static final int BlockTier2Parallel_MegaMacerator = Config.MM_BlockTier2Parallel;
     public static final float EuModifier_MegaMacerator = Config.MM_EuModifier;
     public static final boolean EnablePerfectOverclock_MegaMacerator = Config.MM_EnablePerfectOverclock;
 

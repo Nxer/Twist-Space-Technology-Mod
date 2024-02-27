@@ -1,53 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AdvancedMegaOilCracker;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BiosphereIII;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DebugUncertaintyHatch;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_IV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_LuV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_ZPM;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LargeIndustrialCokingFactory;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LaserSmartNode;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaBrickedBlastFurnace;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OpticalSOC;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OreProcessingFactory;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeEV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeHV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeIV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeLV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeLuV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeMAX;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeMV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUEV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUHV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUIV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUMV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUXV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeZPM;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhysicalFormSwitcher;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Scavenger;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ThermalEnergyDevourer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.VacuumFilterExtractor;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.*;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
@@ -135,7 +88,7 @@ import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
 import com.github.bartimaeusnek.bartworks.common.loaders.BioItemList;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import com.github.bartimaeusnek.bartworks.system.material.*;
 
 import appeng.items.materials.MaterialType;
 import goodgenerator.items.MyMaterial;
@@ -1663,6 +1616,29 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // endregion
 
+        // region Mega Macerator
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                GregtechItemList.Industrial_MacerationStack.get(64),
+                CustomItemList.MaceratorZPM.get(16),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 16},
+                WerkstoffLoader.HDCS.get(OrePrefixes.gearGt, 16),
+                WerkstoffLoader.AdemicSteel.get(OrePrefixes.gearGt, 16),
+
+                ItemList.Electric_Motor_UV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorZPM, 8),
+                MyMaterial.adamantiumAlloy.get(OrePrefixes.plateDense, 16)
+            )
+            .fluidInputs(new FluidStack(solderIndAlloy,144*64))
+            .itemOutputs(MegaMacerator.get(1))
+            .noOptimize()
+            .eut(RECIPE_ZPM)
+            .duration(20*300)
+            .addTo(assembler);
+        // endregion
     }
     // spotless:on
 }

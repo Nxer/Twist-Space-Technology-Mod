@@ -236,9 +236,11 @@ public class Config {
     // endregion
 
     // region Mega Macerator
-    public static float MM_speedBouns = 1;
-    public static float MM_EuModifier = 1;
+    public static int MM_BlockTier1Parallel = 128;
+    public static int MM_BlockTier2Parallel = 32768;
+    public static float MM_EuModifier = 0.90F;
     public static boolean MM_EnablePerfectOverclock=false;
+
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;

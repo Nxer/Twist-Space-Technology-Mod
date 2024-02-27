@@ -1,19 +1,44 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.*;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static gregtech.api.enums.GT_HatchElement.*;
-import static gregtech.api.enums.Textures.BlockIcons.*;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier1Parallel_MegaMacerator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier2Parallel_MegaMacerator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_MegaMacerator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_MegaMacerator;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.Maintenance;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.*;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
+import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -24,13 +49,17 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings4;
+import gregtech.common.blocks.GT_Block_Casings2;
 import gregtech.common.blocks.GT_Block_Casings8;
 
 public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> {
@@ -54,15 +83,8 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     // end region
 
     // region Processing Logic
-
+    private int mBlockTier = 0;
     public byte glassTier;
-
-    protected float speedBonus = 1;
-
-    @Override
-    protected float getEuModifier() {
-        return EuModifier_MegaMacerator;
-    }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -70,18 +92,79 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     }
 
     @Override
-    protected float getSpeedBonus() {
-        return speedMultiplier_MegaMacerator;
-    }
-
-    @Override
-    protected int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
+    protected float getEuModifier() {
+        return EuModifier_MegaMacerator;
     }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.maceratorRecipes;
+    }
+
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                setSpeedBonus(getSpeedBonus());
+                return super.process();
+            }
+
+            @Override
+            protected @NotNull CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
+                if (glassTier < 12 && glassTier < GT_Utility.getTier(recipe.mEUt) + 1) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt));
+                }
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    }
+
+    public float getSpeedBonus() {
+        // int mEuTier = GT_Utility.getTier(this.getMaxInputEu()) - 1;
+        // return (float) (Math.log(100 + exp(4 * 13 - mBlockTier * mEuTier))
+        // / Math.log(100 + exp(3 * 11 - mBlockTier * mEuTier))
+        // * Math.pow(1 / BlockspeedMultiplier_MegaMacerator, mBlockTier)
+        // * Math.pow(EuModifier_MegaMacerator, mEuTier));
+        return 1;
+    }
+
+    @Override
+    protected int getMaxParallelRecipes() {
+        switch (mBlockTier) {
+            case (1):
+                return BlockTier1Parallel_MegaMacerator;
+            case (2):
+                return BlockTier2Parallel_MegaMacerator;
+            case (4):
+                return Integer.MAX_VALUE;
+            default:
+                return -1;
+        }
+    }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        return true;
+    }
+
+    public static int getTierOfBlock(Block block, int meta) {
+        if (block == null) {
+            return -1;
+        }
+        if (block == GregTech_API.sBlockMetal2 && meta == 9) {
+            return 1; // Damascus Steel
+        }
+        if (block == GregTech_API.sBlockMetal5 && meta == 2) {
+            return 2; // Neutronium
+        }
+        if (block == GregTech_API.sBlockMetal9 && meta == 8) {
+            return 3; // Universium
+        }
+        return -1;
     }
 
     // region Structure
@@ -91,14 +174,6 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     private final int depthOffSet = 1;
     private static final String STRUCTURE_PIECE_MAIN = "mainMegaMacerator";
     private static IStructureDefinition<TST_MegaMacerator> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        this.speedBonus = (float) Math.pow(speedMultiplier_MegaMacerator, GT_Utility.getTier(this.getMaxInputEu()));
-        return true;
-    }
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
@@ -144,8 +219,9 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                         .atLeast(InputBus, OutputBus, Maintenance)
                         .adder(TST_MegaMacerator::addToMachineList)
                         .dot(2)
-                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings2).getTextureIndex(0))
+                        .casingIndex(((GT_Block_Casings2) GregTech_API.sBlockCasings2).getTextureIndex(0))
                         .buildAndChain(GregTech_API.sBlockCasings2, 0))
+                .addElement('b', ofBlock(GregTech_API.sBlockCasings2, 0))
                 .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 8))
                 .addElement(
                     'D',
@@ -153,12 +229,27 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_MegaMacerator::addToMachineList)
                         .dot(1)
-                        .casingIndex(((GT_Block_Casings4) GregTech_API.sBlockCasings8).getTextureIndex(3))
+                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(3))
                         .buildAndChain(GregTech_API.sBlockCasings8, 3))
                 .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 7))
                 .addElement('F', ofBlock(GregTech_API.sBlockCasings8, 10))
-                .addElement('G', ofBlock(GregTech_API.sBlockMetal5, 2))
+                // .addElement('G', ofBlock(WerkstoffLoader.BWBlocks, 10097))
+                .addElement(
+                    'G',
+                    withChannel(
+                        "structureblock",
+                        ofBlocksTiered(
+                            TST_MegaMacerator::getTierOfBlock,
+                            ImmutableList.of(
+                                Pair.of(GregTech_API.sBlockMetal2, 9),
+                                Pair.of(GregTech_API.sBlockMetal5, 2),
+                                Pair.of(GregTech_API.sBlockMetal9, 8)),
+                            0,
+                            (m, t) -> m.mBlockTier = t,
+                            m -> m.mBlockTier)))
+
                 .addElement('H', ofFrame(Materials.NaquadahAlloy))
+                .addElement('I', ofFrame(Materials.CosmicNeutronium))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -174,6 +265,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
      * F -> ofBlock...(gt.blockcasings8, 10, ...);
      * G -> ofBlock...(gt.blockmetal5, 2, ...);
      * H -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
+     * I -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
      */
     private final String[][] shape = new String[][] {
         { "                 ", "                 ", "                 ", "                 ", "                 ",
@@ -188,18 +280,18 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
             " FFC         CFF ", "FFC           CFF", "FFC           CFF", "FFC           CFF", "FFC           CFF",
             "FFC           CFF", " FFC         CFF ", " FFC         CFF ", "  FFCC     CCFF  ", "   FFFCCCCCFFF   ",
             "    FFFFFFFFF    ", "      FFFFF      " },
-        { "                 ", "      DCBBD      ", "    HBBCCCCBH    ", "   BCC     CCB   ", "  HC         CH  ",
-            "  BC         CB  ", " DC    EEE    CD ", " BC   ECCCE   CC ", " BC   ECCCE   CB ", " CC   ECCCE   CB ",
-            " DB    EEE    CD ", "  BC         CB  ", "  HC         CH  ", "   BCC     CCB   ", "    HBCCCCBBH    ",
-            "      DBBCD      ", "                 " },
+        { "                 ", "      DbbbD      ", "    IbbbbbbbI    ", "   bbb     bbb   ", "  Ib         bI  ",
+            "  bb         bb  ", " bb    EEE    bb ", " bb   ECCCE   bb ", " bb   ECCCE   bb ", " bb   ECCCE   bb ",
+            " bb    EEE    bb ", "  bb         bb  ", "  Ib         bI  ", "   bbb     bbb   ", "    IbbbbbbbI    ",
+            "      DbbbD      ", "                 " },
         { "      DDDDD      ", "    DDDDDDDDD    ", "   DDDDDDDDDDD   ", "  DDDDDDDDDDDDD  ", " DDDDDDDDDDDDDDD ",
             " DDDDDDDDDDDDDDD ", "DDDDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDDDD", "DDDDDDDDCDDDDDDDD", "DDDDDDDDDDDDDDDDD",
             "DDDDDDDDDDDDDDDDD", " DDDDDDDDDDDDDDD ", " DDDDDDDDDDDDDDD ", "  DDDDDDDDDDDDD  ", "   DDDDDDDDDDD   ",
             "    DDDDDDDDD    ", "      DDDDD      " },
-        { "                 ", "      FAAAF      ", "    FH     HF    ", "   D         D   ", "  F           F  ",
-            "  H           H  ", " F             F ", " A             A ", " A      C      A ", " A             A ",
-            " F             F ", "  H           H  ", "  F           F  ", "   D         D   ", "    FH     HF    ",
-            "      FAAAF      ", "                 " },
+        { "                 ", "      FFFFF      ", "    FF     FF    ", "   F         F   ", "  F           F  ",
+            "  F           F  ", " F             F ", " F             F ", " F      C      F ", " F             F ",
+            " F             F ", "  F           F  ", "  F           F  ", "   F         F   ", "    FF     FF    ",
+            "      FFFFF      ", "                 " },
         { "                 ", "      FAAAF      ", "    FH     HF    ", "   D         D   ", "  F           F  ",
             "  H       G   H  ", " F   GG   G    F ", " A     G G     A ", " A      C      A ", " A     G G     A ",
             " F    G   GG   F ", "  H   G       H  ", "  F           F  ", "   D         D   ", "    FH     HF    ",
@@ -273,17 +365,17 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
             "DDDDDDDDDDDDDDDDD", " DDDDCDDDDDCDDDD ", " DDDDDDDDDDDDDDD ", "  DDDDDDDDDDDDD  ", "   DDDDDDDDDDDD  ",
             "    DDDDDDDDD    ", "      DDDDD      " },
         { "                 ", "      DBBBD      ", "    HBBBBBBBH    ", "   BBBEEEEEBBB   ", "  HBEEEEEEEEEBH  ",
-            "  BBECEEEEECEBB  ", " DBEEEEEEEEEEEBD ", " BBEEEECCCEEEEBB ", " BBEEEECCCEEEEBB ", " BBEEEECCCEEEEBB ",
+            "  BBECEEEEECEBB  ", " DBEEEEEEEEEEEBD ", " BBEEEECCCEEEEBB ", "  BEEEECCCEEEEB  ", " BBEEEECCCEEEEBB ",
             " DBEEEEEEEEEEEBD ", "  BBECEEEEECEBB  ", "  HBEEEEEEEEEBH  ", "   BBBEEEEEBBB   ", "    HBBBBBBBH    ",
-            "      DBBBD      ", "                 " },
+            "      DB BD      ", "                 " },
         { "                 ", "      DB~BD      ", "    HBBBBBBBH    ", "   BBB     BBB   ", "  HBFFF   FFFBH  ",
-            "  BBFCFFFFFCFBB  ", " DB FFFEEEFFF BD ", " BB  FEEEEEF  BB ", " BB  FEECEEF  BB ", " BB  FEEEEEF  BB ",
+            "  BBFCFFFFFCFBB  ", " DB FFFEEEFFF BD ", " BB  FEEEEEF  BB ", "  B  FEECEEF  B  ", " BB  FEEEEEF  BB ",
             " DB FFFEEEFFF BD ", "  BBFCFFFFFCFBB  ", "  HBFFF   FFFBH  ", "   BBB     BBB   ", "    HBBBBBBBH    ",
-            "      DBBBD      ", "                 " },
+            "      DB BD      ", "                 " },
         { "                 ", "      DBBBD      ", "    HBBBBBBBH    ", "   BBB     BBB   ", "  HBFFF   FFFBH  ",
-            "  BBFCFFFFFCFBB  ", " DB FFFCCCFFF BD ", " BB  FCCCCCF  BB ", " BB  FCCCCCF  BB ", " BB  FCCCCCF  BB ",
+            "  BBFCFFFFFCFBB  ", " DB FFFCCCFFF BD ", " BB  FCCCCCF  BB ", "  B  FCCCCCF  B  ", " BB  FCCCCCF  BB ",
             " DB FFFCCCFFF BD ", "  BBFCFFFFFCFBB  ", "  HBFFF   FFFBH  ", "   BBB     BBB   ", "    HBBBBBBBH    ",
-            "      DBBBD      ", "                 " },
+            "      DB BD      ", "                 " },
         { "      DDDDD      ", "    DDDDDDDDD    ", "  DDDDDDDDDDDDD  ", "  DDDDDDDDDDDDD  ", " DDDDDDDDDDDDDDD ",
             " DDDDDDDDDDDDDDD ", "DDDDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDDDD",
             "DDDDDDDDDDDDDDDDD", " DDDDDDDDDDDDDDD ", " DDDDDDDDDDDDDDD ", "  DDDDDDDDDDDDD  ", "  DDDDDDDDDDDDD  ",
@@ -296,6 +388,17 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     @Override
     public boolean supportsInputSeparation() {
         return false;
+    }
+
+    // Scanner Info
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 3];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Block Level: " + EnumChatFormatting.GOLD + this.mBlockTier;
+        return ret;
     }
 
     @Override
@@ -350,7 +453,8 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                     .glow()
                     .build() };
         }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183) };
+        return new ITexture[] { Textures.BlockIcons
+            .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings2, 0)) };
     }
     // end region
 }
