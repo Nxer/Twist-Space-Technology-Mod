@@ -667,8 +667,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
         for (ItemStack itemStack : inputList) {
             TST_ItemID itemWithDamage = TST_ItemID.create(itemStack);
-            int itemCount = itemCountInput.getOrDefault(itemWithDamage, 0) + itemStack.stackSize;
-            itemCountInput.put(itemWithDamage, itemCount);
+            itemCountInput.merge(itemWithDamage, itemStack.stackSize, Integer::sum);
         }
 
         // get parallelism
