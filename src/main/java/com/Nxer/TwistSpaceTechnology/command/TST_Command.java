@@ -32,6 +32,11 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
     }
 
     @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
+    }
+
+    @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length < 1) {
             TST_CommandMethods.INSTANCE.printHelp(sender);
