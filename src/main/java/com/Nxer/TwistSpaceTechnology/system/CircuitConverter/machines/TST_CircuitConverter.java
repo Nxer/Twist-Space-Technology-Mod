@@ -86,6 +86,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         }
         // inputs are consumed at this point
         updateSlots();
+        if (outputs.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
