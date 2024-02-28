@@ -1,11 +1,15 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
+import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_Utility;
@@ -17,6 +21,7 @@ public class ChemicalReactorRecipePool implements IRecipePool {
 
         final IRecipeMap LCR = RecipeMaps.multiblockChemicalReactorRecipes;
 
+        // One Step K2Cr2O7
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(21),
@@ -35,5 +40,15 @@ public class ChemicalReactorRecipePool implements IRecipePool {
             .duration(64)
             .addTo(LCR);
 
+        // Naquadah Emulsion
+        GT_Values.RA.stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(4), Materials.Quicklime.getDust(32))
+            .fluidInputs(MyMaterial.acidNaquadahEmulsion.getFluidOrGas(4 * 1000))
+            .itemOutputs(Materials.AntimonyTrioxide.getDust(1), WerkstoffLoader.Fluorspar.get(OrePrefixes.dust, 16))
+            .fluidOutputs(MyMaterial.naquadahEmulsion.getFluidOrGas(4 * 1000))
+            .noOptimize()
+            .eut(RECIPE_MV)
+            .duration(240)
+            .addTo(LCR);
     }
 }

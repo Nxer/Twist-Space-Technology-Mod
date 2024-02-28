@@ -21,6 +21,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainCo
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaBrickedBlastFurnace;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OpticalSOC;
@@ -112,6 +113,7 @@ import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MacerationStack;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
@@ -1663,6 +1665,29 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // endregion
 
+        // region Mega Macerator
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                Industrial_MacerationStack.get(64),
+                CustomItemList.MaceratorZPM.get(16),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 16},
+                GregtechItemList.Maceration_Upgrade_Chip.get(64),
+                WerkstoffLoader.AdemicSteel.get(OrePrefixes.gearGt, 16),
+
+                ItemList.Electric_Motor_UV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorZPM, 8),
+                MyMaterial.adamantiumAlloy.get(OrePrefixes.plateDense, 16)
+            )
+            .fluidInputs(new FluidStack(solderIndAlloy,144*64))
+            .itemOutputs(MegaMacerator.get(1))
+            .noOptimize()
+            .eut(RECIPE_ZPM)
+            .duration(20*300)
+            .addTo(assembler);
+        // endregion
     }
     // spotless:on
 }

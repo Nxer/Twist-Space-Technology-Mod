@@ -191,6 +191,7 @@ public enum GTCMItemList {
     LargeSteamAlloySmelter,
     EyeOfWood,
     BeeEngineer,
+    MegaMacerator,
 
     // MAX
     HighDimensionalExtend,

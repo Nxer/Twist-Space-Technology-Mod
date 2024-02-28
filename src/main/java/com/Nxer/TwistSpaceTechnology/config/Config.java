@@ -34,6 +34,7 @@ public class Config {
     public static final String VacuumFilterExtractor = "VacuumFilterExtractor";
     public static final String MEG = "TowerOFAbstraction";
     public static final String BeeEngineer = "BeeEngineer";
+    public static final String MegaMacerator = "HouseholdCellFragmentizer";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -235,12 +236,21 @@ public class Config {
     public static int BE_pEachProcessTime = 20 * 10;
     // endregion
 
+    // region Mega Macerator
+    public static int BlockTier1Parallel_MegaMacerator = 128;
+    public static int BlockTier2Parallel_MegaMacerator = 32768;
+    public static float EuModifier_MegaMacerator = 0.80F;
+    public static boolean EnablePerfectOverclock_MegaMacerator=false;
+
     // region Infinite Air Hatch
+
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
 
     public static boolean activateMegaSpaceStation=false;
     public static boolean activateCombatStats=false;
+
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -444,6 +454,13 @@ public class Config {
         BE_pUUMCost = configuration.getInt("BE_pUUMCost", BeeEngineer, BE_pUUMCost, 0, Integer.MAX_VALUE, "UUM needed for each try to enhance.");
         BE_pEachProcessTime = configuration.getInt("BE_pEachProcessTime", BeeEngineer, BE_pEachProcessTime, 1, 65536 * 20, "Time needed for each try to transform drone, in ticks.");
         // endregion
+
+        // region Mega Macerator
+        BlockTier1Parallel_MegaMacerator = configuration.getInt("BlockTier1Parallel_MegaMacerator", MegaMacerator, BlockTier1Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 1. Type: int");
+        BlockTier2Parallel_MegaMacerator = configuration.getInt("BlockTier2Parallel_MegaMacerator", MegaMacerator, BlockTier2Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 2. Type: int");
+        EuModifier_MegaMacerator = Float.parseFloat(configuration.getString("EuModifier_MegaMacerator", MegaMacerator, String.valueOf(EuModifier_MegaMacerator), "EU Modifier of Mega Macerator. Type: float"));
+        EnablePerfectOverclock_MegaMacerator=configuration.getBoolean("EnablePerfectOverclock_MegaMacerator", MegaMacerator, EnablePerfectOverclock_MegaMacerator, "Enable perfect overclock of Mega Macerator. Type: boolean");
+        // end region
 
         if (configuration.hasChanged()) {
             configuration.save();

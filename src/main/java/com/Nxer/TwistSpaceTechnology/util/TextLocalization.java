@@ -682,6 +682,17 @@ public class TextLocalization {
     public static final String Tooltip_BeeEngineer_05 = texter("Will try to consume 32kL UUM (if exists) to increase success rate to 80%.", "Tooltip_BeeEngineer_05");
     public static final String Tooltip_BeeEngineer_06 = texter("In case of failure, all consumed ingredients will not be returned.", "Tooltip_BeeEngineer_06");
     public static final String Tooltip_BeeEngineer_07 = texter("Don't put too many drones in at once, that will result in a long run time!", "Tooltip_BeeEngineer_07");
+
+    // region Mega Macerator
+    public static final String NameMegaMacerator = texter("\"Mini\" Household Cell Fragmentizer", "NameMegaMacerator");
+    public static final String Tooltip_MegaMacerator_MachineType = texter("Macerator", "Tooltip_MegaMacerator_Type");
+    public static final String Tooltip_MegaMacerator_Controller = texter("Controller block for the \"Mini\" Household Cell Fragmentizer", "Tooltip_MegaMacerator_Controller");
+    public static final String Tooltip_MegaMacerator_01 = texter("Squeezed Collision of Material.", "Tooltip_MegaMacerator_01");
+    public static final String Tooltip_MegaMacerator_02 = texter("This is way better than a forge hammer.", "Tooltip_MegaMacerator_02");
+    public static final String Tooltip_MegaMacerator_03 = texter("Can parallel up to 2 ^ (2 ^ (Tier + 2) - 1).", "Tooltip_MegaMacerator_03");
+    public static final String Tooltip_MegaMacerator_04 = texter("Tier is determined by cotainment block: Damascus Steel, Neutronium, Universium.", "Tooltip_MegaMacerator_04");
+    public static final String Tooltip_MegaMacerator_05 = texter("Available recipe tier is one below glass tier.", "Tooltip_MegaMacerator_05");
+
     // endregion
 
 }
