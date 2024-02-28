@@ -81,7 +81,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
         if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) return null;
         if (tPrefixMaterial.mPrefix == OrePrefixes.circuit) {
-            return GT_OreDictUnificator.get(true, items, true);
+            return GT_OreDictUnificator.get(false, items, true);
         }
         return null;
     }

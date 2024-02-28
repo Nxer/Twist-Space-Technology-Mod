@@ -80,7 +80,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
 
             if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) continue;
             if (tPrefixMaterial.mPrefix == OrePrefixes.circuit) {
-                outputs.add(GT_OreDictUnificator.get(true, item, true));
+                outputs.add(GT_OreDictUnificator.get(false, item, true));
                 item.stackSize = 0;
             }
         }
