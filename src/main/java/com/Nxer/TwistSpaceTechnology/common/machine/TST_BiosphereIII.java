@@ -174,7 +174,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             @NotNull
             @Override
             protected GT_ParallelHelper createParallelHelper(@NotNull GT_Recipe recipe) {
-                return super.createParallelHelper(recipeAfterEfficiencyCalculation(recipe));
+                return super.createParallelHelper(recipeAfterEfficiencyCalculation(recipe, inputFluids));
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
@@ -185,7 +185,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         logic.setSpecialSlotItem(this.getControllerSlot());
     }
 
-    private GT_Recipe recipeAfterEfficiencyCalculation(GT_Recipe recipe) {
+    private GT_Recipe recipeAfterEfficiencyCalculation(GT_Recipe recipe, FluidStack[] inputFluids) {
         // Brewing & Fermenting, no change to the recipe
         if (mode == 2 || mode == 3) return recipe;
 
@@ -193,6 +193,16 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         if (mode == 0) efficiency = getExpectedMultiplier(tRecipe.mFluidOutputs[0]);// Bio Vat Normal
         else efficiency = (int) (((mGlassTier - mNeededGlassTier) * 600 + 1601.0) / 1000
             * ConfigHandler.bioVatMaxParallelBonus);// Bio Vat Automation
+
+        long fluidAmount = 0;
+        for (FluidStack fluid : inputFluids) {
+            if (fluid.isFluidEqual(recipe.mFluidInputs[0])) {
+                fluidAmount += fluid.amount;
+            }
+        }
+        efficiency = (int) Math.min(efficiency, fluidAmount / recipe.mFluidInputs[0].amount);
+        efficiency = Math.max(efficiency, 1);
+
         tRecipe.mFluidInputs[0].amount *= efficiency;
         tRecipe.mFluidOutputs[0].amount *= efficiency;
         return tRecipe;
@@ -419,7 +429,8 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setInteger("mSievert", mSievert);
         aNBT.setInteger("mNeededSievert", mNeededSievert);
-        aNBT.setInteger("mode", mode);
+        aNBT.setByte("mode", mode);
+        aNBT.setInteger("efficiency", efficiency);
         super.saveNBTData(aNBT);
     }
 
@@ -428,6 +439,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         mSievert = aNBT.getInteger("mSievert");
         mNeededSievert = aNBT.getInteger("mNeededSievert");
         mode = aNBT.getByte("mode");
+        efficiency = aNBT.getInteger("efficiency");
         super.loadNBTData(aNBT);
     }
 
@@ -447,6 +459,11 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             case 2 -> TextLocalization.BiosphereIII_Mode_02;
             default -> TextLocalization.BiosphereIII_Mode_03;
         };
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
     }
 
     @Override
