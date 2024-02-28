@@ -65,6 +65,7 @@ import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MacerationStack;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
@@ -111,6 +112,7 @@ import gtPlusPlus.core.material.ALLOY;
 import gtPlusPlus.core.material.MISC_MATERIALS;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import ic2.core.Ic2Items;
+import micdoodle8.mods.galacticraft.planets.mars.client.model.*;
 
 public class GTCMMachineRecipePool implements IRecipePool {
 
@@ -1621,11 +1623,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(10),
-                GregtechItemList.Industrial_MacerationStack.get(64),
+                Industrial_MacerationStack.get(64),
                 CustomItemList.MaceratorZPM.get(16),
 
                 new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 16},
-                WerkstoffLoader.HDCS.get(OrePrefixes.gearGt, 16),
+                GregtechItemList.Maceration_Upgrade_Chip.get(64),
                 WerkstoffLoader.AdemicSteel.get(OrePrefixes.gearGt, 16),
 
                 ItemList.Electric_Motor_UV.get(16),

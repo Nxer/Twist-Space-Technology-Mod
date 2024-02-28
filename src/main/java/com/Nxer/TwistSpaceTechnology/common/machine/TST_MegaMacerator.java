@@ -113,8 +113,8 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
             @Override
             protected @NotNull CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
-                if (glassTier < 12 && glassTier < GT_Utility.getTier(recipe.mEUt) + 1) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt));
+                if (glassTier < 12 && glassTier - 1 < GT_Utility.getTier(recipe.mEUt)) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt) - 1);
                 }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
@@ -137,7 +137,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                 return BlockTier1Parallel_MegaMacerator;
             case (2):
                 return BlockTier2Parallel_MegaMacerator;
-            case (4):
+            case (3):
                 return Integer.MAX_VALUE;
             default:
                 return -1;

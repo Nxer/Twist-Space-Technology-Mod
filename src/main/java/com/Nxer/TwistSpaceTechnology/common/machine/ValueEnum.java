@@ -226,10 +226,10 @@ public final class ValueEnum {
 
     // region Mega Macerator
 
-    public static final int BlockTier1Parallel_MegaMacerator = Config.MM_BlockTier1Parallel;
-    public static final int BlockTier2Parallel_MegaMacerator = Config.MM_BlockTier2Parallel;
-    public static final float EuModifier_MegaMacerator = Config.MM_EuModifier;
-    public static final boolean EnablePerfectOverclock_MegaMacerator = Config.MM_EnablePerfectOverclock;
+    public static final int BlockTier1Parallel_MegaMacerator = Config.BlockTier1Parallel_MegaMacerator;
+    public static final int BlockTier2Parallel_MegaMacerator = Config.BlockTier2Parallel_MegaMacerator;
+    public static final float EuModifier_MegaMacerator = Config.EuModifier_MegaMacerator;
+    public static final boolean EnablePerfectOverclock_MegaMacerator = Config.EnablePerfectOverclock_MegaMacerator;
 
     // region Infinite Air Hatch
     public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
