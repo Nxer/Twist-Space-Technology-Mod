@@ -159,7 +159,6 @@ import gtPlusPlus.core.material.ALLOY;
 import gtPlusPlus.core.material.MISC_MATERIALS;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import ic2.core.Ic2Items;
-import micdoodle8.mods.galacticraft.planets.mars.client.model.*;
 
 public class GTCMMachineRecipePool implements IRecipePool {
 
