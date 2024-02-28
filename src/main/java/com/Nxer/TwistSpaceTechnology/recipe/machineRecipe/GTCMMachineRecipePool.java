@@ -136,7 +136,7 @@ import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
 import com.github.bartimaeusnek.bartworks.common.loaders.BioItemList;
-import com.github.bartimaeusnek.bartworks.system.material.*;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import appeng.items.materials.MaterialType;
 import goodgenerator.items.MyMaterial;
