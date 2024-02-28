@@ -352,7 +352,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
-        if (wirelessMode) {
+        if (mode == 1 || wirelessMode) {
             this.storageEU += this.generateTickEU();
         } else {
             addEnergyOutput(this.generateTickEU());
