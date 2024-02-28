@@ -807,5 +807,5 @@ Tooltip_MegaMacerator_Controller=Controller block for the "Mini" Household Cell 
 Tooltip_MegaMacerator_01=§6Squeezed Collision of Material.
 Tooltip_MegaMacerator_02=This is way better than a forge hammer.
 Tooltip_MegaMacerator_03=Can parallel up to 2 ^ (2 ^ (Tier + 2) - 1).
-Tooltip_MegaMacerator_04=Tier is determined by cotainment block: Damascus Steel, Neutronium, Universium.
+Tooltip_MegaMacerator_04=Tier is determined by containment block: Damascus Steel, Neutronium, Universium.
 Tooltip_MegaMacerator_05=Available recipe tier is one below glass tier.
