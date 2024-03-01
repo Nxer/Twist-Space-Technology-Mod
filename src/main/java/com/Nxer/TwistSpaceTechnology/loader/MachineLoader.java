@@ -29,6 +29,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
@@ -97,6 +98,7 @@ public class MachineLoader {
     public static ItemStack EyeOfWood;
     public static ItemStack BeeEngineer;
     public static ItemStack MegaMacerator;
+    public static ItemStack HephaestusAtelier;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -359,6 +361,13 @@ public class MachineLoader {
         MegaMacerator = new TST_MegaMacerator(19036, "NameMegaMacerator", TextLocalization.NameMegaMacerator)
             .getStackForm(1);
         GTCMItemList.MegaMacerator.set(MegaMacerator);
+
+        //
+        HephaestusAtelier = new TST_HephaestusAtelier(
+            19037,
+            "NameHephaestusAtelier",
+            TextLocalization.NameHephaestusAtelier).getStackForm(1);
+        GTCMItemList.HephaestusAtelier.set(HephaestusAtelier);
 
         // endregion
 
