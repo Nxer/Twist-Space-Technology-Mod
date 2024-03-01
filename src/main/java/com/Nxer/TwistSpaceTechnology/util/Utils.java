@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.util;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.isInDevMode;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +17,8 @@ import gregtech.api.metatileentity.MetaTileEntity;
 
 public final class Utils {
 
-    private static final double LOG2 = Math.log(2);
+    public static final double LOG2 = Math.log(2);
+    public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
 
     // region about ItemStack
     public static boolean metaItemEqual(ItemStack a, ItemStack b) {

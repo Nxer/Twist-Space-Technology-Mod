@@ -21,6 +21,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainCo
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaBrickedBlastFurnace;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OpticalSOC;
@@ -112,6 +113,7 @@ import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MacerationStack;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
@@ -1663,6 +1665,71 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // endregion
 
+        // region Mega Macerator
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                Industrial_MacerationStack.get(64),
+                CustomItemList.MaceratorZPM.get(16),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 16},
+                GregtechItemList.Maceration_Upgrade_Chip.get(64),
+                WerkstoffLoader.AdemicSteel.get(OrePrefixes.gearGt, 16),
+
+                ItemList.Electric_Motor_UV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorZPM, 8),
+                MyMaterial.adamantiumAlloy.get(OrePrefixes.plateDense, 16)
+            )
+            .fluidInputs(new FluidStack(solderIndAlloy,144*64))
+            .itemOutputs(MegaMacerator.get(1))
+            .noOptimize()
+            .eut(RECIPE_ZPM)
+            .duration(20*300)
+            .addTo(assembler);
+        // endregion
+
+        // region Hephaestus' Atelier
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, ItemList.Machine_Multi_Furnace.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .itemInputs(
+                ItemList.Machine_Multi_Furnace.get(64),
+                ItemList.Casing_HeatProof.get(64),
+                ItemList.Casing_FrostProof.get(64),
+                new ItemStack[]{
+                    ItemList.Casing_Coil_AwakenedDraconium.get(64),
+                    ItemList.Casing_Coil_Infinity.get(16),
+                    ItemList.Casing_Coil_Hypogen.get(4),
+                    ItemList.Casing_Coil_Eternal.get(1),
+                },
+
+                eM_Hollow.get(64),
+                ItemList.Field_Generator_UHV.get(16),
+                ItemList.Electric_Pump_UHV.get(64),
+                ItemList.Conveyor_Module_UHV.get(64),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 32},
+                HighEnergyFlowCircuit.get(64),
+                HighEnergyFlowCircuit.get(64),
+                HighEnergyFlowCircuit.get(64),
+
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Invar, 64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 16)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*128),
+                Materials.CosmicNeutronium.getMolten(144*64),
+                Materials.UUMatter.getFluid(1000*64),
+                Materials.SuperCoolant.getFluid(1000*64)
+            )
+            .itemOutputs(GTCMItemList.HephaestusAtelier.get(1))
+            .eut(RECIPE_UEV)
+            .duration(20*600)
+            .addTo(assemblyLine);
+        // endregion
     }
     // spotless:on
 }

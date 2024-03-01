@@ -538,6 +538,8 @@ public class TextLocalization {
     public static final String Tooltip_MegaBrickedBlastFurnace_06 = texter("Takes "+EnumChatFormatting.RED + "8" +EnumChatFormatting.GRAY+" hours of continuous run time to achieve maximum efficiency.","Tooltip_MegaBrickedBlastFurnace_06");
     public static final String Tooltip_MegaBrickedBlastFurnace_07 = texter("This improve coal efficiency by up to "+EnumChatFormatting.RED+"800%"+EnumChatFormatting.GRAY+". Reduce minimum coal requirement and calculate in actual progress time.","Tooltip_MegaBrickedBlastFurnace_07");
     public static final String Tooltip_MegaBrickedBlastFurnace_08 = texter(EnumChatFormatting.YELLOW+"It is recommended not to force yourself to build it until you have enough resources.","Tooltip_MegaBrickedBlastFurnace_08");
+
+    public static final String Tooltip_MegaBrickedBlastFurnace_09 = texter(EnumChatFormatting.AQUA + "Use a screwdriver to switch to primitive mode so you can process all primitive recipes here, but you cannot use wrought iron anymore", "Tooltip_MegaBrickedBlastFurnace_09");
     public static final String textMegaBrickedBlastFurnaceTips = texter(EnumChatFormatting.YELLOW+"Dirt must be Horizontal dirt in Chisel Mod!","textMegaBrickedBlastFurnaceTips");
     public static final String textMegaBrickedBlastFurnaceLocation = texter("any Bronze Plated Bricks, 0-6x","textMegaBrickedBlastFurnaceLocation");
 
@@ -680,6 +682,40 @@ public class TextLocalization {
     public static final String Tooltip_BeeEngineer_05 = texter("Will try to consume 32kL UUM (if exists) to increase success rate to 80%.", "Tooltip_BeeEngineer_05");
     public static final String Tooltip_BeeEngineer_06 = texter("In case of failure, all consumed ingredients will not be returned.", "Tooltip_BeeEngineer_06");
     public static final String Tooltip_BeeEngineer_07 = texter("Don't put too many drones in at once, that will result in a long run time!", "Tooltip_BeeEngineer_07");
+
+    // region Mega Macerator
+    public static final String NameMegaMacerator = texter("\"Mini\" Household Cell Fragmentizer", "NameMegaMacerator");
+    public static final String Tooltip_MegaMacerator_MachineType = texter("Macerator", "Tooltip_MegaMacerator_Type");
+    public static final String Tooltip_MegaMacerator_Controller = texter("Controller block for the \"Mini\" Household Cell Fragmentizer", "Tooltip_MegaMacerator_Controller");
+    public static final String Tooltip_MegaMacerator_01 = texter("Squeezed Collision of Material.", "Tooltip_MegaMacerator_01");
+    public static final String Tooltip_MegaMacerator_02 = texter("This is way better than a forge hammer.", "Tooltip_MegaMacerator_02");
+    public static final String Tooltip_MegaMacerator_03 = texter("Can parallel up to 2 ^ (2 ^ (Tier + 2) - 1).", "Tooltip_MegaMacerator_03");
+    public static final String Tooltip_MegaMacerator_04 = texter("Tier is determined by cotainment block: Damascus Steel, Neutronium, Universium.", "Tooltip_MegaMacerator_04");
+    public static final String Tooltip_MegaMacerator_05 = texter("Available recipe tier is one below glass tier.", "Tooltip_MegaMacerator_05");
+
+    // endregion
+
+    // region HephaestusAtelier
+    public static final String NameHephaestusAtelier = texter("Hephaestus' Atelier", "NameHephaestusAtelier");
+    public static final String Tooltip_HephaestusAtelier_MachineType = texter("Furnace", "Tooltip_HephaestusAtelier_MachineType");
+    public static final String Tooltip_HephaestusAtelier_Controller = texter("Controller block for the Hephaestus' Atelier", "Tooltip_HephaestusAtelier_Controller");
+    public static final String Tooltip_HephaestusAtelier_01 = texter(""+EnumChatFormatting.DARK_RED+EnumChatFormatting.ITALIC+"“And first Hephaestus makes a great and massive shield ...", "Tooltip_HephaestusAtelier_01");
+    public static final String Tooltip_HephaestusAtelier_02 = texter(""+EnumChatFormatting.DARK_RED+EnumChatFormatting.ITALIC+"    ... And he forged on the shield two noble cities.”", "Tooltip_HephaestusAtelier_02");
+    public static final String Tooltip_HephaestusAtelier_03 = texter("Even in the future, the most primitive means of smelting will be needed.", "Tooltip_HephaestusAtelier_03");
+    public static final String Tooltip_HephaestusAtelier_04 = texter("Parallelism across recipes is possible, even using Crafting Input hatches.", "Tooltip_HephaestusAtelier_04");
+    public static final String Tooltip_HephaestusAtelier_05 = texter("The machine will adjust its operation according to the installed coil level.", "Tooltip_HephaestusAtelier_05");
+    public static final String Tooltip_HephaestusAtelier_06 = texter(EnumChatFormatting.GOLD+" ----- T1 Coil : Molecular Coil -----", "Tooltip_HephaestusAtelier_06");
+    public static final String Tooltip_HephaestusAtelier_07 = texter("Like other normal machine, use energy from energy hatches and do overclock.", "Tooltip_HephaestusAtelier_07");
+    public static final String Tooltip_HephaestusAtelier_08 = texter("2.1G parallel. Every item smelting consume 7 EU/t and 25.6s.", "Tooltip_HephaestusAtelier_08");
+    public static final String Tooltip_HephaestusAtelier_09 = texter(EnumChatFormatting.GOLD+" ----- T2 Coil : Ultimate Containment Field Generator -----", "Tooltip_HephaestusAtelier_09");
+    public static final String Tooltip_HephaestusAtelier_10 = texter("Directly consume energy from wireless EU net.", "Tooltip_HephaestusAtelier_10");
+    public static final String Tooltip_HephaestusAtelier_11 = texter("Infinite parallel. Every item smelting consume 2048 EU.", "Tooltip_HephaestusAtelier_11");
+    public static final String Tooltip_HephaestusAtelier_12 = texter("Processing time is fixed at 12.8s.", "Tooltip_HephaestusAtelier_12");
+    public static final String Tooltip_HephaestusAtelier_13 = texter(EnumChatFormatting.GOLD+" ----- T3 Coil : Teleportation Casing -----", "Tooltip_HephaestusAtelier_13");
+    public static final String Tooltip_HephaestusAtelier_14 = texter("Processing time 1s.", "Tooltip_HephaestusAtelier_14");
+    public static final String Tooltip_HephaestusAtelier_15 = texter("Otherwise same as T2.", "Tooltip_HephaestusAtelier_15");
+    public static final String Tooltip_HephaestusAtelier_2_01 = texter("Must install energy hatch when in T1.", "Tooltip_HephaestusAtelier_2_01");
+
     // endregion
 
 }

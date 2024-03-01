@@ -55,7 +55,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.TieredCircuits;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.dreammaster.gthandler.CustomItemList;
 
@@ -67,6 +66,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
@@ -77,10 +77,11 @@ import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
     public ItemStack transToWildCircuit(ItemStack items) {
-        for (TieredCircuits circuit : TieredCircuits.values()) {
-            if (circuit.contains(items)) {
-                return circuit.getPatternCircuit(items.stackSize);
-            }
+        ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(items);
+
+        if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) return null;
+        if (tPrefixMaterial.mPrefix == OrePrefixes.circuit) {
+            return GT_OreDictUnificator.get(false, items, true);
         }
         return null;
     }

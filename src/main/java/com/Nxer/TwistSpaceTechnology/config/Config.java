@@ -34,6 +34,8 @@ public class Config {
     public static final String VacuumFilterExtractor = "VacuumFilterExtractor";
     public static final String MEG = "TowerOFAbstraction";
     public static final String BeeEngineer = "BeeEngineer";
+    public static final String MegaMacerator = "HouseholdCellFragmentizer";
+    public static final String HephaestusAtelier = "HephaestusAtelier";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -235,17 +237,44 @@ public class Config {
     public static int BE_pEachProcessTime = 20 * 10;
     // endregion
 
+    // region Mega Macerator
+    public static int BlockTier1Parallel_MegaMacerator = 128;
+    public static int BlockTier2Parallel_MegaMacerator = 32768;
+    public static float EuModifier_MegaMacerator = 0.80F;
+    public static boolean EnablePerfectOverclock_MegaMacerator=false;
+    // endregion
+
+    // region HephaestusAtelier
+    public static int ConsumeEutPerParallel_HephaestusAtelier = 7;
+    public static int ConsumeDuration_HephaestusAtelier = 512;
+    public static int ConsumeEuPerSmelting_HephaestusAtelier = 2048;
+    public static int DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier = 256;
+    public static int DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = 20;
+
+    // endregion
+
     // region Infinite Air Hatch
+
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
 
     public static boolean activateMegaSpaceStation=false;
     public static boolean activateCombatStats=false;
+
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region HephaestusAtelier
+        ConsumeEutPerParallel_HephaestusAtelier = configuration.getInt("ConsumeEutPerParallel_HephaestusAtelier", HephaestusAtelier, ConsumeEutPerParallel_HephaestusAtelier, 1, 30, "In normal mode, how much EU/t per parallel cost of Hephaestus' Atelier. Type: int");
+        ConsumeDuration_HephaestusAtelier = configuration.getInt("ConsumeDuration_HephaestusAtelier", HephaestusAtelier, ConsumeDuration_HephaestusAtelier, 1, 32767, "In normal mode, how many ticks every processing cost. Type: int");
+        ConsumeEuPerSmelting_HephaestusAtelier = configuration.getInt("ConsumeEuPerSmelting_HephaestusAtelier", HephaestusAtelier, ConsumeEuPerSmelting_HephaestusAtelier, 1, 32767, "In wireless mode, how much EU per item smelting cost. Type: int");
+        DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier = configuration.getInt("DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier", HephaestusAtelier, DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier, 1, 32767, "In wireless mode with T2 coil, how many ticks every processing cost. Type: int");
+        DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = configuration.getInt("DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier", HephaestusAtelier, DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier, 1, 32767, "In wireless mode with T3 coil, how many ticks every processing cost. Type: int");
         // endregion
 
         // region VacuumFilterExtractor
@@ -444,6 +473,13 @@ public class Config {
         BE_pUUMCost = configuration.getInt("BE_pUUMCost", BeeEngineer, BE_pUUMCost, 0, Integer.MAX_VALUE, "UUM needed for each try to enhance.");
         BE_pEachProcessTime = configuration.getInt("BE_pEachProcessTime", BeeEngineer, BE_pEachProcessTime, 1, 65536 * 20, "Time needed for each try to transform drone, in ticks.");
         // endregion
+
+        // region Mega Macerator
+        BlockTier1Parallel_MegaMacerator = configuration.getInt("BlockTier1Parallel_MegaMacerator", MegaMacerator, BlockTier1Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 1. Type: int");
+        BlockTier2Parallel_MegaMacerator = configuration.getInt("BlockTier2Parallel_MegaMacerator", MegaMacerator, BlockTier2Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 2. Type: int");
+        EuModifier_MegaMacerator = Float.parseFloat(configuration.getString("EuModifier_MegaMacerator", MegaMacerator, String.valueOf(EuModifier_MegaMacerator), "EU Modifier of Mega Macerator. Type: float"));
+        EnablePerfectOverclock_MegaMacerator=configuration.getBoolean("EnablePerfectOverclock_MegaMacerator", MegaMacerator, EnablePerfectOverclock_MegaMacerator, "Enable perfect overclock of Mega Macerator. Type: boolean");
+        // end region
 
         if (configuration.hasChanged()) {
             configuration.save();

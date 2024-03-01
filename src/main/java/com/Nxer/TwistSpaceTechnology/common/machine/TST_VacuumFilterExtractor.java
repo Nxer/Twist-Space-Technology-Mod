@@ -228,6 +228,11 @@ G -> ofFrame...(Materials.Neutronium);
 
     // region General
     @Override
+    public boolean getDefaultInputSeparationMode() {
+        return false;
+    }
+
+    @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType(TextLocalization.Tooltip_VacuumFilterExtractor_MachineType)
