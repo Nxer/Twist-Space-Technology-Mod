@@ -128,8 +128,8 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     @Override
     protected int getMaxParallelRecipes() {
         return switch (mode) {
-            case 0 -> getControllerSlot().stackSize * 4; // Bio Vat normal
-            case 1 -> getControllerSlot().stackSize; // Bio Vat automation
+            case 0 -> (getControllerSlot() == null) ? 0 : getControllerSlot().stackSize * 4; // Bio Vat normal
+            case 1 -> (getControllerSlot() == null) ? 0 : getControllerSlot().stackSize; // Bio Vat automation
             default -> 1 << Math.max(mGlassTier * 2 - 6, 0); // Brewing && Fermenting
         };
     }
