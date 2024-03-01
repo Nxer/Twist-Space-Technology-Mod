@@ -192,6 +192,7 @@ public enum GTCMItemList {
     EyeOfWood,
     BeeEngineer,
     MegaMacerator,
+    HephaestusAtelier,
 
     // MAX
     HighDimensionalExtend,
