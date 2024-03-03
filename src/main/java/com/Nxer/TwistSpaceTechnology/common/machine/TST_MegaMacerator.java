@@ -123,8 +123,8 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                 if (glassTier < 12 && glassTier < GT_Utility.getTier(recipe.mEUt)) {
                     return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt));
                 }
-                if (glassTier > 11 || glassTier > GT_Utility.getTier(recipe.mEUt)) {
-                    speedBonus = SpeedBonus_MegaMacerator;
+                if (glassTier >= 12 || glassTier > GT_Utility.getTier(recipe.mEUt)) {
+                    speedBonus = 1 / SpeedBonus_MegaMacerator;
                 }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
