@@ -50,7 +50,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -67,12 +66,10 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
     // region Class Constructor
     public TST_MegaMacerator(int aID, String aName, String aNameRegional) {
-
         super(aID, aName, aNameRegional);
     }
 
     public TST_MegaMacerator(String aName) {
-
         super(aName);
     }
 
@@ -85,7 +82,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
     // region Processing Logic
     private int mBlockTier = 0;
-    private float speedBonus = 1;
+    public int mRecipeTier = 1;
     public byte glassTier;
 
     @Override
@@ -95,12 +92,12 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
     @Override
     protected float getSpeedBonus() {
+        return (((glassTier >= 12) || (glassTier > mRecipeTier)) ? SpeedBonus_MegaMacerator : 1);
         // int mEuTier = GT_Utility.getTier(this.getMaxInputEu()) - 1;
         // return (float) (Math.log(100 + exp(4 * 13 - mBlockTier * mEuTier))
         // / Math.log(100 + exp(3 * 11 - mBlockTier * mEuTier))
         // * Math.pow(1 / BlockspeedMultiplier_MegaMacerator, mBlockTier)
         // * Math.pow(EuModifier_MegaMacerator, mEuTier));
-        return speedBonus;
     }
 
     @Override
@@ -113,21 +110,15 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
             @NotNull
             @Override
-            public CheckRecipeResult process() {
+            protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
+                mRecipeTier = GT_Utility.getTier(recipe.mEUt);
                 setSpeedBonus(getSpeedBonus());
-                return super.process();
-            }
-
-            @Override
-            protected @NotNull CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
-                if (glassTier < 12 && glassTier < GT_Utility.getTier(recipe.mEUt)) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt));
-                }
-                if (glassTier >= 12 || glassTier > GT_Utility.getTier(recipe.mEUt)) {
-                    speedBonus = 1 / SpeedBonus_MegaMacerator;
+                if (glassTier < 12 && glassTier < mRecipeTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTier);
                 }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
+
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
@@ -149,13 +140,6 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (glassTier < 12) {
-            for (GT_MetaTileEntity_Hatch hatch : this.mExoticEnergyHatches) {
-                if (this.glassTier < hatch.mTier) {
-                    return false;
-                }
-            }
-        }
         return true;
     }
 
@@ -406,6 +390,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Block Level: " + EnumChatFormatting.GOLD + this.mBlockTier;
+        // ret[origin.length + 2] = EnumChatFormatting.AQUA + "Eu Tier: " + EnumChatFormatting.GOLD + this.mRecipeTier;
         return ret;
     }
 

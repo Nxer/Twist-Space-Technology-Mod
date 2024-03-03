@@ -240,7 +240,7 @@ public class Config {
     // region Mega Macerator
     public static int BlockTier1Parallel_MegaMacerator = 128;
     public static int BlockTier2Parallel_MegaMacerator = 32768;
-    public static float SpeedBonus_MegaMacerator = 8.0F;
+    public static float SpeedBonus_MegaMacerator = 0.125F;
     public static boolean EnablePerfectOverclock_MegaMacerator=false;
     // endregion
 
