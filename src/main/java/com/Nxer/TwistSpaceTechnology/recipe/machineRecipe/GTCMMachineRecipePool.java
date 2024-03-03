@@ -1689,6 +1689,49 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(assembler);
         // endregion
 
+        // region Hephaestus' Atelier
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, ItemList.Machine_Multi_Furnace.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .itemInputs(
+                ItemList.Machine_Multi_Furnace.get(64),
+                ItemList.Casing_HeatProof.get(64),
+                ItemList.Casing_FrostProof.get(64),
+                new ItemStack[]{
+                    ItemList.Casing_Coil_AwakenedDraconium.get(64),
+                    ItemList.Casing_Coil_Infinity.get(16),
+                    ItemList.Casing_Coil_Hypogen.get(4),
+                    ItemList.Casing_Coil_Eternal.get(1),
+                },
+
+                eM_Hollow.get(64),
+                ItemList.Field_Generator_UHV.get(16),
+                ItemList.Electric_Pump_UHV.get(64),
+                ItemList.Conveyor_Module_UHV.get(64),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 32},
+                HighEnergyFlowCircuit.get(64),
+                HighEnergyFlowCircuit.get(64),
+                HighEnergyFlowCircuit.get(64),
+
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Invar, 64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 16)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 144*128),
+                Materials.CosmicNeutronium.getMolten(144*64),
+                Materials.UUMatter.getFluid(1000*64),
+                Materials.SuperCoolant.getFluid(1000*64)
+            )
+            .itemOutputs(GTCMItemList.HephaestusAtelier.get(1))
+            .eut(RECIPE_UEV)
+            .duration(20*600)
+            .addTo(assemblyLine);
+
+        // endregion
+
         // region Legend Laser Hatch
         IItemContainer LegendTarget = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel9001;
         IItemContainer LegendSource = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel9001;
@@ -1767,6 +1810,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UXV)
             .duration(20 * 512)
             .addTo(AssemblyLine);
+
         // endregion
     }
     // spotless:on

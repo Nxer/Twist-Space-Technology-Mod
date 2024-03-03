@@ -230,9 +230,18 @@ public final class ValueEnum {
     public static final int BlockTier2Parallel_MegaMacerator = Config.BlockTier2Parallel_MegaMacerator;
     public static final float SpeedBonus_MegaMacerator = Config.SpeedBonus_MegaMacerator;
     public static final boolean EnablePerfectOverclock_MegaMacerator = Config.EnablePerfectOverclock_MegaMacerator;
+    // endregion
 
     // region Infinite Air Hatch
     public static final int ticksOfInfiniteAirHatchFillFull = (int) (20 * Config.secondsOfInfiniteAirHatchFillFull);
+    // endregion
+
+    // region Hephaestus' Atelier
+    public static final int ConsumeEutPerParallel_HephaestusAtelier = Config.ConsumeEutPerParallel_HephaestusAtelier;
+    public static final int ConsumeDuration_HephaestusAtelier = Config.ConsumeDuration_HephaestusAtelier;
+    public static final int ConsumeEuPerSmelting_HephaestusAtelier = Config.ConsumeEuPerSmelting_HephaestusAtelier;
+    public static final int DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier = Config.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
+    public static final int DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = Config.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
     // endregion
 
 }

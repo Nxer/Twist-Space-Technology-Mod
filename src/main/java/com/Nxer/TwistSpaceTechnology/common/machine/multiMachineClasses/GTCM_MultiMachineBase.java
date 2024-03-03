@@ -4,6 +4,11 @@ import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTEs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -28,6 +33,10 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_InputBus_ME;
+import gregtech.common.tileentities.machines.IDualInputHatch;
+import gregtech.common.tileentities.machines.IDualInputInventory;
 
 public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable {
@@ -181,9 +190,61 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return rList;
     }
 
+    /**
+     * Forced get all input items, include all Dual Input Hatch slot.
+     * 
+     * @return The items list.
+     */
+    public ArrayList<ItemStack> getStoredInputsNoSeparation() {
+        ArrayList<ItemStack> rList = new ArrayList<>();
+
+        if (supportsCraftingMEBuffer()) {
+            for (IDualInputHatch dualInputHatch : mDualInputHatches) {
+                Iterator<? extends IDualInputInventory> inventoryIterator = dualInputHatch.inventories();
+                while (inventoryIterator.hasNext()) {
+                    ItemStack[] items = inventoryIterator.next()
+                        .getItemInputs();
+                    if (items == null || items.length == 0) continue;
+                    // rList.addAll(Arrays.asList(Arrays.stream(items).filter(Objects::nonNull).toArray(ItemStack[]::new)));
+                    Arrays.stream(items)
+                        .filter(Objects::nonNull)
+                        .forEach(rList::add);
+                }
+            }
+        }
+
+        Map<GT_Utility.ItemId, ItemStack> inputsFromME = new HashMap<>();
+        for (GT_MetaTileEntity_Hatch_InputBus tHatch : GT_Utility.filterValidMTEs(mInputBusses)) {
+            tHatch.mRecipeMap = getRecipeMap();
+            IGregTechTileEntity tileEntity = tHatch.getBaseMetaTileEntity();
+            boolean isMEBus = tHatch instanceof GT_MetaTileEntity_Hatch_InputBus_ME;
+            for (int i = tileEntity.getSizeInventory() - 1; i >= 0; i--) {
+                ItemStack itemStack = tileEntity.getStackInSlot(i);
+                if (itemStack != null) {
+                    if (isMEBus) {
+                        // Prevent the same item from different ME buses from being recognized
+                        inputsFromME.put(GT_Utility.ItemId.createNoCopy(itemStack), itemStack);
+                    } else {
+                        rList.add(itemStack);
+                    }
+                }
+            }
+        }
+
+        if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
+            .startsWith("gt.integrated_circuit")) rList.add(getStackInSlot(1));
+        if (!inputsFromME.isEmpty()) {
+            rList.addAll(inputsFromME.values());
+        }
+        return rList;
+    }
+
     // region Overrides
     @Override
     public String[] getInfoData() {
+        String dSpeed = String.format("%.3f", this.getSpeedBonus() * 100) + "%";
+        String dEUMod = String.format("%.3f", this.getEuModifier() * 100) + "%";
+
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
@@ -194,11 +255,11 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         ret[origin.length + 1] = EnumChatFormatting.AQUA + texter("Speed multiplier", "MachineInfoData.SpeedMultiplier")
             + ": "
             + EnumChatFormatting.GOLD
-            + this.getSpeedBonus();
+            + dSpeed;
         ret[origin.length + 2] = EnumChatFormatting.AQUA + texter("EU Modifier", "MachineInfoData.EuModifier")
             + ": "
             + EnumChatFormatting.GOLD
-            + this.getEuModifier();
+            + dEUMod;
         return ret;
     }
 

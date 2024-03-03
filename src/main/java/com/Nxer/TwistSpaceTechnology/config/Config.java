@@ -35,6 +35,7 @@ public class Config {
     public static final String MEG = "TowerOFAbstraction";
     public static final String BeeEngineer = "BeeEngineer";
     public static final String MegaMacerator = "HouseholdCellFragmentizer";
+    public static final String HephaestusAtelier = "HephaestusAtelier";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -241,6 +242,16 @@ public class Config {
     public static int BlockTier2Parallel_MegaMacerator = 32768;
     public static float SpeedBonus_MegaMacerator = 8.0F;
     public static boolean EnablePerfectOverclock_MegaMacerator=false;
+    // endregion
+
+    // region HephaestusAtelier
+    public static int ConsumeEutPerParallel_HephaestusAtelier = 7;
+    public static int ConsumeDuration_HephaestusAtelier = 512;
+    public static int ConsumeEuPerSmelting_HephaestusAtelier = 2048;
+    public static int DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier = 256;
+    public static int DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = 20;
+
+    // endregion
 
     // region Infinite Air Hatch
 
@@ -256,6 +267,14 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region HephaestusAtelier
+        ConsumeEutPerParallel_HephaestusAtelier = configuration.getInt("ConsumeEutPerParallel_HephaestusAtelier", HephaestusAtelier, ConsumeEutPerParallel_HephaestusAtelier, 1, 30, "In normal mode, how much EU/t per parallel cost of Hephaestus' Atelier. Type: int");
+        ConsumeDuration_HephaestusAtelier = configuration.getInt("ConsumeDuration_HephaestusAtelier", HephaestusAtelier, ConsumeDuration_HephaestusAtelier, 1, 32767, "In normal mode, how many ticks every processing cost. Type: int");
+        ConsumeEuPerSmelting_HephaestusAtelier = configuration.getInt("ConsumeEuPerSmelting_HephaestusAtelier", HephaestusAtelier, ConsumeEuPerSmelting_HephaestusAtelier, 1, 32767, "In wireless mode, how much EU per item smelting cost. Type: int");
+        DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier = configuration.getInt("DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier", HephaestusAtelier, DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier, 1, 32767, "In wireless mode with T2 coil, how many ticks every processing cost. Type: int");
+        DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = configuration.getInt("DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier", HephaestusAtelier, DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier, 1, 32767, "In wireless mode with T3 coil, how many ticks every processing cost. Type: int");
         // endregion
 
         // region VacuumFilterExtractor

@@ -27,21 +27,23 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.TieredCircuits;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OreDictUnificator;
 
 public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConverter> {
 
@@ -72,25 +74,19 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
 
         Set<ItemStack> outputs = new HashSet<>();
         // check every input
-        for (ItemStack items : inputs) {
-            if (isStackInvalid(items)) continue;
-            boolean isNotCircuit = true;
-            for (TieredCircuits cir : TieredCircuits.values()) {
-                if (cir.contains(items)) {
-                    isNotCircuit = false;
-                    outputs.add(cir.getPatternCircuit(items.stackSize));
-                    items.stackSize = 0;
-                    break;
-                }
-            }
-            if (isNotCircuit) {
-                // if this item is not a circuit, put it into outputs.
-                outputs.add(items.copy());
-                items.stackSize = 0;
+        for (ItemStack item : inputs) {
+            if (isStackInvalid(item)) continue;
+            ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(item);
+
+            if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) continue;
+            if (tPrefixMaterial.mPrefix == OrePrefixes.circuit) {
+                outputs.add(GT_OreDictUnificator.get(false, item, true));
+                item.stackSize = 0;
             }
         }
         // inputs are consumed at this point
         updateSlots();
+        if (outputs.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
