@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier1Parallel_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier2Parallel_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_MegaMacerator;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_MegaMacerator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -35,7 +35,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.*;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.google.common.collect.ImmutableList;
@@ -66,12 +66,10 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
     // region Class Constructor
     public TST_MegaMacerator(int aID, String aName, String aNameRegional) {
-
         super(aID, aName, aNameRegional);
     }
 
     public TST_MegaMacerator(String aName) {
-
         super(aName);
     }
 
@@ -84,6 +82,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
     // region Processing Logic
     private int mBlockTier = 0;
+    public int mRecipeTier = 1;
     public byte glassTier;
 
     @Override
@@ -92,8 +91,13 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     }
 
     @Override
-    protected float getEuModifier() {
-        return EuModifier_MegaMacerator;
+    protected float getSpeedBonus() {
+        return (((glassTier >= 12) || (glassTier > mRecipeTier)) ? SpeedBonus_MegaMacerator : 1);
+        // int mEuTier = GT_Utility.getTier(this.getMaxInputEu()) - 1;
+        // return (float) (Math.log(100 + exp(4 * 13 - mBlockTier * mEuTier))
+        // / Math.log(100 + exp(3 * 11 - mBlockTier * mEuTier))
+        // * Math.pow(1 / BlockspeedMultiplier_MegaMacerator, mBlockTier)
+        // * Math.pow(EuModifier_MegaMacerator, mEuTier));
     }
 
     @Override
@@ -106,28 +110,16 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
             @NotNull
             @Override
-            public CheckRecipeResult process() {
+            protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
+                mRecipeTier = GT_Utility.getTier(recipe.mEUt);
                 setSpeedBonus(getSpeedBonus());
-                return super.process();
-            }
-
-            @Override
-            protected @NotNull CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
-                if (glassTier < 12 && glassTier - 1 < GT_Utility.getTier(recipe.mEUt)) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt) - 1);
+                if (glassTier < 12 && glassTier < mRecipeTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTier);
                 }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
 
-    public float getSpeedBonus() {
-        // int mEuTier = GT_Utility.getTier(this.getMaxInputEu()) - 1;
-        // return (float) (Math.log(100 + exp(4 * 13 - mBlockTier * mEuTier))
-        // / Math.log(100 + exp(3 * 11 - mBlockTier * mEuTier))
-        // * Math.pow(1 / BlockspeedMultiplier_MegaMacerator, mBlockTier)
-        // * Math.pow(EuModifier_MegaMacerator, mEuTier));
-        return 1;
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
     @Override
@@ -398,6 +390,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Block Level: " + EnumChatFormatting.GOLD + this.mBlockTier;
+        // ret[origin.length + 2] = EnumChatFormatting.AQUA + "Eu Tier: " + EnumChatFormatting.GOLD + this.mRecipeTier;
         return ret;
     }
 
@@ -411,6 +404,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
             .addInfo(TextLocalization.Tooltip_MegaMacerator_03)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_04)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_05)
+            .addInfo(TextLocalization.Tooltip_MegaMacerator_06)
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)

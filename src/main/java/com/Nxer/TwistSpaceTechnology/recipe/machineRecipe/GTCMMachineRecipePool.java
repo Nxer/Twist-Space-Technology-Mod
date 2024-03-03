@@ -1729,6 +1729,88 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UEV)
             .duration(20*600)
             .addTo(assemblyLine);
+
+        // endregion
+
+        // region Legend Laser Hatch
+        IItemContainer LegendTarget = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel9001;
+        IItemContainer LegendSource = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel9001;
+        IItemContainer UXVTarget104 = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel7_UXV;
+        IItemContainer UXVSource104 = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel7_UXV;
+        IItemContainer HomoStructureTime = com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
+        IItemContainer HomoStructureSpace = com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, UXVTarget104.get(1))
+            .metadata(RESEARCH_TIME, 640 * HOURS)
+            .itemInputs(
+                UXVTarget104.get(64),
+                ItemList.Field_Generator_UXV.get(64),
+                UXVTarget104.get(64),
+                HomoStructureTime.get(64),
+
+                UXVTarget104.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcillium, 64),
+                UXVTarget104.get(64),
+                ItemList.ZPM6.get(1),
+
+                UXVTarget104.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcicium, 64),
+                UXVTarget104.get(64),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 16),
+
+                UXVTarget104.get(64),
+                ItemList.Field_Generator_UXV.get(64),
+                UXVTarget104.get(64),
+                HomoStructureTime.get(64)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.Time.getMolten(2000000000),
+                MaterialsUEVplus.Eternity.getMolten(2000000000),
+                MaterialsUEVplus.SpaceTime.getMolten(2000000000),
+                Materials.Infinity.getMolten(2000000000)
+            )
+            .itemOutputs(LegendTarget.get(1))
+            .eut(RECIPE_UXV)
+            .duration(20 * 512)
+            .addTo(AssemblyLine);
+
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, UXVSource104.get(1))
+            .metadata(RESEARCH_TIME, 640 * HOURS)
+            .itemInputs(
+                UXVSource104.get(64),
+                ItemList.Field_Generator_UXV.get(64),
+                UXVSource104.get(64),
+                HomoStructureTime.get(64),
+
+                UXVSource104.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcillium, 64),
+                UXVSource104.get(64),
+                ItemList.ZPM6.get(1),
+
+                UXVSource104.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcicium, 64),
+                UXVSource104.get(64),
+                GT_ModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 16),
+
+                UXVSource104.get(64),
+                ItemList.Field_Generator_UXV.get(64),
+                UXVSource104.get(64),
+                HomoStructureTime.get(64)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.Time.getMolten(2000000000),
+                MaterialsUEVplus.Eternity.getMolten(2000000000),
+                MaterialsUEVplus.SpaceTime.getMolten(2000000000),
+                Materials.Infinity.getMolten(2000000000)
+            )
+            .itemOutputs(LegendSource.get(1))
+            .eut(RECIPE_UXV)
+            .duration(20 * 512)
+            .addTo(AssemblyLine);
+
         // endregion
     }
     // spotless:on
