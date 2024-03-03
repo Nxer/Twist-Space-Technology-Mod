@@ -808,4 +808,5 @@ Tooltip_MegaMacerator_01=§6物质的挤压碰撞
 Tooltip_MegaMacerator_02=这玩意可比锻造锤好用多了
 Tooltip_MegaMacerator_03=最大并行：2 ^ (2 ^ (等级 + 2) - 1)
 Tooltip_MegaMacerator_04=取决于可选方块:大马士革钢、中子、宇宙素
-Tooltip_MegaMacerator_05=可用配方等级不低于玻璃等级-1
+Tooltip_MegaMacerator_05=玻璃等级限制可执行配方等级
+Tooltip_MegaMacerator_06=当玻璃等级高于配方等级时获得8x倍速

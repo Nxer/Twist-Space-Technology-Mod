@@ -689,7 +689,8 @@ public class TextLocalization {
     public static final String Tooltip_MegaMacerator_02 = texter("This is way better than a forge hammer.", "Tooltip_MegaMacerator_02");
     public static final String Tooltip_MegaMacerator_03 = texter("Can parallel up to 2 ^ (2 ^ (Tier + 2) - 1).", "Tooltip_MegaMacerator_03");
     public static final String Tooltip_MegaMacerator_04 = texter("Tier is determined by cotainment block: Damascus Steel, Neutronium, Universium.", "Tooltip_MegaMacerator_04");
-    public static final String Tooltip_MegaMacerator_05 = texter("Available recipe tier is one below glass tier.", "Tooltip_MegaMacerator_05");
+    public static final String Tooltip_MegaMacerator_05 = texter("The max voltage tier is limited by the glass tier.", "Tooltip_MegaMacerator_05");
+    public static final String Tooltip_MegaMacerator_06 = texter("Enable 8x speed multiplier when glass tier > recipe tier.", "Tooltip_MegaMacerator_06");
 
     // endregion
 

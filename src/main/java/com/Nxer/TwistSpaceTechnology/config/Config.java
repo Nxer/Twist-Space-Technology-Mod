@@ -239,7 +239,7 @@ public class Config {
     // region Mega Macerator
     public static int BlockTier1Parallel_MegaMacerator = 128;
     public static int BlockTier2Parallel_MegaMacerator = 32768;
-    public static float EuModifier_MegaMacerator = 0.80F;
+    public static float SpeedBonus_MegaMacerator = 8.0F;
     public static boolean EnablePerfectOverclock_MegaMacerator=false;
 
     // region Infinite Air Hatch
@@ -458,7 +458,7 @@ public class Config {
         // region Mega Macerator
         BlockTier1Parallel_MegaMacerator = configuration.getInt("BlockTier1Parallel_MegaMacerator", MegaMacerator, BlockTier1Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 1. Type: int");
         BlockTier2Parallel_MegaMacerator = configuration.getInt("BlockTier2Parallel_MegaMacerator", MegaMacerator, BlockTier2Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 2. Type: int");
-        EuModifier_MegaMacerator = Float.parseFloat(configuration.getString("EuModifier_MegaMacerator", MegaMacerator, String.valueOf(EuModifier_MegaMacerator), "EU Modifier of Mega Macerator. Type: float"));
+        SpeedBonus_MegaMacerator = Float.parseFloat(configuration.getString("SpeedBonus_MegaMacerator", MegaMacerator, String.valueOf(SpeedBonus_MegaMacerator), "Speed Bonus of Mega Macerator. Type: float"));
         EnablePerfectOverclock_MegaMacerator=configuration.getBoolean("EnablePerfectOverclock_MegaMacerator", MegaMacerator, EnablePerfectOverclock_MegaMacerator, "Enable perfect overclock of Mega Macerator. Type: boolean");
         // end region
 

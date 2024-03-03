@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier1Parallel_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier2Parallel_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_MegaMacerator;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_MegaMacerator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -50,6 +50,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.metatileentity.implementations.*;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -84,6 +85,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
     // region Processing Logic
     private int mBlockTier = 0;
+    private float speedBonus = 1;
     public byte glassTier;
 
     @Override
@@ -92,8 +94,13 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     }
 
     @Override
-    protected float getEuModifier() {
-        return EuModifier_MegaMacerator;
+    protected float getSpeedBonus() {
+        // int mEuTier = GT_Utility.getTier(this.getMaxInputEu()) - 1;
+        // return (float) (Math.log(100 + exp(4 * 13 - mBlockTier * mEuTier))
+        // / Math.log(100 + exp(3 * 11 - mBlockTier * mEuTier))
+        // * Math.pow(1 / BlockspeedMultiplier_MegaMacerator, mBlockTier)
+        // * Math.pow(EuModifier_MegaMacerator, mEuTier));
+        return speedBonus;
     }
 
     @Override
@@ -113,21 +120,15 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
             @Override
             protected @NotNull CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
-                if (glassTier < 12 && glassTier - 1 < GT_Utility.getTier(recipe.mEUt)) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt) - 1);
+                if (glassTier < 12 && glassTier < GT_Utility.getTier(recipe.mEUt)) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt));
+                }
+                if (glassTier > 11 || glassTier > GT_Utility.getTier(recipe.mEUt)) {
+                    speedBonus = SpeedBonus_MegaMacerator;
                 }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
-
-    public float getSpeedBonus() {
-        // int mEuTier = GT_Utility.getTier(this.getMaxInputEu()) - 1;
-        // return (float) (Math.log(100 + exp(4 * 13 - mBlockTier * mEuTier))
-        // / Math.log(100 + exp(3 * 11 - mBlockTier * mEuTier))
-        // * Math.pow(1 / BlockspeedMultiplier_MegaMacerator, mBlockTier)
-        // * Math.pow(EuModifier_MegaMacerator, mEuTier));
-        return 1;
     }
 
     @Override
@@ -148,6 +149,13 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (glassTier < 12) {
+            for (GT_MetaTileEntity_Hatch hatch : this.mExoticEnergyHatches) {
+                if (this.glassTier < hatch.mTier) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -411,6 +419,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
             .addInfo(TextLocalization.Tooltip_MegaMacerator_03)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_04)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_05)
+            .addInfo(TextLocalization.Tooltip_MegaMacerator_06)
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
