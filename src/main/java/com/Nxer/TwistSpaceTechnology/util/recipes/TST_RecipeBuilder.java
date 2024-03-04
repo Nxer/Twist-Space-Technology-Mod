@@ -12,14 +12,14 @@ public class TST_RecipeBuilder {
         return new TST_RecipeBuilder();
     }
 
-    public ItemStack[] inputItems = new ItemStack[0];
-    public ItemStack[] outputItems = new ItemStack[0];
-    public FluidStack[] inputFluids = new FluidStack[0];
-    public FluidStack[] outputFluids = new FluidStack[0];
-    public int[] outputChance;
-    public int eut = 0;
-    public int duration = 0;
-    public int specialValue = 0;
+    private ItemStack[] inputItems = new ItemStack[0];
+    private ItemStack[] outputItems = new ItemStack[0];
+    private FluidStack[] inputFluids = new FluidStack[0];
+    private FluidStack[] outputFluids = new FluidStack[0];
+    private int[] outputChance;
+    private int eut = 0;
+    private int duration = 0;
+    private int specialValue = 0;
 
     public TST_RecipeBuilder() {}
 
