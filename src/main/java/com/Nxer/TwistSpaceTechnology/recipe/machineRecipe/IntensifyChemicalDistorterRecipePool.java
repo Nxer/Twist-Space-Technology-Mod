@@ -2,13 +2,16 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
+import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
+import static gregtech.api.enums.TierEU.RECIPE_LuV;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
+import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static net.minecraftforge.fluids.FluidRegistry.getFluidStack;
 
 import net.minecraftforge.fluids.FluidRegistry;
@@ -17,7 +20,9 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.gthandler.CustomItemList;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
@@ -138,6 +143,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .eut(RECIPE_UHV)
             .duration(20)
             .addTo(ICD);
+
+        // endregion
 
         // region Phosphoric Acid
         GT_Values.RA.stdBuilder()
@@ -675,6 +682,189 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .eut(RECIPE_HV)
             .duration(20*30)
             .addTo(ICD);
+        // endregion
+
+        // region Platinum Group
+
+        // Platinum
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, CustomItemList.RadoxPolymerLens.get(1)),
+                WerkstoffLoader.PTMetallicPowder.get(OrePrefixes.dust, 28)
+            )
+            .fluidInputs(
+                Materials.Chlorine.getGas(3760),
+                Materials.Oxygen.getGas(1000*45)
+            )
+            .itemOutputs(
+                Materials.Platinum.getDust(20),
+                WerkstoffLoader.PTResidue.get(OrePrefixes.dust, 20),
+                WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 36)
+            )
+            .specialValue(9900)
+            .eut(RECIPE_EV)
+            .duration(20*20)
+            .addTo(ICD);
+
+        // Palladium
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, CustomItemList.RadoxPolymerLens.get(1)),
+                WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 28),
+                Materials.Carbon.getDust(10)
+            )
+            .fluidInputs(
+                Materials.Nitrogen.getGas(1000*70),
+                Materials.Hydrogen.getGas(1000*190),
+                Materials.Oxygen.getGas(1000*20)
+            )
+            .itemOutputs(
+                Materials.Palladium.getDust(10)
+            )
+            .specialValue(9900)
+            .eut(RECIPE_HV)
+            .duration(20*10)
+            .addTo(ICD);
+
+        // Platinum Residue
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, CustomItemList.RadoxPolymerLens.get(1)),
+                setStackSize(WerkstoffLoader.PTResidue.get(OrePrefixes.dust, 1),220),
+                Materials.Sulfur.getDust(52),
+                setStackSize(Materials.Saltpeter.getDust(1), 570)
+            )
+            .fluidInputs(
+                Materials.Oxygen.getGas(1000*83),
+                Materials.SaltWater.getFluid(1000*57)
+            )
+            .itemOutputs(
+                setStackSize(WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 1),198),
+                setStackSize(WerkstoffLoader.SodiumRuthenate.get(OrePrefixes.dust, 1),171),
+                setStackSize(WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 1),342)
+            )
+            .specialValue(9900)
+            .eut(RECIPE_IV)
+            .duration(20*100)
+            .addTo(ICD);
+
+        // Rhodium
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, CustomItemList.RadoxPolymerLens.get(1)),
+                setStackSize(WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 1),100),
+                Materials.Sodium.getDust(50)
+            )
+            .fluidInputs(
+                Materials.Nitrogen.getGas(1000),
+                Materials.Oxygen.getGas(1000*180),
+                Materials.Chlorine.getGas(1000*90)
+            )
+            .itemOutputs(
+                WerkstoffLoader.Rhodium.get(OrePrefixes.dust, 57)
+            )
+            .fluidOutputs(
+                Materials.Hydrogen.getGas(1000*71)
+            )
+            .specialValue(9900)
+            .eut(RECIPE_IV)
+            .duration(20*57)
+            .addTo(ICD);
+
+        // Ruthenium
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, CustomItemList.RadoxPolymerLens.get(1)),
+                WerkstoffLoader.SodiumRuthenate.get(OrePrefixes.dust, 5)
+            )
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*72)
+            )
+            .itemOutputs(
+                WerkstoffLoader.Ruthenium.get(OrePrefixes.dust, 12),
+                Materials.Sodium.getDust(5)
+            )
+            .fluidOutputs(
+                Materials.Chlorine.getGas(2500)
+            )
+            .specialValue(9900)
+            .eut(RECIPE_LuV)
+            .duration(20*12)
+            .addTo(ICD);
+
+        // Rarest Metal Residue
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, CustomItemList.RadoxPolymerLens.get(1)),
+                WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 20)
+            )
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*51),
+                Materials.Chlorine.getGas(1000*24)
+            )
+            .itemOutputs(
+                Materials.Osmium.getDust(1),
+                Materials.Iridium.getDust(10),
+                Materials.Nickel.getDust(5),
+                Materials.Copper.getDust(5),
+                Materials.SiliconDioxide.getDust(6),
+                Materials.Gold.getDust(4)
+            )
+            .specialValue(10800)
+            .eut(RECIPE_UV)
+            .duration(60)
+            .addTo(ICD);
+
+        // Iridium Residue
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, CustomItemList.RadoxPolymerLens.get(1)),
+                WerkstoffLoader.IrLeachResidue.get(OrePrefixes.dust, 10)
+            )
+            .fluidInputs(
+                Materials.Hydrogen.getGas(1000*40),
+                Materials.Chlorine.getGas(1000*20)
+            )
+            .itemOutputs(
+                Materials.Iridium.getDust(10),
+                Materials.Nickel.getDust(5),
+                Materials.Copper.getDust(5),
+                Materials.SiliconDioxide.getDust(6),
+                Materials.Gold.getDust(4)
+            )
+            .specialValue(10800)
+            .eut(RECIPE_ZPM)
+            .duration(20*10)
+            .addTo(ICD);
+
+        // Acidic Osmium Solution
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, CustomItemList.RadoxPolymerLens.get(1))
+            )
+            .fluidInputs(
+                WerkstoffLoader.AcidicOsmiumSolution.getFluidOrGas(10000),
+                Materials.Hydrogen.getGas(1000*6)
+            )
+            .itemOutputs(
+                Materials.Osmium.getDust(1)
+            )
+            .fluidOutputs(
+                Materials.Chlorine.getGas(1000)
+            )
+            .specialValue(10800)
+            .eut(RECIPE_UV)
+            .duration(20)
+            .addTo(ICD);
+
         // endregion
 
     }

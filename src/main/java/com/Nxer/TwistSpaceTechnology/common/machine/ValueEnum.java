@@ -228,7 +228,7 @@ public final class ValueEnum {
 
     public static final int BlockTier1Parallel_MegaMacerator = Config.BlockTier1Parallel_MegaMacerator;
     public static final int BlockTier2Parallel_MegaMacerator = Config.BlockTier2Parallel_MegaMacerator;
-    public static final float EuModifier_MegaMacerator = Config.EuModifier_MegaMacerator;
+    public static final float SpeedBonus_MegaMacerator = Config.SpeedBonus_MegaMacerator;
     public static final boolean EnablePerfectOverclock_MegaMacerator = Config.EnablePerfectOverclock_MegaMacerator;
     // endregion
 
@@ -242,6 +242,10 @@ public final class ValueEnum {
     public static final int ConsumeEuPerSmelting_HephaestusAtelier = Config.ConsumeEuPerSmelting_HephaestusAtelier;
     public static final int DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier = Config.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
     public static final int DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = Config.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
+    // endregion
+
+    // region Deployed Nano Core
+    public static final int TickPerProgressing_WirelessMode_DeployedNanoCore = Config.TickPerProgressing_WirelessMode_DeployedNanoCore;
     // endregion
 
 }

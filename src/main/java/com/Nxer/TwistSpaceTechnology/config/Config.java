@@ -36,6 +36,7 @@ public class Config {
     public static final String BeeEngineer = "BeeEngineer";
     public static final String MegaMacerator = "HouseholdCellFragmentizer";
     public static final String HephaestusAtelier = "HephaestusAtelier";
+    public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -240,7 +241,7 @@ public class Config {
     // region Mega Macerator
     public static int BlockTier1Parallel_MegaMacerator = 128;
     public static int BlockTier2Parallel_MegaMacerator = 32768;
-    public static float EuModifier_MegaMacerator = 0.80F;
+    public static float SpeedBonus_MegaMacerator = 0.125F;
     public static boolean EnablePerfectOverclock_MegaMacerator=false;
     // endregion
 
@@ -251,6 +252,11 @@ public class Config {
     public static int DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier = 256;
     public static int DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = 20;
 
+    // endregion
+
+    // region DeployedNanoCore
+    public static boolean Enable_DeployedNanoCore = true;
+    public static int TickPerProgressing_WirelessMode_DeployedNanoCore = 128;
     // endregion
 
     // region Infinite Air Hatch
@@ -267,6 +273,11 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region DeployedNanoCore
+        Enable_DeployedNanoCore = configuration.getBoolean("Enable_DeployedNanoCore", DeployedNanoCore, Enable_DeployedNanoCore, "Enable Deployed Nano Core.");
+        TickPerProgressing_WirelessMode_DeployedNanoCore = configuration.getInt("TickPerProgressing_WirelessMode_DeployedNanoCore", DeployedNanoCore, TickPerProgressing_WirelessMode_DeployedNanoCore, 1, 65536, "How many ticks per progressing cost in Wireless mode of Deployed Nano Core. Type: int");
         // endregion
 
         // region HephaestusAtelier
@@ -477,7 +488,7 @@ public class Config {
         // region Mega Macerator
         BlockTier1Parallel_MegaMacerator = configuration.getInt("BlockTier1Parallel_MegaMacerator", MegaMacerator, BlockTier1Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 1. Type: int");
         BlockTier2Parallel_MegaMacerator = configuration.getInt("BlockTier2Parallel_MegaMacerator", MegaMacerator, BlockTier2Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 2. Type: int");
-        EuModifier_MegaMacerator = Float.parseFloat(configuration.getString("EuModifier_MegaMacerator", MegaMacerator, String.valueOf(EuModifier_MegaMacerator), "EU Modifier of Mega Macerator. Type: float"));
+        SpeedBonus_MegaMacerator = Float.parseFloat(configuration.getString("SpeedBonus_MegaMacerator", MegaMacerator, String.valueOf(SpeedBonus_MegaMacerator), "Speed Bonus of Mega Macerator. Type: float"));
         EnablePerfectOverclock_MegaMacerator=configuration.getBoolean("EnablePerfectOverclock_MegaMacerator", MegaMacerator, EnablePerfectOverclock_MegaMacerator, "Enable perfect overclock of Mega Macerator. Type: boolean");
         // end region
 

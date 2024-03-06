@@ -112,10 +112,10 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
             * (ValueEnum.MEG_CrepperEgg_Gen * mCrepperEggs + ValueEnum.MEG_DragonEgg_Gen * mDragonEggs
                 + ValueEnum.MEG_InfinityEgg_Gen * mInfinityEggs));
         if (tOutput > vol) {
-            mEUt = (int) vol;
+            lEUt = vol;
             eAmpereFlow = Math.min(tOutput / vol, amp);
         } else {
-            mEUt = (int) tOutput;
+            lEUt = tOutput;
         }
     }
 
