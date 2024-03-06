@@ -12,7 +12,6 @@ import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
-import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +37,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -56,7 +56,7 @@ import gregtech.common.blocks.GT_Block_Casings8;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNanoCore> {
+public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNanoCore> implements IGlobalWirelessEnergy {
 
     // region Class Constructor
     public TST_DeployedNanoCore(int aID, String aName, String aNameRegional) {
