@@ -113,7 +113,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 + coilTier;
             ret[origin.length] = "" + EnumChatFormatting.RED
                 + EnumChatFormatting.BOLD
-                + texter("Wireless mode enabled", "HephaestusAtelier.getInfoData.Wireless_mode_enabled");
+                + TextLocalization.Info_Wireless_mode_enabled;
         } else {
             ret = new String[origin.length + 1];
             System.arraycopy(origin, 0, ret, 0, origin.length);

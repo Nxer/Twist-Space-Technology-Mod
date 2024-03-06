@@ -144,6 +144,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .duration(20)
             .addTo(ICD);
 
+        // endregion
+
         // region Phosphoric Acid
         GT_Values.RA.stdBuilder()
             .itemInputs(

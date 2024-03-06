@@ -28,6 +28,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
@@ -89,7 +90,6 @@ public class MachineLoader {
     public static ItemStack AdvancedMegaOilCracker;
     public static ItemStack IndistinctTentacle;
     public static ItemStack ThermalEnergyDevourer;
-
     public static ItemStack NuclearReactor;
     public static ItemStack AstralComputingArray;
     public static ItemStack VacuumFilterExtractor;
@@ -99,6 +99,7 @@ public class MachineLoader {
     public static ItemStack BeeEngineer;
     public static ItemStack MegaMacerator;
     public static ItemStack HephaestusAtelier;
+    public static ItemStack DeployedNanoCore;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -368,6 +369,15 @@ public class MachineLoader {
             "NameHephaestusAtelier",
             TextLocalization.NameHephaestusAtelier).getStackForm(1);
         GTCMItemList.HephaestusAtelier.set(HephaestusAtelier);
+
+        //
+        if (Config.Enable_DeployedNanoCore) {
+            DeployedNanoCore = new TST_DeployedNanoCore(
+                19038,
+                "NameDeployedNanoCore",
+                TextLocalization.NameDeployedNanoCore).getStackForm(1);
+            GTCMItemList.DeployedNanoCore.set(DeployedNanoCore);
+        }
 
         // endregion
 

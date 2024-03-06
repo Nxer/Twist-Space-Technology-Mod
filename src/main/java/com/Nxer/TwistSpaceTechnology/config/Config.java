@@ -36,6 +36,7 @@ public class Config {
     public static final String BeeEngineer = "BeeEngineer";
     public static final String MegaMacerator = "HouseholdCellFragmentizer";
     public static final String HephaestusAtelier = "HephaestusAtelier";
+    public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -253,6 +254,11 @@ public class Config {
 
     // endregion
 
+    // region DeployedNanoCore
+    public static boolean Enable_DeployedNanoCore = true;
+    public static int TickPerProgressing_WirelessMode_DeployedNanoCore = 128;
+    // endregion
+
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;
@@ -267,6 +273,11 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region DeployedNanoCore
+        Enable_DeployedNanoCore = configuration.getBoolean("Enable_DeployedNanoCore", DeployedNanoCore, Enable_DeployedNanoCore, "Enable Deployed Nano Core.");
+        TickPerProgressing_WirelessMode_DeployedNanoCore = configuration.getInt("TickPerProgressing_WirelessMode_DeployedNanoCore", DeployedNanoCore, TickPerProgressing_WirelessMode_DeployedNanoCore, 1, 65536, "How many ticks per progressing cost in Wireless mode of Deployed Nano Core. Type: int");
         // endregion
 
         // region HephaestusAtelier

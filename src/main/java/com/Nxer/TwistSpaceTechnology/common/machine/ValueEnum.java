@@ -244,4 +244,8 @@ public final class ValueEnum {
     public static final int DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier = Config.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
     // endregion
 
+    // region Deployed Nano Core
+    public static final int TickPerProgressing_WirelessMode_DeployedNanoCore = Config.TickPerProgressing_WirelessMode_DeployedNanoCore;
+    // endregion
+
 }

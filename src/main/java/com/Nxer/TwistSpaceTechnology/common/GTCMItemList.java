@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.util.GT_Log;
-import gregtech.api.util.GT_OreDictUnificator;
 
 public enum GTCMItemList {
 
@@ -193,6 +192,7 @@ public enum GTCMItemList {
     BeeEngineer,
     MegaMacerator,
     HephaestusAtelier,
+    DeployedNanoCore,
 
     // MAX
     HighDimensionalExtend,
@@ -339,7 +339,7 @@ public enum GTCMItemList {
             new NullPointerException().printStackTrace(GT_Log.out);
             return Utils.copyAmount(aAmount, TestItem0.get(1));
         }
-        return Utils.copyAmount(aAmount, GT_OreDictUnificator.get(mStack));
+        return Utils.copyAmount(aAmount, mStack);
     }
 
     public GTCMItemList set(Item aItem) {
