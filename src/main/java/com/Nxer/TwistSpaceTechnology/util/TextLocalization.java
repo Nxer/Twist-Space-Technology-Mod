@@ -42,6 +42,10 @@ public class TextLocalization {
     public static final String Waila_CurrentEuCost = texter("Current EU Cost","Waila.General.CurrentEuCost");
     // endregion
 
+    // region getInfoData
+    public static final String Info_Wireless_mode_enabled = texter("Wireless mode enabled", "General.getInfoData.Wireless_mode_enabled");
+    // endregion
+
     // region Names
     public static final String name_Nxer = "" + EnumChatFormatting.RED
                                                + EnumChatFormatting.BOLD
@@ -717,6 +721,16 @@ public class TextLocalization {
     public static final String Tooltip_HephaestusAtelier_15 = texter("Otherwise same as T2.", "Tooltip_HephaestusAtelier_15");
     public static final String Tooltip_HephaestusAtelier_2_01 = texter("Must install energy hatch when in T1.", "Tooltip_HephaestusAtelier_2_01");
 
+    // endregion
+
+    // region Deployed Nano Core
+    public static final String NameDeployedNanoCore = texter("Deployed Nano Core","NameDeployedNanoCore");
+    public static final String Tooltip_DeployedNanoCore_MachineType = texter("Nano Forge","Tooltip_DeployedNanoCore_MachineType");
+    public static final String Tooltip_DeployedNanoCore_Controller = texter("Controller block for the Deployed Nano Core","Tooltip_DeployedNanoCore_Controller");
+    public static final String Tooltip_DeployedNanoCore_01 = texter(""+EnumChatFormatting.WHITE+EnumChatFormatting.ITALIC+"If you shed tears when you miss the sun, you also miss the stars.","Tooltip_DeployedNanoCore_01");
+    public static final String Tooltip_DeployedNanoCore_02 = texter("It'll take care of itself.","Tooltip_DeployedNanoCore_02");
+    public static final String Tooltip_DeployedNanoCore_03 = texter("With perfect overclock and infinite parallel.","Tooltip_DeployedNanoCore_03");
+    public static final String Tooltip_DeployedNanoCore_04 = texter("What are you worried about?","Tooltip_DeployedNanoCore_04");
     // endregion
 
 }

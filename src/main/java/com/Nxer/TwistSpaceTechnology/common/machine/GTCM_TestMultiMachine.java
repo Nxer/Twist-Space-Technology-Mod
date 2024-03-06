@@ -232,10 +232,10 @@ public class GTCM_TestMultiMachine
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
+        tt.addMachineType("test")
+            .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
             .beginStructureBlock(11, 13, 11, false)
             .addController(TextLocalization.textFrontBottom)
             .addCasingInfoRange(TextLocalization.textCasing, 8, 26, false)

@@ -10,6 +10,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_LuV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_ZPM;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrameComponent;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
@@ -27,6 +28,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstr
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OpticalSOC;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OreProcessingFactory;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PerfectLapotronCrystal;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeEV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeHV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeIV;
@@ -130,6 +132,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
@@ -1811,6 +1814,46 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20 * 512)
             .addTo(AssemblyLine);
 
+        // endregion
+
+        // region Deployed Nano Core
+        if (Config.Enable_DeployedNanoCore) {
+            TST_RecipeBuilder
+                .builder()
+                .itemInputs(
+                    setStackSize(ItemList.NanoForge.get(1), 512),
+                    MaterialsUEVplus.Universium.getNanite(64),
+                    setStackSize(MaterialsUEVplus.Eternity.getNanite(1), 128),
+                    setStackSize(MaterialsUEVplus.TranscendentMetal.getNanite(1), 1024),
+
+                    SpaceScaler.get(64),
+                    GravitationalLens.get(1024),
+                    AnnihilationConstrainer.get(1024),
+                    DysonSphereFrameComponent.get(1024),
+
+                    PerfectLapotronCrystal.get(2048),
+                    setStackSize(ItemList.Field_Generator_UMV.get(1), 1024),
+                    setStackSize(ItemList.Emitter_UMV.get(1), 2048),
+                    setStackSize(QuantumCircuit.get(1), 4096),
+
+                    StellarConstructionFrameMaterial.get(2048),
+                    setStackSize(GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 1), 4096)
+                )
+                .fluidInputs(
+                    MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144*256),
+                    Materials.UUMatter.getFluid(2000000),
+                    MaterialsUEVplus.ExcitedDTSC.getFluid(1000000),
+                    MyMaterial.shirabon.getMolten(144*8192),
+
+                    Materials.Neutronium.getMolten(144*524288),
+                    Materials.CosmicNeutronium.getMolten(144*524288),
+                    Materials.NaquadahAlloy.getMolten(144*524288)
+                )
+                .itemOutputs(GTCMItemList.DeployedNanoCore.get(1))
+                .eut(2000000000)
+                .duration(20*775500)
+                .addTo(GTCMRecipe.MiracleTopRecipes);
+        }
         // endregion
     }
     // spotless:on
