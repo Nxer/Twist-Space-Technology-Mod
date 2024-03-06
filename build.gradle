@@ -3,3 +3,8 @@
 plugins {
     id 'com.gtnewhorizons.gtnhconvention'
 }
+
+minecraft {
+    extraRunJvmArguments.add("-Xmx16G")
+    extraRunJvmArguments.add("-Xms16G")
+}
