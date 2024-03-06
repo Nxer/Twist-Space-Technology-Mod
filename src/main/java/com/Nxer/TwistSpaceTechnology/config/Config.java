@@ -136,7 +136,7 @@ public class Config {
     // endregion
 
     // region Silksong
-    public static float SpeedBonus_MultiplyPerCoilTier_Silksong = 0.9F;
+    public static float SpeedBonus_MultiplyPerCoilTier_Silksong = 0.8F;
     public static int Parallel_PerPiece_Silksong = 24;
     // endregion
 
