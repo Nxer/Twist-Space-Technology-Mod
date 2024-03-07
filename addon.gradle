@@ -3,18 +3,20 @@ tasks.register('preprocessLangInJavaFiles') {
     description = 'Preprocesses Java files.'
 
     doLast {
-        // 获取main源集中的所有Java文件
-        def javaFiles = sourceSets.main.java
+        def namespace = 'gtnhcommunitymod'
 
+        // 获取main源集中的所有Java文件
         def langMap = [:]
         def en_lang = [:]
+        def keySet = [] as Set
 
+        // 搜索源文件
+        def javaFiles = sourceSets.main.java
         langMap['en_US'] = en_lang
         // 定义状态变量
         def state = null
         def trMatch = null
 
-        // 循环处理每个.java文件
         javaFiles.each { file ->
             // 读取文件内容
             def content = file.text
@@ -25,7 +27,7 @@ tasks.register('preprocessLangInJavaFiles') {
                 switch (state) {
                     case 'tr':
                         // 如果上一行匹配了#tr模式
-                        def matcher = line =~ /\/\/\s*#([a-zA-Z_]{4})?\s(.*?)\s*/
+                        def matcher = line =~ /\/\/\s*#([a-z]{2}_[A-Z]{2})?\s*(.+)/
 
                         if (matcher) {
                             // 处理匹配结果
@@ -38,14 +40,18 @@ tasks.register('preprocessLangInJavaFiles') {
                                     en_lang[key] = value
                                 } else {
                                     def lang = matcher.group(1)
+                                    if (lang == null || lang == '') {
+                                        lang = 'en_US'
+                                    }
                                     def key = trMatch.group(1) as String
                                     def value = matcher.group(2)
                                     def lang1 = langMap[lang] as Map
                                     if (lang1 == null) {
-                                        lang1 = [String: String]
+                                        lang1 = [:]
                                         langMap[lang] = lang1
                                     }
                                     lang1[key] = value
+
                                 }
                             } else {
                                 // 处理其他情况，例如匹配到其他数量的组或者没有匹配
@@ -55,10 +61,12 @@ tasks.register('preprocessLangInJavaFiles') {
                         }
                         break
                     default:
+                        def matcher = line =~ /\/\/\s*#tr\s+([a-zA-Z.]+)\s*(.+)?\s*/
                         // 检查是否匹配了#tr模式
-                        if (line =~ /\/\/\s*#tr\s+(.+?)\s*(.*?)?\s*/) {
+                        if (matcher) {
+                            println "line: $line"
                             // 处理匹配结果
-                            def matcher = line =~ /\/\/\s*#tr\s+(.+?)\s*(.*?)?\s*/
+
                             def groupCount = matcher.groupCount()
 
                             // 如果匹配到一组或两组
@@ -66,16 +74,99 @@ tasks.register('preprocessLangInJavaFiles') {
                                 state = 'tr'
                                 trMatch = matcher
                             } else if (groupCount == 2) {
-                                def key = matcher.group(1)
                                 def value = matcher.group(2)
-                                en_lang[key] = value
+                                if (value == null || value == '') {
+                                    state = 'tr'
+                                    trMatch = matcher
+                                } else {
+                                    def key = matcher.group(1)
+                                    en_lang[key] = value
+                                }
+
                             }
                         }
                         break
                 }
             }
         }
+
+        langMap.each { name, map ->
+            keySet.addAll(map.keySet())
+        }
         println "Found information: $langMap"
+
+        def sort = []
+
+        // 获取所有资源文件
+        def resourceFiles = fileTree(dir: "src/main/resources/assets/$namespace/lang").include("*.lang")
+
+        // 遍历资源文件
+        resourceFiles.each { file ->
+            def fileName = file.name.substring(0, 5)
+            def needSort = false
+            if (fileName == 'en_US') needSort = true
+
+            // 读取文件内容
+            file.withReader { reader ->
+                def lang1 = langMap[fileName] as Map
+                if (lang1 == null) {
+                    lang1 = [:]
+                    langMap[fileName] = lang1
+                }
+
+                reader.eachLine { line ->
+                    if (line.startsWith("#") || line.trim().empty) {
+                        if (needSort) sort.add('//' + line)
+                    } else {
+                        // 使用正则表达式按第一个等号分割每一行
+                        def parts = line.split('=', 2)
+
+                        // 分割结果数组的长度为2，第一个元素为key，第二个元素为value
+                        if (parts.size() == 2) {
+                            def key = parts[0].trim()
+                            def value = parts[1]
+
+                            if (needSort) sort.add(key)
+                            if (lang1.containsKey(key)) {
+                                println "The key: $key is already defined in the code! The Lang file will be overwritten!"
+                                println "Code: ${lang1[key]} Lang file: $value"
+                            } else {
+                                lang1[key] = value
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        keySet.removeAll(sort)
+        sort.addAll(keySet)
+        println sort
+
+        langMap.each { fileName, innerMap ->
+            def outputFile = new File("src/main/resources/assets/$namespace/lang/${fileName}.lang")
+            outputFile.getParentFile().mkdirs()
+            outputFile.withWriter { writer ->
+                if (!sort.empty) {
+                    sort.each { line ->
+                        if (line.startsWith('//'))
+                            writer.write(line.substring(2) + '\n')
+                        else {
+                            if (innerMap.containsKey(line)) {
+                                writer.write("${line}=${innerMap[line]}\n")
+                            } else {
+                                println "The $fileName file does not contain the $line"
+                                writer.write("${line}=${en_lang[line]}\n")
+                            }
+                        }
+                    }
+                } else {
+                    innerMap.each { key, value ->
+                        writer.write("$key=$value\n")
+                    }
+                }
+            }
+        }
+
     }
 }
-
