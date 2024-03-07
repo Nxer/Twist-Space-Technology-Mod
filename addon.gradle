@@ -1,0 +1,81 @@
+tasks.register('preprocessLangInJavaFiles') {
+    group = 'preprocessing'
+    description = 'Preprocesses Java files.'
+
+    doLast {
+        // 获取main源集中的所有Java文件
+        def javaFiles = sourceSets.main.java
+
+        def langMap = [:]
+        def en_lang = [:]
+
+        langMap['en_US'] = en_lang
+        // 定义状态变量
+        def state = null
+        def trMatch = null
+
+        // 循环处理每个.java文件
+        javaFiles.each { file ->
+            // 读取文件内容
+            def content = file.text
+
+            // 按行处理内容
+            content.eachLine { line ->
+                // 根据状态处理行
+                switch (state) {
+                    case 'tr':
+                        // 如果上一行匹配了#tr模式
+                        def matcher = line =~ /\/\/\s*#([a-zA-Z_]{4})?\s(.*?)\s*/
+
+                        if (matcher) {
+                            // 处理匹配结果
+                            def groupCount = matcher.groupCount()
+                            // 如果匹配到一组或两组
+                            if (groupCount == 1 || groupCount == 2) {
+                                if (groupCount == 1) {
+                                    def key = trMatch.group(1) as String
+                                    def value = matcher.group(1)
+                                    en_lang[key] = value
+                                } else {
+                                    def lang = matcher.group(1)
+                                    def key = trMatch.group(1) as String
+                                    def value = matcher.group(2)
+                                    def lang1 = langMap[lang] as Map
+                                    if (lang1 == null) {
+                                        lang1 = [String: String]
+                                        langMap[lang] = lang1
+                                    }
+                                    lang1[key] = value
+                                }
+                            } else {
+                                // 处理其他情况，例如匹配到其他数量的组或者没有匹配
+                                trMatch = null
+                                state = null
+                            }
+                        }
+                        break
+                    default:
+                        // 检查是否匹配了#tr模式
+                        if (line =~ /\/\/\s*#tr\s+(.+?)\s*(.*?)?\s*/) {
+                            // 处理匹配结果
+                            def matcher = line =~ /\/\/\s*#tr\s+(.+?)\s*(.*?)?\s*/
+                            def groupCount = matcher.groupCount()
+
+                            // 如果匹配到一组或两组
+                            if (groupCount == 1) {
+                                state = 'tr'
+                                trMatch = matcher
+                            } else if (groupCount == 2) {
+                                def key = matcher.group(1)
+                                def value = matcher.group(2)
+                                en_lang[key] = value
+                            }
+                        }
+                        break
+                }
+            }
+        }
+        println "Found information: $langMap"
+    }
+}
+
