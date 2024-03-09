@@ -56,6 +56,7 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPL
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 public class MachineLoader {
 
@@ -434,101 +435,102 @@ public class MachineLoader {
         GTCMItemList.DualInputBuffer_UV.set(DualInputBuffer_UV);
 
         // region buffered energy hatch
+
         BufferedEnergyHatchLV = new GT_Hatch_BufferedEnergyHatch(
             18984,
             "NameBufferedEnergyHatchLV",
-            "Buffered Energy Hatch LV",
+            Utils.i18n("NameBufferedEnergyHatchLV"),
             1,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchMV = new GT_Hatch_BufferedEnergyHatch(
             18985,
             "NameBufferedEnergyHatchMV",
-            "Buffered Energy Hatch MV",
+            Utils.i18n("NameBufferedEnergyHatchMV"),
             2,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchHV = new GT_Hatch_BufferedEnergyHatch(
             18986,
             "NameBufferedEnergyHatchHV",
-            "Buffered Energy Hatch HV",
+            Utils.i18n("NameBufferedEnergyHatchHV"),
             3,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchEV = new GT_Hatch_BufferedEnergyHatch(
             18987,
             "NameBufferedEnergyHatchEV",
-            "Buffered Energy Hatch EV",
+            Utils.i18n("NameBufferedEnergyHatchEV"),
             4,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchIV = new GT_Hatch_BufferedEnergyHatch(
             18988,
             "NameBufferedEnergyHatchIV",
-            "Buffered Energy Hatch IV",
+            Utils.i18n("NameBufferedEnergyHatchIV"),
             5,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchLuV = new GT_Hatch_BufferedEnergyHatch(
             18989,
             "NameBufferedEnergyHatchLuV",
-            "Buffered Energy Hatch LuV",
+            Utils.i18n("NameBufferedEnergyHatchLuV"),
             6,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchZPM = new GT_Hatch_BufferedEnergyHatch(
             18990,
             "NameBufferedEnergyHatchZPM",
-            "Buffered Energy Hatch ZPM",
+            Utils.i18n("NameBufferedEnergyHatchZPM"),
             7,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUV = new GT_Hatch_BufferedEnergyHatch(
             18991,
             "NameBufferedEnergyHatchUV",
-            "Buffered Energy Hatch UV",
+            Utils.i18n("NameBufferedEnergyHatchUV"),
             8,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUHV = new GT_Hatch_BufferedEnergyHatch(
             18992,
             "NameBufferedEnergyHatchUHV",
-            "Buffered Energy Hatch UHV",
+            Utils.i18n("NameBufferedEnergyHatchUHV"),
             9,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUEV = new GT_Hatch_BufferedEnergyHatch(
             18993,
             "NameBufferedEnergyHatchUEV",
-            "Buffered Energy Hatch UEV",
+            Utils.i18n("NameBufferedEnergyHatchUEV"),
             10,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUIV = new GT_Hatch_BufferedEnergyHatch(
             18994,
             "NameBufferedEnergyHatchUIV",
-            "Buffered Energy Hatch UIV",
+            Utils.i18n("NameBufferedEnergyHatchUIV"),
             11,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUMV = new GT_Hatch_BufferedEnergyHatch(
             18995,
             "NameBufferedEnergyHatchUMV",
-            "Buffered Energy Hatch UMV",
+            Utils.i18n("NameBufferedEnergyHatchUMV"),
             12,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUXV = new GT_Hatch_BufferedEnergyHatch(
             18996,
             "NameBufferedEnergyHatchUXV",
-            "Buffered Energy Hatch UXV",
+            Utils.i18n("NameBufferedEnergyHatchUXV"),
             13,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchMAX = new GT_Hatch_BufferedEnergyHatch(
             18997,
             "NameBufferedEnergyHatchMAX",
-            "Buffered Energy Hatch MAX",
+            Utils.i18n("NameBufferedEnergyHatchMAX"),
             14,
             16,
             null).getStackForm(1);

@@ -8,9 +8,9 @@ import com.Nxer.TwistSpaceTechnology.Tags;
 
 // spotless:off
 /**
- * <li>It's best to write here the texts that need auto generate en_US.lang .
- * <li>Or some usually used texts.
+ * See <a href="https://github.com/Nxer/Twist-Space-Technology-Mod/pull/284">This PR: Use a preprocessor to help complete the creation of language files</a>
  */
+@Deprecated
 public class TextLocalization {
 
     // region general
