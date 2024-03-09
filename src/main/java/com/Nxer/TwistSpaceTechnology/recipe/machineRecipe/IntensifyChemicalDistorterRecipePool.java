@@ -867,6 +867,86 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
         // endregion
 
+        // region Naquadah
+
+        // Naquadah
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, Materials.Neutronium.getNanite(1)),
+                setStackSize(MyMaterial.naquadahEarth.get(OrePrefixes.dust,1), 480),
+                setStackSize(Materials.Sodium.getDust(1), 1128)
+            )
+            .fluidInputs(Materials.Fluorine.getGas(1000*800))
+            .itemOutputs(
+                MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 25),
+                setStackSize(Materials.Gallium.getDust(1), 960),
+                setStackSize(Materials.Adamantium.getDust(1), 384),
+                setStackSize(Materials.Sulfur.getDust(1), 1210)
+            )
+            .fluidOutputs(
+                Materials.Naquadah.getMolten(144*960),
+                Materials.NaquadahEnriched.getMolten(144*225),
+                Materials.Naquadria.getMolten(144*30),
+                Materials.Titanium.getMolten(144*480),
+                Materials.Hydrogen.getGas(1000*3368),
+                Materials.Oxygen.getGas(1000*5816),
+                MyMaterial.wasteLiquid.getFluidOrGas(1000*160)
+            )
+            .specialValue(11700)
+            .eut(RECIPE_LuV)
+            .duration(20 * 1425)
+            .addTo(ICD);
+
+        // Enriched Naquadah
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, Materials.Silver.getNanite(1)),
+                setStackSize(MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust,1), 220),
+                setStackSize(Materials.Sulfur.getDust(1), 102)
+            )
+            .fluidInputs(Materials.Oxygen.getGas(1000*288))
+            .itemOutputs(
+                MyMaterial.naquadahEarth.get(OrePrefixes.dust, 60),
+                Materials.Trinium.getDust(10)
+            )
+            .fluidOutputs(
+                Materials.NaquadahEnriched.getMolten(144*180),
+                Materials.Naquadria.getMolten(144*24),
+                Materials.Hydrogen.getGas(1000*600),
+                MyMaterial.wasteLiquid.getFluidOrGas(1000*60)
+            )
+            .specialValue(11700)
+            .eut(RECIPE_LuV * 2)
+            .duration(20 * 228)
+            .addTo(ICD);
+
+        // Naquadria
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                copyAmount(0, Materials.Silver.getNanite(1)),
+                setStackSize(MyMaterial.naquadriaEarth.get(OrePrefixes.dust,1), 100),
+                setStackSize(Materials.Phosphorus.getDust(1), 95)
+            )
+            .itemOutputs(
+                MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 50),
+                Materials.Barium.getDust(2),
+                Materials.Indium.getDust(5),
+                setStackSize(Materials.Sulfur.getDust(1), 102)
+            )
+            .fluidOutputs(
+                Materials.Naquadria.getMolten(144*100),
+                Materials.Oxygen.getGas(1000*276)
+            )
+            .specialValue(12600)
+            .eut(RECIPE_ZPM)
+            .duration(20 * 100)
+            .addTo(ICD);
+
+        // endregion
+
     }
     public void loadRecipePostInit() {
         // region H2O2
