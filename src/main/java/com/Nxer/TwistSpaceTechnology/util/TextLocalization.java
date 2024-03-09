@@ -331,14 +331,14 @@ public class TextLocalization {
 
     // region CrystallineInfinitier
     public static final String NameCrystallineInfinitier = texter("Crystalline Infinitier","NameCrystallineInfinitier");
-    public static final String Tooltip_CrystallineInfinitier_MachineType = texter("Autoclave | Crystalline Infinitier","Tooltip_CrystallineInfinitier_MachineType");
+    public static final String Tooltip_CrystallineInfinitier_MachineType = texter("Autoclave | Crystalline Infinitier | Chemical Bath","Tooltip_CrystallineInfinitier_MachineType");
     public static final String Tooltip_CrystallineInfinitier_00 = texter("Controller block for the Crystalline Infinitier","Tooltip_CrystallineInfinitier_00");
     public static final String Tooltip_CrystallineInfinitier_01 = texter(EnumChatFormatting.GREEN + "They're here. Grow and multiply without end.","Tooltip_CrystallineInfinitier_01");
     public static final String Tooltip_CrystallineInfinitier_02 = texter("With Gravitation Tech as a medium, we can control growth of crystalline cells more conveniently.","Tooltip_CrystallineInfinitier_02");
     public static final String Tooltip_CrystallineInfinitier_03 = texter("Higher glass tier, higher field generator tier, higher voltage tier means higher value of parallel.","Tooltip_CrystallineInfinitier_03");
     public static final String Tooltip_CrystallineInfinitier_04 = texter("And higher field generator tier means lower Energy cost.","Tooltip_CrystallineInfinitier_04");
     public static final String Tooltip_CrystallineInfinitier_05 = texter("Crude Stabilisation Field Generator enable Perfect Overclock.","Tooltip_CrystallineInfinitier_05");
-    public static final String Tooltip_CrystallineInfinitier_06 = texter("Extra +300%% speed in Autoclave mode.","Tooltip_CrystallineInfinitier_06");
+    public static final String Tooltip_CrystallineInfinitier_06 = texter("Extra +300%% speed in Autoclave mode. Extra +1500%% speed in Chemical Bath mode.","Tooltip_CrystallineInfinitier_06");
 
     // endregion
 

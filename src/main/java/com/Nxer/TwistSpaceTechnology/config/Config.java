@@ -172,6 +172,7 @@ public class Config {
     // region Crystalline Infinitier
     public static byte Mode_Default_CrystallineInfinitier = 0;
     public static int SpeedMultiplier_AutoclaveMode_CrystallineInfinitier = 4;
+    public static int SpeedMultiplier_ChemicalBath_CrystallineInfinitier = 16;
     public static int SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = 1;
     public static int ParallelMultiplier_CrystallineInfinitier = 1;
     public static byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = 3;
