@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.isInDevMode;
+import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -124,6 +125,13 @@ public final class Utils {
 
     public static boolean fluidEqual(FluidStack a, FluidStack b) {
         return a.getFluid() == b.getFluid();
+    }
+
+    // endregion
+
+    // region About Text
+    public static String i18n(String key) {
+        return translateToLocalFormatted(key);
     }
 
     // endregion
