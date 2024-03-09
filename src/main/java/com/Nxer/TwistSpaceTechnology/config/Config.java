@@ -131,12 +131,12 @@ public class Config {
 
     // region Magnetic Domain Constructor
     public static byte Mode_Default_MagneticDomainConstructor = 0;
-    public static float SpeedBonus_MultiplyPerTier_MagneticDomainConstructor = 0.9F;
-    public static int Parallel_PerRing_MagneticDomainConstructor = 8;
+    public static float SpeedBonus_MultiplyPerTier_MagneticDomainConstructor = 0.8F;
+    public static int Parallel_PerRing_MagneticDomainConstructor = 18;
     // endregion
 
     // region Silksong
-    public static float SpeedBonus_MultiplyPerCoilTier_Silksong = 0.9F;
+    public static float SpeedBonus_MultiplyPerCoilTier_Silksong = 0.8F;
     public static int Parallel_PerPiece_Silksong = 24;
     // endregion
 
@@ -172,6 +172,7 @@ public class Config {
     // region Crystalline Infinitier
     public static byte Mode_Default_CrystallineInfinitier = 0;
     public static int SpeedMultiplier_AutoclaveMode_CrystallineInfinitier = 4;
+    public static int SpeedMultiplier_ChemicalBath_CrystallineInfinitier = 16;
     public static int SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = 1;
     public static int ParallelMultiplier_CrystallineInfinitier = 1;
     public static byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = 3;

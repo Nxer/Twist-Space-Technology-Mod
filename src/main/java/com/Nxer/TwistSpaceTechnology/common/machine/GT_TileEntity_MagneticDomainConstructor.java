@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -67,6 +68,27 @@ public class GT_TileEntity_MagneticDomainConstructor
     // region Processing Logic
     private byte mode = Mode_Default_MagneticDomainConstructor;
     private int rings = 1;
+    private int parallel = 1;
+    private float speedBonus = 1;
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mode", mode);
+        aNBT.setInteger("rings", rings);
+        aNBT.setInteger("parallel", parallel);
+        aNBT.setFloat("speedBonus", speedBonus);
+
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        mode = aNBT.getByte("mode");
+        rings = aNBT.getInteger("rings");
+        parallel = aNBT.getInteger("parallel");
+        speedBonus = aNBT.getFloat("speedBonus");
+    }
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
@@ -87,23 +109,16 @@ public class GT_TileEntity_MagneticDomainConstructor
     }
 
     public int getMaxParallelRecipes() {
-        return this.rings * Parallel_PerRing_MagneticDomainConstructor;
+        return parallel;
     }
 
     public float getSpeedBonus() {
-        return (float) Math.pow(
-            SpeedBonus_MultiplyPerTier_MagneticDomainConstructor,
-            GT_Utility.getTier(this.getAverageInputVoltage()));
+        return speedBonus;
     }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (mode) {
-            case 1:
-                return RecipeMaps.polarizerRecipes;
-            default:
-                return RecipeMaps.electroMagneticSeparatorRecipes;
-        }
+        return mode == 1 ? RecipeMaps.polarizerRecipes : RecipeMaps.electroMagneticSeparatorRecipes;
     }
 
     @Override
@@ -144,6 +159,11 @@ public class GT_TileEntity_MagneticDomainConstructor
 
             return false;
         }
+
+        parallel = (int) Math.min((long) rings * Parallel_PerRing_MagneticDomainConstructor, Integer.MAX_VALUE);
+        speedBonus = (float) Math
+            .pow(SpeedBonus_MultiplyPerTier_MagneticDomainConstructor, Utils.calculatePowerTier(getMaxInputEu()));
+
         return true;
     }
 
@@ -461,19 +481,6 @@ public class GT_TileEntity_MagneticDomainConstructor
             .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 10)) };
     }
 
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
-        aNBT.setInteger("rings", rings);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
-        rings = aNBT.getInteger("rings");
-    }
     // endregion
 
 }

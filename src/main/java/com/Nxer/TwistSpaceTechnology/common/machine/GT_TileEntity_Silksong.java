@@ -60,6 +60,8 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
 
     // region Processing Logic
     private int piece = 1;
+    private int parallel = 1;
+    private float speedBonus = 1;
     private HeatingCoilLevel coilLevel;
 
     public HeatingCoilLevel getCoilLevel() {
@@ -71,16 +73,34 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
     }
 
     @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setInteger("piece", piece);
+        aNBT.setInteger("parallel", parallel);
+        aNBT.setFloat("speedBonus", speedBonus);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        piece = aNBT.getInteger("piece");
+        parallel = aNBT.getInteger("parallel");
+        speedBonus = aNBT.getFloat("speedBonus");
+    }
+
+    @Override
     protected boolean isEnablePerfectOverclock() {
         return false;
     }
 
     protected int getMaxParallelRecipes() {
-        return this.piece * Parallel_PerPiece_Silksong;
+        return parallel;
     }
 
     protected float getSpeedBonus() {
-        return (float) Math.pow(SpeedBonus_MultiplyPerCoilTier_Silksong, this.coilLevel.getLevel());
+        return speedBonus;
     }
 
     @Override
@@ -106,6 +126,9 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
             || !checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet, depthOffSet - piece * 2 - 2)) {
             return false;
         }
+
+        parallel = (int) Math.min((long) piece * Parallel_PerPiece_Silksong, Integer.MAX_VALUE);
+        speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerCoilTier_Silksong, this.coilLevel.getTier());
 
         return true;
     }
@@ -275,20 +298,6 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
     // endregion
 
     // region Overrides
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-
-        aNBT.setInteger("piece", piece);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-
-        piece = aNBT.getInteger("piece");
-    }
 
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {

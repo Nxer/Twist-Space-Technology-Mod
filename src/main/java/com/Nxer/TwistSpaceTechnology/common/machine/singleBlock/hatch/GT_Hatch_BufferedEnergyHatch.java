@@ -14,6 +14,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.internal.wrapper.BaseSlot;
@@ -47,7 +49,8 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
             aNameRegional,
             aTier,
             aInvSlotCount,
-            new String[] { "Buffered Energy Injector for Multiblocks", "Accepts up to 2 Amps" },
+            new String[] { Utils.i18n("BufferedEnergyHatch.Tooltips.01"), Utils.i18n("BufferedEnergyHatch.Tooltips.02"),
+                TextLocalization.ModNameDesc },
             aTextures);
     }
 
@@ -60,7 +63,10 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
     public String[] getDescription() {
         String[] desc = new String[mDescriptionArray.length + 1];
         System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
-        desc[mDescriptionArray.length] = mInventory.length + " Slots";
+        // #tr Slots
+        // #en_US Slots
+        // #zh_CN 格
+        desc[mDescriptionArray.length] = mInventory.length + " " + Utils.i18n("Slots");
         return desc;
     }
 

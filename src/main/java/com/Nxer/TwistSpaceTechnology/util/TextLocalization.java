@@ -8,9 +8,9 @@ import com.Nxer.TwistSpaceTechnology.Tags;
 
 // spotless:off
 /**
- * <li>It's best to write here the texts that need auto generate en_US.lang .
- * <li>Or some usually used texts.
+ * See <a href="https://github.com/Nxer/Twist-Space-Technology-Mod/pull/284">This PR: Use a preprocessor to help complete the creation of language files</a>
  */
+@Deprecated
 public class TextLocalization {
 
     // region general
@@ -276,8 +276,8 @@ public class TextLocalization {
     public static final String Tooltip_MagneticDomainConstructor_00 = texter("Controller block for the Magnetic Domain Constructor","Tooltip_MagneticDomainConstructor_00");
     public static final String Tooltip_MagneticDomainConstructor_01 = texter(EnumChatFormatting.DARK_GRAY + "Don't give up your imagination.","Tooltip_MagneticDomainConstructor_01");
     public static final String Tooltip_MagneticDomainConstructor_02 = texter("Controlling the magnetic domains inside the crystal, yes that's it.","Tooltip_MagneticDomainConstructor_02");
-    public static final String Tooltip_MagneticDomainConstructor_03 = texter("8x Parallel per Ring.(Don't use a lot of blueprints when first scanning.)","Tooltip_MagneticDomainConstructor_03");
-    public static final String Tooltip_MagneticDomainConstructor_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.","Tooltip_MagneticDomainConstructor_04");
+    public static final String Tooltip_MagneticDomainConstructor_03 = texter("18x Parallel per Ring.(Don't use a lot of blueprints when first scanning.)","Tooltip_MagneticDomainConstructor_03");
+    public static final String Tooltip_MagneticDomainConstructor_04 = texter("Additional 20%% reduction in time per Voltage Tier, multiplication calculus.","Tooltip_MagneticDomainConstructor_04");
 
     // endregion
 
@@ -288,7 +288,7 @@ public class TextLocalization {
     public static final String Tooltip_Silksong_01 = texter(EnumChatFormatting.WHITE+"Maybe dreams aren't such a good thing ......","Tooltip_Silksong_01");
     public static final String Tooltip_Silksong_02 = texter("Endless cables spew from this machine.","Tooltip_Silksong_02");
     public static final String Tooltip_Silksong_03 = texter("24x Parallel per piece.","Tooltip_Silksong_03");
-    public static final String Tooltip_Silksong_04 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_Silksong_04");
+    public static final String Tooltip_Silksong_04 = texter("Additional 20%% reduction in time per Coil Tier, multiplication calculus.","Tooltip_Silksong_04");
     // endregion
 
     // region HolySeparator
@@ -331,14 +331,14 @@ public class TextLocalization {
 
     // region CrystallineInfinitier
     public static final String NameCrystallineInfinitier = texter("Crystalline Infinitier","NameCrystallineInfinitier");
-    public static final String Tooltip_CrystallineInfinitier_MachineType = texter("Autoclave | Crystalline Infinitier","Tooltip_CrystallineInfinitier_MachineType");
+    public static final String Tooltip_CrystallineInfinitier_MachineType = texter("Autoclave | Crystalline Infinitier | Chemical Bath","Tooltip_CrystallineInfinitier_MachineType");
     public static final String Tooltip_CrystallineInfinitier_00 = texter("Controller block for the Crystalline Infinitier","Tooltip_CrystallineInfinitier_00");
     public static final String Tooltip_CrystallineInfinitier_01 = texter(EnumChatFormatting.GREEN + "They're here. Grow and multiply without end.","Tooltip_CrystallineInfinitier_01");
     public static final String Tooltip_CrystallineInfinitier_02 = texter("With Gravitation Tech as a medium, we can control growth of crystalline cells more conveniently.","Tooltip_CrystallineInfinitier_02");
     public static final String Tooltip_CrystallineInfinitier_03 = texter("Higher glass tier, higher field generator tier, higher voltage tier means higher value of parallel.","Tooltip_CrystallineInfinitier_03");
     public static final String Tooltip_CrystallineInfinitier_04 = texter("And higher field generator tier means lower Energy cost.","Tooltip_CrystallineInfinitier_04");
     public static final String Tooltip_CrystallineInfinitier_05 = texter("Crude Stabilisation Field Generator enable Perfect Overclock.","Tooltip_CrystallineInfinitier_05");
-    public static final String Tooltip_CrystallineInfinitier_06 = texter("Extra +300%% speed in Autoclave mode.","Tooltip_CrystallineInfinitier_06");
+    public static final String Tooltip_CrystallineInfinitier_06 = texter("Extra +300%% speed in Autoclave mode. Extra +1500%% speed in Chemical Bath mode.","Tooltip_CrystallineInfinitier_06");
 
     // endregion
 
