@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.FieldTier_E
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiplier_CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
@@ -24,6 +25,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -33,10 +37,12 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -75,42 +81,80 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     private byte mode = Mode_Default_CrystallineInfinitier;
     public byte glassTier = 0;
     private int fieldGeneratorTier = 0;
+    private float euModifier = 1;
+    private float speedBonus = 1;
+    private int maxParallel = 1;
+    private boolean enablePerfectOverclock = false;
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
+        aNBT.setByte("glassTier", glassTier);
+        aNBT.setByte("mode", mode);
+        aNBT.setFloat("euModifier", euModifier);
+        aNBT.setFloat("speedBonus", speedBonus);
+        aNBT.setInteger("maxParallel", maxParallel);
+        aNBT.setBoolean("enablePerfectOverclock", enablePerfectOverclock);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
+        glassTier = aNBT.getByte("glassTier");
+        mode = aNBT.getByte("mode");
+        euModifier = aNBT.getFloat("euModifier");
+        speedBonus = aNBT.getFloat("speedBonus");
+        maxParallel = aNBT.getInteger("maxParallel");
+        enablePerfectOverclock = aNBT.getBoolean("enablePerfectOverclock");
+    }
 
     protected float getEuModifier() {
-        return 1.0F / Math.max(fieldGeneratorTier, 1);
-    };
+        return euModifier;
+    }
 
     protected float getSpeedBonus() {
-        return 1F / (mode == 0 ? SpeedMultiplier_AutoclaveMode_CrystallineInfinitier
-            : SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier);
-    };
+        return speedBonus;
+    }
 
     protected int getMaxParallelRecipes() {
-        return Math.min(
-            ValueEnum.MAX_PARALLEL_LIMIT,
-            glassTier * fieldGeneratorTier
-                * GT_Utility.getTier(this.getMaxInputVoltage())
-                * ParallelMultiplier_CrystallineInfinitier);
-    };
+        return maxParallel;
+    }
 
     protected boolean isEnablePerfectOverclock() {
-        return fieldGeneratorTier >= FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
-    };
+        return enablePerfectOverclock;
+    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (mode) {
-            case 1:
-                return GTCMRecipe.CrystallineInfinitierRecipes;
-            default:
-                return RecipeMaps.autoclaveRecipes;
-        }
+        return switch (mode) {
+            case 1 -> GTCMRecipe.CrystallineInfinitierRecipes;
+            case 2 -> RecipeMaps.chemicalBathRecipes;
+            default -> RecipeMaps.autoclaveRecipes;
+        };
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(
+            RecipeMaps.autoclaveRecipes,
+            RecipeMaps.chemicalBathRecipes,
+            GTCMRecipe.CrystallineInfinitierRecipes);
     }
 
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
+            this.mode = (byte) ((this.mode + 1) % 3);
+            this.speedBonus = switch (mode) {
+                case 0 -> 1F / SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
+                case 2 -> 1F / SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
+                default -> 1F / SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
+            };
             GT_Utility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + this.mode));
@@ -131,6 +175,15 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
                 if (this.glassTier < hatch.mTier) return false;
             }
         }
+
+        euModifier = 1.0F / Math.max(fieldGeneratorTier, 1);
+        maxParallel = (int) Math.min(
+            Integer.MAX_VALUE,
+            (long) glassTier * fieldGeneratorTier
+                * Utils.calculatePowerTier(getMaxInputEu())
+                * ParallelMultiplier_CrystallineInfinitier);
+        enablePerfectOverclock = fieldGeneratorTier >= FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
+
         return sign;
     }
     // endregion
@@ -293,24 +346,6 @@ G -> ofFrame;
     // endregion
 
     // region Overrides
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-
-        aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
-        aNBT.setByte("glassTier", glassTier);
-        aNBT.setByte("mode", mode);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-
-        fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
-        glassTier = aNBT.getByte("glassTier");
-        mode = aNBT.getByte("mode");
-    }
 
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {

@@ -132,6 +132,7 @@ public final class ValueEnum {
     // region Crystalline Infinitier
     public static final byte Mode_Default_CrystallineInfinitier = Config.Mode_Default_CrystallineInfinitier;
     public static final int SpeedMultiplier_AutoclaveMode_CrystallineInfinitier = Config.SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
+    public static final int SpeedMultiplier_ChemicalBath_CrystallineInfinitier = Config.SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
     public static final int SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = Config.SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
     public static final int ParallelMultiplier_CrystallineInfinitier = Config.ParallelMultiplier_CrystallineInfinitier;
     public static final byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = Config.FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
