@@ -894,7 +894,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 MyMaterial.wasteLiquid.getFluidOrGas(1000*160)
             )
             .specialValue(11700)
-            .eut(RECIPE_LuV)
+            .eut(RECIPE_ZPM)
             .duration(20 * 1425)
             .addTo(ICD);
 
@@ -918,7 +918,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 MyMaterial.wasteLiquid.getFluidOrGas(1000*60)
             )
             .specialValue(11700)
-            .eut(RECIPE_LuV * 2)
+            .eut(RECIPE_ZPM)
             .duration(20 * 228)
             .addTo(ICD);
 
@@ -970,7 +970,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 MyMaterial.wasteLiquid.getFluidOrGas(1000*160)
             )
             .specialValue(12600)
-            .eut(RECIPE_LuV)
+            .eut(RECIPE_UV)
             .duration(20 * 200)
             .addTo(ICD);
 
@@ -994,7 +994,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 MyMaterial.wasteLiquid.getFluidOrGas(1000*60)
             )
             .specialValue(12600)
-            .eut(RECIPE_LuV * 2)
+            .eut(RECIPE_UV)
             .duration(20 * 50)
             .addTo(ICD);
 
@@ -1017,7 +1017,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Oxygen.getGas(1000*276)
             )
             .specialValue(12600)
-            .eut(RECIPE_ZPM)
+            .eut(RECIPE_UV)
             .duration(20 * 8)
             .addTo(ICD);
 
