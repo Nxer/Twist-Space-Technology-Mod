@@ -971,7 +971,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             )
             .specialValue(12600)
             .eut(RECIPE_UV)
-            .duration(20 * 200)
+            .duration(2 * 1425)
             .addTo(ICD);
 
         // Enriched Naquadah
@@ -995,7 +995,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             )
             .specialValue(12600)
             .eut(RECIPE_UV)
-            .duration(20 * 50)
+            .duration(2 * 228)
             .addTo(ICD);
 
         // Naquadria
@@ -1018,7 +1018,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             )
             .specialValue(12600)
             .eut(RECIPE_UV)
-            .duration(20 * 8)
+            .duration(2 * 100)
             .addTo(ICD);
 
         // endregion
