@@ -41,13 +41,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.*;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
@@ -127,6 +121,9 @@ public class MachineLoader {
     public static ItemStack BufferedEnergyHatchMAX;
     public static ItemStack DebugUncertaintyHatch;
     public static ItemStack LaserSmartNode;
+
+    public static ItemStack FackRackHatch;
+    public static ItemStack RealRackHatch;
 
     // test
     // public static ItemStack TestMachine;
@@ -319,8 +316,10 @@ public class MachineLoader {
         // GTCMItemList.NuclearReactor.set(IndistinctTentacle);
 
         //
-        AstralComputingArray = new TST_Computer(19029, "NameAstralComputingArray", "Astral Computing Array")
-            .getStackForm(1);
+        AstralComputingArray = new TST_Computer(
+            19029,
+            "NameAstralComputingArray",
+            TextLocalization.NameAstralComputingArray).getStackForm(1);
         GTCMItemList.AstralComputingArray.set(AstralComputingArray);
 
         //
@@ -564,6 +563,20 @@ public class MachineLoader {
             TextLocalization.NameLaserSmartNode).getStackForm(1);
         GTCMItemList.LaserSmartNode.set(LaserSmartNode);
         // endregion
+        FackRackHatch = new GT_Hatch_RackComputationMonitor(
+            18959,
+            "NameFackRackHatch",
+            TextLocalization.NameFackRackHatch,
+            0,
+            false).getStackForm(1);
+        GTCMItemList.FackRackHatch.set(FackRackHatch);
 
+        RealRackHatch = new GT_Hatch_RackComputationMonitor(
+            18958,
+            "NameRealRackHatch",
+            TextLocalization.NameRealRackHatch,
+            0,
+            true).getStackForm(1);
+        GTCMItemList.RealRackHatch.set(RealRackHatch);
     }
 }

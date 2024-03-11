@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.devTools.PathHelper;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
@@ -101,6 +102,7 @@ public class TwistSpaceTechnology {
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
         MachineLoader.loadMachines();// Load Machines
+        GT_Hatch_RackComputationMonitor.run();
         NEIHandler.IMCSender();// NEI reg
         // dimension provider
         // *unfinished */ DimensionManager.registerProviderType(WorldStats.dimensionProviderID,

@@ -843,3 +843,17 @@ BufferedEnergyHatch.Tooltips.01=为多方块机器提供更高缓存的能源输
 BufferedEnergyHatch.Tooltips.02=最大输入2安
 Slots=格
 AddByTwistSpaceTechnology=由 §aTwist Space Technology§7 添加
+NameFackRackHatch=机箱模拟器
+NameRealRackHatch=机箱控制器
+NameAstralComputingArray=星规阵列
+tst.computer.desc.0=星规阵列 籍星辰以规万物
+tst.computer.desc.1=常规热量将会得到超级冷却液/冷却液/极寒之凛冰的有效冷却，具体如下：
+tst.computer.desc.2=冷却液：0.001，超级冷却液：0.01
+tst.computer.desc.3=如果安装了星辉魔法，则星能液提供额外的10倍率。
+tst.computer.desc.4=每次运算将会消耗掉当前输入仓中所有输入的液体。如果输入多种冷却液会生效随机一种。
+tst.computer.desc.5=超频公式 倍率=1+LOG(1.0 + 流体数量*倍率*当前热量)
+tst.computer.hint.0=仓室：输入仓，维护仓，机箱控制器，主光学接口，能源仓
+tst.computer.hint.1=仅有一个机箱控制器会被识别，如果放多个，会识别其中的任意一个。
+tst.computationhatchmonitor.desc1=中央集成设备，请不要放多个
+tst.computationhatchmonitor.desc2=如果没有冷却也未必会爆炸，但是谁也不敢保证
+tst.cleanroom.desc.0=任何情况不会掉落洁净度，可以作为有源变压器使用，最大64*64*64，属于超净间的输入仓/总线的流体/物品会按一定顺序输出到输出仓/总线，如果有me输出仓/总线，则会统一输出到此内部
