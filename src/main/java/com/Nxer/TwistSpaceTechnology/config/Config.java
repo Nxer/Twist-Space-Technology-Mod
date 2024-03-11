@@ -37,6 +37,7 @@ public class Config {
     public static final String MegaMacerator = "HouseholdCellFragmentizer";
     public static final String HephaestusAtelier = "HephaestusAtelier";
     public static final String DeployedNanoCore = "DeployedNanoCore";
+    public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation="spaceStation";
@@ -260,6 +261,10 @@ public class Config {
     public static int TickPerProgressing_WirelessMode_DeployedNanoCore = 128;
     // endregion
 
+    // region CoreDeviceOfHumanPowerGenerationFacility
+    public static boolean Enable_CoreDeviceOfHumanPowerGenerationFacility = true;
+    // endregion
+
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;
@@ -274,6 +279,10 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region CoreDeviceOfHumanPowerGenerationFacility
+        Enable_CoreDeviceOfHumanPowerGenerationFacility = configuration.getBoolean("Enable_CoreDeviceOfHumanPowerGenerationFacility", CoreDeviceOfHumanPowerGenerationFacility, Enable_CoreDeviceOfHumanPowerGenerationFacility, "Enable Core Device of Human Power Generation Facility.");
         // endregion
 
         // region DeployedNanoCore

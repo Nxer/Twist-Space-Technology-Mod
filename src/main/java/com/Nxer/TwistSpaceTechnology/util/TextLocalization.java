@@ -8,7 +8,8 @@ import com.Nxer.TwistSpaceTechnology.Tags;
 
 // spotless:off
 /**
- * See <a href="https://github.com/Nxer/Twist-Space-Technology-Mod/pull/284">This PR: Use a preprocessor to help complete the creation of language files</a>
+ * Use {@link com.Nxer.TwistSpaceTechnology.util.TextEnums}
+ * <p>See <a href="https://github.com/Nxer/Twist-Space-Technology-Mod/pull/284">This PR: Use a preprocessor to help complete the creation of language files</a>
  */
 @Deprecated
 public class TextLocalization {
@@ -378,7 +379,7 @@ public class TextLocalization {
     public static final String Tooltip_DSPReceiver_02_05 = texter("Converted to remaining time of intensify mode.","Tooltip_DSPReceiver_02_05");
     public static final String Tooltip_DSPReceiver_02_06 = texter("Requesting ratio = Integrated Circuit Number / Stack Size","Tooltip_DSPReceiver_02_06");
     public static final String Tooltip_DSPReceiver_02_07 = texter("Put §b§l§oAstral Array Fabricator§7 into controller slot then this machine can request over 1024A Max power point.","Tooltip_DSPReceiver_02_07");
-    public static final String Tooltip_DSPReceiver_02_08 = texter("Final requesting power point limit = Astral Array Fabricator amount * 1024A Max","Tooltip_DSPReceiver_02_08");
+    public static final String Tooltip_DSPReceiver_02_08 = texter("Final requesting power point limit = Astral Array Fabricator amount * 2048A Max","Tooltip_DSPReceiver_02_08");
 
     // endregion
 

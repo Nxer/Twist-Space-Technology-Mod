@@ -340,7 +340,7 @@ Tooltip_DSPReceiver_02_04=Graviton Lens will be consumed immediately upon input.
 Tooltip_DSPReceiver_02_05=Converted to enhancement mode duration.
 Tooltip_DSPReceiver_02_06=Request ratio = Programmed Circuit Number / Stack Size
 Tooltip_DSPReceiver_02_07=Put §b§l§oAstral Array Fabricator§7 into controller slot then this machine can request over 1024A Max power point.
-Tooltip_DSPReceiver_02_08=Final requesting power point limit = Astral Array Fabricator amount * 1024A Max
+Tooltip_DSPReceiver_02_08=Final requesting power point limit = Astral Array Fabricator amount * 2048A Max
 Tooltip_ArtificialStar_MachineType=Dyson Sphere Program: Annihilation Generator
 Tooltip_ArtificialStar_00=§d§lAll you have to do is just let the positive and negative proton beams pass
 Tooltip_ArtificialStar_01=§d§l silently through the magnetic field from both ends into the confining sphere, easy peasy!
@@ -843,3 +843,8 @@ BufferedEnergyHatch.Tooltips.01=Buffered Energy Injector for Multiblocks
 BufferedEnergyHatch.Tooltips.02=Accepts up to 2 Amps
 Slots=Slots
 AddByTwistSpaceTechnology=Added by §aTwist Space Technology§7
+NameCoreDeviceOfHumanPowerGenerationFacility=Core Device of Human Power Generation Facility
+Tooltip_CoreDeviceOfHumanPowerGenerationFacility_MachineType=Fluid Heater
+Tooltip_CoreDeviceOfHumanPowerGenerationFacility_Controller=Controller block for the Core Device of Human Power Generation Facility
+Tooltip_CoreDeviceOfHumanPowerGenerationFacility_01=§cThe use of "The Fast-Heater" is prohibited in the dormitories.
+Tooltip_CoreDeviceOfHumanPowerGenerationFacility_02=Upgrade coils for faster speeds.
