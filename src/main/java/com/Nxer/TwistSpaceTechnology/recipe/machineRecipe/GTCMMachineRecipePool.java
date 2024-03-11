@@ -1826,7 +1826,32 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UEV * 2)
             .duration(20 * 500)
             .addTo(assembler);
+
+
         // endregion
+
+
+        if (Config.Enable_CoreDeviceOfHumanPowerGenerationFacility) {
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(10),
+                    CustomItemList.FluidHeaterUV.get(64),
+                    ItemList.Electric_Pump_UV.get(64),
+
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Iridium, 64),
+                    new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 32},
+                    HighEnergyFlowCircuit.get(32),
+
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUV, 64)
+                )
+                .fluidInputs(new FluidStack(solderPlasma, 144 * 64))
+                .itemOutputs(GTCMItemList.CoreDeviceOfHumanPowerGenerationFacility.get(1))
+                .eut(RECIPE_UV)
+                .duration(20 * 900)
+                .addTo(assembler);
+        }
+
     }
     // spotless:on
 }
