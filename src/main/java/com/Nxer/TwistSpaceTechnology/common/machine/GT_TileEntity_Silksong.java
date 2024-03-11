@@ -111,6 +111,7 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
+        coilLevel = HeatingCoilLevel.None;
 
         this.piece = 0;
 
