@@ -35,10 +35,12 @@ import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFi
 import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier7;
 import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8;
 import static com.google.common.math.LongMath.pow;
+import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GalaxySpace;
 import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.enums.Mods.GraviSuite;
 import static gregtech.api.enums.Mods.GregTech;
+import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.enums.Mods.SuperSolarPanels;
 import static gregtech.api.util.GT_ModHandler.getModItem;
 import static gtPlusPlus.core.material.ALLOY.INDALLOY_140;
@@ -57,6 +59,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.dreammaster.gthandler.CustomItemList;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import goodgenerator.items.MyMaterial;
 import goodgenerator.util.ItemRefer;
@@ -130,9 +133,8 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             StabilisationFieldGeneratorTier7.get(1), StabilisationFieldGeneratorTier8.get(1),
             ItemList.Hatch_Energy_LuV.get(1), ItemList.Hatch_Energy_ZPM.get(1), ItemList.Hatch_Energy_UV.get(1),
             ItemList.Hatch_Energy_MAX.get(1), ItemList.Hatch_Dynamo_LuV.get(1), ItemList.Hatch_Dynamo_ZPM.get(1),
-            ItemList.Hatch_Dynamo_UV.get(1), ItemList.Hatch_Dynamo_MAX.get(1),
-
-        };
+            ItemList.Hatch_Dynamo_UV.get(1), ItemList.Hatch_Dynamo_MAX.get(1), ItemList.Casing_Dim_Injector.get(1),
+            ItemList.Casing_Dim_Trans.get(1) };
 
         // start check assembly line recipes
         checkRecipe: for (var recipe : GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes) {
@@ -226,6 +228,52 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
     public void loadSpecialRecipes() {
         final IRecipeMap MASL = GTCMRecipe.AssemblyLineWithoutResearchRecipe;
+
+        {
+            Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
+                ? FluidRegistry.getFluid("molten.mutatedlivingsolder")
+                : FluidRegistry.getFluid("molten.solderingalloy");
+
+            // Dimensionally Injection Casing
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(2),
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Osmiridium, 4),
+                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Ledox, 1),
+                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CallistoIce, 1),
+                    ItemList.Reactor_Coolant_Sp_6.get(1L),
+                    getModItem(GTPlusPlus.ID, "itemScrewLaurenium", 12, 0),
+                    new Object[] { OrePrefixes.circuit.get(Materials.Elite), 2L },
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 2),
+                    ItemList.Super_Chest_IV.get(1),
+                    ItemList.Super_Tank_IV.get(1),
+                    getModItem(NewHorizonsCoreMod.ID, "item.PicoWafer", 1, 0))
+                .fluidInputs(
+                    WerkstoffLoader.Oganesson.getFluidOrGas(1000),
+                    new FluidStack(solderUEV, 576),
+                    Materials.NaquadahEnriched.getMolten(288L))
+                .itemOutputs(ItemList.Casing_Dim_Injector.get(1))
+                .eut(32_000_000)
+                .duration(20 * 20)
+                .addTo(MASL);
+
+            // Dimensionally Transcendent Casing
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(1),
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Osmiridium, 6),
+                    getModItem(GTPlusPlus.ID, "itemScrewLaurenium", 12, 0),
+                    ItemList.Reactor_Coolant_Sp_6.get(1L),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1))
+                .fluidInputs(
+                    WerkstoffLoader.Oganesson.getFluidOrGas(500),
+                    new FluidStack(solderUEV, 288),
+                    Materials.NaquadahEnriched.getMolten(144L))
+                .itemOutputs(ItemList.Casing_Dim_Trans.get(1))
+                .eut(32_000_000)
+                .duration(20 * 20)
+                .addTo(MASL);
+        }
 
         // Energy hatch and dynamo hatch of LuV - UHV
         {
