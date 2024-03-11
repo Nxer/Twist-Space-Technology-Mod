@@ -128,7 +128,6 @@ public class DSP_DataCell implements Serializable {
      * @return          True means success; <p>False means nothing happened, request failed.</p>
      */
     public boolean tryUsePowerPoint(long amount){
-        // TODO add Big Integer calculation
         if (this.canUsePowerPoint(amount)){
             markDataDirty();
             this.markDirty();
