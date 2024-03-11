@@ -303,6 +303,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
+        coilLevel = HeatingCoilLevel.None;
         // this.casingAmountActual = 0; // re-init counter
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }

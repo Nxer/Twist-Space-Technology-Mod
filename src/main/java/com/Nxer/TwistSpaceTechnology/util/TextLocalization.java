@@ -9,7 +9,8 @@ import com.Nxer.TwistSpaceTechnology.Tags;
 // spotless:off
 
 /**
- * See <a href="https://github.com/Nxer/Twist-Space-Technology-Mod/pull/284">This PR: Use a preprocessor to help complete the creation of language files</a>
+ * Use {@link com.Nxer.TwistSpaceTechnology.util.TextEnums}
+ * <p>See <a href="https://github.com/Nxer/Twist-Space-Technology-Mod/pull/284">This PR: Use a preprocessor to help complete the creation of language files</a>
  */
 @Deprecated
 public class TextLocalization {

@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import forestry.api.apiculture.EnumBeeType;
@@ -177,10 +178,10 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     // endregion
 
     // region Structure
-    private final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_BE";
+    private static final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_BE";
     private final int hOffset = 1, vOffset = 1, dOffset = 0;
-    private final int sCasingIndex = 10;
-    private static IStructureDefinition<TST_BeeEngineer> structureDef = null;
+    private static final int CASING_INDEX = 10;
+    private static IStructureDefinition<TST_BeeEngineer> STRUCTURE_DEF = null;
 
     // spotless:off
     protected final String[][] STRUCTURE = new String[][]{
@@ -192,25 +193,41 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     @Override
     public IStructureDefinition<TST_BeeEngineer> getStructureDefinition() {
-        if (structureDef == null) {
-            structureDef = StructureDefinition.<TST_BeeEngineer>builder()
+        if (STRUCTURE_DEF == null) {
+            STRUCTURE_DEF = StructureDefinition.<TST_BeeEngineer>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(STRUCTURE))
                 .addElement(
                     'C',
                     GT_HatchElementBuilder.<TST_BeeEngineer>builder()
                         .atLeast(InputBus, InputHatch, OutputBus)
                         .adder(TST_BeeEngineer::addToMachineList)
-                        .casingIndex(sCasingIndex)
                         .dot(1)
+                        .casingIndex(CASING_INDEX)
                         .buildAndChain(GregTech_API.sBlockCasings1, 10))
                 .build();
         }
-        return structureDef;
+        return STRUCTURE_DEF;
     }
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, hOffset, vOffset, dOffset);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
+        return survivialBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            hOffset,
+            vOffset,
+            dOffset,
+            realBudget,
+            env,
+            false,
+            true);
     }
 
     // endregion
@@ -246,7 +263,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
         if (side == facing) {
-            if (active) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(sCasingIndex),
+            if (active) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
                     .extFacing()
@@ -256,7 +273,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
                     .extFacing()
                     .glow()
                     .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(sCasingIndex), TextureFactory.builder()
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX), TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
                 .extFacing()
                 .build(),
@@ -266,7 +283,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
                     .glow()
                     .build() };
         }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(sCasingIndex) };
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX) };
     }
 
     @Override

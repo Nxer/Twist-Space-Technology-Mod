@@ -28,6 +28,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
@@ -49,6 +50,7 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_Arti
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
@@ -95,6 +97,7 @@ public class MachineLoader {
     public static ItemStack MegaMacerator;
     public static ItemStack HephaestusAtelier;
     public static ItemStack DeployedNanoCore;
+    public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -377,6 +380,15 @@ public class MachineLoader {
                 "NameDeployedNanoCore",
                 TextLocalization.NameDeployedNanoCore).getStackForm(1);
             GTCMItemList.DeployedNanoCore.set(DeployedNanoCore);
+        }
+
+        //
+        if (Config.Enable_CoreDeviceOfHumanPowerGenerationFacility) {
+            CoreDeviceOfHumanPowerGenerationFacility = new TST_CoreDeviceOfHumanPowerGenerationFacility(
+                19039,
+                "NameCoreDeviceOfHumanPowerGenerationFacility",
+                TextEnums.NameCoreDeviceOfHumanPowerGenerationFacility.toString()).getStackForm(1);
+            GTCMItemList.CoreDeviceOfHumanPowerGenerationFacility.set(CoreDeviceOfHumanPowerGenerationFacility);
         }
 
         // endregion

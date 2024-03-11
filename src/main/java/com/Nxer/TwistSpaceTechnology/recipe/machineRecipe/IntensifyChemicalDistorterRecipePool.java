@@ -894,7 +894,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 MyMaterial.wasteLiquid.getFluidOrGas(1000*160)
             )
             .specialValue(11700)
-            .eut(RECIPE_LuV)
+            .eut(RECIPE_ZPM)
             .duration(20 * 1425)
             .addTo(ICD);
 
@@ -918,7 +918,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 MyMaterial.wasteLiquid.getFluidOrGas(1000*60)
             )
             .specialValue(11700)
-            .eut(RECIPE_LuV * 2)
+            .eut(RECIPE_ZPM)
             .duration(20 * 228)
             .addTo(ICD);
 
@@ -951,7 +951,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 copyAmount(0, Materials.Gold.getNanite(1)),
                 setStackSize(MyMaterial.naquadahEarth.get(OrePrefixes.dust,1), 480),
-                setStackSize(Materials.Sodium.getDust(1), 1128)
+                setStackSize(Materials.Sodium.getDust(1), 112)
             )
             .fluidInputs(Materials.Fluorine.getGas(1000*800))
             .itemOutputs(
@@ -970,8 +970,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 MyMaterial.wasteLiquid.getFluidOrGas(1000*160)
             )
             .specialValue(12600)
-            .eut(RECIPE_LuV)
-            .duration(20 * 200)
+            .eut(RECIPE_UV)
+            .duration(2 * 1425)
             .addTo(ICD);
 
         // Enriched Naquadah
@@ -980,7 +980,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 copyAmount(0, Materials.Gold.getNanite(1)),
                 setStackSize(MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust,1), 220),
-                setStackSize(Materials.Sulfur.getDust(1), 102)
+                setStackSize(Materials.Sulfur.getDust(1), 10)
             )
             .fluidInputs(Materials.Oxygen.getGas(1000*288))
             .itemOutputs(
@@ -994,8 +994,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 MyMaterial.wasteLiquid.getFluidOrGas(1000*60)
             )
             .specialValue(12600)
-            .eut(RECIPE_LuV * 2)
-            .duration(20 * 50)
+            .eut(RECIPE_UV)
+            .duration(2 * 228)
             .addTo(ICD);
 
         // Naquadria
@@ -1004,7 +1004,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 copyAmount(0, Materials.Gold.getNanite(1)),
                 setStackSize(MyMaterial.naquadriaEarth.get(OrePrefixes.dust,1), 100),
-                setStackSize(Materials.Phosphorus.getDust(1), 95)
+                setStackSize(Materials.Phosphorus.getDust(1), 9)
             )
             .itemOutputs(
                 MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 50),
@@ -1017,8 +1017,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Oxygen.getGas(1000*276)
             )
             .specialValue(12600)
-            .eut(RECIPE_ZPM)
-            .duration(20 * 8)
+            .eut(RECIPE_UV)
+            .duration(2 * 100)
             .addTo(ICD);
 
         // endregion

@@ -193,6 +193,7 @@ public enum GTCMItemList {
     MegaMacerator,
     HephaestusAtelier,
     DeployedNanoCore,
+    CoreDeviceOfHumanPowerGenerationFacility,
 
     // MAX
     HighDimensionalExtend,
