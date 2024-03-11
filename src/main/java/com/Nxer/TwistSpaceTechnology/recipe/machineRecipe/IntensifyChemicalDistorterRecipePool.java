@@ -951,7 +951,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 copyAmount(0, Materials.Gold.getNanite(1)),
                 setStackSize(MyMaterial.naquadahEarth.get(OrePrefixes.dust,1), 480),
-                setStackSize(Materials.Sodium.getDust(1), 1128)
+                setStackSize(Materials.Sodium.getDust(1), 112)
             )
             .fluidInputs(Materials.Fluorine.getGas(1000*800))
             .itemOutputs(
@@ -980,7 +980,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 copyAmount(0, Materials.Gold.getNanite(1)),
                 setStackSize(MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust,1), 220),
-                setStackSize(Materials.Sulfur.getDust(1), 102)
+                setStackSize(Materials.Sulfur.getDust(1), 10)
             )
             .fluidInputs(Materials.Oxygen.getGas(1000*288))
             .itemOutputs(
@@ -1004,7 +1004,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 copyAmount(0, Materials.Gold.getNanite(1)),
                 setStackSize(MyMaterial.naquadriaEarth.get(OrePrefixes.dust,1), 100),
-                setStackSize(Materials.Phosphorus.getDust(1), 95)
+                setStackSize(Materials.Phosphorus.getDust(1), 9)
             )
             .itemOutputs(
                 MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 50),
