@@ -229,7 +229,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
                             .adder(TST_CoreDeviceOfHumanPowerGenerationFacility::addToMachineList)
                             .dot(2)
                             .casingIndex(16)
-                            .buildAndChain(GregTech_API.sBlockCasings2, 6)
+                            .buildAndChain(GregTech_API.sBlockCasings2, 0)
                     )
                     .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 4))
                     .addElement(
