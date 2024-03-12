@@ -1,5 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
+
+import net.minecraft.entity.EntityList;
+import net.minecraft.item.ItemStack;
+
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
@@ -55,10 +60,6 @@ import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessin
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import net.minecraft.entity.EntityList;
-import net.minecraft.item.ItemStack;
-
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
 public class MachineLoader {
 
