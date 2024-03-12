@@ -8,6 +8,8 @@ import java.math.BigInteger;
 
 import net.minecraftforge.common.config.Configuration;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+
 // spotless:off
 public class Config {
     // region Regions enum
@@ -40,9 +42,9 @@ public class Config {
     public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
     public static final String SingleBlocks = "SingleBlocks";
 
-    public static final String spaceStation="spaceStation";
+    public static final String spaceStation = "spaceStation";
 
-    public static final String CombatStats="CombatStats";
+    public static final String CombatStats = "CombatStats";
     // endregion
 
     // region General
@@ -125,9 +127,9 @@ public class Config {
     public static int SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = 1;
     public static int Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster = 256;
     public static int Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = 16;
-    public static int[] PhotonControllerUpgradeCasingSpeedIncrement = new int[] { /* LV */100, /* MV */200, /* HV */300, /* EV */400, /* IV */500,
+    public static int[] PhotonControllerUpgradeCasingSpeedIncrement = new int[]{ /* LV */100, /* MV */200, /* HV */300, /* EV */400, /* IV */500,
         /* LuV */1000, /* ZPM */2000, /* UV */4000, /* UHV */7000, /* UEV */10000, /* UIV */14000, /* UMV */19000,
-        /* UXV */25000, /* MAX */32000 };
+        /* UXV */25000, /* MAX */32000};
     // endregion
 
     // region Magnetic Domain Constructor
@@ -156,11 +158,11 @@ public class Config {
     // endregion
 
     // region Hyper Spacetime Transformer
-    public static byte Mode_Default_HyperSpacetimeTransformer=0;
-    public static int ParallelMultiplier_HyperSpacetimeTransformer=1;
-    public static int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=5;
-    public static int SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=1;
-    public static boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer= true;
+    public static byte Mode_Default_HyperSpacetimeTransformer = 0;
+    public static int ParallelMultiplier_HyperSpacetimeTransformer = 1;
+    public static int SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer = 5;
+    public static int SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer = 1;
+    public static boolean EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer = true;
     // endregion
 
     // region Molecule Deconstructor
@@ -244,7 +246,7 @@ public class Config {
     public static int BlockTier1Parallel_MegaMacerator = 128;
     public static int BlockTier2Parallel_MegaMacerator = 32768;
     public static float SpeedBonus_MegaMacerator = 0.125F;
-    public static boolean EnablePerfectOverclock_MegaMacerator=false;
+    public static boolean EnablePerfectOverclock_MegaMacerator = false;
     // endregion
 
     // region HephaestusAtelier
@@ -270,8 +272,8 @@ public class Config {
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
 
-    public static boolean activateMegaSpaceStation=false;
-    public static boolean activateCombatStats=false;
+    public static boolean activateMegaSpaceStation = false;
+    public static boolean activateCombatStats = false;
 
 
     public static void synchronizeConfiguration(File configFile) {
@@ -305,7 +307,8 @@ public class Config {
 
         // region ThermalEnergyDevourer
         Mode_Default_ThermalEnergyDevourer = (byte) configuration.getInt("Mode_Default_ThermalEnergyDevourer", ThermalEnergyDevourer, Mode_Default_ThermalEnergyDevourer, 0, 1, "The default mode when deploy Thermal Energy Devourer. 0=HighSpeedMode, 1=HighParallelMode. Type: byte");
-        if (Mode_Default_ThermalEnergyDevourer < 0 || Mode_Default_ThermalEnergyDevourer > 1) Mode_Default_ThermalEnergyDevourer = 0;
+        if (Mode_Default_ThermalEnergyDevourer < 0 || Mode_Default_ThermalEnergyDevourer > 1)
+            Mode_Default_ThermalEnergyDevourer = 0;
         Parallel_HighSpeedMode_ThermalEnergyDevourer = configuration.getInt("Parallel_HighSpeedMode_ThermalEnergyDevourer", ThermalEnergyDevourer, Parallel_HighSpeedMode_ThermalEnergyDevourer, 1, Integer.MAX_VALUE, "Max Parallel of Thermal Energy Devourer high speed mode. Type: int");
         Parallel_HighParallelMode_ThermalEnergyDevourer = configuration.getInt("Parallel_HighParallelMode_ThermalEnergyDevourer", ThermalEnergyDevourer, Parallel_HighParallelMode_ThermalEnergyDevourer, 1, Integer.MAX_VALUE, "Max Parallel of Thermal Energy Devourer high parallel mode. Type: int");
         TickPerProgressing_WirelessMode_ThermalEnergyDevourer = configuration.getInt("TickPerProgressing_WirelessMode_ThermalEnergyDevourer", ThermalEnergyDevourer, TickPerProgressing_WirelessMode_ThermalEnergyDevourer, 1, 16384, "How many ticks per progressing cost in Wireless mode of Thermal Energy Devourer. Type: int");
@@ -346,51 +349,51 @@ public class Config {
         // endregion
 
         // region Precise High Energy Photonic Quantum Master
-        Mode_Default_PreciseHighEnergyPhotonicQuantumMaster = configuration.getBoolean("Mode_Default_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,Mode_Default_PreciseHighEnergyPhotonicQuantumMaster,"The default mode when deploy a machine. true=Photon Controller, false=Laser Engraver. Type: boolean");
-        SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster,1,256,"Speed Multiplier of Precise High Energy Photonic Quantum Master in Laser Engraver mode. Type: int");
-        SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster,1,256,"Speed Multiplier of Precise High Energy Photonic Quantum Master in Photon Controller mode. Type: int");
-        Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster,1,65536,"Parallel of Precise High Energy Photonic Quantum Master in Laser Engraver mode. Type: int");
-        Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster",PreciseHighEnergyPhotonicQuantumMaster,Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster,1,65536,"Parallel of Precise High Energy Photonic Quantum Master in Photon Controller mode. Type: int");
+        Mode_Default_PreciseHighEnergyPhotonicQuantumMaster = configuration.getBoolean("Mode_Default_PreciseHighEnergyPhotonicQuantumMaster", PreciseHighEnergyPhotonicQuantumMaster, Mode_Default_PreciseHighEnergyPhotonicQuantumMaster, "The default mode when deploy a machine. true=Photon Controller, false=Laser Engraver. Type: boolean");
+        SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster", PreciseHighEnergyPhotonicQuantumMaster, SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster, 1, 256, "Speed Multiplier of Precise High Energy Photonic Quantum Master in Laser Engraver mode. Type: int");
+        SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster", PreciseHighEnergyPhotonicQuantumMaster, SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster, 1, 256, "Speed Multiplier of Precise High Energy Photonic Quantum Master in Photon Controller mode. Type: int");
+        Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster", PreciseHighEnergyPhotonicQuantumMaster, Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster, 1, 65536, "Parallel of Precise High Energy Photonic Quantum Master in Laser Engraver mode. Type: int");
+        Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster = configuration.getInt("Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster", PreciseHighEnergyPhotonicQuantumMaster, Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster, 1, 65536, "Parallel of Precise High Energy Photonic Quantum Master in Photon Controller mode. Type: int");
         PhotonControllerUpgradeCasingSpeedIncrement = configuration.get("PhotonControllerUpgradeCasingSpeedIncrement", PreciseHighEnergyPhotonicQuantumMaster, PhotonControllerUpgradeCasingSpeedIncrement, "Photon Controller Upgrade Casing Speed Increment data.")
-                                                                   .getIntList();
+            .getIntList();
         // endregion
 
         // region Miracle Top
-        Mode_Default_MiracleTop = Byte.parseByte(configuration.getString("Mode_Default_MiracleTop",MiracleTop,String.valueOf(Mode_Default_MiracleTop),"The default mode when deploy a machine. 0=Circuit Assembler, 1=Gravitation Inversion. Type: byte"));
-        SpeedUpMultiplier_PerRing_MiracleTop = configuration.getInt("SpeedUpMultiplier_PerRing_MiracleTop",MiracleTop,SpeedUpMultiplier_PerRing_MiracleTop,1,64,"Speed Up amount of per Ring. Type: int");
-        Parallel_PerRing_MiracleTop = configuration.getInt("Parallel_PerRing_MiracleTop",MiracleTop,Parallel_PerRing_MiracleTop,1,65536,"Parallel per Ring add. Type: int");
-        RingsAmount_EnablePerfectOverclock_MiracleTop = configuration.getInt("RingsAmount_EnablePerfectOverclock_MiracleTop",MiracleTop,RingsAmount_EnablePerfectOverclock_MiracleTop,1,16,"How many Rings can enable Perfect overclock. Type: int");
+        Mode_Default_MiracleTop = Byte.parseByte(configuration.getString("Mode_Default_MiracleTop", MiracleTop, String.valueOf(Mode_Default_MiracleTop), "The default mode when deploy a machine. 0=Circuit Assembler, 1=Gravitation Inversion. Type: byte"));
+        SpeedUpMultiplier_PerRing_MiracleTop = configuration.getInt("SpeedUpMultiplier_PerRing_MiracleTop", MiracleTop, SpeedUpMultiplier_PerRing_MiracleTop, 1, 64, "Speed Up amount of per Ring. Type: int");
+        Parallel_PerRing_MiracleTop = configuration.getInt("Parallel_PerRing_MiracleTop", MiracleTop, Parallel_PerRing_MiracleTop, 1, 65536, "Parallel per Ring add. Type: int");
+        RingsAmount_EnablePerfectOverclock_MiracleTop = configuration.getInt("RingsAmount_EnablePerfectOverclock_MiracleTop", MiracleTop, RingsAmount_EnablePerfectOverclock_MiracleTop, 1, 16, "How many Rings can enable Perfect overclock. Type: int");
         // endregion
 
         // region Magnetic Drive Pressure Former
-        Mode_Default_MagneticDrivePressureFormer = Byte.parseByte(configuration.getString("Mode_Default_MagneticDrivePressureFormer",MagneticDrivePressureFormer,String.valueOf(Mode_Default_MagneticDrivePressureFormer),"The default mode when deploy a machine. 0=Extruder, 1=Bender, 2=Press, 3=Hammer. Type: byte"));
-        SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer = configuration.getInt("SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer",MagneticDrivePressureFormer,SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer,1,256,"Speed Multiplier of Magnetic Drive Pressure Former in Extruder mode. Type: int");
-        SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer = configuration.getInt("SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer",MagneticDrivePressureFormer,SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer,1,256,"Speed Multiplier of Magnetic Drive Pressure Former in Other mode. Type: int");
-        SpeedUpMultiplier_Coil_MagneticDrivePressureFormer = configuration.getInt("SpeedUpMultiplier_Coil_MagneticDrivePressureFormer",MagneticDrivePressureFormer,SpeedUpMultiplier_Coil_MagneticDrivePressureFormer,1,256,"Speed Up amount of per Coil tier. Type: int");
-        Parallel_MagneticDrivePressureFormer = configuration.getInt("Parallel_MagneticDrivePressureFormer",MagneticDrivePressureFormer,Parallel_MagneticDrivePressureFormer,1,65536,"Parallel of Magnetic Drive Pressure Former. Type: int");
-        EU_Multiplier_MagneticDrivePressureFormer = Float.parseFloat(configuration.getString("EU_Multiplier_MagneticDrivePressureFormer",MagneticDrivePressureFormer,String.valueOf(EU_Multiplier_MagneticDrivePressureFormer),"EU Multiplier of Magnetic Drive Pressure Former. Type: float"));
-        GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = configuration.getInt("GlassTier_LimitLaserHatch_MagneticDrivePressureFormer",MagneticDrivePressureFormer,GlassTier_LimitLaserHatch_MagneticDrivePressureFormer,1,12,"Glass Tier of Laser Hatch Limit in Magnetic Drive Pressure Former. Type: int");
-        CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer = configuration.getInt("CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer",MagneticDomainConstructor,CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer,0,13,"The Coil Tier can enable perfect overclock in Extruder mode. 0 is Cupronickel Coil, 13 is Eternal Coil, default 11 is Infinity Coil. Type: int");
+        Mode_Default_MagneticDrivePressureFormer = Byte.parseByte(configuration.getString("Mode_Default_MagneticDrivePressureFormer", MagneticDrivePressureFormer, String.valueOf(Mode_Default_MagneticDrivePressureFormer), "The default mode when deploy a machine. 0=Extruder, 1=Bender, 2=Press, 3=Hammer. Type: byte"));
+        SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer = configuration.getInt("SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer", MagneticDrivePressureFormer, SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer, 1, 256, "Speed Multiplier of Magnetic Drive Pressure Former in Extruder mode. Type: int");
+        SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer = configuration.getInt("SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer", MagneticDrivePressureFormer, SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer, 1, 256, "Speed Multiplier of Magnetic Drive Pressure Former in Other mode. Type: int");
+        SpeedUpMultiplier_Coil_MagneticDrivePressureFormer = configuration.getInt("SpeedUpMultiplier_Coil_MagneticDrivePressureFormer", MagneticDrivePressureFormer, SpeedUpMultiplier_Coil_MagneticDrivePressureFormer, 1, 256, "Speed Up amount of per Coil tier. Type: int");
+        Parallel_MagneticDrivePressureFormer = configuration.getInt("Parallel_MagneticDrivePressureFormer", MagneticDrivePressureFormer, Parallel_MagneticDrivePressureFormer, 1, 65536, "Parallel of Magnetic Drive Pressure Former. Type: int");
+        EU_Multiplier_MagneticDrivePressureFormer = Float.parseFloat(configuration.getString("EU_Multiplier_MagneticDrivePressureFormer", MagneticDrivePressureFormer, String.valueOf(EU_Multiplier_MagneticDrivePressureFormer), "EU Multiplier of Magnetic Drive Pressure Former. Type: float"));
+        GlassTier_LimitLaserHatch_MagneticDrivePressureFormer = configuration.getInt("GlassTier_LimitLaserHatch_MagneticDrivePressureFormer", MagneticDrivePressureFormer, GlassTier_LimitLaserHatch_MagneticDrivePressureFormer, 1, 12, "Glass Tier of Laser Hatch Limit in Magnetic Drive Pressure Former. Type: int");
+        CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer = configuration.getInt("CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer", MagneticDomainConstructor, CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer, 0, 13, "The Coil Tier can enable perfect overclock in Extruder mode. 0 is Cupronickel Coil, 13 is Eternal Coil, default 11 is Infinity Coil. Type: int");
         // endregion
 
         // region Physical Form Switcher
-        Mode_Default_PhysicalFormSwitcher = configuration.getBoolean("Mode_Default_PhysicalFormSwitcher",PhysicalFormSwitcher,Mode_Default_PhysicalFormSwitcher,"The default mode when deploy a machine. true=Fluid Extraction, false=Fluid Solidfication. Type: boolean");
-        SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher",PhysicalFormSwitcher,String.valueOf(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher),"The speed bonus = this ^ tier . Type: float"));
+        Mode_Default_PhysicalFormSwitcher = configuration.getBoolean("Mode_Default_PhysicalFormSwitcher", PhysicalFormSwitcher, Mode_Default_PhysicalFormSwitcher, "The default mode when deploy a machine. true=Fluid Extraction, false=Fluid Solidfication. Type: boolean");
+        SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher", PhysicalFormSwitcher, String.valueOf(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher), "The speed bonus = this ^ tier . Type: float"));
         // endregion
 
         // region Magnetic Mixer
-        SpeedBonus_MultiplyPerTier_MagneticMixer = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MagneticMixer",MagneticMixer,String.valueOf(SpeedBonus_MultiplyPerTier_MagneticMixer),"The speed bonus = this ^ tier . Type: float"));
+        SpeedBonus_MultiplyPerTier_MagneticMixer = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MagneticMixer", MagneticMixer, String.valueOf(SpeedBonus_MultiplyPerTier_MagneticMixer), "The speed bonus = this ^ tier . Type: float"));
         // endregion
 
         // region Magnetic Domain Constructor
-        Mode_Default_MagneticDomainConstructor = (byte) configuration.getInt("Mode_Default_MagneticDomainConstructor",MagneticDomainConstructor,Mode_Default_MagneticDomainConstructor,0,1,"The default mode when deploy a machine. 0=Electro Magnetic Separator, 1=Polarizer. Type: byte");
-        SpeedBonus_MultiplyPerTier_MagneticDomainConstructor = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MagneticDomainConstructor",MagneticDomainConstructor,String.valueOf(SpeedBonus_MultiplyPerTier_MagneticDomainConstructor),"The speed bonus = this ^ tier . Type: float"));
-        Parallel_PerRing_MagneticDomainConstructor = configuration.getInt("Parallel_PerRing_MagneticDomainConstructor",MagneticDomainConstructor,Parallel_PerRing_MagneticDomainConstructor,1,65536,"Parallel per Ring add. Type: int");
+        Mode_Default_MagneticDomainConstructor = (byte) configuration.getInt("Mode_Default_MagneticDomainConstructor", MagneticDomainConstructor, Mode_Default_MagneticDomainConstructor, 0, 1, "The default mode when deploy a machine. 0=Electro Magnetic Separator, 1=Polarizer. Type: byte");
+        SpeedBonus_MultiplyPerTier_MagneticDomainConstructor = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MagneticDomainConstructor", MagneticDomainConstructor, String.valueOf(SpeedBonus_MultiplyPerTier_MagneticDomainConstructor), "The speed bonus = this ^ tier . Type: float"));
+        Parallel_PerRing_MagneticDomainConstructor = configuration.getInt("Parallel_PerRing_MagneticDomainConstructor", MagneticDomainConstructor, Parallel_PerRing_MagneticDomainConstructor, 1, 65536, "Parallel per Ring add. Type: int");
         // endregion
 
         // region Silksong
-        SpeedBonus_MultiplyPerCoilTier_Silksong = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerCoilTier_Silksong",Silksong,String.valueOf(SpeedBonus_MultiplyPerCoilTier_Silksong),"The speed bonus = this ^ CoilTier . Type: float"));
-        Parallel_PerPiece_Silksong = configuration.getInt("Parallel_PerPiece_Silksong",Silksong,Parallel_PerPiece_Silksong,1,65536,"Parallel per Piece add. Type: int");
+        SpeedBonus_MultiplyPerCoilTier_Silksong = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerCoilTier_Silksong", Silksong, String.valueOf(SpeedBonus_MultiplyPerCoilTier_Silksong), "The speed bonus = this ^ CoilTier . Type: float"));
+        Parallel_PerPiece_Silksong = configuration.getInt("Parallel_PerPiece_Silksong", Silksong, Parallel_PerPiece_Silksong, 1, 65536, "Parallel per Piece add. Type: int");
         // endregion
 
         // region Holy Separator
@@ -401,25 +404,25 @@ public class Config {
         // endregion
 
         // region Space Scaler
-        Mode_Default_SpaceScaler = (byte) configuration.getInt("Mode_Default_SpaceScaler",SpaceScaler,Mode_Default_SpaceScaler,0,1,"The default mode when deploy a machine. 0=Compressor, 1=Extractor. Can not set the default 2 - Cyclotron, machine will crash directly. Type: byte");
-        Multiplier_ExtraOutputsPerFieldTier_SpaceScaler = configuration.getInt("Multiplier_ExtraOutputsPerFieldTier_SpaceScaler",SpaceScaler,Multiplier_ExtraOutputsPerFieldTier_SpaceScaler,1,64,"Extra outputs multiplier of Cyclotron mode, every higher tier of field block bring this value multiplied extra output items and fluids. Type: int");
-        SpeedMultiplier_Tier1Block_SpaceScaler = configuration.getInt("SpeedMultiplier_Tier1Block_SpaceScaler",SpaceScaler,SpeedMultiplier_Tier1Block_SpaceScaler,1,64,"Speed Multiplier at Tier 1 field generator block. Type: int");
-        SpeedMultiplier_BeyondTier2Block_SpaceScaler = configuration.getInt("SpeedMultiplier_BeyondTier2Block_SpaceScaler",SpaceScaler,SpeedMultiplier_BeyondTier2Block_SpaceScaler,1,64,"Speed Multiplier at beyond Tier 2 field generator block. Type: int");
+        Mode_Default_SpaceScaler = (byte) configuration.getInt("Mode_Default_SpaceScaler", SpaceScaler, Mode_Default_SpaceScaler, 0, 1, "The default mode when deploy a machine. 0=Compressor, 1=Extractor. Can not set the default 2 - Cyclotron, machine will crash directly. Type: byte");
+        Multiplier_ExtraOutputsPerFieldTier_SpaceScaler = configuration.getInt("Multiplier_ExtraOutputsPerFieldTier_SpaceScaler", SpaceScaler, Multiplier_ExtraOutputsPerFieldTier_SpaceScaler, 1, 64, "Extra outputs multiplier of Cyclotron mode, every higher tier of field block bring this value multiplied extra output items and fluids. Type: int");
+        SpeedMultiplier_Tier1Block_SpaceScaler = configuration.getInt("SpeedMultiplier_Tier1Block_SpaceScaler", SpaceScaler, SpeedMultiplier_Tier1Block_SpaceScaler, 1, 64, "Speed Multiplier at Tier 1 field generator block. Type: int");
+        SpeedMultiplier_BeyondTier2Block_SpaceScaler = configuration.getInt("SpeedMultiplier_BeyondTier2Block_SpaceScaler", SpaceScaler, SpeedMultiplier_BeyondTier2Block_SpaceScaler, 1, 64, "Speed Multiplier at beyond Tier 2 field generator block. Type: int");
         // endregion
 
         // region Crystalline Infinitier
-        Mode_Default_CrystallineInfinitier = (byte) configuration.getInt("Mode_Default_CrystallineInfinitier",CrystallineInfinitier,Mode_Default_CrystallineInfinitier,0,1,"The default mode when deploy a machine. 0=Autoclave, 1=Crystalline Infinitier. Type: byte");
-        SpeedMultiplier_AutoclaveMode_CrystallineInfinitier = configuration.getInt("SpeedMultiplier_AutoclaveMode_CrystallineInfinitier",CrystallineInfinitier,SpeedMultiplier_AutoclaveMode_CrystallineInfinitier,1,64,"Speed Multiplier of Crystalline Infinitier in Autoclave mode. Type: int");
-        SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = configuration.getInt("SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier",CrystallineInfinitier,SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier,1,64,"Speed Multiplier of Crystalline Infinitier in Crystalline Infinitier mode. Type: int");
-        ParallelMultiplier_CrystallineInfinitier = configuration.getInt("ParallelMultiplier_CrystallineInfinitier",CrystallineInfinitier,ParallelMultiplier_CrystallineInfinitier,1,256,"Parallel Multiplier of Crystalline Infinitier. The final parallel will be multiplied this value. Type: int");
-        FieldTier_EnablePerfectOverclock_CrystallineInfinitier = (byte) configuration.getInt("FieldTier_EnablePerfectOverclock_CrystallineInfinitier",CrystallineInfinitier,FieldTier_EnablePerfectOverclock_CrystallineInfinitier,1,11,"When field generator block tier is beyond this value, machine will enable perfect overclock. 3 is the lowest EOH block. Type: byte");
+        Mode_Default_CrystallineInfinitier = (byte) configuration.getInt("Mode_Default_CrystallineInfinitier", CrystallineInfinitier, Mode_Default_CrystallineInfinitier, 0, 1, "The default mode when deploy a machine. 0=Autoclave, 1=Crystalline Infinitier. Type: byte");
+        SpeedMultiplier_AutoclaveMode_CrystallineInfinitier = configuration.getInt("SpeedMultiplier_AutoclaveMode_CrystallineInfinitier", CrystallineInfinitier, SpeedMultiplier_AutoclaveMode_CrystallineInfinitier, 1, 64, "Speed Multiplier of Crystalline Infinitier in Autoclave mode. Type: int");
+        SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = configuration.getInt("SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier", CrystallineInfinitier, SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier, 1, 64, "Speed Multiplier of Crystalline Infinitier in Crystalline Infinitier mode. Type: int");
+        ParallelMultiplier_CrystallineInfinitier = configuration.getInt("ParallelMultiplier_CrystallineInfinitier", CrystallineInfinitier, ParallelMultiplier_CrystallineInfinitier, 1, 256, "Parallel Multiplier of Crystalline Infinitier. The final parallel will be multiplied this value. Type: int");
+        FieldTier_EnablePerfectOverclock_CrystallineInfinitier = (byte) configuration.getInt("FieldTier_EnablePerfectOverclock_CrystallineInfinitier", CrystallineInfinitier, FieldTier_EnablePerfectOverclock_CrystallineInfinitier, 1, 11, "When field generator block tier is beyond this value, machine will enable perfect overclock. 3 is the lowest EOH block. Type: byte");
         // endregion
 
         // region Molecule Deconstructor
-        Mode_Default_MoleculeDeconstructor = (byte) configuration.getInt("Mode_Default_MoleculeDeconstructor",MoleculeDeconstructor,Mode_Default_MoleculeDeconstructor,0,1,"The default mode when deploy a machine. 0=Electrolyzer, 1=Centrifuge. Type: byte");
-        PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor = configuration.getInt("PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor",MoleculeDeconstructor,PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor,1,64,"How many piece can enable perfect overclock. Type: int");
-        Parallel_PerPiece_MoleculeDeconstructor = configuration.getInt("Parallel_PerPiece_MoleculeDeconstructor",MoleculeDeconstructor,Parallel_PerPiece_MoleculeDeconstructor,1,65536,"Parallel per piece add. Type: int");
-        SpeedBonus_MultiplyPerTier_MoleculeDeconstructor = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MoleculeDeconstructor",MoleculeDeconstructor,String.valueOf(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor),"The speed bonus = this ^ tier . Type: float"));
+        Mode_Default_MoleculeDeconstructor = (byte) configuration.getInt("Mode_Default_MoleculeDeconstructor", MoleculeDeconstructor, Mode_Default_MoleculeDeconstructor, 0, 1, "The default mode when deploy a machine. 0=Electrolyzer, 1=Centrifuge. Type: byte");
+        PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor = configuration.getInt("PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor", MoleculeDeconstructor, PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor, 1, 64, "How many piece can enable perfect overclock. Type: int");
+        Parallel_PerPiece_MoleculeDeconstructor = configuration.getInt("Parallel_PerPiece_MoleculeDeconstructor", MoleculeDeconstructor, Parallel_PerPiece_MoleculeDeconstructor, 1, 65536, "Parallel per piece add. Type: int");
+        SpeedBonus_MultiplyPerTier_MoleculeDeconstructor = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerTier_MoleculeDeconstructor", MoleculeDeconstructor, String.valueOf(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor), "The speed bonus = this ^ tier . Type: float"));
         // endregion
 
         // region Miracle Door
@@ -459,19 +462,24 @@ public class Config {
         // endregion
 
         // region Space Station
-        activateMegaSpaceStation = configuration.getBoolean("activateMegaSpaceStation",spaceStation,activateMegaSpaceStation,"decide whether can use mega space station.");
+        activateMegaSpaceStation = configuration.getBoolean("activateMegaSpaceStation", spaceStation, activateMegaSpaceStation, "decide whether can use mega space station.");
         // endregion
 
         // region CombatRework
-        activateCombatStats = configuration.getBoolean("activateCombatStats",CombatStats,activateCombatStats,"decide whether to enable the combatstats system(WIP).DO NOT USE IT FOR NOW!");
+        activateCombatStats = configuration.getBoolean("activateCombatStats", CombatStats, activateCombatStats, "decide whether to enable the combatstats system(WIP).DO NOT USE IT FOR NOW!");
         // endregion
 
         // region Hyper Spacetime Transformer
-        Mode_Default_HyperSpacetimeTransformer=                                      (byte) configuration.getInt( "Mode_Default_HyperSpacetimeTransformer", HyperSpacetimeTransformer,Mode_Default_HyperSpacetimeTransformer, 0,1,"");;
-        ParallelMultiplier_HyperSpacetimeTransformer=                                configuration.getInt(        "ParallelMultiplier_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,ParallelMultiplier_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
-        SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer=          configuration.getInt(        "SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
-        SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer=       configuration.getInt(        "SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer",             HyperSpacetimeTransformer,SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE,"");;
-        EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer=   configuration.getBoolean(    "EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer",    HyperSpacetimeTransformer,EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer,"");;
+        Mode_Default_HyperSpacetimeTransformer = (byte) configuration.getInt("Mode_Default_HyperSpacetimeTransformer", HyperSpacetimeTransformer, Mode_Default_HyperSpacetimeTransformer, 0, 1, "");
+        ;
+        ParallelMultiplier_HyperSpacetimeTransformer = configuration.getInt("ParallelMultiplier_HyperSpacetimeTransformer", HyperSpacetimeTransformer, ParallelMultiplier_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE, "");
+        ;
+        SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer = configuration.getInt("SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer", HyperSpacetimeTransformer, SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE, "");
+        ;
+        SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer = configuration.getInt("SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer", HyperSpacetimeTransformer, SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer, 1, Integer.MAX_VALUE, "");
+        ;
+        EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer = configuration.getBoolean("EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer", HyperSpacetimeTransformer, EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer, "");
+        ;
         // endregion
 
         // region Mega Egg Generator
@@ -499,9 +507,9 @@ public class Config {
         BlockTier1Parallel_MegaMacerator = configuration.getInt("BlockTier1Parallel_MegaMacerator", MegaMacerator, BlockTier1Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 1. Type: int");
         BlockTier2Parallel_MegaMacerator = configuration.getInt("BlockTier2Parallel_MegaMacerator", MegaMacerator, BlockTier2Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 2. Type: int");
         SpeedBonus_MegaMacerator = Float.parseFloat(configuration.getString("SpeedBonus_MegaMacerator", MegaMacerator, String.valueOf(SpeedBonus_MegaMacerator), "Speed Bonus of Mega Macerator. Type: float"));
-        EnablePerfectOverclock_MegaMacerator=configuration.getBoolean("EnablePerfectOverclock_MegaMacerator", MegaMacerator, EnablePerfectOverclock_MegaMacerator, "Enable perfect overclock of Mega Macerator. Type: boolean");
+        EnablePerfectOverclock_MegaMacerator = configuration.getBoolean("EnablePerfectOverclock_MegaMacerator", MegaMacerator, EnablePerfectOverclock_MegaMacerator, "Enable perfect overclock of Mega Macerator. Type: boolean");
         // end region
-
+        TST_CleanRoom.loadConfig(configuration);
         if (configuration.hasChanged()) {
             configuration.save();
         }

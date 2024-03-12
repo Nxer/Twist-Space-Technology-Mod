@@ -298,7 +298,9 @@ public enum GTCMItemList {
     NuclearReactorStructure0,
     NuclearReactorStructure1,
     NuclearReactorStructure2,
-    NuclearReactorStructure3;
+    NuclearReactorStructure3,
+    FackRackHatch,
+    RealRackHatch;
 
     // region Member Variables
 
