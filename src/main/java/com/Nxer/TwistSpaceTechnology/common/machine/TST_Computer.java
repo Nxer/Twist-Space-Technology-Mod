@@ -9,7 +9,6 @@ import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStat
 import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_TOO_LOW;
 import static com.github.technus.tectech.util.CommonValues.*;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static goodgenerator.loader.Loaders.FRF_Coil_1;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
@@ -18,11 +17,6 @@ import static gtPlusPlus.core.block.ModBlocks.blockCasings3Misc;
 import static net.minecraft.util.StatCollector.translateToLocal;
 import static vazkii.botania.common.block.ModBlocks.pylon;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -30,17 +24,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.mechanics.dataTransport.QuantumDataPacket;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_Rack;
 import com.github.technus.tectech.thing.metaTileEntity.multi.GT_MetaTileEntity_EM_switch;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.INameFunction;
@@ -60,25 +53,22 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_StructureUtility;
-import gregtech.api.util.IGT_HatchAdder;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
 
 public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements ISurvivalConstructable {
 
     // region variables
-    private final ArrayList<GT_MetaTileEntity_Hatch_Rack> eRacks = new ArrayList<>();
+    // private final ArrayList<GT_Hatch_RackComputationMonitor> eRacks = new ArrayList<>();
+    private GT_Hatch_RackComputationMonitor realMonitor;
 
     private double multiplier = 1;
 
@@ -87,9 +77,9 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
     // endregion
     private static final String[] description = new String[] {
         EnumChatFormatting.AQUA + translateToLocal("tt.keyphrase.Hint_Details") + ":",
-        translateToLocal("gt.blockmachines.multimachine.em.computer.hint.0"), // 1 - Classic/Data Hatches or
+        translateToLocal("tst.computer.hint.0"), // 1 - Classic/Data Hatches or
         // Computer casing
-        translateToLocal("gt.blockmachines.multimachine.em.computer.hint.1"), // 2 - Rack Hatches or Advanced
+        translateToLocal("tst.computer.hint.1"), // 2 - Rack Hatches or Advanced
         // computer casing
     };
 
@@ -1024,18 +1014,28 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
         mCrowbar = true;
         mSolderingTool = true;
         mWrench = true;
-        eRacks.clear();
+        realMonitor = null;
+        // eRacks.clear();
         if (!structureCheck_EM(MAIN, offsetX, offsetY, offsetZ)) {
             return false;
         }
-        for (GT_MetaTileEntity_Hatch_Rack rack : filterValidMTEs(eRacks)) {
-            rack.getBaseMetaTileEntity()
-                .setActive(iGregTechTileEntity.isActive());
-        }
-        return mOutputHatches.size() > 0 && mInputHatches.size() > 0
-            && mMaintenanceHatches.size() == 1
-            && eRacks.size() > 0
-            && eOutputData.size() != 0;
+        // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
+        // rack.getBaseMetaTileEntity()
+        // .setActive(iGregTechTileEntity.isActive());
+        // }
+        // if (mOutputHatches.isEmpty()) {
+        // LOG.info("output is empty");
+        // }
+        // if (mInputHatches.isEmpty()) {
+        // LOG.info("input is empty");
+        // }
+        // if (realMonitor == null) {
+        // LOG.info("stupid!!");
+        // }
+        return !mOutputHatches.isEmpty() && !mInputHatches.isEmpty() && mMaintenanceHatches.size() == 1
+        // && !eRacks.isEmpty()
+            && realMonitor != null
+            && !eOutputData.isEmpty();
     }
 
     @Override
@@ -1060,9 +1060,9 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             && !aBaseMetaTileEntity.isActive()
             && aTick % 20 == MULTI_CHECK_AT) {
             double maxTemp = 0;
-            for (GT_MetaTileEntity_Hatch_Rack rack : filterValidMTEs(eRacks)) {
-                maxTemp = Math.max(maxTemp, rack.heat);
-            }
+            // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
+            // maxTemp = Math.max(maxTemp, rack.heat);
+            // }
             maxCurrentTemp.set(maxTemp);
         }
     }
@@ -1087,25 +1087,27 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                 return CheckRecipeResultRegistry.POWER_OVERFLOW;
             }
             long thingsActive = 0;
-            int rackComputation;
+            long rackComputation;
             // mOutputFluids[0] = null;
             // LOG.info("pre racks computation! size:" + filterValidMTEs(eRacks).size());
-            for (GT_MetaTileEntity_Hatch_Rack rack : filterValidMTEs(eRacks)) {
-                if (rack.heat > maxTemp) {
-                    maxTemp = rack.heat;
+            // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
+            if (realMonitor != null) {
+                if (realMonitor.heat > maxTemp) {
+                    maxTemp = realMonitor.heat;
                 }
-                rackComputation = rack.tickComponents((float) overClockRatio, (float) overVoltageRatio);
-                // LOG.info("preview heat:" + rack.heat + "/preview rackComputation:" + rackComputation);
-                rack.heat = coolTheRackHatchByAnyCoolant(rack.heat);
-                rackComputation *= multiplier;
-                // LOG.info("after heat:" + rack.heat + "/after rackComputation:" + rackComputation);
+                rackComputation = realMonitor.tickComponents((float) overClockRatio, (float) overVoltageRatio);
+                LOG.info("preview heat:" + realMonitor.heat + "/preview rackComputation:" + rackComputation);
+                realMonitor.heat = coolTheRackHatchByAnyCoolant(realMonitor.heat);
+                rackComputation *= (long) (multiplier * multiplier);
+                LOG.info("after heat:" + realMonitor.heat + "/after rackComputation:" + rackComputation);
                 if (rackComputation > 0) {
                     eAvailableData += rackComputation;
-                    thingsActive += 4 * multiplier * multiplier;
+                    thingsActive += (long) (4 * multiplier * multiplier);
                 }
-                rack.getBaseMetaTileEntity()
+                realMonitor.getBaseMetaTileEntity()
                     .setActive(true);
             }
+            // }
             // LOG.info("end racks computation!");
 
             for (GT_MetaTileEntity_Hatch_InputData di : eInputData) {
@@ -1118,7 +1120,7 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                 thingsActive += eOutputData.size();
                 // LOG.info("activated " + thingsActive);
                 eAmpereFlow = 1 + (thingsActive >> 2);
-                // eAmpereFlow *= multiplier * multiplier;
+                eAmpereFlow *= (long) (multiplier * multiplier);
                 mMaxProgresstime = 20;
                 mEfficiencyIncrease = 10000;
                 maxCurrentTemp.set(maxTemp);
@@ -1138,7 +1140,7 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                 return SimpleCheckRecipeResult.ofSuccess("no_computing");
             }
         } else {
-            LOG.info("what?");
+            // LOG.info("what?");
         }
         return SimpleCheckRecipeResult.ofFailure("no_computing");
     }
@@ -1148,15 +1150,18 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
         for (var input : filterValidMTEs(mInputHatches)) {
             FluidStack fluid = input.getFluid();
             if (fluid == null) continue;
-            if (coolant == null && validCoolant(fluid) > 0) coolant = fluid.copy();
+            // LOG.info(fluid.getLocalizedName());
+            if (coolant == null && validCoolant(fluid) > -1) coolant = fluid.copy();
             else if (coolant != null && coolant.getFluid() == fluid.getFluid()) coolant.amount += fluid.amount;
         }
+        // LOG.info("coolant is null?" + (coolant == null));
         if (coolant == null) return prevHeat;
         double maxHeatCanCool = validCoolant(coolant) * coolant.amount;
         multiplier = 1.0 + Math.log10(1.0 + maxHeatCanCool * prevHeat);
-        long realHeatCanCool = (int) (prevHeat - (prevHeat / multiplier));
+        long realHeatCanCool = (int) Math.min(maxHeatCanCool, (prevHeat - (prevHeat / (multiplier * multiplier))));
         long requiredAmount = (long) (realHeatCanCool / validCoolant(coolant));
-        FluidStack output = null;
+
+        // FluidStack output = null;
         for (var input : filterValidMTEs(mInputHatches)) {
             FluidStack fluid = input.getFluid();
             if (requiredAmount == 0) break;
@@ -1164,35 +1169,37 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                 int mx = (int) Math.min(requiredAmount, fluid.amount);
                 fluid.amount -= mx;
                 requiredAmount -= mx;
-                if (output == null) output = new FluidStack(getCoolantTransform(coolant.getFluid()), mx);
-                else output.amount += mx;
+                // if (output == null) output = new FluidStack(getCoolantTransform(coolant.getFluid()), mx);
+                // else output.amount += mx;
             }
         }
-        if (output == null) {
-            if (realHeatCanCool != 0) {
-                LOG.info("why you can cool without coolant?");
-            }
-            return (int) (prevHeat - realHeatCanCool);
-        }
-        output.amount = output.amount * 97 / 100;
-        // LOG.info("maxHeat:" + maxHeatCanCool + " /realHeat:" + realHeatCanCool + " /requiredAmount:" + requiredAmount
-        // + " /output:" + output.amount);
-        addFluidOutputs(new FluidStack[] { output });
+        // if (output == null) {
+        // if (realHeatCanCool != 0) {
+        // LOG.info("why you can cool without coolant?");
+        // }
+        // return (int) (prevHeat - realHeatCanCool);
+        // }
+        // output.amount = output.amount * 10 / 100;
+        // LOG.info("maxHeat:" + maxHeatCanCool + " /realHeat:" + realHeatCanCool + " /requiredAmount:" +
+        // requiredAmount);
+        // addFluidOutputs(new FluidStack[] { output });
         return (int) (prevHeat - realHeatCanCool);
     }
 
     public static double validCoolant(FluidStack fluid) {
-        if (fluid.getFluid() == BlocksItems.getFluid(InternalName.fluidCoolant)) return 0.01;
-        if (fluid.getFluid() == Materials.SuperCoolant.mFluid) return 10;
-        return -1;
+        // LOG.info(fluid.getUnlocalizedName().equals("Gelid Cryotheum"));
+        if (fluid.getFluid() == BlocksItems.getFluid(InternalName.fluidCoolant)) return 0.001;
+        if (fluid.getFluid() == Materials.SuperCoolant.mFluid) return 0.01;
+        // if (fluid.getUnlocalizedName().equals("Gelid Cryotheum")) return 0.1;
+        return -100;
     }
 
-    public static Fluid getCoolantTransform(Fluid fluid) {
-        if (fluid == BlocksItems.getFluid(InternalName.fluidCoolant))
-            return BlocksItems.getFluid(InternalName.fluidHotCoolant);
-        if (fluid == Materials.SuperCoolant.mFluid) return BlocksItems.getFluid(InternalName.fluidCoolant);
-        return null;
-    }
+    // public static Fluid getCoolantTransform(Fluid fluid) {
+    // if (fluid == BlocksItems.getFluid(InternalName.fluidCoolant))
+    // return BlocksItems.getFluid(InternalName.fluidHotCoolant);
+    // if (fluid == Materials.SuperCoolant.mFluid) return BlocksItems.getFluid(InternalName.fluidCoolant);
+    // return null;
+    // }
 
     @Override
     public void outputAfterRecipe_EM() {
@@ -1233,32 +1240,18 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             // computation (and heat)
             .addInfo(translateToLocal("tt.keyword.Structure.StructureTooComplex")) // The structure is too complex!
             .addSeparator()
-            .addInfo("You should put racks on the top the advanced computing block")
-            .addInfo("or replace the advanced computing block in the second layer of centre matrix")
-            .addInfo("the extra overclock calculated as follow:")
-            .addInfo("if you have current heat H and you have input X amount of coolant")
-            .addInfo("your extra overclock will be (1+log10(1+0.01*X*H))")
-            .addInfo("It will currently return you back 97% percent of hotCoolant ")
+            // .addInfo("what the fuck")
+            .addInfo(translateToLocal("tst.computer.desc.0"))
+            .addInfo(translateToLocal("tst.computer.desc.1"))
+            .addInfo(translateToLocal("tst.computer.desc.2"))
+            .addInfo(translateToLocal("tst.computer.desc.3"))
+            .addInfo(translateToLocal("tst.computer.desc.4"))
+            .addInfo(translateToLocal("tst.computer.desc.5"))
             // .beginVariableStructureBlock(2, 2, 4, 4, 5, 16, false)
             .addOtherStructurePart(
                 translateToLocal("gt.blockmachines.hatch.certain.tier.07.name"),
                 "no need uncertain hatch!",
-                1) // Uncertainty Resolver: Any Computer Casing on first or last slice
-            .addOtherStructurePart(
-                translateToLocal("tt.keyword.Structure.DataConnector"),
-                translateToLocal("tt.keyword.Structure.AnyComputerCasingFirstOrLastSlice"),
-                1) // Optical Connector: Any Computer Casing on first or last slice
-            .addOtherStructurePart(
-                translateToLocal("gt.blockmachines.hatch.rack.tier.08.name"),
-                translateToLocal("tt.keyword.Structure.AnyAdvComputerCasingExceptOuter"),
-                2) // Computer Rack: Any Advanced Computer Casing, except the outer ones
-            .addOtherStructurePart(
-                translateToLocal("gt.blockmachines.hatch.param.tier.05.name"),
-                translateToLocal("tt.keyword.Structure.Optional") + " "
-                    + translateToLocal("tt.keyword.Structure.AnyComputerCasingFirstOrLastSlice"),
-                2) // Parametrizer: (optional) Any Computer Casing on first or last slice
-            .addEnergyHatch(translateToLocal("tt.keyword.Structure.AnyComputerCasingFirstOrLastSlice"), 1) // Energy
-            .addMaintenanceHatch(translateToLocal("tt.keyword.Structure.AnyComputerCasingFirstOrLastSlice"), 1) // Maintenance
+                1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
@@ -1290,18 +1283,22 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
     @Override
     public void onRemoval() {
         super.onRemoval();
-        for (GT_MetaTileEntity_Hatch_Rack rack : filterValidMTEs(eRacks)) {
-            rack.getBaseMetaTileEntity()
-                .setActive(false);
-        }
+        // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
+        // rack.getBaseMetaTileEntity()
+        // .setActive(false);
+        // }
+        if (realMonitor != null) realMonitor.getBaseMetaTileEntity()
+            .setActive(false);
     }
 
     @Override
     protected void extraExplosions_EM() {
-        for (MetaTileEntity tTileEntity : eRacks) {
-            tTileEntity.getBaseMetaTileEntity()
-                .doExplosion(V[9]);
-        }
+        // for (MetaTileEntity tTileEntity : eRacks) {
+        // tTileEntity.getBaseMetaTileEntity()
+        // .doExplosion(V[9]);
+        // }
+        realMonitor.getBaseMetaTileEntity()
+            .doExplosion(V[9]);
     }
 
     @Override
@@ -1314,34 +1311,23 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
         // LOG.info("SOMETHING stop the machine");
         super.stopMachine();
         eAvailableData = 0;
-        for (GT_MetaTileEntity_Hatch_Rack rack : filterValidMTEs(eRacks)) {
-            rack.getBaseMetaTileEntity()
-                .setActive(false);
-        }
+        // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
+        // rack.getBaseMetaTileEntity()
+        // .setActive(false);
+        // }
+        if (realMonitor != null) realMonitor.getBaseMetaTileEntity()
+            .setActive(false);
     }
 
     @Override
     protected void afterRecipeCheckFailed() {
         super.afterRecipeCheckFailed();
-        for (GT_MetaTileEntity_Hatch_Rack rack : filterValidMTEs(eRacks)) {
-            rack.getBaseMetaTileEntity()
-                .setActive(false);
-        }
-    }
-
-    public final boolean addRackToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) {
-            return false;
-        }
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) {
-            return false;
-        }
-        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Rack) {
-            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            return eRacks.add((GT_MetaTileEntity_Hatch_Rack) aMetaTileEntity);
-        }
-        return false;
+        // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
+        // rack.getBaseMetaTileEntity()
+        // .setActive(false);
+        // }
+        if (realMonitor != null) realMonitor.getBaseMetaTileEntity()
+            .setActive(false);
     }
 
     @Override
@@ -1397,27 +1383,13 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                 .addElement('M', ofBlock(QuantumGlassBlock.INSTANCE, 0)) // M -> ofBlock...(tile.quantumGlass, 0, ...);
                 .addElement('O', ofBlock(pylon, 1))
                 // .addElement('N', ofBlock(Block.getBlockById(1), 0))
-                .addElement(
-                    'P',
-                    ofChain(RackHatchElement.INSTANCE.newAny(textureOffset + 3, 2), ofBlock(Block.getBlockById(0), 0)))
-                // .addElement('P', ofBlock(LASERpipeBlock.getBlock(), 15472))
-                // .addElement('K', ofBlock(Block.getBlockById(1), 0))
-                // .addElement('k', ofBlock(, 7))
+                .addElement('P', ofBlock(sBlockCasingsTT, 2))
                 .addElement(
                     'E',
                     StructureUtility.ofChain(
-                        GT_StructureUtility.ofHatchAdder(TST_Computer::addToMachineList, textureOffset + 2, 1),
-                        // GT_StructureUtility
-                        // .ofHatchAdder(TST_Computer::addExoticEnergyInputToMachineList, textureOffset + 2, 1),
-                        // GT_StructureUtility.ofHatchAdder(TST_Computer::addInputToMachineList, textureOffset + 2, 1),
-                        // GT_StructureUtility.ofHatchAdder(TST_Computer::addOutputToMachineList, textureOffset + 2, 1),
-                        // GT_StructureUtility.ofHatchAdder(TST_Computer::addDataConnectorToMachineList, textureOffset +
-                        // 2,
-                        // 1),
+                        GT_StructureUtility.ofHatchAdder(TST_Computer::superAddToMachineList, textureOffset + 2, 1),
                         StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 2)))
-                .addElement(
-                    'Q',
-                    ofChain(RackHatchElement.INSTANCE.newAny(textureOffset + 3, 2), ofBlock(sBlockCasingsTT, 3)))
+                .addElement('Q', ofBlock(sBlockCasingsTT, 3))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -1428,23 +1400,26 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
         return description;
     }
 
-    private enum RackHatchElement implements IHatchElement<TST_Computer> {
+    public final boolean superAddToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        // LOG.info("see you again");
+        if (aTileEntity == null) {
+            return false;
+        }
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) {
+            return false;
+        }
+        if (aTileEntity.getMetaTileEntity() instanceof GT_Hatch_RackComputationMonitor monitor) {
+            if (monitor.isMeanHatch()) {
+                // LOG.info("monitor added");
+                realMonitor = monitor;
+                realMonitor.updateTexture(aBaseCasingIndex);
+                return true;
+            }
 
-        INSTANCE;
-
-        @Override
-        public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
-            return Collections.singletonList(GT_MetaTileEntity_Hatch_Rack.class);
         }
 
-        @Override
-        public IGT_HatchAdder<? super TST_Computer> adder() {
-            return TST_Computer::addRackToMachineList;
-        }
-
-        @Override
-        public long count(TST_Computer t) {
-            return t.eRacks.size();
-        }
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex);
     }
+
 }

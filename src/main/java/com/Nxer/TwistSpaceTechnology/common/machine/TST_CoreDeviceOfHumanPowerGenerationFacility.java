@@ -229,7 +229,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
                             .adder(TST_CoreDeviceOfHumanPowerGenerationFacility::addToMachineList)
                             .dot(2)
                             .casingIndex(16)
-                            .buildAndChain(GregTech_API.sBlockCasings2, 6)
+                            .buildAndChain(GregTech_API.sBlockCasings2, 0)
                     )
                     .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 4))
                     .addElement(
@@ -285,11 +285,11 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(15, 20, 15, false)
-            .addInputHatch(TextLocalization.textAnyCasing, 1)
-            .addOutputHatch(TextLocalization.textAnyCasing, 1)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 3)
+            .addInputHatch(TextLocalization.textUseBlueprint, 1)
+            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+            .addInputBus(TextLocalization.textUseBlueprint, 2)
+            .addOutputBus(TextLocalization.textUseBlueprint, 2)
+            .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }

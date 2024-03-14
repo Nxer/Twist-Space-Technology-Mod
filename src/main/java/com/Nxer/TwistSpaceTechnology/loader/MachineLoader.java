@@ -39,11 +39,13 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
@@ -104,6 +106,7 @@ public class MachineLoader {
     public static ItemStack HephaestusAtelier;
     public static ItemStack DeployedNanoCore;
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
+    public static ItemStack StarcoreMiner;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -130,6 +133,9 @@ public class MachineLoader {
     public static ItemStack BufferedEnergyHatchMAX;
     public static ItemStack DebugUncertaintyHatch;
     public static ItemStack LaserSmartNode;
+
+    public static ItemStack FackRackHatch;
+    public static ItemStack RealRackHatch;
 
     // test
     // public static ItemStack TestMachine;
@@ -322,8 +328,10 @@ public class MachineLoader {
         // GTCMItemList.NuclearReactor.set(IndistinctTentacle);
 
         //
-        AstralComputingArray = new TST_Computer(19029, "NameAstralComputingArray", "Astral Computing Array")
-            .getStackForm(1);
+        AstralComputingArray = new TST_Computer(
+            19029,
+            "NameAstralComputingArray",
+            TextLocalization.NameAstralComputingArray).getStackForm(1);
         GTCMItemList.AstralComputingArray.set(AstralComputingArray);
 
         //
@@ -391,6 +399,16 @@ public class MachineLoader {
                 TextEnums.NameCoreDeviceOfHumanPowerGenerationFacility.toString()).getStackForm(1);
             GTCMItemList.CoreDeviceOfHumanPowerGenerationFacility.set(CoreDeviceOfHumanPowerGenerationFacility);
         }
+
+        // if (Config.Enable_StarcoreMiner) {
+        // StarcoreMiner = new TST_StarcoreMiner(
+        // 19040,
+        // "NameMegaVoidMiner",
+        // TextEnums.tr("NameMegaVoidMiner"),
+        // 4
+        // ).getStackForm(1);
+        // GTCMItemList.StarcoreMiner.set(StarcoreMiner);
+        // }
 
         // endregion
 
@@ -576,6 +594,35 @@ public class MachineLoader {
             TextLocalization.NameLaserSmartNode).getStackForm(1);
         GTCMItemList.LaserSmartNode.set(LaserSmartNode);
         // endregion
+        FackRackHatch = new GT_Hatch_RackComputationMonitor(
+            18959,
+            "NameFackRackHatch",
+            TextLocalization.NameFackRackHatch,
+            0,
+            false).getStackForm(1);
+        GTCMItemList.FackRackHatch.set(FackRackHatch);
+
+        RealRackHatch = new GT_Hatch_RackComputationMonitor(
+            18958,
+            "NameRealRackHatch",
+            TextLocalization.NameRealRackHatch,
+            0,
+            true).getStackForm(1);
+        GTCMItemList.RealRackHatch.set(RealRackHatch);
+    }
+
+    public static void loadMachinePostInit() {
+
+        if (Config.Enable_StarcoreMiner) {
+            StarcoreMiner = new TST_StarcoreMiner(
+                19040,
+                "NameStarcoreMiner",
+                // #tr NameStarcoreMiner
+                // # Starcore Miner
+                // #zh_CN 星核钻机
+                TextEnums.tr("NameStarcoreMiner")).getStackForm(1);
+            GTCMItemList.StarcoreMiner.set(StarcoreMiner);
+        }
 
     }
 }

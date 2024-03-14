@@ -24,8 +24,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -40,7 +38,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
@@ -62,6 +59,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
 
     public TST_CleanRoom(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        // GT_MetaTileEntity_Cleanroom
 
     }
 
@@ -108,14 +106,14 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("Cleanroom")
+        tt.addMachineType("")
             .addInfo("Controller block for the Cleanroom")
             .addInfo("Consumes 40 EU/t when first turned on")
             .addInfo("and 4 EU/t once at 100% efficiency")
             .addInfo("If you use an LV energy hatch, it will actually accept 2A instead of just 1A.")
             .addInfo(
                 "MV+ energy hatches just accept 1A as usual. For HV+ the cleanroom will overclock and gain efficiency faster.")
-            .addInfo("Time required to reach full efficiency is proportional to")
+            .addInfo("tst.cleanroom.desc.0")
             .addInfo("the height of empty space within")
             .addInfo("Machines that cause pollution aren't allowed to be put in.")
             .addInfo("buffered bt TST")
@@ -149,22 +147,6 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        // long v = getMaxInputVoltage();
-        // long maxBufferedEU = 1024 * v;
-        // bufferedEU = (long) (Math.min(maxBufferedEU, bufferedEU) * 0.9999);
-        // long increase = maxBufferedEU - bufferedEU;
-        // for (var tHatch : filterValidMTEs(mEnergyHatches)) {
-        // long decrease = Math.min(increase, tHatch.getEUVar());
-        // if (tHatch.getBaseMetaTileEntity()
-        // .decreaseStoredEnergyUnits(decrease, false)) increase -= decrease;
-        // }
-        // for (var tHatch : filterValidMTEs(mExoticEnergyHatches)) {
-        // long decrease = Math.min(increase, tHatch.getEUVar());
-        // if (tHatch.getBaseMetaTileEntity()
-        // .decreaseStoredEnergyUnits(decrease, false)) increase -= decrease;
-        // }
-        // bufferedEU = maxBufferedEU - increase;
-        // bufferedEU -= outputToDynamo(Math.min(bufferedEU, maxBufferedEU / 2));
         if (aTick % 20 == 0) {
             var a = filterValidMTEs(mInputHatches);
             var b = filterValidMTEs(mOutputHatches);
@@ -222,34 +204,6 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
             : SimpleCheckRecipeResult.ofFailure("running fine");
     }
 
-    public long outputToDynamo(long aEU) {
-        long injected = 0;
-        long leftToInject;
-        long aVoltage;
-        int aAmpsToInject;
-        int aRemainder;
-        int ampsOnCurrentHatch;
-        for (GT_MetaTileEntity_Hatch_Dynamo aDynamo : filterValidMTEs(mDynamoHatches)) {
-
-            leftToInject = aEU - injected;
-            aVoltage = aDynamo.maxEUOutput();
-            aAmpsToInject = (int) (leftToInject / aVoltage);
-            aRemainder = (int) (leftToInject - (aAmpsToInject * aVoltage));
-            ampsOnCurrentHatch = (int) Math.min(aDynamo.maxAmperesOut(), aAmpsToInject);
-            for (int i = 0; i < ampsOnCurrentHatch; i++) {
-                aDynamo.getBaseMetaTileEntity()
-                    .increaseStoredEnergyUnits(aVoltage, false);
-            }
-            injected += aVoltage * ampsOnCurrentHatch;
-            if (aRemainder > 0 && ampsOnCurrentHatch < aDynamo.maxAmperesOut()) {
-                aDynamo.getBaseMetaTileEntity()
-                    .increaseStoredEnergyUnits(aRemainder, false);
-                injected += aRemainder;
-            }
-        }
-        return aEU - injected;
-    }
-
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         mHardHammer = true;
@@ -258,6 +212,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
         mCrowbar = true;
         mSolderingTool = true;
         mWrench = true;
+        // Cleanroom
         int x = 1;
         int z = 1;
         int y = 1;
@@ -317,7 +272,6 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
                 }
             }
         }
-
         for (int i = -1; i > -maxY; i--) {
             final Block tBlock = aBaseMetaTileEntity.getBlockOffset(x, i, z);
             final int tMeta = aBaseMetaTileEntity.getMetaIDOffset(x, i, z);
@@ -361,12 +315,6 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
                         } else {
                             final IGregTechTileEntity tTileEntity = aBaseMetaTileEntity
                                 .getIGregTechTileEntityOffset(dX, dY, dZ);
-                            if (aBaseMetaTileEntity instanceof GT_MetaTileEntity_Hatch_InputData) {
-                                return false;
-                            }
-                            if (aBaseMetaTileEntity instanceof GT_MetaTileEntity_Hatch_OutputData) {
-                                return false;
-                            }
                             if (!this.addToMachineList(tTileEntity, 210)) {
                                 if (tBlock instanceof ic2.core.block.BlockIC2Door) {
                                     if ((tMeta & 8) == 0) {
