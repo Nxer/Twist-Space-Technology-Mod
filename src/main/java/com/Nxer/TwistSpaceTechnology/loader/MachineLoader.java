@@ -106,7 +106,7 @@ public class MachineLoader {
     public static ItemStack HephaestusAtelier;
     public static ItemStack DeployedNanoCore;
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
-    public static ItemStack MegaVoidMiner;
+    public static ItemStack StarcoreMiner;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -400,14 +400,14 @@ public class MachineLoader {
             GTCMItemList.CoreDeviceOfHumanPowerGenerationFacility.set(CoreDeviceOfHumanPowerGenerationFacility);
         }
 
-        // if (Config.Enable_MegaVoidMiner) {
-        // MegaVoidMiner = new TST_StarcoreMiner(
+        // if (Config.Enable_StarcoreMiner) {
+        // StarcoreMiner = new TST_StarcoreMiner(
         // 19040,
         // "NameMegaVoidMiner",
         // TextEnums.tr("NameMegaVoidMiner"),
         // 4
         // ).getStackForm(1);
-        // GTCMItemList.MegaVoidMiner.set(MegaVoidMiner);
+        // GTCMItemList.StarcoreMiner.set(StarcoreMiner);
         // }
 
         // endregion
@@ -613,15 +613,15 @@ public class MachineLoader {
 
     public static void loadMachinePostInit() {
 
-        if (Config.Enable_MegaVoidMiner) {
-            MegaVoidMiner = new TST_StarcoreMiner(
+        if (Config.Enable_StarcoreMiner) {
+            StarcoreMiner = new TST_StarcoreMiner(
                 19040,
                 "NameStarcoreMiner",
                 // #tr NameStarcoreMiner
                 // # Starcore Miner
                 // #zh_CN 星核钻机
                 TextEnums.tr("NameStarcoreMiner")).getStackForm(1);
-            GTCMItemList.MegaVoidMiner.set(MegaVoidMiner);
+            GTCMItemList.StarcoreMiner.set(StarcoreMiner);
         }
 
     }

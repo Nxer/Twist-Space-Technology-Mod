@@ -194,7 +194,7 @@ public enum GTCMItemList {
     HephaestusAtelier,
     DeployedNanoCore,
     CoreDeviceOfHumanPowerGenerationFacility,
-    MegaVoidMiner,
+    StarcoreMiner,
 
     // MAX
     HighDimensionalExtend,
