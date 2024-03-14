@@ -4,11 +4,9 @@ import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTEs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -192,7 +190,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     /**
      * Forced get all input items, include all Dual Input Hatch slot.
-     * 
+     *
      * @return The items list.
      */
     public ArrayList<ItemStack> getStoredInputsNoSeparation() {
@@ -205,10 +203,21 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                     ItemStack[] items = inventoryIterator.next()
                         .getItemInputs();
                     if (items == null || items.length == 0) continue;
-                    // rList.addAll(Arrays.asList(Arrays.stream(items).filter(Objects::nonNull).toArray(ItemStack[]::new)));
-                    Arrays.stream(items)
-                        .filter(Objects::nonNull)
-                        .forEach(rList::add);
+
+                    for (int i = 0; i < items.length; i++) {
+                        if (items[i] != null) {
+                            rList.add(items[i]);
+                        }
+                    }
+
+                    // for (ItemStack i : items) {
+                    // if (i == null) continue;
+                    // rList.add(i);
+                    // }
+
+                    // Arrays.stream(items)
+                    // .filter(Objects::nonNull)
+                    // .forEach(rList::add);
                 }
             }
         }
