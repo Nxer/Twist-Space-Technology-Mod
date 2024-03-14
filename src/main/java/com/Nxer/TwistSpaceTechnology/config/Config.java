@@ -40,6 +40,7 @@ public class Config {
     public static final String HephaestusAtelier = "HephaestusAtelier";
     public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
+    public static final String StarcoreMiner = "StarcoreMiner";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation = "spaceStation";
@@ -267,6 +268,10 @@ public class Config {
     public static boolean Enable_CoreDeviceOfHumanPowerGenerationFacility = true;
     // endregion
 
+    // region StarcoreMiner
+    public static boolean Enable_StarcoreMiner = true;
+    // endregion
+
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;
@@ -281,6 +286,10 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region StarcoreMiner
+        Enable_StarcoreMiner = configuration.getBoolean("Enable_StarcoreMiner", StarcoreMiner, Enable_StarcoreMiner, "Enable Starcore Miner.");
         // endregion
 
         // region CoreDeviceOfHumanPowerGenerationFacility
