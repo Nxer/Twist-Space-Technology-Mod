@@ -285,11 +285,11 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(15, 20, 15, false)
-            .addInputHatch(TextLocalization.textAnyCasing, 1)
-            .addOutputHatch(TextLocalization.textAnyCasing, 1)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 3)
+            .addInputHatch(TextLocalization.textUseBlueprint, 1)
+            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+            .addInputBus(TextLocalization.textUseBlueprint, 2)
+            .addOutputBus(TextLocalization.textUseBlueprint, 2)
+            .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }

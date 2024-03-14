@@ -39,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
@@ -105,6 +106,7 @@ public class MachineLoader {
     public static ItemStack HephaestusAtelier;
     public static ItemStack DeployedNanoCore;
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
+    public static ItemStack MegaVoidMiner;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -398,6 +400,16 @@ public class MachineLoader {
             GTCMItemList.CoreDeviceOfHumanPowerGenerationFacility.set(CoreDeviceOfHumanPowerGenerationFacility);
         }
 
+        // if (Config.Enable_MegaVoidMiner) {
+        // MegaVoidMiner = new TST_StarcoreMiner(
+        // 19040,
+        // "NameMegaVoidMiner",
+        // TextEnums.tr("NameMegaVoidMiner"),
+        // 4
+        // ).getStackForm(1);
+        // GTCMItemList.MegaVoidMiner.set(MegaVoidMiner);
+        // }
+
         // endregion
 
         // region Single block Machine
@@ -597,5 +609,20 @@ public class MachineLoader {
             0,
             true).getStackForm(1);
         GTCMItemList.RealRackHatch.set(RealRackHatch);
+    }
+
+    public static void loadMachinePostInit() {
+
+        if (Config.Enable_MegaVoidMiner) {
+            MegaVoidMiner = new TST_StarcoreMiner(
+                19040,
+                "NameStarcoreMiner",
+                // #tr NameStarcoreMiner
+                // # Starcore Miner
+                // #zh_CN 星核钻机
+                TextEnums.tr("NameStarcoreMiner")).getStackForm(1);
+            GTCMItemList.MegaVoidMiner.set(MegaVoidMiner);
+        }
+
     }
 }
