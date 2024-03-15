@@ -91,6 +91,7 @@ import static com.dreammaster.gthandler.CustomItemList.Transformer_UMV_UIV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_UXV_UMV;
 import static com.dreammaster.gthandler.CustomItemList.WiremillUV;
 import static com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry.megaMachines;
+import static com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry.voidminer;
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
 import static com.github.technus.tectech.thing.CustomItemList.LASERpipe;
@@ -147,6 +148,9 @@ import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
 import com.github.bartimaeusnek.bartworks.common.loaders.BioItemList;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
+import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
+import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
+import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 
 import appeng.items.materials.MaterialType;
 import goodgenerator.items.MyMaterial;
@@ -1900,7 +1904,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // endregion
 
-
+        // region CoreDeviceOfHumanPowerGenerationFacility
         if (Config.Enable_CoreDeviceOfHumanPowerGenerationFacility) {
             GT_Values.RA
                 .stdBuilder()
@@ -1921,6 +1925,42 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(20 * 900)
                 .addTo(assembler);
         }
+        // endregion
+
+        // region StarcoreMiner
+        if (Config.Enable_StarcoreMiner) {
+            GT_Values.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, GT_OreDictUnificator.get(OrePrefixes.toolHeadDrill, Materials.Infinity, 1))
+                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .itemInputs(
+                    new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
+                    copyAmount(64, voidminer[2]),
+                    new ItemStack(IGItems.MiningDrones, 3, ItemMiningDrones.DroneTiers.UEV.ordinal()),
+                    SpaceWarper.get(3),
+
+                    ItemList.EnergisedTesseract.get(64),
+                    ItemList.Electric_Motor_UEV.get(64),
+                    ItemList.Field_Generator_UEV.get(24),
+                    ItemList.Sensor_UEV.get(64),
+
+                    new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64},
+                    HighEnergyFlowCircuit.get(64),
+                    eM_Power.get(64),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64)
+                )
+                .fluidInputs(
+                    Materials.Quantium.getMolten(144*512),
+                    Materials.UUMatter.getFluid(1000*1024),
+                    new FluidStack(solderPlasma, 144*384)
+                )
+                .itemOutputs(GTCMItemList.StarcoreMiner.get(1))
+                .eut(RECIPE_UIV)
+                .duration(20 * 7200)
+                .addTo(assemblyLine);
+
+        }
+        // endregion
 
     }
     // spotless:on
