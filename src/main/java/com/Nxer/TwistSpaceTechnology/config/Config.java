@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.config;
 
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 
 import java.io.File;
@@ -270,6 +271,11 @@ public class Config {
 
     // region StarcoreMiner
     public static boolean Enable_StarcoreMiner = true;
+    public static byte HeightValueLimit_StarcoreMiner = 20;
+    public static int StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner = 131072;
+    public static int AmountOfOreStackPerMining_StarcoreMiner = 32;
+    public static int Eut_StarcoreMiner = (int) RECIPE_UIV;
+    public static int DurationPerMining_StarcoreMiner = 128;
     // endregion
 
     // region Infinite Air Hatch
@@ -290,6 +296,12 @@ public class Config {
 
         // region StarcoreMiner
         Enable_StarcoreMiner = configuration.getBoolean("Enable_StarcoreMiner", StarcoreMiner, Enable_StarcoreMiner, "Enable Starcore Miner.");
+        HeightValueLimit_StarcoreMiner = (byte) configuration.getInt("HeightValueLimit_StarcoreMiner", StarcoreMiner, HeightValueLimit_StarcoreMiner, 1, 255, "The height value of Mining Pipe structure of a Starcore Miner need to reach. Type: byte");
+        StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner = configuration.getInt("StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner", StarcoreMiner, StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner, 1, Integer.MAX_VALUE, "How many ores in one item stack when mining. Type: int");
+        AmountOfOreStackPerMining_StarcoreMiner = configuration.getInt("AmountOfOreStackPerMining_StarcoreMiner", StarcoreMiner, AmountOfOreStackPerMining_StarcoreMiner, 1, Integer.MAX_VALUE, "How many ore item stacks every mining output. Type: int");
+        Eut_StarcoreMiner = configuration.getInt("Eut_StarcoreMiner", StarcoreMiner, Eut_StarcoreMiner, 1, Integer.MAX_VALUE, "EU/t when Starcore Miner working. Type: int");
+        DurationPerMining_StarcoreMiner = configuration.getInt("DurationPerMining_StarcoreMiner", StarcoreMiner, DurationPerMining_StarcoreMiner, 1, Integer.MAX_VALUE, "How many ticks per mining cost. 20 tick = 1 second . Type: int");
+
         // endregion
 
         // region CoreDeviceOfHumanPowerGenerationFacility

@@ -28,6 +28,8 @@ public enum TextEnums {
     NameCoreDeviceOfHumanPowerGenerationFacility("NameCoreDeviceOfHumanPowerGenerationFacility")
     // endregion
 
+    // endregion
+
     ;
 
     public static String tr(String key) {
