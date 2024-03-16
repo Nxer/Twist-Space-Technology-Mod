@@ -1936,12 +1936,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemInputs(
                     new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
                     copyAmount(64, voidminer[2]),
-                    new ItemStack(IGItems.MiningDrones, 3, ItemMiningDrones.DroneTiers.UEV.ordinal()),
-                    SpaceWarper.get(3),
+                    new ItemStack(IGItems.MiningDrones, 18, ItemMiningDrones.DroneTiers.UEV.ordinal()),
+                    SpaceWarper.get(18),
 
                     ItemList.EnergisedTesseract.get(64),
                     ItemList.Electric_Motor_UEV.get(64),
-                    ItemList.Field_Generator_UEV.get(24),
+                    ItemList.Field_Generator_UEV.get(48),
                     ItemList.Sensor_UEV.get(64),
 
                     new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64},
@@ -1950,9 +1950,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64)
                 )
                 .fluidInputs(
-                    Materials.Quantium.getMolten(144*512),
-                    Materials.UUMatter.getFluid(1000*1024),
-                    new FluidStack(solderPlasma, 144*384)
+                    new FluidStack(solderPlasma, 144*1024),
+                    Materials.Quantium.getMolten(144*1024),
+                    Materials.UUMatter.getFluid(1000*2048),
+                    MyMaterial.metastableOganesson.getMolten(144*512)
                 )
                 .itemOutputs(GTCMItemList.StarcoreMiner.get(1))
                 .eut(RECIPE_UIV)
