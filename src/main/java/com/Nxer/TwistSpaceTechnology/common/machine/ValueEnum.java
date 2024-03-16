@@ -249,4 +249,13 @@ public final class ValueEnum {
     public static final int TickPerProgressing_WirelessMode_DeployedNanoCore = Config.TickPerProgressing_WirelessMode_DeployedNanoCore;
     // endregion
 
+    // region Starcore Miner
+    public static final byte HeightValueLimit_StarcoreMiner = Config.HeightValueLimit_StarcoreMiner;
+    public static final int StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner = Config.StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner;
+    public static final int AmountOfOreStackPerMining_StarcoreMiner = Config.AmountOfOreStackPerMining_StarcoreMiner;
+    public static final int Eut_StarcoreMiner = Config.Eut_StarcoreMiner;
+    public static final int DurationPerMining_StarcoreMiner = Config.DurationPerMining_StarcoreMiner;
+
+    // endregion
+
 }
