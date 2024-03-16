@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.config;
 
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 
 import java.io.File;
@@ -273,8 +273,8 @@ public class Config {
     public static boolean Enable_StarcoreMiner = true;
     public static byte HeightValueLimit_StarcoreMiner = 20;
     public static int StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner = 131072;
-    public static int AmountOfOreStackPerMining_StarcoreMiner = 32;
-    public static int Eut_StarcoreMiner = (int) RECIPE_UIV;
+    public static int AmountOfOreStackPerMining_StarcoreMiner = 24;
+    public static int Eut_StarcoreMiner = (int) RECIPE_MAX;
     public static int DurationPerMining_StarcoreMiner = 128;
     // endregion
 

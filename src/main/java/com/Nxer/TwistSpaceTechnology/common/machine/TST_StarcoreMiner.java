@@ -428,12 +428,12 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             // #zh_CN 直达深处, 为你采集这个星球最深层的财富.
             .addInfo(TextEnums.tr("Tooltip_Starcore_05"))
             // #tr Tooltip_Starcore_06
-            // # Each run produces 32 types of ore, 131072 of each type,
-            // #zh_CN 每次运行产出 32 种矿石, 每种 131072个,
+            // # Each run produces 24 types of ore, 131072 of each type,
+            // #zh_CN 每次运行产出 24 种矿石, 每种 131072个,
             .addInfo(TextEnums.tr("Tooltip_Starcore_06"))
             // #tr Tooltip_Starcore_07
-            // # {\SPACE}{\SPACE}and takes 6.4s, 31,457,280 EU/t (UIV).
-            // #zh_CN {\SPACE}{\SPACE}耗时 6.4s, 耗电 31,457,280 EU/t (UIV).
+            // # {\SPACE}{\SPACE}and takes 6.4s, 2,013,265,920 EU/t (MAX).
+            // #zh_CN {\SPACE}{\SPACE}耗时 6.4s, 耗电 2,013,265,920 EU/t (MAX).
             .addInfo(TextEnums.tr("Tooltip_Starcore_07"))
             // #tr Tooltip_Starcore_08
             // # The mining access portion of the structure needs to extend at least to a height of 20 below.
