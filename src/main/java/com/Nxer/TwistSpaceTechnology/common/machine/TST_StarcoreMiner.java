@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.VoidMinerRework.logic.VoidMinerData;
 import com.Nxer.TwistSpaceTechnology.system.VoidMinerRework.logic.VoidMinerDataGenerator;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -290,6 +291,17 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             TwistSpaceTechnology.LOG.info(
                 "WARNING! Starcore Miner dropmap = null when checkProcessing ! Dim = "
                     + getBaseMetaTileEntity().getWorld().provider.dimensionId);
+            if (Config.DebugMode_StarcoreMiner) {
+                TwistSpaceTechnology.LOG.info("Trying to re-generate drop map.");
+
+                World world = getBaseMetaTileEntity().getWorld();
+                int dimID = world.provider.dimensionId;
+
+                VoidMinerDataGenerator.generate(world)
+                    .done();
+                dropmap = VoidMinerData.OrePool.get(dimID);
+                totalWeight = VoidMinerData.OrePoolTotalWeightPool.get(dimID);
+            }
         }
 
         if (this.totalWeight != 0.f) {
@@ -323,14 +335,17 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
-        World world = aBaseMetaTileEntity.getWorld();
-        int dimID = world.provider.dimensionId;
-        if (!VoidMinerData.OrePool.containsKey(dimID)) {
-            VoidMinerDataGenerator.generate(world)
-                .done();
+
+        if (aBaseMetaTileEntity.isServerSide()) {
+            World world = aBaseMetaTileEntity.getWorld();
+            int dimID = world.provider.dimensionId;
+            if (!VoidMinerData.OrePool.containsKey(dimID)) {
+                VoidMinerDataGenerator.generate(world)
+                    .done();
+            }
+            dropmap = VoidMinerData.OrePool.get(dimID);
+            totalWeight = VoidMinerData.OrePoolTotalWeightPool.get(dimID);
         }
-        dropmap = VoidMinerData.OrePool.get(dimID);
-        totalWeight = VoidMinerData.OrePoolTotalWeightPool.get(dimID);
 
     }
 
