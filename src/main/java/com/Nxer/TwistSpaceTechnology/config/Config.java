@@ -271,7 +271,7 @@ public class Config {
 
     // region StarcoreMiner
     public static boolean Enable_StarcoreMiner = true;
-    public static byte HeightValueLimit_StarcoreMiner = 20;
+    public static byte HeightValueLimit_StarcoreMiner = 24;
     public static int StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner = 131072;
     public static int AmountOfOreStackPerMining_StarcoreMiner = 24;
     public static int Eut_StarcoreMiner = (int) RECIPE_MAX;
