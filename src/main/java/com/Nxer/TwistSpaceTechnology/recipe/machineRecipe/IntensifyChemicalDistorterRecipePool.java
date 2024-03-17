@@ -818,7 +818,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             )
             .specialValue(10800)
             .eut(RECIPE_UV)
-            .duration(60)
+            .duration(25)
             .addTo(ICD);
 
         // Iridium Residue
@@ -841,7 +841,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             )
             .specialValue(10800)
             .eut(RECIPE_ZPM)
-            .duration(20*10)
+            .duration(20*2)
             .addTo(ICD);
 
         // Acidic Osmium Solution
