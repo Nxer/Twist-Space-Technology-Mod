@@ -106,6 +106,7 @@ public class MachineLoader {
     public static ItemStack DeployedNanoCore;
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
     public static ItemStack BallLightning;
+
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
@@ -394,8 +395,9 @@ public class MachineLoader {
         }
 
         //
+
         if (Config.Enable_BallLightning) {
-            MegaMacerator = new TST_BallLightning(19040, "NameBallLightning", TextLocalization.NameBallLightning)
+            BallLightning = new TST_BallLightning(19040, "NameBallLightning", TextLocalization.NameBallLightning)
                 .getStackForm(1);
             GTCMItemList.BallLightning.set(BallLightning);
         }

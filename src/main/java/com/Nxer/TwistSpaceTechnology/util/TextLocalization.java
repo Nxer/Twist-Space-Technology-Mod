@@ -760,5 +760,8 @@ public class TextLocalization {
     public static final String Tooltip_BallLightning_04 = texter("Text4","Tooltip_BallLightning_04");
     public static final String Tooltip_BallLightning_05 = texter("Text5","Tooltip_BallLightning_05");
     public static final String Tooltip_BallLightning_06 = texter("Text6","Tooltip_BallLightning_06");
+
+    // endregion
+
 }
 // spotless:on

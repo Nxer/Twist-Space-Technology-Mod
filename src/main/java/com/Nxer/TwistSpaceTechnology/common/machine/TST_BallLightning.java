@@ -18,7 +18,9 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.player.*;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraftforge.common.util.*;
 
@@ -26,17 +28,26 @@ import org.apache.commons.lang3.tuple.*;
 
 import com.Nxer.TwistSpaceTechnology.common.block.*;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.*;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.*;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.bartimaeusnek.bartworks.API.*;
+import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.*;
+import com.gtnewhorizon.structurelib.structure.IItemSource;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import galaxyspace.core.register.GSBlocks;
 import gregtech.api.*;
 import gregtech.api.enums.*;
 import gregtech.api.interfaces.*;
 import gregtech.api.interfaces.metatileentity.*;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.*;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.*;
 import gregtech.api.render.*;
 import gregtech.api.util.*;
@@ -131,6 +142,11 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             buildPiece(STRUCTURE_PIECE_MK2, stackSize, hintsOnly, 38, 51, 7);
         }
     }
+    // end region
+
+    // region Structure
+
+    private static final String STRUCTURE_PIECE_MAIN = "mainBallLightning";
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
@@ -147,6 +163,19 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             actor,
             false,
             true);
+
+        // return this.survivialBuildPiece(
+        // STRUCTURE_PIECE_MAIN,
+        // stackSize,
+        // horizontalOffSet,
+        // verticalOffSet,
+        // depthOffSet,
+        // realBudget,
+        // source,
+        // actor,
+        // false,
+        // true);
+
         // if (built >= 0) return built;
         // if (stackSize.stackSize > 1) {
         // built += survivialBuildPiece(
@@ -269,6 +298,24 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         // ret[origin.length + 2] = EnumChatFormatting.AQUA + "Eu Tier: " + EnumChatFormatting.GOLD + this.mRecipeTier;
         return ret;
     }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(BW_GlasBlocks, 0, ...);
+     * B -> ofBlock...(compactFusionCoil, 1, ...);
+     * C -> ofBlock...(gt.blockcasings, 14, ...);
+     * D -> ofBlock...(gt.blockcasings5, 12, ...);
+     * E -> ofBlock...(gt.blockcasings8, 5, ...);
+     * F -> ofBlock...(gt.blockcasings8, 10, ...);
+     * G -> ofBlock...(gt.stabilisation_field_generator, 8, ...);
+     * H -> ofBlock...(gtplusplus.blockcasings.4, 3, ...);
+     * I -> ofBlock...(gtplusplus.blocktieredcasings.1, 9, ...);
+     * J -> ofBlock...(tile.DysonSwarmPart, 1, ...);
+     * K -> ofBlock...(tile.DysonSwarmPart, 8, ...);
+     * L -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
+     */
+
+    // end region
 
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
