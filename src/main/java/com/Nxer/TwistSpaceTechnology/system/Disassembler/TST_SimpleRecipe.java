@@ -5,8 +5,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class TST_SimpleRecipe {
 
-    public ItemStack[] inputItems = new ItemStack[0];
-    public ItemStack[] outputItems = new ItemStack[0];
-    public FluidStack[] inputFluids = new FluidStack[0];
-    public FluidStack[] outputFluids = new FluidStack[0];
+    private ItemStack[] inputItems = new ItemStack[0];
+    private ItemStack[] outputItems = new ItemStack[0];
+    private FluidStack[] inputFluids = new FluidStack[0];
+    private FluidStack[] outputFluids = new FluidStack[0];
+
 }

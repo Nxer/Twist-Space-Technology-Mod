@@ -15,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 public class Config {
     // region Regions enum
     public static final String GENERAL = "General";
+    public static final String RECIPE = "Recipe";
     public static final String DSP = "DSP";
     public static final String IntensifyChemicalDistorter = "IntensifyChemicalDistorter";
     public static final String PreciseHighEnergyPhotonicQuantumMaster = "PreciseHighEnergyPhotonicQuantumMaster";
@@ -290,6 +291,10 @@ public class Config {
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
 
+    // region Recipe
+    public static boolean Registry_DragonBlood_FluidHeaterRecipe = true;
+    // endregion
+
     public static boolean activateMegaSpaceStation = false;
     public static boolean activateCombatStats = false;
 
@@ -299,6 +304,10 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region Recipe
+        Registry_DragonBlood_FluidHeaterRecipe = configuration.getBoolean("Registry_DragonBlood_FluidHeaterRecipe", RECIPE, Registry_DragonBlood_FluidHeaterRecipe, "Registry Dragon Blood Fluid Heater Recipe.");
         // endregion
 
         // region Disassembler
