@@ -71,9 +71,9 @@ public class GTCM_TestMultiMachine
         {"A~A", "AAA", "AAA"},
         {"AAA", "AAA", "AAA"}
     };
-    private final int horizontalOffSet = 1;
-    private final int verticalOffSet = 1;
-    private final int depthOffSet = 0;
+    private static final int horizontalOffSet = 1;
+    private static final int verticalOffSet = 1;
+    private static final int depthOffSet = 0;
 
     @Override
     public IStructureDefinition<GTCM_TestMultiMachine> getStructureDefinition() {
