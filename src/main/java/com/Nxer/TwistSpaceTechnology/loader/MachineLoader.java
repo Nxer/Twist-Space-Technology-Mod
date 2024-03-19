@@ -54,6 +54,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
+import com.Nxer.TwistSpaceTechnology.system.Disassembler.TST_Disassembler;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
@@ -107,6 +108,7 @@ public class MachineLoader {
     public static ItemStack DeployedNanoCore;
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
     public static ItemStack StarcoreMiner;
+    public static ItemStack Disassembler;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -400,15 +402,30 @@ public class MachineLoader {
             GTCMItemList.CoreDeviceOfHumanPowerGenerationFacility.set(CoreDeviceOfHumanPowerGenerationFacility);
         }
 
-        // if (Config.Enable_StarcoreMiner) {
-        // StarcoreMiner = new TST_StarcoreMiner(
-        // 19040,
-        // "NameMegaVoidMiner",
-        // TextEnums.tr("NameMegaVoidMiner"),
-        // 4
-        // ).getStackForm(1);
-        // GTCMItemList.StarcoreMiner.set(StarcoreMiner);
-        // }
+        //
+
+        if (Config.Enable_StarcoreMiner) {
+            StarcoreMiner = new TST_StarcoreMiner(
+                19040,
+                "NameStarcoreMiner",
+                // #tr NameStarcoreMiner
+                // # Starcore Miner
+                // #zh_CN 星核钻机
+                TextEnums.tr("NameStarcoreMiner")).getStackForm(1);
+            GTCMItemList.StarcoreMiner.set(StarcoreMiner);
+        }
+
+        //
+        if (Config.Enable_Disassembler) {
+            Disassembler = new TST_Disassembler(
+                19041,
+                // #tr NameTSTDisassembler
+                // # TST Large Disassembler
+                // #zh_CN TST大型拆解机
+                "NameTSTDisassembler",
+                TextEnums.tr("NameTSTDisassembler")).getStackForm(1);
+            GTCMItemList.Disassembler.set(Disassembler);
+        }
 
         // endregion
 
@@ -612,17 +629,6 @@ public class MachineLoader {
     }
 
     public static void loadMachinePostInit() {
-
-        if (Config.Enable_StarcoreMiner) {
-            StarcoreMiner = new TST_StarcoreMiner(
-                19040,
-                "NameStarcoreMiner",
-                // #tr NameStarcoreMiner
-                // # Starcore Miner
-                // #zh_CN 星核钻机
-                TextEnums.tr("NameStarcoreMiner")).getStackForm(1);
-            GTCMItemList.StarcoreMiner.set(StarcoreMiner);
-        }
 
     }
 }
