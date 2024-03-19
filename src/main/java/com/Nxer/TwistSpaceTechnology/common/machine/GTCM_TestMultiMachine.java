@@ -171,22 +171,39 @@ public class GTCM_TestMultiMachine
     }
 
     // Tooltips
+    private static GT_Multiblock_Tooltip_Builder tooltip;
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("test")
-            .addInfo("testing")
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .beginStructureBlock(3, 3, 3, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
+        if (tooltip == null) {
+            tooltip = new GT_Multiblock_Tooltip_Builder();
+            tooltip.addMachineType("test")
+                   .addInfo("testing")
+                   .addSeparator()
+                   .addInfo(TextLocalization.StructureTooComplex)
+                   .addInfo(TextLocalization.BLUE_PRINT_INFO)
+                   .beginStructureBlock(3, 3, 3, false)
+                   .addInputHatch(TextLocalization.textUseBlueprint, 1)
+                   .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+                   .addInputBus(TextLocalization.textUseBlueprint, 2)
+                   .addOutputBus(TextLocalization.textUseBlueprint, 2)
+                   .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
+                   .toolTipFinisher(TextLocalization.ModName);
+
+        }
+        return tooltip;
+//        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+//        tt.addMachineType("test")
+//            .addInfo("testing")
+//            .addSeparator()
+//            .addInfo(TextLocalization.StructureTooComplex)
+//            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+//            .beginStructureBlock(3, 3, 3, false)
+//            .addInputHatch(TextLocalization.textUseBlueprint, 1)
+//            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+//            .addInputBus(TextLocalization.textUseBlueprint, 2)
+//            .addOutputBus(TextLocalization.textUseBlueprint, 2)
+//            .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
+//            .toolTipFinisher(TextLocalization.ModName);
     }
 
 }

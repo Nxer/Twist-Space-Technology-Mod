@@ -195,6 +195,7 @@ public enum GTCMItemList {
     DeployedNanoCore,
     CoreDeviceOfHumanPowerGenerationFacility,
     StarcoreMiner,
+    Disassembler,
 
     // MAX
     HighDimensionalExtend,

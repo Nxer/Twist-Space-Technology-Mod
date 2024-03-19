@@ -42,6 +42,7 @@ public class Config {
     public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
     public static final String StarcoreMiner = "StarcoreMiner";
+    public static final String Disassembler = "Disassembler";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation = "spaceStation";
@@ -279,6 +280,11 @@ public class Config {
     public static boolean DebugMode_StarcoreMiner = false;
     // endregion
 
+    // region Disassembler
+    public static boolean Enable_Disassembler = true;
+    public static int CostTicksPerItemDisassembling_Disassembler = 100;
+    // endregion
+
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;
@@ -293,6 +299,11 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region Disassembler
+        Enable_Disassembler = configuration.getBoolean("Enable_Disassembler", Disassembler, Enable_Disassembler, "Enable TST Disassembler.");
+        CostTicksPerItemDisassembling_Disassembler = configuration.getInt("CostTicksPerItemDisassembling_Disassembler", Disassembler, CostTicksPerItemDisassembling_Disassembler, 1, 72000, "Cost Ticks per item disassembling.");
         // endregion
 
         // region StarcoreMiner
