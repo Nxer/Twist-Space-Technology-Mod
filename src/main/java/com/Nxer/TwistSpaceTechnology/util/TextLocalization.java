@@ -207,6 +207,22 @@ public class TextLocalization {
             Tooltips_Upgrades_UXV,
             Tooltips_Upgrades_MAX
     };
+    public static final String NameHighPowerRadiationProofCasing =
+        texter(
+            "High Power Radiation Proof Casing",
+            "HighPowerRadiationProofCasing.name"
+        );
+
+
+    public static final String[] Tooltips_HighPowerRadiationProofCasing = new String[]{
+        texter(
+            "Constrained the overflowing energy",
+            "Tooltips_HighPowerRadiationProofCasing.01"),
+        texter(
+            "The power levels are still rising!!!",
+            "Tooltips_HighPowerRadiationProofCasing.02")
+    };
+
 
 
     // endregion
@@ -734,5 +750,15 @@ public class TextLocalization {
     public static final String Tooltip_DeployedNanoCore_04 = texter("What are you worried about?","Tooltip_DeployedNanoCore_04");
     // endregion
 
+    // region Ball Lightning
+    public static final String NameBallLightning = texter("Ball Lightning","NameBallLightning");
+    public static final String Tooltip_BallLightning_MachineType = texter("Type","Tooltip_BallLightning_MachineType");
+    public static final String Tooltip_BallLightning_Controller = texter("Controller of The Ball Lightning","Tooltip_BallLightning_Controller");
+    public static final String Tooltip_BallLightning_01 = texter("Text1","Tooltip_BallLightning_01");
+    public static final String Tooltip_BallLightning_02 = texter("Text2","Tooltip_BallLightning_02");
+    public static final String Tooltip_BallLightning_03 = texter("Text3","Tooltip_BallLightning_03");
+    public static final String Tooltip_BallLightning_04 = texter("Text4","Tooltip_BallLightning_04");
+    public static final String Tooltip_BallLightning_05 = texter("Text5","Tooltip_BallLightning_05");
+    public static final String Tooltip_BallLightning_06 = texter("Text6","Tooltip_BallLightning_06");
 }
 // spotless:on

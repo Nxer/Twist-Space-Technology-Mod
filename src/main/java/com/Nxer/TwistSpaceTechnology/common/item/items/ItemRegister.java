@@ -185,6 +185,9 @@ public class ItemRegister {
             GTCMItemList.Space_TimeLifeCore.set(initItem01("Space-time life core", 419));
         }
 
+        if(Config.Enable_BallLightning){
+            GTCMItemList.Space_TimeLifeCore.set(initItem01("Space-time life core", 419));
+        }
         GTCMItemList.Rune_of_Vigilance.set(initItemRune("Rune of Vigilance", 0, new String[]{ TextHandler.texter("Vigilance.", "tooltips.Rune_of_Vigilance.line1")}));
         GTCMItemList.Rune_of_Erelong.set(initItemRune("Rune of Erelong", 1, new String[]{ TextHandler.texter("Erelong.", "tooltips.Rune_of_Erelong.line1")}));
         GTCMItemList.Rune_of_Ether.set(initItemRune("Rune of Ether", 2, new String[]{ TextHandler.texter("Ether.", "tooltips.Rune_of_Ether.line1")}));

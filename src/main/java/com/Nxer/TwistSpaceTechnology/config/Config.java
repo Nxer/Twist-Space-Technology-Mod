@@ -38,8 +38,8 @@ public class Config {
     public static final String HephaestusAtelier = "HephaestusAtelier";
     public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
+    public static final String BallLightning = "Ball Lightning";
     public static final String SingleBlocks = "SingleBlocks";
-
     public static final String spaceStation="spaceStation";
 
     public static final String CombatStats="CombatStats";
@@ -264,6 +264,10 @@ public class Config {
     // region CoreDeviceOfHumanPowerGenerationFacility
     public static boolean Enable_CoreDeviceOfHumanPowerGenerationFacility = true;
     // endregion
+
+    // region Ball Lightning
+    public static boolean Enable_BallLightning = true;
+    // end region
 
     // region Infinite Air Hatch
 
@@ -500,6 +504,10 @@ public class Config {
         BlockTier2Parallel_MegaMacerator = configuration.getInt("BlockTier2Parallel_MegaMacerator", MegaMacerator, BlockTier2Parallel_MegaMacerator, 1, 2147483646, "Parallel of Tier 2. Type: int");
         SpeedBonus_MegaMacerator = Float.parseFloat(configuration.getString("SpeedBonus_MegaMacerator", MegaMacerator, String.valueOf(SpeedBonus_MegaMacerator), "Speed Bonus of Mega Macerator. Type: float"));
         EnablePerfectOverclock_MegaMacerator=configuration.getBoolean("EnablePerfectOverclock_MegaMacerator", MegaMacerator, EnablePerfectOverclock_MegaMacerator, "Enable perfect overclock of Mega Macerator. Type: boolean");
+        // end region
+
+        // region Ball Lightning
+        Enable_BallLightning = configuration.getBoolean("Enable_BallLightning", BallLightning, Enable_BallLightning, "Enable Ball Lightning.");
         // end region
 
         if (configuration.hasChanged()) {

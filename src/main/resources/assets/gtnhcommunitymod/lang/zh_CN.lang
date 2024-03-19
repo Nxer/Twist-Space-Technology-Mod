@@ -848,3 +848,6 @@ Tooltip_CoreDeviceOfHumanPowerGenerationFacility_MachineType=流体加热器
 Tooltip_CoreDeviceOfHumanPowerGenerationFacility_Controller=人类能源设施的核心装置的控制器方块
 Tooltip_CoreDeviceOfHumanPowerGenerationFacility_01=§c禁止在宿舍使用 "热得快"。
 Tooltip_CoreDeviceOfHumanPowerGenerationFacility_02=升级线圈以获得更快的速度.
+HighPowerRadiationProofCasing.0.name=高能防辐射机械方块
+Tooltips_HighPowerRadiationProofCasing.01=§a约束住了外溢的能量§7.
+Tooltips_HighPowerRadiationProofCasing.02=§l§b能量仍在上升!!!

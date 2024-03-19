@@ -194,6 +194,7 @@ public enum GTCMItemList {
     HephaestusAtelier,
     DeployedNanoCore,
     CoreDeviceOfHumanPowerGenerationFacility,
+    BallLightning,
 
     // MAX
     HighDimensionalExtend,
@@ -289,6 +290,8 @@ public enum GTCMItemList {
     SpaceStationAntiGravityBlockUMV,
     SpaceStationAntiGravityBlockUXV,
     SpaceStationAntiGravityBlockMAX,
+    HighPowerRadiationProofCasing,
+
     // MultiStructure Machine:
     TestMultiStructureMainMachine,
     TestMultiStructureSubMachine,

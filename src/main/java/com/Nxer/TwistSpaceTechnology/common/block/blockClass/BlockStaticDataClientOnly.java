@@ -21,5 +21,7 @@ public class BlockStaticDataClientOnly {
     public static Map<Integer, IIcon> iconsSpaceStationStructureCasingMap = new HashMap<>();
     @SideOnly(Side.CLIENT)
     public static Map<Integer, IIcon> iconsNuclearReactor = new HashMap<>();
+    @SideOnly(Side.CLIENT)
+    public static Map<Integer, IIcon> iconsHighPowerRadiationProofCasing = new HashMap<>();
 
 }

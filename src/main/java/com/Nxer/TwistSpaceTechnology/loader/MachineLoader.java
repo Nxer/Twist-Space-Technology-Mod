@@ -24,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
@@ -104,7 +105,7 @@ public class MachineLoader {
     public static ItemStack HephaestusAtelier;
     public static ItemStack DeployedNanoCore;
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
-
+    public static ItemStack BallLightning;
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
@@ -390,6 +391,13 @@ public class MachineLoader {
                 "NameCoreDeviceOfHumanPowerGenerationFacility",
                 TextEnums.NameCoreDeviceOfHumanPowerGenerationFacility.toString()).getStackForm(1);
             GTCMItemList.CoreDeviceOfHumanPowerGenerationFacility.set(CoreDeviceOfHumanPowerGenerationFacility);
+        }
+
+        //
+        if (Config.Enable_BallLightning) {
+            MegaMacerator = new TST_BallLightning(19040, "NameBallLightning", TextLocalization.NameBallLightning)
+                .getStackForm(1);
+            GTCMItemList.BallLightning.set(BallLightning);
         }
 
         // endregion

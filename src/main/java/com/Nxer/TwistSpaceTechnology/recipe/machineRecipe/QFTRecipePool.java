@@ -126,7 +126,7 @@ public class QFTRecipePool implements IRecipePool {
                 Materials.Phosphorus.getDust(64),
                 Materials.Thorium.getDust(64),
                 WerkstoffLoader.Thorium232.get(OrePrefixes.dust, 64),
-                WerkstoffMaterialPool.RarestEarthResidue.get(OrePrefixes.dust, 64))
+                WerkstoffMaterialPool.Gangue.get(OrePrefixes.dust, 64))
             .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
             .noOptimize()
             .specialValue(2)
