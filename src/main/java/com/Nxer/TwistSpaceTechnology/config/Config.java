@@ -292,7 +292,7 @@ public class Config {
     // endregion
 
     // region Recipe
-    public static boolean Registry_DragonBlood_FluidHeaterRecipe = true;
+    public static boolean Registry_DragonBlood_ExtraRecipe = true;
     // endregion
 
     public static boolean activateMegaSpaceStation = false;
@@ -307,7 +307,7 @@ public class Config {
         // endregion
 
         // region Recipe
-        Registry_DragonBlood_FluidHeaterRecipe = configuration.getBoolean("Registry_DragonBlood_FluidHeaterRecipe", RECIPE, Registry_DragonBlood_FluidHeaterRecipe, "Registry Dragon Blood Fluid Heater Recipe.");
+        Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
         // endregion
 
         // region Disassembler

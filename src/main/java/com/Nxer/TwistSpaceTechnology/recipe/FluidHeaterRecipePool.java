@@ -18,11 +18,11 @@ public class FluidHeaterRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-        if (Config.Registry_DragonBlood_FluidHeaterRecipe) {
+        if (Config.Registry_DragonBlood_ExtraRecipe) {
             GT_Values.RA.stdBuilder()
                 .itemInputs(GT_Utility.getIntegratedCircuit(1))
                 .fluidInputs(getFluidStack("potion.dragonblood", 1000))
-                .fluidOutputs(DRAGON_METAL.getFluidStack(144))
+                .fluidOutputs(DRAGON_METAL.getFluidStack(144 * 6))
                 .noOptimize()
                 .eut(RECIPE_UXV)
                 .duration(20 * 6)
@@ -31,7 +31,7 @@ public class FluidHeaterRecipePool implements IRecipePool {
             GT_Values.RA.stdBuilder()
                 .itemInputs(new ItemStack(Blocks.dragon_egg, 0, 0))
                 .fluidInputs(getFluidStack("fieryblood", 1000))
-                .fluidOutputs(DRAGON_METAL.getFluidStack(144))
+                .fluidOutputs(DRAGON_METAL.getFluidStack(144 * 6))
                 .noOptimize()
                 .eut(RECIPE_UXV)
                 .duration(20 * 6)

@@ -5,12 +5,15 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
+import static gtPlusPlus.core.material.ELEMENT.STANDALONE.DRAGON_METAL;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -31,6 +34,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.xmod.forestry.bees.handler.GTPP_CombType;
 
 public class StellarForgeRecipePool implements IRecipePool {
 
@@ -266,6 +270,32 @@ public class StellarForgeRecipePool implements IRecipePool {
         bd.eut(RECIPE_MV)
             .duration(20 * 10)
             .addTo(GTCMRecipe.StellarForgeRecipes);
+
+        if (Config.Registry_DragonBlood_ExtraRecipe) {
+            bd = TST_RecipeBuilder.builder()
+                .itemInputs(GTPP_CombType.DRAGONBLOOD.getStackForType(64));
+            if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
+                bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 128));
+            } else {
+                bd.itemOutputs(DRAGON_METAL.getIngot(128));
+            }
+
+            bd.eut(RECIPE_UEV)
+                .duration(20 * 60)
+                .addTo(GTCMRecipe.StellarForgeRecipes);
+
+            bd = TST_RecipeBuilder.builder()
+                .itemInputs(new ItemStack(Blocks.dragon_egg, 64));
+            if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
+                bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 128));
+            } else {
+                bd.itemOutputs(DRAGON_METAL.getIngot(128));
+            }
+
+            bd.eut(RECIPE_UEV)
+                .duration(20 * 600)
+                .addTo(GTCMRecipe.StellarForgeRecipes);
+        }
 
     }
 
