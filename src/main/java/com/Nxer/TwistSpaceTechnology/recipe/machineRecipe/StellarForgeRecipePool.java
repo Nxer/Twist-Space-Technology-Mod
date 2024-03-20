@@ -281,7 +281,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             }
 
             bd.eut(RECIPE_UEV)
-                .duration(20 * 60)
+                .duration(20 * 120)
                 .addTo(GTCMRecipe.StellarForgeRecipes);
 
             bd = TST_RecipeBuilder.builder()
