@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.config;
 
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 
 import java.io.File;
@@ -15,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 public class Config {
     // region Regions enum
     public static final String GENERAL = "General";
+    public static final String RECIPE = "Recipe";
     public static final String DSP = "DSP";
     public static final String IntensifyChemicalDistorter = "IntensifyChemicalDistorter";
     public static final String PreciseHighEnergyPhotonicQuantumMaster = "PreciseHighEnergyPhotonicQuantumMaster";
@@ -42,6 +43,7 @@ public class Config {
     public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
     public static final String StarcoreMiner = "StarcoreMiner";
+    public static final String Disassembler = "Disassembler";
     public static final String SingleBlocks = "SingleBlocks";
 
     public static final String spaceStation = "spaceStation";
@@ -271,16 +273,27 @@ public class Config {
 
     // region StarcoreMiner
     public static boolean Enable_StarcoreMiner = true;
-    public static byte HeightValueLimit_StarcoreMiner = 20;
+    public static byte HeightValueLimit_StarcoreMiner = 24;
     public static int StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner = 131072;
-    public static int AmountOfOreStackPerMining_StarcoreMiner = 32;
-    public static int Eut_StarcoreMiner = (int) RECIPE_UIV;
+    public static int AmountOfOreStackPerMining_StarcoreMiner = 24;
+    public static int Eut_StarcoreMiner = (int) RECIPE_MAX;
     public static int DurationPerMining_StarcoreMiner = 128;
+    public static boolean DebugMode_StarcoreMiner = false;
+    // endregion
+
+    // region Disassembler
+    public static boolean Enable_Disassembler = true;
+    public static int CostTicksPerItemDisassembling_Disassembler = 100;
     // endregion
 
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;
+    // endregion
+
+    // region Recipe
+    public static boolean Registry_DragonBlood_ExtraRecipe = true;
+    public static boolean UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe = true;
     // endregion
 
     public static boolean activateMegaSpaceStation = false;
@@ -294,6 +307,16 @@ public class Config {
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
         // endregion
 
+        // region Recipe
+        Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe = configuration.getBoolean("UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe", RECIPE, UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe, "Use Witchery mod's Infinity Egg instead Dragon Egg in Dragon Blood Fluid Heater Recipe.");
+        // endregion
+
+        // region Disassembler
+        Enable_Disassembler = configuration.getBoolean("Enable_Disassembler", Disassembler, Enable_Disassembler, "Enable TST Disassembler.");
+        CostTicksPerItemDisassembling_Disassembler = configuration.getInt("CostTicksPerItemDisassembling_Disassembler", Disassembler, CostTicksPerItemDisassembling_Disassembler, 1, 72000, "Cost Ticks per item disassembling.");
+        // endregion
+
         // region StarcoreMiner
         Enable_StarcoreMiner = configuration.getBoolean("Enable_StarcoreMiner", StarcoreMiner, Enable_StarcoreMiner, "Enable Starcore Miner.");
         HeightValueLimit_StarcoreMiner = (byte) configuration.getInt("HeightValueLimit_StarcoreMiner", StarcoreMiner, HeightValueLimit_StarcoreMiner, 1, 255, "The height value of Mining Pipe structure of a Starcore Miner need to reach. Type: byte");
@@ -301,6 +324,7 @@ public class Config {
         AmountOfOreStackPerMining_StarcoreMiner = configuration.getInt("AmountOfOreStackPerMining_StarcoreMiner", StarcoreMiner, AmountOfOreStackPerMining_StarcoreMiner, 1, Integer.MAX_VALUE, "How many ore item stacks every mining output. Type: int");
         Eut_StarcoreMiner = configuration.getInt("Eut_StarcoreMiner", StarcoreMiner, Eut_StarcoreMiner, 1, Integer.MAX_VALUE, "EU/t when Starcore Miner working. Type: int");
         DurationPerMining_StarcoreMiner = configuration.getInt("DurationPerMining_StarcoreMiner", StarcoreMiner, DurationPerMining_StarcoreMiner, 1, Integer.MAX_VALUE, "How many ticks per mining cost. 20 tick = 1 second . Type: int");
+        DebugMode_StarcoreMiner = configuration.getBoolean("DebugMode_StarcoreMiner", StarcoreMiner, DebugMode_StarcoreMiner, "Debug mode.");
 
         // endregion
 

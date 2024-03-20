@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.recipe.FluidHeaterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.AssemblyLineWithoutResearchRecipePool;
@@ -48,7 +49,8 @@ public class RecipeLoader {
             new TCRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
             new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool(),
             new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
-            new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePoll() };
+            new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePoll(),
+            new FluidHeaterRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
