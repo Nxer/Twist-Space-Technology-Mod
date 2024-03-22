@@ -886,3 +886,5 @@ Tooltip_TSTDisassembler_2_04= - §bAssembly Line Recipes
 Tooltip_TSTDisassembler_2_05= - §bAssembler Recipes
 Tooltip_TSTDisassembler_2_06= - §bPhoton Controller Recipes
 Tooltip_TSTDisassembler_2_07=§cNOT SUPPORTED CRAFTING TABLE RECIPES !
+MetaBlockCasing01.0.name=Test Casing
+MetaBlockCasing01.2.name=Test Casing
