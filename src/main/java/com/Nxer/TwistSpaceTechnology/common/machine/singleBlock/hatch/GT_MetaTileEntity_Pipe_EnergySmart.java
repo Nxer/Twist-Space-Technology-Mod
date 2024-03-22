@@ -130,6 +130,11 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
     }
 
     @Override
+    public long getMinimumStoredEU() {
+        return Voltage;
+    }
+
+    @Override
     public boolean isAccessAllowed(EntityPlayer aPlayer) {
         return true;
     }
@@ -214,11 +219,9 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
                             .getIGregTechTileEntityAtSideAndDistance(side, dist);
                         if (tGTTileEntity != null && tGTTileEntity.getColorization() == color) {
                             IMetaTileEntity aMetaTileEntity = tGTTileEntity.getMetaTileEntity();
-                            if (aMetaTileEntity instanceof MetaTileEntity
-                                && (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_EnergyTunnel
-                                    && opposite == tGTTileEntity.getFrontFacing())
-                                || (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart
-                                    && opposite == tGTTileEntity.getFrontFacing())) {
+                            if ((aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_EnergyTunnel
+                                || aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart)
+                                && opposite == tGTTileEntity.getFrontFacing()) {
                                 energies.add((MetaTileEntity) aMetaTileEntity);
                                 break;
                             } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_Energy pipe) {
@@ -234,7 +237,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
             }
             if (dynamo != null) moveEnergy(dynamo, this);
             for (MetaTileEntity energy : energies) {
-                moveEnergy(this, energy);
+                if (aBaseMetaTileEntity.getStoredEU() > getMinimumStoredEU()) moveEnergy(this, energy);
             }
         }
     }
