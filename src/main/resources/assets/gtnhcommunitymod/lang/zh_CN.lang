@@ -886,3 +886,5 @@ Tooltip_TSTDisassembler_2_04= - §b装配线配方
 Tooltip_TSTDisassembler_2_05= - §b组装机配方
 Tooltip_TSTDisassembler_2_06= - §b光子掌控者配方
 Tooltip_TSTDisassembler_2_07=§c不兼容工作台配方!
+MetaBlockCasing01.0.name=Test Casing
+MetaBlockCasing01.2.name=Test Casing

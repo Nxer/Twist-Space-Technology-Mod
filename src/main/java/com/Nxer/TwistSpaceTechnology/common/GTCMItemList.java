@@ -154,6 +154,10 @@ public enum GTCMItemList {
     Rune_of_Perdition,
     PowerChair,
     PrimitiveMansSpaceTimeDistortionDevice,
+
+    // Blocks
+    TestCasing,
+
     // Machines
 
     IntensifyChemicalDistorter,

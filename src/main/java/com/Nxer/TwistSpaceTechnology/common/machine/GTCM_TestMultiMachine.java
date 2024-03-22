@@ -20,13 +20,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing01;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -85,9 +86,9 @@ public class GTCM_TestMultiMachine
                 GT_HatchElementBuilder.<GTCM_TestMultiMachine>builder()
                     .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
                     .adder(GTCM_TestMultiMachine::addToMachineList)
-                    .casingIndex(176)
+                    .casingIndex(((MetaBlockCasing01) BasicBlocks.MetaBlockCasing01).getTextureIndex(2))
                     .dot(1)
-                    .buildAndChain(GregTech_API.sBlockCasings8, 0))
+                    .buildAndChain(BasicBlocks.MetaBlockCasing01, 2))
             .build();
     }
 
