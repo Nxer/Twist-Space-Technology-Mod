@@ -20,13 +20,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing01;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -71,9 +72,9 @@ public class GTCM_TestMultiMachine
         {"A~A", "AAA", "AAA"},
         {"AAA", "AAA", "AAA"}
     };
-    private final int horizontalOffSet = 1;
-    private final int verticalOffSet = 1;
-    private final int depthOffSet = 0;
+    private static final int horizontalOffSet = 1;
+    private static final int verticalOffSet = 1;
+    private static final int depthOffSet = 0;
 
     @Override
     public IStructureDefinition<GTCM_TestMultiMachine> getStructureDefinition() {
@@ -85,9 +86,9 @@ public class GTCM_TestMultiMachine
                 GT_HatchElementBuilder.<GTCM_TestMultiMachine>builder()
                     .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
                     .adder(GTCM_TestMultiMachine::addToMachineList)
-                    .casingIndex(176)
+                    .casingIndex(((MetaBlockCasing01) BasicBlocks.MetaBlockCasing01).getTextureIndex(2))
                     .dot(1)
-                    .buildAndChain(GregTech_API.sBlockCasings8, 0))
+                    .buildAndChain(BasicBlocks.MetaBlockCasing01, 2))
             .build();
     }
 
@@ -171,22 +172,39 @@ public class GTCM_TestMultiMachine
     }
 
     // Tooltips
+    private static GT_Multiblock_Tooltip_Builder tooltip;
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("test")
-            .addInfo("testing")
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .beginStructureBlock(3, 3, 3, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
+        if (tooltip == null) {
+            tooltip = new GT_Multiblock_Tooltip_Builder();
+            tooltip.addMachineType("test")
+                   .addInfo("testing")
+                   .addSeparator()
+                   .addInfo(TextLocalization.StructureTooComplex)
+                   .addInfo(TextLocalization.BLUE_PRINT_INFO)
+                   .beginStructureBlock(3, 3, 3, false)
+                   .addInputHatch(TextLocalization.textUseBlueprint, 1)
+                   .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+                   .addInputBus(TextLocalization.textUseBlueprint, 2)
+                   .addOutputBus(TextLocalization.textUseBlueprint, 2)
+                   .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
+                   .toolTipFinisher(TextLocalization.ModName);
+
+        }
+        return tooltip;
+//        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+//        tt.addMachineType("test")
+//            .addInfo("testing")
+//            .addSeparator()
+//            .addInfo(TextLocalization.StructureTooComplex)
+//            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+//            .beginStructureBlock(3, 3, 3, false)
+//            .addInputHatch(TextLocalization.textUseBlueprint, 1)
+//            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+//            .addInputBus(TextLocalization.textUseBlueprint, 2)
+//            .addOutputBus(TextLocalization.textUseBlueprint, 2)
+//            .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
+//            .toolTipFinisher(TextLocalization.ModName);
     }
 
 }

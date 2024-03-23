@@ -23,8 +23,8 @@ public final class Utils {
 
     // region about ItemStack
     public static boolean metaItemEqual(ItemStack a, ItemStack b) {
-        if (a == b) return true;
         if (a == null || b == null) return false;
+        if (a == b) return true;
         return a.getItem() == b.getItem() && a.getItemDamage() == b.getItemDamage();
     }
 
@@ -125,6 +125,17 @@ public final class Utils {
 
     public static boolean fluidEqual(FluidStack a, FluidStack b) {
         return a.getFluid() == b.getFluid();
+    }
+
+    public static FluidStack setStackSize(FluidStack fluidStack, int amount) {
+        if (fluidStack == null) return null;
+        if (amount < 0) {
+            TwistSpaceTechnology.LOG
+                .info("Error! Trying to set a item stack size lower than zero! " + fluidStack + " to amount " + amount);
+            return fluidStack;
+        }
+        fluidStack.amount = amount;
+        return fluidStack;
     }
 
     // endregion

@@ -1963,6 +1963,39 @@ public class GTCMMachineRecipePool implements IRecipePool {
         }
         // endregion
 
+        // region TST Disassembler
+        if (Config.Enable_Disassembler) {
+            GT_Values.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, ItemList.Machine_LV_Assembler.get(1))
+                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .itemInputs(
+                    CustomItemList.AssemblingMachineUHV.get(64),
+                    ItemList.Field_Generator_UHV.get(16),
+                    ItemList.Electric_Pump_UHV.get(64),
+                    ItemList.Conveyor_Module_UHV.get(64),
+
+                    ItemList.Robot_Arm_UHV.get(64),
+                    ItemList.Robot_Arm_UHV.get(64),
+                    ItemList.Robot_Arm_UHV.get(64),
+                    ItemList.Robot_Arm_UHV.get(64),
+
+                    eM_Power.get(64),
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 16),
+                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 16)
+                )
+                .fluidInputs(
+                    new FluidStack(solderPlasma, 144*64*16),
+                    Materials.UUMatter.getFluid(1000*128),
+                    Materials.SuperCoolant.getFluid(1000*128*6)
+                )
+                .itemOutputs(GTCMItemList.Disassembler.get(1))
+                .eut(RECIPE_UEV)
+                .duration(20 * 3600)
+                .addTo(assemblyLine);
+        }
+        // endregion
+
     }
     // spotless:on
 }

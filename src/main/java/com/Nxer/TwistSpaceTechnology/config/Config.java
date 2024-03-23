@@ -15,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 public class Config {
     // region Regions enum
     public static final String GENERAL = "General";
+    public static final String RECIPE = "Recipe";
     public static final String DSP = "DSP";
     public static final String IntensifyChemicalDistorter = "IntensifyChemicalDistorter";
     public static final String PreciseHighEnergyPhotonicQuantumMaster = "PreciseHighEnergyPhotonicQuantumMaster";
@@ -42,6 +43,8 @@ public class Config {
     public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
     public static final String BallLightning = "Ball Lightning";
+    public static final String StarcoreMiner = "StarcoreMiner";
+    public static final String Disassembler = "Disassembler";
     public static final String SingleBlocks = "SingleBlocks";
     public static final String spaceStation="spaceStation";
     public static final String StarcoreMiner = "StarcoreMiner";
@@ -281,9 +284,19 @@ public class Config {
     public static boolean DebugMode_StarcoreMiner = false;
     // endregion
 
+    // region Disassembler
+    public static boolean Enable_Disassembler = true;
+    public static int CostTicksPerItemDisassembling_Disassembler = 100;
+    // endregion
+
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;
+    // endregion
+
+    // region Recipe
+    public static boolean Registry_DragonBlood_ExtraRecipe = true;
+    public static boolean UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe = true;
     // endregion
 
     public static boolean activateMegaSpaceStation = false;
@@ -295,6 +308,16 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        // endregion
+
+        // region Recipe
+        Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe = configuration.getBoolean("UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe", RECIPE, UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe, "Use Witchery mod's Infinity Egg instead Dragon Egg in Dragon Blood Fluid Heater Recipe.");
+        // endregion
+
+        // region Disassembler
+        Enable_Disassembler = configuration.getBoolean("Enable_Disassembler", Disassembler, Enable_Disassembler, "Enable TST Disassembler.");
+        CostTicksPerItemDisassembling_Disassembler = configuration.getInt("CostTicksPerItemDisassembling_Disassembler", Disassembler, CostTicksPerItemDisassembling_Disassembler, 1, 72000, "Cost Ticks per item disassembling.");
         // endregion
 
         // region StarcoreMiner

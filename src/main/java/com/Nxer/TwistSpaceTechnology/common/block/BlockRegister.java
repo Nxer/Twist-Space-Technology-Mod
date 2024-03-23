@@ -13,6 +13,11 @@ import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.Bloc
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStar;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.*;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.BlockNuclearReactor;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing01;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasingItemBlock;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
@@ -28,6 +33,10 @@ public class BlockRegister {
     public static void registryBlocks() {
 
         GameRegistry.registerBlock(MetaBlock01, ItemBlockBase01.class, MetaBlock01.getUnlocalizedName());
+        GameRegistry.registerBlock(
+            BasicBlocks.MetaBlockCasing01,
+            MetaBlockCasingItemBlock.class,
+            BasicBlocks.MetaBlockCasing01.getUnlocalizedName());
         GameRegistry.registerBlock(
             PhotonControllerUpgrade,
             PhotonControllerUpgradeCasingItemBlock.class,
@@ -59,6 +68,9 @@ public class BlockRegister {
     public static void registryBlockContainers() {
 
         GTCMItemList.TestMetaBlock01_0.set(ItemBlockBase01.initMetaBlock01("TestMetaBlock01_0", 0));
+        GTCMItemList.TestCasing.set(MetaBlockCasing01.initMetaCasing01("Test Casing", 2));
+
+        // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier LV Tier", 0));
         GTCMItemList.PhotonControllerUpgradeMV
@@ -87,7 +99,9 @@ public class BlockRegister {
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier UXV Tier", 12));
         GTCMItemList.PhotonControllerUpgradeMAX
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier MAX Tier", 13));
+        // endregion
         // ---------------------------------------------------------------------------------------------------------------------------//
+        // region MegaSpaceStation
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.spaceStationStructureBlockLV.set(
                 SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock LV Tier", 0));
@@ -172,6 +186,7 @@ public class BlockRegister {
             GTCMItemList.AdvancedCoilBlock
                 .set(AdvancedHighPowerCoil.AdvancedCompactFusionCoilMeta("Advanced Coil Block", 0));
         }
+        // endregion
     }
 
     public static void registry() {

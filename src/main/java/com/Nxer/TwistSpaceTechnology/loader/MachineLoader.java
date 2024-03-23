@@ -9,6 +9,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_TestMultiMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
@@ -55,6 +56,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
+import com.Nxer.TwistSpaceTechnology.system.Disassembler.TST_Disassembler;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
@@ -109,6 +111,7 @@ public class MachineLoader {
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
     public static ItemStack BallLightning;
     public static ItemStack StarcoreMiner;
+    public static ItemStack Disassembler;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -140,13 +143,13 @@ public class MachineLoader {
     public static ItemStack RealRackHatch;
 
     // test
-    // public static ItemStack TestMachine;
+    public static ItemStack TestMachine;
 
     public static void loadMachines() {
 
         EntityList.addMapping(Ship.class, "Ship", 114);
         // test
-        // TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
+        TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 
         // region multi Machine controller
 
@@ -403,7 +406,7 @@ public class MachineLoader {
         }
 
         //
-
+        
         if (Config.Enable_BallLightning) {
             BallLightning = new TST_BallLightning(19041, "NameBallLightning", TextLocalization.NameBallLightning)
                 .getStackForm(1);
@@ -418,6 +421,29 @@ public class MachineLoader {
         // ).getStackForm(1);
         // GTCMItemList.StarcoreMiner.set(StarcoreMiner);
         // }
+
+        if (Config.Enable_StarcoreMiner) {
+            StarcoreMiner = new TST_StarcoreMiner(
+                19040,
+                "NameStarcoreMiner",
+                // #tr NameStarcoreMiner
+                // # Starcore Miner
+                // #zh_CN 星核钻机
+                TextEnums.tr("NameStarcoreMiner")).getStackForm(1);
+            GTCMItemList.StarcoreMiner.set(StarcoreMiner);
+        }
+
+        //
+        if (Config.Enable_Disassembler) {
+            Disassembler = new TST_Disassembler(
+                19041,
+                // #tr NameTSTDisassembler
+                // # TST Large Disassembler
+                // #zh_CN TST大型拆解机
+                "NameTSTDisassembler",
+                TextEnums.tr("NameTSTDisassembler")).getStackForm(1);
+            GTCMItemList.Disassembler.set(Disassembler);
+        }
 
         // endregion
 
@@ -621,17 +647,6 @@ public class MachineLoader {
     }
 
     public static void loadMachinePostInit() {
-
-        if (Config.Enable_StarcoreMiner) {
-            StarcoreMiner = new TST_StarcoreMiner(
-                19040,
-                "NameStarcoreMiner",
-                // #tr NameStarcoreMiner
-                // # Starcore Miner
-                // #zh_CN 星核钻机
-                TextEnums.tr("NameStarcoreMiner")).getStackForm(1);
-            GTCMItemList.StarcoreMiner.set(StarcoreMiner);
-        }
 
     }
 }
