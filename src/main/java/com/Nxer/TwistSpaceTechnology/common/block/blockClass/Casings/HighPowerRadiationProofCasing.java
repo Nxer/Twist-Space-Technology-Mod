@@ -20,6 +20,10 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClie
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.*;
+import gregtech.api.util.*;
+import gtPlusPlus.xmod.gregtech.api.enums.*;
+import gtPlusPlus.xmod.gregtech.api.objects.*;
 
 public class HighPowerRadiationProofCasing extends BlockBase01 {
 

@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.AdvancedHighPowerCoilBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockStar;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.HighPowerRadiationProofBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlock01;
@@ -11,10 +12,7 @@ import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.Bloc
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStar;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.BlockNuclearReactor;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.HighPowerRadiationProofCasingItemBlock;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.*;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
@@ -50,6 +48,10 @@ public class BlockRegister {
             HighPowerRadiationProofBlock,
             HighPowerRadiationProofCasingItemBlock.class,
             HighPowerRadiationProofBlock.getUnlocalizedName());
+        GameRegistry.registerBlock(
+            AdvancedHighPowerCoilBlock,
+            AdvancedCompactFusionCoilItemBlock.class,
+            AdvancedHighPowerCoilBlock.getUnlocalizedName());
         BlockStar = new BlockStar();
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
     }
@@ -165,7 +167,10 @@ public class BlockRegister {
         }
         if (Config.Enable_BallLightning) {
             GTCMItemList.HighPowerRadiationProofCasing.set(
-                SpaceStationStructureCasing.SpaceStationStructureCasingMeta("High Power Radiation Proof Casing", 0));
+                HighPowerRadiationProofCasing
+                    .HighPowerRadiationProofCasingMeta("High Power Radiation Proof Casing", 0));
+            GTCMItemList.AdvancedCoilBlock
+                .set(AdvancedHighPowerCoil.AdvancedCompactFusionCoilMeta("Advanced Coil Block", 0));
         }
     }
 

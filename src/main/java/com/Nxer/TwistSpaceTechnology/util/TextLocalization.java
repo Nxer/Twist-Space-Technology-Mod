@@ -223,6 +223,15 @@ public class TextLocalization {
             "Tooltips_HighPowerRadiationProofCasing.02")
     };
 
+    public static  final String[] Tooltips_AdvancedHighPowerCoil = new String[]{
+        texter(
+            "Constrained the overflowing energy",
+            "Tooltips_HighPowerRadiationProofCasing.01"),
+        texter(
+            "The power levels are still rising!!!",
+            "Tooltips_HighPowerRadiationProofCasing.02")
+    };
+
 
 
     // endregion

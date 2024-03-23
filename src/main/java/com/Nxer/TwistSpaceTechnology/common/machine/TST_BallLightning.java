@@ -3,22 +3,21 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Antimatter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.HighPowerRadiationProofBlock;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.*;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
+import static gregtech.api.util.GT_StructureUtility.ofCoil;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GT_Utility.getCasingTextureIndex;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.player.*;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
@@ -27,32 +26,42 @@ import net.minecraftforge.common.util.*;
 import org.apache.commons.lang3.tuple.*;
 
 import com.Nxer.TwistSpaceTechnology.common.block.*;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.*;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.*;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.*;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.bartimaeusnek.bartworks.API.*;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
+import com.github.technus.tectech.thing.metaTileEntity.multi.base.*;
 import com.google.common.collect.*;
-import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.*;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import galaxyspace.core.register.GSBlocks;
+import goodgenerator.blocks.tileEntity.base.*;
 import gregtech.api.*;
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
+import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.interfaces.*;
+import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.*;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.*;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.*;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.*;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.*;
+import gregtech.api.util.GT_HatchElementBuilder;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.common.blocks.*;
 import gtPlusPlus.core.block.*;
+import gtPlusPlus.xmod.gregtech.api.enums.*;
 
 public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> {
 
@@ -73,11 +82,22 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     // end region
 
     // region Processing Logic
-    private int fieldGeneratorTier = 1;
+    private int fieldGeneratorTier = 0;
+    private int compactFusionCoilTier = 0;
     public int mRecipeTier = 1;
     public int mMachineTier = 1;
     public byte glassTier;
     public byte mSpecialTier;
+
+    public HeatingCoilLevel coilLevel;
+
+    public HeatingCoilLevel getCoilLevel() {
+        return coilLevel;
+    }
+
+    public void setCoilLevel(HeatingCoilLevel coilLevel) {
+        this.coilLevel = coilLevel;
+    }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -109,6 +129,13 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         return 0;
     }
 
+    public static int getcompactFusionCoilTier(Block block, int meta) {
+        if (block == compactFusionCoil) {
+            return meta + 1;
+        }
+        return 0;
+    }
+
     // region Structure
 
     private static final String STRUCTURE_PIECE_MK1 = "BallLightningMK1";
@@ -118,6 +145,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
+        this.fieldGeneratorTier = 0;
+        this.compactFusionCoilTier = 0;
         mSpecialTier = 0;
         if (checkPiece(STRUCTURE_PIECE_MK1, 12, 20, 7)) {
             mSpecialTier = 1;
@@ -125,73 +154,67 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                 if (aStack.isItemEqual(GravitationalLens.get(1))) {
                     mSpecialTier = 2;
                 }
-                if (aStack.isItemEqual(Antimatter.get(1)) && checkPiece(STRUCTURE_PIECE_MK2, 38, 51, 7)) {
+                if (checkPiece(STRUCTURE_PIECE_MK2, 38, 51, 7) && compactFusionCoilTier > 4
+                    && glassTier > 11
+                    && coilLevel.getTier() > 12
+                    && aStack.isItemEqual(Antimatter.get(1))) {
                     mSpecialTier = 3;
+                    if (fieldGeneratorTier > 1) mSpecialTier = 4;
                 }
             }
         }
-        // if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         return mSpecialTier > 0;
+        // if (!checkPiece(STRUCTURE_PIECE_MK1, 12, 20, 7)) return false;
+        // return true;
     }
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MK1, stackSize, hintsOnly, 12, 20, 7);
-        if (stackSize.stackSize > 1) {
-            buildPiece(STRUCTURE_PIECE_MK2, stackSize, hintsOnly, 38, 51, 7);
-        }
+        this.buildPiece(STRUCTURE_PIECE_MK1, stackSize, hintsOnly, 12, 20, 7);
+        if (stackSize.stackSize > 1) this.buildPiece(STRUCTURE_PIECE_MK2, stackSize, hintsOnly, 38, 51, 7);
     }
     // end region
 
     // region Structure
 
-    private static final String STRUCTURE_PIECE_MAIN = "mainBallLightning";
-
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
-        if (this.mMachine) return -1;
-        int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
-        int built = survivialBuildPiece(
-            STRUCTURE_PIECE_MK1,
-            stackSize,
-            12,
-            20,
-            7,
-            realBudget,
-            source,
-            actor,
-            false,
-            true);
-
-        // return this.survivialBuildPiece(
-        // STRUCTURE_PIECE_MAIN,
-        // stackSize,
-        // horizontalOffSet,
-        // verticalOffSet,
-        // depthOffSet,
-        // realBudget,
-        // source,
-        // actor,
-        // false,
-        // true);
-
-        // if (built >= 0) return built;
-        // if (stackSize.stackSize > 1) {
-        // built += survivialBuildPiece(
-        // STRUCTURE_PIECE_MK2,
-        // stackSize,
-        // 38,
-        // 51,
-        // 7,
-        // realBudget,
-        // source,
-        // actor,
-        // false,
-        // true);
-        // }
-        return built;
-
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        // int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
+        int builtMain = survivialBuildPiece(STRUCTURE_PIECE_MK1, stackSize, 12, 20, 7, elementBudget, env, false, true);
+        // int builtEx = 0;
+        // boolean triedBuiltEx = false;
+        //
+        if (stackSize.stackSize > 1) {
+            // builtEx = survivialBuildPiece(STRUCTURE_PIECE_MK2, stackSize, 38, 51, 7, elementBudget, env, false,
+            // true);
+            // triedBuiltEx = true;
+            builtMain += survivialBuildPiece(
+                STRUCTURE_PIECE_MK2,
+                stackSize,
+                38,
+                51,
+                7,
+                elementBudget,
+                env,
+                false,
+                true);
+        }
+        //
+        // if (builtEx == 0 && !triedBuiltEx) builtEx = -1;
+        //
+        // // building finished
+        // if (builtMain == -1 && builtEx == -1) return -1;
+        //
+        // // only Main finished
+        // if (builtMain == -1 && builtEx >= 0) return builtEx;
+        //
+        // // only Ex finished
+        // if (builtEx == -1 && builtMain >= 0) return builtMain;
+        //
+        // // building
+        // return builtMain + builtEx;
+        return builtMain;
     }
 
     /*
@@ -211,7 +234,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
      * N -> ofBlock...(tile.blockDiamond, 0, ...);
      * O -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseOetaPipeEntity, ...);
      */
-
     @Override
     public IStructureDefinition<TST_BallLightning> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
@@ -228,9 +250,29 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                             Byte.MAX_VALUE,
                             (te, t) -> te.glassTier = t,
                             te -> te.glassTier)))
-                .addElement('B', ofBlock(compactFusionCoil, 4))
+                .addElement(
+                    'B',
+                    withChannel(
+                        "compactcoiltier",
+                        ofBlocksTiered(
+                            TST_BallLightning::getcompactFusionCoilTier,
+                            ImmutableList.of(
+                                Pair.of(compactFusionCoil, 0),
+                                Pair.of(compactFusionCoil, 1),
+                                Pair.of(compactFusionCoil, 2),
+                                Pair.of(compactFusionCoil, 3),
+                                Pair.of(compactFusionCoil, 4)),
+                            0,
+                            (me, m) -> me.compactFusionCoilTier = m,
+                            me -> me.compactFusionCoilTier))
+                // ofBlock(compactFusionCoil, 4)
+                )
                 .addElement('C', ofBlock(GregTech_API.sBlockCasings1, 14))
-                .addElement('D', ofBlock(GregTech_API.sBlockCasings5, 12))
+                .addElement(
+                    'D',
+                    withChannel("coil", ofCoil(TST_BallLightning::setCoilLevel, TST_BallLightning::getCoilLevel))
+                // ofBlock(GregTech_API.sBlockCasings5, 12)
+                )
                 .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 5))
                 .addElement(
                     'F',
@@ -250,8 +292,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                                 Pair.of(StabilisationFieldGenerators, 7),
                                 Pair.of(StabilisationFieldGenerators, 8)),
                             0,
-                            (m, t) -> m.fieldGeneratorTier = t,
-                            m -> m.fieldGeneratorTier)))
+                            (ne, n) -> ne.fieldGeneratorTier = n,
+                            ne -> ne.fieldGeneratorTier))
+                // fBlock(sBlockCasingsTT, 9)
+                )
                 .addElement('G', ofBlock(HighPowerRadiationProofBlock, 0))
                 .addElement('H', ofBlock(ModBlocks.blockCasingsTieredGTPP, 9))
                 .addElement('I', ofBlock(GSBlocks.DysonSwarmBlocks, 1))
@@ -266,6 +310,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                     GT_HatchElementBuilder.<TST_BallLightning>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Maintenance, Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
+                        .casingIndex(TAE.getIndexFromPage(50, 0))
+                        // .casingIndex(getCasingTextureIndex(HighPowerRadiationProofBlock, 0))
                         .dot(2)
                         .buildAndChain(HighPowerRadiationProofBlock, 0))
                 .addElement(
@@ -273,8 +319,9 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                     GT_HatchElementBuilder.<TST_BallLightning>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
+                        .casingIndex(getCasingTextureIndex(GregTech_API.sBlockCasings8, 5))
                         .dot(1)
-                        .buildAndChain(GSBlocks.DysonSwarmBlocks, 1))
+                        .buildAndChain(GregTech_API.sBlockCasings8, 5))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -291,29 +338,23 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 3];
+        String[] ret = new String[origin.length + 5];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
-        // [origin.length + 1] = EnumChatFormatting.AQUA + "Block Level: " + EnumChatFormatting.GOLD + this.mBlockTier;
-        // ret[origin.length + 2] = EnumChatFormatting.AQUA + "Eu Tier: " + EnumChatFormatting.GOLD + this.mRecipeTier;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "coil Level: "
+            + EnumChatFormatting.GOLD
+            + this.coilLevel.getTier();
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + "compact Fusion Coil Tier: "
+            + EnumChatFormatting.GOLD
+            + this.compactFusionCoilTier;
+        ret[origin.length + 3] = EnumChatFormatting.AQUA + "field Generator Tier: "
+            + EnumChatFormatting.GOLD
+            + this.fieldGeneratorTier;
+        ret[origin.length + 3] = EnumChatFormatting.AQUA + "Machine Tier: "
+            + EnumChatFormatting.GOLD
+            + this.mSpecialTier;
         return ret;
     }
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks, 0, ...);
-     * B -> ofBlock...(compactFusionCoil, 1, ...);
-     * C -> ofBlock...(gt.blockcasings, 14, ...);
-     * D -> ofBlock...(gt.blockcasings5, 12, ...);
-     * E -> ofBlock...(gt.blockcasings8, 5, ...);
-     * F -> ofBlock...(gt.blockcasings8, 10, ...);
-     * G -> ofBlock...(gt.stabilisation_field_generator, 8, ...);
-     * H -> ofBlock...(gtplusplus.blockcasings.4, 3, ...);
-     * I -> ofBlock...(gtplusplus.blocktieredcasings.1, 9, ...);
-     * J -> ofBlock...(tile.DysonSwarmPart, 1, ...);
-     * K -> ofBlock...(tile.DysonSwarmPart, 8, ...);
-     * L -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
-     */
 
     // end region
 
@@ -345,9 +386,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
-            if (aActive) return new ITexture[] {
-                Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings2, 0)),
+            if (aActive) return new ITexture[] { TextureFactory.of(HighPowerRadiationProofBlock, 0),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE)
                     .extFacing()
@@ -357,22 +396,19 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                     .extFacing()
                     .glow()
                     .build() };
-            return new ITexture[] {
-                Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings2, 0)),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
-                    .extFacing()
-                    .build(),
+            return new ITexture[] { TextureFactory.of(HighPowerRadiationProofBlock, 0), TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
+                .extFacing()
+                .build(),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_GLOW)
                     .extFacing()
                     .glow()
                     .build() };
         }
-        return new ITexture[] { Textures.BlockIcons
-            .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings2, 0)) };
+        return new ITexture[] { TextureFactory.of(HighPowerRadiationProofBlock, 0) };
     }
+
     // end region
 
     private final String[][] shapeMK1 = new String[][] {
@@ -549,7 +585,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             "                         " },
         { "                         ", "                         ", "                         ",
             "                         ", "                         ", "                         ",
-            "                         ", "           KKK           ", "           O O           ",
+            "                         ", "           YYY           ", "           O O           ",
             "         O     O         ", "                         ", "        O  JOJ  O        ",
             "           OBO           ", "        O  JOJ  O        ", "                         ",
             "         O     O         ", "           O O           ", "                         ",
@@ -558,7 +594,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             "                         " },
         { "                         ", "                         ", "                         ",
             "                         ", "                         ", "                         ",
-            "                         ", "          KKNKK          ", "          GGGGG          ",
+            "                         ", "          YY~YY          ", "          GGGGG          ",
             "         GHHGHHG         ", "        GH  G  HG        ", "        GH JGJ HG        ",
             "        GGGGBGGGG        ", "        GH JGJ HG        ", "        GH  G  HG        ",
             "         GHHGHHG         ", "          GGGGG          ", "                         ",
@@ -567,7 +603,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             "                         " },
         { "                         ", "                         ", "                         ",
             "         GGGGGGG         ", "       GGOOOOOOOGG       ", "      GOOO     OOOG      ",
-            "     GOO         OOG     ", "    GOO   KKKKK   OOG    ", "    GO   GHHHHHG   OG    ",
+            "     GOO         OOG     ", "    GOO   YYYYY   OOG    ", "    GO   GHHHHHG   OG    ",
             "   GOO  GHHHHHHHG  OOG   ", "   GO  GHHHHHHHHHG  OG   ", "   GO  GHHHHHHHHHG  OG   ",
             "   GO  GHHHHHHHHHG  OG   ", "   GO  GHHHHHHHHHG  OG   ", "   GO  GHHHHHHHHHG  OG   ",
             "   GOO  GHHHHHHHG  OOG   ", "    GO   GHHHHHG   OG    ", "    GOO   GGGGG   OOG    ",

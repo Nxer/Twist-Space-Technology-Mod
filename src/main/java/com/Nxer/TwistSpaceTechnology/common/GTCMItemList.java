@@ -292,6 +292,7 @@ public enum GTCMItemList {
     SpaceStationAntiGravityBlockUXV,
     SpaceStationAntiGravityBlockMAX,
     HighPowerRadiationProofCasing,
+    AdvancedCoilBlock,
 
     // MultiStructure Machine:
     TestMultiStructureMainMachine,
