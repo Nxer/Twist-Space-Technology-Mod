@@ -11,8 +11,7 @@ import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.Bloc
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStar;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.BlockNuclearReactor;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing01;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasingItemBlock;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaItemBlockCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
@@ -32,7 +31,7 @@ public class BlockRegister {
         GameRegistry.registerBlock(MetaBlock01, ItemBlockBase01.class, MetaBlock01.getUnlocalizedName());
         GameRegistry.registerBlock(
             BasicBlocks.MetaBlockCasing01,
-            MetaBlockCasingItemBlock.class,
+            MetaItemBlockCasing.class,
             BasicBlocks.MetaBlockCasing01.getUnlocalizedName());
         GameRegistry.registerBlock(
             PhotonControllerUpgrade,
@@ -57,7 +56,8 @@ public class BlockRegister {
     public static void registryBlockContainers() {
 
         GTCMItemList.TestMetaBlock01_0.set(ItemBlockBase01.initMetaBlock01("TestMetaBlock01_0", 0));
-        GTCMItemList.TestCasing.set(MetaBlockCasing01.initMetaCasing01("Test Casing", 2));
+        GTCMItemList.TestCasing
+            .set(MetaBlockConstructors.initMetaBlockCasing("Test Casing", (byte) 2, BasicBlocks.MetaBlockCasing01));
 
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV

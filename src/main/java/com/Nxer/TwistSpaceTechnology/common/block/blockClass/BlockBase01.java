@@ -30,7 +30,7 @@ public class BlockBase01 extends Block {
 
     public BlockBase01() {
         this(Material.iron);
-        this.setCreativeTab(GTCMCreativeTabs.tabMetaBlock01);
+        this.setCreativeTab(GTCMCreativeTabs.TAB_META_BLOCKS);
     }
 
     public BlockBase01(String unlocalizedName, String localName) {

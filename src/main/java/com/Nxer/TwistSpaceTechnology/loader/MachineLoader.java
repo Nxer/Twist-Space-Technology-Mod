@@ -9,7 +9,6 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
-import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_TestMultiMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
@@ -147,7 +146,7 @@ public class MachineLoader {
 
         EntityList.addMapping(Ship.class, "Ship", 114);
         // test
-        TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
+        // TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 
         // region multi Machine controller
 

@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings;
 
 import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
-import static gregtech.api.util.GT_Utility.getTextureId;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,19 +15,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.block.MetaBlockConstructors;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClientOnly;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_Utility;
 
 /**
- * A trying of making a custom casing.
- * <p>
- * It's not perfect yet but it's working.
- * </p>
+ * Use {@link MetaBlockCasing} with {@link MetaBlockConstructors}
  */
+@Deprecated
 public class MetaBlockCasing01 extends MetaBlockCasingBase {
 
     // TODO: Prepare a generic meta block class to handle all those meta blocks in different basic blocks.
@@ -37,11 +36,15 @@ public class MetaBlockCasing01 extends MetaBlockCasingBase {
     private static final Set<Integer> USED_META = new HashSet<>(16);
     public static final Map<Integer, String[]> TOOLTIPS = new HashMap<>(16);
 
-    private static int getTextureIndexStatic(int aMeta) {
-        return getTextureId(TEXTURE_PAGE_INDEX, getTexturePageIndex(aMeta));
+    public MetaBlockCasing01() {
+        super(unlocalizedName);
     }
 
-    private static byte getTexturePageIndex(int meta) {
+    private static int getTextureIndexStatic(int aMeta) {
+        return GT_Utility.getTextureId(TEXTURE_PAGE_INDEX, getTextureIndexInPageStatic(aMeta));
+    }
+
+    private static byte getTextureIndexInPageStatic(int meta) {
         return (byte) (meta + TEXTURE_ID_OFFSITE);
     }
 
@@ -89,6 +92,16 @@ public class MetaBlockCasing01 extends MetaBlockCasingBase {
     @Override
     public int getTextureIndex(int aMeta) {
         return getTextureIndexStatic(aMeta);
+    }
+
+    @Override
+    public byte getTexturePageIndex() {
+        return TEXTURE_PAGE_INDEX;
+    }
+
+    @Override
+    public byte getTextureIndexInPage(int meta) {
+        return getTextureIndexInPageStatic(meta);
     }
 
     @Override
