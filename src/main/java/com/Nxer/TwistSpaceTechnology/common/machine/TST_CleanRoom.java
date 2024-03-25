@@ -116,6 +116,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
             .addInfo("tst.cleanroom.desc.0")
             .addInfo("the height of empty space within")
             .addInfo("Machines that cause pollution aren't allowed to be put in.")
+            .addInfo("WATCH OUT! DO NOT DESTROY STRUCTURE BLOCK WHEN MACHINE IS WORKING!")
             .addInfo("buffered bt TST")
             .addInfo("author shordinger")
             .addSeparator()
