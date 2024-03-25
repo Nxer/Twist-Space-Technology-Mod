@@ -38,7 +38,7 @@ public class ItemBlockBase01 extends ItemBlock {
         super(aBlock);
         setHasSubtypes(true);
         setMaxDamage(0);
-        this.setCreativeTab(GTCMCreativeTabs.tabMetaBlock01);
+        this.setCreativeTab(GTCMCreativeTabs.TAB_META_BLOCKS);
     }
 
     // endregion

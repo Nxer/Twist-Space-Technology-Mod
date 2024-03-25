@@ -34,10 +34,10 @@ public class GTCMCreativeTabs {
     };
 
     /**
-     * Creative Tab for MetaBlock01
+     * Creative Tab for MetaBlocks
      */
-    public static final CreativeTabs tabMetaBlock01 = new CreativeTabs(
-        texter("TST Meta Blocks 1", "itemGroup.TST Meta Blocks 1")) {
+    public static final CreativeTabs TAB_META_BLOCKS = new CreativeTabs(
+        texter("TST Meta Blocks", "itemGroup.TST Meta Blocks")) {
 
         @Override
         @SideOnly(Side.CLIENT)

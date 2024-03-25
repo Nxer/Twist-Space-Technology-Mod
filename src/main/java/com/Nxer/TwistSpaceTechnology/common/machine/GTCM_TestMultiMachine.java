@@ -21,7 +21,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing01;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -86,7 +85,7 @@ public class GTCM_TestMultiMachine
                 GT_HatchElementBuilder.<GTCM_TestMultiMachine>builder()
                     .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
                     .adder(GTCM_TestMultiMachine::addToMachineList)
-                    .casingIndex(((MetaBlockCasing01) BasicBlocks.MetaBlockCasing01).getTextureIndex(2))
+                    .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(2))
                     .dot(1)
                     .buildAndChain(BasicBlocks.MetaBlockCasing01, 2))
             .build();
