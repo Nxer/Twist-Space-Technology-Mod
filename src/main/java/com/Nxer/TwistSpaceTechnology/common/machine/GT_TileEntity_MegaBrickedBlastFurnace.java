@@ -734,7 +734,6 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             while (consumeSize > 0) {
                 for (int i = 0; i < inputList.size(); i++) {
                     ItemStack input = inputList.get(i);
-                    // I want to use areStacksEqualExtended but it's private :(
                     if (input != null && GT_Utility.areStacksEqual(input, toBeConsumed, false)) {
                         int consumeThisTime = Math.min(input.stackSize, consumeSize);
                         input.stackSize -= consumeThisTime;
