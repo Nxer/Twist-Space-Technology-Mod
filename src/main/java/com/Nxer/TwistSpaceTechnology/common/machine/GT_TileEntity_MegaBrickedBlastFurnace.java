@@ -690,19 +690,16 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             }
         }
         result.parallelism = parallelism;
-        result.fuelToBeConsumed = new ItemStack(
-            fuelItem.getItemStack()
-                .getItem(),
-            fuelAmount,
-            fuelItem.getItemStack()
-                .getItemDamage());
-
+        ItemStack fuelToBeConsumed = ItemStack.copyItemStack(fuelItem.getItemStack());
+        fuelToBeConsumed.stackSize = fuelAmount;
+        result.fuelToBeConsumed = fuelToBeConsumed;
         for (ItemStack ingredient : recipe.mInputs) {
             if (ingredient != null) {
                 TST_ItemID itemWithDamage = TST_ItemID.create(ingredient);
                 if (!fuels.contains(itemWithDamage)) {
-                    result.materialToBeConsumed
-                        .add(new ItemStack(ingredient.getItem(), parallelism * ingredient.stackSize));
+                    ItemStack newstack = ItemStack.copyItemStack(ingredient);
+                    newstack.stackSize = parallelism * newstack.stackSize;
+                    result.materialToBeConsumed.add(newstack);
                 }
             }
         }
@@ -737,8 +734,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             while (consumeSize > 0) {
                 for (int i = 0; i < inputList.size(); i++) {
                     ItemStack input = inputList.get(i);
-                    if (input != null && input.getItem() == toBeConsumed.getItem()
-                        && input.getItemDamage() == toBeConsumed.getItemDamage()) {
+                    if (input != null && GT_Utility.areStacksEqual(input, toBeConsumed, false)) {
                         int consumeThisTime = Math.min(input.stackSize, consumeSize);
                         input.stackSize -= consumeThisTime;
                         consumeSize -= consumeThisTime;
