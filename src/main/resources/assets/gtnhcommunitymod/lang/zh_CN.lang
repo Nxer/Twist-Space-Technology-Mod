@@ -888,3 +888,19 @@ Tooltip_TSTDisassembler_2_06= - §b光子掌控者配方
 Tooltip_TSTDisassembler_2_07=§c不兼容工作台配方!
 MetaBlockCasing01.0.name=Test Casing
 MetaBlockCasing01.2.name=Test Casing
+getInfoData.StoredWater=已存储水
+getInfoData.StoredLava=已存储岩浆
+getInfoData.SuccessChance=成功几率
+Tooltip_EyeOfWood_02=仅可部署在主世界, 否则将产生节庆效果.
+Tooltip_EyeOfWood_2_01=机器会将输入仓中输入的§9水§7和§c岩浆§7存储于机器内部, 就像鸿蒙之眼一样.
+Tooltip_EyeOfWood_2_02=机器运行的成功率取决于已存储的水和岩浆的数量.
+Tooltip_EyeOfWood_2_03=当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%%
+Tooltip_EyeOfWood_2_04=    §b成功率§7 = §f{7500 - 7499 * [1 - 1/(§6S§f^§9dW§f * §6S§f^§cdL§f) ] } / 10000
+Tooltip_EyeOfWood_2_05=其中 :
+Tooltip_EyeOfWood_2_06=特定值底数 §6S§f ≈ 1.087
+Tooltip_EyeOfWood_2_07=§9dW§7 为已存储水量和需求量(256,000L)的差值再除以1000向下取整, 单位L : §9dW§f = floor( |已存储水量 - 需求量| / 1000 )
+Tooltip_EyeOfWood_2_08=§cdL§7 为已存储岩浆量和需求量(256,000L)的差值再除以1000向下取整, 单位L : §cdL§f = floor( |已存储岩浆量 - 需求量| / 1000 )
+Tooltip_EyeOfWood_2_09=机器每次运行耗时恒定为60秒.
+Tooltip_EyeOfWood_2_10=如果机器运行成功, 将产出大量主世界矿资源.
+Tooltip_EyeOfWood_2_11=如果机器运行失败, 则产出大量蒸汽.
+Tooltip_EyeOfWood_2_12=产出蒸汽数量(单位L) = 成功几率 * 360,000,000L (最多270,000,000L)
