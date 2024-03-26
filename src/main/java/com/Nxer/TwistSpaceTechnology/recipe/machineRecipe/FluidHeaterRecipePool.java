@@ -1,9 +1,10 @@
-package com.Nxer.TwistSpaceTechnology.recipe;
+package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static gtPlusPlus.core.material.ELEMENT.STANDALONE.DRAGON_METAL;
 import static net.minecraftforge.fluids.FluidRegistry.getFluidStack;
 
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
