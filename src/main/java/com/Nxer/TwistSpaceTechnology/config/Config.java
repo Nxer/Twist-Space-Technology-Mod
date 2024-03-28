@@ -46,6 +46,7 @@ public class Config {
     public static final String Disassembler = "Disassembler";
     public static final String EOW = "Eye of Wood";
     public static final String SingleBlocks = "SingleBlocks";
+    public static final String SpaceApiary = "SpaceApiary";
 
     public static final String spaceStation = "spaceStation";
 
@@ -302,6 +303,10 @@ public class Config {
     // region Recipe
     public static boolean Registry_DragonBlood_ExtraRecipe = true;
     public static boolean UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe = true;
+    // endregion
+
+    // region Space Apiary
+    public static boolean enableDNAConsuming = true;
     // endregion
 
     public static boolean activateMegaSpaceStation = false;
@@ -569,6 +574,10 @@ public class Config {
         SpeedBonus_MegaMacerator = Float.parseFloat(configuration.getString("SpeedBonus_MegaMacerator", MegaMacerator, String.valueOf(SpeedBonus_MegaMacerator), "Speed Bonus of Mega Macerator. Type: float"));
         EnablePerfectOverclock_MegaMacerator = configuration.getBoolean("EnablePerfectOverclock_MegaMacerator", MegaMacerator, EnablePerfectOverclock_MegaMacerator, "Enable perfect overclock of Mega Macerator. Type: boolean");
         // end region
+
+        // region Space Apiary
+        enableDNAConsuming = configuration.getBoolean("enableDNAConsuming", SpaceApiary, enableDNAConsuming, "Enable DNA consuming for Space Apiary Modules. Type: boolean");
+        // endregion
         TST_CleanRoom.loadConfig(configuration);
         if (configuration.hasChanged()) {
             configuration.save();

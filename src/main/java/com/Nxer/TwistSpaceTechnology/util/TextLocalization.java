@@ -745,5 +745,24 @@ public class TextLocalization {
     public static final String Tooltip_DeployedNanoCore_04 = texter("What are you worried about?", "Tooltip_DeployedNanoCore_04");
     // endregion
 
+    //region Space Apiary
+    public static final String NameSpaceApiaryT1 = texter("Space Apiray Module MK-I", "NameSpaceApiaryT1");
+    public static final String Tooltip_SpaceApiary_desc0 = texter("Module that adds Space Apiary Operations to the Space Elevator", "Tooltip_SpaceApiary_desc0");
+    public static final String Tooltip_SpaceApiary_t1_desc1 = texter("Time to let the lazy bees absorb some cosmic rays.", "Tooltip_SpaceApiary_t1_desc1");
+    public static final String Tooltip_SpaceApiary_desc1 = texter("Accurately distort bee working progress in low-gravity environments.", "Tooltip_SpaceApiary_desc1");
+    public static final String Tooltip_SpaceApiary_desc2 = texter("Need queen bee in controller slot.", "Tooltip_SpaceApiary_desc2");
+    public static final String Tooltip_SpaceApiary_desc3 = texter("Consumes 1A-Luv per parallel, while consuming 100L liquid DNA/parallel per run.", "Tooltip_SpaceApiary_desc3");
+    public static final String Tooltip_SpaceApiary_t1_desc4 = texter("Max parallels: 256", "Tooltip_SpaceApiary_t1_desc4");
+    public static final String NameSpaceApiaryT2 = texter("Space Apiray Module MK-II", "NameSpaceApiaryT2");
+    public static final String Tooltip_SpaceApiary_t2_desc1 = texter("Surrender to the hive mind..", "Tooltip_SpaceApiary_t2_desc1");
+    public static final String Tooltip_SpaceApiary_t2_desc4 = texter("Max parallels: 4096", "Tooltip_SpaceApiary_t2_desc4");
+    public static final String NameSpaceApiaryT3 = texter("Space Apiray Module MK-III", "NameSpaceApiaryT3");
+    public static final String Tooltip_SpaceApiary_t3_desc1 = texter("The Great Creator of the Void!", "Tooltip_SpaceApiary_t3_desc1");
+    public static final String Tooltip_SpaceApiary_t3_desc4 = texter("Max parallels: 32768", "Tooltip_SpaceApiary_t3_desc4");
+    public static final String NameSpaceApiaryT4 = texter("Space Apiray Module MK-IV", "NameSpaceApiaryT4");
+    public static final String Tooltip_SpaceApiary_t4_desc1 = texter("Bees give birth to all things to nourish humanity.", "Tooltip_SpaceApiary_t4_desc1");
+    public static final String Tooltip_SpaceApiary_t4_desc4 = texter("Max parallels: 2147483647", "Tooltip_SpaceApiary_t4_desc4");
+    public static final String Tooltip_SpaceApiary_t4_desc5 = texter("But humans have nothing to repay the bees.", "Tooltip_SpaceApiary_t4_desc5");
+    // endregion
 }
 // spotless:on
