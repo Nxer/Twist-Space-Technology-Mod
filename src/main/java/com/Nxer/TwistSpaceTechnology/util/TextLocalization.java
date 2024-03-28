@@ -733,6 +733,11 @@ public class TextLocalization {
     public static final String NameRealRackHatch = texter("rack simulation controller hack", "NameRealRackHatch");
 
     public static final String NameAstralComputingArray = texter("Astral Computing Array", "NameAstralComputingArray");
+
+    public static final String NameWirelessDataInputHatch = texter("Wireless Optical Slave Connector", "NameWirelessDataInputHatch");
+
+    public static final String NameWirelessDataOutputHatch = texter("Wireless Optical Master Connector", "NameWirelessDataOutputHatch");
+
     // endregion
 
     // region Deployed Nano Core
