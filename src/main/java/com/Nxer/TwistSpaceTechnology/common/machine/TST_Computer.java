@@ -1,33 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_NEUTRAL;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_OK;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_TOO_LOW;
-import static com.github.technus.tectech.util.CommonValues.*;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static goodgenerator.loader.Loaders.FRF_Coil_1;
-import static goodgenerator.loader.Loaders.compactFusionCoil;
-import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
-import static gtPlusPlus.core.block.ModBlocks.blockCasings3Misc;
-import static net.minecraft.util.StatCollector.translateToLocal;
-import static vazkii.botania.common.block.ModBlocks.pylon;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.mechanics.dataTransport.QuantumDataPacket;
@@ -48,7 +20,6 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import com.gtnewhorizon.structurelib.util.Vec3Impl;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Materials;
@@ -63,6 +34,34 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_StructureUtility;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
+
+import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
+import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
+import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
+import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_NEUTRAL;
+import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_OK;
+import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_TOO_LOW;
+import static com.github.technus.tectech.util.CommonValues.MULTI_CHECK_AT;
+import static com.github.technus.tectech.util.CommonValues.V;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static goodgenerator.loader.Loaders.FRF_Coil_1;
+import static goodgenerator.loader.Loaders.compactFusionCoil;
+import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
+import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static gtPlusPlus.core.block.ModBlocks.blockCasings3Misc;
+import static net.minecraft.util.StatCollector.translateToLocal;
+import static vazkii.botania.common.block.ModBlocks.pylon;
 
 public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements ISurvivalConstructable {
 
@@ -71,6 +70,16 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
     private GT_Hatch_RackComputationMonitor realMonitor;
 
     private double multiplier = 1;
+
+    // GT_MetaTileEntity_AssemblyLine
+
+    // GT_MetaTileEntity_EM_computer
+
+    public static boolean wireless = false;
+
+    private static boolean localWirelessTag = false;
+
+    public static long activatedComputer = -10000000;
 
     private static Textures.BlockIcons.CustomIcon ScreenOFF;
     private static Textures.BlockIcons.CustomIcon ScreenON;
@@ -82,6 +91,19 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
         translateToLocal("tst.computer.hint.1"), // 2 - Rack Hatches or Advanced
         // computer casing
     };
+
+    // public static HashSet<GT_Hatch_WirelessData_input> wirelessDataInputs = new HashSet<>();
+    // public static QuantumDataPacket[] wirelessData = new QuantumDataPacket[16];
+    public static long[][] latestUpload = new long[16][20];
+    public static long[][] latestDownload = new long[16][20];
+
+    private static final long[][] previewUploaded = new long[16][20];
+
+    private static final long[][] previewDownloaded = new long[16][20];
+    public static boolean maintained = false;
+    private static int loopTags = 0;
+
+    private static Vec3Impl controllerPosition;
 
     public static final int offsetX = 23, offsetY = 34, offsetZ = 0;
     // region structure
@@ -1019,29 +1041,52 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
         if (!structureCheck_EM(MAIN, offsetX, offsetY, offsetZ)) {
             return false;
         }
-        // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
-        // rack.getBaseMetaTileEntity()
-        // .setActive(iGregTechTileEntity.isActive());
-        // }
-        // if (mOutputHatches.isEmpty()) {
-        // LOG.info("output is empty");
-        // }
-        // if (mInputHatches.isEmpty()) {
-        // LOG.info("input is empty");
-        // }
-        // if (realMonitor == null) {
-        // LOG.info("stupid!!");
-        // }
         return !mOutputHatches.isEmpty() && !mInputHatches.isEmpty() && mMaintenanceHatches.size() == 1
         // && !eRacks.isEmpty()
             && realMonitor != null
             && !eOutputData.isEmpty();
     }
 
+    // GT_MetaTileEntity_Hatch_Rack
+    public static QuantumDataPacket downloadData(int id, long dataIn) {
+        // LOG.info("someone try to dowload data from wireless computation network");
+        long time = System.currentTimeMillis();
+        if (!wireless || Math.abs(time - TST_Computer.activatedComputer) > 10000 || id < 0 || id > 15)
+            return new QuantumDataPacket(0L);
+        latestDownload[id][loopTags] += dataIn;
+        double totalRequired = 1, totalUploaded = 1;
+        for (int i = 0; i < 20; i++) {
+            totalRequired += latestDownload[id][i];
+            totalUploaded += latestUpload[id][i];
+        }
+        // GT_MetaTileEntity_Hatch_InputBus_ME
+        long result = (long) (Math.min(1.0, totalUploaded / totalRequired) * dataIn);
+        LOG.info(
+            "It requested:" + dataIn
+                + " downloaded:"
+                + result
+                + " which total required is:"
+                + totalRequired
+                + " and total uploaded is: "
+                + totalUploaded
+                + " in channel: "
+                + id);
+        return new QuantumDataPacket(result).unifyTraceWith(controllerPosition);
+    }
+
+    public static void uploadData(int id, long dataOut) {
+        long time = System.currentTimeMillis();
+        if (!wireless || Math.abs(time - TST_Computer.activatedComputer) > 10000 || id < 0 || id > 15) return;
+        LOG.info("someone uploaded: " + dataOut + " computation to " + id);
+        latestUpload[id][loopTags] += dataOut;
+    }
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setDouble("computation", availableData.get());
+        aNBT.setBoolean("wireless", wireless);
+        aNBT.setBoolean("localWirelessTag", localWirelessTag);
     }
 
     @Override
@@ -1051,20 +1096,67 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             availableData.set(aNBT.getDouble("computation"));
             eAvailableData = (long) availableData.get();
         }
+        wireless = aNBT.getBoolean("wireless");
+        localWirelessTag = aNBT.getBoolean("localWirelessTag");
+    }
+
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPreTick(aBaseMetaTileEntity, aTick);
+        if (!maintained && localWirelessTag && aBaseMetaTileEntity.isServerSide() && loopTags != aTick % 20) {
+            loopTags = (int) (aTick % 20);
+            // LOG.info("wireless maintainance start in tick:" + loopTags);
+            if (controllerPosition == null) {
+                controllerPosition = new Vec3Impl(
+                    aBaseMetaTileEntity.getXCoord(),
+                    aBaseMetaTileEntity.getYCoord(),
+                    aBaseMetaTileEntity.getZCoord());
+            }
+
+            // LOG.info("");
+            for (int i = 0; i < 16; i++) {
+                // if (i == 0)
+                // LOG.info("channel " + i + " now has latest downloads " + latestDownload[i][loopTags] + " and latest
+                // uploads " + latestUpload[i][loopTags] + " and preview downloaded " + previewDownloaded[i][loopTags] +
+                // " and preview uploaded " + previewUploaded[i][loopTags]);
+
+                latestUpload[i][loopTags] -= previewUploaded[i][loopTags];
+                latestDownload[i][loopTags] -= previewDownloaded[i][loopTags];
+                previewUploaded[i][loopTags] = latestUpload[i][loopTags];
+                previewDownloaded[i][loopTags] = latestDownload[i][loopTags];
+            }
+            maintained = true;
+        }
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
+        // wireless = true;
+        if (aBaseMetaTileEntity.isServerSide() && mMachine
+            && aBaseMetaTileEntity.isActive()
+            && aTick % 20 == MULTI_CHECK_AT
+            && localWirelessTag) {
+            activatedComputer = System.currentTimeMillis();
+        }
+        if (aTick % 20 == 0 && !wireless) {
+            ItemStack stack = getControllerSlot();
+            if (stack != null && stack.getItem() != null
+                && stack.getItem()
+                    .equals(WirelessUpdateItem.getItem())
+                && stack.stackSize > 0) {
+                wireless = true;
+                localWirelessTag = true;
+            }
+        }
         if (aBaseMetaTileEntity.isServerSide() && mMachine
             && !aBaseMetaTileEntity.isActive()
             && aTick % 20 == MULTI_CHECK_AT) {
             double maxTemp = 0;
-            // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
-            // maxTemp = Math.max(maxTemp, rack.heat);
-            // }
+
             maxCurrentTemp.set(maxTemp);
         }
+        maintained = false;
     }
 
     @Override
@@ -1088,18 +1180,14 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             }
             long thingsActive = 0;
             long rackComputation;
-            // mOutputFluids[0] = null;
-            // LOG.info("pre racks computation! size:" + filterValidMTEs(eRacks).size());
-            // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
             if (realMonitor != null) {
                 if (realMonitor.heat > maxTemp) {
                     maxTemp = realMonitor.heat;
                 }
                 rackComputation = realMonitor.tickComponents((float) overClockRatio, (float) overVoltageRatio);
-                LOG.info("preview heat:" + realMonitor.heat + "/preview rackComputation:" + rackComputation);
                 realMonitor.heat = coolTheRackHatchByAnyCoolant(realMonitor.heat);
+                realMonitor.postProcessAfterCoolant();
                 rackComputation *= (long) (multiplier * multiplier);
-                LOG.info("after heat:" + realMonitor.heat + "/after rackComputation:" + rackComputation);
                 if (rackComputation > 0) {
                     eAvailableData += rackComputation;
                     thingsActive += (long) (4 * multiplier * multiplier);
@@ -1107,15 +1195,13 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                 realMonitor.getBaseMetaTileEntity()
                     .setActive(true);
             }
-            // }
-            // LOG.info("end racks computation!");
 
             for (GT_MetaTileEntity_Hatch_InputData di : eInputData) {
-                if (di.q != null) // ok for power losses
-                {
+                if (di.q != null) {
                     thingsActive++;
                 }
             }
+            if (wireless) thingsActive *= 4;
             if (thingsActive > 0) {
                 thingsActive += eOutputData.size();
                 // LOG.info("activated " + thingsActive);
@@ -1169,37 +1255,18 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                 int mx = (int) Math.min(requiredAmount, fluid.amount);
                 fluid.amount -= mx;
                 requiredAmount -= mx;
-                // if (output == null) output = new FluidStack(getCoolantTransform(coolant.getFluid()), mx);
-                // else output.amount += mx;
+
             }
         }
-        // if (output == null) {
-        // if (realHeatCanCool != 0) {
-        // LOG.info("why you can cool without coolant?");
-        // }
-        // return (int) (prevHeat - realHeatCanCool);
-        // }
-        // output.amount = output.amount * 10 / 100;
-        // LOG.info("maxHeat:" + maxHeatCanCool + " /realHeat:" + realHeatCanCool + " /requiredAmount:" +
-        // requiredAmount);
-        // addFluidOutputs(new FluidStack[] { output });
+
         return (int) (prevHeat - realHeatCanCool);
     }
 
     public static double validCoolant(FluidStack fluid) {
-        // LOG.info(fluid.getUnlocalizedName().equals("Gelid Cryotheum"));
         if (fluid.getFluid() == BlocksItems.getFluid(InternalName.fluidCoolant)) return 0.001;
         if (fluid.getFluid() == Materials.SuperCoolant.mFluid) return 0.01;
-        // if (fluid.getUnlocalizedName().equals("Gelid Cryotheum")) return 0.1;
         return -100;
     }
-
-    // public static Fluid getCoolantTransform(Fluid fluid) {
-    // if (fluid == BlocksItems.getFluid(InternalName.fluidCoolant))
-    // return BlocksItems.getFluid(InternalName.fluidHotCoolant);
-    // if (fluid == Materials.SuperCoolant.mFluid) return BlocksItems.getFluid(InternalName.fluidCoolant);
-    // return null;
-    // }
 
     @Override
     public void outputAfterRecipe_EM() {
@@ -1247,6 +1314,9 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             .addInfo(translateToLocal("tst.computer.desc.3"))
             .addInfo(translateToLocal("tst.computer.desc.4"))
             .addInfo(translateToLocal("tst.computer.desc.5"))
+            .addInfo(translateToLocal("tst.computer.desc.6"))
+            .addInfo(translateToLocal("tst.computer.desc.7"))
+            .addInfo(translateToLocal("tst.computer.desc.8"))
             // .beginVariableStructureBlock(2, 2, 4, 4, 5, 16, false)
             .addOtherStructurePart(
                 translateToLocal("gt.blockmachines.hatch.certain.tier.07.name"),
