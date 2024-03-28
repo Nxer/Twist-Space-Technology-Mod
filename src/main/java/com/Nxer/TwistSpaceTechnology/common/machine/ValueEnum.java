@@ -264,4 +264,8 @@ public final class ValueEnum {
     public static final int TicksPerProcessing_EyeOfWood = 20 * Config.SecondsPerProcessing_EyeOfWood;
     // endregion
 
+    // region Space Apiary
+    public static boolean enableDNAConsuming = Config.enableDNAConsuming;
+    // endregion
+
 }
