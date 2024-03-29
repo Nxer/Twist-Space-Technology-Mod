@@ -7,7 +7,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.github.technus.tectech.thing.gui.TecTechUITextures;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
 import com.gtnewhorizons.modularui.api.math.Alignment;
@@ -76,7 +76,7 @@ public class GT_Hatch_WirelessData_input extends GT_MetaTileEntity_Hatch_InputDa
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPreTick(aBaseMetaTileEntity, aTick);
         if (aBaseMetaTileEntity.isServerSide() && q == null) {
-            q = TST_Computer.downloadData(getColorization(), requiredComputation);
+            q = WirelessDataPacket.downloadData(aBaseMetaTileEntity.getOwnerName(), requiredComputation);
         }
 
     }

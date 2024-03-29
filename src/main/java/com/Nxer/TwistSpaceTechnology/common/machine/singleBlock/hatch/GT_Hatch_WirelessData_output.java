@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
 
 import gregtech.api.interfaces.ITexture;
@@ -50,7 +50,7 @@ public class GT_Hatch_WirelessData_output extends GT_MetaTileEntity_Hatch_Output
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPreTick(aBaseMetaTileEntity, aTick);
         if (aBaseMetaTileEntity.isServerSide() && q != null) {
-            TST_Computer.uploadData(getColorization(), q.getContent());
+            WirelessDataPacket.uploadData(aBaseMetaTileEntity.getOwnerName(), q.getContent());
             q = null;
         }
     }

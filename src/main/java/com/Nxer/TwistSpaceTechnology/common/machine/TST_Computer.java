@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
+import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.mechanics.dataTransport.QuantumDataPacket;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
@@ -44,7 +45,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
 import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
 import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
@@ -65,22 +65,11 @@ import static vazkii.botania.common.block.ModBlocks.pylon;
 
 public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements ISurvivalConstructable {
 
-    // region variables
-    // private final ArrayList<GT_Hatch_RackComputationMonitor> eRacks = new ArrayList<>();
     private GT_Hatch_RackComputationMonitor realMonitor;
-
     private double multiplier = 1;
-
     // GT_MetaTileEntity_AssemblyLine
-
     // GT_MetaTileEntity_EM_computer
-
-    public static boolean wireless = false;
-
     private static boolean localWirelessTag = false;
-
-    public static long activatedComputer = -10000000;
-
     private static Textures.BlockIcons.CustomIcon ScreenOFF;
     private static Textures.BlockIcons.CustomIcon ScreenON;
     // endregion
@@ -91,17 +80,6 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
         translateToLocal("tst.computer.hint.1"), // 2 - Rack Hatches or Advanced
         // computer casing
     };
-
-    // public static HashSet<GT_Hatch_WirelessData_input> wirelessDataInputs = new HashSet<>();
-    // public static QuantumDataPacket[] wirelessData = new QuantumDataPacket[16];
-    public static long[][] latestUpload = new long[16][20];
-    public static long[][] latestDownload = new long[16][20];
-
-    private static final long[][] previewUploaded = new long[16][20];
-
-    private static final long[][] previewDownloaded = new long[16][20];
-    public static boolean maintained = false;
-    private static int loopTags = 0;
 
     private static Vec3Impl controllerPosition;
 
@@ -1041,51 +1019,17 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
         if (!structureCheck_EM(MAIN, offsetX, offsetY, offsetZ)) {
             return false;
         }
-        return !mOutputHatches.isEmpty() && !mInputHatches.isEmpty() && mMaintenanceHatches.size() == 1
+        return !mInputHatches.isEmpty() && mMaintenanceHatches.size() == 1
         // && !eRacks.isEmpty()
             && realMonitor != null
-            && !eOutputData.isEmpty();
-    }
-
-    // GT_MetaTileEntity_Hatch_Rack
-    public static QuantumDataPacket downloadData(int id, long dataIn) {
-        // LOG.info("someone try to dowload data from wireless computation network");
-        long time = System.currentTimeMillis();
-        if (!wireless || Math.abs(time - TST_Computer.activatedComputer) > 10000 || id < 0 || id > 15)
-            return new QuantumDataPacket(0L);
-        latestDownload[id][loopTags] += dataIn;
-        double totalRequired = 1, totalUploaded = 1;
-        for (int i = 0; i < 20; i++) {
-            totalRequired += latestDownload[id][i];
-            totalUploaded += latestUpload[id][i];
-        }
-        // GT_MetaTileEntity_Hatch_InputBus_ME
-        long result = (long) (Math.min(1.0, totalUploaded / totalRequired) * dataIn);
-        LOG.info(
-            "It requested:" + dataIn
-                + " downloaded:"
-                + result
-                + " which total required is:"
-                + totalRequired
-                + " and total uploaded is: "
-                + totalUploaded
-                + " in channel: "
-                + id);
-        return new QuantumDataPacket(result).unifyTraceWith(controllerPosition);
-    }
-
-    public static void uploadData(int id, long dataOut) {
-        long time = System.currentTimeMillis();
-        if (!wireless || Math.abs(time - TST_Computer.activatedComputer) > 10000 || id < 0 || id > 15) return;
-        LOG.info("someone uploaded: " + dataOut + " computation to " + id);
-        latestUpload[id][loopTags] += dataOut;
+            && !eOutputData.isEmpty()
+            && eInputData.isEmpty();
     }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setDouble("computation", availableData.get());
-        aNBT.setBoolean("wireless", wireless);
         aNBT.setBoolean("localWirelessTag", localWirelessTag);
     }
 
@@ -1096,67 +1040,41 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             availableData.set(aNBT.getDouble("computation"));
             eAvailableData = (long) availableData.get();
         }
-        wireless = aNBT.getBoolean("wireless");
         localWirelessTag = aNBT.getBoolean("localWirelessTag");
     }
 
     @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPreTick(aBaseMetaTileEntity, aTick);
-        if (!maintained && localWirelessTag && aBaseMetaTileEntity.isServerSide() && loopTags != aTick % 20) {
-            loopTags = (int) (aTick % 20);
-            // LOG.info("wireless maintainance start in tick:" + loopTags);
-            if (controllerPosition == null) {
-                controllerPosition = new Vec3Impl(
-                    aBaseMetaTileEntity.getXCoord(),
-                    aBaseMetaTileEntity.getYCoord(),
-                    aBaseMetaTileEntity.getZCoord());
-            }
-
-            // LOG.info("");
-            for (int i = 0; i < 16; i++) {
-                // if (i == 0)
-                // LOG.info("channel " + i + " now has latest downloads " + latestDownload[i][loopTags] + " and latest
-                // uploads " + latestUpload[i][loopTags] + " and preview downloaded " + previewDownloaded[i][loopTags] +
-                // " and preview uploaded " + previewUploaded[i][loopTags]);
-
-                latestUpload[i][loopTags] -= previewUploaded[i][loopTags];
-                latestDownload[i][loopTags] -= previewDownloaded[i][loopTags];
-                previewUploaded[i][loopTags] = latestUpload[i][loopTags];
-                previewDownloaded[i][loopTags] = latestDownload[i][loopTags];
-            }
-            maintained = true;
+        if (aBaseMetaTileEntity.isServerSide() && localWirelessTag) {
+            WirelessDataPacket.updatePacket(aBaseMetaTileEntity, aTick);
         }
+
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        // wireless = true;
-        if (aBaseMetaTileEntity.isServerSide() && mMachine
-            && aBaseMetaTileEntity.isActive()
-            && aTick % 20 == MULTI_CHECK_AT
-            && localWirelessTag) {
-            activatedComputer = System.currentTimeMillis();
-        }
-        if (aTick % 20 == 0 && !wireless) {
+        if (aTick % 20 == 0 && aBaseMetaTileEntity.isServerSide()) {
             ItemStack stack = getControllerSlot();
             if (stack != null && stack.getItem() != null
                 && stack.getItem()
                     .equals(WirelessUpdateItem.getItem())
                 && stack.stackSize > 0) {
-                wireless = true;
-                localWirelessTag = true;
+                if (WirelessDataPacket.enableWirelessNetWork(aBaseMetaTileEntity)) {
+                    localWirelessTag = true;
+                }
+            } else {
+                WirelessDataPacket.disableWirelessNetWork(aBaseMetaTileEntity);
+                localWirelessTag = false;
             }
         }
         if (aBaseMetaTileEntity.isServerSide() && mMachine
             && !aBaseMetaTileEntity.isActive()
             && aTick % 20 == MULTI_CHECK_AT) {
             double maxTemp = 0;
-
             maxCurrentTemp.set(maxTemp);
         }
-        maintained = false;
     }
 
     @Override
@@ -1201,19 +1119,15 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
                     thingsActive++;
                 }
             }
-            if (wireless) thingsActive *= 4;
+            if (localWirelessTag) thingsActive *= 4;
             if (thingsActive > 0) {
                 thingsActive += eOutputData.size();
-                // LOG.info("activated " + thingsActive);
                 eAmpereFlow = 1 + (thingsActive >> 2);
                 eAmpereFlow *= (long) (multiplier * multiplier);
                 mMaxProgresstime = 20;
                 mEfficiencyIncrease = 10000;
                 maxCurrentTemp.set(maxTemp);
                 availableData.set(eAvailableData);
-                // addFluidOutputs(mOutputFluids);
-                // mOutputFluids[0] = null;
-                // LOG.info("activated " + thingsActive + " /A:" + eAmpereFlow + " /maxTemp:" + maxTemp);
                 return SimpleCheckRecipeResult.ofSuccess("computing");
             } else {
                 eAvailableData = 0;
@@ -1317,6 +1231,10 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
             .addInfo(translateToLocal("tst.computer.desc.6"))
             .addInfo(translateToLocal("tst.computer.desc.7"))
             .addInfo(translateToLocal("tst.computer.desc.8"))
+            .addInfo(translateToLocal("tst.computer.desc.9"))
+            .addInfo(translateToLocal("tst.computer.desc.10"))
+            .addInfo(translateToLocal("tst.computer.desc.11"))
+            .addInfo(translateToLocal("tst.computer.desc.12"))
             // .beginVariableStructureBlock(2, 2, 4, 4, 5, 16, false)
             .addOtherStructurePart(
                 translateToLocal("gt.blockmachines.hatch.certain.tier.07.name"),
