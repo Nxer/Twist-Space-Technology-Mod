@@ -120,6 +120,7 @@ import static com.github.technus.tectech.thing.CustomItemList.rack_Hatch;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.Mods.AE2WCT;
+import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.util.GT_ModHandler.addCraftingRecipe;
 import static gregtech.api.util.GT_ModHandler.getModItem;
@@ -2047,6 +2048,28 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(20 * 3600)
                 .addTo(assemblyLine);
         }
+        // endregion
+
+        // region Bee Engineer
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Bronze, 64),
+                GT_ModHandler.getModItem(Forestry.ID, "alveary", 64, 0),
+
+                ItemList.Field_Generator_LuV.get(4),
+                ItemList.Electric_Pump_LuV.get(16),
+                ItemList.Conveyor_Module_LuV.get(16),
+
+                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Plutonium241, 64),
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16}
+            )
+            .fluidInputs(Materials.Honey.getFluid(1000 * 256))
+            .itemOutputs(GTCMItemList.BeeEngineer.get(1))
+            .eut(RECIPE_ZPM)
+            .duration(20 * 300)
+            .addTo(assembler);
         // endregion
 
     }
