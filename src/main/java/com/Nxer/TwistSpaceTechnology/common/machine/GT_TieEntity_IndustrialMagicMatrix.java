@@ -1411,8 +1411,9 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
         if (mNodeEnergized.isEmpty()) {
             mSpeedBonus = 1;
             return;
-        } else if (mNodeEnergized.size() != 5) {
-            mSpeedBonus = (5 - mNodeEnergized.size()) * 1.75;
+        } else if (mNodeEnergized.size() < 6) {
+            mSpeedBonus = (6 - mNodeEnergized.size()) * 1.75;
+            return;
         }
         for (TileNodeEnergized tileNodeEnergized : mNodeEnergized) {
             aspectList.add(
@@ -1427,6 +1428,7 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
         }
         if (penalize > 0) {
             ExtraTime = penalize * 20;
+            mSpeedBonus = 1;
             return;
         }
         for (Aspect aspect : aspectList.getAspects()) {
@@ -1464,16 +1466,14 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
         return sum / n;
     }
 
-    private Aspect getMaxAspect(AspectList aspectList) {
+    private Aspect getMaxAspect(@Nonnull AspectList aspectList) {
+        Aspect maxAspect = null;
         int max = 0;
-        int index = 0;
-        for (int i = 0; i < aspectList.size(); i++) {
-            if (aspectList.getAmount(aspectList.getAspects()[i]) > max) {
-                max = aspectList.getAmount(aspectList.getAspects()[i]);
-                index = i;
-            }
+        for (Aspect aspect : aspectList.getAspects()){
+            max = Math.max(aspectList.getAmount(aspect),max);
+            maxAspect = aspect;
         }
-        return (aspectList.getAspects()[index]);
+        return maxAspect;
     }
 
     @Override
@@ -1594,7 +1594,9 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
 
     public final boolean addNodeEnergized(TileEntity aTileEntity) {
         if (aTileEntity instanceof TileNodeEnergized) {
+            if (!(mNodeEnergized.size()==6)){
             return this.mNodeEnergized.add((TileNodeEnergized) aTileEntity);
+            }else return true;
         }
         return false;
     }
