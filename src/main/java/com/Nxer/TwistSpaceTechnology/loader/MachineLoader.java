@@ -406,12 +406,7 @@ public class MachineLoader {
         }
 
         //
-        
-        if (Config.Enable_BallLightning) {
-            BallLightning = new TST_BallLightning(19041, "NameBallLightning", TextLocalization.NameBallLightning)
-                .getStackForm(1);
-            GTCMItemList.BallLightning.set(BallLightning);
-        }
+
         // if (Config.Enable_StarcoreMiner) {
         // StarcoreMiner = new TST_StarcoreMiner(
         // 19040,
@@ -443,6 +438,12 @@ public class MachineLoader {
                 "NameTSTDisassembler",
                 TextEnums.tr("NameTSTDisassembler")).getStackForm(1);
             GTCMItemList.Disassembler.set(Disassembler);
+        }
+
+        if (Config.Enable_BallLightning) {
+            BallLightning = new TST_BallLightning(19042, "NameBallLightning", TextLocalization.NameBallLightning)
+                .getStackForm(1);
+            GTCMItemList.BallLightning.set(BallLightning);
         }
 
         // endregion

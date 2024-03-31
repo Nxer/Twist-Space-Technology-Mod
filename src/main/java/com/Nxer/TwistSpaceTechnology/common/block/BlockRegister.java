@@ -1,8 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.AdvancedHighPowerCoilBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockStar;
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.HighPowerRadiationProofBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlock01;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.NuclearReactorBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.PhotonControllerUpgrade;
@@ -13,11 +11,6 @@ import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.Bloc
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStar;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.*;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.BlockNuclearReactor;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing01;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasingItemBlock;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
@@ -53,14 +46,6 @@ public class BlockRegister {
             NuclearReactorBlock,
             BlockNuclearReactor.innerItemBlock.class,
             NuclearReactorBlock.getUnlocalizedName());
-        GameRegistry.registerBlock(
-            HighPowerRadiationProofBlock,
-            HighPowerRadiationProofCasingItemBlock.class,
-            HighPowerRadiationProofBlock.getUnlocalizedName());
-        GameRegistry.registerBlock(
-            AdvancedHighPowerCoilBlock,
-            AdvancedCompactFusionCoilItemBlock.class,
-            AdvancedHighPowerCoilBlock.getUnlocalizedName());
         BlockStar = new BlockStar();
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
     }
@@ -68,8 +53,11 @@ public class BlockRegister {
     public static void registryBlockContainers() {
 
         GTCMItemList.TestMetaBlock01_0.set(ItemBlockBase01.initMetaBlock01("TestMetaBlock01_0", 0));
-        GTCMItemList.TestCasing.set(MetaBlockCasing01.initMetaCasing01("Test Casing", 2));
-
+        GTCMItemList.TestCasing.set(MetaBlockCasing01.initMetaCasing01("Test Casing", 0));
+        GTCMItemList.HighPowerRadiationProofCasing
+            .set(MetaBlockCasing01.initMetaCasing01("High Power Radiation Proof Casing", 1));
+        GTCMItemList.AdvancedHighPowerCoilBlock
+            .set(MetaBlockCasing01.initMetaCasing01("Advanced High Power Coil Block", 2));
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier LV Tier", 0));
@@ -178,13 +166,6 @@ public class BlockRegister {
             GTCMItemList.NuclearReactorStructure1.set(NuclearReactorBlockMeta("Nuclear Reactor structure block1", 1));
             GTCMItemList.NuclearReactorStructure2.set(NuclearReactorBlockMeta("Nuclear Reactor structure block2", 2));
             GTCMItemList.NuclearReactorStructure3.set(NuclearReactorBlockMeta("Nuclear Reactor structure block3", 3));
-        }
-        if (Config.Enable_BallLightning) {
-            GTCMItemList.HighPowerRadiationProofCasing.set(
-                HighPowerRadiationProofCasing
-                    .HighPowerRadiationProofCasingMeta("High Power Radiation Proof Casing", 0));
-            GTCMItemList.AdvancedCoilBlock
-                .set(AdvancedHighPowerCoil.AdvancedCompactFusionCoilMeta("Advanced Coil Block", 0));
         }
         // endregion
     }

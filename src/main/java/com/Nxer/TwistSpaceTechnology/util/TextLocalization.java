@@ -207,13 +207,6 @@ public class TextLocalization {
         Tooltips_Upgrades_UXV,
         Tooltips_Upgrades_MAX
     };
-    public static final String NameHighPowerRadiationProofCasing =
-        texter(
-            "High Power Radiation Proof Casing",
-            "HighPowerRadiationProofCasing.name"
-        );
-
-
     public static final String[] Tooltips_HighPowerRadiationProofCasing = new String[]{
         texter(
             "Constrained the overflowing energy",
@@ -226,10 +219,10 @@ public class TextLocalization {
     public static  final String[] Tooltips_AdvancedHighPowerCoil = new String[]{
         texter(
             "Constrained the overflowing energy",
-            "Tooltips_HighPowerRadiationProofCasing.01"),
+            "Tooltips_AdvancedHighPowerCoil.01"),
         texter(
             "The power levels are still rising!!!",
-            "Tooltips_HighPowerRadiationProofCasing.02")
+            "Tooltips_AdvancedHighPowerCoil.02")
     };
 
 

@@ -154,9 +154,13 @@ public enum GTCMItemList {
     Rune_of_Perdition,
     PowerChair,
     PrimitiveMansSpaceTimeDistortionDevice,
+    BallLightningUpgradeChip,
 
     // Blocks
     TestCasing,
+
+    HighPowerRadiationProofCasing,
+    AdvancedHighPowerCoilBlock,
 
     // Machines
 
@@ -296,8 +300,6 @@ public enum GTCMItemList {
     SpaceStationAntiGravityBlockUMV,
     SpaceStationAntiGravityBlockUXV,
     SpaceStationAntiGravityBlockMAX,
-    HighPowerRadiationProofCasing,
-    AdvancedCoilBlock,
 
     // MultiStructure Machine:
     TestMultiStructureMainMachine,

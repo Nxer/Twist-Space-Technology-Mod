@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
+import com.Nxer.TwistSpaceTechnology.util.*;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -29,6 +30,11 @@ public class MetaBlockCasingItemBlock extends ItemBlockBase01 {
         boolean p_77624_4_) {
         if (null == aItemStack) return;
         int meta = aItemStack.getItemDamage();
+
+        MetaBlockCasing01.TOOLTIPS.put(0, new String[] { "TestCasing", "Test Casing" });
+        MetaBlockCasing01.TOOLTIPS.put(1, TextLocalization.Tooltips_HighPowerRadiationProofCasing);
+        MetaBlockCasing01.TOOLTIPS.put(2, TextLocalization.Tooltips_AdvancedHighPowerCoil);
+
         if (MetaBlockCasing01.TOOLTIPS.containsKey(meta)) {
             theTooltipsList.addAll(Arrays.asList(MetaBlockCasing01.TOOLTIPS.get(meta)));
         }

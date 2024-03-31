@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.*;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;

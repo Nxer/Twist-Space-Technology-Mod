@@ -169,4 +169,15 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
+    public static final RecipeMap<TST_RecipeMapBackend> BallLightningRecipes = RecipeMapBuilder
+        .of("tst.recipe.BallLightningRecipes", TST_RecipeMapBackend::new)
+        .maxIO(4, 4, 4, 4)
+        .neiSpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .frontend(TST_GeneralFrontend::new)
+        .neiHandlerInfo(
+            builder -> builder.setDisplayStack(GTCMItemList.BallLightning.get(1))
+                .setMaxRecipesPerPage(1))
+        .disableOptimize()
+        .build();
 }

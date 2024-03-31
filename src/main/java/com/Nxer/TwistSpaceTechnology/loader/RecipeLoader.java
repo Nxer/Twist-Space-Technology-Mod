@@ -25,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.NanoForgeRecipePoll;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.QFTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.RuneEngraverRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StarKernelForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
@@ -64,6 +65,9 @@ public class RecipeLoader {
         if (Config.EnableRecipeRegistry_IndistinctTentacle) {
             new AssemblyLineWithoutResearchRecipePool().loadRecipes();
         }
+        if (Config.Enable_BallLightning) {
+            new StarKernelForgeRecipePool().loadRecipes();
+        }
     }
 
     public static void loadRecipesPostInit() {
@@ -72,5 +76,6 @@ public class RecipeLoader {
 
     public static void loadRecipesServerStarted() {
         new StellarForgeRecipePool().loadOnServerStarted();
+        new StarKernelForgeRecipePool().loadOnServerStarted();
     }
 }

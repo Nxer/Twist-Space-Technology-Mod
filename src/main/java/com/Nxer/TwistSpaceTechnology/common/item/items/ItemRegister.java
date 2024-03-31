@@ -54,6 +54,9 @@ public class ItemRegister {
         GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{ TextHandler.texter("Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
         GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.set(initItem01("Primitive Man's SpaceTime Distortion Device", 22, new String[]{ TextHandler.texter("Anyway...", "tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1")}));
 
+        if(Config.Enable_BallLightning){
+            GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 23, new String[]{ TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
+        }
         if(Config.activateMegaSpaceStation) {
             GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));
             GTCMItemList.HighDimensionalCircuitDoard.set(initItem01("High-dimensional circuit board", 177));
@@ -185,9 +188,6 @@ public class ItemRegister {
             GTCMItemList.Space_TimeLifeCore.set(initItem01("Space-time life core", 419));
         }
 
-        if(Config.Enable_BallLightning){
-            GTCMItemList.Space_TimeLifeCore.set(initItem01("Space-time life core", 419));
-        }
         GTCMItemList.Rune_of_Vigilance.set(initItemRune("Rune of Vigilance", 0, new String[]{ TextHandler.texter("Vigilance.", "tooltips.Rune_of_Vigilance.line1")}));
         GTCMItemList.Rune_of_Erelong.set(initItemRune("Rune of Erelong", 1, new String[]{ TextHandler.texter("Erelong.", "tooltips.Rune_of_Erelong.line1")}));
         GTCMItemList.Rune_of_Ether.set(initItemRune("Rune of Ether", 2, new String[]{ TextHandler.texter("Ether.", "tooltips.Rune_of_Ether.line1")}));

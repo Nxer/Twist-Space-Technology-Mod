@@ -47,7 +47,6 @@ public class Config {
     public static final String Disassembler = "Disassembler";
     public static final String SingleBlocks = "SingleBlocks";
     public static final String spaceStation="spaceStation";
-    public static final String StarcoreMiner = "StarcoreMiner";
     public static final String CombatStats = "CombatStats";
     // endregion
 
