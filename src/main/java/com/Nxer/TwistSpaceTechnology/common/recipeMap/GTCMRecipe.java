@@ -49,7 +49,6 @@ public class GTCMRecipe {
                 .setMaxRecipesPerPage(1))
         .disableOptimize()
         .build();
-
     public static final RecipeMap<RecipeMapBackend> QuantumInversionRecipes = RecipeMapBuilder
         .of("gtcm.recipe.QuantumInversionRecipes")
         .maxIO(1, 1, 1, 1)
@@ -58,8 +57,8 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
-    public static final RecipeMap<TST_RecipeMapBackend> CrystallineInfinitierRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.CrystallineInfinitierRecipes", TST_RecipeMapBackend::new)
+    public static final RecipeMap<RecipeMapBackend> CrystallineInfinitierRecipes = RecipeMapBuilder
+        .of("gtcm.recipe.CrystallineInfinitierRecipes")
         .maxIO(4, 4, 4, 1)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
@@ -170,4 +169,13 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
+    public static final RecipeMap<RecipeMapBackend> IndustrialMagicMatrixRecipe = RecipeMapBuilder
+            .of("tst.recipe.IndustrialMagicMatrixRecipe")
+            .maxIO(16, 1, 0, 0)
+            .progressBar(GT_UITextures.OVERLAY_SLOT_CANNER)
+            .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialMagicMatrix.get(1)))
+            .useSpecialSlot()
+            .frontend(TST_GeneralFrontend::new)
+            .disableOptimize()
+            .build();
 }

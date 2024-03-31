@@ -54,7 +54,6 @@ dependencies {
     implementation('com.github.GTNewHorizons:MagicBees:2.7.14-GTNH:dev')
     implementation('com.github.GTNewHorizons:GigaGramFab:0.3.17:dev')
 //    implementation('com.github.GTNewHorizons:Railcraft:9.15.7:dev')
-    implementation('thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev')
     implementation('com.github.GTNewHorizons:ThaumicBases:1.6.0:dev')
     implementation('curse.maven:automagy-222153:2285272')
     implementation('com.github.GTNewHorizons:ThaumicHorizons:1.5.1:dev')
