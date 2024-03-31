@@ -136,7 +136,6 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Pla
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 
-import fox.spiteful.avaritia.items.LudicrousItems;
 import net.glease.ggfab.GGItemList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -165,6 +164,7 @@ import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
 import appeng.items.materials.MaterialType;
+import fox.spiteful.avaritia.items.LudicrousItems;
 import goodgenerator.items.MyMaterial;
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GT_Values;
@@ -1992,7 +1992,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .eut(RECIPE_UMV)
                 .duration(800)
                 .addTo(AssemblyLine);
-            
+
         }
 
         // endregion
