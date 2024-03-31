@@ -932,3 +932,6 @@ NameSpaceApiaryT4=Space Apiray Module MK-IV
 Tooltip_SpaceApiary_t4_desc1=Bees give birth to all things to nourish humanity.
 Tooltip_SpaceApiary_t4_desc4=Max parallels: 2147483647
 Tooltip_SpaceApiary_t4_desc5=But humans have nothing to repay the bees.
+Mark_TwistSpaceTechnology_TecTech=§b§lTwist Space Technology : §r§9Tec§1Tech
+WirelessDataInput.tooltips.01=Wireless Quantum Data Input for Multiblocks
+WirelessDataOutput.tooltips.01=Wireless Quantum Data Output for Multiblocks

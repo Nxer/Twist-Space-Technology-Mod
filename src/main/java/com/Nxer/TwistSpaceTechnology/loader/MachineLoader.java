@@ -673,7 +673,7 @@ public class MachineLoader {
         GTCMItemList.WirelessDataInputHatch.set(WirelessDataInputHatch);
         WirelessDataOutputHatch = new GT_Hatch_WirelessData_output(
             18956,
-            "NameWirelessDataInputHatch",
+            "NameWirelessDataOutputHatch",
             TextLocalization.NameWirelessDataOutputHatch,
             12).getStackForm(1);
         GTCMItemList.WirelessDataOutputHatch.set(WirelessDataOutputHatch);
