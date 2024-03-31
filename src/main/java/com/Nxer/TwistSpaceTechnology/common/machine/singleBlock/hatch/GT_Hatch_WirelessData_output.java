@@ -1,8 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Mark_TwistSpaceTechnology_TecTech;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
 
 import gregtech.api.interfaces.ITexture;
@@ -53,6 +56,20 @@ public class GT_Hatch_WirelessData_output extends GT_MetaTileEntity_Hatch_Output
             WirelessDataPacket.uploadData(aBaseMetaTileEntity.getOwnerName(), q.getContent());
             q = null;
         }
+    }
+
+    private static String[] tooltips;
+
+    @Override
+    public String[] getDescription() {
+        if (tooltips == null) {
+            tooltips = new String[] { Mark_TwistSpaceTechnology_TecTech,
+                // #tr WirelessDataOutput.tooltips.01
+                // # Wireless Quantum Data Output for Multiblocks
+                // #zh_CN 多方块机器无线数据输出
+                TextEnums.tr("WirelessDataOutput.tooltips.01") };
+        }
+        return tooltips;
     }
 
 }

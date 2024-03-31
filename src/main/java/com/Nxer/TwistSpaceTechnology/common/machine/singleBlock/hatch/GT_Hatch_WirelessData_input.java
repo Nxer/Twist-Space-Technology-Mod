@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Mark_TwistSpaceTechnology_TecTech;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,6 +10,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.github.technus.tectech.thing.gui.TecTechUITextures;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
 import com.gtnewhorizons.modularui.api.math.Alignment;
@@ -115,8 +118,8 @@ public class GT_Hatch_WirelessData_input extends GT_MetaTileEntity_Hatch_InputDa
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         builder.widget(
             TextWidget.localised("tst.wirelessInputData.config.text")
-                .setPos(3, 2)
-                .setSize(74, 14))
+                .setPos(49, 18)
+                .setSize(81, 14))
             .widget(
                 new TextFieldWidget().setSetterInt(val -> requiredComputation = val)
                     .setGetterLong(() -> requiredComputation)
@@ -125,7 +128,21 @@ public class GT_Hatch_WirelessData_input extends GT_MetaTileEntity_Hatch_InputDa
                     .setTextAlignment(Alignment.Center)
                     .setTextColor(Color.WHITE.normal)
                     .setSize(70, 18)
-                    .setPos(3, 18)
+                    .setPos(54, 36)
                     .setBackground(GT_UITextures.BACKGROUND_TEXT_FIELD));
+    }
+
+    private static String[] tooltips;
+
+    @Override
+    public String[] getDescription() {
+        if (tooltips == null) {
+            tooltips = new String[] { Mark_TwistSpaceTechnology_TecTech,
+                // #tr WirelessDataInput.tooltips.01
+                // # Wireless Quantum Data Input for Multiblocks
+                // #zh_CN 多方块机器无线数据输入
+                TextEnums.tr("WirelessDataInput.tooltips.01") };
+        }
+        return tooltips;
     }
 }

@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.Tags;
+import com.github.technus.tectech.util.CommonValues;
 
 import gregtech.api.util.GT_LanguageManager;
 
@@ -19,8 +20,7 @@ public class TextLocalization {
 
     // region general
     public static final String ModName = Tags.MODNAME;
-
-    public static final String ModNameDesc = texter("Added by " + EnumChatFormatting.GREEN + "Twist Space Technology" + EnumChatFormatting.GRAY, "ModNameDesc");
+    public static final String ModNameDesc = texter("Added by " + EnumChatFormatting.GREEN + ModName + EnumChatFormatting.GRAY, "ModNameDesc");
 
     public static final String HeatCapacity = texter("Heat Capacity: ", "HeatCapacity");
     public static final String FluidCapacity = texter("Capacity: ", "FluidCapacity");
@@ -82,6 +82,7 @@ public class TextLocalization {
     // region special hatch info
     public static final String Tooltip_DoNotNeedMaintenance = texter("Do Not Need Maintenance!", "Tooltip_DoNotNeedMaintenance");
     public static final String Tooltip_DoNotNeedEnergyHatch = texter("Do Not Need Energy Hatch!", "Tooltip_DoNotNeedEnergyHatch");
+    public static final String Mark_TwistSpaceTechnology_TecTech = texter("" + EnumChatFormatting.AQUA + EnumChatFormatting.BOLD + ModName + " : " + EnumChatFormatting.RESET + CommonValues.TEC_MARK_SHORT, "Mark_TwistSpaceTechnology_TecTech");
 
     // endregion
 
