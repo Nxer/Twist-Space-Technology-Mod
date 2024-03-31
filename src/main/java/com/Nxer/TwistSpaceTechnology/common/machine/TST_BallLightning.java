@@ -753,7 +753,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         // #tr Tooltip_BallLightning_MachineType
-        // # (Plasma/Electric) Arc Furnace / Fusion Reactor / Star Kernel Generator
+        // # (Plasma / Electric) Arc Furnace / Fusion Reactor / Star Kernel Generator
         // #zh_CN 电弧炉 | 等离子电弧炉 | 聚变反应堆 | 星核发生器
         tt.addMachineType(TextEnums.tr("Tooltip_BallLightning_MachineType"))
             // #tr Tooltip_BallLightning_Controller
@@ -789,85 +789,89 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN {\ITALIC}{\WHITE}对能源最基础也是最终极的运用.
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.07"))
             // #tr Tooltip_BallLightning.0.08
-            // # Text.
+            // # The structure requires at least Infinity Coil.
             // #zh_CN 至少需要无尽线圈才可成型
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.08"))
             // #tr Tooltip_BallLightning.0.09
-            // # Text.
+            // # Comprises four machine levels, each unlocking a different mode.
             // #zh_CN 拥有4个机器等级, 分别解锁4种模式,
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.09"))
             // #tr Tooltip_BallLightning.0.10
-            // # Text.
-            // #zh_CN 每升级一次机器等级, 更低级的机器模式获得4倍速
+            // # With each machine tier upgrade, the lower-tier modes benefit from a 4x speed multiplier.
+            // #zh_CN 每升级一次机器等级, 更低级的机器模式获得4倍速.
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.10"))
             // #tr Tooltip_BallLightning.0.11
-            // # Text.
+            // # {\GOLD}===  Machine Tier  ===
             // #zh_CN {\GOLD}===  机器等级  ===
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.11"))
             // #tr Tooltip_BallLightning.0.12
-            // # Text.
+            // # The base structure is Tier 1
             // #zh_CN 基础结构为等级1
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.12"))
             // #tr Tooltip_BallLightning.0.13
-            // # Text.
+            // # Gravitational Lens in the control slot unlocks level 2
             // #zh_CN 在主机内放入引力透镜解锁等级2
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.13"))
             // #tr Tooltip_BallLightning.0.14
-            // # Text.
+            // # Upgrade Chip in the control slot and utilizing Tier 2 structure unlocks level 3
             // #zh_CN 在主机内放入升级芯片且使用2级结构解锁等级3
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.14"))
             // #tr Tooltip_BallLightning.0.15
-            // # Text.
+            // # Utilizing Advanced High Power Coil unlocks level 4
             // #zh_CN 使用进阶高能线圈解锁等级4
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.15"))
             // #tr Tooltip_BallLightning.0.16
-            // # Text.
+            // # {\GOLD}===  Machine Mode  ===
             // #zh_CN {\GOLD}===  机器模式  ===
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.16"))
             // #tr Tooltip_BallLightning.0.17
-            // # Text.
+            // # {\YELLOW} (Plasma / Electric) Arc Furnace
             // #zh_CN {\YELLOW} 电弧炉 | 等离子电弧炉
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.17"))
             // #tr Tooltip_BallLightning.0.18
-            // # Text.
+            // # Parallel number = 2 ^ (Compact Fusion Coil Tier * (Coil Tier - 10))
             // #zh_CN 并行数 = 2 ^ (聚变线圈等级 * (线圈等级 - 10))
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.18"))
             // #tr Tooltip_BallLightning.0.19
-            // # Text.
+            // # Tiers above Crude Stabilisation Field Generator block enables perfect overclocks
             // #zh_CN 粗制稳定力场发生器等级+ 解锁无损超频
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.19"))
             // #tr Tooltip_BallLightning.0.20
-            // # Text.
+            // # {\YELLOW} Fusion Reactor
             // #zh_CN {\YELLOW} 聚变反应堆
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.20"))
             // #tr Tooltip_BallLightning.0.21
-            // # Text.
+            // # The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.6 ^ (Field Generator Tier - 1) MAX/t
             // #zh_CN 最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.6 ^ (力场发生器等级 - 1) A MAX
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.21"))
             // #tr Tooltip_BallLightning.0.22
-            // # Text.
-            // #zh_CN 65536并行, 无损超频
+            // # 65536x parallel | Perfect overclocks
+            // #zh_CN 65536 并行, 无损超频
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.22"))
             // #tr Tooltip_BallLightning.0.23
-            // # Text.
+            // # The max recipe tier is limited by the Compact Fusion Coil Tier
             // #zh_CN 聚变线圈等级决定配方等级
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.23"))
             // #tr Tooltip_BallLightning.0.24
-            // # Text.
+            // # {\YELLOW} Star Kernel Generator
             // #zh_CN {\YELLOW} 星核发生器
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.24"))
             // #tr Tooltip_BallLightning.0.25
-            // # Text.
+            // # Almost infinite parallel | Upgrade the Field Generator for faster speeds
             // #zh_CN 几乎无限的并行, 升级力场发生器以获得更高的速度
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.25"))
             // #tr Tooltip_BallLightning.0.26
-            // # Text.
-            // #zh_CN 额外增速 = 0.7937 ^ (力场发生器等级 - 1)
+            // # Extra Speed Bonus = 0.7937 ^ (Field Generator Tier - 1)
+            // #zh_CN 额外增速 = 0.7937 ^ (1 - 力场发生器等级)
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.26"))
             // #tr Tooltip_BallLightning.0.27
-            // # Text.
-            // #zh_CN 当不安装能源仓时进入无线模式, 处理时间固定为1.0s, 同时耗能提高到{\RED}64{\GRAY}倍
+            // # Joining the wireless EU network when no energy hatch is installed
+            // #zh_CN 未安装能源仓时进入无线模式
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.27"))
+            // #tr Tooltip_BallLightning.0.28
+            // # The Progressing Time will be fixed at 1.0s, and EU cost increase to {\RED}64{\GRAY}x
+            // #zh_CN 处理时间固定为1.0s, 同时耗能提高到{\RED}64{\GRAY}倍
+            .addInfo(TextEnums.tr("Tooltip_BallLightning.0.28"))
 
             .addSeparator()
             .addInfo(StructureTooComplex)
