@@ -1,11 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork;
 
+import java.util.HashMap;
+
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic_t.TeamManager;
 import com.github.technus.tectech.mechanics.dataTransport.QuantumDataPacket;
 import com.gtnewhorizon.structurelib.util.Vec3Impl;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
-import java.util.HashMap;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 public class WirelessDataPacket {
 

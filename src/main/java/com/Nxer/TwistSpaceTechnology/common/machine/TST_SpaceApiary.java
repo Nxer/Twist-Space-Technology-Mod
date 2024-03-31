@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.enableDNAConsuming;
 import static forestry.api.apiculture.BeeManager.beeRoot;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
@@ -18,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.INameFunction;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.IStatusFunction;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus;
@@ -25,7 +27,6 @@ import com.github.technus.tectech.thing.metaTileEntity.multi.base.Parameters;
 import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevatormodules.TileEntityModuleBase;
 import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
-import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import forestry.api.apiculture.*;
 import forestry.apiculture.genetics.Bee;
@@ -37,8 +38,6 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.enableDNAConsuming;
-
 public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
     public static final long ENERGY_CONSUMPTION = (int) GT_Values.VP[6];// 1A Luv
@@ -46,8 +45,8 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
     private final Fluid liquddna = FluidRegistry.getFluid("liquiddna");
 
     private static final INameFunction<TST_SpaceApiary> PARALLEL_SETTING_NAME = (base,
-                                                                                 p) -> GCCoreUtil.translate("gt.blockmachines.multimachine.project.ig.pump.cfgi.2") + " "
-        + (p.hatchId() / 2 + 1); // Parallels
+        p) -> GCCoreUtil.translate("gt.blockmachines.multimachine.project.ig.pump.cfgi.2") + " "
+            + (p.hatchId() / 2 + 1); // Parallels
 
     private static final IStatusFunction<TST_SpaceApiary> PARALLEL_STATUS = (base, p) -> LedStatus
         .fromLimitsInclusiveOuterBoundary(p.get(), 0, 1, 100, base.getParallels());
@@ -76,7 +75,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         if (controllerStack != null && beeRoot.getType(controllerStack) == EnumBeeType.QUEEN) {
             double boosted = 1d;
 
-            if (enableDNAConsuming){
+            if (enableDNAConsuming) {
                 if (!consumeLiquddna()) {
                     return CheckRecipeResultRegistry.NO_RECIPE;
                 }
@@ -155,7 +154,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         public double getVoltageTierExact() {
-            return Math.log((double) GT_Values.V[8] / 8d) / Math.log(4d) + 1e-8d; //UV Tier
+            return Math.log((double) GT_Values.V[8] / 8d) / Math.log(4d) + 1e-8d; // UV Tier
         }
 
         public TST_SpaceApiaryT1(int aID, String aName, String aNameRegional) {
@@ -210,7 +209,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         public double getVoltageTierExact() {
-            return Math.log((double) GT_Values.V[9] / 8d) / Math.log(4d) + 1e-8d; //UHV Tier
+            return Math.log((double) GT_Values.V[9] / 8d) / Math.log(4d) + 1e-8d; // UHV Tier
         }
 
         public TST_SpaceApiaryT2(int aID, String aName, String aNameRegional) {
@@ -265,7 +264,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         public double getVoltageTierExact() {
-            return Math.log((double) GT_Values.V[10] / 8d) / Math.log(4d) + 1e-8d; //UEV Tier
+            return Math.log((double) GT_Values.V[10] / 8d) / Math.log(4d) + 1e-8d; // UEV Tier
         }
 
         public TST_SpaceApiaryT3(int aID, String aName, String aNameRegional) {
@@ -320,7 +319,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         public double getVoltageTierExact() {
-            return Math.log((double) Integer.MAX_VALUE / 8d) / Math.log(4d) + 1e-8d; //MAX Tier
+            return Math.log((double) Integer.MAX_VALUE / 8d) / Math.log(4d) + 1e-8d; // MAX Tier
         }
 
         public TST_SpaceApiaryT4(int aID, String aName, String aNameRegional) {

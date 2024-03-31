@@ -1,5 +1,34 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
+import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
+import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
+import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
+import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_NEUTRAL;
+import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_OK;
+import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_TOO_LOW;
+import static com.github.technus.tectech.util.CommonValues.MULTI_CHECK_AT;
+import static com.github.technus.tectech.util.CommonValues.V;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static goodgenerator.loader.Loaders.FRF_Coil_1;
+import static goodgenerator.loader.Loaders.compactFusionCoil;
+import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
+import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static gtPlusPlus.core.block.ModBlocks.blockCasings3Misc;
+import static net.minecraft.util.StatCollector.translateToLocal;
+import static vazkii.botania.common.block.ModBlocks.pylon;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -21,6 +50,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import com.gtnewhorizon.structurelib.util.Vec3Impl;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Materials;
@@ -35,33 +65,6 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_StructureUtility;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_NEUTRAL;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_OK;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_TOO_LOW;
-import static com.github.technus.tectech.util.CommonValues.MULTI_CHECK_AT;
-import static com.github.technus.tectech.util.CommonValues.V;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static goodgenerator.loader.Loaders.FRF_Coil_1;
-import static goodgenerator.loader.Loaders.compactFusionCoil;
-import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
-import static gtPlusPlus.core.block.ModBlocks.blockCasings3Misc;
-import static net.minecraft.util.StatCollector.translateToLocal;
-import static vazkii.botania.common.block.ModBlocks.pylon;
 
 public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements ISurvivalConstructable {
 
