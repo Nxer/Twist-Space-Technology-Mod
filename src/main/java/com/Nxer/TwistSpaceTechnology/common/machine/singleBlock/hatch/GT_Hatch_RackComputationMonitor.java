@@ -11,6 +11,7 @@ import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -67,7 +68,7 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
             aNameRegional,
             aTier,
             64,
-            new String[] { CommonValues.TEC_MARK_EM, translateToLocal("tst.computationhatchmonitor.desc1"),
+            new String[] {TextLocalization.Mark_TwistSpaceTechnology_TecTech, translateToLocal("tst.computationhatchmonitor.desc1"),
                 EnumChatFormatting.AQUA + translateToLocal("tst.computationhatchmonitor.desc2") });
         TT_Utility.setTier(aTier, this);
         this.isMeanHatch = isMeanHatch;
