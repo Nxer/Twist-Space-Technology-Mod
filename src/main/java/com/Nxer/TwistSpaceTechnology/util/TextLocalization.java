@@ -771,7 +771,7 @@ public class TextLocalization {
     public static final String Tooltip_SpaceApiary_t4_desc5 = texter("But humans have nothing to repay the bees.", "Tooltip_SpaceApiary_t4_desc5");
     // endregion
 
-    // region Large Steam Forge Hammer
+    // region Industrial Magic Matrix
     public static final String IndustrialMagicMatrixRecipeInputAspects = texter("Recipe required Essentia","IndustrialMagicMatrixRecipeInputAspects");
     public static final String NameIndustrialMagicMatrix = texter("Industrial Magic Matrix", "NameIndustrialMagicMatrix");
     public static final String Tooltip_IndustrialMagicMatrix_MachineType = texter("Magic Matrix","Tooltip_IndustrialMagicMatrix_MachineType");
