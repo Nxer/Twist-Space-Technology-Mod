@@ -770,34 +770,5 @@ public class TextLocalization {
     public static final String Tooltip_SpaceApiary_t4_desc4 = texter("Max parallels: 2147483647", "Tooltip_SpaceApiary_t4_desc4");
     public static final String Tooltip_SpaceApiary_t4_desc5 = texter("But humans have nothing to repay the bees.", "Tooltip_SpaceApiary_t4_desc5");
     // endregion
-
-    // region Large Steam Forge Hammer
-    public static final String IndustrialMagicMatrixRecipeInputAspects = texter("Recipe required Essentia","IndustrialMagicMatrixRecipeInputAspects");
-    public static final String NameIndustrialMagicMatrix = texter("Industrial Magic Matrix", "NameIndustrialMagicMatrix");
-    public static final String Tooltip_IndustrialMagicMatrix_MachineType = texter("Magic Matrix","Tooltip_IndustrialMagicMatrix_MachineType");
-    public static final String Tooltip_IndustrialMagicMatrix_Controller = texter("Controller block for the Industrial Magic Matrix","Tooltip_IndustrialMagicMatrix_Controller");
-    public static final String Tooltip_IndustrialMagicMatrix_00 = texter("Please use the Infusion Supplier to supply Essence!","Tooltip_IndustrialMagicMatrix_00");
-    public static final String Tooltip_IndustrialMagicMatrix_01 = texter("When you stare into the void, the void stares at you.","Tooltip_IndustrialMagicMatrix_01");
-    public static final String Tooltip_IndustrialMagicMatrix_02 = texter("Some say it's a miracle of a mystical envoy,","Tooltip_IndustrialMagicMatrix_02");
-    public static final String Tooltip_IndustrialMagicMatrix_03 = texter("Others say that it is a cult creature of a sorcerer.","Tooltip_IndustrialMagicMatrix_03");
-    public static final String Tooltip_IndustrialMagicMatrix_04 = texter("But who cares?!","Tooltip_IndustrialMagicMatrix_04");
-    public static final String Tooltip_IndustrialMagicMatrix_05 = texter("Needless to say, its incredible principle is fascinating...","Tooltip_IndustrialMagicMatrix_05");
-    public static final String Tooltip_IndustrialMagicMatrix_06 = texter("Because of the pollution of technology,","Tooltip_IndustrialMagicMatrix_06");
-    public static final String Tooltip_IndustrialMagicMatrix_07 = texter("It is unable to perform active infusions.","Tooltip_IndustrialMagicMatrix_07");
-    public static final String Tooltip_IndustrialMagicMatrix_08 = texter("Parallelism depends on the level of the structure block.","Tooltip_IndustrialMagicMatrix_08");
-    public static final String Tooltip_IndustrialMagicMatrix_09 = texter("Do an 4/2 overclock.Turn on lossless overclocking after reaching the maximum acceleration rate.","Tooltip_IndustrialMagicMatrix_09");
-    public static final String Tooltip_IndustrialMagicMatrix_10 = texter("Use Charged Nodes to get acceleration rewards,","Tooltip_IndustrialMagicMatrix_10");
-    public static final String Tooltip_IndustrialMagicMatrix_11 = texter("However, when the number of nodes is less than six,","Tooltip_IndustrialMagicMatrix_11");
-    public static final String Tooltip_IndustrialMagicMatrix_12 = texter("the processing time will be carried out (recipe time * number of missing nodes * 1.75).","Tooltip_IndustrialMagicMatrix_12");
-    public static final String Tooltip_IndustrialMagicMatrix_13 = texter("and will take the largest element in each of the six nodes and calculate the average,","Tooltip_IndustrialMagicMatrix_13");
-    public static final String Tooltip_IndustrialMagicMatrix_14 = texter("The more balanced the elements, the higher the acceleration coefficient.","Tooltip_IndustrialMagicMatrix_14");
-    public static final String Tooltip_IndustrialMagicMatrix_15 = texter("The actual acceleration magnification is ((0.4+0.45exp(-0.05Variance)+ ","Tooltip_IndustrialMagicMatrix_15");
-    public static final String Tooltip_IndustrialMagicMatrix_16 = texter("0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500).","Tooltip_IndustrialMagicMatrix_16");
-    public static final String Tooltip_IndustrialMagicMatrix_17 = texter("Variance is the variance of the largest element in the six nodes,","Tooltip_IndustrialMagicMatrix_17");
-    public static final String Tooltip_IndustrialMagicMatrix_18 = texter("Mean is the average.","Tooltip_IndustrialMagicMatrix_18");
-    public static final String Tooltip_IndustrialMagicMatrix_19 = texter("When the type of the six elements is not the six original elements,","Tooltip_IndustrialMagicMatrix_19");
-    public static final String Tooltip_IndustrialMagicMatrix_20 = texter("Each missing one adds a fixed 1 second to the time.","Tooltip_IndustrialMagicMatrix_20");
-    public static final String Tooltip_IndustrialMagicMatrix_21 = texter("Gain up to 1145.14% acceleration multiplier.","Tooltip_IndustrialMagicMatrix_21");
-    // endregion
 }
 // spotless:on
