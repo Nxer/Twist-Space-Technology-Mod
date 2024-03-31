@@ -47,6 +47,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.struct
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_input;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_output;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
@@ -144,6 +146,9 @@ public class MachineLoader {
 
     public static ItemStack FackRackHatch;
     public static ItemStack RealRackHatch;
+
+    public static ItemStack WirelessDataInputHatch;
+    public static ItemStack WirelessDataOutputHatch;
 
     // test
     public static ItemStack TestMachine;
@@ -648,7 +653,7 @@ public class MachineLoader {
             18959,
             "NameFackRackHatch",
             TextLocalization.NameFackRackHatch,
-            0,
+            12,
             false).getStackForm(1);
         GTCMItemList.FackRackHatch.set(FackRackHatch);
 
@@ -656,9 +661,22 @@ public class MachineLoader {
             18958,
             "NameRealRackHatch",
             TextLocalization.NameRealRackHatch,
-            0,
+            12,
             true).getStackForm(1);
         GTCMItemList.RealRackHatch.set(RealRackHatch);
+
+        WirelessDataInputHatch = new GT_Hatch_WirelessData_input(
+            18957,
+            "NameWirelessDataInputHatch",
+            TextLocalization.NameWirelessDataInputHatch,
+            12).getStackForm(1);
+        GTCMItemList.WirelessDataInputHatch.set(WirelessDataInputHatch);
+        WirelessDataOutputHatch = new GT_Hatch_WirelessData_output(
+            18956,
+            "NameWirelessDataInputHatch",
+            TextLocalization.NameWirelessDataOutputHatch,
+            12).getStackForm(1);
+        GTCMItemList.WirelessDataOutputHatch.set(WirelessDataOutputHatch);
     }
 
     public static void loadMachinePostInit() {
