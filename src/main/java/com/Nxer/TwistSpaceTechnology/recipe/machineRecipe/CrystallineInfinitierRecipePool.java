@@ -10,6 +10,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -43,6 +44,27 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         final IRecipeMap LE = RecipeMaps.laserEngraverRecipes;
         final IRecipeMap HM = RecipeMaps.hammerRecipes;
         final IRecipeMap CI = GTCMRecipe.CrystallineInfinitierRecipes;
+
+        // region Adv Nether Stars
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(new ItemStack(Items.nether_star))
+            .fluidInputs(Materials.Neutronium.getMolten(144 * 2))
+            .itemOutputs(ItemList.Gravistar.get(1))
+            .eut(RECIPE_IV)
+            .duration(20 * 16)
+            .addTo(CI);
+
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(new ItemStack(Items.nether_star))
+            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
+            .itemOutputs(ItemList.NuclearStar.get(1))
+            .eut(RECIPE_UEV)
+            .duration(20 * 16)
+            .addTo(CI);
+
+        // endregion
 
         // region Cubic Zirconia
         GT_Values.RA
