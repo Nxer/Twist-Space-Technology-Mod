@@ -53,6 +53,9 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ThermalEnergyDevourer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.VacuumFilterExtractor;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataInputHatch;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataOutputHatch;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
@@ -96,11 +99,14 @@ import static com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energ
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
 import static com.github.technus.tectech.thing.CustomItemList.LASERpipe;
 import static com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Computer;
+import static com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Switch;
 import static com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Transformer;
 import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8;
 import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8;
 import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8;
 import static com.github.technus.tectech.thing.CustomItemList.UncertaintyX_Hatch;
+import static com.github.technus.tectech.thing.CustomItemList.dataIn_Hatch;
+import static com.github.technus.tectech.thing.CustomItemList.dataOut_Hatch;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Containment_Field;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
@@ -113,8 +119,10 @@ import static com.github.technus.tectech.thing.CustomItemList.hatch_CreativeMain
 import static com.github.technus.tectech.thing.CustomItemList.rack_Hatch;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
+import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.util.GT_ModHandler.addCraftingRecipe;
+import static gregtech.api.util.GT_ModHandler.getModItem;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
@@ -1869,38 +1877,83 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // region Astral Array
         GT_Values.RA
             .stdBuilder()
+            .metadata(RESEARCH_ITEM, Machine_Multi_Computer.get(1))
+            .metadata(RESEARCH_TIME, 114514 * 20 * 100)
             .itemInputs(
                 Machine_Multi_Computer.get(64),
                 Machine_Multi_Computer.get(64),
                 Machine_Multi_Computer.get(64),
                 Machine_Multi_Computer.get(64),
-                ItemList.Sensor_UEV.get(64),
                 HiC_T5.get(64),
-                ItemList.Circuit_Biomainframe.get(64),
+                HiC_T5.get(64),
+                ItemList.Circuit_OpticalMainframe.get(64),
+                ItemList.Circuit_OpticalMainframe.get(64),
+                ItemList.Sensor_UEV.get(64),
                 ItemList.Field_Generator_UEV.get(64),
                 Materials.Silver.getNanite(64),
-//                ItemList.Quan
                 ItemList.Gravistar.get(64),
                 new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 1),
                 new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 1),
                 new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 2),
                 new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 2)
             )
-            .fluidInputs(Materials.Tin.getPlasma(14400), Materials.SuperCoolant.getFluid(4000000))
+            .fluidInputs(Materials.Tin.getPlasma(14400), Materials.SuperCoolant.getFluid(4000000), Materials.Infinity.getFluid(114514))
             .itemOutputs(AstralComputingArray.get(1))
             .eut(RECIPE_UEV * 3)
             .duration(20 * 1000)
-            .addTo(assembler);
+            .addTo(AssemblyLine);
 
         GT_Values.RA
             .stdBuilder()
             .itemInputs(rack_Hatch.get(64), ItemList.Field_Generator_UEV.get(64), new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 1), HiC_T5.get(64))
-//            .fluidInputs(Materials.Mutation.getFluid(2000000))
             .itemOutputs(RealRackHatch.get(1))
             .eut(RECIPE_UEV * 2)
             .duration(20 * 500)
             .addTo(assembler);
 
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(10), getModItem(AE2WCT.ID, "infinityBoosterCard", 64), ItemList.Sensor_UMV.get(64), ItemList.Wireless_Dynamo_Energy_UMV.get(1), dataIn_Hatch.get(16))
+            .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
+            .itemOutputs(WirelessDataInputHatch.get(1))
+            .eut(RECIPE_UMV)
+            .duration(800)
+            .addTo(assembler);
+
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                getModItem(AE2WCT.ID, "infinityBoosterCard", 64), ItemList.Emitter_UMV.get(64), ItemList.Wireless_Dynamo_Energy_UMV.get(1), dataOut_Hatch.get(16))
+            .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
+            .itemOutputs(WirelessDataOutputHatch.get(1))
+            .eut(RECIPE_UMV)
+            .duration(800)
+            .addTo(assembler);
+        GT_Values.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
+            .metadata(RESEARCH_TIME, 720000)
+            .itemInputs(
+                getModItem(AE2WCT.ID, "infinityBoosterCard", 64),
+                getModItem(AE2WCT.ID, "infinityBoosterCard", 64),
+                getModItem(AE2WCT.ID, "infinityBoosterCard", 64),
+                getModItem(AE2WCT.ID, "infinityBoosterCard", 64),
+                WirelessDataOutputHatch.get(8),
+                WirelessDataInputHatch.get(8),
+                ItemList.Field_Generator_UMV.get(64),
+                ItemList.Wireless_Dynamo_Energy_UMV.get(8),
+                Machine_Multi_Switch.get(64),
+                Machine_Multi_Switch.get(64),
+                Machine_Multi_Switch.get(64),
+                Machine_Multi_Switch.get(64)
+
+            )
+            .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 200), Materials.UUMatter.getFluid(20480000), Materials.SuperconductorUIVBase.getFluid(5000000))
+            .itemOutputs(WirelessUpdateItem.get(1))
+            .eut(RECIPE_UMV)
+            .duration(800)
+            .addTo(AssemblyLine);
 
         // endregion
 
@@ -1950,10 +2003,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64)
                 )
                 .fluidInputs(
-                    new FluidStack(solderPlasma, 144*1024),
-                    Materials.Quantium.getMolten(144*1024),
-                    Materials.UUMatter.getFluid(1000*2048),
-                    MyMaterial.metastableOganesson.getMolten(144*512)
+                    new FluidStack(solderPlasma, 144 * 1024),
+                    Materials.Quantium.getMolten(144 * 1024),
+                    Materials.UUMatter.getFluid(1000 * 2048),
+                    MyMaterial.metastableOganesson.getMolten(144 * 512)
                 )
                 .itemOutputs(GTCMItemList.StarcoreMiner.get(1))
                 .eut(RECIPE_UIV)
@@ -1985,9 +2038,9 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 16)
                 )
                 .fluidInputs(
-                    new FluidStack(solderPlasma, 144*64*16),
-                    Materials.UUMatter.getFluid(1000*128),
-                    Materials.SuperCoolant.getFluid(1000*128*6)
+                    new FluidStack(solderPlasma, 144 * 64 * 16),
+                    Materials.UUMatter.getFluid(1000 * 128),
+                    Materials.SuperCoolant.getFluid(1000 * 128 * 6)
                 )
                 .itemOutputs(GTCMItemList.Disassembler.get(1))
                 .eut(RECIPE_UEV)

@@ -852,8 +852,16 @@ tst.computer.desc.2=冷却液：0.001，超级冷却液：0.01
 tst.computer.desc.3=如果安装了星辉魔法，则星能液提供额外的10倍率。
 tst.computer.desc.4=每次运算将会消耗掉当前输入仓中所有输入的液体。如果输入多种冷却液会生效随机一种。
 tst.computer.desc.5=超频公式 倍率=1+LOG(1.0 + 流体数量*倍率*当前热量)
+tst.computer.desc.6=在控制器中摆放一个无线量子升级芯片来开启无线模式！
+tst.computer.desc.7=警告：多个星规阵列同时开启无线模式会导致量子退相干使得无线网络紊乱。请不要这么做
+tst.computer.desc.8=无需给无线光学主接口与副接口涂色
+tst.computer.desc.11=右键给无线光学副接口设置算力需求。
+tst.computer.desc.9=如果颜色频道内算力不足，会按照设置的需求在网络中的比例进行分配。
+tst.computer.desc.10=§o 四倍耗电！
+tst.computer.desc.12=加入同一个tst戴森球团队以共享无线算力频道！
 tst.computer.hint.0=仓室：输入仓，维护仓，机箱控制器，主光学接口，能源仓
 tst.computer.hint.1=仅有一个机箱控制器会被识别，如果放多个，会识别其中的任意一个。
+tst.wirelessInputData.config.text=设置光学输入的权重
 tst.computationhatchmonitor.desc1=中央集成设备，请不要放多个
 tst.computationhatchmonitor.desc2=如果没有冷却也未必会爆炸，但是谁也不敢保证
 tst.cleanroom.desc.0=任何情况不会掉落洁净度，可以作为有源变压器使用，最大64*64*64，属于超净间的输入仓/总线的流体/物品会按一定顺序输出到输出仓/总线，如果有me输出仓/总线，则会统一输出到此内部
@@ -888,6 +896,9 @@ Tooltip_TSTDisassembler_2_06= - §b光子掌控者配方
 Tooltip_TSTDisassembler_2_07=§c不兼容工作台配方!
 MetaBlockCasing01.0.name=Test Casing
 MetaBlockCasing01.2.name=Test Casing
+NameWirelessDataInputHatch=无线副光学接口
+NameWirelessDataOutputHatch=无线主光学接口
+
 getInfoData.StoredWater=已存储水
 getInfoData.StoredLava=已存储岩浆
 getInfoData.SuccessChance=成功几率
@@ -904,3 +915,4 @@ Tooltip_EyeOfWood_2_09=机器每次运行耗时恒定为60秒.
 Tooltip_EyeOfWood_2_10=如果机器运行成功, 将产出大量主世界矿资源.
 Tooltip_EyeOfWood_2_11=如果机器运行失败, 则产出大量蒸汽.
 Tooltip_EyeOfWood_2_12=产出蒸汽数量(单位L) = 成功几率 * 360,000,000L (最多270,000,000L)
+MetaItem01.23.name=无线算力网络升级芯片

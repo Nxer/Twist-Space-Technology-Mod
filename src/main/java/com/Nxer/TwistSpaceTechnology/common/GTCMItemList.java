@@ -181,6 +181,8 @@ public enum GTCMItemList {
     MegaEggGenerator,
     AstralComputingArray,
 
+    WirelessUpdateItem,
+
     StellarMaterialSiphon,
     ElvenWorkshop,
     HyperSpacetimeTransformer,
@@ -306,7 +308,10 @@ public enum GTCMItemList {
     NuclearReactorStructure2,
     NuclearReactorStructure3,
     FackRackHatch,
-    RealRackHatch;
+    RealRackHatch,
+
+    WirelessDataInputHatch,
+    WirelessDataOutputHatch;
 
     // region Member Variables
 
