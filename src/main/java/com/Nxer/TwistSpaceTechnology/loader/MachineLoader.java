@@ -42,6 +42,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
@@ -111,6 +112,11 @@ public class MachineLoader {
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
     public static ItemStack StarcoreMiner;
     public static ItemStack Disassembler;
+
+    public static ItemStack SpaceApiaryT1;
+    public static ItemStack SpaceApiaryT2;
+    public static ItemStack SpaceApiaryT3;
+    public static ItemStack SpaceApiaryT4;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -431,6 +437,33 @@ public class MachineLoader {
                 TextEnums.tr("NameTSTDisassembler")).getStackForm(1);
             GTCMItemList.Disassembler.set(Disassembler);
         }
+
+        // endregion
+
+        //
+        SpaceApiaryT1 = new TST_SpaceApiary.TST_SpaceApiaryT1(
+            19042,
+            "NameSpaceApiaryT1",
+            TextLocalization.NameSpaceApiaryT1).getStackForm(1);
+        GTCMItemList.SpaceApiaryT1.set(SpaceApiaryT1);
+
+        SpaceApiaryT2 = new TST_SpaceApiary.TST_SpaceApiaryT2(
+            19043,
+            "NameSpaceApiaryT2",
+            TextLocalization.NameSpaceApiaryT2).getStackForm(1);
+        GTCMItemList.SpaceApiaryT2.set(SpaceApiaryT2);
+
+        SpaceApiaryT3 = new TST_SpaceApiary.TST_SpaceApiaryT3(
+            19044,
+            "NameSpaceApiaryT3",
+            TextLocalization.NameSpaceApiaryT3).getStackForm(1);
+        GTCMItemList.SpaceApiaryT3.set(SpaceApiaryT3);
+
+        SpaceApiaryT4 = new TST_SpaceApiary.TST_SpaceApiaryT4(
+            19045,
+            "NameSpaceApiaryT4",
+            TextLocalization.NameSpaceApiaryT4).getStackForm(1);
+        GTCMItemList.SpaceApiaryT4.set(SpaceApiaryT4);
 
         // endregion
 

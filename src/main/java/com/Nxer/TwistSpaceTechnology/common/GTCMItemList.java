@@ -202,6 +202,10 @@ public enum GTCMItemList {
     CoreDeviceOfHumanPowerGenerationFacility,
     StarcoreMiner,
     Disassembler,
+    SpaceApiaryT1,
+    SpaceApiaryT2,
+    SpaceApiaryT3,
+    SpaceApiaryT4,
 
     // MAX
     HighDimensionalExtend,
