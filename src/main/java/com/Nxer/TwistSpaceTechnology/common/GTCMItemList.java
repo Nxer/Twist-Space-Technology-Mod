@@ -180,6 +180,7 @@ public enum GTCMItemList {
     Scavenger,
     MegaEggGenerator,
     AstralComputingArray,
+    IndustrialMagicMatrix,
 
     WirelessUpdateItem,
 
