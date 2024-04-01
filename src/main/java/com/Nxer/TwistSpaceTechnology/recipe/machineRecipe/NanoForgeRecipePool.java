@@ -10,7 +10,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.recipe.RecipeMaps;
 
-public class NanoForgeRecipePoll implements IRecipePool {
+public class NanoForgeRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {

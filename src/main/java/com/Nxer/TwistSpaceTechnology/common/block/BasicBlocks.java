@@ -28,4 +28,5 @@ public class BasicBlocks {
     public static Block BlockStar;
 
     public static Block NuclearReactorBlock = new BlockNuclearReactor("nuclear", "Mega Nuclear Reactor");
+
 }

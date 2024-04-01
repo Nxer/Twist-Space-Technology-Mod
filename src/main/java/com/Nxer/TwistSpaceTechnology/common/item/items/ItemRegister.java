@@ -49,11 +49,16 @@ public class ItemRegister {
         GTCMItemList.AntimatterFuelRod.set(initItem01("Antimatter Fuel Rod", 16, new String[]{texter("More...", "tooltips.AntimatterFuelRod.line1"), DSPName}));
         GTCMItemList.StellarConstructionFrameMaterial.set(initItem01("Stellar Construction Frame Material", 17, new String[]{texter("Perfect and expensive.", "tooltips.StellarConstructionFrameMaterial.line1"), DSPName}));
         GTCMItemList.GravitationalLens.set(initItem01("Gravitational Lens", 18, new String[]{texter("Its twisted and powerful gravitational field is shielded in a container.", "tooltips.GravitationalLens.line1"), texter("It is usually utilized to work and alter spatial structures, ", "tooltips.GravitationalLens.line2"), texter(" but that doesn't stop some people from taking it and focusing sunlight to light fires for fun.", "tooltips.GravitationalLens.line3"), DSPName}));
-        GTCMItemList.PurpleMagnoliaPetal.set(initItem01("Purple Magnolia Petal", 19, new String[]{TextHandler.texter("Petals falling from Alfheim...", "tooltips.PurpleMagnoliaPetal.line1")}));
-        GTCMItemList.PurpleMagnoliaSapling.set(initItem01("Purple Magnolia Sapling", 20, new String[]{TextHandler.texter("Not plantable. Need to be on ic2 crop sticks.", "tooltips.PurpleMagnoliaSapling.line1")}));
-        GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{TextHandler.texter("Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
-        GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.set(initItem01("Primitive Man's SpaceTime Distortion Device", 22, new String[]{TextHandler.texter("Anyway...", "tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1")}));
+        GTCMItemList.PurpleMagnoliaPetal.set(initItem01("Purple Magnolia Petal", 19, new String[]{ TextHandler.texter("Petals falling from Alfheim...", "tooltips.PurpleMagnoliaPetal.line1")}));
+        GTCMItemList.PurpleMagnoliaSapling.set(initItem01("Purple Magnolia Sapling", 20, new String[]{ TextHandler.texter("Not plantable. Need to be on ic2 crop sticks.", "tooltips.PurpleMagnoliaSapling.line1")}));
+        GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{ TextHandler.texter("Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
+        GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.set(initItem01("Primitive Man's SpaceTime Distortion Device", 22, new String[]{ TextHandler.texter("Anyway...", "tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1")}));
         GTCMItemList.WirelessUpdateItem.set(initItem01("Wireless Computation update circuit", 23, new String[]{}));
+
+        if(Config.Enable_BallLightning){
+            GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 24, new String[]{ TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
+        }
+
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));
             GTCMItemList.HighDimensionalCircuitDoard.set(initItem01("High-dimensional circuit board", 177));
@@ -84,7 +89,7 @@ public class ItemRegister {
             GTCMItemList.ExoticCircuitBoard.set(initItem01("Exotic Circuit Board", 318));
             GTCMItemList.spaceStationConstructingMaterialMax.set(initItem01("very good item", 319));
             GTCMItemList.LightQuantumMatrix.set(initItem01("Light Quantum Matrix", 320));
-            //GTCMItemList.StarCore.set(initItem01("Star Core", 321));
+            // GTCMItemList.StarCore.set(initItem01("Star Core", 321));
             GTCMItemList.CasimirQuantumFiber.set(initItem01("Casimir Quantum Fiber", 322));
             GTCMItemList.SuperstringStructure.set(initItem01("Superstring structure", 323));
             GTCMItemList.DynamicParadoxBody.set(initItem01("Dynamic Paradox Body", 324));
@@ -193,6 +198,7 @@ public class ItemRegister {
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
         GTCMItemList.PowerChair.set(new ItemStack(BasicItems.PowerChair, 1));
     }
+
 
     // spotless:on
     public static void registry() {

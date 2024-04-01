@@ -21,10 +21,12 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.HyperSpacetimeTransfor
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IntensifyChemicalDistorterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MixerRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.NanoForgeRecipePoll;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.NanoForgeRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ParticleColliderRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.QFTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.RuneEngraverRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StarKernelForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
@@ -49,8 +51,8 @@ public class RecipeLoader {
             new TCRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
             new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool(),
             new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
-            new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePoll(),
-            new FluidHeaterRecipePool() };
+            new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
+            new FluidHeaterRecipePool(), new ParticleColliderRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
@@ -63,6 +65,9 @@ public class RecipeLoader {
         new OP_NormalProcessing().enumOreProcessingRecipes();
         if (Config.EnableRecipeRegistry_IndistinctTentacle) {
             new AssemblyLineWithoutResearchRecipePool().loadRecipes();
+        }
+        if (Config.Enable_BallLightning) {
+            new StarKernelForgeRecipePool().loadRecipes();
         }
     }
 

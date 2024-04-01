@@ -24,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
@@ -110,6 +111,7 @@ public class MachineLoader {
     public static ItemStack HephaestusAtelier;
     public static ItemStack DeployedNanoCore;
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
+    public static ItemStack BallLightning;
     public static ItemStack StarcoreMiner;
     public static ItemStack Disassembler;
 
@@ -415,6 +417,16 @@ public class MachineLoader {
 
         //
 
+        // if (Config.Enable_StarcoreMiner) {
+        // StarcoreMiner = new TST_StarcoreMiner(
+        // 19040,
+        // "NameMegaVoidMiner",
+        // TextEnums.tr("NameMegaVoidMiner"),
+        // 4
+        // ).getStackForm(1);
+        // GTCMItemList.StarcoreMiner.set(StarcoreMiner);
+        // }
+
         if (Config.Enable_StarcoreMiner) {
             StarcoreMiner = new TST_StarcoreMiner(
                 19040,
@@ -465,6 +477,11 @@ public class MachineLoader {
             TextLocalization.NameSpaceApiaryT4).getStackForm(1);
         GTCMItemList.SpaceApiaryT4.set(SpaceApiaryT4);
 
+        if (Config.Enable_BallLightning) {
+            BallLightning = new TST_BallLightning(19046, "NameBallLightning", TextLocalization.NameBallLightning)
+                .getStackForm(1);
+            GTCMItemList.BallLightning.set(BallLightning);
+        }
         // endregion
 
         // region Single block Machine

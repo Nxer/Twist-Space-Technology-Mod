@@ -214,6 +214,24 @@ public class TextLocalization {
         Tooltips_Upgrades_UXV,
         Tooltips_Upgrades_MAX
     };
+    public static final String[] Tooltips_HighPowerRadiationProofCasing = new String[]{
+        texter(
+            "Constrained the overflowing energy",
+            "Tooltips_HighPowerRadiationProofCasing.01"),
+        texter(
+            "The power levels are still rising!!!",
+            "Tooltips_HighPowerRadiationProofCasing.02")
+    };
+
+    public static  final String[] Tooltips_AdvancedHighPowerCoil = new String[]{
+        texter(
+            "Constrained the overflowing energy",
+            "Tooltips_AdvancedHighPowerCoil.01"),
+        texter(
+            "The power levels are still rising!!!",
+            "Tooltips_AdvancedHighPowerCoil.02")
+    };
+
 
 
     // endregion
@@ -739,6 +757,10 @@ public class TextLocalization {
 
     public static final String NameWirelessDataOutputHatch = texter("Wireless Optical Master Connector", "NameWirelessDataOutputHatch");
 
+    // endregion
+
+    // region Ball Lightning
+    public static final String NameBallLightning = texter("BallLightning", "NameBallLightning");
     // endregion
 
     // region Deployed Nano Core
