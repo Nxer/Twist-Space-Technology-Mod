@@ -30,10 +30,16 @@ public class StarKernelForgeRecipePool implements IRecipePool {
         for (GT_Recipe plasmaFuel : RecipeMaps.plasmaFuels.getAllRecipes()) {
             FluidStack PlasmaOutput = GT_Utility.getFluidForFilledItem(plasmaFuel.mInputs[0], true);
             if (PlasmaOutput == null) continue;
-            int EuCost = plasmaFuel.mSpecialValue * 1000;
+            int EuCost = 1;
             int PlasmaInputAmount = getFluidAmount(getcellFluids(plasmaFuel.mInputs[0]));
-            if (PlasmaInputAmount == 144) PlasmaOutput.amount = 144;
-            if (PlasmaInputAmount == 1000) PlasmaOutput.amount = 1000;
+            if (PlasmaInputAmount == 144) {
+                PlasmaOutput.amount = 144 * 8;
+                EuCost = plasmaFuel.mSpecialValue * 144 * 8;
+            }
+            if (PlasmaInputAmount == 1000) {
+                PlasmaOutput.amount = 1000;
+                EuCost = plasmaFuel.mSpecialValue * 1000;
+            }
 
             String PlasmaOutputName = FluidRegistry.getFluidName(PlasmaOutput);
 
@@ -166,8 +172,8 @@ public class StarKernelForgeRecipePool implements IRecipePool {
             .fluidInputs(Materials.Tritanium.getMolten(144));
         bd.fluidOutputs(Materials.Tritanium.getPlasma(144));
         bd.specialValue(13500);
-        bd.eut((int) 1024000L * 727)
-            .duration(getDuration((int) 1024000L * 727))
+        bd.eut((int) 1024L * 727 * 8 * 144)
+            .duration(getDuration((int) 1024L * 727 * 8 * 144))
             .addTo(GTCMRecipe.BallLightningRecipes);
     }
 
