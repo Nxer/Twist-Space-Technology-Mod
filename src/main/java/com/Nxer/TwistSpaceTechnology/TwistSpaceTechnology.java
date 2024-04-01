@@ -66,6 +66,7 @@ public class TwistSpaceTechnology {
     public static final String MOD_ID = Tags.MODID;
     public static final String MOD_NAME = Tags.MODNAME;
     public static final String VERSION = Tags.VERSION;
+    public static final String RESOURCE_ROOT_ID = "gtnhcommunitymod";
 
     /**
      * If you need send a message to the Log, call this.

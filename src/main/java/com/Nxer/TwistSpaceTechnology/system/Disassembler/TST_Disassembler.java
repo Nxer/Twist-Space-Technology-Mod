@@ -17,6 +17,7 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -35,6 +36,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -230,6 +232,77 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
+        List<ItemStack> inputItems = getStoredInputsNoSeparation();
+        if (inputItems.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+
+        final byte tier = getRealTierComponentCasing();
+        ArrayList<ItemStack> outputItems = new ArrayList<>();
+        ArrayList<FluidStack> outputFluids = new ArrayList<>();
+        long processed = 0;
+
+        for (ItemStack items : inputItems) {
+            if (items.stackSize <= 0) continue;
+
+            TST_SimpleDisassemblyRecipe disassemblyRecipe = TST_DisassemblerRecipeHandler.DisassemblerRecipeMap
+                .get(TST_ItemID.createNoNBT(items));
+
+            if (disassemblyRecipe == null) continue;
+
+            if (tier < 14) {
+                byte recipeTier = disassemblyRecipe.getTier();
+                if (recipeTier > tier + 1) {
+                    if (processed == 0) {
+                        return CheckRecipeResultRegistry.insufficientMachineTier(recipeTier - 1);
+                    } else continue;
+                }
+            }
+
+            int recipeNeed = disassemblyRecipe.getItemAmount();
+            if (items.stackSize < recipeNeed) continue;
+
+            // Found the recipe
+            int outputMultiplier = items.stackSize / recipeNeed;
+            items.stackSize -= outputMultiplier * recipeNeed;
+
+            // Handle progress time cost
+            processed += outputMultiplier;
+
+            if (disassemblyRecipe.hasOutputItems()) {
+                outputItems.addAll(disassemblyRecipe.getOutputItems(outputMultiplier));
+            }
+
+            if (disassemblyRecipe.hasOutputFluids()) {
+                outputFluids.addAll(disassemblyRecipe.getOutputFluids(outputMultiplier));
+            }
+
+        }
+
+        if (processed == 0) return CheckRecipeResultRegistry.NO_RECIPE;
+
+        long tempProgressTime = Math.max(1, processed / (4L * tier)) * CostTicksPerItemDisassembling_Disassembler;
+        mMaxProgresstime = tempProgressTime > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) tempProgressTime;
+
+        if (!outputItems.isEmpty()) {
+            mOutputItems = outputItems.toArray(new ItemStack[0]);
+        }
+
+        if (!outputFluids.isEmpty()) {
+            mOutputFluids = outputFluids.toArray(new FluidStack[0]);
+        }
+
+        updateSlots();
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        TST_DisassemblerRecipeHandler.initDisassemblerRecipes();
+    }
+
+    @NotNull
+    // @Override
+    public CheckRecipeResult checkProcessingOld() {
         ArrayList<ItemStack> inputItems = getStoredInputs();
         if (inputItems.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
 

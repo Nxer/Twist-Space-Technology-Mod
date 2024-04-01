@@ -6,11 +6,14 @@ import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.NuclearReac
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.PhotonControllerUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
-import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.BlockNuclearReactor.NuclearReactorBlockMeta;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStar;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.*;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing01;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaItemBlockCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.nuclear.BlockNuclearReactor;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
@@ -28,7 +31,7 @@ public class BlockRegister {
         GameRegistry.registerBlock(MetaBlock01, ItemBlockBase01.class, MetaBlock01.getUnlocalizedName());
         GameRegistry.registerBlock(
             BasicBlocks.MetaBlockCasing01,
-            MetaBlockCasingItemBlock.class,
+            MetaItemBlockCasing.class,
             BasicBlocks.MetaBlockCasing01.getUnlocalizedName());
         GameRegistry.registerBlock(
             PhotonControllerUpgrade,
@@ -58,6 +61,9 @@ public class BlockRegister {
             .set(MetaBlockCasing01.initMetaCasing01("High Power Radiation Proof Casing", 1));
         GTCMItemList.AdvancedHighPowerCoilBlock
             .set(MetaBlockCasing01.initMetaCasing01("Advanced High Power Coil Block", 2));
+        GTCMItemList.TestCasing
+            .set(MetaBlockConstructors.initMetaBlockCasing("Test Casing", (byte) 2, BasicBlocks.MetaBlockCasing01));
+
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier LV Tier", 0));
@@ -162,10 +168,14 @@ public class BlockRegister {
             GTCMItemList.SpaceStationAntiGravityBlockMAX.set(
                 SpaceStationAntiGravityCasing
                     .SpaceStationAntiGravityCasingMeta("SpaceStationAntiGravityBlock MAX Tier", 13));
-            GTCMItemList.NuclearReactorStructure0.set(NuclearReactorBlockMeta("Nuclear Reactor structure block0", 0));
-            GTCMItemList.NuclearReactorStructure1.set(NuclearReactorBlockMeta("Nuclear Reactor structure block1", 1));
-            GTCMItemList.NuclearReactorStructure2.set(NuclearReactorBlockMeta("Nuclear Reactor structure block2", 2));
-            GTCMItemList.NuclearReactorStructure3.set(NuclearReactorBlockMeta("Nuclear Reactor structure block3", 3));
+            // GTCMItemList.NuclearReactorStructure0.set(NuclearReactorBlockMeta("Nuclear Reactor structure block0",
+            // 0));
+            // GTCMItemList.NuclearReactorStructure1.set(NuclearReactorBlockMeta("Nuclear Reactor structure block1",
+            // 1));
+            // GTCMItemList.NuclearReactorStructure2.set(NuclearReactorBlockMeta("Nuclear Reactor structure block2",
+            // 2));
+            // GTCMItemList.NuclearReactorStructure3.set(NuclearReactorBlockMeta("Nuclear Reactor structure block3",
+            // 3));
         }
         // endregion
     }

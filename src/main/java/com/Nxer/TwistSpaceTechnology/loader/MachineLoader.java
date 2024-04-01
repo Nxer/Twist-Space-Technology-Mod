@@ -9,7 +9,6 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
-import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_TestMultiMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
@@ -41,6 +40,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
@@ -48,6 +48,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.struct
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_input;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_output;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
@@ -113,6 +115,11 @@ public class MachineLoader {
     public static ItemStack StarcoreMiner;
     public static ItemStack Disassembler;
 
+    public static ItemStack SpaceApiaryT1;
+    public static ItemStack SpaceApiaryT2;
+    public static ItemStack SpaceApiaryT3;
+    public static ItemStack SpaceApiaryT4;
+
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
@@ -142,6 +149,9 @@ public class MachineLoader {
     public static ItemStack FackRackHatch;
     public static ItemStack RealRackHatch;
 
+    public static ItemStack WirelessDataInputHatch;
+    public static ItemStack WirelessDataOutputHatch;
+
     // test
     public static ItemStack TestMachine;
 
@@ -149,7 +159,7 @@ public class MachineLoader {
 
         EntityList.addMapping(Ship.class, "Ship", 114);
         // test
-        TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
+        // TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 
         // region multi Machine controller
 
@@ -448,6 +458,33 @@ public class MachineLoader {
 
         // endregion
 
+        //
+        SpaceApiaryT1 = new TST_SpaceApiary.TST_SpaceApiaryT1(
+            19042,
+            "NameSpaceApiaryT1",
+            TextLocalization.NameSpaceApiaryT1).getStackForm(1);
+        GTCMItemList.SpaceApiaryT1.set(SpaceApiaryT1);
+
+        SpaceApiaryT2 = new TST_SpaceApiary.TST_SpaceApiaryT2(
+            19043,
+            "NameSpaceApiaryT2",
+            TextLocalization.NameSpaceApiaryT2).getStackForm(1);
+        GTCMItemList.SpaceApiaryT2.set(SpaceApiaryT2);
+
+        SpaceApiaryT3 = new TST_SpaceApiary.TST_SpaceApiaryT3(
+            19044,
+            "NameSpaceApiaryT3",
+            TextLocalization.NameSpaceApiaryT3).getStackForm(1);
+        GTCMItemList.SpaceApiaryT3.set(SpaceApiaryT3);
+
+        SpaceApiaryT4 = new TST_SpaceApiary.TST_SpaceApiaryT4(
+            19045,
+            "NameSpaceApiaryT4",
+            TextLocalization.NameSpaceApiaryT4).getStackForm(1);
+        GTCMItemList.SpaceApiaryT4.set(SpaceApiaryT4);
+
+        // endregion
+
         // region Single block Machine
 
         //
@@ -634,7 +671,7 @@ public class MachineLoader {
             18959,
             "NameFackRackHatch",
             TextLocalization.NameFackRackHatch,
-            0,
+            12,
             false).getStackForm(1);
         GTCMItemList.FackRackHatch.set(FackRackHatch);
 
@@ -642,9 +679,22 @@ public class MachineLoader {
             18958,
             "NameRealRackHatch",
             TextLocalization.NameRealRackHatch,
-            0,
+            12,
             true).getStackForm(1);
         GTCMItemList.RealRackHatch.set(RealRackHatch);
+
+        WirelessDataInputHatch = new GT_Hatch_WirelessData_input(
+            18957,
+            "NameWirelessDataInputHatch",
+            TextLocalization.NameWirelessDataInputHatch,
+            12).getStackForm(1);
+        GTCMItemList.WirelessDataInputHatch.set(WirelessDataInputHatch);
+        WirelessDataOutputHatch = new GT_Hatch_WirelessData_output(
+            18956,
+            "NameWirelessDataOutputHatch",
+            TextLocalization.NameWirelessDataOutputHatch,
+            12).getStackForm(1);
+        GTCMItemList.WirelessDataOutputHatch.set(WirelessDataOutputHatch);
     }
 
     public static void loadMachinePostInit() {

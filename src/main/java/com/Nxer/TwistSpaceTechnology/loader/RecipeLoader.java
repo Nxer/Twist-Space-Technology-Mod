@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.FluidHeaterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.AssemblyLineWithoutResearchRecipePool;
@@ -15,6 +14,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CrystallineInfinitierR
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.DistillationRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ElvenWorkshopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ExtractorRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.FluidHeaterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.FluidSolidifierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.GTCMMachineRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.HyperSpacetimeTransformerRecipePool;

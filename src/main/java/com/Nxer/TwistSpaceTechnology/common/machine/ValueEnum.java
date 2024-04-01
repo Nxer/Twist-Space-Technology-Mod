@@ -258,4 +258,14 @@ public final class ValueEnum {
 
     // endregion
 
+    // region Eye of Wood
+    public static final int StandardWaterNeed_EyeOfWood = Config.StandardWaterNeed_EyeOfWood;
+    public static final int StandardLavaNeed_EyeOfWood = Config.StandardLavaNeed_EyeOfWood;
+    public static final int TicksPerProcessing_EyeOfWood = 20 * Config.SecondsPerProcessing_EyeOfWood;
+    // endregion
+
+    // region Space Apiary
+    public static boolean enableDNAConsuming = Config.enableDNAConsuming;
+    // endregion
+
 }

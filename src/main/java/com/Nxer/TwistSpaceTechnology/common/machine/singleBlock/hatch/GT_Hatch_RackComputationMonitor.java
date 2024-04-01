@@ -21,9 +21,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.TecTech;
 import com.github.technus.tectech.thing.gui.TecTechUITextures;
-import com.github.technus.tectech.util.CommonValues;
 import com.github.technus.tectech.util.TT_Utility;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -67,7 +67,8 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
             aNameRegional,
             aTier,
             64,
-            new String[] { CommonValues.TEC_MARK_EM, translateToLocal("tst.computationhatchmonitor.desc1"),
+            new String[] { TextLocalization.Mark_TwistSpaceTechnology_TecTech,
+                translateToLocal("tst.computationhatchmonitor.desc1"),
                 EnumChatFormatting.AQUA + translateToLocal("tst.computationhatchmonitor.desc2") });
         TT_Utility.setTier(aTier, this);
         this.isMeanHatch = isMeanHatch;
@@ -195,23 +196,19 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
             if (comp == null) {
                 continue;
             }
-            if (tickingComponents) {
-                if (this.heat > comp.maxHeat * 64 * 64) {
-                    mInventory[i] = null;
-                    continue;
-                } else if (comp.subZero || this.heat >= 0) {
-                    heat += (1f + comp.coEff * this.heat / 10000f) * mInventory[i].stackSize
-                        * (comp.heat > 0 ? comp.heat * overclock * overclock * overvolt : comp.heat);
-                    // =MAX(0;MIN(MIN($B4;1*C$3+C$3-0,25);1+RAND()+(C$3-1)-($B4-1)/2))
-                    if (overvolt * 10f > 7f + TecTech.RANDOM.nextFloat()) {
-                        computation += (float) (comp.computation * Math.max(
-                            0,
-                            Math.min(
-                                Math.min(overclock, overvolt + overvolt - 0.25),
-                                1 + TecTech.RANDOM.nextFloat() + (overvolt - 1) - (overclock - 1) / 2)))
-                            * mInventory[i].stackSize;
-                    }
+            if (tickingComponents && comp.subZero || this.heat >= 0) {
+                heat += (1f + comp.coEff * this.heat / 10000f) * mInventory[i].stackSize
+                    * (comp.heat > 0 ? comp.heat * overclock * overclock * overvolt : comp.heat);
+                // =MAX(0;MIN(MIN($B4;1*C$3+C$3-0,25);1+RAND()+(C$3-1)-($B4-1)/2))
+                if (overvolt * 10f > 7f + TecTech.RANDOM.nextFloat()) {
+                    computation += (float) (comp.computation * Math.max(
+                        0,
+                        Math.min(
+                            Math.min(overclock, overvolt + overvolt - 0.25),
+                            1 + TecTech.RANDOM.nextFloat() + (overvolt - 1) - (overclock - 1) / 2)))
+                        * mInventory[i].stackSize;
                 }
+
             } else {
                 computation += comp.computation * overclock * mInventory[i].stackSize;
             }
@@ -220,6 +217,18 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
             this.heat += (int) Math.ceil(heat);
         }
         return (int) Math.floor(computation);
+    }
+
+    public void postProcessAfterCoolant() {
+        for (int i = 0; i < mInventory.length; i++) {
+            if (mInventory[i] == null) continue;
+            RackComponent comp = componentBinds.get(getUniqueIdentifier(mInventory[i]));
+            if (comp == null) continue;
+            if (this.heat > comp.maxHeat * 64 * 64) {
+                mInventory[i] = null;
+                // continue;
+            }
+        }
     }
 
     @Override

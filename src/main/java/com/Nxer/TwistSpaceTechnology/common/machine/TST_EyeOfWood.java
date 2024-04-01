@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -11,23 +12,47 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
+import org.jetbrains.annotations.NotNull;
+
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.system.VoidMinerRework.logic.VoidMinerData;
+import com.Nxer.TwistSpaceTechnology.system.VoidMinerRework.logic.VoidMinerDataGenerator;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import com.github.bartimaeusnek.bartworks.util.Pair;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.ItemData;
+import gregtech.api.objects.XSTR;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OreDictUnificator;
 
 public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
 
@@ -47,36 +72,276 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     // endregion
 
     // region Processing Logic
+    private static Map<Pair<Integer, Boolean>, Float> dropmap = null;
+    private static float totalWeight = 0;
+    private static Fluid WATER;
+    private static Fluid LAVA;
+    private static boolean preGenerated = false;
+    private static final int STANDARD_WATER_BUCKET = ValueEnum.StandardWaterNeed_EyeOfWood;
+    private static final int STANDARD_WATER_AMOUNT = STANDARD_WATER_BUCKET * 1000;
+    private static final int STANDARD_LAVA_BUCKET = ValueEnum.StandardLavaNeed_EyeOfWood;
+    private static final int STANDARD_LAVA_AMOUNT = STANDARD_LAVA_BUCKET * 1000;
+    private static final double STANDARD_SUBSTRATE = Math
+        .pow(2_000_000_000d, 1d / Math.max(STANDARD_WATER_BUCKET, STANDARD_LAVA_BUCKET));
+    private int storedWater = 0;
+    private int storedLava = 0;
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 3];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        // #tr getInfoData.StoredWater
+        // # Stored Water
+        // #zh_CN 已存储水
+        ret[origin.length] = TextEnums.tr("getInfoData.StoredWater") + " : "
+            + EnumChatFormatting.BLUE
+            + storedWater
+            + EnumChatFormatting.RESET
+            + "L / "
+            + STANDARD_WATER_AMOUNT
+            + "L";
+        // #tr getInfoData.StoredLava
+        // # Stored Lava
+        // #zh_CN 已存储岩浆
+        ret[origin.length + 1] = TextEnums.tr("getInfoData.StoredLava") + " : "
+            + EnumChatFormatting.RED
+            + storedLava
+            + EnumChatFormatting.RESET
+            + "L / "
+            + STANDARD_LAVA_AMOUNT
+            + "L";
+        // #tr getInfoData.SuccessChance
+        // # Success Chance
+        // #zh_CN 成功几率
+        ret[origin.length + 2] = TextEnums.tr("getInfoData.SuccessChance") + " : "
+            + EnumChatFormatting.GOLD
+            + getSuccessChance()
+            + " / 10000";
+        return ret;
+    }
+
+    private void resetStored() {
+        storedWater = 0;
+        storedLava = 0;
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("storedWater", storedWater);
+        aNBT.setInteger("storedLava", storedLava);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        storedWater = aNBT.getInteger("storedWater");
+        storedLava = aNBT.getInteger("storedLava");
+    }
+
+    @NotNull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+        if (dropmap == null || totalWeight == 0) {
+            TwistSpaceTechnology.LOG.info("WARNING! Eye of Wood dropmap = null when checkProcessing !");
+            return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        }
+
+        int successChance = getSuccessChance();
+        TwistSpaceTechnology.LOG.info("success chance : " + successChance);
+        resetStored();
+
+        if (successChance > XSTR.XSTR_INSTANCE.nextInt(10000)) {
+            // success
+            mOutputItems = getItemOutputs();
+
+        } else {
+            // if fail
+            // max 1200 * 30 * 7500 L Steam / 1200tick -> 112_500 EU/t in 100% Efficient , final multiply 25% fail
+            // chance
+            // min 1200 * 30 * 1 L Steam / 1200tick -> 15 EU/t in 100% Efficient , final multiply 99.99% fail chance
+            mOutputFluids = new FluidStack[] { Materials.Water.getGas(36000L * successChance) };
+
+        }
+
+        mMaxProgresstime = ValueEnum.TicksPerProcessing_EyeOfWood;
+
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    private ItemStack[] getItemOutputs() {
+        List<ItemStack> outputs = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            ItemData oreData = GT_OreDictUnificator.getItemData(generateOneStackOre(1));
+            if (oreData == null) {
+                TwistSpaceTechnology.LOG.info("EOW getItemOutputs error: oreData is null");
+                return new ItemStack[0];
+            }
+
+            outputs.addAll(getOutputs(oreData.mMaterial.mMaterial, (int) oreData.mMaterial.mAmount));
+        }
+
+        if (outputs.isEmpty()) return new ItemStack[0];
+
+        return outputs.toArray(new ItemStack[0]);
+    }
+
+    public List<ItemStack> getOutputs(Materials material, int multiplier) {
+        List<ItemStack> outputs = new ArrayList<>();
+
+        // check byproduct
+        if (!material.mOreByProducts.isEmpty()) {
+            // the basic output the material
+            outputs.add(getDustStack(material, 64));
+            if (material.mOreByProducts.size() == 1) {
+                for (Materials byproduct : material.mOreByProducts) {
+                    if (byproduct == null) continue;
+                    outputs.add(getDustStack(byproduct, 48));
+                }
+            } else {
+                for (Materials byproduct : material.mOreByProducts) {
+                    if (byproduct == null || byproduct == Materials.Netherrack
+                        || byproduct == Materials.Endstone
+                        || byproduct == Materials.Stone) continue;
+
+                    outputs.add(getDustStack(byproduct, 32));
+                }
+            }
+
+        } else {
+            outputs.add(getDustStack(material, 128));
+        }
+
+        // check gem style
+        if (GT_OreDictUnificator.get(OrePrefixes.gem, material, 1) != null) {
+            if (GT_OreDictUnificator.get(OrePrefixes.gemExquisite, material, 1) != null) {
+                // has gem style
+                outputs.add(GT_OreDictUnificator.get(OrePrefixes.gemExquisite, material, 16));
+                outputs.add(GT_OreDictUnificator.get(OrePrefixes.gemFlawless, material, 32));
+                outputs.add(GT_OreDictUnificator.get(OrePrefixes.gem, material, 32));
+
+            } else {
+                // just normal gem
+                outputs.add(GT_OreDictUnificator.get(OrePrefixes.gem, material, 64));
+            }
+        }
+
+        if (multiplier > 1) {
+            for (ItemStack out : outputs) {
+                out.stackSize *= multiplier;
+            }
+        }
+
+        return outputs;
+    }
+
+    public ItemStack getDustStack(Materials material, int amount) {
+        return setStackSize(GT_OreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
+    }
+
+    /**
+     * 成功率 = {7500 - 7499 * [1 - 1/(S^dW * S^dL)]} / 10000
+     * <P>
+     * S ≈ 1.087
+     * </P>
+     * <P>
+     * dW, dL 分别为已存储的水量与需求量(256,000L)的差值除以1000和已存储的岩浆量和需求量的差值除以1000, 并向下取整.
+     * </P>
+     */
+    private int getSuccessChance() {
+        if (storedWater == STANDARD_WATER_AMOUNT && storedLava == STANDARD_LAVA_AMOUNT) {
+            return 7500;
+        }
+
+        int waterBucketDifference = Math.abs(storedWater - STANDARD_WATER_AMOUNT) / 1000;
+        int lavaBucketDifference = Math.abs(storedLava - STANDARD_LAVA_AMOUNT) / 1000;
+        if (waterBucketDifference >= STANDARD_WATER_BUCKET || lavaBucketDifference >= STANDARD_LAVA_BUCKET) {
+            return 1;
+        }
+
+        double waterMultiplier = 1d / Math.pow(STANDARD_SUBSTRATE, waterBucketDifference);
+        double lavaMultiplier = 1d / Math.pow(STANDARD_SUBSTRATE, lavaBucketDifference);
+
+        return (int) (7500 - 7499 * (1d - waterMultiplier * lavaMultiplier));
+    }
+
+    private ItemStack generateOneStackOre(int amount) {
+        return getOreItemStack(getOreDamage(), amount);
+    }
+
+    private Pair<Integer, Boolean> getOreDamage() {
+        float curentWeight = 0.f;
+        while (true) {
+            float randomNum = XSTR.XSTR_INSTANCE.nextFloat() * totalWeight;
+            for (Map.Entry<Pair<Integer, Boolean>, Float> entry : dropmap.entrySet()) {
+                curentWeight += entry.getValue();
+                if (randomNum < curentWeight) return entry.getKey();
+            }
+        }
+    }
+
+    private ItemStack getOreItemStack(Pair<Integer, Boolean> stats, int amount) {
+        return new ItemStack(
+            stats.getValue() ? WerkstoffLoader.BWOres : GregTech_API.sBlockOres1,
+            amount,
+            stats.getKey());
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+
+        if (aBaseMetaTileEntity.isServerSide()) {
+            World world = aBaseMetaTileEntity.getWorld();
+            int dimID = world.provider.dimensionId;
+
+            if (dimID != 0) {
+                explodeMultiblock();
+                return;
+            }
+
+            if (!preGenerated) {
+
+                if (!VoidMinerData.OrePool.containsKey(dimID)) {
+                    VoidMinerDataGenerator.generate(world)
+                        .done();
+                }
+                dropmap = VoidMinerData.OrePool.get(dimID);
+                totalWeight = VoidMinerData.OrePoolTotalWeightPool.get(dimID);
+                WATER = Materials.Water.mFluid;
+                LAVA = Materials.Lava.mFluid;
+
+                preGenerated = true;
+            }
+        }
+
+    }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aTick % 20 == 0) {
-
+        if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0) {
+            startRecipeProcessing();
+            ArrayList<FluidStack> fluidInputs = getStoredFluids();
+            if (fluidInputs != null && !fluidInputs.isEmpty()) {
+                for (FluidStack fluidStack : fluidInputs) {
+                    Fluid fluid = fluidStack.getFluid();
+                    if (fluid == WATER) {
+                        long t = (long) storedWater + fluidStack.amount;
+                        storedWater = t > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) t;
+                        fluidStack.amount = 0;
+                    } else if (fluid == LAVA) {
+                        long t = (long) storedLava + fluidStack.amount;
+                        storedLava = t > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) t;
+                        fluidStack.amount = 0;
+                    }
+                }
+                updateSlots();
+            }
+            endRecipeProcessing();
         }
     }
-
-    // @NotNull
-    // @Override
-    // public CheckRecipeResult checkProcessing() {
-    // setupProcessingLogic(processingLogic);
-    //
-    // CheckRecipeResult result = doCheckRecipe();
-    // result = postCheckRecipe(result, processingLogic);
-    // // inputs are consumed at this point
-    // updateSlots();
-    // if (!result.wasSuccessful()) return result;
-    //
-    // mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
-    // mEfficiencyIncrease = 10000;
-    // mMaxProgresstime = processingLogic.getDuration();
-    // setEnergyUsage(processingLogic);
-    //
-    // mOutputItems = processingLogic.getOutputItems();
-    // mOutputFluids = processingLogic.getOutputFluids();
-    //
-    // return result;
-    // }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -85,12 +350,12 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
 
     @Override
     protected float getSpeedBonus() {
-        return 0;
+        return 1;
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -192,19 +457,111 @@ F -> ofBlock...(tile.wood, 0, ...);
     // region General
 
     @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    protected boolean supportsCraftingMEBuffer() {
+        return false;
+    }
+
+    private static GT_Multiblock_Tooltip_Builder tt = null;
+
+    @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType(TextLocalization.Tooltip_EyeOfWood_MachineType)
-            .addInfo(TextLocalization.Tooltip_EyeOfWood_Controller)
-            .addInfo(TextLocalization.Tooltip_EyeOfWood_01)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
-            .beginStructureBlock(33, 33, 33, false)
-            .addController(TextLocalization.textFrontCenter)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+        // spotless:off
+        if (tt == null) {
+            tt = new GT_Multiblock_Tooltip_Builder();
+            tt.addMachineType(TextLocalization.Tooltip_EyeOfWood_MachineType)
+                .addInfo(TextLocalization.Tooltip_EyeOfWood_Controller)
+                .addInfo(TextLocalization.Tooltip_EyeOfWood_01)
+                // #tr Tooltip_EyeOfWood_02
+                // # Can only be deployed in the Overworld, otherwise it will have a festive effect.
+                // #zh_CN 仅可部署在主世界, 否则将产生节庆效果.
+                .addInfo(TextEnums.tr("Tooltip_EyeOfWood_02"))
+                .addInfo(TextLocalization.StructureTooComplex)
+                .addInfo(TextLocalization.BLUE_PRINT_INFO)
+                .addSeparator()
+                // #tr Tooltip_EyeOfWood_2_01
+                // # This machine will constantly consume {\BLUE}Water {\GRAY}and {\RED}Lava {\GRAY} in Input Hatches and store it inside the machine, like the Eye of Harmony.
+                // #zh_CN 机器会将输入仓中输入的{\BLUE}水{\GRAY}和{\RED}岩浆{\GRAY}存储于机器内部, 就像鸿蒙之眼一样.
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_01"))
+                // #tr Tooltip_EyeOfWood_2_02
+                // # The success rate of processing depends on the amount of water and magma that has been stored inside machine.
+                // #zh_CN 机器运行的成功率取决于已存储的水和岩浆的数量.
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_02"))
+                // #tr Tooltip_EyeOfWood_2_03
+                // # Maximum success rate : 75% when the amount of stored water and lava are both equal to 256,000L.
+                // #zh_CN 当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%%
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_03"))
+                .addStructureInfo(TextLocalization.Text_SeparatingLine)
+                // #tr Tooltip_EyeOfWood_2_04
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\AQUA}Success Rate{\GRAY} = {\WHITE}{7500 - 7499 * [1 - 1/({\GOLD}S{\WHITE}^{\BLUE}dW{\WHITE} * {\GOLD}S{\WHITE}^{\RED}dL{\WHITE}) ] } / 10000
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\AQUA}成功率{\GRAY} = {\WHITE}{7500 - 7499 * [1 - 1/({\GOLD}S{\WHITE}^{\BLUE}dW{\WHITE} * {\GOLD}S{\WHITE}^{\RED}dL{\WHITE}) ] } / 10000
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_04"))
+                // #tr Tooltip_EyeOfWood_2_05
+                // # Of Which :
+                // #zh_CN 其中 :
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_05"))
+                // #tr Tooltip_EyeOfWood_2_06
+                // # Value-specific base {\GOLD}S{\WHITE} ≈ 1.087
+                // #zh_CN 特定值底数 {\GOLD}S{\WHITE} ≈ 1.087
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_06"))
+                // #tr Tooltip_EyeOfWood_2_07
+                // # {\BLUE}dW{\GRAY} is the difference between stored water and demand (256,000L) divided by 1000, rounded down, unit L : {\BLUE}dW{\WHITE} = floor( |Stored Water - Demand | / 1000 )
+                // #zh_CN {\BLUE}dW{\GRAY} 为已存储水量和需求量(256,000L)的差值再除以1000向下取整, 单位L : {\BLUE}dW{\WHITE} = floor( |已存储水量 - 需求量| / 1000 )
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_07"))
+                // #tr Tooltip_EyeOfWood_2_08
+                // # {\RED}dL{\GRAY} is the difference between stored lava and demand (256,000L) divided by 1000, rounded down, unit L : {\RED}dL{\WHITE} = floor( |Stored Lava - Demand | / 1000 )
+                // #zh_CN {\RED}dL{\GRAY} 为已存储岩浆量和需求量(256,000L)的差值再除以1000向下取整, 单位L : {\RED}dL{\WHITE} = floor( |已存储岩浆量 - 需求量| / 1000 )
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_08"))
+                .addStructureInfo(TextLocalization.Text_SeparatingLine)
+                // #tr Tooltip_EyeOfWood_2_09
+                // # The machine takes a constant 60 seconds per run.
+                // #zh_CN 机器每次运行耗时恒定为60秒.
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_09"))
+                // #tr Tooltip_EyeOfWood_2_10
+                // # If processing succeed, machine will output lots of ore resource of Overworld.
+                // #zh_CN 如果机器运行成功, 将产出大量主世界矿资源.
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_10"))
+                // #tr Tooltip_EyeOfWood_2_11
+                // # If processing fail, machine will output lots of Steam.
+                // #zh_CN 如果机器运行失败, 则产出大量蒸汽.
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_11"))
+                // #tr Tooltip_EyeOfWood_2_12
+                // # Amount of steam produced (in L) = Success Rate * 360,000,000L (max. 270,000,000L)
+                // #zh_CN 产出蒸汽数量(单位L) = 成功几率 * 360,000,000L (最多270,000,000L)
+                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_12"))
+                /*
+                 * 成功率 = {7500 - 7499 * [1 - 1/(S^dW * S^dL)]} / 10000
+                 * <P>S ≈ 1.087</P>
+                 * <P>dW, dL 分别为已存储的水量与需求量(256,000L)的差值除以1000和已存储的岩浆量和需求量的差值除以1000, 并向下取整.</P>
+                 */
+                .addStructureInfo(TextLocalization.Text_SeparatingLine)
+                .beginStructureBlock(33, 33, 33, false)
+                .addController(TextLocalization.textFrontCenter)
+                .addInputBus(TextLocalization.textAnyCasing, 2)
+                .addOutputBus(TextLocalization.textAnyCasing, 2)
+                .toolTipFinisher(TextLocalization.ModName);
+        }
+        // spotless:on
+
         return tt;
     }
 
