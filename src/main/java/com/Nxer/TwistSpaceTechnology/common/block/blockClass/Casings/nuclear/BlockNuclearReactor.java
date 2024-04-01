@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings;
+package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.nuclear;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.NuclearReactorBlock;
 import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;

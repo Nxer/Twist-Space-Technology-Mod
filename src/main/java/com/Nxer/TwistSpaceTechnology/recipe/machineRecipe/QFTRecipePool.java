@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.*;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
@@ -126,7 +127,7 @@ public class QFTRecipePool implements IRecipePool {
                 Materials.Phosphorus.getDust(64),
                 Materials.Thorium.getDust(64),
                 WerkstoffLoader.Thorium232.get(OrePrefixes.dust, 64),
-                WerkstoffMaterialPool.RarestEarthResidue.get(OrePrefixes.dust, 64))
+                WerkstoffMaterialPool.Gangue.get(OrePrefixes.dust, 64))
             .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
             .noOptimize()
             .specialValue(2)
