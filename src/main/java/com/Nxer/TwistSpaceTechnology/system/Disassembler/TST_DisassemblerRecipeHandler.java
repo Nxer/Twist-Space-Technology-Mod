@@ -37,6 +37,7 @@ public class TST_DisassemblerRecipeHandler {
     private static class initializer {
 
         public void initDisassemblerRecipes() {
+            processSpecialDisassemblyRecipes();
             generateDisassemblyRecipes(GoodGeneratorRecipeMaps.componentAssemblyLineRecipes.getAllRecipes());
             generateDisassemblyRecipes(GTCMRecipe.MiracleTopRecipes.getAllRecipes());
             generateDisassemblyRecipes(RecipeMaps.assemblylineVisualRecipes.getAllRecipes());
@@ -44,8 +45,24 @@ public class TST_DisassemblerRecipeHandler {
             generateDisassemblyRecipes(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes.getAllRecipes());
         }
 
+        private void processSpecialDisassemblyRecipes() {
+            DisassemblerRecipeMap.put(
+                TST_ItemID.createNoNBT(ItemList.Casing_Fusion_Coil.get(1)),
+                new TST_SimpleDisassemblyRecipe()
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(ItemList.Casing_Fusion_Coil.get(1)))
+                    .setItemAmount(1)
+                    .setOutputItems(
+                        ItemList.Casing_Coil_Superconductor.get(1),
+                        ItemList.Neutron_Reflector.get(2),
+                        ItemList.Field_Generator_MV.get(2),
+                        GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 4))
+                    .setEut(480)
+                    .setTier(GT_Utility.getTier(480)));
+        }
+
         private final Set<TST_ItemID> blackList = Sets.newHashSet(
             TST_ItemID.createNoNBT(ItemList.Casing_Coil_Superconductor.get(1)),
+            TST_ItemID.createNoNBT(ItemList.Casing_Fusion_Coil.get(1)),
             TST_ItemID.createNoNBT(Materials.Carbon.getNanite(1)),
             TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorMV, 1)),
             TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorHV, 1)),
