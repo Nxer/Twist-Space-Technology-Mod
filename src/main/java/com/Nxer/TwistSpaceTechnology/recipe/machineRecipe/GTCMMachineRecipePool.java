@@ -177,8 +177,8 @@ import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
 import appeng.items.materials.MaterialType;
-import galaxyspace.core.register.GSItems;
 import fox.spiteful.avaritia.items.LudicrousItems;
+import galaxyspace.core.register.GSItems;
 import goodgenerator.items.MyMaterial;
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GT_Values;

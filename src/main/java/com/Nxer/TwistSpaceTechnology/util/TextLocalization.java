@@ -759,6 +759,10 @@ public class TextLocalization {
 
     // endregion
 
+    // region Ball Lightning
+    public static final String NameBallLightning = texter("BallLightning", "NameBallLightning");
+    // endregion
+
     // region Deployed Nano Core
     public static final String NameDeployedNanoCore = texter("Deployed Nano Core", "NameDeployedNanoCore");
     public static final String Tooltip_DeployedNanoCore_MachineType = texter("Nano Forge", "Tooltip_DeployedNanoCore_MachineType");

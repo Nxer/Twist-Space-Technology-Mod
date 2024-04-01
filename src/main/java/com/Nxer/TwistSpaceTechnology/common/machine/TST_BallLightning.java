@@ -470,7 +470,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                     GT_HatchElementBuilder.<TST_BallLightning>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
-                        .casingIndex((BasicBlocks.MetaBlockCasing01.getTextureIndex(2)))
+                        .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(1))
                         .dot(2)
                         .buildAndChain(MetaBlockCasing01, 1))
                 .addElement(

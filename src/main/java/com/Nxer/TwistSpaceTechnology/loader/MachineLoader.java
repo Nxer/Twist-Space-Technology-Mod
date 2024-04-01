@@ -450,12 +450,6 @@ public class MachineLoader {
             GTCMItemList.Disassembler.set(Disassembler);
         }
 
-        if (Config.Enable_BallLightning) {
-            BallLightning = new TST_BallLightning(19042, "NameBallLightning", TextLocalization.NameBallLightning)
-                .getStackForm(1);
-            GTCMItemList.BallLightning.set(BallLightning);
-        }
-
         // endregion
 
         //
@@ -483,6 +477,11 @@ public class MachineLoader {
             TextLocalization.NameSpaceApiaryT4).getStackForm(1);
         GTCMItemList.SpaceApiaryT4.set(SpaceApiaryT4);
 
+        if (Config.Enable_BallLightning) {
+            BallLightning = new TST_BallLightning(19046, "NameBallLightning", TextLocalization.NameBallLightning)
+                .getStackForm(1);
+            GTCMItemList.BallLightning.set(BallLightning);
+        }
         // endregion
 
         // region Single block Machine
