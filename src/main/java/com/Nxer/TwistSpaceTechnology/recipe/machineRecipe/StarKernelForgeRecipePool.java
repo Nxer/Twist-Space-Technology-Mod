@@ -169,8 +169,8 @@ public class StarKernelForgeRecipePool implements IRecipePool {
             .addTo(GTCMRecipe.BallLightningRecipes);
 
         bd = TST_RecipeBuilder.builder()
-            .fluidInputs(Materials.Tritanium.getMolten(144));
-        bd.fluidOutputs(Materials.Tritanium.getPlasma(144));
+            .fluidInputs(Materials.Tritanium.getMolten(8 * 144));
+        bd.fluidOutputs(Materials.Tritanium.getPlasma(8 * 144));
         bd.specialValue(13500);
         bd.eut((int) 1024L * 727 * 8 * 144)
             .duration(getDuration((int) 1024L * 727 * 8 * 144))
