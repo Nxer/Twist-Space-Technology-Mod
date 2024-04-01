@@ -193,7 +193,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 // debugLogInfo("Wildcard recipe generating.");
                 for (int i = 0; i < inputItems.length; i++) {
                     if (inputItems[i] == null) {
-                        inputItems[i] = inputWildcards[i][0];
+                        if (inputWildcards[i] != null && inputWildcards[i].length > 0) {
+                            inputItems[i] = inputWildcards[i][0];
+                        }
                     }
                 }
                 List<ItemStack[]> inputCombine = generateAllItemInput(inputItems, inputWildcards);
