@@ -77,6 +77,5 @@ public class RecipeLoader {
 
     public static void loadRecipesServerStarted() {
         new StellarForgeRecipePool().loadOnServerStarted();
-        new StarKernelForgeRecipePool().loadOnServerStarted();
     }
 }

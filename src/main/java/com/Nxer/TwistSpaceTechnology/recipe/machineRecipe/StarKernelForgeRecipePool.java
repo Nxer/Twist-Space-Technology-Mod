@@ -1,11 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -15,177 +9,137 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
-import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.material.ELEMENT;
 
 public class StarKernelForgeRecipePool implements IRecipePool {
 
-    public void SpawnRecipes() {
-
-        for (GT_Recipe plasmaFuel : RecipeMaps.plasmaFuels.getAllRecipes()) {
-            FluidStack PlasmaOutput = GT_Utility.getFluidForFilledItem(plasmaFuel.mInputs[0], true);
-            if (PlasmaOutput == null) continue;
-            int EuCost = 1;
-            int PlasmaInputAmount = getFluidAmount(getcellFluids(plasmaFuel.mInputs[0]));
-            if (PlasmaInputAmount == 144) {
-                PlasmaOutput.amount = 144 * 8;
-                EuCost = plasmaFuel.mSpecialValue * 144 * 8;
-            }
-            if (PlasmaInputAmount == 1000) {
-                PlasmaOutput.amount = 1000;
-                EuCost = plasmaFuel.mSpecialValue * 1000;
-            }
-
-            String PlasmaOutputName = FluidRegistry.getFluidName(PlasmaOutput);
-
-            if (PlasmaOutputName.split("\\.", 2).length == 2) {
-                String InputName = PlasmaOutputName.split("\\.", 2)[1];
-                FluidStack InputFluid = FluidRegistry.getFluidStack(InputName, PlasmaOutput.amount);
-                ItemStack InputItem = null;
-                if (InputFluid == null)
-                    InputFluid = FluidRegistry.getFluidStack("molten." + InputName, PlasmaOutput.amount);
-                if (InputFluid == null) {
-                    if (Objects.equals(InputName, "helium_3"))
-                        InputFluid = Materials.Helium_3.getGas(PlasmaOutput.amount);
-                    if (Objects.equals(InputName, "sodium"))
-                        InputFluid = Materials.Sodium.getFluid(PlasmaOutput.amount);
-                    if (Objects.equals(InputName, "carbon")) InputItem = Materials.Carbon.getDust(1);
-                    if (Objects.equals(InputName, "sulfur")) InputItem = Materials.Sulfur.getDust(1);
-                    if (Objects.equals(InputName, "phosphorus")) InputItem = Materials.Phosphorus.getDust(1);
-                    if (Objects.equals(InputName, "strontium")) InputItem = Materials.Strontium.getDust(1);
-                    if (Objects.equals(InputName, "cadmium")) InputItem = Materials.Cadmium.getDust(1);
-                }
-                if (InputFluid != null || InputItem != null) {
-                    addToRecipes(InputItem, InputFluid, PlasmaOutput, EuCost, getDuration(EuCost));
-                }
-            }
-
-        }
-
+    @Override
+    public void loadRecipes() {
+        loadGeneralRecipes();
+        loadManualRecipes();
     }
 
-    public FluidStack getcellFluids(ItemStack Cell) {
-        FluidStack out = null;
-        for (GT_Recipe recipe : RecipeMaps.fluidCannerRecipes.getAllRecipes()) {
-            if (metaItemEqual(Cell, recipe.mInputs[0])) {
-                if (recipe.mFluidOutputs[0] != null) {
-                    out = recipe.mFluidOutputs[0].copy();
-                    if (getFluidAmount(recipe.mFluidOutputs[0]) == 144) out.amount = 144;
-                    if (getFluidAmount(recipe.mFluidOutputs[0]) == 1000) out.amount = 1000;
-                }
-                break;
-            }
-        }
-        return out;
-    }
-
-    public static int getFluidAmount(FluidStack fluid) {
-        return fluid.amount;
-    };
-
-    public static int getDuration(int eut) {
-        return (int) Math.ceil(Math.log(eut) / Math.log(Math.E) * 5);
-    }
-
-    public void addToRecipes(ItemStack inputItems, FluidStack inputFluids, FluidStack outputFluids, int eut,
+    private void addRecipe(ItemStack[] itemInputs, FluidStack[] fluidInputs, FluidStack[] fluidOutputs, int eut,
         int duration) {
-        GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
-
-        if (inputItems != null) {
-            ra.itemInputs(inputItems);
-        }
-
-        if (inputFluids != null) {
-            ra.fluidInputs(inputFluids);
-        }
-
-        if (outputFluids != null) {
-            ra.fluidOutputs(outputFluids);
-        }
-
-        ra.eut(eut)
-            .duration(duration)
+        TST_RecipeBuilder.builder()
+            .itemInputs(itemInputs)
+            .fluidInputs(fluidInputs)
+            .fluidOutputs(fluidOutputs)
             .specialValue(13500)
+            .eut(eut)
+            .duration(duration)
             .addTo(GTCMRecipe.BallLightningRecipes);
     }
 
-    public static Collection<GT_Recipe> StarKernelForgeRecipeListCache;
-
-    private void cacheRecipeList() {
-        StarKernelForgeRecipeListCache = new HashSet<>(GTCMRecipe.BallLightningRecipes.getAllRecipes());
+    private void addRecipe(FluidStack[] fluidInputs, FluidStack[] fluidOutputs, int eut, int duration) {
+        addRecipe(null, fluidInputs, fluidOutputs, eut, duration);
     }
 
-    private void loadRecipeListCache() {
-        for (GT_Recipe recipe : StarKernelForgeRecipeListCache) {
-            GTCMRecipe.BallLightningRecipes.addRecipe(recipe);
+    private void addRecipe(FluidStack fluidInputs, FluidStack fluidOutputs, int eut) {
+        addRecipe(new FluidStack[] { fluidInputs }, new FluidStack[] { fluidOutputs }, eut, 50);
+    }
+
+    private void addRecipe(ItemStack itemInputs, FluidStack fluidOutputs, int eut) {
+        addRecipe(new ItemStack[] { itemInputs }, null, new FluidStack[] { fluidOutputs }, eut, 50);
+    }
+
+    private void loadGeneralRecipes() {
+        for (GT_Recipe plasmaFuel : RecipeMaps.plasmaFuels.getAllRecipes()) {
+            FluidStack plasma = GT_Utility.getFluidForFilledItem(plasmaFuel.mInputs[0], true);
+            if (plasma == null) {
+                continue;
+            }
+            int EUL = plasmaFuel.mSpecialValue;
+            String plasmaName = FluidRegistry.getFluidName(plasma);
+            String[] plasmaNameSplit = plasmaName.split("\\.", 2);
+            if (plasmaNameSplit.length != 2) continue;
+            String liquidName = plasmaNameSplit[1];
+            plasma.amount = 1000;
+            FluidStack liquid = FluidRegistry.getFluidStack(liquidName, plasma.amount);
+            if (liquid == null) liquid = FluidRegistry.getFluidStack("molten." + liquidName, plasma.amount);
+            if (liquid == null) {
+                switch (liquidName) {
+                    case "helium_3" -> liquid = Materials.Helium_3.getGas(plasma.amount);
+                    case "sodium" -> liquid = Materials.Sodium.getFluid(plasma.amount);
+                }
+            }
+
+            if (liquid == null) continue; // turn to manually process
+
+            addRecipe(liquid, plasma, EUL * 1000);
+
         }
     }
 
     public void loadManualRecipes() {
 
-        TST_RecipeBuilder bd = TST_RecipeBuilder.builder()
-            .fluidInputs(WerkstoffLoader.Neon.getFluidOrGas(1000));
-        bd.fluidOutputs(new FluidStack(ELEMENT.getInstance().NEON.getPlasma(), 1000));
-        bd.specialValue(13500);
-        bd.eut((int) (1024000L * 20))
-            .duration(getDuration((int) (1024000L * 20)))
-            .addTo(GTCMRecipe.BallLightningRecipes);
+        // Neon
+        addRecipe(
+            WerkstoffLoader.Neon.getFluidOrGas(1000),
+            new FluidStack(ELEMENT.getInstance().NEON.getPlasma(), 1000),
+            10_000_000);
 
-        bd = TST_RecipeBuilder.builder()
-            .fluidInputs(WerkstoffLoader.Krypton.getFluidOrGas(1000));
-        bd.fluidOutputs(new FluidStack(ELEMENT.getInstance().KRYPTON.getPlasma(), 1000));
-        bd.specialValue(13500);
-        bd.eut((int) (1024000L * 36))
-            .duration(getDuration((int) (1024000L * 36)))
-            .addTo(GTCMRecipe.BallLightningRecipes);
+        // Krypton
+        addRecipe(
+            WerkstoffLoader.Krypton.getFluidOrGas(1000),
+            new FluidStack(ELEMENT.getInstance().KRYPTON.getPlasma(), 1000),
+            30_000_000);
 
-        bd = TST_RecipeBuilder.builder()
-            .fluidInputs(WerkstoffLoader.Xenon.getFluidOrGas(1000));
-        bd.fluidOutputs(new FluidStack(ELEMENT.getInstance().XENON.getPlasma(), 1000));
-        bd.specialValue(13500);
-        bd.eut((int) (1024000L * 131))
-            .duration(getDuration((int) (1024000L * 131)))
-            .addTo(GTCMRecipe.BallLightningRecipes);
+        // Xenon
+        addRecipe(
+            WerkstoffLoader.Xenon.getFluidOrGas(1000),
+            new FluidStack(ELEMENT.getInstance().XENON.getPlasma(), 1000),
+            90_000_000);
 
-        bd = TST_RecipeBuilder.builder()
-            .fluidInputs(new FluidStack(ELEMENT.getInstance().TECHNETIUM.getFluid(), 1000));
-        bd.fluidOutputs(new FluidStack(ELEMENT.getInstance().TECHNETIUM.getPlasma(), 1000));
-        bd.specialValue(13500);
-        bd.eut((int) (1024000L * 98))
-            .duration(getDuration((int) (1024000L * 98)))
-            .addTo(GTCMRecipe.BallLightningRecipes);
+        // Technetium
+        addRecipe(
+            new FluidStack(ELEMENT.getInstance().TECHNETIUM.getFluid(), 1000),
+            new FluidStack(ELEMENT.getInstance().TECHNETIUM.getPlasma(), 1000),
+            100_000_000);
 
-        bd = TST_RecipeBuilder.builder()
-            .fluidInputs(new FluidStack(ELEMENT.getInstance().BROMINE.getFluid(), 1000));
-        bd.fluidOutputs(new FluidStack(ELEMENT.getInstance().BROMINE.getPlasma(), 1000));
-        bd.specialValue(13500);
-        bd.eut((int) (1024000L * 80))
-            .duration(getDuration((int) (1024000L * 80)))
-            .addTo(GTCMRecipe.BallLightningRecipes);
+        // Bromine
+        addRecipe(
+            new FluidStack(ELEMENT.getInstance().BROMINE.getFluid(), 1000),
+            new FluidStack(ELEMENT.getInstance().BROMINE.getPlasma(), 1000),
+            100_000_000);
 
-        bd = TST_RecipeBuilder.builder()
-            .fluidInputs(Materials.Tritanium.getMolten(8 * 144));
-        bd.fluidOutputs(Materials.Tritanium.getPlasma(8 * 144));
-        bd.specialValue(13500);
-        bd.eut((int) 1024L * 727 * 8 * 144)
-            .duration(getDuration((int) 1024L * 727 * 8 * 144))
-            .addTo(GTCMRecipe.BallLightningRecipes);
+        // Tritanium
+        addRecipe(Materials.Tritanium.getMolten(1000), Materials.Tritanium.getPlasma(1000), 100_000_000);
+
+        // Carbon
+        addRecipe(
+            Materials.Carbon.getDust(1),
+            Materials.Carbon.getPlasma(144),
+            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Carbon) * 144);
+
+        // Sulfur
+        addRecipe(
+            Materials.Sulfur.getDust(1),
+            Materials.Sulfur.getPlasma(144),
+            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Sulfur) * 144);
+
+        // Phosphorus
+        addRecipe(
+            Materials.Phosphorus.getDust(1),
+            Materials.Phosphorus.getPlasma(144),
+            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Phosphorus) * 144);
+
+        // Strontium
+        addRecipe(
+            Materials.Strontium.getDust(1),
+            Materials.Strontium.getPlasma(144),
+            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Strontium) * 144);
+
+        // Cadmium
+        addRecipe(
+            Materials.Cadmium.getDust(1),
+            Materials.Cadmium.getPlasma(144),
+            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Cadmium) * 144);
+
     }
 
-    @Override
-    public void loadRecipes() {
-        SpawnRecipes();
-        loadManualRecipes();
-        cacheRecipeList();
-    }
-
-    public void loadOnServerStarted() {
-        SpawnRecipes();
-        loadRecipeListCache();
-    }
 }
