@@ -165,6 +165,7 @@ import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.gthandler.GT_CoreModSupport;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
 import com.github.bartimaeusnek.bartworks.common.loaders.BioItemList;
@@ -2133,8 +2134,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 )
                 .fluidInputs(
                     WerkstoffLoader.Oganesson.getFluidOrGas(2000*1000),
-                    Materials.Celenegil.getMolten(144*64*64),
-                    Materials.Radon.getMolten(144*64*16),
+                    ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(144 * 64 * 64),
+                    GT_CoreModSupport.RadoxPolymer.getMolten(144 * 64 * 16),
                     MaterialsUEVplus.ExcitedDTEC.getFluid(1000 * 16)
                 )
                 .itemOutputs(BallLightning.get(1))
@@ -2272,7 +2273,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
                     AnnihilationConstrainer.get(1),
                     ItemList.ZPM2.get(1),
-                    GT_ModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 16),
+                    GT_ModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 1),
                     Laser_Lens_Special.get(4)
                 )
                 .fluidInputs(

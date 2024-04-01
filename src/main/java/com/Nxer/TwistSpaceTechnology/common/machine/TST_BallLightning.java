@@ -71,6 +71,7 @@ import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -472,7 +473,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                         .adder(TST_BallLightning::addToMachineList)
                         .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(1))
                         .dot(2)
-                        .buildAndChain(MetaBlockCasing01, 1))
+                        .buildAndChain(BasicBlocks.MetaBlockCasing01, 1))
                 .addElement(
                     'Z',
                     GT_HatchElementBuilder.<TST_BallLightning>builder()
@@ -625,20 +626,24 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
-            if (aActive) return new ITexture[] { TextureFactory.of(MetaBlockCasing01, 1), TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_ON)
-                .extFacing()
-                .build(),
+            if (aActive) return new ITexture[] {
+                Textures.BlockIcons.getCasingTextureForId(BasicBlocks.MetaBlockCasing01.getTextureIndex(1)),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_DTPF_ON)
+                    .extFacing()
+                    .build(),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FUSION1_GLOW)
                     .extFacing()
                     .glow()
                     .build() };
-            return new ITexture[] { TextureFactory.of(MetaBlockCasing01, 1), TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .glow()
-                .build() };
+            return new ITexture[] {
+                Textures.BlockIcons.getCasingTextureForId(BasicBlocks.MetaBlockCasing01.getTextureIndex(1)),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_DTPF_OFF)
+                    .extFacing()
+                    .glow()
+                    .build() };
         }
         return new ITexture[] { TextureFactory.of(MetaBlockCasing01, 1) };
     }

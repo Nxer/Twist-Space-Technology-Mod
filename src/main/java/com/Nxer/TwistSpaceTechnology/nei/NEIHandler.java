@@ -79,10 +79,10 @@ public class NEIHandler {
         sendCatalyst("gg.recipe.precise_assembler", "gregtech:gt.blockmachines:19028");
         sendCatalyst("gt.recipe.distillery", "gregtech:gt.blockmachines:19031");
         sendCatalyst("gt.recipe.distillationtower", "gregtech:gt.blockmachines:19031");
-        sendCatalyst("gt.recipe.arcfurnace", "gregtech:gt.blockmachines:19042");
-        sendCatalyst("gt.recipe.plasmaarcfurnace", "gregtech:gt.blockmachines:19042");
-        sendCatalyst("gt.recipe.fusionreactor", "gregtech:gt.blockmachines:19042");
-        sendCatalyst("tst.recipe.BallLightningRecipes", "gregtech:gt.blockmachines:19042");
+        sendCatalyst("gt.recipe.arcfurnace", "gregtech:gt.blockmachines:19046");
+        sendCatalyst("gt.recipe.plasmaarcfurnace", "gregtech:gt.blockmachines:19046");
+        sendCatalyst("gt.recipe.fusionreactor", "gregtech:gt.blockmachines:19046");
+        sendCatalyst("tst.recipe.BallLightningRecipes", "gregtech:gt.blockmachines:19046");
     }
 
     private static void sendHandler(String aName, String aBlock) {

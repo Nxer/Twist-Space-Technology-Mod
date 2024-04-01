@@ -9,7 +9,6 @@ import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStatio
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStar;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing01;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaItemBlockCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasingItemBlock;
@@ -56,13 +55,14 @@ public class BlockRegister {
     public static void registryBlockContainers() {
 
         GTCMItemList.TestMetaBlock01_0.set(ItemBlockBase01.initMetaBlock01("TestMetaBlock01_0", 0));
-        GTCMItemList.TestCasing.set(MetaBlockCasing01.initMetaCasing01("Test Casing", 0));
-        GTCMItemList.HighPowerRadiationProofCasing
-            .set(MetaBlockCasing01.initMetaCasing01("High Power Radiation Proof Casing", 1));
-        GTCMItemList.AdvancedHighPowerCoilBlock
-            .set(MetaBlockCasing01.initMetaCasing01("Advanced High Power Coil Block", 2));
         GTCMItemList.TestCasing
-            .set(MetaBlockConstructors.initMetaBlockCasing("Test Casing", (byte) 2, BasicBlocks.MetaBlockCasing01));
+            .set(MetaBlockConstructors.initMetaBlockCasing("Test Casing", (byte) 0, BasicBlocks.MetaBlockCasing01));
+        GTCMItemList.HighPowerRadiationProofCasing.set(
+            MetaBlockConstructors
+                .initMetaBlockCasing("High Power Radiation Proof Casing", (byte) 1, BasicBlocks.MetaBlockCasing01));
+        GTCMItemList.AdvancedHighPowerCoilBlock.set(
+            MetaBlockConstructors
+                .initMetaBlockCasing("Advanced High Power Coil Block", (byte) 2, BasicBlocks.MetaBlockCasing01));
 
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
