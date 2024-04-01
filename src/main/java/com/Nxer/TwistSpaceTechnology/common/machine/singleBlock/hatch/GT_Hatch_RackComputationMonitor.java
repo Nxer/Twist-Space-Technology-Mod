@@ -21,9 +21,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.TecTech;
 import com.github.technus.tectech.thing.gui.TecTechUITextures;
-import com.github.technus.tectech.util.CommonValues;
 import com.github.technus.tectech.util.TT_Utility;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -67,7 +67,8 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
             aNameRegional,
             aTier,
             64,
-            new String[] { CommonValues.TEC_MARK_EM, translateToLocal("tst.computationhatchmonitor.desc1"),
+            new String[] { TextLocalization.Mark_TwistSpaceTechnology_TecTech,
+                translateToLocal("tst.computationhatchmonitor.desc1"),
                 EnumChatFormatting.AQUA + translateToLocal("tst.computationhatchmonitor.desc2") });
         TT_Utility.setTier(aTier, this);
         this.isMeanHatch = isMeanHatch;

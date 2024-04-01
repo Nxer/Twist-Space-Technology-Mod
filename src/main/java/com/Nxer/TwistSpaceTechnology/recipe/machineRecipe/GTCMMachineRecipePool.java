@@ -120,6 +120,7 @@ import static com.github.technus.tectech.thing.CustomItemList.rack_Hatch;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.Mods.AE2WCT;
+import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.util.GT_ModHandler.addCraftingRecipe;
@@ -163,6 +164,7 @@ import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
 import appeng.items.materials.MaterialType;
+import fox.spiteful.avaritia.items.LudicrousItems;
 import goodgenerator.items.MyMaterial;
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GT_Values;
@@ -1877,85 +1879,121 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region Astral Array
-        GT_Values.RA
-            .stdBuilder()
-            .metadata(RESEARCH_ITEM, Machine_Multi_Computer.get(1))
-            .metadata(RESEARCH_TIME, 114514 * 20 * 100)
-            .itemInputs(
-                Machine_Multi_Computer.get(64),
-                Machine_Multi_Computer.get(64),
-                Machine_Multi_Computer.get(64),
-                Machine_Multi_Computer.get(64),
-                HiC_T5.get(64),
-                HiC_T5.get(64),
-                ItemList.Circuit_OpticalMainframe.get(64),
-                ItemList.Circuit_OpticalMainframe.get(64),
-                ItemList.Sensor_UEV.get(64),
-                ItemList.Field_Generator_UEV.get(64),
-                Materials.Silver.getNanite(64),
-                ItemList.Gravistar.get(64),
-                new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 1),
-                new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 1),
-                new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 2),
-                new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 2)
-            )
-            .fluidInputs(Materials.Tin.getPlasma(14400), Materials.SuperCoolant.getFluid(4000000), Materials.Infinity.getFluid(114514))
-            .itemOutputs(AstralComputingArray.get(1))
-            .eut(RECIPE_UEV * 3)
-            .duration(20 * 1000)
-            .addTo(AssemblyLine);
+        {
+            GT_Values.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, Machine_Multi_Computer.get(1))
+                .metadata(RESEARCH_TIME, 114514 * 20 * 100)
+                .itemInputs(
+                    Machine_Multi_Computer.get(64),
+                    Machine_Multi_Computer.get(64),
+                    Machine_Multi_Computer.get(64),
+                    Machine_Multi_Computer.get(64),
+                    HiC_T5.get(64),
+                    HiC_T5.get(64),
+                    ItemList.Circuit_OpticalMainframe.get(64),
+                    ItemList.Circuit_OpticalMainframe.get(64),
+                    ItemList.Sensor_UEV.get(64),
+                    ItemList.Field_Generator_UEV.get(64),
+                    Materials.Silver.getNanite(64),
+                    ItemList.Gravistar.get(64),
+                    new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 1),
+                    new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 1),
+                    new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 2),
+                    new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 2)
+                )
+                .fluidInputs(Materials.Tin.getPlasma(14400), Materials.SuperCoolant.getFluid(4000000), Materials.Infinity.getFluid(114514))
+                .itemOutputs(AstralComputingArray.get(1))
+                .eut(RECIPE_UEV * 3)
+                .duration(20 * 1000)
+                .addTo(AssemblyLine);
 
-        GT_Values.RA
-            .stdBuilder()
-            .itemInputs(rack_Hatch.get(64), ItemList.Field_Generator_UEV.get(64), new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 1), HiC_T5.get(64))
-            .itemOutputs(RealRackHatch.get(1))
-            .eut(RECIPE_UEV * 2)
-            .duration(20 * 500)
-            .addTo(assembler);
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    rack_Hatch.get(64),
+                    ItemList.Field_Generator_UEV.get(64),
+                    new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 1),
+                    HiC_T5.get(64))
+                .itemOutputs(RealRackHatch.get(1))
+                .eut(RECIPE_UEV * 2)
+                .duration(20 * 500)
+                .addTo(assembler);
 
-        GT_Values.RA
-            .stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(10), getModItem(AE2WCT.ID, "infinityBoosterCard", 64), ItemList.Sensor_UMV.get(64), ItemList.Wireless_Dynamo_Energy_UMV.get(1), dataIn_Hatch.get(16))
-            .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
-            .itemOutputs(WirelessDataInputHatch.get(1))
-            .eut(RECIPE_UMV)
-            .duration(800)
-            .addTo(assembler);
+            final ItemStack wirelessCard = getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 1, 42);
+            final ItemStack quantumCard = getModItem(AE2WCT.ID, "infinityBoosterCard", 1);
 
-        GT_Values.RA
-            .stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(10),
-                getModItem(AE2WCT.ID, "infinityBoosterCard", 64), ItemList.Emitter_UMV.get(64), ItemList.Wireless_Dynamo_Energy_UMV.get(1), dataOut_Hatch.get(16))
-            .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
-            .itemOutputs(WirelessDataOutputHatch.get(1))
-            .eut(RECIPE_UMV)
-            .duration(800)
-            .addTo(assembler);
-        GT_Values.RA
-            .stdBuilder()
-            .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
-            .metadata(RESEARCH_TIME, 720000)
-            .itemInputs(
-                getModItem(AE2WCT.ID, "infinityBoosterCard", 64),
-                getModItem(AE2WCT.ID, "infinityBoosterCard", 64),
-                getModItem(AE2WCT.ID, "infinityBoosterCard", 64),
-                getModItem(AE2WCT.ID, "infinityBoosterCard", 64),
-                WirelessDataOutputHatch.get(8),
-                WirelessDataInputHatch.get(8),
-                ItemList.Field_Generator_UMV.get(64),
-                ItemList.Wireless_Dynamo_Energy_UMV.get(8),
-                Machine_Multi_Switch.get(64),
-                Machine_Multi_Switch.get(64),
-                Machine_Multi_Switch.get(64),
-                Machine_Multi_Switch.get(64)
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(10),
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 4),
+                    copyAmount(32, wirelessCard),
+                    new ItemStack(LudicrousItems.resource, 4, 5)
+                )
+                .fluidInputs(Materials.Infinity.getMolten(144 * 8))
+                .itemOutputs(copyAmount(1, quantumCard))
+                .eut(RECIPE_UHV)
+                .duration(20)
+                .addTo(assembler);
 
-            )
-            .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 200), Materials.UUMatter.getFluid(20480000), Materials.SuperconductorUIVBase.getFluid(5000000))
-            .itemOutputs(WirelessUpdateItem.get(1))
-            .eut(RECIPE_UMV)
-            .duration(800)
-            .addTo(AssemblyLine);
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(10),
+                    copyAmount(64, quantumCard),
+                    ItemList.Sensor_UIV.get(16),
+                    ItemList.Tesseract.get(64),
+                    dataIn_Hatch.get(16)
+                )
+                .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
+                .itemOutputs(WirelessDataInputHatch.get(1))
+                .eut(RECIPE_UMV)
+                .duration(800)
+                .addTo(assembler);
+
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(10),
+                    copyAmount(64, quantumCard),
+                    ItemList.Emitter_UIV.get(64),
+                    ItemList.EnergisedTesseract.get(64),
+                    dataOut_Hatch.get(16)
+                )
+                .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
+                .itemOutputs(WirelessDataOutputHatch.get(1))
+                .eut(RECIPE_UMV)
+                .duration(800)
+                .addTo(assembler);
+
+            GT_Values.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
+                .metadata(RESEARCH_TIME, 720000)
+                .itemInputs(
+                    copyAmount(64, quantumCard),
+                    copyAmount(64, quantumCard),
+                    copyAmount(64, quantumCard),
+                    copyAmount(64, quantumCard),
+
+                    WirelessDataOutputHatch.get(8),
+                    WirelessDataInputHatch.get(8),
+                    ItemList.Field_Generator_UMV.get(64),
+                    ItemList.Wireless_Dynamo_Energy_UMV.get(8),
+
+                    Machine_Multi_Switch.get(64),
+                    Machine_Multi_Switch.get(64),
+                    Machine_Multi_Switch.get(64),
+                    Machine_Multi_Switch.get(64)
+                )
+                .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 200), Materials.UUMatter.getFluid(20480000), Materials.SuperconductorUIVBase.getFluid(5000000))
+                .itemOutputs(WirelessUpdateItem.get(1))
+                .eut(RECIPE_UMV)
+                .duration(800)
+                .addTo(AssemblyLine);
+
+        }
 
         // endregion
 
