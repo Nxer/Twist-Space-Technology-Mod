@@ -86,9 +86,9 @@ public class GTCM_TestMultiMachine
                 GT_HatchElementBuilder.<GTCM_TestMultiMachine>builder()
                     .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), Maintenance)
                     .adder(GTCM_TestMultiMachine::addToMachineList)
-                    .casingIndex(((MetaBlockCasing01) BasicBlocks.MetaBlockCasing01).getTextureIndex(2))
+                    .casingIndex(((MetaBlockCasing01) BasicBlocks.MetaBlockCasing01).getTextureIndex(0))
                     .dot(1)
-                    .buildAndChain(BasicBlocks.MetaBlockCasing01, 2))
+                    .buildAndChain(BasicBlocks.MetaBlockCasing01, 0))
             .build();
     }
 

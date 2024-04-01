@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import net.minecraftforge.common.config.Configuration;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+import com.glodblock.github.inventory.item.*;
 
 // spotless:off
 public class Config {
@@ -272,6 +273,8 @@ public class Config {
 
     // region Ball Lightning
     public static boolean Enable_BallLightning = true;
+    public static int WirelessModeExtraEuCost_BallLightning = 64;
+    public static int WirelessModeTickEveryProcess_BallLightning = 20;
     // end region
     // region StarcoreMiner
     public static boolean Enable_StarcoreMiner = true;
@@ -559,6 +562,8 @@ public class Config {
 
         // region Ball Lightning
         Enable_BallLightning = configuration.getBoolean("Enable_BallLightning", BallLightning, Enable_BallLightning, "Enable Ball Lightning.");
+        WirelessModeExtraEuCost_BallLightning = configuration.getInt("WirelessModeExtraEuCost_BallLightning", BallLightning, WirelessModeExtraEuCost_BallLightning, 1, 2147483646, "Wireless Mode Extra Eu Cost. Type: int");
+        WirelessModeTickEveryProcess_BallLightning = configuration.getInt("WirelessModeTickEveryProcess_BallLightning", BallLightning, WirelessModeTickEveryProcess_BallLightning, 1, 2147483646, "Wireless Mode Work Ticks. Type: int");
         // end region
 
         TST_CleanRoom.loadConfig(configuration);

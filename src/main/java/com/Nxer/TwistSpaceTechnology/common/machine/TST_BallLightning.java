@@ -3,6 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BallLightningUpgradeChip;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeExtraEuCost_BallLightning;
+import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeTickEveryProcess_BallLightning;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -292,8 +294,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         mEfficiencyIncrease = 10000;
         if (isWirelessMode) {
             lEUt = 0;
-            mMaxProgresstime = 20;
-            extraEuCostMultiplier = 64;
+            mMaxProgresstime = WirelessModeTickEveryProcess_BallLightning;
+            extraEuCostMultiplier = WirelessModeExtraEuCost_BallLightning;
 
             BigInteger costingWirelessEUTemp = BigInteger.valueOf(processingLogic.getCalculatedEut())
                 .multiply(BigInteger.valueOf(processingLogic.getDuration()))
@@ -801,8 +803,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN 每升级一次机器等级, 更低级的机器模式获得4倍速.
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.10"))
             // #tr Tooltip_BallLightning.0.11
-            // # {\GOLD}===  Machine Tier  ===
-            // #zh_CN {\GOLD}===  机器等级  ===
+            // # {\GOLD}=== Machine Tier ===
+            // #zh_CN {\GOLD}=== 机器等级 ===
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.11"))
             // #tr Tooltip_BallLightning.0.12
             // # The base structure is Tier 1
@@ -821,8 +823,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN 使用进阶高能线圈解锁等级4
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.15"))
             // #tr Tooltip_BallLightning.0.16
-            // # {\GOLD}===  Machine Mode  ===
-            // #zh_CN {\GOLD}===  机器模式  ===
+            // # {\GOLD}=== Machine Mode ===
+            // #zh_CN {\GOLD}=== 机器模式 ===
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.16"))
             // #tr Tooltip_BallLightning.0.17
             // # {\YELLOW} (Plasma / Electric) Arc Furnace
@@ -841,7 +843,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN {\YELLOW} 聚变反应堆
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.20"))
             // #tr Tooltip_BallLightning.0.21
-            // # The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.6 ^ (Field Generator Tier - 1) MAX/t
+            // # The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.6 ^ (Field Generator
+            // Tier - 1) MAX/t
             // #zh_CN 最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.6 ^ (力场发生器等级 - 1) A MAX
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.21"))
             // #tr Tooltip_BallLightning.0.22

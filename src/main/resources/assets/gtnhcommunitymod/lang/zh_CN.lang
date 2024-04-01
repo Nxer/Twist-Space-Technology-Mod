@@ -944,3 +944,7 @@ Tooltip_BallLightning.1.12=§666 §7x戴森球控制中心基座机械方块
 Tooltip_BallLightning.1.13=§6162 §7x传输机械方块
 Tooltip_BallLightning.1.14=§6360 §7xUIV超导粗胚框架
 Tooltip_BallLightning.1.15=§6538 §7x中子框架
+BallLightning.modeMsg.0=电弧炉
+BallLightning.modeMsg.1=等离子电弧炉
+BallLightning.modeMsg.2=聚变反应堆
+BallLightning.modeMsg.3=星核发生器

@@ -944,3 +944,7 @@ Tooltip_BallLightning.1.12=§666 §7xDyson Swarm Control Center Base Casing
 Tooltip_BallLightning.1.13=§6162 §7xTeleportation Casing
 Tooltip_BallLightning.1.14=§6360 §7xSuperconductor Base UIV Frame Box
 Tooltip_BallLightning.1.15=§6538 §7xNeutronium Frame Box
+BallLightning.modeMsg.0=Electric Arc Furnace
+BallLightning.modeMsg.1=Plasma Arc Furnace
+BallLightning.modeMsg.2=Fusion Reactor
+BallLightning.modeMsg.3=Star Kernel Generator
