@@ -374,19 +374,14 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
         int builtMain = survivialBuildPiece(STRUCTURE_PIECE_MK1, stackSize, 12, 20, 7, elementBudget, env, false, true);
-        if (stackSize.stackSize > 1) {
-            builtMain += survivialBuildPiece(
-                STRUCTURE_PIECE_MK2,
-                stackSize,
-                38,
-                51,
-                7,
-                elementBudget,
-                env,
-                false,
-                true);
+        if (stackSize.stackSize < 2) {
+            return builtMain;
         }
-        return builtMain;
+        int builtAdv = survivialBuildPiece(STRUCTURE_PIECE_MK2, stackSize, 38, 51, 7, elementBudget, env, false, true);
+        if (builtMain == -1 && builtAdv == -1) return -1;
+        if (builtMain == -1 && builtAdv > -1) return builtAdv;
+        if (builtMain > -1 && builtAdv == -1) return builtMain;
+        return builtMain + builtAdv;
     }
 
     /*
