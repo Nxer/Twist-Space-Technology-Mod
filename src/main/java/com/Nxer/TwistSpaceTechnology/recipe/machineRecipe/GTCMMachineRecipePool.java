@@ -1173,7 +1173,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 36),
                 Materials.UUMatter.getFluid(1000 * 8),
-                MaterialsUEVplus.ExcitedDTSC.getFluid(1000 * 4)
+                MaterialsUEVplus.ExcitedDTEC.getFluid(1000 * 64)
             )
             .itemOutputs(InfiniteWirelessDynamoHatch.get(1))
             .eut(RECIPE_UXV)
