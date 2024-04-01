@@ -29,12 +29,15 @@ import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static gregtech.api.util.GT_Utility.getCasingTextureIndex;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -152,6 +155,17 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             case 3 -> GTCMRecipe.BallLightningRecipes;
             default -> RecipeMaps.arcFurnaceRecipes;
         };
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(
+            RecipeMaps.arcFurnaceRecipes,
+            RecipeMaps.plasmaArcFurnaceRecipes,
+            RecipeMaps.fusionRecipes,
+            GTCMRecipe.BallLightningRecipes
+        );
     }
 
     @Override
@@ -625,27 +639,24 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
+        ITexture base = casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(1)];
         if (side == facing) {
-            if (aActive) return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(BasicBlocks.MetaBlockCasing01.getTextureIndex(1)),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_ON)
-                    .extFacing()
-                    .build(),
+            if (aActive) return new ITexture[] { base, TextureFactory.builder()
+                .addIcon(OVERLAY_DTPF_ON)
+                .extFacing()
+                .build(),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FUSION1_GLOW)
                     .extFacing()
                     .glow()
                     .build() };
-            return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(BasicBlocks.MetaBlockCasing01.getTextureIndex(1)),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_OFF)
-                    .extFacing()
-                    .glow()
-                    .build() };
+            return new ITexture[] { base, TextureFactory.builder()
+                .addIcon(OVERLAY_DTPF_OFF)
+                .extFacing()
+                .glow()
+                .build() };
         }
-        return new ITexture[] { TextureFactory.of(MetaBlockCasing01, 1) };
+        return new ITexture[] { base };
     }
 
     // end region

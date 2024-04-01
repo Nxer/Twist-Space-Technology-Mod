@@ -137,6 +137,7 @@ import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.core.item.chemistry.RocketFuels.Liquid_Hydrogen;
+import static gtPlusPlus.core.material.ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Industrial_Arc_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GTPP_Casing_UHV;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;

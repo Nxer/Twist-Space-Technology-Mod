@@ -21,6 +21,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockRegister {
@@ -57,12 +58,10 @@ public class BlockRegister {
         GTCMItemList.TestMetaBlock01_0.set(ItemBlockBase01.initMetaBlock01("TestMetaBlock01_0", 0));
         GTCMItemList.TestCasing
             .set(MetaBlockConstructors.initMetaBlockCasing("Test Casing", (byte) 0, BasicBlocks.MetaBlockCasing01));
-        GTCMItemList.HighPowerRadiationProofCasing.set(
-            MetaBlockConstructors
-                .initMetaBlockCasing("High Power Radiation Proof Casing", (byte) 1, BasicBlocks.MetaBlockCasing01));
-        GTCMItemList.AdvancedHighPowerCoilBlock.set(
-            MetaBlockConstructors
-                .initMetaBlockCasing("Advanced High Power Coil Block", (byte) 2, BasicBlocks.MetaBlockCasing01));
+        GTCMItemList.HighPowerRadiationProofCasing
+            .set(MetaBlockConstructors.initMetaBlockCasing("High Power Radiation Proof Casing", (byte) 1, BasicBlocks.MetaBlockCasing01, new String[]{TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.01"), TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.02")}));
+        GTCMItemList.AdvancedHighPowerCoilBlock
+            .set(MetaBlockConstructors.initMetaBlockCasing("Advanced High Power Coil Block", (byte) 2, BasicBlocks.MetaBlockCasing01, new String[]{TextEnums.tr("Tooltips_AdvancedHighPowerCoil.01"), TextEnums.tr("Tooltips_AdvancedHighPowerCoil.02")}));
 
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
