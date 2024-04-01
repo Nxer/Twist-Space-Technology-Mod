@@ -922,12 +922,12 @@ Tooltip_BallLightning.0.07=§o§fThe most elemental and ultimate utilization of 
 Tooltip_BallLightning.0.08=The structure requires at least Infinity Coil.
 Tooltip_BallLightning.0.09=Comprises four machine levels, each unlocking a different mode.
 Tooltip_BallLightning.0.10=With each machine tier upgrade, the lower-tier modes benefit from a 4x speed multiplier.
-Tooltip_BallLightning.0.11=§6===  Machine Tier  ===
+Tooltip_BallLightning.0.11=§6=== Machine Tier ===
 Tooltip_BallLightning.0.12=The base structure is Tier 1
 Tooltip_BallLightning.0.13=Gravitational Lens in the control slot unlocks level 2
 Tooltip_BallLightning.0.14=Upgrade Chip in the control slot and utilizing Tier 2 structure unlocks level 3
 Tooltip_BallLightning.0.15=Utilizing Advanced High Power Coil unlocks level 4
-Tooltip_BallLightning.0.16=§6===  Machine Mode  ===
+Tooltip_BallLightning.0.16=§6=== Machine Mode ===
 Tooltip_BallLightning.0.17=§e (Plasma / Electric) Arc Furnace
 Tooltip_BallLightning.0.18=Parallel number = 2 ^ (Compact Fusion Coil Tier * (Coil Tier - 10))
 Tooltip_BallLightning.0.19=Tiers above Crude Stabilisation Field Generator block enables perfect overclocks
@@ -937,8 +937,8 @@ Tooltip_BallLightning.0.22=65536x parallel | Perfect overclocks
 Tooltip_BallLightning.0.23=The max recipe tier is limited by the Compact Fusion Coil Tier
 Tooltip_BallLightning.0.24=§e Star Kernel Generator
 Tooltip_BallLightning.0.25=Almost infinite parallel | Upgrade the Field Generator for faster speeds
-Tooltip_BallLightning.0.26=Extra Speed Bonus = 0.7937 ^ (Field Generator Tier - 1)
-Tooltip_BallLightning.0.27=Joining the wireless EU network when no energy hatch is installed
+Tooltip_BallLightning.0.26=Extra Speed Bonus = 0.794 ^ (Field Generator Tier - 1)
+Tooltip_BallLightning.0.27=Joining the wireless EU network when machine tier is 4 AND when no energy hatch is installed
 Tooltip_BallLightning.0.28=The Progressing Time will be fixed at 1.0s, and EU cost increase to §c64§7x
 Tooltip_BallLightning.1.01=§9Base Multi (Tier§51§9):
 Tooltip_BallLightning.1.02=§6NEI §7preview for details
@@ -959,6 +959,7 @@ BallLightning.modeMsg.0=Electric Arc Furnace
 BallLightning.modeMsg.1=Plasma Arc Furnace
 BallLightning.modeMsg.2=Fusion Reactor
 BallLightning.modeMsg.3=Star Kernel Generator
+BallLightning.modeMsg.IncompleteStructure=INCOMPLETE STRUCTURE!
 getInfoData.StoredWater=Stored Water
 getInfoData.StoredLava=Stored Lava
 getInfoData.SuccessChance=Success Chance
@@ -995,3 +996,4 @@ Tooltip_SpaceApiary_t4_desc5=But humans have nothing to repay the bees.
 Mark_TwistSpaceTechnology_TecTech=§b§lTwist Space Technology : §r§9Tec§1Tech
 WirelessDataInput.tooltips.01=Wireless Quantum Data Input for Multiblocks
 WirelessDataOutput.tooltips.01=Wireless Quantum Data Output for Multiblocks
+Author_Goderium=Author : §f§lGoderium

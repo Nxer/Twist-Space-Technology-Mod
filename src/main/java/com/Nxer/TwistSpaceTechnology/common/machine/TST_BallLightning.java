@@ -57,6 +57,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing01;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -120,6 +121,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     private int compactFusionCoilTier = 0;
     private UUID ownerUUID;
     public byte mMachineTier = 1;
+    private byte mStructureTier = 0;
+
     public byte mode = 0;
     public long FusionMaxEut = 0;
     private boolean isWirelessMode = false;
@@ -133,6 +136,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
+        if (GravitationalLens == null) GravitationalLens = GTCMItemList.GravitationalLens.get(1);
+        if (BallLightningUpgradeChip == null) BallLightningUpgradeChip = GTCMItemList.BallLightningUpgradeChip.get(1);
     }
 
     public HeatingCoilLevel coilLevel;
@@ -227,12 +232,20 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide() && mMachineTier != 0) {
+            if (!checkStructure(true)) {
+                // #tr BallLightning.modeMsg.IncompleteStructure
+                // # INCOMPLETE STRUCTURE!
+                // #zh_CN 结构不完整!
+                GT_Utility.sendChatToPlayer(
+                    aPlayer,
+                    StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
+                return;
+            }
+
             this.mode = (byte) ((this.mode + 1) % mMachineTier);
             GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("BallLightning.modeMsg." + this.mode));
-            if (checkStructure(true))
-                isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty() && mode == 3;
+
         }
-        // checkSpeedBonus();
     }
 
     @Override
@@ -295,6 +308,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
+        checkTier();
         setupProcessingLogic(processingLogic);
 
         CheckRecipeResult result = doCheckRecipe();
@@ -333,6 +347,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     private static final String STRUCTURE_PIECE_MK1 = "BallLightningMK1";
     private static final String STRUCTURE_PIECE_MK2 = "BallLightningMK2";
     private static IStructureDefinition<TST_BallLightning> STRUCTURE_DEFINITION = null;
+    private static ItemStack GravitationalLens;
+    private static ItemStack BallLightningUpgradeChip;
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
@@ -341,24 +357,49 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         this.fieldGeneratorTier = 0;
         this.compactFusionCoilTier = 0;
         this.coilLevel = HeatingCoilLevel.None;
+        this.mStructureTier = 0;
 
         if (checkPiece(STRUCTURE_PIECE_MK1, 12, 20, 7) && coilLevel.getTier() > 10) {
-            mMachineTier = 1;
-            if (aStack != null) {
-                if (aStack.isItemEqual(GravitationalLens.get(1))) {
-                    mMachineTier = 2;
-                }
-                if (checkPiece(STRUCTURE_PIECE_MK2, 38, 51, 7) && aStack.isItemEqual(BallLightningUpgradeChip.get(1))) {
-                    mMachineTier = 3;
-                    if (compactFusionCoilTier == 6) mMachineTier = 4;
-                }
+            if (checkPiece(STRUCTURE_PIECE_MK2, 38, 51, 7)) {
+                mStructureTier = 2;
+            } else {
+                mStructureTier = 1;
             }
-        } else mMachineTier = 0;
+        } else return false;
+
+        checkTier();
+        isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty() && mMachineTier == 4;
+        return mStructureTier > 0;
+
+    }
+
+    protected void checkTier() {
+        checkTier: {
+            if (mStructureTier < 1) {
+                mMachineTier = 0;
+                break checkTier;
+            }
+
+            ItemStack controllerSlot = getControllerSlot();
+            if (controllerSlot == null) {
+                mMachineTier = 1;
+                break checkTier;
+            }
+
+            if (mStructureTier == 2 && controllerSlot.isItemEqual(BallLightningUpgradeChip)) {
+                if (compactFusionCoilTier == 6) {
+                    mMachineTier = 4;
+                } else {
+                    mMachineTier = 3;
+                }
+            } else if (controllerSlot.isItemEqual(GravitationalLens)) {
+                mMachineTier = 2;
+            } else {
+                mMachineTier = 1;
+            }
+        }
 
         checkSpeedBonus();
-        isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty() && mode == 3;
-        return mMachineTier > 0;
-
     }
 
     @Override
@@ -497,7 +538,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     // region General
 
     @Override
-    public boolean supportsInputSeparation() {
+    public boolean getDefaultInputSeparationMode() {
         return false;
     }
 
@@ -604,6 +645,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", mode);
         aNBT.setByte(" mMachineTier", mMachineTier);
+        aNBT.setByte(" mStructureTier", mStructureTier);
         aNBT.setBoolean("isWirelessMode", isWirelessMode);
         aNBT.setFloat("speedBonus", speedBonus);
         aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
@@ -618,6 +660,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         super.loadNBTData(aNBT);
         mode = aNBT.getByte("mode");
         mMachineTier = aNBT.getByte("mMachineTier");
+        mStructureTier = aNBT.getByte("mStructureTier");
         isWirelessMode = aNBT.getBoolean("isWirelessMode");
         speedBonus = aNBT.getFloat("speedBonus");
         fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
@@ -759,7 +802,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         {"                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                GGGGGGGGGGGGG                                ","                            GGGGBBBBBBBBBBBBBGGGG                            ","                            ZZZZBBBBBBBBBBBBBZZZZ                            ","                            GGGGBBBBBBBBBBBBBGGGG                            ","                                GGGGGGGGGGGGG                                ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             "},
         {"                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                GGGGGGGGGGGGG                                ","                                ZZZZZZZZZZZZZ                                ","                                GGGGGGGGGGGGG                                ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             "}
     };
-    // spotless:on
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
@@ -805,7 +847,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.08"))
             // #tr Tooltip_BallLightning.0.09
             // # Comprises four machine levels, each unlocking a different mode.
-            // #zh_CN 拥有4个机器等级, 分别解锁4种模式,
+            // #zh_CN 机器拥有4个等级, 依次解锁4种模式,
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.09"))
             // #tr Tooltip_BallLightning.0.10
             // # With each machine tier upgrade, the lower-tier modes benefit from a 4x speed multiplier.
@@ -852,8 +894,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN {\YELLOW} 聚变反应堆
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.20"))
             // #tr Tooltip_BallLightning.0.21
-            // # The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.6 ^ (Field Generator
-            // Tier - 1) MAX/t
+            // # The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.6 ^ (Field Generator Tier - 1) MAX/t
             // #zh_CN 最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.6 ^ (力场发生器等级 - 1) A MAX
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.21"))
             // #tr Tooltip_BallLightning.0.22
@@ -873,12 +914,13 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN 几乎无限的并行, 升级力场发生器以获得更高的速度
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.25"))
             // #tr Tooltip_BallLightning.0.26
-            // # Extra Speed Bonus = 0.7937 ^ (Field Generator Tier - 1)
-            // #zh_CN 额外增速 = 0.7937 ^ (1 - 力场发生器等级)
+            // # Extra Speed Bonus = 0.794 ^ (Field Generator Tier - 1)
+            // #zh_CN 耗时系数 = 0.794 ^ (力场发生器等级 - 1)
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.26"))
+            .addInfo(Text_SeparatingLine)
             // #tr Tooltip_BallLightning.0.27
-            // # Joining the wireless EU network when no energy hatch is installed
-            // #zh_CN 未安装能源仓时进入无线模式
+            // # Joining the wireless EU network when machine tier is 4 AND when no energy hatch is installed
+            // #zh_CN 等级4且未安装能源仓时进入无线模式
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.27"))
             // #tr Tooltip_BallLightning.0.28
             // # The Progressing Time will be fixed at 1.0s, and EU cost increase to {\RED}64{\GRAY}x
@@ -888,6 +930,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
+            .addInfo(TextEnums.Author_Goderium.getText())
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
@@ -959,4 +1002,5 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             .toolTipFinisher(ModName);
         return tt;
     }
+    // spotless:on
 }

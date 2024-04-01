@@ -53,12 +53,14 @@ public class StarKernelForgeRecipePool implements IRecipePool {
             if (plasma == null) {
                 continue;
             }
+            // EU/L
             int EUL = plasmaFuel.mSpecialValue;
             String plasmaName = FluidRegistry.getFluidName(plasma);
             String[] plasmaNameSplit = plasmaName.split("\\.", 2);
             if (plasmaNameSplit.length != 2) continue;
             String liquidName = plasmaNameSplit[1];
             plasma.amount = 1000;
+            // Try finding cooled liquid
             FluidStack liquid = FluidRegistry.getFluidStack(liquidName, plasma.amount);
             if (liquid == null) liquid = FluidRegistry.getFluidStack("molten." + liquidName, plasma.amount);
             if (liquid == null) {

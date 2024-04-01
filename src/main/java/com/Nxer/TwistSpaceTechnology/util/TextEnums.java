@@ -9,6 +9,11 @@ public enum TextEnums {
 
     // region General
 
+    // #tr Author_Goderium
+    // # Author : {\WHITE}{\BOLD}Goderium
+    // #zh_CN 作者 : {\WHITE}{\BOLD}Goderium
+    Author_Goderium("Author_Goderium"),
+
     // #tr AddByTwistSpaceTechnology
     // # Added by {\GREEN}Twist Space Technology{\GRAY}
     // #zh_CN 由 {\GREEN}Twist Space Technology{\GRAY} 添加
