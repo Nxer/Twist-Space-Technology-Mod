@@ -31,6 +31,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -1438,9 +1439,9 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
         Variance = calculateVariance(MaxAmount);
         double e = Math.E;
         double ln1 = Math.log(1 + Math.pow(e, -Variance));
-        double ln2 = Math.log(2);
-        mSpeedBonus = Math
-                .min(1 / ((0.4 + 0.45 * (Math.pow(e, -0.05 * Variance)) + 0.15 * (ln1 / ln2)) * (Mean / 500)), 1 / 11.4514);
+        double ln2 = Math.log(2);;
+        double SpeedBonus = 1 + ((0.4 + Math.pow(0.45 * e, -0.005 * Variance) + 0.15 * (ln1 / ln2)) * Mean / 500);
+        mSpeedBonus = Math.max(1 / SpeedBonus, 1 / 11.4514);
     }
 
     public static double calculateVariance(List<Double> data) {
@@ -1527,61 +1528,61 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
     @Override
     public IStructureDefinition<GT_TieEntity_IndustrialMagicMatrix> getStructureDefinition() {
         return StructureDefinition.<GT_TieEntity_IndustrialMagicMatrix>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addElement(
-                        'A',
-                        ofChain(
-                                onElementPass(x -> x.onEssentiaCellFound(1), ofBlock(Loaders.essentiaCell, 0)),
-                                onElementPass(x -> x.onEssentiaCellFound(2), ofBlock(Loaders.essentiaCell, 1)),
-                                onElementPass(x -> x.onEssentiaCellFound(3), ofBlock(Loaders.essentiaCell, 2)),
-                                onElementPass(x -> x.onEssentiaCellFound(4), ofBlock(Loaders.essentiaCell, 3))))
-                .addElement('B', ofBlock(GregTech_API.sBlockCasings8, 8))
-                .addElement('C', ofBlock(GregTech_API.sBlockMetal4, 10))
-                .addElement(
-                        'D',
-                        ofChain(
-                                GT_HatchElementBuilder.<GT_TieEntity_IndustrialMagicMatrix>builder()
-                                        .atLeast(Maintenance, InputBus, OutputBus, Energy)
-                                        .adder(GT_TieEntity_IndustrialMagicMatrix::addToMachineList)
-                                        .casingIndex(1536)
-                                        .dot(1)
-                                        .build(),
-                                ofBlock(magicCasing, 0),
-                                ofTileAdder(GT_TieEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))
-                .addElement('E', ofBlock(BloodyIchorium.getBlock(), 0))
-                .addElement('F', ofBlock(BloodyThaumium.getBlock(), 0))
-                .addElement('G', ofBlock(BloodyVoid.getBlock(), 0))
-                .addElement('H', ofBlock(blockCrystalDeep, 0))
-                .addElement('I', ofBlock(blockCosmeticSolid, 0))
-                .addElement('J', ofBlock(blockCosmeticSolid, 4))
-                .addElement('K', ofBlock(blockCosmeticSolid, 6))
-                .addElement('L', ofBlock(blockCosmeticSolid, 7))
-                .addElement('M', ofBlock(blockMetalDevice, 3))
-                .addElement('N', ofChain(ofBlock(blockCosmeticSolid, 6), ofBlock(blockStoneDevice, 6)))
-                .addElement('O', ofBlock(translucent, 0))
-                .addElement('P', ofBlock(crystalBlock, 0))
-                .addElement('Q', ofBlock(crystalBlock, 1))
-                .addElement('R', ofBlock(crystalBlock, 2))
-                .addElement('S', ofBlock(crystalBlock, 3))
-                .addElement('T', ofBlock(crystalBlock, 4))
-                .addElement('U', ofBlock(crystalBlock, 5))
-                .addElement('V', ofBlock(dustBlock, 0))
-                .addElement('W', ofBlock(voidBlock, 0))
-                .addElement('X', ofBlock(thauminiteBlock, 0))
-                .addElement(
-                        'Y',
-                        ofChain(
-                                ofTileAdder(GT_TieEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
-                                ofBlock(Blocks.air, 0)))
-                .addElement('Z', ofBlock(blockCosmeticOpaque, 2))
-                .addElement('0', ofBlock(blockStoneDevice, 2))
-                .addElement('1', ofFrame(Materials.Thaumium))
-                .addElement('3', ofBlock(blockStoneDevice, 10))
-                .addElement('5', ofBlock(blockStoneDevice, 11))
-                .addElement('6', ofChain(ofBlock(blockCosmeticSolid, 7), ofBlock(blockStoneDevice, 7)))
-                .addElement('7', ofBlock(blockStoneDevice, 1))
-                .addElement('8', ofBlockAnyMeta(Blocks.beacon, 1))
-                .build();
+            .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+            .addElement(
+                'A',
+                ofChain(
+                    onElementPass(x -> x.onEssentiaCellFound(1), ofBlock(Loaders.essentiaCell, 0)),
+                    onElementPass(x -> x.onEssentiaCellFound(2), ofBlock(Loaders.essentiaCell, 1)),
+                    onElementPass(x -> x.onEssentiaCellFound(3), ofBlock(Loaders.essentiaCell, 2)),
+                    onElementPass(x -> x.onEssentiaCellFound(4), ofBlock(Loaders.essentiaCell, 3))))
+            .addElement('B', ofBlock(GregTech_API.sBlockCasings8, 8))
+            .addElement('C', ofBlock(GregTech_API.sBlockMetal4, 10))
+            .addElement(
+                'D',
+                ofChain(
+                    GT_HatchElementBuilder.<GT_TieEntity_IndustrialMagicMatrix>builder()
+                        .atLeast(Maintenance, InputBus, OutputBus, Energy)
+                        .adder(GT_TieEntity_IndustrialMagicMatrix::addToMachineList)
+                        .casingIndex(1536)
+                        .dot(1)
+                        .build(),
+                    ofBlock(magicCasing, 0),
+                    ofTileAdder(GT_TieEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))
+            .addElement('E', ofBlock(blockMetalDevice, 9))
+            .addElement('F', ofBlock(BloodyThaumium.getBlock(), 0))
+            .addElement('G', ofBlock(BloodyVoid.getBlock(), 0))
+            .addElement('H', ofBlock(blockCrystalDeep, 0))
+            .addElement('I', ofBlock(blockCosmeticSolid, 0))
+            .addElement('J', ofBlock(blockCosmeticSolid, 4))
+            .addElement('K', ofBlock(blockCosmeticSolid, 6))
+            .addElement('L', ofBlock(blockCosmeticSolid, 7))
+            .addElement('M', ofBlock(blockMetalDevice, 3))
+            .addElement('N', ofChain(ofBlock(blockCosmeticSolid, 6), ofBlock(blockStoneDevice, 6)))
+            .addElement('O', ofBlock(translucent, 0))
+            .addElement('P', ofBlock(crystalBlock, 0))
+            .addElement('Q', ofBlock(crystalBlock, 1))
+            .addElement('R', ofBlock(crystalBlock, 2))
+            .addElement('S', ofBlock(crystalBlock, 3))
+            .addElement('T', ofBlock(crystalBlock, 4))
+            .addElement('U', ofBlock(crystalBlock, 5))
+            .addElement('V', ofBlock(dustBlock, 0))
+            .addElement('W', ofBlock(voidBlock, 0))
+            .addElement('X', ofBlock(thauminiteBlock, 0))
+            .addElement(
+                'Y',
+                ofChain(
+                    ofTileAdder(GT_TieEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
+                    ofBlock(Blocks.air, 0)))
+            .addElement('Z', ofBlock(blockCosmeticOpaque, 2))
+            .addElement('0', ofBlock(blockStoneDevice, 2))
+            .addElement('1', ofFrame(Materials.Thaumium))
+            .addElement('3', ofBlock(blockStoneDevice, 10))
+            .addElement('5', ofBlock(blockStoneDevice, 11))
+            .addElement('6', ofChain(ofBlock(blockCosmeticSolid, 7), ofBlock(blockStoneDevice, 7)))
+            .addElement('7', ofBlock(blockStoneDevice, 1))
+            .addElement('8', ofBlockAnyMeta(Blocks.beacon, 1))
+            .build();
     }
 
 
@@ -1594,9 +1595,9 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
 
     public final boolean addNodeEnergized(TileEntity aTileEntity) {
         if (aTileEntity instanceof TileNodeEnergized) {
-            if (!(mNodeEnergized.size()==6)){
-            return this.mNodeEnergized.add((TileNodeEnergized) aTileEntity);
-            }else return true;
+            if (!(mNodeEnergized.size() == 6)) {
+                return this.mNodeEnergized.add((TileNodeEnergized) aTileEntity);
+            } else return true;
         }
         return false;
     }
@@ -1605,39 +1606,44 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType(TextLocalization.Tooltip_IndustrialMagicMatrix_MachineType)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_Controller)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_00)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_01)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_02)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_03)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_04)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_05)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_06)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_07)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_08)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_09)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_10)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_11)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_12)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_13)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_14)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_15)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_16)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_17)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_18)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_19)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_20)
-                .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_21)
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addInputHatch(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addInputBus(TextLocalization.textUseBlueprint, 1)
-                .addOutputBus(TextLocalization.textUseBlueprint, 1)
-                .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-                .toolTipFinisher(TextLocalization.ModName);
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_Controller)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_00)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_01)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_02)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_03)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_04)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_05)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_06)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_07)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_08)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_09)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_10)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_11)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_12)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_13)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_14)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_15)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_16)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_17)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_18)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_19)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_20)
+            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_21)
+            .addSeparator()
+            .addInfo(TextLocalization.StructureTooComplex)
+            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            // #tr Tooltip_IndustrialMagicMatrix_21
+            // # Infusion Provider: §bAny magic mechanical block
+            // #zh_CN 注魔供应器: §b任意魔法机械方块
+            .addStructureHint(TextEnums.tr("Tooltip_IndustrialMagicMatrix_21"))
+            // #tr Tooltip_IndustrialMagicMatrix_22
+            // # §bAny magic mechanical block
+            // #zh_CN §b任意魔法机械方块
+            .addInputBus(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
+            .addOutputBus(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
+            .addMaintenanceHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
+            .addEnergyHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
+            .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
 

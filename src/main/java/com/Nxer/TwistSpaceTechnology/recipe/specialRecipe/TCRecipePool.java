@@ -7,6 +7,8 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GT_OreDictUnificator;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -31,6 +33,25 @@ public class TCRecipePool implements IRecipePool {
                 Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1),
                 ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1), Materials.Steeleaf.getPlates(1),
                 new ItemStack(ModItems.spawnerMover, 1) });
+        ThaumcraftApi.addInfusionCraftingRecipe(
+            "INDUSTRIAL_MAGIC_MATRIX",
+            GTCMItemList.IndustrialMagicMatrix.get(1, 0),
+            25,
+            (new AspectList()).merge(Aspect.LIFE, 128)
+                .merge(Aspect.EARTH, 128)
+                .merge(Aspect.MAGIC, 128)
+                .merge(Aspect.MECHANISM, 128)
+                .merge(Aspect.AIR, 128)
+                .merge(Aspect.EARTH, 128)
+                .merge(Aspect.FIRE, 128)
+                .merge(Aspect.WATER, 128)
+                .merge(Aspect.ORDER, 128)
+                .merge(Aspect.ENTROPY, 128),
+            ItemList.Machine_Multi_Assemblyline.get(1, 0),
+            new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L) });
     }
 
 }

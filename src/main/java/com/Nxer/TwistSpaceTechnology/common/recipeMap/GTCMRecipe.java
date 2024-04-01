@@ -4,6 +4,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 
 import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.recipe.RecipeMap;
@@ -170,12 +171,12 @@ public class GTCMRecipe {
         .build();
 
     public static final RecipeMap<RecipeMapBackend> IndustrialMagicMatrixRecipe = RecipeMapBuilder
-            .of("tst.recipe.IndustrialMagicMatrixRecipe")
-            .maxIO(16, 1, 0, 0)
-            .progressBar(GT_UITextures.OVERLAY_SLOT_CANNER)
-            .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialMagicMatrix.get(1)))
-            .useSpecialSlot()
-            .frontend(TST_GeneralFrontend::new)
-            .disableOptimize()
-            .build();
+        .of("tst.recipe.IndustrialMagicMatrixRecipe")
+        .maxIO(16, 1, 0, 0)
+        .progressBar(GT_UITextures.OVERLAY_SLOT_CANNER)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialMagicMatrix.get(1)))
+        .useSpecialSlot()
+        .frontend(TST_IndustrialMagicMatrixFrontend::new)
+        .disableOptimize()
+        .build();
 }

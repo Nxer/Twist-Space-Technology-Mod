@@ -941,7 +941,7 @@ GT5U.gui.text.Essentiainsentia=Essentia insentia
 GT5U.gui.text.Research_not_completed=Research not completed
 tst.recipe.IndustrialMagicMatrixRecipe=Industrial Infusion Matrix RecipesTooltip_IndustrialMagicMatrix_20=Each missing one adds a fixed 1 second to the time.
 Tooltip_IndustrialMagicMatrix_20=Each missing one adds a fixed 1 second to the time.
-Tooltip_IndustrialMagicMatrix_21=Gain up to 1145.14% acceleration multiplier.
+Tooltip_IndustrialMagicMatrix_21=Infusion Provider: §bAny magic mechanical block
 Tooltip_IndustrialMagicMatrix_00=Please use the essentia brain-computer interface to supply essentia!
 Tooltip_IndustrialMagicMatrix_01=When you stare into the void, the void stares at you.
 Tooltip_IndustrialMagicMatrix_02=Some say it's a miracle of a mystical envoy,
@@ -965,5 +965,4 @@ Tooltip_IndustrialMagicMatrix_MachineType=Magic Matrix
 Tooltip_IndustrialMagicMatrix_17=Variance is the variance of the largest element in the six nodes,
 Tooltip_IndustrialMagicMatrix_18=Mean is the average.
 Tooltip_IndustrialMagicMatrix_19=When the type of the six elements is not the six original elements,
-TST_EssentiaHatch_tooltip_01=Use the essentia provider to enter essentia.
-TST_EssentiaHatch_tooltip_02=Right-click to initialize the state.
+Tooltip_IndustrialMagicMatrix_22=§bAny magic mechanical block
