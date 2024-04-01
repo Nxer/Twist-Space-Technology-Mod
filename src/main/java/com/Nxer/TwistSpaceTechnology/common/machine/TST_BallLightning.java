@@ -74,7 +74,6 @@ import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -164,8 +163,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             RecipeMaps.arcFurnaceRecipes,
             RecipeMaps.plasmaArcFurnaceRecipes,
             RecipeMaps.fusionRecipes,
-            GTCMRecipe.BallLightningRecipes
-        );
+            GTCMRecipe.BallLightningRecipes);
     }
 
     @Override
