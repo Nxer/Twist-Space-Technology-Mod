@@ -1902,7 +1902,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 2),
                     new ItemStack(TT_Container_Casings.sBlockCasingsTT, 64, 2)
                 )
-                .fluidInputs(Materials.Tin.getPlasma(14400), Materials.SuperCoolant.getFluid(4000000), Materials.Infinity.getFluid(114514))
+                .fluidInputs(Materials.Tin.getPlasma(14400), Materials.SuperCoolant.getFluid(4000000), Materials.Infinity.getMolten(114514))
                 .itemOutputs(AstralComputingArray.get(1))
                 .eut(RECIPE_UEV * 3)
                 .duration(20 * 1000)
@@ -1987,7 +1987,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     Machine_Multi_Switch.get(64),
                     Machine_Multi_Switch.get(64)
                 )
-                .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 200), Materials.UUMatter.getFluid(20480000), Materials.SuperconductorUIVBase.getFluid(5000000))
+                .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 200), Materials.UUMatter.getFluid(20480000), Materials.SuperconductorUIVBase.getMolten(5000000))
                 .itemOutputs(WirelessUpdateItem.get(1))
                 .eut(RECIPE_UMV)
                 .duration(800)

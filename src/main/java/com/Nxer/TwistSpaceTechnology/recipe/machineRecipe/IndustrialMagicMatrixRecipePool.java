@@ -25,8 +25,8 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
         final IRecipeMap IIM = GTCMRecipe.IndustrialMagicMatrixRecipe;
         for (TCRecipeTools.InfusionCraftingRecipe Recipe : TCRecipeTools.ICR) {
             if (Recipe.getOutput()
-                    .getItem() == revolver
-                    || Recipe.getOutput()
+                .getItem() == revolver
+                || Recipe.getOutput()
                     .getItem() == itemJarNode
                     || Recipe.getOutput()
                     .getItem() == itemEtherealFamiliar) {
@@ -37,16 +37,16 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
             Essence.setStackDisplayName(TextLocalization.IndustrialMagicMatrixRecipeInputAspects);
             new ItemEssence().setAspects(Essence, Recipe.getInputAspects());
             GT_Values.RA.stdBuilder()
-                    .clearInvalid()
-                    .specialItem(Essence)
-                    .itemInputsUnified(Recipe.getInputItem())
-                    .itemOutputs((Recipe.getOutput()))
-                    .fluidInputs()
-                    .fluidOutputs()
-                    .noOptimize()
-                    .duration(200 + Recipe.getInputItem().length * 20 + Math.min(Recipe.getAspectAmount(), 600))
-                    .eut(RECIPE_LuV)
-                    .addTo(IIM);
+                .clearInvalid()
+                .specialItem(Essence)
+                .itemInputsUnified(Recipe.getInputItem())
+                .itemOutputs((Recipe.getOutput()))
+                .fluidInputs()
+                .fluidOutputs()
+                .noOptimize()
+                .duration(200 + Recipe.getInputItem().length * 20 + Math.min(Recipe.getAspectAmount(), 600))
+                .eut(RECIPE_LuV)
+                .addTo(IIM);
         }
     }
 }

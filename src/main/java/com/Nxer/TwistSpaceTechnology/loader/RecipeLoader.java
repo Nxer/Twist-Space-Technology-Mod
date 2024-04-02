@@ -28,7 +28,7 @@ public class RecipeLoader {
             new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool(),
             new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
             new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePoll(),
-            new FluidHeaterRecipePool(), new IndustrialMagicMatrixRecipePool()};
+            new FluidHeaterRecipePool(), new IndustrialMagicMatrixRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {

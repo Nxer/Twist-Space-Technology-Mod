@@ -172,9 +172,9 @@ public class GTCMRecipe {
 
     public static final RecipeMap<RecipeMapBackend> IndustrialMagicMatrixRecipe = RecipeMapBuilder
         .of("tst.recipe.IndustrialMagicMatrixRecipe")
-        .maxIO(16, 1, 0, 0)
-        .progressBar(GT_UITextures.OVERLAY_SLOT_CANNER)
+        .maxIO(25, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialMagicMatrix.get(1)))
+        .neiTransferRect(100,45,18,72)
         .useSpecialSlot()
         .frontend(TST_IndustrialMagicMatrixFrontend::new)
         .disableOptimize()

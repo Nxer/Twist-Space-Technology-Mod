@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -15,6 +16,9 @@ import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.ModItems;
+
+import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
+import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 
 public class TCResearches {
 
@@ -56,9 +60,16 @@ public class TCResearches {
             4,
             -9,
             5,
-            GTCMItemList.IndustrialMagicMatrix.get(1, 0)).setParents("ICHORIUM")
+            GTCMItemList.IndustrialMagicMatrix.get(1, 0))/* .setParents("ICHORIUM") */
                 .setPages(
-                    new ResearchPage("tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1"),
+                    // #tr tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1
+                    // # Death, Evil, Abomination, Grievance, Murderous Intent, Curse of Misfortune, Hell, Ethics,Fool,
+                    // Tyrant, Sinner, Cunning, Thief, Despicable, Evil, Poison, Hunger, Epidemic, Earthquake,Heavenly
+                    // Change, Alien, Human, Calamity Forever, Time, Spirit, Root, Fiction, Darkness, Innocence,Life, or
+                    // Something Called Fear.
+                    // #zh_CN
+                    // 死、邪恶、憎恶、怨嗟、杀意、不幸诅咒、地狱、伦理、愚者、暴君、罪人、狡猾、贼徒、卑劣、恶、毒、饥饿、疫病、地震、天变、异形、人间、灾厄永远、时间、精神、根源、虚构、黑暗、无垢、命或者被称为恐惧之物。
+                    new ResearchPage(TextEnums.tr("tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1")),
                     new ResearchPage(
                         new InfusionRecipe(
                             "INDUSTRIAL_MAGIC_MATRIX",
@@ -75,10 +86,22 @@ public class TCResearches {
                                 .merge(Aspect.ORDER, 128)
                                 .merge(Aspect.ENTROPY, 128),
                             ItemList.Machine_Multi_Assemblyline.get(1, 0),
-                            new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L) })))
+                            new ItemStack[] {  GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                    new ItemStack(blockStoneDevice,1,2),
+                                    new ItemStack(blockMetalDevice,1,3),
+                                    new ItemStack(blockMetalDevice,1,12),
+                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                    new ItemStack(blockStoneDevice,1,2),
+                                    new ItemStack(blockMetalDevice,1,3),
+                                    new ItemStack(blockMetalDevice,1,12),
+                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                    new ItemStack(blockStoneDevice,1,2),
+                                    new ItemStack(blockMetalDevice,1,3),
+                                    new ItemStack(blockMetalDevice,1,12),
+                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                    new ItemStack(blockStoneDevice,1,2),
+                                    new ItemStack(blockMetalDevice,1,3),
+                                    new ItemStack(blockMetalDevice,1,12)})))
                 .registerResearchItem();
     }
 }

@@ -18,14 +18,14 @@ public class TCRecipeTools {
     public static void getInfusionCraftingRecipe() {
         for (Object r : ThaumcraftApi.getCraftingRecipes()) {
             if (r instanceof InfusionRecipe && ((InfusionRecipe) r).getRecipeOutput() instanceof ItemStack
-                    && ((InfusionRecipe) r).getRecipeInput() != null) // GetInfusionCraftingRecipe
+                && ((InfusionRecipe) r).getRecipeInput() != null) // GetInfusionCraftingRecipe
             {
                 InfusionCraftingRecipe y = new InfusionCraftingRecipe(
-                        ((InfusionRecipe) r).getRecipeInput(), // getItemInput
-                        ((InfusionRecipe) r).getRecipeOutput(), // getItemOutput
-                        ((InfusionRecipe) r).getComponents(), // getRecipeItemInput
-                        ((InfusionRecipe) r).getAspects(), // getAspects
-                        ((InfusionRecipe) r).getResearch());// getResearch
+                    ((InfusionRecipe) r).getRecipeInput(), // getItemInput
+                    ((InfusionRecipe) r).getRecipeOutput(), // getItemOutput
+                    ((InfusionRecipe) r).getComponents(), // getRecipeItemInput
+                    ((InfusionRecipe) r).getAspects(), // getAspects
+                    ((InfusionRecipe) r).getResearch());// getResearch
                 ICR.add(y);
             }
         }
@@ -41,7 +41,7 @@ public class TCRecipeTools {
         private final ItemStack[] Components;
 
         public InfusionCraftingRecipe(ItemStack InputItem, Object OutputItem, ItemStack[] Components,
-                                      AspectList InputAspects, String research) {
+            AspectList InputAspects, String research) {
             this.InputItem = InputItem;
             this.OutputItem = (ItemStack) OutputItem;
             this.InputAspects = InputAspects;
