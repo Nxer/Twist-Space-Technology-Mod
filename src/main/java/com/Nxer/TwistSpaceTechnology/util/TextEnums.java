@@ -23,6 +23,36 @@ public enum TextEnums {
     EuModifier("MachineInfoData.EuModifier"),
     GlassTier("MachineInfoData.GlassTier"),
 
+    // #tr MachineInfoData.CoilTier
+    // # Coil Tier
+    // #zh_CN 线圈等级
+    CoilTier("MachineInfoData.CoilTier"),
+
+    // #tr MachineInfoData.MachineMode
+    // # Machine Mode
+    // #zh_CN 机器模式
+    MachineMode("MachineInfoData.MachineMode"),
+
+    // #tr MachineInfoData.MachineTier
+    // # Machine Tier
+    // #zh_CN 机器等级
+    MachineTier("MachineInfoData.MachineTier"),
+
+    // #tr MachineInfoData.FieldGeneratorTier
+    // # Field Generator Tier
+    // #zh_CN 力场发生器等级
+    FieldGeneratorTier("MachineInfoData.FieldGeneratorTier"),
+
+    // #tr MachineInfoData.FusionCoilTier
+    // # Fusion Coil Tier
+    // #zh_CN 聚变线圈等级
+    FusionCoilTier("MachineInfoData.FusionCoilTier"),
+
+    // #tr MachineInfoData.CompactFusionCoilTier
+    // # Compact Fusion Coil Tier
+    // #zh_CN 压缩聚变线圈等级
+    CompactFusionCoilTier("MachineInfoData.CompactFusionCoilTier"),
+
     // endregion
 
     // region Core Device of Human Power Generation Facility

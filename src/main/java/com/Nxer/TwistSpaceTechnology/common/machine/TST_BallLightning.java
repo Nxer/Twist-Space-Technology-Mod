@@ -623,18 +623,28 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 6];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + "Machine Mode: " + EnumChatFormatting.GOLD + this.mode;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Machine Tier: "
+        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.MachineMode.getText()
+            + " : "
+            + EnumChatFormatting.GOLD
+            + this.mode;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums.MachineTier.getText()
+            + " : "
             + EnumChatFormatting.GOLD
             + this.mMachineTier;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + "field Generator Tier: "
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + TextEnums.FieldGeneratorTier.getText()
+            + " : "
             + EnumChatFormatting.GOLD
             + this.fieldGeneratorTier;
-        ret[origin.length + 3] = EnumChatFormatting.AQUA + "compact Fusion Coil Tier: "
+        ret[origin.length + 3] = EnumChatFormatting.AQUA + TextEnums.CompactFusionCoilTier.getText()
+            + " : "
             + EnumChatFormatting.GOLD
             + this.compactFusionCoilTier;
-        ret[origin.length + 4] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
-        ret[origin.length + 5] = EnumChatFormatting.AQUA + "coil Level: "
+        ret[origin.length + 4] = EnumChatFormatting.AQUA + TextEnums.GlassTier.getText()
+            + " : "
+            + EnumChatFormatting.GOLD
+            + this.glassTier;
+        ret[origin.length + 5] = EnumChatFormatting.AQUA + TextEnums.CoilTier.getText()
+            + " : "
             + EnumChatFormatting.GOLD
             + this.coilLevel.getTier();
         return ret;
