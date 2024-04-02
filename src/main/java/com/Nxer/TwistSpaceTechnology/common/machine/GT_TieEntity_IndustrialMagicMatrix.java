@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
 import static com.dreammaster.block.BlockList.*;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static com.kentington.thaumichorizons.common.ThaumicHorizons.blockCrystalDeep;
@@ -1646,49 +1647,126 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType(TextLocalization.Tooltip_IndustrialMagicMatrix_MachineType)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_Controller)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_00)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_01)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_02)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_03)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_04)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_05)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_06)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_07)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_08)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_09)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_10)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_11)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_12)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_13)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_14)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_15)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_16)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_17)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_18)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_19)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_20)
-            .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_21)
-            // #tr Tooltip_IndustrialMagicMatrix_23
-            // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
-            // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
-            .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_23"))
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            // #tr Tooltip_IndustrialMagicMatrix_21
-            // # Infusion Provider: §bAny magic mechanical block
-            // #zh_CN 注魔供应器: §b任意魔法机械方块
-            .addStructureHint(TextEnums.tr("Tooltip_IndustrialMagicMatrix_21"))
-            // #tr Tooltip_IndustrialMagicMatrix_22
-            // # §bAny magic mechanical block
-            // #zh_CN §b任意魔法机械方块
-            .addInputBus(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
-            .addOutputBus(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
-            .addMaintenanceHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
-            .addEnergyHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
-            .toolTipFinisher(TextLocalization.ModName);
+        tt.addMachineType(
+                        // #tr Tooltip_IndustrialMagicMatrix_Controller
+                        // # Magic Matrix
+                        // #zh_CN 工业注魔矩阵的控制器方块
+                TextEnums.tr("Tooltip_IndustrialMagicMatrix_Controller"))
+                // #tr Tooltip_IndustrialMagicMatrix_MachineType
+                // # Controller block for the Industrial Magic Matrix
+                // #zh_CN §0工业注魔矩阵
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_MachineType"))
+                // #tr Tooltip_IndustrialMagicMatrix_00
+                // # Please use the Infusion Supplier to supply Essence!
+                // #zh_CN 请使用注魔供应器供给源质！
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_00"))
+                // #tr Tooltip_IndustrialMagicMatrix_01
+                // # When you stare into the void, the void stares at you.
+                // #zh_CN §c§n当你凝视虚空时，虚空也在凝视你。
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_01"))
+                // #tr Tooltip_IndustrialMagicMatrix_02
+                // # Some say it's a miracle of a mystical envoy,
+                // #zh_CN 有人说这是神秘使的神迹，
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_02"))
+                // #tr Tooltip_IndustrialMagicMatrix_03
+                // # Others say that it is a cult creature of a sorcerer.
+                // #zh_CN 也有人说这是邪术使的§c§0邪祟造物。
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_03"))
+                // #tr Tooltip_IndustrialMagicMatrix_04
+                // # But who cares?!
+                // #zh_CN 不过谁在意呢？！
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_05
+                // # Needless to say, its incredible principle is fascinating...
+                // #zh_CN §k毋庸置疑的是它那不可思议的原理令人十分入迷...
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_06
+                // # Because of the pollution of technology,
+                // #zh_CN 由于被科技所污染，
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_07
+                // # It is unable to perform active infusions.
+                // #zh_CN 它无法进行具有活性的注魔。
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_08
+                // # Parallelism depends on the level of the structure block.
+                // #zh_CN 并行取决于结构方块的等级。
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_09
+                // # Do an 4/2 overclock.Turn on lossless overclocking after reaching the maximum acceleration rate.
+                // #zh_CN 进行4/2超频。达到最高加速倍率后开启无损超频.
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_10
+                // # Use Charged Nodes to get acceleration rewards,
+                // #zh_CN §b使用充能节点以获得加速奖励§7，
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_11
+                // # However, when the number of nodes is less than six,
+                // #zh_CN 但节点数量不足六个时,
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_12
+                // # the processing time will be carried out (recipe time * number of missing nodes * 1.75).
+                // #zh_CN 将会额外计算(配方时间*节点缺失数量*1.75)的加工时长，
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_13
+                // # The matrix will take the largest element of each of the six nodes and calculate the average.
+                // #zh_CN 矩阵将会取这六个节点中每个最大的要素并计算平均值，
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_14
+                // # The closer the quantities between the six primitive elements are, the higher the multiplication factor will be.
+                // #zh_CN 六种原始要素之间的数量越接近倍率系数就会越高。
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_15
+                // # The actual acceleration magnification is ((0.4+0.45exp(-0.05Variance)+
+                // #zh_CN
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_16
+                // # 0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500).
+                // #zh_CN 实际加速倍率为((0.4+0.45exp(-0.05Variance) +
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_17
+                // # Variance is the variance of the largest element in the six nodes,
+                // #zh_CN 0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500)。
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_18
+                // # Mean is the average.
+                // #zh_CN Variance为六个节点里最大要素的方差，
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_19
+                // # When the type of the six elements is not the six original elements,
+                // #zh_CN Mean则为平均数。
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_20
+                // # Each missing one adds a fixed 1 second to the time.
+                // #zh_CN 当六个要素的种类不为六种原始要素时,
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_21
+                // # Gain up to 1145.14% acceleration multiplier.
+                // #zh_CN 每缺少一种就固定增加1秒耗时。
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                // #tr Tooltip_IndustrialMagicMatrix_22
+                // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
+                // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
+                .addSeparator()
+                .addInfo(StructureTooComplex)
+                .addInfo(BLUE_PRINT_INFO)
+                // #tr Tooltip_IndustrialMagicMatrix_23
+                // # Infusion Provider:
+                // #zh_CN 注魔供应器:
+                // #tr Tooltip_IndustrialMagicMatrix_23.1
+                // # §bAny magic mechanical block
+                // #zh_CN §b任意魔法机械方块
+                .addOtherStructurePart(TextEnums.tr("Tooltip_IndustrialMagicMatrix_23"),
+                        TextEnums.tr("Tooltip_IndustrialMagicMatrix_23.1"))
+                // #tr Tooltip_IndustrialMagicMatrix_24
+                // # §bAny magic mechanical block
+                // #zh_CN §b任意魔法机械方块
+                .addInputBus(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
+                .addOutputBus(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
+                .addMaintenanceHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
+                .addEnergyHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
+                .toolTipFinisher(ModName);
         return tt;
     }
     // spotless:on

@@ -471,7 +471,10 @@ public class MachineLoader {
         IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
             19046,
             "IndustrialMagicMatrix",
-            TextLocalization.NameIndustrialMagicMatrix).getStackForm(1);
+            // #tr NameIndustrialMagicMatrix
+            // # Industrial Magic Matrix
+            // #zh_CN §0工业注魔矩阵
+            TextEnums.tr("NameIndustrialMagicMatrix")).getStackForm(1);
         GTCMItemList.IndustrialMagicMatrix.set(IndustrialMagicMatrix);
         // endregion
 

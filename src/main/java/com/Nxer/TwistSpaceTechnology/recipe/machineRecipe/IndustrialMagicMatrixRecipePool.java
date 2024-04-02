@@ -5,6 +5,7 @@ import static makeo.gadomancy.common.registration.RegisteredItems.itemEtherealFa
 import static tb.init.TBItems.revolver;
 import static thaumcraft.common.config.ConfigItems.*;
 
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -34,7 +35,10 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
             }
             ItemStack Essence = new ItemStack(itemEssence);
             Essence.setItemDamage(1);
-            Essence.setStackDisplayName(TextLocalization.IndustrialMagicMatrixRecipeInputAspects);
+            // #tr IndustrialMagicMatrixRecipeInputAspects
+            // # Recipe required Essentia
+            // #zh_CN 配方所需源质
+            Essence.setStackDisplayName(TextEnums.tr("IndustrialMagicMatrixRecipeInputAspects"));
             new ItemEssence().setAspects(Essence, Recipe.getInputAspects());
             GT_Values.RA.stdBuilder()
                 .clearInvalid()
