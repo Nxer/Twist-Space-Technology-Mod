@@ -66,8 +66,9 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
             // UUID and username of the owner.
             this.owner_uuid = aBaseMetaTileEntity.getOwnerUuid()
                 .toString();
+            String owner_name = aBaseMetaTileEntity.getOwnerName();
 
-            strongCheckOrAddUser(UUID.fromString(owner_uuid));
+            strongCheckOrAddUser(owner_uuid, owner_name);
         }
     }
 
