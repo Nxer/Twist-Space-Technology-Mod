@@ -183,7 +183,6 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
         return GTCMRecipe.IndustrialMagicMatrixRecipe;
     }
 
-
     @Override
     protected boolean isEnablePerfectOverclock() {
         return mSpeedBonus == (double) 1 / 11.4514;
