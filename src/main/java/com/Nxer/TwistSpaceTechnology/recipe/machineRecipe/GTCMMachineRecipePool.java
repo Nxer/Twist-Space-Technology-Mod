@@ -1939,6 +1939,23 @@ public class GTCMMachineRecipePool implements IRecipePool {
             final ItemStack wirelessCard = getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 1, 42);
             final ItemStack quantumCard = getModItem(AE2WCT.ID, "infinityBoosterCard", 1);
 
+            // Wireless Booster Card
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(10),
+                    Materials.Fluix.getDust(1),
+                    Materials.CertusQuartz.getGems(1),
+                    Materials.EnderPearl.getPlates(1),
+                    GT_OreDictUnificator.get(OrePrefixes.itemCasing, Materials.Titanium, 2)
+                )
+                .fluidInputs(Materials.Aluminium.getMolten(144))
+                .itemOutputs(copyAmount(1, wirelessCard))
+                .eut(RECIPE_LV)
+                .duration(100)
+                .addTo(assembler);
+
+            // Infinity Booster Card
             GT_Values.RA
                 .stdBuilder()
                 .itemInputs(
@@ -1953,14 +1970,16 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(20)
                 .addTo(assembler);
 
+            // Wireless Data Input Hatch
             GT_Values.RA
                 .stdBuilder()
                 .itemInputs(
                     GT_Utility.getIntegratedCircuit(10),
-                    copyAmount(64, quantumCard),
+                    dataIn_Hatch.get(1),
+                    Machine_Multi_Switch.get(1),
+                    copyAmount(16, quantumCard),
                     ItemList.Sensor_UIV.get(16),
-                    ItemList.Tesseract.get(64),
-                    dataIn_Hatch.get(16)
+                    ItemList.Tesseract.get(64)
                 )
                 .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
                 .itemOutputs(WirelessDataInputHatch.get(1))
@@ -1968,14 +1987,16 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(800)
                 .addTo(assembler);
 
+            // Wireless Data Output Hatch
             GT_Values.RA
                 .stdBuilder()
                 .itemInputs(
                     GT_Utility.getIntegratedCircuit(10),
-                    copyAmount(64, quantumCard),
-                    ItemList.Emitter_UIV.get(64),
-                    ItemList.EnergisedTesseract.get(64),
-                    dataOut_Hatch.get(16)
+                    dataOut_Hatch.get(1),
+                    Machine_Multi_Switch.get(1),
+                    copyAmount(16, quantumCard),
+                    ItemList.Emitter_UIV.get(16),
+                    ItemList.EnergisedTesseract.get(64)
                 )
                 .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
                 .itemOutputs(WirelessDataOutputHatch.get(1))
@@ -1983,6 +2004,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(800)
                 .addTo(assembler);
 
+            // Wireless computation update card
             GT_Values.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
