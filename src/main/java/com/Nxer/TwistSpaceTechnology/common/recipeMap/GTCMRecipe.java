@@ -174,7 +174,7 @@ public class GTCMRecipe {
         .of("tst.recipe.IndustrialMagicMatrixRecipe")
         .maxIO(25, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialMagicMatrix.get(1)))
-        .neiTransferRect(100,45,18,72)
+        .neiTransferRect(100, 45, 18, 72)
         .useSpecialSlot()
         .frontend(TST_IndustrialMagicMatrixFrontend::new)
         .disableOptimize()

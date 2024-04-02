@@ -28,7 +28,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
                 .getItem() == revolver
                 || Recipe.getOutput()
                     .getItem() == itemJarNode
-                    || Recipe.getOutput()
+                || Recipe.getOutput()
                     .getItem() == itemEtherealFamiliar) {
                 continue;
             }

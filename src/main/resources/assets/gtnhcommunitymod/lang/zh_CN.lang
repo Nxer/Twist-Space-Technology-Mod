@@ -969,3 +969,4 @@ Tooltip_IndustrialMagicMatrix_22=§b任意魔法机械方块
 tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1=死、邪恶、憎恶、怨嗟、杀意、不幸诅咒、地狱、伦理、愚者、暴君、罪人、狡猾、贼徒、卑劣、恶、毒、饥饿、疫病、地震、天变、异形、人间、灾厄永远、时间、精神、根源、虚构、黑暗、无垢、命或者被称为恐惧之物。
 tc.research_name.INDUSTRIAL_MAGIC_MATRIX=工业注魔矩阵
 tc.research_text.INDUSTRIAL_MAGIC_MATRIX=嘿嘿嘿，工业化注魔！
+Tooltip_IndustrialMagicMatrix_23=在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...

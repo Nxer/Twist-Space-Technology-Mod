@@ -1,5 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
+import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
+import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
+
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -16,9 +19,6 @@ import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.ModItems;
-
-import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
-import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 
 public class TCResearches {
 
@@ -86,22 +86,18 @@ public class TCResearches {
                                 .merge(Aspect.ORDER, 128)
                                 .merge(Aspect.ENTROPY, 128),
                             ItemList.Machine_Multi_Assemblyline.get(1, 0),
-                            new ItemStack[] {  GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                    new ItemStack(blockStoneDevice,1,2),
-                                    new ItemStack(blockMetalDevice,1,3),
-                                    new ItemStack(blockMetalDevice,1,12),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                    new ItemStack(blockStoneDevice,1,2),
-                                    new ItemStack(blockMetalDevice,1,3),
-                                    new ItemStack(blockMetalDevice,1,12),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                    new ItemStack(blockStoneDevice,1,2),
-                                    new ItemStack(blockMetalDevice,1,3),
-                                    new ItemStack(blockMetalDevice,1,12),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                    new ItemStack(blockStoneDevice,1,2),
-                                    new ItemStack(blockMetalDevice,1,3),
-                                    new ItemStack(blockMetalDevice,1,12)})))
+                            new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                                new ItemStack(blockMetalDevice, 1, 12),
+                                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                                new ItemStack(blockMetalDevice, 1, 12),
+                                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                                new ItemStack(blockMetalDevice, 1, 12),
+                                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                                new ItemStack(blockMetalDevice, 1, 12) })))
                 .registerResearchItem();
     }
 }

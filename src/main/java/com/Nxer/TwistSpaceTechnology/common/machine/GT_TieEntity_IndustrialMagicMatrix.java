@@ -54,30 +54,36 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
+import scala.Int;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.tiles.TileNodeEnergized;
+import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 
 public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT_TieEntity_IndustrialMagicMatrix>
-        implements ISidedInventory, IConstructable {
+    implements ISidedInventory, IConstructable {
 
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    private final int horizontalOffSet = 22;
-    private final int verticalOffSet = 35;
-    private final int depthOffSet = 20;
-    private int mParallel = 1;
+    // region default value
+
+    private int mParallel;
     private int ExtraTime;
     private double mSpeedBonus;
     private double Mean;
     private double Variance;
+    private final ItemStack EssentiaCell_Creative = EnumEssentiaStorageTypes.Type_Creative.getCell();
+    private final ItemStack ProofOfHeroes = GTCMItemList.ProofOfHeroes.get(1, 0);
     protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<TileInfusionProvider>();
     protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
     public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
-            .ofFailurePersistOnShutdown("Essentiainsentia");
+        .ofFailurePersistOnShutdown("Essentiainsentia");
     public static final CheckRecipeResult Research_not_completed = SimpleCheckRecipeResult
-            .ofFailurePersistOnShutdown("Research_not_completed");
+        .ofFailurePersistOnShutdown("Research_not_completed");
+
+    // end region
+
+    // region Class Constructor
 
     public GT_TieEntity_IndustrialMagicMatrix(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -86,6 +92,241 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
     public GT_TieEntity_IndustrialMagicMatrix(String aName) {
         super(aName);
     }
+
+    // end region
+
+    // region Processing Logic
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                setSpeedBonus(getSpeedBonus());
+                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
+                // setOverclock(isEnablePerfectOverclock() ? 2 : 1, isEnablePerfectOverclock() ? 2 : 3);
+                return super.process();
+            }
+
+            @Nonnull
+            @Override
+            protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+                int Para = createParallelHelper(recipe).setConsumption(false)
+                    .build()
+                    .getCurrentParallel();
+                for (TCRecipeTools.InfusionCraftingRecipe recipe1 : TCRecipeTools.ICR) {
+                    if (recipe1.getOutput()
+                        .isItemEqual(recipe.mOutputs[0])) {
+                        if (!(ThaumcraftApiHelper.isResearchComplete(getPlayName(), recipe1.getResearch()))) {
+                            return Research_not_completed;
+                        }
+                        if (!(getControllerSlot() == null)) {
+                            if (getControllerSlot().isItemEqual(EssentiaCell_Creative)
+                                || getControllerSlot().isItemEqual(ProofOfHeroes)) {
+                                return CheckRecipeResultRegistry.SUCCESSFUL;
+                            }
+                        }
+                        for (Aspect aspect : recipe1.getInputAspects()
+                            .getAspects()) {
+                            if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+                            for (TileInfusionProvider hatch : mTileInfusionProvider) {
+
+                                if (hatch.takeFromContainer(aspect, recipe1.getAspectAmount(aspect) * Para)) {
+                                    return CheckRecipeResultRegistry.SUCCESSFUL;
+                                } else return Essentia_InsentiaL;
+                            }
+
+                        }
+                    }
+                }
+                return CheckRecipeResultRegistry.NO_RECIPE;
+            }
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    }
+
+    @Nonnull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+        // If no logic is found, try legacy checkRecipe
+        if (processingLogic == null) {
+            return checkRecipe(mInventory[1]) ? CheckRecipeResultRegistry.SUCCESSFUL
+                : CheckRecipeResultRegistry.NO_RECIPE;
+        }
+
+        setupProcessingLogic(processingLogic);
+
+        CheckRecipeResult result = doCheckRecipe();
+        result = postCheckRecipe(result, processingLogic);
+        // inputs are consumed at this point
+        updateSlots();
+        if (!result.wasSuccessful()) return result;
+
+        mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+        mEfficiencyIncrease = 10000;
+        if (getControllerSlot() == null) {
+            mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
+        } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
+            mMaxProgresstime = 1;
+        } else mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
+        setEnergyUsage(processingLogic);
+
+        mOutputItems = processingLogic.getOutputItems();
+        mOutputFluids = processingLogic.getOutputFluids();
+
+        return result;
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.IndustrialMagicMatrixRecipe;
+    }
+
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return mSpeedBonus == (double) 1 / 11.4514;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        mSpeedBonus = 0.0;
+        ExtraTime = 0;
+        countSpeedBonus();
+        return (float) mSpeedBonus;
+    }
+
+    @Override
+    protected int getLimitedMaxParallel() {
+        return getMaxParallelRecipes();
+    }
+
+    private void countSpeedBonus() {
+        int penalize = 0;
+        ArrayList<Double> MaxAmount = new ArrayList<>();
+        AspectList aspectList = new AspectList();
+        AspectList auraBase = (new AspectList()).add(Aspect.AIR, 20)
+            .add(Aspect.FIRE, 20)
+            .add(Aspect.EARTH, 20)
+            .add(Aspect.WATER, 20)
+            .add(Aspect.ORDER, 20)
+            .add(Aspect.ENTROPY, 20);
+        if (mNodeEnergized.isEmpty()) {
+            mSpeedBonus = 1;
+            return;
+        } else if (mNodeEnergized.size() < 6) {
+            mSpeedBonus = (6 - mNodeEnergized.size()) * 1.75;
+            return;
+        }
+        for (TileNodeEnergized tileNodeEnergized : mNodeEnergized) {
+            aspectList.add(
+                getMaxAspect(tileNodeEnergized.getAspects()),
+                tileNodeEnergized.getAspects()
+                    .getAmount(getMaxAspect(tileNodeEnergized.getAspects())));
+        }
+        for (Aspect aspect : auraBase.getAspects()) {
+            if (!(aspectList.aspects.containsKey(aspect))) {
+                penalize++;
+            }
+        }
+        if (penalize > 0) {
+            ExtraTime = penalize * 20;
+            mSpeedBonus = 1;
+            return;
+        }
+        for (Aspect aspect : aspectList.getAspects()) {
+            MaxAmount.add((double) aspectList.getAmount(aspect));
+        }
+        Mean = calculateMean(MaxAmount);
+        Variance = calculateVariance(MaxAmount);
+        double e = Math.E;
+        double ln1 = Math.log(1 + Math.pow(e, -Variance));
+        double ln2 = Math.log(2);;
+        double SpeedBonus = 1 + ((0.4 + Math.pow(0.45 * e, -0.005 * Variance) + 0.15 * (ln1 / ln2)) * Mean / 500);
+        mSpeedBonus = Math.max(1 / SpeedBonus, 1 / 11.4514);
+    }
+
+    public static double calculateVariance(List<Double> data) {
+        int n = data.size();
+        double mean = calculateMean(data);
+        double sum = 0.0;
+
+        for (double value : data) {
+            double diff = value - mean;
+            sum += diff * diff;
+        }
+        return sum / n;
+    }
+
+    private static double calculateMean(List<Double> data) {
+        int n = data.size();
+        double sum = 0.0;
+
+        for (double value : data) {
+            sum += value;
+        }
+
+        return sum / n;
+    }
+
+    private Aspect getMaxAspect(@Nonnull AspectList aspectList) {
+        Aspect maxAspect = null;
+        int max = 0;
+        for (Aspect aspect : aspectList.getAspects()) {
+            max = Math.max(aspectList.getAmount(aspect), max);
+            maxAspect = aspect;
+        }
+        return maxAspect;
+    }
+
+    @Override
+    protected int getMaxParallelRecipes() {
+        if (getControllerSlot() == null) {
+            return mParallel;
+        } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
+            return Int.MaxValue();
+        } else return mParallel;
+    }
+
+    // end region
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = EnumChatFormatting.AQUA + "Mean: "
+            + EnumChatFormatting.GOLD
+            + this.Mean
+            + EnumChatFormatting.AQUA
+            + "Variance: "
+            + EnumChatFormatting.GOLD
+            + this.Variance;
+        return ret;
+    }
+
+    protected String getPlayName() {
+        return this.getBaseMetaTileEntity()
+            .getOwnerName();
+    }
+
+    protected void onEssentiaCellFound(int tier) {
+        this.mParallel = (int) (tier * 8L);
+    }
+
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    // region Structure
+
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private final int horizontalOffSet = 22;
+    private final int verticalOffSet = 35;
+    private final int depthOffSet = 20;
+
+    // spotless:off
 
     private static final String[][] shape = new String[][] {
             { "                                             ", "                                             ",
@@ -1308,222 +1549,21 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
                     "                                             ", "                                             ",
                     "                                             " } };
 
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus(getSpeedBonus());
-                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
-                // setOverclock(isEnablePerfectOverclock() ? 2 : 1, isEnablePerfectOverclock() ? 2 : 3);
-                return super.process();
-            }
-
-            @Nonnull
-            @Override
-            protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
-                int Para = createParallelHelper(recipe).setConsumption(false)
-                        .build()
-                        .getCurrentParallel();
-                for (TCRecipeTools.InfusionCraftingRecipe recipe1 : TCRecipeTools.ICR) {
-                    if (recipe1.getOutput()
-                            .isItemEqual(recipe.mOutputs[0])) {
-                        if (!(ThaumcraftApiHelper.isResearchComplete(getPlayName(), recipe1.getResearch()))) {
-                            return Research_not_completed;
-                        }
-                        for (Aspect aspect : recipe1.getInputAspects()
-                                .getAspects()) {
-                            for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                                if (hatch.takeFromContainer(aspect, recipe1.getAspectAmount(aspect) * Para)) {
-                                    return CheckRecipeResultRegistry.SUCCESSFUL;
-                                } else return Essentia_InsentiaL;
-                            }
-
-                        }
-                    }
-                }
-                return CheckRecipeResultRegistry.NO_RECIPE;
-            }
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
-
-    @Nonnull
-    @Override
-    public CheckRecipeResult checkProcessing() {
-        // If no logic is found, try legacy checkRecipe
-        if (processingLogic == null) {
-            return checkRecipe(mInventory[1]) ? CheckRecipeResultRegistry.SUCCESSFUL
-                    : CheckRecipeResultRegistry.NO_RECIPE;
-        }
-
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
-        setEnergyUsage(processingLogic);
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
-        return result;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.IndustrialMagicMatrixRecipe;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return mSpeedBonus == (double) 1 / 11.4514;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        mSpeedBonus = 0.0;
-        ExtraTime = 0;
-        countSpeedBonus();
-        return (float) mSpeedBonus;
-    }
-
-    @Override
-    protected int getLimitedMaxParallel() {
-        return getMaxParallelRecipes();
-    }
-
-    private void countSpeedBonus() {
-        int penalize = 0;
-        ArrayList<Double> MaxAmount = new ArrayList<>();
-        AspectList aspectList = new AspectList();
-        AspectList auraBase = (new AspectList()).add(Aspect.AIR, 20)
-                .add(Aspect.FIRE, 20)
-                .add(Aspect.EARTH, 20)
-                .add(Aspect.WATER, 20)
-                .add(Aspect.ORDER, 20)
-                .add(Aspect.ENTROPY, 20);
-        if (mNodeEnergized.isEmpty()) {
-            mSpeedBonus = 1;
-            return;
-        } else if (mNodeEnergized.size() < 6) {
-            mSpeedBonus = (6 - mNodeEnergized.size()) * 1.75;
-            return;
-        }
-        for (TileNodeEnergized tileNodeEnergized : mNodeEnergized) {
-            aspectList.add(
-                    getMaxAspect(tileNodeEnergized.getAspects()),
-                    tileNodeEnergized.getAspects()
-                            .getAmount(getMaxAspect(tileNodeEnergized.getAspects())));
-        }
-        for (Aspect aspect : auraBase.getAspects()) {
-            if (!(aspectList.aspects.containsKey(aspect))) {
-                penalize++;
-            }
-        }
-        if (penalize > 0) {
-            ExtraTime = penalize * 20;
-            mSpeedBonus = 1;
-            return;
-        }
-        for (Aspect aspect : aspectList.getAspects()) {
-            MaxAmount.add((double) aspectList.getAmount(aspect));
-        }
-        Mean = calculateMean(MaxAmount);
-        Variance = calculateVariance(MaxAmount);
-        double e = Math.E;
-        double ln1 = Math.log(1 + Math.pow(e, -Variance));
-        double ln2 = Math.log(2);;
-        double SpeedBonus = 1 + ((0.4 + Math.pow(0.45 * e, -0.005 * Variance) + 0.15 * (ln1 / ln2)) * Mean / 500);
-        mSpeedBonus = Math.max(1 / SpeedBonus, 1 / 11.4514);
-    }
-
-    public static double calculateVariance(List<Double> data) {
-        int n = data.size();
-        double mean = calculateMean(data);
-        double sum = 0.0;
-
-        for (double value : data) {
-            double diff = value - mean;
-            sum += diff * diff;
-        }
-        return sum / n;
-    }
-
-    private static double calculateMean(List<Double> data) {
-        int n = data.size();
-        double sum = 0.0;
-
-        for (double value : data) {
-            sum += value;
-        }
-
-        return sum / n;
-    }
-
-    private Aspect getMaxAspect(@Nonnull AspectList aspectList) {
-        Aspect maxAspect = null;
-        int max = 0;
-        for (Aspect aspect : aspectList.getAspects()){
-            max = Math.max(aspectList.getAmount(aspect),max);
-            maxAspect = aspect;
-        }
-        return maxAspect;
-    }
-
-    @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 1];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + "Mean: "
-                + EnumChatFormatting.GOLD
-                + this.Mean
-                + EnumChatFormatting.AQUA
-                + "Variance: "
-                + EnumChatFormatting.GOLD
-                + this.Variance;
-        return ret;
-    }
-
-    protected String getPlayName() {
-        return this.getBaseMetaTileEntity()
-                .getOwnerName();
-    }
-
-    @Override
-    protected int getMaxParallelRecipes() {
-        return mParallel;
-    }
-
-    protected void onEssentiaCellFound(int tier) {
-        this.mParallel = (int) (tier * 8L);
-    }
-
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
+    // spotless:on
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
         return survivialBuildPiece(
-                STRUCTURE_PIECE_MAIN,
-                stackSize,
-                horizontalOffSet,
-                verticalOffSet,
-                depthOffSet,
-                elementBudget,
-                source,
-                actor,
-                false,
-                true);
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            source,
+            actor,
+            false,
+            true);
     }
 
     @Override
@@ -1586,7 +1626,6 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
             .build();
     }
 
-
     public final boolean addInfusionProvider(TileEntity aTileEntity) {
         if (aTileEntity instanceof TileInfusionProvider) {
             return this.mTileInfusionProvider.add((TileInfusionProvider) aTileEntity);
@@ -1602,6 +1641,8 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
         }
         return false;
     }
+
+    // spotless:off
 
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
@@ -1630,6 +1671,10 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
             .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_19)
             .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_20)
             .addInfo(TextLocalization.Tooltip_IndustrialMagicMatrix_21)
+            // #tr Tooltip_IndustrialMagicMatrix_23
+            // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
+            // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
+            .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_23"))
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
@@ -1647,6 +1692,8 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
+    // spotless:on
+    // end region
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -1667,8 +1714,6 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
-
-
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_TieEntity_IndustrialMagicMatrix(this.mName);
@@ -1676,26 +1721,26 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int colorIndex, boolean active, boolean redstoneLevel) {
+        int colorIndex, boolean active, boolean redstoneLevel) {
         if (side == facing) {
             if (active) return new ITexture[] { TextureFactory.of(blockStoneDevice, 2), TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE)
+                .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW)
                     .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                            .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW)
-                            .extFacing()
-                            .glow()
-                            .build() };
+                    .glow()
+                    .build() };
             return new ITexture[] { TextureFactory.of(blockStoneDevice, 2), TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
+                .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_GLOW)
                     .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                            .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_GLOW)
-                            .extFacing()
-                            .glow()
-                            .build() };
+                    .glow()
+                    .build() };
         }
         return new ITexture[] { TextureFactory.of(blockStoneDevice, 2) };
     }

@@ -49,6 +49,6 @@ public class TST_IndustrialMagicMatrixFrontend extends RecipeMapFrontend {
 
     @Override
     public @NotNull Pos2d getSpecialItemPosition() {
-        return new Pos2d(125,75);
+        return new Pos2d(125, 75);
     }
 }
