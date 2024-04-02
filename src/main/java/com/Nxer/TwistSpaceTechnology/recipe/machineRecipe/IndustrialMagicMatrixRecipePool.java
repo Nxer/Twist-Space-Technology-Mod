@@ -5,13 +5,12 @@ import static makeo.gadomancy.common.registration.RegisteredItems.itemEtherealFa
 import static tb.init.TBItems.revolver;
 import static thaumcraft.common.config.ConfigItems.*;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.IRecipeMap;
