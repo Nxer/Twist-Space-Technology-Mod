@@ -1014,7 +1014,7 @@ GT5U.gui.text.Essentiainsentia=Essentia insentia
 GT5U.gui.text.Research_not_completed=Research not completed
 tst.recipe.IndustrialMagicMatrixRecipe=Industrial Infusion Matrix RecipesTooltip_IndustrialMagicMatrix_20=Each missing one adds a fixed 1 second to the time.
 Tooltip_IndustrialMagicMatrix_20=Each missing one adds a fixed 1 second to the time.
-Tooltip_IndustrialMagicMatrix_21=Gain up to 1145.14% acceleration multiplier.
+Tooltip_IndustrialMagicMatrix_21=Gain up to 1145.14%% acceleration multiplier.
 Tooltip_IndustrialMagicMatrix_00=Please use the Infusion Supplier to supply Essence!
 Tooltip_IndustrialMagicMatrix_01=When you stare into the void, the void stares at you.
 Tooltip_IndustrialMagicMatrix_02=Some say it's a miracle of a mystical envoy,
