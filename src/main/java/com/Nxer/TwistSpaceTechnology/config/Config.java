@@ -313,7 +313,7 @@ public class Config {
 
     // region Space Apiary
     public static boolean EnableSpaceApiaryModule = true;
-    public static boolean enableDNAConsuming = false;
+    public static boolean enableDNAConsuming = true;
     // endregion
 
     public static boolean activateMegaSpaceStation = false;
@@ -591,7 +591,7 @@ public class Config {
 
         // region Space Apiary
         EnableSpaceApiaryModule = configuration.getBoolean("EnableSpaceApiaryModule", SpaceApiary, EnableSpaceApiaryModule, "Enable Space Apiary Module.");
-//        enableDNAConsuming = configuration.getBoolean("enableDNAConsuming", SpaceApiary, enableDNAConsuming, "Enable DNA consuming for Space Apiary Modules. Type: boolean");
+        enableDNAConsuming = configuration.getBoolean("enableDNAConsuming", SpaceApiary, enableDNAConsuming, "Enable DNA consuming for Space Apiary Modules. Type: boolean");
         // endregion
 
         TST_CleanRoom.loadConfig(configuration);
