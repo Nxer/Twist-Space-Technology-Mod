@@ -413,7 +413,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
+        if (mMachine && stackSize.stackSize < 2) return -1;
         int builtMain = survivialBuildPiece(STRUCTURE_PIECE_MK1, stackSize, 12, 20, 7, elementBudget, env, false, true);
         if (stackSize.stackSize < 2) {
             return builtMain;
