@@ -213,6 +213,8 @@ public enum GTCMItemList {
     SpaceApiaryT3,
     SpaceApiaryT4,
 
+    LargeCanner,
+
     // MAX
     HighDimensionalExtend,
     HighDimensionalCircuitDoard,

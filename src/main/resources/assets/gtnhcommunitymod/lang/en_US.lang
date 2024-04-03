@@ -1003,7 +1003,12 @@ MachineInfoData.MachineTier=Machine Tier
 MachineInfoData.FieldGeneratorTier=Field Generator Tier
 MachineInfoData.FusionCoilTier=Fusion Coil Tier
 MachineInfoData.CompactFusionCoilTier=Compact Fusion Coil Tier
-
+Tooltip_LargeCanner_MachineType=Fluid/Solid Canner
+Tooltip_LargeCanner_Controller=Controller block for the Large Canner
+Tooltip_LargeCanner_01="Use unimaginable force to press items into containers!"
+Tooltip_LargeCanner_02=Having almost infinite parallelism!
+Tooltip_LargeCanner_03=Please use a screwdriver to switch modes.
+NameLargeCanner=Large Canner
 IndustrialMagicMatrixRecipeInputAspects=Recipe required Essentia
 GT5U.gui.text.Essentiainsentia=Essentia insentia
 GT5U.gui.text.Research_not_completed=Research not completed

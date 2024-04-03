@@ -1003,7 +1003,12 @@ MachineInfoData.MachineTier=机器等级
 MachineInfoData.FieldGeneratorTier=力场发生器等级
 MachineInfoData.FusionCoilTier=聚变线圈等级
 MachineInfoData.CompactFusionCoilTier=压缩聚变线圈等级
-
+Tooltip_LargeCanner_MachineType=流体/固体装罐机
+Tooltip_LargeCanner_Controller=大型灌装机的控制方块
+Tooltip_LargeCanner_01="使用超乎想象的力量把物品压入容器中！”
+Tooltip_LargeCanner_02=拥有近乎无限的并行！
+Tooltip_LargeCanner_03=请使用螺丝刀来切换模式。
+NameLargeCanner=大型装罐机
 IndustrialMagicMatrixRecipeInputAspects=配方所需源质
 GT5U.gui.text.Essentiainsentia=§c§k源质不足
 GT5U.gui.text.Research_not_completed=§c§k小朋友，作业还没写完呢§c§k

@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.machine.*;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
@@ -121,6 +120,8 @@ public class MachineLoader {
     public static ItemStack SpaceApiaryT2;
     public static ItemStack SpaceApiaryT3;
     public static ItemStack SpaceApiaryT4;
+
+    public static ItemStack LargeCanner;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -484,6 +485,18 @@ public class MachineLoader {
                 .getStackForm(1);
             GTCMItemList.BallLightning.set(BallLightning);
         }
+
+        if (Config.EnableLargeCanner){
+            LargeCanner = new TST_LargeCanner(
+                19048,
+                "NameLargeCanner",
+                // #tr NameLargeCanner
+                // # Large Canner
+                // #zh_CN 大型装罐机
+                TextEnums.tr("NameLargeCanner")).getStackForm(1);
+            GTCMItemList.LargeCanner.set(LargeCanner);
+        }
+
         //
         IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
             19047,
@@ -493,6 +506,7 @@ public class MachineLoader {
             // #zh_CN §0工业注魔矩阵
             TextEnums.tr("NameIndustrialMagicMatrix")).getStackForm(1);
         GTCMItemList.IndustrialMagicMatrix.set(IndustrialMagicMatrix);
+
         // endregion
 
         // region Single block Machine
