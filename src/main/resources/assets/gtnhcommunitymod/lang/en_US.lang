@@ -1047,3 +1047,5 @@ Tooltip_IndustrialMagicMatrix_23.1=§bAny magic mechanical block
 Tooltip_IndustrialMagicMatrix_24=§bAny magic mechanical block
 Tooltip_IndustrialMagicMatrix_25=Essentia diffusion unit
 Tooltip_IndustrialMagicMatrix_25.1=Each level provides 4^tier parallel
+LargeCanner.modeMsg.true=Mode: Fluid Canner
+LargeCanner.modeMsg.false=Mode: Canner
