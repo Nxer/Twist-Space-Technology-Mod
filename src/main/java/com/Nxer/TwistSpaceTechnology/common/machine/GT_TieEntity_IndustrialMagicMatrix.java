@@ -293,12 +293,12 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 1];
+        String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA + "Mean: "
             + EnumChatFormatting.GOLD
-            + this.Mean
-            + EnumChatFormatting.AQUA
+            + this.Mean;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA
             + "Variance: "
             + EnumChatFormatting.GOLD
             + this.Variance;
@@ -1678,71 +1678,71 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
                 // #tr Tooltip_IndustrialMagicMatrix_05
                 // # Needless to say, its incredible principle is fascinating...
                 // #zh_CN §k毋庸置疑的是它那不可思议的原理令人十分入迷...
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_05"))
                 // #tr Tooltip_IndustrialMagicMatrix_06
                 // # Because of the pollution of technology,
                 // #zh_CN 由于被科技所污染，
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_06"))
                 // #tr Tooltip_IndustrialMagicMatrix_07
                 // # It is unable to perform active infusions.
                 // #zh_CN 它无法进行具有活性的注魔。
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_07"))
                 // #tr Tooltip_IndustrialMagicMatrix_08
                 // # Parallelism depends on the level of the structure block.
                 // #zh_CN 并行取决于结构方块的等级。
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_08"))
                 // #tr Tooltip_IndustrialMagicMatrix_09
                 // # Do an 4/2 overclock.Turn on lossless overclocking after reaching the maximum acceleration rate.
                 // #zh_CN 进行4/2超频。达到最高加速倍率后开启无损超频.
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_09"))
                 // #tr Tooltip_IndustrialMagicMatrix_10
                 // # Use Charged Nodes to get acceleration rewards,
                 // #zh_CN §b使用充能节点以获得加速奖励§7，
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_010"))
                 // #tr Tooltip_IndustrialMagicMatrix_11
                 // # However, when the number of nodes is less than six,
                 // #zh_CN 但节点数量不足六个时,
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_11"))
                 // #tr Tooltip_IndustrialMagicMatrix_12
                 // # the processing time will be carried out (recipe time * number of missing nodes * 1.75).
                 // #zh_CN 将会额外计算(配方时间*节点缺失数量*1.75)的加工时长，
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_12"))
                 // #tr Tooltip_IndustrialMagicMatrix_13
                 // # The matrix will take the largest element of each of the six nodes and calculate the average.
                 // #zh_CN 矩阵将会取这六个节点中每个最大的要素并计算平均值，
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_13"))
                 // #tr Tooltip_IndustrialMagicMatrix_14
                 // # The closer the quantities between the six primitive elements are, the higher the multiplication factor will be.
                 // #zh_CN 六种原始要素之间的数量越接近倍率系数就会越高。
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_14"))
                 // #tr Tooltip_IndustrialMagicMatrix_15
                 // # The actual acceleration magnification is ((0.4+0.45exp(-0.05Variance)+
                 // #zh_CN
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_15"))
                 // #tr Tooltip_IndustrialMagicMatrix_16
                 // # 0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500).
                 // #zh_CN 实际加速倍率为((0.4+0.45exp(-0.05Variance) +
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_16"))
                 // #tr Tooltip_IndustrialMagicMatrix_17
                 // # Variance is the variance of the largest element in the six nodes,
                 // #zh_CN 0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500)。
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_17"))
                 // #tr Tooltip_IndustrialMagicMatrix_18
                 // # Mean is the average.
                 // #zh_CN Variance为六个节点里最大要素的方差，
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_18"))
                 // #tr Tooltip_IndustrialMagicMatrix_19
                 // # When the type of the six elements is not the six original elements,
                 // #zh_CN Mean则为平均数。
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_19"))
                 // #tr Tooltip_IndustrialMagicMatrix_20
                 // # Each missing one adds a fixed 1 second to the time.
                 // #zh_CN 当六个要素的种类不为六种原始要素时,
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_20"))
                 // #tr Tooltip_IndustrialMagicMatrix_21
                 // # Gain up to 1145.14% acceleration multiplier.
                 // #zh_CN 每缺少一种就固定增加1秒耗时。
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_04"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_21"))
                 // #tr Tooltip_IndustrialMagicMatrix_22
                 // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
                 // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...

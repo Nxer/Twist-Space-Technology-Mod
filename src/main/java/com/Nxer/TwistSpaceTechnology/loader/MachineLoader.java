@@ -486,7 +486,7 @@ public class MachineLoader {
         }
         //
         IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
-            19046,
+            19047,
             "IndustrialMagicMatrix",
             // #tr NameIndustrialMagicMatrix
             // # Industrial Magic Matrix
