@@ -166,7 +166,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
             // # Mode: Fluid Canner
             // #zh_CN 流体灌装机模式
             // #tr LargeCanner.modeMsg.false
-            // # Mode: Canner
+            // # Mode: Canning Machine
             // #zh_CN 装罐机模式
             GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("LargeCanner.modeMsg." + fluidMode));
         }

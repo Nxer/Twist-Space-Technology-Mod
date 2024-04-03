@@ -2619,6 +2619,34 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // endregion
 
+        // region Large Canner
+        if (Config.EnableLargeCanner) {
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(10),
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 16),
+                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.TungstenSteel, 16),
+
+                    CustomItemList.FluidCannerZPM.get(16),
+                    CustomItemList.CanningMachineZPM.get(16),
+                    new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16},
+
+                    ItemList.Electric_Pump_ZPM.get(16),
+                    ItemList.Conveyor_Module_ZPM.get(8),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 16)
+                )
+                .fluidInputs(Materials.SolderingAlloy.getMolten(144*64))
+                .itemOutputs(GTCMItemList.LargeCanner.get(1))
+                .eut(RECIPE_UV)
+                .duration(20 * 300)
+                .addTo(assembler);
+        }
+
+        // endregion
+
+
+
     }
     // spotless:on
 }
