@@ -1712,31 +1712,31 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_14"))
                 // #tr Tooltip_IndustrialMagicMatrix_15
                 // # The actual acceleration magnification is ((0.4+0.45exp(-0.05Variance)+
-                // #zh_CN
+                // #zh_CN 实际加速倍率为{\SPACE}{\AQUA}((0.4+0.45exp(-0.05Variance) +
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_15"))
                 // #tr Tooltip_IndustrialMagicMatrix_16
                 // # 0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500).
-                // #zh_CN 实际加速倍率为((0.4+0.45exp(-0.05Variance) +
+                // #zh_CN {\SPACE}{\SPACE}{\AQUA}0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500)
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_16"))
                 // #tr Tooltip_IndustrialMagicMatrix_17
                 // # Variance is the variance of the largest element in the six nodes,
-                // #zh_CN 0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500)。
+                // #zh_CN Variance为六个节点里最大要素的方差，
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_17"))
                 // #tr Tooltip_IndustrialMagicMatrix_18
                 // # Mean is the average.
-                // #zh_CN Variance为六个节点里最大要素的方差，
+                // #zh_CN Mean则为平均数。
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_18"))
                 // #tr Tooltip_IndustrialMagicMatrix_19
                 // # When the type of the six elements is not the six original elements,
-                // #zh_CN Mean则为平均数。
+                // #zh_CN 当六个要素的种类不为六种原始要素时,
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_19"))
                 // #tr Tooltip_IndustrialMagicMatrix_20
                 // # Each missing one adds a fixed 1 second to the time.
-                // #zh_CN 当六个要素的种类不为六种原始要素时,
+                // #zh_CN 每缺少一种就固定增加1秒耗时。
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_20"))
                 // #tr Tooltip_IndustrialMagicMatrix_21
-                // # Gain up to 1145.14% acceleration multiplier.
-                // #zh_CN 每缺少一种就固定增加1秒耗时。
+                // # Gain up to 1145.14%% acceleration multiplier.
+                // #zh_CN 最高获得 1145.14%% 的加速倍数。
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_21"))
                 // #tr Tooltip_IndustrialMagicMatrix_22
                 // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
