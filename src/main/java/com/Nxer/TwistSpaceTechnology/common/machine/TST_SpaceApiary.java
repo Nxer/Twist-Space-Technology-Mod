@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.enableDNAConsuming;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static forestry.api.apiculture.BeeManager.beeRoot;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
@@ -19,14 +20,13 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.INameFunction;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.IStatusFunction;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.Parameters;
 import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevatormodules.TileEntityModuleBase;
-import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
-import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 
 import forestry.api.apiculture.*;
 import forestry.apiculture.genetics.Bee;
@@ -40,17 +40,7 @@ import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
-    public static final long ENERGY_CONSUMPTION = (int) GT_Values.VP[6];// 1A Luv
-    Parameters.Group.ParameterIn[] parallelSettings;
-    private final Fluid liquddna = FluidRegistry.getFluid("liquiddna");
-
-    private static final INameFunction<TST_SpaceApiary> PARALLEL_SETTING_NAME = (base,
-        p) -> GCCoreUtil.translate("gt.blockmachines.multimachine.project.ig.pump.cfgi.2") + " "
-            + (p.hatchId() / 2 + 1); // Parallels
-
-    private static final IStatusFunction<TST_SpaceApiary> PARALLEL_STATUS = (base, p) -> LedStatus
-        .fromLimitsInclusiveOuterBoundary(p.get(), 0, 1, 100, base.getParallels());
-
+    // region Class Constructor
     public TST_SpaceApiary(int aID, String aName, String aNameRegional, int tTier, int tModuleTier, int tMinMotorTier) {
         super(aID, aName, aNameRegional, tTier, tModuleTier, tMinMotorTier);
     }
@@ -59,55 +49,97 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         super(aName, tTier, tModuleTier, tMinMotorTier);
     }
 
+    // endregion
+
+    // region Statics
+    private static final INameFunction<TST_SpaceApiary> PARALLEL_SETTING_NAME = (base,
+        p) -> GCCoreUtil.translate("gt.blockmachines.multimachine.project.ig.pump.cfgi.2") + " "
+            + (p.hatchId() / 2 + 1); // Parallels
+
+    private static final IStatusFunction<TST_SpaceApiary> PARALLEL_STATUS = (base, p) -> LedStatus
+        .fromLimitsInclusiveOuterBoundary(p.get(), 0, 1, 100, base.getMaxParallels());
+
+    // endregion
+    Parameters.Group.ParameterIn[] parallelSettings;
+    private final Fluid liquddna = FluidRegistry.getFluid("liquiddna");
+
+    protected World world;
+    protected float voltageTierExact;
+
     public double getVoltageTierExact() {
         return Math.log((double) GT_Values.V[6] / 8d) / Math.log(4d) + 1e-8d;
     }
 
     @Override
+    public void onFirstTick_EM(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick_EM(aBaseMetaTileEntity);
+        if (aBaseMetaTileEntity.isServerSide()) {
+            world = getBaseMetaTileEntity().getWorld();
+            voltageTierExact = (float) getVoltageTierExact();
+        }
+    }
+
+    @Override
     public @NotNull CheckRecipeResult checkProcessing_EM() {
         ItemStack controllerStack = getControllerSlot();
-
-        int mparallel = Math.min((int) parallelSettings[0].get(), getParallels());
-        if (ENERGY_CONSUMPTION * mparallel > getEUVar()) {
-            return CheckRecipeResultRegistry.insufficientPower(ENERGY_CONSUMPTION * mparallel);
+        if (controllerStack == null || beeRoot.getType(controllerStack) != EnumBeeType.QUEEN) {
+            return CheckRecipeResultRegistry.NO_RECIPE;
         }
 
-        if (controllerStack != null && beeRoot.getType(controllerStack) == EnumBeeType.QUEEN) {
-            double boosted = 1d;
+        int mParallel = getCurrentParallel();
+        if (RECIPE_LuV * mParallel > getEUVar()) {
+            return CheckRecipeResultRegistry.insufficientPower(RECIPE_LuV * mParallel);
+        }
 
-            if (enableDNAConsuming) {
-                if (!consumeLiquddna()) {
-                    return CheckRecipeResultRegistry.NO_RECIPE;
-                }
-                updateSlots();
+        if (enableDNAConsuming) {
+            if (!consumeLiquidDNA()) {
+                return CheckRecipeResultRegistry.NO_FUEL_FOUND;
             }
-
-            World w = getBaseMetaTileEntity().getWorld();
-            float t = (float) getVoltageTierExact();
-            List<ItemStack> stacks = new ArrayList<>();
-            TST_SpaceApiary.BeeSimulator beeSimulator = new TST_SpaceApiary.BeeSimulator(controllerStack, w, t);
-            stacks.addAll(beeSimulator.getDrops(this, 64_00d * boosted * mparallel));
-
-            this.lEUt = -(int) ((double) GT_Values.V[6] * mparallel * 0.99d);
-            this.mEfficiency = 10000;
-            this.mEfficiencyIncrease = 10000;
-            this.mMaxProgresstime = 100;
-            this.mOutputItems = stacks.toArray(new ItemStack[0]);
-
-            return CheckRecipeResultRegistry.SUCCESSFUL;
         }
 
-        return CheckRecipeResultRegistry.NO_RECIPE;
+        updateSlots();
+
+        List<ItemStack> outputs = new ArrayList<>();
+        TST_SpaceApiary.BeeSimulator beeSimulator = new TST_SpaceApiary.BeeSimulator(
+            controllerStack,
+            world,
+            voltageTierExact);
+
+        for (ItemStack outItems : beeSimulator.getDrops(this, 6400)) {
+            if (outItems == null || outItems.stackSize < 1) continue;
+            long amount = (long) outItems.stackSize * mParallel;
+            if (amount <= Integer.MAX_VALUE) {
+                outputs.add(Utils.setStackSize(outItems.copy(), (int) amount));
+            } else {
+                while (amount >= Integer.MAX_VALUE) {
+                    outputs.add(Utils.setStackSize(outItems.copy(), Integer.MAX_VALUE));
+                    amount -= Integer.MAX_VALUE;
+                }
+                if (amount > 0) {
+                    outputs.add(Utils.setStackSize(outItems.copy(), (int) amount));
+                }
+            }
+        }
+
+        this.lEUt = -RECIPE_LuV * mParallel;
+        this.mEfficiency = 10000;
+        this.mEfficiencyIncrease = 10000;
+        this.mMaxProgresstime = 100;
+        this.mOutputItems = outputs.toArray(new ItemStack[0]);
+
+        return CheckRecipeResultRegistry.SUCCESSFUL;
 
     }
 
-    private boolean consumeLiquddna() {
+    protected abstract int getLiquidDnaConsumingAmount();
+
+    private boolean consumeLiquidDNA() {
         if (getStoredFluids().isEmpty()) return false;
-        int mparallel = Math.min((int) parallelSettings[0].get(), getParallels());
+        int consumeAmount = getCurrentParallel() * getLiquidDnaConsumingAmount();
         for (FluidStack fluid : getStoredFluids()) {
             if (fluid.getFluid() == liquddna) {
-                if (fluid.amount >= 100 * mparallel) {
-                    fluid.amount -= 100 * mparallel;
+                if (fluid.amount >= consumeAmount) {
+                    fluid.amount -= consumeAmount;
                     return true;
                 }
             }
@@ -115,12 +147,11 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         return false;
     }
 
-    @Override
-    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return super.checkMachine_EM(aBaseMetaTileEntity, aStack);
+    protected int getCurrentParallel() {
+        return Math.min((int) parallelSettings[0].get(), getMaxParallels());
     }
 
-    protected int getParallels() {
+    protected int getMaxParallels() {
         return Integer.MAX_VALUE;
     }
 
@@ -130,11 +161,6 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         parallelSettings = new Parameters.Group.ParameterIn[1];
         parallelSettings[0] = parametrization.getGroup(0, false)
             .makeInParameter(0, 1, PARALLEL_SETTING_NAME, PARALLEL_STATUS);
-    }
-
-    @Override
-    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
-        super.drawTexts(screenElements, inventorySlot);
     }
 
     public static class TST_SpaceApiaryT1 extends TST_SpaceApiary {
@@ -148,13 +174,18 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         protected static final int MAX_PARALLELS = 256;
 
         @Override
-        protected int getParallels() {
+        protected int getMaxParallels() {
             return MAX_PARALLELS;
         }
 
         @Override
         public double getVoltageTierExact() {
             return Math.log((double) GT_Values.V[8] / 8d) / Math.log(4d) + 1e-8d; // UV Tier
+        }
+
+        @Override
+        protected int getLiquidDnaConsumingAmount() {
+            return 100;
         }
 
         public TST_SpaceApiaryT1(int aID, String aName, String aNameRegional) {
@@ -203,8 +234,13 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         protected static final int MAX_PARALLELS = 4096;
 
         @Override
-        protected int getParallels() {
+        protected int getMaxParallels() {
             return MAX_PARALLELS;
+        }
+
+        @Override
+        protected int getLiquidDnaConsumingAmount() {
+            return 25;
         }
 
         @Override
@@ -258,8 +294,13 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         protected static final int MAX_PARALLELS = 32768;
 
         @Override
-        protected int getParallels() {
+        protected int getMaxParallels() {
             return MAX_PARALLELS;
+        }
+
+        @Override
+        protected int getLiquidDnaConsumingAmount() {
+            return 5;
         }
 
         @Override
@@ -313,8 +354,13 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         protected static final int MAX_PARALLELS = Integer.MAX_VALUE;
 
         @Override
-        protected int getParallels() {
+        protected int getMaxParallels() {
             return MAX_PARALLELS;
+        }
+
+        @Override
+        protected int getLiquidDnaConsumingAmount() {
+            return 1;
         }
 
         @Override
