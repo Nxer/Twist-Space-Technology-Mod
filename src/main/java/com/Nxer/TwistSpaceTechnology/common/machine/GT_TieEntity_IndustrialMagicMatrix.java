@@ -1642,14 +1642,14 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType(
-                        // #tr Tooltip_IndustrialMagicMatrix_Controller
-                        // # Magic Matrix
-                        // #zh_CN 工业注魔矩阵的控制器方块
-                TextEnums.tr("Tooltip_IndustrialMagicMatrix_Controller"))
                 // #tr Tooltip_IndustrialMagicMatrix_MachineType
                 // # Controller block for the Industrial Magic Matrix
                 // #zh_CN §0工业注魔矩阵
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_MachineType"))
+                TextEnums.tr("Tooltip_IndustrialMagicMatrix_MachineType"))
+                // #tr Tooltip_IndustrialMagicMatrix_Controller
+                // # Magic Matrix
+                // #zh_CN 工业注魔矩阵的控制器方块
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_Controller"))
                 // #tr Tooltip_IndustrialMagicMatrix_00
                 // # Please use the Infusion Supplier to supply Essence!
                 // #zh_CN 请使用注魔供应器供给源质！
@@ -1693,7 +1693,7 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
                 // #tr Tooltip_IndustrialMagicMatrix_10
                 // # Use Charged Nodes to get acceleration rewards,
                 // #zh_CN §b使用充能节点以获得加速奖励§7，
-                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_010"))
+                .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_10"))
                 // #tr Tooltip_IndustrialMagicMatrix_11
                 // # However, when the number of nodes is less than six,
                 // #zh_CN 但节点数量不足六个时,
@@ -1746,8 +1746,8 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
                 .addInfo(StructureTooComplex)
                 .addInfo(BLUE_PRINT_INFO)
                 // #tr Tooltip_IndustrialMagicMatrix_23
-                // # Infusion Provider:
-                // #zh_CN 注魔供应器:
+                // # Infusion Provider
+                // #zh_CN 注魔供应器
                 // #tr Tooltip_IndustrialMagicMatrix_23.1
                 // # §bAny magic mechanical block
                 // #zh_CN §b任意魔法机械方块
@@ -1760,6 +1760,14 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
                 .addOutputBus(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
                 .addMaintenanceHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
                 .addEnergyHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
+                // #tr Tooltip_IndustrialMagicMatrix_25
+                // # Essentia diffusion unit
+                // #zh_CN 源质扩散单元
+                // #tr Tooltip_IndustrialMagicMatrix_25.1
+                // # Each level provides 4^tier parallel
+                // #zh_CN §b每级提供4^tier的并行
+                .addOtherStructurePart(TextEnums.tr("Tooltip_IndustrialMagicMatrix_25"),
+                        TextEnums.tr("Tooltip_IndustrialMagicMatrix_25.1"))
                 .toolTipFinisher(ModName);
         return tt;
     }

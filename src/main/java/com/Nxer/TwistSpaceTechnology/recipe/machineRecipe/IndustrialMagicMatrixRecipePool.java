@@ -1,8 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.kentington.thaumichorizons.common.ThaumicHorizons.blockCrystalDeep;
+import static gregtech.api.enums.TierEU.RECIPE_LV;
 import static gregtech.api.enums.TierEU.RECIPE_LuV;
 import static makeo.gadomancy.common.registration.RegisteredItems.itemEtherealFamiliar;
 import static tb.init.TBItems.revolver;
+import static thaumcraft.common.config.ConfigBlocks.blockCosmeticSolid;
 import static thaumcraft.common.config.ConfigItems.*;
 
 import net.minecraft.item.ItemStack;
@@ -13,7 +16,9 @@ import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import thaumcraft.common.items.ItemEssence;
 
 public class IndustrialMagicMatrixRecipePool implements IRecipePool {
@@ -51,5 +56,14 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
                 .eut(RECIPE_LuV)
                 .addTo(IIM);
         }
+        GT_Values.RA.stdBuilder()
+            .clearInvalid()
+            .itemInputs(new ItemStack(blockCosmeticSolid, 8, 6), new ItemStack(itemShard, 1, 6))
+            .itemOutputs(new ItemStack(blockCrystalDeep, 8))
+            .fluidInputs(Materials.Thaumium.getMolten(144))
+            .noOptimize()
+            .duration(20)
+            .eut(RECIPE_LV)
+            .addTo(RecipeMaps.assemblerRecipes);
     }
 }
