@@ -452,6 +452,17 @@ public class MachineLoader {
             GTCMItemList.BallLightning.set(BallLightning);
         }
 
+        //
+        IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
+            19047,
+            "IndustrialMagicMatrix",
+            // #tr NameIndustrialMagicMatrix
+            // # Industrial Magic Matrix
+            // #zh_CN §0工业注魔矩阵
+            TextEnums.tr("NameIndustrialMagicMatrix")).getStackForm(1);
+        GTCMItemList.IndustrialMagicMatrix.set(IndustrialMagicMatrix);
+
+        //
         if (Config.EnableLargeCanner) {
             LargeCanner = new TST_LargeCanner(
                 19048,
@@ -462,16 +473,6 @@ public class MachineLoader {
                 TextEnums.tr("NameLargeCanner")).getStackForm(1);
             GTCMItemList.LargeCanner.set(LargeCanner);
         }
-
-        //
-        IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
-            19047,
-            "IndustrialMagicMatrix",
-            // #tr NameIndustrialMagicMatrix
-            // # Industrial Magic Matrix
-            // #zh_CN §0工业注魔矩阵
-            TextEnums.tr("NameIndustrialMagicMatrix")).getStackForm(1);
-        GTCMItemList.IndustrialMagicMatrix.set(IndustrialMagicMatrix);
 
         // endregion
 
