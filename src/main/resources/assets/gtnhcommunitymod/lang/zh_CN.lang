@@ -1047,3 +1047,5 @@ Tooltip_IndustrialMagicMatrix_23.1=§b任意魔法机械方块
 Tooltip_IndustrialMagicMatrix_24=§b任意魔法机械方块
 Tooltip_IndustrialMagicMatrix_25=源质扩散单元
 Tooltip_IndustrialMagicMatrix_25.1=§b每级提供4^tier的并行
+LargeCanner.modeMsg.true=流体灌装机模式
+LargeCanner.modeMsg.false=装罐机模式

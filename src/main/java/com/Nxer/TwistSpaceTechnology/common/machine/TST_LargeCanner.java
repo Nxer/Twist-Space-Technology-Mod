@@ -14,12 +14,17 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -60,9 +65,9 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
 
     // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "LargeCanner_main";
-    private final int horizontalOffSet = 6;
-    private final int verticalOffSet = 15;
-    private final int depthOffSet = 0;
+    private static final int horizontalOffSet = 6;
+    private static final int verticalOffSet = 15;
+    private static final int depthOffSet = 0;
     private static IStructureDefinition<TST_LargeCanner> STRUCTURE_DEFINITION = null;
 
     // spotless:off
@@ -112,8 +117,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        return true;
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
     @Override
@@ -141,25 +145,31 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     // region end
 
     // process
-    protected boolean fluidmode = false;
+    protected boolean fluidMode = false;
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return fluidmode ? RecipeMaps.fluidCannerRecipes : RecipeMaps.cannerRecipes;
+        return fluidMode ? RecipeMaps.fluidCannerRecipes : RecipeMaps.cannerRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(RecipeMaps.fluidCannerRecipes, RecipeMaps.cannerRecipes);
     }
 
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
-            this.fluidmode = !this.fluidmode;
-            String aMode = fluidmode ? "Fluid Canner" : "Solid Canner";
-            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("Mode." + aMode));
+            this.fluidMode = !this.fluidMode;
+            // #tr LargeCanner.modeMsg.true
+            // # Mode: Fluid Canner
+            // #zh_CN 流体灌装机模式
+            // #tr LargeCanner.modeMsg.false
+            // # Mode: Canner
+            // #zh_CN 装罐机模式
+            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("LargeCanner.modeMsg." + fluidMode));
         }
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
     }
 
     @Override
@@ -174,27 +184,21 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return false;
+        return true;
     }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setBoolean("mFluidMode", fluidmode);
+        aNBT.setBoolean("fluidMode", fluidMode);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        if (aNBT.hasKey("mFluidMode")) {
-            fluidmode = aNBT.getBoolean("mFluidMode");
-        } else {
-            fluidmode = true;
-        }
+        fluidMode = aNBT.getBoolean("fluidMode");
     }
-    //
 
-    //
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int aColorIndex, boolean aActive, boolean aRedstone) {
