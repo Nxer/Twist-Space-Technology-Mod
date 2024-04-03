@@ -308,7 +308,7 @@ public class Config {
 
     // region Recipe
     public static boolean Registry_DragonBlood_ExtraRecipe = true;
-    public static boolean UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe = true;
+
     // endregion
 
     // region Space Apiary
@@ -331,7 +331,6 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
-        UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe = configuration.getBoolean("UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe", RECIPE, UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe, "Use Witchery mod's Infinity Egg instead Dragon Egg in Dragon Blood Fluid Heater Recipe.");
         // endregion
 
         // region Eye of Wood

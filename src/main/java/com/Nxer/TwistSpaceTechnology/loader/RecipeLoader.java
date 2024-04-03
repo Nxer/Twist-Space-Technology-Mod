@@ -32,6 +32,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonR
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DragonBloodRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.MegaUniversalSpaceStationRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCResearches;
@@ -52,7 +53,7 @@ public class RecipeLoader {
             new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool(),
             new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
             new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
-            new FluidHeaterRecipePool(), new IndustrialMagicMatrixRecipePool() };
+            new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new DragonBloodRecipe() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
@@ -79,3 +80,4 @@ public class RecipeLoader {
         new StellarForgeRecipePool().loadOnServerStarted();
     }
 }
+
