@@ -450,7 +450,7 @@ public class MachineLoader {
 
         if (Config.EnableLargeCanner){
             LargeCanner = new TST_LargeCanner(
-                19047,
+                19048,
                 "NameLargeCanner",
                 // #tr NameLargeCanner
                 // # Large Canner
