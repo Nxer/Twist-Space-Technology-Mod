@@ -1,11 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static gregtech.api.enums.ItemList.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +20,8 @@ import org.apache.logging.log4j.core.helpers.Strings;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.dreammaster.gthandler.CustomItemList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -63,6 +65,37 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
 
     private static String[] romeDigits = new String[] { "I", "II", "III", "IV", "V" };
 
+    @SideOnly(Side.CLIENT)
+    private static final ITexture[] DEFAULT_FRONT_ACTIVE = new ITexture[] {
+        Textures.BlockIcons.getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 2)),
+        TextureFactory.builder()
+            .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
+            .extFacing()
+            .build(),
+        TextureFactory.builder()
+            .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
+            .extFacing()
+            .glow()
+            .build() };
+
+    @SideOnly(Side.CLIENT)
+    private static final ITexture[] DEFAULT_FRONT_IDLE = new ITexture[] {
+        Textures.BlockIcons.getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings4, 0)),
+        TextureFactory.builder()
+            .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
+            .extFacing()
+            .build(),
+        TextureFactory.builder()
+            .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
+            .extFacing()
+            .glow()
+            .build() };
+
+    @SideOnly(Side.CLIENT)
+    private static final ITexture[] DEFAULT_CASING_TEXTURE = new ITexture[] {
+        Textures.BlockIcons.getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings4, 0)) };
+
+    // spotless:off
     public static final String[][] PROCESSING_MACHINE_LIST = new String[][] {
         // OP
         { "Macerator", "Macerator" }, { "OreWasher", "OreWashingPlant" }, { "ChemicalBath", "ChemicalBath" },
@@ -76,18 +109,41 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
         { "AlloySmelter", "AlloySmelter" }, { "Electrolyzer", "Electrolyzer" }, { "Sifter", "SiftingMachine" },
         { "ChemicalReactor", "ChemicalReactor" }, { "ElectromagneticSeparator", "ElectromagneticSeparator" },
         { "Recycler", "Recycler" }, { "Massfab", "MassFabricator" }, { "Centrifuge", "Centrifuge" },
-        { "Assembler", "AssemblingMachine" }, { "CircuitAssembler", "CircuitAssembler" }
+        { "Cutter", "CuttingMachine" }, { "Assembler", "AssemblingMachine" }, { "CircuitAssembler", "CircuitAssembler" }
         // TODO: bartworks bio lab
     };
 
     public static final Map<String, String> overlayMapping = new HashMap<>() {
+
         {
             put("Macerator", "macerator");
             put("OreWasher", "ore_washer");
-            put("ChemicalBath","chemical_bath");
+            put("ChemicalBath", "chemical_bath");
             put("ThermalCentrifuge", "thermal_centrifuge");
             put("E_Furnace", "electric_furnace");
             put("ArcFurnace", "arc_furnace");
+            put("Bender", "bender");
+            put("Wiremill", "wiremill");
+            put("Lathe", "lathe");
+            put("Hammer", "hammer");
+            put("Extruder", "extruder");
+            put("FluidExtractor", "fluid_extractor");
+            put("Compressor", "compressor");
+            put("Press", "press");
+            put("FluidSolidifier", "fluid_solidifier");
+            put("Extractor", "extractor");
+            put("LaserEngraver", "laser_engraver");
+            put("Autoclave", "autoclave");
+            put("Mixer", "mixer");
+            put("AlloySmelter", "alloy_smelter");
+            put("Electrolyzer", "electrolyzer");
+            put("ElectromagneticSeparator", "electromagnetic_separator");
+            put("Recycler", "recycler");
+            put("Massfab", "amplifab");
+            put("Centrifuge", "centrifuge");
+            put("Cutter", "cutter");
+            put("Assembler", "assembler");
+            put("CircuitAssembler", "circuitassembler");
         }
     };
 
@@ -101,6 +157,28 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
                 put("ThermalCentrifuge", RecipeMaps.class.getDeclaredField("thermalCentrifugeRecipes"));
                 put("E_Furnace", RecipeMaps.class.getDeclaredField("furnaceRecipes"));
                 put("ArcFurnace", RecipeMaps.class.getDeclaredField("arcFurnaceRecipes"));
+                put("Bender", RecipeMaps.class.getDeclaredField("benderRecipes"));
+                put("Wiremill", RecipeMaps.class.getDeclaredField("wiremillRecipes"));
+                put("Lathe", RecipeMaps.class.getDeclaredField("latheRecipes"));
+                put("Hammer", RecipeMaps.class.getDeclaredField("hammerRecipes"));
+                put("Extruder", RecipeMaps.class.getDeclaredField("extruderRecipes"));
+                put("FluidExtractor", RecipeMaps.class.getDeclaredField("fluidExtractionRecipes"));
+                put("Compressor", RecipeMaps.class.getDeclaredField("compressorRecipes"));
+                put("Press", RecipeMaps.class.getDeclaredField("formingPressRecipes"));
+                put("FluidSolidifier", RecipeMaps.class.getDeclaredField("fluidSolidifierRecipes"));
+                put("Extractor", RecipeMaps.class.getDeclaredField("extractorRecipes"));
+                put("LaserEngraver", RecipeMaps.class.getDeclaredField("laserEngraverRecipes"));
+                put("Autoclave", RecipeMaps.class.getDeclaredField("autoclaveRecipes"));
+                put("Mixer", RecipeMaps.class.getDeclaredField("mixerNonCellRecipes"));
+                put("AlloySmelter", RecipeMaps.class.getDeclaredField("alloySmelterRecipes"));
+                put("Electrolyzer", RecipeMaps.class.getDeclaredField("electrolyzerNonCellRecipes"));
+                put("ElectromagneticSeparator", RecipeMaps.class.getDeclaredField("electroMagneticSeparatorRecipes"));
+                put("Recycler", RecipeMaps.class.getDeclaredField("recyclerRecipes"));
+                put("Massfab", RecipeMaps.class.getDeclaredField("massFabFakeRecipes"));
+                put("Centrifuge", RecipeMaps.class.getDeclaredField("centrifugeNonCellRecipes"));
+                put("Cutter", RecipeMaps.class.getDeclaredField("cutterRecipes"));
+                put("Assembler", RecipeMaps.class.getDeclaredField("assemblerRecipes"));
+                put("CircuitAssembler", RecipeMaps.class.getDeclaredField("circuitAssemblerRecipes"));
             } catch (Exception e) {
 
             }
@@ -123,29 +201,9 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
     @SideOnly(Side.CLIENT)
     private ITexture[] idleTextures = new ITexture[0];
 
-    public static final Map<String, List<ItemList>> processingMachinesMapping = new HashMap<>() {
-
-        {
-
-            // material processing
-            put("extractor", Arrays.asList());
-            put("laser_engraver", Arrays.asList());
-            put("autoclave", Arrays.asList());
-            put("electrolyzer", Arrays.asList());
-            put("sifter", Arrays.asList());
-            put("chemical_plant", Arrays.asList());
-            put("ElectromagneticSeparator", Arrays.asList());
-            put("recycler", Arrays.asList());
-            put("fabricator", Arrays.asList());
-            put("centrifuge", Arrays.asList());
-
-        }
-    };
-
     private ITexture[] getActiveTextures(String machineType) {
         String front = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE", overlayMapping.get(machineType));
-        String frontGlow = String
-            .format("basicmachines/%s/OVERLAY_FRONT_ACTIVE_GLOW", overlayMapping.get(machineType));
+        String frontGlow = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE_GLOW", overlayMapping.get(machineType));
         CustomIcon frontIcon = new CustomIcon(front);
         frontIcon.run();
         CustomIcon frontGlowIcon = new CustomIcon(frontGlow);
@@ -203,13 +261,6 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
         machines = ItemStack.loadItemStackFromNBT(aNBT.getCompoundTag("machines"));
     }
 
-    private List<ItemList> macerators = Arrays.asList(
-        ItemList.Machine_LV_Macerator,
-        ItemList.Machine_MV_Macerator,
-        ItemList.Machine_HV_Macerator,
-        ItemList.Machine_EV_Macerator,
-        ItemList.Machine_IV_Macerator);
-
     public TST_BigBroArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -233,15 +284,18 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
     @Override
     protected GT_Multiblock_Tooltip_Builder getTooltip() {
         GT_Multiblock_Tooltip_Builder gt_multiblock_tooltip_builder = new GT_Multiblock_Tooltip_Builder()
-            .addMachineType("Processing Array")
-            .addInfo("Big brother array")
-            .addInfo("Big brother is watching you!")
-            .addInfo("Provides 256x/1024x/4096x/Integer.MAX_VALUEx parallelism")
-            .addInfo("Supports all types of single block machines, including single block generator")
-            .addStructureHint("7x7 cube")
-            .addStructureHint("Controller is on front center")
-            .addStructureHint("Maintaince, energy, dynamo, input bus/hatch, output bus/hatch replace any block");
-        gt_multiblock_tooltip_builder.toolTipFinisher("Twist Space Technology");
+            .addMachineType(TextEnums.BigBroArrayType.toString())
+            .addInfo(TextEnums.BigBroArrayName.toString())
+            .addInfo(TextEnums.BigBroArrayDesc1.toString())
+            .addInfo(TextEnums.BigBroArrayDesc2.toString())
+            .addInfo(TextEnums.BigBroArrayDesc3.toString())
+            .addInfo(TextEnums.BigBroArrayDesc4.toString())
+            .addInfo(TextEnums.BigBroArrayDesc5.toString())
+            .addInfo(TextEnums.BigBroArrayDesc6.toString())
+            .addInfo(TextEnums.BigBroArrayDesc7.toString())
+            .addInfo(TextEnums.StructureTooComplex.toString())
+            .addInfo(TextLocalization.BLUE_PRINT_INFO);
+        gt_multiblock_tooltip_builder.toolTipFinisher(TextLocalization.ModName);
         return gt_multiblock_tooltip_builder;
     }
 
@@ -280,7 +334,8 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
                 if (field == null) {
                     return null;
                 }
-                return (RecipeMap<?>) field.get(null);
+                RecipeMap<?> o = (RecipeMap<?>) field.get(null);
+                return o;
             } catch (IllegalAccessException e) {
                 return null;
             }
@@ -372,12 +427,19 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
                 }
             }
             if (machineType != null) {
+                GT_Utility.sendChatToPlayer(
+                    aPlayer,
+                    String.format(
+                        "Machine [%s] is set, parallelism is %s",
+                        machines.getDisplayName(),
+                        machines.stackSize));
                 int xCoord = getBaseMetaTileEntity().getXCoord();
                 int yCoord = getBaseMetaTileEntity().getYCoord();
                 int zCoord = getBaseMetaTileEntity().getZCoord();
                 TST_Network.tst.sendToAll(new PackSyncMachineType(xCoord, yCoord, zCoord, machineType));
             }
         } else {
+            GT_Utility.sendChatToPlayer(aPlayer, "Machines are sent to output bus");
             machineType = null;
             addOutput(machines);
             machines = null;
@@ -400,40 +462,17 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
         if (side == facing) {
             if (active) {
                 if (Strings.isEmpty(machineType) || activeTextures.length == 0) {
-                    return new ITexture[] {
-                        Textures.BlockIcons
-                            .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 2)),
-                        TextureFactory.builder()
-                            .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
-                            .extFacing()
-                            .build(),
-                        TextureFactory.builder()
-                            .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
-                            .extFacing()
-                            .glow()
-                            .build() };
+                    return DEFAULT_FRONT_ACTIVE;
                 }
                 return activeTextures;
             }
             if (machineType == null || idleTextures.length == 0) {
-                return new ITexture[] {
-                    Textures.BlockIcons
-                        .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings4, 0)),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
+                return DEFAULT_FRONT_IDLE;
             } else {
                 return idleTextures;
             }
         }
-        return new ITexture[] { Textures.BlockIcons
-            .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings4, 0)) };
+        return DEFAULT_CASING_TEXTURE;
     }
 
     public static class PackRequestMachineType

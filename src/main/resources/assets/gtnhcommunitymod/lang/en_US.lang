@@ -904,3 +904,12 @@ Tooltip_EyeOfWood_2_09=The machine takes a constant 60 seconds per run.
 Tooltip_EyeOfWood_2_10=If processing succeed, machine will output lots of ore resource of Overworld.
 Tooltip_EyeOfWood_2_11=If processing fail, machine will output lots of Steam.
 Tooltip_EyeOfWood_2_12=Amount of steam produced (in L) = Success Rate * 360,000,000L (max. 270,000,000L)
+BigBroArray.name=MegaArray
+BigBroArray.type=Processing Array | Generator Array
+BigBroArray.desc.1=This is MEGA!
+BigBroArray.desc.2=A perfect toy for those who hates GT++.
+BigBroArray.desc.3=Put machines in input bus and right click controller with screw driver to setup. Machines will get consumed.
+BigBroArray.desc.4=Right clicking the controller again with screw driver will get them back in output bus.
+BigBroArray.desc.5=Max parallelism of the machine is 256/1024/4096/2147483647
+BigBroArray.desc.6=Supports almost all processing single block machine in GT. Supports GT single-block generator and ASP Solar panels. Electro-Magic-Tools will also be supported.
+BigBroArray.desc.7=Will overclock recipes to energy level of energy hatch, but can't process recipes with energy level higher than that of machines in controller.
