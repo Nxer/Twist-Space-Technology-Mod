@@ -201,6 +201,7 @@ public enum GTCMItemList {
     StarcoreMiner,
     Disassembler,
 
+    BigBroArray,
     // MAX
     HighDimensionalExtend,
     HighDimensionalCircuitDoard,

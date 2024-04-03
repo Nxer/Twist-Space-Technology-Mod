@@ -6,42 +6,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
-import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
-import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticMixer;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaEggGenerator;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MiracleTop;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MoleculeDeconstructor;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PhysicalFormSwitcher;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
+import com.Nxer.TwistSpaceTechnology.common.machine.*;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
@@ -109,6 +74,8 @@ public class MachineLoader {
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
     public static ItemStack StarcoreMiner;
     public static ItemStack Disassembler;
+
+    public static ItemStack BigBroArray;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -426,6 +393,10 @@ public class MachineLoader {
                 TextEnums.tr("NameTSTDisassembler")).getStackForm(1);
             GTCMItemList.Disassembler.set(Disassembler);
         }
+
+        BigBroArray = new TST_BigBroArray(19042, "NameTSTBigBroArray", TextEnums.tr("NameTSTBigBroArray"))
+            .getStackForm(1);
+        GTCMItemList.BigBroArray.set(BigBroArray);
 
         // endregion
 
