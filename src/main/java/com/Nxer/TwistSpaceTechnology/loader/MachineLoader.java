@@ -9,6 +9,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TieEntity_IndustrialMagicMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
@@ -34,6 +35,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
@@ -105,6 +107,7 @@ public class MachineLoader {
     public static ItemStack VacuumFilterExtractor;
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
+    public static ItemStack IndustrialMagicMatrix;
     public static ItemStack EyeOfWood;
     public static ItemStack BeeEngineer;
     public static ItemStack MegaMacerator;
@@ -119,6 +122,9 @@ public class MachineLoader {
     public static ItemStack SpaceApiaryT2;
     public static ItemStack SpaceApiaryT3;
     public static ItemStack SpaceApiaryT4;
+    public static ItemStack SpaceModuleTest;
+
+    public static ItemStack LargeCanner;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -416,17 +422,6 @@ public class MachineLoader {
         }
 
         //
-
-        // if (Config.Enable_StarcoreMiner) {
-        // StarcoreMiner = new TST_StarcoreMiner(
-        // 19040,
-        // "NameMegaVoidMiner",
-        // TextEnums.tr("NameMegaVoidMiner"),
-        // 4
-        // ).getStackForm(1);
-        // GTCMItemList.StarcoreMiner.set(StarcoreMiner);
-        // }
-
         if (Config.Enable_StarcoreMiner) {
             StarcoreMiner = new TST_StarcoreMiner(
                 19040,
@@ -450,38 +445,35 @@ public class MachineLoader {
             GTCMItemList.Disassembler.set(Disassembler);
         }
 
-        // endregion
-
         //
-        SpaceApiaryT1 = new TST_SpaceApiary.TST_SpaceApiaryT1(
-            19042,
-            "NameSpaceApiaryT1",
-            TextLocalization.NameSpaceApiaryT1).getStackForm(1);
-        GTCMItemList.SpaceApiaryT1.set(SpaceApiaryT1);
-
-        SpaceApiaryT2 = new TST_SpaceApiary.TST_SpaceApiaryT2(
-            19043,
-            "NameSpaceApiaryT2",
-            TextLocalization.NameSpaceApiaryT2).getStackForm(1);
-        GTCMItemList.SpaceApiaryT2.set(SpaceApiaryT2);
-
-        SpaceApiaryT3 = new TST_SpaceApiary.TST_SpaceApiaryT3(
-            19044,
-            "NameSpaceApiaryT3",
-            TextLocalization.NameSpaceApiaryT3).getStackForm(1);
-        GTCMItemList.SpaceApiaryT3.set(SpaceApiaryT3);
-
-        SpaceApiaryT4 = new TST_SpaceApiary.TST_SpaceApiaryT4(
-            19045,
-            "NameSpaceApiaryT4",
-            TextLocalization.NameSpaceApiaryT4).getStackForm(1);
-        GTCMItemList.SpaceApiaryT4.set(SpaceApiaryT4);
-
         if (Config.Enable_BallLightning) {
             BallLightning = new TST_BallLightning(19046, "NameBallLightning", TextLocalization.NameBallLightning)
                 .getStackForm(1);
             GTCMItemList.BallLightning.set(BallLightning);
         }
+
+        //
+        IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
+            19047,
+            "IndustrialMagicMatrix",
+            // #tr NameIndustrialMagicMatrix
+            // # Industrial Magic Matrix
+            // #zh_CN §0工业注魔矩阵
+            TextEnums.tr("NameIndustrialMagicMatrix")).getStackForm(1);
+        GTCMItemList.IndustrialMagicMatrix.set(IndustrialMagicMatrix);
+
+        //
+        if (Config.EnableLargeCanner) {
+            LargeCanner = new TST_LargeCanner(
+                19048,
+                "NameLargeCanner",
+                // #tr NameLargeCanner
+                // # Large Canner
+                // #zh_CN 大型装罐机
+                TextEnums.tr("NameLargeCanner")).getStackForm(1);
+            GTCMItemList.LargeCanner.set(LargeCanner);
+        }
+
         // endregion
 
         // region Single block Machine
@@ -697,6 +689,32 @@ public class MachineLoader {
     }
 
     public static void loadMachinePostInit() {
+        //
+        if (Config.EnableSpaceApiaryModule) {
+            SpaceApiaryT1 = new TST_SpaceApiary.TST_SpaceApiaryT1(
+                19042,
+                "NameSpaceApiaryT1",
+                TextLocalization.NameSpaceApiaryT1).getStackForm(1);
+            GTCMItemList.SpaceApiaryT1.set(SpaceApiaryT1);
+
+            SpaceApiaryT2 = new TST_SpaceApiary.TST_SpaceApiaryT2(
+                19043,
+                "NameSpaceApiaryT2",
+                TextLocalization.NameSpaceApiaryT2).getStackForm(1);
+            GTCMItemList.SpaceApiaryT2.set(SpaceApiaryT2);
+
+            SpaceApiaryT3 = new TST_SpaceApiary.TST_SpaceApiaryT3(
+                19044,
+                "NameSpaceApiaryT3",
+                TextLocalization.NameSpaceApiaryT3).getStackForm(1);
+            GTCMItemList.SpaceApiaryT3.set(SpaceApiaryT3);
+
+            SpaceApiaryT4 = new TST_SpaceApiary.TST_SpaceApiaryT4(
+                19045,
+                "NameSpaceApiaryT4",
+                TextLocalization.NameSpaceApiaryT4).getStackForm(1);
+            GTCMItemList.SpaceApiaryT4.set(SpaceApiaryT4);
+        }
 
     }
 }

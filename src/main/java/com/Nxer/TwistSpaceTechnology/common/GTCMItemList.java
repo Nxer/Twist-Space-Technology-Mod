@@ -184,6 +184,8 @@ public enum GTCMItemList {
     Scavenger,
     MegaEggGenerator,
     AstralComputingArray,
+    IndustrialMagicMatrix,
+
     WirelessUpdateItem,
 
     StellarMaterialSiphon,
@@ -210,6 +212,7 @@ public enum GTCMItemList {
     SpaceApiaryT2,
     SpaceApiaryT3,
     SpaceApiaryT4,
+    LargeCanner,
 
     // MAX
     HighDimensionalExtend,

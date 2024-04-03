@@ -174,7 +174,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @Override
     protected int getMaxParallelRecipes() {
         return switch (mode) {
-            case (2) -> 65536;
+            case (2) -> isWirelessMode ? 65536 * WirelessModeTickEveryProcess_BallLightning : 65536;
             case (3) -> Integer.MAX_VALUE;
             default -> (int) Math.pow(2, compactFusionCoilTier * (coilLevel.getTier() - 10));
         };
@@ -287,22 +287,22 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
     @Override
     protected void setProcessingLogicPower(ProcessingLogic logic) {
-        if (mode == 2) {
-            FusionMaxEut = (long) (RECIPE_MAX
-                * (Math.pow(4, (compactFusionCoilTier - 2)) * Math.pow(1.6, fieldGeneratorTier - 1)));
-            if (FusionMaxEut < getMaxInputEu()) {
-                logic.setAvailableVoltage(FusionMaxEut);
-                logic.setAvailableAmperage(1);
-                logic.setAmperageOC(false);
-            } else super.setProcessingLogicPower(logic);
-        } else if (isWirelessMode) {
-            // wireless mode ignore voltage limit
-            logic.setAvailableVoltage(Long.MAX_VALUE);
+        if (isWirelessMode || mode == 2) {
+            if (mode != 2) {
+                // wireless mode ignore voltage limit
+                logic.setAvailableVoltage(Long.MAX_VALUE);
+            } else {
+                FusionMaxEut = (long) (RECIPE_MAX
+                    * (Math.pow(4, (compactFusionCoilTier - 2)) * Math.pow(1.6, fieldGeneratorTier - 1)));
+                if (!isWirelessMode) {
+                    if (FusionMaxEut < getMaxInputEu()) {
+                        logic.setAvailableVoltage(FusionMaxEut);
+                    } else super.setProcessingLogicPower(logic);
+                } else logic.setAvailableVoltage(FusionMaxEut);
+            }
             logic.setAvailableAmperage(1);
             logic.setAmperageOC(false);
-        } else {
-            super.setProcessingLogicPower(logic);
-        }
+        } else super.setProcessingLogicPower(logic);
     }
 
     @NotNull
@@ -623,18 +623,28 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 6];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + "Machine Mode: " + EnumChatFormatting.GOLD + this.mode;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Machine Tier: "
+        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.MachineMode.getText()
+            + " : "
+            + EnumChatFormatting.GOLD
+            + this.mode;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums.MachineTier.getText()
+            + " : "
             + EnumChatFormatting.GOLD
             + this.mMachineTier;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + "field Generator Tier: "
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + TextEnums.FieldGeneratorTier.getText()
+            + " : "
             + EnumChatFormatting.GOLD
             + this.fieldGeneratorTier;
-        ret[origin.length + 3] = EnumChatFormatting.AQUA + "compact Fusion Coil Tier: "
+        ret[origin.length + 3] = EnumChatFormatting.AQUA + TextEnums.CompactFusionCoilTier.getText()
+            + " : "
             + EnumChatFormatting.GOLD
             + this.compactFusionCoilTier;
-        ret[origin.length + 4] = EnumChatFormatting.AQUA + "Glass Tier: " + EnumChatFormatting.GOLD + this.glassTier;
-        ret[origin.length + 5] = EnumChatFormatting.AQUA + "coil Level: "
+        ret[origin.length + 4] = EnumChatFormatting.AQUA + TextEnums.GlassTier.getText()
+            + " : "
+            + EnumChatFormatting.GOLD
+            + this.glassTier;
+        ret[origin.length + 5] = EnumChatFormatting.AQUA + TextEnums.CoilTier.getText()
+            + " : "
             + EnumChatFormatting.GOLD
             + this.coilLevel.getTier();
         return ret;

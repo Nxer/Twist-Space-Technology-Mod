@@ -1939,6 +1939,23 @@ public class GTCMMachineRecipePool implements IRecipePool {
             final ItemStack wirelessCard = getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 1, 42);
             final ItemStack quantumCard = getModItem(AE2WCT.ID, "infinityBoosterCard", 1);
 
+            // Wireless Booster Card
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(10),
+                    Materials.Fluix.getDust(1),
+                    Materials.CertusQuartz.getGems(1),
+                    Materials.EnderPearl.getPlates(1),
+                    GT_OreDictUnificator.get(OrePrefixes.itemCasing, Materials.Titanium, 2)
+                )
+                .fluidInputs(Materials.Aluminium.getMolten(144))
+                .itemOutputs(copyAmount(1, wirelessCard))
+                .eut(RECIPE_LV)
+                .duration(100)
+                .addTo(assembler);
+
+            // Infinity Booster Card
             GT_Values.RA
                 .stdBuilder()
                 .itemInputs(
@@ -1953,14 +1970,16 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(20)
                 .addTo(assembler);
 
+            // Wireless Data Input Hatch
             GT_Values.RA
                 .stdBuilder()
                 .itemInputs(
                     GT_Utility.getIntegratedCircuit(10),
-                    copyAmount(64, quantumCard),
+                    dataIn_Hatch.get(1),
+                    Machine_Multi_Switch.get(1),
+                    copyAmount(16, quantumCard),
                     ItemList.Sensor_UIV.get(16),
-                    ItemList.Tesseract.get(64),
-                    dataIn_Hatch.get(16)
+                    ItemList.Tesseract.get(64)
                 )
                 .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
                 .itemOutputs(WirelessDataInputHatch.get(1))
@@ -1968,14 +1987,16 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(800)
                 .addTo(assembler);
 
+            // Wireless Data Output Hatch
             GT_Values.RA
                 .stdBuilder()
                 .itemInputs(
                     GT_Utility.getIntegratedCircuit(10),
-                    copyAmount(64, quantumCard),
-                    ItemList.Emitter_UIV.get(64),
-                    ItemList.EnergisedTesseract.get(64),
-                    dataOut_Hatch.get(16)
+                    dataOut_Hatch.get(1),
+                    Machine_Multi_Switch.get(1),
+                    copyAmount(16, quantumCard),
+                    ItemList.Emitter_UIV.get(16),
+                    ItemList.EnergisedTesseract.get(64)
                 )
                 .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 8))
                 .itemOutputs(WirelessDataOutputHatch.get(1))
@@ -1983,6 +2004,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(800)
                 .addTo(assembler);
 
+            // Wireless computation update card
             GT_Values.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
@@ -2442,6 +2464,188 @@ public class GTCMMachineRecipePool implements IRecipePool {
         }
 
         // endregion
+
+        // region Bee Engineer
+        GT_Values.RA
+            .stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Bronze, 64),
+                GT_ModHandler.getModItem(Forestry.ID, "alveary", 64, 0),
+
+                ItemList.Field_Generator_LuV.get(4),
+                ItemList.Electric_Pump_LuV.get(16),
+                ItemList.Conveyor_Module_LuV.get(16),
+
+                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Plutonium241, 64),
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16}
+            )
+            .fluidInputs(Materials.Honey.getFluid(1000 * 256))
+            .itemOutputs(GTCMItemList.BeeEngineer.get(1))
+            .eut(RECIPE_ZPM)
+            .duration(20 * 300)
+            .addTo(assembler);
+        // endregion
+
+        // region Space Apiary Module
+        if (Config.EnableSpaceApiaryModule) {
+            final IRecipeMap SpaceAssembler = IGRecipeMaps.spaceAssemblerRecipes;
+
+            // t1
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+
+                    ItemList.Field_Generator_UHV.get(16),
+                    ItemList.Conveyor_Module_UHV.get(16),
+                    ItemList.Robot_Arm_UHV.get(16),
+                    ItemList.Electric_Pump_UHV.get(16),
+
+                    new Object[]{OrePrefixes.circuit.get(Materials.Bio), 64}
+                )
+                .fluidInputs(
+                    Materials.UUMatter.getFluid(1000 * 128),
+                    Materials.Honey.getFluid(1000 * 256)
+                )
+                .itemOutputs(GTCMItemList.SpaceApiaryT1.get(1))
+                .specialValue(1)
+                .eut(RECIPE_UHV)
+                .duration(20 * 300)
+                .addTo(SpaceAssembler);
+
+            // t2
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+
+                    ItemList.Field_Generator_UEV.get(16),
+                    ItemList.Conveyor_Module_UEV.get(16),
+                    ItemList.Robot_Arm_UEV.get(16),
+                    ItemList.Electric_Pump_UEV.get(16),
+
+                    new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64}
+                )
+                .fluidInputs(
+                    Materials.UUMatter.getFluid(1000 * 256),
+                    Materials.Honey.getFluid(1000 * 512)
+                )
+                .itemOutputs(GTCMItemList.SpaceApiaryT2.get(1))
+                .specialValue(1)
+                .eut(RECIPE_UEV)
+                .duration(20 * 600)
+                .addTo(SpaceAssembler);
+
+            // t3
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+
+                    ItemList.Field_Generator_UIV.get(16),
+                    ItemList.Conveyor_Module_UIV.get(16),
+                    ItemList.Robot_Arm_UIV.get(16),
+                    ItemList.Electric_Pump_UIV.get(16),
+
+                    PikoCircuit.get(64)
+                )
+                .fluidInputs(
+                    Materials.UUMatter.getFluid(1000 * 512),
+                    Materials.Honey.getFluid(1000 * 1024)
+                )
+                .itemOutputs(GTCMItemList.SpaceApiaryT3.get(1))
+                .specialValue(2)
+                .eut(RECIPE_UIV)
+                .duration(20 * 1200)
+                .addTo(SpaceAssembler);
+
+            // t4
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+                    ItemList.Machine_IndustrialApiary.get(64),
+
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+                    ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64),
+
+                    ItemList.Field_Generator_UMV.get(16),
+                    ItemList.Conveyor_Module_UMV.get(16),
+                    ItemList.Robot_Arm_UMV.get(16),
+                    ItemList.Electric_Pump_UMV.get(16),
+
+                    QuantumCircuit.get(64)
+                )
+                .fluidInputs(
+                    Materials.UUMatter.getFluid(1000 * 1024),
+                    Materials.Honey.getFluid(1000 * 2048)
+                )
+                .itemOutputs(GTCMItemList.SpaceApiaryT4.get(1))
+                .specialValue(3)
+                .eut(RECIPE_UMV)
+                .duration(20 * 2400)
+                .addTo(SpaceAssembler);
+
+        }
+
+        // endregion
+
+        // region Large Canner
+        if (Config.EnableLargeCanner) {
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(10),
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 16),
+                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.TungstenSteel, 16),
+
+                    CustomItemList.FluidCannerZPM.get(16),
+                    CustomItemList.CanningMachineZPM.get(16),
+                    new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16},
+
+                    ItemList.Electric_Pump_ZPM.get(16),
+                    ItemList.Conveyor_Module_ZPM.get(8),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 16)
+                )
+                .fluidInputs(Materials.SolderingAlloy.getMolten(144*64))
+                .itemOutputs(GTCMItemList.LargeCanner.get(1))
+                .eut(RECIPE_UV)
+                .duration(20 * 300)
+                .addTo(assembler);
+        }
+
+        // endregion
+
+
 
     }
     // spotless:on
