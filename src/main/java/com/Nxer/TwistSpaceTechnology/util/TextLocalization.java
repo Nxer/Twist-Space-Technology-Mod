@@ -779,7 +779,10 @@ public class TextLocalization {
     public static final String Tooltip_SpaceApiary_t1_desc1 = texter("Time to let the lazy bees absorb some cosmic rays.", "Tooltip_SpaceApiary_t1_desc1");
     public static final String Tooltip_SpaceApiary_desc1 = texter("Accurately distort bee working progress in low-gravity environments.", "Tooltip_SpaceApiary_desc1");
     public static final String Tooltip_SpaceApiary_desc2 = texter("Need queen bee in controller slot.", "Tooltip_SpaceApiary_desc2");
-    public static final String Tooltip_SpaceApiary_desc3 = texter("Consumes 1A-Luv per parallel, while consuming 100L liquid DNA/parallel per run.", "Tooltip_SpaceApiary_desc3");
+    public static final String Tooltip_SpaceApiary_t1_desc3 = texter("Consumes 1A-Luv per parallel, while consuming 100L liquid DNA/parallel per run.", "Tooltip_SpaceApiary_desc3");
+    public static final String Tooltip_SpaceApiary_t2_desc3 = texter("Consumes 1A-Luv per parallel, while consuming 25L liquid DNA/parallel per run.", "Tooltip_SpaceApiary_t2_desc3");
+    public static final String Tooltip_SpaceApiary_t3_desc3 = texter("Consumes 1A-Luv per parallel, while consuming 5L liquid DNA/parallel per run.", "Tooltip_SpaceApiary_t3_desc3");
+    public static final String Tooltip_SpaceApiary_t4_desc3 = texter("Consumes 1A-Luv per parallel, while consuming 1L liquid DNA/parallel per run.", "Tooltip_SpaceApiary_t4_desc3");
     public static final String Tooltip_SpaceApiary_t1_desc4 = texter("Max parallels: 256", "Tooltip_SpaceApiary_t1_desc4");
     public static final String NameSpaceApiaryT2 = texter("Space Apiray Module MK-II", "NameSpaceApiaryT2");
     public static final String Tooltip_SpaceApiary_t2_desc1 = texter("Surrender to the hive mind..", "Tooltip_SpaceApiary_t2_desc1");
