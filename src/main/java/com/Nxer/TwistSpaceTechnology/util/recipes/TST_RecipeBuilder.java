@@ -24,22 +24,30 @@ public class TST_RecipeBuilder {
     public TST_RecipeBuilder() {}
 
     public TST_RecipeBuilder itemInputs(ItemStack... inputItems) {
-        this.inputItems = inputItems;
+        if (inputItems != null && inputItems.length > 0) {
+            this.inputItems = inputItems;
+        }
         return this;
     }
 
     public TST_RecipeBuilder itemOutputs(ItemStack... outputItems) {
-        this.outputItems = outputItems;
+        if (outputItems != null && outputItems.length > 0) {
+            this.outputItems = outputItems;
+        }
         return this;
     }
 
     public TST_RecipeBuilder fluidInputs(FluidStack... inputFluids) {
-        this.inputFluids = inputFluids;
+        if (inputFluids != null && inputFluids.length > 0) {
+            this.inputFluids = inputFluids;
+        }
         return this;
     }
 
     public TST_RecipeBuilder fluidOutputs(FluidStack... outputFluids) {
-        this.outputFluids = outputFluids;
+        if (outputFluids != null && outputFluids.length > 0) {
+            this.outputFluids = outputFluids;
+        }
         return this;
     }
 

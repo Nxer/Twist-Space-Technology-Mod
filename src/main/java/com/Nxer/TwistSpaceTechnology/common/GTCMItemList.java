@@ -154,9 +154,13 @@ public enum GTCMItemList {
     Rune_of_Perdition,
     PowerChair,
     PrimitiveMansSpaceTimeDistortionDevice,
+    BallLightningUpgradeChip,
 
     // Blocks
     TestCasing,
+
+    HighPowerRadiationProofCasing,
+    AdvancedHighPowerCoilBlock,
 
     // Machines
 
@@ -180,6 +184,9 @@ public enum GTCMItemList {
     Scavenger,
     MegaEggGenerator,
     AstralComputingArray,
+    IndustrialMagicMatrix,
+
+    WirelessUpdateItem,
 
     StellarMaterialSiphon,
     ElvenWorkshop,
@@ -198,8 +205,14 @@ public enum GTCMItemList {
     HephaestusAtelier,
     DeployedNanoCore,
     CoreDeviceOfHumanPowerGenerationFacility,
+    BallLightning,
     StarcoreMiner,
     Disassembler,
+    SpaceApiaryT1,
+    SpaceApiaryT2,
+    SpaceApiaryT3,
+    SpaceApiaryT4,
+    LargeCanner,
 
     BigBroArray,
     // MAX
@@ -296,6 +309,7 @@ public enum GTCMItemList {
     SpaceStationAntiGravityBlockUMV,
     SpaceStationAntiGravityBlockUXV,
     SpaceStationAntiGravityBlockMAX,
+
     // MultiStructure Machine:
     TestMultiStructureMainMachine,
     TestMultiStructureSubMachine,
@@ -307,7 +321,10 @@ public enum GTCMItemList {
     NuclearReactorStructure2,
     NuclearReactorStructure3,
     FackRackHatch,
-    RealRackHatch;
+    RealRackHatch,
+
+    WirelessDataInputHatch,
+    WirelessDataOutputHatch;
 
     // region Member Variables
 

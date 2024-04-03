@@ -18,6 +18,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.block.MetaBlockConstructors;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClientOnly;
 
+import buildcraft.core.lib.gui.tooltips.*;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;

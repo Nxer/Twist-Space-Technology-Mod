@@ -293,6 +293,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> {
             .addInfo(TextEnums.BigBroArrayDesc5.toString())
             .addInfo(TextEnums.BigBroArrayDesc6.toString())
             .addInfo(TextEnums.BigBroArrayDesc7.toString())
+            .addInfo(TextEnums.BigBroArrayDesc8.toString())
             .addInfo(TextEnums.StructureTooComplex.toString())
             .addInfo(TextLocalization.BLUE_PRINT_INFO);
         gt_multiblock_tooltip_builder.toolTipFinisher(TextLocalization.ModName);

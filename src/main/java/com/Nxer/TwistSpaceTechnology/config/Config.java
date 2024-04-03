@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import net.minecraftforge.common.config.Configuration;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+import com.glodblock.github.inventory.item.*;
 
 // spotless:off
 public class Config {
@@ -42,12 +43,13 @@ public class Config {
     public static final String HephaestusAtelier = "HephaestusAtelier";
     public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
+    public static final String BallLightning = "Ball Lightning";
     public static final String StarcoreMiner = "StarcoreMiner";
     public static final String Disassembler = "Disassembler";
     public static final String EOW = "Eye of Wood";
     public static final String SingleBlocks = "SingleBlocks";
-
-    public static final String spaceStation = "spaceStation";
+    public static final String spaceStation="spaceStation";
+    public static final String SpaceApiary = "SpaceApiary";
 
     public static final String CombatStats = "CombatStats";
     // endregion
@@ -272,6 +274,11 @@ public class Config {
     public static boolean Enable_CoreDeviceOfHumanPowerGenerationFacility = true;
     // endregion
 
+    // region Ball Lightning
+    public static boolean Enable_BallLightning = true;
+    public static int WirelessModeExtraEuCost_BallLightning = 64;
+    public static int WirelessModeTickEveryProcess_BallLightning = 20;
+    // end region
     // region StarcoreMiner
     public static boolean Enable_StarcoreMiner = true;
     public static byte HeightValueLimit_StarcoreMiner = 24;
@@ -301,11 +308,18 @@ public class Config {
 
     // region Recipe
     public static boolean Registry_DragonBlood_ExtraRecipe = true;
-    public static boolean UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe = true;
+
+    // endregion
+
+    // region Space Apiary
+    public static boolean EnableSpaceApiaryModule = true;
+    public static boolean enableDNAConsuming = true;
     // endregion
 
     public static boolean activateMegaSpaceStation = false;
     public static boolean activateCombatStats = false;
+
+    public static boolean EnableLargeCanner = true;
 
 
     public static void synchronizeConfiguration(File configFile) {
@@ -317,7 +331,6 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
-        UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe = configuration.getBoolean("UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe", RECIPE, UseWitcheryInfinityEggInsteadDragonEgg_DragonBlood_FluidHeaterRecipe, "Use Witchery mod's Infinity Egg instead Dragon Egg in Dragon Blood Fluid Heater Recipe.");
         // endregion
 
         // region Eye of Wood
@@ -569,6 +582,18 @@ public class Config {
         SpeedBonus_MegaMacerator = Float.parseFloat(configuration.getString("SpeedBonus_MegaMacerator", MegaMacerator, String.valueOf(SpeedBonus_MegaMacerator), "Speed Bonus of Mega Macerator. Type: float"));
         EnablePerfectOverclock_MegaMacerator = configuration.getBoolean("EnablePerfectOverclock_MegaMacerator", MegaMacerator, EnablePerfectOverclock_MegaMacerator, "Enable perfect overclock of Mega Macerator. Type: boolean");
         // end region
+
+        // region Ball Lightning
+        Enable_BallLightning = configuration.getBoolean("Enable_BallLightning", BallLightning, Enable_BallLightning, "Enable Ball Lightning.");
+        WirelessModeExtraEuCost_BallLightning = configuration.getInt("WirelessModeExtraEuCost_BallLightning", BallLightning, WirelessModeExtraEuCost_BallLightning, 1, 2147483646, "Wireless Mode Extra Eu Cost. Type: int");
+        WirelessModeTickEveryProcess_BallLightning = configuration.getInt("WirelessModeTickEveryProcess_BallLightning", BallLightning, WirelessModeTickEveryProcess_BallLightning, 1, 2147483646, "Wireless Mode Work Ticks. Type: int");
+        // end region
+
+        // region Space Apiary
+        EnableSpaceApiaryModule = configuration.getBoolean("EnableSpaceApiaryModule", SpaceApiary, EnableSpaceApiaryModule, "Enable Space Apiary Module.");
+        enableDNAConsuming = configuration.getBoolean("enableDNAConsuming", SpaceApiary, enableDNAConsuming, "Enable DNA consuming for Space Apiary Modules. Type: boolean");
+        // endregion
+
         TST_CleanRoom.loadConfig(configuration);
         if (configuration.hasChanged()) {
             configuration.save();

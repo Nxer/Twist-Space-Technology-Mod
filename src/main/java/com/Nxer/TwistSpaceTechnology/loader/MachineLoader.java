@@ -6,11 +6,53 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.machine.*;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TieEntity_IndustrialMagicMatrix;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticMixer;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaEggGenerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MiracleTop;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MoleculeDeconstructor;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PhysicalFormSwitcher;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_input;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_output;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
@@ -66,16 +108,25 @@ public class MachineLoader {
     public static ItemStack VacuumFilterExtractor;
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
+    public static ItemStack IndustrialMagicMatrix;
     public static ItemStack EyeOfWood;
     public static ItemStack BeeEngineer;
     public static ItemStack MegaMacerator;
     public static ItemStack HephaestusAtelier;
     public static ItemStack DeployedNanoCore;
     public static ItemStack CoreDeviceOfHumanPowerGenerationFacility;
+    public static ItemStack BallLightning;
     public static ItemStack StarcoreMiner;
     public static ItemStack Disassembler;
 
     public static ItemStack BigBroArray;
+    public static ItemStack SpaceApiaryT1;
+    public static ItemStack SpaceApiaryT2;
+    public static ItemStack SpaceApiaryT3;
+    public static ItemStack SpaceApiaryT4;
+    public static ItemStack SpaceModuleTest;
+
+    public static ItemStack LargeCanner;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -105,6 +156,9 @@ public class MachineLoader {
 
     public static ItemStack FackRackHatch;
     public static ItemStack RealRackHatch;
+
+    public static ItemStack WirelessDataInputHatch;
+    public static ItemStack WirelessDataOutputHatch;
 
     // test
     public static ItemStack TestMachine;
@@ -370,7 +424,6 @@ public class MachineLoader {
         }
 
         //
-
         if (Config.Enable_StarcoreMiner) {
             StarcoreMiner = new TST_StarcoreMiner(
                 19040,
@@ -394,9 +447,38 @@ public class MachineLoader {
             GTCMItemList.Disassembler.set(Disassembler);
         }
 
-        BigBroArray = new TST_BigBroArray(19042, "NameTSTBigBroArray", TextEnums.tr("NameTSTBigBroArray"))
+        if (Config.Enable_BallLightning) {
+            BallLightning = new TST_BallLightning(19046, "NameBallLightning", TextLocalization.NameBallLightning)
+                .getStackForm(1);
+            GTCMItemList.BallLightning.set(BallLightning);
+        }
+
+        //
+        IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
+            19047,
+            "IndustrialMagicMatrix",
+            // #tr NameIndustrialMagicMatrix
+            // # Industrial Magic Matrix
+            // #zh_CN §0工业注魔矩阵
+            TextEnums.tr("NameIndustrialMagicMatrix")).getStackForm(1);
+        GTCMItemList.IndustrialMagicMatrix.set(IndustrialMagicMatrix);
+
+        //
+        if (Config.EnableLargeCanner) {
+            LargeCanner = new TST_LargeCanner(
+                19048,
+                "NameLargeCanner",
+                // #tr NameLargeCanner
+                // # Large Canner
+                // #zh_CN 大型装罐机
+                TextEnums.tr("NameLargeCanner")).getStackForm(1);
+            GTCMItemList.LargeCanner.set(LargeCanner);
+        }
+
+        BigBroArray = new TST_BigBroArray(19049, "BigBroArray.name", TextEnums.tr("BigBroArray.name"))
             .getStackForm(1);
         GTCMItemList.BigBroArray.set(BigBroArray);
+
 
         // endregion
 
@@ -586,7 +668,7 @@ public class MachineLoader {
             18959,
             "NameFackRackHatch",
             TextLocalization.NameFackRackHatch,
-            0,
+            12,
             false).getStackForm(1);
         GTCMItemList.FackRackHatch.set(FackRackHatch);
 
@@ -594,12 +676,51 @@ public class MachineLoader {
             18958,
             "NameRealRackHatch",
             TextLocalization.NameRealRackHatch,
-            0,
+            12,
             true).getStackForm(1);
         GTCMItemList.RealRackHatch.set(RealRackHatch);
+
+        WirelessDataInputHatch = new GT_Hatch_WirelessData_input(
+            18957,
+            "NameWirelessDataInputHatch",
+            TextLocalization.NameWirelessDataInputHatch,
+            12).getStackForm(1);
+        GTCMItemList.WirelessDataInputHatch.set(WirelessDataInputHatch);
+        WirelessDataOutputHatch = new GT_Hatch_WirelessData_output(
+            18956,
+            "NameWirelessDataOutputHatch",
+            TextLocalization.NameWirelessDataOutputHatch,
+            12).getStackForm(1);
+        GTCMItemList.WirelessDataOutputHatch.set(WirelessDataOutputHatch);
     }
 
     public static void loadMachinePostInit() {
+        //
+        if (Config.EnableSpaceApiaryModule) {
+            SpaceApiaryT1 = new TST_SpaceApiary.TST_SpaceApiaryT1(
+                19042,
+                "NameSpaceApiaryT1",
+                TextLocalization.NameSpaceApiaryT1).getStackForm(1);
+            GTCMItemList.SpaceApiaryT1.set(SpaceApiaryT1);
+
+            SpaceApiaryT2 = new TST_SpaceApiary.TST_SpaceApiaryT2(
+                19043,
+                "NameSpaceApiaryT2",
+                TextLocalization.NameSpaceApiaryT2).getStackForm(1);
+            GTCMItemList.SpaceApiaryT2.set(SpaceApiaryT2);
+
+            SpaceApiaryT3 = new TST_SpaceApiary.TST_SpaceApiaryT3(
+                19044,
+                "NameSpaceApiaryT3",
+                TextLocalization.NameSpaceApiaryT3).getStackForm(1);
+            GTCMItemList.SpaceApiaryT3.set(SpaceApiaryT3);
+
+            SpaceApiaryT4 = new TST_SpaceApiary.TST_SpaceApiaryT4(
+                19045,
+                "NameSpaceApiaryT4",
+                TextLocalization.NameSpaceApiaryT4).getStackForm(1);
+            GTCMItemList.SpaceApiaryT4.set(SpaceApiaryT4);
+        }
 
     }
 }

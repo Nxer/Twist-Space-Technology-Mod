@@ -9,6 +9,11 @@ public enum TextEnums {
 
     // region General
 
+    // #tr Author_Goderium
+    // # Author : {\WHITE}{\BOLD}Goderium
+    // #zh_CN 作者 : {\WHITE}{\BOLD}Goderium
+    Author_Goderium("Author_Goderium"),
+
     // #tr AddByTwistSpaceTechnology
     // # Added by {\GREEN}Twist Space Technology{\GRAY}
     // #zh_CN 由 {\GREEN}Twist Space Technology{\GRAY} 添加
@@ -17,6 +22,36 @@ public enum TextEnums {
     Parallels("MachineInfoData.Parallels"),
     EuModifier("MachineInfoData.EuModifier"),
     GlassTier("MachineInfoData.GlassTier"),
+
+    // #tr MachineInfoData.CoilTier
+    // # Coil Tier
+    // #zh_CN 线圈等级
+    CoilTier("MachineInfoData.CoilTier"),
+
+    // #tr MachineInfoData.MachineMode
+    // # Machine Mode
+    // #zh_CN 机器模式
+    MachineMode("MachineInfoData.MachineMode"),
+
+    // #tr MachineInfoData.MachineTier
+    // # Machine Tier
+    // #zh_CN 机器等级
+    MachineTier("MachineInfoData.MachineTier"),
+
+    // #tr MachineInfoData.FieldGeneratorTier
+    // # Field Generator Tier
+    // #zh_CN 力场发生器等级
+    FieldGeneratorTier("MachineInfoData.FieldGeneratorTier"),
+
+    // #tr MachineInfoData.FusionCoilTier
+    // # Fusion Coil Tier
+    // #zh_CN 聚变线圈等级
+    FusionCoilTier("MachineInfoData.FusionCoilTier"),
+
+    // #tr MachineInfoData.CompactFusionCoilTier
+    // # Compact Fusion Coil Tier
+    // #zh_CN 压缩聚变线圈等级
+    CompactFusionCoilTier("MachineInfoData.CompactFusionCoilTier"),
 
     // endregion
 
@@ -40,6 +75,7 @@ public enum TextEnums {
     BigBroArrayDesc5("BigBroArray.desc.5"),
     BigBroArrayDesc6("BigBroArray.desc.6"),
     BigBroArrayDesc7("BigBroArray.desc.7"),
+    BigBroArrayDesc8("BigBroArray.desc.8"),
 
     // end
     StructureTooComplex("StructureTooComplex");

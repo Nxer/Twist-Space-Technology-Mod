@@ -67,15 +67,19 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     private int mPieces = 1;
     private int mInfinityEggs = 0;
     private int mDragonEggs = 0;
-    private int mCrepperEggs = 0;
+    private int mCreeperEggs = 0;
     private int mAirPosed = 0;
+    private long genVol = 0L;
+    private long genAmp = 0L;
+    private int effCap = 10000;
 
     @Override
     @NotNull
     public CheckRecipeResult checkProcessing_EM() {
         this.mMaxProgresstime = 20;
-        getEfficiencyIncrease();
-        getOutput();
+        this.lEUt = Math.abs(genVol);
+        this.eAmpereFlow = genAmp;
+        this.mEfficiencyIncrease = effCap;
         return CheckRecipeResultRegistry.GENERATING;
     }
 
@@ -84,8 +88,8 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      */
     private void getEfficiencyIncrease() {
         if (mInfinityEggs != 0) {
-            this.mEfficiencyIncrease = mInfinityEggs * 100;
-        } else this.mEfficiencyIncrease = 1;
+            effCap = mInfinityEggs * 100;
+        } else effCap = 1;
     }
 
     /**
@@ -96,7 +100,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      * 2024.1.21 Fix vol explode
      */
     private void getOutput() {
-        long vol = 0, amp = 0, tOutput = 0;
+        long vol = 0, amp = 0, tOutput;
         for (GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
             vol += tHatch.maxEUOutput();
             amp += tHatch.maxAmperesOut();
@@ -109,13 +113,15 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
         if (amp > Integer.MAX_VALUE) amp = Integer.MAX_VALUE;
 
         tOutput = (long) (ValueEnum.MEG_Overall_Multiply
-            * (ValueEnum.MEG_CrepperEgg_Gen * mCrepperEggs + ValueEnum.MEG_DragonEgg_Gen * mDragonEggs
+            * (ValueEnum.MEG_CrepperEgg_Gen * mCreeperEggs + ValueEnum.MEG_DragonEgg_Gen * mDragonEggs
                 + ValueEnum.MEG_InfinityEgg_Gen * mInfinityEggs));
         if (tOutput > vol) {
-            lEUt = vol;
-            eAmpereFlow = Math.min(tOutput / vol, amp);
+            genVol = vol;
+            long tmp = tOutput / vol;
+            genAmp = tmp <= amp ? (Math.max(tmp, 1L)) : amp;
         } else {
-            lEUt = tOutput;
+            genVol = tOutput;
+            genAmp = 1L;
         }
     }
 
@@ -124,12 +130,11 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      * 1% max efficiency every 1 infinity egg.
      */
     private int getCalculatedEfficiency() {
-        return Math
-            .max(
-                0,
-                10000 + ValueEnum.MEG_Efficiency_PiecesBuff * (int) (Math.log(mPieces) / Math.log(2))
-                    - ValueEnum.MEG_Efficiency_Lost * mAirPosed)
-            + ValueEnum.MEG_Efficiency_InfinityEggBuff * mInfinityEggs;
+        return Math.max(
+            0,
+            10000 + ValueEnum.MEG_Efficiency_PiecesBuff * (int) (Math.log(mPieces) / Math.log(2))
+                + ValueEnum.MEG_Efficiency_InfinityEggBuff * mInfinityEggs
+                - ValueEnum.MEG_Efficiency_Lost * mAirPosed);
     }
 
     @Override
@@ -139,11 +144,11 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
         // Initialize
         this.mInfinityEggs = 0;
         this.mDragonEggs = 0;
-        this.mCrepperEggs = 0;
+        this.mCreeperEggs = 0;
         this.mAirPosed = 0;
         this.mPieces = 0;
         // Main checks
-        return checkAllPieces() && checkInfinityEgg() && checkLaser() && checkDynamo();
+        return checkAllPieces() && checkInfinityEgg() && checkLaser() && checkDynamo() && setVal();
     }
 
     /**
@@ -199,7 +204,13 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      * @return If dynamo is allowed
      */
     private boolean checkDynamo() {
-        return (mDynamoHatches.size() + eDynamoMulti.size()) == ValueEnum.MEG_Dynamo_Limit;
+        return (mDynamoHatches.size() + eDynamoMulti.size()) <= ValueEnum.MEG_Dynamo_Limit;
+    }
+
+    private boolean setVal() {
+        this.getOutput();
+        this.getEfficiencyIncrease();
+        return true;
     }
 
     // endregion
@@ -303,7 +314,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
 			       .addElement('K',
                        ofChain(
                            onElementPass(k -> ++k.mAirPosed, isAir()),
-                           onElementPass(k -> ++k.mCrepperEggs, ofBlock(MarsBlocks.creeperEgg, 0)),
+                           onElementPass(k -> ++k.mCreeperEggs, ofBlock(MarsBlocks.creeperEgg, 0)),
                            onElementPass(k -> ++k.mDragonEggs, ofBlock(Blocks.dragon_egg,0)),
                            onElementPass(k -> ++k.mInfinityEggs, ofBlock(InfinityEgg(), 0))
                        )
@@ -340,7 +351,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Dragon Eggs: " + EnumChatFormatting.GOLD + this.mDragonEggs;
         ret[origin.length + 2] = EnumChatFormatting.AQUA + "Crepper Eggs: "
             + EnumChatFormatting.GOLD
-            + this.mCrepperEggs;
+            + this.mCreeperEggs;
         ret[origin.length + 3] = EnumChatFormatting.AQUA + "Air Voids: " + EnumChatFormatting.GOLD + this.mAirPosed;
         ret[origin.length + 4] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.mPieces;
         return ret;
@@ -351,7 +362,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
         super.saveNBTData(aNBT);
         aNBT.setInteger("mInfinityEggs", mInfinityEggs);
         aNBT.setInteger("mDragonEggs", mDragonEggs);
-        aNBT.setInteger("mCrepperEggs", mCrepperEggs);
+        aNBT.setInteger("mCrepperEggs", mCreeperEggs);
         aNBT.setInteger("mAirPosed", mAirPosed);
         aNBT.setInteger("mPieces", mPieces);
     }
@@ -361,7 +372,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
         super.loadNBTData(aNBT);
         mInfinityEggs = aNBT.getInteger("mInfinityEggs");
         mDragonEggs = aNBT.getInteger("mDragonEggs");
-        mCrepperEggs = aNBT.getInteger("mCrepperEggs");
+        mCreeperEggs = aNBT.getInteger("mCrepperEggs");
         mAirPosed = aNBT.getInteger("mAirPosed");
         mPieces = aNBT.getInteger("mPieces");
     }

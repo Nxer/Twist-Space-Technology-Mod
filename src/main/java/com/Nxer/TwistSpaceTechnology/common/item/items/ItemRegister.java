@@ -53,8 +53,13 @@ public class ItemRegister {
         GTCMItemList.PurpleMagnoliaSapling.set(initItem01("Purple Magnolia Sapling", 20, new String[]{ TextHandler.texter("Not plantable. Need to be on ic2 crop sticks.", "tooltips.PurpleMagnoliaSapling.line1")}));
         GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{ TextHandler.texter("Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
         GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.set(initItem01("Primitive Man's SpaceTime Distortion Device", 22, new String[]{ TextHandler.texter("Anyway...", "tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1")}));
+        GTCMItemList.WirelessUpdateItem.set(initItem01("Wireless Computation update circuit", 23, new String[]{}));
 
-        if(Config.activateMegaSpaceStation) {
+        if(Config.Enable_BallLightning){
+            GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 24, new String[]{ TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
+        }
+
+        if (Config.activateMegaSpaceStation) {
             GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));
             GTCMItemList.HighDimensionalCircuitDoard.set(initItem01("High-dimensional circuit board", 177));
             GTCMItemList.HighDimensionalCapacitor.set(initItem01("High-dimensional capacitor", 178));
@@ -84,7 +89,7 @@ public class ItemRegister {
             GTCMItemList.ExoticCircuitBoard.set(initItem01("Exotic Circuit Board", 318));
             GTCMItemList.spaceStationConstructingMaterialMax.set(initItem01("very good item", 319));
             GTCMItemList.LightQuantumMatrix.set(initItem01("Light Quantum Matrix", 320));
-            //GTCMItemList.StarCore.set(initItem01("Star Core", 321));
+            // GTCMItemList.StarCore.set(initItem01("Star Core", 321));
             GTCMItemList.CasimirQuantumFiber.set(initItem01("Casimir Quantum Fiber", 322));
             GTCMItemList.SuperstringStructure.set(initItem01("Superstring structure", 323));
             GTCMItemList.DynamicParadoxBody.set(initItem01("Dynamic Paradox Body", 324));
@@ -164,7 +169,7 @@ public class ItemRegister {
             GTCMItemList.VoidFluctuation.set(initItem01("Void Fluctuation", 398));
             GTCMItemList.AncientCreationFluctuation.set(initItem01("Ancient Creation Fluctuation", 399));
             GTCMItemList.InfiniteRecursiveHeart.set(initItem01("Infinite recursive heart", 400));
-            //GTCMItemList.AlienStarCore.set(initItem01("Alien Star Core", 401));
+            GTCMItemList.AlienStarCore.set(initItem01("Alien Star Core", 401));
             GTCMItemList.SpiralSpiral.set(initItem01("spiral spiral", 402));
             GTCMItemList.MagneticSpinLife.set(initItem01("Magnetic Spin Life", 403));
             GTCMItemList.LightWaves.set(initItem01("Light Waves", 404));
@@ -185,14 +190,15 @@ public class ItemRegister {
             GTCMItemList.Space_TimeLifeCore.set(initItem01("Space-time life core", 419));
         }
 
-        GTCMItemList.Rune_of_Vigilance.set(initItemRune("Rune of Vigilance", 0, new String[]{ TextHandler.texter("Vigilance.", "tooltips.Rune_of_Vigilance.line1")}));
-        GTCMItemList.Rune_of_Erelong.set(initItemRune("Rune of Erelong", 1, new String[]{ TextHandler.texter("Erelong.", "tooltips.Rune_of_Erelong.line1")}));
-        GTCMItemList.Rune_of_Ether.set(initItemRune("Rune of Ether", 2, new String[]{ TextHandler.texter("Ether.", "tooltips.Rune_of_Ether.line1")}));
-        GTCMItemList.Rune_of_Perdition.set(initItemRune("Rune of Perdition", 3, new String[]{ TextHandler.texter("Perdition.", "tooltips.Rune_of_Perdition.line1")}));
+        GTCMItemList.Rune_of_Vigilance.set(initItemRune("Rune of Vigilance", 0, new String[]{TextHandler.texter("Vigilance.", "tooltips.Rune_of_Vigilance.line1")}));
+        GTCMItemList.Rune_of_Erelong.set(initItemRune("Rune of Erelong", 1, new String[]{TextHandler.texter("Erelong.", "tooltips.Rune_of_Erelong.line1")}));
+        GTCMItemList.Rune_of_Ether.set(initItemRune("Rune of Ether", 2, new String[]{TextHandler.texter("Ether.", "tooltips.Rune_of_Ether.line1")}));
+        GTCMItemList.Rune_of_Perdition.set(initItemRune("Rune of Perdition", 3, new String[]{TextHandler.texter("Perdition.", "tooltips.Rune_of_Perdition.line1")}));
 
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
         GTCMItemList.PowerChair.set(new ItemStack(BasicItems.PowerChair, 1));
     }
+
 
     // spotless:on
     public static void registry() {
