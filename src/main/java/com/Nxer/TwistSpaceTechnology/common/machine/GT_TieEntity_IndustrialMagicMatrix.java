@@ -74,7 +74,7 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
     private double Variance;
     private final ItemStack EssentiaCell_Creative = EnumEssentiaStorageTypes.Type_Creative.getCell();
     private final ItemStack ProofOfHeroes = GTCMItemList.ProofOfHeroes.get(1, 0);
-    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<TileInfusionProvider>();
+    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
     protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
     public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
         .ofFailurePersistOnShutdown("Essentiainsentia");
@@ -241,7 +241,7 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
         Variance = calculateVariance(MaxAmount);
         double e = Math.E;
         double ln1 = Math.log(1 + Math.pow(e, -Variance));
-        double ln2 = Math.log(2);;
+        double ln2 = Math.log(2);
         double SpeedBonus = 1 + ((0.4 + Math.pow(0.45 * e, -0.005 * Variance) + 0.15 * (ln1 / ln2)) * Mean / 500);
         mSpeedBonus = Math.max(1 / SpeedBonus, 1 / 11.4514);
     }
