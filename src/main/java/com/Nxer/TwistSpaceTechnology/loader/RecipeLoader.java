@@ -4,6 +4,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBla
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.*;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.AssemblyLineWithoutResearchRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CentrifugeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ChemicalReactorRecipePool;
@@ -51,8 +52,8 @@ public class RecipeLoader {
             new TCRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
             new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool(),
             new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
-            new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
-            new FluidHeaterRecipePool(), new ParticleColliderRecipePool() };
+            new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePoll(),
+            new FluidHeaterRecipePool(), new IndustrialMagicMatrixRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {

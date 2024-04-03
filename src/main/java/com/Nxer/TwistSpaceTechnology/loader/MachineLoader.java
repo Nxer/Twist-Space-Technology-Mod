@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.machine.*;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
@@ -105,6 +106,7 @@ public class MachineLoader {
     public static ItemStack VacuumFilterExtractor;
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
+    public static ItemStack IndustrialMagicMatrix;
     public static ItemStack EyeOfWood;
     public static ItemStack BeeEngineer;
     public static ItemStack MegaMacerator;
@@ -482,6 +484,15 @@ public class MachineLoader {
                 .getStackForm(1);
             GTCMItemList.BallLightning.set(BallLightning);
         }
+        //
+        IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
+            19046,
+            "IndustrialMagicMatrix",
+            // #tr NameIndustrialMagicMatrix
+            // # Industrial Magic Matrix
+            // #zh_CN §0工业注魔矩阵
+            TextEnums.tr("NameIndustrialMagicMatrix")).getStackForm(1);
+        GTCMItemList.IndustrialMagicMatrix.set(IndustrialMagicMatrix);
         // endregion
 
         // region Single block Machine
