@@ -319,6 +319,8 @@ public class Config {
     public static boolean activateMegaSpaceStation = false;
     public static boolean activateCombatStats = false;
 
+    public static boolean EnableLargeCanner = true;
+
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
