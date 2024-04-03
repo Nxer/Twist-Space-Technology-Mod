@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -45,7 +46,10 @@ public class DragonBloodRecipe implements IRecipePool {
                 .addTo(RecipeMaps.fluidHeaterRecipes);
 
             GT_Values.RA.stdBuilder()
-                .itemInputs(Utils.setStackSize(GT_ModHandler.getModItem("witchery", "infinityegg", 0), 0))
+                .itemInputs(
+                    Utils.setStackSize(
+                        GT_ModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1)),
+                        0))
                 .fluidInputs(getFluidStack("potion.dragonblood", 1000))
                 .fluidOutputs(DRAGON_METAL.getFluidStack(144))
                 .noOptimize()
@@ -65,7 +69,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 .fluidOutputs(getFluidStack("fieryblood", 500))
                 .noOptimize()
                 .eut(RECIPE_UEV)
-                .duration(20 * 150)
+                .duration(20 * 120)
                 .addTo(chemicalBathRecipes);
 
             GT_Values.RA.stdBuilder()
@@ -84,11 +88,8 @@ public class DragonBloodRecipe implements IRecipePool {
 
             // Stellar Forge
             TST_RecipeBuilder bd = TST_RecipeBuilder.builder()
-                .itemInputs(
-                    new ItemStack(Blocks.dragon_egg, 1),
-                    Materials.DraconiumAwakened.getDust(64),
-                    GTPP_CombType.DRAGONBLOOD.getStackForType(4));
-            bd.fluidInputs(Materials.Radon.getPlasma(144 * 4));
+                .itemInputs(new ItemStack(Blocks.dragon_egg, 1), GTPP_CombType.DRAGONBLOOD.getStackForType(4));
+            bd.fluidInputs(Materials.DraconiumAwakened.getMolten(144 * 96));
             if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
                 bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 4));
             } else {
@@ -100,10 +101,11 @@ public class DragonBloodRecipe implements IRecipePool {
 
             bd = TST_RecipeBuilder.builder()
                 .itemInputs(
-                    Utils.setStackSize(GT_ModHandler.getModItem("witchery", "infinityegg", 0), 1),
-                    Materials.DraconiumAwakened.getDust(64),
+                    Utils.setStackSize(
+                        GT_ModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1)),
+                        0),
                     GTPP_CombType.DRAGONBLOOD.getStackForType(4));
-            bd.fluidInputs(Materials.Radon.getPlasma(144 * 2));
+            bd.fluidInputs(Materials.DraconiumAwakened.getMolten(144 * 96));
             if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
                 bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 4 * 64));
             } else {
@@ -114,8 +116,8 @@ public class DragonBloodRecipe implements IRecipePool {
                 .addTo(GTCMRecipe.StellarForgeRecipes);
 
             bd = TST_RecipeBuilder.builder()
-                .itemInputs(new ItemStack(Blocks.dragon_egg, 1), Materials.DraconiumAwakened.getDust(64));
-            bd.fluidInputs(Materials.Radon.getPlasma(144 * 4));
+                .itemInputs(new ItemStack(Blocks.dragon_egg, 1));
+            bd.fluidInputs(Materials.DraconiumAwakened.getMolten(144 * 128));
             if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
                 bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 4));
             } else {
@@ -127,9 +129,10 @@ public class DragonBloodRecipe implements IRecipePool {
 
             bd = TST_RecipeBuilder.builder()
                 .itemInputs(
-                    Utils.setStackSize(GT_ModHandler.getModItem("witchery", "infinityegg", 0), 1),
-                    Materials.DraconiumAwakened.getDust(64));
-            bd.fluidInputs(Materials.Radon.getPlasma(144 * 2));
+                    Utils.setStackSize(
+                        GT_ModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1)),
+                        0));
+            bd.fluidInputs(Materials.DraconiumAwakened.getMolten(144 * 128));
             if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
                 bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 4 * 64));
             } else {
@@ -142,16 +145,22 @@ public class DragonBloodRecipe implements IRecipePool {
             // Star Kernel
             GT_Values.RA.stdBuilder()
                 .itemInputs(new ItemStack(Blocks.dragon_egg, 1))
-                .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 2))
+                .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 16))
                 .noOptimize()
+                .specialValue(13500)
                 .eut(RECIPE_MAX)
                 .duration(20 * 10)
                 .addTo(GTCMRecipe.BallLightningRecipes);
 
             GT_Values.RA.stdBuilder()
-                .itemInputs(Utils.setStackSize(GT_ModHandler.getModItem("witchery", "infinityegg", 0), 1))
-                .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 2 * 256))
+                .itemInputs(
+                    Utils.setStackSize(
+                        GT_ModHandler.getModItem("witchery", "infinityegg", 1, GTCMItemList.TestItem0.get(1)),
+                        0))
+                .fluidInputs(getFluidStack("fieryblood", 1000 * 2048))
+                .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 512))
                 .noOptimize()
+                .specialValue(13500)
                 .eut(RECIPE_MAX)
                 .duration(20 * 10)
                 .addTo(GTCMRecipe.BallLightningRecipes);

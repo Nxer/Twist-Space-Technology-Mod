@@ -81,4 +81,3 @@ public class RecipeLoader {
         new StellarForgeRecipePool().loadOnServerStarted();
     }
 }
-
