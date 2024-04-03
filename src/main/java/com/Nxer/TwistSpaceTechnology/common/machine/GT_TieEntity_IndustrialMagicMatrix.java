@@ -295,13 +295,8 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + "Mean: "
-            + EnumChatFormatting.GOLD
-            + this.Mean;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA
-            + "Variance: "
-            + EnumChatFormatting.GOLD
-            + this.Variance;
+        ret[origin.length] = EnumChatFormatting.AQUA + "Mean: " + EnumChatFormatting.GOLD + this.Mean;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Variance: " + EnumChatFormatting.GOLD + this.Variance;
         return ret;
     }
 
