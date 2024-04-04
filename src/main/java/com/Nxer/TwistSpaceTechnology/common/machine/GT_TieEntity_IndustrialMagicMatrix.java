@@ -1,10 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
-import static com.dreammaster.block.BlockList.*;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.dreammaster.block.BlockList.BloodyThaumium;
+import static com.dreammaster.block.BlockList.BloodyVoid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static com.kentington.thaumichorizons.common.ThaumicHorizons.blockCrystalDeep;
 import static goodgenerator.loader.Loaders.magicCasing;
+import static goodgenerator.util.DescTextLocalization.BLUE_PRINT_INFO;
 import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
