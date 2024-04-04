@@ -626,7 +626,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.MachineMode.getText()
             + " : "
             + EnumChatFormatting.GOLD
-            + this.mode;
+            + (this.mode + 1);
         ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums.MachineTier.getText()
             + " : "
             + EnumChatFormatting.GOLD
