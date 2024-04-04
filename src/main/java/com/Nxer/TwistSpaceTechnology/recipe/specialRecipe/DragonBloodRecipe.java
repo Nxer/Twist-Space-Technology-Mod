@@ -107,9 +107,9 @@ public class DragonBloodRecipe implements IRecipePool {
                     GTPP_CombType.DRAGONBLOOD.getStackForType(4));
             bd.fluidInputs(Materials.DraconiumAwakened.getMolten(144 * 96));
             if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-                bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 4 * 16));
+                bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 4 * 64));
             } else {
-                bd.itemOutputs(DRAGON_METAL.getIngot(4 * 16));
+                bd.itemOutputs(DRAGON_METAL.getIngot(4 * 64));
             }
             bd.eut(RECIPE_UIV)
                 .duration(20 * 20)
@@ -134,9 +134,9 @@ public class DragonBloodRecipe implements IRecipePool {
                         0));
             bd.fluidInputs(Materials.DraconiumAwakened.getMolten(144 * 128));
             if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-                bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 4 * 16));
+                bd.fluidOutputs(DRAGON_METAL.getFluidStack(144 * 4 * 64));
             } else {
-                bd.itemOutputs(DRAGON_METAL.getIngot(4 * 16));
+                bd.itemOutputs(DRAGON_METAL.getIngot(4 * 64));
             }
             bd.eut(RECIPE_UIV)
                 .duration(20 * 40)
