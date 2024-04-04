@@ -61,6 +61,9 @@ dependencies {
     implementation('com.github.GTNewHorizons:Gadomancy:1.3.2:dev')
     implementation('com.github.GTNewHorizons:Botania:1.10.12-GTNH:dev')
     implementation('com.github.GTNewHorizons:twilightforest:2.5.19:dev')
+    implementation('com.github.GTNewHorizons:supersolarpanels:1.1.3:dev')
+    implementation('curse.maven:advsolar-362768:2885953')
+    implementation('com.github.GTNewHorizons:Electro-Magic-Tools:1.4.6:dev')
     //These 2 deps have conflicts with Amun-Ra by default, see Twist-Space-Technology-Mod#150
     compileOnly('curse.maven:witchery-69673:2234410')
     compileOnly('com.github.GTNewHorizons:WitcheryExtras:1.2.2:dev')

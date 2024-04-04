@@ -24,5 +24,6 @@ public class ClientProxy extends CommonProxy {
             TST_BigBroArray.PackSyncMachineType.class,
             1,
             Side.CLIENT);
+        TST_BigBroArray.initializeDefaultTextures();
     }
 }

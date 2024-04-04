@@ -14,7 +14,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticMixer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaEggGenerator;
@@ -28,6 +27,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMateria
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
@@ -475,10 +475,8 @@ public class MachineLoader {
             GTCMItemList.LargeCanner.set(LargeCanner);
         }
 
-        BigBroArray = new TST_BigBroArray(19049, "BigBroArray.name", TextEnums.tr("BigBroArray.name"))
-            .getStackForm(1);
+        BigBroArray = new TST_BigBroArray(19049, "BigBroArray.name", TextEnums.tr("BigBroArray.name")).getStackForm(1);
         GTCMItemList.BigBroArray.set(BigBroArray);
-
 
         // endregion
 
