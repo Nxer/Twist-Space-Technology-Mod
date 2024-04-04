@@ -37,9 +37,9 @@ public class DragonBloodRecipe implements IRecipePool {
         if (Config.Registry_DragonBlood_ExtraRecipe) {
             // Fluid Heater
             GT_Values.RA.stdBuilder()
-                .itemInputs(new ItemStack(Blocks.dragon_egg, 1, 0))
+                .itemInputs(new ItemStack(Blocks.dragon_egg, 0, 0))
                 .fluidInputs(getFluidStack("potion.dragonblood", 1000))
-                .fluidOutputs(DRAGON_METAL.getFluidStack(144))
+                .fluidOutputs(DRAGON_METAL.getFluidStack(36))
                 .noOptimize()
                 .eut(RECIPE_UXV)
                 .duration(20 * 6)
@@ -158,7 +158,7 @@ public class DragonBloodRecipe implements IRecipePool {
                         GT_ModHandler.getModItem("witchery", "infinityegg", 1, GTCMItemList.TestItem0.get(1)),
                         0))
                 .fluidInputs(getFluidStack("fieryblood", 1000 * 2048))
-                .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 512))
+                .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 1024))
                 .noOptimize()
                 .specialValue(13500)
                 .eut(RECIPE_MAX)

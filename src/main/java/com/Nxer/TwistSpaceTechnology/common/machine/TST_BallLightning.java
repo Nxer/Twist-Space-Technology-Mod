@@ -413,7 +413,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
+        if (mMachine && stackSize.stackSize < 2) return -1;
         int builtMain = survivialBuildPiece(STRUCTURE_PIECE_MK1, stackSize, 12, 20, 7, elementBudget, env, false, true);
         if (stackSize.stackSize < 2) {
             return builtMain;
@@ -626,7 +626,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.MachineMode.getText()
             + " : "
             + EnumChatFormatting.GOLD
-            + this.mode;
+            + (this.mode + 1);
         ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums.MachineTier.getText()
             + " : "
             + EnumChatFormatting.GOLD

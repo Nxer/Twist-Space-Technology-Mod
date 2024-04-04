@@ -41,12 +41,13 @@ import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
     // region Class Constructor
-    public TST_SpaceApiary(int aID, String aName, String aNameRegional, int tTier, int tModuleTier, int tMinMotorTier) {
-        super(aID, aName, aNameRegional, tTier, tModuleTier, tMinMotorTier);
+    public TST_SpaceApiary(int aID, String aName, String aNameRegional, int tTier, int tModuleTier, int tMinMotorTier,
+        int bufferSizeMultiplier) {
+        super(aID, aName, aNameRegional, tTier, tModuleTier, tMinMotorTier, bufferSizeMultiplier);
     }
 
-    public TST_SpaceApiary(String aName, int tTier, int tModuleTier, int tMinMotorTier) {
-        super(aName, tTier, tModuleTier, tMinMotorTier);
+    public TST_SpaceApiary(String aName, int tTier, int tModuleTier, int tMinMotorTier, int bufferSizeMultiplier) {
+        super(aName, tTier, tModuleTier, tMinMotorTier, bufferSizeMultiplier);
     }
 
     // endregion
@@ -61,7 +62,8 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
     // endregion
     Parameters.Group.ParameterIn[] parallelSettings;
-    private final Fluid liquddna = FluidRegistry.getFluid("liquiddna");
+    private final Fluid liquddna = FluidRegistry.getFluid("liquiddna") != null ? FluidRegistry.getFluid("liquiddna")
+        : FluidRegistry.getFluid("water");
 
     protected World world;
     protected float voltageTierExact;
@@ -189,11 +191,11 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         public TST_SpaceApiaryT1(int aID, String aName, String aNameRegional) {
-            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER);
+            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
         }
 
         public TST_SpaceApiaryT1(String aName) {
-            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER);
+            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
         }
 
         @Override
@@ -210,7 +212,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
                         + TextLocalization.Tooltip_SpaceApiary_t1_desc1)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_desc1)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_desc2)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc3)
+                .addInfo(TextLocalization.Tooltip_SpaceApiary_t1_desc3)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t1_desc4)
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT1"))
                 .addSeparator()
@@ -249,11 +251,11 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         public TST_SpaceApiaryT2(int aID, String aName, String aNameRegional) {
-            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER);
+            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
         }
 
         public TST_SpaceApiaryT2(String aName) {
-            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER);
+            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
         }
 
         @Override
@@ -270,7 +272,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
                         + TextLocalization.Tooltip_SpaceApiary_t2_desc1)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_desc1)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_desc2)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc3)
+                .addInfo(TextLocalization.Tooltip_SpaceApiary_t2_desc3)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t2_desc4)
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT2"))
                 .addSeparator()
@@ -309,11 +311,11 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         public TST_SpaceApiaryT3(int aID, String aName, String aNameRegional) {
-            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER);
+            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
         }
 
         public TST_SpaceApiaryT3(String aName) {
-            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER);
+            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
         }
 
         @Override
@@ -330,7 +332,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
                         + TextLocalization.Tooltip_SpaceApiary_t3_desc1)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_desc1)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_desc2)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc3)
+                .addInfo(TextLocalization.Tooltip_SpaceApiary_t3_desc3)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t3_desc4)
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT3"))
                 .addSeparator()
@@ -369,11 +371,11 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         public TST_SpaceApiaryT4(int aID, String aName, String aNameRegional) {
-            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER);
+            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
         }
 
         public TST_SpaceApiaryT4(String aName) {
-            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER);
+            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
         }
 
         @Override
@@ -390,7 +392,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
                         + TextLocalization.Tooltip_SpaceApiary_t4_desc1)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_desc1)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_desc2)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc3)
+                .addInfo(TextLocalization.Tooltip_SpaceApiary_t4_desc3)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t4_desc4)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t4_desc5)
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT4"))

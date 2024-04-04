@@ -108,7 +108,7 @@ public class TST_CommandMethods implements IDSP_IO {
                     + "↓"));
         sender.addChatMessage(
             new ChatComponentText(
-                "/tst dsp_setNode " + EnumChatFormatting.GREEN
+                "/tst_admin dsp_setNode " + EnumChatFormatting.GREEN
                     + "amount "
                     + EnumChatFormatting.AQUA
                     + "<dimID> <team name>"));
@@ -167,7 +167,7 @@ public class TST_CommandMethods implements IDSP_IO {
                     + "↓"));
         sender.addChatMessage(
             new ChatComponentText(
-                "/tst dsp_setSolarSail " + EnumChatFormatting.GREEN
+                "/tst_admin dsp_setSolarSail " + EnumChatFormatting.GREEN
                     + "amount "
                     + EnumChatFormatting.AQUA
                     + "<dimID> <team name>"));
