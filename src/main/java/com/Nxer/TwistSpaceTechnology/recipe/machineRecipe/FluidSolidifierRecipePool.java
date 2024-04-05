@@ -845,11 +845,9 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .addTo(RecipeMaps.autoclaveRecipes);
 
         GT_Values.RA.stdBuilder()
-            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Unstable, 64), MoldSingularity.get(0))
-            .fluidInputs(Materials.Infinity.getMolten(144 * 2))
+            .itemInputs(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Unstable, 66), MoldSingularity.get(0))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.extraUtilities.singularity", 1, 0))
-
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
@@ -860,7 +858,6 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .fluidInputs(Materials.Infinity.getMolten(144 * 2))
             .itemOutputs(
                 GT_ModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 4))
-
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20)
