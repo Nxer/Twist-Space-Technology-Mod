@@ -1075,8 +1075,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                             // (int)log(output / 8, 4) = LV(1), MV(2), HV(3), EV(4), IV(5), .......
                             if ("EMT_Solar".equals(machineType)
                                 && (int) Math.floor(Math.log(((TileEntitySolarBase) solarTE).output / 8) / Math.log(4))
-                                    >= (frameTier + 4) && addonCount > 0)
-                                continue;
+                                    >= (frameTier + 4)
+                                && addonCount > 0) continue;
                             if (machines != null) {
                                 if (GT_Utility.areStacksEqual(machines, storedInput)) {
                                     machines.stackSize += Math
