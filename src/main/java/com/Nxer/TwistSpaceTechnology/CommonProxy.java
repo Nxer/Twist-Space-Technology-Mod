@@ -73,6 +73,9 @@ public class CommonProxy {
             Side.SERVER);
         registerUUForArray();
         getGeneratorsForArray();
+        TST_BigBroArray.initializeMaterials();
+        TST_BigBroArray.initializeStructure();
+        TST_BigBroArray.addRecipes();
     }
 
     private void registerUUForArray() {
@@ -132,7 +135,7 @@ public class CommonProxy {
                 new ItemStack(ItemBlock.getItemFromBlock(AdvancedSolarPanel.blockAdvSolarPanel), 1, 1), // MV
                 new ItemStack(ItemBlock.getItemFromBlock(AdvancedSolarPanel.blockAdvSolarPanel), 1, 2), // HV
                 new ItemStack(ItemBlock.getItemFromBlock(AdvancedSolarPanel.blockAdvSolarPanel), 1, 3), // EV
-                new ItemStack(ItemBlock.getItemFromBlock(AdvancedSolarPanel.blockAdvSolarPanel), 1, 4), // IV
+                new ItemStack(MainSSP.BlockSpectralSP, 1), // IV
                 new ItemStack(MainSSP.BlockSingularSP, 1), // LuV
                 new ItemStack(MainSSP.BlockAdminSP, 1), // ZPM
                 new ItemStack(MainSSP.BlockPhotonSP, 1) // UV
