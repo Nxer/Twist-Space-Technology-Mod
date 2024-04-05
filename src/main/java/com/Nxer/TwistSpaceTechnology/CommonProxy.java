@@ -70,8 +70,13 @@ public class CommonProxy {
         TST_Network.tst.registerMessage(
             TST_BigBroArray.PackRequestMachineType.class,
             TST_BigBroArray.PackRequestMachineType.class,
-            2,
+            0,
             Side.SERVER);
+        TST_Network.tst.registerMessage(
+            TST_BigBroArray.PackSyncMachineType.class,
+            TST_BigBroArray.PackSyncMachineType.class,
+            1,
+            Side.CLIENT);
         registerUUForArray();
         getGeneratorsForArray();
         TST_BigBroArray.initializeMaterials();

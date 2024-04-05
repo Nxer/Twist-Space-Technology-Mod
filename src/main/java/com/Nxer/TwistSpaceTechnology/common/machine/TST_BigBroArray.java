@@ -110,13 +110,13 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
         "UEV", "UIV", "UMV", "UXV" };
 
     @SideOnly(Side.CLIENT)
-    public static ITexture[] DEFAULT_FRONT_ACTIVE = null;
+    public static ITexture[] DEFAULT_FRONT_ACTIVE;
 
     @SideOnly(Side.CLIENT)
-    public static ITexture[] DEFAULT_FRONT_IDLE = null;
+    public static ITexture[] DEFAULT_FRONT_IDLE;
 
     @SideOnly(Side.CLIENT)
-    private static ITexture[] DEFAULT_CASING_TEXTURE = null;
+    private static ITexture[] DEFAULT_CASING_TEXTURE;
 
     // spotless:off
     public static final String[][] PROCESSING_MACHINE_LIST = new String[][] {
@@ -517,10 +517,10 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
     private static IStructureDefinition<TST_BigBroArray> STRUCTURE_DEFINITION;
 
     @SideOnly(Side.CLIENT)
-    private ITexture[] activeTextures = DEFAULT_FRONT_ACTIVE;
+    private ITexture[] activeTextures;
 
     @SideOnly(Side.CLIENT)
-    private ITexture[] idleTextures = DEFAULT_FRONT_IDLE;
+    private ITexture[] idleTextures;
 
     public static void initializeMaterials() {
         MACHINE_CASINGS = IntStream.range(0, tierNamesCasing.length)
@@ -732,6 +732,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
             .build();
     }
 
+    @SideOnly(Side.CLIENT)
     public static void initializeDefaultTextures() {
         DEFAULT_FRONT_ACTIVE = new ITexture[] {
             Textures.BlockIcons.getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings4, 0)),
@@ -762,6 +763,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
 
     }
 
+    @SideOnly(Side.CLIENT)
     private ITexture[] getActiveTextures(String machineType) {
         if (StringUtils.isEmpty(machineType)) {
             return DEFAULT_FRONT_ACTIVE;
@@ -788,6 +790,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                 .build() };
     }
 
+    @SideOnly(Side.CLIENT)
     private ITexture[] getIdleTextures(String machineType) {
         if (StringUtils.isEmpty(machineType)) {
             return DEFAULT_FRONT_IDLE;
