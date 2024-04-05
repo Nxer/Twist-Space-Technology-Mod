@@ -77,7 +77,7 @@ public enum TextEnums {
     BigBroArrayDesc7("BigBroArray.desc.7"),
     BigBroArrayDesc8("BigBroArray.desc.8"),
 
-    BigBroArrayDesc9("BigBroArray.desc.10"),
+    BigBroArrayDesc9("BigBroArray.desc.9"),
 
     BigBroArrayDesc10("BigBroArray.desc.10"),
 
