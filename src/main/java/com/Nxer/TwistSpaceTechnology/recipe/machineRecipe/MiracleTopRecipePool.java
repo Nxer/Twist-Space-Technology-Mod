@@ -1,8 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.DATApipe;
+import static com.glodblock.github.loader.ItemAndBlockHolder.SINGULARITY_CELL;
+import static gregtech.api.enums.Mods.EternalSingularity;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
@@ -14,8 +17,11 @@ import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
+import static gregtech.api.util.GT_ModHandler.getModItem;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
+import static thaumcraft.common.config.ConfigBlocks.blockEssentiaReservoir;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -31,7 +37,10 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 import com.dreammaster.gthandler.GT_CoreModSupport;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import com.glodblock.github.common.storage.CellType;
 
+import appeng.core.Api;
+import appeng.items.materials.MaterialType;
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -42,6 +51,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import thaumicenergistics.implementaion.ThEAPIImplementation;
 
 // spotless:off
 public class MiracleTopRecipePool implements IRecipePool {
@@ -77,6 +87,147 @@ public class MiracleTopRecipePool implements IRecipePool {
 
         final ItemStack Wrapped_Circuit_Board_Bio_Ultra = GT_ModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32746);
 
+        // region ME Storage Component
+        {
+            final ItemStack integratedCircuit19 = GT_Utility.getIntegratedCircuit(19);
+
+            // Item
+            TST_RecipeBuilder
+                .builder()
+                .itemInputs(
+                    integratedCircuit19,
+                    CustomItemList.EngineeringProcessorItemAdvEmeraldCore.get(48),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64)
+                )
+                .fluidInputs(
+                    new FluidStack(solderPlasma, 72)
+                )
+                .itemOutputs(MaterialType.Cell16384kPart.stack(64))
+                .eut(RECIPE_UV)
+                .duration(200)
+                .addTo(MT);
+
+            // Fluid
+            TST_RecipeBuilder
+                .builder()
+                .itemInputs(
+                    integratedCircuit19,
+                    ItemList.Electric_Pump_EV.get(48),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64)
+                )
+                .fluidInputs(
+                    new FluidStack(solderPlasma, 72)
+                )
+                .itemOutputs(CellType.Cell16384kPart.stack(64))
+                .eut(RECIPE_UV)
+                .duration(200)
+                .addTo(MT);
+
+            // Essentia
+            TST_RecipeBuilder
+                .builder()
+                .itemInputs(
+                    integratedCircuit19,
+                    CustomItemList.EngineeringProcessorEssentiaPulsatingCore.get(48),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 64)
+                )
+                .fluidInputs(
+                    new FluidStack(solderPlasma, 72)
+                )
+                .itemOutputs(ThEAPIImplementation.instance().items().EssentiaStorageComponent_16384k.getStacks(64))
+                .eut(RECIPE_UV)
+                .duration(200)
+                .addTo(MT);
+
+            final ItemStack eternalSingularity = getModItem(EternalSingularity.ID, "eternal_singularity", 1);
+
+            // Item Singularity
+            TST_RecipeBuilder
+                .builder()
+                .itemInputs(
+                    integratedCircuit19,
+                    eternalSingularity,
+                    MaterialType.Cell16384kPart.stack(9),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 32),
+
+                    ItemList.Field_Generator_UV.get(6),
+                    ItemList.Conveyor_Module_UEV.get(6),
+                    setStackSize(Materials.InfinityCatalyst.getDust(1), 192)
+                )
+                .fluidInputs(
+                    Materials.Infinity.getMolten(144*24),
+                    Materials.CosmicNeutronium.getMolten(144*81),
+                    Materials.Americium.getMolten(144*18)
+                )
+                .itemOutputs(Api.INSTANCE.definitions().items().cellSingularity().maybeStack(1).get())
+                .eut(RECIPE_UXV)
+                .duration(200)
+                .addTo(MT);
+
+            // Fluid Singularity
+            TST_RecipeBuilder
+                .builder()
+                .itemInputs(
+                    integratedCircuit19,
+                    eternalSingularity,
+                    CellType.Cell16384kPart.stack(6),
+                    ItemList.Electric_Pump_UHV.get(24),
+
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 32),
+                    ItemList.Field_Generator_UV.get(6),
+                    ItemList.Electric_Pump_UV.get(6),
+
+                    new ItemStack(Items.nether_star, 144),
+                    setStackSize(Materials.InfinityCatalyst.getDust(1), 192)
+                )
+                .fluidInputs(
+                    Materials.DraconiumAwakened.getMolten(144*150),
+                    Materials.Americium.getMolten(144*12),
+                    Materials.Infinity.getMolten(144*123),
+                    Materials.CosmicNeutronium.getMolten(144*177)
+                )
+                .itemOutputs(SINGULARITY_CELL.stack())
+                .eut(RECIPE_UXV)
+                .duration(200)
+                .addTo(MT);
+
+            // Essentia Singularity
+            TST_RecipeBuilder
+                .builder()
+                .itemInputs(
+                    integratedCircuit19,
+                    eternalSingularity,
+                    ThEAPIImplementation.instance().items().EssentiaStorageComponent_16384k.getStacks(9),
+                    new ItemStack(blockEssentiaReservoir, 6),
+                    setStackSize(Materials.InfinityCatalyst.getDust(1), 192)
+                )
+                .fluidInputs(
+                    Materials.Infinity.getMolten(144*24),
+                    Materials.CosmicNeutronium.getMolten(144*81)
+                )
+                .itemOutputs(ThEAPIImplementation.instance().items().EssentiaCell_Singularity.getStack())
+                .eut(RECIPE_UXV)
+                .duration(200)
+                .addTo(MT);
+
+        }
+        // endregion
 
 
         // region Quantum Circuit and Piko Circuit
