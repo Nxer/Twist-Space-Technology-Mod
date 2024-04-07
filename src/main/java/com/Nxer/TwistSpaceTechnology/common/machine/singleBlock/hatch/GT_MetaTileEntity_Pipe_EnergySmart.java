@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.github.technus.tectech.mechanics.pipe.IConnectsToEnergyTunnel;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyTunnel;
@@ -84,7 +84,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
             texter(
                 EnumChatFormatting.AQUA + "Input energy from the front and output from other sides.",
                 "LaserSmartNode.getDescription.03"),
-            TextLocalization.ModNameDesc };
+            TextEnums.AddByTwistSpaceTechnology.getText() };
     }
 
     @Override
@@ -116,7 +116,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
 
     @Override
     public long maxEUStore() {
-        return 20 * Voltage * Amperes;
+        return 24 * Voltage * Amperes;
     }
 
     @Override
@@ -146,16 +146,6 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
 
     @Override
     public boolean isFacingValid(ForgeDirection facing) {
-        return true;
-    }
-
-    @Override
-    public boolean isEnetInput() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnetOutput() {
         return true;
     }
 

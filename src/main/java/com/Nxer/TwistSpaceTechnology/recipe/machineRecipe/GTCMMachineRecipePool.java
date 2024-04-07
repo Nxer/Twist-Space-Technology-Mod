@@ -79,7 +79,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.CustomItemList.AutoclaveUHV;
-import static com.dreammaster.gthandler.CustomItemList.Casing_UEV;
 import static com.dreammaster.gthandler.CustomItemList.CentrifugeUV;
 import static com.dreammaster.gthandler.CustomItemList.CompressorUHV;
 import static com.dreammaster.gthandler.CustomItemList.CuttingMachineUHV;
@@ -126,6 +125,7 @@ import static com.github.technus.tectech.thing.CustomItemList.hatch_CreativeMain
 import static com.github.technus.tectech.thing.CustomItemList.rack_Hatch;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
+import static gregtech.api.enums.ItemList.Hatch_Energy_MAX;
 import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.enums.Mods.Forestry;
@@ -1632,14 +1632,14 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(assembler);
         // endregion
 
-        // region LaserSmartPipe
+        // region LaserSmartNode
         GT_Values.RA
             .stdBuilder()
             .itemInputs(
-                LASERpipe.get(32),
-                Laser_Lens_Special.get(0),
-                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1},
-                Casing_UEV.get(1)
+                LASERpipe.get(64),
+                Laser_Lens_Special.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.Bio), 1},
+                Hatch_Energy_MAX.get(1)
             )
             .fluidInputs(MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144))
             .itemOutputs(LaserSmartNode.get(1))
