@@ -55,7 +55,7 @@ import thaumicenergistics.implementaion.ThEAPIImplementation;
 
 // spotless:off
 public class MiracleTopRecipePool implements IRecipePool {
-    static final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipes;
+    final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipes;
 
     @Override
     public void loadRecipes() {
