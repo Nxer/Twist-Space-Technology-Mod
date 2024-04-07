@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
 import com.Nxer.TwistSpaceTechnology.combat.PlayerEventHandler;
 import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
+import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
@@ -49,6 +50,7 @@ public class CommonProxy {
     public void serverStarting(FMLServerStartingEvent event) {
         TwistSpaceTechnology.LOG.info("Ok, " + Tags.MODNAME + " at version " + Tags.VERSION + " load success .");
         event.registerServerCommand(new TST_Command());
+        event.registerServerCommand(new TST_AdminCommand());
         if (Config.activateCombatStats) {
             event.registerServerCommand(new CombatRework_Command());
         }
