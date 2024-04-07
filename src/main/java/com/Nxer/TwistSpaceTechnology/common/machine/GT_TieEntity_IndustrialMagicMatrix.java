@@ -13,6 +13,7 @@ import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static tb.init.TBBlocks.*;
 import static thaumcraft.common.config.ConfigBlocks.*;
+import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static tuhljin.automagy.blocks.ModBlocks.translucent;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import fox.spiteful.avaritia.items.LudicrousItems;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
@@ -58,9 +60,11 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import scala.Int;
+import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.common.tiles.TileNodeEnergized;
 import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
@@ -174,9 +178,35 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
             mMaxProgresstime = 1;
         } else mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
         setEnergyUsage(processingLogic);
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
+        ItemStack PrimordialPearl = new ItemStack(itemEldritchObject, 1, 3);
+        int size = 0;
+        for (ItemStack itemStack : processingLogic.getOutputItems()) {
+            if (!(itemStack.isItemEqual(new ItemStack(LudicrousItems.bigPearl)))) {
+                InfusionRecipe Recipe = ThaumcraftApi.getInfusionRecipe(itemStack);
+                for (ItemStack itemStack1 : Recipe.getComponents()) {
+                    if (itemStack1.isItemEqual(PrimordialPearl)) {
+                        size++;
+                    }
+                }
+            } else {
+                mOutputItems = processingLogic.getOutputItems();
+                mOutputFluids = processingLogic.getOutputFluids();
+                return result;
+            }
+        }
+        if (size != 0) {
+            int index = 0;
+            ItemStack[] OutputItems = new ItemStack[processingLogic.getOutputItems().length + 1];
+            for (ItemStack itemStack : processingLogic.getOutputItems()) {
+                OutputItems[index] = itemStack;
+            }
+            OutputItems[OutputItems.length - 1] = new ItemStack(itemEldritchObject, size, 3);
+            mOutputItems = OutputItems;
+            mOutputFluids = processingLogic.getOutputFluids();
+        } else {
+            mOutputItems = processingLogic.getOutputItems();
+            mOutputFluids = processingLogic.getOutputFluids();
+        }
 
         return result;
     }
