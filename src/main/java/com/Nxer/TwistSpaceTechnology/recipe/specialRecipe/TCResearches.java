@@ -3,10 +3,10 @@ package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.ItemList;
@@ -52,57 +52,54 @@ public class TCResearches {
                                 ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1),
                                 Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1) })))
                 .registerResearchItem();
-        if (Config.EnableIndustrialMagicMatrix) {
+        if (Config.EnableIndustrialMagicMatrix){
             new ResearchItem(
-                "INDUSTRIAL_MAGIC_MATRIX",
-                "BASICS",
-                (new AspectList()).merge(Aspect.EARTH, 1)
-                    .merge(Aspect.MECHANISM, 1)
-                    .merge(Aspect.MAGIC, 1),
-                4,
-                -9,
-                5,
-                GTCMItemList.IndustrialMagicMatrix.get(1, 0))/* .setParents("ICHORIUM") */
+                    "INDUSTRIAL_MAGIC_MATRIX",
+                    "BASICS",
+                    (new AspectList()).merge(Aspect.EARTH, 1)
+                            .merge(Aspect.MECHANISM, 1)
+                            .merge(Aspect.MAGIC, 1),
+                    4,
+                    -9,
+                    5,
+                    GTCMItemList.IndustrialMagicMatrix.get(1, 0))/* .setParents("ICHORIUM") */
                     .setPages(
-                        // #tr tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1
-                        // # Death, Evil, Abomination, Grievance, Murderous Intent, Curse of Misfortune, Hell,
-                        // Ethics,Fool,
-                        // Tyrant, Sinner, Cunning, Thief, Despicable, Evil, Poison, Hunger, Epidemic,
-                        // Earthquake,Heavenly
-                        // Change, Alien, Human, Calamity Forever, Time, Spirit, Root, Fiction, Darkness,
-                        // Innocence,Life, or
-                        // Something Called Fear.
-                        // #zh_CN
-                        // 死、邪恶、憎恶、怨嗟、杀意、不幸诅咒、地狱、伦理、愚者、暴君、罪人、狡猾、贼徒、卑劣、恶、毒、饥饿、疫病、地震、天变、异形、人间、灾厄永远、时间、精神、根源、虚构、黑暗、无垢、命或者被称为恐惧之物。
-                        new ResearchPage(TextEnums.tr("tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1")),
-                        new ResearchPage(
-                            new InfusionRecipe(
-                                "INDUSTRIAL_MAGIC_MATRIX",
-                                GTCMItemList.IndustrialMagicMatrix.get(1, 0),
-                                25,
-                                (new AspectList()).merge(Aspect.LIFE, 128)
-                                    .merge(Aspect.EARTH, 128)
-                                    .merge(Aspect.MAGIC, 128)
-                                    .merge(Aspect.MECHANISM, 128)
-                                    .merge(Aspect.AIR, 128)
-                                    .merge(Aspect.EARTH, 128)
-                                    .merge(Aspect.FIRE, 128)
-                                    .merge(Aspect.WATER, 128)
-                                    .merge(Aspect.ORDER, 128)
-                                    .merge(Aspect.ENTROPY, 128),
-                                ItemList.Machine_Multi_Assemblyline.get(1, 0),
-                                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
-                                    new ItemStack(blockMetalDevice, 1, 12),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
-                                    new ItemStack(blockMetalDevice, 1, 12),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
-                                    new ItemStack(blockMetalDevice, 1, 12),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
-                                    new ItemStack(blockMetalDevice, 1, 12) })))
+                            // #tr tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1
+                            // # Death, Evil, Abomination, Grievance, Murderous Intent, Curse of Misfortune, Hell, Ethics,Fool,
+                            // Tyrant, Sinner, Cunning, Thief, Despicable, Evil, Poison, Hunger, Epidemic, Earthquake,Heavenly
+                            // Change, Alien, Human, Calamity Forever, Time, Spirit, Root, Fiction, Darkness, Innocence,Life, or
+                            // Something Called Fear.
+                            // #zh_CN
+                            // 死、邪恶、憎恶、怨嗟、杀意、不幸诅咒、地狱、伦理、愚者、暴君、罪人、狡猾、贼徒、卑劣、恶、毒、饥饿、疫病、地震、天变、异形、人间、灾厄永远、时间、精神、根源、虚构、黑暗、无垢、命或者被称为恐惧之物。
+                            new ResearchPage(TextEnums.tr("tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1")),
+                            new ResearchPage(
+                                    new InfusionRecipe(
+                                            "INDUSTRIAL_MAGIC_MATRIX",
+                                            GTCMItemList.IndustrialMagicMatrix.get(1, 0),
+                                            25,
+                                            (new AspectList()).merge(Aspect.LIFE, 128)
+                                                    .merge(Aspect.EARTH, 128)
+                                                    .merge(Aspect.MAGIC, 128)
+                                                    .merge(Aspect.MECHANISM, 128)
+                                                    .merge(Aspect.AIR, 128)
+                                                    .merge(Aspect.EARTH, 128)
+                                                    .merge(Aspect.FIRE, 128)
+                                                    .merge(Aspect.WATER, 128)
+                                                    .merge(Aspect.ORDER, 128)
+                                                    .merge(Aspect.ENTROPY, 128),
+                                            ItemList.Machine_Multi_Assemblyline.get(1, 0),
+                                            new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                                                    new ItemStack(blockMetalDevice, 1, 12),
+                                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                                                    new ItemStack(blockMetalDevice, 1, 12),
+                                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                                                    new ItemStack(blockMetalDevice, 1, 12),
+                                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                                                    new ItemStack(blockMetalDevice, 1, 12)})))
                     .registerResearchItem();
         }
     }

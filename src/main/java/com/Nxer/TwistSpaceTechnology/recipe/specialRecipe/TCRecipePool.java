@@ -3,10 +3,10 @@ package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.ItemList;
@@ -38,34 +38,34 @@ public class TCRecipePool implements IRecipePool {
                 ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1), Materials.Steeleaf.getPlates(1),
                 new ItemStack(ModItems.spawnerMover, 1) });
         /* INDUSTRIAL_MAGIC_MATRIX */
-        if (Config.EnableIndustrialMagicMatrix) {
+        if (Config.EnableIndustrialMagicMatrix){
             ThaumcraftApi.addInfusionCraftingRecipe(
-                "INDUSTRIAL_MAGIC_MATRIX",
-                GTCMItemList.IndustrialMagicMatrix.get(1, 0),
-                25,
-                (new AspectList()).merge(Aspect.LIFE, 128)
-                    .merge(Aspect.EARTH, 128)
-                    .merge(Aspect.MAGIC, 128)
-                    .merge(Aspect.MECHANISM, 128)
-                    .merge(Aspect.AIR, 128)
-                    .merge(Aspect.EARTH, 128)
-                    .merge(Aspect.FIRE, 128)
-                    .merge(Aspect.WATER, 128)
-                    .merge(Aspect.ORDER, 128)
-                    .merge(Aspect.ENTROPY, 128),
-                ItemList.Machine_Multi_Assemblyline.get(1, 0),
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
-                    new ItemStack(blockMetalDevice, 1, 12),
-                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
-                    new ItemStack(blockMetalDevice, 1, 12),
-                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
-                    new ItemStack(blockMetalDevice, 1, 12),
-                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
-                    new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
-                    new ItemStack(blockMetalDevice, 1, 12) });
+                    "INDUSTRIAL_MAGIC_MATRIX",
+                    GTCMItemList.IndustrialMagicMatrix.get(1, 0),
+                    25,
+                    (new AspectList()).merge(Aspect.LIFE, 128)
+                            .merge(Aspect.EARTH, 128)
+                            .merge(Aspect.MAGIC, 128)
+                            .merge(Aspect.MECHANISM, 128)
+                            .merge(Aspect.AIR, 128)
+                            .merge(Aspect.EARTH, 128)
+                            .merge(Aspect.FIRE, 128)
+                            .merge(Aspect.WATER, 128)
+                            .merge(Aspect.ORDER, 128)
+                            .merge(Aspect.ENTROPY, 128),
+                    ItemList.Machine_Multi_Assemblyline.get(1, 0),
+                    new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                            new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                            new ItemStack(blockMetalDevice, 1, 12),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                            new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                            new ItemStack(blockMetalDevice, 1, 12),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                            new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                            new ItemStack(blockMetalDevice, 1, 12),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                            new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
+                            new ItemStack(blockMetalDevice, 1, 12)});
         }
     }
 
