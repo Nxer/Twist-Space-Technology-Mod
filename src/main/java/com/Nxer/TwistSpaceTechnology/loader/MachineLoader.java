@@ -453,14 +453,16 @@ public class MachineLoader {
         }
 
         //
-        IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
-            19047,
-            "IndustrialMagicMatrix",
-            // #tr NameIndustrialMagicMatrix
-            // # Industrial Magic Matrix
-            // #zh_CN §0工业注魔矩阵
-            TextEnums.tr("NameIndustrialMagicMatrix")).getStackForm(1);
-        GTCMItemList.IndustrialMagicMatrix.set(IndustrialMagicMatrix);
+        if (Config.EnableIndustrialMagicMatrix) {
+            IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
+                19047,
+                "IndustrialMagicMatrix",
+                // #tr NameIndustrialMagicMatrix
+                // # Industrial Magic Matrix
+                // #zh_CN §0工业注魔矩阵
+                TextEnums.tr("NameIndustrialMagicMatrix")).getStackForm(1);
+            GTCMItemList.IndustrialMagicMatrix.set(IndustrialMagicMatrix);
+        }
 
         //
         if (Config.EnableLargeCanner) {
