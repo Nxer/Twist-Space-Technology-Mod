@@ -25,6 +25,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -32,6 +35,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -145,6 +150,16 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             default:
                 return RecipeMaps.extruderRecipes;
         }
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(
+            RecipeMaps.benderRecipes,
+            RecipeMaps.formingPressRecipes,
+            RecipeMaps.hammerRecipes,
+            RecipeMaps.extruderRecipes);
     }
 
     @Override

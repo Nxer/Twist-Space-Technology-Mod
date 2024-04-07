@@ -18,6 +18,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -119,6 +122,12 @@ public class GT_TileEntity_MagneticDomainConstructor
     @Override
     public RecipeMap<?> getRecipeMap() {
         return mode == 1 ? RecipeMaps.polarizerRecipes : RecipeMaps.electroMagneticSeparatorRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(RecipeMaps.polarizerRecipes, RecipeMaps.electroMagneticSeparatorRecipes);
     }
 
     @Override

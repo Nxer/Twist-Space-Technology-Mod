@@ -24,6 +24,7 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -220,6 +221,13 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             default:
                 return RecipeMaps.compressorRecipes;
         }
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays
+            .asList(RecipeMaps.extractorRecipes, GTPPRecipeMaps.cyclotronRecipes, RecipeMaps.compressorRecipes);
     }
 
     @Override

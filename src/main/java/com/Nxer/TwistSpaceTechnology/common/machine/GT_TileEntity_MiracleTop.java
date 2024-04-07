@@ -18,12 +18,17 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -300,6 +305,12 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     @Override
     public RecipeMap<?> getRecipeMap() {
         return this.mode == 0 ? GTCMRecipe.MiracleTopRecipes : GTCMRecipe.QuantumInversionRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(GTCMRecipe.MiracleTopRecipes, GTCMRecipe.QuantumInversionRecipes);
     }
 
     @Override
