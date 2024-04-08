@@ -3,10 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.authorName_Nxer;
-import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
-import static gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser;
-
-import java.util.UUID;
 
 import net.minecraft.util.EnumChatFormatting;
 
@@ -36,7 +32,8 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
     // endregion
 
     // region IO info
-    private String owner_uuid;
+    private static final long LongMaxDevice4 = Long.MAX_VALUE / 4;
+    private static final long LongMaxDecreaseInt = Long.MAX_VALUE - Integer.MAX_VALUE;
 
     @Override
     public long getMinimumStoredEU() {
@@ -45,43 +42,17 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
 
     @Override
     public long maxEUOutput() {
-        return Long.MAX_VALUE;
+        return LongMaxDevice4;
     }
 
     @Override
     public long maxEUStore() {
-        return Long.MAX_VALUE;
+        return LongMaxDecreaseInt;
     }
 
     @Override
     public long maxAmperesOut() {
         return 1;
-    }
-
-    @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        if (aBaseMetaTileEntity.isServerSide()) {
-            // On first tick find the player name and attempt to add them to the map.
-            // UUID and username of the owner.
-            this.owner_uuid = aBaseMetaTileEntity.getOwnerUuid()
-                .toString();
-
-            strongCheckOrAddUser(UUID.fromString(owner_uuid));
-        }
-    }
-
-    @Override
-    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPreTick(aBaseMetaTileEntity, aTick);
-
-        if (aBaseMetaTileEntity.isServerSide()) {
-            // Every ticks_between_energy_addition ticks change the energy content of the machine.
-            if (aTick % ticks_between_energy_addition == 0L) {
-                addEUToGlobalEnergyMap(UUID.fromString(owner_uuid), getEUVar());
-                setEUVar(0L);
-            }
-        }
     }
 
     // endregion
