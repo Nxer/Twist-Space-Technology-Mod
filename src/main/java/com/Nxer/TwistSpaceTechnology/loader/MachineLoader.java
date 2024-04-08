@@ -27,6 +27,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMateria
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
@@ -118,6 +119,7 @@ public class MachineLoader {
     public static ItemStack StarcoreMiner;
     public static ItemStack Disassembler;
 
+    public static ItemStack BigBroArray;
     public static ItemStack SpaceApiaryT1;
     public static ItemStack SpaceApiaryT2;
     public static ItemStack SpaceApiaryT3;
@@ -445,7 +447,6 @@ public class MachineLoader {
             GTCMItemList.Disassembler.set(Disassembler);
         }
 
-        //
         if (Config.Enable_BallLightning) {
             BallLightning = new TST_BallLightning(19046, "NameBallLightning", TextLocalization.NameBallLightning)
                 .getStackForm(1);
@@ -475,6 +476,9 @@ public class MachineLoader {
                 TextEnums.tr("NameLargeCanner")).getStackForm(1);
             GTCMItemList.LargeCanner.set(LargeCanner);
         }
+
+        BigBroArray = new TST_BigBroArray(19049, "BigBroArray.name", TextEnums.tr("BigBroArray.name")).getStackForm(1);
+        GTCMItemList.BigBroArray.set(BigBroArray);
 
         // endregion
 

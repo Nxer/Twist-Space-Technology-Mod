@@ -65,6 +65,7 @@ public class BlockRegister {
                 BasicBlocks.MetaBlockCasing01,
                 new String[] { TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.01"),
                     TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.02") }));
+
         GTCMItemList.AdvancedHighPowerCoilBlock.set(
             MetaBlockConstructors.initMetaBlockCasing(
                 "Advanced High Power Coil Block",
@@ -72,6 +73,41 @@ public class BlockRegister {
                 BasicBlocks.MetaBlockCasing01,
                 new String[] { TextEnums.tr("Tooltips_AdvancedHighPowerCoil.01"),
                     TextEnums.tr("Tooltips_AdvancedHighPowerCoil.02") }));
+
+        GTCMItemList.ParallelismCasing0.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 0",
+                (byte) 3,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.0") }));
+
+        GTCMItemList.ParallelismCasing1.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 1",
+                (byte) 4,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.1") }));
+
+        GTCMItemList.ParallelismCasing2.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 2",
+                (byte) 5,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.2") }));
+
+        GTCMItemList.ParallelismCasing3.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 3",
+                (byte) 6,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.4") }));
+
+        GTCMItemList.ParallelismCasing4.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 4",
+                (byte) 7,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.4") }));
 
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV

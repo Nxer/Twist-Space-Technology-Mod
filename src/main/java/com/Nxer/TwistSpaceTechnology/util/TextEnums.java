@@ -60,12 +60,29 @@ public enum TextEnums {
     // #tr NameCoreDeviceOfHumanPowerGenerationFacility
     // # Core Device of Human Power Generation Facility
     // #zh_CN 人类能源设施的核心装置
-    NameCoreDeviceOfHumanPowerGenerationFacility("NameCoreDeviceOfHumanPowerGenerationFacility")
+    NameCoreDeviceOfHumanPowerGenerationFacility("NameCoreDeviceOfHumanPowerGenerationFacility"),
     // endregion
 
     // endregion
 
-    ;
+    // start
+    BigBroArrayName("BigBroArray.name"),
+    BigBroArrayType("BigBroArray.type"),
+    BigBroArrayDesc1("BigBroArray.desc.1"),
+    BigBroArrayDesc2("BigBroArray.desc.2"),
+    BigBroArrayDesc3("BigBroArray.desc.3"),
+    BigBroArrayDesc4("BigBroArray.desc.4"),
+    BigBroArrayDesc5("BigBroArray.desc.5"),
+    BigBroArrayDesc6("BigBroArray.desc.6"),
+    BigBroArrayDesc7("BigBroArray.desc.7"),
+    BigBroArrayDesc8("BigBroArray.desc.8"),
+
+    BigBroArrayDesc9("BigBroArray.desc.9"),
+
+    BigBroArrayDesc10("BigBroArray.desc.10"),
+
+    // end
+    StructureTooComplex("StructureTooComplex");
 
     public static String tr(String key) {
         return translateToLocalFormatted(key);
