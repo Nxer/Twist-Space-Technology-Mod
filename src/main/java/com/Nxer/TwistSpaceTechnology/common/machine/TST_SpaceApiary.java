@@ -1,11 +1,23 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryCycleTime;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T1;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T2;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T3;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T4;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryEnableDisplayInfo;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T1;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T2;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T3;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T4;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.enableDNAConsuming;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static forestry.api.apiculture.BeeManager.beeRoot;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +39,12 @@ import com.github.technus.tectech.thing.metaTileEntity.multi.base.IStatusFunctio
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.Parameters;
 import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevatormodules.TileEntityModuleBase;
+import com.gtnewhorizons.modularui.api.math.Alignment;
+import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
+import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
+import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
+import com.gtnewhorizons.modularui.common.widget.SlotWidget;
+import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import forestry.api.apiculture.*;
 import forestry.apiculture.genetics.Bee;
@@ -36,7 +54,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 
 public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
@@ -54,8 +71,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
     // region Statics
     private static final INameFunction<TST_SpaceApiary> PARALLEL_SETTING_NAME = (base,
-        p) -> GCCoreUtil.translate("gt.blockmachines.multimachine.project.ig.pump.cfgi.2") + " "
-            + (p.hatchId() / 2 + 1); // Parallels
+        p) -> translateToLocal("gt.blockmachines.multimachine.project.ig.pump.cfgi.2") + " " + (p.hatchId() / 2 + 1); // Parallels
 
     private static final IStatusFunction<TST_SpaceApiary> PARALLEL_STATUS = (base, p) -> LedStatus
         .fromLimitsInclusiveOuterBoundary(p.get(), 0, 1, 100, base.getMaxParallels());
@@ -126,7 +142,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         this.lEUt = -RECIPE_LuV * mParallel;
         this.mEfficiency = 10000;
         this.mEfficiencyIncrease = 10000;
-        this.mMaxProgresstime = 100;
+        this.mMaxProgresstime = SpaceApiaryCycleTime;
         this.mOutputItems = outputs.toArray(new ItemStack[0]);
 
         return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -165,6 +181,46 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
             .makeInParameter(0, 1, PARALLEL_SETTING_NAME, PARALLEL_STATUS);
     }
 
+    @Override
+    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
+        super.drawTexts(screenElements, inventorySlot);
+        if (SpaceApiaryEnableDisplayInfo) {
+            screenElements.widget(
+                TextWidget.dynamicString(this::generateRecipeInfo)
+                    .setSynced(false)
+                    .setDefaultColor(COLOR_TEXT_WHITE.get())
+                    .setTextAlignment(Alignment.CenterLeft)
+                    .setEnabled(widget -> mMachine && mOutputItems != null && mOutputItems.length > 0))
+                .widget(new FakeSyncWidget.IntegerSyncer(() -> mProgresstime, val -> mProgresstime = val))
+                .widget(new FakeSyncWidget.IntegerSyncer(() -> mMaxProgresstime, val -> mMaxProgresstime = val))
+                .widget(
+                    new FakeSyncWidget.ListSyncer<>(
+                        () -> mOutputItems != null ? Arrays.asList(mOutputItems) : Collections.emptyList(),
+                        val -> mOutputItems = val.toArray(new ItemStack[0]),
+                        NetworkUtils::writeItemStack,
+                        NetworkUtils::readItemStack));
+        }
+    }
+
+    private String generateRecipeInfo() {
+        StringBuilder ret = new StringBuilder("Progress: ").append(String.format("%,.2f", (double) mProgresstime / 20))
+            .append("s / ")
+            .append(String.format("%,.2f", (double) mMaxProgresstime / 20))
+            .append("s (")
+            .append(String.format("%,.1f", (double) mProgresstime / mMaxProgresstime * 100))
+            .append("%)\n");
+        if (mOutputItems != null) {
+            for (ItemStack outputItem : mOutputItems) {
+                String ItemDisplayName = outputItem.getDisplayName();
+                ret.append(" - ")
+                    .append(ItemDisplayName)
+                    .append(String.format(" x %d", outputItem.stackSize))
+                    .append("\n");
+            }
+        }
+        return ret.toString();
+    }
+
     public static class TST_SpaceApiaryT1 extends TST_SpaceApiary {
 
         protected static final int MODULE_VOLTAGE_TIER = 10;
@@ -173,7 +229,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         protected static final int MINIMUM_MOTOR_TIER = 1;
 
-        protected static final int MAX_PARALLELS = 256;
+        protected static final int MAX_PARALLELS = SpaceApiaryMaxParallels_T1;
 
         @Override
         protected int getMaxParallels() {
@@ -187,7 +243,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         protected int getLiquidDnaConsumingAmount() {
-            return 100;
+            return SpaceApiaryDNACost_T1;
         }
 
         public TST_SpaceApiaryT1(int aID, String aName, String aNameRegional) {
@@ -233,7 +289,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         protected static final int MINIMUM_MOTOR_TIER = 2;
 
-        protected static final int MAX_PARALLELS = 4096;
+        protected static final int MAX_PARALLELS = SpaceApiaryMaxParallels_T2;
 
         @Override
         protected int getMaxParallels() {
@@ -242,7 +298,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         protected int getLiquidDnaConsumingAmount() {
-            return 25;
+            return SpaceApiaryDNACost_T2;
         }
 
         @Override
@@ -293,7 +349,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         protected static final int MINIMUM_MOTOR_TIER = 3;
 
-        protected static final int MAX_PARALLELS = 32768;
+        protected static final int MAX_PARALLELS = SpaceApiaryMaxParallels_T3;
 
         @Override
         protected int getMaxParallels() {
@@ -302,7 +358,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         protected int getLiquidDnaConsumingAmount() {
-            return 5;
+            return SpaceApiaryDNACost_T3;
         }
 
         @Override
@@ -353,7 +409,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         protected static final int MINIMUM_MOTOR_TIER = 4;
 
-        protected static final int MAX_PARALLELS = Integer.MAX_VALUE;
+        protected static final int MAX_PARALLELS = SpaceApiaryMaxParallels_T4;
 
         @Override
         protected int getMaxParallels() {
@@ -362,7 +418,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         protected int getLiquidDnaConsumingAmount() {
-            return 1;
+            return SpaceApiaryDNACost_T4;
         }
 
         @Override
