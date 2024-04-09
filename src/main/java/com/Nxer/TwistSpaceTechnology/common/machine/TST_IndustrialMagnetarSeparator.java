@@ -89,12 +89,6 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
         return ParallelMultiply_IndustrialMagnetarSeparator * GT_Utility.getTier(this.getMaxInputVoltage());
     }
 
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Collections.singletonList(RecipeMaps.electroMagneticSeparatorRecipes);
-    }
-
     @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.electroMagneticSeparatorRecipes;
