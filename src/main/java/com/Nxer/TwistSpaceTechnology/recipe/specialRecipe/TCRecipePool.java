@@ -38,7 +38,7 @@ public class TCRecipePool implements IRecipePool {
                 ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1), Materials.Steeleaf.getPlates(1),
                 new ItemStack(ModItems.spawnerMover, 1) });
         /* INDUSTRIAL_MAGIC_MATRIX */
-        if (Config.EnableIndustrialMagicMatrix) {
+        if (Config.Enable_IndustrialMagicMatrix) {
             ThaumcraftApi.addInfusionCraftingRecipe(
                 "INDUSTRIAL_MAGIC_MATRIX",
                 GTCMItemList.IndustrialMagicMatrix.get(1, 0),

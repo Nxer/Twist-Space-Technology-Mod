@@ -278,4 +278,9 @@ public final class ValueEnum {
     public static boolean SpaceApiaryEnableDisplayInfo = Config.SpaceApiaryEnableDisplayInfo;
     // endregion
 
+    // region
+    public static float SpeedBouns_IndustrialMagnetarSeparator = Config.SpeedBouns_IndustrialMagnetarSeparator;
+    public static float EuModifier_IndustrialMagnetarSeparator = Config.EuModifier_IndustrialMagnetarSeparator;
+    public static int ParallelMultiply_IndustrialMagnetarSeparator = Config.ParallelMultiply_IndustrialMagnetarSeparator;
+    // end region
 }
