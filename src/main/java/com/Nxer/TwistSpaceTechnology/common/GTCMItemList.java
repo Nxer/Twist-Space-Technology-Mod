@@ -214,6 +214,7 @@ public enum GTCMItemList {
     SpaceApiaryT4,
     LargeCanner,
 
+    BigBroArray,
     // MAX
     HighDimensionalExtend,
     HighDimensionalCircuitDoard,
@@ -319,6 +320,12 @@ public enum GTCMItemList {
     NuclearReactorStructure1,
     NuclearReactorStructure2,
     NuclearReactorStructure3,
+
+    ParallelismCasing0,
+    ParallelismCasing1,
+    ParallelismCasing2,
+    ParallelismCasing3,
+    ParallelismCasing4,
     FackRackHatch,
     RealRackHatch,
 

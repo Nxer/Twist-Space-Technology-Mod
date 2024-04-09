@@ -321,6 +321,8 @@ public class Config {
 
     public static boolean EnableLargeCanner = true;
 
+    public static boolean EnableIndustrialMagicMatrix = true;
+
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
