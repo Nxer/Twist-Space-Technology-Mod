@@ -47,7 +47,7 @@ public class TST_DisassemblerRecipeHandler {
             processSpecialDisassemblyRecipes();
             generateDisassemblyRecipes(GoodGeneratorRecipeMaps.componentAssemblyLineRecipes.getAllRecipes());
             generateDisassemblyRecipes(GTCMRecipe.MiracleTopRecipes.getAllRecipes());
-            generateDisassemblyRecipes(RecipeMaps.assemblylineVisualRecipes.getAllRecipes());
+            generateDisassemblyRecipes(GTCMRecipe.AssemblyLineWithoutResearchRecipe.getAllRecipes());
             generateDisassemblyRecipes(RecipeMaps.assemblerRecipes.getAllRecipes());
             generateDisassemblyRecipes(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes.getAllRecipes());
         }
@@ -96,9 +96,60 @@ public class TST_DisassemblerRecipeHandler {
                     .setEut(1024)
                     .setTier(GT_Utility.getTier(1024)));
 
+            // 1080k Space Cell
+            DisassemblerRecipeMap.put(
+                TST_ItemID.createNoNBT(CustomItemList.Empty1080SpCell.get(1)),
+                new TST_SimpleDisassemblyRecipe()
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.Empty1080SpCell.get(1)))
+                    .setItemAmount(1)
+                    .setOutputItems(CustomItemList.Empty180SpCell.get(6))
+                    .setEut(1024)
+                    .setTier(GT_Utility.getTier(1024)));
+
+            // 540k Space Cell
+            DisassemblerRecipeMap.put(
+                TST_ItemID.createNoNBT(CustomItemList.Empty540SpCell.get(1)),
+                new TST_SimpleDisassemblyRecipe()
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.Empty540SpCell.get(1)))
+                    .setItemAmount(1)
+                    .setOutputItems(CustomItemList.Empty180SpCell.get(3))
+                    .setEut(480)
+                    .setTier(GT_Utility.getTier(480)));
+
+            // 360k Space Cell
+            DisassemblerRecipeMap.put(
+                TST_ItemID.createNoNBT(CustomItemList.Empty360SpCell.get(1)),
+                new TST_SimpleDisassemblyRecipe()
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.Empty360SpCell.get(1)))
+                    .setItemAmount(1)
+                    .setOutputItems(CustomItemList.Empty180SpCell.get(2))
+                    .setEut(480)
+                    .setTier(GT_Utility.getTier(480)));
+
+            // 60k Cell
+            DisassemblerRecipeMap.put(
+                TST_ItemID.createNoNBT(CustomItemList.SixtyKCell.get(1)),
+                new TST_SimpleDisassemblyRecipe()
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.SixtyKCell.get(1)))
+                    .setItemAmount(1)
+                    .setOutputItems(ItemList.Cell_Empty.get(6))
+                    .setEut(60)
+                    .setTier(GT_Utility.getTier(60)));
+
+            // 30k Cell
+            DisassemblerRecipeMap.put(
+                TST_ItemID.createNoNBT(CustomItemList.ThirtyKCell.get(1)),
+                new TST_SimpleDisassemblyRecipe()
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.ThirtyKCell.get(1)))
+                    .setItemAmount(1)
+                    .setOutputItems(ItemList.Cell_Empty.get(3))
+                    .setEut(60)
+                    .setTier(GT_Utility.getTier(60)));
+
         }
 
         private final Set<TST_ItemID> blackList = Sets.newHashSet(
+            TST_ItemID.createNoNBT(ItemList.IC2_Mixed_Metal_Ingot.get(1)),
             TST_ItemID.createNoNBT(ItemList.Casing_Coil_Superconductor.get(1)),
             TST_ItemID.createNoNBT(ItemList.Casing_Fusion_Coil.get(1)),
             TST_ItemID.createNoNBT(Materials.Carbon.getNanite(1)),
