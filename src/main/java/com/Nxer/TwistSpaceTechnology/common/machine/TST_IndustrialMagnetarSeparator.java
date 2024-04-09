@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
-import static com.Nxer.TwistSpaceTechnology.config.Config.EuModifier_IndustrialMagnetarSeparator;
-import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelMultiply_IndustrialMagnetarSeparator;
-import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedBouns_IndustrialMagnetarSeparator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_IndustrialMagnetarSeparator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiply_IndustrialMagnetarSeparator;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBouns_IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -93,6 +93,11 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Collections.singletonList(RecipeMaps.electroMagneticSeparatorRecipes);
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.electroMagneticSeparatorRecipes;
     }
 
     @Override
