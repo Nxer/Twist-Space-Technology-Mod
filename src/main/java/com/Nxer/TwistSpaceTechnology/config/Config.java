@@ -7,10 +7,10 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import java.io.File;
 import java.math.BigInteger;
 
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IndustrialMagicMatrixRecipePool;
 import net.minecraftforge.common.config.Configuration;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
-import com.glodblock.github.inventory.item.*;
 
 // spotless:off
 public class Config {
@@ -50,7 +50,7 @@ public class Config {
     public static final String SingleBlocks = "SingleBlocks";
     public static final String spaceStation="spaceStation";
     public static final String SpaceApiary = "SpaceApiary";
-
+    public static final String IndustrialMagnetarSeparator = "IndustrialMagnetarSeparator";
     public static final String CombatStats = "CombatStats";
     // endregion
 
@@ -279,6 +279,7 @@ public class Config {
     public static int WirelessModeExtraEuCost_BallLightning = 64;
     public static int WirelessModeTickEveryProcess_BallLightning = 20;
     // end region
+
     // region StarcoreMiner
     public static boolean Enable_StarcoreMiner = true;
     public static byte HeightValueLimit_StarcoreMiner = 24;
@@ -301,6 +302,15 @@ public class Config {
 
     // endregion
 
+    // region
+    public static boolean Enable_IndustrialMagnetarSeparator = true;
+
+    public static float SpeedBouns_IndustrialMagnetarSeparator = 0.25F;
+    public static float EuModifier_IndustrialMagnetarSeparator = 0.8F;
+    public static int ParallelMultiply_IndustrialMagnetarSeparator = 8;
+
+
+    public static boolean EnableMegaTreeFarm = true;
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;
@@ -319,9 +329,9 @@ public class Config {
     public static boolean activateMegaSpaceStation = false;
     public static boolean activateCombatStats = false;
 
-    public static boolean EnableLargeCanner = true;
+    public static boolean Enable_LargeCanner = true;
 
-    public static boolean EnableIndustrialMagicMatrix = true;
+    public static boolean Enable_IndustrialMagicMatrix = true;
 
 
     public static void synchronizeConfiguration(File configFile) {
@@ -594,6 +604,17 @@ public class Config {
         // region Space Apiary
         EnableSpaceApiaryModule = configuration.getBoolean("EnableSpaceApiaryModule", SpaceApiary, EnableSpaceApiaryModule, "Enable Space Apiary Module.");
         enableDNAConsuming = configuration.getBoolean("enableDNAConsuming", SpaceApiary, enableDNAConsuming, "Enable DNA consuming for Space Apiary Modules. Type: boolean");
+        // endregion
+
+        // region Industrial Magnetar Separator
+        Enable_IndustrialMagnetarSeparator = configuration.getBoolean("EnableIndustrialMagnetarSeparator",IndustrialMagnetarSeparator, Enable_IndustrialMagnetarSeparator, "Enable Industrial Magnetar Separator.");;
+        SpeedBouns_IndustrialMagnetarSeparator = Float.parseFloat(configuration.getString("SpeedBonus_IndustrialMagnetarSeparator", IndustrialMagnetarSeparator, String.valueOf(SpeedBouns_IndustrialMagnetarSeparator), "Speed Bonus of Industrial Magnetar Separator. Type: float"));
+        EuModifier_IndustrialMagnetarSeparator = Float.parseFloat(configuration.getString("EuModifier_IndustrialMagnetarSeparator", IndustrialMagnetarSeparator, String.valueOf(EuModifier_IndustrialMagnetarSeparator), "Eu Modifier of Industrial Magnetar Separator. Type: float"));
+        ParallelMultiply_IndustrialMagnetarSeparator = configuration.getInt("ParallelMultiply_IndustrialMagnetarSeparator", IndustrialMagnetarSeparator, ParallelMultiply_IndustrialMagnetarSeparator, 1, 2147483646, "Parallel Multiply of Industrial Magnetar Separator. Type: int");;
+        // endregion
+
+        // region Mega Tree Farm
+
         // endregion
 
         TST_CleanRoom.loadConfig(configuration);

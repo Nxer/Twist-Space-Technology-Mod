@@ -9,8 +9,8 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TieEntity_IndustrialMagicMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IndustrialMagicMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
@@ -36,6 +36,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialMagnetarSeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
@@ -125,8 +126,9 @@ public class MachineLoader {
     public static ItemStack SpaceApiaryT3;
     public static ItemStack SpaceApiaryT4;
     public static ItemStack SpaceModuleTest;
-
     public static ItemStack LargeCanner;
+    public static ItemStack IndustrialMagnetarSeparator;
+    public static ItemStack MegaTreeFarm;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -454,8 +456,8 @@ public class MachineLoader {
         }
 
         //
-        if (Config.EnableIndustrialMagicMatrix) {
-            IndustrialMagicMatrix = new GT_TieEntity_IndustrialMagicMatrix(
+        if (Config.Enable_IndustrialMagicMatrix) {
+            IndustrialMagicMatrix = new GT_TileEntity_IndustrialMagicMatrix(
                 19047,
                 "IndustrialMagicMatrix",
                 // #tr NameIndustrialMagicMatrix
@@ -466,7 +468,7 @@ public class MachineLoader {
         }
 
         //
-        if (Config.EnableLargeCanner) {
+        if (Config.Enable_LargeCanner) {
             LargeCanner = new TST_LargeCanner(
                 19048,
                 "NameLargeCanner",
@@ -479,6 +481,17 @@ public class MachineLoader {
 
         BigBroArray = new TST_BigBroArray(19049, "BigBroArray.name", TextEnums.tr("BigBroArray.name")).getStackForm(1);
         GTCMItemList.BigBroArray.set(BigBroArray);
+
+        if (Config.Enable_IndustrialMagnetarSeparator) {
+            IndustrialMagnetarSeparator = new TST_IndustrialMagnetarSeparator(
+                19050,
+                "NameIndustrialMagnetarSeparator",
+                // #tr NameIndustrialMagnetarSeparator
+                // # Industrial Magnetar Separator
+                // #zh_CN 工业电磁离析机
+                TextEnums.tr("NameIndustrialMagnetarSeparator")).getStackForm(1);
+            GTCMItemList.IndustrialMagnetarSeparator.set(IndustrialMagnetarSeparator);
+        }
 
         // endregion
 

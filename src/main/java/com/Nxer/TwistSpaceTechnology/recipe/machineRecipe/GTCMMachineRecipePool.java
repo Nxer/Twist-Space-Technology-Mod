@@ -2620,7 +2620,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region Large Canner
-        if (Config.EnableLargeCanner) {
+        if (Config.Enable_LargeCanner) {
             GT_Values.RA
                 .stdBuilder()
                 .itemInputs(

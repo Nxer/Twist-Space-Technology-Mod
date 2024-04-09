@@ -213,8 +213,10 @@ public enum GTCMItemList {
     SpaceApiaryT3,
     SpaceApiaryT4,
     LargeCanner,
-
     BigBroArray,
+    IndustrialMagnetarSeparator,
+    MegaTreeFarm,
+
     // MAX
     HighDimensionalExtend,
     HighDimensionalCircuitDoard,
@@ -326,6 +328,7 @@ public enum GTCMItemList {
     ParallelismCasing2,
     ParallelismCasing3,
     ParallelismCasing4,
+    AntiMagneticCasing,
     FackRackHatch,
     RealRackHatch,
 

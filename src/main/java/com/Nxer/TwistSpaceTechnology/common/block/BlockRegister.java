@@ -109,6 +109,9 @@ public class BlockRegister {
                 BasicBlocks.MetaBlockCasing01,
                 new String[] { TextEnums.tr("Tooltips.ParallelismCasing.4") }));
 
+        GTCMItemList.AntiMagneticCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing("Anti-Magnetic Casing", (byte) 8, BasicBlocks.MetaBlockCasing01));
+
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier LV Tier", 0));

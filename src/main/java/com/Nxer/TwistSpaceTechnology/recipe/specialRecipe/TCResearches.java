@@ -52,7 +52,7 @@ public class TCResearches {
                                 ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1),
                                 Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1) })))
                 .registerResearchItem();
-        if (Config.EnableIndustrialMagicMatrix) {
+        if (Config.Enable_IndustrialMagicMatrix) {
             new ResearchItem(
                 "INDUSTRIAL_MAGIC_MATRIX",
                 "BASICS",

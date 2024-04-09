@@ -69,7 +69,7 @@ import thaumcraft.common.tiles.TileNodeEnergized;
 import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 
-public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT_TieEntity_IndustrialMagicMatrix>
+public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT_TileEntity_IndustrialMagicMatrix>
     implements ISidedInventory, IConstructable {
 
     // region default value
@@ -92,11 +92,11 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
 
     // region Class Constructor
 
-    public GT_TieEntity_IndustrialMagicMatrix(int aID, String aName, String aNameRegional) {
+    public GT_TileEntity_IndustrialMagicMatrix(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public GT_TieEntity_IndustrialMagicMatrix(String aName) {
+    public GT_TileEntity_IndustrialMagicMatrix(String aName) {
         super(aName);
     }
 
@@ -1594,8 +1594,8 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
     }
 
     @Override
-    public IStructureDefinition<GT_TieEntity_IndustrialMagicMatrix> getStructureDefinition() {
-        return StructureDefinition.<GT_TieEntity_IndustrialMagicMatrix>builder()
+    public IStructureDefinition<GT_TileEntity_IndustrialMagicMatrix> getStructureDefinition() {
+        return StructureDefinition.<GT_TileEntity_IndustrialMagicMatrix>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
             .addElement(
                 'A',
@@ -1609,14 +1609,14 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
             .addElement(
                 'D',
                 ofChain(
-                    GT_HatchElementBuilder.<GT_TieEntity_IndustrialMagicMatrix>builder()
+                    GT_HatchElementBuilder.<GT_TileEntity_IndustrialMagicMatrix>builder()
                         .atLeast(Maintenance, InputBus, OutputBus, Energy)
-                        .adder(GT_TieEntity_IndustrialMagicMatrix::addToMachineList)
+                        .adder(GT_TileEntity_IndustrialMagicMatrix::addToMachineList)
                         .casingIndex(1536)
                         .dot(1)
                         .build(),
                     ofBlock(magicCasing, 0),
-                    ofTileAdder(GT_TieEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))
+                    ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))
             .addElement('E', ofBlock(blockMetalDevice, 9))
             .addElement('F', ofBlock(BloodyThaumium.getBlock(), 0))
             .addElement('G', ofBlock(BloodyVoid.getBlock(), 0))
@@ -1640,7 +1640,7 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
             .addElement(
                 'Y',
                 ofChain(
-                    ofTileAdder(GT_TieEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
+                    ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
                     ofBlock(Blocks.air, 0)))
             .addElement('Z', ofBlock(blockCosmeticOpaque, 2))
             .addElement('0', ofBlock(blockStoneDevice, 2))
@@ -1828,7 +1828,7 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TieEntity_IndustrialMagicMatrix(this.mName);
+        return new GT_TileEntity_IndustrialMagicMatrix(this.mName);
     }
 
     @Override
