@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import java.io.File;
 import java.math.BigInteger;
 
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IndustrialMagicMatrixRecipePool;
 import net.minecraftforge.common.config.Configuration;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
@@ -310,7 +309,7 @@ public class Config {
     public static int ParallelMultiply_IndustrialMagnetarSeparator = 8;
 
 
-    public static boolean EnableMegaTreeFarm = true;
+    public static boolean Enable_MegaTreeFarm = true;
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;
