@@ -18,6 +18,8 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStatio
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
+import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -49,8 +51,10 @@ public class BlockRegister {
             NuclearReactorBlock,
             BlockNuclearReactor.innerItemBlock.class,
             NuclearReactorBlock.getUnlocalizedName());
+        GameRegistry.registerBlock(BasicBlocks.BlockPowerChair, ItemBlockPowerChair.class, "BlockPowerChair");
         BlockStar = new BlockStar();
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
+        GameRegistry.registerTileEntity(TilePowerChair.class, "TilePowerChair");
     }
 
     public static void registryBlockContainers() {

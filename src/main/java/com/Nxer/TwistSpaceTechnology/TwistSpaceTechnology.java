@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
+import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -27,6 +28,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import gregtech.api.util.GT_Recipe;
 
 @Mod(
@@ -105,6 +107,8 @@ public class TwistSpaceTechnology {
         MachineLoader.loadMachines();// Load Machines
         GT_Hatch_RackComputationMonitor.run();
         NEIHandler.IMCSender();// NEI reg
+        EntityRegistry
+            .registerModEntity(EntityMountableBlock.class, "TST:EntityMountableBlock", 1, this, 256, 20, false);
         // dimension provider
         // *unfinished */ DimensionManager.registerProviderType(WorldStats.dimensionProviderID,
         // WorldProviderAlfheim.class, false);
