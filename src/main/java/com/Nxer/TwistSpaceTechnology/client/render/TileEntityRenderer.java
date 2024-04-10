@@ -1,18 +1,20 @@
 package com.Nxer.TwistSpaceTechnology.client.render;
 
-import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
-import cpw.mods.fml.client.registry.ClientRegistry;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelCustom;
+
 import org.lwjgl.opengl.GL11;
+
+import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
 
 public class TileEntityRenderer extends TileEntitySpecialRenderer {
 
     private final IModelCustom Renderer;
     private final ResourceLocation textures;
-
 
     public TileEntityRenderer(final IModelCustom Renderer, final ResourceLocation textures) {
         this.Renderer = Renderer;

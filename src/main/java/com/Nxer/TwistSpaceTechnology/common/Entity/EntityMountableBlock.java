@@ -7,15 +7,18 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 
-public class EntityMountableBlock extends Entity  {
+public class EntityMountableBlock extends Entity {
+
     public static final HashMap<BlockPos, EntityMountableBlock> OCCUPIED = new HashMap<>();
+
     public EntityMountableBlock(World worldIn) {
         super(worldIn);
         noClip = true;
         height = 0.0001F;
         width = 0.0001F;
     }
-    public EntityMountableBlock(World world, BlockPos pos){
+
+    public EntityMountableBlock(World world, BlockPos pos) {
         super(world);
         setPosition(pos.x + 0.5D, pos.y + 0.68D, pos.z + 0.5D);
         noClip = true;
@@ -23,16 +26,16 @@ public class EntityMountableBlock extends Entity  {
         width = 0.0001F;
         OCCUPIED.put(pos, this);
     }
+
     @Override
-    public void onUpdate()
-    {
-        if(worldObj.isRemote)
-        {
-            if (this.riddenByEntity == null){
+    public void onUpdate() {
+        if (worldObj.isRemote) {
+            if (this.riddenByEntity == null) {
                 this.setDead();
             }
         }
     }
+
     /**
      *
      */

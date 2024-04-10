@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass;
 
-import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
-import com.Nxer.TwistSpaceTechnology.util.BlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -13,12 +11,14 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
+import com.Nxer.TwistSpaceTechnology.util.BlockPos;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockPowerChair extends Block{
+public class BlockPowerChair extends Block {
 
     public BlockPowerChair() {
         super(Material.iron);
@@ -49,7 +49,6 @@ public class BlockPowerChair extends Block{
     public boolean canRenderInPass(int a) {
         return true;
     }
-
 
     @Override
     public boolean renderAsNormalBlock() {
@@ -83,29 +82,28 @@ public class BlockPowerChair extends Block{
         }
     }
 
-
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
-                                    float par8, float par9) {
-        if (world.isRemote){
+        float par8, float par9) {
+        if (world.isRemote) {
             return false;
-        }else {
+        } else {
             TileEntity tile = world.getTileEntity(x, y, z);
-            if (tile instanceof TilePowerChair){
+            if (tile instanceof TilePowerChair) {
                 int metadata = world.getBlockMetadata(x, y, z);
                 metadata %= 4;
                 if (metadata == 0) {
                     player.rotationYaw = 90.0F;
-                    EntityMountableBlock entityMountableBlock = new EntityMountableBlock(world,new BlockPos(x,y,z));
+                    EntityMountableBlock entityMountableBlock = new EntityMountableBlock(world, new BlockPos(x, y, z));
                     world.spawnEntityInWorld(entityMountableBlock);
                     player.mountEntity(entityMountableBlock);
 
-                   return true;
+                    return true;
                 }
 
                 if (metadata == 1) {
                     player.rotationYaw = -90.0F;
-                    EntityMountableBlock entityMountableBlock = new EntityMountableBlock(world,new BlockPos(x,y,z));
+                    EntityMountableBlock entityMountableBlock = new EntityMountableBlock(world, new BlockPos(x, y, z));
                     world.spawnEntityInWorld(entityMountableBlock);
                     player.mountEntity(entityMountableBlock);
                     return true;
@@ -113,7 +111,7 @@ public class BlockPowerChair extends Block{
 
                 if (metadata == 2) {
                     player.rotationYaw = 180.0F;
-                    EntityMountableBlock entityMountableBlock = new EntityMountableBlock(world,new BlockPos(x,y,z));
+                    EntityMountableBlock entityMountableBlock = new EntityMountableBlock(world, new BlockPos(x, y, z));
                     world.spawnEntityInWorld(entityMountableBlock);
                     player.mountEntity(entityMountableBlock);
                     return true;
@@ -121,20 +119,21 @@ public class BlockPowerChair extends Block{
 
                 if (metadata == 3) {
                     player.rotationYaw = 0.0F;
-                    EntityMountableBlock entityMountableBlock = new EntityMountableBlock(world,new BlockPos(x,y,z));
+                    EntityMountableBlock entityMountableBlock = new EntityMountableBlock(world, new BlockPos(x, y, z));
                     world.spawnEntityInWorld(entityMountableBlock);
                     player.mountEntity(entityMountableBlock);
                     return true;
-            }else return false;
+                } else return false;
+            }
+            return false;
         }
-        return false;
-    }
     }
 
     @Override
     public TileEntity createTileEntity(World world, int metadata) {
         return new TilePowerChair();
     }
+
     @Override
     public int getRenderType() {
         return -1;

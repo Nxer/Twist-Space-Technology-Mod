@@ -1,21 +1,20 @@
 package com.Nxer.TwistSpaceTechnology.common.tile;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockPowerChair;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockPowerChair;
 
 public class TilePowerChair extends TileEntity {
 
     public EnumFacing Facing;
     public int facing;
 
-
-
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-       return super.getRenderBoundingBox();
+        return super.getRenderBoundingBox();
     }
 
     @Override
@@ -32,6 +31,5 @@ public class TilePowerChair extends TileEntity {
         return 0;
 
     }
-
 
 }
