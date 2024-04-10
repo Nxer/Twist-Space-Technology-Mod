@@ -1,14 +1,15 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderer;
-import com.Nxer.TwistSpaceTechnology.client.render.TileEntityRenderer;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockPowerChair;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockPowerChair;
+import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderer;
+import com.Nxer.TwistSpaceTechnology.client.render.TileEntityRenderer;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
 
 public class RendereLoader {
 
