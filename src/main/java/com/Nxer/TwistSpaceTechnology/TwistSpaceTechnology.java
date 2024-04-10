@@ -1,14 +1,7 @@
 package com.Nxer.TwistSpaceTechnology;
 
-import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
-
-import java.util.Collection;
-import java.util.HashSet;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
+import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -18,16 +11,18 @@ import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import gregtech.api.util.GT_Recipe;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Collection;
+import java.util.HashSet;
+
+import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
 
 @Mod(
     modid = Tags.MODID,
@@ -105,6 +100,7 @@ public class TwistSpaceTechnology {
         MachineLoader.loadMachines();// Load Machines
         GT_Hatch_RackComputationMonitor.run();
         NEIHandler.IMCSender();// NEI reg
+        EntityRegistry.registerModEntity(EntityMountableBlock.class,"TST:EntityMountableBlock", 1, this, 256, 20, false);
         // dimension provider
         // *unfinished */ DimensionManager.registerProviderType(WorldStats.dimensionProviderID,
         // WorldProviderAlfheim.class, false);
