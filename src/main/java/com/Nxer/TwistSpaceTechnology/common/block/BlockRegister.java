@@ -51,7 +51,7 @@ public class BlockRegister {
             NuclearReactorBlock,
             BlockNuclearReactor.innerItemBlock.class,
             NuclearReactorBlock.getUnlocalizedName());
-        GameRegistry.registerBlock(BlockPowerChair, ItemBlockPowerChair.class, "BlockPowerChair");
+        GameRegistry.registerBlock(BasicBlocks.BlockPowerChair, ItemBlockPowerChair.class, "BlockPowerChair");
         BlockStar = new BlockStar();
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
         GameRegistry.registerTileEntity(TilePowerChair.class, "TilePowerChair");
