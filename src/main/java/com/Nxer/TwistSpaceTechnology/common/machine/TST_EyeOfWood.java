@@ -149,7 +149,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         }
 
         int successChance = getSuccessChance();
-        TwistSpaceTechnology.LOG.info("success chance : " + successChance);
+        // TwistSpaceTechnology.LOG.info("success chance : " + successChance);
         resetStored();
 
         if (successChance > XSTR.XSTR_INSTANCE.nextInt(10000)) {
@@ -165,6 +165,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
 
         }
 
+        updateSlots();
         mMaxProgresstime = ValueEnum.TicksPerProcessing_EyeOfWood;
 
         return CheckRecipeResultRegistry.SUCCESSFUL;
