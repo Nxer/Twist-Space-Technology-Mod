@@ -1072,3 +1072,4 @@ Tooltip_IndustrialMagnetarSeparator.01=300% faster than using single block machi
 Tooltip_IndustrialMagnetarSeparator.02=Only uses 80% of the EU/t normally required
 Tooltip_IndustrialMagnetarSeparator.03=Processes eight items per voltage tier
 Tooltip_IndustrialMagnetarSeparator.casingAmount=§69x §7Anti-Magnetic Casing (minimum)
+BlockPowerChair.0.name=PowerChair
