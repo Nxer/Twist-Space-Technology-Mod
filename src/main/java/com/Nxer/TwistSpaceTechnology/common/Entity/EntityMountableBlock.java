@@ -1,11 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.Entity;
 
-import com.Nxer.TwistSpaceTechnology.util.BlockPos;
+import java.util.HashMap;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
+import com.Nxer.TwistSpaceTechnology.util.BlockPos;
 
 public class EntityMountableBlock extends Entity {
 

@@ -1,5 +1,13 @@
 package com.Nxer.TwistSpaceTechnology;
 
+import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
+
+import java.util.Collection;
+import java.util.HashSet;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
 import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
@@ -11,6 +19,7 @@ import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -21,13 +30,6 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import gregtech.api.util.GT_Recipe;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.Collection;
-import java.util.HashSet;
-
-import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
 
 @Mod(
     modid = Tags.MODID,
