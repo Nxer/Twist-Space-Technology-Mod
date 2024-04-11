@@ -162,9 +162,9 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     private boolean calculateSuccess(ArrayList<FluidStack> inputFluid) {
         double r = Math.random();
-        if (r <= (consumeUUM(inputFluid) ? pChanceEnhanced : pChance)){
+        if (r <= (consumeUUM(inputFluid) ? pChanceEnhanced : pChance)) {
             return consumeHoney(inputFluid);
-        }else return false;
+        } else return false;
     }
 
     private void calculateTime(int size) {
