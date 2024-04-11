@@ -100,19 +100,19 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         processSize = 0;
         outputStacks = new ArrayList<>();
         ArrayList<ItemStack> inputStacks = getStoredInputs();
+        ArrayList<FluidStack> inputFluid = getStoredFluids();
         if (inputStacks.isEmpty()) {
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
         for (ItemStack stack : inputStacks) {
             if (beeRoot.getType(stack) == EnumBeeType.DRONE) {
                 while (stack.stackSize > 0) {
-                    if (!consumeHoney()) {
-                        break;
-                    }
-                    if (calculateSuccess(consumeUUM())) {
-                        IBee bee = beeRoot.getMember(stack);
-                        ItemStack princess = beeRoot.getMemberStack(bee.copy(), EnumBeeType.PRINCESS.ordinal());
-                        outputStacks.add(princess);
+                    if (calculateSuccess(consumeUUM(inputFluid))) {
+                        if (consumeHoney(inputFluid)) {
+                            IBee bee = beeRoot.getMember(stack);
+                            ItemStack princess = beeRoot.getMemberStack(bee.copy(), EnumBeeType.PRINCESS.ordinal());
+                            outputStacks.add(princess);
+                        }else break;
                     }
                     stack.stackSize--;
                     processSize++;
@@ -128,43 +128,43 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         return CheckRecipeResultRegistry.NO_RECIPE;
     }
 
-    private boolean consumeHoney() {
-        if (getStoredFluids() == null || getStoredFluids().isEmpty()) return false;
+    private boolean consumeHoney(ArrayList<FluidStack> inputFluid) {
+        if (inputFluid == null || inputFluid.isEmpty()) return false;
         int cost = pHoneyCost;
-        for (FluidStack fluid : getStoredFluids()) {
+        for (FluidStack fluid : inputFluid) {
             if (fluid.getFluid() == Materials.Honey.mFluid) {
                 if (fluid.amount >= cost) {
                     fluid.amount -= cost;
                     return true;
                 } else {
-                    cost -= fluid.amount;
                     fluid.amount = 0;
+                    return false;
                 }
             }
         }
-        return true;
+        return false;
     }
 
-    private boolean consumeUUM() {
-        if (getStoredFluids() == null || getStoredFluids().isEmpty()) return false;
+    private boolean consumeUUM(ArrayList<FluidStack> inputFluid) {
+        if (inputFluid == null || inputFluid.isEmpty()) return false;
         int cost = pUUMCost;
-        for (FluidStack fluid : getStoredFluids()) {
+        for (FluidStack fluid : inputFluid) {
             if (fluid.getFluid() == Materials.UUMatter.mFluid) {
                 if (fluid.amount >= cost) {
                     fluid.amount -= cost;
                     return true;
                 } else {
-                    cost -= fluid.amount;
                     fluid.amount = 0;
+                    return false;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     private boolean calculateSuccess(boolean enhance) {
         double r = Math.random();
-        return r <= (enhance ? pChance : pChanceEnhanced);
+        return r <= (enhance ? pChanceEnhanced : pChance);
     }
 
     private void calculateTime(int size) {
