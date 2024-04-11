@@ -7,7 +7,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIV
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_GLOW;
 import static gregtech.api.util.GT_Utility.filterValidMTEs;
-import static net.minecraft.util.StatCollector.translateToLocal;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -107,19 +106,19 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("")
-            .addInfo("Controller block for the Cleanroom")
-            .addInfo("Consumes 40 EU/t when first turned on")
-            .addInfo("and 4 EU/t once at 100% efficiency")
-            .addInfo("If you use an LV energy hatch, it will actually accept 2A instead of just 1A.")
-            .addInfo(
-                "MV+ energy hatches just accept 1A as usual. For HV+ the cleanroom will overclock and gain efficiency faster.")
-            .addInfo(translateToLocal("tst.cleanroom.desc.0"))
-            .addInfo("the height of empty space within")
-            .addInfo("Machines that cause pollution aren't allowed to be put in.")
-            .addInfo("WATCH OUT! DO NOT DESTROY STRUCTURE BLOCK WHEN MACHINE IS WORKING!")
-            .addInfo("buffered by TST")
-            .addInfo("author shordinger")
+        tt.addMachineType(TextLocalization.Tooltip_TST_CleanRoom_MachineType)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_00)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_01)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_02)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_03)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_04)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_05)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_06)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_07)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_08)
+            .addInfo(TextLocalization.Tooltip_TST_CleanRoom_09)
+            .addInfo(TextLocalization.StructureTooComplex)
+            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addSeparator()
             .beginVariableStructureBlock(3, 15, 4, 15, 3, 15, true)
             .addController("Top center")

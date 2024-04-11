@@ -796,5 +796,19 @@ public class TextLocalization {
     public static final String Tooltip_SpaceApiary_t4_desc5 = texter("But humans have nothing to repay the bees.", "Tooltip_SpaceApiary_t4_desc5");
     // endregion
 
+    // region TST Cleanroom
+    public static final String Tooltip_TST_CleanRoom_MachineType = texter("CleanRoom","Tooltip_TST_CleanRoom_MachineType");
+    public static final String Tooltip_TST_CleanRoom_00 = texter("Controller block for the Cleanroom","Tooltip_TST_CleanRoom_00");
+    public static final String Tooltip_TST_CleanRoom_01 = texter("Consumes 40 EU/t when first turned on","Tooltip_TST_CleanRoom_01");
+    public static final String Tooltip_TST_CleanRoom_02 = texter("Test","Tooltip_TST_CleanRoom_02");
+    public static final String Tooltip_TST_CleanRoom_03 = texter("If you use an LV energy hatch, it will actually accept 2A instead of just 1A.","Tooltip_TST_CleanRoom_03");
+    public static final String Tooltip_TST_CleanRoom_04 = texter("MV+ energy hatches just accept 1A as usual. For HV+ the cleanroom will overclock and gain efficiency faster.","Tooltip_TST_CleanRoom_04");
+    public static final String Tooltip_TST_CleanRoom_05 = texter("always clean，can be use as laser nodes，max 64*64*64","Tooltip_TST_CleanRoom_05");
+    public static final String Tooltip_TST_CleanRoom_06 = texter("Machines that cause pollution aren't allowed to be put in.","Tooltip_TST_CleanRoom_06");
+    public static final String Tooltip_TST_CleanRoom_07 = texter("WATCH OUT! DO NOT DESTROY STRUCTURE BLOCK WHEN MACHINE IS WORKING!","Tooltip_TST_CleanRoom_07");
+    public static final String Tooltip_TST_CleanRoom_08 = texter("Buffered by TST","Tooltip_TST_CleanRoom_08");
+    public static final String Tooltip_TST_CleanRoom_09 = texter("Author:Shordinger","Tooltip_TST_CleanRoom_09");
+    // endregion
+
 }
 // spotless:on
