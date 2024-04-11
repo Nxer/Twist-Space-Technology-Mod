@@ -38,7 +38,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -70,7 +69,7 @@ import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 
 public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT_TileEntity_IndustrialMagicMatrix>
-    implements ISidedInventory, IConstructable {
+    implements ISidedInventory {
 
     // region default value
 
@@ -1593,64 +1592,69 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             true);
     }
 
+    private static IStructureDefinition<GT_TileEntity_IndustrialMagicMatrix> STRUCTURE_DEFINITION = null;
+
     @Override
     public IStructureDefinition<GT_TileEntity_IndustrialMagicMatrix> getStructureDefinition() {
-        return StructureDefinition.<GT_TileEntity_IndustrialMagicMatrix>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-            .addElement(
-                'A',
-                ofChain(
-                    onElementPass(x -> x.onEssentiaCellFound(1), ofBlock(Loaders.essentiaCell, 0)),
-                    onElementPass(x -> x.onEssentiaCellFound(2), ofBlock(Loaders.essentiaCell, 1)),
-                    onElementPass(x -> x.onEssentiaCellFound(3), ofBlock(Loaders.essentiaCell, 2)),
-                    onElementPass(x -> x.onEssentiaCellFound(4), ofBlock(Loaders.essentiaCell, 3))))
-            .addElement('B', ofBlock(GregTech_API.sBlockCasings8, 8))
-            .addElement('C', ofBlock(GregTech_API.sBlockMetal4, 10))
-            .addElement(
-                'D',
-                ofChain(
-                    GT_HatchElementBuilder.<GT_TileEntity_IndustrialMagicMatrix>builder()
-                        .atLeast(Maintenance, InputBus, OutputBus, Energy)
-                        .adder(GT_TileEntity_IndustrialMagicMatrix::addToMachineList)
-                        .casingIndex(1536)
-                        .dot(1)
-                        .build(),
-                    ofBlock(magicCasing, 0),
-                    ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))
-            .addElement('E', ofBlock(blockMetalDevice, 9))
-            .addElement('F', ofBlock(BloodyThaumium.getBlock(), 0))
-            .addElement('G', ofBlock(BloodyVoid.getBlock(), 0))
-            .addElement('H', ofBlock(blockCrystalDeep, 0))
-            .addElement('I', ofBlock(blockCosmeticSolid, 0))
-            .addElement('J', ofBlock(blockCosmeticSolid, 4))
-            .addElement('K', ofBlock(blockCosmeticSolid, 6))
-            .addElement('L', ofBlock(blockCosmeticSolid, 7))
-            .addElement('M', ofBlock(blockMetalDevice, 3))
-            .addElement('N', ofChain(ofBlock(blockCosmeticSolid, 6), ofBlock(blockStoneDevice, 6)))
-            .addElement('O', ofBlock(translucent, 0))
-            .addElement('P', ofBlock(crystalBlock, 0))
-            .addElement('Q', ofBlock(crystalBlock, 1))
-            .addElement('R', ofBlock(crystalBlock, 2))
-            .addElement('S', ofBlock(crystalBlock, 3))
-            .addElement('T', ofBlock(crystalBlock, 4))
-            .addElement('U', ofBlock(crystalBlock, 5))
-            .addElement('V', ofBlock(dustBlock, 0))
-            .addElement('W', ofBlock(voidBlock, 0))
-            .addElement('X', ofBlock(thauminiteBlock, 0))
-            .addElement(
-                'Y',
-                ofChain(
-                    ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
-                    ofBlock(Blocks.air, 0)))
-            .addElement('Z', ofBlock(blockCosmeticOpaque, 2))
-            .addElement('0', ofBlock(blockStoneDevice, 2))
-            .addElement('1', ofFrame(Materials.Thaumium))
-            .addElement('3', ofBlock(blockStoneDevice, 10))
-            .addElement('5', ofBlock(blockStoneDevice, 11))
-            .addElement('6', ofChain(ofBlock(blockCosmeticSolid, 7), ofBlock(blockStoneDevice, 7)))
-            .addElement('7', ofBlock(blockStoneDevice, 1))
-            .addElement('8', ofBlockAnyMeta(Blocks.beacon, 1))
-            .build();
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_IndustrialMagicMatrix>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addElement(
+                    'A',
+                    ofChain(
+                        onElementPass(x -> x.onEssentiaCellFound(1), ofBlock(Loaders.essentiaCell, 0)),
+                        onElementPass(x -> x.onEssentiaCellFound(2), ofBlock(Loaders.essentiaCell, 1)),
+                        onElementPass(x -> x.onEssentiaCellFound(3), ofBlock(Loaders.essentiaCell, 2)),
+                        onElementPass(x -> x.onEssentiaCellFound(4), ofBlock(Loaders.essentiaCell, 3))))
+                .addElement('B', ofBlock(GregTech_API.sBlockCasings8, 8))
+                .addElement('C', ofBlock(GregTech_API.sBlockMetal4, 10))
+                .addElement(
+                    'D',
+                    ofChain(
+                        GT_HatchElementBuilder.<GT_TileEntity_IndustrialMagicMatrix>builder()
+                            .atLeast(Maintenance, InputBus, OutputBus, Energy)
+                            .adder(GT_TileEntity_IndustrialMagicMatrix::addToMachineList)
+                            .casingIndex(1536)
+                            .dot(1)
+                            .build(),
+                        ofBlock(magicCasing, 0),
+                        ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))
+                .addElement('E', ofBlock(blockMetalDevice, 9))
+                .addElement('F', ofBlock(BloodyThaumium.getBlock(), 0))
+                .addElement('G', ofBlock(BloodyVoid.getBlock(), 0))
+                .addElement('H', ofBlock(blockCrystalDeep, 0))
+                .addElement('I', ofBlock(blockCosmeticSolid, 0))
+                .addElement('J', ofBlock(blockCosmeticSolid, 4))
+                .addElement('K', ofBlock(blockCosmeticSolid, 6))
+                .addElement('L', ofBlock(blockCosmeticSolid, 7))
+                .addElement('M', ofBlock(blockMetalDevice, 3))
+                .addElement('N', ofChain(ofBlock(blockCosmeticSolid, 6), ofBlock(blockStoneDevice, 6)))
+                .addElement('O', ofBlock(translucent, 0))
+                .addElement('P', ofBlock(crystalBlock, 0))
+                .addElement('Q', ofBlock(crystalBlock, 1))
+                .addElement('R', ofBlock(crystalBlock, 2))
+                .addElement('S', ofBlock(crystalBlock, 3))
+                .addElement('T', ofBlock(crystalBlock, 4))
+                .addElement('U', ofBlock(crystalBlock, 5))
+                .addElement('V', ofBlock(dustBlock, 0))
+                .addElement('W', ofBlock(voidBlock, 0))
+                .addElement('X', ofBlock(thauminiteBlock, 0))
+                .addElement(
+                    'Y',
+                    ofChain(
+                        ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
+                        ofBlock(Blocks.air, 0)))
+                .addElement('Z', ofBlock(blockCosmeticOpaque, 2))
+                .addElement('0', ofBlock(blockStoneDevice, 2))
+                .addElement('1', ofFrame(Materials.Thaumium))
+                .addElement('3', ofBlock(blockStoneDevice, 10))
+                .addElement('5', ofBlock(blockStoneDevice, 11))
+                .addElement('6', ofChain(ofBlock(blockCosmeticSolid, 7), ofBlock(blockStoneDevice, 7)))
+                .addElement('7', ofBlock(blockStoneDevice, 1))
+                .addElement('8', ofBlockAnyMeta(Blocks.beacon, 1))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     public final boolean addInfusionProvider(TileEntity aTileEntity) {
