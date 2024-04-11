@@ -7,6 +7,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIV
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_GLOW;
 import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static net.minecraft.util.StatCollector.translateToLocal;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -113,7 +114,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
             .addInfo("If you use an LV energy hatch, it will actually accept 2A instead of just 1A.")
             .addInfo(
                 "MV+ energy hatches just accept 1A as usual. For HV+ the cleanroom will overclock and gain efficiency faster.")
-            .addInfo("tst.cleanroom.desc.0")
+            .addInfo(translateToLocal("tst.cleanroom.desc.0"))
             .addInfo("the height of empty space within")
             .addInfo("Machines that cause pollution aren't allowed to be put in.")
             .addInfo("WATCH OUT! DO NOT DESTROY STRUCTURE BLOCK WHEN MACHINE IS WORKING!")
