@@ -112,7 +112,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
                             IBee bee = beeRoot.getMember(stack);
                             ItemStack princess = beeRoot.getMemberStack(bee.copy(), EnumBeeType.PRINCESS.ordinal());
                             outputStacks.add(princess);
-                        }else break;
+                        } else break;
                     }
                     stack.stackSize--;
                     processSize++;
