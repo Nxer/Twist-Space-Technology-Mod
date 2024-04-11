@@ -107,13 +107,11 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         for (ItemStack stack : inputStacks) {
             if (beeRoot.getType(stack) == EnumBeeType.DRONE) {
                 while (stack.stackSize > 0) {
-                    if (calculateSuccess(consumeUUM(inputFluid))) {
-                        if (consumeHoney(inputFluid)) {
-                            IBee bee = beeRoot.getMember(stack);
-                            ItemStack princess = beeRoot.getMemberStack(bee.copy(), EnumBeeType.PRINCESS.ordinal());
-                            outputStacks.add(princess);
-                        } else break;
-                    }
+                    if (calculateSuccess(consumeUUM(inputFluid), consumeHoney(inputFluid))) {
+                        IBee bee = beeRoot.getMember(stack);
+                        ItemStack princess = beeRoot.getMemberStack(bee.copy(), EnumBeeType.PRINCESS.ordinal());
+                        outputStacks.add(princess);
+                    } else break;
                     stack.stackSize--;
                     processSize++;
                 }
@@ -162,9 +160,9 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         return false;
     }
 
-    private boolean calculateSuccess(boolean enhance) {
+    private boolean calculateSuccess(boolean enhance, boolean consumeHoney) {
         double r = Math.random();
-        return r <= (enhance ? pChanceEnhanced : pChance);
+        return r <= (enhance ? pChanceEnhanced : pChance) && consumeHoney;
     }
 
     private void calculateTime(int size) {
