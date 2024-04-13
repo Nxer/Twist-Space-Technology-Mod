@@ -29,6 +29,8 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -118,6 +120,16 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
             case 3 -> GoodGeneratorRecipeMaps.preciseAssemblerRecipes;
             default -> GTCMRecipe.AssemblyLineWithoutResearchRecipe;
         };
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(
+            GoodGeneratorRecipeMaps.componentAssemblyLineRecipes,
+            RecipeMaps.assemblerRecipes,
+            GoodGeneratorRecipeMaps.preciseAssemblerRecipes,
+            GTCMRecipe.AssemblyLineWithoutResearchRecipe);
     }
 
     public String[] getInfoData() {

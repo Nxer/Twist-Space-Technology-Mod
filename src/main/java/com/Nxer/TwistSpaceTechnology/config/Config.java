@@ -10,7 +10,6 @@ import java.math.BigInteger;
 import net.minecraftforge.common.config.Configuration;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
-import com.glodblock.github.inventory.item.*;
 
 // spotless:off
 public class Config {
@@ -50,8 +49,10 @@ public class Config {
     public static final String SingleBlocks = "SingleBlocks";
     public static final String spaceStation="spaceStation";
     public static final String SpaceApiary = "SpaceApiary";
-
+    public static final String IndustrialMagnetarSeparator = "IndustrialMagnetarSeparator";
     public static final String CombatStats = "CombatStats";
+    public static final String IndustrialMagicMatrix = "IndustrialMagicMatrix";
+    public static final String PowerChairBGM = "PowerChairBGM";
     // endregion
 
     // region General
@@ -142,7 +143,7 @@ public class Config {
     // region Magnetic Domain Constructor
     public static byte Mode_Default_MagneticDomainConstructor = 0;
     public static float SpeedBonus_MultiplyPerTier_MagneticDomainConstructor = 0.8F;
-    public static int Parallel_PerRing_MagneticDomainConstructor = 18;
+    public static int Parallel_PerRing_MagneticDomainConstructor = 32;
     // endregion
 
     // region Silksong
@@ -279,6 +280,7 @@ public class Config {
     public static int WirelessModeExtraEuCost_BallLightning = 64;
     public static int WirelessModeTickEveryProcess_BallLightning = 20;
     // end region
+
     // region StarcoreMiner
     public static boolean Enable_StarcoreMiner = true;
     public static byte HeightValueLimit_StarcoreMiner = 24;
@@ -301,6 +303,16 @@ public class Config {
 
     // endregion
 
+    // region Industrial Magnetar Separator
+    public static boolean Enable_IndustrialMagnetarSeparator = true;
+    public static float SpeedBouns_IndustrialMagnetarSeparator = 0.25F;
+    public static float EuModifier_IndustrialMagnetarSeparator = 0.8F;
+    public static int ParallelMultiply_IndustrialMagnetarSeparator = 8;
+
+    // endregion
+
+    public static boolean Enable_MegaTreeFarm = true;
+
     // region Infinite Air Hatch
 
     public static double secondsOfInfiniteAirHatchFillFull = 1;
@@ -314,13 +326,32 @@ public class Config {
     // region Space Apiary
     public static boolean EnableSpaceApiaryModule = true;
     public static boolean enableDNAConsuming = true;
+    public static int SpaceApiaryCycleTime = 100;
+    public static int SpaceApiaryDNACost_T1 = 100;
+    public static int SpaceApiaryDNACost_T2 = 25;
+    public static int SpaceApiaryDNACost_T3 = 5;
+    public static int SpaceApiaryDNACost_T4 = 1;
+    public static int SpaceApiaryMaxParallels_T1 = 256;
+    public static int SpaceApiaryMaxParallels_T2 = 4096;
+    public static int SpaceApiaryMaxParallels_T3 = 32768;
+    public static int SpaceApiaryMaxParallels_T4 = 2147483647;
+    public static boolean SpaceApiaryEnableDisplayInfo = true;
+
+
     // endregion
 
     public static boolean activateMegaSpaceStation = false;
     public static boolean activateCombatStats = false;
 
-    public static boolean EnableLargeCanner = true;
+    public static boolean Enable_LargeCanner = true;
 
+    // region IndustrialMagicMatrix
+    public static boolean Enable_IndustrialMagicMatrix = true;
+    // endregion
+
+    // region PowerChair BGM
+    public static boolean Enable_PowerChairBGM = true;
+    // endregion
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
@@ -592,6 +623,35 @@ public class Config {
         // region Space Apiary
         EnableSpaceApiaryModule = configuration.getBoolean("EnableSpaceApiaryModule", SpaceApiary, EnableSpaceApiaryModule, "Enable Space Apiary Module.");
         enableDNAConsuming = configuration.getBoolean("enableDNAConsuming", SpaceApiary, enableDNAConsuming, "Enable DNA consuming for Space Apiary Modules. Type: boolean");
+        SpaceApiaryCycleTime = configuration.getInt("SpaceApiaryCycleTime", SpaceApiary, SpaceApiaryCycleTime, 1, 2147483646, "Ticks required for each run. Type: int");
+        SpaceApiaryDNACost_T1 = configuration.getInt("SpaceApiaryDNACost_T1", SpaceApiary, SpaceApiaryDNACost_T1,1, 2147483646, "DNA needed per parallel for Space Apiary Module MK-I. Type: int");
+        SpaceApiaryDNACost_T2 = configuration.getInt("SpaceApiaryDNACost_T2", SpaceApiary, SpaceApiaryDNACost_T2, 1, 2147483646,"DNA needed per parallel for Space Apiary Module MK-II. Type: int");
+        SpaceApiaryDNACost_T3 = configuration.getInt("SpaceApiaryDNACost_T3", SpaceApiary, SpaceApiaryDNACost_T3,1, 2147483646, "DNA needed per parallel for Space Apiary Module MK-III. Type: int");
+        SpaceApiaryDNACost_T4 = configuration.getInt("SpaceApiaryDNACost_T4", SpaceApiary, SpaceApiaryDNACost_T4,1, 2147483646, "DNA needed per parallel for Space Apiary Module MK-IV. Type: int");
+        SpaceApiaryMaxParallels_T1 = configuration.getInt("SpaceApiaryMaxParallels_T1", SpaceApiary, SpaceApiaryMaxParallels_T1, 1, 2147483646, "Max parallels for Space Apiary Module MK-I. Type: int");
+        SpaceApiaryMaxParallels_T2 = configuration.getInt("SpaceApiaryMaxParallels_T2", SpaceApiary, SpaceApiaryMaxParallels_T2, 1, 2147483646, "Max parallels for Space Apiary Module MK-II. Type: int");
+        SpaceApiaryMaxParallels_T3 = configuration.getInt("SpaceApiaryMaxParallels_T3", SpaceApiary, SpaceApiaryMaxParallels_T3, 1, 2147483646, "Max parallels for Space Apiary Module MK-III. Type: int");
+        SpaceApiaryMaxParallels_T4 = configuration.getInt("SpaceApiaryMaxParallels_T4", SpaceApiary, SpaceApiaryMaxParallels_T4, 1, 2147483646, "Max parallels for Space Apiary Module MK-IV. Type: int");
+        SpaceApiaryEnableDisplayInfo = configuration.getBoolean("SpaceApiaryEnableDisplayInfo", SpaceApiary, SpaceApiaryEnableDisplayInfo, "Enable output display in controller. Type: boolean");
+        // endregion
+
+        // region Industrial Magnetar Separator
+        Enable_IndustrialMagnetarSeparator = configuration.getBoolean("EnableIndustrialMagnetarSeparator",IndustrialMagnetarSeparator, Enable_IndustrialMagnetarSeparator, "Enable Industrial Magnetar Separator.");;
+        SpeedBouns_IndustrialMagnetarSeparator = Float.parseFloat(configuration.getString("SpeedBonus_IndustrialMagnetarSeparator", IndustrialMagnetarSeparator, String.valueOf(SpeedBouns_IndustrialMagnetarSeparator), "Speed Bonus of Industrial Magnetar Separator. Type: float"));
+        EuModifier_IndustrialMagnetarSeparator = Float.parseFloat(configuration.getString("EuModifier_IndustrialMagnetarSeparator", IndustrialMagnetarSeparator, String.valueOf(EuModifier_IndustrialMagnetarSeparator), "Eu Modifier of Industrial Magnetar Separator. Type: float"));
+        ParallelMultiply_IndustrialMagnetarSeparator = configuration.getInt("ParallelMultiply_IndustrialMagnetarSeparator", IndustrialMagnetarSeparator, ParallelMultiply_IndustrialMagnetarSeparator, 1, 2147483646, "Parallel Multiply of Industrial Magnetar Separator. Type: int");;
+        // endregion
+
+        // region Industrial Magic Matrix
+        Enable_IndustrialMagicMatrix = configuration.getBoolean("EnableIndustrialMagicMatrix",IndustrialMagicMatrix,Enable_IndustrialMagicMatrix,"Enable Industrial Magic Matrix");
+        // endregion
+
+        // region Power Chair
+        Enable_PowerChairBGM = configuration.getBoolean("Enable Power Chair BGM",PowerChairBGM,Enable_PowerChairBGM,"Enable Power Chair BGM");
+        // endregion
+
+        // region Mega Tree Farm
+
         // endregion
 
         TST_CleanRoom.loadConfig(configuration);

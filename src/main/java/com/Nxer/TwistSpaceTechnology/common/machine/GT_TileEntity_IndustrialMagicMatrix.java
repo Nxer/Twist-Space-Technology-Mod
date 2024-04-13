@@ -13,6 +13,7 @@ import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static tb.init.TBBlocks.*;
 import static thaumcraft.common.config.ConfigBlocks.*;
+import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static tuhljin.automagy.blocks.ModBlocks.translucent;
 
 import java.util.ArrayList;
@@ -37,11 +38,11 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import fox.spiteful.avaritia.items.LudicrousItems;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
@@ -58,15 +59,17 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import scala.Int;
+import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.common.tiles.TileNodeEnergized;
 import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 
-public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT_TieEntity_IndustrialMagicMatrix>
-    implements ISidedInventory, IConstructable {
+public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT_TileEntity_IndustrialMagicMatrix>
+    implements ISidedInventory {
 
     // region default value
 
@@ -88,11 +91,11 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
 
     // region Class Constructor
 
-    public GT_TieEntity_IndustrialMagicMatrix(int aID, String aName, String aNameRegional) {
+    public GT_TileEntity_IndustrialMagicMatrix(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public GT_TieEntity_IndustrialMagicMatrix(String aName) {
+    public GT_TileEntity_IndustrialMagicMatrix(String aName) {
         super(aName);
     }
 
@@ -174,9 +177,35 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
             mMaxProgresstime = 1;
         } else mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
         setEnergyUsage(processingLogic);
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
+        ItemStack PrimordialPearl = new ItemStack(itemEldritchObject, 1, 3);
+        int size = 0;
+        for (ItemStack itemStack : processingLogic.getOutputItems()) {
+            if (!(itemStack.isItemEqual(new ItemStack(LudicrousItems.bigPearl)))) {
+                InfusionRecipe Recipe = ThaumcraftApi.getInfusionRecipe(itemStack);
+                for (ItemStack itemStack1 : Recipe.getComponents()) {
+                    if (itemStack1.isItemEqual(PrimordialPearl)) {
+                        size++;
+                    }
+                }
+            } else {
+                mOutputItems = processingLogic.getOutputItems();
+                mOutputFluids = processingLogic.getOutputFluids();
+                return result;
+            }
+        }
+        if (size != 0) {
+            int index = 0;
+            ItemStack[] OutputItems = new ItemStack[processingLogic.getOutputItems().length + 1];
+            for (ItemStack itemStack : processingLogic.getOutputItems()) {
+                OutputItems[index] = itemStack;
+            }
+            OutputItems[OutputItems.length - 1] = new ItemStack(itemEldritchObject, size, 3);
+            mOutputItems = OutputItems;
+            mOutputFluids = processingLogic.getOutputFluids();
+        } else {
+            mOutputItems = processingLogic.getOutputItems();
+            mOutputFluids = processingLogic.getOutputFluids();
+        }
 
         return result;
     }
@@ -1563,64 +1592,69 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
             true);
     }
 
+    private static IStructureDefinition<GT_TileEntity_IndustrialMagicMatrix> STRUCTURE_DEFINITION = null;
+
     @Override
-    public IStructureDefinition<GT_TieEntity_IndustrialMagicMatrix> getStructureDefinition() {
-        return StructureDefinition.<GT_TieEntity_IndustrialMagicMatrix>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-            .addElement(
-                'A',
-                ofChain(
-                    onElementPass(x -> x.onEssentiaCellFound(1), ofBlock(Loaders.essentiaCell, 0)),
-                    onElementPass(x -> x.onEssentiaCellFound(2), ofBlock(Loaders.essentiaCell, 1)),
-                    onElementPass(x -> x.onEssentiaCellFound(3), ofBlock(Loaders.essentiaCell, 2)),
-                    onElementPass(x -> x.onEssentiaCellFound(4), ofBlock(Loaders.essentiaCell, 3))))
-            .addElement('B', ofBlock(GregTech_API.sBlockCasings8, 8))
-            .addElement('C', ofBlock(GregTech_API.sBlockMetal4, 10))
-            .addElement(
-                'D',
-                ofChain(
-                    GT_HatchElementBuilder.<GT_TieEntity_IndustrialMagicMatrix>builder()
-                        .atLeast(Maintenance, InputBus, OutputBus, Energy)
-                        .adder(GT_TieEntity_IndustrialMagicMatrix::addToMachineList)
-                        .casingIndex(1536)
-                        .dot(1)
-                        .build(),
-                    ofBlock(magicCasing, 0),
-                    ofTileAdder(GT_TieEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))
-            .addElement('E', ofBlock(blockMetalDevice, 9))
-            .addElement('F', ofBlock(BloodyThaumium.getBlock(), 0))
-            .addElement('G', ofBlock(BloodyVoid.getBlock(), 0))
-            .addElement('H', ofBlock(blockCrystalDeep, 0))
-            .addElement('I', ofBlock(blockCosmeticSolid, 0))
-            .addElement('J', ofBlock(blockCosmeticSolid, 4))
-            .addElement('K', ofBlock(blockCosmeticSolid, 6))
-            .addElement('L', ofBlock(blockCosmeticSolid, 7))
-            .addElement('M', ofBlock(blockMetalDevice, 3))
-            .addElement('N', ofChain(ofBlock(blockCosmeticSolid, 6), ofBlock(blockStoneDevice, 6)))
-            .addElement('O', ofBlock(translucent, 0))
-            .addElement('P', ofBlock(crystalBlock, 0))
-            .addElement('Q', ofBlock(crystalBlock, 1))
-            .addElement('R', ofBlock(crystalBlock, 2))
-            .addElement('S', ofBlock(crystalBlock, 3))
-            .addElement('T', ofBlock(crystalBlock, 4))
-            .addElement('U', ofBlock(crystalBlock, 5))
-            .addElement('V', ofBlock(dustBlock, 0))
-            .addElement('W', ofBlock(voidBlock, 0))
-            .addElement('X', ofBlock(thauminiteBlock, 0))
-            .addElement(
-                'Y',
-                ofChain(
-                    ofTileAdder(GT_TieEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
-                    ofBlock(Blocks.air, 0)))
-            .addElement('Z', ofBlock(blockCosmeticOpaque, 2))
-            .addElement('0', ofBlock(blockStoneDevice, 2))
-            .addElement('1', ofFrame(Materials.Thaumium))
-            .addElement('3', ofBlock(blockStoneDevice, 10))
-            .addElement('5', ofBlock(blockStoneDevice, 11))
-            .addElement('6', ofChain(ofBlock(blockCosmeticSolid, 7), ofBlock(blockStoneDevice, 7)))
-            .addElement('7', ofBlock(blockStoneDevice, 1))
-            .addElement('8', ofBlockAnyMeta(Blocks.beacon, 1))
-            .build();
+    public IStructureDefinition<GT_TileEntity_IndustrialMagicMatrix> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_IndustrialMagicMatrix>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addElement(
+                    'A',
+                    ofChain(
+                        onElementPass(x -> x.onEssentiaCellFound(1), ofBlock(Loaders.essentiaCell, 0)),
+                        onElementPass(x -> x.onEssentiaCellFound(2), ofBlock(Loaders.essentiaCell, 1)),
+                        onElementPass(x -> x.onEssentiaCellFound(3), ofBlock(Loaders.essentiaCell, 2)),
+                        onElementPass(x -> x.onEssentiaCellFound(4), ofBlock(Loaders.essentiaCell, 3))))
+                .addElement('B', ofBlock(GregTech_API.sBlockCasings8, 8))
+                .addElement('C', ofBlock(GregTech_API.sBlockMetal4, 10))
+                .addElement(
+                    'D',
+                    ofChain(
+                        GT_HatchElementBuilder.<GT_TileEntity_IndustrialMagicMatrix>builder()
+                            .atLeast(Maintenance, InputBus, OutputBus, Energy)
+                            .adder(GT_TileEntity_IndustrialMagicMatrix::addToMachineList)
+                            .casingIndex(1536)
+                            .dot(1)
+                            .build(),
+                        ofBlock(magicCasing, 0),
+                        ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))
+                .addElement('E', ofBlock(blockMetalDevice, 9))
+                .addElement('F', ofBlock(BloodyThaumium.getBlock(), 0))
+                .addElement('G', ofBlock(BloodyVoid.getBlock(), 0))
+                .addElement('H', ofBlock(blockCrystalDeep, 0))
+                .addElement('I', ofBlock(blockCosmeticSolid, 0))
+                .addElement('J', ofBlock(blockCosmeticSolid, 4))
+                .addElement('K', ofBlock(blockCosmeticSolid, 6))
+                .addElement('L', ofBlock(blockCosmeticSolid, 7))
+                .addElement('M', ofBlock(blockMetalDevice, 3))
+                .addElement('N', ofChain(ofBlock(blockCosmeticSolid, 6), ofBlock(blockStoneDevice, 6)))
+                .addElement('O', ofBlock(translucent, 0))
+                .addElement('P', ofBlock(crystalBlock, 0))
+                .addElement('Q', ofBlock(crystalBlock, 1))
+                .addElement('R', ofBlock(crystalBlock, 2))
+                .addElement('S', ofBlock(crystalBlock, 3))
+                .addElement('T', ofBlock(crystalBlock, 4))
+                .addElement('U', ofBlock(crystalBlock, 5))
+                .addElement('V', ofBlock(dustBlock, 0))
+                .addElement('W', ofBlock(voidBlock, 0))
+                .addElement('X', ofBlock(thauminiteBlock, 0))
+                .addElement(
+                    'Y',
+                    ofChain(
+                        ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
+                        ofBlock(Blocks.air, 0)))
+                .addElement('Z', ofBlock(blockCosmeticOpaque, 2))
+                .addElement('0', ofBlock(blockStoneDevice, 2))
+                .addElement('1', ofFrame(Materials.Thaumium))
+                .addElement('3', ofBlock(blockStoneDevice, 10))
+                .addElement('5', ofBlock(blockStoneDevice, 11))
+                .addElement('6', ofChain(ofBlock(blockCosmeticSolid, 7), ofBlock(blockStoneDevice, 7)))
+                .addElement('7', ofBlock(blockStoneDevice, 1))
+                .addElement('8', ofBlockAnyMeta(Blocks.beacon, 1))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     public final boolean addInfusionProvider(TileEntity aTileEntity) {
@@ -1798,7 +1832,7 @@ public class GT_TieEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TieEntity_IndustrialMagicMatrix(this.mName);
+        return new GT_TileEntity_IndustrialMagicMatrix(this.mName);
     }
 
     @Override

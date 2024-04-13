@@ -796,5 +796,9 @@ public class TextLocalization {
     public static final String Tooltip_SpaceApiary_t4_desc5 = texter("But humans have nothing to repay the bees.", "Tooltip_SpaceApiary_t4_desc5");
     // endregion
 
+    // region TST Cleanroom
+    public static final String NamesuperCleanRoom = texter("CleanRoom","NamesuperCleanRoom");
+    // endregion
+
 }
 // spotless:on

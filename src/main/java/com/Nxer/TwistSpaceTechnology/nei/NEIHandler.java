@@ -83,6 +83,7 @@ public class NEIHandler {
         sendCatalyst("gt.recipe.plasmaarcfurnace", "gregtech:gt.blockmachines:19046");
         sendCatalyst("gt.recipe.fusionreactor", "gregtech:gt.blockmachines:19046");
         sendCatalyst("tst.recipe.BallLightningRecipes", "gregtech:gt.blockmachines:19046");
+        sendCatalyst("gt.recipe.electromagneticseparator", "gregtech:gt.blockmachines:19050");
     }
 
     private static void sendHandler(String aName, String aBlock) {

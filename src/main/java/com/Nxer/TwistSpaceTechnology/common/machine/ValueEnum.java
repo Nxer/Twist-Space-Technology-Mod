@@ -266,6 +266,21 @@ public final class ValueEnum {
 
     // region Space Apiary
     public static boolean enableDNAConsuming = Config.enableDNAConsuming;
+    public static int SpaceApiaryCycleTime = Config.SpaceApiaryCycleTime;
+    public static int SpaceApiaryDNACost_T1 = Config.SpaceApiaryDNACost_T1;
+    public static int SpaceApiaryDNACost_T2 = Config.SpaceApiaryDNACost_T2;
+    public static int SpaceApiaryDNACost_T3 = Config.SpaceApiaryDNACost_T3;
+    public static int SpaceApiaryDNACost_T4 = Config.SpaceApiaryDNACost_T4;
+    public static int SpaceApiaryMaxParallels_T1 = Config.SpaceApiaryMaxParallels_T1;
+    public static int SpaceApiaryMaxParallels_T2 = Config.SpaceApiaryMaxParallels_T2;
+    public static int SpaceApiaryMaxParallels_T3 = Config.SpaceApiaryMaxParallels_T3;
+    public static int SpaceApiaryMaxParallels_T4 = Config.SpaceApiaryMaxParallels_T4;
+    public static boolean SpaceApiaryEnableDisplayInfo = Config.SpaceApiaryEnableDisplayInfo;
     // endregion
 
+    // region
+    public static float SpeedBouns_IndustrialMagnetarSeparator = Config.SpeedBouns_IndustrialMagnetarSeparator;
+    public static float EuModifier_IndustrialMagnetarSeparator = Config.EuModifier_IndustrialMagnetarSeparator;
+    public static int ParallelMultiply_IndustrialMagnetarSeparator = Config.ParallelMultiply_IndustrialMagnetarSeparator;
+    // end region
 }

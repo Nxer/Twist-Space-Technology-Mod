@@ -33,6 +33,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -40,6 +43,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
@@ -104,6 +109,12 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
             default:
                 return GTPPRecipeMaps.electrolyzerNonCellRecipes;
         }
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(GTPPRecipeMaps.centrifugeNonCellRecipes, GTPPRecipeMaps.electrolyzerNonCellRecipes);
     }
 
     @Override

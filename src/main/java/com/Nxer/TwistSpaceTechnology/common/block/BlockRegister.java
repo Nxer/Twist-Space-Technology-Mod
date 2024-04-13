@@ -18,6 +18,8 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStatio
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
+import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -49,8 +51,10 @@ public class BlockRegister {
             NuclearReactorBlock,
             BlockNuclearReactor.innerItemBlock.class,
             NuclearReactorBlock.getUnlocalizedName());
+        GameRegistry.registerBlock(BasicBlocks.BlockPowerChair, ItemBlockPowerChair.class, "BlockPowerChair");
         BlockStar = new BlockStar();
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
+        GameRegistry.registerTileEntity(TilePowerChair.class, "TilePowerChair");
     }
 
     public static void registryBlockContainers() {
@@ -65,6 +69,7 @@ public class BlockRegister {
                 BasicBlocks.MetaBlockCasing01,
                 new String[] { TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.01"),
                     TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.02") }));
+
         GTCMItemList.AdvancedHighPowerCoilBlock.set(
             MetaBlockConstructors.initMetaBlockCasing(
                 "Advanced High Power Coil Block",
@@ -72,6 +77,44 @@ public class BlockRegister {
                 BasicBlocks.MetaBlockCasing01,
                 new String[] { TextEnums.tr("Tooltips_AdvancedHighPowerCoil.01"),
                     TextEnums.tr("Tooltips_AdvancedHighPowerCoil.02") }));
+
+        GTCMItemList.ParallelismCasing0.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 0",
+                (byte) 3,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.0") }));
+
+        GTCMItemList.ParallelismCasing1.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 1",
+                (byte) 4,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.1") }));
+
+        GTCMItemList.ParallelismCasing2.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 2",
+                (byte) 5,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.2") }));
+
+        GTCMItemList.ParallelismCasing3.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 3",
+                (byte) 6,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.4") }));
+
+        GTCMItemList.ParallelismCasing4.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Parallelism Casing Mark 4",
+                (byte) 7,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.4") }));
+
+        GTCMItemList.AntiMagneticCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing("Anti-Magnetic Casing", (byte) 8, BasicBlocks.MetaBlockCasing01));
 
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV

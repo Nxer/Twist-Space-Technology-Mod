@@ -45,6 +45,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
             Essence.setStackDisplayName(TextEnums.tr("IndustrialMagicMatrixRecipeInputAspects"));
             new ItemEssence().setAspects(Essence, Recipe.getInputAspects());
             GT_Values.RA.stdBuilder()
+                .ignoreCollision()
                 .clearInvalid()
                 .specialItem(Essence)
                 .itemInputsUnified(Recipe.getInputItem())

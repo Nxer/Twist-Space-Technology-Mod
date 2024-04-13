@@ -24,6 +24,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -86,6 +89,12 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     public RecipeMap<?> getRecipeMap() {
         if (mode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
         return RecipeMaps.multiblockChemicalReactorRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(GTCMRecipe.IntensifyChemicalDistorterRecipes, RecipeMaps.multiblockChemicalReactorRecipes);
     }
 
     @Override

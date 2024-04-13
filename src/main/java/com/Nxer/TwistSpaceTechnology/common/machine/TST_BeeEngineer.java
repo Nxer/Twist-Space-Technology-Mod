@@ -11,9 +11,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -62,12 +62,12 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     @Override
     protected float getSpeedBonus() {
-        return 0;
+        return 1;
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -85,94 +85,113 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         return false;
     }
 
-    private ArrayList<ItemStack> outputStacks = new ArrayList<>();
-    private int processSize = 0;
-    private final double pChance = ValueEnum.BE_pChance;
-    private final double pChanceEnhanced = ValueEnum.BE_pChanceEnhanced;
-    private final int pHoneyCost = ValueEnum.BE_pHoneyCost;
-    private final int pUUMCost = ValueEnum.BE_pUUMCost;
-    private final int pEachProcessTime = ValueEnum.BE_pEachProcessTime;
+    private static final FluidStack HONEY = Materials.Honey.getFluid(1);
+    private static final FluidStack UUM = Materials.UUMatter.getFluid(1);
 
     @Override
     @NotNull
     public CheckRecipeResult checkProcessing() {
-        mEfficiencyIncrease = 10000;
-        processSize = 0;
-        outputStacks = new ArrayList<>();
-        ArrayList<ItemStack> inputStacks = getStoredInputs();
-        if (inputStacks.isEmpty()) {
-            return CheckRecipeResultRegistry.NO_RECIPE;
-        }
-        for (ItemStack stack : inputStacks) {
-            if (beeRoot.getType(stack) == EnumBeeType.DRONE) {
-                while (stack.stackSize > 0) {
-                    if (!consumeHoney()) {
-                        break;
-                    }
-                    if (calculateSuccess(consumeUUM())) {
-                        IBee bee = beeRoot.getMember(stack);
-                        ItemStack princess = beeRoot.getMemberStack(bee.copy(), EnumBeeType.PRINCESS.ordinal());
-                        outputStacks.add(princess);
-                    }
-                    stack.stackSize--;
-                    processSize++;
+        List<ItemStack> inputStacks = getStoredInputs();
+        List<FluidStack> inputFluid = getStoredFluids();
+        // check no input
+        if (inputStacks.isEmpty() || inputFluid.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+
+        // check honey liquid and uu matter liquid input, store fluids info
+        List<FluidStack> honeyStacks = new ArrayList<>();
+        boolean honeyEnough = false;
+        List<FluidStack> uuStacks = new ArrayList<>();
+        boolean uuProvided = false;
+        {
+            long honeyAmount = 0;
+            long uuAmount = 0;
+            for (FluidStack fluidStack : inputFluid) {
+                if (fluidStack == null || fluidStack.amount > 1) continue;
+                if (!honeyEnough && fluidStack.isFluidEqual(HONEY)) {
+                    honeyStacks.add(fluidStack);
+                    honeyAmount += fluidStack.amount;
+                    if (honeyAmount >= ValueEnum.BE_pHoneyCost) honeyEnough = true;
+                }
+                if (!uuProvided && fluidStack.isFluidEqual(UUM)) {
+                    uuStacks.add(fluidStack);
+                    uuAmount += fluidStack.amount;
+                    if (uuAmount >= ValueEnum.BE_pUUMCost) uuProvided = true;
+                }
+                if (honeyEnough && uuProvided) break;
+            }
+
+            // check no honey input
+            if (!honeyEnough) {
+                if (honeyAmount == 0) {
+                    return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+                } else {
+                    return CheckRecipeResultRegistry
+                        .insufficientStartupPower((int) (ValueEnum.BE_pHoneyCost - honeyAmount));
                 }
             }
+
         }
-        calculateTime(processSize);
-        updateSlots();
-        if (!outputStacks.isEmpty()) {
-            mOutputItems = outputStacks.toArray(new ItemStack[0]);
+
+        // check bee input and processing
+        for (ItemStack itemStack : inputStacks) {
+            if (itemStack == null || itemStack.stackSize < 1 || beeRoot.getType(itemStack) != EnumBeeType.DRONE)
+                continue;
+
+            // process
+
+            // consume honey
+            {
+                int needHoney = ValueEnum.BE_pHoneyCost;
+                for (FluidStack honeyStack : honeyStacks) {
+                    if (honeyStack.amount >= needHoney) {
+                        honeyStack.amount -= needHoney;
+                        needHoney = 0;
+                        break;
+                    } else if (honeyStack.amount > 0) {
+                        needHoney -= honeyStack.amount;
+                        honeyStack.amount = 0;
+                    }
+                }
+                // honey should be enough in checking before here
+                if (needHoney > 0) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+            }
+
+            double successRate = ValueEnum.BE_pChance;
+            // consume UU
+            if (uuProvided) {
+                int needUU = ValueEnum.BE_pUUMCost;
+                for (FluidStack uuStack : uuStacks) {
+                    if (uuStack.amount >= needUU) {
+                        uuStack.amount -= needUU;
+                        needUU = 0;
+                        break;
+                    } else if (uuStack.amount > 0) {
+                        needUU -= uuStack.amount;
+                        uuStack.amount = 0;
+                    }
+                }
+
+                // UU should be enough here but still make a check
+                if (needUU == 0) {
+                    successRate = ValueEnum.BE_pChanceEnhanced;
+                }
+            }
+
+            // consume the drone bee
+            itemStack.stackSize -= 1;
+
+            if (Math.random() <= successRate) {
+                IBee bee = beeRoot.getMember(itemStack);
+                mOutputItems = new ItemStack[] { beeRoot.getMemberStack(bee.copy(), EnumBeeType.PRINCESS.ordinal()) };
+            }
+
+            mEfficiencyIncrease = 10000;
+            mMaxProgresstime = ValueEnum.BE_pEachProcessTime;
+
             return CheckRecipeResultRegistry.SUCCESSFUL;
         }
+
+        // check no bees
         return CheckRecipeResultRegistry.NO_RECIPE;
-    }
-
-    private boolean consumeHoney() {
-        if (getStoredFluids() == null || getStoredFluids().isEmpty()) return false;
-        int cost = pHoneyCost;
-        for (FluidStack fluid : getStoredFluids()) {
-            if (fluid.getFluid() == Materials.Honey.mFluid) {
-                if (fluid.amount >= cost) {
-                    fluid.amount -= cost;
-                    return true;
-                } else {
-                    cost -= fluid.amount;
-                    fluid.amount = 0;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean consumeUUM() {
-        if (getStoredFluids() == null || getStoredFluids().isEmpty()) return false;
-        int cost = pUUMCost;
-        for (FluidStack fluid : getStoredFluids()) {
-            if (fluid.getFluid() == Materials.UUMatter.mFluid) {
-                if (fluid.amount >= cost) {
-                    fluid.amount -= cost;
-                    return true;
-                } else {
-                    cost -= fluid.amount;
-                    fluid.amount = 0;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean calculateSuccess(boolean enhance) {
-        double r = Math.random();
-        return r <= (enhance ? pChance : pChanceEnhanced);
-    }
-
-    private void calculateTime(int size) {
-        if (size <= 0) {
-            mMaxProgresstime = 20;
-        } else {
-            mMaxProgresstime = size * pEachProcessTime;
-        }
     }
 
     // endregion
@@ -242,7 +261,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
             .addInfo(TextLocalization.Tooltip_BeeEngineer_04)
             .addInfo(TextLocalization.Tooltip_BeeEngineer_05)
             .addInfo(TextLocalization.Tooltip_BeeEngineer_06)
-            .addInfo(TextLocalization.Tooltip_BeeEngineer_07)
+            // .addInfo(TextLocalization.Tooltip_BeeEngineer_07)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
@@ -286,27 +305,4 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX) };
     }
 
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        NBTTagCompound outputList = new NBTTagCompound();
-        outputList.setInteger("outputBELength", outputStacks.size());
-        int index = 0;
-        for (ItemStack itemStack : outputStacks) {
-            outputList.setTag("outputBEItem" + index, itemStack.writeToNBT(new NBTTagCompound()));
-            index++;
-        }
-        aNBT.setTag("outputBE", outputList);
-        aNBT.setInteger("processSize", processSize);
-        super.saveNBTData(aNBT);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        NBTTagCompound tempTag = aNBT.getCompoundTag("outputBE");
-        for (int index = 0; index < tempTag.getInteger("outputBELength"); index++) {
-            outputStacks.add(ItemStack.loadItemStackFromNBT(tempTag.getCompoundTag("outputBEItem" + index)));
-        }
-        processSize = aNBT.getInteger("processSize");
-        super.loadNBTData(aNBT);
-    }
 }
