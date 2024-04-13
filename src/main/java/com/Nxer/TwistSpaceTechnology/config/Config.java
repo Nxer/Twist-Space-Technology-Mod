@@ -51,6 +51,8 @@ public class Config {
     public static final String SpaceApiary = "SpaceApiary";
     public static final String IndustrialMagnetarSeparator = "IndustrialMagnetarSeparator";
     public static final String CombatStats = "CombatStats";
+    public static final String IndustrialMagicMatrix = "IndustrialMagicMatrix";
+    public static final String PowerChairBGM = "PowerChairBGM";
     // endregion
 
     // region General
@@ -343,8 +345,13 @@ public class Config {
 
     public static boolean Enable_LargeCanner = true;
 
+    // region IndustrialMagicMatrix
     public static boolean Enable_IndustrialMagicMatrix = true;
+    // endregion
 
+    // region PowerChair BGM
+    public static boolean Enable_PowerChairBGM = true;
+    // endregion
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
@@ -633,6 +640,14 @@ public class Config {
         SpeedBouns_IndustrialMagnetarSeparator = Float.parseFloat(configuration.getString("SpeedBonus_IndustrialMagnetarSeparator", IndustrialMagnetarSeparator, String.valueOf(SpeedBouns_IndustrialMagnetarSeparator), "Speed Bonus of Industrial Magnetar Separator. Type: float"));
         EuModifier_IndustrialMagnetarSeparator = Float.parseFloat(configuration.getString("EuModifier_IndustrialMagnetarSeparator", IndustrialMagnetarSeparator, String.valueOf(EuModifier_IndustrialMagnetarSeparator), "Eu Modifier of Industrial Magnetar Separator. Type: float"));
         ParallelMultiply_IndustrialMagnetarSeparator = configuration.getInt("ParallelMultiply_IndustrialMagnetarSeparator", IndustrialMagnetarSeparator, ParallelMultiply_IndustrialMagnetarSeparator, 1, 2147483646, "Parallel Multiply of Industrial Magnetar Separator. Type: int");;
+        // endregion
+
+        // region Industrial Magic Matrix
+        Enable_IndustrialMagicMatrix = configuration.getBoolean("EnableIndustrialMagicMatrix",IndustrialMagicMatrix,Enable_IndustrialMagicMatrix,"Enable Industrial Magic Matrix");
+        // endregion
+
+        // region Power Chair
+        Enable_PowerChairBGM = configuration.getBoolean("Enable Power Chair BGM",PowerChairBGM,Enable_PowerChairBGM,"Enable Power Chair BGM");
         // endregion
 
         // region Mega Tree Farm

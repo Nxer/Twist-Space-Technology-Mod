@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 
 public class EntityMountableBlock extends Entity {
 
@@ -45,7 +46,9 @@ public class EntityMountableBlock extends Entity {
         this.orgBlockPosZ = z;
         this.orgBlock = world.getBlock(x, y, z);
         this.setPosition(mountingX, mountingY, mountingZ);
-        this.sound = new Sound(BGM, 0.4f, 1.0f, true, x, y, z);
+        if (Config.Enable_PowerChairBGM) {
+            this.sound = new Sound(BGM, 0.4f, 1.0f, true, x, y, z);
+        }
     }
 
     public static boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, float hitX,
@@ -75,9 +78,11 @@ public class EntityMountableBlock extends Entity {
                         mountingZ);
                     world.spawnEntityInWorld(entity);
                     entity.interact(player);
-                    Minecraft.getMinecraft()
-                        .getSoundHandler()
-                        .playSound(entity.sound);
+                    if (Config.Enable_PowerChairBGM) {
+                        Minecraft.getMinecraft()
+                            .getSoundHandler()
+                            .playSound(entity.sound);
+                    }
                     return true;
                 }
 
