@@ -107,37 +107,37 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addMachineType("")
-            .addInfo("Controller block for the Cleanroom")
-            .addInfo("Consumes 40 EU/t when first turned on")
-            .addInfo("and 4 EU/t once at 100% efficiency")
-            .addInfo("If you use an LV energy hatch, it will actually accept 2A instead of just 1A.")
-            .addInfo(
-                "MV+ energy hatches just accept 1A as usual. For HV+ the cleanroom will overclock and gain efficiency faster.")
-            .addInfo(translateToLocal("tst.cleanroom.desc.0"))
-            .addInfo("the height of empty space within")
-            .addInfo("Machines that cause pollution aren't allowed to be put in.")
-            .addInfo("WATCH OUT! DO NOT DESTROY STRUCTURE BLOCK WHEN MACHINE IS WORKING!")
-            .addInfo("buffered by TST")
-            .addInfo("author shordinger")
-            .addSeparator()
-            .beginVariableStructureBlock(3, 15, 4, 15, 3, 15, true)
-            .addController("Top center")
-            .addCasingInfoRange("Plascrete", 20, 1007, false)
-            .addStructureInfo(
-                GT_Values.cleanroomGlass
-                    + "% of the Plascrete can be replaced with Reinforced Glass (not counting the top layer)")
-            .addStructureInfo(
-                "Other material can be used in place of Plascrete, even in higher percentages. See config for detail")
-            .addOtherStructurePart("Filter Machine Casing", "Top besides controller and edges")
-            .addEnergyHatch("Any casing except top layer. Exactly one.")
-            .addMaintenanceHatch("Any casing except top layer")
-            .addStructureInfo("0-2x Reinforced Door (keep closed or efficiency will reduce)")
-            .addStructureInfo("Up to 1 Elevator, Rotating Elevator, and Travel Anchor each")
-            .addStructureInfo("Up to 10 Machine Hulls for Item & Energy transfer through walls")
-            .addStructureInfo("You can also use Diodes for more power")
-            .addStructureInfo("Diodes also count towards 10 Machine Hulls count limit")
-            .toolTipFinisher(TextLocalization.ModName);
+        tt.addMachineType(translateToLocal("Tooltip_TST_CleanRoom_MachineType"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_00"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_01"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_02"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_03"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_04"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_05"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_06"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_07"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_08"));
+        tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_09"));
+        tt.addSeparator();
+        tt.addInfo(translateToLocal("StructureTooComplex"));
+        tt.addInfo(translateToLocal("BLUE_PRINT_INFO"));
+        tt.beginVariableStructureBlock(3, 15, 4, 15, 3, 15, true);
+        tt.addController("Top center");
+        tt.addCasingInfoRange("Plascrete", 20, 1007, false);
+        tt.addStructureInfo(
+            GT_Values.cleanroomGlass
+                + "% of the Plascrete can be replaced with Reinforced Glass (not counting the top layer)");
+        tt.addStructureInfo(
+            "Other material can be used in place of Plascrete, even in higher percentages. See config for detail");
+        tt.addOtherStructurePart("Filter Machine Casing", "Top besides controller and edges");
+        tt.addEnergyHatch("Any casing except top layer. Exactly one.");
+        tt.addMaintenanceHatch("Any casing except top layer");
+        tt.addStructureInfo("0-2x Reinforced Door (keep closed or efficiency will reduce)");
+        tt.addStructureInfo("Up to 1 Elevator, Rotating Elevator, and Travel Anchor each");
+        tt.addStructureInfo("Up to 10 Machine Hulls for Item & Energy transfer through walls");
+        tt.addStructureInfo("You can also use Diodes for more power");
+        tt.addStructureInfo("Diodes also count towards 10 Machine Hulls count limit");
+        tt.toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
 
