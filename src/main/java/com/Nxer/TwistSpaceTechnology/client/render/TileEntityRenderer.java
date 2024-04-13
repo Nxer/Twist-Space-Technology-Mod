@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.client.render;
 
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -49,11 +50,18 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer {
         if (!(tile instanceof TilePowerChair)) return;
         GL11.glPushMatrix();
         getTileEntityFacing((TilePowerChair) tile, x, y, z);
+        GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glScaled(0.07, 0.07, 0.07);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         this.bindTexture(textures);
+        GL11.glScaled(0.07, 0.07, 0.07);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
         Renderer.renderAll();
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
     }
 }

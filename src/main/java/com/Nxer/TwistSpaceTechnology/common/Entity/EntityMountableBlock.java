@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.Entity;
 
-import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -10,10 +12,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import java.util.Iterator;
-import java.util.List;
+import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
 
 public class EntityMountableBlock extends Entity {
+
+    public static final ResourceLocation BGM = new ResourceLocation("gtnhcommunitymod:PowerChair");
 
     public int orgBlockPosX;
     public int orgBlockPosY;
@@ -21,7 +24,6 @@ public class EntityMountableBlock extends Entity {
     public Block orgBlock;
     public EntityPlayer player;
     public Sound sound;
-    public static final ResourceLocation BGM = new ResourceLocation("gtnhcommunitymod:PowerChair");
 
     public EntityMountableBlock(World worldIn) {
         super(worldIn);
