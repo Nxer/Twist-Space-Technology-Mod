@@ -1,13 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass;
 
-import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
-import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
-import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,9 +10,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockPowerChair extends Block {
+import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
+import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 
-    private static final net.minecraft.client.audio.SoundHandler SoundHandler = Minecraft.getMinecraft().getSoundHandler();
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class BlockPowerChair extends Block {
 
     public BlockPowerChair() {
         super(Material.iron);
@@ -82,39 +81,38 @@ public class BlockPowerChair extends Block {
         }
     }
 
-
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
         float par8, float par9) {
 
-            TileEntity tile = world.getTileEntity(x, y, z);
-            if (tile instanceof TilePowerChair) {
-                int metadata = world.getBlockMetadata(x, y, z);
-                metadata %= 4;
-                if (metadata == 0) {
-                    player.rotationYaw = 90.0F;
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof TilePowerChair) {
+            int metadata = world.getBlockMetadata(x, y, z);
+            metadata %= 4;
+            if (metadata == 0) {
+                player.rotationYaw = 90.0F;
 
-                    return EntityMountableBlock.onBlockActivated(world, x, y, z, player, 0.5F, 0.68F, 0.5F);
-                }
-
-                if (metadata == 1) {
-                    player.rotationYaw = -90.0F;
-
-                    return EntityMountableBlock.onBlockActivated(world, x, y, z, player, 0.5F, 0.68F, 0.5F);
-                }
-
-                if (metadata == 2) {
-                    player.rotationYaw = 180.0F;
-
-                    return EntityMountableBlock.onBlockActivated(world, x, y, z, player, 0.5F, 0.68F, 0.5F);
-                }
-
-                if (metadata == 3) {
-                    player.rotationYaw = 0.0F;
-
-                    return EntityMountableBlock.onBlockActivated(world, x, y, z, player, 0.5F, 0.68F, 0.5F);
-                } else return false;
+                return EntityMountableBlock.onBlockActivated(world, x, y, z, player, 0.5F, 0.68F, 0.5F);
             }
+
+            if (metadata == 1) {
+                player.rotationYaw = -90.0F;
+
+                return EntityMountableBlock.onBlockActivated(world, x, y, z, player, 0.5F, 0.68F, 0.5F);
+            }
+
+            if (metadata == 2) {
+                player.rotationYaw = 180.0F;
+
+                return EntityMountableBlock.onBlockActivated(world, x, y, z, player, 0.5F, 0.68F, 0.5F);
+            }
+
+            if (metadata == 3) {
+                player.rotationYaw = 0.0F;
+
+                return EntityMountableBlock.onBlockActivated(world, x, y, z, player, 0.5F, 0.68F, 0.5F);
+            } else return false;
+        }
 
         return false;
     }

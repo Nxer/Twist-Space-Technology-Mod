@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.Entity;
 
 import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
-import com.Nxer.TwistSpaceTechnology.util.BlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -11,11 +10,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 public class EntityMountableBlock extends Entity {
+
     public int orgBlockPosX;
     public int orgBlockPosY;
     public int orgBlockPosZ;
@@ -24,8 +23,6 @@ public class EntityMountableBlock extends Entity {
     public Sound sound;
     public static final ResourceLocation BGM = new ResourceLocation("gtnhcommunitymod:PowerChair");
 
-    public static final HashMap<BlockPos, EntityMountableBlock> OCCUPIED = new HashMap<>();
-
     public EntityMountableBlock(World worldIn) {
         super(worldIn);
         noClip = true;
@@ -33,7 +30,8 @@ public class EntityMountableBlock extends Entity {
         width = 0.0001F;
     }
 
-    public EntityMountableBlock(World world, EntityPlayer player, int x, int y, int z, double mountingX, double mountingY, double mountingZ) {
+    public EntityMountableBlock(World world, EntityPlayer player, int x, int y, int z, double mountingX,
+        double mountingY, double mountingZ) {
         super(world);
         this.player = player;
         this.noClip = true;
@@ -45,12 +43,16 @@ public class EntityMountableBlock extends Entity {
         this.orgBlockPosZ = z;
         this.orgBlock = world.getBlock(x, y, z);
         this.setPosition(mountingX, mountingY, mountingZ);
-        this.sound = new Sound(BGM,0.4f,1.0f,true,x,y,z);
+        this.sound = new Sound(BGM, 0.4f, 1.0f, true, x, y, z);
     }
 
-    public static boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, float hitX, float hitY, float hitZ) {
+    public static boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, float hitX,
+        float hitY, float hitZ) {
         if (!world.isRemote) {
-            List listEMB = world.getEntitiesWithinAABB(EntityMountableBlock.class, AxisAlignedBB.getBoundingBox((double) x, (double) y, (double) z, (double) x + 1.0D, (double) y + 1.0D, (double) z + 1.0D).expand(1.0D, 1.0D, 1.0D));
+            List listEMB = world.getEntitiesWithinAABB(
+                EntityMountableBlock.class,
+                AxisAlignedBB.getBoundingBox(x, y, z, (double) x + 1.0D, (double) y + 1.0D, (double) z + 1.0D)
+                    .expand(1.0D, 1.0D, 1.0D));
             Iterator i = listEMB.iterator();
             EntityMountableBlock mounting;
 
@@ -60,10 +62,20 @@ public class EntityMountableBlock extends Entity {
                     double mountingY = (double) y + hitY;
                     double mountingZ = (double) z + hitZ;
 
-                    EntityMountableBlock entity = new EntityMountableBlock(world, player, x, y, z, mountingX, mountingY, mountingZ);
+                    EntityMountableBlock entity = new EntityMountableBlock(
+                        world,
+                        player,
+                        x,
+                        y,
+                        z,
+                        mountingX,
+                        mountingY,
+                        mountingZ);
                     world.spawnEntityInWorld(entity);
                     entity.interact(player);
-                    Minecraft.getMinecraft().getSoundHandler().playSound(entity.sound);
+                    Minecraft.getMinecraft()
+                        .getSoundHandler()
+                        .playSound(entity.sound);
                     return true;
                 }
 
@@ -78,7 +90,8 @@ public class EntityMountableBlock extends Entity {
     }
 
     public boolean interact(EntityPlayer entityplayer) {
-        if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && this.riddenByEntity != entityplayer) {
+        if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer
+            && this.riddenByEntity != entityplayer) {
             return true;
         } else {
             if (!this.worldObj.isRemote) {
@@ -93,11 +106,13 @@ public class EntityMountableBlock extends Entity {
     public void onEntityUpdate() {
         this.worldObj.theProfiler.startSection("entityBaseTick");
         if (this.riddenByEntity != null && !this.riddenByEntity.isDead) {
-           return;
+            return;
         } else {
             this.setDead();
-            if (this.sound != null ){
-                Minecraft.getMinecraft().getSoundHandler().stopSound(this.sound);
+            if (this.sound != null) {
+                Minecraft.getMinecraft()
+                    .getSoundHandler()
+                    .stopSound(this.sound);
             }
         }
 
@@ -113,21 +128,11 @@ public class EntityMountableBlock extends Entity {
 
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     *
-     * @param tagCompund
-     */
     @Override
     protected void readEntityFromNBT(NBTTagCompound tagCompund) {
 
     }
 
-    /**
-     * (abstract) Protected helper method to write subclass entity data to NBT.
-     *
-     * @param tagCompound
-     */
     @Override
     protected void writeEntityToNBT(NBTTagCompound tagCompound) {
 
