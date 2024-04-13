@@ -1,0 +1,11 @@
+{
+  "PowerChair": {
+    "category": "master",
+    "sounds": [
+      {
+      "name": "PowerChair",
+      "stream": false
+      }
+    ]
+  }
+}
