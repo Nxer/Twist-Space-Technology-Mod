@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass;
 
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -17,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -123,20 +123,20 @@ public class BlockPowerChair extends Block {
 
     @SideOnly(Side.CLIENT)
     private void PlaySound(int x, int y, int z) {
-        if (Config.Enable_PowerChairBGM){
+        if (Config.Enable_PowerChairBGM) {
             sound = new Sound(new ResourceLocation("gtnhcommunitymod:PowerChair"), 0.4f, 1.0f, true, x, y, z);
             Minecraft.getMinecraft()
-                    .getSoundHandler()
-                    .playSound(sound);
+                .getSoundHandler()
+                .playSound(sound);
         }
     }
 
     @SideOnly(Side.CLIENT)
     public static void stopPlaySound() {
-        if (Config.Enable_PowerChairBGM){
+        if (Config.Enable_PowerChairBGM) {
             Minecraft.getMinecraft()
-                    .getSoundHandler()
-                    .stopSound(sound);
+                .getSoundHandler()
+                .stopSound(sound);
         }
     }
 
