@@ -88,7 +88,6 @@ public class EntityMountableBlock extends Entity {
                 BlockPowerChair.stopPlaySound();
             }
         }
-
         ++this.ticksExisted;
         this.worldObj.theProfiler.endSection();
     }
