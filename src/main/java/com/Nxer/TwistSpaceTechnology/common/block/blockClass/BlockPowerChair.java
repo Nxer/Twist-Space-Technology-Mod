@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass;
 
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
