@@ -116,7 +116,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
             long honeyAmount = 0;
             long uuAmount = 0;
             for (FluidStack fluidStack : inputFluid) {
-                if (fluidStack == null || fluidStack.amount > 1) continue;
+                if (fluidStack == null || fluidStack.amount < 1) continue;
                 if (!honeyEnough && fluidStack.isFluidEqual(HONEY)) {
                     honeyStacks.add(fluidStack);
                     honeyAmount += fluidStack.amount;
