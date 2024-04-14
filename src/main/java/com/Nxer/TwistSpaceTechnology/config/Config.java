@@ -57,6 +57,7 @@ public class Config {
 
     // region General
     public static int MAX_PARALLEL_LIMIT = Integer.MAX_VALUE;
+    public static boolean DEFAULT_BATCH_MODE = false;
 
     // endregion
 
@@ -358,6 +359,7 @@ public class Config {
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
+        DEFAULT_BATCH_MODE = configuration.getBoolean("DEFAULT_BATCH_MODE", GENERAL, DEFAULT_BATCH_MODE, "Default Batch mode state of machine when placed. True is auto enable Batch mode.");
         // endregion
 
         // region Recipe
