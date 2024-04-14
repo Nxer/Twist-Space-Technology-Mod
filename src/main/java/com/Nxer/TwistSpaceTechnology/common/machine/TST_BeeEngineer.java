@@ -85,8 +85,19 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         return false;
     }
 
-    private static final FluidStack HONEY = Materials.Honey.getFluid(1);
-    private static final FluidStack UUM = Materials.UUMatter.getFluid(1);
+    private static FluidStack HONEY;
+    private static FluidStack UUM;
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (HONEY == null) {
+            HONEY = Materials.Honey.getFluid(1);
+        }
+        if (UUM == null) {
+            UUM = Materials.UUMatter.getFluid(1);
+        }
+    }
 
     @Override
     @NotNull
