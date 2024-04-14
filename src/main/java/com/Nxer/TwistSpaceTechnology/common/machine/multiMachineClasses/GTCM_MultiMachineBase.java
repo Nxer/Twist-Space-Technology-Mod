@@ -422,6 +422,14 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return false;
     }
 
+    /**
+     * no longer afraid of rain
+     */
+    @Override
+    public boolean willExplodeInRain() {
+        return false;
+    }
+
     @Override
     public boolean supportsVoidProtection() {
         return true;
