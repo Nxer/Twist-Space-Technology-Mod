@@ -1902,7 +1902,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GT_Values.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Machine_Multi_Computer.get(1))
-                .metadata(RESEARCH_TIME, 114514 * 20 * 100)
+                .metadata(RESEARCH_TIME, 114514 * 20)
                 .itemInputs(
                     Machine_Multi_Computer.get(64),
                     Machine_Multi_Computer.get(64),
