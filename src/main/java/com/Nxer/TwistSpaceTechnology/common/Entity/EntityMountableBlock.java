@@ -1,11 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.Entity;
 
+import static com.Nxer.TwistSpaceTechnology.client.Sound.SoundLoader.BGM;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
@@ -21,7 +22,6 @@ public class EntityMountableBlock extends Entity {
     public int orgBlockPosY;
     public int orgBlockPosZ;
     public EntityPlayer player;
-    public static final ResourceLocation BGM = new ResourceLocation("gtnhcommunitymod:PowerChair");
 
     public EntityMountableBlock(World worldIn) {
         super(worldIn);
@@ -66,6 +66,8 @@ public class EntityMountableBlock extends Entity {
             return false;
         }
     }
+
+    /* Detects if music is playing and plays music at the right time */
 
     @SideOnly(Side.CLIENT)
     public static void PlaySound(int x, int y, int z) {
@@ -128,7 +130,10 @@ public class EntityMountableBlock extends Entity {
         } else {
             this.setDead();
             if (worldObj.isRemote) {
-                stopPlaySound((int) this.posX, (int) this.posY, (int) this.posZ);
+                stopPlaySound(
+                    (int) this.posX,
+                    (int) this.posY,
+                    (int) this.posZ);/* Stops playing music when the entity dies */
             }
         }
         ++this.ticksExisted;
