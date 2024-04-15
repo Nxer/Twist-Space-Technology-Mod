@@ -32,7 +32,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
     // endregion
 
     // region IO info
-    private static final long LongMaxDevice4 = Long.MAX_VALUE / 4;
+    private static final long LongMaxDivide4 = Long.MAX_VALUE / 4;
     private static final long LongMaxDecreaseInt = Long.MAX_VALUE - Integer.MAX_VALUE;
 
     @Override
@@ -42,7 +42,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
 
     @Override
     public long maxEUOutput() {
-        return LongMaxDevice4;
+        return LongMaxDivide4;
     }
 
     @Override

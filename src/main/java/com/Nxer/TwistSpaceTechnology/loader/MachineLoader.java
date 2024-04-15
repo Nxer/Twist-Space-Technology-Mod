@@ -321,7 +321,8 @@ public class MachineLoader {
 
         GTCMItemList.Scavenger.set(Scavenger);
 
-        superCleanRoom = new TST_CleanRoom(19024, "multimachine.cleanroom", "Cleanroom Controller").getStackForm(1);
+        superCleanRoom = new TST_CleanRoom(19024, "NameTSTcleanroom", TextLocalization.NamesuperCleanRoom)
+            .getStackForm(1);
         // ItemList.Machine_Multi_Cleanroom.set(superCleanRoom);
         GTCMItemList.superCleanRoom.set(superCleanRoom);
 

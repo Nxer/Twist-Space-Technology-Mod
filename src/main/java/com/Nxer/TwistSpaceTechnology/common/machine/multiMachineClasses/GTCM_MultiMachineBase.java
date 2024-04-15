@@ -17,6 +17,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 
@@ -421,6 +422,14 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return false;
     }
 
+    /**
+     * no longer afraid of rain
+     */
+    @Override
+    public boolean willExplodeInRain() {
+        return false;
+    }
+
     @Override
     public boolean supportsVoidProtection() {
         return true;
@@ -434,6 +443,12 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     @Override
     public boolean supportsBatchMode() {
         return true;
+    }
+
+    @Override
+    public boolean getDefaultBatchMode() {
+        if (!supportsBatchMode()) return false;
+        return Config.DEFAULT_BATCH_MODE;
     }
 
     @Override
