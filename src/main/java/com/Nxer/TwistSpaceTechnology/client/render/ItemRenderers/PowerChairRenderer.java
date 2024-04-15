@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.client.render;
+package com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockPowerChair;
 
@@ -12,12 +12,12 @@ import org.lwjgl.opengl.GL11;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
 
-public class ItemRenderer implements IItemRenderer {
+public class PowerChairRenderer implements IItemRenderer {
 
     protected IModelCustom models;
     protected ResourceLocation textures;
 
-    public ItemRenderer(final IModelCustom models, final ResourceLocation textures) {
+    public PowerChairRenderer(final IModelCustom models, final ResourceLocation textures) {
         this.models = models;
         this.textures = textures;
     }

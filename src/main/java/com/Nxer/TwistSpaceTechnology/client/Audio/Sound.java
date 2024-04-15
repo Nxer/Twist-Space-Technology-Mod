@@ -9,9 +9,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Sound extends PositionedSoundRecord {
 
-    public Sound(ResourceLocation soundResource, float volume, float pitch, boolean repeat, float xPosition,
-        float yPosition, float zPosition) {
+    public Sound(ResourceLocation soundResource, float volume, float pitch, float xPosition, float yPosition,
+        float zPosition) {
         super(soundResource, volume, pitch, xPosition, yPosition, zPosition);
-        this.repeat = repeat;
+        this.repeat = true;
     }
+
 }
