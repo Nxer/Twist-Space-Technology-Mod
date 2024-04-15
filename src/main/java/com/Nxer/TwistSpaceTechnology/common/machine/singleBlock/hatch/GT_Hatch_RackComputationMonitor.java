@@ -72,6 +72,7 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
                 EnumChatFormatting.AQUA + translateToLocal("tst.computationhatchmonitor.desc2") });
         TT_Utility.setTier(aTier, this);
         this.isMeanHatch = isMeanHatch;
+
     }
 
     public GT_Hatch_RackComputationMonitor(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures,

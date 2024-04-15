@@ -1011,12 +1011,6 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
 
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
-        mHardHammer = true;
-        mSoftHammer = true;
-        mScrewdriver = true;
-        mCrowbar = true;
-        mSolderingTool = true;
-        mWrench = true;
         realMonitor = null;
         // eRacks.clear();
         if (!structureCheck_EM(MAIN, offsetX, offsetY, offsetZ)) {
