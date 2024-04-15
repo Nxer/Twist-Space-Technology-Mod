@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -205,8 +206,8 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
         // return SimpleCheckRecipeResult.ofSuccess(
         // "You create " + (Integer.MAX_VALUE - maxP)
         // + " items! goooood!");
-        // return SimpleCheckRecipeResult.ofSuccess("This machine process each valid request with in 0 tick!\n" +
-        // "so you will never see it work!");
+         return SimpleCheckRecipeResult.ofSuccess("This machine process each valid request with in 0 tick!\n" +
+         "so you will never see it work!");
     }
 
     private static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
