@@ -41,6 +41,8 @@ public class EntityMountableBlock extends Entity {
         this.setPosition(mountingX, mountingY, mountingZ);
     }
 
+    /* Spawn an entity and have the player ride on it */
+
     public static boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, float hitX,
         float hitY, float hitZ) {
         if (!world.isRemote) {
@@ -64,6 +66,8 @@ public class EntityMountableBlock extends Entity {
         }
     }
 
+    /* Let the player ride an entity */
+
     public boolean interact(EntityPlayer entityplayer) {
         if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer
             && this.riddenByEntity != entityplayer) {
@@ -85,7 +89,7 @@ public class EntityMountableBlock extends Entity {
         } else {
             this.setDead();
             if (worldObj.isRemote) {
-                BlockPowerChair.stopPlaySound();
+                BlockPowerChair.stopPlaySound(this);/* Stops playing sound when the entity dies */
             }
         }
         ++this.ticksExisted;

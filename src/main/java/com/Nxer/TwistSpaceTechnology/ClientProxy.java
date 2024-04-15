@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology;
 
 import net.minecraftforge.common.MinecraftForge;
 
+import com.Nxer.TwistSpaceTechnology.client.Sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.loader.RendereLoader;
@@ -26,6 +27,7 @@ public class ClientProxy extends CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
         new RendereLoader();
+        new SoundLoader();
     }
 
 }
