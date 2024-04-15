@@ -28,7 +28,7 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
     public static RecipeMap<TST_RecipeMapBackend> extremeCraftRecipes;
 
     public static void initECRecipe() {
-        extremeCraftRecipes = RecipeMapBuilder.of("gtcm.recipe.extremeCraftRecipes1", TST_RecipeMapBackend::new)
+        extremeCraftRecipes = RecipeMapBuilder.of("gtcm.recipe.extremeCraftRecipes", TST_RecipeMapBackend::new)
             .maxIO(16, 16, 0, 0)
             .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
             .frontend(TST_GeneralFrontend::new)
@@ -55,16 +55,20 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
                         .toArray());
                 output = recipe.getRecipeOutput();
             }
-            LOG.info("-----------------------");
+
+            // LOG.info("-----------------------");
             if (inputs != null) {
                 for (var in : inputs) {
-                    LOG.info(in);
+                    // LOG.info(in);
+                    inputs = mergeItemstacks(inputs);
                 }
-            } else LOG.info("input is null!");
-            LOG.info("output:" + output);
-            LOG.info("-----------------------");
+            } else {
+                // LOG.info("input is null!");
+            }
+            // LOG.info("output:" + output);
+            // LOG.info("-----------------------");
             if (inputs != null && output != null) {
-                LOG.info("insert into recipemap");
+                // LOG.info("insert into recipemap");
                 int pre = extremeCraftRecipes.getAllRecipes()
                     .size();
                 GT_Values.RA.stdBuilder()
@@ -83,10 +87,10 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
                         .addTo(extremeCraftRecipes);
                 }
             } else {
-                LOG.info("get a null recipe here");
+                // LOG.info("get a null recipe here");
             }
         }
-        LOG.info("end init extreme craft table recipe");
+        // LOG.info("end init extreme craft table recipe");
     }
 
     public static Object[] addCircuit(Object[] obj, int n) {

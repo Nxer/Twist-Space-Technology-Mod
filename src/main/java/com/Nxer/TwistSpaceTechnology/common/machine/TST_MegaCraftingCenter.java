@@ -1,9 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
-import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.proxy;
 import static com.Nxer.TwistSpaceTechnology.system.RecipePattern.CustomCraftRecipe.areStacksEqual;
 import static com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipe.extremeCraftRecipes;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -11,13 +12,13 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
@@ -41,9 +43,7 @@ import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.networking.crafting.ICraftingProvider;
 import appeng.api.networking.crafting.ICraftingProviderHelper;
 import appeng.api.networking.events.MENetworkCraftingPatternChange;
-import appeng.api.networking.security.BaseActionSource;
 import appeng.api.networking.security.IActionHost;
-import appeng.api.networking.security.MachineSource;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.DimensionalCoord;
 import appeng.items.misc.ItemEncodedPattern;
@@ -56,7 +56,10 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
 import gtPlusPlus.core.block.ModBlocks;
@@ -68,8 +71,6 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
     private ArrayList<ICraftingPatternDetails> cachedPatternDetails = new ArrayList<>();
     private final HashMap<ICraftingPatternDetails, Long> cachedOutput = new HashMap<>();
 
-    @Nullable
-    private BaseActionSource requestSource;
     private ArrayList<ItemStack> cachedPattern;
     @Nullable
     private AENetworkProxy gridProxy;
@@ -111,12 +112,6 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
                 .build();
         }
         return STRUCTURE_DEFINITION;
-    }
-
-    private BaseActionSource getRequest() {
-        if (requestSource == null) requestSource = new MachineSource((IActionHost) getBaseMetaTileEntity());
-        return requestSource;
-        // GT_MetaTileEntity_Hatch_CraftingInput_ME
     }
 
     // Blocks:
@@ -180,34 +175,40 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
 
     @Override
     protected @NotNull CheckRecipeResult checkProcessing_EM() {
-        // GT_MetaTileEntity_Hatch_Input_ME
-        // if (mOutputItems != null) {
-        // return SimpleCheckRecipeResult.ofFailure("sadly, there's still something in your machine, what is that?");
-        // }
-        // long value = 0;
-        // ArrayList<ItemStack> additionalOutput = new ArrayList<>();
-        // var set = cachedOutput.entrySet();
-        // for (var itemstack : set) {
-        // ItemStack stack = itemstack.getKey()
-        // .getOutputs()[0].getItemStack()
-        // .copy();
-        // long p=stack.stackSize * itemstack.getValue();
-        // value +=stack.stackSize * itemstack.getValue();
-        //
-        // stack.stackSize = p;
-        // additionalOutput.add(stack);
-        //
-        //
-        // }
-        // if (additionalOutput.isEmpty()) return SimpleCheckRecipeResult.ofFailure("Empty! Nothing is working here!");
-        // mOutputItems = additionalOutput.toArray(new ItemStack[0]);
-        // lEUt = RECIPE_ZPM * (Integer.MAX_VALUE - maxP);
-        // mProgresstime = (int) (20 * Math.log10(Integer.MAX_VALUE - maxP));
-        // return SimpleCheckRecipeResult.ofSuccess(
-        // "You create " + (Integer.MAX_VALUE - maxP)
-        // + " items! goooood!");
-         return SimpleCheckRecipeResult.ofSuccess("This machine process each valid request with in 0 tick!\n" +
-         "so you will never see it work!");
+        if (mOutputItems != null) {
+            return SimpleCheckRecipeResult.ofFailure("sadly, there's still something in your machine, what is that?");
+        }
+        long value = 0;
+        ArrayList<ItemStack> additionalOutput = new ArrayList<>();
+        var set = cachedOutput.entrySet();
+        for (var itemstack : set) {
+            ItemStack stack = itemstack.getKey()
+                .getOutputs()[0].getItemStack()
+                    .copy();
+            long p = stack.stackSize * itemstack.getValue();
+            value += stack.stackSize * itemstack.getValue();
+            ItemStack newStack;
+            while (p > Integer.MAX_VALUE) {
+                newStack = stack.copy();
+                newStack.stackSize = Integer.MAX_VALUE;
+                additionalOutput.add(newStack.copy());
+                p -= Integer.MAX_VALUE;
+            }
+            newStack = stack.copy();
+            if (p > 0) newStack.stackSize = (int) p;
+            else continue;
+            additionalOutput.add(newStack.copy());
+        }
+        if (additionalOutput.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+        mOutputItems = additionalOutput.toArray(new ItemStack[0]);
+        // LOG.info(Arrays.toString(mOutputItems));
+        lEUt = -RECIPE_ZPM * value;
+        mMaxProgresstime = (int) (2 * (1 + Math.log10(1 + value)));
+        mProgresstime = 0;
+        cachedOutput.clear();
+        return CheckRecipeResultRegistry.GENERATING;
+        // return SimpleCheckRecipeResult.ofSuccess("This machine process each valid request with in 0 tick!\n" +
+        // "so you will never see it work!");
     }
 
     private static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
@@ -216,11 +217,7 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
     public AENetworkProxy getProxy() {
         if (gridProxy == null) {
             if (getBaseMetaTileEntity() instanceof IGridProxyable) {
-                gridProxy = new AENetworkProxy(
-                    (IGridProxyable) getBaseMetaTileEntity(),
-                    "proxy",
-                    GTCMItemList.ExtremeCraftCenter.get(1),
-                    true);
+                gridProxy = new AENetworkProxy(this, "proxy", GTCMItemList.ExtremeCraftCenter.get(1), true);
                 gridProxy.setFlags(GridFlags.REQUIRE_CHANNEL);
                 // updateValidGridProxySides();
                 if (getBaseMetaTileEntity().getWorld() != null) gridProxy.setOwner(
@@ -276,11 +273,8 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
     @Override
     public void provideCrafting(@NotNull ICraftingProviderHelper craftingTracker) {
         AENetworkProxy proxy = this.getProxy();
-        LOG.info("do we pass to here?");
-        // if (!getBaseMetaTileEntity().isActive()) return;
         if (proxy != null && proxy.isReady()) {
             for (var details : cachedPatternDetails) {
-
                 craftingTracker.addCraftingOption(this, details);
             }
         }
@@ -289,8 +283,12 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
 
     @Override
     public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
-        Long pre = cachedOutput.get(patternDetails);
-        return Objects.equals(cachedOutput.put(patternDetails, pre + 1), pre);
+        if (cachedOutput.containsKey(patternDetails)) {
+            Long pre = cachedOutput.get(patternDetails);
+            return Objects.equals(cachedOutput.put(patternDetails, pre + 1), pre);
+        }
+        cachedOutput.put(patternDetails, 1L);
+        return true;
     }
 
     @Override
@@ -302,19 +300,11 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aTick % 20 == 0 && aBaseMetaTileEntity.isServerSide()) {
             updatePatterns();
-            var proxy = getProxy();
-            try {
-                var grid = proxy.getCrafting();
-                // LOG.info();
-            } catch (GridAccessException e) {
-                throw new RuntimeException(e);
-            }
         }
         super.onPreTick(aBaseMetaTileEntity, aTick);
     }
 
     public void updatePatterns() {
-        LOG.info("proxy is:" + getProxy());
         ArrayList<ICraftingPatternDetails> patternDetails = new ArrayList<>();
         ArrayList<ItemStack> patterns = getStoredInputs();
         if (!patterns.equals(cachedPattern)) {
@@ -363,6 +353,20 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
                 // LOG.info(ignored);
             }
         }
+    }
+
+    @Override
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addMachineType(TextEnums.tr("tst.megacraftingcenter.machinetype"))
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.0"))
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.1"))
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.2"))
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.3"))
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.4"))
+            .addStructureInfo(Text_SeparatingLine)
+            .toolTipFinisher(ModName);
+        return tt;
     }
 
     public static ItemStack[] convertAEToMC(IAEItemStack[] STACK) {

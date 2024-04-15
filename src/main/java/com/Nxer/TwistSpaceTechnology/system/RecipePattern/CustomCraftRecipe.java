@@ -202,7 +202,10 @@ public class CustomCraftRecipe implements IRecipeProvider {
                 }
                 if (!flag) result.add(item.copy());
             } else if (it instanceof ArrayList<?>itemStacks) {
-                LOG.info("GET ORE DICTIONARY INPUT: " + itemStacks.get(0));
+                if (itemStacks.size() == 1) {
+                    result.add(itemStacks.get(0));
+                    continue;
+                }
                 ItemStack[] warped = new ItemStack[itemStacks.size()];
                 for (int i = 0; i < itemStacks.size(); i++) {
                     warped[i] = (ItemStack) itemStacks.get(i);
