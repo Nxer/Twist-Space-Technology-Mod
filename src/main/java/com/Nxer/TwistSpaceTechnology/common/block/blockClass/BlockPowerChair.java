@@ -4,16 +4,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.client.Sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -69,7 +70,7 @@ public class BlockPowerChair extends Block {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack itemIn) {
         int l = MathHelper.floor_double((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         int i1 = world.getBlockMetadata(x, y, z) & 4;
-
+        /* Determines the direction the player is facing when placing the block, and sets the Meta value */
         if (l == 0) {
             world.setBlockMetadataWithNotify(x, y, z, 2 | i1, 2);
         }
@@ -88,6 +89,12 @@ public class BlockPowerChair extends Block {
     }
 
     @Override
+    public void breakBlock(World worldIn, int x, int y, int z, Block blockBroken, int meta) {
+        stopPlaySound();
+        super.breakBlock(worldIn, x, y, z, blockBroken, meta);
+    }
+
+    @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
         float par8, float par9) {
         if (!world.isRemote) {
@@ -95,6 +102,7 @@ public class BlockPowerChair extends Block {
             if (tile instanceof TilePowerChair) {
                 int metadata = world.getBlockMetadata(x, y, z);
                 metadata %= 4;
+                /* Determines the Meta value and sets the direction for the player */
                 switch (metadata) {
                     case 0 -> {
                         player.rotationYaw = 90.0F;
@@ -121,19 +129,32 @@ public class BlockPowerChair extends Block {
         return false;
     }
 
+    /* Play a sound */
+
     @SideOnly(Side.CLIENT)
     private void PlaySound(int x, int y, int z) {
         if (Config.Enable_PowerChairBGM) {
-            sound = new Sound(new ResourceLocation("gtnhcommunitymod:PowerChair"), 0.4f, 1.0f, true, x, y, z);
+            sound = new Sound(SoundLoader.BGM, 0.4f, 1.0f, true, x, y, z);
             Minecraft.getMinecraft()
                 .getSoundHandler()
                 .playSound(sound);
         }
     }
 
+    /* Stop playing a sound */
+
     @SideOnly(Side.CLIENT)
     public static void stopPlaySound() {
         if (Config.Enable_PowerChairBGM) {
+            Minecraft.getMinecraft()
+                .getSoundHandler()
+                .stopSound(sound);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void stopPlaySound(Entity entity) {
+        if (Config.Enable_PowerChairBGM && entity instanceof EntityMountableBlock) {
             Minecraft.getMinecraft()
                 .getSoundHandler()
                 .stopSound(sound);
