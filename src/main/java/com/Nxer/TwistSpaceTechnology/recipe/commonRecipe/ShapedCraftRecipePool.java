@@ -8,6 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.ItemList;
@@ -44,20 +45,20 @@ public class ShapedCraftRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsBotania.ElvenElementium, 1), 'B',
                 new ItemStack(spark), 'C', ItemList.Hatch_Input_HV.get(1), 'D', new ItemStack(rune, 1, 0) });
 
-        // if (Config.Enable_IndustrialMagnetarSeparator) {
-        // // Industrial Magnetar Separator
-        // addCraftingRecipe(
-        // GTCMItemList.IndustrialMagnetarSeparator.get(1),
-        // new Object[] { "ABA", "CDC", "ABA", 'A', ALLOY.TALONITE.getPlate(1), 'B',
-        // OrePrefixes.circuit.get(Materials.Elite), 'C', ItemList.IV_Coil.get(1), 'D',
-        // ItemList.Machine_IV_ElectromagneticSeparator.get(1) });
-        //
-        // // Anti Magnetic Casing
-        // addCraftingRecipe(
-        // GTCMItemList.AntiMagneticCasing.get(1),
-        // new Object[] { "ABA", "CDC", "ABA", 'A', ALLOY.TALONITE.getPlate(1), 'B',
-        // ALLOY.MARAGING300.getLongRod(1), 'C', ALLOY.MARAGING250.getRod(1), 'D',
-        // ALLOY.MARAGING300.getFrameBox(1) });
-        // }
+        if (Config.Enable_IndustrialMagnetarSeparator) {
+            // Industrial Magnetar Separator
+            addCraftingRecipe(
+                GTCMItemList.IndustrialMagnetarSeparator.get(1),
+                new Object[] { "ABA", "CDC", "ABA", 'A', ALLOY.TALONITE.getPlate(1), 'B',
+                    OrePrefixes.circuit.get(Materials.Elite), 'C', ItemList.IV_Coil.get(1), 'D',
+                    ItemList.Machine_IV_ElectromagneticSeparator.get(1) });
+
+            // Anti Magnetic Casing
+            addCraftingRecipe(
+                GTCMItemList.AntiMagneticCasing.get(1),
+                new Object[] { "ABA", "CDC", "ABA", 'A', ALLOY.TALONITE.getPlate(1), 'B',
+                    ALLOY.MARAGING300.getLongRod(1), 'C', ALLOY.MARAGING250.getRod(1), 'D',
+                    ALLOY.MARAGING300.getFrameBox(1) });
+        }
     }
 }

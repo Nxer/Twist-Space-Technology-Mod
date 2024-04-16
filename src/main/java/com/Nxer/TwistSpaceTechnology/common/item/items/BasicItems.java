@@ -3,9 +3,9 @@ package com.Nxer.TwistSpaceTechnology.common.item.items;
 import net.minecraft.item.Item;
 
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
-import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ITemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderRune;
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemProofOfHeroes;
@@ -37,7 +37,7 @@ public final class BasicItems {
         "PowerChair",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:PowerChair");
 
-    public static final Item HatchUpdateTool = new ITemHatchUpdateTool(
+    public static final Item HatchUpdateTool = new ItemHatchUpdateTool(
         "Hatch Update Tool",
         "HatchUpdateTool",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:HatchUpdateTool");

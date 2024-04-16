@@ -25,11 +25,11 @@ import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 
-public class ITemHatchUpdateTool extends Item {
+public class ItemHatchUpdateTool extends Item {
 
     public String unlocalizedName;
 
-    public ITemHatchUpdateTool(String aName, String aMetaName, CreativeTabs aCreativeTabs) {
+    public ItemHatchUpdateTool(String aName, String aMetaName, CreativeTabs aCreativeTabs) {
         super();
         this.setCreativeTab(aCreativeTabs);
         this.unlocalizedName = aMetaName;
