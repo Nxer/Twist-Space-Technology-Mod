@@ -9,6 +9,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemProofOfHeroes;
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemYamato;
 
 public final class BasicItems {
 
@@ -37,9 +38,12 @@ public final class BasicItems {
         "PowerChair",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:PowerChair");
 
+
     public static final Item HatchUpdateTool = new ItemHatchUpdateTool(
         "Hatch Update Tool",
         "HatchUpdateTool",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:HatchUpdateTool");
+
+    public static final Item Yamato = new ItemYamato("Yamato", "Yamato", GTCMCreativeTabs.tabMetaItem01);
 
 }

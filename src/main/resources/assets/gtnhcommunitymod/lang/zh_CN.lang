@@ -1084,6 +1084,7 @@ Tooltip_IndustrialMagnetarSeparator.02=只需要使用配方要求功率的80%%
 Tooltip_IndustrialMagnetarSeparator.03=每提升一个电压等级，每次运行可以多处理8个物品
 Tooltip_IndustrialMagnetarSeparator.casingAmount=剩余方块为§7抗磁机械方块§r(至少§69§r个！)
 BlockPowerChair.0.name=抛瓦椅
+
 NameExtremeCraftCenter=梦魇工业合成中心
 tst.megacraftingcenter.machinetype=工作台 | 梦魇合成台
 tst.megacraftingcenter.desc.0= 耗电量: ZPM * n, n 是当前并行合成的数量
@@ -1092,3 +1093,7 @@ tst.megacraftingcenter.desc.2= 需要输出仓进行物品输出，需要输入�
 tst.megacraftingcenter.desc.3= 如果样板不是合法的工作台配方或者终极工作台配方，将不会被处理并展示在ae网络中。
 tst.megacraftingcenter.desc.4= 请不要倍增您的样板。数量与展示在NEI中的配方不符的样板将视为不合法。
 gtcm.recipe.extremeCraftRecipes= 梦魇工作台配方转换
+
+item.Yamato.name=阎魔刀
+item.YamatoUnsheathed.name=阎魔刀(未开鞘)
+
