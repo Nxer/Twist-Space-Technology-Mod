@@ -156,6 +156,7 @@ public enum GTCMItemList {
     PowerChair,
     PrimitiveMansSpaceTimeDistortionDevice,
     BallLightningUpgradeChip,
+    HatchUpdateTool,
 
     // Blocks
     TestCasing,
@@ -266,6 +267,8 @@ public enum GTCMItemList {
     BufferedEnergyHatchMAX,
     DebugUncertaintyHatch,
     LaserSmartNode,
+
+    ExtremeCraftCenter,
 
     // Blocks
 

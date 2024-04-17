@@ -45,7 +45,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
     }
 
     public GT_MetaTileEntity_Pipe_EnergySmart(String aName, int aTier, String[] aDescription,
-        ITexture[][][] aTextures) {
+                                              ITexture[][][] aTextures) {
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
@@ -89,7 +89,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
-        int colorIndex, boolean aActive, boolean redstoneLevel) {
+                                 int colorIndex, boolean aActive, boolean redstoneLevel) {
         if (side == aFacing) {
             return new ITexture[] { new GT_RenderedTexture(EMpipe), OVERLAYS_ENERGY_IN_LASER_TT[mTier],
                 new GT_RenderedTexture(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
@@ -190,16 +190,16 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
                                 break;
                             } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart energySmart
                                 && opposite != tGTTileEntity.getFrontFacing()) {
-                                    Voltage = energySmart.maxEUOutput();
-                                    Amperes = energySmart.Amperes;
+                                Voltage = energySmart.maxEUOutput();
+                                Amperes = energySmart.Amperes;
+                                break;
+                            } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_Energy pipe) {
+                                if (pipe.connectionCount < 2) {
                                     break;
-                                } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_Energy pipe) {
-                                    if (pipe.connectionCount < 2) {
-                                        break;
-                                    } else {
-                                        pipe.markUsed();
-                                    }
-                                } else break;
+                                } else {
+                                    pipe.markUsed();
+                                }
+                            } else break;
                         } else break;
                     }
                 } else {
@@ -234,13 +234,13 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
-        ItemStack aStack) {
+                                  ItemStack aStack) {
         return false;
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
-        ItemStack aStack) {
+                                 ItemStack aStack) {
         return false;
     }
 

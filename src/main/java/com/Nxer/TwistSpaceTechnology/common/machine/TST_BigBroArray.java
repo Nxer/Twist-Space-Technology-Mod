@@ -611,9 +611,9 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
     }
 
     public static int getParallelismCasingTier(Block block, int meta) {
-        if (block == GTCMItemList.ParallelismCasing0.getBlock()) {
-            return meta - 2;
-        }
+         if (block == GTCMItemList.ParallelismCasing0.getBlock()) {
+         return meta - 2;
+         }
         return 0;
     }
 
@@ -1133,17 +1133,17 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
     }
 
     public static void addRecipes() {
-        GT_Values.RA.addAssemblerRecipe(
-            new ItemStack[] { ItemList.Processing_Array.get(16), ItemList.Robot_Arm_IV.get(32),
-                ItemList.Emitter_IV.get(32), ItemList.Field_Generator_IV.get(32),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64), },
-            ALLOY.NITINOL_60.getFluidStack(24576),
-            GTCMItemList.BigBroArray.get(1),
-            20 * 1200,
-            7680);
+         GT_Values.RA.addAssemblerRecipe(
+         new ItemStack[] { ItemList.Processing_Array.get(16), ItemList.Robot_Arm_IV.get(32),
+         ItemList.Emitter_IV.get(32), ItemList.Field_Generator_IV.get(32),
+         GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
+         GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
+         GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
+         GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64), },
+         ALLOY.NITINOL_60.getFluidStack(24576),
+         GTCMItemList.BigBroArray.get(1),
+         20 * 1200,
+         7680);
     }
 
     @SideOnly(Side.CLIENT)

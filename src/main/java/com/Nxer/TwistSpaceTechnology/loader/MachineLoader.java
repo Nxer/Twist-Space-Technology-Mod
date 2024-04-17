@@ -41,6 +41,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
@@ -129,6 +130,8 @@ public class MachineLoader {
     public static ItemStack LargeCanner;
     public static ItemStack IndustrialMagnetarSeparator;
     public static ItemStack MegaTreeFarm;
+
+    public static ItemStack ExtremeCraftCenter;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -493,6 +496,12 @@ public class MachineLoader {
                 TextEnums.tr("NameIndustrialMagnetarSeparator")).getStackForm(1);
             GTCMItemList.IndustrialMagnetarSeparator.set(IndustrialMagnetarSeparator);
         }
+
+        ExtremeCraftCenter = new TST_MegaCraftingCenter(
+            19052,
+            "NameExtremeCraftCenter",
+            TextEnums.tr("NameExtremeCraftCenter")).getStackForm(1);
+        GTCMItemList.ExtremeCraftCenter.set(ExtremeCraftCenter);
         // if(Config.Enable_MegaTreeFarm)
         // 19051
 

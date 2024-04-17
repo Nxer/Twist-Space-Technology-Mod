@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderRune;
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemProofOfHeroes;
@@ -36,6 +37,12 @@ public final class BasicItems {
         "Power Chair",
         "PowerChair",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:PowerChair");
+
+
+    public static final Item HatchUpdateTool = new ItemHatchUpdateTool(
+        "Hatch Update Tool",
+        "HatchUpdateTool",
+        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:HatchUpdateTool");
 
     public static final Item Yamato = new ItemYamato("Yamato", "Yamato", GTCMCreativeTabs.tabMetaItem01);
 
