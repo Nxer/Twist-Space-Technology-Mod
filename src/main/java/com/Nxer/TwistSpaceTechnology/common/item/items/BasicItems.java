@@ -38,7 +38,6 @@ public final class BasicItems {
         "PowerChair",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:PowerChair");
 
-
     public static final Item HatchUpdateTool = new ItemHatchUpdateTool(
         "Hatch Update Tool",
         "HatchUpdateTool",

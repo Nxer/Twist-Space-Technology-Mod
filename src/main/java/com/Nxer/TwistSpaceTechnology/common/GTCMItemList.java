@@ -218,6 +218,7 @@ public enum GTCMItemList {
     BigBroArray,
     IndustrialMagnetarSeparator,
     MegaTreeFarm,
+    LightningSpire,
 
     // MAX
     HighDimensionalExtend,
