@@ -287,22 +287,24 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
     @Override
     protected void setProcessingLogicPower(ProcessingLogic logic) {
-        if (isWirelessMode || mode == 2) {
-            if (mode != 2) {
+        if (mode != 2) {
+            if (isWirelessMode) {
                 // wireless mode ignore voltage limit
                 logic.setAvailableVoltage(Long.MAX_VALUE);
             } else {
-                FusionMaxEut = (long) (RECIPE_MAX
-                    * (Math.pow(4, (compactFusionCoilTier - 2)) * Math.pow(1.6, fieldGeneratorTier - 1)));
-                if (!isWirelessMode) {
-                    if (FusionMaxEut < getMaxInputEu()) {
-                        logic.setAvailableVoltage(FusionMaxEut);
-                    } else super.setProcessingLogicPower(logic);
-                } else logic.setAvailableVoltage(FusionMaxEut);
+                super.setProcessingLogicPower(logic);
             }
-            logic.setAvailableAmperage(1);
-            logic.setAmperageOC(false);
-        } else super.setProcessingLogicPower(logic);
+        } else {
+            FusionMaxEut = (long) (RECIPE_MAX
+                * (Math.pow(4, (compactFusionCoilTier - 2)) * Math.pow(1.6, fieldGeneratorTier - 1)));
+            if (isWirelessMode || FusionMaxEut < getMaxInputEu()) {
+                logic.setAvailableVoltage(FusionMaxEut);
+                logic.setAvailableAmperage(1);
+                logic.setAmperageOC(false);
+            } else {
+                super.setProcessingLogicPower(logic);
+            }
+        }
     }
 
     @NotNull
