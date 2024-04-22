@@ -433,7 +433,7 @@ public class TextLocalization {
     // region Dyson Sphere Program Information
     public static final String Tooltip_DSPInfo_launch_01 = texter("Launching Solar Sail increase Solar Sail amount of current Galaxy's Dyson Sphere.", "Tooltip_DSPInfo_launch_01");
     public static final String Tooltip_DSPInfo_launch_02 = texter("Launching Small Launch Vehicle increase Node amount of current Galaxy's Dyson Sphere.", "Tooltip_DSPInfo_launch_02");
-    public static final String Tooltip_DSPInfo_00 = texter("DSP Power Point = Solar Sail Power Point (default 524288) * Solar Sail amount * (Node + 1)^0.5", "Tooltip_DSPInfo_00");
+    public static final String Tooltip_DSPInfo_00 = texter("Dyson Sphere Energy Credit = Solar Sail Output (default 524288) * Solar Sail amount * (Node + 1)^0.8", "Tooltip_DSPInfo_00");
     public static final String Tooltip_DSPInfo_01 = texter("Every Node can absorb (default) 256 Solar Sails.", "Tooltip_DSPInfo_01");
     public static final String Tooltip_DSPInfo_02 = texter("If unabsorbed solar sails amount is larger than 2048,", "Tooltip_DSPInfo_02");
     public static final String Tooltip_DSPInfo_03 = texter(" the excess may be destroyed.", "Tooltip_DSPInfo_03");
