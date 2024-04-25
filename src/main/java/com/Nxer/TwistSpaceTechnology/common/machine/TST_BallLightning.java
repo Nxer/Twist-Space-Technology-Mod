@@ -291,6 +291,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             if (isWirelessMode) {
                 // wireless mode ignore voltage limit
                 logic.setAvailableVoltage(Long.MAX_VALUE);
+                logic.setAvailableAmperage(1);
+                logic.setAmperageOC(false);
             } else {
                 super.setProcessingLogicPower(logic);
             }
