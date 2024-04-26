@@ -23,7 +23,6 @@ public class ItemRegister {
 
             BasicItems.MetaItemRune, BasicItems.PowerChair, BasicItems.HatchUpdateTool, BasicItems.Yamato };
 
-
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.getUnlocalizedName());
         }
