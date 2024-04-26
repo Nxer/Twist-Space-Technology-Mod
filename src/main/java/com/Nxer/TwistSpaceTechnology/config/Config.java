@@ -345,6 +345,7 @@ public class Config {
     public static boolean activateCombatStats = false;
 
     public static boolean Enable_LargeCanner = true;
+    public static boolean Enable_LightningSpire = true;
 
     // region IndustrialMagicMatrix
     public static boolean Enable_IndustrialMagicMatrix = true;

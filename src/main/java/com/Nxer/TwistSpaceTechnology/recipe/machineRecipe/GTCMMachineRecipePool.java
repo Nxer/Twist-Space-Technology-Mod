@@ -197,6 +197,7 @@ import gregtech.api.util.GT_Utility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.item.*;
 import gtPlusPlus.core.material.*;
+import gtPlusPlus.core.recipe.common.CI;
 import gtPlusPlus.core.util.minecraft.*;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import ic2.core.Ic2Items;
@@ -2668,6 +2669,28 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(20 * 500)
                 .addTo(MiracleTopRecipes);
 
+        }
+
+        //region Lightning Spire
+        if (Config.Enable_LightningSpire){
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    CI.getTieredGTPPMachineCasing(5,1),
+                    CI.getEnergyCore(5,1),
+                    CI.getTransmissionComponent(5,2),
+                    ItemList.Field_Generator_HV.get(4),
+                    ALLOY.NITINOL_60.getGear(4),
+                    ELEMENT.getInstance().GERMANIUM.getBolt(16),
+                    ALLOY.NICHROME.getFineWire(16),
+                    ALLOY.NICHROME.getCable16(1)
+                )
+                .fluidInputs(
+                    Materials.Silicone.getMolten(2304)
+                )
+                .itemOutputs(GTCMItemList.LightningSpire.get(1))
+                .eut(RECIPE_IV)
+                .duration(20 * 120)
+                .addTo(assembler);
         }
 
     }

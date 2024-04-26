@@ -9,6 +9,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
+import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_LightningSpire;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IndustrialMagicMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
@@ -130,6 +131,7 @@ public class MachineLoader {
     public static ItemStack LargeCanner;
     public static ItemStack IndustrialMagnetarSeparator;
     public static ItemStack MegaTreeFarm;
+    public static ItemStack LightningSpire;
 
     public static ItemStack ExtremeCraftCenter;
 
@@ -505,6 +507,16 @@ public class MachineLoader {
         // if(Config.Enable_MegaTreeFarm)
         // 19051
 
+        if (Config.Enable_LightningSpire) {
+            LightningSpire = new GTCM_LightningSpire(
+                19053,
+                "NameLightningSpire",
+                // #tr NameLightningSpire
+                // # Lightning Spire
+                // #zh_CN 闪电尖塔
+                TextEnums.tr("NameLightningSpire")).getStackForm(1);
+            GTCMItemList.LightningSpire.set(LightningSpire);
+        }
         // endregion
 
         // region Single block Machine
