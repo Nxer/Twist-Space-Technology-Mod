@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM.HatchElement.DynamoMulti;
+import static com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase.HatchElement.ExoticDynamo;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -22,14 +22,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.emoniph.witchery.Witchery;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -42,7 +40,6 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -50,8 +47,7 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 
-public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_MultiblockBase_EM
-    implements IConstructable, ISurvivalConstructable {
+public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEntity_MegaEggGenerator> {
 
     // region Class Constructor
     public GT_TileEntity_MegaEggGenerator(int aID, String aName, String aNameRegional) {
@@ -61,6 +57,21 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     public GT_TileEntity_MegaEggGenerator(String aName) {
         super(aName);
     }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 0;
+    }
+
+    @Override
+    protected int getMaxParallelRecipes() {
+        return 0;
+    }
     // endregion
 
     // region Processing Logic
@@ -69,60 +80,16 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     private int mDragonEggs = 0;
     private int mCreeperEggs = 0;
     private int mAirPosed = 0;
-    private long genVol = 0L;
-    private long genAmp = 0L;
+    private long gen = 0L;
     private int effCap = 10000;
 
     @Override
     @NotNull
-    public CheckRecipeResult checkProcessing_EM() {
+    public CheckRecipeResult checkProcessing() {
         this.mMaxProgresstime = 20;
-        this.lEUt = Math.abs(genVol);
-        this.eAmpereFlow = genAmp;
+        this.lEUt = Math.abs(gen);
         this.mEfficiencyIncrease = effCap;
         return CheckRecipeResultRegistry.GENERATING;
-    }
-
-    /**
-     * When Infinity eggs exist, every infinity egg give 100t efficiency increase boost.
-     */
-    private void getEfficiencyIncrease() {
-        if (mInfinityEggs != 0) {
-            effCap = mInfinityEggs * 100;
-        } else effCap = 1;
-    }
-
-    /**
-     * 1A HV Crepper egg
-     * 1A EV Dragon egg
-     * 2A IV Infinite egg
-     * Can be defined in config
-     * 2024.1.21 Fix vol explode
-     */
-    private void getOutput() {
-        long vol = 0, amp = 0, tOutput;
-        for (GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
-            vol += tHatch.maxEUOutput();
-            amp += tHatch.maxAmperesOut();
-        }
-        for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : eDynamoMulti) {
-            vol += tHatch.maxEUOutput();
-            amp += tHatch.maxAmperesOut();
-        }
-        if (vol > Integer.MAX_VALUE) vol = Integer.MAX_VALUE;
-        if (amp > Integer.MAX_VALUE) amp = Integer.MAX_VALUE;
-
-        tOutput = (long) (ValueEnum.MEG_Overall_Multiply
-            * (ValueEnum.MEG_CrepperEgg_Gen * mCreeperEggs + ValueEnum.MEG_DragonEgg_Gen * mDragonEggs
-                + ValueEnum.MEG_InfinityEgg_Gen * mInfinityEggs));
-        if (tOutput > vol) {
-            genVol = vol;
-            long tmp = tOutput / vol;
-            genAmp = tmp <= amp ? (Math.max(tmp, 1L)) : amp;
-        } else {
-            genVol = tOutput;
-            genAmp = 1L;
-        }
     }
 
     /**
@@ -138,9 +105,9 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     }
 
     @Override
-    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         // No need for the maintenance hatches!
-        turnOffMaintenance();
+        repairMachine();
         // Initialize
         this.mInfinityEggs = 0;
         this.mDragonEggs = 0;
@@ -189,7 +156,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      */
     private boolean checkLaser() {
         if (mPieces < ValueEnum.MEG_Laser_Pieces) {
-            for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : eDynamoMulti) {
+            for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : mExoticDynamoHatches) {
                 if (tHatch instanceof GT_MetaTileEntity_Hatch_DynamoTunnel) {
                     return false;
                 }
@@ -204,12 +171,19 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      * @return If dynamo is allowed
      */
     private boolean checkDynamo() {
-        return (mDynamoHatches.size() + eDynamoMulti.size()) <= ValueEnum.MEG_Dynamo_Limit;
+        return (mDynamoHatches.size() + mExoticDynamoHatches.size()) <= ValueEnum.MEG_Dynamo_Limit;
     }
 
     private boolean setVal() {
-        this.getOutput();
-        this.getEfficiencyIncrease();
+        // Power
+        gen = (long) (ValueEnum.MEG_Overall_Multiply
+            * (ValueEnum.MEG_CrepperEgg_Gen * mCreeperEggs + ValueEnum.MEG_DragonEgg_Gen * mDragonEggs
+                + ValueEnum.MEG_InfinityEgg_Gen * mInfinityEggs));
+        // Efficiency
+        if (mInfinityEggs != 0) {
+            effCap = mInfinityEggs * 100;
+        } else effCap = 20;
+
         return true;
     }
 
@@ -293,7 +267,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     }
 
 	@Override
-	public IStructureDefinition<GT_TileEntity_MegaEggGenerator> getStructure_EM() {
+	public IStructureDefinition<GT_TileEntity_MegaEggGenerator> getStructureDefinition() {
         if (structureDef == null) {
 		structureDef = StructureDefinition.<GT_TileEntity_MegaEggGenerator>builder()
 			       .addShape(STRUCTURE_PIECE_BASE, transpose(shapeBase))
@@ -301,7 +275,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
 			       .addShape(STRUCTURE_PIECE_TOP, transpose(shapeTop))
 			       .addElement('A',
                        GT_HatchElementBuilder.<GT_TileEntity_MegaEggGenerator>builder()
-                                       .atLeast(Dynamo.or(DynamoMulti))
+                                       .atLeast(Dynamo.or(ExoticDynamo))
                            .adder(GT_TileEntity_MegaEggGenerator::addToMachineList)
                                        .casingIndex(1536)
                                        .dot(1)
@@ -339,6 +313,27 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     public boolean isRotationChangeAllowed() {
         return ValueEnum.MEG_AllowRotation;
     }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
     // endregion
 
     // region Overrides
@@ -349,7 +344,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
         String[] ret = new String[origin.length + 5];
         ret[origin.length] = EnumChatFormatting.AQUA + "Infinity Eggs: " + EnumChatFormatting.GOLD + this.mInfinityEggs;
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Dragon Eggs: " + EnumChatFormatting.GOLD + this.mDragonEggs;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Crepper Eggs: "
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Creeper Eggs: "
             + EnumChatFormatting.GOLD
             + this.mCreeperEggs;
         ret[origin.length + 3] = EnumChatFormatting.AQUA + "Air Voids: " + EnumChatFormatting.GOLD + this.mAirPosed;
@@ -362,9 +357,10 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
         super.saveNBTData(aNBT);
         aNBT.setInteger("mInfinityEggs", mInfinityEggs);
         aNBT.setInteger("mDragonEggs", mDragonEggs);
-        aNBT.setInteger("mCrepperEggs", mCreeperEggs);
+        aNBT.setInteger("mCreeperEggs", mCreeperEggs);
         aNBT.setInteger("mAirPosed", mAirPosed);
         aNBT.setInteger("mPieces", mPieces);
+        aNBT.setLong("genAmp", gen);
     }
 
     @Override
@@ -372,9 +368,10 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
         super.loadNBTData(aNBT);
         mInfinityEggs = aNBT.getInteger("mInfinityEggs");
         mDragonEggs = aNBT.getInteger("mDragonEggs");
-        mCreeperEggs = aNBT.getInteger("mCrepperEggs");
+        mCreeperEggs = aNBT.getInteger("mCreeperEggs");
         mAirPosed = aNBT.getInteger("mAirPosed");
         mPieces = aNBT.getInteger("mPieces");
+        gen = aNBT.getLong("gen");
     }
 
     @Override
@@ -420,7 +417,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
         if (side == facing) {
             if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183),
                 TextureFactory.builder()
-                    .addIcon(MACHINE_CASING_DRAGONEGG_GLOW)
+                    .addIcon(MACHINE_CASING_DRAGONEGG)
                     .extFacing()
                     .build(),
                 TextureFactory.builder()
@@ -433,7 +430,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
                 .extFacing()
                 .build(),
                 TextureFactory.builder()
-                    .addIcon(MACHINE_CASING_DRAGONEGG)
+                    .addIcon(MACHINE_CASING_DRAGONEGG_GLOW)
                     .extFacing()
                     .glow()
                     .build() };
