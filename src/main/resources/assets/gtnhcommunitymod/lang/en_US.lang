@@ -1109,3 +1109,4 @@ GTCM_LightningSpire_08=§nPlease clear the internal cache power before outputtin
 GTCM_LightningSpire_09=§nBefore dismantling the machine, please output the lightning rod first!
 GTCM_LightningSpire_10=§nOtherwise all internal lightning rods will be lost!
 NameLightningSpire=Lightning Spire
+tst.DynamicParallelController.UI.text.01=Parallel

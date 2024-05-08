@@ -1109,3 +1109,4 @@ GTCM_LightningSpire_08=§n输出机器前请先输出完内部电力缓存
 GTCM_LightningSpire_09=§n拆除机器前请先输出避雷针
 GTCM_LightningSpire_10=§n否则会丢失所有内部避雷针！
 NameLightningSpire=闪电尖塔
+tst.DynamicParallelController.UI.text.01=并行

@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -166,6 +167,11 @@ public class MachineLoader {
 
     public static ItemStack WirelessDataInputHatch;
     public static ItemStack WirelessDataOutputHatch;
+
+    // region Modularized Stuff
+    public static ItemStack ParallelControllerTest;
+
+    // endregion
 
     // test
     public static ItemStack TestMachine;
@@ -729,6 +735,15 @@ public class MachineLoader {
             TextLocalization.NameWirelessDataOutputHatch,
             12).getStackForm(1);
         GTCMItemList.WirelessDataOutputHatch.set(WirelessDataOutputHatch);
+
+        // Modularized Stuff
+        ParallelControllerTest = new DynamicParallelController(
+            18800,
+            "NameParallelControllerTest",
+            "ParallelControllerTest",
+            12,
+            114514
+        ).getStackForm(1);
     }
 
     public static void loadMachinePostInit() {
