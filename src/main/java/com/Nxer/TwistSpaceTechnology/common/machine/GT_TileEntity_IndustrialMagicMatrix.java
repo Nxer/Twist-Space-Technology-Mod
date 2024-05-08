@@ -14,6 +14,7 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static tb.init.TBBlocks.*;
 import static thaumcraft.common.config.ConfigBlocks.*;
 import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
+import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 import static tuhljin.automagy.blocks.ModBlocks.translucent;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -60,10 +62,10 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import scala.Int;
 import thaumcraft.api.ThaumcraftApi;
-import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.common.tiles.TileNodeEnergized;
 import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
@@ -82,6 +84,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     private final ItemStack ProofOfHeroes = GTCMItemList.ProofOfHeroes.get(1, 0);
     protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
     protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
+    protected ArrayList<String> Research = new ArrayList<>();
     public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
         .ofFailurePersistOnShutdown("Essentiainsentia");
     public static final CheckRecipeResult Research_not_completed = SimpleCheckRecipeResult
@@ -125,7 +128,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 for (TCRecipeTools.InfusionCraftingRecipe recipe1 : TCRecipeTools.ICR) {
                     if (recipe1.getOutput()
                         .isItemEqual(recipe.mOutputs[0])) {
-                        if (!(ThaumcraftApiHelper.isResearchComplete(getPlayName(), recipe1.getResearch()))) {
+                        if (!(isResearchComplete(recipe1.getResearch()))) {
                             return Research_not_completed;
                         }
                         if (!(getControllerSlot() == null)) {
@@ -150,6 +153,14 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 return CheckRecipeResultRegistry.NO_RECIPE;
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    }
+
+    public boolean isResearchComplete(String key) {
+        if (!key.startsWith("@") && ResearchCategories.getResearch(key) == null) {
+            return false;
+        } else {
+            return this.Research != null && !this.Research.isEmpty() && this.Research.contains(key);
+        }
     }
 
     @Nonnull
@@ -1813,16 +1824,49 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
+        NBTTagList list = new NBTTagList();
+        for (String string : Research) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("ResearchName", string);
+            list.appendTag(tag);
+        }
         aNBT.setInteger("mParallel", this.mParallel);
         aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
+        aNBT.setTag("Research", list);
         super.saveNBTData(aNBT);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
+        this.Research.clear();
+        for (int i = 0; i < aNBT.getTagList("Research", 10)
+            .tagCount(); i++) {
+            if (aNBT.getTagList("Research", 10)
+                .getCompoundTagAt(i)
+                .hasKey("ResearchName")) {
+                this.Research.add(
+                    aNBT.getTagList("Research", 10)
+                        .getCompoundTagAt(i)
+                        .getString("ResearchName"));
+            }
+        }
         this.mParallel = aNBT.getInteger("mParallel");
         this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
         super.loadNBTData(aNBT);
+    }
+
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if (aTick % 100 == 0) {
+            super.onPreTick(aBaseMetaTileEntity, aTick);
+            if (aBaseMetaTileEntity.isServerSide()) {
+                ArrayList<String> list = getResearchForPlayer(getPlayName());
+                if ((this.Research == null && list != null)
+                    || (list != null && !list.isEmpty() && this.Research.size() != list.size())) {
+                    this.Research = list;
+                }
+            }
+        }
     }
 
     @Override
