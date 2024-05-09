@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -62,6 +61,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
@@ -180,7 +181,7 @@ public class MachineLoader {
 
         EntityList.addMapping(Ship.class, "Ship", 114);
         // test
-        // TestMachine = new GTCM_TestMultiMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
+        TestMachine = new Test_ModularizedMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 
         // region multi Machine controller
 
@@ -742,8 +743,7 @@ public class MachineLoader {
             "NameParallelControllerTest",
             "ParallelControllerTest",
             12,
-            114514
-        ).getStackForm(1);
+            114514).getStackForm(1);
     }
 
     public static void loadMachinePostInit() {

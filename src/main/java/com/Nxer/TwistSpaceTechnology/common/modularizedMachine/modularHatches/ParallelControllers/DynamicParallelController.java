@@ -1,20 +1,20 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
 import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
+
 import gregtech.api.gui.modularui.GT_UIInfos;
 import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 public class DynamicParallelController extends DynamicParallelControllerBase {
 
@@ -61,7 +61,7 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
 
     @Override
     public int getParallel() {
-        return 0;
+        return parallel;
     }
 
     @Override
@@ -81,26 +81,41 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        builder
+        builder.widget(
+            // #tr tst.DynamicParallelController.UI.text.01
+            // # Parallel
+            // #zh_CN 并行
+            TextWidget.localised("tst.DynamicParallelController.UI.text.01")
+                .setPos(49, 18)
+                .setSize(81, 14))
             .widget(
-                //#tr tst.DynamicParallelController.UI.text.01
-                //# Parallel
-                //#zh_CN 并行
-                TextWidget.localised("tst.DynamicParallelController.UI.text.01")
-                          .setPos(49, 18)
-                          .setSize(81, 14)
-            )
-           .widget(
-               new TextFieldWidget().setSetterInt(val -> parallel = val)
-                                    .setGetterInt(() -> parallel)
-                                    .setNumbers(1, maxParallel)
-                                    .setOnScrollNumbers(1, 4, 64)
-                                    .setTextAlignment(Alignment.Center)
-                                    .setTextColor(Color.WHITE.normal)
-                                    .setSize(70, 18)
-                                    .setPos(54, 36)
-                                    .setBackground(GT_UITextures.BACKGROUND_TEXT_FIELD)
-           );
+                new TextFieldWidget().setSetterInt(val -> parallel = val)
+                    .setGetterInt(() -> parallel)
+                    .setNumbers(1, maxParallel)
+                    .setOnScrollNumbers(1, 4, 64)
+                    .setTextAlignment(Alignment.Center)
+                    .setTextColor(Color.WHITE.normal)
+                    .setSize(70, 18)
+                    .setPos(54, 36)
+                    .setBackground(GT_UITextures.BACKGROUND_TEXT_FIELD));
     }
+
+    // endregion
+
+    // region General
+
+    private static String[] description;
+
+    // @Override
+    // public String[] getDescription() {
+    // if (null == mDescriptionArray || mDescriptionArray.length < 1) {
+    // mDescriptionArray =
+    // new String[] {
+    // TextEnums.tr(),
+    // TextEnums.tr(),
+    // };
+    // }
+    // return mDescriptionArray;
+    // }
 
 }

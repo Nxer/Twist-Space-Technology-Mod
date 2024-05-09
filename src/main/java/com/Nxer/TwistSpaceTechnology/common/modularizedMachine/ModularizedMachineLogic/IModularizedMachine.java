@@ -4,8 +4,8 @@ import java.util.Collection;
 
 public interface IModularizedMachine {
 
-
     Collection<ModularHatchTypes> getSupportedModularHatchTypes();
+
     Collection<ModularBlockTypes> getSupportedModularBlockTypes();
 
     /**
@@ -46,12 +46,15 @@ public interface IModularizedMachine {
 
     /**
      * The original method to get all modular hatches.
+     * 
      * @return All modular hatches.
      */
     Collection<IModularHatch> getAllModularHatches();
 
     interface ISupportParallelController extends IModularizedMachine {
+
         int getParallelParameterValue();
+
         void setParallelParameter(int value);
     }
 
