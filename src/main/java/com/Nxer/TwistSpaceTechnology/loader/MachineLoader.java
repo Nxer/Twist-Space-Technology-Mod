@@ -170,7 +170,14 @@ public class MachineLoader {
     public static ItemStack WirelessDataOutputHatch;
 
     // region Modularized Stuff
-    public static ItemStack ParallelControllerTest;
+    public static ItemStack DynamicParallelControllerZPM;
+    public static ItemStack DynamicParallelControllerUV;
+    public static ItemStack DynamicParallelControllerUHV;
+    public static ItemStack DynamicParallelControllerUEV;
+    public static ItemStack DynamicParallelControllerUIV;
+    public static ItemStack DynamicParallelControllerUMV;
+    public static ItemStack DynamicParallelControllerUXV;
+    public static ItemStack DynamicParallelControllerMAX;
 
     // endregion
 
@@ -730,6 +737,7 @@ public class MachineLoader {
             TextLocalization.NameWirelessDataInputHatch,
             12).getStackForm(1);
         GTCMItemList.WirelessDataInputHatch.set(WirelessDataInputHatch);
+
         WirelessDataOutputHatch = new GT_Hatch_WirelessData_output(
             18956,
             "NameWirelessDataOutputHatch",
@@ -737,13 +745,115 @@ public class MachineLoader {
             12).getStackForm(1);
         GTCMItemList.WirelessDataOutputHatch.set(WirelessDataOutputHatch);
 
-        // Modularized Stuff
-        ParallelControllerTest = new DynamicParallelController(
+        // region Modularized Stuff
+
+        // #tr NameParallelControllerZPM
+        // # Dynamic Parallel Controller Module ZPM
+        // #zh_CN 动态并行控制器模块ZPM
+        DynamicParallelControllerZPM = new DynamicParallelController(
             18800,
-            "NameParallelControllerTest",
-            "ParallelControllerTest",
+            "NameParallelControllerZPM",
+            TextEnums.tr("NameParallelControllerZPM"),
+            7,
+            8).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerZPM.set(DynamicParallelControllerZPM);
+
+        // #tr NameParallelControllerUV
+        // # Dynamic Parallel Controller Module UV
+        // #zh_CN 动态并行控制器模块UV
+        DynamicParallelControllerUV = new DynamicParallelController(
+            18801,
+            "NameParallelControllerUV",
+            TextEnums.tr("NameParallelControllerUV"),
+            8,
+            128).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerUV.set(DynamicParallelControllerUV);
+
+        // #tr NameParallelControllerUHV
+        // # Dynamic Parallel Controller Module UHV
+        // #zh_CN 动态并行控制器模块UHV
+        DynamicParallelControllerUHV = new DynamicParallelController(
+            18802,
+            "NameParallelControllerUHV",
+            TextEnums.tr("NameParallelControllerUHV"),
+            9,
+            2048).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerUHV.set(DynamicParallelControllerUHV);
+
+        // #tr NameParallelControllerUEV
+        // # Dynamic Parallel Controller Module UEV
+        // #zh_CN 动态并行控制器模块UEV
+        DynamicParallelControllerUEV = new DynamicParallelController(
+            18803,
+            "NameParallelControllerUEV",
+            TextEnums.tr("NameParallelControllerUEV"),
+            10,
+            32768).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerUEV.set(DynamicParallelControllerUEV);
+
+        // #tr NameParallelControllerUIV
+        // # Dynamic Parallel Controller Module UIV
+        // #zh_CN 动态并行控制器模块UIV
+        DynamicParallelControllerUIV = new DynamicParallelController(
+            18804,
+            "NameParallelControllerUIV",
+            TextEnums.tr("NameParallelControllerUIV"),
+            11,
+            524288).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerUIV.set(DynamicParallelControllerUIV);
+
+        // #tr NameParallelControllerUMV
+        // # Dynamic Parallel Controller Module UMV
+        // #zh_CN 动态并行控制器模块UMV
+        DynamicParallelControllerUMV = new DynamicParallelController(
+            18805,
+            "NameParallelControllerUMV",
+            TextEnums.tr("NameParallelControllerUMV"),
             12,
-            114514).getStackForm(1);
+            8388608).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerUMV.set(DynamicParallelControllerUMV);
+
+        // #tr NameParallelControllerUXV
+        // # Dynamic Parallel Controller Module UXV
+        // #zh_CN 动态并行控制器模块UXV
+        DynamicParallelControllerUXV = new DynamicParallelController(
+            18806,
+            "NameParallelControllerUXV",
+            TextEnums.tr("NameParallelControllerUXV"),
+            13,
+            134217728).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerUXV.set(DynamicParallelControllerUXV);
+
+        // #tr NameParallelControllerMAX
+        // # Dynamic Parallel Controller Module MAX
+        // #zh_CN 动态并行控制器模块MAX
+        DynamicParallelControllerMAX = new DynamicParallelController(
+            18807,
+            "NameParallelControllerMAX",
+            TextEnums.tr("NameParallelControllerMAX"),
+            14,
+            Integer.MAX_VALUE).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerMAX.set(DynamicParallelControllerMAX);
+
+        /*
+         * LV=1
+         * MV=2
+         * HV=3
+         * EV=4
+         * IV=5
+         * LuV=6
+         * ZPM=7 8
+         * UV=8 128
+         * UHV=9 2,048
+         * UEV=10 32,768
+         * UIV=11 524,288
+         * UMV=12 8,388,608
+         * UXV=13 134,217,728
+         * MAX=14 2,147,483,648
+         */
+
+        // endregion
+
     }
 
     public static void loadMachinePostInit() {

@@ -2,6 +2,8 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachi
 
 import java.util.Collection;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
+
 public interface IModularizedMachine {
 
     Collection<ModularHatchTypes> getSupportedModularHatchTypes();
@@ -46,19 +48,33 @@ public interface IModularizedMachine {
 
     /**
      * The original method to get all modular hatches.
-     * 
+     *
      * @return All modular hatches.
      */
     Collection<IModularHatch> getAllModularHatches();
 
+    void resetModularHatchCollections();
+
     interface ISupportParallelController extends IModularizedMachine {
 
-        int getParallelParameterValue();
+        int getStaticParallelParameterValue();
 
-        void setParallelParameter(int value);
+        void setStaticParallelParameter(int value);
+
+        int getDynamicParallelParameterValue();
+
+        void setDynamicParallelParameter(int value);
     }
 
     interface ISupportSpeedController extends IModularizedMachine {
 
+        float getStaticSpeedParameterValue();
+
+        void setStaticSpeedParameterValue(float value);
+
+        float getDynamicSpeedParameterValue();
+
+        void setDynamicSpeedParameterValue(float value);
     }
+
 }

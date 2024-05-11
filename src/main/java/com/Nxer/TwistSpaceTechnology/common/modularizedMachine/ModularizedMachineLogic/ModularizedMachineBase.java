@@ -10,6 +10,9 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IDynamicModularHatch;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IStaticModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelControllerBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.ParallelControllerBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.StaticParallelControllerBase;
@@ -34,6 +37,7 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
     // endregion
 
     // region Modular Logic
+    // TODO 内存泄露
     protected Map<ModularHatchTypes, Collection<IModularHatch>> modularHatches = new HashMap<>();
     protected Map<ModularHatchTypes, Collection<IStaticModularHatch>> staticModularHatches = new HashMap<>();
     protected Map<ModularHatchTypes, Collection<IDynamicModularHatch>> dynamicModularHatches = new HashMap<>();
@@ -54,6 +58,31 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
     @Override
     public Collection<IModularHatch> getAllModularHatches() {
         return allModularHatches;
+    }
+
+    public void resetModularHatchCollections() {
+        modularHatches.forEach((k, v) -> v.clear());
+        staticModularHatches.forEach((k, v) -> v.clear());
+        dynamicModularHatches.forEach((k, v) -> v.clear());
+        allModularHatches.clear();
+    }
+
+    @Override
+    public void applyModularStaticSettings() {
+        for (Collection<IStaticModularHatch> c : getStaticModularHatchMap().values()) {
+            for (IStaticModularHatch d : c) {
+                d.onCheckMachine(this);
+            }
+        }
+    }
+
+    @Override
+    public void applyModularDynamicParameters() {
+        for (Collection<IDynamicModularHatch> c : getDynamicModularHatchMap().values()) {
+            for (IDynamicModularHatch d : c) {
+                d.onCheckProcessing(this);
+            }
+        }
     }
 
     @Override
@@ -143,6 +172,7 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        resetModularHatchCollections();
         if (!checkMachineMM(aBaseMetaTileEntity, aStack)) return false;
         checkModularStaticSettings();
         return true;

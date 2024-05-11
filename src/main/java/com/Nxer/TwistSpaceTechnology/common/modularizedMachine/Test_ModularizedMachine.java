@@ -14,13 +14,14 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IDynamicModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularBlockTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
@@ -58,41 +59,38 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
 
     // region Processing Logic
 
-    private int parallelParameter = 1;
+    private int staticParallelParameter = 0;
+    private int dynamicParallelParameter = 0;
 
     @Override
-    public int getParallelParameterValue() {
-        return parallelParameter;
+    public int getStaticParallelParameterValue() {
+        return staticParallelParameter;
     }
 
     @Override
-    public void setParallelParameter(int value) {
-        parallelParameter = value;
+    public void setStaticParallelParameter(int value) {
+        staticParallelParameter = value;
+    }
+
+    @Override
+    public int getDynamicParallelParameterValue() {
+        return dynamicParallelParameter;
+    }
+
+    @Override
+    public void setDynamicParallelParameter(int value) {
+        dynamicParallelParameter = value;
     }
 
     // TODO
     @Override
     public void resetModularStaticSettings() {
-
-    }
-
-    @Override
-    public void applyModularStaticSettings() {
-
+        staticParallelParameter = 0;
     }
 
     @Override
     public void resetModularDynamicParameters() {
-        parallelParameter = 1;
-    }
-
-    @Override
-    public void applyModularDynamicParameters() {
-        for (Collection<IDynamicModularHatch> c : getDynamicModularHatchMap().values()) {
-            for (IDynamicModularHatch d : c) {
-                d.onCheckProcessing(this);
-            }
-        }
+        dynamicParallelParameter = 0;
     }
 
     @Override
@@ -107,17 +105,24 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
 
     @Override
     protected int getMaxParallelRecipes() {
-        return parallelParameter;
+        if (dynamicParallelParameter == Integer.MAX_VALUE || staticParallelParameter == Integer.MAX_VALUE
+            || dynamicParallelParameter >= Integer.MAX_VALUE - 1 - staticParallelParameter) {
+            return Integer.MAX_VALUE;
+        }
+        return dynamicParallelParameter + staticParallelParameter + 1;
     }
+
+    protected static final Collection<ModularHatchTypes> SUPPORTED_MODULAR_HATCH_TYPES = Arrays
+        .asList(ModularHatchTypes.PARALLEL_CONTROLLER);
 
     @Override
     public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
-        return null;// TODO NULL
+        return SUPPORTED_MODULAR_HATCH_TYPES;// TODO NULL
     }
 
     @Override
     public Collection<ModularBlockTypes> getSupportedModularBlockTypes() {
-        return null;// TODO NULL
+        return Collections.emptyList();// TODO NULL
     }
 
     @Override
@@ -177,6 +182,7 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
                         .buildAndChain(BasicBlocks.MetaBlockCasing01, 0))
                 .build();
         }
+
         return STRUCTURE_DEFINITION;
     }
     // endregion

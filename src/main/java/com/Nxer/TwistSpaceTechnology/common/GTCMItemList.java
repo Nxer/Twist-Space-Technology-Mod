@@ -220,6 +220,17 @@ public enum GTCMItemList {
     MegaTreeFarm,
     LightningSpire,
 
+    // region Modularized Machine System Stuffs
+    DynamicParallelControllerZPM,
+    DynamicParallelControllerUV,
+    DynamicParallelControllerUHV,
+    DynamicParallelControllerUEV,
+    DynamicParallelControllerUIV,
+    DynamicParallelControllerUMV,
+    DynamicParallelControllerUXV,
+    DynamicParallelControllerMAX,
+    // endregion
+
     // MAX
     HighDimensionalExtend,
     HighDimensionalCircuitDoard,

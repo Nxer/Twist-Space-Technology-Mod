@@ -1,7 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers;
 
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IDynamicModularHatch;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IDynamicModularHatch;
 
 import gregtech.api.interfaces.ITexture;
 
@@ -17,7 +18,16 @@ public abstract class DynamicParallelControllerBase extends ParallelControllerBa
 
     @Override
     public void onCheckProcessing(ModularizedMachineBase<?> machine) {
-        onChecking(machine);
+        if (machine instanceof IModularizedMachine.ISupportParallelController parallelSupporter) {
+            int p = parallelSupporter.getDynamicParallelParameterValue();
+            if (p == Integer.MAX_VALUE) return;
+            int tp = getParallel();
+            if (p >= Integer.MAX_VALUE - tp) {
+                parallelSupporter.setDynamicParallelParameter(Integer.MAX_VALUE);
+            } else {
+                parallelSupporter.setDynamicParallelParameter(p + tp);
+            }
+        }
     }
 
     public abstract int getMaxParallel();
