@@ -4,6 +4,7 @@ import static gregtech.api.enums.Textures.BlockIcons.*;
 
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +15,14 @@ import java.util.stream.IntStream;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -40,16 +43,29 @@ import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEnt
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
+import com.supsolpans.MainSSP;
 
+import advsolar.common.AdvancedSolarPanel;
 import advsolar.common.tiles.TileEntitySolarPanel;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import emt.EMT;
+import emt.block.BlockSolars;
+import emt.tile.solar.Solars;
 import emt.tile.solar.TileEntitySolarBase;
+import goodgenerator.loader.Loaders;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.GT_HatchElement;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.HeatingCoilLevel;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -62,9 +78,15 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_HatchElementBuilder;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_StructureUtility;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings_Abstract;
+import gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Massfabricator;
 import gtPlusPlus.core.material.ALLOY;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import io.netty.buffer.ByteBuf;
 
 public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
@@ -381,13 +403,21 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
         "DDDDDDDDD     ",
         "DDEEEEEDD     ",
         "DDEEEEEDD     ",
-        "DDEEEEEFFFFFFF",
+        "DDEEEEEDDDDDDD",
         "DDEEEEEDD     ",
         "DDEEEEEDD     ",
         "DDDDDDDDD     ",
         "DDDDDDDDD     "
     }};
     // spotless:on
+
+    private static final String[][] PATTERN_ADDON_90_CW = new String[PATTERN_ADDON.length][PATTERN_ADDON[0][0]
+        .length()];
+
+    private static final String[][] PATTERN_ADDON_90_CCW = new String[PATTERN_ADDON.length][PATTERN_ADDON[0][0]
+        .length()];
+
+    private static final String[][] PATTERN_ADDON_180 = new String[PATTERN_ADDON.length][PATTERN_ADDON[0].length];
 
     public static final Map<String, String> overlayMapping = new HashMap<>() {
 
@@ -600,6 +630,86 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                 5));
     }
 
+    public static void registerUUForArray() {
+        // some workaround on UU
+        RecipeMaps.massFabFakeRecipes.addRecipe(
+            false,
+            new ItemStack[] { GT_Utility.getIntegratedCircuit(24) },
+            null,
+            null,
+            null,
+            new FluidStack[] { Materials.UUMatter.getFluid(1) },
+            GT_MetaTileEntity_Massfabricator.sDurationMultiplier,
+            GT_MetaTileEntity_Massfabricator.BASE_EUT,
+            0);
+        RecipeMaps.massFabFakeRecipes.addRecipe(
+            false,
+            new ItemStack[] { GT_Utility.getIntegratedCircuit(23) },
+            null,
+            null,
+            new FluidStack[] { Materials.UUAmplifier.getFluid(GT_MetaTileEntity_Massfabricator.sUUAperUUM) },
+            new FluidStack[] { Materials.UUMatter.getFluid(1L) },
+            GT_MetaTileEntity_Massfabricator.sDurationMultiplier / GT_MetaTileEntity_Massfabricator.sUUASpeedBonus,
+            GT_MetaTileEntity_Massfabricator.BASE_EUT,
+            0);
+    }
+
+    public static void getGeneratorsForArray() {
+        TST_BigBroArray.GENERATORS.put(
+            "Diesel",
+            new ItemStack[] { ItemList.Generator_Diesel_LV.get(1), ItemList.Generator_Diesel_MV.get(1),
+                ItemList.Generator_Diesel_HV.get(1), Loaders.Generator_Diesel[0], Loaders.Generator_Diesel[1] });
+        TST_BigBroArray.GENERATORS.put(
+            "Steam_Turbine",
+            new ItemStack[] { ItemList.Generator_Steam_Turbine_LV.get(1), ItemList.Generator_Steam_Turbine_MV.get(1),
+                ItemList.Generator_Steam_Turbine_HV.get(1), });
+        TST_BigBroArray.GENERATORS.put(
+            "Gas_Turbine",
+            new ItemStack[] { ItemList.Generator_Gas_Turbine_LV.get(1), ItemList.Generator_Gas_Turbine_MV.get(1),
+                ItemList.Generator_Gas_Turbine_HV.get(1), ItemList.Generator_Gas_Turbine_EV.get(1),
+                ItemList.Generator_Gas_Turbine_IV.get(1), });
+
+        TST_BigBroArray.GENERATORS.put(
+            "SemiFluid",
+            new ItemStack[] { GregtechItemList.Generator_SemiFluid_LV.get(1),
+                GregtechItemList.Generator_SemiFluid_MV.get(1), GregtechItemList.Generator_SemiFluid_HV.get(1),
+                GregtechItemList.Generator_SemiFluid_EV.get(1), GregtechItemList.Generator_SemiFluid_IV.get(1) });
+
+        TST_BigBroArray.GENERATORS.put(
+            "Naquadah",
+            new ItemStack[] { ItemList.Generator_Naquadah_Mark_I.get(1), ItemList.Generator_Naquadah_Mark_II.get(1),
+                ItemList.Generator_Naquadah_Mark_III.get(1), ItemList.Generator_Naquadah_Mark_IV.get(1),
+                ItemList.Generator_Naquadah_Mark_V.get(1), });
+
+        TST_BigBroArray.GENERATORS.put(
+            "ASP_Solar",
+            new ItemStack[] { new ItemStack(ItemBlock.getItemFromBlock(AdvancedSolarPanel.blockAdvSolarPanel), 1), // LV
+                new ItemStack(ItemBlock.getItemFromBlock(AdvancedSolarPanel.blockAdvSolarPanel), 1, 1), // MV
+                new ItemStack(ItemBlock.getItemFromBlock(AdvancedSolarPanel.blockAdvSolarPanel), 1, 2), // HV
+                new ItemStack(ItemBlock.getItemFromBlock(AdvancedSolarPanel.blockAdvSolarPanel), 1, 3), // EV
+                new ItemStack(MainSSP.BlockSpectralSP, 1), // IV
+                new ItemStack(MainSSP.BlockSingularSP, 1), // LuV
+                new ItemStack(MainSSP.BlockAdminSP, 1), // ZPM
+                new ItemStack(MainSSP.BlockPhotonSP, 1) // UV
+            });
+
+        List<ItemStack> EMTSolars = new ArrayList<>();
+        for (int i = 0; i < Solars.getCountOfInstances(); i++) {
+            BlockSolars emtSolars;
+            if (i == 0) {
+                emtSolars = (BlockSolars) GameRegistry.findBlock(EMT.MOD_ID, "EMTSolars");
+
+            } else {
+                emtSolars = (BlockSolars) GameRegistry.findBlock(EMT.MOD_ID, "EMTSolars" + (i + 1));
+            }
+            for (int meta = 0; meta < emtSolars.countOfMetas; meta++) {
+                EMTSolars.add(new ItemStack(emtSolars, 1, meta));
+            }
+        }
+        TST_BigBroArray.GENERATORS.put("EMT_Solar", EMTSolars.toArray(new ItemStack[0]));
+
+    }
+
     public static int getFrameTier(Block block, int meta) {
         for (int i = 0; i < FRAMES.size(); i++) {
             if (block == FRAMES.get(i)
@@ -634,7 +744,40 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
     }
 
     public static void initializeStructure() {
-        STRUCTURE_DEFINITION = StructureDefinition.<TST_BigBroArray>builder()
+        for (int i = 0; i < PATTERN_ADDON.length; i++) {
+            for (int j = 0; j < PATTERN_ADDON[i].length; j++) {
+                PATTERN_ADDON[i][j] = PATTERN_ADDON[i][j].replace('A', 'G')
+                    .replace('B', 'H')
+                    .replace('C', 'I')
+                    .replace('D', 'J')
+                    .replace('E', 'K');
+            }
+        }
+        for (int i = 0; i < PATTERN_ADDON.length; i++) {
+            for (int j = 0; j < PATTERN_ADDON[0].length; j++) {
+                // cw 180 addon
+                PATTERN_ADDON_180[i][j] = StringUtils.reverse(PATTERN_ADDON[i][j]);
+            }
+        }
+        for (int i = 0; i < PATTERN_ADDON.length; i++) {
+            for (int k = 0; k < PATTERN_ADDON[0][0].length(); k++) {
+                String rotated = "";
+                for (int j = 0; j < PATTERN_ADDON[0].length; j++) {
+                    // cw 90 addon
+                    rotated += PATTERN_ADDON[i][j].charAt(k);
+                }
+                PATTERN_ADDON_90_CW[i][k] = rotated;
+            }
+        }
+
+        for (int i = 0; i < PATTERN_ADDON_90_CW.length; i++) {
+            for (int j = 0; j <= PATTERN_ADDON_90_CW.length / 2; j++) {
+                PATTERN_ADDON_90_CCW[i][j] = PATTERN_ADDON_90_CW[i][PATTERN_ADDON_90_CW[0].length - 1 - j];
+                PATTERN_ADDON_90_CCW[i][PATTERN_ADDON_90_CW[0].length - 1 - j] = PATTERN_ADDON_90_CW[i][j];
+            }
+        }
+
+        StructureDefinition.Builder<TST_BigBroArray> builder = StructureDefinition.<TST_BigBroArray>builder()
             .addShape("core", StructureUtility.transpose(PATTERN_CORE))
             .addElement(
                 'D',
@@ -653,8 +796,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                 StructureUtility.withChannel(
                     "glass",
                     BorosilicateGlass.ofBoroGlass(
-                        (byte) Byte.MAX_VALUE,
-                        (te, tier) -> te.glassTier = Math.min(tier, te.glassTier),
+                        Byte.MAX_VALUE,
+                        (te, tier) -> te.glassTier = te.glassTier < 0 ? Math.min(tier, te.glassTier) : tier,
                         (te) -> (byte) te.glassTier)))
             .addElement(
                 'B',
@@ -686,50 +829,49 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                         MACHINE_CASINGS,
                         14,
                         TST_BigBroArray::setCasingTier,
-                        TST_BigBroArray::getCasingTier)))
+                        TST_BigBroArray::getCasingTier)));
+        List<String[][]> strings = Arrays
+            .asList(PATTERN_ADDON, PATTERN_ADDON_90_CW, PATTERN_ADDON_180, PATTERN_ADDON_90_CCW);
+        for (int i = 0; i < strings.size(); i++) {
+            String[][] pattern = strings.get(i);
+            builder = builder.addShape("addon" + i, StructureUtility.transpose(pattern))
+                .addElement(
+                    'K',
+                    StructureUtility.withChannel(
+                        "coil",
+                        GT_StructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
+                .addElement(
+                    'I',
+                    StructureUtility.withChannel(
+                        "frame",
+                        StructureUtility.ofBlocksTiered(
+                            TST_BigBroArray::getFrameTier,
+                            FRAMES,
+                            Integer.MAX_VALUE,
+                            (te, tier) -> te.frameTier = Math.min(tier, te.frameTier),
+                            (te) -> te.frameTier)))
+                .addElement(
+                    'G',
+                    StructureUtility.withChannel(
+                        "glass",
+                        BorosilicateGlass.ofBoroGlass(
+                            Byte.MAX_VALUE,
+                            (te, tier) -> te.glassTier = Math.min(tier, te.glassTier),
+                            (te) -> (byte) te.glassTier)))
+                .addElement(
+                    'H',
+                    StructureUtility.withChannel(
+                        "parallelism",
+                        StructureUtility.ofBlocksTiered(
+                            TST_BigBroArray::getParallelismCasingTier,
+                            PARALLELISM_CASINGS,
+                            5,
+                            (te, tier) -> te.parallelismTier = Math.min(tier, te.parallelismTier),
+                            (te) -> te.parallelismTier)))
+                .addElement('J', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1));
+        }
 
-            .addShape("addon1", StructureUtility.transpose(PATTERN_ADDON))
-            .addElement('D', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1))
-            .addElement(
-                'E',
-                StructureUtility.withChannel(
-                    "coil",
-                    GT_StructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
-            .addElement(
-                'C',
-                StructureUtility.withChannel(
-                    "frame",
-                    StructureUtility.ofBlocksTiered(
-                        TST_BigBroArray::getFrameTier,
-                        FRAMES,
-                        Integer.MAX_VALUE,
-                        (te, tier) -> te.frameTier = Math.min(tier, te.frameTier),
-                        (te) -> te.frameTier)))
-            .addElement(
-                'A',
-                StructureUtility.withChannel(
-                    "glass",
-                    BorosilicateGlass.ofBoroGlass(
-                        Byte.MAX_VALUE,
-                        (te, tier) -> te.glassTier = Math.min(tier, te.glassTier),
-                        (te) -> (byte) te.glassTier)))
-            .addElement(
-                'B',
-                StructureUtility.withChannel(
-                    "parallelism",
-                    StructureUtility.ofBlocksTiered(
-                        TST_BigBroArray::getParallelismCasingTier,
-                        PARALLELISM_CASINGS,
-                        5,
-                        (te, tier) -> te.parallelismTier = Math.min(tier, te.parallelismTier),
-                        (te) -> te.parallelismTier)))
-            .addElement(
-                'F',
-                StructureUtility.ofBlock(
-                    com.github.technus.tectech.thing.CustomItemList.LASERpipe.getBlock(),
-                    com.github.technus.tectech.thing.CustomItemList.LASERpipe.get(1)
-                        .getItemDamage()))
-            .build();
+        STRUCTURE_DEFINITION = builder.build();
     }
 
     @SideOnly(Side.CLIENT)
@@ -969,6 +1111,22 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
     @Override
     public void construct(ItemStack itemStack, boolean hintsOnly) {
         buildPiece("core", itemStack, hintsOnly, 5, 5, 4);
+        int addonCount = Math.min(itemStack.stackSize - 1, 4);
+        if (addonCount == 4) {
+            buildPiece("addon3", itemStack, hintsOnly, 4, 12, -7);
+            addonCount--;
+        }
+        if (addonCount == 3) {
+            buildPiece("addon2", itemStack, hintsOnly, -6, 12, 3);
+            addonCount--;
+        }
+        if (addonCount == 2) {
+            buildPiece("addon1", itemStack, hintsOnly, 4, 12, 18);
+            addonCount--;
+        }
+        if (addonCount == 1) {
+            buildPiece("addon0", itemStack, hintsOnly, 19, 12, 3);
+        }
     }
 
     @Override
@@ -1044,7 +1202,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                         }
                         if (machineTypeToBeUsed != null) {
                             if (GT_Utility.areStacksEqual(machineTypeToBeUsed, storedInput)) {
-                                if (i < frameTier + 5 || addonCount == 0) {
+                                // supports all machines when there's no additional strucutures or frame level >= 6
+                                if (i < frameTier + 5 || frameTier >= 6 || addonCount == 0) {
                                     if (machines != null) {
                                         if (GT_Utility.areStacksEqual(machines, storedInput)) {
                                             machines.stackSize += Math
@@ -1052,7 +1211,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                                             storedInput.stackSize -= Math
                                                 .min(maxParallelism - machines.stackSize, storedInput.stackSize);
                                         }
-                                    } else {
+                                    } else if (storedInput.stackSize > 0) { // or parallelism will be 0
                                         machines = storedInput.copy();
                                         machines.stackSize = Math.min(maxParallelism, machines.stackSize);
                                         storedInput.stackSize -= machines.stackSize;
@@ -1076,9 +1235,11 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                             if ("ASP_Solar".equals(machineType) && i >= (frameTier + 4) && addonCount > 0) continue;
                             // calculate tier with log
                             // (int)log(output / 8, 4) = LV(1), MV(2), HV(3), EV(4), IV(5), .......
+                            // supports all machines when there's no additional strucutures or frame level >= 6
                             if ("EMT_Solar".equals(machineType)
                                 && (int) Math.floor(Math.log(((TileEntitySolarBase) solarTE).output / 8) / Math.log(4))
                                     >= (frameTier + 4)
+                                && frameTier < 6
                                 && addonCount > 0) continue;
                             if (machines != null) {
                                 if (GT_Utility.areStacksEqual(machines, storedInput)) {
@@ -1087,7 +1248,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                                     storedInput.stackSize -= Math
                                         .min(maxParallelism - machines.stackSize, storedInput.stackSize);
                                 }
-                            } else {
+                            } else if (storedInput.stackSize > 0) { // or parallelism will be 0
                                 mode = MODE_GENERATOR;
                                 machines = storedInput.copy();
                                 machines.stackSize = Math.min(maxParallelism, machines.stackSize);
