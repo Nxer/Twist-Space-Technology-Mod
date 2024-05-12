@@ -592,32 +592,32 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM impleme
                 Block.getBlockFromItem(
                     ALLOY.ARCANITE.getFrameBox(1)
                         .getItem()),
-                1), // IV
+                0), // IV
             Pair.of(
                 Block.getBlockFromItem(
                     ALLOY.ZERON_100.getFrameBox(1)
                         .getItem()),
-                2), // LuV
+                0), // LuV
             Pair.of(
                 Block.getBlockFromItem(
                     ALLOY.PIKYONIUM.getFrameBox(1)
                         .getItem()),
-                3), // ZPM
+                0), // ZPM
             Pair.of(
                 Block.getBlockFromItem(
                     ALLOY.BOTMIUM.getFrameBox(1)
                         .getItem()),
-                4), // UV
+                0), // UV
             Pair.of(
                 Block.getBlockFromItem(
                     ALLOY.ABYSSAL.getFrameBox(1)
                         .getItem()),
-                5), // UHV
+                0), // UHV
             Pair.of(
                 Block.getBlockFromItem(
                     ALLOY.QUANTUM.getFrameBox(1)
                         .getItem()),
-                6)); // UEV - MAX
+                0)); // UEV - MAX
         PARALLELISM_CASINGS = Arrays.asList(
             Pair.of(
                 Block.getBlockFromItem(
