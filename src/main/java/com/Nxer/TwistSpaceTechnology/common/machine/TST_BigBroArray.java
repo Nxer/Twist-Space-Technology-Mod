@@ -1455,7 +1455,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM impleme
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64), },
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64) },
             ALLOY.NITINOL_60.getFluidStack(24576),
             GTCMItemList.BigBroArray.get(1),
             20 * 1200,
