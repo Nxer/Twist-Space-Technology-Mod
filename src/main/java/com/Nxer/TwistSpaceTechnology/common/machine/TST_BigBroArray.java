@@ -1,6 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static gregtech.api.enums.Textures.BlockIcons.*;
+import static gregtech.api.util.GT_RecipeBuilder.HOURS;
+import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
+import static gregtech.api.util.GT_RecipeConstants.*;
 
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +15,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.github.technus.tectech.recipe.TT_recipeAdder;
+import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.TierEU;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +28,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,9 +48,15 @@ import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_H
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyMulti;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyTunnel;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
+import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
+import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
+import com.gtnewhorizons.modularui.common.widget.SlotWidget;
+import com.gtnewhorizons.modularui.common.widget.TextWidget;
 import com.supsolpans.MainSSP;
 
 import advsolar.common.AdvancedSolarPanel;
@@ -89,30 +103,32 @@ import gtPlusPlus.core.material.ALLOY;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import io.netty.buffer.ByteBuf;
 
-public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
+public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM implements ISurvivalConstructable {
 
     private ItemStack machines;
 
     private int maxParallelism = 256;
 
+    private int actualParallelism = 256;
+    private int machineCountForMaxParallelism = 256;
     private String machineType = null;
 
-    private int machineTier = Byte.MAX_VALUE;
+    private int machineTier = -1;
 
     // affects energy hatch
-    private int glassTier = Byte.MAX_VALUE;
+    private int glassTier = -2;
 
     // affects machines tier that can be put into array
-    private int frameTier = Integer.MAX_VALUE;
+    private int frameTier = -1;
 
     // bonus processing speed and reduce power cost
-    private HeatingCoilLevel coilTier = HeatingCoilLevel.MAX;
+    private HeatingCoilLevel coilTier = HeatingCoilLevel.None;
 
     // affects maxparallelism
-    private int parallelismTier = 5;
+    private int parallelismTier = -1;
 
     // affects dynamo
-    private int casingTier = 14;
+    private int casingTier = -1;
 
     // affects max parallelism
     private int addonCount = 0;
@@ -607,27 +623,27 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                 Block.getBlockFromItem(
                     GTCMItemList.ParallelismCasing0.get(1)
                         .getItem()),
-                1),
+                3),
             Pair.of(
                 Block.getBlockFromItem(
                     GTCMItemList.ParallelismCasing1.get(1)
                         .getItem()),
-                2),
+                4),
             Pair.of(
                 Block.getBlockFromItem(
                     GTCMItemList.ParallelismCasing2.get(1)
                         .getItem()),
-                3),
+                5),
             Pair.of(
                 Block.getBlockFromItem(
                     GTCMItemList.ParallelismCasing3.get(1)
                         .getItem()),
-                4),
+                6),
             Pair.of(
                 Block.getBlockFromItem(
                     GTCMItemList.ParallelismCasing4.get(1)
                         .getItem()),
-                5));
+                7));
     }
 
     public static void registerUUForArray() {
@@ -728,7 +744,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
     }
 
     public void setCoilTier(HeatingCoilLevel level) {
-        this.coilTier = level.getTier() < coilTier.getLevel() ? level : coilTier;
+        this.coilTier = coilTier != HeatingCoilLevel.None ? (level.getTier() < coilTier.getLevel() ? level : coilTier)
+            : level;
     }
 
     public HeatingCoilLevel getCoilTier() {
@@ -736,7 +753,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
     }
 
     public void setCasingTier(int casingTier) {
-        this.casingTier = Math.min(casingTier, this.casingTier);
+        this.casingTier = this.casingTier >= 0 ? Math.min(casingTier, this.casingTier) : casingTier;
     }
 
     public int getCasingTier() {
@@ -796,8 +813,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                 StructureUtility.withChannel(
                     "glass",
                     BorosilicateGlass.ofBoroGlass(
-                        Byte.MAX_VALUE,
-                        (te, tier) -> te.glassTier = te.glassTier < 0 ? Math.min(tier, te.glassTier) : tier,
+                        (byte) -2,
+                        (te, tier) -> te.glassTier = te.glassTier >= 0 ? Math.min(tier, te.glassTier) : tier,
                         (te) -> (byte) te.glassTier)))
             .addElement(
                 'B',
@@ -806,8 +823,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                     StructureUtility.ofBlocksTiered(
                         TST_BigBroArray::getFrameTier,
                         FRAMES,
-                        Integer.MAX_VALUE,
-                        (te, tier) -> te.frameTier = Math.min(tier, te.frameTier),
+                        -1,
+                        (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
                         (te) -> te.frameTier)))
             .addElement('E', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1))
             .addElement(
@@ -827,7 +844,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                     StructureUtility.ofBlocksTiered(
                         (block, meta) -> meta,
                         MACHINE_CASINGS,
-                        14,
+                        -1,
                         TST_BigBroArray::setCasingTier,
                         TST_BigBroArray::getCasingTier)));
         List<String[][]> strings = Arrays
@@ -847,16 +864,16 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                         StructureUtility.ofBlocksTiered(
                             TST_BigBroArray::getFrameTier,
                             FRAMES,
-                            Integer.MAX_VALUE,
-                            (te, tier) -> te.frameTier = Math.min(tier, te.frameTier),
+                            -1,
+                            (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
                             (te) -> te.frameTier)))
                 .addElement(
                     'G',
                     StructureUtility.withChannel(
                         "glass",
                         BorosilicateGlass.ofBoroGlass(
-                            Byte.MAX_VALUE,
-                            (te, tier) -> te.glassTier = Math.min(tier, te.glassTier),
+                            (byte) -1,
+                            (te, tier) -> te.glassTier = te.glassTier >= 0 ? Math.min(tier, te.glassTier) : tier,
                             (te) -> (byte) te.glassTier)))
                 .addElement(
                     'H',
@@ -865,8 +882,14 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                         StructureUtility.ofBlocksTiered(
                             TST_BigBroArray::getParallelismCasingTier,
                             PARALLELISM_CASINGS,
-                            5,
-                            (te, tier) -> te.parallelismTier = Math.min(tier, te.parallelismTier),
+                            -1,
+                            (te, tier) -> {
+                                if (te.parallelismTier >= 0) {
+                                    te.parallelismTier = Math.min(tier, te.parallelismTier);
+                                } else {
+                                    te.parallelismTier = tier;
+                                }
+                            },
                             (te) -> te.parallelismTier)))
                 .addElement('J', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1));
         }
@@ -966,6 +989,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
             aNBT.setString("machineType", machineType);
         }
         aNBT.setInteger("tier", machineTier);
+        aNBT.setInteger("maxParallelism", maxParallelism);
+        aNBT.setInteger("actualParallelism", actualParallelism);
         if (mode != null) aNBT.setString("mode", mode);
 
         if (solarTE != null) {
@@ -986,6 +1011,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
         machineType = aNBT.getString("machineType");
         mode = aNBT.getString("mode");
         machineTier = aNBT.getInteger("tier");
+        maxParallelism = aNBT.getInteger("maxParallelism");
+        actualParallelism = aNBT.getInteger("acutalParallelism");
         if (aNBT.hasKey("machines")) machines = ItemStack.loadItemStackFromNBT(aNBT.getCompoundTag("machines"));
         if (aNBT.hasKey("solarTE")) {
             NBTTagCompound compound = aNBT.getCompoundTag("solarTE");
@@ -1013,8 +1040,10 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
     @Override
     protected ProcessingLogic createProcessingLogic() {
         GTCM_ProcessingLogic gtcm_processingLogic = new GTCM_ProcessingLogic();
-        gtcm_processingLogic.setMaxParallelSupplier(() -> machines != null ? machines.stackSize : 1);
-        gtcm_processingLogic.setSpeedBonus(1.1f);
+        gtcm_processingLogic.setMaxParallelSupplier(
+            () -> machines != null ? (int) Math.min(machines.stackSize * Math.pow(2, parallelismTier), maxParallelism)
+                : 1);
+        // gtcm_processingLogic.setEuModifier((float) Math.pow(0.9, coilTier.getTier()));
         return gtcm_processingLogic;
     }
 
@@ -1026,20 +1055,27 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
         } else if (MODE_GENERATOR.equals(mode)) {
             if ("ASP_Solar".equals(machineType) || "EMT_Solar".equals(machineType)) {
                 mMaxProgresstime = 20;
+                int xCoord = getBaseMetaTileEntity().getXCoord();
+                int yCoord = getBaseMetaTileEntity().getYCoord() + 4;
+                int zCoord = getBaseMetaTileEntity().getZCoord();
+                solarTE.xCoord = xCoord;
+                solarTE.yCoord = yCoord;
+                solarTE.zCoord = zCoord;
                 if (!solarTE.hasWorldObj()) {
                     solarTE.setWorldObj(getBaseMetaTileEntity().getWorld());
                 }
                 solarTE.updateEntity();
                 if (solarTE instanceof TileEntitySolarPanel te) {
                     solarTE.updateEntity();
-                    long energyOutput = ((long) te.storage) * machines.stackSize * 20;
-                    fillAllDynamos(energyOutput);
+                    lEUt = ((long) (te.storage * Math.pow(1.5, parallelismTier))) * actualParallelism * 20;
+                    fillAllDynamos(lEUt);
                     te.storage = 0;
                     return CheckRecipeResultRegistry.SUCCESSFUL;
                 } else if (solarTE instanceof TileEntitySolarBase te) {
                     te.checkConditions();
                     long energyOutput = te.energySource.getEnergyStored();
-                    fillAllDynamos(energyOutput * machines.stackSize * 20);
+                    lEUt = (long) (Math.pow(1.5, parallelismTier) * energyOutput * actualParallelism * 20);
+                    fillAllDynamos(lEUt);
                     te.energySource.drawEnergy(energyOutput);
                     return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
@@ -1052,7 +1088,54 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
         }
     }
 
-    private void fillAllDynamos(long energy) {
+    @Override
+    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
+        super.drawTexts(screenElements, inventorySlot);
+        screenElements
+            .widget(
+                new TextWidget(String.format("发电中, 功率: %dEU/t", lEUt / 20)).setDefaultColor(COLOR_TEXT_WHITE.get())
+                    .setEnabled(
+                        widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && getBaseMetaTileEntity().isActive()
+                            && MODE_GENERATOR.equals(mode)))
+            .widget(new FakeSyncWidget.StringSyncer(() -> mode, (mode) -> TST_BigBroArray.this.mode = mode))
+            .widget(new FakeSyncWidget.LongSyncer(() -> lEUt, (l) -> lEUt = l));
+
+        screenElements.widget(
+            new TextWidget("Machine state: " + mode).setDefaultColor(COLOR_TEXT_WHITE.get())
+                .setEnabled(
+                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()));
+
+        screenElements.widget(
+            new TextWidget("Machine type:" + machineType).setDefaultColor(COLOR_TEXT_WHITE.get())
+                .setEnabled(
+                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+            .widget(new FakeSyncWidget.StringSyncer(() -> machineType, (type) -> machineType = type));;
+
+        screenElements.widget(
+            new TextWidget("Machine tier:" + machineTier).setDefaultColor(COLOR_TEXT_WHITE.get())
+                .setEnabled(
+                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> machineTier, (tier) -> machineTier = tier));
+        screenElements
+            .widget(
+                new TextWidget("Provided parallelism:" + actualParallelism).setEnabled(
+                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> actualParallelism, (p) -> this.actualParallelism = p));
+
+        screenElements.widget(
+            new TextWidget("Speed boost:" + Math.pow(1.5, parallelismTier)).setDefaultColor(COLOR_TEXT_WHITE.get())
+                .setEnabled(
+                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> parallelismTier, (tier) -> parallelismTier = tier));
+
+        screenElements.widget(
+            new TextWidget("Addons attached:" + addonCount).setDefaultColor(COLOR_TEXT_WHITE.get())
+                .setEnabled(
+                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> addonCount, (ct) -> addonCount = ct));
+    }
+
+    private long fillAllDynamos(long energy) {
         for (GT_MetaTileEntity_Hatch_Dynamo dynamo : mDynamoHatches) {
             long drain = Math.min(energy, dynamo.maxEUStore() - dynamo.getEUVar());
             energy -= drain;
@@ -1063,6 +1146,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
             energy -= drain;
             dynamo.setEUVar(dynamo.getEUVar() + drain);
         }
+        return energy;
     }
 
     @Override
@@ -1085,6 +1169,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
             .addInfo(TextEnums.BigBroArrayDesc8.toString())
             .addInfo(TextEnums.BigBroArrayDesc9.toString())
             .addInfo(TextEnums.BigBroArrayDesc10.toString())
+            .addInfo(TextEnums.BigBroArrayDesc11.toString())
             .addInfo(TextEnums.StructureTooComplex.toString())
             .addInfo(TextLocalization.BLUE_PRINT_INFO);
         gt_multiblock_tooltip_builder.toolTipFinisher(TextLocalization.ModName);
@@ -1130,12 +1215,42 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
     }
 
     @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        int blockPlacedCount = 0;
+        if (!mMachine) {
+            blockPlacedCount += survivialBuildPiece("core", stackSize, 5, 5, 4, elementBudget, env, true);
+        } else {
+            switch (this.addonCount) {
+                case 0:
+                    blockPlacedCount += survivialBuildPiece("addon0", stackSize, 19, 12, 3, elementBudget, env, true);
+                    break;
+                case 1:
+                    blockPlacedCount += survivialBuildPiece("addon1", stackSize, 4, 12, 18, elementBudget, env, true);
+                    break;
+                case 2:
+                    blockPlacedCount += survivialBuildPiece("addon2", stackSize, -6, 12, 3, elementBudget, env, true);
+                    break;
+                case 3:
+                    blockPlacedCount += survivialBuildPiece("addon2", stackSize, -4, 12, -7, elementBudget, env, true);
+                    break;
+                default:
+                    break;
+            }
+        }
+        return blockPlacedCount;
+    }
+
+    @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         return getTooltip();
     }
 
     @Override
     protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+        this.casingTier = -1;
+        this.glassTier = -2;
+        this.coilTier = HeatingCoilLevel.None;
+        this.frameTier = -1;
         boolean checkPiece = checkPiece("core", 5, 5, 4);
         if (!checkPiece) return false;
         // dynamo hatch level follows casing level
@@ -1164,9 +1279,48 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                 return false;
             }
         }
+
+        this.addonCount = 0;
+        if (checkPiece("addon0", 19, 12, 3)) {
+            this.addonCount += 1;
+        }
+        if (checkPiece("addon1", 4, 12, 18)) {
+            this.addonCount += 1;
+        }
+        if (checkPiece("addon2", -6, 12, 3)) {
+            this.addonCount += 1;
+        }
+        if (checkPiece("addon3", 4, 12, -7)) {
+            this.addonCount += 1;
+        }
         // 5 is place holder, max tier is 4
-        maxParallelism = (64 << ((parallelismTier == 5 ? 0 : parallelismTier) * 2)) * (1 + addonCount);
+        this.maxParallelism = calculateMaxParallelismByAddonTier();
+        this.machineCountForMaxParallelism = (this.maxParallelism >> parallelismTier);
+        this.actualParallelism = calculateParallelismByAddonTier();
+        processingLogic.setSpeedBonus((float) Math.pow(1.5, parallelismTier));
+        processingLogic.setEuModifier((float) Math.pow(0.9, coilTier.getTier()));
         return checkPiece;
+    }
+
+    private int calculateMaxParallelismByAddonTier() {
+        if (addonCount > 0) {
+            // 0-64
+            // 1-256
+            // 2-1024
+            // 3-2048
+            // 4-MAX/5
+            return parallelismTier >= 5 ? (Integer.MAX_VALUE / 5) * (1 + this.addonCount)
+                : (64 << ((parallelismTier) * 2)) * (1 + this.addonCount);
+        } else {
+            return 64;
+        }
+    }
+
+    private int calculateParallelismByAddonTier() {
+        int p = parallelismTier >= 5 ? (Integer.MAX_VALUE / 5) * (1 + this.addonCount)
+            : ((machines != null ? machines.stackSize : 0) << parallelismTier);
+        int m = calculateMaxParallelismByAddonTier();
+        return Math.min(p, m);
     }
 
     @Override
@@ -1176,7 +1330,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return machines != null ? machines.stackSize * 16 : 0;
+        return Math.min(actualParallelism, 10000);
     }
 
     @Override
@@ -1206,14 +1360,18 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                                 if (i < frameTier + 5 || frameTier >= 6 || addonCount == 0) {
                                     if (machines != null) {
                                         if (GT_Utility.areStacksEqual(machines, storedInput)) {
-                                            machines.stackSize += Math
-                                                .min(maxParallelism - machines.stackSize, storedInput.stackSize);
-                                            storedInput.stackSize -= Math
-                                                .min(maxParallelism - machines.stackSize, storedInput.stackSize);
+                                            int d = Math
+                                                // every parallelism tier provides 4x parallelism each machine
+                                                .min(
+                                                    machineCountForMaxParallelism - machines.stackSize,
+                                                    storedInput.stackSize);
+                                            machines.stackSize += d;
+                                            storedInput.stackSize -= d;
                                         }
                                     } else if (storedInput.stackSize > 0) { // or parallelism will be 0
                                         machines = storedInput.copy();
-                                        machines.stackSize = Math.min(maxParallelism, machines.stackSize);
+                                        machines.stackSize = Math
+                                            .min(machineCountForMaxParallelism, storedInput.stackSize);
                                         storedInput.stackSize -= machines.stackSize;
                                         this.machineType = machineType[0];
                                         machineTier = i;
@@ -1243,36 +1401,32 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
                                 && addonCount > 0) continue;
                             if (machines != null) {
                                 if (GT_Utility.areStacksEqual(machines, storedInput)) {
-                                    machines.stackSize += Math
-                                        .min(maxParallelism - machines.stackSize, storedInput.stackSize);
-                                    storedInput.stackSize -= Math
-                                        .min(maxParallelism - machines.stackSize, storedInput.stackSize);
+                                    int d = Math
+                                        .min(machineCountForMaxParallelism - machines.stackSize, storedInput.stackSize);
+                                    machines.stackSize += d;
+                                    storedInput.stackSize -= d;
                                 }
                             } else if (storedInput.stackSize > 0) { // or parallelism will be 0
                                 mode = MODE_GENERATOR;
                                 machines = storedInput.copy();
-                                machines.stackSize = Math.min(maxParallelism, machines.stackSize);
+                                machines.stackSize = Math.min(machineCountForMaxParallelism, machines.stackSize);
                                 storedInput.stackSize -= machines.stackSize;
                                 this.machineType = machineType;
                                 solarTE.setWorldObj(aPlayer.worldObj);
-                                int xCoord = getBaseMetaTileEntity().getXCoord();
-                                int yCoord = getBaseMetaTileEntity().getYCoord() + 4;
-                                int zCoord = getBaseMetaTileEntity().getZCoord();
-                                solarTE.xCoord = xCoord;
-                                solarTE.yCoord = yCoord;
-                                solarTE.zCoord = zCoord;
+                                machineTier = i;
                             }
                         }
                     }
                 }
             }
             if (machineType != null) {
+                this.actualParallelism = calculateParallelismByAddonTier();
                 GT_Utility.sendChatToPlayer(
                     aPlayer,
                     String.format(
                         "Machine [%s] is set, parallelism is %s",
                         machines.getDisplayName(),
-                        machines.stackSize));
+                        actualParallelism));
                 int xCoord = getBaseMetaTileEntity().getXCoord();
                 int yCoord = getBaseMetaTileEntity().getYCoord();
                 int zCoord = getBaseMetaTileEntity().getZCoord();
@@ -1286,6 +1440,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
             machines = null;
             solarTE = null;
             mode = null;
+            actualParallelism = 0;
             int xCoord = getBaseMetaTileEntity().getXCoord();
             int yCoord = getBaseMetaTileEntity().getYCoord();
             int zCoord = getBaseMetaTileEntity().getZCoord();
@@ -1295,16 +1450,107 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM {
 
     public static void addRecipes() {
         GT_Values.RA.addAssemblerRecipe(
-            new ItemStack[] { ItemList.Processing_Array.get(16), ItemList.Robot_Arm_IV.get(32),
+            new ItemStack[]{ItemList.Processing_Array.get(16), ItemList.Robot_Arm_IV.get(32),
                 ItemList.Emitter_IV.get(32), ItemList.Field_Generator_IV.get(32),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64), },
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),},
             ALLOY.NITINOL_60.getFluidStack(24576),
             GTCMItemList.BigBroArray.get(1),
             20 * 1200,
             7680);
+        GT_Values.RA.addAssemblerRecipe(
+            new ItemStack[]{
+                ItemList.Field_Generator_IV.get(2),
+                ItemList.Casing_RobustTungstenSteel.get(1),
+                ItemList.Robot_Arm_IV.get(16),
+                ItemList.Emitter_IV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 8),
+                GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Elite), 4)},
+            Materials.SolderingAlloy.getMolten(9216),
+            GTCMItemList.ParallelismCasing0.get(1),
+            150 * 20,
+            6400
+        );
+
+        GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing0.get(1))
+            .metadata(RESEARCH_TIME, 4 * HOURS)
+            .itemInputs(
+                ItemList.Field_Generator_ZPM.get(2),
+                ItemList.Casing_StableTitanium.get(1),
+                GTCMItemList.ParallelismCasing0.get(4),
+                ItemList.Robot_Arm_ZPM.get(16),
+                ItemList.Emitter_ZPM.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 8),
+                GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Ultimate), 4))
+            .itemOutputs(GTCMItemList.ParallelismCasing1.get(1))
+            .fluidInputs(Materials.SolderingAlloy.getMolten(9216))
+            .duration(600 * SECONDS)
+            .eut((int) TierEU.RECIPE_ZPM)
+            .addTo(AssemblyLine);
+
+        GT_Values.RA.stdBuilder()
+            .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing1.get(1))
+            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .itemInputs(
+                ItemList.Field_Generator_UHV.get(4),
+                ItemList.Casing_CleanStainlessSteel.get(1),
+                GTCMItemList.ParallelismCasing1.get(4),
+                ItemList.Robot_Arm_UHV.get(16),
+                ItemList.Emitter_UHV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 8),
+                GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 4))
+            .itemOutputs(GTCMItemList.ParallelismCasing2.get(1))
+            .fluidInputs(new FluidStack(ALLOY.INDALLOY_140.getFluid(), 9216))
+            .duration(1200 * SECONDS)
+            .eut((int) TierEU.RECIPE_UHV)
+            .addTo(AssemblyLine);
+
+        Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
+            ? FluidRegistry.getFluid("molten.mutatedlivingsolder")
+            : FluidRegistry.getFluid("molten.solderingalloy");
+
+        TT_recipeAdder.addResearchableAssemblylineRecipe(
+            GTCMItemList.ParallelismCasing2.get(1),
+            20000000,
+            2000,
+            31457280,
+            1,
+            new Object[]{
+                ItemList.Field_Generator_UIV.get(8),
+                ItemList.Casing_FrostProof.get(1),
+                GTCMItemList.ParallelismCasing2.get(4),
+                ItemList.Robot_Arm_UIV.get(16),
+                ItemList.Emitter_UIV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 8),
+                GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Optical), 4)
+            },
+            new FluidStack[]{new FluidStack(solderUEV, 9216)},
+            GTCMItemList.ParallelismCasing3.get(1),
+            20 * 1200,
+            31457280);
+
+        TT_recipeAdder.addResearchableAssemblylineRecipe(
+            GTCMItemList.ParallelismCasing2.get(1),
+            200000000,
+            20000,
+            503316480,
+            1,
+            new Object[]{
+                ItemList.Field_Generator_UXV.get(8),
+                ItemList.Casing_SolidSteel.get(1),
+                GTCMItemList.ParallelismCasing2.get(4),
+                ItemList.Robot_Arm_UXV.get(16),
+                ItemList.Emitter_UXV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 8),
+                com.dreammaster.item.ItemList.QuantumCircuit.getIS(4)
+            },
+            new FluidStack[]{MaterialsUEVplus.SpaceTime.getMolten(9216)},
+            GTCMItemList.ParallelismCasing4.get(1),
+            20 * 1200,
+            503316480);
     }
 
     @SideOnly(Side.CLIENT)
