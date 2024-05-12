@@ -15,9 +15,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.github.technus.tectech.recipe.TT_recipeAdder;
-import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.TierEU;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,6 +40,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.dreammaster.gthandler.CustomItemList;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
+import com.github.technus.tectech.recipe.TT_recipeAdder;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyMulti;
@@ -78,8 +76,10 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -1450,29 +1450,25 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM impleme
 
     public static void addRecipes() {
         GT_Values.RA.addAssemblerRecipe(
-            new ItemStack[]{ItemList.Processing_Array.get(16), ItemList.Robot_Arm_IV.get(32),
+            new ItemStack[] { ItemList.Processing_Array.get(16), ItemList.Robot_Arm_IV.get(32),
                 ItemList.Emitter_IV.get(32), ItemList.Field_Generator_IV.get(32),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),},
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64), },
             ALLOY.NITINOL_60.getFluidStack(24576),
             GTCMItemList.BigBroArray.get(1),
             20 * 1200,
             7680);
         GT_Values.RA.addAssemblerRecipe(
-            new ItemStack[]{
-                ItemList.Field_Generator_IV.get(2),
-                ItemList.Casing_RobustTungstenSteel.get(1),
-                ItemList.Robot_Arm_IV.get(16),
-                ItemList.Emitter_IV.get(16),
+            new ItemStack[] { ItemList.Field_Generator_IV.get(2), ItemList.Casing_RobustTungstenSteel.get(1),
+                ItemList.Robot_Arm_IV.get(16), ItemList.Emitter_IV.get(16),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 8),
-                GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Elite), 4)},
+                GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Elite), 4) },
             Materials.SolderingAlloy.getMolten(9216),
             GTCMItemList.ParallelismCasing0.get(1),
             150 * 20,
-            6400
-        );
+            6400);
 
         GT_Values.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing0.get(1))
@@ -1518,16 +1514,11 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM impleme
             2000,
             31457280,
             1,
-            new Object[]{
-                ItemList.Field_Generator_UIV.get(8),
-                ItemList.Casing_FrostProof.get(1),
-                GTCMItemList.ParallelismCasing2.get(4),
-                ItemList.Robot_Arm_UIV.get(16),
-                ItemList.Emitter_UIV.get(16),
+            new Object[] { ItemList.Field_Generator_UIV.get(8), ItemList.Casing_FrostProof.get(1),
+                GTCMItemList.ParallelismCasing2.get(4), ItemList.Robot_Arm_UIV.get(16), ItemList.Emitter_UIV.get(16),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 8),
-                GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Optical), 4)
-            },
-            new FluidStack[]{new FluidStack(solderUEV, 9216)},
+                GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Optical), 4) },
+            new FluidStack[] { new FluidStack(solderUEV, 9216) },
             GTCMItemList.ParallelismCasing3.get(1),
             20 * 1200,
             31457280);
@@ -1538,16 +1529,11 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM impleme
             20000,
             503316480,
             1,
-            new Object[]{
-                ItemList.Field_Generator_UXV.get(8),
-                ItemList.Casing_SolidSteel.get(1),
-                GTCMItemList.ParallelismCasing2.get(4),
-                ItemList.Robot_Arm_UXV.get(16),
-                ItemList.Emitter_UXV.get(16),
+            new Object[] { ItemList.Field_Generator_UXV.get(8), ItemList.Casing_SolidSteel.get(1),
+                GTCMItemList.ParallelismCasing2.get(4), ItemList.Robot_Arm_UXV.get(16), ItemList.Emitter_UXV.get(16),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 8),
-                com.dreammaster.item.ItemList.QuantumCircuit.getIS(4)
-            },
-            new FluidStack[]{MaterialsUEVplus.SpaceTime.getMolten(9216)},
+                com.dreammaster.item.ItemList.QuantumCircuit.getIS(4) },
+            new FluidStack[] { MaterialsUEVplus.SpaceTime.getMolten(9216) },
             GTCMItemList.ParallelismCasing4.get(1),
             20 * 1200,
             503316480);
