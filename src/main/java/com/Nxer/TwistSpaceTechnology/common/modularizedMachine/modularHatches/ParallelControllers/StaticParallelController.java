@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -23,23 +21,11 @@ public class StaticParallelController extends StaticParallelControllerBase {
         return new StaticParallelController(this.mName, this.mTier, this.parallel, this.mTextures);
     }
 
-    protected int parallel;
+    protected final int parallel;
 
     @Override
     public int getParallel() {
         return parallel;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("parallel", parallel);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        parallel = aNBT.getInteger("parallel");
     }
 
 }

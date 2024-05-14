@@ -221,14 +221,47 @@ public enum GTCMItemList {
     LightningSpire,
 
     // region Modularized Machine System Stuffs
-    DynamicParallelControllerZPM,
-    DynamicParallelControllerUV,
-    DynamicParallelControllerUHV,
-    DynamicParallelControllerUEV,
-    DynamicParallelControllerUIV,
-    DynamicParallelControllerUMV,
-    DynamicParallelControllerUXV,
-    DynamicParallelControllerMAX,
+
+    // dynamic parallel controllers
+    DynamicParallelControllerT1,
+    DynamicParallelControllerT2,
+    DynamicParallelControllerT3,
+    DynamicParallelControllerT4,
+    DynamicParallelControllerT5,
+    DynamicParallelControllerT6,
+    DynamicParallelControllerT7,
+    DynamicParallelControllerT8,
+
+    // static dynamic parallel controllers
+    StaticParallelControllerT1,
+    StaticParallelControllerT2,
+    StaticParallelControllerT3,
+    StaticParallelControllerT4,
+    StaticParallelControllerT5,
+    StaticParallelControllerT6,
+    StaticParallelControllerT7,
+    StaticParallelControllerT8,
+
+    // dynamic speed controllers
+    DynamicSpeedControllerT1,
+    DynamicSpeedControllerT2,
+    DynamicSpeedControllerT3,
+    DynamicSpeedControllerT4,
+    DynamicSpeedControllerT5,
+    DynamicSpeedControllerT6,
+    DynamicSpeedControllerT7,
+    DynamicSpeedControllerT8,
+
+    // static speed controllers
+    StaticSpeedControllerT1,
+    StaticSpeedControllerT2,
+    StaticSpeedControllerT3,
+    StaticSpeedControllerT4,
+    StaticSpeedControllerT5,
+    StaticSpeedControllerT6,
+    StaticSpeedControllerT7,
+    StaticSpeedControllerT8,
+
     // endregion
 
     // MAX

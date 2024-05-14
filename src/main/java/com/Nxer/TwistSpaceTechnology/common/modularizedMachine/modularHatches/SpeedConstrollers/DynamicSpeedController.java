@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers;
+package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.SpeedConstrollers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,50 +16,54 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
-public class DynamicParallelController extends DynamicParallelControllerBase {
+public class DynamicSpeedController extends DynamicSpeedControllerBase {
 
     // region Class Constructor
-    public DynamicParallelController(int aID, String aName, String aNameRegional, int aTier, int maxParallel) {
+    public DynamicSpeedController(int aID, String aName, String aNameRegional, int aTier, int maxSpeedMultiplier) {
         super(aID, aName, aNameRegional, aTier);
-        this.maxParallel = maxParallel;
+        this.maxSpeedMultiplier = maxSpeedMultiplier;
     }
 
-    public DynamicParallelController(String aName, int aTier, int maxParallel, ITexture[][][] aTextures) {
-        super(aName, aTier, aTextures);
-        this.maxParallel = maxParallel;
+    public DynamicSpeedController(String aName, int aTier, int maxSpeedMultiplier, String[] aDescription,
+        ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        this.maxSpeedMultiplier = maxSpeedMultiplier;
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new DynamicParallelController(this.mName, this.mTier, this.maxParallel, this.mTextures);
+        return new DynamicSpeedController(
+            this.mName,
+            this.mTier,
+            this.maxSpeedMultiplier,
+            this.mDescriptionArray,
+            this.mTextures);
     }
 
     // endregion
-
-    // region Logic
-    protected final int maxParallel;
-    protected int parallel = 1;
+    protected final int maxSpeedMultiplier;
+    protected int speedMultiplier = 1;
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setInteger("parallel", parallel);
+        aNBT.setInteger("speedMultiplier", speedMultiplier);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        parallel = aNBT.getByte("parallel");
+        speedMultiplier = aNBT.getInteger("speedMultiplier");
     }
 
     @Override
-    public int getMaxParallel() {
-        return maxParallel;
+    public int getSpeedMultiplier() {
+        return speedMultiplier;
     }
 
     @Override
-    public int getParallel() {
-        return parallel;
+    public int getMaxSpeedMultiplier() {
+        return maxSpeedMultiplier;
     }
 
     @Override
@@ -80,16 +84,16 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         builder.widget(
-            // #tr tst.DynamicParallelController.UI.text.01
-            // # Parallel
-            // #zh_CN 并行
-            TextWidget.localised("tst.DynamicParallelController.UI.text.01")
+            // #tr tst.DynamicSpeedController.UI.text.01
+            // # Speed Multiplier
+            // #zh_CN 速度倍率
+            TextWidget.localised("tst.DynamicSpeedController.UI.text.01")
                 .setPos(49, 18)
                 .setSize(81, 14))
             .widget(
-                new TextFieldWidget().setSetterInt(val -> parallel = val)
-                    .setGetterInt(() -> parallel)
-                    .setNumbers(1, maxParallel)
+                new TextFieldWidget().setSetterInt(val -> speedMultiplier = val)
+                    .setGetterInt(() -> speedMultiplier)
+                    .setNumbers(1, maxSpeedMultiplier)
                     .setOnScrollNumbers(1, 4, 64)
                     .setTextAlignment(Alignment.Center)
                     .setTextColor(Color.WHITE.normal)
@@ -97,23 +101,4 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
                     .setPos(54, 36)
                     .setBackground(GT_UITextures.BACKGROUND_TEXT_FIELD));
     }
-
-    // endregion
-
-    // region General
-
-    private static String[] description;
-
-    // @Override
-    // public String[] getDescription() {
-    // if (null == mDescriptionArray || mDescriptionArray.length < 1) {
-    // mDescriptionArray =
-    // new String[] {
-    // TextEnums.tr(),
-    // TextEnums.tr(),
-    // };
-    // }
-    // return mDescriptionArray;
-    // }
-
 }

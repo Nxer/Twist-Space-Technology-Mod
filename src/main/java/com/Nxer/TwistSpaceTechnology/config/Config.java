@@ -53,6 +53,7 @@ public class Config {
     public static final String CombatStats = "CombatStats";
     public static final String IndustrialMagicMatrix = "IndustrialMagicMatrix";
     public static final String PowerChairBGM = "PowerChairBGM";
+    public static final String ModularizedMachineStuffs = "ModularizedMachineStuffs";
     // endregion
 
     // region General
@@ -343,7 +344,6 @@ public class Config {
 
     public static boolean activateMegaSpaceStation = false;
     public static boolean activateCombatStats = false;
-
     public static boolean Enable_LargeCanner = true;
     public static boolean Enable_LightningSpire = true;
 
@@ -353,6 +353,11 @@ public class Config {
 
     // region PowerChair BGM
     public static boolean Enable_PowerChairBGM = true;
+    // endregion
+
+    // region Modularized Machine Stuffs
+    public static int[] ParallelOfParallelController = new int[]{8, 128, 2048, 32768, 524288, 8388608, 134217728, Integer.MAX_VALUE};
+    public static int[] SpeedMultiplierOfSpeedController = new int[]{2, 4, 8, 16, 32, 64, 128, 256};
     // endregion
 
     public static void synchronizeConfiguration(File configFile) {
@@ -365,6 +370,11 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        // endregion
+
+        // region Modularized Machine Stuffs
+        ParallelOfParallelController = configuration.get(ModularizedMachineStuffs, "ParallelOfParallelController", ParallelOfParallelController, "Parallel parameters of Parallel Controller.").getIntList();
+        SpeedMultiplierOfSpeedController = configuration.get(ModularizedMachineStuffs, "SpeedMultiplierOfSpeedController", SpeedMultiplierOfSpeedController, "Speed multiplier parameters of Speed Controller.").getIntList();
         // endregion
 
         // region Eye of Wood

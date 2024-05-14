@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
+import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
 import net.minecraft.entity.EntityList;
@@ -63,6 +65,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.StaticParallelController;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.SpeedConstrollers.DynamicSpeedController;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.SpeedConstrollers.StaticSpeedController;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines.TST_CircuitConverter;
@@ -170,14 +175,38 @@ public class MachineLoader {
     public static ItemStack WirelessDataOutputHatch;
 
     // region Modularized Stuff
-    public static ItemStack DynamicParallelControllerZPM;
-    public static ItemStack DynamicParallelControllerUV;
-    public static ItemStack DynamicParallelControllerUHV;
-    public static ItemStack DynamicParallelControllerUEV;
-    public static ItemStack DynamicParallelControllerUIV;
-    public static ItemStack DynamicParallelControllerUMV;
-    public static ItemStack DynamicParallelControllerUXV;
-    public static ItemStack DynamicParallelControllerMAX;
+    public static ItemStack DynamicParallelControllerT1;
+    public static ItemStack DynamicParallelControllerT2;
+    public static ItemStack DynamicParallelControllerT3;
+    public static ItemStack DynamicParallelControllerT4;
+    public static ItemStack DynamicParallelControllerT5;
+    public static ItemStack DynamicParallelControllerT6;
+    public static ItemStack DynamicParallelControllerT7;
+    public static ItemStack DynamicParallelControllerT8;
+    public static ItemStack StaticParallelControllerT1;
+    public static ItemStack StaticParallelControllerT2;
+    public static ItemStack StaticParallelControllerT3;
+    public static ItemStack StaticParallelControllerT4;
+    public static ItemStack StaticParallelControllerT5;
+    public static ItemStack StaticParallelControllerT6;
+    public static ItemStack StaticParallelControllerT7;
+    public static ItemStack StaticParallelControllerT8;
+    public static ItemStack DynamicSpeedControllerT1;
+    public static ItemStack DynamicSpeedControllerT2;
+    public static ItemStack DynamicSpeedControllerT3;
+    public static ItemStack DynamicSpeedControllerT4;
+    public static ItemStack DynamicSpeedControllerT5;
+    public static ItemStack DynamicSpeedControllerT6;
+    public static ItemStack DynamicSpeedControllerT7;
+    public static ItemStack DynamicSpeedControllerT8;
+    public static ItemStack StaticSpeedControllerT1;
+    public static ItemStack StaticSpeedControllerT2;
+    public static ItemStack StaticSpeedControllerT3;
+    public static ItemStack StaticSpeedControllerT4;
+    public static ItemStack StaticSpeedControllerT5;
+    public static ItemStack StaticSpeedControllerT6;
+    public static ItemStack StaticSpeedControllerT7;
+    public static ItemStack StaticSpeedControllerT8;
 
     // endregion
 
@@ -747,93 +776,357 @@ public class MachineLoader {
 
         // region Modularized Stuff
 
-        // #tr NameParallelControllerZPM
-        // # Dynamic Parallel Controller Module ZPM
-        // #zh_CN 动态并行控制器模块ZPM
-        DynamicParallelControllerZPM = new DynamicParallelController(
+        // #tr NameDynamicParallelControllerT1
+        // # Dynamic Parallel Controller Module T1
+        // #zh_CN 动态并行控制器模块T1
+        DynamicParallelControllerT1 = new DynamicParallelController(
             18800,
-            "NameParallelControllerZPM",
-            TextEnums.tr("NameParallelControllerZPM"),
+            "NameDynamicParallelControllerT1",
+            TextEnums.tr("NameDynamicParallelControllerT1"),
             7,
-            8).getStackForm(1);
-        GTCMItemList.DynamicParallelControllerZPM.set(DynamicParallelControllerZPM);
+            ParallelOfParallelController[0]).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerT1.set(DynamicParallelControllerT1);
 
-        // #tr NameParallelControllerUV
-        // # Dynamic Parallel Controller Module UV
-        // #zh_CN 动态并行控制器模块UV
-        DynamicParallelControllerUV = new DynamicParallelController(
+        // #tr NameDynamicParallelControllerT2
+        // # Dynamic Parallel Controller Module T2
+        // #zh_CN 动态并行控制器模块T2
+        DynamicParallelControllerT2 = new DynamicParallelController(
             18801,
-            "NameParallelControllerUV",
-            TextEnums.tr("NameParallelControllerUV"),
+            "NameDynamicParallelControllerT2",
+            TextEnums.tr("NameDynamicParallelControllerT2"),
             8,
-            128).getStackForm(1);
-        GTCMItemList.DynamicParallelControllerUV.set(DynamicParallelControllerUV);
+            ParallelOfParallelController[1]).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerT2.set(DynamicParallelControllerT2);
 
-        // #tr NameParallelControllerUHV
-        // # Dynamic Parallel Controller Module UHV
-        // #zh_CN 动态并行控制器模块UHV
-        DynamicParallelControllerUHV = new DynamicParallelController(
+        // #tr NameDynamicParallelControllerT3
+        // # Dynamic Parallel Controller Module T3
+        // #zh_CN 动态并行控制器模块T3
+        DynamicParallelControllerT3 = new DynamicParallelController(
             18802,
-            "NameParallelControllerUHV",
-            TextEnums.tr("NameParallelControllerUHV"),
+            "NameDynamicParallelControllerT3",
+            TextEnums.tr("NameDynamicParallelControllerT3"),
             9,
-            2048).getStackForm(1);
-        GTCMItemList.DynamicParallelControllerUHV.set(DynamicParallelControllerUHV);
+            ParallelOfParallelController[2]).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerT3.set(DynamicParallelControllerT3);
 
-        // #tr NameParallelControllerUEV
-        // # Dynamic Parallel Controller Module UEV
-        // #zh_CN 动态并行控制器模块UEV
-        DynamicParallelControllerUEV = new DynamicParallelController(
+        // #tr NameDynamicParallelControllerT4
+        // # Dynamic Parallel Controller Module T4
+        // #zh_CN 动态并行控制器模块T4
+        DynamicParallelControllerT4 = new DynamicParallelController(
             18803,
-            "NameParallelControllerUEV",
-            TextEnums.tr("NameParallelControllerUEV"),
+            "NameDynamicParallelControllerT4",
+            TextEnums.tr("NameDynamicParallelControllerT4"),
             10,
-            32768).getStackForm(1);
-        GTCMItemList.DynamicParallelControllerUEV.set(DynamicParallelControllerUEV);
+            ParallelOfParallelController[3]).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerT4.set(DynamicParallelControllerT4);
 
-        // #tr NameParallelControllerUIV
-        // # Dynamic Parallel Controller Module UIV
-        // #zh_CN 动态并行控制器模块UIV
-        DynamicParallelControllerUIV = new DynamicParallelController(
+        // #tr NameDynamicParallelControllerT5
+        // # Dynamic Parallel Controller Module T5
+        // #zh_CN 动态并行控制器模块T5
+        DynamicParallelControllerT5 = new DynamicParallelController(
             18804,
-            "NameParallelControllerUIV",
-            TextEnums.tr("NameParallelControllerUIV"),
+            "NameDynamicParallelControllerT5",
+            TextEnums.tr("NameDynamicParallelControllerT5"),
             11,
-            524288).getStackForm(1);
-        GTCMItemList.DynamicParallelControllerUIV.set(DynamicParallelControllerUIV);
+            ParallelOfParallelController[4]).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerT5.set(DynamicParallelControllerT5);
 
-        // #tr NameParallelControllerUMV
-        // # Dynamic Parallel Controller Module UMV
-        // #zh_CN 动态并行控制器模块UMV
-        DynamicParallelControllerUMV = new DynamicParallelController(
+        // #tr NameDynamicParallelControllerT6
+        // # Dynamic Parallel Controller Module T6
+        // #zh_CN 动态并行控制器模块T6
+        DynamicParallelControllerT6 = new DynamicParallelController(
             18805,
-            "NameParallelControllerUMV",
-            TextEnums.tr("NameParallelControllerUMV"),
+            "NameDynamicParallelControllerT6",
+            TextEnums.tr("NameDynamicParallelControllerT6"),
             12,
-            8388608).getStackForm(1);
-        GTCMItemList.DynamicParallelControllerUMV.set(DynamicParallelControllerUMV);
+            ParallelOfParallelController[5]).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerT6.set(DynamicParallelControllerT6);
 
-        // #tr NameParallelControllerUXV
-        // # Dynamic Parallel Controller Module UXV
-        // #zh_CN 动态并行控制器模块UXV
-        DynamicParallelControllerUXV = new DynamicParallelController(
+        // #tr NameDynamicParallelControllerT7
+        // # Dynamic Parallel Controller Module T7
+        // #zh_CN 动态并行控制器模块T7
+        DynamicParallelControllerT7 = new DynamicParallelController(
             18806,
-            "NameParallelControllerUXV",
-            TextEnums.tr("NameParallelControllerUXV"),
+            "NameDynamicParallelControllerT7",
+            TextEnums.tr("NameDynamicParallelControllerT7"),
             13,
-            134217728).getStackForm(1);
-        GTCMItemList.DynamicParallelControllerUXV.set(DynamicParallelControllerUXV);
+            ParallelOfParallelController[6]).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerT7.set(DynamicParallelControllerT7);
 
-        // #tr NameParallelControllerMAX
-        // # Dynamic Parallel Controller Module MAX
-        // #zh_CN 动态并行控制器模块MAX
-        DynamicParallelControllerMAX = new DynamicParallelController(
+        // #tr NameDynamicParallelControllerT8
+        // # Dynamic Parallel Controller Module T8
+        // #zh_CN 动态并行控制器模块T8
+        DynamicParallelControllerT8 = new DynamicParallelController(
             18807,
-            "NameParallelControllerMAX",
-            TextEnums.tr("NameParallelControllerMAX"),
+            "NameDynamicParallelControllerT8",
+            TextEnums.tr("NameDynamicParallelControllerT8"),
             14,
-            Integer.MAX_VALUE).getStackForm(1);
-        GTCMItemList.DynamicParallelControllerMAX.set(DynamicParallelControllerMAX);
+            ParallelOfParallelController[7]).getStackForm(1);
+        GTCMItemList.DynamicParallelControllerT8.set(DynamicParallelControllerT8);
+
+        // #tr NameStaticParallelControllerT1
+        // # Static Parallel Controller Module T1
+        // #zh_CN 静态并行控制器模块T1
+        StaticParallelControllerT1 = new StaticParallelController(
+            18808,
+            "NameStaticParallelControllerT1",
+            TextEnums.tr("NameStaticParallelControllerT1"),
+            7,
+            ParallelOfParallelController[0]).getStackForm(1);
+        GTCMItemList.StaticParallelControllerT1.set(StaticParallelControllerT1);
+
+        // #tr NameStaticParallelControllerT2
+        // # Static Parallel Controller Module T2
+        // #zh_CN 静态并行控制器模块T2
+        StaticParallelControllerT2 = new StaticParallelController(
+            18809,
+            "NameStaticParallelControllerT2",
+            TextEnums.tr("NameStaticParallelControllerT2"),
+            8,
+            ParallelOfParallelController[1]).getStackForm(1);
+        GTCMItemList.StaticParallelControllerT2.set(StaticParallelControllerT2);
+
+        // #tr NameStaticParallelControllerT3
+        // # Static Parallel Controller Module T3
+        // #zh_CN 静态并行控制器模块T3
+        StaticParallelControllerT3 = new StaticParallelController(
+            18810,
+            "NameStaticParallelControllerT3",
+            TextEnums.tr("NameStaticParallelControllerT3"),
+            9,
+            ParallelOfParallelController[2]).getStackForm(1);
+        GTCMItemList.StaticParallelControllerT3.set(StaticParallelControllerT3);
+
+        // #tr NameStaticParallelControllerT4
+        // # Static Parallel Controller Module T4
+        // #zh_CN 静态并行控制器模块T4
+        StaticParallelControllerT4 = new StaticParallelController(
+            18811,
+            "NameStaticParallelControllerT4",
+            TextEnums.tr("NameStaticParallelControllerT4"),
+            10,
+            ParallelOfParallelController[3]).getStackForm(1);
+        GTCMItemList.StaticParallelControllerT4.set(StaticParallelControllerT4);
+
+        // #tr NameStaticParallelControllerT5
+        // # Static Parallel Controller Module T5
+        // #zh_CN 静态并行控制器模块T5
+        StaticParallelControllerT5 = new StaticParallelController(
+            18812,
+            "NameStaticParallelControllerT5",
+            TextEnums.tr("NameStaticParallelControllerT5"),
+            11,
+            ParallelOfParallelController[4]).getStackForm(1);
+        GTCMItemList.StaticParallelControllerT5.set(StaticParallelControllerT5);
+
+        // #tr NameStaticParallelControllerT6
+        // # Static Parallel Controller Module T6
+        // #zh_CN 静态并行控制器模块T6
+        StaticParallelControllerT6 = new StaticParallelController(
+            18813,
+            "NameStaticParallelControllerT6",
+            TextEnums.tr("NameStaticParallelControllerT6"),
+            12,
+            ParallelOfParallelController[5]).getStackForm(1);
+        GTCMItemList.StaticParallelControllerT6.set(StaticParallelControllerT6);
+
+        // #tr NameStaticParallelControllerT7
+        // # Static Parallel Controller Module T7
+        // #zh_CN 静态并行控制器模块T7
+        StaticParallelControllerT7 = new StaticParallelController(
+            18814,
+            "NameStaticParallelControllerT7",
+            TextEnums.tr("NameStaticParallelControllerT7"),
+            13,
+            ParallelOfParallelController[6]).getStackForm(1);
+        GTCMItemList.StaticParallelControllerT7.set(StaticParallelControllerT7);
+
+        // #tr NameStaticParallelControllerT8
+        // # Static Parallel Controller Module T8
+        // #zh_CN 静态并行控制器模块T8
+        StaticParallelControllerT8 = new StaticParallelController(
+            18815,
+            "NameStaticParallelControllerT8",
+            TextEnums.tr("NameStaticParallelControllerT8"),
+            14,
+            ParallelOfParallelController[7]).getStackForm(1);
+        GTCMItemList.StaticParallelControllerT8.set(StaticParallelControllerT8);
+
+        // #tr NameDynamicSpeedControllerT1
+        // # Dynamic Speed Controller Module T1
+        // #zh_CN 动态速度控制器模块T1
+        DynamicSpeedControllerT1 = new DynamicSpeedController(
+            18816,
+            "NameDynamicSpeedControllerT1",
+            TextEnums.tr("NameDynamicSpeedControllerT1"),
+            7,
+            SpeedMultiplierOfSpeedController[0]).getStackForm(1);
+        GTCMItemList.DynamicSpeedControllerT1.set(DynamicSpeedControllerT1);
+
+        // #tr NameDynamicSpeedControllerT2
+        // # Dynamic Speed Controller Module T2
+        // #zh_CN 动态速度控制器模块T2
+        DynamicSpeedControllerT2 = new DynamicSpeedController(
+            18817,
+            "NameDynamicSpeedControllerT2",
+            TextEnums.tr("NameDynamicSpeedControllerT2"),
+            8,
+            SpeedMultiplierOfSpeedController[1]).getStackForm(1);
+        GTCMItemList.DynamicSpeedControllerT2.set(DynamicSpeedControllerT2);
+
+        // #tr NameDynamicSpeedControllerT3
+        // # Dynamic Speed Controller Module T3
+        // #zh_CN 动态速度控制器模块T3
+        DynamicSpeedControllerT3 = new DynamicSpeedController(
+            18818,
+            "NameDynamicSpeedControllerT3",
+            TextEnums.tr("NameDynamicSpeedControllerT3"),
+            9,
+            SpeedMultiplierOfSpeedController[2]).getStackForm(1);
+        GTCMItemList.DynamicSpeedControllerT3.set(DynamicSpeedControllerT3);
+
+        // #tr NameDynamicSpeedControllerT4
+        // # Dynamic Speed Controller Module T4
+        // #zh_CN 动态速度控制器模块T4
+        DynamicSpeedControllerT4 = new DynamicSpeedController(
+            18819,
+            "NameDynamicSpeedControllerT4",
+            TextEnums.tr("NameDynamicSpeedControllerT4"),
+            10,
+            SpeedMultiplierOfSpeedController[3]).getStackForm(1);
+        GTCMItemList.DynamicSpeedControllerT4.set(DynamicSpeedControllerT4);
+
+        // #tr NameDynamicSpeedControllerT5
+        // # Dynamic Speed Controller Module T5
+        // #zh_CN 动态速度控制器模块T5
+        DynamicSpeedControllerT5 = new DynamicSpeedController(
+            18820,
+            "NameDynamicSpeedControllerT5",
+            TextEnums.tr("NameDynamicSpeedControllerT5"),
+            11,
+            SpeedMultiplierOfSpeedController[4]).getStackForm(1);
+        GTCMItemList.DynamicSpeedControllerT5.set(DynamicSpeedControllerT5);
+
+        // #tr NameDynamicSpeedControllerT6
+        // # Dynamic Speed Controller Module T6
+        // #zh_CN 动态速度控制器模块T6
+        DynamicSpeedControllerT6 = new DynamicSpeedController(
+            18821,
+            "NameDynamicSpeedControllerT6",
+            TextEnums.tr("NameDynamicSpeedControllerT6"),
+            12,
+            SpeedMultiplierOfSpeedController[5]).getStackForm(1);
+        GTCMItemList.DynamicSpeedControllerT6.set(DynamicSpeedControllerT6);
+
+        // #tr NameDynamicSpeedControllerT7
+        // # Dynamic Speed Controller Module T7
+        // #zh_CN 动态速度控制器模块T7
+        DynamicSpeedControllerT7 = new DynamicSpeedController(
+            18822,
+            "NameDynamicSpeedControllerT7",
+            TextEnums.tr("NameDynamicSpeedControllerT7"),
+            13,
+            SpeedMultiplierOfSpeedController[6]).getStackForm(1);
+        GTCMItemList.DynamicSpeedControllerT7.set(DynamicSpeedControllerT7);
+
+        // #tr NameDynamicSpeedControllerT8
+        // # Dynamic Speed Controller Module T8
+        // #zh_CN 动态速度控制器模块T8
+        DynamicSpeedControllerT8 = new DynamicSpeedController(
+            18823,
+            "NameDynamicSpeedControllerT8",
+            TextEnums.tr("NameDynamicSpeedControllerT8"),
+            14,
+            SpeedMultiplierOfSpeedController[7]).getStackForm(1);
+        GTCMItemList.DynamicSpeedControllerT8.set(DynamicSpeedControllerT8);
+
+        // #tr NameStaticSpeedControllerT1
+        // # Static Speed Controller Module T1
+        // #zh_CN 静态速度控制器模块T1
+        StaticSpeedControllerT1 = new StaticSpeedController(
+            18824,
+            "NameStaticSpeedControllerT1",
+            TextEnums.tr("NameStaticSpeedControllerT1"),
+            7,
+            SpeedMultiplierOfSpeedController[0]).getStackForm(1);
+        GTCMItemList.StaticSpeedControllerT1.set(StaticSpeedControllerT1);
+
+        // #tr NameStaticSpeedControllerT2
+        // # Static Speed Controller Module T2
+        // #zh_CN 静态速度控制器模块T2
+        StaticSpeedControllerT2 = new StaticSpeedController(
+            18825,
+            "NameStaticSpeedControllerT2",
+            TextEnums.tr("NameStaticSpeedControllerT2"),
+            8,
+            SpeedMultiplierOfSpeedController[1]).getStackForm(1);
+        GTCMItemList.StaticSpeedControllerT2.set(StaticSpeedControllerT2);
+
+        // #tr NameStaticSpeedControllerT3
+        // # Static Speed Controller Module T3
+        // #zh_CN 静态速度控制器模块T3
+        StaticSpeedControllerT3 = new StaticSpeedController(
+            18826,
+            "NameStaticSpeedControllerT3",
+            TextEnums.tr("NameStaticSpeedControllerT3"),
+            9,
+            SpeedMultiplierOfSpeedController[2]).getStackForm(1);
+        GTCMItemList.StaticSpeedControllerT3.set(StaticSpeedControllerT3);
+
+        // #tr NameStaticSpeedControllerT4
+        // # Static Speed Controller Module T4
+        // #zh_CN 静态速度控制器模块T4
+        StaticSpeedControllerT4 = new StaticSpeedController(
+            18827,
+            "NameStaticSpeedControllerT4",
+            TextEnums.tr("NameStaticSpeedControllerT4"),
+            10,
+            SpeedMultiplierOfSpeedController[3]).getStackForm(1);
+        GTCMItemList.StaticSpeedControllerT4.set(StaticSpeedControllerT4);
+
+        // #tr NameStaticSpeedControllerT5
+        // # Static Speed Controller Module T5
+        // #zh_CN 静态速度控制器模块T5
+        StaticSpeedControllerT5 = new StaticSpeedController(
+            18828,
+            "NameStaticSpeedControllerT5",
+            TextEnums.tr("NameStaticSpeedControllerT5"),
+            11,
+            SpeedMultiplierOfSpeedController[4]).getStackForm(1);
+        GTCMItemList.StaticSpeedControllerT5.set(StaticSpeedControllerT5);
+
+        // #tr NameStaticSpeedControllerT6
+        // # Static Speed Controller Module T6
+        // #zh_CN 静态速度控制器模块T6
+        StaticSpeedControllerT6 = new StaticSpeedController(
+            18829,
+            "NameStaticSpeedControllerT6",
+            TextEnums.tr("NameStaticSpeedControllerT6"),
+            12,
+            SpeedMultiplierOfSpeedController[5]).getStackForm(1);
+        GTCMItemList.StaticSpeedControllerT6.set(StaticSpeedControllerT6);
+
+        // #tr NameStaticSpeedControllerT7
+        // # Static Speed Controller Module T7
+        // #zh_CN 静态速度控制器模块T7
+        StaticSpeedControllerT7 = new StaticSpeedController(
+            18830,
+            "NameStaticSpeedControllerT7",
+            TextEnums.tr("NameStaticSpeedControllerT7"),
+            13,
+            SpeedMultiplierOfSpeedController[6]).getStackForm(1);
+        GTCMItemList.StaticSpeedControllerT7.set(StaticSpeedControllerT7);
+
+        // #tr NameStaticSpeedControllerT8
+        // # Static Speed Controller Module T8
+        // #zh_CN 静态速度控制器模块T8
+        StaticSpeedControllerT8 = new StaticSpeedController(
+            18831,
+            "NameStaticSpeedControllerT8",
+            TextEnums.tr("NameStaticSpeedControllerT8"),
+            14,
+            SpeedMultiplierOfSpeedController[7]).getStackForm(1);
+        GTCMItemList.StaticSpeedControllerT8.set(StaticSpeedControllerT8);
 
         /*
          * LV=1
