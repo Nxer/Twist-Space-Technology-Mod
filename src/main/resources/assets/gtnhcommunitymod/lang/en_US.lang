@@ -1051,7 +1051,7 @@ NameLargeCanner=Large Canner
 IndustrialMagicMatrixRecipeInputAspects=Recipe required Essentia
 GT5U.gui.text.Essentiainsentia=Essentia insentia
 GT5U.gui.text.Research_not_completed=Research not completed
-tst.recipe.IndustrialMagicMatrixRecipe=Industrial Infusion Matrix RecipesTooltip_IndustrialMagicMatrix_20=Each missing one adds a fixed 1 second to the time.
+tst.recipe.IndustrialMagicMatrixRecipe=Industrial Infusion Matrix Recipes
 Tooltip_IndustrialMagicMatrix_20=Each missing one adds a fixed 1 second to the time.
 Tooltip_IndustrialMagicMatrix_21=Gain up to 1145.14%% acceleration multiplier.
 Tooltip_IndustrialMagicMatrix_00=Please use the Infusion Supplier to supply Essence!
