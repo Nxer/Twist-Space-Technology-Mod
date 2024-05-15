@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
+import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
@@ -66,6 +67,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.StaticParallelController;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.PowerConsumptionControllers.StaticPowerConsumptionController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.SpeedConstrollers.DynamicSpeedController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.SpeedConstrollers.StaticSpeedController;
 import com.Nxer.TwistSpaceTechnology.common.ship.Ship;
@@ -207,6 +209,14 @@ public class MachineLoader {
     public static ItemStack StaticSpeedControllerT6;
     public static ItemStack StaticSpeedControllerT7;
     public static ItemStack StaticSpeedControllerT8;
+    public static ItemStack StaticPowerConsumptionControllerT1;
+    public static ItemStack StaticPowerConsumptionControllerT2;
+    public static ItemStack StaticPowerConsumptionControllerT3;
+    public static ItemStack StaticPowerConsumptionControllerT4;
+    public static ItemStack StaticPowerConsumptionControllerT5;
+    public static ItemStack StaticPowerConsumptionControllerT6;
+    public static ItemStack StaticPowerConsumptionControllerT7;
+    public static ItemStack StaticPowerConsumptionControllerT8;
 
     // endregion
 
@@ -1127,6 +1137,17 @@ public class MachineLoader {
             14,
             SpeedMultiplierOfSpeedController[7]).getStackForm(1);
         GTCMItemList.StaticSpeedControllerT8.set(StaticSpeedControllerT8);
+
+        // #tr NameStaticPowerConsumptionControllerT1
+        // # Static Power Consumption Controller Module T1
+        // #zh_CN 静态耗能控制器模块T1
+        StaticPowerConsumptionControllerT1 = new StaticPowerConsumptionController(
+            18832,
+            "NameStaticPowerConsumptionControllerT1",
+            TextEnums.tr("NameStaticPowerConsumptionControllerT1"),
+            7,
+            (float) PowerConsumptionMultiplierOfPowerConsumptionController[0]).getStackForm(1);
+        GTCMItemList.StaticPowerConsumptionControllerT1.set(StaticPowerConsumptionControllerT1);
 
         /*
          * LV=1

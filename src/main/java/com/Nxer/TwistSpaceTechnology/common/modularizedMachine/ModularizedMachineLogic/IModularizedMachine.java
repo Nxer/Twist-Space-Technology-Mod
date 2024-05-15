@@ -77,4 +77,12 @@ public interface IModularizedMachine {
         void setDynamicSpeedParameterValue(float value);
     }
 
+    interface ISupportPowerConsumptionController extends IModularizedMachine {
+
+        float getStaticPowerConsumptionParameterValue();
+
+        void setStaticPowerConsumptionParameterValue(float value);
+
+    }
+
 }

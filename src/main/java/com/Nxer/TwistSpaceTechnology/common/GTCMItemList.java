@@ -262,10 +262,21 @@ public enum GTCMItemList {
     StaticSpeedControllerT7,
     StaticSpeedControllerT8,
 
+    // static power consumption controllers
+    StaticPowerConsumptionControllerT1,
+    StaticPowerConsumptionControllerT2,
+    StaticPowerConsumptionControllerT3,
+    StaticPowerConsumptionControllerT4,
+    StaticPowerConsumptionControllerT5,
+    StaticPowerConsumptionControllerT6,
+    StaticPowerConsumptionControllerT7,
+    StaticPowerConsumptionControllerT8,
+
     // endregion
 
     // MAX
     HighDimensionalExtend,
+    // TODO: typo
     HighDimensionalCircuitDoard,
     HighDimensionalCapacitor,
     HighDimensionalInterface,

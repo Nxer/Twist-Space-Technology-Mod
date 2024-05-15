@@ -13,9 +13,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IDynamicModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IStaticModularHatch;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelControllerBase;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.ParallelControllerBase;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.StaticParallelControllerBase;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -92,45 +90,102 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
     }
 
     public boolean addModularHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return addParallelControllerToMachineList(aTileEntity, aBaseCasingIndex);
+        return addAnyModularHatchToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
-    public boolean addParallelControllerToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+    public boolean addAnyModularHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         if (aTileEntity == null) return false;
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof ParallelControllerBase parallelController) {
-            parallelController.updateTexture(aBaseCasingIndex);
-            parallelController.updateCraftingIcon(this.getMachineCraftingIcon());
+        if (aMetaTileEntity instanceof ModularHatchBase modularHatchBase) {
+            ModularHatchTypes hatchTypes = modularHatchBase.getType();
+            if (!getSupportedModularHatchTypes().contains(hatchTypes)) return false;
 
-            if (!modularHatches.containsKey(ModularHatchTypes.PARALLEL_CONTROLLER)
-                || modularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER) == null) {
-                modularHatches.put(ModularHatchTypes.PARALLEL_CONTROLLER, new ArrayList<>());
+            modularHatchBase.updateTexture(aBaseCasingIndex);
+            modularHatchBase.updateCraftingIcon(this.getMachineCraftingIcon());
+
+            if (!modularHatches.containsKey(hatchTypes) || modularHatches.get(hatchTypes) == null) {
+                modularHatches.put(hatchTypes, new ArrayList<>());
             }
-            modularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER)
-                .add(parallelController);
-            allModularHatches.add(parallelController);
+            modularHatches.get(hatchTypes)
+                .add(modularHatchBase);
+            allModularHatches.add(modularHatchBase);
 
-            if (parallelController instanceof DynamicParallelControllerBase dynamicParallelController) {
-                if (!dynamicModularHatches.containsKey(ModularHatchTypes.PARALLEL_CONTROLLER)
-                    || dynamicModularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER) == null) {
-                    dynamicModularHatches.put(ModularHatchTypes.PARALLEL_CONTROLLER, new ArrayList<>());
+            if (modularHatchBase instanceof IDynamicModularHatch dynamicModularHatch) {
+                if (!dynamicModularHatches.containsKey(hatchTypes) || dynamicModularHatches.get(hatchTypes) == null) {
+                    dynamicModularHatches.put(hatchTypes, new ArrayList<>());
                 }
 
-                return dynamicModularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER)
-                    .add(dynamicParallelController);
+                return dynamicModularHatches.get(hatchTypes)
+                    .add(dynamicModularHatch);
 
-            } else if (parallelController instanceof StaticParallelControllerBase staticParallelControllerBase) {
-                if (!staticModularHatches.containsKey(ModularHatchTypes.PARALLEL_CONTROLLER)
-                    || staticModularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER) == null) {
-                    staticModularHatches.put(ModularHatchTypes.PARALLEL_CONTROLLER, new ArrayList<>());
+            } else if (modularHatchBase instanceof IStaticModularHatch staticModularHatch) {
+                if (!staticModularHatches.containsKey(hatchTypes) || staticModularHatches.get(hatchTypes) == null) {
+                    staticModularHatches.put(hatchTypes, new ArrayList<>());
                 }
 
-                return staticModularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER)
-                    .add(staticParallelControllerBase);
+                return staticModularHatches.get(hatchTypes)
+                    .add(staticModularHatch);
             }
         }
         return false;
+    }
+
+    protected boolean addSpecialModularHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex,
+        ModularHatchTypes hatchType) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof ModularHatchBase modularHatchBase) {
+            if (modularHatchBase.getType() != hatchType) return false;
+            if (!getSupportedModularHatchTypes().contains(hatchType)) return false;
+
+            modularHatchBase.updateTexture(aBaseCasingIndex);
+            modularHatchBase.updateCraftingIcon(this.getMachineCraftingIcon());
+
+            if (!modularHatches.containsKey(hatchType) || modularHatches.get(hatchType) == null) {
+                modularHatches.put(hatchType, new ArrayList<>());
+            }
+            modularHatches.get(hatchType)
+                .add(modularHatchBase);
+            allModularHatches.add(modularHatchBase);
+
+            if (modularHatchBase instanceof IDynamicModularHatch dynamicModularHatch) {
+                if (!dynamicModularHatches.containsKey(hatchType) || dynamicModularHatches.get(hatchType) == null) {
+                    dynamicModularHatches.put(hatchType, new ArrayList<>());
+                }
+
+                return dynamicModularHatches.get(hatchType)
+                    .add(dynamicModularHatch);
+
+            } else if (modularHatchBase instanceof IStaticModularHatch staticModularHatch) {
+                if (!staticModularHatches.containsKey(hatchType) || staticModularHatches.get(hatchType) == null) {
+                    staticModularHatches.put(hatchType, new ArrayList<>());
+                }
+
+                return staticModularHatches.get(hatchType)
+                    .add(staticModularHatch);
+            }
+        }
+        return false;
+    }
+
+    public boolean addParallelControllerToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addSpecialModularHatchToMachineList(
+            aTileEntity,
+            aBaseCasingIndex,
+            ModularHatchTypes.PARALLEL_CONTROLLER);
+    }
+
+    public boolean addSpeedControllerToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addSpecialModularHatchToMachineList(aTileEntity, aBaseCasingIndex, ModularHatchTypes.SPEED_CONTROLLER);
+    }
+
+    public boolean addPowerConsumptionControllerToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addSpecialModularHatchToMachineList(
+            aTileEntity,
+            aBaseCasingIndex,
+            ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER);
     }
 
     // endregion

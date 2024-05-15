@@ -46,17 +46,15 @@ public abstract class ParallelControllerBase extends ModularHatchBase {
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getBoolean("isActive")) {
-            currentTip.add(
-                // #tr Waila.ParallelControllerBase.1
-                // # Parallel
-                // #zh_CN 并行
-                EnumChatFormatting.AQUA + TextEnums.tr("Waila.ParallelControllerBase.1")
-                    + EnumChatFormatting.RESET
-                    + ": "
-                    + EnumChatFormatting.GOLD
-                    + tag.getInteger("parallel"));
-        }
+        currentTip.add(
+            // #tr Waila.ParallelControllerBase.1
+            // # Parallel
+            // #zh_CN 并行
+            EnumChatFormatting.AQUA + TextEnums.tr("Waila.ParallelControllerBase.1")
+                + EnumChatFormatting.RESET
+                + ": "
+                + EnumChatFormatting.GOLD
+                + tag.getInteger("parallel"));
     }
 
     @Override

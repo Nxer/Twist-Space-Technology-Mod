@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.SpeedConstrollers;
+package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.PowerConsumptionControllers;
 
 import java.util.List;
 
@@ -18,26 +18,22 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public abstract class SpeedControllerBase extends ModularHatchBase {
+public abstract class PowerConsumptionControllerBase extends ModularHatchBase {
 
-    public SpeedControllerBase(int aID, String aName, String aNameRegional, int aTier) {
+    public PowerConsumptionControllerBase(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 0, null);
     }
 
-    public SpeedControllerBase(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+    public PowerConsumptionControllerBase(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
     @Override
     public ModularHatchTypes getType() {
-        return ModularHatchTypes.SPEED_CONTROLLER;
+        return ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER;
     }
 
-    public float getSpeedBonus() {
-        return 1F / getSpeedMultiplier();
-    }
-
-    public abstract int getSpeedMultiplier();
+    public abstract float getPowerConsumptionMultiplier();
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -45,14 +41,14 @@ public abstract class SpeedControllerBase extends ModularHatchBase {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(
-            // #tr Waila.SpeedControllerBase.1
-            // # Speed Multiplier
-            // #zh_CN 速度倍率
-            EnumChatFormatting.AQUA + TextEnums.tr("Waila.SpeedControllerBase.1")
+            // #tr Waila.PowerConsumptionControllerBase.1
+            // # Power Consumption Multiplier
+            // #zh_CN 耗能倍率
+            EnumChatFormatting.AQUA + TextEnums.tr("Waila.PowerConsumptionControllerBase.1")
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD
-                + tag.getInteger("speedMultiplier"));
+                + tag.getFloat("powerConsumptionMultiplier"));
     }
 
     @Override
@@ -61,7 +57,7 @@ public abstract class SpeedControllerBase extends ModularHatchBase {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setInteger("speedMultiplier", getSpeedMultiplier());
+            tag.setFloat("powerConsumptionMultiplier", getPowerConsumptionMultiplier());
         }
     }
 
