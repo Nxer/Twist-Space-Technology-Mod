@@ -85,4 +85,8 @@ public interface IModularizedMachine {
 
     }
 
+    interface ISupportAllModularHatches
+        extends ISupportParallelController, ISupportSpeedController, ISupportPowerConsumptionController {
+    }
+
 }

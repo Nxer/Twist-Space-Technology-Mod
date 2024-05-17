@@ -99,7 +99,9 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof ModularHatchBase modularHatchBase) {
             ModularHatchTypes hatchTypes = modularHatchBase.getType();
-            if (!getSupportedModularHatchTypes().contains(hatchTypes)) return false;
+            final Collection<ModularHatchTypes> supportedModularHatchTypes = getSupportedModularHatchTypes();
+            if (!supportedModularHatchTypes.contains(ModularHatchTypes.ALL)
+                && !supportedModularHatchTypes.contains(hatchTypes)) return false;
 
             modularHatchBase.updateTexture(aBaseCasingIndex);
             modularHatchBase.updateCraftingIcon(this.getMachineCraftingIcon());

@@ -6,6 +6,7 @@ public enum ModularHatchTypes {
     SPEED_CONTROLLER,
     POWER_CONSUMPTION_CONTROLLER,
     OVERCLOCK_CONTROLLER,
+    ALL,
     DEBUG;
 
 }

@@ -39,7 +39,7 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
 public class Test_ModularizedMachine extends ModularizedMachineBase<Test_ModularizedMachine>
-    implements IModularizedMachine.ISupportParallelController {
+    implements IModularizedMachine.ISupportAllModularHatches {
 
     // region Class Constructor
     public Test_ModularizedMachine(int aID, String aName, String aNameRegional) {
@@ -82,6 +82,35 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
         dynamicParallelParameter = value;
     }
 
+    @Override
+    public float getStaticPowerConsumptionParameterValue() {
+        return 0;
+    }
+
+    @Override
+    public void setStaticPowerConsumptionParameterValue(float value) {
+
+    }
+
+    @Override
+    public float getStaticSpeedParameterValue() {
+        return 0;
+    }
+
+    @Override
+    public void setStaticSpeedParameterValue(float value) {
+
+    }
+
+    @Override
+    public float getDynamicSpeedParameterValue() {
+        return 0;
+    }
+
+    @Override
+    public void setDynamicSpeedParameterValue(float value) {
+
+    }
     // TODO
     @Override
     public void resetModularStaticSettings() {
@@ -237,5 +266,6 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
         }
         return new ITexture[] { casingTexturePages[1][48] };
     }
+
 
 }

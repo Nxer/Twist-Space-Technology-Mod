@@ -1149,6 +1149,83 @@ public class MachineLoader {
             (float) PowerConsumptionMultiplierOfPowerConsumptionController[0]).getStackForm(1);
         GTCMItemList.StaticPowerConsumptionControllerT1.set(StaticPowerConsumptionControllerT1);
 
+        // #tr NameStaticPowerConsumptionControllerT2
+        // # Static Power Consumption Controller Module T2
+        // #zh_CN 静态耗能控制器模块T2
+        StaticPowerConsumptionControllerT2 = new StaticPowerConsumptionController(
+            18833,
+            "NameStaticPowerConsumptionControllerT2",
+            TextEnums.tr("NameStaticPowerConsumptionControllerT2"),
+            8,
+            (float) PowerConsumptionMultiplierOfPowerConsumptionController[1]).getStackForm(1);
+        GTCMItemList.StaticPowerConsumptionControllerT2.set(StaticPowerConsumptionControllerT2);
+
+        // #tr NameStaticPowerConsumptionControllerT3
+        // # Static Power Consumption Controller Module T3
+        // #zh_CN 静态耗能控制器模块T3
+        StaticPowerConsumptionControllerT3 = new StaticPowerConsumptionController(
+            18834,
+            "NameStaticPowerConsumptionControllerT3",
+            TextEnums.tr("NameStaticPowerConsumptionControllerT3"),
+            9,
+            (float) PowerConsumptionMultiplierOfPowerConsumptionController[2]).getStackForm(1);
+        GTCMItemList.StaticPowerConsumptionControllerT3.set(StaticPowerConsumptionControllerT3);
+
+        // #tr NameStaticPowerConsumptionControllerT4
+        // # Static Power Consumption Controller Module T4
+        // #zh_CN 静态耗能控制器模块T4
+        StaticPowerConsumptionControllerT4 = new StaticPowerConsumptionController(
+            18835,
+            "NameStaticPowerConsumptionControllerT4",
+            TextEnums.tr("NameStaticPowerConsumptionControllerT4"),
+            10,
+            (float) PowerConsumptionMultiplierOfPowerConsumptionController[3]).getStackForm(1);
+        GTCMItemList.StaticPowerConsumptionControllerT4.set(StaticPowerConsumptionControllerT4);
+
+        // #tr NameStaticPowerConsumptionControllerT5
+        // # Static Power Consumption Controller Module T5
+        // #zh_CN 静态耗能控制器模块T5
+        StaticPowerConsumptionControllerT5 = new StaticPowerConsumptionController(
+            18836,
+            "NameStaticPowerConsumptionControllerT5",
+            TextEnums.tr("NameStaticPowerConsumptionControllerT5"),
+            11,
+            (float) PowerConsumptionMultiplierOfPowerConsumptionController[4]).getStackForm(1);
+        GTCMItemList.StaticPowerConsumptionControllerT5.set(StaticPowerConsumptionControllerT5);
+
+        // #tr NameStaticPowerConsumptionControllerT6
+        // # Static Power Consumption Controller Module T6
+        // #zh_CN 静态耗能控制器模块T6
+        StaticPowerConsumptionControllerT6 = new StaticPowerConsumptionController(
+            18837,
+            "NameStaticPowerConsumptionControllerT6",
+            TextEnums.tr("NameStaticPowerConsumptionControllerT6"),
+            12,
+            (float) PowerConsumptionMultiplierOfPowerConsumptionController[5]).getStackForm(1);
+        GTCMItemList.StaticPowerConsumptionControllerT6.set(StaticPowerConsumptionControllerT6);
+
+        // #tr NameStaticPowerConsumptionControllerT7
+        // # Static Power Consumption Controller Module T7
+        // #zh_CN 静态耗能控制器模块T7
+        StaticPowerConsumptionControllerT7 = new StaticPowerConsumptionController(
+            18838,
+            "NameStaticPowerConsumptionControllerT7",
+            TextEnums.tr("NameStaticPowerConsumptionControllerT7"),
+            13,
+            (float) PowerConsumptionMultiplierOfPowerConsumptionController[6]).getStackForm(1);
+        GTCMItemList.StaticPowerConsumptionControllerT7.set(StaticPowerConsumptionControllerT7);
+
+        // #tr NameStaticPowerConsumptionControllerT8
+        // # Static Power Consumption Controller Module T8
+        // #zh_CN 静态耗能控制器模块T8
+        StaticPowerConsumptionControllerT8 = new StaticPowerConsumptionController(
+            18839,
+            "NameStaticPowerConsumptionControllerT8",
+            TextEnums.tr("NameStaticPowerConsumptionControllerT8"),
+            14,
+            (float) PowerConsumptionMultiplierOfPowerConsumptionController[7]).getStackForm(1);
+        GTCMItemList.StaticPowerConsumptionControllerT8.set(StaticPowerConsumptionControllerT8);
+
         /*
          * LV=1
          * MV=2
