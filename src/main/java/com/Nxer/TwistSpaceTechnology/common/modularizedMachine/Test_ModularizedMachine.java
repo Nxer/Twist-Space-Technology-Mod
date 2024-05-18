@@ -63,6 +63,16 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
     private int dynamicParallelParameter = 0;
 
     @Override
+    public void resetModularStaticSettings() {
+        staticParallelParameter = 0;
+    }
+
+    @Override
+    public void resetModularDynamicParameters() {
+        dynamicParallelParameter = 0;
+    }
+
+    @Override
     public int getStaticParallelParameterValue() {
         return staticParallelParameter;
     }
@@ -111,16 +121,13 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
     public void setDynamicSpeedParameterValue(float value) {
 
     }
-    // TODO
-    @Override
-    public void resetModularStaticSettings() {
-        staticParallelParameter = 0;
-    }
 
     @Override
-    public void resetModularDynamicParameters() {
-        dynamicParallelParameter = 0;
+    public void setOverclockParameter(int timeReduction, int powerIncrease) {
+
     }
+
+    // TODO
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -266,6 +273,5 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
         }
         return new ITexture[] { casingTexturePages[1][48] };
     }
-
 
 }

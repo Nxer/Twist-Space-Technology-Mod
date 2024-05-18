@@ -85,8 +85,13 @@ public interface IModularizedMachine {
 
     }
 
-    interface ISupportAllModularHatches
-        extends ISupportParallelController, ISupportSpeedController, ISupportPowerConsumptionController {
+    interface ISupportOverclockController extends IModularizedMachine {
+
+        void setOverclockParameter(int timeReduction, int powerIncrease);
+    }
+
+    interface ISupportAllModularHatches extends ISupportParallelController, ISupportSpeedController,
+        ISupportPowerConsumptionController, ISupportOverclockController {
     }
 
 }
