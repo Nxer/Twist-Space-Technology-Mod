@@ -1,10 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import gregtech.api.util.GT_OreDictUnificator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
+
+import gregtech.api.util.GT_OreDictUnificator;
 
 public final class NBTUtils {
 

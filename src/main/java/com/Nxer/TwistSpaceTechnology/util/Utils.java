@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -62,7 +61,6 @@ public final class Utils {
         }
         return (T[]) totals.toArray(new Object[0]);
     }
-
 
     /**
      *

@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultip
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers.StaticOverclockController;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -66,6 +65,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers.StaticOverclockController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.StaticParallelController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.PowerConsumptionControllers.StaticPowerConsumptionController;
@@ -1239,8 +1239,7 @@ public class MachineLoader {
             TextEnums.tr("NameLowSpeedPerfectOverclockController"),
             12,
             1,
-            1
-        ).getStackForm(1);
+            1).getStackForm(1);
         GTCMItemList.LowSpeedPerfectOverclockController.set(LowSpeedPerfectOverclockController);
 
         // #tr NamePerfectOverclockController
@@ -1252,8 +1251,7 @@ public class MachineLoader {
             TextEnums.tr("NamePerfectOverclockController"),
             13,
             2,
-            2
-        ).getStackForm(1);
+            2).getStackForm(1);
         GTCMItemList.PerfectOverclockController.set(PerfectOverclockController);
 
         // #tr NameSingularityPerfectOverclockController
@@ -1265,8 +1263,7 @@ public class MachineLoader {
             TextEnums.tr("NameSingularityPerfectOverclockController"),
             14,
             3,
-            2
-        ).getStackForm(1);
+            2).getStackForm(1);
         GTCMItemList.SingularityPerfectOverclockController.set(SingularityPerfectOverclockController);
 
         /*
