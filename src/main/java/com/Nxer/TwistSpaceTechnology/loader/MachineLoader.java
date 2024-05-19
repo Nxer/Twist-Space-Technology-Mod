@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultip
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers.StaticOverclockController;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -217,6 +218,9 @@ public class MachineLoader {
     public static ItemStack StaticPowerConsumptionControllerT6;
     public static ItemStack StaticPowerConsumptionControllerT7;
     public static ItemStack StaticPowerConsumptionControllerT8;
+    public static ItemStack LowSpeedPerfectOverclockController;
+    public static ItemStack PerfectOverclockController;
+    public static ItemStack SingularityPerfectOverclockController;
 
     // endregion
 
@@ -1225,6 +1229,45 @@ public class MachineLoader {
             14,
             (float) PowerConsumptionMultiplierOfPowerConsumptionController[7]).getStackForm(1);
         GTCMItemList.StaticPowerConsumptionControllerT8.set(StaticPowerConsumptionControllerT8);
+
+        // #tr NameLowSpeedPerfectOverclockController
+        // # Low Speed Perfect Overclock Controller Module
+        // #zh_CN 低速无损超频控制器模块
+        LowSpeedPerfectOverclockController = new StaticOverclockController(
+            18840,
+            "NameLowSpeedPerfectOverclockController",
+            TextEnums.tr("NameLowSpeedPerfectOverclockController"),
+            12,
+            1,
+            1
+        ).getStackForm(1);
+        GTCMItemList.LowSpeedPerfectOverclockController.set(LowSpeedPerfectOverclockController);
+
+        // #tr NamePerfectOverclockController
+        // # Perfect Overclock Controller Module
+        // #zh_CN 无损超频控制器模块
+        PerfectOverclockController = new StaticOverclockController(
+            18841,
+            "NamePerfectOverclockController",
+            TextEnums.tr("NamePerfectOverclockController"),
+            13,
+            2,
+            2
+        ).getStackForm(1);
+        GTCMItemList.PerfectOverclockController.set(PerfectOverclockController);
+
+        // #tr NameSingularityPerfectOverclockController
+        // # Singularity Perfect Overclock Controller Module
+        // #zh_CN 奇点无损超频控制器模块
+        SingularityPerfectOverclockController = new StaticOverclockController(
+            18842,
+            "NameSingularityPerfectOverclockController",
+            TextEnums.tr("NameSingularityPerfectOverclockController"),
+            14,
+            3,
+            2
+        ).getStackForm(1);
+        GTCMItemList.SingularityPerfectOverclockController.set(SingularityPerfectOverclockController);
 
         /*
          * LV=1

@@ -1,12 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class SimplePair<L, R> implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 202405181655L;
 
     public static <L, R> SimplePair<L, R> of(L left, R right) {

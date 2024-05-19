@@ -1170,3 +1170,6 @@ NameStaticPowerConsumptionControllerT5=Static Power Consumption Controller Modul
 NameStaticPowerConsumptionControllerT6=Static Power Consumption Controller Module T6
 NameStaticPowerConsumptionControllerT7=Static Power Consumption Controller Module T7
 NameStaticPowerConsumptionControllerT8=Static Power Consumption Controller Module T8
+NameLowSpeedPerfectOverclockController=Low Speed Perfect Overclock Controller Module
+NamePerfectOverclockController=Perfect Overclock Controller Module
+NameSingularityPerfectOverclockController=Singularity Perfect Overclock Controller Module

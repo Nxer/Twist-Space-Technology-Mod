@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -36,6 +37,32 @@ public final class Utils {
         }
         return result;
     }
+
+    public static ItemStack[] mergeItemStackArray(ItemStack[]... itemStacks) {
+        int totalLength = 0;
+        for (ItemStack[] stackArray : itemStacks) {
+            totalLength += stackArray.length;
+        }
+
+        ItemStack[] output = Arrays.copyOf(itemStacks[0], totalLength);
+        int offset = itemStacks[0].length;
+        for (ItemStack[] stackArray : itemStacks) {
+            if (stackArray != output) {
+                System.arraycopy(stackArray, 0, output, offset, stackArray.length);
+                offset += stackArray.length;
+            }
+        }
+        return output;
+    }
+
+    public static <T> T[] mergeArrays(T[]... arrays) {
+        List<T> totals = new ArrayList<>();
+        for (T[] array : arrays) {
+            totals.addAll(Arrays.asList(array));
+        }
+        return (T[]) totals.toArray(new Object[0]);
+    }
+
 
     /**
      *
@@ -201,14 +228,6 @@ public final class Utils {
     public static <T extends Collection<E>, E extends MetaTileEntity> T filterValidMTEs(T metaTileEntities) {
         metaTileEntities.removeIf(mte -> mte == null || !mte.isValid());
         return metaTileEntities;
-    }
-
-    public static <T> T[] mergeArrays(T[]... arrays) {
-        List<T> totals = new ArrayList<>();
-        for (T[] array : arrays) {
-            totals.addAll(Arrays.asList(array));
-        }
-        return (T[]) totals.toArray(new Object[0]);
     }
 
     public static int min(int... values) {
