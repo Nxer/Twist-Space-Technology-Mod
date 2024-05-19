@@ -80,6 +80,7 @@ public enum TextEnums {
     BigBroArrayDesc9("BigBroArray.desc.9"),
 
     BigBroArrayDesc10("BigBroArray.desc.10"),
+    BigBroArrayDesc11("BigBroArray.desc.11"),
 
     // end
     StructureTooComplex("StructureTooComplex");
