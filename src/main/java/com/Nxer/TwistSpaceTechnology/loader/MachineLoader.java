@@ -44,6 +44,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
@@ -499,13 +500,22 @@ public class MachineLoader {
             GTCMItemList.IndustrialMagnetarSeparator.set(IndustrialMagnetarSeparator);
         }
 
+        if (Config.Enable_MegaTreeFarm) {
+            MegaTreeFarm = new TST_MegaTreeFarm(
+                19051,
+                "NameMegaTreeFarm",
+                // #tr NameMegaTreeFarm
+                // # Mega Tree Growth Simulator
+                // #zh_CN 巨型原木拟生厂
+                TextEnums.tr("NameMegaTreeFarm")).getStackForm(1);
+            GTCMItemList.MegaTreeFarm.set(MegaTreeFarm);
+        }
+
         ExtremeCraftCenter = new TST_MegaCraftingCenter(
             19052,
             "NameExtremeCraftCenter",
             TextEnums.tr("NameExtremeCraftCenter")).getStackForm(1);
         GTCMItemList.ExtremeCraftCenter.set(ExtremeCraftCenter);
-        // if(Config.Enable_MegaTreeFarm)
-        // 19051
 
         if (Config.Enable_LightningSpire) {
             LightningSpire = new GTCM_LightningSpire(
