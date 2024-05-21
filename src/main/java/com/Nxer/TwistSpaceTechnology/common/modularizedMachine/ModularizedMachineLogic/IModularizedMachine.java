@@ -90,6 +90,10 @@ public interface IModularizedMachine {
         void setOverclockParameter(int timeReduction, int powerIncrease);
     }
 
+    interface ISupportExecutionCore extends IModularizedMachine {
+
+    }
+
     interface ISupportAllModularHatches extends ISupportParallelController, ISupportSpeedController,
         ISupportPowerConsumptionController, ISupportOverclockController {
     }

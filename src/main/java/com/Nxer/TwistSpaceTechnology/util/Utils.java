@@ -55,11 +55,20 @@ public final class Utils {
     }
 
     public static <T> T[] mergeArrays(T[]... arrays) {
-        List<T> totals = new ArrayList<>();
+        int totalLength = 0;
         for (T[] array : arrays) {
-            totals.addAll(Arrays.asList(array));
+            totalLength += array.length;
         }
-        return (T[]) totals.toArray(new Object[0]);
+
+        T[] output = Arrays.copyOf(arrays[0], totalLength);
+        int offset = arrays[0].length;
+        for (T[] array : arrays) {
+            if (array != output) {
+                System.arraycopy(array, 0, output, offset, array.length);
+                offset += array.length;
+            }
+        }
+        return output;
     }
 
     /**
