@@ -298,7 +298,7 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
 
     @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        if (aTick % 20 == 0 && aBaseMetaTileEntity.isServerSide()) {
+        if (aTick % 100 == 0 && aBaseMetaTileEntity.isServerSide()) {
             updatePatterns();
         }
         super.onPreTick(aBaseMetaTileEntity, aTick);
@@ -317,9 +317,9 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
                         LOG.info("details added:" + details);
                     } else {
                         if (details.getOutputs().length != 1) continue;
-                        LOG.info(
-                            "extremeCraftRecipes have " + extremeCraftRecipes.getAllRecipes()
-                                .size());
+                        // LOG.info(
+                        // "extremeCraftRecipes have " + extremeCraftRecipes.getAllRecipes()
+                        // .size());
                         var validResult = extremeCraftRecipes.findRecipeQuery()
                             .items(convertAEToMC(details.getInputs()))
                             .findAll()
@@ -335,7 +335,7 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
                             if (areStacksEqual(recipe.getOutput(0), details.getOutputs()[0].getItemStack(), true)
                                 && details.getOutputs().length == 1) {
                                 patternDetails.add(details);
-                                LOG.info("details added:" + details);
+                                // LOG.info("details added:" + details);
                             }
                         }
                     }

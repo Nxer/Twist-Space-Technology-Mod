@@ -83,35 +83,40 @@ public class BlockRegister {
                 "Parallelism Casing Mark 0",
                 (byte) 3,
                 BasicBlocks.MetaBlockCasing01,
-                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.0") }));
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.3.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.3.name_1") }));
 
         GTCMItemList.ParallelismCasing1.set(
             MetaBlockConstructors.initMetaBlockCasing(
                 "Parallelism Casing Mark 1",
                 (byte) 4,
                 BasicBlocks.MetaBlockCasing01,
-                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.1") }));
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.4.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.4.name_1") }));
 
         GTCMItemList.ParallelismCasing2.set(
             MetaBlockConstructors.initMetaBlockCasing(
                 "Parallelism Casing Mark 2",
                 (byte) 5,
                 BasicBlocks.MetaBlockCasing01,
-                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.2") }));
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.5.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.5.name_1") }));
 
         GTCMItemList.ParallelismCasing3.set(
             MetaBlockConstructors.initMetaBlockCasing(
                 "Parallelism Casing Mark 3",
                 (byte) 6,
                 BasicBlocks.MetaBlockCasing01,
-                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.4") }));
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.6.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.6.name_1") }));
 
         GTCMItemList.ParallelismCasing4.set(
             MetaBlockConstructors.initMetaBlockCasing(
                 "Parallelism Casing Mark 4",
                 (byte) 7,
                 BasicBlocks.MetaBlockCasing01,
-                new String[] { TextEnums.tr("Tooltips.ParallelismCasing.4") }));
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_1") }));
 
         GTCMItemList.AntiMagneticCasing.set(
             MetaBlockConstructors.initMetaBlockCasing("Anti-Magnetic Casing", (byte) 8, BasicBlocks.MetaBlockCasing01));
