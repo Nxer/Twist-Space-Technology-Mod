@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachi
 
 import java.util.Collection;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 
 public interface IModularizedMachine {
@@ -92,6 +93,7 @@ public interface IModularizedMachine {
 
     interface ISupportExecutionCore extends IModularizedMachine {
 
+        Collection<IExecutionCore> getIdleExecutionCores();
     }
 
     interface ISupportAllModularHatches extends ISupportParallelController, ISupportSpeedController,
