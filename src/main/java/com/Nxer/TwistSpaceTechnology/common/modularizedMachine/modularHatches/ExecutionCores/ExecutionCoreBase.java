@@ -17,9 +17,8 @@ public abstract class ExecutionCoreBase extends ModularHatchBase {
         super(aID, aName, aNameRegional, aTier, 0, null);
     }
 
-    public ExecutionCoreBase(String aName, int aTier, int aInvSlotCount, String[] aDescription,
-        ITexture[][][] aTextures) {
-        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
+    public ExecutionCoreBase(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 0, aDescription, aTextures);
     }
 
     @Override

@@ -3,16 +3,20 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachi
 import java.util.ArrayList;
 import java.util.Collection;
 
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
 public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCoreMachineBase<T>>
     extends ModularizedMachineBase<T> implements IModularizedMachine.ISupportExecutionCore, IExecutionCore {
@@ -23,6 +27,37 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     public MultiExecutionCoreMachineBase(String aName) {
         super(aName);
+    }
+
+    // region Modular
+    protected final Collection<AdvExecutionCore> advExecutionCores = new ArrayList<>();
+    protected final Collection<ExecutionCore> executionCores = new ArrayList<>();
+
+    @Override
+    public void resetModularHatchCollections() {
+        super.resetModularHatchCollections();
+        advExecutionCores.clear();
+        executionCores.clear();
+    }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        if (!super.checkMachine(aBaseMetaTileEntity, aStack)) return false;
+
+        // collect execution core module hatches
+        Collection<IModularHatch> allExecutionCores = modularHatches.get(ModularHatchTypes.EXECUTION_CORE);
+        if (allExecutionCores != null && !allExecutionCores.isEmpty()) {
+            for (IModularHatch hatch : allExecutionCores) {
+                if (hatch == null) continue;
+                if (hatch instanceof AdvExecutionCore advExecutionCore) {
+                    advExecutionCores.add(advExecutionCore);
+                } else if (hatch instanceof ExecutionCore executionCore) {
+                    executionCores.add(executionCore);
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -36,6 +71,41 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             }
         }
         return cores;
+    }
+
+    @Override
+    public int getParallelOfEveryNormalExecutionCore() {
+        if (executionCores.isEmpty()) return getMaxParallelRecipes();
+        int coreAmount = executionCores.size() + 1;
+        int totalParallel = getMaxParallelRecipes();
+        if (coreAmount > totalParallel) return 0;
+        if (coreAmount == totalParallel) return 1;
+        return totalParallel / coreAmount;
+    }
+
+    // endregion
+
+    @Override
+    public @NotNull CheckRecipeResult checkProcessing() {
+
+        // check every 20tick
+        mMaxProgresstime = 20;
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+        return super.checkProcessing();
+    }
+
+    @Override
+    public @NotNull CheckRecipeResult checkProcessingMM() {
+        Collection<IExecutionCore> idleExecutionCores = getIdleExecutionCores();
+        if (idleExecutionCores.isEmpty() && !this.isIdle()) {
+            return NoIdleExecutionCore.INSTANCE;
+        }
+
+        // TODO
+
+        return super.checkProcessing();
     }
 
     public static class NoIdleExecutionCore implements CheckRecipeResult {
@@ -87,26 +157,4 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     }
 
-    @Override
-    public @NotNull CheckRecipeResult checkProcessing() {
-
-        // check every 20tick
-        mMaxProgresstime = 20;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        return super.checkProcessing();
-    }
-
-    @Override
-    public @NotNull CheckRecipeResult checkProcessingMM() {
-        Collection<IExecutionCore> idleExecutionCores = getIdleExecutionCores();
-        if (idleExecutionCores.isEmpty() && !this.isIdle()) {
-            return NoIdleExecutionCore.INSTANCE;
-        }
-
-        // TODO
-
-        return super.checkProcessing();
-    }
 }

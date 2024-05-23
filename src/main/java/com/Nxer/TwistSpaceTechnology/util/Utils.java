@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -19,7 +18,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 import gregtech.api.metatileentity.MetaTileEntity;
-import org.jetbrains.annotations.NotNull;
 import scala.actors.migration.pattern;
 
 public final class Utils {
@@ -50,11 +48,14 @@ public final class Utils {
             .toArray(ItemStack[]::new);
     }
 
-    public static <T> T[] mergeArrayss(/*@NotNull IntFunction<T[]> generator, */T[]... arrays) {
+    public static <T> T[] mergeArrayss(/* @NotNull IntFunction<T[]> generator, */T[]... arrays) {
         IntFunction<T[]> generator = null;
         for (T[] array : arrays) {
             if (array == null) continue;
-            generator = size -> (T[]) Array.newInstance(array.getClass().getComponentType(), size);
+            generator = size -> (T[]) Array.newInstance(
+                array.getClass()
+                    .getComponentType(),
+                size);
             break;
         }
         if (generator == null) return null;

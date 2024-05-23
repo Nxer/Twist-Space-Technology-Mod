@@ -94,6 +94,8 @@ public interface IModularizedMachine {
     interface ISupportExecutionCore extends IModularizedMachine {
 
         Collection<IExecutionCore> getIdleExecutionCores();
+
+        int getParallelOfEveryNormalExecutionCore();
     }
 
     interface ISupportAllModularHatches extends ISupportParallelController, ISupportSpeedController,
