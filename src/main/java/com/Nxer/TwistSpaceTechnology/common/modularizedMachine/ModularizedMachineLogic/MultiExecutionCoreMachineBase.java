@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachi
 import java.util.ArrayList;
 import java.util.Collection;
 
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import net.minecraft.network.PacketBuffer;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,10 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     public static class NoIdleExecutionCore implements CheckRecipeResult {
 
         public static final NoIdleExecutionCore INSTANCE = new NoIdleExecutionCore();
+
+        static {
+            CheckRecipeResultRegistry.register(INSTANCE);
+        }
 
         @NotNull
         @Override
@@ -84,10 +89,22 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     public @NotNull CheckRecipeResult checkProcessing() {
+
+        // check every 20tick
+        mMaxProgresstime = 20;
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+        return super.checkProcessing();
+    }
+
+    @Override
+    public @NotNull CheckRecipeResult checkProcessingMM() {
         Collection<IExecutionCore> idleExecutionCores = getIdleExecutionCores();
         if (idleExecutionCores.isEmpty() && !this.isIdle()) {
             return NoIdleExecutionCore.INSTANCE;
         }
+
         // TODO
 
         return super.checkProcessing();

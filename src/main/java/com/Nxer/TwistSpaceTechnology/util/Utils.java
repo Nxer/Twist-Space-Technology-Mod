@@ -3,11 +3,15 @@ package com.Nxer.TwistSpaceTechnology.util;
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.isInDevMode;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -15,6 +19,8 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 import gregtech.api.metatileentity.MetaTileEntity;
+import org.jetbrains.annotations.NotNull;
+import scala.actors.migration.pattern;
 
 public final class Utils {
 
@@ -38,34 +44,49 @@ public final class Utils {
     }
 
     public static ItemStack[] mergeItemStackArray(ItemStack[]... itemStacks) {
-        int totalLength = 0;
-        for (ItemStack[] stackArray : itemStacks) {
-            totalLength += stackArray.length;
-        }
+        return Arrays.stream(itemStacks)
+            .filter(Objects::nonNull)
+            .flatMap(Arrays::stream)
+            .toArray(ItemStack[]::new);
+    }
 
-        ItemStack[] output = Arrays.copyOf(itemStacks[0], totalLength);
-        int offset = itemStacks[0].length;
-        for (ItemStack[] stackArray : itemStacks) {
-            if (stackArray != output) {
-                System.arraycopy(stackArray, 0, output, offset, stackArray.length);
-                offset += stackArray.length;
-            }
+    public static <T> T[] mergeArrayss(/*@NotNull IntFunction<T[]> generator, */T[]... arrays) {
+        IntFunction<T[]> generator = null;
+        for (T[] array : arrays) {
+            if (array == null) continue;
+            generator = size -> (T[]) Array.newInstance(array.getClass().getComponentType(), size);
+            break;
         }
-        return output;
+        if (generator == null) return null;
+
+        return Arrays.stream(arrays)
+            .filter(a -> a != null && a.length > 0)
+            .flatMap(Arrays::stream)
+            .toArray(generator);
     }
 
     public static <T> T[] mergeArrays(T[]... arrays) {
         int totalLength = 0;
-        for (T[] array : arrays) {
-            totalLength += array.length;
+        T[] pattern = null;
+        int indexFirstNotNull = -1;
+        for (int i = 0; i < arrays.length; i++) {
+            if (arrays[i] == null || arrays[i].length < 1) continue;
+            totalLength += arrays[i].length;
+            if (pattern == null) {
+                pattern = arrays[i];
+                indexFirstNotNull = i;
+            }
         }
 
-        T[] output = Arrays.copyOf(arrays[0], totalLength);
-        int offset = arrays[0].length;
-        for (T[] array : arrays) {
-            if (array != output) {
-                System.arraycopy(array, 0, output, offset, array.length);
-                offset += array.length;
+        if (pattern == null) return null;
+
+        T[] output = Arrays.copyOf(pattern, totalLength);
+        int offset = pattern.length;
+        for (int i = indexFirstNotNull; i < arrays.length; i++) {
+            if (arrays[i] == null || arrays[i].length < 1) continue;
+            if (arrays[i] != pattern) {
+                System.arraycopy(arrays[i], 0, output, offset, arrays[i].length);
+                offset += arrays[i].length;
             }
         }
         return output;

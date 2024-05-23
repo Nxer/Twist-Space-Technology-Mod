@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineBase;
+import gregtech.api.recipe.check.CheckRecipeResult;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -37,6 +39,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import org.jetbrains.annotations.NotNull;
 
 public class Test_ModularizedMachine extends ModularizedMachineBase<Test_ModularizedMachine>
     implements IModularizedMachine.ISupportAllModularHatches {
@@ -159,6 +162,11 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
     @Override
     public Collection<ModularBlockTypes> getSupportedModularBlockTypes() {
         return Collections.emptyList();// TODO NULL
+    }
+
+    @Override
+    public @NotNull CheckRecipeResult checkProcessing() {
+        return MultiExecutionCoreMachineBase.NoIdleExecutionCore.INSTANCE;
     }
 
     @Override
