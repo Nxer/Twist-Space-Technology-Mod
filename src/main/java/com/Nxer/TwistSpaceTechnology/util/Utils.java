@@ -41,11 +41,35 @@ public final class Utils {
         return result;
     }
 
-    public static ItemStack[] mergeItemStackArray(ItemStack[]... itemStacks) {
+    public static ItemStack[] mergeItemStackArray(ItemStack[] array1, ItemStack[] array2) {
+        if (array1 == null || array1.length < 1) {
+            return array2;
+        }
+        if (array2 == null || array2.length < 1) {
+            return array1;
+        }
+        ItemStack[] newArray = Arrays.copyOf(array1, array1.length + array2.length);
+        System.arraycopy(array2, 0, newArray, array1.length, array2.length);
+        return newArray;
+    }
+
+    public static ItemStack[] mergeItemStackArrays(ItemStack[]... itemStacks) {
         return Arrays.stream(itemStacks)
             .filter(Objects::nonNull)
             .flatMap(Arrays::stream)
             .toArray(ItemStack[]::new);
+    }
+
+    public static <T> T[] mergeArray(T[] array1, T[] array2) {
+        if (array1 == null || array1.length < 1) {
+            return array2;
+        }
+        if (array2 == null || array2.length < 1) {
+            return array1;
+        }
+        T[] newArray = Arrays.copyOf(array1, array1.length + array2.length);
+        System.arraycopy(array2, 0, newArray, array1.length, array2.length);
+        return newArray;
     }
 
     public static <T> T[] mergeArrayss(/* @NotNull IntFunction<T[]> generator, */T[]... arrays) {
@@ -204,6 +228,19 @@ public final class Utils {
     // endregion
 
     // region Rewrites
+
+    public static <T extends Collection<?>> T filterValidMTE(T metaTileEntities) {
+        metaTileEntities.removeIf(o -> {
+            if (o == null) {
+                return true;
+            }
+            if (o instanceof MetaTileEntity mte) {
+                return !mte.isValid();
+            }
+            return false;
+        });
+        return metaTileEntities;
+    }
 
     // endregion
 

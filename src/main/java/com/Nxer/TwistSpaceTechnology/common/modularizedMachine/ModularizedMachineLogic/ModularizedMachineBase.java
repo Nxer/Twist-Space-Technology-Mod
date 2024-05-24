@@ -172,6 +172,10 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
         return false;
     }
 
+    public boolean addExecutionCoreToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addSpecialModularHatchToMachineList(aTileEntity, aBaseCasingIndex, ModularHatchTypes.EXECUTION_CORE);
+    }
+
     public boolean addParallelControllerToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return addSpecialModularHatchToMachineList(
             aTileEntity,

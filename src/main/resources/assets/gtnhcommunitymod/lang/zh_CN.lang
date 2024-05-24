@@ -1174,3 +1174,6 @@ NameLowSpeedPerfectOverclockController=低速无损超频控制器模块
 NamePerfectOverclockController=无损超频控制器模块
 NameSingularityPerfectOverclockController=奇点无损超频控制器模块
 CheckRecipeResult.NoIdleExecutionCore=没有空闲的执行核心
+Waila.ExecutionCore.1=配方总基础耗时
+Waila.ExecutionCore.2=已执行时间
+Waila.ExecutionCore.3=基础功率

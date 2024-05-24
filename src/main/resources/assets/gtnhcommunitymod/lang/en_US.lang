@@ -1174,3 +1174,6 @@ NameLowSpeedPerfectOverclockController=Low Speed Perfect Overclock Controller Mo
 NamePerfectOverclockController=Perfect Overclock Controller Module
 NameSingularityPerfectOverclockController=Singularity Perfect Overclock Controller Module
 CheckRecipeResult.NoIdleExecutionCore=No idle execution core.
+Waila.ExecutionCore.1=Total basic max progressing time
+Waila.ExecutionCore.2=Progressed time
+Waila.ExecutionCore.3=Basic power consumption

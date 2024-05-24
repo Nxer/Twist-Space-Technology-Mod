@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.StaticParallelController;
@@ -19,6 +20,8 @@ import gregtech.api.util.IGT_HatchAdder;
 
 public enum ModularizedHatchElement implements IHatchElement<ModularizedMachineBase> {
 
+    ExecutionCoreModule(ModularHatchTypes.EXECUTION_CORE, ModularizedMachineBase::addExecutionCoreToMachineList,
+        ExecutionCore.class),
     ParallelController(ModularHatchTypes.PARALLEL_CONTROLLER,
         ModularizedMachineBase::addParallelControllerToMachineList, StaticParallelController.class,
         DynamicParallelController.class),

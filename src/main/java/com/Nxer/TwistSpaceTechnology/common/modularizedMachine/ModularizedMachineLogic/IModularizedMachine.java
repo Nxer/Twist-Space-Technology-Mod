@@ -2,6 +2,9 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachi
 
 import java.util.Collection;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 
@@ -93,9 +96,17 @@ public interface IModularizedMachine {
 
     interface ISupportExecutionCore extends IModularizedMachine {
 
-        Collection<IExecutionCore> getIdleExecutionCores();
+        Collection<IExecutionCore> getIdleNormalExecutionCores();
 
         int getParallelOfEveryNormalExecutionCore();
+
+        void mergeOutputItems(ItemStack... outputs);
+
+        void mergeOutputFluids(FluidStack... outputs);
+
+        boolean tryUseEut(long eut);
+
+        boolean tryDecreaseUsedEut(long eut);
     }
 
     interface ISupportAllModularHatches extends ISupportParallelController, ISupportSpeedController,

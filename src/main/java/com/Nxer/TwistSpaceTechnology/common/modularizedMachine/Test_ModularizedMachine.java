@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine;
 
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ExecutionCoreModule;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ParallelController;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_HatchElement.Energy;
@@ -21,13 +22,10 @@ import java.util.Collections;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularBlockTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -37,12 +35,11 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
-public class Test_ModularizedMachine extends ModularizedMachineBase<Test_ModularizedMachine>
+public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_ModularizedMachine>
     implements IModularizedMachine.ISupportAllModularHatches {
 
     // region Class Constructor
@@ -153,7 +150,7 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
     }
 
     protected static final Collection<ModularHatchTypes> SUPPORTED_MODULAR_HATCH_TYPES = Arrays
-        .asList(ModularHatchTypes.PARALLEL_CONTROLLER);
+        .asList(ModularHatchTypes.PARALLEL_CONTROLLER, ModularHatchTypes.EXECUTION_CORE);
 
     @Override
     public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
@@ -163,11 +160,6 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
     @Override
     public Collection<ModularBlockTypes> getSupportedModularBlockTypes() {
         return Collections.emptyList();// TODO NULL
-    }
-
-    @Override
-    public @NotNull CheckRecipeResult checkProcessing() {
-        return MultiExecutionCoreMachineBase.NoIdleExecutionCore.INSTANCE;
     }
 
     @Override
@@ -220,7 +212,8 @@ public class Test_ModularizedMachine extends ModularizedMachineBase<Test_Modular
                             InputBus,
                             OutputBus,
                             Energy.or(ExoticEnergy),
-                            ParallelController)
+                            ParallelController,
+                            ExecutionCoreModule)
                         .adder(Test_ModularizedMachine::addToMachineList)
                         .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(0))
                         .dot(1)

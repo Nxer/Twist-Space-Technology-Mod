@@ -65,6 +65,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers.StaticOverclockController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.StaticParallelController;
@@ -221,6 +222,7 @@ public class MachineLoader {
     public static ItemStack LowSpeedPerfectOverclockController;
     public static ItemStack PerfectOverclockController;
     public static ItemStack SingularityPerfectOverclockController;
+    public static ItemStack TestExecutionCore;
 
     // endregion
 
@@ -1282,6 +1284,12 @@ public class MachineLoader {
          * UXV=13 134,217,728
          * MAX=14 2,147,483,648
          */
+
+        TestExecutionCore = new ExecutionCore(
+            18843,
+            "NameTestExecutionCore",
+            "Test Execution Core from Twist Space Technology",
+            14).getStackForm(1);
 
         // endregion
 
