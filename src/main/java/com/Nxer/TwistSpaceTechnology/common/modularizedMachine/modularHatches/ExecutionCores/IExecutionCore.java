@@ -5,6 +5,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
 
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IVoidable;
 
 public interface IExecutionCore extends IVoidable {
@@ -33,13 +34,31 @@ public interface IExecutionCore extends IVoidable {
     boolean isIdle();
 
     /**
+     * @return If true this execution core module is working.
+     */
+    boolean isWorking();
+
+    /**
      * Get the main machine object.
      *
      * @return The main machine object.
      */
     IModularizedMachine.ISupportExecutionCore getMainMachine();
 
-    // region Setters
+    void runExecutionCoreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick);
+
+    /**
+     * @return The tick amount of maxProgressingTime - progressedTime
+     */
+    int getNeedProgressingTime();
+
+    /**
+     * @param tick Boosted tick amount.
+     * @return This execution core.
+     */
+    IExecutionCore boostTick(int tick);
+
+    // region Getters and Setters
     IExecutionCore setOutputItems(ItemStack[] outputItems);
 
     IExecutionCore setOutputFluids(FluidStack[] outputFluids);
@@ -47,5 +66,7 @@ public interface IExecutionCore extends IVoidable {
     IExecutionCore setMaxProgressingTime(int maxProgressingTime);
 
     IExecutionCore setEut(long eut);
+
+    long getEut();
 
 }

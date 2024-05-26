@@ -23,11 +23,6 @@ public class ExecutionCore extends ExecutionCoreBase implements IStaticModularHa
     }
 
     @Override
-    public boolean isIdle() {
-        return false;
-    }
-
-    @Override
     public void onCheckMachine(ModularizedMachineBase<?> machine) {
         // do nothing
     }

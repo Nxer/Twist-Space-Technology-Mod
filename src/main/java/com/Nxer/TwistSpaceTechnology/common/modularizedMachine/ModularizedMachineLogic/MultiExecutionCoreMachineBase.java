@@ -6,21 +6,29 @@ import static gregtech.api.util.GT_Utility.filterValidMTEs;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
@@ -30,10 +38,11 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCoreMachineBase<T>>
     extends ModularizedMachineBase<T> implements IModularizedMachine.ISupportExecutionCore, IExecutionCore {
@@ -125,6 +134,22 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
+    public Collection<IExecutionCore> getAllWorkingExecutionCores() {
+        Collection<IExecutionCore> cores = new ArrayList<>();
+        for (ExecutionCore executionCore : executionCores) {
+            if (executionCore.isWorking()) {
+                cores.add(executionCore);
+            }
+        }
+        for (AdvExecutionCore executionCore : advExecutionCores) {
+            if (executionCore.isWorking()) {
+                cores.add(executionCore);
+            }
+        }
+        return cores;
+    }
+
+    @Override
     public int getParallelOfEveryNormalExecutionCore() {
         if (executionCores.isEmpty()) return getMaxParallelRecipes();
         int coreAmount = executionCores.size() + 1;
@@ -146,7 +171,149 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     protected FluidStack[] eOutputFluids;
     protected int eMaxProgressingTime;
     protected int eProgressedTime;
+    protected int eBoostedTime;
     protected long eEut;
+
+    @Override
+    public long getEut() {
+        return eEut;
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isServerSide()) {
+            runExecutionCoreTick(aBaseMetaTileEntity, aTick);
+        }
+    }
+
+    public void runExecutionCoreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if (!aBaseMetaTileEntity.isServerSide()) return;
+        if (eMaxProgressingTime > 0) {
+            if (eProgressedTime < eMaxProgressingTime) {
+                eProgressedTime++;
+            } else {
+                // output and finish this work
+
+                if (eOutputItems != null && eOutputItems.length > 0) {
+                    this.mergeOutputItems(eOutputItems);
+                    eOutputItems = null;
+                }
+
+                if (eOutputFluids != null && eOutputFluids.length > 0) {
+                    this.mergeOutputFluids(eOutputFluids);
+                    eOutputFluids = null;
+                }
+
+                if (!this.tryDecreaseUsedEut(eEut)) {
+                    TwistSpaceTechnology.LOG.info(
+                        "ERROR: Execution core try decrease used EU/t failed at x" + aBaseMetaTileEntity.getXCoord()
+                            + " y"
+                            + aBaseMetaTileEntity.getYCoord()
+                            + " z"
+                            + aBaseMetaTileEntity.getZCoord());
+                }
+
+                eMaxProgressingTime = 0;
+                eProgressedTime = 0;
+                eBoostedTime = 0;
+                eEut = 0;
+
+                this.forceCheckProcessing();
+
+            }
+        }
+    }
+
+    @Override
+    public IExecutionCore boostTick(int tick) {
+        eProgressedTime += tick;
+        eBoostedTime += tick;
+        return this;
+    }
+
+    @Override
+    public int getNeedProgressingTime() {
+        return eMaxProgressingTime - eProgressedTime;
+    }
+
+    // region waila
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        int maxProgressingTime = tag.getInteger("maxProgressingTime");
+        if (maxProgressingTime > 0) {
+            // spotless:off
+            currentTip.add(
+                // #tr Waila.ExecutionCore.1
+                // # Total basic max progressing time
+                // #zh_CN 配方总基础耗时
+                TextEnums.tr("Waila.ExecutionCore.1") + " : "
+                    + maxProgressingTime + " tick ("
+                    + (maxProgressingTime / 20) + "s)");
+            int progressedTime = tag.getInteger("progressedTime");
+            currentTip.add(
+                // #tr Waila.ExecutionCore.2
+                // # Progressed time
+                // #zh_CN 已执行时间
+                TextEnums.tr("Waila.ExecutionCore.2") + " : "
+                    + progressedTime + " tick ("
+                    + (progressedTime / 20) + "s)"
+            );
+            int boostedTime = tag.getInteger("boostedTime");
+            currentTip.add(
+                // #tr Waila.ExecutionCore.4
+                // # Boosted time
+                // #zh_CN 已加速时间
+                TextEnums.tr("Waila.ExecutionCore.4") + " : "
+                    + boostedTime + " tick ("
+                    + (boostedTime / 20) + "s)"
+            );
+            currentTip.add(
+                // #tr Waila.ExecutionCore.3
+                // # Basic power consumption
+                // #zh_CN 基础功率
+                TextEnums.tr("Waila.ExecutionCore.3") + " : "
+                    + tag.getLong("usingEut") + " EU/t"
+            );
+            currentTip.add(
+                // #tr Waila.ExecutionCore.5
+                // # Power for boosting
+                // #zh_CN 已用于加速的功率
+                TextEnums.tr("Waila.ExecutionCore.5") + " : "
+                    + tag.getLong("eutForBoostLastTick") + " EU/t"
+            );
+            // spotless:on
+        } else {
+            // #tr Waila.ExecutionCore.IsIdle
+            // # This execution core is idle.
+            // #zh_CN 空闲状态
+            currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
+        }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            tag.setInteger("maxProgressingTime", eMaxProgressingTime);
+            if (eMaxProgressingTime > 0) {
+                int outputItemStackAmount = eOutputItems == null ? 0 : eOutputItems.length;
+                tag.setInteger("outputItemStackAmount", outputItemStackAmount);
+                int outputFluidStackAmount = eOutputFluids == null ? 0 : eOutputFluids.length;
+                tag.setInteger("outputFluidStackAmount", outputFluidStackAmount);
+                tag.setInteger("progressedTime", eProgressedTime);
+                tag.setInteger("boostedTime", eBoostedTime);
+                tag.setLong("usingEut", eEut);
+                tag.setLong("eutForBoostLastTick", eutForBoostLastTick);
+            }
+        }
+    }
+    // endregion
 
     protected void saveNBTDataItemStacks(NBTTagCompound aNBT) {
         if (eOutputItems != null && eOutputItems.length > 0) {
@@ -215,6 +382,11 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
+    public boolean isWorking() {
+        return this.eMaxProgressingTime > 0;
+    }
+
+    @Override
     public IExecutionCore setOutputItems(ItemStack[] outputItems) {
         this.eOutputItems = outputItems;
         return this;
@@ -243,7 +415,10 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     // region Logic
     protected boolean startedRecipeProcessing = false;
     protected long maxEutCanUse = 0;
+    protected long eutForBoostLastTick = 0;
     protected CheckRecipeResult lastCheck = CheckRecipeResultRegistry.NO_RECIPE;
+
+    protected abstract OverclockType getOverclockType();
 
     public void mergeOutputItems(ItemStack... outputs) {
         mOutputItems = mergeArray(mOutputItems, outputs);
@@ -272,6 +447,11 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
+
+        // TODO boost execution core progressing
+        long eutForBoostLastTick = boostExecutionCoreProcessing();
+
+        // EU costing
         if (this.lEUt < 0) {
             if (!drainEnergyInput(getActualEnergyUsage())) {
                 shutDownAllExecutionCore();
@@ -279,7 +459,72 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                 return false;
             }
         }
+
+        tryDecreaseUsedEut(eutForBoostLastTick);
         return true;
+    }
+
+    @Override
+    public void stopMachine(@NotNull ShutDownReason reason) {
+        eutForBoostLastTick = 0;
+        super.stopMachine(reason);
+    }
+
+    /**
+     * Use idle EUt to boost.
+     *
+     * @return The value of EUt used for boosting.
+     */
+    protected long boostExecutionCoreProcessing() {
+        eutForBoostLastTick = 0;
+        Collection<IExecutionCore> workingCores = getAllWorkingExecutionCores();
+        if (workingCores.isEmpty()) {
+            TwistSpaceTechnology.LOG.info("Test : workingCores.isEmpty()");
+            return 0;
+        }
+
+        int workingCoreWaitBoostAmount = workingCores.size();
+        long maxEUtCanUse = getEutCanUse();
+        if (maxEUtCanUse < workingCoreWaitBoostAmount) return 0;
+
+        boolean perfectOverclock = getOverclockType().isPerfectOverclock();
+
+        for (IExecutionCore executionCore : workingCores) {
+            long maxAverageEUtCanUse = maxEUtCanUse / workingCoreWaitBoostAmount;
+            workingCoreWaitBoostAmount--;
+            int maxTickCanBoost = executionCore.getNeedProgressingTime();
+            if (maxTickCanBoost < 1) continue;
+
+            long thisCoreEUt = executionCore.getEut();
+            long thisCoreUsed = 0;
+
+            long eutExtraMultiplier = maxAverageEUtCanUse / thisCoreEUt;
+
+            int boostedTick;
+            if (perfectOverclock) {
+                if (eutExtraMultiplier > maxTickCanBoost) {
+                    boostedTick = maxTickCanBoost;
+                } else {
+                    boostedTick = (int) eutExtraMultiplier;
+                }
+                thisCoreUsed = boostedTick * thisCoreEUt;
+
+            } else {
+                long eutMultiplier = eutExtraMultiplier + 1;
+                int canOverclockTimes = (int) Math
+                    .min(Math.log(eutMultiplier) / Utils.LOG4, Math.log(maxTickCanBoost) / Utils.LOG2);
+                boostedTick = (int) Math.pow(2, canOverclockTimes) - 1;
+                thisCoreUsed = (long) ((Math.pow(4, canOverclockTimes) - 1) * thisCoreEUt);
+            }
+
+            maxEUtCanUse -= thisCoreUsed;
+            eutForBoostLastTick += thisCoreUsed;
+            tryUseEut(thisCoreUsed);
+            executionCore.boostTick(boostedTick);
+            TwistSpaceTechnology.LOG.info("Test : executionCore.boostTick(boostedTick)");
+        }
+
+        return eutForBoostLastTick;
     }
 
     protected void shutDownAllExecutionCore() {
@@ -314,8 +559,10 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         super.saveNBTData(aNBT);
         aNBT.setBoolean("startedRecipeProcessing", startedRecipeProcessing);
         aNBT.setLong("maxEutCanUse", maxEutCanUse);
+        aNBT.setLong("eutForBoostLastTick", eutForBoostLastTick);
         aNBT.setInteger("eMaxProgressingTime", eMaxProgressingTime);
         aNBT.setInteger("eProgressedTime", eProgressedTime);
+        aNBT.setInteger("eBoostedTime", eBoostedTime);
         aNBT.setLong("eEut", eEut);
         saveNBTDataItemStacks(aNBT);
         saveNBTDataFluidStacks(aNBT);
@@ -326,8 +573,10 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         super.loadNBTData(aNBT);
         startedRecipeProcessing = aNBT.getBoolean("startedRecipeProcessing");
         maxEutCanUse = aNBT.getLong("maxEutCanUse");
+        eutForBoostLastTick = aNBT.getLong("eutForBoostLastTick");
         eMaxProgressingTime = aNBT.getInteger("eMaxProgressingTime");
         eProgressedTime = aNBT.getInteger("eProgressedTime");
+        eBoostedTime = aNBT.getInteger("eBoostedTime");
         eEut = aNBT.getLong("eEut");
         loadNBTDataItemStacks(aNBT);
         loadNBTDataFluidStacks(aNBT);
@@ -335,6 +584,10 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     public long getEutCanUse() {
         return maxEutCanUse + lEUt;
+    }
+
+    public long getEutCanUse(int coreAmount) {
+        return (maxEutCanUse + lEUt) / coreAmount;
     }
 
     protected ProcessingLogic createProcessingLogic() {
@@ -346,14 +599,8 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
                 setEuModifier(getEuModifier());
                 setSpeedBonus(getSpeedBonus());
-                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
+                setOverclock(getOverclockType().timeReduction, getOverclockType().powerIncrease);
                 return super.process();
-            }
-
-            @Nonnull
-            @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
-                return GT_OverclockCalculator.ofNoOverclock(recipe);
             }
 
         };
@@ -369,13 +616,11 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         logic.setRecipeLocking(this, false);
         logic.setAvailableVoltage(getEutCanUse());
         logic.setAvailableAmperage(1);
-        logic.setAmperageOC(false);
         logic.setMaxParallel(getParallelOfEveryNormalExecutionCore());
     }
 
     @Nonnull
     protected CheckRecipeResult doCheckRecipe() {
-        processingLogic.setAvailableVoltage(getEutCanUse());
         return super.doCheckRecipe();
     }
 
@@ -388,13 +633,20 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     public @NotNull CheckRecipeResult checkProcessingMM() {
         lastCheck = checkProcessingForAllNormalExecutionCore();
 
-        // check every 20tick
-        mMaxProgresstime = 20;
+        // check every 128tick
+        mMaxProgresstime = 128;
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
         updateSlots();
         return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    public void forceCheckProcessing() {
+        IGregTechTileEntity mte = getBaseMetaTileEntity();
+        if (mte.isServerSide() && mte.isAllowedToWork()) {
+            lastCheck = checkProcessingForAllNormalExecutionCore();
+        }
     }
 
     public @NotNull CheckRecipeResult checkProcessingForAllNormalExecutionCore() {
@@ -405,8 +657,11 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         }
 
         setupProcessingLogic(processingLogic);
+        int idleAmount = idleExecutionCores.size();
         boolean flag = false;
         for (IExecutionCore executionCore : idleExecutionCores) {
+            processingLogic.setAvailableVoltage(getEutCanUse(idleAmount));
+            idleAmount--;
             CheckRecipeResult result = checkExecutionCoreProcessing(executionCore);
             if (!result.wasSuccessful()) {
                 break;
@@ -431,6 +686,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             // set power parameters of this controller
             lEUt -= processingLogic.getCalculatedEut();
         }
+        updateSlots();
         endRecipeProcessing();
         return result;
     }

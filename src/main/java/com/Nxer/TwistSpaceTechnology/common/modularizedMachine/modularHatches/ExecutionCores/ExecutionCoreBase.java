@@ -46,6 +46,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     protected FluidStack[] outputFluids;
     protected int maxProgressingTime;
     protected int progressedTime;
+    protected int boostedTime;
     protected long eut;
     protected boolean hasBeenSetup = false;
     protected IModularizedMachine.ISupportExecutionCore mainMachine;
@@ -56,34 +57,56 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        int maxProgressingTime = tag.getInteger("maxProgressingTime");
-        if (maxProgressingTime > 0) {
-            // spotless:off
-            currentTip.add(
-                // #tr Waila.ExecutionCore.1
-                // # Total basic max progressing time
-                // #zh_CN 配方总基础耗时
-                TextEnums.tr("Waila.ExecutionCore.1") + " : "
-                + maxProgressingTime + " tick ("
-                + (maxProgressingTime / 20) + "s)");
-            int progressedTime = tag.getInteger("progressedTime");
-            currentTip.add(
-                // #tr Waila.ExecutionCore.2
-                // # Progressed time
-                // #zh_CN 已执行时间
-                TextEnums.tr("Waila.ExecutionCore.2") + " : "
-                + progressedTime + " tick ("
-                + (progressedTime / 20) + "s)"
-            );
-            currentTip.add(
-                // #tr Waila.ExecutionCore.3
-                // # Basic power consumption
-                // #zh_CN 基础功率
-                TextEnums.tr("Waila.ExecutionCore.3") + " : "
-                + tag.getLong("usingEut") + " EU/t"
-            );
-            // spotless:on
+        if (tag.getBoolean("hasBeenSetup")) {
+            int maxProgressingTime = tag.getInteger("maxProgressingTime");
+            if (maxProgressingTime > 0) {
+                // spotless:off
+                currentTip.add(
+                    // #tr Waila.ExecutionCore.1
+                    // # Total basic max progressing time
+                    // #zh_CN 配方总基础耗时
+                    TextEnums.tr("Waila.ExecutionCore.1") + " : "
+                        + maxProgressingTime + " tick ("
+                        + (maxProgressingTime / 20) + "s)");
+                int progressedTime = tag.getInteger("progressedTime");
+                currentTip.add(
+                    // #tr Waila.ExecutionCore.2
+                    // # Progressed time
+                    // #zh_CN 已执行时间
+                    TextEnums.tr("Waila.ExecutionCore.2") + " : "
+                        + progressedTime + " tick ("
+                        + (progressedTime / 20) + "s)"
+                );
+                int boostedTime = tag.getInteger("boostedTime");
+                currentTip.add(
+                    // #tr Waila.ExecutionCore.4
+                    // # Boosted time
+                    // #zh_CN 已加速时间
+                    TextEnums.tr("Waila.ExecutionCore.4") + " : "
+                        + boostedTime + " tick ("
+                        + (boostedTime / 20) + "s)"
+                );
+                currentTip.add(
+                    // #tr Waila.ExecutionCore.3
+                    // # Basic power consumption
+                    // #zh_CN 基础功率
+                    TextEnums.tr("Waila.ExecutionCore.3") + " : "
+                        + tag.getLong("usingEut") + " EU/t"
+                );
+                // spotless:on
+            } else {
+                // #tr Waila.ExecutionCore.IsIdle
+                // # This execution core is idle.
+                // #zh_CN 空闲状态
+                currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
+            }
+        } else {
+            // #tr Waila.ExecutionCore.HasNotBeenSetup
+            // # This execution core has not been setup.
+            // #zh_CN 此执行核心未初始化
+            currentTip.add(TextEnums.tr("Waila.ExecutionCore.HasNotBeenSetup"));
         }
+
     }
 
     @Override
@@ -92,6 +115,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
+            tag.setBoolean("hasBeenSetup", hasBeenSetup && mainMachine != null);
             tag.setInteger("maxProgressingTime", maxProgressingTime);
             if (maxProgressingTime > 0) {
                 int outputItemStackAmount = outputItems == null ? 0 : outputItems.length;
@@ -99,6 +123,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                 int outputFluidStackAmount = outputFluids == null ? 0 : outputFluids.length;
                 tag.setInteger("outputFluidStackAmount", outputFluidStackAmount);
                 tag.setInteger("progressedTime", progressedTime);
+                tag.setInteger("boostedTime", boostedTime);
                 tag.setLong("usingEut", eut);
             }
         }
@@ -108,10 +133,14 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
+        runExecutionCoreTick(aBaseMetaTileEntity, aTick);
+    }
+
+    public void runExecutionCoreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
-            if (hasBeenSetup) {
+            if (hasBeenSetup && mainMachine != null) {
                 if (maxProgressingTime > 0) {
-                    if (progressedTime < maxProgressingTime) {
+                    if (progressedTime < maxProgressingTime - 1) {
                         progressedTime++;
                     } else {
                         // output and finish this work
@@ -138,7 +167,10 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
 
                         maxProgressingTime = 0;
                         progressedTime = 0;
+                        boostedTime = 0;
                         eut = 0;
+
+                        mainMachine.forceCheckProcessing();
 
                     }
                 }
@@ -147,8 +179,24 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     }
 
     @Override
+    public IExecutionCore boostTick(int tick) {
+        progressedTime += tick;
+        boostedTime += tick;
+        return this;
+    }
+
+    @Override
+    public int getNeedProgressingTime() {
+        return maxProgressingTime - progressedTime;
+    }
+
+    @Override
     public boolean isIdle() {
         return hasBeenSetup && this.maxProgressingTime < 1;
+    }
+
+    public boolean isWorking() {
+        return hasBeenSetup && this.maxProgressingTime > 0;
     }
 
     @Override
@@ -186,8 +234,8 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         super.saveNBTData(aNBT);
         aNBT.setInteger("maxProgressingTime", maxProgressingTime);
         aNBT.setInteger("progressedTime", progressedTime);
+        aNBT.setInteger("boostedTime", boostedTime);
         aNBT.setLong("eut", eut);
-        aNBT.setBoolean("hasBeenSetup", hasBeenSetup);
         saveNBTDataItemStacks(aNBT);
         saveNBTDataFluidStacks(aNBT);
     }
@@ -215,8 +263,8 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         super.loadNBTData(aNBT);
         maxProgressingTime = aNBT.getInteger("maxProgressingTime");
         progressedTime = aNBT.getInteger("progressedTime");
+        boostedTime = aNBT.getInteger("boostedTime");
         eut = aNBT.getLong("eut");
-        hasBeenSetup = aNBT.getBoolean("hasBeenSetup");
         loadNBTDataItemStacks(aNBT);
         loadNBTDataFluidStacks(aNBT);
     }

@@ -98,6 +98,8 @@ public interface IModularizedMachine {
 
         Collection<IExecutionCore> getIdleNormalExecutionCores();
 
+        Collection<IExecutionCore> getAllWorkingExecutionCores();
+
         int getParallelOfEveryNormalExecutionCore();
 
         void mergeOutputItems(ItemStack... outputs);
@@ -107,6 +109,8 @@ public interface IModularizedMachine {
         boolean tryUseEut(long eut);
 
         boolean tryDecreaseUsedEut(long eut);
+
+        void forceCheckProcessing();
     }
 
     interface ISupportAllModularHatches extends ISupportParallelController, ISupportSpeedController,

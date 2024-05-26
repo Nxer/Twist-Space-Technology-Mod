@@ -23,6 +23,7 @@ import scala.actors.migration.pattern;
 public final class Utils {
 
     public static final double LOG2 = Math.log(2);
+    public static final double LOG4 = Math.log(4);
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
 
     // region about ItemStack

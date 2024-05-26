@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularBlockTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
@@ -132,7 +133,12 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return false;
+        return getOverclockType().isPerfectOverclock();
+    }
+
+    @Override
+    protected OverclockType getOverclockType() {
+        return OverclockType.PerfectOverclock;
     }
 
     @Override

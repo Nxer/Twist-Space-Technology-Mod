@@ -1177,3 +1177,7 @@ CheckRecipeResult.NoIdleExecutionCore=No idle execution core.
 Waila.ExecutionCore.1=Total basic max progressing time
 Waila.ExecutionCore.2=Progressed time
 Waila.ExecutionCore.3=Basic power consumption
+Waila.ExecutionCore.IsIdle=This execution core is idle.
+Waila.ExecutionCore.HasNotBeenSetup=This execution core has not been setup.
+Waila.ExecutionCore.4=Boosted time
+Waila.ExecutionCore.5=Power for boosting
