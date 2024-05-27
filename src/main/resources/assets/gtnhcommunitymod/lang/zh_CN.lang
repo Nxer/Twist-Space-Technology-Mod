@@ -1181,3 +1181,5 @@ Waila.ExecutionCore.IsIdle=空闲状态
 Waila.ExecutionCore.HasNotBeenSetup=此执行核心未初始化
 Waila.ExecutionCore.4=已加速时间
 Waila.ExecutionCore.5=已用于加速的功率
+NameExecutionCore=执行核心模块
+NameAdvancedExecutionCore=高级执行核心模块

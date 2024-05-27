@@ -1181,3 +1181,5 @@ Waila.ExecutionCore.IsIdle=This execution core is idle.
 Waila.ExecutionCore.HasNotBeenSetup=This execution core has not been setup.
 Waila.ExecutionCore.4=Boosted time
 Waila.ExecutionCore.5=Power for boosting
+NameExecutionCore=Execution Core Module
+NameAdvancedExecutionCore=Advanced Execution Core Module

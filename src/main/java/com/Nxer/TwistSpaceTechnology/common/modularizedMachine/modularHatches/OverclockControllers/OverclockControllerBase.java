@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers;
 
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 
@@ -20,8 +21,6 @@ public abstract class OverclockControllerBase extends ModularHatchBase {
         return ModularHatchTypes.OVERCLOCK_CONTROLLER;
     }
 
-    public abstract int getTimeReduction();
-
-    public abstract int getPowerIncrease();
+    public abstract OverclockType getOverclockType();
 
 }

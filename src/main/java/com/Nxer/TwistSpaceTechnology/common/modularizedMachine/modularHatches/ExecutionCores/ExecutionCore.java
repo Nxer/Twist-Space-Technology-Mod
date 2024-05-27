@@ -1,13 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores;
 
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IStaticModularHatch;
-
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
-public class ExecutionCore extends ExecutionCoreBase implements IStaticModularHatch {
+public class ExecutionCore extends ExecutionCoreBase {
 
     public ExecutionCore(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
@@ -23,7 +20,13 @@ public class ExecutionCore extends ExecutionCoreBase implements IStaticModularHa
     }
 
     @Override
-    public void onCheckMachine(ModularizedMachineBase<?> machine) {
+    public void done() {
         // do nothing
     }
+
+    @Override
+    public boolean useMainMachinePower() {
+        return true;
+    }
+
 }

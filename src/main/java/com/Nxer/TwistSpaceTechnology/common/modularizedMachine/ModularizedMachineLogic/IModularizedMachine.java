@@ -5,6 +5,7 @@ import java.util.Collection;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 
@@ -91,12 +92,14 @@ public interface IModularizedMachine {
 
     interface ISupportOverclockController extends IModularizedMachine {
 
-        void setOverclockParameter(int timeReduction, int powerIncrease);
+        void setOverclockType(OverclockType type);
     }
 
     interface ISupportExecutionCore extends IModularizedMachine {
 
         Collection<IExecutionCore> getIdleNormalExecutionCores();
+
+        Collection<IExecutionCore> getIdleAdvancedExecutionCores();
 
         Collection<IExecutionCore> getAllWorkingExecutionCores();
 

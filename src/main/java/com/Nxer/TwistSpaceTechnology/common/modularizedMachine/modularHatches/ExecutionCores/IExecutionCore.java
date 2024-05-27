@@ -67,6 +67,16 @@ public interface IExecutionCore extends IVoidable {
 
     IExecutionCore setEut(long eut);
 
+    /**
+     * Finish parameter setting.
+     */
+    void done();
+
+    /**
+     * @return If true this execution core use main machine power system, or special handle power things.
+     */
+    boolean useMainMachinePower();
+
     long getEut();
 
 }

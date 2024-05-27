@@ -65,6 +65,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers.StaticOverclockController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
@@ -222,7 +223,8 @@ public class MachineLoader {
     public static ItemStack LowSpeedPerfectOverclockController;
     public static ItemStack PerfectOverclockController;
     public static ItemStack SingularityPerfectOverclockController;
-    public static ItemStack TestExecutionCore;
+    public static ItemStack ExecutionCore;
+    public static ItemStack AdvancedExecutionCore;
 
     // endregion
 
@@ -1285,11 +1287,22 @@ public class MachineLoader {
          * MAX=14 2,147,483,648
          */
 
-        TestExecutionCore = new ExecutionCore(
-            18843,
-            "NameTestExecutionCore",
-            "Test Execution Core from Twist Space Technology",
-            14).getStackForm(1);
+        // #tr NameExecutionCore
+        // # Execution Core Module
+        // #zh_CN 执行核心模块
+        ExecutionCore = new ExecutionCore(18843, "NameExecutionCore", TextEnums.tr("NameExecutionCore"), 12)
+            .getStackForm(1);
+        GTCMItemList.ExecutionCore.set(ExecutionCore);
+
+        // #tr NameAdvancedExecutionCore
+        // # Advanced Execution Core Module
+        // #zh_CN 高级执行核心模块
+        AdvancedExecutionCore = new AdvExecutionCore(
+            18844,
+            "NameAdvancedExecutionCore",
+            TextEnums.tr("NameAdvancedExecutionCore"),
+            13).getStackForm(1);
+        GTCMItemList.AdvancedExecutionCore.set(AdvancedExecutionCore);
 
         // endregion
 

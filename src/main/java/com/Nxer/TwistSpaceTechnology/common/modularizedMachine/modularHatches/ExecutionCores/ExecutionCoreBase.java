@@ -13,6 +13,8 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IStaticModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -25,7 +27,7 @@ import gregtech.api.interfaces.tileentity.IVoidable;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public abstract class ExecutionCoreBase extends ModularHatchBase implements IExecutionCore {
+public abstract class ExecutionCoreBase extends ModularHatchBase implements IExecutionCore, IStaticModularHatch {
 
     public ExecutionCoreBase(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 0, null);
@@ -155,14 +157,16 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                             outputFluids = null;
                         }
 
-                        if (!mainMachine.tryDecreaseUsedEut(eut)) {
-                            TwistSpaceTechnology.LOG.info(
-                                "ERROR: Execution core try decrease used EU/t failed at x"
-                                    + aBaseMetaTileEntity.getXCoord()
-                                    + " y"
-                                    + aBaseMetaTileEntity.getYCoord()
-                                    + " z"
-                                    + aBaseMetaTileEntity.getZCoord());
+                        if (useMainMachinePower()) {
+                            if (!mainMachine.tryDecreaseUsedEut(eut)) {
+                                TwistSpaceTechnology.LOG.info(
+                                    "ERROR: Execution core try decrease used EU/t failed at x"
+                                        + aBaseMetaTileEntity.getXCoord()
+                                        + " y"
+                                        + aBaseMetaTileEntity.getYCoord()
+                                        + " z"
+                                        + aBaseMetaTileEntity.getZCoord());
+                            }
                         }
 
                         maxProgressingTime = 0;
@@ -407,5 +411,10 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     }
 
     // endregion
+
+    @Override
+    public void onCheckMachine(ModularizedMachineBase<?> machine) {
+        // do nothing
+    }
 
 }

@@ -275,6 +275,10 @@ public enum GTCMItemList {
     PerfectOverclockController,
     SingularityPerfectOverclockController,
 
+    // execution core
+    ExecutionCore,
+    AdvancedExecutionCore,
+
     // endregion
 
     // MAX

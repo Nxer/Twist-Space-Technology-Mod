@@ -63,6 +63,12 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_
 
     private int staticParallelParameter = 0;
     private int dynamicParallelParameter = 0;
+    private OverclockType overclockType = OverclockType.NormalOverclock;
+
+    @Override
+    public void setOverclockType(OverclockType type) {
+
+    }
 
     @Override
     public void resetModularStaticSettings() {
@@ -121,11 +127,6 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_
 
     @Override
     public void setDynamicSpeedParameterValue(float value) {
-
-    }
-
-    @Override
-    public void setOverclockParameter(int timeReduction, int powerIncrease) {
 
     }
 

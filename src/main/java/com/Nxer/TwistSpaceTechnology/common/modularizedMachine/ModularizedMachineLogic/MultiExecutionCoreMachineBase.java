@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -56,8 +57,20 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     // region Modular and preparing
+
+    /**
+     * A collector contains all advanced execution cores.
+     */
     protected final Collection<AdvExecutionCore> advExecutionCores = new ArrayList<>();
+
+    /**
+     * A collector contains all normal execution cores.
+     */
     protected final Collection<ExecutionCore> executionCores = new ArrayList<>();
+
+    /**
+     * A collector contains all storage input buses and hatches (ME) to conveniently handle ME network.
+     */
     protected final Collection<IRecipeProcessingAwareHatch> MEInputHatches = new ArrayList<>();
 
     @Override
@@ -68,6 +81,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         MEInputHatches.clear();
     }
 
+    /**
+     * Quickly process by using local collectors to get ME input hatches.
+     */
     @Override
     protected void startRecipeProcessing() {
         startedRecipeProcessing = true;
@@ -77,6 +93,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         }
     }
 
+    /**
+     * Quickly process by using local collectors to get ME input hatches.
+     */
     @Override
     protected void endRecipeProcessing() {
         startedRecipeProcessing = false;
@@ -90,6 +109,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         if (!super.checkMachine(aBaseMetaTileEntity, aStack)) return false;
 
+        // 2.5% for wire loss
         maxEutCanUse = (long) (0.975d * getMaxInputEu());
 
         // collect ME input hatches to easier flush
@@ -133,9 +153,22 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         return cores;
     }
 
+    public Collection<IExecutionCore> getIdleAdvancedExecutionCores() {
+        Collection<IExecutionCore> cores = new ArrayList<>();
+        for (AdvExecutionCore executionCore : advExecutionCores) {
+            if (executionCore.isIdle()) {
+                cores.add(executionCore);
+            }
+        }
+        return cores;
+    }
+
     @Override
     public Collection<IExecutionCore> getAllWorkingExecutionCores() {
         Collection<IExecutionCore> cores = new ArrayList<>();
+        if (this.isWorking()) {
+            cores.add(this);
+        }
         for (ExecutionCore executionCore : executionCores) {
             if (executionCore.isWorking()) {
                 cores.add(executionCore);
@@ -205,13 +238,15 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                     eOutputFluids = null;
                 }
 
-                if (!this.tryDecreaseUsedEut(eEut)) {
-                    TwistSpaceTechnology.LOG.info(
-                        "ERROR: Execution core try decrease used EU/t failed at x" + aBaseMetaTileEntity.getXCoord()
-                            + " y"
-                            + aBaseMetaTileEntity.getYCoord()
-                            + " z"
-                            + aBaseMetaTileEntity.getZCoord());
+                if (useMainMachinePower()) {
+                    if (!this.tryDecreaseUsedEut(eEut)) {
+                        TwistSpaceTechnology.LOG.info(
+                            "ERROR: Execution core try decrease used EU/t failed at x" + aBaseMetaTileEntity.getXCoord()
+                                + " y"
+                                + aBaseMetaTileEntity.getYCoord()
+                                + " z"
+                                + aBaseMetaTileEntity.getZCoord());
+                    }
                 }
 
                 eMaxProgressingTime = 0;
@@ -237,12 +272,33 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         return eMaxProgressingTime - eProgressedTime;
     }
 
+    @Override
+    public void done() {
+        // do nothing
+    }
+
+    @Override
+    public boolean useMainMachinePower() {
+        return true;
+    }
+
     // region waila
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
+
+        currentTip.add(EnumChatFormatting.AQUA +
+        // #tr Waila.ExecutionCore.5
+        // # Power for boosting
+        // #zh_CN 已用于加速的功率
+            TextEnums.tr("Waila.ExecutionCore.5")
+            + EnumChatFormatting.GRAY
+            + " : "
+            + tag.getLong("eutForBoostLastTick")
+            + " EU/t");
+
         int maxProgressingTime = tag.getInteger("maxProgressingTime");
         if (maxProgressingTime > 0) {
             // spotless:off
@@ -277,13 +333,6 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                 // #zh_CN 基础功率
                 TextEnums.tr("Waila.ExecutionCore.3") + " : "
                     + tag.getLong("usingEut") + " EU/t"
-            );
-            currentTip.add(
-                // #tr Waila.ExecutionCore.5
-                // # Power for boosting
-                // #zh_CN 已用于加速的功率
-                TextEnums.tr("Waila.ExecutionCore.5") + " : "
-                    + tag.getLong("eutForBoostLastTick") + " EU/t"
             );
             // spotless:on
         } else {
@@ -364,6 +413,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         eOutputFluids = null;
         eMaxProgressingTime = 0;
         eProgressedTime = 0;
+        eBoostedTime = 0;
         eEut = 0;
     }
 
@@ -373,6 +423,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         eOutputFluids = null;
         eMaxProgressingTime = 0;
         eProgressedTime = 0;
+        eBoostedTime = 0;
         eEut = 0;
     }
 
@@ -471,7 +522,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     /**
-     * Use idle EUt to boost.
+     * Use idle EUt to boost execution cores working.
      *
      * @return The value of EUt used for boosting.
      */
@@ -479,7 +530,6 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         eutForBoostLastTick = 0;
         Collection<IExecutionCore> workingCores = getAllWorkingExecutionCores();
         if (workingCores.isEmpty()) {
-            TwistSpaceTechnology.LOG.info("Test : workingCores.isEmpty()");
             return 0;
         }
 
@@ -521,7 +571,6 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             eutForBoostLastTick += thisCoreUsed;
             tryUseEut(thisCoreUsed);
             executionCore.boostTick(boostedTick);
-            TwistSpaceTechnology.LOG.info("Test : executionCore.boostTick(boostedTick)");
         }
 
         return eutForBoostLastTick;
@@ -624,6 +673,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         return super.doCheckRecipe();
     }
 
+    // TODO delete this method
     @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.wiremillRecipes;
@@ -631,7 +681,8 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     public @NotNull CheckRecipeResult checkProcessingMM() {
-        lastCheck = checkProcessingForAllNormalExecutionCore();
+        checkProcessingForAdvancedExecutionCore();
+        lastCheck = checkProcessingForNormalExecutionCore();
 
         // check every 128tick
         mMaxProgresstime = 128;
@@ -645,12 +696,14 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     public void forceCheckProcessing() {
         IGregTechTileEntity mte = getBaseMetaTileEntity();
         if (mte.isServerSide() && mte.isAllowedToWork()) {
-            lastCheck = checkProcessingForAllNormalExecutionCore();
+            checkProcessingForAdvancedExecutionCore();
+            lastCheck = checkProcessingForNormalExecutionCore();
         }
     }
 
-    public @NotNull CheckRecipeResult checkProcessingForAllNormalExecutionCore() {
+    public @NotNull CheckRecipeResult checkProcessingForNormalExecutionCore() {
         Collection<IExecutionCore> idleExecutionCores = getIdleNormalExecutionCores();
+        // main machine is also a normal execution core.
         if (this.isIdle()) idleExecutionCores.add(this);
         if (idleExecutionCores.isEmpty()) {
             return CheckRecipeResults.NoIdleExecutionCore;
@@ -673,6 +726,35 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         return flag ? CheckRecipeResultRegistry.SUCCESSFUL : CheckRecipeResultRegistry.NO_RECIPE;
     }
 
+    /**
+     * Use main machine power parameters to check recipe and setup advanced execution cores.
+     * But the real power consumption is handled by advanced execution core internal.
+     */
+    public @NotNull CheckRecipeResult checkProcessingForAdvancedExecutionCore() {
+        Collection<IExecutionCore> idleExecutionCores = getIdleAdvancedExecutionCores();
+        if (idleExecutionCores.isEmpty()) {
+            return CheckRecipeResults.NoIdleExecutionCore;
+        }
+
+        setupProcessingLogic(processingLogic);
+        boolean flag = false;
+        for (IExecutionCore executionCore : idleExecutionCores) {
+            CheckRecipeResult result = checkExecutionCoreProcessing(executionCore);
+            if (!result.wasSuccessful()) {
+                break;
+            } else {
+                flag = true;
+            }
+        }
+
+        return flag ? CheckRecipeResultRegistry.SUCCESSFUL : CheckRecipeResultRegistry.NO_RECIPE;
+    }
+
+    /**
+     * Others were all prepared enough, then check recipe for every execution core.
+     *
+     * @param executionCore Check recipe for this execution core.
+     */
     protected CheckRecipeResult checkExecutionCoreProcessing(IExecutionCore executionCore) {
         if (!startedRecipeProcessing) startRecipeProcessing();
         CheckRecipeResult result = doCheckRecipe();
@@ -681,16 +763,22 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             executionCore.setOutputItems(processingLogic.getOutputItems())
                 .setOutputFluids(processingLogic.getOutputFluids())
                 .setMaxProgressingTime(processingLogic.getDuration())
-                .setEut(processingLogic.getCalculatedEut());
+                .setEut(processingLogic.getCalculatedEut())
+                .done();
 
             // set power parameters of this controller
-            lEUt -= processingLogic.getCalculatedEut();
+            if (executionCore.useMainMachinePower()) {
+                tryUseEut(processingLogic.getCalculatedEut());
+            }
         }
         updateSlots();
         endRecipeProcessing();
         return result;
     }
 
+    /**
+     * Multi Execution Core Machine will all not support void protection.
+     */
     @Override
     public boolean supportsVoidProtection() {
         return false;
