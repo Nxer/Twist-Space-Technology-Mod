@@ -45,6 +45,9 @@ import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
+/**
+ * The base class of GregTech machine which can use multi Execution Cores to handle multi recipe at same time.
+ */
 public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCoreMachineBase<T>>
     extends ModularizedMachineBase<T> implements IModularizedMachine.ISupportExecutionCore, IExecutionCore {
 
@@ -527,6 +530,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
      * @return The value of EUt used for boosting.
      */
     protected long boostExecutionCoreProcessing() {
+
         eutForBoostLastTick = 0;
         Collection<IExecutionCore> workingCores = getAllWorkingExecutionCores();
         if (workingCores.isEmpty()) {
