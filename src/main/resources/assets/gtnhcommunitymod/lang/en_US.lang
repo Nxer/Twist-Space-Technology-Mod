@@ -1183,3 +1183,5 @@ Waila.ExecutionCore.4=Boosted time
 Waila.ExecutionCore.5=Power for boosting
 NameExecutionCore=Execution Core Module
 NameAdvancedExecutionCore=Advanced Execution Core Module
+CheckRecipeResult.SetProcessingFailed=Set processing failed. Check your power system or wireless EU net.
+NamePerfectExecutionCore=Perfect Execution Core Module

@@ -194,6 +194,13 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
             ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER);
     }
 
+    public boolean addOverclockControllerToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addSpecialModularHatchToMachineList(
+            aTileEntity,
+            aBaseCasingIndex,
+            ModularHatchTypes.OVERCLOCK_CONTROLLER);
+    }
+
     // endregion
 
     // region Processing Logic

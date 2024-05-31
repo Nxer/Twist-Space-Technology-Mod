@@ -24,6 +24,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.fluid.IFluidStore;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IVoidable;
+import gregtech.api.logic.ProcessingLogic;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -138,6 +139,14 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         runExecutionCoreTick(aBaseMetaTileEntity, aTick);
     }
 
+    public boolean setProcessing(ProcessingLogic processingLogic) {
+        setOutputItems(processingLogic.getOutputItems());
+        setOutputFluids(processingLogic.getOutputFluids());
+        setMaxProgressingTime(processingLogic.getDuration());
+        setEut(processingLogic.getCalculatedEut());
+        return done();
+    }
+
     public void runExecutionCoreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
             if (hasBeenSetup && mainMachine != null) {
@@ -169,10 +178,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                             }
                         }
 
-                        maxProgressingTime = 0;
-                        progressedTime = 0;
-                        boostedTime = 0;
-                        eut = 0;
+                        resetParameters();
 
                         mainMachine.forceCheckProcessing();
 
@@ -219,6 +225,13 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         outputFluids = null;
         maxProgressingTime = 0;
         progressedTime = 0;
+        eut = 0;
+    }
+
+    public void resetParameters() {
+        maxProgressingTime = 0;
+        progressedTime = 0;
+        boostedTime = 0;
         eut = 0;
     }
 

@@ -12,7 +12,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 // TODO Wireless EU costings
-public class AdvExecutionCore extends ExecutionCore implements IGlobalWirelessEnergy {
+public class AdvExecutionCore extends ExecutionCoreBase implements IGlobalWirelessEnergy {
 
     public AdvExecutionCore(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
@@ -36,7 +36,7 @@ public class AdvExecutionCore extends ExecutionCore implements IGlobalWirelessEn
     }
 
     @Override
-    public void done() {
+    public boolean done() {
         // check wireless EU at this moment
         if (!addEUToGlobalEnergyMap(
             ownerUUID,
@@ -49,8 +49,11 @@ public class AdvExecutionCore extends ExecutionCore implements IGlobalWirelessEn
             TwistSpaceTechnology.LOG.info(
                 "Advanced Execution Core shut down because of power at x" + mte
                     .getXCoord() + " y" + mte.getYCoord() + " z" + mte.getZCoord());
+
+            return false;
         }
 
+        return true;
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers.StaticOverclockController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.StaticParallelController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.PowerConsumptionControllers.StaticPowerConsumptionController;
@@ -30,7 +31,8 @@ public enum ModularizedHatchElement implements IHatchElement<ModularizedMachineB
     PowerConsumptionController(ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER,
         ModularizedMachineBase::addPowerConsumptionControllerToMachineList, StaticPowerConsumptionController.class),
 
-    ;
+    OverclockController(ModularHatchTypes.OVERCLOCK_CONTROLLER,
+        ModularizedMachineBase::addOverclockControllerToMachineList, StaticOverclockController.class);
 
     private final List<Class<? extends IMetaTileEntity>> mteClasses;
     private final IGT_HatchAdder<ModularizedMachineBase> adder;

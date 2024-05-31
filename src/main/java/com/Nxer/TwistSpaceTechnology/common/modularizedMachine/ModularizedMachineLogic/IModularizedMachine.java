@@ -101,7 +101,9 @@ public interface IModularizedMachine {
 
         Collection<IExecutionCore> getIdleAdvancedExecutionCores();
 
-        Collection<IExecutionCore> getAllWorkingExecutionCores();
+        Collection<IExecutionCore> getIdlePerfectExecutionCores();
+
+        Collection<IExecutionCore> getAllWorkingExecutionCoresToBoost();
 
         int getParallelOfEveryNormalExecutionCore();
 

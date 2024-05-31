@@ -278,6 +278,7 @@ public enum GTCMItemList {
     // execution core
     ExecutionCore,
     AdvancedExecutionCore,
+    PerfectExecutionCore,
 
     // endregion
 

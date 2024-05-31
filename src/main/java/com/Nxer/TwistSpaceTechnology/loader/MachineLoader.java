@@ -67,6 +67,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers.StaticOverclockController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.StaticParallelController;
@@ -225,6 +226,7 @@ public class MachineLoader {
     public static ItemStack SingularityPerfectOverclockController;
     public static ItemStack ExecutionCore;
     public static ItemStack AdvancedExecutionCore;
+    public static ItemStack PerfectExecutionCore;
 
     // endregion
 
@@ -1303,6 +1305,16 @@ public class MachineLoader {
             TextEnums.tr("NameAdvancedExecutionCore"),
             13).getStackForm(1);
         GTCMItemList.AdvancedExecutionCore.set(AdvancedExecutionCore);
+
+        // #tr NamePerfectExecutionCore
+        // # Perfect Execution Core Module
+        // #zh_CN 完美执行核心模块
+        PerfectExecutionCore = new PerfectExecutionCore(
+            18845,
+            "NamePerfectExecutionCore",
+            TextEnums.tr("NamePerfectExecutionCore"),
+            14).getStackForm(1);
+        GTCMItemList.PerfectExecutionCore.set(PerfectExecutionCore);
 
         // endregion
 

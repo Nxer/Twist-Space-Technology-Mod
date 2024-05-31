@@ -36,6 +36,8 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -59,7 +61,7 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_
 
     // endregion
 
-    // region Processing Logic
+    // region Module Logic
 
     private int staticParallelParameter = 0;
     private int dynamicParallelParameter = 0;
@@ -130,8 +132,6 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_
 
     }
 
-    // TODO
-
     @Override
     protected boolean isEnablePerfectOverclock() {
         return getOverclockType().isPerfectOverclock();
@@ -167,6 +167,16 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_
     @Override
     public Collection<ModularBlockTypes> getSupportedModularBlockTypes() {
         return Collections.emptyList();// TODO NULL
+    }
+
+    // endregion
+
+    // region Processing Logic
+
+    // TODO delete this method
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.wiremillRecipes;
     }
 
     @Override

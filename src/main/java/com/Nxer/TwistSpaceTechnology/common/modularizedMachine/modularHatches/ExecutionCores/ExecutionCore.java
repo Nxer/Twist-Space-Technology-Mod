@@ -20,8 +20,9 @@ public class ExecutionCore extends ExecutionCoreBase {
     }
 
     @Override
-    public void done() {
+    public boolean done() {
         // do nothing
+        return true;
     }
 
     @Override

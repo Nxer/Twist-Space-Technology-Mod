@@ -7,6 +7,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IVoidable;
+import gregtech.api.logic.ProcessingLogic;
 
 public interface IExecutionCore extends IVoidable {
 
@@ -48,6 +49,15 @@ public interface IExecutionCore extends IVoidable {
     void runExecutionCoreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick);
 
     /**
+     * Set this execution core processing. Get parameters from the main machine's processing logic object after check
+     * recipe and calculate overclock.
+     *
+     * @param processingLogic Calculated parameters stored in.
+     * @return Success to set processing
+     */
+    boolean setProcessing(ProcessingLogic processingLogic);
+
+    /**
      * @return The tick amount of maxProgressingTime - progressedTime
      */
     int getNeedProgressingTime();
@@ -69,8 +79,10 @@ public interface IExecutionCore extends IVoidable {
 
     /**
      * Finish parameter setting.
+     *
+     * @return Success.
      */
-    void done();
+    boolean done();
 
     /**
      * @return If true this execution core use main machine power system, or special handle power things.

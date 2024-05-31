@@ -26,6 +26,7 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -35,10 +36,10 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
-import gregtech.api.recipe.RecipeMap;
-import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.util.GT_OverclockCalculator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
@@ -62,6 +63,11 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     // region Modular and preparing
 
     /**
+     * A collector contains all perfect execution cores.
+     */
+    protected final Collection<PerfectExecutionCore> perfectExecutionCores = new ArrayList<>();
+
+    /**
      * A collector contains all advanced execution cores.
      */
     protected final Collection<AdvExecutionCore> advExecutionCores = new ArrayList<>();
@@ -79,6 +85,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     @Override
     public void resetModularHatchCollections() {
         super.resetModularHatchCollections();
+        perfectExecutionCores.clear();
         advExecutionCores.clear();
         executionCores.clear();
         MEInputHatches.clear();
@@ -132,7 +139,10 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         if (allExecutionCores != null && !allExecutionCores.isEmpty()) {
             for (IModularHatch hatch : allExecutionCores) {
                 if (hatch == null) continue;
-                if (hatch instanceof AdvExecutionCore advExecutionCore) {
+                if (hatch instanceof PerfectExecutionCore perfectExecutionCore) {
+                    perfectExecutionCores.add(perfectExecutionCore);
+                    perfectExecutionCore.setup(this);
+                } else if (hatch instanceof AdvExecutionCore advExecutionCore) {
                     advExecutionCores.add(advExecutionCore);
                     advExecutionCore.setup(this);
                 } else if (hatch instanceof ExecutionCore executionCore) {
@@ -149,17 +159,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     public Collection<IExecutionCore> getIdleNormalExecutionCores() {
         Collection<IExecutionCore> cores = new ArrayList<>();
         for (ExecutionCore executionCore : executionCores) {
-            if (executionCore.isIdle()) {
-                cores.add(executionCore);
-            }
-        }
-        return cores;
-    }
-
-    public Collection<IExecutionCore> getIdleAdvancedExecutionCores() {
-        Collection<IExecutionCore> cores = new ArrayList<>();
-        for (AdvExecutionCore executionCore : advExecutionCores) {
-            if (executionCore.isIdle()) {
+            if (executionCore != null && executionCore.isIdle()) {
                 cores.add(executionCore);
             }
         }
@@ -167,7 +167,29 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
-    public Collection<IExecutionCore> getAllWorkingExecutionCores() {
+    public Collection<IExecutionCore> getIdleAdvancedExecutionCores() {
+        Collection<IExecutionCore> cores = new ArrayList<>();
+        for (AdvExecutionCore executionCore : advExecutionCores) {
+            if (executionCore != null && executionCore.isIdle()) {
+                cores.add(executionCore);
+            }
+        }
+        return cores;
+    }
+
+    @Override
+    public Collection<IExecutionCore> getIdlePerfectExecutionCores() {
+        Collection<IExecutionCore> cores = new ArrayList<>();
+        for (PerfectExecutionCore executionCore : perfectExecutionCores) {
+            if (executionCore != null && executionCore.isIdle()) {
+                cores.add(executionCore);
+            }
+        }
+        return cores;
+    }
+
+    @Override
+    public Collection<IExecutionCore> getAllWorkingExecutionCoresToBoost() {
         Collection<IExecutionCore> cores = new ArrayList<>();
         if (this.isWorking()) {
             cores.add(this);
@@ -209,6 +231,15 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     protected int eProgressedTime;
     protected int eBoostedTime;
     protected long eEut;
+
+    @Override
+    public boolean setProcessing(ProcessingLogic processingLogic) {
+        setOutputItems(processingLogic.getOutputItems());
+        setOutputFluids(processingLogic.getOutputFluids());
+        setMaxProgressingTime(processingLogic.getDuration());
+        setEut(processingLogic.getCalculatedEut());
+        return done();
+    }
 
     @Override
     public long getEut() {
@@ -276,8 +307,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
-    public void done() {
+    public boolean done() {
         // do nothing
+        return true;
     }
 
     @Override
@@ -292,15 +324,17 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
 
-        currentTip.add(EnumChatFormatting.AQUA +
-        // #tr Waila.ExecutionCore.5
-        // # Power for boosting
-        // #zh_CN 已用于加速的功率
-            TextEnums.tr("Waila.ExecutionCore.5")
-            + EnumChatFormatting.GRAY
-            + " : "
-            + tag.getLong("eutForBoostLastTick")
-            + " EU/t");
+        if (tag.getBoolean("isActive")) {
+            currentTip.add(EnumChatFormatting.AQUA +
+            // #tr Waila.ExecutionCore.5
+            // # Power for boosting
+            // #zh_CN 已用于加速的功率
+                TextEnums.tr("Waila.ExecutionCore.5")
+                + EnumChatFormatting.GRAY
+                + " : "
+                + tag.getLong("eutForBoostLastTick")
+                + " EU/t");
+        }
 
         int maxProgressingTime = tag.getInteger("maxProgressingTime");
         if (maxProgressingTime > 0) {
@@ -470,6 +504,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     protected boolean startedRecipeProcessing = false;
     protected long maxEutCanUse = 0;
     protected long eutForBoostLastTick = 0;
+    protected boolean isNoOverclockCalculator = false;
     protected CheckRecipeResult lastCheck = CheckRecipeResultRegistry.NO_RECIPE;
 
     protected abstract OverclockType getOverclockType();
@@ -532,7 +567,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     protected long boostExecutionCoreProcessing() {
 
         eutForBoostLastTick = 0;
-        Collection<IExecutionCore> workingCores = getAllWorkingExecutionCores();
+        Collection<IExecutionCore> workingCores = getAllWorkingExecutionCoresToBoost();
         if (workingCores.isEmpty()) {
             return 0;
         }
@@ -603,8 +638,8 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     public void onBlockDestroyed() {
-        super.onBlockDestroyed();
         resetAllExecutionCore();
+        super.onBlockDestroyed();
     }
 
     @Override
@@ -613,6 +648,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         aNBT.setBoolean("startedRecipeProcessing", startedRecipeProcessing);
         aNBT.setLong("maxEutCanUse", maxEutCanUse);
         aNBT.setLong("eutForBoostLastTick", eutForBoostLastTick);
+        aNBT.setBoolean("isNoOverclockCalculator", isNoOverclockCalculator);
         aNBT.setInteger("eMaxProgressingTime", eMaxProgressingTime);
         aNBT.setInteger("eProgressedTime", eProgressedTime);
         aNBT.setInteger("eBoostedTime", eBoostedTime);
@@ -627,6 +663,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         startedRecipeProcessing = aNBT.getBoolean("startedRecipeProcessing");
         maxEutCanUse = aNBT.getLong("maxEutCanUse");
         eutForBoostLastTick = aNBT.getLong("eutForBoostLastTick");
+        isNoOverclockCalculator = aNBT.getBoolean("isNoOverclockCalculator");
         eMaxProgressingTime = aNBT.getInteger("eMaxProgressingTime");
         eProgressedTime = aNBT.getInteger("eProgressedTime");
         eBoostedTime = aNBT.getInteger("eBoostedTime");
@@ -656,6 +693,16 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                 return super.process();
             }
 
+            @Nonnull
+            @Override
+            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+                if (isNoOverclockCalculator) {
+                    return GT_OverclockCalculator.ofNoOverclock(recipe);
+                } else {
+                    return super.createOverclockCalculator(recipe);
+                }
+            }
+
         };
     }
 
@@ -672,20 +719,34 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         logic.setMaxParallel(getParallelOfEveryNormalExecutionCore());
     }
 
+    protected void setupProcessingLogicWirelessEU(ProcessingLogic logic) {
+        logic.clear();
+        logic.setMachine(this);
+        logic.setRecipeMapSupplier(this::getRecipeMap);
+        logic.setVoidProtection(false, false);
+        logic.setBatchSize(isBatchModeEnabled() ? getMaxBatchSize() : 1);
+        logic.setRecipeLocking(this, false);
+        logic.setAvailableVoltage(getEutCanUse());
+        logic.setAvailableAmperage(1);
+        logic.setMaxParallel(Integer.MAX_VALUE);
+    }
+
     @Nonnull
     protected CheckRecipeResult doCheckRecipe() {
         return super.doCheckRecipe();
     }
 
-    // TODO delete this method
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.wiremillRecipes;
-    }
-
     @Override
     public @NotNull CheckRecipeResult checkProcessingMM() {
-        checkProcessingForAdvancedExecutionCore();
+        if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
+            disableWorking();
+            return CheckRecipeResults.SetProcessingFailed;
+        }
+        if (checkProcessingForAdvancedExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
+            disableWorking();
+            return CheckRecipeResults.SetProcessingFailed;
+        }
+
         lastCheck = checkProcessingForNormalExecutionCore();
 
         // check every 128tick
@@ -700,7 +761,16 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     public void forceCheckProcessing() {
         IGregTechTileEntity mte = getBaseMetaTileEntity();
         if (mte.isServerSide() && mte.isAllowedToWork()) {
-            checkProcessingForAdvancedExecutionCore();
+            if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
+                disableWorking();
+                this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
+                return;
+            }
+            if (checkProcessingForAdvancedExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
+                disableWorking();
+                this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
+                return;
+            }
             lastCheck = checkProcessingForNormalExecutionCore();
         }
     }
@@ -713,6 +783,8 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             return CheckRecipeResults.NoIdleExecutionCore;
         }
 
+        // set overclock open
+        this.isNoOverclockCalculator = false;
         setupProcessingLogic(processingLogic);
         int idleAmount = idleExecutionCores.size();
         boolean flag = false;
@@ -720,6 +792,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             processingLogic.setAvailableVoltage(getEutCanUse(idleAmount));
             idleAmount--;
             CheckRecipeResult result = checkExecutionCoreProcessing(executionCore);
+            if (result == CheckRecipeResults.SetProcessingFailed) return result;
             if (!result.wasSuccessful()) {
                 break;
             } else {
@@ -733,6 +806,8 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     /**
      * Use main machine power parameters to check recipe and setup advanced execution cores.
      * But the real power consumption is handled by advanced execution core internal.
+     *
+     * @return If there is a new processing has been set. Or some processing set failed.
      */
     public @NotNull CheckRecipeResult checkProcessingForAdvancedExecutionCore() {
         Collection<IExecutionCore> idleExecutionCores = getIdleAdvancedExecutionCores();
@@ -740,10 +815,44 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             return CheckRecipeResults.NoIdleExecutionCore;
         }
 
+        // set overclock open
+        this.isNoOverclockCalculator = false;
         setupProcessingLogic(processingLogic);
         boolean flag = false;
         for (IExecutionCore executionCore : idleExecutionCores) {
             CheckRecipeResult result = checkExecutionCoreProcessing(executionCore);
+            if (result == CheckRecipeResults.SetProcessingFailed) return result;
+            if (!result.wasSuccessful()) {
+                break;
+            } else {
+                flag = true;
+            }
+        }
+
+        return flag ? CheckRecipeResultRegistry.SUCCESSFUL : CheckRecipeResultRegistry.NO_RECIPE;
+    }
+
+    /**
+     * Make Perfect Execution Cores as a real Wireless EU net joining machine to find and process recipe.
+     *
+     * @return If there is a new processing has been set. Or some processing set failed.
+     */
+    public CheckRecipeResult checkProcessingForPerfectExecutionCore() {
+        Collection<IExecutionCore> idleExecutionCores = getIdlePerfectExecutionCores();
+        if (idleExecutionCores.isEmpty()) {
+            return CheckRecipeResults.NoIdleExecutionCore;
+        }
+
+        // set overclock close
+        this.isNoOverclockCalculator = true;
+        setupProcessingLogicWirelessEU(processingLogic);
+        // set wireless EU net mode to find recipe
+        processingLogic.setAvailableVoltage(Long.MAX_VALUE);
+        // flag to show has do a new recipe processing
+        boolean flag = false;
+        for (IExecutionCore executionCore : idleExecutionCores) {
+            CheckRecipeResult result = checkExecutionCoreProcessing(executionCore);
+            if (result == CheckRecipeResults.SetProcessingFailed) return result;
             if (!result.wasSuccessful()) {
                 break;
             } else {
@@ -764,11 +873,12 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         CheckRecipeResult result = doCheckRecipe();
         if (result.wasSuccessful()) {
             // set basic parameters to execution core
-            executionCore.setOutputItems(processingLogic.getOutputItems())
-                .setOutputFluids(processingLogic.getOutputFluids())
-                .setMaxProgressingTime(processingLogic.getDuration())
-                .setEut(processingLogic.getCalculatedEut())
-                .done();
+            boolean success = executionCore.setProcessing(processingLogic);
+            if (!success) {
+                updateSlots();
+                endRecipeProcessing();
+                return CheckRecipeResults.SetProcessingFailed;
+            }
 
             // set power parameters of this controller
             if (executionCore.useMainMachinePower()) {
