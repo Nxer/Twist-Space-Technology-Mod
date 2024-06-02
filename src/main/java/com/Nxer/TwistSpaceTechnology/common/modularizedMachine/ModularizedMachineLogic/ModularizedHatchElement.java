@@ -6,7 +6,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers.StaticOverclockController;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers.DynamicParallelController;
@@ -22,7 +24,7 @@ import gregtech.api.util.IGT_HatchAdder;
 public enum ModularizedHatchElement implements IHatchElement<ModularizedMachineBase> {
 
     ExecutionCoreModule(ModularHatchTypes.EXECUTION_CORE, ModularizedMachineBase::addExecutionCoreToMachineList,
-        ExecutionCore.class),
+        ExecutionCore.class, AdvExecutionCore.class, PerfectExecutionCore.class),
     ParallelController(ModularHatchTypes.PARALLEL_CONTROLLER,
         ModularizedMachineBase::addParallelControllerToMachineList, StaticParallelController.class,
         DynamicParallelController.class),
@@ -32,7 +34,17 @@ public enum ModularizedHatchElement implements IHatchElement<ModularizedMachineB
         ModularizedMachineBase::addPowerConsumptionControllerToMachineList, StaticPowerConsumptionController.class),
 
     OverclockController(ModularHatchTypes.OVERCLOCK_CONTROLLER,
-        ModularizedMachineBase::addOverclockControllerToMachineList, StaticOverclockController.class);
+        ModularizedMachineBase::addOverclockControllerToMachineList, StaticOverclockController.class),
+    AllModule(ModularHatchTypes.ALL, ModularizedMachineBase::addAnyModularHatchToMachineList, ExecutionCore.class,
+        AdvExecutionCore.class, PerfectExecutionCore.class, StaticParallelController.class,
+        DynamicParallelController.class, StaticSpeedController.class, DynamicSpeedController.class,
+        StaticPowerConsumptionController.class, StaticOverclockController.class) {
+
+        @Override
+        public long count(ModularizedMachineBase modularizedMachineBase) {
+            return modularizedMachineBase.allModularHatches.size();
+        }
+    };
 
     private final List<Class<? extends IMetaTileEntity>> mteClasses;
     private final IGT_HatchAdder<ModularizedMachineBase> adder;

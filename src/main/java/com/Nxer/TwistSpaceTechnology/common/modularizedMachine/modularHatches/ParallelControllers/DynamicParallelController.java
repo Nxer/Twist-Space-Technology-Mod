@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.P
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -22,6 +23,9 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
     public DynamicParallelController(int aID, String aName, String aNameRegional, int aTier, int maxParallel) {
         super(aID, aName, aNameRegional, aTier);
         this.maxParallel = maxParallel;
+        this.description = new String[] {
+
+        };
     }
 
     public DynamicParallelController(String aName, int aTier, int maxParallel, ITexture[][][] aTextures) {
@@ -102,18 +106,28 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
 
     // region General
 
-    private static String[] description;
+    // spotless:off
+    protected String[] description;
 
-    // @Override
-    // public String[] getDescription() {
-    // if (null == mDescriptionArray || mDescriptionArray.length < 1) {
-    // mDescriptionArray =
-    // new String[] {
-    // TextEnums.tr(),
-    // TextEnums.tr(),
-    // };
-    // }
-    // return mDescriptionArray;
-    // }
+    @Override
+    public String[] getDescription() {
+        if (description == null || description.length == 0) {
+            description =
+                new String[] {
+                      // #tr Tooltips.DynamicParallelController.01
+                      // # Parallel controller module with adjustable parameters.
+                      // #zh_CN 可调参数的并行控制器模块.
+                      TextEnums.tr("Tooltips.DynamicParallelController.01"),
+                      // #tr Tooltips.DynamicParallelController.02
+                      // # Provides up to
+                      // #zh_CN 最多提供
+                      TextEnums.tr("Tooltips.DynamicParallelController.02") + " " + getMaxParallel() + " " + TextEnums.World_Parallel + ".",
+                      TextEnums.AddByTwistSpaceTechnology.getText(),
+                      TextEnums.ModularizedMachineSystem.getText(),
+                };
+        }
+        return description;
+    }
+    // spotless:on
 
 }

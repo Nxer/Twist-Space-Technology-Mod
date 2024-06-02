@@ -55,10 +55,9 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     protected IModularizedMachine.ISupportExecutionCore mainMachine;
 
     // region waila
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+
+    public void processWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("hasBeenSetup")) {
             int maxProgressingTime = tag.getInteger("maxProgressingTime");
@@ -109,7 +108,13 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
             // #zh_CN 此执行核心未初始化
             currentTip.add(TextEnums.tr("Waila.ExecutionCore.HasNotBeenSetup"));
         }
+    }
 
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        processWailaBody(itemStack, currentTip, accessor, config);
     }
 
     @Override

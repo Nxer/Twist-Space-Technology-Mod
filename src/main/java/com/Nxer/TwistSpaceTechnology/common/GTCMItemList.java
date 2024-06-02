@@ -271,6 +271,8 @@ public enum GTCMItemList {
     StaticPowerConsumptionControllerT6,
     StaticPowerConsumptionControllerT7,
     StaticPowerConsumptionControllerT8,
+
+    // overclock controller
     LowSpeedPerfectOverclockController,
     PerfectOverclockController,
     SingularityPerfectOverclockController,

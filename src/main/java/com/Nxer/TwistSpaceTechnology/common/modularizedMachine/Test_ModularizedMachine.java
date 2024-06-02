@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine;
 
-import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ExecutionCoreModule;
-import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ParallelController;
+import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.AllModule;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
@@ -15,19 +14,11 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
-import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.IModularizedMachine;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularBlockTypes;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -42,8 +33,7 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
-public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_ModularizedMachine>
-    implements IModularizedMachine.ISupportAllModularHatches {
+public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAllModuleBase<Test_ModularizedMachine> {
 
     // region Class Constructor
     public Test_ModularizedMachine(int aID, String aName, String aNameRegional) {
@@ -57,116 +47,6 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new Test_ModularizedMachine(this.mName);
-    }
-
-    // endregion
-
-    // region Module Logic
-
-    private int staticParallelParameter = 0;
-    private int dynamicParallelParameter = 0;
-    private OverclockType overclockType = OverclockType.NormalOverclock;
-
-    @Override
-    public void setOverclockType(OverclockType type) {
-
-    }
-
-    @Override
-    public void resetModularStaticSettings() {
-        staticParallelParameter = 0;
-    }
-
-    @Override
-    public void resetModularDynamicParameters() {
-        dynamicParallelParameter = 0;
-    }
-
-    @Override
-    public int getStaticParallelParameterValue() {
-        return staticParallelParameter;
-    }
-
-    @Override
-    public void setStaticParallelParameter(int value) {
-        staticParallelParameter = value;
-    }
-
-    @Override
-    public int getDynamicParallelParameterValue() {
-        return dynamicParallelParameter;
-    }
-
-    @Override
-    public void setDynamicParallelParameter(int value) {
-        dynamicParallelParameter = value;
-    }
-
-    @Override
-    public float getStaticPowerConsumptionParameterValue() {
-        return 0;
-    }
-
-    @Override
-    public void setStaticPowerConsumptionParameterValue(float value) {
-
-    }
-
-    @Override
-    public float getStaticSpeedParameterValue() {
-        return 0;
-    }
-
-    @Override
-    public void setStaticSpeedParameterValue(float value) {
-
-    }
-
-    @Override
-    public float getDynamicSpeedParameterValue() {
-        return 0;
-    }
-
-    @Override
-    public void setDynamicSpeedParameterValue(float value) {
-
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return getOverclockType().isPerfectOverclock();
-    }
-
-    @Override
-    protected OverclockType getOverclockType() {
-        return OverclockType.PerfectOverclock;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    protected int getMaxParallelRecipes() {
-        if (dynamicParallelParameter == Integer.MAX_VALUE || staticParallelParameter == Integer.MAX_VALUE
-            || dynamicParallelParameter >= Integer.MAX_VALUE - 1 - staticParallelParameter) {
-            return Integer.MAX_VALUE;
-        }
-        return dynamicParallelParameter + staticParallelParameter + 1;
-    }
-
-    protected static final Collection<ModularHatchTypes> SUPPORTED_MODULAR_HATCH_TYPES = Arrays
-        .asList(ModularHatchTypes.PARALLEL_CONTROLLER, ModularHatchTypes.EXECUTION_CORE);
-
-    @Override
-    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
-        return SUPPORTED_MODULAR_HATCH_TYPES;// TODO NULL
-    }
-
-    @Override
-    public Collection<ModularBlockTypes> getSupportedModularBlockTypes() {
-        return Collections.emptyList();// TODO NULL
     }
 
     // endregion
@@ -223,14 +103,7 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineBase<Test_
                 .addElement(
                     'A',
                     GT_HatchElementBuilder.<Test_ModularizedMachine>builder()
-                        .atLeast(
-                            InputHatch,
-                            OutputHatch,
-                            InputBus,
-                            OutputBus,
-                            Energy.or(ExoticEnergy),
-                            ParallelController,
-                            ExecutionCoreModule)
+                        .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), AllModule)
                         .adder(Test_ModularizedMachine::addToMachineList)
                         .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(0))
                         .dot(1)

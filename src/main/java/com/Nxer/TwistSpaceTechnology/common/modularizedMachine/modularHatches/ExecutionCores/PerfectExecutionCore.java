@@ -75,19 +75,18 @@ public class PerfectExecutionCore extends ExecutionCoreBase implements IGlobalWi
     }
 
     @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+    public void processWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("hasBeenSetup")) {
             int maxProgressingTime = tag.getInteger("maxProgressingTime");
             if (maxProgressingTime > 0) {
                 // spotless:off
                 currentTip.add(
-                    // #tr Waila.ExecutionCore.1
-                    // # Total basic max progressing time
-                    // #zh_CN 配方总基础耗时
-                    TextEnums.tr("Waila.ExecutionCore.1") + " : "
+                    // #tr Waila.PerfectExecutionCore.1
+                    // # Total progressing time
+                    // #zh_CN 总耗时
+                    TextEnums.tr("Waila.PerfectExecutionCore.1") + " : "
                         + maxProgressingTime + " tick ("
                         + (maxProgressingTime / 20) + "s)");
                 int progressedTime = tag.getInteger("progressedTime");
@@ -98,15 +97,6 @@ public class PerfectExecutionCore extends ExecutionCoreBase implements IGlobalWi
                     TextEnums.tr("Waila.ExecutionCore.2") + " : "
                         + progressedTime + " tick ("
                         + (progressedTime / 20) + "s)"
-                );
-                int boostedTime = tag.getInteger("boostedTime");
-                currentTip.add(
-                    // #tr Waila.ExecutionCore.4
-                    // # Boosted time
-                    // #zh_CN 已加速时间
-                    TextEnums.tr("Waila.ExecutionCore.4") + " : "
-                        + boostedTime + " tick ("
-                        + (boostedTime / 20) + "s)"
                 );
                 String costEU = tag.getString("costEU");
                 if (costEU != null && !costEU.isEmpty()) {
@@ -161,5 +151,39 @@ public class PerfectExecutionCore extends ExecutionCoreBase implements IGlobalWi
     public boolean useMainMachinePower() {
         return false;
     }
+
+    // region General
+
+    // spotless:off
+    protected String[] description;
+
+    @Override
+    public String[] getDescription() {
+        if (description == null || description.length == 0) {
+            description =
+                new String[]{
+                    // #tr Tooltips.PerfectExecutionCore.01
+                    // # Add a second self to your modularized machine, but more powerful.
+                    // #zh_CN 为你的模块化机器添加第二个自我, 但更加强大.
+                    TextEnums.tr("Tooltips.PerfectExecutionCore.01"),
+                    // #tr Tooltips.PerfectExecutionCore.02
+                    // # Use the logic parameters of the machine, but without energy constraints, and parallel infinity.
+                    // #zh_CN 使用机器的逻辑参数, 但不受能源限制, 并且并行无限.
+                    TextEnums.tr("Tooltips.PerfectExecutionCore.02"),
+                    // #tr Tooltips.PerfectExecutionCore.03
+                    // # Directly use wireless EU energy.
+                    // #zh_CN 直接使用无线EU能源.
+                    TextEnums.tr("Tooltips.PerfectExecutionCore.03"),
+                    // #tr Tooltips.PerfectExecutionCore.04
+                    // # Any task is completed within 1 second.
+                    // #zh_CN 任何任务都在 1 秒内完成.
+                    TextEnums.tr("Tooltips.PerfectExecutionCore.04"),
+                    TextEnums.AddByTwistSpaceTechnology.getText(),
+                    TextEnums.ModularizedMachineSystem.getText(),
+                };
+        }
+        return description;
+    }
+    // spotless:on
 
 }
