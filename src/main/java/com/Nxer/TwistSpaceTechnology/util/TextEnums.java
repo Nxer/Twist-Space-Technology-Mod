@@ -63,6 +63,26 @@ public enum TextEnums {
     NameCoreDeviceOfHumanPowerGenerationFacility("NameCoreDeviceOfHumanPowerGenerationFacility"),
     // endregion
 
+    // region Single World
+
+    // #tr World_Parallel
+    // # Parallel
+    // #zh_CN 并行
+    World_Parallel("World_Parallel"),
+
+    // #tr World_Overclock
+    // # Overclock
+    // #zh_CN 超频
+    World_Overclock("World_Overclock"),
+
+    // endregion
+
+    // region Modularized Machine System
+
+    // #tr ModularizedMachineSystem
+    // # {\BLUE}{\BOLD}Modularized Machine System
+    // #zh_CN {\BLUE}{\BOLD}模块化机械系统
+    ModularizedMachineSystem("ModularizedMachineSystem"),
     // endregion
 
     // start

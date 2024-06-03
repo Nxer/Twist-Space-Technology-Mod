@@ -220,8 +220,73 @@ public enum GTCMItemList {
     MegaTreeFarm,
     LightningSpire,
 
+    // region Modularized Machine System Stuffs
+
+    // dynamic parallel controllers
+    DynamicParallelControllerT1,
+    DynamicParallelControllerT2,
+    DynamicParallelControllerT3,
+    DynamicParallelControllerT4,
+    DynamicParallelControllerT5,
+    DynamicParallelControllerT6,
+    DynamicParallelControllerT7,
+    DynamicParallelControllerT8,
+
+    // static dynamic parallel controllers
+    StaticParallelControllerT1,
+    StaticParallelControllerT2,
+    StaticParallelControllerT3,
+    StaticParallelControllerT4,
+    StaticParallelControllerT5,
+    StaticParallelControllerT6,
+    StaticParallelControllerT7,
+    StaticParallelControllerT8,
+
+    // dynamic speed controllers
+    DynamicSpeedControllerT1,
+    DynamicSpeedControllerT2,
+    DynamicSpeedControllerT3,
+    DynamicSpeedControllerT4,
+    DynamicSpeedControllerT5,
+    DynamicSpeedControllerT6,
+    DynamicSpeedControllerT7,
+    DynamicSpeedControllerT8,
+
+    // static speed controllers
+    StaticSpeedControllerT1,
+    StaticSpeedControllerT2,
+    StaticSpeedControllerT3,
+    StaticSpeedControllerT4,
+    StaticSpeedControllerT5,
+    StaticSpeedControllerT6,
+    StaticSpeedControllerT7,
+    StaticSpeedControllerT8,
+
+    // static power consumption controllers
+    StaticPowerConsumptionControllerT1,
+    StaticPowerConsumptionControllerT2,
+    StaticPowerConsumptionControllerT3,
+    StaticPowerConsumptionControllerT4,
+    StaticPowerConsumptionControllerT5,
+    StaticPowerConsumptionControllerT6,
+    StaticPowerConsumptionControllerT7,
+    StaticPowerConsumptionControllerT8,
+
+    // overclock controller
+    LowSpeedPerfectOverclockController,
+    PerfectOverclockController,
+    SingularityPerfectOverclockController,
+
+    // execution core
+    ExecutionCore,
+    AdvancedExecutionCore,
+    PerfectExecutionCore,
+
+    // endregion
+
     // MAX
     HighDimensionalExtend,
+    // TODO: typo
     HighDimensionalCircuitDoard,
     HighDimensionalCapacitor,
     HighDimensionalInterface,

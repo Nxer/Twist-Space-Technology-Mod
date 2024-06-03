@@ -3,11 +3,14 @@ package com.Nxer.TwistSpaceTechnology.util;
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.isInDevMode;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.IntFunction;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -15,10 +18,12 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 import gregtech.api.metatileentity.MetaTileEntity;
+import scala.actors.migration.pattern;
 
 public final class Utils {
 
     public static final double LOG2 = Math.log(2);
+    public static final double LOG4 = Math.log(4);
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
 
     // region about ItemStack
@@ -35,6 +40,82 @@ public final class Utils {
             result[i] = array[i].copy();
         }
         return result;
+    }
+
+    public static ItemStack[] mergeItemStackArray(ItemStack[] array1, ItemStack[] array2) {
+        if (array1 == null || array1.length < 1) {
+            return array2;
+        }
+        if (array2 == null || array2.length < 1) {
+            return array1;
+        }
+        ItemStack[] newArray = Arrays.copyOf(array1, array1.length + array2.length);
+        System.arraycopy(array2, 0, newArray, array1.length, array2.length);
+        return newArray;
+    }
+
+    public static ItemStack[] mergeItemStackArrays(ItemStack[]... itemStacks) {
+        return Arrays.stream(itemStacks)
+            .filter(Objects::nonNull)
+            .flatMap(Arrays::stream)
+            .toArray(ItemStack[]::new);
+    }
+
+    public static <T> T[] mergeArray(T[] array1, T[] array2) {
+        if (array1 == null || array1.length < 1) {
+            return array2;
+        }
+        if (array2 == null || array2.length < 1) {
+            return array1;
+        }
+        T[] newArray = Arrays.copyOf(array1, array1.length + array2.length);
+        System.arraycopy(array2, 0, newArray, array1.length, array2.length);
+        return newArray;
+    }
+
+    public static <T> T[] mergeArrayss(/* @NotNull IntFunction<T[]> generator, */T[]... arrays) {
+        IntFunction<T[]> generator = null;
+        for (T[] array : arrays) {
+            if (array == null) continue;
+            generator = size -> (T[]) Array.newInstance(
+                array.getClass()
+                    .getComponentType(),
+                size);
+            break;
+        }
+        if (generator == null) return null;
+
+        return Arrays.stream(arrays)
+            .filter(a -> a != null && a.length > 0)
+            .flatMap(Arrays::stream)
+            .toArray(generator);
+    }
+
+    public static <T> T[] mergeArrays(T[]... arrays) {
+        int totalLength = 0;
+        T[] pattern = null;
+        int indexFirstNotNull = -1;
+        for (int i = 0; i < arrays.length; i++) {
+            if (arrays[i] == null || arrays[i].length < 1) continue;
+            totalLength += arrays[i].length;
+            if (pattern == null) {
+                pattern = arrays[i];
+                indexFirstNotNull = i;
+            }
+        }
+
+        if (pattern == null) return null;
+
+        T[] output = Arrays.copyOf(pattern, totalLength);
+        int offset = pattern.length;
+        for (int i = indexFirstNotNull; i < arrays.length; i++) {
+            if (arrays[i] == null || arrays[i].length < 1) continue;
+            if (arrays[i] != pattern) {
+                System.arraycopy(arrays[i], 0, output, offset, arrays[i].length);
+                offset += arrays[i].length;
+            }
+        }
+        return output;
     }
 
     /**
@@ -149,6 +230,19 @@ public final class Utils {
 
     // region Rewrites
 
+    public static <T extends Collection<?>> T filterValidMTE(T metaTileEntities) {
+        metaTileEntities.removeIf(o -> {
+            if (o == null) {
+                return true;
+            }
+            if (o instanceof MetaTileEntity mte) {
+                return !mte.isValid();
+            }
+            return false;
+        });
+        return metaTileEntities;
+    }
+
     // endregion
 
     // region Generals
@@ -201,14 +295,6 @@ public final class Utils {
     public static <T extends Collection<E>, E extends MetaTileEntity> T filterValidMTEs(T metaTileEntities) {
         metaTileEntities.removeIf(mte -> mte == null || !mte.isValid());
         return metaTileEntities;
-    }
-
-    public static <T> T[] mergeArrays(T[]... arrays) {
-        List<T> totals = new ArrayList<>();
-        for (T[] array : arrays) {
-            totals.addAll(Arrays.asList(array));
-        }
-        return (T[]) totals.toArray(new Object[0]);
     }
 
     public static int min(int... values) {

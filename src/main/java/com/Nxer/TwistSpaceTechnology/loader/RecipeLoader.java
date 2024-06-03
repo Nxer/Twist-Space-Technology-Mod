@@ -54,7 +54,7 @@ public class RecipeLoader {
             new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
             new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
             new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new IndustrialMagicMatrixRecipePool(),
-            new DragonBloodRecipe(), new FusionReactorRecipePool() };
+            new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
