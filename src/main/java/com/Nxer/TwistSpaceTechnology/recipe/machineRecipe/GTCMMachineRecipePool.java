@@ -2740,7 +2740,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     .stdBuilder()
                     .itemInputs(
                         copyAmount(64, Loaders.NA),
-                        ItemRefer.HiC_T4.get(64),
+                        HiC_T5.get(64),
                         ItemRefer.Compact_Fusion_Coil_T4.get(64),
                         new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64}
                     )
