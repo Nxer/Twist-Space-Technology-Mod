@@ -55,6 +55,7 @@ public class Config {
     public static final String PowerChairBGM = "PowerChairBGM";
     public static final String ModularizedMachineStuffs = "ModularizedMachineStuffs";
     public static final String DimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = "Dimensionally Transcendent Matter Plasma Forge Prototype MK2";
+    public static final String LargeNeutronOscillator = "Large Neutron Oscillator";
     // endregion
 
     // region General
@@ -357,6 +358,10 @@ public class Config {
     public static double MaxFuelDiscount_DTMPFP = 0.25d;
     // endregion
 
+    // region LargeNeutronOscillator
+    public static boolean EnableLargeNeutronOscillator = true;
+    // endregion
+
     // region PowerChair BGM
     public static boolean Enable_PowerChairBGM = true;
     // endregion
@@ -378,6 +383,10 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        // endregion
+
+        // region LargeNeutronOscillator
+        EnableLargeNeutronOscillator = configuration.getBoolean("EnableLargeNeutronOscillator", LargeNeutronOscillator, EnableLargeNeutronOscillator, "Enable Large Neutron Oscillator. Need enable Modularized Machine System at the same time.");
         // endregion
 
         // region DimensionallyTranscendentMatterPlasmaForgePrototypeMK2

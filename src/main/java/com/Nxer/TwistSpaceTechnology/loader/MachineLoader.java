@@ -65,6 +65,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
@@ -149,6 +150,7 @@ public class MachineLoader {
 
     public static ItemStack ExtremeCraftCenter;
     public static ItemStack DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
+    public static ItemStack LargeNeutronOscillator;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -595,6 +597,18 @@ public class MachineLoader {
                     TextEnums.tr("NameDimensionallyTranscendentMatterPlasmaForgePrototypeMK2")).getStackForm(1);
                 GTCMItemList.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                     .set(DimensionallyTranscendentMatterPlasmaForgePrototypeMK2);
+            }
+
+            if (Config.EnableLargeNeutronOscillator) {
+
+                // #tr NameLargeNeutronOscillator
+                // # Large Neutron Oscillator
+                // #zh_CN 大型中子振荡器
+                LargeNeutronOscillator = new MM_LargeNeutronOscillator(
+                    19055,
+                    "NameLargeNeutronOscillator",
+                    TextEnums.tr("NameLargeNeutronOscillator")).getStackForm(1);
+                GTCMItemList.LargeNeutronOscillator.set(LargeNeutronOscillator);
             }
 
         }

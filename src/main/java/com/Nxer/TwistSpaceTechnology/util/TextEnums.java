@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
-
+// spotless:off
 /**
  *
  */
@@ -115,13 +115,12 @@ public enum TextEnums {
     SpeedControllerDescription("SpeedControllerDescription"),
 
     // #tr ExecutionCoreDescription
-    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE} Execution Core Module - Adds actual running units to the machine, true
-    // parallelism
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE} Execution Core Module - Adds actual running units to the machine, true parallelism
     // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}执行核心模块 - 为机器添加实际运行单元, 真正意义上的并行
     ExecutionCoreDescription("ExecutionCoreDescription"),
 
     // #tr NotMultiplyInstallSameTypeModule
-    // # Same type of module hatch cannot be installed repeatedly.
+    // # Same type of module hatch cannot be installed repeatedly. Except for Execution Cores.
     // #zh_CN 不可重复安装同类型的模块仓室. 除了执行核心模块.
     NotMultiplyInstallSameTypeModule("NotMultiplyInstallSameTypeModule"),
 
@@ -156,6 +155,7 @@ public enum TextEnums {
     // end
     StructureTooComplex("StructureTooComplex");
 
+    // spotless:off
     public static String tr(String key) {
         return translateToLocalFormatted(key);
     }
