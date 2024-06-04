@@ -29,7 +29,7 @@ public abstract class DynamicSpeedControllerBase extends SpeedControllerBase imp
                 throw new RuntimeException("Error: Speed Bonus is 0. Please try to change your settings at " + this);
             }
 
-            speedSupporter.setDynamicSpeedParameterValue(s * ts);
+            speedSupporter.setDynamicSpeedParameterValue(s * ts); // TODO rework multi speed controller logic
 
         }
     }

@@ -509,6 +509,17 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     protected abstract OverclockType getOverclockType();
 
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+
+        ret[origin.length] = getOverclockType().getDescription();
+
+        return ret;
+    }
+
     public void mergeOutputItems(ItemStack... outputs) {
         mOutputItems = mergeArray(mOutputItems, outputs);
     }

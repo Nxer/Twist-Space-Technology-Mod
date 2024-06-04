@@ -89,6 +89,10 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
             || addModularHatchToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
+    public boolean addNormalHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
     public boolean addModularHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return addAnyModularHatchToMachineList(aTileEntity, aBaseCasingIndex);
     }
@@ -240,11 +244,37 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         resetModularHatchCollections();
         if (!checkMachineMM(aBaseMetaTileEntity, aStack)) return false;
+        if (!canMultiplyModularHatchType()) {
+            if (!checkSingleModularHatch()) return false;
+        }
         checkModularStaticSettings();
         return true;
     }
+
+    protected boolean checkSingleModularHatch() {
+        if (modularHatches.containsKey(ModularHatchTypes.OVERCLOCK_CONTROLLER)
+            && modularHatches.get(ModularHatchTypes.OVERCLOCK_CONTROLLER)
+                .size() > 1)
+            return false;
+        if (modularHatches.containsKey(ModularHatchTypes.PARALLEL_CONTROLLER)
+            && modularHatches.get(ModularHatchTypes.PARALLEL_CONTROLLER)
+                .size() > 1)
+            return false;
+        if (modularHatches.containsKey(ModularHatchTypes.SPEED_CONTROLLER)
+            && modularHatches.get(ModularHatchTypes.SPEED_CONTROLLER)
+                .size() > 1)
+            return false;
+        if (modularHatches.containsKey(ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER)
+            && modularHatches.get(ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER)
+                .size() > 1)
+            return false;
+        return true;
+    }
+
+    protected abstract boolean canMultiplyModularHatchType();
 
     public abstract boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack);
 

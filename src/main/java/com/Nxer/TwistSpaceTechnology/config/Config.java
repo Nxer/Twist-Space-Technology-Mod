@@ -54,6 +54,7 @@ public class Config {
     public static final String IndustrialMagicMatrix = "IndustrialMagicMatrix";
     public static final String PowerChairBGM = "PowerChairBGM";
     public static final String ModularizedMachineStuffs = "ModularizedMachineStuffs";
+    public static final String DimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = "Dimensionally Transcendent Matter Plasma Forge Prototype MK2";
     // endregion
 
     // region General
@@ -351,6 +352,11 @@ public class Config {
     public static boolean Enable_IndustrialMagicMatrix = true;
     // endregion
 
+    // region DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
+    public static boolean EnableDimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = true;
+    public static double MaxFuelDiscount_DTMPFP = 0.25d;
+    // endregion
+
     // region PowerChair BGM
     public static boolean Enable_PowerChairBGM = true;
     // endregion
@@ -372,6 +378,11 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        // endregion
+
+        // region DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
+        EnableDimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = configuration.getBoolean("EnableDimensionallyTranscendentMatterPlasmaForgePrototypeMK2", DimensionallyTranscendentMatterPlasmaForgePrototypeMK2, EnableDimensionallyTranscendentMatterPlasmaForgePrototypeMK2, "Enable Dimensionally Transcendent Matter Plasma Forge Prototype MK2. Need enable Modularized Machine System at the same time.");
+        MaxFuelDiscount_DTMPFP = configuration.get("MaxFuelDiscount_DTMPFP", DimensionallyTranscendentMatterPlasmaForgePrototypeMK2, MaxFuelDiscount_DTMPFP, "Max Fuel Discount of DTMPFP.").getDouble();
         // endregion
 
         // region Modularized Machine Stuffs

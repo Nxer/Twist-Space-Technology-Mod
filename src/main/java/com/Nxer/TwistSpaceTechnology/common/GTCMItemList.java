@@ -10,7 +10,7 @@ import gregtech.api.util.GT_Log;
 
 public enum GTCMItemList {
 
-    // Items
+    // region Items
     TestItem0,
     SpaceWarper,
     OpticalSOC,
@@ -157,14 +157,38 @@ public enum GTCMItemList {
     PrimitiveMansSpaceTimeDistortionDevice,
     BallLightningUpgradeChip,
     HatchUpdateTool,
+    // endregion
 
-    // Blocks
+    // region Blocks
     TestCasing,
 
+    TestMetaBlock01_0,
+    PhotonControllerUpgradeLV,
+    PhotonControllerUpgradeMV,
+    PhotonControllerUpgradeHV,
+    PhotonControllerUpgradeEV,
+    PhotonControllerUpgradeIV,
+    PhotonControllerUpgradeLuV,
+    PhotonControllerUpgradeZPM,
+    PhotonControllerUpgradeUV,
+    PhotonControllerUpgradeUHV,
+    PhotonControllerUpgradeUEV,
+    PhotonControllerUpgradeUIV,
+    PhotonControllerUpgradeUMV,
+    PhotonControllerUpgradeUXV,
+    PhotonControllerUpgradeMAX,
     HighPowerRadiationProofCasing,
     AdvancedHighPowerCoilBlock,
+    ParallelismCasing0,
+    ParallelismCasing1,
+    ParallelismCasing2,
+    ParallelismCasing3,
+    ParallelismCasing4,
+    AntiMagneticCasing,
 
-    // Machines
+    // endregion
+
+    // region Machines
 
     IntensifyChemicalDistorter,
     PreciseHighEnergyPhotonicQuantumMaster,
@@ -219,6 +243,14 @@ public enum GTCMItemList {
     IndustrialMagnetarSeparator,
     MegaTreeFarm,
     LightningSpire,
+    ExtremeCraftCenter,
+
+    // endregion
+
+    // region Modularized Machines
+    DimensionallyTranscendentMatterPlasmaForgePrototypeMK2,
+
+    // endregion
 
     // region Modularized Machine System Stuffs
 
@@ -284,7 +316,7 @@ public enum GTCMItemList {
 
     // endregion
 
-    // MAX
+    // region MAX
     HighDimensionalExtend,
     // TODO: typo
     HighDimensionalCircuitDoard,
@@ -293,8 +325,9 @@ public enum GTCMItemList {
     HighDimensionalDiode,
     HighDimensionalResistor,
     HighDimensionalTransistor,
+    // endregion
 
-    // DSP
+    // region DSP
     SolarSail,
     DysonSphereFrameComponent,
     SmallLaunchVehicle,
@@ -309,7 +342,9 @@ public enum GTCMItemList {
     DSPReceiver,
     ArtificialStar,
 
-    // single block Machines
+    // endregion
+
+    // region single block Machines
     InfiniteAirHatch,
     ManaHatch,
     InfiniteWirelessDynamoHatch,
@@ -333,26 +368,16 @@ public enum GTCMItemList {
     BufferedEnergyHatchMAX,
     DebugUncertaintyHatch,
     LaserSmartNode,
+    FackRackHatch,
+    RealRackHatch,
 
-    ExtremeCraftCenter,
+    WirelessDataInputHatch,
+    WirelessDataOutputHatch,
 
-    // Blocks
+    // endregion
 
-    TestMetaBlock01_0,
-    PhotonControllerUpgradeLV,
-    PhotonControllerUpgradeMV,
-    PhotonControllerUpgradeHV,
-    PhotonControllerUpgradeEV,
-    PhotonControllerUpgradeIV,
-    PhotonControllerUpgradeLuV,
-    PhotonControllerUpgradeZPM,
-    PhotonControllerUpgradeUV,
-    PhotonControllerUpgradeUHV,
-    PhotonControllerUpgradeUEV,
-    PhotonControllerUpgradeUIV,
-    PhotonControllerUpgradeUMV,
-    PhotonControllerUpgradeUXV,
-    PhotonControllerUpgradeMAX,
+    // region super space station miscs
+
     spaceStationStructureBlockLV,
     spaceStationStructureBlockMV,
     spaceStationStructureBlockHV,
@@ -387,23 +412,16 @@ public enum GTCMItemList {
     TestMultiStructureSubMachine,
     megaUniversalSpaceStation,
 
+    // endregion
+
+    // region nuclear reactor
     NuclearReactor,
     NuclearReactorStructure0,
     NuclearReactorStructure1,
     NuclearReactorStructure2,
-    NuclearReactorStructure3,
+    NuclearReactorStructure3;
 
-    ParallelismCasing0,
-    ParallelismCasing1,
-    ParallelismCasing2,
-    ParallelismCasing3,
-    ParallelismCasing4,
-    AntiMagneticCasing,
-    FackRackHatch,
-    RealRackHatch,
-
-    WirelessDataInputHatch,
-    WirelessDataOutputHatch;
+    // endregion
 
     // region Member Variables
 
