@@ -2312,7 +2312,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(20 * 240)
                 .addTo(assemblyLine);
         }
-        // ednregion
+        // endregion
 
         // region Bee Engineer
         GT_Values.RA
@@ -2691,6 +2691,44 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .eut(RECIPE_IV)
                 .duration(20 * 120)
                 .addTo(assembler);
+        }
+
+        if (Config.EnableDimensionallyTranscendentMatterPlasmaForgePrototypeMK2 && Config.EnableModularizedMachineSystem) {
+            GT_Values.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, MiracleDoor.get(1))
+                .metadata(RESEARCH_TIME, 24 * HOURS)
+                .itemInputs(
+                    eM_Teleportation.get(64),
+                    ItemList.Machine_Multi_PlasmaForge.get(64),
+                    ItemRefer.Compact_Fusion_Coil_T4.get(64),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64),
+
+                    StellarConstructionFrameMaterial.get(64),
+                    SpaceWarper.get(64),
+                    SpaceWarper.get(64),
+                    StellarConstructionFrameMaterial.get(64),
+
+                    // TODO Quantum Circuit
+                    QuantumCircuit.get(64),
+                    ItemList.Field_Generator_UMV.get(64),
+                    ItemList.Field_Generator_UMV.get(64),
+                    QuantumCircuit.get(64),
+
+                    ParticleTrapTimeSpaceShield.get(64),
+                    ItemList.ZPM6.get(64),
+                    GravitationalLens.get(64),
+                    AnnihilationConstrainer.get(64)
+                )
+                .fluidInputs(
+                    MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(20_000_000),
+                    MaterialsUEVplus.Eternity.getMolten(144 * 131072),
+                    MyMaterial.shirabon.getMolten(144 * 524288)
+                )
+                .itemOutputs(GTCMItemList.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.get(1))
+                .eut(RECIPE_UXV)
+                .duration(20 * 3600 * 8)
+                .addTo(assemblyLine);
         }
 
     }

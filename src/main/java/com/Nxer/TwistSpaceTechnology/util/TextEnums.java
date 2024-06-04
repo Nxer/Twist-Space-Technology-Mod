@@ -83,6 +83,57 @@ public enum TextEnums {
     // # {\BLUE}{\BOLD}Modularized Machine System
     // #zh_CN {\BLUE}{\BOLD}模块化机械系统
     ModularizedMachineSystem("ModularizedMachineSystem"),
+
+    // #tr ModularizedMachineSystemDescription01
+    // # Install Module Hatches to enhance your machine.
+    // #zh_CN 安装模块仓室强化你的机器.
+    ModularizedMachineSystemDescription01("ModularizedMachineSystemDescription01"),
+
+    // #tr ModularizedMachineSystemDescription02
+    // # The installable modules are :
+    // #zh_CN 可安装的模块有 :
+    ModularizedMachineSystemDescription02("ModularizedMachineSystemDescription02"),
+
+    // #tr OverclockControllerDescription
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Overclock Controller Module - Set machine overclock type
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}超频控制器模块 - 设置机器的超频类型
+    OverclockControllerDescription("OverclockControllerDescription"),
+
+    // #tr ParallelControllerDescription
+    // # Parallel Controller Module - Increase parallelism of machine
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}并行控制器模块 - 提高机器的并行数
+    ParallelControllerDescription("ParallelControllerDescription"),
+
+    // #tr PowerConsumptionControllerDescription
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE} Power Consumption Controller Module - Reduce machine energy consumption
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}耗能控制器模块 - 降低机器能耗
+    PowerConsumptionControllerDescription("PowerConsumptionControllerDescription"),
+
+    // #tr SpeedControllerDescription
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Speed Controller Module - Increase processing speed of machine
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}速度控制器模块 - 提高机器运行速度
+    SpeedControllerDescription("SpeedControllerDescription"),
+
+    // #tr ExecutionCoreDescription
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE} Execution Core Module - Adds actual running units to the machine, true
+    // parallelism
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}执行核心模块 - 为机器添加实际运行单元, 真正意义上的并行
+    ExecutionCoreDescription("ExecutionCoreDescription"),
+
+    // #tr NotMultiplyInstallSameTypeModule
+    // # Same type of module hatch cannot be installed repeatedly.
+    // #zh_CN 不可重复安装同类型的模块仓室. 除了执行核心模块.
+    NotMultiplyInstallSameTypeModule("NotMultiplyInstallSameTypeModule"),
+
+    // #tr CanMultiplyInstallSameTypeModule
+    // # Same type of module hatch can be installed repeatedly.
+    // #zh_CN 可以重复安装同类型的模块仓室.
+    CanMultiplyInstallSameTypeModule("CanMultiplyInstallSameTypeModule"),
+
+    // #tr ModularHatch
+    // # Modular Hatch
+    // #zh_CN 模块仓室
+    ModularHatch("ModularHatch"),
     // endregion
 
     // start

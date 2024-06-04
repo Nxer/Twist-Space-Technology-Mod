@@ -171,6 +171,11 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
     }
 
     @Override
+    protected boolean canMultiplyModularHatchType() {
+        return true;
+    }
+
+    @Override
     public IStructureDefinition<Test_ModularizedMachine> getStructureDefinition() {
 
         // The STRUCTURE_DEFINITION should be design only one time.

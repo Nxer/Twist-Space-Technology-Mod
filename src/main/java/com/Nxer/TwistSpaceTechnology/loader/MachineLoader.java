@@ -64,6 +64,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
@@ -147,6 +148,7 @@ public class MachineLoader {
     public static ItemStack LightningSpire;
 
     public static ItemStack ExtremeCraftCenter;
+    public static ItemStack DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -582,6 +584,18 @@ public class MachineLoader {
         }
 
         if (Config.EnableModularizedMachineSystem) {
+
+            if (Config.EnableDimensionallyTranscendentMatterPlasmaForgePrototypeMK2) {
+                // #tr NameDimensionallyTranscendentMatterPlasmaForgePrototypeMK2
+                // # Dimensionally Transcendent Matter Plasma Forge Prototype MK-II
+                // #zh_CN 超维度物质等离子锻炉原型机MK-II
+                DimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = new MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2(
+                    19054,
+                    "NameDimensionallyTranscendentMatterPlasmaForgePrototypeMK2",
+                    TextEnums.tr("NameDimensionallyTranscendentMatterPlasmaForgePrototypeMK2")).getStackForm(1);
+                GTCMItemList.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
+                    .set(DimensionallyTranscendentMatterPlasmaForgePrototypeMK2);
+            }
 
         }
         // endregion
