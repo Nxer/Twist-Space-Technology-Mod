@@ -1,11 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
-// spotless:off
+
 /**
  *
  */
 public enum TextEnums {
+    // spotless:off
 
     // region General
 
@@ -155,7 +156,7 @@ public enum TextEnums {
     // end
     StructureTooComplex("StructureTooComplex");
 
-    // spotless:off
+    // spotless:on
     public static String tr(String key) {
         return translateToLocalFormatted(key);
     }
