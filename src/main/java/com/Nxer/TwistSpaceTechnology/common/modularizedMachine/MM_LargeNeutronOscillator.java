@@ -248,7 +248,7 @@ public class MM_LargeNeutronOscillator
                 .addStructureInfo(TextEnums.NotMultiplyInstallSameTypeModule.getText())
                 .addStructureInfo(TextLocalization.Text_SeparatingLine)
                 .beginStructureBlock(23, 40, 13, false)
-                .addStructureInfo("    " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
+                .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
                 .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
                 .addInputHatch(TextLocalization.textUseBlueprint, 3)
                 .addOutputHatch(TextLocalization.textUseBlueprint, 3)
