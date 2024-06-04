@@ -451,6 +451,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                 .addInputBus(TextLocalization.textUseBlueprint, 1)
                 .addOutputBus(TextLocalization.textUseBlueprint, 1)
                 .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+                .addStructureInfo("    " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
                 .addStructureHint(TextEnums.ModularHatch.getKey(), 2)
                 .toolTipFinisher(TextLocalization.ModName);
             // spotless:on

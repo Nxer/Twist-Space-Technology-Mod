@@ -323,7 +323,6 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                 mOutputItems[i] = generateOneStackOre();
             }
             updateSlots();
-            // this.mProgresstime = 0;
             mMaxProgresstime = DurationPerMining_StarcoreMiner;
             mEfficiency = 10000;
             mEfficiencyIncrease = 10000;

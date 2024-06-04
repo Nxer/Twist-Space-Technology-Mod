@@ -3,13 +3,10 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachi
 import java.util.Collection;
 import java.util.Collections;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.google.common.collect.ImmutableList;
-
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 public abstract class MultiExecutionCoreMachineSupportAllModuleBase<T extends MultiExecutionCoreMachineSupportAllModuleBase<T>>
     extends MultiExecutionCoreMachineBase<T> implements IModularizedMachine.ISupportAllModularHatches {
@@ -160,11 +157,6 @@ public abstract class MultiExecutionCoreMachineSupportAllModuleBase<T extends Mu
     @Override
     public Collection<ModularBlockTypes> getSupportedModularBlockTypes() {
         return Collections.emptyList();
-    }
-
-    @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return false;
     }
 
     // endregion

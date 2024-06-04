@@ -179,7 +179,9 @@ import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import fox.spiteful.avaritia.items.LudicrousItems;
 import galaxyspace.core.register.GSItems;
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.MyMaterial;
+import goodgenerator.loader.Loaders;
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -2693,43 +2695,69 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .addTo(assembler);
         }
 
-        if (Config.EnableDimensionallyTranscendentMatterPlasmaForgePrototypeMK2 && Config.EnableModularizedMachineSystem) {
-            GT_Values.RA
-                .stdBuilder()
-                .metadata(RESEARCH_ITEM, MiracleDoor.get(1))
-                .metadata(RESEARCH_TIME, 24 * HOURS)
-                .itemInputs(
-                    eM_Teleportation.get(64),
-                    ItemList.Machine_Multi_PlasmaForge.get(64),
-                    ItemRefer.Compact_Fusion_Coil_T4.get(64),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64),
+        if (Config.EnableModularizedMachineSystem) {
 
-                    StellarConstructionFrameMaterial.get(64),
-                    SpaceWarper.get(64),
-                    SpaceWarper.get(64),
-                    StellarConstructionFrameMaterial.get(64),
+            if (Config.EnableDimensionallyTranscendentMatterPlasmaForgePrototypeMK2) {
+                GT_Values.RA
+                    .stdBuilder()
+                    .metadata(RESEARCH_ITEM, MiracleDoor.get(1))
+                    .metadata(RESEARCH_TIME, 24 * HOURS)
+                    .itemInputs(
+                        eM_Teleportation.get(64),
+                        ItemList.Machine_Multi_PlasmaForge.get(64),
+                        ItemRefer.Compact_Fusion_Coil_T4.get(64),
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64),
 
-                    // TODO Quantum Circuit
-                    QuantumCircuit.get(64),
-                    ItemList.Field_Generator_UMV.get(64),
-                    ItemList.Field_Generator_UMV.get(64),
-                    QuantumCircuit.get(64),
+                        StellarConstructionFrameMaterial.get(64),
+                        SpaceWarper.get(64),
+                        SpaceWarper.get(64),
+                        StellarConstructionFrameMaterial.get(64),
 
-                    ParticleTrapTimeSpaceShield.get(64),
-                    ItemList.ZPM6.get(64),
-                    GravitationalLens.get(64),
-                    AnnihilationConstrainer.get(64)
-                )
-                .fluidInputs(
-                    MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(20_000_000),
-                    MaterialsUEVplus.Eternity.getMolten(144 * 131072),
-                    MyMaterial.shirabon.getMolten(144 * 524288)
-                )
-                .itemOutputs(GTCMItemList.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.get(1))
-                .eut(RECIPE_UXV)
-                .duration(20 * 3600 * 8)
-                .addTo(assemblyLine);
+                        // TODO Quantum Circuit
+                        QuantumCircuit.get(64),
+                        ItemList.Field_Generator_UMV.get(64),
+                        ItemList.Field_Generator_UMV.get(64),
+                        QuantumCircuit.get(64),
+
+                        ParticleTrapTimeSpaceShield.get(64),
+                        ItemList.ZPM6.get(64),
+                        GravitationalLens.get(64),
+                        AnnihilationConstrainer.get(64)
+                    )
+                    .fluidInputs(
+                        MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(20_000_000),
+                        MaterialsUEVplus.Eternity.getMolten(144 * 131072),
+                        MyMaterial.shirabon.getMolten(144 * 524288)
+                    )
+                    .itemOutputs(GTCMItemList.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.get(1))
+                    .eut(RECIPE_UXV)
+                    .duration(20 * 3600 * 8)
+                    .addTo(assemblyLine);
+            }
+
+            if (Config.EnableLargeNeutronOscillator) {
+                GT_Values.RA
+                    .stdBuilder()
+                    .itemInputs(
+                        copyAmount(64, Loaders.NA),
+                        ItemRefer.HiC_T4.get(64),
+                        ItemRefer.Compact_Fusion_Coil_T4.get(64),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64}
+                    )
+                    .fluidInputs(
+                        ALLOY.BLACK_TITANIUM.getFluidStack(144 * 514),
+                        MyMaterial.metastableOganesson.getMolten(144 * 514),
+                        MyMaterial.dalisenite.getMolten(144 * 514)
+                    )
+                    .itemOutputs(GTCMItemList.LargeNeutronOscillator.get(1))
+                    .specialValue(3)
+                    .eut(RECIPE_UEV)
+                    .duration(20 * 3600)
+                    .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
+            }
         }
+
+
 
     }
     // spotless:on
