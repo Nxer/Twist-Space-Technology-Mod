@@ -189,6 +189,44 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return rList;
     }
 
+    public ArrayList<ItemStack> getStoredInputItemsWithDualInputHatch() {
+
+        if (supportsCraftingMEBuffer() && !mDualInputHatches.isEmpty()) {
+            for (IDualInputHatch dualInputHatch : mDualInputHatches) {
+                Iterator<? extends IDualInputInventory> inventoryIterator = dualInputHatch.inventories();
+                while (inventoryIterator.hasNext()) {
+                    ItemStack[] items = inventoryIterator.next()
+                        .getItemInputs();
+                    if (items == null || items.length == 0) continue;
+
+                    ArrayList<ItemStack> rList = new ArrayList<>();
+                    for (int i = 0; i < items.length; i++) {
+                        if (items[i] != null) {
+                            rList.add(items[i]);
+                        }
+                    }
+                    return rList;
+                }
+            }
+        }
+
+        ArrayList<ItemStack> rList = new ArrayList<>();
+        for (GT_MetaTileEntity_Hatch_InputBus tHatch : filterValidMTEs(mInputBusses)) {
+            tHatch.mRecipeMap = getRecipeMap();
+            IGregTechTileEntity tileEntity = tHatch.getBaseMetaTileEntity();
+            for (int i = tileEntity.getSizeInventory() - 1; i >= 0; i--) {
+                ItemStack itemStack = tileEntity.getStackInSlot(i);
+                if (itemStack != null) {
+                    rList.add(itemStack);
+                }
+            }
+        }
+
+        if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
+            .startsWith("gt.integrated_circuit")) rList.add(getStackInSlot(1));
+        return rList;
+    }
+
     /**
      * Forced get all input items, include all Dual Input Hatch slot.
      *
@@ -211,14 +249,6 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                         }
                     }
 
-                    // for (ItemStack i : items) {
-                    // if (i == null) continue;
-                    // rList.add(i);
-                    // }
-
-                    // Arrays.stream(items)
-                    // .filter(Objects::nonNull)
-                    // .forEach(rList::add);
                 }
             }
         }
