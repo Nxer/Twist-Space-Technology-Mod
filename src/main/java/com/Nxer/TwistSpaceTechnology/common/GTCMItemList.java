@@ -250,6 +250,7 @@ public enum GTCMItemList {
     // region Modularized Machines
     DimensionallyTranscendentMatterPlasmaForgePrototypeMK2,
     LargeNeutronOscillator,
+    IndistinctTentaclePrototypeMK2,
 
     // endregion
 
