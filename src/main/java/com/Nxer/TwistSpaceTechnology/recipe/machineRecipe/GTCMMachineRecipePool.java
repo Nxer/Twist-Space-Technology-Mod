@@ -2755,6 +2755,35 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     .duration(20 * 3600)
                     .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
             }
+
+            if (Config.EnableRecipeRegistry_IndistinctTentacle) {
+                TST_RecipeBuilder
+                    .builder()
+                    .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 64),
+                        GTCMItemList.PerfectExecutionCore.get(1),
+                        GTCMItemList.IndistinctTentacle.get(16),
+                        AdvancedHighPowerCoilBlock.get(64),
+
+                        copyAmount(16384, ItemList.EnergisedTesseract.get(1)),
+                        StellarConstructionFrameMaterial.get(512),
+                        DysonSphereFrameComponent.get(512),
+                        AnnihilationConstrainer.get(512),
+                        // TODO Quantum Circuit
+                        copyAmount(1024, QuantumCircuit.get(1)),
+                        copyAmount(1024, eM_Ultimate_Containment_Advanced.get(1))
+                    )
+                    .fluidInputs(
+                        Materials.UUMatter.getFluid(2_000_000_000),
+                        MaterialsUEVplus.Eternity.getMolten(144 * 524288),
+                        MaterialsUEVplus.Universium.getMolten(144 * 524288),
+                        MaterialsUEVplus.SpaceTime.getMolten(144 * 524288)
+                    )
+                    .itemOutputs(GTCMItemList.IndistinctTentaclePrototypeMK2.get(1))
+                    .eut(RECIPE_MAX)
+                    .duration(20 * 3600 * 24)
+                    .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
+            }
         }
 
 

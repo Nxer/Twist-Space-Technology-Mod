@@ -10,12 +10,15 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +43,7 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
@@ -501,6 +505,8 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     // endregion
 
     // region Logic
+    protected static final int[] progressingTick = { 1, 5, 10, 20, 32, 64, 128, 192, 256, 512 };
+    protected byte progressingTickIndex = 5;
     protected boolean startedRecipeProcessing = false;
     protected long maxEutCanUse = 0;
     protected long eutForBoostLastTick = 0;
@@ -508,6 +514,29 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     protected CheckRecipeResult lastCheck = CheckRecipeResultRegistry.NO_RECIPE;
 
     protected abstract OverclockType getOverclockType();
+
+    protected int getBaseProgressingTick() {
+        return progressingTick[progressingTickIndex];
+    }
+
+    @Override
+    public boolean onWireCutterRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer aPlayer,
+        float aX, float aY, float aZ, ItemStack aTool) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.progressingTickIndex = (byte) ((this.progressingTickIndex + 1) % 10);
+            // #tr MultiExecutionCoreMachineBase.progressingTickIndex
+            // # The base run cycle time is set to{\SPACE}
+            // #zh_CN 基础运行循环时间设置为{\SPACE}
+            GT_Utility.sendChatToPlayer(
+                aPlayer,
+                StatCollector.translateToLocal("MultiExecutionCoreMachineBase.progressingTickIndex")
+                    + getBaseProgressingTick()
+                    + " tick");
+
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public String[] getInfoData() {
@@ -656,6 +685,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
+        aNBT.setByte("progressingTickIndex", progressingTickIndex);
         aNBT.setBoolean("startedRecipeProcessing", startedRecipeProcessing);
         aNBT.setLong("maxEutCanUse", maxEutCanUse);
         aNBT.setLong("eutForBoostLastTick", eutForBoostLastTick);
@@ -671,6 +701,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+        progressingTickIndex = aNBT.getByte("progressingTickIndex");
         startedRecipeProcessing = aNBT.getBoolean("startedRecipeProcessing");
         maxEutCanUse = aNBT.getLong("maxEutCanUse");
         eutForBoostLastTick = aNBT.getLong("eutForBoostLastTick");
@@ -691,6 +722,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         return (maxEutCanUse + lEUt) / coreAmount;
     }
 
+    @Override
     protected ProcessingLogic createProcessingLogic() {
         return new MultiExecutionProcessingLogic() {
 
@@ -761,7 +793,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         lastCheck = checkProcessingForNormalExecutionCore();
 
         // check every 128tick
-        mMaxProgresstime = 128;
+        mMaxProgresstime = getBaseProgressingTick();
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
@@ -769,6 +801,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
+    @Override
     public void forceCheckProcessing() {
         IGregTechTileEntity mte = getBaseMetaTileEntity();
         if (mte.isServerSide() && mte.isAllowedToWork()) {

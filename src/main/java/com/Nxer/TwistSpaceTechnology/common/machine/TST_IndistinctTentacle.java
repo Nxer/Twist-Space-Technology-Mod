@@ -154,21 +154,13 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        String modeName;
-        switch (tag.getByte("mode")) {
-            case 1:
-                modeName = EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.componentassemblyline");
-                break;
-            case 2:
-                modeName = EnumChatFormatting.BOLD + translateToLocalFormatted("gt.recipe.assembler");
-                break;
-            case 3:
-                modeName = EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.precise_assembler");
-                break;
-            default:
-                modeName = EnumChatFormatting.BOLD
-                    + translateToLocalFormatted("tst.recipe.AssemblyLineWithoutResearchRecipe");
-        }
+        String modeName = switch (tag.getByte("mode")) {
+            case 1 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.componentassemblyline");
+            case 2 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gt.recipe.assembler");
+            case 3 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.precise_assembler");
+            default -> EnumChatFormatting.BOLD
+                + translateToLocalFormatted("tst.recipe.AssemblyLineWithoutResearchRecipe");
+        };
         currentTip.add(modeName);
         if (tag.getBoolean("isWirelessMode")) {
             currentTip.add(EnumChatFormatting.LIGHT_PURPLE + texter("Wireless Mode", "Waila.TST_IndistinctTentacle.1"));
@@ -418,9 +410,9 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
     // endregion
 
     // region Structure
-    private final int horizontalOffSet = 17;
-    private final int verticalOffSet = 17;
-    private final int depthOffSet = 0;
+    private static final int horizontalOffSet = 17;
+    private static final int verticalOffSet = 17;
+    private static final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainIndistinctTentacle";
     private static IStructureDefinition<TST_IndistinctTentacle> STRUCTURE_DEFINITION = null;
 

@@ -65,6 +65,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
@@ -151,6 +152,7 @@ public class MachineLoader {
     public static ItemStack ExtremeCraftCenter;
     public static ItemStack DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
     public static ItemStack LargeNeutronOscillator;
+    public static ItemStack IndistinctTentaclePrototypeMK2;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -609,6 +611,18 @@ public class MachineLoader {
                     "NameLargeNeutronOscillator",
                     TextEnums.tr("NameLargeNeutronOscillator")).getStackForm(1);
                 GTCMItemList.LargeNeutronOscillator.set(LargeNeutronOscillator);
+            }
+
+            if (Config.EnableRecipeRegistry_IndistinctTentacle) {
+
+                // #tr NameIndistinctTentaclePrototypeMK2
+                // # {\DARK_GRAY}{\BOLD}Indistinct Tentacle {\RESET}Prototype MK-II
+                // #zh_CN {\DARK_GRAY}{\BOLD}不可视之触{\RESET}原型机MK-II
+                IndistinctTentaclePrototypeMK2 = new MM_IndistinctTentaclePrototypeMK2(
+                    19056,
+                    "NameIndistinctTentaclePrototypeMK2",
+                    TextEnums.tr("NameIndistinctTentaclePrototypeMK2")).getStackForm(1);
+                GTCMItemList.IndistinctTentaclePrototypeMK2.set(IndistinctTentaclePrototypeMK2);
             }
 
         }

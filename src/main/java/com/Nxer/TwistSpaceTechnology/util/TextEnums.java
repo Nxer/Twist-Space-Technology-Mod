@@ -85,6 +85,11 @@ public enum TextEnums {
     // #zh_CN {\BLUE}{\BOLD}模块化机械系统
     ModularizedMachineSystem("ModularizedMachineSystem"),
 
+    // #tr InstallingModuleNearControllerImproveMachine
+    // # Installing module hatches near the controller block can significantly improve machine performance.
+    // #zh_CN 在主机附近安装模块仓室可以显著提升机器性能.
+    InstallingModuleNearControllerImproveMachine("InstallingModuleNearControllerImproveMachine"),
+
     // #tr ModularizedMachineSystemDescription01
     // # Install Module Hatches to enhance your machine.
     // #zh_CN 安装模块仓室强化你的机器.
