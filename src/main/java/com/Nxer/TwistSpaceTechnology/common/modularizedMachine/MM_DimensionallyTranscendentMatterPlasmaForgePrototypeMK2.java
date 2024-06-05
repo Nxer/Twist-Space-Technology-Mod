@@ -80,6 +80,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     protected static final double max_efficiency_time_in_ticks = 3600d * 24d * 20d;
     protected static final double maximum_discount = MaxFuelDiscount_DTMPFP;
     protected static final double maximum_decrease = 1d - MaxFuelDiscount_DTMPFP;
+    protected static final long tick_decrease_per_tick = 24;
 
     // Valid fuels which the discount will get applied to.
     protected static final FluidStack[] valid_fuels = { MaterialsUEVplus.ExcitedDTEC.getFluid(1L),
@@ -111,16 +112,33 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         fuelCostMultiplier = aNBT.getDouble("fuelCostMultiplier");
     }
 
-    public void resetDiscount() {
-        runningTime = 0;
-        fuelCostMultiplier = 1;
+    public void resetDiscount(int tickDecrease) {
+        if (runningTime == 0) return;
+        if (runningTime < 0) {
+            runningTime = 0;
+            return;
+        }
+
+        if (runningTime > max_efficiency_time_in_ticks) {
+            runningTime = (long) max_efficiency_time_in_ticks;
+            return;
+        }
+
+        long tickToDecrease = tickDecrease * tick_decrease_per_tick;
+
+        if (runningTime > tickToDecrease) {
+            runningTime -= tickToDecrease;
+        } else {
+            runningTime = 0;
+        }
+
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isAllowedToWork()) {
-            resetDiscount();
+        if (aBaseMetaTileEntity.isServerSide() && aTick % 512 == 0 && !aBaseMetaTileEntity.isAllowedToWork()) {
+            resetDiscount(512);
         }
     }
 
@@ -128,13 +146,13 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     public boolean onRunningTick(ItemStack aStack) {
         boolean r = super.onRunningTick(aStack);
         if (!r) {
-            resetDiscount();
+            resetDiscount(1);
             return false;
         }
         if (isWorkingThisTick()) {
             runningTime++;
         } else {
-            resetDiscount();
+            resetDiscount(1);
         }
         return true;
     }
@@ -428,9 +446,10 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                 // #zh_CN 连续运行 {\RED}24 {\GRAY}小时后达到最佳运行状态, 降低 {\AQUA}75%%{\GRAY} 燃料消耗.
                 .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_05"))
                 // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06
-                // # Installing module hatches near the controller block can significantly improve machine performance.
-                // #zh_CN 在主机附近安装模块仓室可以显著提升机器性能.
+                // # After stopping operation, the fuel consumption reduction rate will quickly decrease to {\AQUA}0%%{\GRAY} within {\RED}1{\GRAY} hours.
+                // #zh_CN 停止运行后燃料消耗减免率会在 {\RED}1{\GRAY} 小时内快速降低至 {\AQUA}0%%{\GRAY}.
                 .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06"))
+                .addInfo(TextEnums.InstallingModuleNearControllerImproveMachine.getText())
                 .addInfo(TextEnums.ModularizedMachineSystem.getText())
                 .addSeparator()
                 .addInfo(TextLocalization.StructureTooComplex)
