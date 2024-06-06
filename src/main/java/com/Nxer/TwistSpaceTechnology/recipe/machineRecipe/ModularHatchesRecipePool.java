@@ -253,15 +253,15 @@ public class ModularHatchesRecipePool implements IRecipePool {
             // singularity overclock
             TST_RecipeBuilder.builder()
                 .itemInputs(
-                    copyAmount(0, GTCMItemList.ProofOfHeroes.get(1)),
-                    copyAmount(1024, GTCMItemList.PerfectOverclockController.get(1)),
-                    copyAmount(2048, ItemList.Field_Generator_UXV.get(1)),
+                    GTCMItemList.ProofOfHeroes.get(1),
+                    copyAmount(2048, GTCMItemList.PerfectOverclockController.get(1)),
+                    copyAmount(4096, ItemList.Field_Generator_UXV.get(1)),
                     copyAmount(6144, GT_OreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.Eternity, 1)),
 
-                    copyAmount(2048, MaterialsUEVplus.Universium.getNanite(1)),
-                    copyAmount(2048, MaterialsUEVplus.Eternity.getNanite(1)),
-                    copyAmount(2048, MaterialsUEVplus.BlackDwarfMatter.getNanite(1)),
-                    copyAmount(2048, MaterialsUEVplus.WhiteDwarfMatter.getNanite(1)),
+                    copyAmount(8192, MaterialsUEVplus.Universium.getNanite(1)),
+                    copyAmount(8192, MaterialsUEVplus.Eternity.getNanite(1)),
+                    copyAmount(8192, MaterialsUEVplus.BlackDwarfMatter.getNanite(1)),
+                    copyAmount(8192, MaterialsUEVplus.WhiteDwarfMatter.getNanite(1)),
 
                     copyAmount(65536, ItemList.Timepiece.get(1)),
                     copyAmount(131072, GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Quantum, 1)))
