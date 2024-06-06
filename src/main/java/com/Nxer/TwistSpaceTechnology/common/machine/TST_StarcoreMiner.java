@@ -492,6 +492,14 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             // # The mining access portion of the structure needs to extend at least to a height of 20 below.
             // #zh_CN 结构中采矿通道部分需要至少延伸至高度20以下.
             .addInfo(TextEnums.tr("Tooltip_Starcore_08"))
+            // #tr Tooltip_Starcore_Crash_20240606
+            // # There is a serious bug in the blueprint automatic construction function of this machine,
+            // #zh_CN {\RED}{\BOLD}此机器的蓝图自动搭建功能出现严重bug,
+            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606"))
+            // #tr Tooltip_Starcore_Crash_20240606_02
+            // # {\RED}{\BOLD}{\SPACE}which may cause the save file to crash and become inaccessible.
+            // #zh_CN {\RED}{\BOLD}{\SPACE}可能导致存档崩溃无法进入.
+            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_02"))
             .addInfo(TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
