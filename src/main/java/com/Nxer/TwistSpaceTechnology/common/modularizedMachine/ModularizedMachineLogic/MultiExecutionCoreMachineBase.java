@@ -322,15 +322,14 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     // region waila
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+
+    public void processWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
+
         final NBTTagCompound tag = accessor.getNBTData();
 
         if (tag.getBoolean("isActive")) {
             currentTip.add(EnumChatFormatting.AQUA +
-            // #tr Waila.ExecutionCore.5
             // # Power for boosting
             // #zh_CN 已用于加速的功率
                 TextEnums.tr("Waila.ExecutionCore.5")
@@ -375,13 +374,22 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                 TextEnums.tr("Waila.ExecutionCore.3") + " : "
                     + tag.getLong("usingEut") + " EU/t"
             );
-            // spotless:on
         } else {
             // #tr Waila.ExecutionCore.IsIdle
             // # This {\WHITE}Execution Core{\GRAY} is idle.
             // #zh_CN 此{\WHITE}执行核心{\GRAY}处于空闲状态
             currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
         }
+        // spotless:on
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+
+        processWailaBody(itemStack, currentTip, accessor, config);
+
     }
 
     @Override
