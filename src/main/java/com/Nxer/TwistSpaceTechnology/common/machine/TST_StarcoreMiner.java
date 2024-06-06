@@ -500,6 +500,10 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             // # {\RED}{\BOLD}{\SPACE}which may cause the save file to crash and become inaccessible.
             // #zh_CN {\RED}{\BOLD}{\SPACE}可能导致存档崩溃无法进入.
             .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_02"))
+            // #tr Tooltip_Starcore_Crash_20240606_03
+            // # In case of emergency, you can install ZeroPointBugFix-0.4.1 mod for temporary fix.
+            // #zh_CN {\RED}紧急情况可安装 ZeroPointBugFix-0.4.1 mod临时修复.
+            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_03"))
             .addInfo(TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
