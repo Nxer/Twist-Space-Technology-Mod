@@ -1255,3 +1255,4 @@ NameIndistinctTentaclePrototypeMK2=§8§l不可视之触§r原型机MK-II
 Waila.PerfectExecutionCore.ThisExecutionCore=此执行核心
 Tooltip_Starcore_Crash_20240606=§c§l此机器的蓝图自动搭建功能出现严重bug,
 Tooltip_Starcore_Crash_20240606_02=§c§l 可能导致存档崩溃无法进入.
+Tooltip_Starcore_Crash_20240606_03=§c紧急情况可安装 ZeroPointBugFix-0.4.1 mod临时修复.
