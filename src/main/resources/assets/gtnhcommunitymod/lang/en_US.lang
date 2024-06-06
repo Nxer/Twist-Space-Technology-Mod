@@ -1255,3 +1255,4 @@ NameIndistinctTentaclePrototypeMK2=§8§lIndistinct Tentacle §rPrototype MK-II
 Waila.PerfectExecutionCore.ThisExecutionCore=This Execution Core
 Tooltip_Starcore_Crash_20240606=There is a serious bug in the blueprint automatic construction function of this machine,
 Tooltip_Starcore_Crash_20240606_02=§c§l which may cause the save file to crash and become inaccessible.
+Tooltip_Starcore_Crash_20240606_03=In case of emergency, you can install ZeroPointBugFix-0.4.1 mod for temporary fix.
