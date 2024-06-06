@@ -468,6 +468,10 @@ public enum GTCMItemList {
         return Utils.copyAmount(aAmount, mStack);
     }
 
+    public int getMeta() {
+        return mStack.getItemDamage();
+    }
+
     public GTCMItemList set(Item aItem) {
         mHasNotBeenSet = false;
         if (aItem == null) return this;
