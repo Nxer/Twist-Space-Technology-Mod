@@ -152,6 +152,12 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
     }
 
     @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        mode = aNBT.getByte("mode");
+    }
+
+    @Override
     public Collection<IExecutionCore> getIdlePerfectExecutionCores() {
         Collection<IExecutionCore> cores = super.getIdlePerfectExecutionCores();
         if (this.isIdle()) cores.add(this);
@@ -378,54 +384,56 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
 
     // region General
     // region waila
+
     @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+    public void processWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
+
         final NBTTagCompound tag = accessor.getNBTData();
 
-        String modeName = switch (tag.getByte("mode")) {
+        currentTip.add(switch (tag.getByte("mode")) {
             case 1 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.componentassemblyline");
             case 2 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gt.recipe.assembler");
             case 3 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.precise_assembler");
             default -> EnumChatFormatting.BOLD
                 + translateToLocalFormatted("tst.recipe.AssemblyLineWithoutResearchRecipe");
-        };
-        currentTip.add(modeName);
+        });
 
         int maxProgressingTime = tag.getInteger("maxProgressingTime");
         if (maxProgressingTime > 0) {
-            // spotless:off
             currentTip.add(
                 // #zh_CN 总耗时
                 TextEnums.tr("Waila.PerfectExecutionCore.1") + " : "
-                    + maxProgressingTime + " tick ("
-                    + (maxProgressingTime / 20) + "s)");
+                    + maxProgressingTime
+                    + " tick ("
+                    + (maxProgressingTime / 20)
+                    + "s)");
             int progressedTime = tag.getInteger("progressedTime");
             currentTip.add(
                 // #zh_CN 已执行时间
-                TextEnums.tr("Waila.ExecutionCore.2") + " : "
-                    + progressedTime + " tick ("
-                    + (progressedTime / 20) + "s)"
-            );
+                TextEnums.tr(
+                    "Waila.ExecutionCore.2") + " : " + progressedTime + " tick (" + (progressedTime / 20) + "s)");
             String costEU = tag.getString("costEU");
             if (costEU != null && !costEU.isEmpty()) {
+                // #tr Waila.PerfectExecutionCore.ThisExecutionCore
+                // # This Execution Core
+                // #zh_CN 此执行核心
                 currentTip.add(
-                    EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_MiracleDoor.1")
+                    EnumChatFormatting.AQUA + TextEnums.tr("Waila.PerfectExecutionCore.ThisExecutionCore")
+                        + TextEnums.tr("Waila.TST_MiracleDoor.1")
                         + EnumChatFormatting.RESET
                         + ": "
                         + EnumChatFormatting.GOLD
                         + costEU
                         + EnumChatFormatting.RESET
                         + " EU");
-                // spotless:on
-            } else {
-                // #tr Waila.ExecutionCore.IsIdle
-                // # This execution core is idle.
-                // #zh_CN 空闲状态
-                currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
             }
+
+        } else {
+            // 空闲
+            currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
         }
+
     }
 
     @Override
@@ -434,17 +442,8 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setInteger("maxProgressingTime", eMaxProgressingTime);
-            if (eMaxProgressingTime > 0) {
-                int outputItemStackAmount = eOutputItems == null ? 0 : eOutputItems.length;
-                tag.setInteger("outputItemStackAmount", outputItemStackAmount);
-                int outputFluidStackAmount = eOutputFluids == null ? 0 : eOutputFluids.length;
-                tag.setInteger("outputFluidStackAmount", outputFluidStackAmount);
-                tag.setInteger("progressedTime", eProgressedTime);
-                tag.setInteger("boostedTime", eBoostedTime);
-                tag.setLong("usingEut", eEut);
-                tag.setLong("eutForBoostLastTick", eutForBoostLastTick);
-            }
+            tag.setByte("mode", mode);
+            tag.setString("costEU", costEU);
         }
     }
 

@@ -98,8 +98,8 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                 // spotless:on
             } else {
                 // #tr Waila.ExecutionCore.IsIdle
-                // # This execution core is idle.
-                // #zh_CN 空闲状态
+                // # This {\WHITE}Execution Core{\GRAY} is idle.
+                // #zh_CN 此{\WHITE}执行核心{\GRAY}处于空闲状态
                 currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
             }
         } else {

@@ -67,7 +67,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
-import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Test_ModularizedMachine;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
@@ -243,7 +242,7 @@ public class MachineLoader {
 
         EntityList.addMapping(Ship.class, "Ship", 114);
         // test
-        TestMachine = new Test_ModularizedMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
+        // TestMachine = new Test_ModularizedMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 
         // region multi Machine controller
 
