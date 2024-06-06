@@ -415,8 +415,12 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
                     "Waila.ExecutionCore.2") + " : " + progressedTime + " tick (" + (progressedTime / 20) + "s)");
             String costEU = tag.getString("costEU");
             if (costEU != null && !costEU.isEmpty()) {
+                // #tr Waila.PerfectExecutionCore.ThisExecutionCore
+                // # This Execution Core
+                // #zh_CN 此执行核心
                 currentTip.add(
-                    EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_MiracleDoor.1")
+                    EnumChatFormatting.AQUA + TextEnums.tr("Waila.PerfectExecutionCore.ThisExecutionCore")
+                        + TextEnums.tr("Waila.TST_MiracleDoor.1")
                         + EnumChatFormatting.RESET
                         + ": "
                         + EnumChatFormatting.GOLD
