@@ -54,7 +54,6 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_ParallelHelper;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.shutdown.ShutDownReason;
 
 public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     extends MultiExecutionCoreMachineSupportAllModuleBase<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> {
@@ -158,10 +157,10 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     }
 
     @Override
-    public void stopMachine(@NotNull ShutDownReason reason) {
+    public void stopMachine() {
         runningTime = 0;
         fuelCostMultiplier = 1;
-        super.stopMachine(reason);
+        super.stopMachine();
     }
 
     public void setCoilLevel(HeatingCoilLevel coilLevel) {

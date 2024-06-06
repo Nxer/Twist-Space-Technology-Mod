@@ -34,7 +34,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
     // region IO info
     private static final long LongMaxDivide4 = Long.MAX_VALUE / 4;
     private static final long LongMaxDecreaseInt = Long.MAX_VALUE - Integer.MAX_VALUE;
-  
+
     private String owner_uuid;
     private String owner_name;
 

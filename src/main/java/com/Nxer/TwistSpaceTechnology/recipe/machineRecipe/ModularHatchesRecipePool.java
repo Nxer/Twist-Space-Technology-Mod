@@ -48,7 +48,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
         Materials[] materials = new Materials[] { Materials.NaquadahAlloy, Materials.Neutronium,
             Materials.CosmicNeutronium, Materials.Infinity, MaterialsUEVplus.TranscendentMetal,
             MaterialsUEVplus.SpaceTime, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter,
-            MaterialsUEVplus.MagMatter };
+            MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter };
 
         ItemStack[] hulls = new ItemStack[] { ItemList.Hull_ZPM.get(1), ItemList.Hull_UV.get(1),
             ItemList.Hull_MAX.get(1), CustomItemList.Hull_UEV.get(1), CustomItemList.Hull_UIV.get(1),

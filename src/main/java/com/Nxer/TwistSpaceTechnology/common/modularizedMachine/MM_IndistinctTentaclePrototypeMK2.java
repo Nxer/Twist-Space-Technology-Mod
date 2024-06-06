@@ -209,7 +209,6 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
         if (mte.isServerSide() && mte.isAllowedToWork()) {
             if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
                 disableWorking();
-                this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
             }
         }
     }
