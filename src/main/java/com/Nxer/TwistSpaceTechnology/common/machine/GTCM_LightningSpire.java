@@ -43,7 +43,6 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.modularui.api.NumberFormatMUI;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
@@ -469,23 +468,16 @@ public class GTCM_LightningSpire extends GT_MetaTileEntity_MultiblockBase_EM
                 .setSize(130, 5));
     }
 
-    protected static NumberFormatMUI numberFormatLocal;
-    static {
-        numberFormatLocal = new NumberFormatMUI();
-        numberFormatLocal.setMaximumFractionDigits(8);
-    }
-
     @Override
     protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
         super.drawTexts(screenElements, inventorySlot);
-        screenElements
-            .widget(
-                new TextWidget().setStringSupplier(() -> "Currently stored LR:" + numberFormatLocal.format(tRods))
-                    .setDefaultColor(COLOR_TEXT_WHITE.get())
-                    .setEnabled(widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0))
+        screenElements.widget(
+            new TextWidget().setStringSupplier(() -> "Currently stored LR:" + tRods)
+                .setDefaultColor(COLOR_TEXT_WHITE.get())
+                .setEnabled(widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> tRods, val -> tRods = val))
             .widget(
-                new TextWidget().setStringSupplier(() -> "EU Gen per strike:" + numberFormatLocal.format(tProduct))
+                new TextWidget().setStringSupplier(() -> "EU Gen per strike:" + tProduct)
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> tProduct, val -> tProduct = val));
