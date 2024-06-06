@@ -55,12 +55,12 @@ dependencies {
     implementation('com.github.GTNewHorizons:GigaGramFab:0.3.9:dev')
 //    implementation('com.github.GTNewHorizons:Railcraft:9.15.3:dev')
     implementation('thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev')
-    implementation('com.github.GTNewHorizons:ThaumicBases:1.6.0:dev')
+    implementation('com.github.GTNewHorizons:ThaumicBases:1.6.6:dev')
     implementation('curse.maven:automagy-222153:2285272')
-    implementation('com.github.GTNewHorizons:ThaumicHorizons:1.5.1:dev')
+    implementation('com.github.GTNewHorizons:ThaumicHorizons:1.5.3:dev')
     implementation('com.github.GTNewHorizons:Gadomancy:1.3.2:dev')
-//  implementation('com.github.GTNewHorizons:Botania:1.10.12-GTNH:dev')
-//  implementation('com.github.GTNewHorizons:twilightforest:2.5.19:dev')
+    implementation('com.github.GTNewHorizons:Botania:1.10.12-GTNH:dev')
+    implementation('com.github.GTNewHorizons:twilightforest:2.5.22:dev')
     implementation('com.github.GTNewHorizons:supersolarpanels:1.1.3:dev')
     implementation('curse.maven:advsolar-362768:2885953')
     implementation('com.github.GTNewHorizons:Electro-Magic-Tools:1.4.6:dev')
@@ -70,6 +70,5 @@ dependencies {
     compileOnly('curse.maven:witchery-69673:2234410')
     compileOnly('com.github.GTNewHorizons:WitcheryExtras:1.1.14:dev')
 //    implementation('com.github.RealSilverMoon:BoxPlusPlus:1.2.0:dev')
-//    implementation('com.github.GTNewHorizons:KubaTech:0.13.4:dev')
 
 }

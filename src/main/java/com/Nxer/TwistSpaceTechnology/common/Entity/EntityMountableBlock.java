@@ -1,22 +1,26 @@
 package com.Nxer.TwistSpaceTechnology.common.Entity;
 
-import net.minecraft.block.Block;
+import static com.Nxer.TwistSpaceTechnology.client.Sound.SoundLoader.BGM;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
+import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockPowerChair;
+import com.Nxer.TwistSpaceTechnology.config.Config;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityMountableBlock extends Entity {
-
-    public static final ResourceLocation BGM = new ResourceLocation("gtnhcommunitymod:PowerChair");
 
     public int orgBlockPosX;
     public int orgBlockPosY;
     public int orgBlockPosZ;
-    public Block orgBlock;
     public EntityPlayer player;
 
     public EntityMountableBlock(World worldIn) {
@@ -37,16 +41,15 @@ public class EntityMountableBlock extends Entity {
         this.orgBlockPosX = x;
         this.orgBlockPosY = y;
         this.orgBlockPosZ = z;
-        this.orgBlock = world.getBlock(x, y, z);
         this.setPosition(mountingX, mountingY, mountingZ);
     }
 
     public static boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, float hitX,
         float hitY, float hitZ) {
+        double mountingX = (double) x + hitX;
+        double mountingY = (double) y + hitY;
+        double mountingZ = (double) z + hitZ;
         if (!world.isRemote) {
-            double mountingX = (double) x + hitX;
-            double mountingY = (double) y + hitY;
-            double mountingZ = (double) z + hitZ;
             EntityMountableBlock entity = new EntityMountableBlock(
                 world,
                 player,
@@ -61,6 +64,48 @@ public class EntityMountableBlock extends Entity {
             return true;
         } else {
             return false;
+        }
+    }
+
+    /* Detects if music is playing and plays music at the right time */
+
+    @SideOnly(Side.CLIENT)
+    public static void PlaySound(int x, int y, int z) {
+        ChunkCoordinates chunkCoordinates = new ChunkCoordinates(x, y, z);
+        if (!BlockPowerChair.PowerChair.containsKey(chunkCoordinates)) {
+            if (Config.Enable_PowerChairBGM) {
+                Sound sound1 = new Sound(
+                    BGM,
+                    0.4f,
+                    1.0f,
+                    chunkCoordinates.posX,
+                    chunkCoordinates.posY,
+                    chunkCoordinates.posZ);
+                BlockPowerChair.PowerChair.put(chunkCoordinates, sound1);
+                Minecraft.getMinecraft()
+                    .getSoundHandler()
+                    .playSound(sound1);
+            }
+        } else {
+            if (Minecraft.getMinecraft()
+                .getSoundHandler()
+                .isSoundPlaying(BlockPowerChair.PowerChair.get(chunkCoordinates))) {
+                Minecraft.getMinecraft()
+                    .getSoundHandler()
+                    .stopSound(BlockPowerChair.PowerChair.get(chunkCoordinates));
+                BlockPowerChair.PowerChair.remove(chunkCoordinates);
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void stopPlaySound(int x, int y, int z) {
+        ChunkCoordinates chunkcoordinates = new ChunkCoordinates(x, y, z);
+        if (BlockPowerChair.PowerChair.containsKey(chunkcoordinates)) {
+            Minecraft.getMinecraft()
+                .getSoundHandler()
+                .stopSound(BlockPowerChair.PowerChair.get(chunkcoordinates));
+            BlockPowerChair.PowerChair.remove(chunkcoordinates);
         }
     }
 
@@ -85,7 +130,10 @@ public class EntityMountableBlock extends Entity {
         } else {
             this.setDead();
             if (worldObj.isRemote) {
-                BlockPowerChair.stopPlaySound();
+                stopPlaySound(
+                    (int) this.posX,
+                    (int) this.posY,
+                    (int) this.posZ);/* Stops playing music when the entity dies */
             }
         }
         ++this.ticksExisted;

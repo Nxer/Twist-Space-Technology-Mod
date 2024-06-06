@@ -412,11 +412,9 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     private final int horizontalOffSet = 18;
     private final int verticalOffSet = 39;
     private final int depthOffSet = 15;
-    @Override
-    public IStructureDefinition<TST_ArtificialStar> getStructureDefinition() {
-        return IStructureDefinition.<TST_ArtificialStar>builder()
-                   .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                                   /*
+
+
+    /*
 A -> ofBlock...(gt.blockcasings, 14, ...);      // tierDimensionField
 B -> ofBlock...(gt.blockcasingsSE, 2, ...);
 C -> ofBlock...(gt.blockcasingsTT, 4, ...);
@@ -429,7 +427,11 @@ I -> ofBlock...(gt.blockcasingsTT, 13, ...);
 J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
 K -> ofBlock...(tile.quantumGlass, 0, ...);
 L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
-                                    */
+     */
+    @Override
+    public IStructureDefinition<TST_ArtificialStar> getStructureDefinition() {
+        return IStructureDefinition.<TST_ArtificialStar>builder()
+                   .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
                    .addElement(
                        'A',
                        withChannel("tierdimensionfield",

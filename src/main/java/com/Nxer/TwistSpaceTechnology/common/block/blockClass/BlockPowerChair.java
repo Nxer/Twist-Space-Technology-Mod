@@ -1,29 +1,29 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass;
 
+import java.util.HashMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
-import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockPowerChair extends Block {
 
-    public static Sound sound;
+    public static HashMap<ChunkCoordinates, Sound> PowerChair = new HashMap<>();
 
     public BlockPowerChair() {
         super(Material.iron);
@@ -66,6 +66,14 @@ public class BlockPowerChair extends Block {
     }
 
     @Override
+    public void onBlockDestroyedByPlayer(World worldIn, int x, int y, int z, int meta) {
+        if (worldIn.isRemote) {
+            EntityMountableBlock.stopPlaySound(x, y, z);/* Stops playing music when the block is broken */
+        }
+        super.onBlockDestroyedByPlayer(worldIn, x, y, z, meta);
+    }
+
+    @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack itemIn) {
         int l = MathHelper.floor_double((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         int i1 = world.getBlockMetadata(x, y, z) & 4;
@@ -90,6 +98,7 @@ public class BlockPowerChair extends Block {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
         float par8, float par9) {
+
         if (!world.isRemote) {
             TileEntity tile = world.getTileEntity(x, y, z);
             if (tile instanceof TilePowerChair) {
@@ -115,29 +124,9 @@ public class BlockPowerChair extends Block {
                 }
             }
         } else {
-            PlaySound(x, y, z);
-            return false;
+            EntityMountableBlock.PlaySound((int) (x + 0.5F), (int) (y + 0.68F), (int) (z + 0.5F));
         }
         return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void PlaySound(int x, int y, int z) {
-        if (Config.Enable_PowerChairBGM) {
-            sound = new Sound(new ResourceLocation("gtnhcommunitymod:PowerChair"), 0.4f, 1.0f, true, x, y, z);
-            Minecraft.getMinecraft()
-                .getSoundHandler()
-                .playSound(sound);
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void stopPlaySound() {
-        if (Config.Enable_PowerChairBGM) {
-            Minecraft.getMinecraft()
-                .getSoundHandler()
-                .stopSound(sound);
-        }
     }
 
     @Override

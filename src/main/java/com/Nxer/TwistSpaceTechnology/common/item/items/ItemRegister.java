@@ -20,7 +20,8 @@ public class ItemRegister {
 
     public static void registryItems() {
         Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes, MultiStructuresLinkTool,
-            BasicItems.MetaItemRune, BasicItems.PowerChair };
+
+            BasicItems.MetaItemRune, BasicItems.PowerChair, BasicItems.HatchUpdateTool, BasicItems.Yamato };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.getUnlocalizedName());
@@ -49,14 +50,14 @@ public class ItemRegister {
         GTCMItemList.AntimatterFuelRod.set(initItem01("Antimatter Fuel Rod", 16, new String[]{texter("More...", "tooltips.AntimatterFuelRod.line1"), DSPName}));
         GTCMItemList.StellarConstructionFrameMaterial.set(initItem01("Stellar Construction Frame Material", 17, new String[]{texter("Perfect and expensive.", "tooltips.StellarConstructionFrameMaterial.line1"), DSPName}));
         GTCMItemList.GravitationalLens.set(initItem01("Gravitational Lens", 18, new String[]{texter("Its twisted and powerful gravitational field is shielded in a container.", "tooltips.GravitationalLens.line1"), texter("It is usually utilized to work and alter spatial structures, ", "tooltips.GravitationalLens.line2"), texter(" but that doesn't stop some people from taking it and focusing sunlight to light fires for fun.", "tooltips.GravitationalLens.line3"), DSPName}));
-        GTCMItemList.PurpleMagnoliaPetal.set(initItem01("Purple Magnolia Petal", 19, new String[]{ TextHandler.texter("Petals falling from Alfheim...", "tooltips.PurpleMagnoliaPetal.line1")}));
-        GTCMItemList.PurpleMagnoliaSapling.set(initItem01("Purple Magnolia Sapling", 20, new String[]{ TextHandler.texter("Not plantable. Need to be on ic2 crop sticks.", "tooltips.PurpleMagnoliaSapling.line1")}));
-        GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{ TextHandler.texter("Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
-        GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.set(initItem01("Primitive Man's SpaceTime Distortion Device", 22, new String[]{ TextHandler.texter("Anyway...", "tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1")}));
+        GTCMItemList.PurpleMagnoliaPetal.set(initItem01("Purple Magnolia Petal", 19, new String[]{TextHandler.texter("Petals falling from Alfheim...", "tooltips.PurpleMagnoliaPetal.line1")}));
+        GTCMItemList.PurpleMagnoliaSapling.set(initItem01("Purple Magnolia Sapling", 20, new String[]{TextHandler.texter("Not plantable. Need to be on ic2 crop sticks.", "tooltips.PurpleMagnoliaSapling.line1")}));
+        GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{TextHandler.texter("Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
+        GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.set(initItem01("Primitive Man's SpaceTime Distortion Device", 22, new String[]{TextHandler.texter("Anyway...", "tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1")}));
         GTCMItemList.WirelessUpdateItem.set(initItem01("Wireless Computation update circuit", 23, new String[]{}));
 
-        if(Config.Enable_BallLightning){
-            GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 24, new String[]{ TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
+        if (Config.Enable_BallLightning) {
+            GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 24, new String[]{TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
         }
 
         if (Config.activateMegaSpaceStation) {
@@ -197,6 +198,11 @@ public class ItemRegister {
 
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
         GTCMItemList.PowerChair.set(new ItemStack(BasicItems.PowerChair, 1));
+
+        GTCMItemList.HatchUpdateTool.set(new ItemStack(BasicItems.HatchUpdateTool, 1));
+
+        GTCMItemList.Yamato.set(new ItemStack(BasicItems.Yamato,1));
+
     }
 
 

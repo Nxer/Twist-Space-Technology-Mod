@@ -21,7 +21,6 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import gregtech.api.enums.ItemList;
 import gregtech.api.interfaces.tileentity.IRecipeLockable;
 import gregtech.api.interfaces.tileentity.IVoidable;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -148,26 +147,6 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
 
     // region Setters
 
-    /**
-     * Sets MetaTE controller, with current configuration for void protection mode.
-     *
-     * @deprecated Use {@link #setMachine(IVoidable)}
-     */
-    @Deprecated
-    public GT_ParallelHelper setController(GT_MetaTileEntity_MultiBlockBase machineMeta) {
-        return setMachine(machineMeta, machineMeta.protectsExcessItem(), machineMeta.protectsExcessFluid());
-    }
-
-    /**
-     * Sets MetaTE controller, with void protection mode forcibly.
-     *
-     * @deprecated Use {@link #setMachine(IVoidable, boolean, boolean)}
-     */
-    @Deprecated
-    public GT_ParallelHelper setController(GT_MetaTileEntity_MultiBlockBase machineMeta, boolean protectExcessItem,
-                                           boolean protectExcessFluid) {
-        return setMachine(machineMeta, protectExcessItem, protectExcessFluid);
-    }
 
     /**
      * Sets machine, with current configuration for void protection mode.

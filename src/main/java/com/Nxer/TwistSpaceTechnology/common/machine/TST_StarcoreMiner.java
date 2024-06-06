@@ -57,6 +57,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 
 public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> implements IGlobalWirelessEnergy {
 
@@ -305,29 +306,31 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
         }
 
         if (this.totalWeight != 0.f) {
-            mOutputItems = new ItemStack[ValueEnum.AmountOfOreStackPerMining_StarcoreMiner];
-            for (int i = 0; i < ValueEnum.AmountOfOreStackPerMining_StarcoreMiner; i++) {
-                mOutputItems[i] = generateOneStackOre();
-            }
-            updateSlots();
-            // this.mProgresstime = 0;
-            mMaxProgresstime = DurationPerMining_StarcoreMiner;
-            mEfficiency = 10000;
-            mEfficiencyIncrease = 10000;
 
             if (isWirelessMode) {
                 lEUt = 0;
                 if (!addEUToGlobalEnergyMap(ownerUUID, -1L * DurationPerMining_StarcoreMiner * Eut_StarcoreMiner)) {
+                    this.stopMachine(ShutDownReasonRegistry.POWER_LOSS);
                     return CheckRecipeResultRegistry
                         .insufficientPower((long) DurationPerMining_StarcoreMiner * Eut_StarcoreMiner);
                 }
             } else {
                 lEUt = -Eut_StarcoreMiner;
             }
+
+            mOutputItems = new ItemStack[ValueEnum.AmountOfOreStackPerMining_StarcoreMiner];
+            for (int i = 0; i < ValueEnum.AmountOfOreStackPerMining_StarcoreMiner; i++) {
+                mOutputItems[i] = generateOneStackOre();
+            }
+            updateSlots();
+            mMaxProgresstime = DurationPerMining_StarcoreMiner;
+            mEfficiency = 10000;
+            mEfficiencyIncrease = 10000;
+
             return CheckRecipeResultRegistry.SUCCESSFUL;
         }
 
-        this.stopMachine();
+        this.stopMachine(ShutDownReasonRegistry.CRITICAL_NONE);
         return CheckRecipeResultRegistry.NO_RECIPE;
     }
 
