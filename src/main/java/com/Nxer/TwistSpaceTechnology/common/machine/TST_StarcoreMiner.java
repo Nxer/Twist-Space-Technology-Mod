@@ -23,7 +23,7 @@ import java.util.UUID;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.gen.ChunkProviderServer;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,10 +31,13 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.system.VoidMinerRework.logic.VoidMinerData;
+import com.Nxer.TwistSpaceTechnology.system.VoidMinerRework.logic.VoidMinerDataGenerator;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
-import com.github.bartimaeusnek.crossmod.galacticgreg.VoidMinerUtility;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import com.github.bartimaeusnek.bartworks.util.Pair;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -54,8 +57,6 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
-import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 
 public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> implements IGlobalWirelessEnergy {
 
@@ -266,11 +267,10 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
 
     // region Processing Logic
 
-    protected VoidMinerUtility.DropMap dropMap = null;
-    protected VoidMinerUtility.DropMap extraDropMap = null;
-    protected float totalWeight = 0;
-    protected boolean isWirelessMode = false;
-    protected UUID ownerUUID;
+    private Map<Pair<Integer, Boolean>, Float> dropmap = null;
+    private float totalWeight = 0;
+    private boolean isWirelessMode = false;
+    private UUID ownerUUID;
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -287,14 +287,20 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
-        if (dropMap == null || totalWeight == 0) {
+        if (dropmap == null || totalWeight == 0) {
             TwistSpaceTechnology.LOG.info(
                 "WARNING! Starcore Miner dropmap = null when checkProcessing ! Dim = "
                     + getBaseMetaTileEntity().getWorld().provider.dimensionId);
             if (Config.DebugMode_StarcoreMiner) {
                 TwistSpaceTechnology.LOG.info("Trying to re-generate drop map.");
 
-                // TODO Debug Regeneration
+                World world = getBaseMetaTileEntity().getWorld();
+                int dimID = world.provider.dimensionId;
+
+                VoidMinerDataGenerator.generate(world)
+                    .done();
+                dropmap = VoidMinerData.OrePool.get(dimID);
+                totalWeight = VoidMinerData.OrePoolTotalWeightPool.get(dimID);
             }
         }
 
@@ -303,7 +309,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             if (isWirelessMode) {
                 lEUt = 0;
                 if (!addEUToGlobalEnergyMap(ownerUUID, -1L * DurationPerMining_StarcoreMiner * Eut_StarcoreMiner)) {
-                    this.stopMachine(ShutDownReasonRegistry.POWER_LOSS);
+                    this.stopMachine();
                     return CheckRecipeResultRegistry
                         .insufficientPower((long) DurationPerMining_StarcoreMiner * Eut_StarcoreMiner);
                 }
@@ -323,7 +329,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             return CheckRecipeResultRegistry.SUCCESSFUL;
         }
 
-        this.stopMachine(ShutDownReasonRegistry.CRITICAL_NONE);
+        this.stopMachine();
         return CheckRecipeResultRegistry.NO_RECIPE;
     }
 
@@ -333,80 +339,38 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
         ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
 
         if (aBaseMetaTileEntity.isServerSide()) {
-            initDropMap();
-        }
-
-    }
-
-    protected void initDropMap() {
-        this.dropMap = new VoidMinerUtility.DropMap();
-        this.extraDropMap = new VoidMinerUtility.DropMap();
-        int id = this.getBaseMetaTileEntity()
-            .getWorld().provider.dimensionId;
-        this.handleModDimDef(id);
-        this.handleExtraDrops(id);
-        this.totalWeight = dropMap.getTotalWeight() + extraDropMap.getTotalWeight();
-    }
-
-    /**
-     * Gets the DropMap of the dim for the specified dim id
-     *
-     * @param id the dim number
-     */
-    private void handleModDimDef(int id) {
-        if (VoidMinerUtility.dropMapsByDimId.containsKey(id)) {
-            this.dropMap = VoidMinerUtility.dropMapsByDimId.get(id);
-        } else {
-            String chunkProviderName = ((ChunkProviderServer) this.getBaseMetaTileEntity()
-                .getWorld()
-                .getChunkProvider()).currentChunkProvider.getClass()
-                    .getName();
-
-            if (VoidMinerUtility.dropMapsByChunkProviderName.containsKey(chunkProviderName)) {
-                this.dropMap = VoidMinerUtility.dropMapsByChunkProviderName.get(chunkProviderName);
+            World world = aBaseMetaTileEntity.getWorld();
+            int dimID = world.provider.dimensionId;
+            if (!VoidMinerData.OrePool.containsKey(dimID)) {
+                VoidMinerDataGenerator.generate(world)
+                    .done();
             }
+            dropmap = VoidMinerData.OrePool.get(dimID);
+            totalWeight = VoidMinerData.OrePoolTotalWeightPool.get(dimID);
         }
-    }
 
-    /**
-     * Handles the ores added manually with {@link VoidMinerUtility#addMaterialToDimensionList}
-     *
-     * @param id the specified dim id
-     */
-    private void handleExtraDrops(int id) {
-        if (VoidMinerUtility.extraDropsDimMap.containsKey(id)) {
-            extraDropMap = VoidMinerUtility.extraDropsDimMap.get(id);
-        }
     }
 
     private ItemStack generateOneStackOre() {
-        ItemStack nextOre = nextOre();
-        nextOre.stackSize = ValueEnum.StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner;
-        return nextOre;
+        return getOreItemStack(getOreDamage());
     }
 
-    /**
-     * method used to pick the next ore in the dropMap.
-     *
-     * @return the chosen ore
-     */
-    private ItemStack nextOre() {
-        float currentWeight = 0.f;
+    private Pair<Integer, Boolean> getOreDamage() {
+        float curentWeight = 0.f;
         while (true) {
-            float randomNumber = XSTR.XSTR_INSTANCE.nextFloat() * this.totalWeight;
-            for (Map.Entry<GT_Utility.ItemId, Float> entry : this.dropMap.getInternalMap()
-                .entrySet()) {
-                currentWeight += entry.getValue();
-                if (randomNumber < currentWeight) return entry.getKey()
-                    .getItemStack();
-            }
-            for (Map.Entry<GT_Utility.ItemId, Float> entry : this.extraDropMap.getInternalMap()
-                .entrySet()) {
-                currentWeight += entry.getValue();
-                if (randomNumber < currentWeight) return entry.getKey()
-                    .getItemStack();
+            float randomNum = XSTR.XSTR_INSTANCE.nextFloat() * this.totalWeight;
+            for (Map.Entry<Pair<Integer, Boolean>, Float> entry : this.dropmap.entrySet()) {
+                curentWeight += entry.getValue();
+                if (randomNum < curentWeight) return entry.getKey();
             }
         }
+    }
+
+    private ItemStack getOreItemStack(Pair<Integer, Boolean> stats) {
+        return new ItemStack(
+            stats.getValue() ? WerkstoffLoader.BWOres : GregTech_API.sBlockOres1,
+            ValueEnum.StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner,
+            stats.getKey());
     }
 
     @Override

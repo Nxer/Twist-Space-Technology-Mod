@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -30,9 +29,12 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.system.VoidMinerRework.logic.VoidMinerData;
+import com.Nxer.TwistSpaceTechnology.system.VoidMinerRework.logic.VoidMinerDataGenerator;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.crossmod.galacticgreg.VoidMinerUtility;
+import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import com.github.bartimaeusnek.bartworks.util.Pair;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
@@ -51,7 +53,6 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Utility;
 
 public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
 
@@ -71,12 +72,11 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     // endregion
 
     // region Processing Logic
-    protected static VoidMinerUtility.DropMap dropMap = null;
-    protected static VoidMinerUtility.DropMap extraDropMap = null;
-    protected static float totalWeight = 0;
-    private static boolean preGenerated = false;
+    private static Map<Pair<Integer, Boolean>, Float> dropmap = null;
+    private static float totalWeight = 0;
     private static Fluid WATER;
     private static Fluid LAVA;
+    private static boolean preGenerated = false;
     private static final int STANDARD_WATER_BUCKET = ValueEnum.StandardWaterNeed_EyeOfWood;
     private static final int STANDARD_WATER_AMOUNT = STANDARD_WATER_BUCKET * 1000;
     private static final int STANDARD_LAVA_BUCKET = ValueEnum.StandardLavaNeed_EyeOfWood;
@@ -143,7 +143,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
-        if (dropMap == null || totalWeight == 0) {
+        if (dropmap == null || totalWeight == 0) {
             TwistSpaceTechnology.LOG.info("WARNING! Eye of Wood dropmap = null when checkProcessing !");
             return CheckRecipeResultRegistry.INTERNAL_ERROR;
         }
@@ -174,7 +174,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     private ItemStack[] getItemOutputs() {
         List<ItemStack> outputs = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
-            ItemData oreData = GT_OreDictUnificator.getItemData(generateOneStackOre());
+            ItemData oreData = GT_OreDictUnificator.getItemData(generateOneStackOre(1));
             if (oreData == null) {
                 TwistSpaceTechnology.LOG.info("EOW getItemOutputs error: oreData is null");
                 return new ItemStack[0];
@@ -267,23 +267,26 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         return (int) (7500 - 7499 * (1d - waterMultiplier * lavaMultiplier));
     }
 
-    private ItemStack generateOneStackOre() {
-        float currentWeight = 0.f;
+    private ItemStack generateOneStackOre(int amount) {
+        return getOreItemStack(getOreDamage(), amount);
+    }
+
+    private Pair<Integer, Boolean> getOreDamage() {
+        float curentWeight = 0.f;
         while (true) {
-            float randomNumber = XSTR.XSTR_INSTANCE.nextFloat() * totalWeight;
-            for (Map.Entry<GT_Utility.ItemId, Float> entry : dropMap.getInternalMap()
-                .entrySet()) {
-                currentWeight += entry.getValue();
-                if (randomNumber < currentWeight) return entry.getKey()
-                    .getItemStack();
-            }
-            for (Map.Entry<GT_Utility.ItemId, Float> entry : extraDropMap.getInternalMap()
-                .entrySet()) {
-                currentWeight += entry.getValue();
-                if (randomNumber < currentWeight) return entry.getKey()
-                    .getItemStack();
+            float randomNum = XSTR.XSTR_INSTANCE.nextFloat() * totalWeight;
+            for (Map.Entry<Pair<Integer, Boolean>, Float> entry : dropmap.entrySet()) {
+                curentWeight += entry.getValue();
+                if (randomNum < curentWeight) return entry.getKey();
             }
         }
+    }
+
+    private ItemStack getOreItemStack(Pair<Integer, Boolean> stats, int amount) {
+        return new ItemStack(
+            stats.getValue() ? WerkstoffLoader.BWOres : GregTech_API.sBlockOres1,
+            amount,
+            stats.getKey());
     }
 
     @Override
@@ -300,54 +303,20 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
             }
 
             if (!preGenerated) {
-                initDropMap();
+
+                if (!VoidMinerData.OrePool.containsKey(dimID)) {
+                    VoidMinerDataGenerator.generate(world)
+                        .done();
+                }
+                dropmap = VoidMinerData.OrePool.get(dimID);
+                totalWeight = VoidMinerData.OrePoolTotalWeightPool.get(dimID);
                 WATER = Materials.Water.mFluid;
                 LAVA = Materials.Lava.mFluid;
+
                 preGenerated = true;
             }
         }
 
-    }
-
-    protected void initDropMap() {
-        dropMap = new VoidMinerUtility.DropMap();
-        extraDropMap = new VoidMinerUtility.DropMap();
-        int id = this.getBaseMetaTileEntity()
-            .getWorld().provider.dimensionId;
-        handleModDimDef(id);
-        handleExtraDrops(id);
-        totalWeight = dropMap.getTotalWeight() + extraDropMap.getTotalWeight();
-    }
-
-    /**
-     * Gets the DropMap of the dim for the specified dim id
-     *
-     * @param id the dim number
-     */
-    private void handleModDimDef(int id) {
-        if (VoidMinerUtility.dropMapsByDimId.containsKey(id)) {
-            dropMap = VoidMinerUtility.dropMapsByDimId.get(id);
-        } else {
-            String chunkProviderName = ((ChunkProviderServer) this.getBaseMetaTileEntity()
-                .getWorld()
-                .getChunkProvider()).currentChunkProvider.getClass()
-                    .getName();
-
-            if (VoidMinerUtility.dropMapsByChunkProviderName.containsKey(chunkProviderName)) {
-                dropMap = VoidMinerUtility.dropMapsByChunkProviderName.get(chunkProviderName);
-            }
-        }
-    }
-
-    /**
-     * Handles the ores added manually with {@link VoidMinerUtility#addMaterialToDimensionList}
-     *
-     * @param id the specified dim id
-     */
-    private void handleExtraDrops(int id) {
-        if (VoidMinerUtility.extraDropsDimMap.containsKey(id)) {
-            extraDropMap = VoidMinerUtility.extraDropsDimMap.get(id);
-        }
     }
 
     @Override
