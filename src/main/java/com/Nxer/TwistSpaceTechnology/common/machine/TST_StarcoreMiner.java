@@ -54,8 +54,6 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
-import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 
 public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> implements IGlobalWirelessEnergy {
 
@@ -303,7 +301,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             if (isWirelessMode) {
                 lEUt = 0;
                 if (!addEUToGlobalEnergyMap(ownerUUID, -1L * DurationPerMining_StarcoreMiner * Eut_StarcoreMiner)) {
-                    this.stopMachine(ShutDownReasonRegistry.POWER_LOSS);
+                    this.stopMachine();
                     return CheckRecipeResultRegistry
                         .insufficientPower((long) DurationPerMining_StarcoreMiner * Eut_StarcoreMiner);
                 }
@@ -323,7 +321,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             return CheckRecipeResultRegistry.SUCCESSFUL;
         }
 
-        this.stopMachine(ShutDownReasonRegistry.CRITICAL_NONE);
+        this.stopMachine();
         return CheckRecipeResultRegistry.NO_RECIPE;
     }
 

@@ -470,7 +470,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                                 .build();
             maxParallel = Math.min(voidProtectionHelper.getMaxParallel(), maxParallel);
             if (maxParallel <= 0) {
-                result = CheckRecipeResultRegistry.ITEM_OUTPUT_FULL;
+                result = CheckRecipeResultRegistry.OUTPUT_FULL;
                 return;
             }
         }

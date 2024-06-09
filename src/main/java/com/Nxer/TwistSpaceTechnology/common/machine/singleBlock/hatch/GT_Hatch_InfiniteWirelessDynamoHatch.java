@@ -35,6 +35,9 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
     private static final long LongMaxDivide4 = Long.MAX_VALUE / 4;
     private static final long LongMaxDecreaseInt = Long.MAX_VALUE - Integer.MAX_VALUE;
 
+    private String owner_uuid;
+    private String owner_name;
+
     @Override
     public long getMinimumStoredEU() {
         return 512;
@@ -53,6 +56,33 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wire
     @Override
     public long maxAmperesOut() {
         return 1;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (aBaseMetaTileEntity.isServerSide()) {
+            // On first tick find the player name and attempt to add them to the map.
+            // UUID and username of the owner.
+            this.owner_uuid = aBaseMetaTileEntity.getOwnerUuid()
+                .toString();
+            owner_name = aBaseMetaTileEntity.getOwnerName();
+
+            strongCheckOrAddUser(owner_uuid, owner_name);
+        }
+    }
+
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPreTick(aBaseMetaTileEntity, aTick);
+
+        if (aBaseMetaTileEntity.isServerSide()) {
+            // Every ticks_between_energy_addition ticks change the energy content of the machine.
+            if (aTick % ticks_between_energy_addition == 0L) {
+                addEUToGlobalEnergyMap(owner_uuid, getEUVar());
+                setEUVar(0L);
+            }
+        }
     }
 
     // endregion

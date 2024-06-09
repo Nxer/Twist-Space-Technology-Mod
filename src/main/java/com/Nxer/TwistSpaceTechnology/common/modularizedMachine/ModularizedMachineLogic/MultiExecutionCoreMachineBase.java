@@ -44,8 +44,6 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import gregtech.api.util.shutdown.ShutDownReason;
-import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -113,9 +111,10 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     @Override
     protected void endRecipeProcessing() {
         startedRecipeProcessing = false;
-        if (MEInputHatches.isEmpty()) return;
-        for (IRecipeProcessingAwareHatch hatch : filterValidMTE(MEInputHatches)) {
-            setResultIfFailure(hatch.endRecipeProcessing(this));
+        if (MEInputHatches.isEmpty()) {
+            return;
+        } else {
+            super.endRecipeProcessing();
         }
     }
 
@@ -533,8 +532,13 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+    }
+
+    @Override
     public boolean onWireCutterRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer aPlayer,
-        float aX, float aY, float aZ, ItemStack aTool) {
+        float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.progressingTickIndex = (byte) ((this.progressingTickIndex + 1) % 10);
             // #tr MultiExecutionCoreMachineBase.progressingTickIndex
@@ -597,7 +601,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         if (this.lEUt < 0) {
             if (!drainEnergyInput(getActualEnergyUsage())) {
                 shutDownAllExecutionCore();
-                stopMachine(ShutDownReasonRegistry.POWER_LOSS);
+                stopMachine();
                 return false;
             }
         }
@@ -607,9 +611,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
-    public void stopMachine(@NotNull ShutDownReason reason) {
+    public void stopMachine() {
         eutForBoostLastTick = 0;
-        super.stopMachine(reason);
+        super.stopMachine();
     }
 
     /**
