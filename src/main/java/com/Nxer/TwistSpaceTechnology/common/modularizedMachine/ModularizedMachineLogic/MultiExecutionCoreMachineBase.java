@@ -252,7 +252,11 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
+
         if (aBaseMetaTileEntity.isServerSide()) {
+
+            if (needToCheckRecipe) doCheckRecipeForExecutionCores();
+
             runExecutionCoreTick(aBaseMetaTileEntity, aTick);
         }
     }
@@ -515,6 +519,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     protected static final int[] progressingTick = { 1, 5, 10, 20, 32, 64, 128, 192, 256, 512 };
     protected byte progressingTickIndex = 5;
     protected boolean startedRecipeProcessing = false;
+    protected boolean needToCheckRecipe = true;
     protected long maxEutCanUse = 0;
     protected long eutForBoostLastTick = 0;
     protected boolean isNoOverclockCalculator = false;
@@ -685,6 +690,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         for (IExecutionCore executionCore : advExecutionCores) {
             executionCore.reset();
         }
+        for (IExecutionCore executionCore : perfectExecutionCores) {
+            executionCore.reset();
+        }
         resetModularHatchCollections();
     }
 
@@ -793,18 +801,8 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     public @NotNull CheckRecipeResult checkProcessingMM() {
-        if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
-            disableWorking();
-            return CheckRecipeResults.SetProcessingFailed;
-        }
-        if (checkProcessingForAdvancedExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
-            disableWorking();
-            return CheckRecipeResults.SetProcessingFailed;
-        }
+        doCheckRecipeForExecutionCores();
 
-        lastCheck = checkProcessingForNormalExecutionCore();
-
-        // check every 128tick
         mMaxProgresstime = getBaseProgressingTick();
 
         mEfficiency = 10000;
@@ -815,18 +813,22 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     public void forceCheckProcessing() {
-        IGregTechTileEntity mte = getBaseMetaTileEntity();
-        if (mte.isServerSide() && mte.isAllowedToWork()) {
-            if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
-                disableWorking();
-                return;
-            }
-            if (checkProcessingForAdvancedExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
-                disableWorking();
-                return;
-            }
-            lastCheck = checkProcessingForNormalExecutionCore();
+        needToCheckRecipe = true;
+    }
+
+    public void doCheckRecipeForExecutionCores() {
+        needToCheckRecipe = false;
+        if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
+            disableWorking();
+            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
+            return;
         }
+        if (checkProcessingForAdvancedExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
+            disableWorking();
+            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
+            return;
+        }
+        lastCheck = checkProcessingForNormalExecutionCore();
     }
 
     public @NotNull CheckRecipeResult checkProcessingForNormalExecutionCore() {

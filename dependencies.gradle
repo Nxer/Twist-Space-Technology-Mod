@@ -60,7 +60,7 @@ dependencies {
     implementation('com.github.GTNewHorizons:ThaumicHorizons:1.5.3:dev')
     implementation('com.github.GTNewHorizons:Gadomancy:1.3.2:dev')
     implementation('com.github.GTNewHorizons:Botania:1.10.12-GTNH:dev')
-    implementation('com.github.GTNewHorizons:twilightforest:2.5.22:dev')
+    implementation('com.github.GTNewHorizons:twilightforest:2.5.25:dev')
     implementation('com.github.GTNewHorizons:supersolarpanels:1.1.3:dev')
     implementation('curse.maven:advsolar-362768:2885953')
     implementation('com.github.GTNewHorizons:Electro-Magic-Tools:1.4.6:dev')
