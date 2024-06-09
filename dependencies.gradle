@@ -48,7 +48,7 @@ dependencies {
     implementation('com.github.GTNewHorizons:Avaritiaddons:1.7.1-GTNH:dev')
     implementation('com.github.GTNewHorizons:Eternal-Singularity:1.2.1:dev')
     implementation('com.github.GTNewHorizons:Universal-Singularities:8.7.0:dev')
-    implementation('com.github.GTNewHorizons:BlockRenderer6343:1.1.6:dev')
+    implementation('com.github.GTNewHorizons:BlockRenderer6343:1.2.8:dev')
     implementation('com.github.GTNewHorizons:GTNH-Intergalactic:1.3.4:dev')
     implementation('com.github.GTNewHorizons:amunra:0.5.1:dev')
     implementation('com.github.GTNewHorizons:MagicBees:2.7.15-GTNH:dev')
