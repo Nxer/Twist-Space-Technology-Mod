@@ -191,7 +191,6 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
         needToCheckRecipe = false;
         if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
             disableWorking();
-            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
         }
     }
 

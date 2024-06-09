@@ -820,12 +820,10 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         needToCheckRecipe = false;
         if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
             disableWorking();
-            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
             return;
         }
         if (checkProcessingForAdvancedExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
             disableWorking();
-            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
             return;
         }
         lastCheck = checkProcessingForNormalExecutionCore();
