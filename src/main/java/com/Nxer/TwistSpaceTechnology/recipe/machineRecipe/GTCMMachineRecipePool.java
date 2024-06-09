@@ -20,11 +20,13 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrame
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HighPowerRadiationProofCasing;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LargeIndustrialCokingFactory;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LaserSmartNode;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaBrickedBlastFurnace;
@@ -83,6 +85,7 @@ import static com.dreammaster.gthandler.CustomItemList.CentrifugeUV;
 import static com.dreammaster.gthandler.CustomItemList.CompressorUHV;
 import static com.dreammaster.gthandler.CustomItemList.CuttingMachineUHV;
 import static com.dreammaster.gthandler.CustomItemList.ElectrolyzerUV;
+import static com.dreammaster.gthandler.CustomItemList.ElectromagneticSeparatorUHV;
 import static com.dreammaster.gthandler.CustomItemList.ExtractorUHV;
 import static com.dreammaster.gthandler.CustomItemList.FluidExtractorUV;
 import static com.dreammaster.gthandler.CustomItemList.FluidSolidifierUV;
@@ -90,6 +93,7 @@ import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static com.dreammaster.gthandler.CustomItemList.MixerUV;
 import static com.dreammaster.gthandler.CustomItemList.PicoWafer;
 import static com.dreammaster.gthandler.CustomItemList.PikoCircuit;
+import static com.dreammaster.gthandler.CustomItemList.PolarizerUHV;
 import static com.dreammaster.gthandler.CustomItemList.QuantumCircuit;
 import static com.dreammaster.gthandler.CustomItemList.SlicingMachineUHV;
 import static com.dreammaster.gthandler.CustomItemList.Transformer_MAX_UXV;
@@ -824,29 +828,28 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region MagneticDomainConstructor
-//        GT_Values.RA.stdBuilder()
-//            .itemInputs(
-//                GT_Utility.getIntegratedCircuit(10),
-//                Config.Enable_IndustrialMagnetarSeparator ?
-//                    IndustrialMagnetarSeparator.get(64):
-//                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 16),
-//                ElectromagneticSeparatorUHV.get(16),
-//
-//                PolarizerUHV.get(16),
-//                ItemList.Field_Generator_UV.get(3),
-//                ItemList.Robot_Arm_UHV.get(8),
-//
-//                new Object[]{OrePrefixes.circuit.get(Materials.Bio), 16},
-//                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.BlackPlutonium, 64),
-//                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 16)
-//            )
-//            .fluidInputs(new FluidStack(solderPlasma, 144 * 64))
-//            .itemOutputs(MagneticDomainConstructor.get(1))
-//
-//            .noOptimize()
-//            .eut(RECIPE_UHV)
-//            .duration(20 * 320)
-//            .addTo(assembler);
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(10),
+                Config.Enable_IndustrialMagnetarSeparator ?
+                    IndustrialMagnetarSeparator.get(64):
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 16),
+                ElectromagneticSeparatorUHV.get(16),
+
+                PolarizerUHV.get(16),
+                ItemList.Field_Generator_UV.get(3),
+                ItemList.Robot_Arm_UHV.get(8),
+
+                new Object[]{OrePrefixes.circuit.get(Materials.Bio), 16},
+                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.BlackPlutonium, 64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 16)
+            )
+            .fluidInputs(new FluidStack(solderPlasma, 144 * 64))
+            .itemOutputs(MagneticDomainConstructor.get(1))
+            .noOptimize()
+            .eut(RECIPE_UHV)
+            .duration(20 * 320)
+            .addTo(assembler);
 
         // endregion
 
