@@ -870,7 +870,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
             )
             .fluidInputs(Materials.Iridium.getMolten(144 * 32))
             .itemOutputs(Silksong.get(1))
-
             .noOptimize()
             .eut(RECIPE_ZPM)
             .duration(20 * 600)

@@ -66,7 +66,6 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -188,29 +187,11 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
     }
 
     @Override
-    public @NotNull CheckRecipeResult checkProcessingMM() {
+    public void doCheckRecipeForExecutionCores() {
+        needToCheckRecipe = false;
         if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
             disableWorking();
-            return CheckRecipeResults.SetProcessingFailed;
-        }
-
-        // check every 128tick
-        mMaxProgresstime = getBaseProgressingTick();
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        updateSlots();
-        return CheckRecipeResultRegistry.SUCCESSFUL;
-    }
-
-    @Override
-    public void forceCheckProcessing() {
-        IGregTechTileEntity mte = getBaseMetaTileEntity();
-        if (mte.isServerSide() && mte.isAllowedToWork()) {
-            if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
-                disableWorking();
-                this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
-            }
+            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
         }
     }
 
