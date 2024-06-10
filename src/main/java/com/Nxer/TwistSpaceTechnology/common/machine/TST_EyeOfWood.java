@@ -10,7 +10,7 @@ public abstract class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood>
     public static TST_EyeOfWood getInstance(int aID, String aName, String aNameRegional) {
         return switch (GTNHVersion.version) {
             case GTNH261 -> new TST_EyeOfWood_261(aID, aName, aNameRegional);
-            case GTNH260 -> new TST_EyeOfWood_260(aID, aName, aNameRegional);
+            case GTNH260, GTNH251 -> new TST_EyeOfWood_260(aID, aName, aNameRegional);
             case Unknown -> null;
         };
     }

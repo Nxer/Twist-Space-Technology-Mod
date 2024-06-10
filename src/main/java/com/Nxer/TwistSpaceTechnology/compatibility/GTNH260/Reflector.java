@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.compatibility.GTNH260.system.VoidMinerRework.logic;
+package com.Nxer.TwistSpaceTechnology.compatibility.GTNH260;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,15 +12,17 @@ public class Reflector {
 
     private final static Method getExtraDropsDimMapMethod;
     static {
+        Method getExtraDropsDimMapMethod1;
         try {
             Class<GT_TileEntity_VoidMiner_Base> clazz = GT_TileEntity_VoidMiner_Base.class;
-            getExtraDropsDimMapMethod = clazz.getMethod("getExtraDropsDimMap");
-            getExtraDropsDimMapMethod.setAccessible(true);
+            getExtraDropsDimMapMethod1 = clazz.getMethod("getExtraDropsDimMap");
+            getExtraDropsDimMapMethod1.setAccessible(true);
         } catch (NoSuchMethodException e) {
             TwistSpaceTechnology.LOG.warn(
                 "Method com.github.bartimaeusnek.crossmod.galacticgreg.GT_TileEntity_VoidMiner_Base.getExtraDropsDimMap() of Bartwork could not be found");
-            throw new RuntimeException(e);
+            getExtraDropsDimMapMethod1 = null;
         }
+        getExtraDropsDimMapMethod = getExtraDropsDimMapMethod1;
     }
 
     public static ArrayListMultimap<Integer, Pair<Pair<Integer, Boolean>, Float>> getExtraDropsDimMap() {

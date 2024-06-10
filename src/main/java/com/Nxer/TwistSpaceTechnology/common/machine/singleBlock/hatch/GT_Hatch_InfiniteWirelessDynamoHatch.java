@@ -6,6 +6,9 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.authorName_Nxe
 
 import net.minecraft.util.EnumChatFormatting;
 
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.common.machine.GT_Hatch_InfiniteWirelessDynamoHatch_251;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
+
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -14,13 +17,22 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Wireless_Dy
 
 public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wireless_Dynamo {
 
+    public static GT_Hatch_InfiniteWirelessDynamoHatch getInstance(int aID, String aName, String aNameRegional,
+        int aTier) {
+        return switch (GTNHVersion.version) {
+            case GTNH261, GTNH260 -> new GT_Hatch_InfiniteWirelessDynamoHatch(aID, aName, aNameRegional, aTier);
+            case GTNH251 -> new GT_Hatch_InfiniteWirelessDynamoHatch_251(aID, aName, aNameRegional, aTier);
+            case Unknown -> null;
+        };
+    }
+
     // region Class Constructor
-    public GT_Hatch_InfiniteWirelessDynamoHatch(String aName, byte aTier, String[] aDescription,
+    protected GT_Hatch_InfiniteWirelessDynamoHatch(String aName, byte aTier, String[] aDescription,
         ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
     }
 
-    public GT_Hatch_InfiniteWirelessDynamoHatch(int aID, String aName, String aNameRegional, int aTier) {
+    protected GT_Hatch_InfiniteWirelessDynamoHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
     }
 

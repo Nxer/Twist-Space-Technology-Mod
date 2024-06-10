@@ -46,6 +46,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
@@ -191,7 +192,8 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
         needToCheckRecipe = false;
         if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
             disableWorking();
-            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
+            if (GTNHVersion.version != GTNHVersion.Version.GTNH251)
+                this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
         }
     }
 

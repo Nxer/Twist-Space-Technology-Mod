@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
@@ -48,7 +49,11 @@ public class ModularHatchesRecipePool implements IRecipePool {
         Materials[] materials = new Materials[] { Materials.NaquadahAlloy, Materials.Neutronium,
             Materials.CosmicNeutronium, Materials.Infinity, MaterialsUEVplus.TranscendentMetal,
             MaterialsUEVplus.SpaceTime, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter,
-            MaterialsUEVplus.MagMatter };
+            switch (GTNHVersion.version) {
+            case GTNH261, GTNH260 -> MaterialsUEVplus.MagMatter;
+            case GTNH251 -> MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter;
+            default -> null;
+            } };
 
         ItemStack[] hulls = new ItemStack[] { ItemList.Hull_ZPM.get(1), ItemList.Hull_UV.get(1),
             ItemList.Hull_MAX.get(1), CustomItemList.Hull_UEV.get(1), CustomItemList.Hull_UIV.get(1),

@@ -13,7 +13,7 @@ public abstract class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_Starco
     public static TST_StarcoreMiner getInstance(int aID, String aName, String aNameRegional) {
         return switch (GTNHVersion.version) {
             case GTNH261 -> new TST_StarcoreMiner_261(aID, aName, aNameRegional);
-            case GTNH260 -> new TST_StarcoreMiner_260(aID, aName, aNameRegional);
+            case GTNH260, GTNH251 -> new TST_StarcoreMiner_260(aID, aName, aNameRegional);
             case Unknown -> null;
         };
     }

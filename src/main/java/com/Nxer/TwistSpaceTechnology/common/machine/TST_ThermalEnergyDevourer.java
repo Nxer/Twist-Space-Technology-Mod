@@ -40,6 +40,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.common.machine.TST_ThermalEnergyDevourer_251;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -70,12 +72,20 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_ThermalEnergyDevourer> {
 
+    public static TST_ThermalEnergyDevourer getInstance(int aID, String aName, String aNameRegional) {
+        return switch (GTNHVersion.version) {
+            case GTNH261, GTNH260 -> new TST_ThermalEnergyDevourer(aID, aName, aNameRegional);
+            case GTNH251 -> new TST_ThermalEnergyDevourer_251(aID, aName, aNameRegional);
+            case Unknown -> null;
+        };
+    }
+
     // region Class Constructor
-    public TST_ThermalEnergyDevourer(int aID, String aName, String aNameRegional) {
+    protected TST_ThermalEnergyDevourer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public TST_ThermalEnergyDevourer(String aName) {
+    protected TST_ThermalEnergyDevourer(String aName) {
         super(aName);
     }
 

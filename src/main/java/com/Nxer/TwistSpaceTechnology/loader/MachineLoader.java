@@ -434,10 +434,9 @@ public class MachineLoader {
         GTCMItemList.AstralComputingArray.set(AstralComputingArray);
 
         //
-        ThermalEnergyDevourer = new TST_ThermalEnergyDevourer(
-            19030,
-            "NameThermalEnergyDevourer",
-            TextLocalization.NameThermalEnergyDevourer).getStackForm(1);
+        ThermalEnergyDevourer = TST_ThermalEnergyDevourer
+            .getInstance(19030, "NameThermalEnergyDevourer", TextLocalization.NameThermalEnergyDevourer)
+            .getStackForm(1);
         GTCMItemList.ThermalEnergyDevourer.set(ThermalEnergyDevourer);
 
         //
@@ -484,10 +483,9 @@ public class MachineLoader {
 
         //
         if (Config.Enable_DeployedNanoCore) {
-            DeployedNanoCore = new TST_DeployedNanoCore(
-                19038,
-                "NameDeployedNanoCore",
-                TextLocalization.NameDeployedNanoCore).getStackForm(1);
+            DeployedNanoCore = TST_DeployedNanoCore
+                .getInstance(19038, "NameDeployedNanoCore", TextLocalization.NameDeployedNanoCore)
+                .getStackForm(1);
             GTCMItemList.DeployedNanoCore.set(DeployedNanoCore);
         }
 
@@ -640,11 +638,9 @@ public class MachineLoader {
         GTCMItemList.InfiniteAirHatch.set(InfiniteAirHatch);
 
         //
-        InfiniteWirelessDynamoHatch = new GT_Hatch_InfiniteWirelessDynamoHatch(
-            18998,
-            "NameInfiniteWirelessDynamoHatch",
-            TextLocalization.NameInfiniteWirelessDynamoHatch,
-            14).getStackForm(1);
+        InfiniteWirelessDynamoHatch = GT_Hatch_InfiniteWirelessDynamoHatch
+            .getInstance(18998, "NameInfiniteWirelessDynamoHatch", TextLocalization.NameInfiniteWirelessDynamoHatch, 14)
+            .getStackForm(1);
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
 
         //
