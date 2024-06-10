@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.Reflector251;
 import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.common.machine.TST_DeployedNanoCore_251;
 import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -179,7 +180,10 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
 
         // calculate Eu cost
         long costEu = processingLogic.getCalculatedEut() * processingLogic.getDuration();
-        if (!addEUToGlobalEnergyMap(ownerUUID, -costEu)) {
+        boolean flag = GTNHVersion.version != GTNHVersion.Version.GTNH251 ? addEUToGlobalEnergyMap(ownerUUID, -costEu)
+            : Reflector251.addEUToGlobalEnergyMap(this, ownerUUID.toString(), -costEu);
+
+        if (!flag) {
             return CheckRecipeResultRegistry.insufficientPower(costEu);
         }
 

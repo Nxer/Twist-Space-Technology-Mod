@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
@@ -473,12 +474,18 @@ public class GTCM_LightningSpire extends GT_MetaTileEntity_MultiblockBase_EM
         super.drawTexts(screenElements, inventorySlot);
         screenElements
             .widget(
-                new TextWidget().setStringSupplier(() -> "Currently stored LR:" + numberFormat.format(tRods))
+                new TextWidget().setStringSupplier(
+                    () -> "Currently stored LR:"
+                        + (GTNHVersion.version != GTNHVersion.Version.GTNH251 ? numberFormat.format(tProduct) : tRods))
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> tRods, val -> tRods = val))
             .widget(
-                new TextWidget().setStringSupplier(() -> "EU Gen per strike:" + numberFormat.format(tProduct))
+                new TextWidget()
+                    .setStringSupplier(
+                        () -> "EU Gen per strike:"
+                            + (GTNHVersion.version != GTNHVersion.Version.GTNH251 ? numberFormat.format(tProduct)
+                                : tProduct))
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> tProduct, val -> tProduct = val));
