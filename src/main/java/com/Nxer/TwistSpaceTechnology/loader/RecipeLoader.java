@@ -72,6 +72,11 @@ public class RecipeLoader {
         if (Config.Enable_BallLightning) {
             new StarKernelForgeRecipePool().loadRecipes();
         }
+        if (Config.EnableModularizedMachineSystem) {
+            if (Config.EnableLargeNeutronOscillator) {
+                new NeutronActivatorWithEURecipePool().loadRecipes();
+            }
+        }
     }
 
     public static void loadRecipesPostInit() {
@@ -80,6 +85,5 @@ public class RecipeLoader {
 
     public static void loadRecipesServerStarted() {
         new StellarForgeRecipePool().loadOnServerStarted();
-        new NeutronActivatorWithEURecipePool().loadRecipes();
     }
 }
