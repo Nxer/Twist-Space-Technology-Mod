@@ -31,6 +31,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.Ex
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
@@ -112,11 +113,18 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
      */
     @Override
     protected void endRecipeProcessing() {
-        startedRecipeProcessing = false;
-        if (MEInputHatches.isEmpty()) return;
-        for (IRecipeProcessingAwareHatch hatch : filterValidMTE(MEInputHatches)) {
-            setResultIfFailure(hatch.endRecipeProcessing(this));
+        switch (GTNHVersion.version) {
+            case GTNH261, GTNH260 -> {
+                startedRecipeProcessing = false;
+                if (MEInputHatches.isEmpty()) return;
+                for (IRecipeProcessingAwareHatch hatch : filterValidMTE(MEInputHatches)) {
+                    setResultIfFailure(hatch.endRecipeProcessing(this));
+                }
+            }
+            case GTNH251 -> super.endRecipeProcessing();
+            default -> {}
         }
+
     }
 
     @Override
@@ -534,6 +542,14 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
     @Override
     public boolean onWireCutterRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer aPlayer,
+        float aX, float aY, float aZ) {
+        return GTNHVersion.version == GTNHVersion.Version.GTNH251
+            ? onWireCutterRightClick(side, wrenchingSide, aPlayer, aX, aY, aZ, null)
+            : super.onWireCutterRightClick(side, wrenchingSide, aPlayer, aX, aY, aZ);
+    }
+
+    @Override
+    public boolean onWireCutterRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer aPlayer,
         float aX, float aY, float aZ, ItemStack aTool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.progressingTickIndex = (byte) ((this.progressingTickIndex + 1) % 10);
@@ -597,13 +613,20 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         if (this.lEUt < 0) {
             if (!drainEnergyInput(getActualEnergyUsage())) {
                 shutDownAllExecutionCore();
-                stopMachine(ShutDownReasonRegistry.POWER_LOSS);
+                if (GTNHVersion.version == GTNHVersion.Version.GTNH251) stopMachine();
+                else stopMachine(ShutDownReasonRegistry.POWER_LOSS);
                 return false;
             }
         }
 
         tryDecreaseUsedEut(eutForBoostLastTick);
         return true;
+    }
+
+    @Override
+    public void stopMachine() {
+        eutForBoostLastTick = 0;
+        this.stopMachine();
     }
 
     @Override
@@ -816,12 +839,14 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         needToCheckRecipe = false;
         if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
             disableWorking();
-            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
+            if (GTNHVersion.version != GTNHVersion.Version.GTNH251)
+                this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
             return;
         }
         if (checkProcessingForAdvancedExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
             disableWorking();
-            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
+            if (GTNHVersion.version != GTNHVersion.Version.GTNH251)
+                this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
             return;
         }
         lastCheck = checkProcessingForNormalExecutionCore();

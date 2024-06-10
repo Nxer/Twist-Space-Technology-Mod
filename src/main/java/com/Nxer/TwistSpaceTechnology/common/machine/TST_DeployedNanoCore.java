@@ -31,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.common.machine.TST_DeployedNanoCore_251;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -58,12 +60,20 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNanoCore> {
 
+    public static TST_DeployedNanoCore getInstance(int aID, String aName, String aNameRegional) {
+        return switch (GTNHVersion.version) {
+            case GTNH261, GTNH260 -> new TST_DeployedNanoCore(aID, aName, aNameRegional);
+            case GTNH251 -> new TST_DeployedNanoCore_251(aID, aName, aNameRegional);
+            case Unknown -> null;
+        };
+    }
+
     // region Class Constructor
-    public TST_DeployedNanoCore(int aID, String aName, String aNameRegional) {
+    protected TST_DeployedNanoCore(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public TST_DeployedNanoCore(String aName) {
+    protected TST_DeployedNanoCore(String aName) {
         super(aName);
     }
 

@@ -158,6 +158,13 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     }
 
     @Override
+    public void stopMachine() {
+        runningTime = 0;
+        fuelCostMultiplier = 1;
+        super.stopMachine();
+    }
+
+    @Override
     public void stopMachine(@NotNull ShutDownReason reason) {
         runningTime = 0;
         fuelCostMultiplier = 1;

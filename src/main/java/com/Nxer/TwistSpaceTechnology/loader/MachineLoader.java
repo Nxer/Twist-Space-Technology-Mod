@@ -434,10 +434,9 @@ public class MachineLoader {
         GTCMItemList.AstralComputingArray.set(AstralComputingArray);
 
         //
-        ThermalEnergyDevourer = new TST_ThermalEnergyDevourer(
-            19030,
-            "NameThermalEnergyDevourer",
-            TextLocalization.NameThermalEnergyDevourer).getStackForm(1);
+        ThermalEnergyDevourer = TST_ThermalEnergyDevourer
+            .getInstance(19030, "NameThermalEnergyDevourer", TextLocalization.NameThermalEnergyDevourer)
+            .getStackForm(1);
         GTCMItemList.ThermalEnergyDevourer.set(ThermalEnergyDevourer);
 
         //
@@ -462,7 +461,8 @@ public class MachineLoader {
         GTCMItemList.LargeSteamAlloySmelter.set(LargeSteamAlloySmelter);
 
         //
-        EyeOfWood = new TST_EyeOfWood(19034, "NameEyeOfWood", TextLocalization.NameEyeOfWood).getStackForm(1);
+        EyeOfWood = TST_EyeOfWood.getInstance(19034, "NameEyeOfWood", TextLocalization.NameEyeOfWood)
+            .getStackForm(1);
         GTCMItemList.EyeOfWood.set(EyeOfWood);
 
         //
@@ -483,10 +483,9 @@ public class MachineLoader {
 
         //
         if (Config.Enable_DeployedNanoCore) {
-            DeployedNanoCore = new TST_DeployedNanoCore(
-                19038,
-                "NameDeployedNanoCore",
-                TextLocalization.NameDeployedNanoCore).getStackForm(1);
+            DeployedNanoCore = TST_DeployedNanoCore
+                .getInstance(19038, "NameDeployedNanoCore", TextLocalization.NameDeployedNanoCore)
+                .getStackForm(1);
             GTCMItemList.DeployedNanoCore.set(DeployedNanoCore);
         }
 
@@ -501,13 +500,14 @@ public class MachineLoader {
 
         //
         if (Config.Enable_StarcoreMiner) {
-            StarcoreMiner = new TST_StarcoreMiner(
+            StarcoreMiner = TST_StarcoreMiner.getInstance(
                 19040,
                 "NameStarcoreMiner",
                 // #tr NameStarcoreMiner
                 // # Starcore Miner
                 // #zh_CN 星核钻机
-                TextEnums.tr("NameStarcoreMiner")).getStackForm(1);
+                TextEnums.tr("NameStarcoreMiner"))
+                .getStackForm(1);
             GTCMItemList.StarcoreMiner.set(StarcoreMiner);
         }
 
@@ -638,11 +638,9 @@ public class MachineLoader {
         GTCMItemList.InfiniteAirHatch.set(InfiniteAirHatch);
 
         //
-        InfiniteWirelessDynamoHatch = new GT_Hatch_InfiniteWirelessDynamoHatch(
-            18998,
-            "NameInfiniteWirelessDynamoHatch",
-            TextLocalization.NameInfiniteWirelessDynamoHatch,
-            14).getStackForm(1);
+        InfiniteWirelessDynamoHatch = GT_Hatch_InfiniteWirelessDynamoHatch
+            .getInstance(18998, "NameInfiniteWirelessDynamoHatch", TextLocalization.NameInfiniteWirelessDynamoHatch, 14)
+            .getStackForm(1);
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
 
         //
