@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.common.machine;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
-import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.Reflector;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.Reflector251;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -36,7 +36,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch_251 extends GT_Hatch_InfiniteW
                 .toString();
             owner_name = aBaseMetaTileEntity.getOwnerName();
 
-            Reflector.strongCheckOrAddUser(this, owner_uuid, owner_name);
+            Reflector251.strongCheckOrAddUser(this, owner_uuid, owner_name);
         }
     }
 
@@ -47,7 +47,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch_251 extends GT_Hatch_InfiniteW
         if (aBaseMetaTileEntity.isServerSide()) {
             // Every ticks_between_energy_addition ticks change the energy content of the machine.
             if (aTick % ticks_between_energy_addition == 0L) {
-                Reflector.addEUToGlobalEnergyMap(this, owner_uuid, getEUVar());
+                Reflector251.addEUToGlobalEnergyMap(this, owner_uuid, getEUVar());
                 setEUVar(0L);
             }
         }

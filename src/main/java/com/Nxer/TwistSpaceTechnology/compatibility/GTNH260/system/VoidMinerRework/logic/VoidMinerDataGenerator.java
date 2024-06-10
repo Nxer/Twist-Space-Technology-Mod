@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkProviderServer;
 
-import com.Nxer.TwistSpaceTechnology.compatibility.GTNH260.Reflector;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNH260.Reflector260;
 import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.bartimaeusnek.bartworks.system.oregen.BW_OreLayer;
@@ -67,7 +67,7 @@ public class VoidMinerDataGenerator {
 
     private void handleExtraDrops(int id) {
         Optional.ofNullable(
-            Reflector.getExtraDropsDimMap()
+            Reflector260.getExtraDropsDimMap()
                 .get(id))
             .ifPresent(e -> e.forEach(f -> this.addDrop(f.getKey(), f.getValue())));
     }

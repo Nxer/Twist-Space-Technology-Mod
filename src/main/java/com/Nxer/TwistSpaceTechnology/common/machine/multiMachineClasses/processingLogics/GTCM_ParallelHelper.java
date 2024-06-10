@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.Reflector;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.Reflector251;
 import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -472,7 +472,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                                 .build();
             maxParallel = Math.min(voidProtectionHelper.getMaxParallel(), maxParallel);
             if (maxParallel <= 0) {
-                result = GTNHVersion.version != GTNHVersion.Version.GTNH251 ? CheckRecipeResultRegistry.ITEM_OUTPUT_FULL : Reflector.OUTPUT_FULL;
+                result = GTNHVersion.version != GTNHVersion.Version.GTNH251 ? CheckRecipeResultRegistry.ITEM_OUTPUT_FULL : Reflector251.OUTPUT_FULL;
                 return;
             }
         }

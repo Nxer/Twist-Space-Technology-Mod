@@ -8,7 +8,7 @@ import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
-public class Reflector {
+public class Reflector251 {
 
     public static final CheckRecipeResult OUTPUT_FULL;
     private static final Method strongCheckOrAddUserMethod;
