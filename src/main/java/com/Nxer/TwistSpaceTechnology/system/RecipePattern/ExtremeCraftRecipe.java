@@ -72,6 +72,7 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
                 int pre = extremeCraftRecipes.getAllRecipes()
                     .size();
                 GT_Values.RA.stdBuilder()
+                    .ignoreCollision()
                     .itemInputs(inputs)
                     .itemOutputs(output)
                     .eut(RECIPE_ZPM)
@@ -80,6 +81,7 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
                 if (pre == extremeCraftRecipes.getAllRecipes()
                     .size()) {
                     GT_Values.RA.stdBuilder()
+                        .ignoreCollision()
                         .itemInputs(inputs)
                         .itemOutputs(output)
                         .eut(RECIPE_ZPM)
