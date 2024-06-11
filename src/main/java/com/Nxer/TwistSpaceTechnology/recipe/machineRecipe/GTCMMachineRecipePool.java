@@ -2680,7 +2680,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GT_Values.RA.stdBuilder()
                 .itemInputs(
                     CI.getTieredGTPPMachineCasing(5,1),
-                    CI.getEnergyCore(5,1),
+                    CI.getEnergyCore(4,4),
                     CI.getTransmissionComponent(5,2),
                     ItemList.Field_Generator_HV.get(4),
                     ALLOY.NITINOL_60.getGear(4),
