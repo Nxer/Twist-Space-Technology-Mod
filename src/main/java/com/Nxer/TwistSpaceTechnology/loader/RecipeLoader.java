@@ -30,6 +30,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StarKernelForgeRecipeP
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.NeutronActivatorWithEURecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DragonBloodRecipe;
@@ -54,7 +55,7 @@ public class RecipeLoader {
             new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
             new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
             new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new IndustrialMagicMatrixRecipePool(),
-            new DragonBloodRecipe(), new FusionReactorRecipePool() };
+            new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
@@ -70,6 +71,11 @@ public class RecipeLoader {
         }
         if (Config.Enable_BallLightning) {
             new StarKernelForgeRecipePool().loadRecipes();
+        }
+        if (Config.EnableModularizedMachineSystem) {
+            if (Config.EnableLargeNeutronOscillator) {
+                new NeutronActivatorWithEURecipePool().loadRecipes();
+            }
         }
     }
 

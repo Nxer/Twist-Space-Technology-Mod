@@ -6,6 +6,7 @@ import static net.minecraft.util.StatCollector.translateToLocalFormatted;
  *
  */
 public enum TextEnums {
+    // spotless:off
 
     // region General
 
@@ -63,6 +64,81 @@ public enum TextEnums {
     NameCoreDeviceOfHumanPowerGenerationFacility("NameCoreDeviceOfHumanPowerGenerationFacility"),
     // endregion
 
+    // region Single World
+
+    // #tr World_Parallel
+    // # Parallel
+    // #zh_CN 并行
+    World_Parallel("World_Parallel"),
+
+    // #tr World_Overclock
+    // # Overclock
+    // #zh_CN 超频
+    World_Overclock("World_Overclock"),
+
+    // endregion
+
+    // region Modularized Machine System
+
+    // #tr ModularizedMachineSystem
+    // # {\BLUE}{\BOLD}Modularized Machine System
+    // #zh_CN {\BLUE}{\BOLD}模块化机械系统
+    ModularizedMachineSystem("ModularizedMachineSystem"),
+
+    // #tr InstallingModuleNearControllerImproveMachine
+    // # Installing module hatches near the controller block can significantly improve machine performance.
+    // #zh_CN 在主机附近安装模块仓室可以显著提升机器性能.
+    InstallingModuleNearControllerImproveMachine("InstallingModuleNearControllerImproveMachine"),
+
+    // #tr ModularizedMachineSystemDescription01
+    // # Install Module Hatches to enhance your machine.
+    // #zh_CN 安装模块仓室强化你的机器.
+    ModularizedMachineSystemDescription01("ModularizedMachineSystemDescription01"),
+
+    // #tr ModularizedMachineSystemDescription02
+    // # The installable modules are :
+    // #zh_CN 可安装的模块有 :
+    ModularizedMachineSystemDescription02("ModularizedMachineSystemDescription02"),
+
+    // #tr OverclockControllerDescription
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Overclock Controller Module - Set machine overclock type
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}超频控制器模块 - 设置机器的超频类型
+    OverclockControllerDescription("OverclockControllerDescription"),
+
+    // #tr ParallelControllerDescription
+    // # Parallel Controller Module - Increase parallelism of machine
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}并行控制器模块 - 提高机器的并行数
+    ParallelControllerDescription("ParallelControllerDescription"),
+
+    // #tr PowerConsumptionControllerDescription
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE} Power Consumption Controller Module - Reduce machine energy consumption
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}耗能控制器模块 - 降低机器能耗
+    PowerConsumptionControllerDescription("PowerConsumptionControllerDescription"),
+
+    // #tr SpeedControllerDescription
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Speed Controller Module - Increase processing speed of machine
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}速度控制器模块 - 提高机器运行速度
+    SpeedControllerDescription("SpeedControllerDescription"),
+
+    // #tr ExecutionCoreDescription
+    // # {\SPACE}{\SPACE}{\SPACE}{\SPACE} Execution Core Module - Adds actual running units to the machine, true parallelism
+    // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}执行核心模块 - 为机器添加实际运行单元, 真正意义上的并行
+    ExecutionCoreDescription("ExecutionCoreDescription"),
+
+    // #tr NotMultiplyInstallSameTypeModule
+    // # Same type of module hatch cannot be installed repeatedly. Except for Execution Cores.
+    // #zh_CN 不可重复安装同类型的模块仓室. 除了执行核心模块.
+    NotMultiplyInstallSameTypeModule("NotMultiplyInstallSameTypeModule"),
+
+    // #tr CanMultiplyInstallSameTypeModule
+    // # Same type of module hatch can be installed repeatedly.
+    // #zh_CN 可以重复安装同类型的模块仓室.
+    CanMultiplyInstallSameTypeModule("CanMultiplyInstallSameTypeModule"),
+
+    // #tr ModularHatch
+    // # Modular Hatch
+    // #zh_CN 模块仓室
+    ModularHatch("ModularHatch"),
     // endregion
 
     // start
@@ -85,6 +161,7 @@ public enum TextEnums {
     // end
     StructureTooComplex("StructureTooComplex");
 
+    // spotless:on
     public static String tr(String key) {
         return translateToLocalFormatted(key);
     }
