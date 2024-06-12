@@ -2710,30 +2710,30 @@ public class GTCMMachineRecipePool implements IRecipePool {
                         ItemRefer.Compact_Fusion_Coil_T4.get(64),
                         GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64),
 
-                        StellarConstructionFrameMaterial.get(64),
+                        AnnihilationConstrainer.get(64),
                         SpaceWarper.get(64),
                         SpaceWarper.get(64),
-                        StellarConstructionFrameMaterial.get(64),
+                        AnnihilationConstrainer.get(64),
 
-                        // TODO Quantum Circuit
-                        QuantumCircuit.get(64),
+                        ItemList.Emitter_UMV.get(64),
                         ItemList.Field_Generator_UMV.get(64),
                         ItemList.Field_Generator_UMV.get(64),
-                        QuantumCircuit.get(64),
+                        ItemList.Emitter_UMV.get(64),
 
-                        ParticleTrapTimeSpaceShield.get(64),
+                        AdvancedHighPowerCoilBlock.get(64),
                         ItemList.ZPM6.get(64),
                         GravitationalLens.get(64),
-                        AnnihilationConstrainer.get(64)
+                        AdvancedHighPowerCoilBlock.get(64)
                     )
                     .fluidInputs(
-                        MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(20_000_000),
-                        MaterialsUEVplus.Eternity.getMolten(144 * 131072),
-                        MyMaterial.shirabon.getMolten(144 * 524288)
+                        MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(2_000_000_000),
+                        MaterialsUEVplus.Eternity.getMolten(144 * 524288),
+                        MyMaterial.shirabon.getMolten(144 * 524288),
+                        MaterialsUEVplus.SpaceTime.getMolten(144 * 2097152)
                     )
                     .itemOutputs(GTCMItemList.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.get(1))
                     .eut(RECIPE_UXV)
-                    .duration(20 * 3600 * 8)
+                    .duration(20 * 3600 * 24)
                     .addTo(assemblyLine);
             }
 
@@ -2743,8 +2743,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     .itemInputs(
                         copyAmount(64, Loaders.NA),
                         HiC_T5.get(64),
-                        ItemRefer.Compact_Fusion_Coil_T4.get(64),
-                        new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64}
+                        ItemRefer.Compact_Fusion_Coil_T3.get(8),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Optical), 8}
                     )
                     .fluidInputs(
                         ALLOY.BLACK_TITANIUM.getFluidStack(144 * 514),
@@ -2754,7 +2754,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     .itemOutputs(GTCMItemList.LargeNeutronOscillator.get(1))
                     .specialValue(3)
                     .eut(RECIPE_UEV)
-                    .duration(20 * 3600)
+                    .duration(20 * 600)
                     .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
             }
 
