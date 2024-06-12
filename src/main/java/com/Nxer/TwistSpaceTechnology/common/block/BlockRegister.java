@@ -121,6 +121,20 @@ public class BlockRegister {
         GTCMItemList.AntiMagneticCasing.set(
             MetaBlockConstructors.initMetaBlockCasing("Anti-Magnetic Casing", (byte) 8, BasicBlocks.MetaBlockCasing01));
 
+        GTCMItemList.ReinforcedStoneBrickCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Reinforced Stone Brick Casing",
+                (byte) 9,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltip_ReinforcedStoneBrickCasing") }));
+
+        GTCMItemList.CompositeFarmCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Composite Farm Casing",
+                (byte) 10,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltip_CompositeFarmCasing") }));
+
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier LV Tier", 0));

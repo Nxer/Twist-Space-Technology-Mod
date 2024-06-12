@@ -185,6 +185,8 @@ public enum GTCMItemList {
     ParallelismCasing3,
     ParallelismCasing4,
     AntiMagneticCasing,
+    ReinforcedStoneBrickCasing,
+    CompositeFarmCasing,
 
     // endregion
 
