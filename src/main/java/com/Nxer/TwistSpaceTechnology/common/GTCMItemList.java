@@ -10,7 +10,7 @@ import gregtech.api.util.GT_Log;
 
 public enum GTCMItemList {
 
-    // Items
+    // region Items
     TestItem0,
     SpaceWarper,
     OpticalSOC,
@@ -157,14 +157,38 @@ public enum GTCMItemList {
     PrimitiveMansSpaceTimeDistortionDevice,
     BallLightningUpgradeChip,
     HatchUpdateTool,
+    // endregion
 
-    // Blocks
+    // region Blocks
     TestCasing,
 
+    TestMetaBlock01_0,
+    PhotonControllerUpgradeLV,
+    PhotonControllerUpgradeMV,
+    PhotonControllerUpgradeHV,
+    PhotonControllerUpgradeEV,
+    PhotonControllerUpgradeIV,
+    PhotonControllerUpgradeLuV,
+    PhotonControllerUpgradeZPM,
+    PhotonControllerUpgradeUV,
+    PhotonControllerUpgradeUHV,
+    PhotonControllerUpgradeUEV,
+    PhotonControllerUpgradeUIV,
+    PhotonControllerUpgradeUMV,
+    PhotonControllerUpgradeUXV,
+    PhotonControllerUpgradeMAX,
     HighPowerRadiationProofCasing,
     AdvancedHighPowerCoilBlock,
+    ParallelismCasing0,
+    ParallelismCasing1,
+    ParallelismCasing2,
+    ParallelismCasing3,
+    ParallelismCasing4,
+    AntiMagneticCasing,
 
-    // Machines
+    // endregion
+
+    // region Machines
 
     IntensifyChemicalDistorter,
     PreciseHighEnergyPhotonicQuantumMaster,
@@ -219,17 +243,93 @@ public enum GTCMItemList {
     IndustrialMagnetarSeparator,
     MegaTreeFarm,
     LightningSpire,
+    ExtremeCraftCenter,
 
-    // MAX
+    // endregion
+
+    // region Modularized Machines
+    DimensionallyTranscendentMatterPlasmaForgePrototypeMK2,
+    LargeNeutronOscillator,
+    IndistinctTentaclePrototypeMK2,
+
+    // endregion
+
+    // region Modularized Machine System Stuffs
+
+    // dynamic parallel controllers
+    DynamicParallelControllerT1,
+    DynamicParallelControllerT2,
+    DynamicParallelControllerT3,
+    DynamicParallelControllerT4,
+    DynamicParallelControllerT5,
+    DynamicParallelControllerT6,
+    DynamicParallelControllerT7,
+    DynamicParallelControllerT8,
+
+    // static dynamic parallel controllers
+    StaticParallelControllerT1,
+    StaticParallelControllerT2,
+    StaticParallelControllerT3,
+    StaticParallelControllerT4,
+    StaticParallelControllerT5,
+    StaticParallelControllerT6,
+    StaticParallelControllerT7,
+    StaticParallelControllerT8,
+
+    // dynamic speed controllers
+    DynamicSpeedControllerT1,
+    DynamicSpeedControllerT2,
+    DynamicSpeedControllerT3,
+    DynamicSpeedControllerT4,
+    DynamicSpeedControllerT5,
+    DynamicSpeedControllerT6,
+    DynamicSpeedControllerT7,
+    DynamicSpeedControllerT8,
+
+    // static speed controllers
+    StaticSpeedControllerT1,
+    StaticSpeedControllerT2,
+    StaticSpeedControllerT3,
+    StaticSpeedControllerT4,
+    StaticSpeedControllerT5,
+    StaticSpeedControllerT6,
+    StaticSpeedControllerT7,
+    StaticSpeedControllerT8,
+
+    // static power consumption controllers
+    StaticPowerConsumptionControllerT1,
+    StaticPowerConsumptionControllerT2,
+    StaticPowerConsumptionControllerT3,
+    StaticPowerConsumptionControllerT4,
+    StaticPowerConsumptionControllerT5,
+    StaticPowerConsumptionControllerT6,
+    StaticPowerConsumptionControllerT7,
+    StaticPowerConsumptionControllerT8,
+
+    // overclock controller
+    LowSpeedPerfectOverclockController,
+    PerfectOverclockController,
+    SingularityPerfectOverclockController,
+
+    // execution core
+    ExecutionCore,
+    AdvancedExecutionCore,
+    PerfectExecutionCore,
+
+    // endregion
+
+    // region MAX
     HighDimensionalExtend,
+    // TODO: typo
     HighDimensionalCircuitDoard,
     HighDimensionalCapacitor,
     HighDimensionalInterface,
     HighDimensionalDiode,
     HighDimensionalResistor,
     HighDimensionalTransistor,
+    // endregion
 
-    // DSP
+    // region DSP
     SolarSail,
     DysonSphereFrameComponent,
     SmallLaunchVehicle,
@@ -244,7 +344,9 @@ public enum GTCMItemList {
     DSPReceiver,
     ArtificialStar,
 
-    // single block Machines
+    // endregion
+
+    // region single block Machines
     InfiniteAirHatch,
     ManaHatch,
     InfiniteWirelessDynamoHatch,
@@ -268,26 +370,16 @@ public enum GTCMItemList {
     BufferedEnergyHatchMAX,
     DebugUncertaintyHatch,
     LaserSmartNode,
+    FackRackHatch,
+    RealRackHatch,
 
-    ExtremeCraftCenter,
+    WirelessDataInputHatch,
+    WirelessDataOutputHatch,
 
-    // Blocks
+    // endregion
 
-    TestMetaBlock01_0,
-    PhotonControllerUpgradeLV,
-    PhotonControllerUpgradeMV,
-    PhotonControllerUpgradeHV,
-    PhotonControllerUpgradeEV,
-    PhotonControllerUpgradeIV,
-    PhotonControllerUpgradeLuV,
-    PhotonControllerUpgradeZPM,
-    PhotonControllerUpgradeUV,
-    PhotonControllerUpgradeUHV,
-    PhotonControllerUpgradeUEV,
-    PhotonControllerUpgradeUIV,
-    PhotonControllerUpgradeUMV,
-    PhotonControllerUpgradeUXV,
-    PhotonControllerUpgradeMAX,
+    // region super space station miscs
+
     spaceStationStructureBlockLV,
     spaceStationStructureBlockMV,
     spaceStationStructureBlockHV,
@@ -322,23 +414,16 @@ public enum GTCMItemList {
     TestMultiStructureSubMachine,
     megaUniversalSpaceStation,
 
+    // endregion
+
+    // region nuclear reactor
     NuclearReactor,
     NuclearReactorStructure0,
     NuclearReactorStructure1,
     NuclearReactorStructure2,
-    NuclearReactorStructure3,
+    NuclearReactorStructure3;
 
-    ParallelismCasing0,
-    ParallelismCasing1,
-    ParallelismCasing2,
-    ParallelismCasing3,
-    ParallelismCasing4,
-    AntiMagneticCasing,
-    FackRackHatch,
-    RealRackHatch,
-
-    WirelessDataInputHatch,
-    WirelessDataOutputHatch;
+    // endregion
 
     // region Member Variables
 
@@ -381,6 +466,10 @@ public enum GTCMItemList {
             return Utils.copyAmount(aAmount, TestItem0.get(1));
         }
         return Utils.copyAmount(aAmount, mStack);
+    }
+
+    public int getMeta() {
+        return mStack.getItemDamage();
     }
 
     public GTCMItemList set(Item aItem) {

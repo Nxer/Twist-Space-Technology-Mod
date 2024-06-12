@@ -6,6 +6,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.D
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 
+import goodgenerator.client.GUI.GG_UITextures;
 import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
@@ -150,8 +151,8 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
-    public static final RecipeMap<RecipeMapBackend> AssemblyLineWithoutResearchRecipe = RecipeMapBuilder
-        .of("tst.recipe.AssemblyLineWithoutResearchRecipe")
+    public static final RecipeMap<TST_RecipeMapBackend> AssemblyLineWithoutResearchRecipe = RecipeMapBuilder
+        .of("tst.recipe.AssemblyLineWithoutResearchRecipe", TST_RecipeMapBackend::new)
         .maxIO(16, 1, 4, 0)
         .minInputs(1, 0)
         .useSpecialSlot()
@@ -191,4 +192,16 @@ public class GTCMRecipe {
         .frontend(TST_IndustrialMagicMatrixFrontend::new)
         .disableOptimize()
         .build();
+
+    // #tr tst.recipe.neutronActivatorRecipesWithEU
+    // # Neutron Oscillator - Electric Neutron Activator
+    // #zh_CN 中子振荡器 - 电力版中子活化器
+    public static final RecipeMap<TST_RecipeMapBackend> NeutronActivatorRecipesWithEU = RecipeMapBuilder
+        .of("tst.recipe.neutronActivatorRecipesWithEU", TST_RecipeMapBackend::new)
+        .maxIO(9, 9, 1, 1)
+        .dontUseProgressBar()
+        .addSpecialTexture(73, 22, 31, 21, GG_UITextures.PICTURE_NEUTRON_ACTIVATOR)
+        .disableOptimize()
+        .build();
+
 }

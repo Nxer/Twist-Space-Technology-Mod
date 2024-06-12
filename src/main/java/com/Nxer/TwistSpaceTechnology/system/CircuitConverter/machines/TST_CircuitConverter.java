@@ -69,7 +69,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     @Override
     public CheckRecipeResult checkProcessing() {
         // check input buses
-        ArrayList<ItemStack> inputs = getStoredInputs();
+        ArrayList<ItemStack> inputs = getStoredInputsNoSeparation();
         if (inputs.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
 
         Set<ItemStack> outputs = new HashSet<>();
