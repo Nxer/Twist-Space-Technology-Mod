@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DATA_ACCESS;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -23,10 +24,6 @@ public abstract class ModularHatchBase extends GT_MetaTileEntity_Hatch implement
     }
 
     // region General
-    public void setActive(boolean active) {
-        getBaseMetaTileEntity().setActive(active);
-        getBaseMetaTileEntity().isAllowedToWork();
-    }
 
     @Override
     public boolean willExplodeInRain() {
