@@ -250,14 +250,15 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPostTick(aBaseMetaTileEntity, aTick);
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPreTick(aBaseMetaTileEntity, aTick);
 
         if (aBaseMetaTileEntity.isServerSide()) {
 
-            if (needToCheckRecipe) doCheckRecipeForExecutionCores();
-
             runExecutionCoreTick(aBaseMetaTileEntity, aTick);
+
+            if (aBaseMetaTileEntity.isAllowedToWork() && needToCheckRecipe) doCheckRecipeForExecutionCores();
+
         }
     }
 
@@ -516,6 +517,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     // endregion
 
     // region Logic
+
     protected static final int[] progressingTick = { 1, 5, 10, 20, 32, 64, 128, 192, 256, 512 };
     protected byte progressingTickIndex = 5;
     protected boolean startedRecipeProcessing = false;

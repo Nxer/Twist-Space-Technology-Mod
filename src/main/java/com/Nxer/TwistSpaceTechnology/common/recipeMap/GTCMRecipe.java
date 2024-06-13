@@ -204,4 +204,12 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
+    public static final RecipeMap<TST_RecipeMapBackend> MassFabricatorGenesis = RecipeMapBuilder
+        .of("tst.recipe.MassFabricatorGenesis", TST_RecipeMapBackend::new)
+        .maxIO(1, 0, 0, 1)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MassFabricatorGenesis.get(1)))
+        .disableOptimize()
+        .build();
+
 }

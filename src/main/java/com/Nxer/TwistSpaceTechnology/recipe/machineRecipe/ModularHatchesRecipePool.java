@@ -102,14 +102,14 @@ public class ModularHatchesRecipePool implements IRecipePool {
                 .metadata(RESEARCH_TIME, 24 * HOURS)
                 .itemInputs(
                     CustomItemList.Hull_UIV.get(1),
-                    ItemList.Electric_Motor_UIV.get(24),
-                    ItemList.Conveyor_Module_UIV.get(16),
-                    ItemList.Robot_Arm_UIV.get(32),
+                    ItemList.Electric_Motor_UIV.get(16),
+                    ItemList.Conveyor_Module_UIV.get(12),
+                    ItemList.Robot_Arm_UIV.get(18),
 
                     ItemList.Electric_Pump_UIV.get(12),
-                    ItemList.Field_Generator_UIV.get(3),
-                    ItemList.Sensor_UIV.get(3),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Optical), 16 },
+                    ItemList.Field_Generator_UIV.get(1),
+                    ItemList.Sensor_UIV.get(1),
+                    new Object[] { OrePrefixes.circuit.get(Materials.Optical), 2 },
 
                     CustomItemList.HighEnergyFlowCircuit.get(36),
                     GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.Infinity, 18),
@@ -119,13 +119,13 @@ public class ModularHatchesRecipePool implements IRecipePool {
                     GT_OreDictUnificator.get(OrePrefixes.screw, MaterialsUEVplus.TranscendentMetal, 32),
                     GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsUEVplus.TranscendentMetal, 64))
                 .fluidInputs(
-                    ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(144 * 64 * 16),
-                    Materials.Infinity.getMolten(144 * 64 * 16),
-                    Materials.Quantium.getMolten(144 * 64 * 64),
+                    ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(144 * 64),
+                    Materials.Infinity.getMolten(144 * 64),
+                    Materials.Quantium.getMolten(144 * 64 * 16),
                     MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128))
                 .itemOutputs(GTCMItemList.ExecutionCore.get(1))
                 .eut(RECIPE_UIV)
-                .duration(20 * 600)
+                .duration(20 * 120)
                 .addTo(AssemblyLine);
 
             // Advanced Execution Core
@@ -229,13 +229,18 @@ public class ModularHatchesRecipePool implements IRecipePool {
                 .itemInputs(
                     GTCMItemList.LowSpeedPerfectOverclockController.get(1),
                     GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 16),
-                    ItemList.Field_Generator_UMV.get(64),
-                    ItemList.Emitter_UMV.get(64),
+                    ItemRefer.Compact_Fusion_Coil_T4.get(64),
+                    Materials.Gold.getNanite(64),
 
-                    ItemRefer.Compact_Fusion_Coil_T4.get(64),
-                    ItemRefer.Compact_Fusion_Coil_T4.get(64),
-                    Materials.Gold.getNanite(64),
-                    Materials.Gold.getNanite(64),
+                    ItemList.Field_Generator_UMV.get(64),
+                    ItemList.Field_Generator_UMV.get(64),
+                    ItemList.Field_Generator_UMV.get(64),
+                    ItemList.Field_Generator_UMV.get(64),
+
+                    ItemList.Emitter_UMV.get(64),
+                    ItemList.Emitter_UMV.get(64),
+                    ItemList.Emitter_UMV.get(64),
+                    ItemList.Emitter_UMV.get(64),
 
                     new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 64 },
                     MyMaterial.metastableOganesson.get(OrePrefixes.plateDense, 64),
@@ -347,10 +352,10 @@ public class ModularHatchesRecipePool implements IRecipePool {
                         copyAmount(64, circuits[i]),
 
                         copyAmount(64, fieldGenerators[i]),
-                        copyAmount(64, motors[i]),
-                        copyAmount(64, motors[i]),
+                        copyAmount(64, fieldGenerators[i]),
+                        copyAmount(64, fieldGenerators[i]),
 
-                        copyAmount(64, pistons[i]),
+                        copyAmount(64, motors[i]),
                         copyAmount(64, pistons[i]),
                         GT_OreDictUnificator.get(OrePrefixes.plate, materials[i], 64))
                     .fluidInputs(materials[i].getMolten(144 * 64))
