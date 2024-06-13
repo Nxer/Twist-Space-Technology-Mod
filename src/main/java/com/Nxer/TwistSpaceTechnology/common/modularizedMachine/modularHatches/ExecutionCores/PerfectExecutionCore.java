@@ -76,7 +76,7 @@ public class PerfectExecutionCore extends ExecutionCoreBase implements IGlobalWi
         this.costEU = GT_Utility.formatNumbers(costEU);
         maxProgressingTime = 20;
 
-        setActive(true);
+        trySetActive();
         return true;
     }
 

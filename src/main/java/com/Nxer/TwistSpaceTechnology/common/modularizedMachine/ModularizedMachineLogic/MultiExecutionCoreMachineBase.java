@@ -518,6 +518,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     // endregion
 
     // region Logic
+
     protected static final int[] progressingTick = { 1, 5, 10, 20, 32, 64, 128, 192, 256, 512 };
     protected byte progressingTickIndex = 5;
     protected boolean startedRecipeProcessing = false;

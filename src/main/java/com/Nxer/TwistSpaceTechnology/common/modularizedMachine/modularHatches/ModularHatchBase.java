@@ -23,10 +23,6 @@ public abstract class ModularHatchBase extends GT_MetaTileEntity_Hatch implement
     }
 
     // region General
-    public void setActive(boolean active) {
-        getBaseMetaTileEntity().setActive(active);
-        getBaseMetaTileEntity().isAllowedToWork();
-    }
 
     @Override
     public boolean willExplodeInRain() {

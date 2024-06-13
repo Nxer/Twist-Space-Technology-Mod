@@ -60,7 +60,7 @@ public class AdvExecutionCore extends ExecutionCoreBase implements IGlobalWirele
             return false;
         }
 
-        setActive(true);
+        trySetActive();
         return true;
     }
 

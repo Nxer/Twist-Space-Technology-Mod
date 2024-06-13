@@ -30,7 +30,7 @@ public class ExecutionCore extends ExecutionCoreBase {
     @Override
     public boolean done() {
         // do nothing
-        setActive(true);
+        trySetActive();
         return true;
     }
 

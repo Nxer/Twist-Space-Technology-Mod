@@ -141,7 +141,14 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        runExecutionCoreTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isServerSide()) {
+            runExecutionCoreTick(aBaseMetaTileEntity, aTick);
+
+            if (maxProgressingTime <= 0 && active) {
+                trySetInactive();
+            }
+
+        }
     }
 
     public boolean setProcessing(ProcessingLogic processingLogic) {
@@ -231,7 +238,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         maxProgressingTime = 0;
         progressedTime = 0;
         eut = 0;
-        setActive(false);
+        setInactiveCritical();
     }
 
     public void resetParameters() {
@@ -239,7 +246,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         progressedTime = 0;
         boostedTime = 0;
         eut = 0;
-        setActive(false);
+        trySetInactive();
     }
 
     @Override
@@ -251,12 +258,41 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         eut = 0;
         hasBeenSetup = false;
         mainMachine = null;
+        setInactiveCritical();
+    }
+
+    protected boolean active = false;
+    protected byte trySetInactiveTimes = 0;
+
+    public void setActive(boolean active) {
+        this.active = active;
+        getBaseMetaTileEntity().setActive(active);
+    }
+
+    public void trySetActive() {
+        trySetInactiveTimes = 0;
+        setActive(true);
+    }
+
+    public void trySetInactive() {
+        if (trySetInactiveTimes > 2) {
+            trySetInactiveTimes = 0;
+            setActive(false);
+        } else {
+            trySetInactiveTimes++;
+        }
+    }
+
+    public void setInactiveCritical() {
+        trySetInactiveTimes = 0;
         setActive(false);
     }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
+        aNBT.setBoolean("MH_active", active);
+        aNBT.setByte("trySetInactiveTimes", trySetInactiveTimes);
         aNBT.setInteger("maxProgressingTime", maxProgressingTime);
         aNBT.setInteger("progressedTime", progressedTime);
         aNBT.setInteger("boostedTime", boostedTime);
@@ -286,6 +322,8 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+        active = aNBT.getBoolean("MH_active");
+        trySetInactiveTimes = aNBT.getByte("trySetInactiveTimes");
         maxProgressingTime = aNBT.getInteger("maxProgressingTime");
         progressedTime = aNBT.getInteger("progressedTime");
         boostedTime = aNBT.getInteger("boostedTime");
