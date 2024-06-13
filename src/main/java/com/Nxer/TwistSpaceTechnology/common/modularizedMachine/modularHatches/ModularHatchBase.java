@@ -6,8 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.render.TextureFactory;
@@ -29,16 +27,6 @@ public abstract class ModularHatchBase extends GT_MetaTileEntity_Hatch implement
     @Override
     public boolean willExplodeInRain() {
         return false;
-    }
-
-    protected static String[] tooltips;
-
-    @Override
-    public String[] getDescription() {
-        if (tooltips == null || tooltips.length == 0) {
-            tooltips = new String[] { TextEnums.AddByTwistSpaceTechnology.getText() };
-        }
-        return tooltips;
     }
 
     // endregion
@@ -78,6 +66,7 @@ public abstract class ModularHatchBase extends GT_MetaTileEntity_Hatch implement
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
         return new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_DATA_ACCESS) };
     }
+
     // endregion
 
 }

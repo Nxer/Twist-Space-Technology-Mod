@@ -21,16 +21,20 @@ public abstract class ModularizedMachineSupportAllModuleBase<T extends Modulariz
 
     // region Modular Settings
 
-    public OverclockType overclockType = OverclockType.NormalOverclock;
+    public OverclockType overclockType = getDefaultOverclockType();
     public int staticParallel = 0;
     public int dynamicParallel = 0;
     public float staticPowerConsumptionMultiplier = 1;
     public float staticSpeedBonus = 1;
     public float dynamicSpeedBonus = 1;
 
+    protected OverclockType getDefaultOverclockType() {
+        return OverclockType.NormalOverclock;
+    }
+
     @Override
     public void resetModularStaticSettings() {
-        overclockType = OverclockType.NormalOverclock;
+        overclockType = getDefaultOverclockType();
         staticParallel = 0;
         staticPowerConsumptionMultiplier = 1;
         staticSpeedBonus = 1;
