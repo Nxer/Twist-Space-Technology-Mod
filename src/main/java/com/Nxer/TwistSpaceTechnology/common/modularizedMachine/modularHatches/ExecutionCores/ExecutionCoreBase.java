@@ -138,7 +138,6 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     }
     // endregion
 
-
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
@@ -264,6 +263,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
 
     protected boolean active = false;
     protected byte trySetInactiveTimes = 0;
+
     public void setActive(boolean active) {
         this.active = active;
         getBaseMetaTileEntity().setActive(active);

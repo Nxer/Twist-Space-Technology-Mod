@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DATA_ACCESS;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
