@@ -1375,8 +1375,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM impleme
     @Override
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         machineType = null;
+        startRecipeProcessing();
         if (machines == null) {
-            startRecipeProcessing();
             for (ItemStack storedInput : getStoredInputs()) {
                 for (String[] machineType : PROCESSING_MACHINE_LIST) {
                     for (int i = 0; i < tierNames.length; i++) {
@@ -1459,7 +1459,6 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM impleme
                         }
                     }
                 }
-                endRecipeProcessing();
             }
             if (machineType != null) {
                 this.actualParallelism = calculateParallelismByAddonTier();
@@ -1497,6 +1496,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM impleme
             int zCoord = getBaseMetaTileEntity().getZCoord();
             TST_Network.tst.sendToAll(new PackSyncMachineType(xCoord, yCoord, zCoord, machineType));
         }
+        endRecipeProcessing();
     }
 
     @Override
