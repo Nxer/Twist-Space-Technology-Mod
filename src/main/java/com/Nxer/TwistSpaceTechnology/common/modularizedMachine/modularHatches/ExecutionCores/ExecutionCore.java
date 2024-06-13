@@ -1,10 +1,16 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.render.TextureFactory;
 
 public class ExecutionCore extends ExecutionCoreBase {
 
@@ -24,6 +30,7 @@ public class ExecutionCore extends ExecutionCoreBase {
     @Override
     public boolean done() {
         // do nothing
+        setActive(true);
         return true;
     }
 
@@ -73,5 +80,33 @@ public class ExecutionCore extends ExecutionCoreBase {
         return description;
     }
     // spotless:on
+
+    // endregion
+
+    // region Texture
+    protected static Textures.BlockIcons.CustomIcon ActiveFace;
+    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        ActiveFace = new Textures.BlockIcons.CustomIcon(
+            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_on");
+        InactiveFace = new Textures.BlockIcons.CustomIcon(
+            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_off");
+        super.registerIcons(aBlockIconRegister);
+    }
+
+    @Override
+    public ITexture[] getTexturesActive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture, TextureFactory.of(ActiveFace) };
+    }
+
+    @Override
+    public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture, TextureFactory.of(InactiveFace) };
+    }
+
+    // endregion
 
 }

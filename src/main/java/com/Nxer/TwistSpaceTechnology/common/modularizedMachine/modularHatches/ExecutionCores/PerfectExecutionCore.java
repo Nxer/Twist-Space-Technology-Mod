@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,10 +16,14 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -71,6 +76,7 @@ public class PerfectExecutionCore extends ExecutionCoreBase implements IGlobalWi
         this.costEU = GT_Utility.formatNumbers(costEU);
         maxProgressingTime = 20;
 
+        setActive(true);
         return true;
     }
 
@@ -185,5 +191,33 @@ public class PerfectExecutionCore extends ExecutionCoreBase implements IGlobalWi
         return description;
     }
     // spotless:on
+
+    // endregion
+
+    // region Texture
+    protected static Textures.BlockIcons.CustomIcon ActiveFace;
+    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        ActiveFace = new Textures.BlockIcons.CustomIcon(
+            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
+        InactiveFace = new Textures.BlockIcons.CustomIcon(
+            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
+        super.registerIcons(aBlockIconRegister);
+    }
+
+    @Override
+    public ITexture[] getTexturesActive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture, TextureFactory.of(ActiveFace) };
+    }
+
+    @Override
+    public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture, TextureFactory.of(InactiveFace) };
+    }
+
+    // endregion
 
 }
