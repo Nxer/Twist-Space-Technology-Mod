@@ -231,6 +231,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         maxProgressingTime = 0;
         progressedTime = 0;
         eut = 0;
+        setActive(false);
     }
 
     public void resetParameters() {
@@ -238,6 +239,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         progressedTime = 0;
         boostedTime = 0;
         eut = 0;
+        setActive(false);
     }
 
     @Override
@@ -249,6 +251,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         eut = 0;
         hasBeenSetup = false;
         mainMachine = null;
+        setActive(false);
     }
 
     @Override
