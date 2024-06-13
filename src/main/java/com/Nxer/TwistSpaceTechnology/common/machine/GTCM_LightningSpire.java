@@ -400,26 +400,30 @@ public class GTCM_LightningSpire extends GT_MetaTileEntity_MultiblockBase_EM
             // #zh_CN {\AQUA}无视雷雨天气发电
             .addInfo(TextEnums.tr("GTCM_LightningSpire_05"))
             // #tr GTCM_LightningSpire_06
-            // # {\AQUA}Each lightning strike requires accurate input of 128 cruotheum and 72 times the number of internal lightning rods of molten iron
-            // #zh_CN {\AQUA}每次雷击必须精准输入128凛冰和内部避雷针数量72倍的熔融铁
+            // # {\AQUA}Consume 128mb cruotheum and 72mb*the number of lightning rods of molten iron ever lightning
+            // #zh_CN {\AQUA}每次雷击均会消耗128mb的极寒之凛冰以及72mb*避雷针数量的熔融铁
             .addInfo(TextEnums.tr("GTCM_LightningSpire_06"))
-            .addSeparator()
             // #tr GTCM_LightningSpire_07
+            // # {\AQUA}Quantitative input is required, too much or too little can lead to power generation failure
+            // #zh_CN {\AQUA}需要定量输入,过多过少均会导致发电失败
+            .addInfo(TextEnums.tr("GTCM_LightningSpire_07"))
+            .addSeparator()
+            // #tr GTCM_LightningSpire_08
             // # {\UNDERLINE}Use a screwdriver to switch input, output, and power generation modes.
             // #zh_CN {\UNDERLINE}使用螺丝刀切换输入，输出，发电模式
-            .addInfo(TextEnums.tr("GTCM_LightningSpire_07"))
-            // #tr GTCM_LightningSpire_08
-            // # {\UNDERLINE}Please clear the internal cache power before outputting the machine
-            // #zh_CN {\UNDERLINE}输出机器前请先输出完内部电力缓存
             .addInfo(TextEnums.tr("GTCM_LightningSpire_08"))
             // #tr GTCM_LightningSpire_09
-            // # {\UNDERLINE}Before dismantling the machine, please output the lightning rod first!
-            // #zh_CN {\UNDERLINE}拆除机器前请先输出避雷针
+            // # {\UNDERLINE}Please clear the internal cache power before outputting the machine
+            // #zh_CN {\UNDERLINE}输出机器前请先输出完内部电力缓存
             .addInfo(TextEnums.tr("GTCM_LightningSpire_09"))
             // #tr GTCM_LightningSpire_10
+            // # {\UNDERLINE}Before dismantling the machine, please output the lightning rod first!
+            // #zh_CN {\UNDERLINE}拆除机器前请先输出避雷针
+            .addInfo(TextEnums.tr("GTCM_LightningSpire_10"))
+            // #tr GTCM_LightningSpire_11
             // # {\UNDERLINE}Otherwise all internal lightning rods will be lost!
             // #zh_CN {\UNDERLINE}否则会丢失所有内部避雷针！
-            .addInfo(TextEnums.tr("GTCM_LightningSpire_10"))
+            .addInfo(TextEnums.tr("GTCM_LightningSpire_11"))
             .addSeparator()
             .beginStructureBlock(11, 23, 11, false)
             .addMaintenanceHatch(TextLocalization.BLUE_PRINT_INFO)

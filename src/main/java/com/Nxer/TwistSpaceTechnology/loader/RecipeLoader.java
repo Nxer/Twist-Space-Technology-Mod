@@ -55,7 +55,8 @@ public class RecipeLoader {
             new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
             new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
             new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new IndustrialMagicMatrixRecipePool(),
-            new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool() };
+            new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool(),
+            new MassFabricatorGenesisRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
@@ -72,6 +73,11 @@ public class RecipeLoader {
         if (Config.Enable_BallLightning) {
             new StarKernelForgeRecipePool().loadRecipes();
         }
+        if (Config.EnableModularizedMachineSystem) {
+            if (Config.EnableLargeNeutronOscillator) {
+                new NeutronActivatorWithEURecipePool().loadRecipes();
+            }
+        }
     }
 
     public static void loadRecipesPostInit() {
@@ -80,6 +86,5 @@ public class RecipeLoader {
 
     public static void loadRecipesServerStarted() {
         new StellarForgeRecipePool().loadOnServerStarted();
-        new NeutronActivatorWithEURecipePool().loadRecipes();
     }
 }

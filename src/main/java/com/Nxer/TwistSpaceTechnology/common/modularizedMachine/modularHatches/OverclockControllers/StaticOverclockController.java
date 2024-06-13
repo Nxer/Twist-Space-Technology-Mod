@@ -1,11 +1,17 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.render.TextureFactory;
 
 public class StaticOverclockController extends StaticOverclockControllerBase {
 
@@ -64,4 +70,42 @@ public class StaticOverclockController extends StaticOverclockControllerBase {
         return description;
     }
     // spotless:on
+
+    // region Texture
+    protected static Textures.BlockIcons.CustomIcon ActiveFaceLowSpeed;
+    protected static Textures.BlockIcons.CustomIcon ActiveFacePerfect;
+    protected static Textures.BlockIcons.CustomIcon ActiveFaceSingularity;
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        ActiveFaceLowSpeed = new Textures.BlockIcons.CustomIcon(
+            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Pri");
+        ActiveFacePerfect = new Textures.BlockIcons.CustomIcon(
+            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Adv");
+        ActiveFaceSingularity = new Textures.BlockIcons.CustomIcon(
+            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Per");
+        super.registerIcons(aBlockIconRegister);
+    }
+
+    protected ITexture overlay;
+
+    @Override
+    public ITexture[] getTexturesActive(ITexture aBaseTexture) {
+        if (null == overlay) {
+            overlay = switch (overclockType) {
+                case PerfectOverclock -> TextureFactory.of(ActiveFacePerfect);
+                case SingularityPerfectOverclock -> TextureFactory.of(ActiveFaceSingularity);
+                default -> TextureFactory.of(ActiveFaceLowSpeed);
+            };
+        }
+        return new ITexture[] { aBaseTexture, overlay };
+    }
+
+    @Override
+    public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
+        return getTexturesActive(aBaseTexture);
+    }
+
+    // endregion
 }
