@@ -128,6 +128,7 @@ import static com.github.technus.tectech.thing.CustomItemList.rack_Hatch;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.ItemList.Hatch_Energy_MAX;
+import static gregtech.api.enums.ItemList.ZPM3;
 import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.enums.Mods.Forestry;
@@ -145,6 +146,7 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Inta
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Arc_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MacerationStack;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MassFab;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
@@ -2786,6 +2788,44 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     .duration(20 * 3600 * 24)
                     .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
             }
+
+            GT_Values.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, CustomItemList.MassFabricatorUMV.get(1))
+                .metadata(RESEARCH_TIME, 24 * HOURS)
+                .itemInputs(
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 64),
+                    Industrial_MassFab.get(64),
+                    ZPM3.get(64),
+                    // TODO quantum circuit
+                    QuantumCircuit.get(64),
+
+                    ItemList.Field_Generator_UMV.get(64),
+                    ItemList.Field_Generator_UMV.get(64),
+                    ItemList.Emitter_UMV.get(64),
+                    ItemList.Emitter_UMV.get(64),
+
+                    Laser_Lens_Special.get(64),
+                    Laser_Lens_Special.get(64),
+                    Laser_Lens_Special.get(64),
+                    Laser_Lens_Special.get(64),
+
+                    HighEnergyFlowCircuit.get(64),
+                    Machine_Multi_Transformer.get(64),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64),
+                    GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 64)
+                )
+                .fluidInputs(
+                    MaterialsUEVplus.Space.getMolten(144 * 256),
+                    MaterialsUEVplus.Time.getMolten(144 * 256),
+                    ELEMENT.STANDALONE.HYPOGEN.getFluidStack(144 * 1024),
+                    Materials.CosmicNeutronium.getMolten(144 * 2048)
+                )
+                .itemOutputs(GTCMItemList.MassFabricatorGenesis.get(1))
+                .eut(RECIPE_UMV)
+                .duration(20 * 3600)
+                .addTo(assemblyLine);
+
         }
 
 
