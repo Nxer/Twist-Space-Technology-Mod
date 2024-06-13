@@ -246,6 +246,7 @@ public enum GTCMItemList {
     MegaTreeFarm,
     LightningSpire,
     ExtremeCraftCenter,
+    MassFabricatorGenesis,
 
     // endregion
 

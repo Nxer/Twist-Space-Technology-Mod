@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.S
 
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,8 +14,12 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.render.TextureFactory;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -64,5 +69,30 @@ public abstract class SpeedControllerBase extends ModularHatchBase {
             tag.setInteger("speedMultiplier", getSpeedMultiplier());
         }
     }
+
+    // region Texture
+
+    protected static Textures.BlockIcons.CustomIcon ActiveFace;
+    // protected static Textures.BlockIcons.CustomIcon InactiveFace;
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        ActiveFace = new Textures.BlockIcons.CustomIcon("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_SpeedController");
+        // InactiveFace = new
+        // Textures.BlockIcons.CustomIcon("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_SpeedController_Static");
+        super.registerIcons(aBlockIconRegister);
+    }
+
+    @Override
+    public ITexture[] getTexturesActive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture, TextureFactory.of(ActiveFace) };
+    }
+
+    @Override
+    public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture, TextureFactory.of(ActiveFace) };
+    }
+    // endregion
 
 }

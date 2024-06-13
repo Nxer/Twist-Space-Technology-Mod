@@ -68,6 +68,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
+import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_MassFabricatorGenesis;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.ExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
@@ -153,6 +154,7 @@ public class MachineLoader {
     public static ItemStack DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
     public static ItemStack LargeNeutronOscillator;
     public static ItemStack IndistinctTentaclePrototypeMK2;
+    public static ItemStack MassFabricatorGenesis;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -633,6 +635,15 @@ public class MachineLoader {
                     TextEnums.tr("NameIndistinctTentaclePrototypeMK2")).getStackForm(1);
                 GTCMItemList.IndistinctTentaclePrototypeMK2.set(IndistinctTentaclePrototypeMK2);
             }
+
+            // #tr NameMassFabricatorGenesis
+            // # Mass Fabricator : Genesis
+            // #zh_CN 质量发生器 : 创世纪
+            MassFabricatorGenesis = new MM_MassFabricatorGenesis(
+                19057,
+                "NameMassFabricatorGenesis",
+                TextEnums.tr("NameMassFabricatorGenesis")).getStackForm(1);
+            GTCMItemList.MassFabricatorGenesis.set(MassFabricatorGenesis);
 
         }
         // endregion

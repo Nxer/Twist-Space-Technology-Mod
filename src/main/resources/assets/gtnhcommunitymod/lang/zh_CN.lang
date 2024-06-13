@@ -1257,3 +1257,7 @@ Tooltip_Starcore_Crash_20240606=§c§l此机器的蓝图自动搭建功能出现
 Tooltip_Starcore_Crash_20240606_02=§c§l 可能导致存档崩溃无法进入.
 Tooltip_Starcore_Crash_20240606_03=§c紧急情况可安装 ZeroPointBugFix-0.4.1 mod临时修复.
 GTCM_LightningSpire_11=§n否则会丢失所有内部避雷针！
+Tooltip_MassFabricatorGenesis_MachineType=§f模块化机械 §7- §e质量发生器
+Tooltip_MassFabricatorGenesis_01=§9§o“虽然未来似乎很遥远，但其实已经开始了。”
+Tooltip_MassFabricatorGenesis_02=能量 - 质量 : 接口.
+NameMassFabricatorGenesis=质量发生器 : 创世纪
