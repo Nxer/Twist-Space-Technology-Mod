@@ -3,14 +3,20 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.E
 import java.math.BigInteger;
 import java.util.UUID;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.render.TextureFactory;
 
 // TODO Wireless EU costings
 public class AdvExecutionCore extends ExecutionCoreBase implements IGlobalWirelessEnergy {
@@ -54,6 +60,7 @@ public class AdvExecutionCore extends ExecutionCoreBase implements IGlobalWirele
             return false;
         }
 
+        trySetActive();
         return true;
     }
 
@@ -99,4 +106,32 @@ public class AdvExecutionCore extends ExecutionCoreBase implements IGlobalWirele
         return description;
     }
     // spotless:on
+
+    // endregion
+
+    // region Texture
+    protected static Textures.BlockIcons.CustomIcon ActiveFace;
+    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        ActiveFace = new Textures.BlockIcons.CustomIcon(
+            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
+        InactiveFace = new Textures.BlockIcons.CustomIcon(
+            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
+        super.registerIcons(aBlockIconRegister);
+    }
+
+    @Override
+    public ITexture[] getTexturesActive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture, TextureFactory.of(ActiveFace) };
+    }
+
+    @Override
+    public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
+        return new ITexture[] { aBaseTexture, TextureFactory.of(InactiveFace) };
+    }
+
+    // endregion
 }
