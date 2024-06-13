@@ -8,7 +8,7 @@ import com.github.bartimaeusnek.bartworks.util.Pair;
 import com.github.bartimaeusnek.crossmod.galacticgreg.GT_TileEntity_VoidMiner_Base;
 import com.google.common.collect.ArrayListMultimap;
 
-public class Reflector {
+public class Reflector260 {
 
     private final static Method getExtraDropsDimMapMethod;
     static {

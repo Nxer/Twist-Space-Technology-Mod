@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.Reflector251;
 import com.Nxer.TwistSpaceTechnology.compatibility.GTNH251.common.machine.TST_ThermalEnergyDevourer_251;
 import com.Nxer.TwistSpaceTechnology.compatibility.GTNHVersion;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -240,13 +241,20 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
             BigInteger finalCostEU = BigInteger.valueOf(-1)
                 .multiply(BigInteger.valueOf(processingLogic.getCalculatedEut()))
                 .multiply(BigInteger.valueOf(processingLogic.getDuration()));
-            if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU)) {
+            boolean flag = GTNHVersion.version != GTNHVersion.Version.GTNH251
+                ? addEUToGlobalEnergyMap(ownerUUID, finalCostEU)
+                : Reflector251.addEUToGlobalEnergyMap(this, ownerUUID.toString(), finalCostEU.longValue());
+            if (!flag) {
                 return CheckRecipeResultRegistry.insufficientPower(1145141919810L);
             }
         } else {
             // fine
             costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration();
-            if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
+            boolean flag = GTNHVersion.version != GTNHVersion.Version.GTNH251
+                ? addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)
+                : Reflector251.addEUToGlobalEnergyMap(this, ownerUUID.toString(), -costingWirelessEUTemp);
+
+            if (!flag) {
                 return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
             }
         }
