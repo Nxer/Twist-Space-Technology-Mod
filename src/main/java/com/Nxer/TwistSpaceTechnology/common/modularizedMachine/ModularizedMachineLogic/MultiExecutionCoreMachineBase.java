@@ -251,14 +251,15 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPostTick(aBaseMetaTileEntity, aTick);
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPreTick(aBaseMetaTileEntity, aTick);
 
         if (aBaseMetaTileEntity.isServerSide()) {
 
-            if (needToCheckRecipe) doCheckRecipeForExecutionCores();
-
             runExecutionCoreTick(aBaseMetaTileEntity, aTick);
+
+            if (aBaseMetaTileEntity.isAllowedToWork() && needToCheckRecipe) doCheckRecipeForExecutionCores();
+
         }
     }
 
