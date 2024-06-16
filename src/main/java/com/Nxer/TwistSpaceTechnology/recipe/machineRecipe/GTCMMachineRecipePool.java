@@ -2724,9 +2724,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     MyMaterial.enrichedNaquadahAlloy.get(OrePrefixes.plateDense,16),
 
                     GT_OreDictUnificator.get(OrePrefixes.gearGt,Materials.NaquadahAlloy,16),
-                    GT_OreDictUnificator.get(OrePrefixes.screw,Materials.NaquadahAlloy,64),
-                    new ItemStack(Particle.getBaseParticle(Particle.PROTON).getItem(),64),
-                    new ItemStack(Particle.getBaseParticle(Particle.NEUTRON).getItem(),64)
+                    GT_OreDictUnificator.get(OrePrefixes.screw,Materials.NaquadahAlloy,64)
 
                 )
                 .fluidInputs(
@@ -2774,9 +2772,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemList.UHV_Coil.get(64),
 
                     new Object[]{OrePrefixes.circuit.get(Materials.Bio), 2},
-                    ItemList.Field_Generator_UHV.get(1),
-                    GT_OreDictUnificator.get(OrePrefixes.screw, Materials.SuperconductorUEV, 16)
-
+                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 19, 64),
+                    ItemList.Field_Generator_UHV.get(1)
                 )
                 .fluidInputs(
                     new FluidStack(celestialTungsten, 1000 * 16),
