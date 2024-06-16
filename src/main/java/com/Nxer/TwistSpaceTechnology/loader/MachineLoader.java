@@ -39,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGe
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialMagnetarSeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
@@ -155,6 +156,7 @@ public class MachineLoader {
     public static ItemStack LargeNeutronOscillator;
     public static ItemStack IndistinctTentaclePrototypeMK2;
     public static ItemStack MassFabricatorGenesis;
+    public static ItemStack IncompactCyclotron;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -575,8 +577,8 @@ public class MachineLoader {
                 19051,
                 "NameMegaTreeFarm",
                 // #tr NameMegaTreeFarm
-                // # Mega Tree Growth Simulator
-                // #zh_CN 巨型原木拟生厂
+                // # BioSphere Growth Simulator
+                // #zh_CN 拟生圈
                 TextEnums.tr("NameMegaTreeFarm")).getStackForm(1);
             GTCMItemList.MegaTreeFarm.set(MegaTreeFarm);
         }
@@ -644,6 +646,17 @@ public class MachineLoader {
                 "NameMassFabricatorGenesis",
                 TextEnums.tr("NameMassFabricatorGenesis")).getStackForm(1);
             GTCMItemList.MassFabricatorGenesis.set(MassFabricatorGenesis);
+
+            if (Config.Enable_IncompactCyclotron) {
+                // #tr NameIncompactCyclotron
+                // # PULSAR - Incompact Cyclotron
+                // #zh_CN PULSAR - 非紧凑式回旋加速器
+                IncompactCyclotron = new TST_IncompactCyclotron(
+                    19058,
+                    "NameIncompactCyclotron",
+                    TextEnums.tr("NameIncompactCyclotron")).getStackForm(1);
+                GTCMItemList.IncompactCyclotron.set(IncompactCyclotron);
+            }
 
         }
         // endregion
