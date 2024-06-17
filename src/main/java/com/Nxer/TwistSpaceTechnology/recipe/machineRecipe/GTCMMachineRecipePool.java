@@ -2715,11 +2715,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemInputs(
                     CustomItemList.Hull_UEV.get(64),
                     COMET_Cyclotron.get(64),
-                    CompactCyclotronCoil.get(16),
+                    ItemList.Casing_Coil_Infinity.get(8),
                     Laser_Lens_Special.get(4),
 
-                    ItemList.Field_Generator_UEV.get(8),
-                    ItemRefer.HiC_T5.get(4),
+                    ItemList.Field_Generator_UHV.get(16),
+                    ItemRefer.HiC_T5.get(32),
                     new Object[]{OrePrefixes.circuit.get(Materials.Bio), 16},
                     MyMaterial.enrichedNaquadahAlloy.get(OrePrefixes.plateDense,16),
 
@@ -2768,7 +2768,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemInputs(
                     Casing_Cyclotron_Coil.get(16),
                     ItemList.Casing_Coil_Superconductor.get(4),
-                    ItemList.Energy_Cluster.get(8),
+                    ItemList.Energy_Cluster.get(1),
                     ItemList.UHV_Coil.get(64),
 
                     new Object[]{OrePrefixes.circuit.get(Materials.Bio), 2},
@@ -2776,9 +2776,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemList.Field_Generator_UHV.get(1)
                 )
                 .fluidInputs(
+                    Materials.UUMatter.getFluid(1000 * 64),
                     new FluidStack(celestialTungsten, 1000 * 16),
-                    Materials.SuperconductorUHV.getMolten(144*8),
-                    MyMaterial.enrichedNaquadahAlloy.getMolten(144*2)
+                    Materials.Longasssuperconductornameforuhvwire.getMolten(144 * 8),
+                    MyMaterial.enrichedNaquadahAlloy.getMolten(144 * 2)
                 )
                 .itemOutputs(CompactCyclotronCoil.get(1))
                 .eut(RECIPE_UHV)
