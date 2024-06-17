@@ -524,7 +524,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
                         .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(1))
-                        .dot(2)
+                        .dot(1)
                         .buildAndChain(BasicBlocks.MetaBlockCasing01, 1))
                 .addElement(
                     'Z',
@@ -532,7 +532,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
                         .casingIndex(getCasingTextureIndex(GregTech_API.sBlockCasings8, 5))
-                        .dot(1)
+                        .dot(2)
                         .buildAndChain(GregTech_API.sBlockCasings8, 5))
                 .build();
         }
@@ -876,15 +876,15 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN 基础结构为等级1
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.12"))
             // #tr Tooltip_BallLightning.0.13
-            // # Gravitational Lens in the control slot unlocks level 2
+            // # Gravitational Lens in the control slot unlocks Tier 2
             // #zh_CN 在主机内放入引力透镜解锁等级2
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.13"))
             // #tr Tooltip_BallLightning.0.14
-            // # Upgrade Chip in the control slot and utilizing Tier 2 structure unlocks level 3
+            // # Upgrade Chip in the control slot and utilizing Tier 2 structure unlocks Tier 3
             // #zh_CN 在主机内放入升级芯片且使用2级结构解锁等级3
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.14"))
             // #tr Tooltip_BallLightning.0.15
-            // # Utilizing Advanced High Power Coil unlocks level 4
+            // # Utilizing Advanced High Power Coil unlocks Tier 4
             // #zh_CN 使用进阶高能线圈解锁等级4
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.15"))
             // #tr Tooltip_BallLightning.0.16

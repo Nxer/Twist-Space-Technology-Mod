@@ -486,5 +486,10 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return true;
     }
 
+    @Override
+    public int getRecipeCatalystPriority() {
+        return -1;
+    }
+
     // endregion
 }

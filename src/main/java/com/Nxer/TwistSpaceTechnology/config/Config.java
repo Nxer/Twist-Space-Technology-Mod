@@ -311,7 +311,7 @@ public class Config {
     public static boolean Enable_IndustrialMagnetarSeparator = true;
     public static float SpeedBouns_IndustrialMagnetarSeparator = 0.25F;
     public static float EuModifier_IndustrialMagnetarSeparator = 0.8F;
-    public static int ParallelMultiply_IndustrialMagnetarSeparator = 8;
+    public static int ParallelMultiply_IndustrialMagnetarSeparator = 4;
 
     // endregion
 
@@ -361,6 +361,13 @@ public class Config {
     // region LargeNeutronOscillator
     public static boolean EnableLargeNeutronOscillator = true;
     // endregion
+
+    // region Incompact Cyclotron
+    public static boolean Enable_IncompactCyclotron =true;
+    public static float EuModifier_IncompactCyclotron = 1.6F;
+    public static boolean EnablePerfectOverclock_IncompactCyclotron =false;
+    public static float SpeedBouns_IncompactCyclotron =0.5F;
+    public static int MaxParallel_IncompactCyclotron =256;
 
     // region PowerChair BGM
     public static boolean Enable_PowerChairBGM = true;
