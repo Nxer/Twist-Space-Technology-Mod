@@ -493,16 +493,16 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             // #zh_CN 结构中采矿通道部分需要至少延伸至高度20以下.
             .addInfo(TextEnums.tr("Tooltip_Starcore_08"))
             // #tr Tooltip_Starcore_Crash_20240606
-            // # There is a serious bug in the blueprint automatic construction function of this machine,
-            // #zh_CN {\RED}{\BOLD}此机器的蓝图自动搭建功能出现严重bug,
+            // # There is a serious bug in the blueprint automatic construction function of borosilicate glass,
+            // #zh_CN {\RED}{\BOLD}蓝图自动搭建硼玻璃功能发现严重bug,
             .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606"))
             // #tr Tooltip_Starcore_Crash_20240606_02
             // # {\RED}{\BOLD}{\SPACE}which may cause the save file to crash and become inaccessible.
             // #zh_CN {\RED}{\BOLD}{\SPACE}可能导致存档崩溃无法进入.
             .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_02"))
             // #tr Tooltip_Starcore_Crash_20240606_03
-            // # In case of emergency, you can install ZeroPointBugFix-0.4.1 mod for temporary fix.
-            // #zh_CN {\RED}紧急情况可安装 ZeroPointBugFix-0.4.1 mod临时修复.
+            // # In case of emergency, you can install ZeroPointBugFix mod for temporary fix.
+            // #zh_CN {\RED}紧急情况可安装 ZeroPointBugFix mod 临时修复.
             .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_03"))
             .addInfo(TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch)
             .addSeparator()

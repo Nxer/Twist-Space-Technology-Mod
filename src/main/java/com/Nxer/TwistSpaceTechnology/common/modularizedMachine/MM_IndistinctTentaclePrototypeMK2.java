@@ -342,8 +342,14 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
                 .addElement(
                     'L',
                     GT_HatchElementBuilder.<MM_IndistinctTentaclePrototypeMK2>builder()
-                        .atLeast(InputBus, InputHatch, OutputBus)
-                        .adder(MM_IndistinctTentaclePrototypeMK2::addNormalHatchToMachineList)
+                        .atLeast(
+                            InputBus,
+                            InputHatch,
+                            OutputBus,
+                            ExecutionCoreModule,
+                            ParallelController,
+                            PowerConsumptionController)
+                        .adder(MM_IndistinctTentaclePrototypeMK2::addToMachineList)
                         .dot(1)
                         .casingIndex(1024 + 12)
                         .buildAndChain(sBlockCasingsTT, 12))

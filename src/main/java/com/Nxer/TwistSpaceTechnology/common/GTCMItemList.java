@@ -185,7 +185,10 @@ public enum GTCMItemList {
     ParallelismCasing3,
     ParallelismCasing4,
     AntiMagneticCasing,
-
+    ReinforcedStoneBrickCasing,
+    CompositeFarmCasing,
+    DenseCyclotronOuterCasing,
+    CompactCyclotronCoil,
     // endregion
 
     // region Machines
@@ -245,6 +248,7 @@ public enum GTCMItemList {
     LightningSpire,
     ExtremeCraftCenter,
     MassFabricatorGenesis,
+    IncompactCyclotron,
 
     // endregion
 

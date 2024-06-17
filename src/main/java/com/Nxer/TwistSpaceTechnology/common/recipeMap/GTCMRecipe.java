@@ -204,6 +204,9 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
+    // #tr tst.recipe.MassFabricatorGenesis
+    // # Mass Fabricator : Genesis
+    // #zh_CN 质量发生器 : 创世纪
     public static final RecipeMap<TST_RecipeMapBackend> MassFabricatorGenesis = RecipeMapBuilder
         .of("tst.recipe.MassFabricatorGenesis", TST_RecipeMapBackend::new)
         .maxIO(1, 0, 0, 1)
@@ -212,4 +215,11 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
+    public static final RecipeMap<TST_RecipeMapBackend> TreeGrowthSimulatorWithoutToolRecipes = RecipeMapBuilder
+        .of("tst.recipe.TreeGrowthSimulatorWithoutToolRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 4, 1, 0)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .disableOptimize()
+        .build();
 }

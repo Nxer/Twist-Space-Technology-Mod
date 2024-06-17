@@ -124,6 +124,7 @@ public class MetaBlockCasing01 extends MetaBlockCasingBase {
             BlockStaticDataClientOnly.iconsMetaBlockCasing01
                 .put(Meta, reg.registerIcon("gtnhcommunitymod:MetaBlockCasing01/" + Meta));
         }
+
     }
 
     @Override
