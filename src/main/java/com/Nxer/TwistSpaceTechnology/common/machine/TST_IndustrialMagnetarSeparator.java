@@ -178,8 +178,8 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
             // #zh_CN 只需要使用配方要求功率的80%%
             .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator.02"))
             // #tr Tooltip_IndustrialMagnetarSeparator.03
-            // # Processes eight items per voltage tier
-            // #zh_CN 每提升一个电压等级，每次运行可以多处理8个物品
+            // # Processes 4 items per voltage tier
+            // #zh_CN 每提升一个电压等级，每次运行可以多处理4个物品
             .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator.03"))
             .addPollutionAmount(300)
             .addSeparator()
