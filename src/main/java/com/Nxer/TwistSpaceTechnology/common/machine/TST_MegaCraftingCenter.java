@@ -243,12 +243,26 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
 
     @Override
     protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+        maintenance_EM();
         if (structureCheck_EM("MAIN", 3, 3, 0)) {
             return !mInputBusses.isEmpty() && !mOutputBusses.isEmpty()
-                && (!mEnergyHatches.isEmpty() || !eEnergyMulti.isEmpty())
-                && !mMaintenanceHatches.isEmpty();
+                && (!mEnergyHatches.isEmpty() || !eEnergyMulti.isEmpty());
         }
         return false;
+    }
+
+    protected void maintenance_EM() {
+        mWrench = true;
+        mScrewdriver = true;
+        mSoftHammer = true;
+        mHardHammer = true;
+        mSolderingTool = true;
+        mCrowbar = true;
+    }
+
+    @Override
+    public boolean doRandomMaintenanceDamage() {
+        return true;
     }
 
     @NotNull
@@ -364,15 +378,21 @@ public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.2"))
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.3"))
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.4"))
-            .addStructureInfo(Text_SeparatingLine)
+            // #tr tst.megacraftingcenter.desc.5
+            // # There is a performance issue when checking pattern. Please use with caution.
+            // #zh_CN 当前检查样板功能存在性能问题. 谨慎使用.
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.5"))
+            .addInfo(Text_SeparatingLine)
             .toolTipFinisher(ModName);
         return tt;
     }
 
     public static ItemStack[] convertAEToMC(IAEItemStack[] STACK) {
+        // TODO use normal code style instead `Stream`
         return Arrays.stream(STACK)
             .filter(Objects::nonNull)
             .map(IAEItemStack::getItemStack)
             .toArray(ItemStack[]::new);
     }
+
 }
