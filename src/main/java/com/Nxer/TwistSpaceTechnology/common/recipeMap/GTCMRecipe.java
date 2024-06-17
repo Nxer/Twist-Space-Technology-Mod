@@ -204,6 +204,9 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
+    // #tr tst.recipe.MassFabricatorGenesis
+    // # Mass Fabricator : Genesis
+    // #zh_CN 质量发生器 : 创世纪
     public static final RecipeMap<TST_RecipeMapBackend> MassFabricatorGenesis = RecipeMapBuilder
         .of("tst.recipe.MassFabricatorGenesis", TST_RecipeMapBackend::new)
         .maxIO(1, 0, 0, 1)
