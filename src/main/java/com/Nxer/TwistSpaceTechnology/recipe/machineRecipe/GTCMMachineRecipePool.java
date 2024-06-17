@@ -9,9 +9,11 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BallLightning;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BallLightningUpgradeChip;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BiosphereIII;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CompactCyclotronCoil;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DebugUncertaintyHatch;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DenseCyclotronOuterCasing;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_IV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_LuV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UV;
@@ -20,6 +22,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrame
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HighPowerRadiationProofCasing;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IncompactCyclotron;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
@@ -140,6 +143,10 @@ import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.core.item.chemistry.RocketFuels.Liquid_Hydrogen;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.COMET_Cyclotron;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_AdvancedVacuum;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_Coil;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_External;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Industrial_Arc_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GTPP_Casing_UHV;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
@@ -2698,6 +2705,88 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(20 * 120)
                 .addTo(assembler);
         }
+
+        //region Incompact Cyclotron
+        if(Config.Enable_IncompactCyclotron){
+            GT_Values.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, COMET_Cyclotron.get(1))
+                .metadata(RESEARCH_TIME, 2 * HOURS)
+                .itemInputs(
+                    CustomItemList.Hull_UEV.get(64),
+                    COMET_Cyclotron.get(64),
+                    CompactCyclotronCoil.get(16),
+                    Laser_Lens_Special.get(4),
+
+                    ItemList.Field_Generator_UEV.get(8),
+                    ItemRefer.HiC_T5.get(4),
+                    new Object[]{OrePrefixes.circuit.get(Materials.Bio), 16},
+                    MyMaterial.enrichedNaquadahAlloy.get(OrePrefixes.plateDense,16),
+
+                    GT_OreDictUnificator.get(OrePrefixes.gearGt,Materials.NaquadahAlloy,16),
+                    GT_OreDictUnificator.get(OrePrefixes.screw,Materials.NaquadahAlloy,64)
+
+                )
+                .fluidInputs(
+                    Materials.NaquadahAlloy.getMolten(144 * 256),
+                    FluidRegistry.getFluidStack("cryotheum", 1_000_000),
+                    ELEMENT.STANDALONE.HYPOGEN.getFluidStack(144 * 2)
+                )
+                .itemOutputs(IncompactCyclotron.get(1))
+                .eut(RECIPE_UEV)
+                .duration(20 * 900)
+                .addTo(assemblyLine);
+
+                GT_Values.RA
+                    .stdBuilder()
+                    .metadata(RESEARCH_ITEM, Casing_Cyclotron_External.get(1))
+                    .metadata(RESEARCH_TIME, 2 * HOURS)
+                    .itemInputs(
+                        Casing_Cyclotron_External.get(4),
+                        Casing_AdvancedVacuum.get(4),
+                        ItemUtils.simpleMetaStack("miscutils:itemDehydratorCoilWire", 3, 16),
+                        ItemRefer.Advanced_Radiation_Protection_Plate.get(6),
+
+                        ALLOY.ABYSSAL.getLongRod(12),
+                        ALLOY.TITANSTEEL.getScrew(24),
+                        ItemList.Electric_Piston_UV.get(6)
+
+                    )
+                    .fluidInputs(
+                        ALLOY.BLACK_TITANIUM.getFluidStack(144*10),
+                        MyMaterial.enrichedNaquadahAlloy.getMolten(144*4)
+                    )
+                    .itemOutputs(DenseCyclotronOuterCasing.get(1))
+                    .eut(RECIPE_UHV)
+                    .duration(20 * 30)
+                    .addTo(assemblyLine);
+
+            GT_Values.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, Casing_Cyclotron_Coil.get(1))
+                .metadata(RESEARCH_TIME, 4 * HOURS)
+                .itemInputs(
+                    Casing_Cyclotron_Coil.get(16),
+                    ItemList.Casing_Coil_Superconductor.get(4),
+                    ItemList.Energy_Cluster.get(8),
+                    ItemList.UHV_Coil.get(64),
+
+                    new Object[]{OrePrefixes.circuit.get(Materials.Bio), 2},
+                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 19, 64),
+                    ItemList.Field_Generator_UHV.get(1)
+                )
+                .fluidInputs(
+                    new FluidStack(celestialTungsten, 1000 * 16),
+                    Materials.SuperconductorUHV.getMolten(144*8),
+                    MyMaterial.enrichedNaquadahAlloy.getMolten(144*2)
+                )
+                .itemOutputs(CompactCyclotronCoil.get(1))
+                .eut(RECIPE_UHV)
+                .duration(20 * 60)
+                .addTo(assemblyLine);
+        }
+
+
 
         if (Config.EnableModularizedMachineSystem) {
 

@@ -278,9 +278,15 @@ public final class ValueEnum {
     public static boolean SpaceApiaryEnableDisplayInfo = Config.SpaceApiaryEnableDisplayInfo;
     // endregion
 
-    // region
+    // region Industrial Magnetar Separator
     public static float SpeedBouns_IndustrialMagnetarSeparator = Config.SpeedBouns_IndustrialMagnetarSeparator;
     public static float EuModifier_IndustrialMagnetarSeparator = Config.EuModifier_IndustrialMagnetarSeparator;
     public static int ParallelMultiply_IndustrialMagnetarSeparator = Config.ParallelMultiply_IndustrialMagnetarSeparator;
     // end region
+
+    // region Incompact Cyclotron
+    public static float EuModifier_IncompactCyclotron = Config.EuModifier_IncompactCyclotron;
+    public static boolean EnablePerfectOverclock_IncompactCyclotron = Config.EnablePerfectOverclock_IncompactCyclotron;
+    public static float SpeedBouns_IncompactCyclotron = Config.SpeedBouns_IncompactCyclotron;
+    public static int MaxParallel_IncompactCyclotron = Config.MaxParallel_IncompactCyclotron;
 }

@@ -39,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGe
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialMagnetarSeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
@@ -47,6 +48,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
@@ -154,6 +156,7 @@ public class MachineLoader {
     public static ItemStack LargeNeutronOscillator;
     public static ItemStack IndistinctTentaclePrototypeMK2;
     public static ItemStack MassFabricatorGenesis;
+    public static ItemStack IncompactCyclotron;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -569,13 +572,22 @@ public class MachineLoader {
             GTCMItemList.IndustrialMagnetarSeparator.set(IndustrialMagnetarSeparator);
         }
 
+        if (Config.Enable_MegaTreeFarm) {
+            MegaTreeFarm = new TST_MegaTreeFarm(
+                19051,
+                "NameMegaTreeFarm",
+                // #tr NameMegaTreeFarm
+                // # BioSphere Growth Simulator
+                // #zh_CN 拟生圈
+                TextEnums.tr("NameMegaTreeFarm")).getStackForm(1);
+            GTCMItemList.MegaTreeFarm.set(MegaTreeFarm);
+        }
+
         ExtremeCraftCenter = new TST_MegaCraftingCenter(
             19052,
             "NameExtremeCraftCenter",
             TextEnums.tr("NameExtremeCraftCenter")).getStackForm(1);
         GTCMItemList.ExtremeCraftCenter.set(ExtremeCraftCenter);
-        // if(Config.Enable_MegaTreeFarm)
-        // 19051
 
         if (Config.Enable_LightningSpire) {
             LightningSpire = new GTCM_LightningSpire(
@@ -634,6 +646,17 @@ public class MachineLoader {
                 "NameMassFabricatorGenesis",
                 TextEnums.tr("NameMassFabricatorGenesis")).getStackForm(1);
             GTCMItemList.MassFabricatorGenesis.set(MassFabricatorGenesis);
+
+            if (Config.Enable_IncompactCyclotron) {
+                // #tr NameIncompactCyclotron
+                // # PULSAR - Incompact Cyclotron
+                // #zh_CN PULSAR - 非紧凑式回旋加速器
+                IncompactCyclotron = new TST_IncompactCyclotron(
+                    19058,
+                    "NameIncompactCyclotron",
+                    TextEnums.tr("NameIncompactCyclotron")).getStackForm(1);
+                GTCMItemList.IncompactCyclotron.set(IncompactCyclotron);
+            }
 
         }
         // endregion

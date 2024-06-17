@@ -935,9 +935,9 @@ Tooltip_BallLightning.0.09=Comprises four machine levels, each unlocking a diffe
 Tooltip_BallLightning.0.10=With each machine tier upgrade, the lower-tier modes benefit from a 4x speed multiplier.
 Tooltip_BallLightning.0.11=§6=== Machine Tier ===
 Tooltip_BallLightning.0.12=The base structure is Tier 1
-Tooltip_BallLightning.0.13=Gravitational Lens in the control slot unlocks level 2
-Tooltip_BallLightning.0.14=Upgrade Chip in the control slot and utilizing Tier 2 structure unlocks level 3
-Tooltip_BallLightning.0.15=Utilizing Advanced High Power Coil unlocks level 4
+Tooltip_BallLightning.0.13=Gravitational Lens in the control slot unlocks Tier 2
+Tooltip_BallLightning.0.14=Upgrade Chip in the control slot and utilizing Tier 2 structure unlocks Tier 3
+Tooltip_BallLightning.0.15=Utilizing Advanced High Power Coil unlocks Tier 4
 Tooltip_BallLightning.0.16=§6=== Machine Mode ===
 Tooltip_BallLightning.0.17=§e (Plasma / Electric) Arc Furnace
 Tooltip_BallLightning.0.18=Parallel number = 2 ^ (Compact Fusion Coil Tier * (Coil Tier - 10))
@@ -1097,7 +1097,7 @@ Tooltip_IndustrialMagnetarSeparator_MachineType=Electromagnetic Separator
 Tooltip_IndustrialMagnetarSeparator_Controller=Controller block for the Industrial Magnetar Separator
 Tooltip_IndustrialMagnetarSeparator.01=300% faster than using single block machines of the same voltage
 Tooltip_IndustrialMagnetarSeparator.02=Only uses 80% of the EU/t normally required
-Tooltip_IndustrialMagnetarSeparator.03=Processes eight items per voltage tier
+Tooltip_IndustrialMagnetarSeparator.03=Processes 4 items per voltage tier
 Tooltip_IndustrialMagnetarSeparator.casingAmount=§69x §7Anti-Magnetic Casing (minimum)
 BlockPowerChair.0.name=PowerChair
 
@@ -1261,3 +1261,22 @@ Tooltip_MassFabricatorGenesis_MachineType=§fModularized Machine §7- §eNeutron
 Tooltip_MassFabricatorGenesis_01=§9§o“Even though the future seems far away, it is actually beginning right now.”
 Tooltip_MassFabricatorGenesis_02=Energy - Mass : Interface.
 NameMassFabricatorGenesis=Mass Fabricator : Genesis
+Tooltip_MegaTreeFarm_MachineType=Tree Farm
+Tooltip_MegaTreeFarm_Controller=Controller block for the BioSphere Growth Simulator
+NameMegaTreeFarm=BioSphere Growth Simulator
+MetaBlockCasing01.9.name=Reinforced Stone Brick Casing
+Tooltip_ReinforcedStoneBrickCasing=Stronger than bedrock!
+MetaBlockCasing01.10.name=Composite Farm Casing
+Tooltip_CompositeFarmCasing=A force stronger than four combined.
+MetaBlockCasing01.11.name=Dense Cyclotron Outer Casing
+MetaBlockCasing01.12.name=Compact Cyclotron Coil
+NameIncompactCyclotron=PULSAR - Incompact Cyclotron
+Tooltip_IncompactCyclotron_MachineType=Particle Accelerator
+Tooltip_IncompactCyclotron_Controller=Controller block for the Incompact Cyclotron
+Tooltip_IncompactCyclotron_01=§5Pulsed Ultrafast Linear Synchronized Accelerator Ring
+Tooltip_IncompactCyclotron_02=The particles are accelerated to §e99%%§7 of the speed of light by the electric field!
+Tooltip_IncompactCyclotron_03=But you can extract the accelerated particles at any time.
+Tooltip_IncompactCyclotron_04="That's incredible!"
+Tooltip_IncompactCyclotron_05=Thanks to the upgrade of technology
+Tooltip_IncompactCyclotron_06=The accelerator upgraded 100%% speedup and 256 parallel
+Tooltip_IncompactCyclotron_07=But it requires additional 60%% of power to work

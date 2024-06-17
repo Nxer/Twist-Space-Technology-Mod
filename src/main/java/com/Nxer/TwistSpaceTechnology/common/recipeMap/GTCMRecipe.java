@@ -212,4 +212,11 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
+    public static final RecipeMap<TST_RecipeMapBackend> TreeGrowthSimulatorWithoutToolRecipes = RecipeMapBuilder
+        .of("tst.recipe.TreeGrowthSimulatorWithoutToolRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 4, 1, 0)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .disableOptimize()
+        .build();
 }

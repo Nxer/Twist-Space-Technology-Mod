@@ -119,7 +119,59 @@ public class BlockRegister {
                     TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_1") }));
 
         GTCMItemList.AntiMagneticCasing.set(
-            MetaBlockConstructors.initMetaBlockCasing("Anti-Magnetic Casing", (byte) 8, BasicBlocks.MetaBlockCasing01));
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Anti-Magnetic Casing",
+                // #tr MetaBlockCasing01.8.name
+                // # Anti-Magnetic Casing
+                // #zh_CN 抗磁机械方块
+                (byte) 8,
+                BasicBlocks.MetaBlockCasing01));
+
+        GTCMItemList.ReinforcedStoneBrickCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Reinforced Stone Brick Casing",
+                // #tr MetaBlockCasing01.9.name
+                // # Reinforced Stone Brick Casing
+                // #zh_CN 强化石砖机械方块
+                (byte) 9,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltip_ReinforcedStoneBrickCasing")
+                // #tr Tooltip_ReinforcedStoneBrickCasing
+                // # Stronger than bedrock!
+                // #zh_CN 比磐石更坚！
+                }));
+
+        GTCMItemList.CompositeFarmCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Composite Farm Casing",
+                // #tr MetaBlockCasing01.10.name
+                // # Composite Farm Casing
+                // #zh_CN 复合农场机械方块
+                (byte) 10,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltip_CompositeFarmCasing")
+                // #tr Tooltip_CompositeFarmCasing
+                // # A force stronger than four combined.
+                // #zh_CN 一个更比四个强
+                }));
+
+        GTCMItemList.DenseCyclotronOuterCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Dense Cyclotron Outer Casing",
+                // #tr MetaBlockCasing01.11.name
+                // # Dense Cyclotron Outer Casing
+                // #zh_CN 致密回旋加速器机械方块
+                (byte) 11,
+                BasicBlocks.MetaBlockCasing01));
+
+        GTCMItemList.CompactCyclotronCoil.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Compact Cyclotron Coil",
+                // #tr MetaBlockCasing01.12.name
+                // # Compact Cyclotron Coil
+                // #zh_CN 压缩回旋加速器线圈
+                (byte) 12,
+                BasicBlocks.MetaBlockCasing01));
 
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
