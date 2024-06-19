@@ -10,9 +10,13 @@
 
 ## 版本需求
 * GTNH-nightly 版本：
-  * 此mod 0.4.12 版本以上版本直接添加即可
+  * 此mod 0.4.30 版本以上版本直接添加即可
+* GTNH-2.6.1 版本：
+  * 此mod 0.4.30 版本以上版本直接添加即可
+* GTNH-2.6.0 版本：
+  * 0.4.30是最后一个支持GTNH-2.6.0的版本
 * GTNH-2.5.1 版本：
-  * 此mod 0.4.0 版本以上 2.5.1适配版本直接添加即可
+  * 0.4.30是最后一个支持GTNH-2.5.1的版本
 * GTNH-2.4.0 版本：
   * 需要升级GTNH-Lanthanides mod至 0.11.0+版本或专门适配版本；
   * 需要升级GregTech mod至 5.09.44.03+版本
@@ -35,8 +39,12 @@ This is an unofficial mod, please be aware of the occasion when discussing this 
 ## Version Requirements
 * GTNH-nightly version:
   * Directly add this mod 0.4.12+ version.
+* GTNH-2.6.1 version:
+  * Directly add this mod 0.4.30+ version.
+* GTNH-2.6.0 version:
+  * 0.4.30 is the last version to support GTNH-2.6.0
 * GTNH-2.5.1 version:
-  * Directly add this mod 0.4.0+ 2.5.1 fitted version.
+  * 0.4.30 is the last version to support GTNH-2.5.1
 * GTNH-2.4.0 version:
   * GTNH-Lanthanides mod need version 0.11.0+ .
   * GregTech mod need version 5.09.44.03+ .
