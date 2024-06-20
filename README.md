@@ -44,7 +44,7 @@ https://discord.gg/yR35zmdY4c
 
 ## Version Requirements
 * GTNH-nightly version:
-  * Directly add this mod 0.4.12+ version.
+  * Directly add this mod 0.4.30+ version.
 * GTNH-2.6.1 version:
   * Directly add this mod 0.4.30+ version.
 * GTNH-2.6.0 version:
