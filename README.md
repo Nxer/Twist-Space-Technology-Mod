@@ -8,6 +8,9 @@
 ### 注意
 这是一个非官方mod，讨论此mod时请注意场合。
 
+### Discord
+https://discord.gg/yR35zmdY4c
+
 ## 版本需求
 * GTNH-nightly 版本：
   * 此mod 0.4.30 版本以上版本直接添加即可
@@ -35,6 +38,9 @@ Just need the balance not too abstract .
 
 ### Attention
 This is an unofficial mod, please be aware of the occasion when discussing this mod.
+
+### Discord
+https://discord.gg/yR35zmdY4c
 
 ## Version Requirements
 * GTNH-nightly version:
