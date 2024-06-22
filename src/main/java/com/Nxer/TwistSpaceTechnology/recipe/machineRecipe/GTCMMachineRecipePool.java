@@ -2768,11 +2768,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemInputs(
                     Casing_Cyclotron_Coil.get(16),
                     ItemList.Casing_Coil_Superconductor.get(4),
-                    ItemList.Energy_Cluster.get(1),
+                    new ItemStack[]{ GregtechItemList.Battery_Gem_2.get(1), ItemList.Energy_Module.get(2) },
                     ItemList.UHV_Coil.get(64),
 
                     new Object[]{OrePrefixes.circuit.get(Materials.Bio), 2},
-                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 19, 64),
+                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 19, 16),
                     ItemList.Field_Generator_UHV.get(1)
                 )
                 .fluidInputs(
