@@ -13,7 +13,6 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 public class TST_SimpleDisassemblyRecipe {
 
-    public static final List _NULL_LIST = Collections.EMPTY_LIST;
     private TST_ItemID itemToDisassemble = null;
     private int itemAmount = 0;
     private ItemStack[] outputItems = new ItemStack[0];
@@ -30,7 +29,7 @@ public class TST_SimpleDisassemblyRecipe {
     }
 
     public List<ItemStack> getOutputItems(int multiplier) {
-        if (outputItems.length < 1) return _NULL_LIST;
+        if (outputItems.length < 1) return Collections.emptyList();
         List<ItemStack> outputs = new ArrayList<>();
         for (ItemStack itemStack : outputItems) {
             long amount = (long) multiplier * itemStack.stackSize;
@@ -51,7 +50,7 @@ public class TST_SimpleDisassemblyRecipe {
     }
 
     public List<FluidStack> getOutputFluids(int multiplier) {
-        if (outputFluids.length < 1) return _NULL_LIST;
+        if (outputFluids.length < 1) return Collections.emptyList();
         List<FluidStack> outputs = new ArrayList<>();
         for (FluidStack fluidStack : outputFluids) {
             long amount = (long) multiplier * fluidStack.amount;

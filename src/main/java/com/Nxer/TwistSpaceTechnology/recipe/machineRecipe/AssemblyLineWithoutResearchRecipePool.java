@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -58,6 +59,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
@@ -68,12 +70,13 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.objects.ItemData;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.core.material.ELEMENT;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 
@@ -229,12 +232,101 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
     }
 
     public void loadSpecialRecipes() {
-        final IRecipeMap MASL = GTCMRecipe.AssemblyLineWithoutResearchRecipe;
+        final RecipeMap<?> MASL = GTCMRecipe.AssemblyLineWithoutResearchRecipe;
+        final Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
+            ? FluidRegistry.getFluid("molten.mutatedlivingsolder")
+            : FluidRegistry.getFluid("molten.solderingalloy");
+        final Fluid solderIndalloy = INDALLOY_140.getFluid();
+        final Fluid ic2coolant = FluidRegistry.getFluid("ic2coolant");
 
         {
-            Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
-                ? FluidRegistry.getFluid("molten.mutatedlivingsolder")
-                : FluidRegistry.getFluid("molten.solderingalloy");
+            // ultimate battery
+
+            // UMV
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
+                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 6144),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 16),
+                    ItemList.Field_Generator_UEV.get(8),
+
+                    ItemList.Circuit_Wafer_PPIC.get(64),
+                    CustomItemList.HighEnergyFlowCircuit.get(64),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 64))
+                .fluidInputs(
+                    new FluidStack(solderUEV, 144 * 64),
+                    ELEMENT.STANDALONE.HYPOGEN.getFluidStack(144 * 64),
+                    Materials.UUMatter.getFluid(1000 * 64))
+                .itemOutputs(ItemList.ZPM3.get(1))
+                .eut(32_000_000)
+                .duration(20 * 128)
+                .addTo(MASL);
+
+            // UXV
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Infinity, 64),
+                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 48912),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 16),
+                    ItemList.Field_Generator_UIV.get(8),
+
+                    ItemList.Circuit_Wafer_QPIC.get(64),
+                    CustomItemList.HighEnergyFlowCircuit.get(64),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64))
+                .fluidInputs(
+                    new FluidStack(solderUEV, 144 * 128),
+                    MaterialsUEVplus.SpaceTime.getMolten(144 * 128),
+                    Materials.UUMatter.getFluid(1000 * 128))
+                .itemOutputs(ItemList.ZPM4.get(1))
+                .eut(128_000_000)
+                .duration(20 * 256)
+                .addTo(MASL);
+
+            // MAX
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    ELEMENT.STANDALONE.HYPOGEN.getPlateDense(64),
+                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 391296),
+                    // TODO piko circuit
+                    CustomItemList.PikoCircuit.get(16),
+                    ItemList.Field_Generator_UMV.get(8),
+
+                    setStackSize(ItemList.Circuit_Wafer_QPIC.get(1), 2048),
+                    CustomItemList.HighEnergyFlowCircuit.get(64),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 64))
+                .fluidInputs(
+                    new FluidStack(solderUEV, 144 * 256),
+                    MaterialsUEVplus.Eternity.getMolten(144 * 256),
+                    Materials.UUMatter.getFluid(1000 * 256))
+                .itemOutputs(ItemList.ZPM5.get(1))
+                .eut(512_000_000)
+                .duration(20 * 512)
+                .addTo(MASL);
+
+            // ERR
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    ELEMENT.STANDALONE.DRAGON_METAL.getBlock(64),
+                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 3130368),
+                    // TODO piko circuit
+                    CustomItemList.QuantumCircuit.get(16),
+                    ItemList.Field_Generator_UXV.get(2),
+
+                    ItemList.EnergisedTesseract.get(64),
+                    CustomItemList.HighEnergyFlowCircuit.get(64),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64))
+                .fluidInputs(
+                    new FluidStack(solderUEV, 144 * 512),
+                    MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 128),
+                    Materials.UUMatter.getFluid(1000 * 512))
+                .itemOutputs(ItemList.ZPM6.get(1))
+                .eut(2_048_000_000)
+                .duration(20 * 1024)
+                .addTo(MASL);
+
+        }
+
+        {
 
             // Dimensionally Injection Casing
             GT_Values.RA.stdBuilder()
@@ -279,8 +371,6 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
         // Energy hatch and dynamo hatch of LuV - UHV
         {
-            final Fluid ic2coolant = FluidRegistry.getFluid("ic2coolant");
-            final Fluid solderIndalloy = INDALLOY_140.getFluid();
 
             // LuV energy hatch
             GT_Values.RA.stdBuilder()
