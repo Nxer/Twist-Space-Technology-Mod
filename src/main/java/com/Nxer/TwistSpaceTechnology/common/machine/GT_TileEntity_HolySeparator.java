@@ -225,7 +225,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
                                                       .addShape(STRUCTURE_PIECE_END, transpose(shapeEnd))
                                                       .addElement('A',
                                                                   GT_HatchElementBuilder.<GT_TileEntity_HolySeparator>builder()
-                                                                                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance, Energy.or(ExoticEnergy))
+                                                                                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                                                         .adder(GT_TileEntity_HolySeparator::addToMachineList)
                                                                                         .dot(1)
                                                                                         .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
@@ -332,7 +332,6 @@ G -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

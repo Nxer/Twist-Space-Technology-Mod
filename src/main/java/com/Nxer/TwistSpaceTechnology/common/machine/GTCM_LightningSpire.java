@@ -127,7 +127,7 @@ public class GTCM_LightningSpire extends GT_MetaTileEntity_MultiblockBase_EM
                 .addElement(
                     'B',
                     buildHatchAdder(GTCM_LightningSpire.class)
-                        .atLeast(Dynamo.or(DynamoMulti), InputBus, InputHatch, OutputBus, Maintenance)
+                        .atLeast(Dynamo.or(DynamoMulti), InputBus, InputHatch, OutputBus)
                         .dot(1)
                         .casingIndex(textureOffset + 16 + 6)
                         .buildAndChain(sBlockCasingsBA0, 6))
@@ -137,7 +137,18 @@ public class GTCM_LightningSpire extends GT_MetaTileEntity_MultiblockBase_EM
     }
 
     @Override
+    protected void maintenance_EM() {
+        mWrench = true;
+        mScrewdriver = true;
+        mSoftHammer = true;
+        mHardHammer = true;
+        mSolderingTool = true;
+        mCrowbar = true;
+    }
+
+    @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        maintenance_EM();
         return structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset);
     }
 
@@ -426,7 +437,6 @@ public class GTCM_LightningSpire extends GT_MetaTileEntity_MultiblockBase_EM
             .addInfo(TextEnums.tr("GTCM_LightningSpire_11"))
             .addSeparator()
             .beginStructureBlock(11, 23, 11, false)
-            .addMaintenanceHatch(TextLocalization.BLUE_PRINT_INFO)
             .addInputHatch(TextLocalization.BLUE_PRINT_INFO)
             .addInputBus(TextLocalization.BLUE_PRINT_INFO)
             .addOutputBus(TextLocalization.BLUE_PRINT_INFO)

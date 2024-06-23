@@ -317,7 +317,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                                .addElement(
                                    'E',
                                    GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
-                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance)
+                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
                                                          .adder(GT_TileEntity_SpaceScaler::addToMachineList)
                                                          .dot(2)
                                                          .casingIndex(1028)
@@ -424,7 +424,6 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

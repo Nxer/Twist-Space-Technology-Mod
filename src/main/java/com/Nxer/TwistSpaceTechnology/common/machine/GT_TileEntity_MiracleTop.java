@@ -401,7 +401,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             .addOutputHatch(TextLocalization.textMiracleTopHatchLocation, 2)
             .addInputBus(TextLocalization.textMiracleTopHatchLocation, 2)
             .addOutputBus(TextLocalization.textMiracleTopHatchLocation, 2)
-            .addMaintenanceHatch(TextLocalization.textAroundController, 1)
             .addEnergyHatch(TextLocalization.textMiracleTopHatchLocation, 2)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

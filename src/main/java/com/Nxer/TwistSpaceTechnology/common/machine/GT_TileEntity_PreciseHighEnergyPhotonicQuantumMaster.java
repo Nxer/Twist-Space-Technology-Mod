@@ -364,7 +364,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
             .addOutputHatch(TextLocalization.textCenterOfLRSides, 2)
             .addInputBus(TextLocalization.textCenterOfLRSides, 2)
             .addOutputBus(TextLocalization.textCenterOfLRSides, 2)
-            .addMaintenanceHatch(TextLocalization.textAroundController, 1)
             .addEnergyHatch(TextLocalization.textHighPowerCasingUDSides, 3)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

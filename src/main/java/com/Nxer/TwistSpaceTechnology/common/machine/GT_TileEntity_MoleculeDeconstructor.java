@@ -456,7 +456,6 @@ I -> ofFrame...();
             .addOutputHatch(textUseBlueprint, 2)
             .addInputBus(textUseBlueprint, 4)
             .addOutputBus(textUseBlueprint, 2)
-            .addMaintenanceHatch(textUseBlueprint, 3)
             .addEnergyHatch(textUseBlueprint, 1)
             .toolTipFinisher(ModName);
         return tt;

@@ -448,7 +448,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             .addOutputHatch(TextLocalization.textAnyCasing, 1)
             .addInputBus(TextLocalization.textAnyCasing, 2)
             .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .addMaintenanceHatch(TextLocalization.textAnyCasing, 2)
             .addEnergyHatch(TextLocalization.textAnyCasing, 3)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

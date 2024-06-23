@@ -137,7 +137,7 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
                                                       .addElement(
                                                           'A',
                                                           GT_HatchElementBuilder.<GTCM_ElvenWorkshop>builder()
-                                                                                .atLeast(Maintenance, Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch)
+                                                                                .atLeast(Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch)
                                                                                 .adder(GTCM_ElvenWorkshop::addToMachineList)
                                                                                 .dot(1)
                                                                                 .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(2))
@@ -198,7 +198,6 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

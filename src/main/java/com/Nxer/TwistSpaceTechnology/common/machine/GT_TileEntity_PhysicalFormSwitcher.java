@@ -198,7 +198,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                                        .addElement('D', ofBlock(GregTech_API.sBlockCasings2,15))
                                        .addElement('E',
                                                    GT_HatchElementBuilder.<GT_TileEntity_PhysicalFormSwitcher>builder()
-                                                                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Maintenance,Energy.or(ExoticEnergy))
+                                                                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                                                                          .adder(GT_TileEntity_PhysicalFormSwitcher::addToMachineList)
                                                                          .dot(1)
                                                                          .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
@@ -293,7 +293,6 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
             .addOutputHatch(TextLocalization.textAnyCasing, 1)
             .addInputBus(TextLocalization.textAnyCasing, 1)
             .addOutputBus(TextLocalization.textAnyCasing, 1)
-            .addMaintenanceHatch(TextLocalization.textAnyCasing, 1)
             .addEnergyHatch(TextLocalization.textAnyCasing, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
