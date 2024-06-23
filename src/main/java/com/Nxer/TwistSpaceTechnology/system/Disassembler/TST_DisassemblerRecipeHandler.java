@@ -32,7 +32,7 @@ public class TST_DisassemblerRecipeHandler {
 
     public static final Map<TST_ItemID, TST_SimpleDisassemblyRecipe> DisassemblerRecipeMap = new HashMap<>();
 
-    public static boolean initialized = false;
+    private static boolean initialized = false;
 
     public static void initDisassemblerRecipes() {
         if (initialized) return;
@@ -152,6 +152,10 @@ public class TST_DisassemblerRecipeHandler {
             TST_ItemID.createNoNBT(ItemList.IC2_Mixed_Metal_Ingot.get(1)),
             TST_ItemID.createNoNBT(ItemList.Casing_Coil_Superconductor.get(1)),
             TST_ItemID.createNoNBT(ItemList.Casing_Fusion_Coil.get(1)),
+            TST_ItemID.createNoNBT(ItemList.ZPM3.get(1)),
+            TST_ItemID.createNoNBT(ItemList.ZPM4.get(1)),
+            TST_ItemID.createNoNBT(ItemList.ZPM5.get(1)),
+            TST_ItemID.createNoNBT(ItemList.ZPM6.get(1)),
             TST_ItemID.createNoNBT(Materials.Carbon.getNanite(1)),
             TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorMV, 1)),
             TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorHV, 1)),
