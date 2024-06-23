@@ -1623,7 +1623,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     'D',
                     ofChain(
                         GT_HatchElementBuilder.<GT_TileEntity_IndustrialMagicMatrix>builder()
-                            .atLeast(Maintenance, InputBus, OutputBus, Energy)
+                            .atLeast(InputBus, OutputBus, Energy)
                             .adder(GT_TileEntity_IndustrialMagicMatrix::addToMachineList)
                             .casingIndex(1536)
                             .dot(1)
@@ -1806,7 +1806,6 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 // #zh_CN §b任意魔法机械方块
                 .addInputBus(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
                 .addOutputBus(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
-                .addMaintenanceHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
                 .addEnergyHatch(TextEnums.tr("Tooltip_IndustrialMagicMatrix_24"))
                 // #tr Tooltip_IndustrialMagicMatrix_25
                 // # Essentia diffusion unit
@@ -1871,6 +1870,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 

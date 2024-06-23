@@ -202,7 +202,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
                                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                                                       .addElement(
                                                           'A',GT_HatchElementBuilder.<GTCM_HyperSpacetimeTransformer>builder()
-                                                                                    .atLeast(Maintenance, Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch, OutputHatch)
+                                                                                    .atLeast(Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch, OutputHatch)
                                                                                     .adder(GTCM_HyperSpacetimeTransformer::addToMachineList)
                                                                                     .dot(1)
                                                                                     .casingIndex(1028)
@@ -878,7 +878,6 @@ J -> ofBlock...(tile.quantumGlass, 0, ...);
             .addOutputHatch(TextLocalization.textUseBlueprint, 2)
             .addInputBus(TextLocalization.textUseBlueprint, 2)
             .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

@@ -232,7 +232,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                                        .addElement(
                                            'D',
                                            GT_HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
-                                                                 .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Maintenance)
+                                                                 .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                                  .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
                                                                  .dot(1)
                                                                  .casingIndex(62)
@@ -331,7 +331,6 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             .addOutputHatch(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
             .addInputBus(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
             .addOutputBus(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
-            .addMaintenanceHatch(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
             .addEnergyHatch(TextLocalization.Tooltip_MagneticDrivePressureFormer_EnergyHatch, 2)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

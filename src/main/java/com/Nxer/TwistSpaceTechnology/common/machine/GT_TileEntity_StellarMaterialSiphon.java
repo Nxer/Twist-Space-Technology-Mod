@@ -445,6 +445,23 @@ public class GT_TileEntity_StellarMaterialSiphon
         return SimpleCheckRecipeResult.ofSuccess("drilling");
     }
 
+    public void repairMachine() {
+        mHardHammer = true;
+        mSoftHammer = true;
+        mScrewdriver = true;
+        mCrowbar = true;
+        mSolderingTool = true;
+        mWrench = true;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean doRandomMaintenanceDamage() {
+        return true;
+    }
+
     /**
      * Check if the machine has a valid structure
      *
@@ -454,12 +471,8 @@ public class GT_TileEntity_StellarMaterialSiphon
      */
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack stack) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, 7, 21, 0) && mInputBusses.size() == 1
-            && mOutputHatches.size() == 1
-            && (mEnergyHatches.size() == 1 || mExoticEnergyHatches.size() == 1)
-            && mMaintenanceHatches.size() == 1
-            && mInputHatches.isEmpty()
-            && mOutputBusses.isEmpty();
+        repairMachine();
+        return checkPiece(STRUCTURE_PIECE_MAIN, 7, 21, 0);
     }
 
     /**

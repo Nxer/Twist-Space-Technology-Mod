@@ -295,7 +295,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                 .addElement(
                     'D', // Energy Hatch, Maintenance
                     GT_HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
-                        .atLeast(Energy.or(ExoticEnergy), Maintenance)
+                        .atLeast(Energy.or(ExoticEnergy))
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
                         .dot(1)
                         .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
@@ -411,7 +411,6 @@ public class GT_TileEntity_MagneticDomainConstructor
             .addOutputHatch(TextLocalization.textUseBlueprint, 3)
             .addInputBus(TextLocalization.textUseBlueprint, 2)
             .addOutputBus(TextLocalization.textUseBlueprint, 3)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
