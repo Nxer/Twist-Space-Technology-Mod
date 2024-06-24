@@ -728,7 +728,7 @@ public class TextLocalization {
 
     // region HephaestusAtelier
     public static final String NameHephaestusAtelier = texter("Hephaestus' Atelier", "NameHephaestusAtelier");
-    public static final String Tooltip_HephaestusAtelier_MachineType = texter("Furnace", "Tooltip_HephaestusAtelier_MachineType");
+    public static final String Tooltip_HephaestusAtelier_MachineType = texter("Furnace | Alloy Smelter", "Tooltip_HephaestusAtelier_MachineType");
     public static final String Tooltip_HephaestusAtelier_Controller = texter("Controller block for the Hephaestus' Atelier", "Tooltip_HephaestusAtelier_Controller");
     public static final String Tooltip_HephaestusAtelier_01 = texter("" + EnumChatFormatting.DARK_RED + EnumChatFormatting.ITALIC + "“And first Hephaestus makes a great and massive shield ...", "Tooltip_HephaestusAtelier_01");
     public static final String Tooltip_HephaestusAtelier_02 = texter("" + EnumChatFormatting.DARK_RED + EnumChatFormatting.ITALIC + "    ... And he forged on the shield two noble cities.”", "Tooltip_HephaestusAtelier_02");
@@ -737,10 +737,10 @@ public class TextLocalization {
     public static final String Tooltip_HephaestusAtelier_05 = texter("The machine will adjust its operation according to the installed coil level.", "Tooltip_HephaestusAtelier_05");
     public static final String Tooltip_HephaestusAtelier_06 = texter(EnumChatFormatting.GOLD + " ----- T1 Coil : Molecular Coil -----", "Tooltip_HephaestusAtelier_06");
     public static final String Tooltip_HephaestusAtelier_07 = texter("Like other normal machine, use energy from energy hatches and do overclock.", "Tooltip_HephaestusAtelier_07");
-    public static final String Tooltip_HephaestusAtelier_08 = texter("2.1G parallel. Every item smelting consume 7 EU/t and 25.6s.", "Tooltip_HephaestusAtelier_08");
+    public static final String Tooltip_HephaestusAtelier_08 = texter("2.1G parallel. Furnace mode every item smelting consume 7 EU/t and 25.6s.", "Tooltip_HephaestusAtelier_08");
     public static final String Tooltip_HephaestusAtelier_09 = texter(EnumChatFormatting.GOLD + " ----- T2 Coil : Ultimate Containment Field Generator -----", "Tooltip_HephaestusAtelier_09");
     public static final String Tooltip_HephaestusAtelier_10 = texter("Directly consume energy from wireless EU net.", "Tooltip_HephaestusAtelier_10");
-    public static final String Tooltip_HephaestusAtelier_11 = texter("Infinite parallel. Every item smelting consume 2048 EU.", "Tooltip_HephaestusAtelier_11");
+    public static final String Tooltip_HephaestusAtelier_11 = texter("Infinite parallel. Furnace mode every item smelting consume 2048 EU.", "Tooltip_HephaestusAtelier_11");
     public static final String Tooltip_HephaestusAtelier_12 = texter("Processing time is fixed at 12.8s.", "Tooltip_HephaestusAtelier_12");
     public static final String Tooltip_HephaestusAtelier_13 = texter(EnumChatFormatting.GOLD + " ----- T3 Coil : Teleportation Casing -----", "Tooltip_HephaestusAtelier_13");
     public static final String Tooltip_HephaestusAtelier_14 = texter("Processing time 1s.", "Tooltip_HephaestusAtelier_14");

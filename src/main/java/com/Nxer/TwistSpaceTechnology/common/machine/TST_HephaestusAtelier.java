@@ -24,18 +24,25 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
@@ -49,6 +56,7 @@ import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -58,6 +66,8 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OverclockCalculator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 
 public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusAtelier>
     implements IGlobalWirelessEnergy {
@@ -79,24 +89,48 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     // endregion
 
     // region Processing Logic
-    private static final BigInteger CONSUME_EU_PER_SMELTING = BigInteger
+    protected static final BigInteger CONSUME_EU_PER_SMELTING = BigInteger
         .valueOf(ConsumeEuPerSmelting_HephaestusAtelier);
-    private int coilTier = 0;
-    private int maxProcessNormalMode = 0;
-    private UUID ownerUUID;
+    protected byte mode = 0;
+    protected int coilTier = 0;
+    protected int maxProcessNormalModeFurnace = 0;
+    protected long maxEut = 0;
+    protected UUID ownerUUID;
+    protected boolean startRecipeProcessing = false;
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
+        aNBT.setByte("mode", mode);
         aNBT.setInteger("coilTier", coilTier);
-        aNBT.setInteger("maxProcessNormalMode", maxProcessNormalMode);
+        aNBT.setInteger("maxProcessNormalModeFurnace", maxProcessNormalModeFurnace);
+        aNBT.setLong("maxEut", maxEut);
+        aNBT.setBoolean("startRecipeProcessing", startRecipeProcessing);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+        mode = aNBT.getByte("mode");
         coilTier = aNBT.getInteger("coilTier");
-        maxProcessNormalMode = aNBT.getInteger("maxProcessNormalMode");
+        maxProcessNormalModeFurnace = aNBT.getInteger("maxProcessNormalModeFurnace");
+        maxEut = aNBT.getLong("maxEut");
+        startRecipeProcessing = aNBT.getBoolean("startRecipeProcessing");
+    }
+
+    @Override
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.mode = (byte) ((this.mode + 1) % 2);
+            // #tr HephaestusAtelier.modeMsg.0
+            // # Mode : Furnace
+            // #zh_CN 模式 : 熔炉
+            // #tr HephaestusAtelier.modeMsg.1
+            // # Mode : Alloy Smelter
+            // #zh_CN 模式 : 合金冶炼炉
+            GT_Utility
+                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("HephaestusAtelier.modeMsg." + this.mode));
+        }
     }
 
     @Override
@@ -127,22 +161,156 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         return ret;
     }
 
+    protected boolean isWirelessMode() {
+        return coilTier > 1;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @Nonnull
+            @Override
+            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+                return isWirelessMode() ? GT_OverclockCalculator.ofNoOverclock(recipe)
+                    : super.createOverclockCalculator(recipe);
+            }
+
+        }.setMaxParallelSupplier(this::getLimitedMaxParallel)
+            .enablePerfectOverclock();
+    }
+
+    @Override
+    protected void setupProcessingLogic(ProcessingLogic logic) {
+        logic.clear();
+        logic.setMachine(this);
+        logic.setRecipeMapSupplier(this::getRecipeMap);
+        logic.setVoidProtection(protectsExcessItem(), protectsExcessFluid());
+        logic.setBatchSize(isBatchModeEnabled() ? getMaxBatchSize() : 1);
+        logic.setRecipeLocking(this, isRecipeLockingEnabled());
+        logic.setAvailableVoltage(isWirelessMode() ? Long.MAX_VALUE : getMaxInputEu());
+        logic.setAvailableAmperage(1);
+        logic.setAmperageOC(true);
+    }
+
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
+        lEUt = 0;
+        return mode == 1 ? checkProcessingAlloySmelter() : checkProcessingFurnace();
+    }
+
+    public CheckRecipeResult checkProcessingAlloySmelter() {
+        setupProcessingLogic(processingLogic);
+        return isWirelessMode() ? wirelessAlloySmelter() : normalAlloySmelter();
+    }
+
+    public CheckRecipeResult normalAlloySmelter() {
+        CheckRecipeResult result = doCheckRecipe();
+        updateSlots();
+        if (!result.wasSuccessful()) return result;
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+        mMaxProgresstime = processingLogic.getDuration();
+        setEnergyUsage(processingLogic);
+
+        mOutputItems = processingLogic.getOutputItems();
+        mOutputFluids = processingLogic.getOutputFluids();
+
+        return result;
+    }
+
+    public CheckRecipeResult wirelessAlloySmelter() {
+
+        ArrayList<ItemStack> outputs = new ArrayList<>();
+        long usedEU = 0;
+        CheckRecipeResult powerOff = CheckRecipeResultRegistry.SUCCESSFUL;
+
+        while (true) {
+            tryStartRecipeProcessing();
+            CheckRecipeResult r = doCheckRecipe();
+            if (!r.wasSuccessful()) break;
+
+            // check overflow long integer in origin result
+            if (Long.MAX_VALUE / processingLogic.getCalculatedEut() <= processingLogic.getDuration()) {
+                // already overflow
+                BigInteger consumeEU = BigInteger.valueOf(processingLogic.getCalculatedEut())
+                    .multiply(BigInteger.valueOf(processingLogic.getDuration()));
+                if (!addEUToGlobalEnergyMap(ownerUUID, consumeEU.multiply(NEGATIVE_ONE))) {
+                    powerOff = CheckRecipeResultRegistry.insufficientPower(consumeEU.longValue());
+                    break;
+                }
+            } else {
+                long costEU = processingLogic.getCalculatedEut() * processingLogic.getDuration();
+                if (Long.MAX_VALUE - costEU <= usedEU) {
+                    BigInteger consumeEU = BigInteger.valueOf(costEU)
+                        .add(BigInteger.valueOf(usedEU));
+                    usedEU = 0;
+                    if (!addEUToGlobalEnergyMap(ownerUUID, consumeEU.multiply(NEGATIVE_ONE))) {
+                        powerOff = CheckRecipeResultRegistry.insufficientPower(consumeEU.longValue());
+                        break;
+                    }
+                } else {
+                    usedEU += costEU;
+                }
+            }
+
+            outputs.addAll(Arrays.asList(processingLogic.getOutputItems()));
+            endRecipeProcessing();
+        }
+
+        updateSlots();
+        if (outputs.isEmpty()) {
+            return powerOff.wasSuccessful() ? CheckRecipeResultRegistry.NO_RECIPE : powerOff;
+        }
+        if (usedEU > 0) {
+            if (!addEUToGlobalEnergyMap(ownerUUID, -usedEU)) {
+                return CheckRecipeResultRegistry.insufficientPower(usedEU);
+            }
+        }
+
+        mOutputItems = outputs.toArray(new ItemStack[0]);
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+
+        // set processing time
+        mMaxProgresstime = coilTier > 2 ? DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier
+            : DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
+        return powerOff;
+    }
+
+    protected void tryStartRecipeProcessing() {
+        if (!startRecipeProcessing) startRecipeProcessing();
+    }
+
+    @Override
+    protected void startRecipeProcessing() {
+        startRecipeProcessing = true;
+        super.startRecipeProcessing();
+    }
+
+    @Override
+    protected void endRecipeProcessing() {
+        startRecipeProcessing = false;
+        super.endRecipeProcessing();
+    }
+
+    public CheckRecipeResult checkProcessingFurnace() {
         ArrayList<ItemStack> inputItems = getStoredInputsNoSeparation();
         if (inputItems.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
 
-        if (coilTier > 1) {
+        if (isWirelessMode()) {
             // wireless
-            return wirelessProcessing(inputItems);
+            return wirelessFurnace(inputItems);
         } else {
             // normal
-            return normalProcessing(inputItems);
+            return normalFurnace(inputItems);
         }
     }
 
-    public CheckRecipeResult wirelessProcessing(ArrayList<ItemStack> inputItems) {
+    public CheckRecipeResult wirelessFurnace(ArrayList<ItemStack> inputItems) {
         ArrayList<ItemStack> outputs = new ArrayList<>();
         long smeltedAmount = 0;
         for (ItemStack items : inputItems) {
@@ -186,8 +354,8 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
-    public CheckRecipeResult normalProcessing(ArrayList<ItemStack> inputItems) {
-        int canProcess = maxProcessNormalMode;
+    public CheckRecipeResult normalFurnace(ArrayList<ItemStack> inputItems) {
+        int canProcess = maxProcessNormalModeFurnace;
         ArrayList<ItemStack> outputs = new ArrayList<>();
         for (ItemStack items : inputItems) {
             if (canProcess <= 0) break;
@@ -214,7 +382,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         mOutputItems = outputs.toArray(new ItemStack[0]);
         updateSlots();
         // no smelting, just move garbage
-        if (canProcess == maxProcessNormalMode) {
+        if (canProcess == maxProcessNormalModeFurnace) {
             mMaxProgresstime = 20;
             return CheckRecipeResultRegistry.SUCCESSFUL;
         }
@@ -222,7 +390,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         long maxEut = getMaxInputEu();
 
         GT_OverclockCalculator calculator = new GT_OverclockCalculator()
-            .setRecipeEUt((long) ConsumeEutPerParallel_HephaestusAtelier * (maxProcessNormalMode - canProcess))
+            .setRecipeEUt((long) ConsumeEutPerParallel_HephaestusAtelier * (maxProcessNormalModeFurnace - canProcess))
             .setEUt(maxEut)
             .setDuration(ConsumeDuration_HephaestusAtelier)
             .setDurationDecreasePerOC(1)
@@ -247,12 +415,18 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.furnaceRecipes;
+        return mode == 1 ? RecipeMaps.alloySmelterRecipes : RecipeMaps.furnaceRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(RecipeMaps.alloySmelterRecipes, RecipeMaps.furnaceRecipes);
     }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return false;
+        return true;
     }
 
     @Override
@@ -272,8 +446,9 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         if (coilTier == 0) return false;
         if (coilTier == 1 && mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty()) return false;
-        maxProcessNormalMode = (int) Math
-            .min(Integer.MAX_VALUE, (15d / 16 * getMaxInputEu() / ConsumeEutPerParallel_HephaestusAtelier));
+        maxEut = (long) (15d / 16 * getMaxInputEu());
+        maxProcessNormalModeFurnace = (int) Math
+            .min(Integer.MAX_VALUE, (maxEut / ConsumeEutPerParallel_HephaestusAtelier));
         return true;
     }
     // endregion
@@ -387,11 +562,6 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
     public boolean supportsVoidProtection() {
         return false;
     }
@@ -406,6 +576,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_03)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_04)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_05)
+            .addInfo(TextLocalization.textScrewdriverChangeMode)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_06)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_07)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_08)
