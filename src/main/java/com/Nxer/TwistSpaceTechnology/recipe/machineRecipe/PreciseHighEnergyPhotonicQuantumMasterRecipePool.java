@@ -132,7 +132,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
                 GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(32000))
             .itemOutputs(
-                GTCMItemList.OpticalSOC.get(32),
+                GTCMItemList.OpticalSOC.get(64),
                 GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 8, 14))
             .fluidOutputs(Materials.Helium.getPlasma(8000))
             .outputChances(10000, 10)
@@ -148,7 +148,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
                 ItemList.Circuit_Chip_Optical.get(2),
                 GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(16000))
-            .itemOutputs(GTCMItemList.OpticalSOC.get(4), GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 1, 14))
+            .itemOutputs(GTCMItemList.OpticalSOC.get(6), GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 1, 14))
             .fluidOutputs(Materials.Helium.getPlasma(4000))
             .outputChances(10000, 10)
             .noOptimize()
@@ -165,11 +165,10 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
                 GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(32000))
             .itemOutputs(
-                GTCMItemList.OpticalSOC.get(64),
-                GTCMItemList.OpticalSOC.get(64),
+                GTCMItemList.OpticalSOC.get(384),
                 GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 8, 14))
             .fluidOutputs(Materials.Helium.getPlasma(8000))
-            .outputChances(10000, 10000, 100)
+            .outputChances(10000, 1000)
             .noOptimize()
             .eut(RECIPE_UMV)
             .duration(64 * 20)
