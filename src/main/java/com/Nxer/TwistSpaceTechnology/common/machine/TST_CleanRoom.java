@@ -131,7 +131,6 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
             "Other material can be used in place of Plascrete, even in higher percentages. See config for detail");
         tt.addOtherStructurePart("Filter Machine Casing", "Top besides controller and edges");
         tt.addEnergyHatch("Any casing except top layer. Exactly one.");
-        tt.addMaintenanceHatch("Any casing except top layer");
         tt.addStructureInfo("0-2x Reinforced Door (keep closed or efficiency will reduce)");
         tt.addStructureInfo("Up to 1 Elevator, Rotating Elevator, and Travel Anchor each");
         tt.addStructureInfo("Up to 10 Machine Hulls for Item & Energy transfer through walls");
@@ -207,13 +206,18 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
     }
 
     @Override
-    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        mHardHammer = true;
-        mSoftHammer = true;
-        mScrewdriver = true;
-        mCrowbar = true;
-        mSolderingTool = true;
+    protected void maintenance_EM() {
         mWrench = true;
+        mScrewdriver = true;
+        mSoftHammer = true;
+        mHardHammer = true;
+        mSolderingTool = true;
+        mCrowbar = true;
+    }
+
+    @Override
+    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        maintenance_EM();
         // Cleanroom
         int x = 1;
         int z = 1;

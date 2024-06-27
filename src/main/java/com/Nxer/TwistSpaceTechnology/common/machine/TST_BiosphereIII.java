@@ -11,7 +11,6 @@ import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER;
@@ -324,7 +323,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
                                                           ofChain(
                                                               ofHatchAdder(TST_BiosphereIII::addRadiationInputToMachineList, STAINLESS_STEEL_CASING_INDEX, 1),
                                                               GT_HatchElementBuilder.<TST_BiosphereIII>builder()
-                                                                                    .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance, Energy.or(ExoticEnergy))
+                                                                                    .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                                                     .adder(TST_BiosphereIII::addToMachineList)
                                                                                     .dot(1)
                                                                                     .casingIndex(STAINLESS_STEEL_CASING_INDEX)
@@ -386,7 +385,6 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             .addInputBus(TextLocalization.textBiosphereIIIHatchLocation, 1)
             .addOutputBus(TextLocalization.textBiosphereIIIHatchLocation, 1)
             .addEnergyHatch(TextLocalization.textBiosphereIIIHatchLocation, 1)
-            .addMaintenanceHatch(TextLocalization.textBiosphereIIIHatchLocation, 1)
             .addStructureInfo(
                 TextLocalization.textBiosphereIIIRadioHatch + ", " + TextLocalization.textBiosphereIIIHatchLocation)
             .toolTipFinisher(TextLocalization.ModName);

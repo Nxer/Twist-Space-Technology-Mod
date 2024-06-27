@@ -25,18 +25,19 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
 
     public static ExtremeCraftingManager originRecipes = ExtremeCraftingManager.getInstance();
 
-    public static RecipeMap<TST_RecipeMapBackend> extremeCraftRecipes;
+    public static RecipeMap<TST_RecipeMapBackend> extremeCraftRecipes = RecipeMapBuilder
+        .of("gtcm.recipe.extremeCraftRecipes", TST_RecipeMapBackend::new)
+        .maxIO(16, 1, 0, 0)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .frontend(TST_GeneralFrontend::new)
+        .neiHandlerInfo(
+            builder -> builder.setDisplayStack(GTCMItemList.ExtremeCraftCenter.get(1))
+                .setMaxRecipesPerPage(1))
+        .disableOptimize()
+        .build();
 
     public static void initECRecipe() {
-        extremeCraftRecipes = RecipeMapBuilder.of("gtcm.recipe.extremeCraftRecipes", TST_RecipeMapBackend::new)
-            .maxIO(16, 16, 0, 0)
-            .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
-            .frontend(TST_GeneralFrontend::new)
-            .neiHandlerInfo(
-                builder -> builder.setDisplayStack(GTCMItemList.ExtremeCraftCenter.get(1))
-                    .setMaxRecipesPerPage(1))
-            .disableOptimize()
-            .build();
+
         LOG.info(
             "start init extreme craft table recipe :" + originRecipes.getRecipeList()
                 .size());

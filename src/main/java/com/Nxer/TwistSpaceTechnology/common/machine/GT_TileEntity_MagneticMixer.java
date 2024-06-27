@@ -256,7 +256,6 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 3)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

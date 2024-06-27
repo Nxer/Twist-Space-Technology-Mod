@@ -16,7 +16,6 @@ import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
@@ -251,7 +250,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
                                                       .addElement(
                                                           'B',
                                                           GT_HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
-                                                                                .atLeast(Maintenance, Energy.or(ExoticEnergy))
+                                                                                .atLeast(Energy.or(ExoticEnergy))
                                                                                 .adder(GTCM_CrystallineInfinitier::addToMachineList)
                                                                                 .dot(1)
                                                                                 .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
@@ -368,7 +367,6 @@ G -> ofFrame;
             .addOutputHatch(TextLocalization.textUseBlueprint, 2)
             .addInputBus(TextLocalization.textUseBlueprint, 2)
             .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

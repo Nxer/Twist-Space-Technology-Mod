@@ -9,7 +9,6 @@ import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
@@ -233,7 +232,7 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
                                                       .addElement(
                                                           'D',
                                                           GT_HatchElementBuilder.<GT_TileEntity_Silksong>builder()
-                                                                                .atLeast(Maintenance, Energy.or(ExoticEnergy))
+                                                                                .atLeast(Energy.or(ExoticEnergy))
                                                                                 .adder(GT_TileEntity_Silksong::addToMachineList)
                                                                                 .dot(1)
                                                                                 .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(2))
@@ -316,7 +315,6 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
             .addOutputHatch(TextLocalization.textUseBlueprint, 3)
             .addInputBus(TextLocalization.textUseBlueprint, 3)
             .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

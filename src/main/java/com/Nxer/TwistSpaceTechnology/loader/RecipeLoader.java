@@ -56,7 +56,8 @@ public class RecipeLoader {
             new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
             new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new IndustrialMagicMatrixRecipePool(),
             new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool(),
-            new MassFabricatorGenesisRecipePool(), new TreeGrowthSimulatorWithoutToolRecipe() };
+            new MassFabricatorGenesisRecipePool(), new TreeGrowthSimulatorWithoutToolRecipe(),
+            new SpaceAssemblerRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {

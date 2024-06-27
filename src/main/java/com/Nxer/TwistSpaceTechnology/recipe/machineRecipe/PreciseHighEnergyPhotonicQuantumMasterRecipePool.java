@@ -7,7 +7,9 @@ import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -34,8 +36,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
 
         final IRecipeMap PhC = GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes;
 
-        Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
-
+        final Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
+        final ItemStack eternalSingularity = GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1);
         // region Space Wrapper
 
         // UEV
@@ -43,9 +45,9 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
             .itemInputs(
                 ItemList.Tesseract.get(16),
                 ItemList.EnergisedTesseract.get(16),
-                GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1),
+                eternalSingularity,
                 ItemList.Field_Generator_UEV.get(8),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16L, 32105),
+                Laser_Lens_Special.get(16),
                 GT_Utility.getIntegratedCircuit(10))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 64), Materials.SuperconductorUEVBase.getMolten(16 * 144))
             .itemOutputs(SpaceWarper.get(1))
@@ -59,9 +61,9 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
             .itemInputs(
                 ItemList.Tesseract.get(12),
                 ItemList.EnergisedTesseract.get(12),
-                GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1),
+                eternalSingularity,
                 ItemList.Field_Generator_UIV.get(4),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 8L, 32105),
+                Laser_Lens_Special.get(8),
                 GT_Utility.getIntegratedCircuit(11))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 32), Materials.SuperconductorUIVBase.getMolten(8 * 144))
             .itemOutputs(SpaceWarper.get(2))
@@ -75,9 +77,9 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
             .itemInputs(
                 ItemList.Tesseract.get(8),
                 ItemList.EnergisedTesseract.get(8),
-                GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1),
+                eternalSingularity,
                 ItemList.Field_Generator_UMV.get(2),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 4L, 32105),
+                Laser_Lens_Special.get(4),
                 GT_Utility.getIntegratedCircuit(12))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 32), Materials.SuperconductorUMVBase.getMolten(4 * 144))
             .itemOutputs(SpaceWarper.get(4))
@@ -91,16 +93,16 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
             .itemInputs(
                 ItemList.Tesseract.get(4),
                 ItemList.EnergisedTesseract.get(4),
-                GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1),
+                eternalSingularity,
                 ItemList.Field_Generator_UXV.get(1),
-                GT_ModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 2L, 32105),
+                Laser_Lens_Special.get(2),
                 GT_Utility.getIntegratedCircuit(13))
             .fluidInputs(
                 MaterialsUEVplus.PrimordialMatter.getFluid(144 * 16),
                 MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64),
                 MaterialsUEVplus.Time.getMolten(144 * 32),
                 MaterialsUEVplus.Space.getMolten(144 * 32))
-            .itemOutputs(SpaceWarper.get(32))
+            .itemOutputs(SpaceWarper.get(128))
             .fluidOutputs(Materials.Hydrogen.getPlasma(1000 * 128))
             .eut(RECIPE_MAX)
             .duration(64 * 20)
@@ -130,7 +132,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
                 GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(32000))
             .itemOutputs(
-                GTCMItemList.OpticalSOC.get(32),
+                GTCMItemList.OpticalSOC.get(64),
                 GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 8, 14))
             .fluidOutputs(Materials.Helium.getPlasma(8000))
             .outputChances(10000, 10)
@@ -146,7 +148,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
                 ItemList.Circuit_Chip_Optical.get(2),
                 GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(16000))
-            .itemOutputs(GTCMItemList.OpticalSOC.get(4), GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 1, 14))
+            .itemOutputs(GTCMItemList.OpticalSOC.get(6), GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 1, 14))
             .fluidOutputs(Materials.Helium.getPlasma(4000))
             .outputChances(10000, 10)
             .noOptimize()
@@ -163,11 +165,10 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipe
                 GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(32000))
             .itemOutputs(
-                GTCMItemList.OpticalSOC.get(64),
-                GTCMItemList.OpticalSOC.get(64),
+                GTCMItemList.OpticalSOC.get(384),
                 GT_ModHandler.getModItem(GTPlusPlus.ID, "particleBase", 8, 14))
             .fluidOutputs(Materials.Helium.getPlasma(8000))
-            .outputChances(10000, 10000, 100)
+            .outputChances(10000, 1000)
             .noOptimize()
             .eut(RECIPE_UMV)
             .duration(64 * 20)

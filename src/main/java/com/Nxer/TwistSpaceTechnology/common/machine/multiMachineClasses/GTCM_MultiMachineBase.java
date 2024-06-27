@@ -151,7 +151,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         updateSlots();
         if (!result.wasSuccessful()) return result;
 
-        mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+        mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
         mMaxProgresstime = processingLogic.getDuration();
         setEnergyUsage(processingLogic);

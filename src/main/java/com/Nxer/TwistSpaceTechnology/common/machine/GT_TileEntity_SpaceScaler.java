@@ -14,7 +14,6 @@ import static gregtech.api.enums.GT_HatchElement.Energy;
 import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
@@ -317,7 +316,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                                .addElement(
                                    'E',
                                    GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
-                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Maintenance)
+                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
                                                          .adder(GT_TileEntity_SpaceScaler::addToMachineList)
                                                          .dot(2)
                                                          .casingIndex(1028)
@@ -424,7 +423,6 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;

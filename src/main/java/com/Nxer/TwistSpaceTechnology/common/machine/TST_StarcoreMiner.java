@@ -291,6 +291,10 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             TwistSpaceTechnology.LOG.info(
                 "WARNING! Starcore Miner dropmap = null when checkProcessing ! Dim = "
                     + getBaseMetaTileEntity().getWorld().provider.dimensionId);
+            TwistSpaceTechnology.LOG.info("In dimension : " + getBaseMetaTileEntity().getWorld().provider.dimensionId);
+            TwistSpaceTechnology.LOG.info("dropMap : " + dropMap);
+            TwistSpaceTechnology.LOG.info("totalWeight : " + totalWeight);
+            TwistSpaceTechnology.LOG.info("extraDropMap : " + extraDropMap);
             if (Config.DebugMode_StarcoreMiner) {
                 TwistSpaceTechnology.LOG.info("Trying to re-generate drop map.");
 

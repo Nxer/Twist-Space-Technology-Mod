@@ -1,27 +1,3 @@
-## GTNH社区mod ：扭曲空间科技
-源自GTNH普通玩家的游戏内容。
-
-每个人都可以在这儿集中实现好的想法。
-
-平衡性太糟糕当然不行。
-
-### 注意
-这是一个非官方mod，讨论此mod时请注意场合。
-
-## 版本需求
-* GTNH-nightly 版本：
-  * 此mod 0.4.12 版本以上版本直接添加即可
-* GTNH-2.5.1 版本：
-  * 此mod 0.4.0 版本以上 2.5.1适配版本直接添加即可
-* GTNH-2.4.0 版本：
-  * 需要升级GTNH-Lanthanides mod至 0.11.0+版本或专门适配版本；
-  * 需要升级GregTech mod至 5.09.44.03+版本
-  * 最后一个适配2.4.0的版本 0.3.7
-## 更新此mod
-* 更新时请重置GT语言文件 GregTech.lang
-* 同时重置本mod配置文件 TwistSpaceTechnology.cfg
-### 大多数参数都可以在配置文件直接修改
-***
 ## GTNH Community Mod :  Twist Space Technology
 Modded elements from normal players .
 
@@ -32,12 +8,22 @@ Just need the balance not too abstract .
 ### Attention
 This is an unofficial mod, please be aware of the occasion when discussing this mod.
 
+### Discord
+https://discord.gg/yR35zmdY4c
+
 ## Version Requirements
 * GTNH-nightly version:
-  * Directly add this mod 0.4.12+ version.
+  * Directly add this mod 0.5.0+ version.
+* GTNH-2.6.1 version:
+  * Directly add this mod 0.5.0+ version.
+* GTNH-2.6.0 version:
+  * Maintenance of this version has stopped
+  * 0.4.30 is the last version to support GTNH-2.6.0
 * GTNH-2.5.1 version:
-  * Directly add this mod 0.4.0+ 2.5.1 fitted version.
+  * Maintenance of this version has stopped
+  * 0.4.30 is the last version to support GTNH-2.5.1
 * GTNH-2.4.0 version:
+  * Maintenance of this version has stopped
   * GTNH-Lanthanides mod need version 0.11.0+ .
   * GregTech mod need version 5.09.44.03+ .
   * The last fitted GTNH-2.4.0 version is 0.3.7
@@ -46,6 +32,42 @@ This is an unofficial mod, please be aware of the occasion when discussing this 
 * And reset Config File TwistSpaceTechnology.cfg of this mod.
 ### Most parameters can be modified directly in the configuration file.
 ***
+
+## GTNH社区mod ：扭曲空间科技
+源自GTNH普通玩家的游戏内容。
+
+每个人都可以在这儿集中实现好的想法。
+
+平衡性太糟糕当然不行。
+
+### 注意
+这是一个非官方mod，讨论此mod时请注意场合。
+
+### Discord
+https://discord.gg/yR35zmdY4c
+
+## 版本需求
+* GTNH-nightly 版本：
+  * 此mod 0.4.30 版本以上版本直接添加即可
+* GTNH-2.6.1 版本：
+  * 此mod 0.4.30 版本以上版本直接添加即可
+* GTNH-2.6.0 版本：
+  * 已停止维护
+  * 0.4.30是最后一个支持GTNH-2.6.0的版本
+* GTNH-2.5.1 版本：
+  * 已停止维护
+  * 0.4.30是最后一个支持GTNH-2.5.1的版本
+* GTNH-2.4.0 版本：
+  * 已停止维护
+  * 需要升级GTNH-Lanthanides mod至 0.11.0+版本或专门适配版本；
+  * 需要升级GregTech mod至 5.09.44.03+版本
+  * 最后一个适配2.4.0的版本 0.3.7
+## 更新此mod
+* 更新时请重置GT语言文件 GregTech.lang
+* 同时重置本mod配置文件 TwistSpaceTechnology.cfg
+### 大多数参数都可以在配置文件直接修改
+***
+
 # 内容简介
 ## 一般生产机器
 ***

@@ -54,7 +54,7 @@ public class GTCMRecipe {
 
     public static final RecipeMap<RecipeMapBackend> QuantumInversionRecipes = RecipeMapBuilder
         .of("gtcm.recipe.QuantumInversionRecipes")
-        .maxIO(1, 1, 1, 1)
+        .maxIO(4, 4, 2, 2)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
         .disableOptimize()
