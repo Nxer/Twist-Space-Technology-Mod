@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
@@ -76,7 +77,9 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.ELEMENT;
+import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 
@@ -137,7 +140,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             ItemList.Hatch_Energy_LuV.get(1), ItemList.Hatch_Energy_ZPM.get(1), ItemList.Hatch_Energy_UV.get(1),
             ItemList.Hatch_Energy_MAX.get(1), ItemList.Hatch_Dynamo_LuV.get(1), ItemList.Hatch_Dynamo_ZPM.get(1),
             ItemList.Hatch_Dynamo_UV.get(1), ItemList.Hatch_Dynamo_MAX.get(1), ItemList.Casing_Dim_Injector.get(1),
-            ItemList.Casing_Dim_Trans.get(1) };
+            ItemList.Casing_Dim_Trans.get(1), ItemRefer.Advanced_Radiation_Protection_Plate.get(1) };
 
         // start check assembly line recipes
         checkRecipe: for (var recipe : GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes) {
@@ -238,6 +241,26 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             : FluidRegistry.getFluid("molten.solderingalloy");
         final Fluid solderIndalloy = INDALLOY_140.getFluid();
         final Fluid ic2coolant = FluidRegistry.getFluid("ic2coolant");
+
+        {
+            // adv radiation proof plate
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    GT_Utility.getIntegratedCircuit(24),
+                    Materials.Neutronium.getNanite(1),
+                    setStackSize(Materials.Lanthanum.getPlates(1), 4096),
+                    setStackSize(Materials.NaquadahAlloy.getPlates(1), 6144),
+                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 0, 1))
+                .fluidInputs(
+                    new FluidStack(solderUEV, 144 * 1024),
+                    Materials.Lead.getMolten(144 * 16 * 1024),
+                    MaterialsUEVplus.SpaceTime.getMolten(144 * 8),
+                    Materials.UUMatter.getFluid(1000 * 16))
+                .itemOutputs(setStackSize(ItemRefer.Advanced_Radiation_Protection_Plate.get(1), 2048))
+                .eut(RECIPE_UXV)
+                .duration(20 * 10)
+                .addTo(MASL);
+        }
 
         {
             // ultimate battery
