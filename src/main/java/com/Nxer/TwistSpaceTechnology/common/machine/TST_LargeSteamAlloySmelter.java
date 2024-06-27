@@ -86,7 +86,6 @@ public class TST_LargeSteamAlloySmelter extends GregtechMeta_SteamMultiBase<TST_
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        fixAllMaintenanceIssue();
         return checkPiece(mName, 2, 1, 0);
     }
     // endregion
