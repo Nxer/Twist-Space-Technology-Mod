@@ -31,7 +31,7 @@ pluginManagement {
     }
 }
 plugins {
-    id 'com.gtnewhorizons.gtnhsettingsconvention' version '1.0.22'
+    id 'com.gtnewhorizons.gtnhsettingsconvention' version '1.0.23'
 }
 //plugins {
 //    id 'com.diffplug.blowdryerSetup' version '1.7.1'
