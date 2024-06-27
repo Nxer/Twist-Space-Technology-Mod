@@ -87,7 +87,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     private static final String STRUCTURE_PIECE_MAIN = "main";
 
     // spotless:off
-    private final String[][] shape = new String[][] {
+    private static final String[][] shape = new String[][] {
         { "               ", "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD", "               ", "               ", "               ", "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD", "     DDDDD     " },
         { "     DDDDD     ", "D   DCCCCCD   D", "DEEEEEEEEEEEEED", "DXXXXXXXXXXXXXD", "DXXXXXXXXXXXXXD", "DXXXXXXXXXXXXXD", "DEEEEEEEEEEEEED", "DDDDDCCCCCDDDDD", "     DAAAD     " },
         { "     DMMMD     ", "DDDDDCCCCCDDDDD", "DBBBBBBBBBBBBBD", " I           I ", " I           I ", " I           I ", "DBBBBBBBBBBBBBD", "DDDDDCCCCCDDDDD", "DDDDDDAAADDDDDD" },
@@ -97,9 +97,9 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         { "               ", "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD", "               ", "               ", "               ", "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD", "     DDDDD     " } };
 
     // spotless:on
-    private final int horizontalOffSet = 7;
-    private final int verticalOffSet = 3;
-    private final int depthOffSet = 0;
+    private static final int horizontalOffSet = 7;
+    private static final int verticalOffSet = 3;
+    private static final int depthOffSet = 0;
     private static IStructureDefinition<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster> STRUCTURE_DEFINITION = null;
 
     /**
