@@ -71,7 +71,6 @@ public class TST_LargeSteamForgeHammer extends GregtechMeta_SteamMultiBase<TST_L
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        fixAllMaintenanceIssue();
         return checkPiece(mName, 1, 1, 0);
     }
 

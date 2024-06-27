@@ -88,9 +88,8 @@ public class QFTRecipePool implements IRecipePool {
                 WerkstoffLoader.Ruthenium.get(OrePrefixes.dust, 64),
                 WerkstoffLoader.Rhodium.get(OrePrefixes.dust, 64),
                 Materials.Iridium.getDust(64),
-                Materials.Osmium.getDust(64),
-                WerkstoffMaterialPool.Gangue.get(OrePrefixes.dust, 64))
-            .outputChances(2000, 2000, 2000, 2000, 2000)
+                Materials.Osmium.getDust(64))
+            .outputChances(2000, 2000, 2000, 2000)
             .noOptimize()
             .specialValue(1)
             .eut(RECIPE_UV)
@@ -126,9 +125,8 @@ public class QFTRecipePool implements IRecipePool {
                 Materials.Gadolinium.getDust(64),
                 Materials.Phosphorus.getDust(64),
                 Materials.Thorium.getDust(64),
-                WerkstoffLoader.Thorium232.get(OrePrefixes.dust, 64),
-                WerkstoffMaterialPool.Gangue.get(OrePrefixes.dust, 64))
-            .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
+                WerkstoffLoader.Thorium232.get(OrePrefixes.dust, 64))
+            .outputChances(1667, 1667, 1667, 1667, 1667)
             .noOptimize()
             .specialValue(2)
             .eut(RECIPE_UHV)
