@@ -61,6 +61,4 @@ dependencies {
     compileOnly('curse.maven:witchery-69673:2234410')
     compileOnly('com.github.GTNewHorizons:WitcheryExtras:1.2.2:dev')
 //    implementation('com.github.RealSilverMoon:BoxPlusPlus:1.2.0:dev')
-//    implementation('com.github.GTNewHorizons:KubaTech:0.15.4:dev')
-
 }
