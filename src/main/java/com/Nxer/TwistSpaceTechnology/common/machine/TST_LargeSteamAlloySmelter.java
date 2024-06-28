@@ -191,4 +191,34 @@ public class TST_LargeSteamAlloySmelter extends GregtechMeta_SteamMultiBase<TST_
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][66] };
     }
 
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean doRandomMaintenanceDamage() {
+        return true;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public void checkMaintenance() {}
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean getDefaultHasMaintenanceChecks() {
+        return false;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public final boolean shouldCheckMaintenance() {
+        return false;
+    }
+
 }

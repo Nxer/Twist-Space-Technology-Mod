@@ -12,14 +12,13 @@ import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
-import static tb.init.TBBlocks.crystalBlock;
-import static tuhljin.automagy.blocks.ModBlocks.translucent;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.LoaderReference;
@@ -99,10 +98,22 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 .addElement('G', ofBlock(GregTech_API.sBlockCasings9, 1))
                 .addElement('H', ofBlock(ModBlocks.blockCasings2Misc, 15))
                 .addElement('I', ofBlock(ModBlocks.blockCasingsTieredGTPP, 8))
-                .addElement('J', ofBlock(translucent, 0))
-                .addElement('K', ofBlock(crystalBlock, 0))
-                .addElement('L', ofBlock(crystalBlock, 2))
-                .addElement('M', ofBlock(crystalBlock, 3))
+                .addElement(
+                    'J',
+                    ofBlock(ModBlocksHandler.BlockTranslucent.getLeft(), ModBlocksHandler.BlockTranslucent.getRight()))
+                .addElement(
+                    'K',
+                    ofBlock(ModBlocksHandler.AirCrystalBlock.getLeft(), ModBlocksHandler.AirCrystalBlock.getRight()))
+                .addElement(
+                    'L',
+                    ofBlock(
+                        ModBlocksHandler.WaterCrystalBlock.getLeft(),
+                        ModBlocksHandler.WaterCrystalBlock.getRight()))
+                .addElement(
+                    'M',
+                    ofBlock(
+                        ModBlocksHandler.EarthCrystalBlock.getLeft(),
+                        ModBlocksHandler.EarthCrystalBlock.getRight()))
                 .addElement('N', ofBlock(Block.getBlockFromName("Forestry:soil"), 0))
                 .addElement('O', ofChain(ofBlock(Blocks.grass, 0), ofBlockAnyMeta(Blocks.dirt, 0)))
                 .addElement(

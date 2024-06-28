@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -37,7 +38,6 @@ import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
 import com.github.technus.tectech.thing.metaTileEntity.multi.GT_MetaTileEntity_EM_switch;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.INameFunction;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.IStatusFunction;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus;
@@ -66,7 +66,7 @@ import gregtech.api.util.GT_StructureUtility;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
 
-public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements ISurvivalConstructable {
+public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalConstructable {
 
     private GT_Hatch_RackComputationMonitor realMonitor;
     private double multiplier = 1;
@@ -1010,18 +1010,7 @@ public class TST_Computer extends GT_MetaTileEntity_MultiblockBase_EM implements
     }
 
     @Override
-    protected void maintenance_EM() {
-        mWrench = true;
-        mScrewdriver = true;
-        mSoftHammer = true;
-        mHardHammer = true;
-        mSolderingTool = true;
-        mCrowbar = true;
-    }
-
-    @Override
     public boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
-        maintenance_EM();
         realMonitor = null;
         // eRacks.clear();
         if (!structureCheck_EM(MAIN, offsetX, offsetY, offsetZ)) {
