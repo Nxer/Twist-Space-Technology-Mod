@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.emoniph.witchery.Witchery;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
@@ -140,7 +139,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         // No need for the maintenance hatches!
-        turnOffMaintenance();
+
         // Initialize
         this.mInfinityEggs = 0;
         this.mDragonEggs = 0;
@@ -288,7 +287,8 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
      */
     private Block InfinityEgg() {
         if (Mods.Witchery.isModLoaded()) {
-            return Witchery.Blocks.INFINITY_EGG;
+            return Block.getBlockFromName(Mods.Witchery.ID + ":infinityegg");
+//             Witchery.Blocks.INFINITY_EGG;
         } else return BasicBlocks.PhotonControllerUpgrade;
     }
 

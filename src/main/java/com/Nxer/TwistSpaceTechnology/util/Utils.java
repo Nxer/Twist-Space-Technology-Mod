@@ -247,6 +247,10 @@ public final class Utils {
 
     // region Generals
 
+    public static <T> T withNull(T main, T instead) {
+        return null == main ? instead : main;
+    }
+
     public static void debugLogInfo(String... strings) {
         if (isInDevMode) {
             for (String msg : strings) {
