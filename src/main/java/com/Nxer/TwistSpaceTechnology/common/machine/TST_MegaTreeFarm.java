@@ -14,8 +14,6 @@ import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
-import static tb.init.TBBlocks.crystalBlock;
-import static tuhljin.automagy.blocks.ModBlocks.translucent;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
