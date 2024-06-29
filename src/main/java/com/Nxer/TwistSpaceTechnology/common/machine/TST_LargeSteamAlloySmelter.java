@@ -11,8 +11,12 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_GLOW;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -25,11 +29,14 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OverclockCalculator;
+import gregtech.api.util.GT_Recipe;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.GregtechMeta_SteamMultiBase;
 
 public class TST_LargeSteamAlloySmelter extends GregtechMeta_SteamMultiBase<TST_LargeSteamAlloySmelter>
@@ -52,6 +59,20 @@ public class TST_LargeSteamAlloySmelter extends GregtechMeta_SteamMultiBase<TST_
     // endregion
 
     // region Processing Logic
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new ProcessingLogic() {
+
+            @Override
+            @Nonnull
+            protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
+                return GT_OverclockCalculator.ofNoOverclock(recipe)
+                    .setEUtDiscount(1.33F)
+                    .setSpeedBoost(1.5F);
+            }
+
+        }.setMaxParallel(getMaxParallelRecipes());
+    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -65,7 +86,6 @@ public class TST_LargeSteamAlloySmelter extends GregtechMeta_SteamMultiBase<TST_
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        fixAllMaintenanceIssue();
         return checkPiece(mName, 2, 1, 0);
     }
     // endregion
@@ -169,6 +189,36 @@ public class TST_LargeSteamAlloySmelter extends GregtechMeta_SteamMultiBase<TST_
                     .build() };
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][66] };
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean doRandomMaintenanceDamage() {
+        return true;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public void checkMaintenance() {}
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean getDefaultHasMaintenanceChecks() {
+        return false;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public final boolean shouldCheckMaintenance() {
+        return false;
     }
 
 }

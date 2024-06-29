@@ -425,6 +425,28 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     /**
+     * No more machine error
+     */
+    @Override
+    public void checkMaintenance() {}
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean getDefaultHasMaintenanceChecks() {
+        return false;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public final boolean shouldCheckMaintenance() {
+        return false;
+    }
+
+    /**
      * Gets the maximum Efficiency that spare Part can get (0 - 10000)
      *
      * @param aStack

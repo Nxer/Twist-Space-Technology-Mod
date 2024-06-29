@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.VP;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
@@ -102,30 +103,30 @@ public class ModularHatchesRecipePool implements IRecipePool {
                 .metadata(RESEARCH_TIME, 24 * HOURS)
                 .itemInputs(
                     CustomItemList.Hull_UIV.get(1),
-                    ItemList.Electric_Motor_UIV.get(16),
-                    ItemList.Conveyor_Module_UIV.get(12),
-                    ItemList.Robot_Arm_UIV.get(18),
+                    ItemList.Electric_Motor_UV.get(16),
+                    ItemList.Conveyor_Module_UV.get(12),
+                    ItemList.Robot_Arm_UV.get(18),
 
-                    ItemList.Electric_Pump_UIV.get(12),
-                    ItemList.Field_Generator_UIV.get(1),
-                    ItemList.Sensor_UIV.get(1),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Optical), 2 },
+                    ItemList.Electric_Pump_UV.get(12),
+                    ItemList.Field_Generator_UV.get(1),
+                    ItemList.Sensor_UV.get(1),
+                    new Object[] { OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2 },
 
                     CustomItemList.HighEnergyFlowCircuit.get(36),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.Infinity, 18),
-                    GT_OreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.TranscendentMetal, 16),
-                    GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, MaterialsUEVplus.TranscendentMetal, 48),
+                    GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Infinity, 32),
+                    GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Neutronium, 6),
+                    GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Neutronium, 16),
 
-                    GT_OreDictUnificator.get(OrePrefixes.screw, MaterialsUEVplus.TranscendentMetal, 32),
-                    GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsUEVplus.TranscendentMetal, 64))
+                    GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Neutronium, 32),
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 16))
                 .fluidInputs(
-                    ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(144 * 64),
-                    Materials.Infinity.getMolten(144 * 64),
+                    Materials.CosmicNeutronium.getMolten(144 * 64),
+                    Materials.Neutronium.getMolten(144 * 64),
                     Materials.Quantium.getMolten(144 * 64 * 16),
                     MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128))
                 .itemOutputs(GTCMItemList.ExecutionCore.get(1))
-                .eut(RECIPE_UIV)
-                .duration(20 * 120)
+                .eut(RECIPE_UV)
+                .duration(20 * 240)
                 .addTo(AssemblyLine);
 
             // Advanced Execution Core
@@ -174,7 +175,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
                     ItemList.Robot_Arm_UXV.get(64),
 
                     ItemList.Electric_Pump_UXV.get(48),
-                    ItemList.Field_Generator_UXV.get(64),
+                    ItemList.Field_Generator_UXV.get(16),
                     ItemList.Sensor_UXV.get(16),
                     // TODO Quantum circuit will be deprecated.
                     new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 64 },

@@ -23,6 +23,7 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Coil;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Containment;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Hollow;
@@ -31,9 +32,6 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Spacetime;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
-import static de.katzenpapst.amunra.item.ARItems.jetItemIon;
-import static de.katzenpapst.amunra.item.ARItems.lightPlating;
-import static de.katzenpapst.amunra.item.ARItems.noseCone;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
@@ -47,6 +45,7 @@ import static gtPlusPlus.core.material.ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.core.material.ELEMENT.STANDALONE.HYPOGEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -66,6 +65,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -85,6 +85,16 @@ public class DSPRecipePool implements IRecipePool {
         final IRecipeMap SpaceAssembler = IGRecipeMaps.spaceAssemblerRecipes;
         final IRecipeMap Assembler = RecipeMaps.assemblerRecipes;
         final Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
+
+        final ItemStack LightWeightPlate = Mods.GalacticraftAmunRa.isModLoaded()
+            ? GT_ModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "item.baseItem", 1, 1)
+            : new ItemStack(Blocks.fire);
+        final ItemStack ShuttleNoseCone = Mods.GalacticraftAmunRa.isModLoaded()
+            ? GT_ModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "item.baseItem", 1, 16)
+            : new ItemStack(Blocks.fire);
+        final ItemStack IonThrusterJet = Mods.GalacticraftAmunRa.isModLoaded()
+            ? GT_ModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "tile.machines2", 1, 1)
+            : new ItemStack(Blocks.fire);
 
         // DSP Ray Receiving Station
         GT_Values.RA.stdBuilder()
@@ -140,7 +150,7 @@ public class DSPRecipePool implements IRecipePool {
                 GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
                 GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
 
-                lightPlating.getItemStack(64),
+                setStackSize(LightWeightPlate.copy(), 64),
                 eM_Power.get(64),
                 new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
                 new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9))
@@ -299,7 +309,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(21),
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
-                lightPlating.getItemStack(6),
+                setStackSize(LightWeightPlate.copy(), 6),
                 GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.BlackPlutonium, 16),
                 Materials.Neutronium.getNanite(1))
             .fluidInputs(
@@ -317,7 +327,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(22),
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
-                lightPlating.getItemStack(9),
+                setStackSize(LightWeightPlate.copy(), 9),
                 GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 8),
                 Materials.Neutronium.getNanite(1))
             .fluidInputs(
@@ -336,7 +346,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(23),
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 48),
-                lightPlating.getItemStack(36),
+                setStackSize(LightWeightPlate.copy(), 36),
                 ItemList.EnergisedTesseract.get(12),
                 GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 12),
                 Materials.Neutronium.getNanite(1))
@@ -362,7 +372,7 @@ public class DSPRecipePool implements IRecipePool {
                 new FluidStack(solderPlasma, 144 * 4),
                 GT_CoreModSupport.RadoxPolymer.getMolten(144 * 4),
                 Materials.Neutronium.getMolten(144 * 2))
-            .itemOutputs(lightPlating.getItemStack(1))
+            .itemOutputs(setStackSize(LightWeightPlate.copy(), 1))
 
             .noOptimize()
             .specialValue(2)
@@ -373,14 +383,14 @@ public class DSPRecipePool implements IRecipePool {
         // Empty Small Launch Vehicle
         GT_Values.RA.stdBuilder()
             .itemInputs(
-                noseCone.getItemStack(1),
+                setStackSize(ShuttleNoseCone.copy(), 1),
                 GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
                 SpaceWarper.get(16),
                 CustomItemList.PikoCircuit.get(32),
 
                 StellarConstructionFrameMaterial.get(32),
-                lightPlating.getItemStack(32),
-                jetItemIon.getItemStack(4))
+                setStackSize(LightWeightPlate.copy(), 32),
+                setStackSize(IonThrusterJet.copy(), 4))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 4),
                 GT_CoreModSupport.RadoxPolymer.getMolten(144 * 4),

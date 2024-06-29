@@ -27,10 +27,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -64,7 +64,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
 import gtPlusPlus.core.block.ModBlocks;
 
-public class TST_MegaCraftingCenter extends GT_MetaTileEntity_MultiblockBase_EM
+public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     implements ICraftingProvider, IActionHost, IGridProxyable, ISurvivalConstructable {
 
     @NotNull

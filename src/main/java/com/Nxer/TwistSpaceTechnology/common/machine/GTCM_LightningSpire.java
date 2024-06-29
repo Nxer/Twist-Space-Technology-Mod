@@ -136,18 +136,7 @@ public class GTCM_LightningSpire extends GT_MetaTileEntity_MultiblockBase_EM
     }
 
     @Override
-    protected void maintenance_EM() {
-        mWrench = true;
-        mScrewdriver = true;
-        mSoftHammer = true;
-        mHardHammer = true;
-        mSolderingTool = true;
-        mCrowbar = true;
-    }
-
-    @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        maintenance_EM();
         return structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset);
     }
 
