@@ -34,7 +34,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.SpaceAssemblerRecipePo
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StarKernelForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.TreeGrowthSimulatorWithoutToolRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.NeutronActivatorWithEURecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
@@ -62,8 +62,7 @@ public class RecipeLoader {
             new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
             new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new IndustrialMagicMatrixRecipePool(),
             new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool(),
-            new MassFabricatorGenesisRecipePool(), new TreeGrowthSimulatorWithoutToolRecipe(),
-            new SpaceAssemblerRecipePool() };
+            new MassFabricatorGenesisRecipePool(), new SpaceAssemblerRecipePool(), new MassFabricatorGenesisRecipePool() };
 
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
@@ -79,6 +78,9 @@ public class RecipeLoader {
         }
         if (Config.Enable_BallLightning) {
             new StarKernelForgeRecipePool().loadRecipes();
+        }
+        if (Config.Enable_MegaTreeFarm) {
+            new TreeGrowthSimulatorWithoutToolFakeRecipe();
         }
         if (Config.EnableModularizedMachineSystem) {
             if (Config.EnableLargeNeutronOscillator) {
