@@ -12,14 +12,29 @@ import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
+import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.LoaderReference;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -28,17 +43,25 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
+import galaxyspace.BarnardsSystem.BRFluids;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
@@ -273,6 +296,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     // spotless:on
     // region Processing Logic
+    double tierMultiplier = 1;
+    int tier = 1;
+    static FluidStack WaterStack = Materials.Water.getFluid(1000);
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -291,7 +317,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.TreeGrowthSimulatorWithoutToolRecipes;
+        return GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes;
+        // return GTPPRecipeMaps.treeGrowthSimulatorFakeRecipes;
     }
 
     @Override
@@ -310,10 +337,210 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     private static int getTierMultiplier(int tier) {
-        // tentative
-        return (int) Math.floor(
-            0.06 * Math.pow(2, tier * (1 + Math.exp(-0.1 * Math.pow(tier - 14, 2)) - 0.03 * (tier - 14) * (tier - 1)))
-                + 1.5 * Math.pow(2, tier));
+        return (int) Math
+            .floor(2 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
+        // Math.floor(Math.pow(Math.pow(2, tier + 1), 0.8 + 0.1 * Math.log(25 + Math.exp(25 - tier)) / Math.log(5)));
     }
 
+    /**
+     * Use the highest bonus from the original Recipe.
+     */
+
+    public static int getModeMultiplier(Mode mode) {
+        return switch (mode) {
+            case LOG -> 20;
+            case SAPLING -> 3;
+            case LEAVES -> 8;
+            case FRUIT -> 1;
+        };
+
+    }
+
+    public int getModeOutput(Mode mode) {
+        Map<Integer, Mode> damageModeMap = new HashMap<>();
+        damageModeMap.put(1, Mode.LOG);
+        damageModeMap.put(2, Mode.SAPLING);
+        damageModeMap.put(3, Mode.LEAVES);
+        damageModeMap.put(4, Mode.FRUIT);
+
+        for (ItemStack stack : getStoredInputs()) {
+            if (stack.getItem() instanceof GT_IntegratedCircuit_Item && stack.getItemDamage() > 0) {
+                Mode mappedMode = damageModeMap.get(stack.getItemDamage());
+                if (mode == mappedMode) {
+                    return 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    // public static ItemStack queryTreeProduct(ItemStack sapling, GregtechMetaTileEntityTreeFarm.Mode mode) {
+    // String key = Item.itemRegistry.getNameForObject(sapling.getItem()) + ":" + sapling.getItemDamage();
+    //
+    // EnumMap<GregtechMetaTileEntityTreeFarm.Mode, ItemStack> productsMap = treeProductsMap.get(key);
+    // return productsMap.get(mode);
+    // }
+    public static EnumMap<Mode, ItemStack> queryTreeProduct(ItemStack sapling) {
+        String key = Item.itemRegistry.getNameForObject(sapling.getItem()) + ":" + sapling.getItemDamage();
+        EnumMap<Mode, ItemStack> ProductMap = treeProductsMap.get(key);
+        if (ProductMap != null) {
+            return ProductMap;
+        }
+        return getOutputsForForestrySapling(sapling);
+    }
+
+    // copy form GTPP_TGS
+    public static EnumMap<Mode, ItemStack> getOutputsForForestrySapling(ItemStack sapling) {
+        ITree tree = TreeManager.treeRoot.getMember(sapling);
+        if (tree == null) return null;
+
+        String speciesUUID = tree.getIdent();
+
+        EnumMap<Mode, ItemStack> defaultMap = treeProductsMap.get("Forestry:sapling:" + speciesUUID);
+        if (defaultMap == null) return null;
+
+        // We need to make a new map so that we don't modify the stored amounts of outputs.
+        EnumMap<Mode, ItemStack> adjustedMap = new EnumMap<>(Mode.class);
+
+        ItemStack log = defaultMap.get(Mode.LOG);
+        if (log != null) {
+            double height = Math.max(
+                3 * (tree.getGenome()
+                    .getHeight() - 1),
+                0) + 1;
+            double girth = tree.getGenome()
+                .getGirth();
+
+            log = log.copy();
+            log.stackSize = (int) (log.stackSize * height * girth);
+            adjustedMap.put(Mode.LOG, log);
+        }
+
+        ItemStack saplingOut = defaultMap.get(Mode.SAPLING);
+        if (saplingOut != null) {
+            // Lowest = 0.01 ... Average = 0.05 ... Highest = 0.3
+            double fertility = tree.getGenome()
+                .getFertility() * 10;
+
+            // Return a copy of the *input* sapling, retaining its genetics.
+            int stackSize = Math.max(1, (int) (saplingOut.stackSize * fertility));
+            saplingOut = sapling.copy();
+            saplingOut.stackSize = stackSize;
+            adjustedMap.put(Mode.SAPLING, saplingOut);
+        }
+
+        ItemStack leaves = defaultMap.get(Mode.LEAVES);
+        if (leaves != null) {
+            adjustedMap.put(Mode.LEAVES, leaves.copy());
+        }
+
+        ItemStack fruit = defaultMap.get(Mode.FRUIT);
+        if (fruit != null) {
+            // Lowest = 0.025 ... Average = 0.2 ... Highest = 0.4
+            double yield = tree.getGenome()
+                .getYield() * 10;
+
+            fruit = fruit.copy();
+            fruit.stackSize = (int) (fruit.stackSize * yield);
+            adjustedMap.put(Mode.FRUIT, fruit);
+        }
+        return adjustedMap;
+    }
+
+    @Override
+    public GTCM_ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @Override
+            @Nonnull
+            public CheckRecipeResult process() {
+                if (inputItems == null) {
+                    inputItems = new ItemStack[0];
+                }
+                if (inputFluids == null) {
+                    inputFluids = new FluidStack[0];
+                }
+
+                ItemStack sapling = getControllerSlot();
+                if (sapling == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
+                EnumMap<Mode, ItemStack> outputPerMode = queryTreeProduct(sapling);
+                if (outputPerMode == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
+
+                tier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
+                tierMultiplier = getTierMultiplier(tier);
+
+                int RunMode = 0;
+                ArrayList<FluidStack> InputFluids = getStoredFluids();
+                for (FluidStack aFluid : InputFluids) {
+                    if (aFluid.getFluid()
+                        .equals(FluidRegistry.WATER)) RunMode = 1;
+                    if (aFluid.getFluid()
+                        .equals(BRFluids.UnknowWater)) RunMode = 2;
+                    if (RunMode > 0) {
+                        inputFluids[0] = aFluid;
+                        break;
+                    }
+                }
+                if (RunMode == 0) return SimpleCheckRecipeResult.ofFailure("no_fluid");
+
+                List<ItemStack> outputs = new ArrayList<>();
+                switch (RunMode) {
+                    case 1: { // Normal Trees
+                        for (Mode mode : Mode.values()) {
+                            int checkMode = getModeOutput(mode);
+                            ItemStack output = outputPerMode.get(mode);
+                            if (output == null) continue; // This sapling has no output in this mode.
+                            int ModeMultiplier = getModeMultiplier(mode);
+                            if (checkMode < 0) continue; // No valid Circuit for this mode found.
+
+                            ItemStack out = output.copy();
+                            long outputStackSize = (long) (out.stackSize * ModeMultiplier * tierMultiplier * checkMode);
+                            while (outputStackSize > Integer.MAX_VALUE) {
+                                ItemStack outUnion = out.copy();
+                                outUnion.stackSize = Integer.MAX_VALUE;
+                                outputs.add(outUnion);
+                                outputStackSize -= Integer.MAX_VALUE;
+                            }
+                            out.stackSize = (int) outputStackSize;
+                            outputs.add(out);
+                        }
+
+                        if (outputs.isEmpty()) {
+                            // No outputs can be produced using the tools we have available.
+                            return SimpleCheckRecipeResult.ofFailure("no_correct_Circuit");
+                        }
+                    }
+                    case 2: { // Normal to Barnarda C
+                        ItemStack BarnardaCSapling = GT_ModHandler
+                            .getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 1, 1);
+                    }
+                }
+
+                outputItems = outputs.toArray(new ItemStack[0]);
+
+                duration = 20;
+                calculatedEut = availableVoltage * availableAmperage * 15 / 16;
+
+                return SimpleCheckRecipeResult.ofSuccess("growing_trees");
+            }
+
+            // @Nonnull
+            // @Override
+            // protected GT_ParallelHelper createParallelHelper(@Nonnull GT_Recipe recipe) {
+            // return super.createParallelHelper(recipe).setChanceMultiplier(tierMultiplier);
+            // }
+        };
+    }
+
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 2];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = EnumChatFormatting.AQUA + "tierMultiplier"
+            + " : "
+            + EnumChatFormatting.GOLD
+            + (int) this.tierMultiplier;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Tier" + " : " + EnumChatFormatting.GOLD + this.tier;
+        return ret;
+    }
 }
