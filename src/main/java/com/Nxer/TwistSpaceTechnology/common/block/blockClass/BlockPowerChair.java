@@ -28,7 +28,7 @@ public class BlockPowerChair extends Block {
     public BlockPowerChair() {
         super(Material.iron);
         this.setResistance(20f);
-        this.setHardness(-1.0f);
+        this.setHardness(5.0f);
         this.setBlockName("tst.PowerChair");
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.55F, 1.0F);
         this.setCreativeTab(GTCMCreativeTabs.TAB_META_BLOCKS);
