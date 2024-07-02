@@ -313,8 +313,9 @@ public class TextLocalization {
     public static final String Tooltip_Silksong_00 = texter("Controller block for the Silksong", "Tooltip_Silksong_00");
     public static final String Tooltip_Silksong_01 = texter(EnumChatFormatting.WHITE + "Maybe dreams aren't such a good thing ......", "Tooltip_Silksong_01");
     public static final String Tooltip_Silksong_02 = texter("Endless cables spew from this machine.", "Tooltip_Silksong_02");
-    public static final String Tooltip_Silksong_03 = texter("32x Parallel per piece.", "Tooltip_Silksong_03");
-    public static final String Tooltip_Silksong_04 = texter("Additional 25%% reduction in time per Coil Tier, multiplication calculus.", "Tooltip_Silksong_04");
+    public static final String Tooltip_Silksong_03 = texter("Parallel = 32 × piece × coil tier.", "Tooltip_Silksong_03");
+    public static final String Tooltip_Silksong_04 = texter("Each level of coil increases the speed by 100%%.", "Tooltip_Silksong_04");
+    public static final String Tooltip_Silksong_05 = texter("Additional 15%% reduction in time per Coil Tier, multiplication calculus.", "Tooltip_Silksong_05");
     // endregion
 
     // region HolySeparator

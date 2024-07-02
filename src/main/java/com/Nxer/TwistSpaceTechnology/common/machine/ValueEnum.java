@@ -5,6 +5,7 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 /**
  * ValueEnum are stored here.
  */
+@Deprecated
 public final class ValueEnum {
 
     // region General and misc
@@ -83,8 +84,6 @@ public final class ValueEnum {
     // endregion
 
     // region Silksong
-    public static final float SpeedBonus_MultiplyPerCoilTier_Silksong = Config.SpeedBonus_MultiplyPerCoilTier_Silksong;
-    public static final int Parallel_PerPiece_Silksong = Config.Parallel_PerPiece_Silksong;
     // endregion
 
     // region Holy Separator

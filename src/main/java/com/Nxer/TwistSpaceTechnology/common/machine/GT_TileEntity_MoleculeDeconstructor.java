@@ -85,6 +85,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     // region Processing Logic
     private byte glassTier = 0;
     private int piece = 1;
+    protected float speedBonus = 1F;
     private byte mode = Mode_Default_MoleculeDeconstructor;
 
     @Override
@@ -97,8 +98,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     }
 
     protected float getSpeedBonus() {
-        return (float) (Math
-            .pow(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor, GT_Utility.getTier(this.getMaxInputEu())));
+        return speedBonus;
     }
 
     @Override
@@ -152,6 +152,9 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
                 }
             }
         }
+
+        speedBonus = (float) (Math
+            .pow(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor, GT_Utility.getTier(this.getMaxInputEu())));
 
         return true;
     }
@@ -425,6 +428,7 @@ I -> ofFrame...();
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
+        aNBT.setFloat("speedBonus", speedBonus);
         aNBT.setInteger("piece", piece);
         aNBT.setByte("mode", mode);
     }
@@ -433,6 +437,7 @@ I -> ofFrame...();
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
+        speedBonus = aNBT.getFloat("speedBonus");
         piece = aNBT.getInteger("piece");
         mode = aNBT.getByte("mode");
     }
