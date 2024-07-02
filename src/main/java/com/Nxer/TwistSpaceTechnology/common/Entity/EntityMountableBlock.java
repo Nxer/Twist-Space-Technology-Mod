@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.Entity;
 
 import static com.Nxer.TwistSpaceTechnology.client.Sound.SoundLoader.BGM;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -126,7 +127,13 @@ public class EntityMountableBlock extends Entity {
     public void onEntityUpdate() {
         this.worldObj.theProfiler.startSection("entityBaseTick");
         if (this.riddenByEntity != null && !this.riddenByEntity.isDead) {
-            return;
+            if (!worldObj.isRemote) {
+                Block block = worldObj.getBlock(orgBlockPosX, orgBlockPosY, orgBlockPosZ);
+                if (block instanceof BlockPowerChair) {
+                    return;
+                }
+                this.setDead();
+            }
         } else {
             this.setDead();
             if (worldObj.isRemote) {
