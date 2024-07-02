@@ -109,7 +109,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
     public int tierComponentCasing = -2;
     public byte glassTier = 0;
     private UUID ownerUUID;
-    private long costingWirelessEUTemp = 0;
+    private String costingWirelessEUTemp = "0";
     private int extraEuCostMultiplier = 1;
 
     @Override
@@ -169,7 +169,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                     + EnumChatFormatting.RESET
                     + ": "
                     + EnumChatFormatting.GOLD
-                    + GT_Utility.formatNumbers(tag.getLong("costingWirelessEUTemp"))
+                    + tag.getString("costingWirelessEUTemp")
                     + EnumChatFormatting.RESET
                     + " EU");
 
@@ -196,7 +196,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
         if (tileEntity != null) {
             tag.setByte("mode", mode);
             tag.setBoolean("isWirelessMode", isWirelessMode);
-            tag.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
+            tag.setString("costingWirelessEUTemp", costingWirelessEUTemp);
             tag.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
         }
     }
@@ -208,7 +208,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
         aNBT.setBoolean("isWirelessMode", isWirelessMode);
         aNBT.setInteger("tierComponentCasing", tierComponentCasing);
         aNBT.setByte("glassTier", glassTier);
-        aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
+        aNBT.setString("costingWirelessEUTemp", costingWirelessEUTemp);
         aNBT.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
     }
 
@@ -219,7 +219,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
         isWirelessMode = aNBT.getBoolean("isWirelessMode");
         tierComponentCasing = aNBT.getInteger("tierComponentCasing");
         glassTier = aNBT.getByte("glassTier");
-        costingWirelessEUTemp = aNBT.getLong("costingWirelessEUTemp");
+        costingWirelessEUTemp = aNBT.getString("costingWirelessEUTemp");
         extraEuCostMultiplier = aNBT.getInteger("extraEuCostMultiplier");
     }
 
@@ -313,28 +313,27 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
             long originEUCost = processingLogic.getCalculatedEut() * processingLogic.getDuration();
             if (processingLogic.getCalculatedEut() > Long.MAX_VALUE / processingLogic.getDuration()) {
                 // total eu cost has overflowed
-                costingWirelessEUTemp = 1145141919810L;
-                BigInteger finalCostEU = BigInteger.valueOf(-1)
-                    .multiply(BigInteger.valueOf(processingLogic.getCalculatedEut()))
+                BigInteger finalCostEU = BigInteger.valueOf(processingLogic.getCalculatedEut())
                     .multiply(BigInteger.valueOf(processingLogic.getDuration()))
                     .multiply(BigInteger.valueOf(extraEuCostMultiplier));
-                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU)) {
-                    return CheckRecipeResultRegistry.insufficientPower(1145141919810L);
+                costingWirelessEUTemp = GT_Utility.formatNumbers(finalCostEU);
+                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU.multiply(Utils.NEGATIVE_ONE))) {
+                    return CheckRecipeResultRegistry.insufficientPower(finalCostEU.longValue());
                 }
             } else if (originEUCost < Long.MAX_VALUE / extraEuCostMultiplier) {
                 // not overflow
-                costingWirelessEUTemp = originEUCost * extraEuCostMultiplier;
-                if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
-                    return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
+                long costEU = originEUCost * extraEuCostMultiplier;
+                costingWirelessEUTemp = String.valueOf(costEU);
+                if (!addEUToGlobalEnergyMap(ownerUUID, -costEU)) {
+                    return CheckRecipeResultRegistry.insufficientPower(costEU);
                 }
             } else {
                 // overflow because multiply extraCost
-                costingWirelessEUTemp = 1145141919810L;
-                BigInteger finalCostEU = BigInteger.valueOf(-1)
-                    .multiply(BigInteger.valueOf(originEUCost))
+                BigInteger finalCostEU = BigInteger.valueOf(originEUCost)
                     .multiply(BigInteger.valueOf(extraEuCostMultiplier));
-                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU)) {
-                    return CheckRecipeResultRegistry.insufficientPower(1145141919810L);
+                costingWirelessEUTemp = GT_Utility.formatNumbers(finalCostEU);
+                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU.multiply(Utils.NEGATIVE_ONE))) {
+                    return CheckRecipeResultRegistry.insufficientPower(finalCostEU.longValue());
                 }
             }
         } else {
