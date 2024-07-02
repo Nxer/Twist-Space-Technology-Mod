@@ -68,7 +68,10 @@ public class BlockPowerChair extends Block {
     @Override
     public void onBlockDestroyedByPlayer(World worldIn, int x, int y, int z, int meta) {
         if (worldIn.isRemote) {
-            EntityMountableBlock.stopPlaySound((int) (x + 0.5F), (int) (y + 0.68F), (int) (z + 0.5F));/* Stops playing music when the block is broken */
+            EntityMountableBlock.stopPlaySound(
+                (int) (x + 0.5F),
+                (int) (y + 0.68F),
+                (int) (z + 0.5F));/* Stops playing music when the block is broken */
         }
         super.onBlockDestroyedByPlayer(worldIn, x, y, z, meta);
     }
