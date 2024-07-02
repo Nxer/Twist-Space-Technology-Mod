@@ -13,8 +13,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
-import java.util.function.Consumer;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +26,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import galaxyspace.core.config.GSConfigCore;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -199,57 +196,57 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
         return tooltip;
     }
 
-//    // read only unless you are making computation generator - read computer class
-//    protected long data = 0; // data being available
-//    private int module = 0;
-//    public static final double destroyModuleBase_chance = 0.066d;
-//    public static final double destroyModule_a = 5.0E-5; // = 0.00005
-//    public static final double destroyModule_b = 3.0E-5; // = 0.00003
-//    public static final double destroyModuleMaxCPS = 100000.0;
-//
-//    private static Consumer<GTCM_TestMultiMachine> moduleDestroyer = (t) -> {
-//        // 每小时执行一次此运算
-//        t.module =
-//            (int) ((double) t.module -
-//                       (double) t.module * 2.0 * destroyModuleBase_chance /
-//                           (    Math.exp( -destroyModule_a * (double) (t.module - 1))
-//                              + Math.exp(destroyModule_b * (double) Math.min(t.data, (long) destroyModuleMaxCPS)))
-//            );
-//        if (t.module < 0) {
-//            t.module = 0;
-//        }
-//
-//        // 拆解一下
-//
-//        // 每次损毁的模块数量部分为
-//        double moduleDestroy = (double) t.module * 2.0 * destroyModuleBase_chance /
-//                                   (    Math.exp( -destroyModule_a * (double) (t.module - 1))
-//                                            + Math.exp(destroyModule_b * (double) Math.min(t.data, (long) destroyModuleMaxCPS)));
-//
-//        // 其中
-//        double 分母 = (double) t.module * 2 * destroyModuleBase_chance;
-//        double 分子 = Math.exp( -destroyModule_a * (double) (t.module - 1))
-//                    + Math.exp( destroyModule_b * (double) Math.min(t.data, (long) destroyModuleMaxCPS));
-//
-//        // 代入默认值
-//        // destroyModuleBase_chance = 0.066d;
-//        // destroyModule_a = 5.0E-5; ( = 0.00005 )
-//        // destroyModule_b = 3.0E-5; ( = 0.00003 )
-//        // destroyModuleMaxCPS = 100000.0;
-//        分母 = (double) t.module * 2 * 0.066d;
-//        分子 = Math.exp( -0.00005 * (double) (t.module - 1))
-//              + Math.exp( 0.00003 * (double) Math.min(t.data, (long) 100000.0));
-//
-//        // 可见算力上限为 100,000
-//        // 汇总后
-//        // y = 损耗量 ; m = 当前模块数量 ; x = 提供算力
-//        // y = (m * 0.132) / {e^[-0.00005 * (m-1)] + e^(0.00003 * x)}
-//
-//        // 取值上限情况
-//        // m = 10,000 ; x = 100,000
-//        // y = (10000 * 0.132) / (e^(-0.00005 * (10000-1)) + e^(0.00003 * 100000))
-//        // y ≈ 63.7924683001747
-//
-//    };
+    // // read only unless you are making computation generator - read computer class
+    // protected long data = 0; // data being available
+    // private int module = 0;
+    // public static final double destroyModuleBase_chance = 0.066d;
+    // public static final double destroyModule_a = 5.0E-5; // = 0.00005
+    // public static final double destroyModule_b = 3.0E-5; // = 0.00003
+    // public static final double destroyModuleMaxCPS = 100000.0;
+    //
+    // private static Consumer<GTCM_TestMultiMachine> moduleDestroyer = (t) -> {
+    // // 每小时执行一次此运算
+    // t.module =
+    // (int) ((double) t.module -
+    // (double) t.module * 2.0 * destroyModuleBase_chance /
+    // ( Math.exp( -destroyModule_a * (double) (t.module - 1))
+    // + Math.exp(destroyModule_b * (double) Math.min(t.data, (long) destroyModuleMaxCPS)))
+    // );
+    // if (t.module < 0) {
+    // t.module = 0;
+    // }
+    //
+    // // 拆解一下
+    //
+    // // 每次损毁的模块数量部分为
+    // double moduleDestroy = (double) t.module * 2.0 * destroyModuleBase_chance /
+    // ( Math.exp( -destroyModule_a * (double) (t.module - 1))
+    // + Math.exp(destroyModule_b * (double) Math.min(t.data, (long) destroyModuleMaxCPS)));
+    //
+    // // 其中
+    // double 分母 = (double) t.module * 2 * destroyModuleBase_chance;
+    // double 分子 = Math.exp( -destroyModule_a * (double) (t.module - 1))
+    // + Math.exp( destroyModule_b * (double) Math.min(t.data, (long) destroyModuleMaxCPS));
+    //
+    // // 代入默认值
+    // // destroyModuleBase_chance = 0.066d;
+    // // destroyModule_a = 5.0E-5; ( = 0.00005 )
+    // // destroyModule_b = 3.0E-5; ( = 0.00003 )
+    // // destroyModuleMaxCPS = 100000.0;
+    // 分母 = (double) t.module * 2 * 0.066d;
+    // 分子 = Math.exp( -0.00005 * (double) (t.module - 1))
+    // + Math.exp( 0.00003 * (double) Math.min(t.data, (long) 100000.0));
+    //
+    // // 可见算力上限为 100,000
+    // // 汇总后
+    // // y = 损耗量 ; m = 当前模块数量 ; x = 提供算力
+    // // y = (m * 0.132) / {e^[-0.00005 * (m-1)] + e^(0.00003 * x)}
+    //
+    // // 取值上限情况
+    // // m = 10,000 ; x = 100,000
+    // // y = (10000 * 0.132) / (e^(-0.00005 * (10000-1)) + e^(0.00003 * 100000))
+    // // y ≈ 63.7924683001747
+    //
+    // };
 
 }

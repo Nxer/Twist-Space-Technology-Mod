@@ -151,7 +151,8 @@ public class Config {
     // endregion
 
     // region Silksong
-    public static float SpeedBonus_MultiplyPerCoilTier_Silksong = 0.75F;
+    public static float SpeedMultiplier_CoilTier_Silksong = 1F;
+    public static float SpeedBonus_MultiplyPerVoltageTier_Silksong = 0.85F;
     public static int Parallel_PerPiece_Silksong = 32;
     // endregion
 
@@ -540,7 +541,8 @@ public class Config {
         // endregion
 
         // region Silksong
-        SpeedBonus_MultiplyPerCoilTier_Silksong = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerCoilTier_Silksong", Silksong, String.valueOf(SpeedBonus_MultiplyPerCoilTier_Silksong), "The speed bonus = this ^ CoilTier . Type: float"));
+        SpeedMultiplier_CoilTier_Silksong = Float.parseFloat(configuration.getString("SpeedMultiplier_CoilTier_Silksong", Silksong, String.valueOf(SpeedMultiplier_CoilTier_Silksong), "The speed multiplier of Coil tier. Type: float"));
+        SpeedBonus_MultiplyPerVoltageTier_Silksong = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerVoltageTier_Silksong", Silksong, String.valueOf(SpeedBonus_MultiplyPerVoltageTier_Silksong), "The speed bonus of every voltage level. Speed bonus from voltage = thisParameter ^ voltageLevel. Type: float"));
         Parallel_PerPiece_Silksong = configuration.getInt("Parallel_PerPiece_Silksong", Silksong, Parallel_PerPiece_Silksong, 1, 65536, "Parallel per Piece add. Type: int");
         // endregion
 

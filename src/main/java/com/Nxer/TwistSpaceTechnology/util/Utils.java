@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
+import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.metatileentity.MetaTileEntity;
 import scala.actors.migration.pattern;
 
@@ -25,6 +26,17 @@ public final class Utils {
     public static final double LOG2 = Math.log(2);
     public static final double LOG4 = Math.log(4);
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
+
+    // region about game
+
+    /**
+     * LV = 1, MAX = 14
+     */
+    public static int getCoilTier(HeatingCoilLevel coilLevel) {
+        return coilLevel.getTier() + 1;
+    }
+
+    // endregion
 
     // region about ItemStack
     public static boolean metaItemEqual(ItemStack a, ItemStack b) {

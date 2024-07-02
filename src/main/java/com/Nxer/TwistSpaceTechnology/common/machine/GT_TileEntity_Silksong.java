@@ -1,7 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerPiece_Silksong;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerCoilTier_Silksong;
+import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_PerPiece_Silksong;
+import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedBonus_MultiplyPerVoltageTier_Silksong;
+import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplier_CoilTier_Silksong;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.pressureResistantWalls;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -69,6 +71,10 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
 
     public void setCoilLevel(HeatingCoilLevel coilLevel) {
         this.coilLevel = coilLevel;
+    }
+
+    public int getCoilTier() {
+        return Utils.getCoilTier(coilLevel);
     }
 
     @Override
@@ -127,8 +133,13 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
             return false;
         }
 
-        parallel = (int) Math.min((long) piece * Parallel_PerPiece_Silksong, Integer.MAX_VALUE);
-        speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerCoilTier_Silksong, this.coilLevel.getTier());
+        // parallel = piece * coilTier * 32
+        parallel = (int) Math.min((long) piece * getCoilTier() * Parallel_PerPiece_Silksong, Integer.MAX_VALUE);
+
+        // speed bonus = 0.85^voltageTier / (coilTier * 1)
+        speedBonus = (float) (Math
+            .pow(SpeedBonus_MultiplyPerVoltageTier_Silksong, GT_Utility.getTier(this.getMaxInputEu()))
+            / (getCoilTier() * SpeedMultiplier_CoilTier_Silksong));
 
         return true;
     }
@@ -308,6 +319,7 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
             .addInfo(TextLocalization.Tooltip_Silksong_02)
             .addInfo(TextLocalization.Tooltip_Silksong_03)
             .addInfo(TextLocalization.Tooltip_Silksong_04)
+            .addInfo(TextLocalization.Tooltip_Silksong_05)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
