@@ -36,6 +36,12 @@ public final class Utils {
         return coilLevel.getTier() + 1;
     }
 
+    /**
+     * One method to handle multi survivialBuildPiece at once.
+     *
+     * @param buildPieces All result of `survivialBuildPiece`.
+     * @return If all result is -1, return -1. Otherwise, return the sum of all non-negative values.
+     */
     public static int multiBuildPiece(int... buildPieces) {
         int out = 0x80000000;
         for (int v : buildPieces) {

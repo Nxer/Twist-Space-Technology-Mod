@@ -19,7 +19,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -27,8 +26,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -173,51 +172,48 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
     }
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
-        int built = 0;
+        int[] built = new int[stackSize.stackSize + 2];
 
-        built += survivialBuildPiece(
+        built[0] = survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
             verticalOffSet,
             depthOffSet,
             elementBudget,
-            source,
-            actor,
+            env,
             false,
             true);
 
         int piece = stackSize.stackSize;
 
         for (int pointer = 1; pointer <= piece; pointer++) {
-            built += survivialBuildPiece(
+            built[pointer] = survivialBuildPiece(
                 STRUCTURE_PIECE_MIDDLE,
                 stackSize,
                 horizontalOffSet,
                 verticalOffSet,
                 depthOffSet - pointer * 2,
                 elementBudget,
-                source,
-                actor,
+                env,
                 false,
                 true);
         }
 
-        built += survivialBuildPiece(
+        built[built.length - 1] = survivialBuildPiece(
             STRUCTURE_PIECE_END,
             stackSize,
             horizontalOffSet,
             verticalOffSet,
             depthOffSet - piece * 2 - 2,
             elementBudget,
-            source,
-            actor,
+            env,
             false,
             true);
 
-        return built;
+        return Utils.multiBuildPiece(built);
     }
 
     private static final String STRUCTURE_PIECE_MAIN = "mainSilksong";

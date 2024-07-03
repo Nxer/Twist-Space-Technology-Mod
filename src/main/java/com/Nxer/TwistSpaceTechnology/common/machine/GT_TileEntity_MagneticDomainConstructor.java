@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -34,8 +33,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -212,20 +211,19 @@ public class GT_TileEntity_MagneticDomainConstructor
     }
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
 
-        int built = 0;
+        int[] built = new int[stackSize.stackSize + 2];
 
-        built += survivialBuildPiece(
+        built[0] = survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             baseHorizontalOffSet,
             baseVerticalOffSet,
             baseDepthOffSet,
             elementBudget,
-            source,
-            actor,
+            env,
             false,
             true);
 
@@ -234,34 +232,32 @@ public class GT_TileEntity_MagneticDomainConstructor
         if (ring > 1) {
             int pointer = 1;
             while (pointer < ring) {
-                built += survivialBuildPiece(
+                built[pointer] = survivialBuildPiece(
                     STRUCTURE_PIECE_MIDDLE,
                     stackSize,
                     baseHorizontalOffSet,
                     baseVerticalOffSet,
                     baseDepthOffSet - pointer * 4,
                     elementBudget,
-                    source,
-                    actor,
+                    env,
                     false,
                     true);
                 pointer++;
             }
         }
 
-        built += survivialBuildPiece(
+        built[ring + 1] = survivialBuildPiece(
             STRUCTURE_PIECE_END,
             stackSize,
             baseHorizontalOffSet,
             baseVerticalOffSet,
             baseDepthOffSet - ring * 4,
             elementBudget,
-            source,
-            actor,
+            env,
             false,
             true);
 
-        return built;
+        return Utils.multiBuildPiece(built);
 
     }
 
