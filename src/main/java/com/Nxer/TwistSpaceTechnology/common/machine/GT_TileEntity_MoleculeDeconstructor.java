@@ -37,7 +37,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -47,11 +46,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -174,53 +174,51 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
 	}
 
 	@Override
-	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 		if (this.mMachine) return -1;
-		int built = 0;
+		int[] built = new int[stackSize.stackSize + 2];
 
-		built += survivialBuildPiece(
+		built[0] = survivialBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
 			horizontalOffSet,
 			verticalOffSet,
 			depthOffSet,
 			elementBudget,
-			source,
-			actor,
+            env,
 			false,
 			true);
 
 		int piece = stackSize.stackSize;
-		if (piece>1) {
+		if (piece > 1) {
 			for (int i = 1; i < piece; i++) {
-				built += survivialBuildPiece(
+				built[i] = survivialBuildPiece(
 					STRUCTURE_PIECE_MIDDLE,
 					stackSize,
 					horizontalOffSet,
 					verticalOffSet,
 					depthOffSet - i * 4,
 					elementBudget,
-					source,
-					actor,
+                    env,
 					false,
 					true);
 			}
 		}
 
-		built += survivialBuildPiece(
+		built[piece + 1] += survivialBuildPiece(
 			STRUCTURE_PIECE_END,
 			stackSize,
 			horizontalOffSet,
 			verticalOffSet,
 			depthOffSet - piece*4,
 			elementBudget,
-			source,
-			actor,
+            env,
 			false,
 			true);
 
-		return built;
+		return Utils.multiBuildPiece(built);
 	}
+
 	private static final String STRUCTURE_PIECE_MAIN = "mainMoleculeDeconstructor";
 	private static final String STRUCTURE_PIECE_MIDDLE = "middleMoleculeDeconstructor";
 	private static final String STRUCTURE_PIECE_END = "endMoleculeDeconstructor";
