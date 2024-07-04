@@ -170,11 +170,11 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
             // #zh_CN 工业电磁离析机的控制方块
             .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator_Controller"))
             // #tr Tooltip_IndustrialMagnetarSeparator.01
-            // # 300% faster than using single block machines of the same voltage
+            // # 300%% faster than using single block machines of the same voltage
             // #zh_CN 比相同电压的单方块机器快300%%
             .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator.01"))
             // #tr Tooltip_IndustrialMagnetarSeparator.02
-            // # Only uses 80% of the EU/t normally required
+            // # Only uses 80%% of the EU/t normally required
             // #zh_CN 只需要使用配方要求功率的80%%
             .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator.02"))
             // #tr Tooltip_IndustrialMagnetarSeparator.03
