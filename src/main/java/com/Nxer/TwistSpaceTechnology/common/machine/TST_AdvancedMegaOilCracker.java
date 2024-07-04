@@ -19,7 +19,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -28,8 +27,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -66,6 +65,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     // region Processing Logic
     private float euModifier = 1.0F;
     public byte glassTier = 1;
+    public boolean perfectOverclock = false;
     private HeatingCoilLevel coilLevel;
 
     public HeatingCoilLevel getCoilLevel() {
@@ -77,6 +77,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         super.saveNBTData(aNBT);
         aNBT.setFloat("euModifier", euModifier);
         aNBT.setByte("glassTier", glassTier);
+        aNBT.setBoolean("perfectOverclock", perfectOverclock);
     }
 
     @Override
@@ -84,6 +85,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         super.loadNBTData(aNBT);
         euModifier = aNBT.getFloat("euModifier");
         glassTier = aNBT.getByte("glassTier");
+        perfectOverclock = aNBT.getBoolean("perfectOverclock");
     }
 
     public void setCoilLevel(HeatingCoilLevel coilLevel) {
@@ -97,7 +99,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return EnablePerfectOverclock_AdvancedMegaOilCracker;
+        return EnablePerfectOverclock_AdvancedMegaOilCracker || perfectOverclock;
     }
 
     @Override
@@ -135,21 +137,16 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     private final int verticalOffSet = 6;
     private final int depthOffSet = 0;
 
+    // spotless:off
     private final String[][] shapeMain = new String[][] {
-        { " D         D ", "DDAAAAAAAAADD", " DAAAAAAAAAD ", " DAAADDDAAAD ", " DAAADDDAAAD ", " DAAADDDAAAD ",
-            " DAAAAAAAAAD ", "DDAAAAAAAAADD", " D         D " },
-        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " A C C C C A ", " A C C C C A ", " A C C C C A ",
-            " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
-        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " DFFFFFFFFFD ", " D C C C C D ", " DFFFFFFFFFD ",
-            " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
-        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " D C C C C D ", " D C C C C D ", " D C C C C D ",
-            " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
-        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " DFFFFFFFFFD ", " D C C C C D ", " DFFFFFFFFFD ",
-            " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
-        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " A C C C C A ", " A C C C C A ", " A C C C C A ",
-            " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
-        { "DDDDDD~DDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD",
-            "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD" } };
+        { " D         D ", "DDAAAAAAAAADD", " DAAAAAAAAAD ", " DAAADDDAAAD ", " DAAADDDAAAD ", " DAAADDDAAAD ", " DAAAAAAAAAD ", "DDAAAAAAAAADD", " D         D " },
+        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " A C C C C A ", " A C C C C A ", " A C C C C A ", " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
+        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " DFFFFFFFFFD ", " D C C C C D ", " DFFFFFFFFFD ", " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
+        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " D C C C C D ", " D C C C C D ", " D C C C C D ", " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
+        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " DFFFFFFFFFD ", " D C C C C D ", " DFFFFFFFFFD ", " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
+        { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " A C C C C A ", " A C C C C A ", " A C C C C A ", " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
+        { "DDDDDD~DDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD" } };
+    // spotless:on
     private static IStructureDefinition<TST_AdvancedMegaOilCracker> STRUCTURE_DEFINITION = null;
 
     /*
@@ -164,11 +161,14 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
+        this.coilLevel = HeatingCoilLevel.None;
         this.glassTier = 0;
+        this.perfectOverclock = false;
         clearHatches();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (this.glassTier <= 0) return false;
+        if (this.glassTier <= 0 || coilLevel == HeatingCoilLevel.None) return false;
         this.euModifier = 1F / (coilLevel.getTier() + 1);
+        this.perfectOverclock = coilLevel.getTier() >= HeatingCoilLevel.UXV.getTier();
         return true;
     }
 
@@ -178,7 +178,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     }
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
         int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
         return this.survivialBuildPiece(
@@ -188,8 +188,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
             verticalOffSet,
             depthOffSet,
             realBudget,
-            source,
-            actor,
+            env,
             false,
             true);
     }
