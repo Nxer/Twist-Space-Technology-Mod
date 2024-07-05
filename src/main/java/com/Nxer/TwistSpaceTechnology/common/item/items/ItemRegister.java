@@ -3,6 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.item.items;
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01.initItem01;
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderRune.initItemRune;
 import static com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems.MultiStructuresLinkTool;
+import static com.Nxer.TwistSpaceTechnology.util.TextEnums.RiseOfDarkFog;
+import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 
@@ -59,6 +61,41 @@ public class ItemRegister {
         if (Config.Enable_BallLightning) {
             GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 24, new String[]{TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
         }
+
+        // #tr EnergyShard.tooltips.01
+        // # A piece of pure energy, from dark...
+        // #zh_CN 一片纯净的能量, 来自黑暗的...
+        GTCMItemList.EnergyShard.set(initItem01("Energy Shard", 25, new String[]{ tr("EnergyShard.tooltips.01"), DSPName, RiseOfDarkFog.getText() }));
+
+        // #tr SiliconBasedNeuron.tooltips.01
+        // # Very... uh, natural.
+        // #zh_CN 非常的... 呃, 自然.
+        GTCMItemList.SiliconBasedNeuron.set(initItem01("Silicon-based Neuron", 26, new String[]{ tr("SiliconBasedNeuron.tooltips.01"), DSPName, RiseOfDarkFog.getText() }));
+
+        // #tr MatterRecombinator.tooltips.01
+        // # The fundamental unit of material manipulation at the scale of elementary particles.
+        // #zh_CN 基本粒子尺度上物质操作的基本单元.
+        GTCMItemList.MatterRecombinator.set(initItem01("Matter Recombinator", 27, new String[]{ tr("MatterRecombinator.tooltips.01"), DSPName, RiseOfDarkFog.getText() }));
+
+        // #tr CoreElement.tooltips.01
+        // # Adding core elements to the singularization reaction of strange matter
+        // #zh_CN 在奇异物质的奇异化反应中加入核心素,
+        // #tr CoreElement.tooltips.02
+        // # can slow down the singularization reaction
+        // #zh_CN 可以慢化奇异化反应,
+        // #tr CoreElement.tooltips.03
+        // # and make it proceed in an orderly manner.
+        // #zh_CN 使其有序进行.
+        GTCMItemList.CoreElement.set(initItem01("Core Element", 28, new String[]{ tr("CoreElement.tooltips.01"), tr("CoreElement.tooltips.02"), tr("CoreElement.tooltips.03"), DSPName, RiseOfDarkFog.getText() }));
+
+        // #tr StrangeAnnihilationFuelRod.tooltips.01
+        // # Using strange matter as the main annihilation reaction raw material,
+        // #zh_CN 使用了奇异物质为主要的湮灭反应原料,
+        // #tr StrangeAnnihilationFuelRod.tooltips.02
+        // # the energy density and output power are greatly improved.
+        // #zh_CN 能量密度和输出功率均大幅提高.
+        GTCMItemList.StrangeAnnihilationFuelRod.set(initItem01("Strange Annihilation Fuel Rod", 29, new String[]{ tr("StrangeAnnihilationFuelRod.tooltips.01"), tr("StrangeAnnihilationFuelRod.tooltips.02"), DSPName, RiseOfDarkFog.getText() }));
+
 
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));

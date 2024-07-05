@@ -121,7 +121,7 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
                       // #tr Tooltips.DynamicParallelController.02
                       // # Provides up to
                       // #zh_CN 最多提供
-                      TextEnums.tr("Tooltips.DynamicParallelController.02") + " " + getMaxParallel() + " " + TextEnums.World_Parallel + ".",
+                      TextEnums.tr("Tooltips.DynamicParallelController.02") + " " + getMaxParallel() + " " + TextEnums.Word_Parallel + ".",
                       TextEnums.AddByTwistSpaceTechnology.getText(),
                       TextEnums.ModularizedMachineSystem.getText(),
                 };
