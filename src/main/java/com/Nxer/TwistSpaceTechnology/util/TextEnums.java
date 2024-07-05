@@ -64,18 +64,26 @@ public enum TextEnums {
     NameCoreDeviceOfHumanPowerGenerationFacility("NameCoreDeviceOfHumanPowerGenerationFacility"),
     // endregion
 
-    // region Single World
+    // region Single Word
 
-    // #tr World_Parallel
+    // #tr Word_Parallel
     // # Parallel
     // #zh_CN 并行
-    World_Parallel("World_Parallel"),
+    Word_Parallel("Word_Parallel"),
 
-    // #tr World_Overclock
+    // #tr Word_Overclock
     // # Overclock
     // #zh_CN 超频
-    World_Overclock("World_Overclock"),
+    Word_Overclock("Word_Overclock"),
 
+    // endregion
+
+    // region Dyson Sphere Program
+
+    // #tr RiseOfTheDarkFog
+    // # {\BLACK}{\BOLD}Rise of the Dark Fog
+    // #zh_CN {\BLACK}{\BOLD}黑雾崛起
+    RiseOfDarkFog("RiseOfTheDarkFog"),
     // endregion
 
     // region Modularized Machine System

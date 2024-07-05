@@ -47,7 +47,7 @@ public class StaticParallelController extends StaticParallelControllerBase {
                     // #tr Tooltips.StaticParallelController.02
                     // # Provides
                     // #zh_CN 提供
-                    TextEnums.tr("Tooltips.StaticParallelController.02") + " " + getParallel() + " " + TextEnums.World_Parallel + ".",
+                    TextEnums.tr("Tooltips.StaticParallelController.02") + " " + getParallel() + " " + TextEnums.Word_Parallel + ".",
                     TextEnums.AddByTwistSpaceTechnology.getText(),
                     TextEnums.ModularizedMachineSystem.getText(),
                 };
