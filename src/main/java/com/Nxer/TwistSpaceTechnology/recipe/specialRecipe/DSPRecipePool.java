@@ -517,7 +517,7 @@ public class DSPRecipePool implements IRecipePool {
             .fluidInputs(
                 Materials.SiliconSG.getMolten(144 * 1024),
                 MaterialsUEVplus.TranscendentMetal.getMolten(144 * 64))
-            .itemOutputs(SolarSail.get(4))
+            .itemOutputs(SolarSail.get(3))
 
             .noOptimize()
             .eut(RECIPE_UMV)
@@ -531,7 +531,7 @@ public class DSPRecipePool implements IRecipePool {
                 ItemList.Circuit_Silicon_Wafer7.get(12),
                 ItemList.Emitter_UIV.get(12))
             .fluidInputs(Materials.SiliconSG.getMolten(144 * 2048), MaterialsUEVplus.SpaceTime.getMolten(144 * 48))
-            .itemOutputs(SolarSail.get(8))
+            .itemOutputs(SolarSail.get(9))
 
             .noOptimize()
             .eut(RECIPE_UMV)
@@ -548,7 +548,7 @@ public class DSPRecipePool implements IRecipePool {
                 Materials.SiliconSG.getMolten(144 * 4096),
                 MaterialsUEVplus.PrimordialMatter.getFluid(144 * 16),
                 MaterialsUEVplus.Eternity.getMolten(144 * 16))
-            .itemOutputs(SolarSail.get(16))
+            .itemOutputs(SolarSail.get(27))
 
             .noOptimize()
             .eut(RECIPE_UMV)
@@ -565,7 +565,7 @@ public class DSPRecipePool implements IRecipePool {
                 Materials.SiliconSG.getMolten(144 * 8192),
                 MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 8),
                 MaterialsUEVplus.Universium.getMolten(144 * 8))
-            .itemOutputs(SolarSail.get(64))
+            .itemOutputs(SolarSail.get(128))
 
             .noOptimize()
             .eut(RECIPE_UXV)
