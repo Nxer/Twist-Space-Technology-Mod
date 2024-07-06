@@ -173,7 +173,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
 
     private ItemStack[] getItemOutputs() {
         List<ItemStack> outputs = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 8; i++) {
             ItemData oreData = GT_OreDictUnificator.getItemData(generateOneStackOre());
             if (oreData == null) {
                 TwistSpaceTechnology.LOG.info("EOW getItemOutputs error: oreData is null");
