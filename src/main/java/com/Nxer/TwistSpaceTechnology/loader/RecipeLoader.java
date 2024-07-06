@@ -4,6 +4,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBla
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.AssemblyLineWithoutResearchRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CentrifugeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ChemicalReactorRecipePool;
@@ -64,6 +65,7 @@ public class RecipeLoader {
             new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool(),
             new MassFabricatorGenesisRecipePool(), new SpaceAssemblerRecipePool() };
 
+        new SimpleFurnaceFuelPool().loadRecipes();
         new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
