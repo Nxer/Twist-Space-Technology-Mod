@@ -526,7 +526,7 @@ meme
 * 深度化学扭曲仪："gtcm.recipe.IntensifyChemicalDistorterRecipes"
 * 光子掌控者："gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes"
 * 奇迹顶点电路组装机模式："gtcm.recipe.MiracleTopRecipes"
-* 奇迹定点量子逆变器模式："gtcm.recipe.QuantumInversionRecipes"
+* 奇迹顶点量子逆变器模式："gtcm.recipe.QuantumInversionRecipes"
 * 无限晶胞："gtcm.recipe.CrystallineInfinitierRecipes"
 * 戴森球模块发射场虚拟配方："gtcm.recipe.DSPLauncherRecipes"
 * 戴森球射线接收站虚拟配方："gtcm.recipe.DSPReceiverRecipes"

@@ -353,6 +353,16 @@ public enum GTCMItemList {
     DSPLauncher,
     DSPReceiver,
     ArtificialStar,
+    StrangeMatterAggregator,
+    SpaceTimeOscillatorT1,
+    SpaceTimeOscillatorT2,
+    SpaceTimeOscillatorT3,
+    SpaceTimeConstraintorT1,
+    SpaceTimeConstraintorT2,
+    SpaceTimeConstraintorT3,
+    SpaceTimeMergerT1,
+    SpaceTimeMergerT2,
+    SpaceTimeMergerT3,
 
     // endregion
 

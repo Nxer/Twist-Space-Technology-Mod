@@ -6,6 +6,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.D
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.MegaTreeGrowthSimulator_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 
 import goodgenerator.client.GUI.GG_UITextures;
 import gregtech.api.gui.modularui.GT_UITextures;
@@ -226,6 +227,19 @@ public class GTCMRecipe {
         .neiSpecialInfoFormatter(MegaTreeGrowthSimulator_SpecialValueFormatter.INSTANCE)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.StrangeMatterAggregatorRecipes
+    // # Strange Matter Aggregation
+    // #zh_CN 奇异物质聚合
+    public static final RecipeMap<TST_RecipeMapBackend> StrangeMatterAggregatorRecipes = RecipeMapBuilder
+        .of("tst.recipe.StrangeMatterAggregatorRecipes", TST_RecipeMapBackend::new)
+        .maxIO(4, 2, 2, 2)
+        .progressBar(GT_UITextures.PROGRESSBAR_COMPRESS)
+        .neiHandlerInfo(b -> b.setDisplayStack(GTCMItemList.StrangeMatterAggregator.get(1)))
+        .useSpecialSlot()
+        .frontend(TST_StrangeMatterAggregatorFrontend::new)
         .disableOptimize()
         .build();
 }

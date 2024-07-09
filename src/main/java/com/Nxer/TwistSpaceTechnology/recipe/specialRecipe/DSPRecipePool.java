@@ -15,6 +15,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehic
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StrangeAnnihilationFuelRod;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatter;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingNode;
@@ -32,6 +33,7 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Spacetime;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
+import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
@@ -51,7 +53,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
 import com.dreammaster.gthandler.GT_CoreModSupport;
@@ -73,6 +77,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
+import gtPlusPlus.core.material.ELEMENT;
 import gtPlusPlus.core.material.Particle;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 
@@ -721,6 +726,98 @@ public class DSPRecipePool implements IRecipePool {
             .eut(RECIPE_UMV)
             .duration(20 * 1200)
             .addTo(GTPPRecipeMaps.cyclotronRecipes);
+
+        // region Strange Matter Aggregation
+        {
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    // first slot is the general input , amount is set by machine internal parameters
+                    Antimatter.get(256),
+                    // second slot is the right input bus input and consumption rate set by structure
+                    AnnihilationConstrainer.get(1),
+                    // third slot is only consume one time per process
+                    ItemList.Tesseract.get(1),
+                    // fourth slot is consume same amount with output, can be saved by high tier structure
+                    StellarConstructionFrameMaterial.get(1))
+                .fluidInputs(
+                    // general input , amount is set by machine internal parameters
+                    Materials.Hydrogen.getPlasma(256 * 1000),
+                    // T1 maintenance fluid with basic amount
+                    MaterialsUEVplus.SpaceTime.getMolten(576))
+                .itemOutputs(
+                    // first output is T1 output
+                    AntimatterFuelRod.get(1),
+                    // second output is T2 output, when input special item then turn to output this instead of T1 output
+                    StrangeAnnihilationFuelRod.get(1))
+                .fluidOutputs(
+                    // here is T1 byproduct
+                    Materials.Infinity.getMolten(Config.ByproductBaseAmount_T1_StrangeMatterAggregator),
+                    ELEMENT.STANDALONE.HYPOGEN.getFluidStack(Config.ByproductBaseAmount_T1_StrangeMatterAggregator))
+                .specialItem(GTCMItemList.CoreElement.get(1))
+                // machine will always use a fixed power, adjusted by structure
+                .eut(RECIPE_MAX)
+                .duration(20 * 120)
+                .addTo(GTCMRecipe.StrangeMatterAggregatorRecipes);
+
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    // first slot is the general input , amount is set by machine internal parameters
+                    Antimatter.get(256),
+                    // second slot is the right input bus input and consumption rate set by structure
+                    AnnihilationConstrainer.get(1),
+                    // third slot is only consume one time per process
+                    ItemList.Tesseract.get(1),
+                    // fourth slot is consume same amount with output, can be saved by high tier structure
+                    StellarConstructionFrameMaterial.get(1))
+                .fluidInputs(
+                    // general input , amount is set by machine internal parameters
+                    Materials.Hydrogen.getPlasma(256 * 1000),
+                    // T2 maintenance fluid with basic amount
+                    MaterialsUEVplus.Universium.getMolten(96))
+                .itemOutputs(
+                    // first output is T1 output
+                    AntimatterFuelRod.get(1),
+                    // second output is T2 output, when input special item then turn to output this instead of T1 output
+                    StrangeAnnihilationFuelRod.get(1))
+                .fluidOutputs(
+                    // here is T2 byproduct
+                    MaterialsUEVplus.SpaceTime.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator),
+                    MyMaterial.shirabon.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator))
+                .specialItem(GTCMItemList.CoreElement.get(1))
+                // machine will always use a fixed power, adjusted by structure
+                .eut(RECIPE_MAX)
+                .duration(20 * 120)
+                .addTo(GTCMRecipe.StrangeMatterAggregatorRecipes);
+
+            GT_Values.RA.stdBuilder()
+                .itemInputs(
+                    // first slot is the general input , amount is set by machine internal parameters
+                    Antimatter.get(256),
+                    // second slot is the right input bus input and consumption rate set by structure
+                    AnnihilationConstrainer.get(1),
+                    // third slot is only consume one time per process
+                    ItemList.Tesseract.get(1),
+                    // fourth slot is consume same amount with output, can be saved by high tier structure
+                    StellarConstructionFrameMaterial.get(1))
+                .fluidInputs(
+                    // general input , amount is set by machine internal parameters
+                    Materials.Hydrogen.getPlasma(256 * 1000),
+                    // T3 maintenance fluid with basic amount
+                    MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(16))
+                .itemOutputs(
+                    // first output is T1 output
+                    AntimatterFuelRod.get(1),
+                    // second output is T2 output, when input special item then turn to output this instead of T1 output
+                    StrangeAnnihilationFuelRod.get(1))
+                .fluidOutputs(
+                    // here is T3 byproduct
+                    MaterialsUEVplus.Universium.getMolten(Config.ByproductBaseAmount_T3_StrangeMatterAggregator))
+                .specialItem(GTCMItemList.CoreElement.get(1))
+                // machine will always use a fixed power, adjusted by structure
+                .eut(RECIPE_MAX)
+                .duration(20 * 120)
+                .addTo(GTCMRecipe.StrangeMatterAggregatorRecipes);
+        }
 
     }
 }

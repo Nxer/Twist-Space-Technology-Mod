@@ -9,6 +9,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonContr
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.nuclear.BlockNuclearReactor;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaStructureCasing;
 
 public class BasicBlocks {
 
@@ -19,6 +20,10 @@ public class BasicBlocks {
         "PhotonControllerUpgrades",
         "Photon Controller Upgrade");
 
+    public static final Block SpaceTimeOscillator = new MetaStructureCasing("SpaceTimeOscillator");
+    public static final Block SpaceTimeConstraintor = new MetaStructureCasing("SpaceTimeConstraintor");
+    public static final Block SpaceTimeMerger = new MetaStructureCasing("SpaceTimeMerger");
+
     public static final Block spaceStationStructureBlock = new SpaceStationStructureCasing(
         "SpaceStationStructureBlock",
         "Space Station Structure Block");
@@ -27,7 +32,6 @@ public class BasicBlocks {
         "SpaceStationAntiGravityBlock",
         "Space Station Anti Gravity Block");
     public static Block BlockStar;
-
     public static Block NuclearReactorBlock = new BlockNuclearReactor("nuclear", "Mega Nuclear Reactor");
 
     public static Block BlockPowerChair = new BlockPowerChair();
