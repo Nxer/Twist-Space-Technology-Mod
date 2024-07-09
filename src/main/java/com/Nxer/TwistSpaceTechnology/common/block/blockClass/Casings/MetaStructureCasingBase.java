@@ -7,38 +7,23 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ICasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
 
 import gregtech.api.GregTech_API;
-import gregtech.api.util.GT_Utility;
 
 /**
- * A base block class of GregTech casings that textures will be called for update hatches' textures.
+ * A base block class of GregTech multiblock machine structure casings without need for textures.
+ * <p>
+ * For example, tiered blocks.
  */
-public abstract class MetaBlockCasingBase extends MetaBlockBase implements ICasing {
+public class MetaStructureCasingBase extends MetaBlockBase {
 
-    public static final byte TEXTURE_PAGE_INDEX = 115;
-
-    static {
-        GT_Utility.addTexturePage(TEXTURE_PAGE_INDEX);
-    }
-
-    public MetaBlockCasingBase(String unlocalizedName) {
+    public MetaStructureCasingBase(String unlocalizedName) {
         super(unlocalizedName);
-        this.setHardness(9.0F);
+        this.setHardness(8.0F);
         this.setResistance(5.0F);
         GregTech_API.registerMachineBlock(this, -1);
     }
-
-    // region Texture
-    @Override
-    public int getTextureIndex(int aMeta) {
-        return getTextureId(getTexturePageIndex(), getTextureIndexInPage(aMeta));
-    }
-    // endregion
-
-    // region General
 
     @Override
     public String getHarvestTool(int aMeta) {
@@ -80,18 +65,17 @@ public abstract class MetaBlockCasingBase extends MetaBlockBase implements ICasi
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess aWorld, int aX, int aY, int aZ) {
-        return false;
-    }
-
-    @Override
-    public boolean isNormalCube(IBlockAccess aWorld, int aX, int aY, int aZ) {
-        return true;
-    }
-
-    @Override
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
         return false;
     }
 
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public boolean isNormalCube(IBlockAccess world, int x, int y, int z) {
+        return true;
+    }
 }

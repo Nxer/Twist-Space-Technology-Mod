@@ -20,4 +20,17 @@ public final class CheckRecipeResults {
     // #zh_CN 设置处理任务失败，检查你的能源系统或无线EU网络。
     public static final CheckRecipeResult SetProcessingFailed = SimpleResultWithText
         .ofFailurePersistOnShutdown("CheckRecipeResult.SetProcessingFailed");
+
+    // #tr CheckRecipeResult.NoSpaceTimeMaintenanceFluidInput
+    // # No Space Time Maintenance Fluid Input
+    // #zh_CN 没有时空维护流体输入
+    public static final CheckRecipeResult NoSpaceTimeMaintenanceFluidInput = SimpleResultWithText
+        .ofFailurePersistOnShutdown("CheckRecipeResult.NoSpaceTimeMaintenanceFluidInput");
+
+    // #tr CheckRecipeResult.NoAnnihilationConstrainerInput
+    // # No Annihilation Constrainers Input
+    // #zh_CN 没有湮灭约束器输入
+    public static final CheckRecipeResult NoAnnihilationConstrainerInput = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.NoAnnihilationConstrainerInput");
+
 }

@@ -2,9 +2,6 @@ package com.Nxer.TwistSpaceTechnology;
 
 import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,6 +12,7 @@ import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.devTools.PathHelper;
+import com.Nxer.TwistSpaceTechnology.loader.LazyStaticsInitLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
@@ -31,7 +29,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
-import gregtech.api.util.GT_Recipe;
 
 @Mod(
     modid = Tags.MODID,
@@ -45,7 +42,7 @@ public class TwistSpaceTechnology {
      * <li>The signal of whether in Development Mode.
      * <li>Keep care to set 'false' when dev complete.
      */
-    public static final boolean isInDevMode = false;
+    public static final boolean isInDevMode = true;
 
     /**
      * The absolute Path of your workspace/resources folder.
@@ -126,12 +123,13 @@ public class TwistSpaceTechnology {
 
     }
 
-    public static Collection<GT_Recipe> temp = new HashSet<>();
-
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
         RecipeLoader.loadRecipes();// Load Recipes
         ExtremeCraftRecipe.initECRecipe();
+
+        // Init static parameters
+        new LazyStaticsInitLoader().initStaticsOnCompleteInit();
         // reflect
 
     }

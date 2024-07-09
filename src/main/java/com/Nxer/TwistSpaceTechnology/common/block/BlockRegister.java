@@ -19,6 +19,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStatio
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasingItemBlock;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -31,14 +32,30 @@ public class BlockRegister {
     public static void registryBlocks() {
 
         GameRegistry.registerBlock(MetaBlock01, ItemBlockBase01.class, MetaBlock01.getUnlocalizedName());
+
         GameRegistry.registerBlock(
             BasicBlocks.MetaBlockCasing01,
             MetaItemBlockCasing.class,
             BasicBlocks.MetaBlockCasing01.getUnlocalizedName());
+
         GameRegistry.registerBlock(
             PhotonControllerUpgrade,
             PhotonControllerUpgradeCasingItemBlock.class,
             PhotonControllerUpgrade.getUnlocalizedName());
+
+        GameRegistry.registerBlock(
+            BasicBlocks.SpaceTimeOscillator,
+            MetaItemBlockCasing.class,
+            BasicBlocks.SpaceTimeOscillator.getUnlocalizedName());
+        GameRegistry.registerBlock(
+            BasicBlocks.SpaceTimeConstraintor,
+            MetaItemBlockCasing.class,
+            BasicBlocks.SpaceTimeConstraintor.getUnlocalizedName());
+        GameRegistry.registerBlock(
+            BasicBlocks.SpaceTimeMerger,
+            MetaItemBlockCasing.class,
+            BasicBlocks.SpaceTimeMerger.getUnlocalizedName());
+
         GameRegistry.registerBlock(
             spaceStationStructureBlock,
             SpaceStationStructureCasingItemBlock.class,
@@ -51,6 +68,7 @@ public class BlockRegister {
             NuclearReactorBlock,
             BlockNuclearReactor.innerItemBlock.class,
             NuclearReactorBlock.getUnlocalizedName());
+
         GameRegistry.registerBlock(BasicBlocks.BlockPowerChair, ItemBlockPowerChair.class, "BlockPowerChair");
         BlockStar = new BlockStar();
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
@@ -172,6 +190,87 @@ public class BlockRegister {
                 // #zh_CN 压缩回旋加速器线圈
                 (byte) 12,
                 BasicBlocks.MetaBlockCasing01));
+
+        // region SpaceTimeOscillator
+
+        // #tr SpaceTimeOscillator.0.name
+        // # SpaceTime Oscillator T1
+        // #zh_CN 时空振荡器T1
+        GTCMItemList.SpaceTimeOscillatorT1.set(
+            MetaBlockConstructors
+                .initMetaBlock("SpaceTime Oscillator T1", (byte) 0, (MetaBlockBase) BasicBlocks.SpaceTimeOscillator));
+
+        // #tr SpaceTimeOscillator.1.name
+        // # SpaceTime Oscillator T2
+        // #zh_CN 时空振荡器T2
+        GTCMItemList.SpaceTimeOscillatorT2.set(
+            MetaBlockConstructors
+                .initMetaBlock("SpaceTime Oscillator T2", (byte) 1, (MetaBlockBase) BasicBlocks.SpaceTimeOscillator));
+
+        // #tr SpaceTimeOscillator.2.name
+        // # SpaceTime Oscillator T3
+        // #zh_CN 时空振荡器T3
+        GTCMItemList.SpaceTimeOscillatorT3.set(
+            MetaBlockConstructors
+                .initMetaBlock("SpaceTime Oscillator T3", (byte) 2, (MetaBlockBase) BasicBlocks.SpaceTimeOscillator));
+
+        // endregion
+
+        // region SpaceTimeConstraintor
+
+        // #tr SpaceTimeConstraintor.0.name
+        // # SpaceTime Constraintor T1
+        // #zh_CN 时空约束器T1
+        GTCMItemList.SpaceTimeConstraintorT1.set(
+            MetaBlockConstructors.initMetaBlock(
+                "SpaceTime Constraintor T1",
+                (byte) 0,
+                (MetaBlockBase) BasicBlocks.SpaceTimeConstraintor));
+
+        // #tr SpaceTimeConstraintor.1.name
+        // # SpaceTime Constraintor T2
+        // #zh_CN 时空约束器T2
+        GTCMItemList.SpaceTimeConstraintorT2.set(
+            MetaBlockConstructors.initMetaBlock(
+                "SpaceTime Constraintor T2",
+                (byte) 1,
+                (MetaBlockBase) BasicBlocks.SpaceTimeConstraintor));
+
+        // #tr SpaceTimeConstraintor.2.name
+        // # SpaceTime Constraintor T3
+        // #zh_CN 时空约束器T3
+        GTCMItemList.SpaceTimeConstraintorT3.set(
+            MetaBlockConstructors.initMetaBlock(
+                "SpaceTime Constraintor T3",
+                (byte) 2,
+                (MetaBlockBase) BasicBlocks.SpaceTimeConstraintor));
+
+        // endregion
+
+        // region SpaceTimeMerger
+
+        // #tr SpaceTimeMerger.0.name
+        // # SpaceTime Merger T1
+        // #zh_CN 时空归并器T1
+        GTCMItemList.SpaceTimeMergerT1.set(
+            MetaBlockConstructors
+                .initMetaBlock("SpaceTime Merger T1", (byte) 0, (MetaBlockBase) BasicBlocks.SpaceTimeMerger));
+
+        // #tr SpaceTimeMerger.1.name
+        // # SpaceTime Merger T2
+        // #zh_CN 时空归并器T2
+        GTCMItemList.SpaceTimeMergerT2.set(
+            MetaBlockConstructors
+                .initMetaBlock("SpaceTime Merger T2", (byte) 1, (MetaBlockBase) BasicBlocks.SpaceTimeMerger));
+
+        // #tr SpaceTimeMerger.2.name
+        // # SpaceTime Merger T3
+        // #zh_CN 时空归并器T3
+        GTCMItemList.SpaceTimeMergerT3.set(
+            MetaBlockConstructors
+                .initMetaBlock("SpaceTime Merger T3", (byte) 2, (MetaBlockBase) BasicBlocks.SpaceTimeMerger));
+
+        // endregion
 
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV

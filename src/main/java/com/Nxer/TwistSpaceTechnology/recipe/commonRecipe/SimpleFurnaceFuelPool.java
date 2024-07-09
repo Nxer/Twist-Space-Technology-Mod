@@ -38,7 +38,7 @@ public class SimpleFurnaceFuelPool implements IRecipePool, IFuelHandler {
      * Registry your item burnable here.
      */
     public void registryFuels() {
-        setFuel(GTCMItemList.EnergyShard.get(1), 365 * 24 * 3600);
+        setFuel(GTCMItemList.EnergyShard.get(1), 365 * 24 * 3600 * 20);
     }
 
     @Override

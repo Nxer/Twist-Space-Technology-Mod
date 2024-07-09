@@ -51,6 +51,15 @@ public final class Utils {
         return out < 0 ? -1 : out;
     }
 
+    public static ItemStack addStringToStackName(ItemStack itemStack, String extra) {
+
+        String originName = itemStack.getDisplayName();
+        String newName = originName + " " + extra;
+        itemStack.setStackDisplayName(newName);
+
+        return itemStack;
+    }
+
     // endregion
 
     // region about ItemStack

@@ -138,6 +138,11 @@ public enum TextEnums {
     // #zh_CN 不可重复安装同类型的模块仓室. 除了执行核心模块.
     NotMultiplyInstallSameTypeModule("NotMultiplyInstallSameTypeModule"),
 
+    // #tr NotMultiplyInstallSameTypeModule
+    // # Same type of module hatch cannot be installed repeatedly.
+    // #zh_CN 不可重复安装同类型的模块仓室.
+    NotMultiplyInstallSameTypeModuleAll("NotMultiplyInstallSameTypeModuleAll"),
+
     // #tr CanMultiplyInstallSameTypeModule
     // # Same type of module hatch can be installed repeatedly.
     // #zh_CN 可以重复安装同类型的模块仓室.
