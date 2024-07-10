@@ -490,11 +490,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     public void checkMaintenance() {}
 
-
     public boolean getDefaultHasMaintenanceChecks() {
         return false;
     }
-
 
     public final boolean shouldCheckMaintenance() {
         return false;
