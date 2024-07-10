@@ -19,12 +19,12 @@ import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GT_ModHandler;
 import thaumcraft.common.items.ItemEssence;
 
 public class IndustrialMagicMatrixRecipePool implements IRecipePool {
@@ -50,14 +50,16 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
             skips = new HashSet<>();
             skips.add(itemJarNode);
             if (Mods.ThaumicBases.isModLoaded()) {
-                skips.add(
-                    GT_ModHandler.getModItem(Mods.ThaumicBases.ID, "revolver", 1)
-                        .getItem());
+                Item revolver = GameRegistry.findItem(Mods.ThaumicBases.ID, "revolver");
+                if (null != revolver) {
+                    skips.add(revolver);
+                }
             }
             if (Mods.Gadomancy.isModLoaded()) {
-                skips.add(
-                    GT_ModHandler.getModItem(Mods.Gadomancy.ID, "itemEtherealFamiliar", 1)
-                        .getItem());
+                Item itemEtherealFamiliar = GameRegistry.findItem(Mods.Gadomancy.ID, "itemEtherealFamiliar");
+                if (null != itemEtherealFamiliar) {
+                    skips.add(itemEtherealFamiliar);
+                }
             }
         }
 
