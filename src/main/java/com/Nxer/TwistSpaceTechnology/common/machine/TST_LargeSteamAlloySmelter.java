@@ -202,13 +202,13 @@ public class TST_LargeSteamAlloySmelter extends GregtechMeta_SteamMultiBase<TST_
     /**
      * No more machine error
      */
-    @Override
+
     public void checkMaintenance() {}
 
     /**
      * No more machine error
      */
-    @Override
+
     public boolean getDefaultHasMaintenanceChecks() {
         return false;
     }
@@ -216,7 +216,7 @@ public class TST_LargeSteamAlloySmelter extends GregtechMeta_SteamMultiBase<TST_
     /**
      * No more machine error
      */
-    @Override
+
     public final boolean shouldCheckMaintenance() {
         return false;
     }

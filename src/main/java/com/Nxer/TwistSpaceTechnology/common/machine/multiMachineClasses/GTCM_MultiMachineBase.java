@@ -285,7 +285,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     /**
      * Forced get all input fluids, include all Dual Input Hatch slot.
-     * 
+     *
      * @return ArrayList of all fluid stacks, contains fluid stacks in Crafting Input Hatch.
      */
     public ArrayList<FluidStack> getStoredFluidsWithDualInput() {
@@ -487,21 +487,15 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     /**
      * No more machine error
      */
-    @Override
+
     public void checkMaintenance() {}
 
-    /**
-     * No more machine error
-     */
-    @Override
+
     public boolean getDefaultHasMaintenanceChecks() {
         return false;
     }
 
-    /**
-     * No more machine error
-     */
-    @Override
+
     public final boolean shouldCheckMaintenance() {
         return false;
     }

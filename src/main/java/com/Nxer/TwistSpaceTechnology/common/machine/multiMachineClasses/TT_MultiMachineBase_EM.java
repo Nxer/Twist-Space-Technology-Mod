@@ -23,13 +23,13 @@ public abstract class TT_MultiMachineBase_EM extends GT_MetaTileEntity_Multibloc
     /**
      * No more machine error
      */
-    @Override
+
     public void checkMaintenance() {}
 
     /**
      * No more machine error
      */
-    @Override
+
     public boolean getDefaultHasMaintenanceChecks() {
         return false;
     }
@@ -37,7 +37,7 @@ public abstract class TT_MultiMachineBase_EM extends GT_MetaTileEntity_Multibloc
     /**
      * No more machine error
      */
-    @Override
+
     public final boolean shouldCheckMaintenance() {
         return false;
     }

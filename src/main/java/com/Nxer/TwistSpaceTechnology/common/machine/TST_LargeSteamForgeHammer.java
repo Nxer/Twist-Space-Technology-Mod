@@ -159,13 +159,13 @@ public class TST_LargeSteamForgeHammer extends GregtechMeta_SteamMultiBase<TST_L
     /**
      * No more machine error
      */
-    @Override
+
     public void checkMaintenance() {}
 
     /**
      * No more machine error
      */
-    @Override
+
     public boolean getDefaultHasMaintenanceChecks() {
         return false;
     }
@@ -173,7 +173,7 @@ public class TST_LargeSteamForgeHammer extends GregtechMeta_SteamMultiBase<TST_L
     /**
      * No more machine error
      */
-    @Override
+
     public final boolean shouldCheckMaintenance() {
         return false;
     }
