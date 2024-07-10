@@ -6,7 +6,6 @@ import static com.dreammaster.block.BlockList.BloodyThaumium;
 import static com.dreammaster.block.BlockList.BloodyVoid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static goodgenerator.loader.Loaders.magicCasing;
-import static goodgenerator.util.DescTextLocalization.BLUE_PRINT_INFO;
 import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
@@ -38,6 +37,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -1816,7 +1816,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
                 .addSeparator()
                 .addInfo(StructureTooComplex)
-                .addInfo(BLUE_PRINT_INFO)
+                .addInfo(TextLocalization.BLUE_PRINT_INFO)
                 // #tr Tooltip_IndustrialMagicMatrix_23
                 // # Infusion Provider
                 // #zh_CN 注魔供应器

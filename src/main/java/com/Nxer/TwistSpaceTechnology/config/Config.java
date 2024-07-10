@@ -84,7 +84,9 @@ public class Config {
     public static int EUTOfLaunchingSolarSail = (int) RECIPE_UHV;
     public static int EUTOfLaunchingNode = (int) RECIPE_UMV;
     public static boolean EnableRenderDefaultArtificialStar = true;
+    public static long EUEveryStrangeAnnihilationFuelRod = 32768L * Integer.MAX_VALUE;
 
+    // TODO cfg of StrangeMatterAggregator
     // region StrangeMatterAggregator
     public static long PowerConsume_StrangeMatterAggregator = RECIPE_MAX * 256L;
     public static int RecipeTime_T1SpaceTimeOscillator_StrangeMatterAggregator = 120 * 20;
@@ -637,6 +639,10 @@ public class Config {
         EUTOfLaunchingSolarSail = configuration.getInt("EUTOfLaunchingSolarSail", DSP, EUTOfLaunchingSolarSail, 1, Integer.MAX_VALUE, "EUt of Launching Solar Sail.");
         EUTOfLaunchingNode = configuration.getInt("EUTOfLaunchingNode", DSP, EUTOfLaunchingNode, 1, Integer.MAX_VALUE, "EUt of Launching Node.");
         EnableRenderDefaultArtificialStar = configuration.getBoolean("EnableRenderDefaultArtificialStar", DSP, EnableRenderDefaultArtificialStar, "Enable Render of Artificial Star when placing a new one.");
+        EUEveryStrangeAnnihilationFuelRod = Long.parseLong(configuration.getString("EUEveryStrangeAnnihilationFuelRod", DSP, String.valueOf(EUEveryStrangeAnnihilationFuelRod), "EU of every Strange Annihilation Fuel Rod can generate. Type: long"));
+        // region StrangeMatterAggregator
+
+        // endregion
         // endregion
 
         // region Space Station

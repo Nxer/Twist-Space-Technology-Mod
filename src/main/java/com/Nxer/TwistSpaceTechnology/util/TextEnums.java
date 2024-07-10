@@ -29,6 +29,11 @@ public enum TextEnums {
     // #zh_CN 线圈等级
     CoilTier("MachineInfoData.CoilTier"),
 
+    // #tr MachineInfoData.CurrentPowerConsumption
+    // # Current Power Consumption
+    // #zh_CN 当前耗电
+    CurrentPowerConsumption("MachineInfoData.CurrentPowerConsumption"),
+
     // #tr MachineInfoData.MachineMode
     // # Machine Mode
     // #zh_CN 机器模式
@@ -138,7 +143,7 @@ public enum TextEnums {
     // #zh_CN 不可重复安装同类型的模块仓室. 除了执行核心模块.
     NotMultiplyInstallSameTypeModule("NotMultiplyInstallSameTypeModule"),
 
-    // #tr NotMultiplyInstallSameTypeModule
+    // #tr NotMultiplyInstallSameTypeModuleAll
     // # Same type of module hatch cannot be installed repeatedly.
     // #zh_CN 不可重复安装同类型的模块仓室.
     NotMultiplyInstallSameTypeModuleAll("NotMultiplyInstallSameTypeModuleAll"),
