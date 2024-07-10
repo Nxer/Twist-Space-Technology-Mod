@@ -3,8 +3,6 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Antimatter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AntimatterFuelRod;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
-import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatter;
-import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EnableRenderDefaultArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
@@ -38,7 +36,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInf
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.SpacetimeCompressionFieldGenerators;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.TimeAccelerationFieldGenerator;
@@ -75,9 +73,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.google.common.collect.ImmutableList;
@@ -118,6 +120,25 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
 
     // endregion
 
+    // region Statics
+    protected static TST_ItemID Antimatter;
+    protected static TST_ItemID AntimatterFuelRod;
+    protected static TST_ItemID StrangeAnnihilationFuelRod;
+    protected static long MaxOfAntimatter;
+    protected static long MaxOfAntimatterFuelRod;
+    protected static long MaxOfStrangeAnnihilationFuelRod;
+
+    public static void initStatics() {
+        Antimatter = TST_ItemID.createNoNBT(GTCMItemList.Antimatter.get(1));
+        AntimatterFuelRod = TST_ItemID.createNoNBT(GTCMItemList.AntimatterFuelRod.get(1));
+        StrangeAnnihilationFuelRod = TST_ItemID.createNoNBT(GTCMItemList.StrangeAnnihilationFuelRod.get(1));
+        MaxOfAntimatter = Config.EUEveryAntimatter / Integer.MAX_VALUE;
+        MaxOfAntimatterFuelRod = Config.EUEveryAntimatterFuelRod / Integer.MAX_VALUE;
+        MaxOfStrangeAnnihilationFuelRod = Config.EUEveryStrangeAnnihilationFuelRod / Integer.MAX_VALUE;
+    }
+
+    // endregion
+
     // region Processing Logic
     private String ownerName;
     private UUID ownerUUID;
@@ -132,7 +153,6 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     private final DecimalFormat decimalFormat = new DecimalFormat("#.0");
     private boolean isRendering = false;
     private byte enableRender = EnableRenderDefaultArtificialStar;
-    public static final BigInteger BIG_INTEGER_100 = BigInteger.valueOf(100);
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -205,20 +225,29 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         // iterate input bus slot
         // consume fuel and generate EU
         boolean flag = false;
-        int recoveryAmount = 0;
+        long recoveryAmount = 0;
+        // * Integer.MAX_VALUE
         currentOutputEU = 0;
         for (ItemStack items : getStoredInputs()) {
-            if (metaItemEqual(items, Antimatter.get(1))) {
-                currentOutputEU += EUEveryAntimatter / Integer.MAX_VALUE * items.stackSize;
-                consumeAntimatter(items);
+            if (Antimatter.equalItemStack(items)) {
+                currentOutputEU += MaxOfAntimatter * items.stackSize;
                 flag = true;
-            } else if (metaItemEqual(items, AntimatterFuelRod.get(1))) {
-                currentOutputEU += EUEveryAntimatterFuelRod / Integer.MAX_VALUE * items.stackSize;
+            } else if (AntimatterFuelRod.equalItemStack(items)) {
+                currentOutputEU += MaxOfAntimatterFuelRod * items.stackSize;
                 recoveryAmount += items.stackSize;
-                consumeAntimatterFuelRod(items);
+                flag = true;
+            } else if (StrangeAnnihilationFuelRod.equalItemStack(items)) {
+                currentOutputEU += MaxOfStrangeAnnihilationFuelRod * items.stackSize;
+                recoveryAmount += items.stackSize;
                 flag = true;
             }
+            // whether the item is fuel
+            // void it
+            items.stackSize = 0;
         }
+
+        // flush input slots
+        updateSlots();
 
         // if no antimatter or fuel rod input
         if (!flag) {
@@ -232,19 +261,24 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
 
-        // flush input slots
-        updateSlots();
+        // add EU to the wireless EU net
+        BigInteger eu = BigInteger.valueOf(currentOutputEU)
+            .multiply(Utils.INTEGER_MAX_VALUE);
+        if (!addEUToGlobalEnergyMap(ownerUUID, eu)) {
+            return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        }
+
         // set progress time with cfg
         mMaxProgresstime = (int) (20 * secondsOfArtificialStarProgressCycleTime);
         // chance to recover FrameMaterial
         if (recoveryChance == 1000) {
-            ItemStack recoverItem = StellarConstructionFrameMaterial.get(1);
-            recoverItem.stackSize = recoveryAmount;
-            mOutputItems = new ItemStack[] { recoverItem.copy(), recoverItem.copy(), recoverItem.copy() };
+            if (recoveryAmount > 0) {
+                mOutputItems = getRecovers(recoveryAmount);
+            }
         } else if (XSTR.XSTR_INSTANCE.nextInt(1000) < recoveryChance) {
-            ItemStack recoverItem = StellarConstructionFrameMaterial.get(1);
-            recoverItem.stackSize = recoveryAmount;
-            mOutputItems = new ItemStack[] { recoverItem.copy(), recoverItem.copy(), recoverItem.copy() };
+            if (recoveryAmount > 0) {
+                mOutputItems = getRecovers(recoveryAmount);
+            }
         }
 
         // increase multiplier of rewarding continuous operation
@@ -258,6 +292,22 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         return CheckRecipeResultRegistry.GENERATING;
     }
 
+    protected ItemStack[] getRecovers(long amount) {
+        if (amount <= Integer.MAX_VALUE) {
+            return new ItemStack[] { StellarConstructionFrameMaterial.get((int) amount) };
+        } else {
+            int stack = (int) (amount / Integer.MAX_VALUE);
+            int remainder = (int) (amount % Integer.MAX_VALUE);
+            ItemStack[] r = new ItemStack[remainder > 0 ? stack + 1 : stack];
+            ItemStack t = StellarConstructionFrameMaterial.get(Integer.MAX_VALUE);
+            for (int i = 0; i < stack; i++) {
+                r[i] = t.copy();
+            }
+            if (remainder > 0) r[stack] = copyAmount(remainder, t);
+            return r;
+        }
+    }
+
     // Artificial Star Output multiplier
     private void calculateOutputMultiplier() {
         // tTime^0.25 * tDim^0.25 * 1.588186^(tStabilisation-2)
@@ -265,43 +315,6 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         // 1.588186^(-1) = 0.629
         this.outputMultiplier = Math.pow(1d * tierTimeField * tierDimensionField, 0.25d)
             * Math.pow(1.588186d, tierStabilisationField - 2);
-    }
-
-    private void consumeAntimatter(ItemStack antimatter) {
-        if (1d * Long.MAX_VALUE / outputMultiplier / EUEveryAntimatter / (rewardContinuous + 100)
-            < antimatter.stackSize) {
-            addEUToGlobalEnergyMap(
-                ownerUUID,
-                BigInteger.valueOf((long) (EUEveryAntimatter * outputMultiplier))
-                    .multiply(BigInteger.valueOf(antimatter.stackSize))
-                    .multiply(BigInteger.valueOf(rewardContinuous + 100))
-                    .divide(BIG_INTEGER_100));
-        } else {
-            addEUToGlobalEnergyMap(
-                ownerUUID,
-                (long) (EUEveryAntimatter * antimatter.stackSize * outputMultiplier * (rewardContinuous + 100) / 100));
-        }
-        antimatter.stackSize = 0;
-    }
-
-    private void consumeAntimatterFuelRod(ItemStack antimatterFuelRod) {
-        if (1d * Long.MAX_VALUE / outputMultiplier / EUEveryAntimatterFuelRod / (rewardContinuous + 100)
-            < antimatterFuelRod.stackSize) {
-            addEUToGlobalEnergyMap(
-                ownerUUID,
-                BigInteger.valueOf((long) (EUEveryAntimatterFuelRod * outputMultiplier))
-                    .multiply(BigInteger.valueOf(antimatterFuelRod.stackSize))
-                    .multiply(BigInteger.valueOf(rewardContinuous + 100))
-                    .divide(BIG_INTEGER_100));
-        } else {
-            addEUToGlobalEnergyMap(
-                ownerUUID,
-                (long) (EUEveryAntimatterFuelRod * antimatterFuelRod.stackSize
-                    * outputMultiplier
-                    * (rewardContinuous + 100)
-                    / 100));
-        }
-        antimatterFuelRod.stackSize = 0;
     }
 
     @Override
@@ -316,11 +329,11 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (rewardContinuous != 0 && mMaxProgresstime == 0) rewardContinuous = 0;
-        if (isRendering && mMaxProgresstime == 0) {
+        if (isRendering && mMaxProgresstime == 0 && rewardContinuous == 0) {
             isRendering = false;
             destroyRenderBlock();
         }
+        if (rewardContinuous != 0 && mMaxProgresstime == 0) rewardContinuous = 0;
     }
 
     @Override

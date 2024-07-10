@@ -82,6 +82,11 @@ public abstract class ModularizedMachineSupportAllModuleBase<T extends Modulariz
     }
 
     @Override
+    protected float getEuModifier() {
+        return staticPowerConsumptionMultiplier;
+    }
+
+    @Override
     protected int getMaxParallelRecipes() {
         if (dynamicParallel == Integer.MAX_VALUE || staticParallel == Integer.MAX_VALUE
             || dynamicParallel >= Integer.MAX_VALUE - 1 - staticParallel) {

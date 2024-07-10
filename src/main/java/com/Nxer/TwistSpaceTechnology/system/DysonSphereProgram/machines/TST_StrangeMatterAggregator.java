@@ -23,9 +23,12 @@ import java.util.UUID;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -79,11 +82,14 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_Utility;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_CraftingInput_ME;
 import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_Input_ME;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import gtPlusPlus.core.material.ELEMENT;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllModuleBase<TST_StrangeMatterAggregator> {
 
@@ -828,12 +834,15 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
-        // UI
+        // UI Structure
         aNBT.setInteger("oscillatorPieceNeed", oscillatorPieceNeed);
         aNBT.setInteger("constraintorPieceNeed", constraintorPieceNeed);
         aNBT.setInteger("mergerPieceNeed", mergerPieceNeed);
 
-        //
+        // UI Running
+        aNBT.setInteger("spaceTimeMaintenanceFluidTier", spaceTimeMaintenanceFluidTier);
+
+        // Structure
         aNBT.setInteger("oscillatorTier", oscillatorTier);
         aNBT.setInteger("oscillatorPiece", oscillatorPiece);
         aNBT.setInteger("constraintorTier", constraintorTier);
@@ -841,35 +850,90 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         aNBT.setInteger("mergerTier", mergerTier);
         aNBT.setInteger("mergerPiece", mergerPiece);
         aNBT.setInteger("rings", rings);
+        aNBT.setBoolean("wirelessMode", wirelessMode);
+
+        // Running
+        aNBT.setInteger("consecutivePoint", consecutivePoint);
+
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+
+        // UI Structure
+        oscillatorPieceNeed = aNBT.getInteger("oscillatorPieceNeed");
+        constraintorPieceNeed = aNBT.getInteger("constraintorPieceNeed");
+        mergerPieceNeed = aNBT.getInteger("mergerPieceNeed");
+
+        // UI Running
+        spaceTimeMaintenanceFluidTier = aNBT.getInteger("spaceTimeMaintenanceFluidTier");
+
+        // Structure
         oscillatorTier = aNBT.getInteger("oscillatorTier");
         oscillatorPiece = aNBT.getInteger("oscillatorPiece");
-        oscillatorPieceNeed = aNBT.getInteger("oscillatorPieceNeed");
         constraintorTier = aNBT.getInteger("constraintorTier");
         constraintorPiece = aNBT.getInteger("constraintorPiece");
-        constraintorPieceNeed = aNBT.getInteger("constraintorPieceNeed");
         mergerTier = aNBT.getInteger("mergerTier");
         mergerPiece = aNBT.getInteger("mergerPiece");
-        mergerPieceNeed = aNBT.getInteger("mergerPieceNeed");
         rings = aNBT.getInteger("rings");
+        wirelessMode = aNBT.getBoolean("wirelessMode");
+
+        // Running
+        consecutivePoint = aNBT.getInteger("consecutivePoint");
 
         flushBuildingRingPieceArray();
     }
 
     @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.getBoolean("isActive")) {
+            currentTip.add(
+                "" + EnumChatFormatting.WHITE
+                    + EnumChatFormatting.BOLD
+                    + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.consecutivePoint")
+                    + EnumChatFormatting.GRAY
+                    + " : "
+                    + EnumChatFormatting.YELLOW
+                    + tag.getInteger("consecutivePoint"));
+            currentTip.add(
+                "" + EnumChatFormatting.AQUA
+                    + TextEnums.CurrentPowerConsumption
+                    + EnumChatFormatting.GRAY
+                    + " : "
+                    + EnumChatFormatting.WHITE
+                    + GT_Utility.formatNumbers(tag.getLong("powerConsumption"))
+                    + " EU/t");
+        }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            if (tileEntity.isActive()) {
+                tag.setInteger("consecutivePoint", consecutivePoint);
+                tag.setLong("powerConsumption", (long) (powerConsumption * getEuModifier()));
+            }
+        }
+    }
+
+    @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 7];
+        String[] ret = new String[origin.length + 8];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA
             // #tr StrangeMatterAggregator.MachineInfoData.oscillatorTier
             // # SpaceTime Oscillator {\RED}Tier
             // #zh_CN 时空振荡器{\RED}等级
             + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.oscillatorTier")
+            + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + oscillatorTier;
@@ -878,6 +942,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             // # SpaceTime Oscillator {\BLUE}Rings
             // #zh_CN 时空振荡器{\BLUE}环数
             + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.oscillatorPiece")
+            + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + oscillatorPiece;
@@ -886,6 +951,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             // # SpaceTime Constraintor {\RED}Tier
             // #zh_CN 时空约束器{\RED}等级
             + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.constraintorTier")
+            + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + constraintorTier;
@@ -894,6 +960,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             // # SpaceTIme Constraintor {\BLUE}Rings
             // #zh_CN 时空约束器{\BLUE}环数
             + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.constraintorPiece")
+            + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + constraintorPiece;
@@ -902,6 +969,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             // # SpaceTime Merger {\RED}Tier
             // #zh_CN 时空归并器{\RED}等级
             + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.mergerTier")
+            + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + mergerTier;
@@ -910,6 +978,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             // # SpaceTime Merger {\BLUE}Rings
             // #zh_CN 时空归并器{\BLUE}环数
             + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.mergerPiece")
+            + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + mergerPiece;
@@ -918,9 +987,19 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             // # {\BLUE}Total Rings
             // #zh_CN {\BLUE}总环数
             + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.totalRings")
+            + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + rings;
+        ret[origin.length + 7] = "" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD
+        // #tr StrangeMatterAggregator.MachineInfoData.consecutivePoint
+        // # Continuous Running Points
+        // #zh_CN 连续运行点数
+            + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.consecutivePoint")
+            + EnumChatFormatting.WHITE
+            + ": "
+            + EnumChatFormatting.GOLD
+            + consecutivePoint;
         return ret;
     }
 
@@ -1445,6 +1524,123 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             tooltip
                 .addMachineType(
                     TextEnums.tr("Tooltip_StrangeMatterAggregator_MachineType"))
+                // #tr Tooltip_StrangeMatterAggregator_01
+                // # {\ITALIC}{\DARK_BLUE}Life is like Ephemera in the world, a drop in the sea.
+                // #zh_CN {\ITALIC}{\DARK_BLUE}寄蜉蝣于天地，渺沧海之一粟。
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_01"))
+                // #tr Tooltip_StrangeMatterAggregator_02
+                // # Creation of specialized space-time, efficient manipulation of strange matter.
+                // #zh_CN 创建专用的时空, 高效地操作奇异物质.
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_02"))
+                // #tr Tooltip_StrangeMatterAggregator_03
+                // # The machines are stacked, and each layer can be fitted with one type of Space-Time Operator Cube.
+                // #zh_CN 机器是叠层结构, 每层可以安装一种时空操作器方块.
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_03"))
+                // #tr Tooltip_StrangeMatterAggregator_04
+                // # Higher tier, more rings, more benefits, but also costs.
+                // #zh_CN 更高等级, 更多层数, 更多收益, 同时也有代价.
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_04"))
+                // #tr Tooltip_StrangeMatterAggregator_05
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Oscillator {\BLUE}----------------
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空振荡器 {\BLUE}----------------
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_05"))
+                // #tr Tooltip_StrangeMatterAggregator_06
+                // # Base run time: the higher the tier the shorter the run time
+                // #zh_CN 基础运行耗时：等级越高, 耗时越短
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_06"))
+                // #tr Tooltip_StrangeMatterAggregator_07
+                // # Basic materials consumption: the higher the number of rings, the lower the amount consumed
+                // #zh_CN 基础原料消耗：层数越多, 消耗量越少
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_07"))
+                // #tr Tooltip_StrangeMatterAggregator_08
+                // # SpaceTime maintenance fluid consumption: more rings more consumed
+                // #zh_CN 时空维护流体消耗：层数越多, 消耗量越多
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_08"))
+                // #tr Tooltip_StrangeMatterAggregator_09
+                // # Core element and annihilation constrainer consumption: higher tier, more rings, lower consumption rate
+                // #zh_CN 核心素和湮灭约束器消耗：等级越高, 层数越多, 消耗率越低
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_09"))
+                // #tr Tooltip_StrangeMatterAggregator_10
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Constraintor {\BLUE}----------------
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空约束器 {\BLUE}----------------
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_10"))
+                // #tr Tooltip_StrangeMatterAggregator_11
+                // # Consumption rate of auxiliary materials: the higher the level, the lower the consumption rate
+                // #zh_CN 辅助材料消耗率：等级越高, 消耗率越低
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_11"))
+                // #tr Tooltip_StrangeMatterAggregator_12
+                // # Actual running time: the higher the tier the longer the actual running time is
+                // #zh_CN 实际运行耗时：等级越高, 实际运行耗时越长
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_12"))
+                // #tr Tooltip_StrangeMatterAggregator_13
+                // # SpaceTime maintenance fluid consumption: the more rings you have the less you consume
+                // #zh_CN 时空维护流体消耗：层数越多, 消耗量越少
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_13"))
+                // #tr Tooltip_StrangeMatterAggregator_14
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Merger {\BLUE}----------------
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空归并器 {\BLUE}----------------
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_14"))
+                // #tr Tooltip_StrangeMatterAggregator_15
+                // # Maximum Continuous Running Points: The higher the tier, the higher the Continuous Running Points limit!
+                // #zh_CN 最大连续运行点数：等级越高, 连续运行点数上限越高
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_15"))
+                // #tr Tooltip_StrangeMatterAggregator_16
+                // # Byproduct outputs: the more rings the more outputs
+                // #zh_CN 副产物产出：层数越多, 产量越大
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_16"))
+                // #tr Tooltip_StrangeMatterAggregator_17
+                // # Power Consumption: higher tier, more rings, the higher the power consumption
+                // #zh_CN 耗电：等级越高层数越多耗电越高
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_17"))
+                // #tr Tooltip_StrangeMatterAggregator_18
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\AQUA}{\BOLD}SpaceTime Maintenance Fluid {\RESET}{\BLUE}----------------
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\AQUA}{\BOLD}时空维护流体 {\RESET}{\BLUE}----------------
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_18"))
+                // #tr Tooltip_StrangeMatterAggregator_19
+                // # Setting the used SpaceTime maintenance fluid tier within the machine UI:
+                // #zh_CN 在主机UI内设置使用的时空维护流体:
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_19"))
+                // #tr Tooltip_StrangeMatterAggregator_20
+                // # {\SPACE}T1 = 576L Molten SpaceTime | T2 = 96L Molten Universium | T3 = 16L Molten Magnetohydrodynamically Constrained Star Matter
+                // #zh_CN {\SPACE}T1 = 576L 熔融时空 | T2 = 96L 熔融宇宙素 | T3 = 16L 熔融磁流体约束恒星物质
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_20"))
+                // #tr Tooltip_StrangeMatterAggregator_21
+                // # Using Advanced SpaceTime Maintenance Fluid increases num of fuel rods can be crafted per Annihilation Constrainer and Core Element,
+                // #zh_CN 使用高级时空维护流体可以提高每个湮灭约束器和核心素可以制作的燃料棒数量,
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_21"))
+                // #tr Tooltip_StrangeMatterAggregator_22
+                // # {\SPACE} and reduce the consumption of fluid materials. The type of byproducts depends on the SpaceTime maintenance fluid used.
+                // #zh_CN {\SPACE}并降低流体原料的消耗量. 副产物类型取决于使用的时空维护流体.
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_22"))
+                // #tr Tooltip_StrangeMatterAggregator_23
+                // # T1: Molten Infinity and Molten Hypogen; T2: Molten SpaceTime and Molten Shirabon; T3: Molten Universium;
+                // #zh_CN T1: 熔融无尽和熔融海珀珍; T2: 熔融时空和熔融调律源金; T3: 熔融宇宙素;
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_23"))
+                .addInfo(EnumChatFormatting.GOLD + TextLocalization.Text_SeparatingLine)
+                // #tr Tooltip_StrangeMatterAggregator_24
+                // # {\WHITE}{\BOLD}Continuous Operation{\RESET}{\WHITE} will produce by-products and more of the main product.
+                // #zh_CN {\WHITE}{\BOLD}连续运行{\RESET}{\WHITE}时将产出副产物和更多的主产物.
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_24"))
+                // #tr Tooltip_StrangeMatterAggregator_25
+                // # For each successful run, {\WHITE}Continuous Running Points{\GRAY} is increased by one.
+                // #zh_CN 每次成功运行时, {\WHITE}连续运行点数{\GRAY}加一.
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_25"))
+                // #tr Tooltip_StrangeMatterAggregator_26
+                // # Continuous provision of sufficient space-time maintenance fluid to maintain continuous operation. Otherwise, operation is interrupted.
+                // #zh_CN 持续提供充足的时空维护流体可保持连续运行状态. 否则中断运行.
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_26"))
+                // #tr Tooltip_StrangeMatterAggregator_27
+                // # {\WHITE}Provide {\YELLOW}{\BOLD}Core Elements {\WHITE}to obtain t2 products
+                // #zh_CN {\WHITE}提供{\YELLOW}{\BOLD}核心素{\WHITE}获得二级产物
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_27"))
+                // #tr Tooltip_StrangeMatterAggregator_28
+                // # If input Core Element, machine will consume Core Element and output a portion of T2 product instead part primary product.
+                // #zh_CN 如果有核心素输入则会消耗核心素并将一部分主产物替换为二级产物.
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_28"))
+                // #tr Tooltip_StrangeMatterAggregator_29
+                // # At the same time, byproduct yields are doubled.
+                // #zh_CN 同时副产物产量翻倍.
+                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_29"))
                 .addInfo(TextEnums.InstallingModuleNearControllerImproveMachine.getText())
                 .addInfo(TextEnums.ModularizedMachineSystem.getText())
                 .addSeparator()
@@ -1457,13 +1653,30 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .addStructureInfo(TextEnums.SpeedControllerDescription.getText())
                 .addStructureInfo(TextEnums.NotMultiplyInstallSameTypeModuleAll.getText())
                 .addStructureInfo(TextLocalization.Text_SeparatingLine)
-                .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-                .addInputHatch(TextLocalization.textUseBlueprint, 3)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 3)
-                .addInputBus(TextLocalization.textUseBlueprint, 3)
-                .addOutputBus(TextLocalization.textUseBlueprint, 3)
-                .addStructureHint(TextEnums.ModularHatch.getKey(), 1)
+                // #tr Tooltip_StrangeMatterAggregator.structure.UI_Description.01
+                // # {\WHITE}{\BOLD}Setting up auto-build rules for multi-rings structures within the controller UI.
+                // #zh_CN {\WHITE}{\BOLD}在主机UI内设置多环结构的自动搭建规则.
+                .addStructureInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.UI_Description.01"))
+                // #tr Tooltip_StrangeMatterAggregator.structure.SpaceTimeMaintenanceFluidInputHatch
+                // # Input Hatch of SpaceTime Maintenance Fluid
+                // #zh_CN 时空维护流体输入仓
+                // #tr Tooltip_StrangeMatterAggregator.structure.Left
+                // # Left area beside the controller block
+                // #zh_CN 主方块左侧区域
+                .addOtherStructurePart(TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.SpaceTimeMaintenanceFluidInputHatch"), TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.Left"), 3)
+                // #tr Tooltip_StrangeMatterAggregator.structure.CoreElementAndAnnihilationConstrainerInputBus
+                // # Input Bus of Core Element and Annihilation Constrainer
+                // #zh_CN 核心素和湮灭约束器输入总线
+                // #tr Tooltip_StrangeMatterAggregator.structure.Right
+                // # Right area beside the controller block
+                // #zh_CN 主方块右侧区域
+                .addOtherStructurePart(TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.CoreElementAndAnnihilationConstrainerInputBus"), TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.Right"), 4)
+                .addInputHatch(TextLocalization.textUseBlueprint, 2)
+                .addInputBus(TextLocalization.textUseBlueprint, 2)
+                .addOtherStructurePart(TextEnums.ModularHatch.getText(), TextLocalization.textUseBlueprint, 1)
+                .addOutputBus(TextLocalization.textUseBlueprint, 1)
+                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+                .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
                 .toolTipFinisher(TextLocalization.ModName);
             // spotless:on
         }
