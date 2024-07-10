@@ -86,6 +86,7 @@ import com.Nxer.TwistSpaceTechnology.system.Disassembler.TST_Disassembler;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
+import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_StrangeMatterAggregator;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -157,6 +158,7 @@ public class MachineLoader {
     public static ItemStack IndistinctTentaclePrototypeMK2;
     public static ItemStack MassFabricatorGenesis;
     public static ItemStack IncompactCyclotron;
+    public static ItemStack StrangeMatterAggregator;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -647,18 +649,32 @@ public class MachineLoader {
                 TextEnums.tr("NameMassFabricatorGenesis")).getStackForm(1);
             GTCMItemList.MassFabricatorGenesis.set(MassFabricatorGenesis);
 
-            if (Config.Enable_IncompactCyclotron) {
-                // #tr NameIncompactCyclotron
-                // # PULSAR - Incompact Cyclotron
-                // #zh_CN PULSAR - 非紧凑式回旋加速器
-                IncompactCyclotron = new TST_IncompactCyclotron(
-                    19058,
-                    "NameIncompactCyclotron",
-                    TextEnums.tr("NameIncompactCyclotron")).getStackForm(1);
-                GTCMItemList.IncompactCyclotron.set(IncompactCyclotron);
-            }
+        }
+
+        if (Config.Enable_IncompactCyclotron) {
+            // #tr NameIncompactCyclotron
+            // # PULSAR - Incompact Cyclotron
+            // #zh_CN PULSAR - 非紧凑式回旋加速器
+            IncompactCyclotron = new TST_IncompactCyclotron(
+                19058,
+                "NameIncompactCyclotron",
+                TextEnums.tr("NameIncompactCyclotron")).getStackForm(1);
+            GTCMItemList.IncompactCyclotron.set(IncompactCyclotron);
+        }
+
+        if (Config.EnableModularizedMachineSystem) {
+
+            // #tr NameStrangeMatterAggregator
+            // # Strange Matter Aggregator
+            // #zh_CN 奇异物质聚合器
+            StrangeMatterAggregator = new TST_StrangeMatterAggregator(
+                19059,
+                "NameStrangeMatterAggregator",
+                TextEnums.tr("NameStrangeMatterAggregator")).getStackForm(1);
+            GTCMItemList.StrangeMatterAggregator.set(StrangeMatterAggregator);
 
         }
+
         // endregion
 
         // region Single block Machine

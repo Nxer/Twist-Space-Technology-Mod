@@ -257,6 +257,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
                 setEuModifier(getEuModifier());
+                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
                 return super.process();
             }
 

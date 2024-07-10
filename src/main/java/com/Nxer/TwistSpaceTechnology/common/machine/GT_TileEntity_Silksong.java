@@ -1,7 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerPiece_Silksong;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerCoilTier_Silksong;
+import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_PerPiece_Silksong;
+import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedBonus_MultiplyPerVoltageTier_Silksong;
+import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplier_CoilTier_Silksong;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.pressureResistantWalls;
@@ -18,15 +19,15 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -69,6 +70,10 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
 
     public void setCoilLevel(HeatingCoilLevel coilLevel) {
         this.coilLevel = coilLevel;
+    }
+
+    public int getCoilTier() {
+        return Utils.getCoilTier(coilLevel);
     }
 
     @Override
@@ -127,8 +132,13 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
             return false;
         }
 
-        parallel = (int) Math.min((long) piece * Parallel_PerPiece_Silksong, Integer.MAX_VALUE);
-        speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerCoilTier_Silksong, this.coilLevel.getTier());
+        // parallel = piece * coilTier * 32
+        parallel = (int) Math.min((long) piece * getCoilTier() * Parallel_PerPiece_Silksong, Integer.MAX_VALUE);
+
+        // speed bonus = 0.85^voltageTier / (coilTier * 1)
+        speedBonus = (float) (Math
+            .pow(SpeedBonus_MultiplyPerVoltageTier_Silksong, GT_Utility.getTier(this.getMaxInputEu()))
+            / (getCoilTier() * SpeedMultiplier_CoilTier_Silksong));
 
         return true;
     }
@@ -162,51 +172,48 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
     }
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
-        int built = 0;
+        int[] built = new int[stackSize.stackSize + 2];
 
-        built += survivialBuildPiece(
+        built[0] = survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
             verticalOffSet,
             depthOffSet,
             elementBudget,
-            source,
-            actor,
+            env,
             false,
             true);
 
         int piece = stackSize.stackSize;
 
         for (int pointer = 1; pointer <= piece; pointer++) {
-            built += survivialBuildPiece(
+            built[pointer] = survivialBuildPiece(
                 STRUCTURE_PIECE_MIDDLE,
                 stackSize,
                 horizontalOffSet,
                 verticalOffSet,
                 depthOffSet - pointer * 2,
                 elementBudget,
-                source,
-                actor,
+                env,
                 false,
                 true);
         }
 
-        built += survivialBuildPiece(
+        built[built.length - 1] = survivialBuildPiece(
             STRUCTURE_PIECE_END,
             stackSize,
             horizontalOffSet,
             verticalOffSet,
             depthOffSet - piece * 2 - 2,
             elementBudget,
-            source,
-            actor,
+            env,
             false,
             true);
 
-        return built;
+        return Utils.multiBuildPiece(built);
     }
 
     private static final String STRUCTURE_PIECE_MAIN = "mainSilksong";
@@ -308,6 +315,7 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
             .addInfo(TextLocalization.Tooltip_Silksong_02)
             .addInfo(TextLocalization.Tooltip_Silksong_03)
             .addInfo(TextLocalization.Tooltip_Silksong_04)
+            .addInfo(TextLocalization.Tooltip_Silksong_05)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)

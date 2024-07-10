@@ -33,6 +33,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyMulti;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_Holder;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
@@ -61,7 +62,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @SuppressWarnings("unchecked")
-public class TST_ResearchCenter extends GT_MetaTileEntity_MultiblockBase_EM implements ISurvivalConstructable {
+public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvivalConstructable {
 
     public static final String machine = "EM Machinery";
     public static final String crafter = "EM Crafting";

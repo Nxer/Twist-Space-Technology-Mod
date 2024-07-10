@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
+import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.metatileentity.MetaTileEntity;
 import scala.actors.migration.pattern;
 
@@ -25,6 +26,42 @@ public final class Utils {
     public static final double LOG2 = Math.log(2);
     public static final double LOG4 = Math.log(4);
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
+    public static final BigInteger INTEGER_MAX_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
+    public static final BigInteger BIG_INTEGER_100 = BigInteger.valueOf(100);
+    // region about game
+
+    /**
+     * LV = 1, MAX = 14
+     */
+    public static int getCoilTier(HeatingCoilLevel coilLevel) {
+        return coilLevel.getTier() + 1;
+    }
+
+    /**
+     * One method to handle multi survivialBuildPiece at once.
+     *
+     * @param buildPieces All result of `survivialBuildPiece`.
+     * @return If all result is -1, return -1. Otherwise, return the sum of all non-negative values.
+     */
+    public static int multiBuildPiece(int... buildPieces) {
+        int out = 0x80000000;
+        for (int v : buildPieces) {
+            out &= (v & 0x80000000) | 0x7fffffff;
+            if (v != -1) out += v;
+        }
+        return out < 0 ? -1 : out;
+    }
+
+    public static ItemStack addStringToStackName(ItemStack itemStack, String extra) {
+
+        String originName = itemStack.getDisplayName();
+        String newName = originName + " " + extra;
+        itemStack.setStackDisplayName(newName);
+
+        return itemStack;
+    }
+
+    // endregion
 
     // region about ItemStack
     public static boolean metaItemEqual(ItemStack a, ItemStack b) {
@@ -246,6 +283,10 @@ public final class Utils {
     // endregion
 
     // region Generals
+
+    public static <T> T withNull(T main, T instead) {
+        return null == main ? instead : main;
+    }
 
     public static void debugLogInfo(String... strings) {
         if (isInDevMode) {

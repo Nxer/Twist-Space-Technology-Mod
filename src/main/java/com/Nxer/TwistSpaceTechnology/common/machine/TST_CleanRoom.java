@@ -24,6 +24,7 @@ import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
@@ -46,8 +47,7 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_OutputBus_ME;
 
-public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
-    implements IConstructable, ISecondaryDescribable, ICleanroom {
+public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructable, ISecondaryDescribable, ICleanroom {
 
     private static final int maxX = 63;
     private static final int maxY = 64;
@@ -206,18 +206,7 @@ public class TST_CleanRoom extends GT_MetaTileEntity_MultiblockBase_EM
     }
 
     @Override
-    protected void maintenance_EM() {
-        mWrench = true;
-        mScrewdriver = true;
-        mSoftHammer = true;
-        mHardHammer = true;
-        mSolderingTool = true;
-        mCrowbar = true;
-    }
-
-    @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        maintenance_EM();
         // Cleanroom
         int x = 1;
         int z = 1;

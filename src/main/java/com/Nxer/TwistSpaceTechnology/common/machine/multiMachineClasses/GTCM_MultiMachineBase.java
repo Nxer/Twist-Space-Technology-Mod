@@ -12,6 +12,8 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -30,10 +32,12 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynam
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_MultiInput;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_InputBus_ME;
+import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_Input_ME;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
 
@@ -279,6 +283,62 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return rList;
     }
 
+    /**
+     * Forced get all input fluids, include all Dual Input Hatch slot.
+     * 
+     * @return ArrayList of all fluid stacks, contains fluid stacks in Crafting Input Hatch.
+     */
+    public ArrayList<FluidStack> getStoredFluidsWithDualInput() {
+        ArrayList<FluidStack> rList = new ArrayList<>();
+        Map<Fluid, FluidStack> inputsFromME = new HashMap<>();
+        for (GT_MetaTileEntity_Hatch_Input tHatch : GT_Utility.filterValidMTEs(mInputHatches)) {
+            setHatchRecipeMap(tHatch);
+            if (tHatch instanceof GT_MetaTileEntity_Hatch_MultiInput multiInputHatch) {
+                for (FluidStack tFluid : multiInputHatch.getStoredFluid()) {
+                    if (tFluid != null) {
+                        rList.add(tFluid);
+                    }
+                }
+            } else if (tHatch instanceof GT_MetaTileEntity_Hatch_Input_ME meHatch) {
+                for (FluidStack fluidStack : meHatch.getStoredFluids()) {
+                    if (fluidStack != null) {
+                        // Prevent the same fluid from different ME hatches from being recognized
+                        inputsFromME.put(fluidStack.getFluid(), fluidStack);
+                    }
+                }
+            } else {
+                if (tHatch.getFillableStack() != null) {
+                    rList.add(tHatch.getFillableStack());
+                }
+            }
+        }
+
+        if (!inputsFromME.isEmpty()) {
+            rList.addAll(inputsFromME.values());
+        }
+
+        // get all fluids from Dual input
+        if (supportsCraftingMEBuffer()) {
+            for (IDualInputHatch dualInputHatch : mDualInputHatches) {
+                Iterator<? extends IDualInputInventory> inventoryIterator = dualInputHatch.inventories();
+                while (inventoryIterator.hasNext()) {
+                    FluidStack[] fluids = inventoryIterator.next()
+                        .getFluidInputs();
+                    if (fluids == null || fluids.length == 0) continue;
+
+                    for (int i = 0; i < fluids.length; i++) {
+                        if (fluids[i] != null && fluids[i].amount > 0) {
+                            rList.add(fluids[i]);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return rList;
+    }
+
     // region Overrides
     @Override
     public String[] getInfoData() {
@@ -422,6 +482,28 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     @Override
     public boolean doRandomMaintenanceDamage() {
         return true;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public void checkMaintenance() {}
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean getDefaultHasMaintenanceChecks() {
+        return false;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public final boolean shouldCheckMaintenance() {
+        return false;
     }
 
     /**

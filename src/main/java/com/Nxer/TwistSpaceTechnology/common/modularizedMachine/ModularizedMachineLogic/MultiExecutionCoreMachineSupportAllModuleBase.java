@@ -87,6 +87,11 @@ public abstract class MultiExecutionCoreMachineSupportAllModuleBase<T extends Mu
     }
 
     @Override
+    protected float getEuModifier() {
+        return staticPowerConsumptionMultiplier;
+    }
+
+    @Override
     protected OverclockType getOverclockType() {
         return overclockType;
     }

@@ -302,8 +302,8 @@ public class TextLocalization {
     public static final String Tooltip_MagneticDomainConstructor_00 = texter("Controller block for the Magnetic Domain Constructor", "Tooltip_MagneticDomainConstructor_00");
     public static final String Tooltip_MagneticDomainConstructor_01 = texter(EnumChatFormatting.DARK_GRAY + "Don't give up your imagination.", "Tooltip_MagneticDomainConstructor_01");
     public static final String Tooltip_MagneticDomainConstructor_02 = texter("Controlling the magnetic domains inside the crystal, yes that's it.", "Tooltip_MagneticDomainConstructor_02");
-    public static final String Tooltip_MagneticDomainConstructor_03 = texter("18x Parallel per Ring.(Don't use a lot of blueprints when first scanning.)", "Tooltip_MagneticDomainConstructor_03");
-    public static final String Tooltip_MagneticDomainConstructor_04 = texter("Additional 20%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_MagneticDomainConstructor_04");
+    public static final String Tooltip_MagneticDomainConstructor_03 = texter("64x Parallel per Ring.(Don't use a lot of blueprints when first scanning.)", "Tooltip_MagneticDomainConstructor_03");
+    public static final String Tooltip_MagneticDomainConstructor_04 = texter("Additional 25%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_MagneticDomainConstructor_04");
 
     // endregion
 
@@ -313,8 +313,9 @@ public class TextLocalization {
     public static final String Tooltip_Silksong_00 = texter("Controller block for the Silksong", "Tooltip_Silksong_00");
     public static final String Tooltip_Silksong_01 = texter(EnumChatFormatting.WHITE + "Maybe dreams aren't such a good thing ......", "Tooltip_Silksong_01");
     public static final String Tooltip_Silksong_02 = texter("Endless cables spew from this machine.", "Tooltip_Silksong_02");
-    public static final String Tooltip_Silksong_03 = texter("24x Parallel per piece.", "Tooltip_Silksong_03");
-    public static final String Tooltip_Silksong_04 = texter("Additional 20%% reduction in time per Coil Tier, multiplication calculus.", "Tooltip_Silksong_04");
+    public static final String Tooltip_Silksong_03 = texter("Parallel = 32 × piece × coil tier.", "Tooltip_Silksong_03");
+    public static final String Tooltip_Silksong_04 = texter("Each level of coil increases the speed by 100%%.", "Tooltip_Silksong_04");
+    public static final String Tooltip_Silksong_05 = texter("Additional 15%% reduction in time per Coil Tier, multiplication calculus.", "Tooltip_Silksong_05");
     // endregion
 
     // region HolySeparator

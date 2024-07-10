@@ -29,6 +29,11 @@ public enum TextEnums {
     // #zh_CN 线圈等级
     CoilTier("MachineInfoData.CoilTier"),
 
+    // #tr MachineInfoData.CurrentPowerConsumption
+    // # Current Power Consumption
+    // #zh_CN 当前耗电
+    CurrentPowerConsumption("MachineInfoData.CurrentPowerConsumption"),
+
     // #tr MachineInfoData.MachineMode
     // # Machine Mode
     // #zh_CN 机器模式
@@ -64,18 +69,26 @@ public enum TextEnums {
     NameCoreDeviceOfHumanPowerGenerationFacility("NameCoreDeviceOfHumanPowerGenerationFacility"),
     // endregion
 
-    // region Single World
+    // region Single Word
 
-    // #tr World_Parallel
+    // #tr Word_Parallel
     // # Parallel
     // #zh_CN 并行
-    World_Parallel("World_Parallel"),
+    Word_Parallel("Word_Parallel"),
 
-    // #tr World_Overclock
+    // #tr Word_Overclock
     // # Overclock
     // #zh_CN 超频
-    World_Overclock("World_Overclock"),
+    Word_Overclock("Word_Overclock"),
 
+    // endregion
+
+    // region Dyson Sphere Program
+
+    // #tr RiseOfTheDarkFog
+    // # {\BLACK}{\BOLD}Rise of the Dark Fog
+    // #zh_CN {\BLACK}{\BOLD}黑雾崛起
+    RiseOfDarkFog("RiseOfTheDarkFog"),
     // endregion
 
     // region Modularized Machine System
@@ -130,6 +143,11 @@ public enum TextEnums {
     // #zh_CN 不可重复安装同类型的模块仓室. 除了执行核心模块.
     NotMultiplyInstallSameTypeModule("NotMultiplyInstallSameTypeModule"),
 
+    // #tr NotMultiplyInstallSameTypeModuleAll
+    // # Same type of module hatch cannot be installed repeatedly.
+    // #zh_CN 不可重复安装同类型的模块仓室.
+    NotMultiplyInstallSameTypeModuleAll("NotMultiplyInstallSameTypeModuleAll"),
+
     // #tr CanMultiplyInstallSameTypeModule
     // # Same type of module hatch can be installed repeatedly.
     // #zh_CN 可以重复安装同类型的模块仓室.
@@ -157,6 +175,8 @@ public enum TextEnums {
 
     BigBroArrayDesc10("BigBroArray.desc.10"),
     BigBroArrayDesc11("BigBroArray.desc.11"),
+    BigBroArrayDesc12("BigBroArray.desc.12"),
+
 
     // end
     StructureTooComplex("StructureTooComplex");

@@ -73,7 +73,7 @@ public class Config {
     public static long solarSailCanHoldDefault = 2048;
     public static long maxPowerPointPerReceiver = 1024L * Integer.MAX_VALUE;
     public static long EUEveryAntimatterFuelRod = 1024L * Integer.MAX_VALUE;// default 1024L * Integer.MAX_VALUE;
-    public static long EUEveryAntimatter = 4L * Integer.MAX_VALUE;// default 4L * Integer.MAX_VALUE;
+    public static long EUEveryAntimatter = 3L * Integer.MAX_VALUE;// default 4L * Integer.MAX_VALUE;
     public static double secondsOfArtificialStarProgressCycleTime = 6.4;
     public static int secondsOfEverySpaceWarperProvideToOverloadTime = 60 * 15;
     public static int overloadSpeedUpMultiplier = 30;
@@ -84,6 +84,36 @@ public class Config {
     public static int EUTOfLaunchingSolarSail = (int) RECIPE_UHV;
     public static int EUTOfLaunchingNode = (int) RECIPE_UMV;
     public static boolean EnableRenderDefaultArtificialStar = true;
+    public static long EUEveryStrangeAnnihilationFuelRod = 32768L * Integer.MAX_VALUE;
+
+    // TODO cfg of StrangeMatterAggregator
+    // region StrangeMatterAggregator
+    public static long PowerConsume_StrangeMatterAggregator = RECIPE_MAX * 256L;
+    public static int RecipeTime_T1SpaceTimeOscillator_StrangeMatterAggregator = 120 * 20;
+    public static int RecipeTime_T2SpaceTimeOscillator_StrangeMatterAggregator = 40 * 20;
+    public static int RecipeTime_T3SpaceTimeOscillator_StrangeMatterAggregator = 10 * 20;
+    public static int MaxConsecutivePoint_T1SpaceTimeMerger_StrangeMatterAggregator = 24;
+    public static int MaxConsecutivePoint_T2SpaceTimeMerger_StrangeMatterAggregator = 144;
+    public static int MaxConsecutivePoint_T3SpaceTimeMerger_StrangeMatterAggregator = 384;
+    public static int BaseInputValue_StrangeMatterAggregator = 256;
+    public static int BaseOutputValue_StrangeMatterAggregator = 1;
+    public static int FluidInputMultiply_SpaceTimeMaintenance_StrangeMatterAggregator = 1000;
+    public static int FluidInputMultiply_UniversiumMaintenance_StrangeMatterAggregator = 50;
+    public static int FluidInputMultiply_MagnetoConstrainedStarMatterMaintenance_StrangeMatterAggregator = 1;
+    public static int BasicRodAmountPerConstrainerProduce_SpaceTime_StrangeMatterAggregator = 256;
+    public static int BasicRodAmountPerConstrainerProduce_Universium_StrangeMatterAggregator = 1024;
+    public static int BasicRodAmountPerConstrainerProduce_MagnetoConstrainedStarMatter_StrangeMatterAggregator = 16384;
+    public static double AuxiliaryMaterialConsumptionRate_T1SpaceTimeConstraintor_StrangeMatterAggregator = 1.0d;
+    public static double AuxiliaryMaterialConsumptionRate_T2SpaceTimeConstraintor_StrangeMatterAggregator = 0.99d;
+    public static double AuxiliaryMaterialConsumptionRate_T3SpaceTimeConstraintor_StrangeMatterAggregator = 0.90d;
+    public static int ByproductBaseAmount_T1_StrangeMatterAggregator = 144;
+    public static int ByproductBaseAmount_T2_StrangeMatterAggregator = 144;
+    public static int ByproductBaseAmount_T3_StrangeMatterAggregator = 144;
+    public static int MaintenanceFluidConsumption_T1SpaceTime_StrangeMatterAggregator = 576;
+    public static int MaintenanceFluidConsumption_T2Universium_StrangeMatterAggregator = 96;
+    public static int MaintenanceFluidConsumption_T3MagnetoConstrainedStarMatter_StrangeMatterAggregator = 16;
+
+    // endregion
 
     // endregion
 
@@ -151,7 +181,8 @@ public class Config {
     // endregion
 
     // region Silksong
-    public static float SpeedBonus_MultiplyPerCoilTier_Silksong = 0.75F;
+    public static float SpeedMultiplier_CoilTier_Silksong = 1F;
+    public static float SpeedBonus_MultiplyPerVoltageTier_Silksong = 0.85F;
     public static int Parallel_PerPiece_Silksong = 32;
     // endregion
 
@@ -540,7 +571,8 @@ public class Config {
         // endregion
 
         // region Silksong
-        SpeedBonus_MultiplyPerCoilTier_Silksong = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerCoilTier_Silksong", Silksong, String.valueOf(SpeedBonus_MultiplyPerCoilTier_Silksong), "The speed bonus = this ^ CoilTier . Type: float"));
+        SpeedMultiplier_CoilTier_Silksong = Float.parseFloat(configuration.getString("SpeedMultiplier_CoilTier_Silksong", Silksong, String.valueOf(SpeedMultiplier_CoilTier_Silksong), "The speed multiplier of Coil tier. Type: float"));
+        SpeedBonus_MultiplyPerVoltageTier_Silksong = Float.parseFloat(configuration.getString("SpeedBonus_MultiplyPerVoltageTier_Silksong", Silksong, String.valueOf(SpeedBonus_MultiplyPerVoltageTier_Silksong), "The speed bonus of every voltage level. Speed bonus from voltage = thisParameter ^ voltageLevel. Type: float"));
         Parallel_PerPiece_Silksong = configuration.getInt("Parallel_PerPiece_Silksong", Silksong, Parallel_PerPiece_Silksong, 1, 65536, "Parallel per Piece add. Type: int");
         // endregion
 
@@ -607,6 +639,10 @@ public class Config {
         EUTOfLaunchingSolarSail = configuration.getInt("EUTOfLaunchingSolarSail", DSP, EUTOfLaunchingSolarSail, 1, Integer.MAX_VALUE, "EUt of Launching Solar Sail.");
         EUTOfLaunchingNode = configuration.getInt("EUTOfLaunchingNode", DSP, EUTOfLaunchingNode, 1, Integer.MAX_VALUE, "EUt of Launching Node.");
         EnableRenderDefaultArtificialStar = configuration.getBoolean("EnableRenderDefaultArtificialStar", DSP, EnableRenderDefaultArtificialStar, "Enable Render of Artificial Star when placing a new one.");
+        EUEveryStrangeAnnihilationFuelRod = Long.parseLong(configuration.getString("EUEveryStrangeAnnihilationFuelRod", DSP, String.valueOf(EUEveryStrangeAnnihilationFuelRod), "EU of every Strange Annihilation Fuel Rod can generate. Type: long"));
+        // region StrangeMatterAggregator
+
+        // endregion
         // endregion
 
         // region Space Station
@@ -633,7 +669,7 @@ public class Config {
         // region Mega Egg Generator
         MEG_CrepperEgg_Gen = Long.parseLong(configuration.getString("MEG_CrepperEgg_Gen", MEG, String.valueOf(MEG_CrepperEgg_Gen), "EUt of Crepper eggs, type: long"));
         MEG_DragonEgg_Gen = Long.parseLong(configuration.getString("MEG_DragonEgg_Gen", MEG, String.valueOf(MEG_DragonEgg_Gen), "EUt of Dragon eggs, type: long"));
-        MEG_InfinityEgg_Gen = Long.parseLong(configuration.getString("MEG_InfinityEgg_Gen", MEG, String.valueOf(MEG_InfinityEgg_Gen), "EUt of Crepper eggs, type: long"));
+        MEG_InfinityEgg_Gen = Long.parseLong(configuration.getString("MEG_InfinityEgg_Gen", MEG, String.valueOf(MEG_InfinityEgg_Gen), "EUt of Infinity eggs, type: long"));
         MEG_Laser_Pieces = configuration.getInt("MEG_Laser_Pieces", MEG, 16, 1, Integer.MAX_VALUE, "Piece num when unlock laser");
         MEG_Dynamo_Limit = configuration.getInt("MEG_Dynamo_Limit", MEG, 1, 1, Integer.MAX_VALUE, "How many dynamo allowed in total");
         MEG_Efficiency_PiecesBuff = configuration.getInt("MEG_Efficiency_PiecesBuff", MEG, 200, 0, Integer.MAX_VALUE, "Every 2^n pieces bring n*this max efficiency buff");

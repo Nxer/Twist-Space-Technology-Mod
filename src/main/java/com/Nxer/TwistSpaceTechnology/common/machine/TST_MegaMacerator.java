@@ -93,11 +93,6 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     @Override
     protected float getSpeedBonus() {
         return (((glassTier >= 12) || (glassTier > mRecipeTier)) ? SpeedBonus_MegaMacerator : 1);
-        // int mEuTier = GT_Utility.getTier(this.getMaxInputEu()) - 1;
-        // return (float) (Math.log(100 + exp(4 * 13 - mBlockTier * mEuTier))
-        // / Math.log(100 + exp(3 * 11 - mBlockTier * mEuTier))
-        // * Math.pow(1 / BlockspeedMultiplier_MegaMacerator, mBlockTier)
-        // * Math.pow(EuModifier_MegaMacerator, mEuTier));
     }
 
     @Override

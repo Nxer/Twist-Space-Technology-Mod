@@ -5,17 +5,13 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooCo
 import static com.dreammaster.block.BlockList.BloodyThaumium;
 import static com.dreammaster.block.BlockList.BloodyVoid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static com.kentington.thaumichorizons.common.ThaumicHorizons.blockCrystalDeep;
 import static goodgenerator.loader.Loaders.magicCasing;
-import static goodgenerator.util.DescTextLocalization.BLUE_PRINT_INFO;
 import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
-import static tb.init.TBBlocks.*;
 import static thaumcraft.common.config.ConfigBlocks.*;
 import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
-import static tuhljin.automagy.blocks.ModBlocks.translucent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +31,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -1633,23 +1631,49 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 .addElement('E', ofBlock(blockMetalDevice, 9))
                 .addElement('F', ofBlock(BloodyThaumium.getBlock(), 0))
                 .addElement('G', ofBlock(BloodyVoid.getBlock(), 0))
-                .addElement('H', ofBlock(blockCrystalDeep, 0))
+                .addElement(
+                    'H',
+                    ofBlock(ModBlocksHandler.BlockCrystalDeep.getLeft(), ModBlocksHandler.BlockCrystalDeep.getRight()))
                 .addElement('I', ofBlock(blockCosmeticSolid, 0))
                 .addElement('J', ofBlock(blockCosmeticSolid, 4))
                 .addElement('K', ofBlock(blockCosmeticSolid, 6))
                 .addElement('L', ofBlock(blockCosmeticSolid, 7))
                 .addElement('M', ofBlock(blockMetalDevice, 3))
                 .addElement('N', ofChain(ofBlock(blockCosmeticSolid, 6), ofBlock(blockStoneDevice, 6)))
-                .addElement('O', ofBlock(translucent, 0))
-                .addElement('P', ofBlock(crystalBlock, 0))
-                .addElement('Q', ofBlock(crystalBlock, 1))
-                .addElement('R', ofBlock(crystalBlock, 2))
-                .addElement('S', ofBlock(crystalBlock, 3))
-                .addElement('T', ofBlock(crystalBlock, 4))
-                .addElement('U', ofBlock(crystalBlock, 5))
-                .addElement('V', ofBlock(dustBlock, 0))
-                .addElement('W', ofBlock(voidBlock, 0))
-                .addElement('X', ofBlock(thauminiteBlock, 0))
+                .addElement(
+                    'O',
+                    ofBlock(ModBlocksHandler.BlockTranslucent.getLeft(), ModBlocksHandler.BlockTranslucent.getRight()))
+                .addElement(
+                    'P',
+                    ofBlock(ModBlocksHandler.AirCrystalBlock.getLeft(), ModBlocksHandler.AirCrystalBlock.getRight()))
+                .addElement(
+                    'Q',
+                    ofBlock(ModBlocksHandler.FireCrystalBlock.getLeft(), ModBlocksHandler.FireCrystalBlock.getRight()))
+                .addElement(
+                    'R',
+                    ofBlock(
+                        ModBlocksHandler.WaterCrystalBlock.getLeft(),
+                        ModBlocksHandler.WaterCrystalBlock.getRight()))
+                .addElement(
+                    'S',
+                    ofBlock(
+                        ModBlocksHandler.EarthCrystalBlock.getLeft(),
+                        ModBlocksHandler.EarthCrystalBlock.getRight()))
+                .addElement(
+                    'T',
+                    ofBlock(
+                        ModBlocksHandler.OrderCrystalBlock.getLeft(),
+                        ModBlocksHandler.OrderCrystalBlock.getRight()))
+                .addElement(
+                    'U',
+                    ofBlock(
+                        ModBlocksHandler.EntropyCrystalBlock.getLeft(),
+                        ModBlocksHandler.EntropyCrystalBlock.getRight()))
+                .addElement('V', ofBlock(ModBlocksHandler.DustBlock.getLeft(), ModBlocksHandler.DustBlock.getRight()))
+                .addElement('W', ofBlock(ModBlocksHandler.VoidBlock.getLeft(), ModBlocksHandler.VoidBlock.getRight()))
+                .addElement(
+                    'X',
+                    ofBlock(ModBlocksHandler.ThauminiteBlock.getLeft(), ModBlocksHandler.ThauminiteBlock.getRight()))
                 .addElement(
                     'Y',
                     ofChain(
@@ -1792,7 +1816,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
                 .addSeparator()
                 .addInfo(StructureTooComplex)
-                .addInfo(BLUE_PRINT_INFO)
+                .addInfo(TextLocalization.BLUE_PRINT_INFO)
                 // #tr Tooltip_IndustrialMagicMatrix_23
                 // # Infusion Provider
                 // #zh_CN 注魔供应器

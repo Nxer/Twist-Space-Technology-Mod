@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic;
 
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
+@Deprecated
 public final class DSP_Values {
     // spotless:off
 

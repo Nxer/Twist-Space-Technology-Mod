@@ -1,19 +1,4 @@
 
-//pluginManagement {
-//    repositories {
-//        maven {
-//            // RetroFuturaGradle
-//            name "GTNH Maven"
-//            url "https://nexus.gtnewhorizons.com/repository/public/"
-//            mavenContent {
-//                includeGroupByRegex("com\\.gtnewhorizons\\..+")
-//            }
-//        }
-//        gradlePluginPortal()
-//        mavenCentral()
-//        mavenLocal()
-//    }
-//}
 pluginManagement {
     repositories {
         maven {
@@ -30,12 +15,7 @@ pluginManagement {
         mavenLocal()
     }
 }
-plugins {
-    id 'com.gtnewhorizons.gtnhsettingsconvention' version '1.0.22'
-}
-//plugins {
-//    id 'com.diffplug.blowdryerSetup' version '1.7.1'
-//    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0' // Provides java toolchains
-//}
 
-//
+plugins {
+    id 'com.gtnewhorizons.gtnhsettingsconvention' version '1.0.23'
+}

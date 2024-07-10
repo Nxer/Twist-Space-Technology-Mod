@@ -2,18 +2,17 @@ package com.Nxer.TwistSpaceTechnology;
 
 import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
 import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
+import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.devTools.PathHelper;
+import com.Nxer.TwistSpaceTechnology.loader.LazyStaticsInitLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
@@ -30,17 +29,12 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
-import gregtech.api.util.GT_Recipe;
 
 @Mod(
     modid = Tags.MODID,
     version = Tags.VERSION,
     name = Tags.MODNAME,
-    dependencies = "required-before:IC2; " + "required-before:gregtech; "
-        + "required-before:bartworks; "
-        + "required-before:tectech; "
-        + "before:miscutils; "
-        + "before:dreamcraft;",
+    dependencies = "required-before:gregtech; " + "before:dreamcraft;",
     acceptedMinecraftVersions = "[1.7.10]")
 public class TwistSpaceTechnology {
 
@@ -99,6 +93,7 @@ public class TwistSpaceTechnology {
         if (Config.activateCombatStats) {
             ItemRegister.registry();
         }
+
     }
 
     @Mod.EventHandler
@@ -110,11 +105,8 @@ public class TwistSpaceTechnology {
         NEIHandler.IMCSender();// NEI reg
         EntityRegistry
             .registerModEntity(EntityMountableBlock.class, "TST:EntityMountableBlock", 1, this, 256, 20, false);
-        // dimension provider
-        // *unfinished */ DimensionManager.registerProviderType(WorldStats.dimensionProviderID,
-        // WorldProviderAlfheim.class, false);
-        // enter biomes into dictionary
-        // *unfinished */ BiomeBaseAlfheim.registerWithBiomeDictionary();
+
+        new ModBlocksHandler().initStatics();
     }
 
     @Mod.EventHandler
@@ -128,18 +120,18 @@ public class TwistSpaceTechnology {
 
         CropLoader.register();
         CropLoader.registerBaseSeed();
-        // dimension provider
-        // *unfinished */ DimensionManager.registerDimension(WorldStats.dimensionID, WorldStats.dimensionProviderID);
-        // TwistSpaceTechnology.LOG.info("test GT.getResourcePath : " + GregTech.getResourcePath("testing"));
-    }
 
-    public static Collection<GT_Recipe> temp = new HashSet<>();
+    }
 
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
         RecipeLoader.loadRecipes();// Load Recipes
         ExtremeCraftRecipe.initECRecipe();
+
+        // Init static parameters
+        new LazyStaticsInitLoader().initStaticsOnCompleteInit();
         // reflect
+
     }
 
     @Mod.EventHandler
