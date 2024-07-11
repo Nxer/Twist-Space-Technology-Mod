@@ -61,9 +61,9 @@ public class RecipeLoader {
             new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool(),
             new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
             new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
-            new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new IndustrialMagicMatrixRecipePool(),
-            new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool(),
-            new MassFabricatorGenesisRecipePool(), new SpaceAssemblerRecipePool() };
+            new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new DragonBloodRecipe(),
+            new FusionReactorRecipePool(), new ModularHatchesRecipePool(), new MassFabricatorGenesisRecipePool(),
+            new SpaceAssemblerRecipePool() };
 
         new SimpleFurnaceFuelPool().loadRecipes();
         new TCResearches().loadResearches();
@@ -93,6 +93,7 @@ public class RecipeLoader {
 
     public static void loadRecipesPostInit() {
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
+        new IndustrialMagicMatrixRecipePool().loadRecipes();
     }
 
     public static void loadRecipesServerStarted() {
