@@ -79,8 +79,8 @@ import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import galaxyspace.core.register.GSBlocks;
@@ -137,7 +137,6 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     private double stellarAndPlanetCoefficient = 0;
     private DSP_DataCell dspDataCell; // init when load world
     private byte dataSyncFlag = 0;
-    private IGregTechTileEntity baseMetaTileEntity;
 
     private void decreaseGravitationalLensTime() {
         if (gravitationalLensTime > 0) gravitationalLensTime--;
@@ -253,7 +252,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             return Math.min(DSP_Values.maxPowerPointPerReceiver, Math.min(limited, canUse));
         } else if (metaItemEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
             // use Astral Array Fabricator to overload over max input limitation
-            astralArrayOverloadMultiplier = controllerStack.stackSize * 2;
+            astralArrayOverloadMultiplier = controllerStack.stackSize * controllerStack.stackSize * 2;
             return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
         } else {
             astralArrayOverloadMultiplier = 1;
@@ -368,7 +367,6 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
         }
         if (aBaseMetaTileEntity.isServerSide()) {
-            this.baseMetaTileEntity = aBaseMetaTileEntity;
             this.dimID = getDimID(aBaseMetaTileEntity);
             this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);
             this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
@@ -432,7 +430,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 	}
 
 	@Override
-	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 		if (this.mMachine) return -1;
 		int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
 		return this.survivialBuildPiece(
@@ -442,8 +440,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 			verticalOffSet,
 			depthOffSet,
 			realBudget,
-			source,
-			actor,
+            env,
 			false,
 			true);
 	}
