@@ -100,7 +100,7 @@ public class DSPRecipePool implements IRecipePool {
         final Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
 
         final ItemStack LightWeightPlate = Mods.GalacticraftAmunRa.isModLoaded()
-            ? GT_ModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "item.baseItem", 1, 1)
+            ? GT_ModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "item.baseItem", 1, 15)
             : new ItemStack(Blocks.fire);
         final ItemStack ShuttleNoseCone = Mods.GalacticraftAmunRa.isModLoaded()
             ? GT_ModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "item.baseItem", 1, 16)
