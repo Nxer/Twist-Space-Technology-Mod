@@ -588,20 +588,9 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             byproductAmount *= 2;
 
             // calculate Core Element
+            long toConsume = 0;
             if (coreElementAmount >= consumeAnnihilationConstrainer) {
                 // all output is advanced production
-
-                // consume Core Element items
-                long toConsume = consumeAnnihilationConstrainer;
-                for (ItemStack i : coreElementStacks) {
-                    if (i.stackSize >= toConsume) {
-                        i.stackSize -= (int) toConsume;
-                        break;
-                    } else {
-                        toConsume -= i.stackSize;
-                        i.stackSize = 0;
-                    }
-                }
 
                 // output strange annihilation fuel rods
                 if (outputRodAmount > Integer.MAX_VALUE) {
@@ -619,6 +608,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 // a part of StrangeAnnihilationFuelRod, a part of AntimatterFuelRod
                 long strangeRod = coreElementAmount * constrainerFactor;
                 long antiMatterRod = outputRodAmount - strangeRod;
+
+                toConsume = coreElementAmount;
 
                 // output strange annihilation fuel rods
                 if (strangeRod > Integer.MAX_VALUE) {
@@ -644,6 +635,19 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     outputItems.add(GTCMItemList.AntimatterFuelRod.get((int) outputRodAmount));
                 }
 
+            }
+
+            // consume Core Element items
+            if (0 < toConsume) {
+                for (ItemStack i : coreElementStacks) {
+                    if (i.stackSize >= toConsume) {
+                        i.stackSize -= (int) toConsume;
+                        break;
+                    } else {
+                        toConsume -= i.stackSize;
+                        i.stackSize = 0;
+                    }
+                }
             }
 
         } else {
