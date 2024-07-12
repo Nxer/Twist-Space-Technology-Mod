@@ -1585,7 +1585,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     "                                             ", "                                             ",
                     "                                             " } };
 
-    private static final String[][] shape_err = new String[][] {
+    private static final String[][] shapeErr = new String[][] {
             { "                                             ", "                                             ",
                     "                                             ", "                                             ",
                     "                                             ", "                                             ",
@@ -2830,7 +2830,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_IndustrialMagicMatrix>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addShape(STRUCTURE_PIECE_MAIN_ERR, transpose(shape_err))
+                .addShape(STRUCTURE_PIECE_MAIN_ERR, transpose(shapeErr))
                 .addElement(
                     'A',
                     ofChain(
