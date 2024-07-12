@@ -1232,7 +1232,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     "            IHHHISSSIIKIIRRRIHHHI            ", "            IHHHISSSSIIIRRRRIHHHI            ",
                     "             IHHISSIIHHHIIRRIHHI             ", "              IHIIIHHHHHHHIIIHI              ",
                     "               IIHHHHHHHHHHHII               ", "                 IIHHHHHHHII                 ",
-                    "            KKKK   IIIIIII   KKKKK           ", "          KKXXXKK           KKXXXKK          ",
+                    "           KKKKK   IIIIIII   KKKKK           ", "          KKXXXKK           KKXXXKK          ",
                     "         KKXXXXXKK         KKXXXXXKK         ", "         KXXXXXXXK         KXXXXXXXK         ",
                     "         KXXXXXXXK         KXXXXXXXK         ", "         KXXXXXXXK         KXXXXXXXK         ",
                     "         KKXXXXXKK         KKXXXXXKK         ", "          KKXXXKK           KKXXXKK          ",
