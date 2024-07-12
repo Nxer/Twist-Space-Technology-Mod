@@ -341,7 +341,7 @@ Tooltip_DSPReceiver_02_04=输入的引力透镜会立刻被消耗.
 Tooltip_DSPReceiver_02_05=转换成剩余的增强模式时间.
 Tooltip_DSPReceiver_02_06=请求比率 = 编程电路编号 / 堆叠数量
 Tooltip_DSPReceiver_02_07=在控制器内放入 §b§l§o星阵§7 可以使此机器请求超过1024A Max的能量点数.
-Tooltip_DSPReceiver_02_08=最终请求能量点数上限 = 星阵数量 * 2048A Max
+Tooltip_DSPReceiver_02_08=最终请求能量点数上限 = 星阵数量^2 * 2048A Max
 Tooltip_ArtificialStar_MachineType=戴森球计划: 湮灭发电机
 Tooltip_ArtificialStar_00=§d§l你只需要让正反质子束从两端静静地穿
 Tooltip_ArtificialStar_01=§d§l 过磁场进入约束球就可以了, 轻松愉快!
