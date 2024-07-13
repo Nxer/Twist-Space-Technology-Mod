@@ -12,6 +12,15 @@ public abstract class TT_MultiMachineBase_EM extends GT_MetaTileEntity_Multibloc
         super(aName);
     }
 
+    public void repairMachine() {
+        mHardHammer = true;
+        mSoftHammer = true;
+        mScrewdriver = true;
+        mCrowbar = true;
+        mSolderingTool = true;
+        mWrench = true;
+    }
+
     /**
      * No more machine error
      */

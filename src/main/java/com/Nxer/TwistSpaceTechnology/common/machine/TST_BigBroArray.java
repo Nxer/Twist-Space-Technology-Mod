@@ -39,6 +39,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -114,8 +115,7 @@ import gtPlusPlus.core.material.ALLOY;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import io.netty.buffer.ByteBuf;
 
-public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM
-    implements ISurvivalConstructable, IGlobalWirelessEnergy {
+public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvivalConstructable, IGlobalWirelessEnergy {
 
     private ItemStack machines;
 
@@ -1317,6 +1317,8 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM
 
     @Override
     protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+        repairMachine();
+
         this.casingTier = -1;
         this.glassTier = -2;
         this.coilTier = HeatingCoilLevel.None;
@@ -1324,7 +1326,7 @@ public class TST_BigBroArray extends GT_MetaTileEntity_MultiblockBase_EM
         boolean checkPiece = checkPiece("core", 5, 5, 4);
         if (!checkPiece) return false;
         // dynamo hatch level follows casing level
-        if (mDynamoHatches.size() == 0 && eDynamoMulti.size() == 0 && casingTier >= 12) {
+        if (mDynamoHatches.isEmpty() && eDynamoMulti.isEmpty() && casingTier >= 12) {
             isWirelessMode = true;
         } else {
             for (GT_MetaTileEntity_Hatch_Dynamo mDynamoHatch : mDynamoHatches) {
