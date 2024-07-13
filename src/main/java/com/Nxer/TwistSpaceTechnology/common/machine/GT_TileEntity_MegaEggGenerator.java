@@ -22,11 +22,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -49,7 +49,7 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 
-public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_MultiblockBase_EM
+public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     implements IConstructable, ISurvivalConstructable {
 
     // region Class Constructor
@@ -139,6 +139,7 @@ public class GT_TileEntity_MegaEggGenerator extends GT_MetaTileEntity_Multiblock
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         // No need for the maintenance hatches!
+        repairMachine();
 
         // Initialize
         this.mInfinityEggs = 0;

@@ -32,6 +32,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
@@ -63,8 +64,7 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 
-public class GTCM_LightningSpire extends GT_MetaTileEntity_MultiblockBase_EM
-    implements IConstructable, ISurvivalConstructable {
+public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements IConstructable, ISurvivalConstructable {
 
     // region Construct
     public GTCM_LightningSpire(int id, String name, String nameRegional) {
@@ -137,6 +137,7 @@ public class GTCM_LightningSpire extends GT_MetaTileEntity_MultiblockBase_EM
 
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         return structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset);
     }
 

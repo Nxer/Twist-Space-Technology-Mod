@@ -207,6 +207,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
 
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         // Cleanroom
         int x = 1;
         int z = 1;
