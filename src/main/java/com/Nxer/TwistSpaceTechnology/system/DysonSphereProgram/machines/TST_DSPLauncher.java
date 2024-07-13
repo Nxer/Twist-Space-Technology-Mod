@@ -53,7 +53,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -67,8 +66,8 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevator.ElevatorUtil;
 
@@ -309,18 +308,16 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 	}
 
 	@Override
-	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 		if (this.mMachine) return -1;
-		int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
 		return this.survivialBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
 			horizontalOffSet,
 			verticalOffSet,
 			depthOffSet,
-			realBudget,
-			source,
-			actor,
+			elementBudget,
+			env,
 			false,
 			true);
 	}

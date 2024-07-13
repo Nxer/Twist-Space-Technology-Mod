@@ -19,7 +19,6 @@ import static net.minecraft.util.StatCollector.translateToLocal;
 import static vazkii.botania.common.block.ModBlocks.pylon;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -44,7 +43,6 @@ import com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.Parameters;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.render.TT_RenderedExtendedFacingTexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
@@ -1324,23 +1322,6 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
         return survivialBuildPiece(MAIN, stackSize, offsetX, offsetY, offsetZ, elementBudget, env, false, true);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
-        if (mMachine) return -1;
-        return survivialBuildPiece(
-            MAIN,
-            stackSize,
-            offsetX,
-            offsetY,
-            offsetZ,
-            elementBudget,
-            source,
-            actor,
-            false,
-            true);
-
     }
 
     private static IStructureDefinition<TST_Computer> STRUCTURE_DEFINITION = null;

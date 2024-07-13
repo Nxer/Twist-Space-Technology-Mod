@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -34,8 +33,9 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTech_API;
@@ -161,50 +161,47 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
 	}
 
 	@Override
-	public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor){
+	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env){
 		if (this.mMachine) return -1;
-		int built = 0;
+		int[] built = new int[stackSize.stackSize + 2];
 
-		built += survivialBuildPiece(
+		built[0] = survivialBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
 			horizontalOffSet,
 			verticalOffSet,
 			depthOffSet,
 			elementBudget,
-			source,
-			actor,
+            env,
 			false,
 			true);
 
 		int piece = stackSize.stackSize;
 		for (int i=1; i<=piece; i++){
-			built += survivialBuildPiece(
+			built[i] = survivialBuildPiece(
 				STRUCTURE_PIECE_MIDDLE,
 				stackSize,
 				horizontalOffSet,
 				verticalOffSet + i*4,
 				depthOffSet,
 				elementBudget,
-				source,
-				actor,
+                env,
 				false,
 				true);
 		}
 
-		built += survivialBuildPiece(
+		built[stackSize.stackSize + 1] += survivialBuildPiece(
 			STRUCTURE_PIECE_END,
 			stackSize,
 			horizontalOffSet,
 			verticalOffSet + piece*4 +4,
 			depthOffSet,
 			elementBudget,
-			source,
-			actor,
+            env,
 			false,
 			true);
 
-		return built;
+		return Utils.multiBuildPiece(built);
 	}
 
 	private static final String STRUCTURE_PIECE_MAIN = "mainHolySeparator";

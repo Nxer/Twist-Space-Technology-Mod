@@ -432,14 +432,13 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 		if (this.mMachine) return -1;
-		int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
 		return this.survivialBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
 			horizontalOffSet,
 			verticalOffSet,
 			depthOffSet,
-			realBudget,
+			elementBudget,
             env,
 			false,
 			true);
