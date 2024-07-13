@@ -313,8 +313,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         Aspect maxAspect = null;
         int max = 0;
         for (Aspect aspect : aspectList.getAspects()) {
-            max = Math.max(aspectList.getAmount(aspect), max);
-            maxAspect = aspect;
+            int amount = aspectList.getAmount(aspect);
+            if (amount > max) {
+                max = amount;
+                maxAspect = aspect;
+            }
         }
         return maxAspect;
     }
