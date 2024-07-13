@@ -6,12 +6,9 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose
 import static gregtech.api.GregTech_API.sBlockCasings1;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.ItemStack;
 
-import org.jetbrains.annotations.NotNull;
-
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_SteamMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -21,16 +18,12 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_Recipe;
-import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.GregtechMeta_SteamMultiBase;
 
-public class TST_LargeSteamForgeHammer extends GregtechMeta_SteamMultiBase<TST_LargeSteamForgeHammer>
+public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_LargeSteamForgeHammer>
     implements ISurvivalConstructable {
 
     // region Class Constructor
@@ -50,50 +43,21 @@ public class TST_LargeSteamForgeHammer extends GregtechMeta_SteamMultiBase<TST_L
     // endregion
 
     @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
-
-            @Override
-            @Nonnull
-            protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
-                return GT_OverclockCalculator.ofNoOverclock(recipe)
-                    .setEUtDiscount(1.33F)
-                    .setSpeedBoost(1.5F);
-            }
-
-        }.setMaxParallel(getMaxParallelRecipes());
-    }
-
-    @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.hammerRecipes;
     }
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
         return checkPiece(mName, 1, 1, 0);
     }
 
-    private static IStructureDefinition<TST_LargeSteamForgeHammer> STRUCTURE_DEFINITION = null;
-
-    @Override
-    protected GT_RenderedTexture getFrontOverlay() {
-        return new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER);
-    }
-
-    @Override
-    protected GT_RenderedTexture getFrontOverlayActive() {
-        return new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER_ACTIVE);
-    }
+    protected static IStructureDefinition<TST_LargeSteamForgeHammer> STRUCTURE_DEFINITION = null;
 
     @Override
     public String getMachineType() {
         return "Forge Hammer";
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 16;
     }
 
     @Override
@@ -146,6 +110,16 @@ public class TST_LargeSteamForgeHammer extends GregtechMeta_SteamMultiBase<TST_L
             .addOutputBus(TextLocalization.textAnyCasing, 2)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
+    }
+
+    @Override
+    protected GT_RenderedTexture getFrontOverlay() {
+        return new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER);
+    }
+
+    @Override
+    protected GT_RenderedTexture getFrontOverlayActive() {
+        return new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER_ACTIVE);
     }
 
     /**
