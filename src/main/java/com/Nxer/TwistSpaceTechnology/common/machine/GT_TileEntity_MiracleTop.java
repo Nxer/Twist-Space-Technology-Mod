@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -34,8 +33,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.interfaces.ITexture;
@@ -147,23 +146,24 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
      *                      server.
      */
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 
         if (this.mMachine) return -1;
 
         int built = 0;
 
-        built += survivialBuildPiece(
+        built = survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             baseHorizontalOffSet,
             baseVerticalOffSet,
             baseDepthOffSet,
             elementBudget,
-            source,
-            actor,
+            env,
             false,
             true);
+
+        if (built >= 0) return built;
 
         int rings = Math.min(14, stackSize.stackSize - 1);
         int pointer = 1;
@@ -175,11 +175,11 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
                 baseVerticalOffSet,
                 baseDepthOffSet - pointer * 8,
                 elementBudget,
-                source,
-                actor,
+                env,
                 false,
                 true);
             pointer++;
+            if (built >= 0) return built;
         }
 
         built += survivialBuildPiece(
@@ -189,8 +189,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             baseVerticalOffSet,
             baseDepthOffSet - pointer * 8,
             elementBudget,
-            source,
-            actor,
+            env,
             false,
             true);
 

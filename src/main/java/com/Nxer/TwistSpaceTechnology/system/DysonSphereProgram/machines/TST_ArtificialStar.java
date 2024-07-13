@@ -83,8 +83,8 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.google.common.collect.ImmutableList;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTech_API;
@@ -405,18 +405,16 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     }
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
-        int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
         return this.survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
             verticalOffSet,
             depthOffSet,
-            realBudget,
-            source,
-            actor,
+            elementBudget,
+            env,
             false,
             true);
     }
