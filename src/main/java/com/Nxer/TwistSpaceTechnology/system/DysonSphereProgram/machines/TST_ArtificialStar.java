@@ -262,7 +262,8 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         }
 
         // add EU to the wireless EU net
-        BigInteger eu = BigInteger.valueOf(currentOutputEU)
+        BigInteger eu = BigInteger
+            .valueOf((long) (currentOutputEU * outputMultiplier * ((rewardContinuous + 100d) / 100d)))
             .multiply(Utils.INTEGER_MAX_VALUE);
         if (!addEUToGlobalEnergyMap(ownerUUID, eu)) {
             return CheckRecipeResultRegistry.INTERNAL_ERROR;
