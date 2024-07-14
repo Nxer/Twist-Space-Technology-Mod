@@ -3007,12 +3007,12 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 // #zh_CN 六种原始要素之间的数量越接近倍率系数就会越高。
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_14"))
                 // #tr Tooltip_IndustrialMagicMatrix_15
-                // # The actual acceleration magnification is ((0.4+0.45exp(-0.05Variance)+
-                // #zh_CN 实际加速倍率为{\SPACE}{\AQUA}((0.4+0.45exp(-0.05Variance) +
+                // # The actual acceleration magnification is (0.4+0.45exp(-0.05Variance)+
+                // #zh_CN 实际加速倍率为{\SPACE}{\AQUA}(0.4+0.45exp(-0.05Variance) +
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_15"))
                 // #tr Tooltip_IndustrialMagicMatrix_16
-                // # 0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500).
-                // #zh_CN {\SPACE}{\SPACE}{\AQUA}0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500)
+                // # 0.15(ln(1+exp(-Variance))/ln2)) * (Mean / 500).
+                // #zh_CN {\SPACE}{\SPACE}{\AQUA}0.15(ln(1+exp(-Variance))/ln2)) * (Mean / 500)
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_16"))
                 // #tr Tooltip_IndustrialMagicMatrix_17
                 // # Variance is the variance of the largest element in the six nodes,
