@@ -685,6 +685,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         if (recipe.mInputs.length > 0 && aInputs == null) return 0;
         if (recipe.mFluidInputs.length > 0 && aFluidInputs == null) return 0;
 
+
         double currentParallel = maxParallel;
 
         if (recipe.mFluidInputs.length > 0) {
@@ -715,7 +716,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
 
         boolean isNBTSensitive = recipe.isNBTSensitive;
         double remainingCost;
-        int providedAmount;
+        long providedAmount;
         if (recipe.mInputs.length > 0) {
             Map<TST_ItemID, Long> itemCost = new HashMap<>();
             if (isNBTSensitive) {
@@ -755,6 +756,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 }
                 if (providedAmount == 0) return 0;
                 currentParallel = Math.min(currentParallel, (double) providedAmount / itemID.getValue());
+
             }
         }
 
