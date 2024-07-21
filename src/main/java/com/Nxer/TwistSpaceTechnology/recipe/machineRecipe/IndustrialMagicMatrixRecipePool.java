@@ -87,7 +87,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
             GT_Values.RA.stdBuilder()
                 .ignoreCollision()
                 .clearInvalid()
-                .specialItem(Essence)
+                .special(Essence)
                 .itemInputsUnified(checkInputSpecial(Recipe.getInputItem()))
                 .itemOutputs((Recipe.getOutput()))
                 .fluidInputs()
