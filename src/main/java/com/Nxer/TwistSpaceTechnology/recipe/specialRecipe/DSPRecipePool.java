@@ -796,7 +796,7 @@ public class DSPRecipePool implements IRecipePool {
                 // # input from the right input bus, upgrades a portion of the product to T2 product, same ratio as the
                 // annihilation constrainer
                 // #zh_CN 由右侧输入总线输入, 将一部分产物升级为2级产物, 比率与湮灭约束器相同
-                .specialItem(
+                .special(
                     addStringToStackName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
@@ -841,7 +841,7 @@ public class DSPRecipePool implements IRecipePool {
                     // here is T2 byproduct
                     MaterialsUEVplus.SpaceTime.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator),
                     MyMaterial.shirabon.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator))
-                .specialItem(
+                .special(
                     addStringToStackName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
@@ -883,7 +883,7 @@ public class DSPRecipePool implements IRecipePool {
                 .fluidOutputs(
                     // here is T3 byproduct
                     MaterialsUEVplus.Universium.getMolten(Config.ByproductBaseAmount_T3_StrangeMatterAggregator))
-                .specialItem(
+                .special(
                     addStringToStackName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))

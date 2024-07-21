@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.util.GT_Recipe.GTppRecipeHelper;
 
 import java.util.ArrayList;
@@ -561,30 +562,38 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             itemOutputs = customItemOutputCalculation.apply(currentParallel);
             return;
         }
-        ArrayList<ItemStack> tempItemStack = new ArrayList<>();
-        //        itemOutputs = new ItemStack[recipe.mOutputs.length];
+        ArrayList<ItemStack> toOutput = new ArrayList<>();
         for (int i = 0; i < recipe.mOutputs.length; i++) {
-            long items = 0;
-            long remain = 0;
-            int itemStackSize = recipe.getOutput(i).stackSize;
-            items = (long) currentParallel * itemStackSize * recipe.getOutputChance(i) / 10000;
-            remain = (long) currentParallel * itemStackSize * recipe.getOutputChance(i) % 10000;
-            if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
-                items += itemStackSize;
-            }
+            int outputChance = recipe.getOutputChance(i);
             ItemStack origin = recipe.getOutput(i).copy();
-            while (items >= Integer.MAX_VALUE) {
-                ItemStack itemstack = origin.copy();
-                itemstack.stackSize = Integer.MAX_VALUE;
-                tempItemStack.add(itemstack);
-                items -= Integer.MAX_VALUE;
+            if (outputChance < 10000) {
+                // parameter of this item final amount
+                long outputs = (long) currentParallel * origin.stackSize * outputChance / 10000;
+                long remain = (long) currentParallel * origin.stackSize * outputChance % 10000;
+                if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
+                    outputs += origin.stackSize;
+                }
+                while (outputs >= Integer.MAX_VALUE) {
+                    toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    outputs -= Integer.MAX_VALUE;
+                }
+
+                if (outputs > 0) {
+                    toOutput.add(setStackSize(origin.copy(), (int) outputs));
+                }
+
+            } else {
+                long outputs = (long) currentParallel * origin.stackSize;
+                while (outputs > Integer.MAX_VALUE) {
+                    toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    outputs -= Integer.MAX_VALUE;
+                }
+                toOutput.add(setStackSize(origin.copy(), (int) outputs));
             }
-            ItemStack item = origin.copy();
-            item.stackSize = (int) items;
-            tempItemStack.add(item);
+
         }
 
-        itemOutputs = tempItemStack.toArray(new ItemStack[0]);
+        itemOutputs = toOutput.toArray(new ItemStack[0]);
     }
 
     protected void calculateFluidOutputs() {
@@ -592,7 +601,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             fluidOutputs = customFluidOutputCalculation.apply(currentParallel);
             return;
         }
-        ArrayList<FluidStack> tempFluidStack = new ArrayList<>();
+        ArrayList<FluidStack> toOutput = new ArrayList<>();
         fluidOutputs = new FluidStack[recipe.mFluidOutputs.length];
         for (int i = 0; i < recipe.mFluidOutputs.length; i++) {
             if (recipe.getFluidOutput(i) != null) {
@@ -602,15 +611,15 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 while (amount >= Integer.MAX_VALUE) {
                     FluidStack fluid = tFluid.copy();
                     fluid.amount = Integer.MAX_VALUE;
-                    tempFluidStack.add(fluid);
+                    toOutput.add(fluid);
                     amount -= Integer.MAX_VALUE;
                 }
                 FluidStack fluid = tFluid.copy();
                 fluid.amount = (int) amount;
-                tempFluidStack.add(fluid);
+                toOutput.add(fluid);
             }
         }
-        fluidOutputs = tempFluidStack.toArray(new FluidStack[0]);
+        fluidOutputs = toOutput.toArray(new FluidStack[0]);
     }
 
     /**
@@ -685,6 +694,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
         if (recipe.mInputs.length > 0 && aInputs == null) return 0;
         if (recipe.mFluidInputs.length > 0 && aFluidInputs == null) return 0;
 
+
         double currentParallel = maxParallel;
 
         if (recipe.mFluidInputs.length > 0) {
@@ -715,7 +725,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
 
         boolean isNBTSensitive = recipe.isNBTSensitive;
         double remainingCost;
-        int providedAmount;
+        long providedAmount;
         if (recipe.mInputs.length > 0) {
             Map<TST_ItemID, Long> itemCost = new HashMap<>();
             if (isNBTSensitive) {
@@ -755,6 +765,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 }
                 if (providedAmount == 0) return 0;
                 currentParallel = Math.min(currentParallel, (double) providedAmount / itemID.getValue());
+
             }
         }
 
