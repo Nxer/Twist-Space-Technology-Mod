@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.util.GT_Recipe.GTppRecipeHelper;
 
 import java.util.ArrayList;
@@ -562,26 +563,34 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             return;
         }
         ArrayList<ItemStack> tempItemStack = new ArrayList<>();
-        //        itemOutputs = new ItemStack[recipe.mOutputs.length];
         for (int i = 0; i < recipe.mOutputs.length; i++) {
-            long items = 0;
-            long remain = 0;
-            int itemStackSize = recipe.getOutput(i).stackSize;
-            items = (long) currentParallel * itemStackSize * recipe.getOutputChance(i) / 10000;
-            remain = (long) currentParallel * itemStackSize * recipe.getOutputChance(i) % 10000;
-            if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
-                items += itemStackSize;
-            }
+            int outputChance = recipe.getOutputChance(i);
             ItemStack origin = recipe.getOutput(i).copy();
-            while (items >= Integer.MAX_VALUE) {
-                ItemStack itemstack = origin.copy();
-                itemstack.stackSize = Integer.MAX_VALUE;
-                tempItemStack.add(itemstack);
-                items -= Integer.MAX_VALUE;
+            if (outputChance < 10000) {
+                // parameter of this item final amount
+                long outputs = (long) currentParallel * origin.stackSize * outputChance / 10000;
+                long remain = (long) currentParallel * origin.stackSize * outputChance % 10000;
+                if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
+                    outputs += origin.stackSize;
+                }
+                while (outputs >= Integer.MAX_VALUE) {
+                    tempItemStack.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    outputs -= Integer.MAX_VALUE;
+                }
+
+                if (outputs > 0) {
+                    tempItemStack.add(setStackSize(origin.copy(), (int) outputs));
+                }
+
+            } else {
+                long outputs = (long) currentParallel * origin.stackSize;
+                while (outputs > Integer.MAX_VALUE) {
+                    tempItemStack.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    outputs -= Integer.MAX_VALUE;
+                }
+                tempItemStack.add(setStackSize(origin.copy(), (int) outputs));
             }
-            ItemStack item = origin.copy();
-            item.stackSize = (int) items;
-            tempItemStack.add(item);
+
         }
 
         itemOutputs = tempItemStack.toArray(new ItemStack[0]);
