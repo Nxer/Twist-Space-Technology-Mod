@@ -562,7 +562,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             itemOutputs = customItemOutputCalculation.apply(currentParallel);
             return;
         }
-        ArrayList<ItemStack> tempItemStack = new ArrayList<>();
+        ArrayList<ItemStack> toOutput = new ArrayList<>();
         for (int i = 0; i < recipe.mOutputs.length; i++) {
             int outputChance = recipe.getOutputChance(i);
             ItemStack origin = recipe.getOutput(i).copy();
@@ -574,26 +574,26 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                     outputs += origin.stackSize;
                 }
                 while (outputs >= Integer.MAX_VALUE) {
-                    tempItemStack.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
                     outputs -= Integer.MAX_VALUE;
                 }
 
                 if (outputs > 0) {
-                    tempItemStack.add(setStackSize(origin.copy(), (int) outputs));
+                    toOutput.add(setStackSize(origin.copy(), (int) outputs));
                 }
 
             } else {
                 long outputs = (long) currentParallel * origin.stackSize;
                 while (outputs > Integer.MAX_VALUE) {
-                    tempItemStack.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
                     outputs -= Integer.MAX_VALUE;
                 }
-                tempItemStack.add(setStackSize(origin.copy(), (int) outputs));
+                toOutput.add(setStackSize(origin.copy(), (int) outputs));
             }
 
         }
 
-        itemOutputs = tempItemStack.toArray(new ItemStack[0]);
+        itemOutputs = toOutput.toArray(new ItemStack[0]);
     }
 
     protected void calculateFluidOutputs() {
@@ -601,7 +601,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
             fluidOutputs = customFluidOutputCalculation.apply(currentParallel);
             return;
         }
-        ArrayList<FluidStack> tempFluidStack = new ArrayList<>();
+        ArrayList<FluidStack> toOutput = new ArrayList<>();
         fluidOutputs = new FluidStack[recipe.mFluidOutputs.length];
         for (int i = 0; i < recipe.mFluidOutputs.length; i++) {
             if (recipe.getFluidOutput(i) != null) {
@@ -611,15 +611,15 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 while (amount >= Integer.MAX_VALUE) {
                     FluidStack fluid = tFluid.copy();
                     fluid.amount = Integer.MAX_VALUE;
-                    tempFluidStack.add(fluid);
+                    toOutput.add(fluid);
                     amount -= Integer.MAX_VALUE;
                 }
                 FluidStack fluid = tFluid.copy();
                 fluid.amount = (int) amount;
-                tempFluidStack.add(fluid);
+                toOutput.add(fluid);
             }
         }
-        fluidOutputs = tempFluidStack.toArray(new FluidStack[0]);
+        fluidOutputs = toOutput.toArray(new FluidStack[0]);
     }
 
     /**
