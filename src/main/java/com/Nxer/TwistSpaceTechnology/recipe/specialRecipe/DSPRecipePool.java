@@ -736,12 +736,12 @@ public class DSPRecipePool implements IRecipePool {
 
         // region Strange Matter Aggregation
         {
+            // spotless:off
             GT_Values.RA.stdBuilder()
                 .itemInputs(
                     // first slot is the general input , amount is set by machine internal parameters
                     // #tr StrangeMatterAggregation.RecipeDescription.firstSlot
-                    // # basic material, input from general input bus, actual amount is set by machine internal
-                    // parameters
+                    // # basic material, input from general input bus, actual amount is set by machine internal parameters
                     // #zh_CN 基础材料, 从通用输入总线输入, 实际数量与机器内部参数有关
                     addStringToStackName(
                         Antimatter.get(256),
@@ -762,8 +762,7 @@ public class DSPRecipePool implements IRecipePool {
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
                     // #tr StrangeMatterAggregation.RecipeDescription.fourthSlot
-                    // # auxiliary material, input from general input bus, consumed amount same as output amount,
-                    // affected by structure
+                    // # auxiliary material, input from general input bus, consumed amount same as output amount, affected by structure
                     // #zh_CN 辅助材料, 从通用输入总线输入, 消耗量等于产物数量, 受结构等级影响
                     addStringToStackName(
                         StellarConstructionFrameMaterial.get(1),
@@ -793,8 +792,7 @@ public class DSPRecipePool implements IRecipePool {
                     Materials.Infinity.getMolten(Config.ByproductBaseAmount_T1_StrangeMatterAggregator),
                     ELEMENT.STANDALONE.HYPOGEN.getFluidStack(Config.ByproductBaseAmount_T1_StrangeMatterAggregator))
                 // #tr StrangeMatterAggregation.RecipeDescription.specialSlot
-                // # input from the right input bus, upgrades a portion of the product to T2 product, same ratio as the
-                // annihilation constrainer
+                // # input from the right input bus, upgrades a portion of the product to T2 product, same ratio as the annihilation constrainer
                 // #zh_CN 由右侧输入总线输入, 将一部分产物升级为2级产物, 比率与湮灭约束器相同
                 .special(
                     addStringToStackName(
@@ -804,6 +802,7 @@ public class DSPRecipePool implements IRecipePool {
                 .eut(RECIPE_MAX)
                 .duration(20 * 120)
                 .addTo(GTCMRecipe.StrangeMatterAggregatorRecipes);
+            // spotless:on
 
             GT_Values.RA.stdBuilder()
                 .itemInputs(

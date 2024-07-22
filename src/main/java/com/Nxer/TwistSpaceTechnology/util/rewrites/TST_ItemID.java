@@ -40,15 +40,20 @@ public class TST_ItemID extends GT_Utility.ItemId {
     // endregion
 
     // region Static Methods
+    public static final TST_ItemID NULL = new TST_ItemID();
+
     public static TST_ItemID create(ItemStack itemStack) {
+        if (null == itemStack) return NULL;
         return new TST_ItemID(itemStack.getItem(), itemStack.getItemDamage(), itemStack.getTagCompound());
     }
 
     public static TST_ItemID createNoNBT(ItemStack itemStack) {
+        if (null == itemStack) return NULL;
         return new TST_ItemID(itemStack.getItem(), itemStack.getItemDamage());
     }
 
     public static TST_ItemID createAsWildcard(ItemStack itemStack) {
+        if (null == itemStack) return NULL;
         return new TST_ItemID(itemStack.getItem(), OreDictionary.WILDCARD_VALUE);
     }
     // endregion

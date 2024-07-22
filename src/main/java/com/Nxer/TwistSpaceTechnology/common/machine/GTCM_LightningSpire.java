@@ -28,13 +28,18 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
+import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.github.technus.tectech.thing.metaTileEntity.multi.base.render.TT_RenderedExtendedFacingTexture;
@@ -62,7 +67,6 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements IConstructable, ISurvivalConstructable {
 
@@ -81,7 +85,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GTCM_LightningSpire(this.mName);
     }
-    // region end
+    // endregion
 
     // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_LR";
@@ -138,7 +142,9 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        return structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset);
+        if (!structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset)) return false;
+        setLightningPosition(getBaseMetaTileEntity().getFrontFacing());
+        return true;
     }
 
     @Override
@@ -160,9 +166,12 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
             false,
             true);
     }
-    // region end
+    // endregion end
 
     // region Process
+    public static final int CRYOTHEUM_CONSUMPTION = 128;
+    protected static Fluid MOLTEN_IRON;
+    protected static Fluid CRYOTHEUM;
     List<ItemStack> mStored = new ArrayList<>();
     private final int MAXRODS = 512;
     private long tStored;
@@ -173,6 +182,19 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
     private int aX;
     private int aY;
     private int aZ;
+
+    @Override
+    public void onFirstTick_EM(IGregTechTileEntity aBaseMetaTileEntity) {
+        if (aBaseMetaTileEntity.isServerSide()) {
+            if (null == MOLTEN_IRON) {
+                MOLTEN_IRON = Materials.Iron.getMolten(1)
+                    .getFluid();
+            }
+            if (null == CRYOTHEUM) {
+                CRYOTHEUM = FluidRegistry.getFluid("cryotheum");
+            }
+        }
+    }
 
     private void setLightningPosition(ForgeDirection face) {
         aY = this.getBaseMetaTileEntity()
@@ -205,124 +227,156 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
         }
     }
 
+    protected void lightOnWorld() {
+        World world = getBaseMetaTileEntity().getWorld();
+        world.addWeatherEffect(new EntityLightningBolt(world, aX, aY, aZ));
+    }
+
     @Override
     @NotNull
     public CheckRecipeResult checkProcessing_EM() {
 
         if (OperatingMode == 0 && tRods > 0) {
+            List<FluidStack> tFluids = getStoredFluids();
+            // If no fluids input, return failed directly.
+            if (tFluids.isEmpty()) {
+                stopMachine(SimpleShutDownReasons.NoCorrectFluidInput);
+                return CheckRecipeResults.NoCorrectFluidInput;
+            }
 
             int tCryotheum = 0;
+            List<FluidStack> cryotheums = new ArrayList<>();
             int tMoltenIron = 0;
+            List<FluidStack> moltenIrons = new ArrayList<>();
 
-            if (mRuntime % 256 == 0) {
-
-                List<FluidStack> tFluids = getStoredFluids();
-
-                World aWorld = this.getBaseMetaTileEntity()
-                    .getWorld();
-
-                setLightningPosition(
-                    this.getBaseMetaTileEntity()
-                        .getFrontFacing());
-
-                for (FluidStack tFluid : tFluids) {
-                    if (tFluid != null && tFluid.isFluidEqual(FluidUtils.getFluidStack("cryotheum", 1))) {
-                        tCryotheum += tFluid.amount;
-                    }
-                    if (tFluid != null && tFluid.isFluidEqual(Materials.Iron.getMolten(1))) {
-                        tMoltenIron += tFluid.amount;
-                    }
+            // check fluids
+            for (FluidStack f : tFluids) {
+                if (null == f || f.amount < 1) continue;
+                if (f.getFluid() == CRYOTHEUM) {
+                    tCryotheum += f.amount;
+                    cryotheums.add(f);
+                } else if (f.getFluid() == MOLTEN_IRON) {
+                    tMoltenIron += f.amount;
+                    moltenIrons.add(f);
                 }
-
-                if (tCryotheum == 128 && tMoltenIron == tRods * 72) {
-                    depleteInput(FluidUtils.getFluidStack("cryotheum", 128));
-                    depleteInput(Materials.Iron.getMolten(tMoltenIron));
-                    tStored = Math.min(tStored + tProduct, tMaxStored);
-                    aWorld.addWeatherEffect(new EntityLightningBolt(aWorld, aX, aY, aZ));
-                } else {
-                    stopMachine();
-                    return CheckRecipeResultRegistry.INTERNAL_ERROR;
-                }
-                //
             }
-            this.mEUt = 0;
-            this.mProgresstime = 1;
-            this.mMaxProgresstime = 1;
-            return CheckRecipeResultRegistry.GENERATING;
-        }
 
-        if (OperatingMode > 0) {
+            int moltenIronConsumption = tRods * 72;
+            if (tCryotheum == CRYOTHEUM_CONSUMPTION && tMoltenIron == moltenIronConsumption) {
+                // consume cryotheum
+                int toConsume = CRYOTHEUM_CONSUMPTION;
+                for (FluidStack f : cryotheums) {
+                    if (f.amount >= toConsume) {
+                        f.amount -= toConsume;
+                        break;
+                    } else {
+                        toConsume -= f.amount;
+                        f.amount = 0;
+                    }
+                }
+
+                // consume molten iron
+                toConsume = moltenIronConsumption;
+                for (FluidStack f : moltenIrons) {
+                    if (f.amount >= toConsume) {
+                        f.amount -= toConsume;
+                        break;
+                    } else {
+                        toConsume -= f.amount;
+                        f.amount = 0;
+                    }
+                }
+
+                // add stored eu
+                tStored = Math.min(tStored + tProduct, tMaxStored);
+
+                // light animation
+                lightOnWorld();
+            } else {
+                // generating failed
+                stopMachine(SimpleShutDownReasons.NoCorrectFluidInput);
+                return CheckRecipeResults.NoCorrectFluidInput;
+            }
+
+            this.mMaxProgresstime = 256;
+            return CheckRecipeResultRegistry.GENERATING;
+
+        } else if (OperatingMode > 0) {
 
             if (OperatingMode == 1 && tRods < MAXRODS) {
+                TST_ItemID LightningRod = TST_ItemID.createNoNBT(Machine_HV_LightningRod.get(1));
+                int canAdd = MAXRODS - tRods;
                 List<ItemStack> tInput = getStoredInputs();
+                if (tInput.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
                 for (ItemStack machine : tInput) {
-                    if (machine.isItemEqual(Machine_HV_LightningRod.get(1))) {
-                        if (MAXRODS - tRods >= 64) {
+                    if (null == machine || machine.stackSize < 1) continue;
+                    if (LightningRod.equalItemStack(machine)) {
+                        if (canAdd > machine.stackSize) {
                             mStored.add(GT_Utility.copy(machine));
                             tRods += machine.stackSize;
+                            canAdd -= machine.stackSize;
                             machine.stackSize = 0;
                         } else {
                             mStored.add(GT_Utility.copyAmount(MAXRODS - tRods, machine));
-                            machine.stackSize -= MAXRODS - tRods;
+                            machine.stackSize -= canAdd;
                             tRods = MAXRODS;
+                            break;
                         }
                     }
                 }
+
                 tProduct = tRods * 28000000L;
                 tMaxStored = tRods * 280000000L;
-                this.mEUt = 0;
-                this.mMaxProgresstime = 1;
+                this.mMaxProgresstime = 20;
                 return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
-            if (OperatingMode == 2 && tRods > 0 && tStored == 0) {
+            } else if (OperatingMode == 2 && tRods > 0 && tStored == 0) {
                 this.mOutputItems = mStored.toArray(new ItemStack[0]);
                 mStored.clear();
                 this.updateSlots();
                 tRods = 0;
                 tProduct = 0;
                 tMaxStored = 0;
-                this.mEUt = 0;
-                this.mMaxProgresstime = 1;
+                this.mMaxProgresstime = 20;
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }
-        this.mEUt = 0;
+
         return CheckRecipeResultRegistry.NO_RECIPE;
     }
 
     @Override
     public boolean onRunningTick(ItemStack stack) {
-
-        // push eu to dynamo
-        for (GT_MetaTileEntity_Hatch_Dynamo eDynamo : super.mDynamoHatches) {
-            if (eDynamo == null || !eDynamo.isValid()) {
-                continue;
+        if (tStored > 0) {
+            // push eu to dynamo
+            for (GT_MetaTileEntity_Hatch_Dynamo eDynamo : super.mDynamoHatches) {
+                if (eDynamo == null || !eDynamo.isValid()) {
+                    continue;
+                }
+                final long power = eDynamo.maxEUStore() - eDynamo.getEUVar();
+                if (tStored >= power) {
+                    eDynamo.setEUVar(eDynamo.getEUVar() + power);
+                    tStored -= power;
+                } else {
+                    eDynamo.setEUVar(eDynamo.getEUVar() + tStored);
+                    tStored = 0L;
+                }
             }
-            final long power = eDynamo.maxEUStore() - eDynamo.getEUVar();
-            if (tStored >= power) {
-                eDynamo.setEUVar(eDynamo.getEUVar() + power);
-                tStored -= power;
-            } else {
-                eDynamo.setEUVar(eDynamo.getEUVar() + tStored);
-                tStored = 0L;
+
+            for (GT_MetaTileEntity_Hatch_DynamoMulti eDynamo : eDynamoMulti) {
+                if (eDynamo == null || !eDynamo.isValid()) {
+                    continue;
+                }
+                final long power = eDynamo.maxEUStore() - eDynamo.getEUVar();
+                if (tStored >= power) {
+                    eDynamo.setEUVar(eDynamo.getEUVar() + power);
+                    tStored -= power;
+                } else {
+                    eDynamo.setEUVar(eDynamo.getEUVar() + tStored);
+                    tStored = 0L;
+                }
             }
         }
 
-        for (GT_MetaTileEntity_Hatch_DynamoMulti eDynamo : eDynamoMulti) {
-            if (eDynamo == null || !eDynamo.isValid()) {
-                continue;
-            }
-            final long power = eDynamo.maxEUStore() - eDynamo.getEUVar();
-            if (tStored >= power) {
-                eDynamo.setEUVar(eDynamo.getEUVar() + power);
-                tStored -= power;
-            } else {
-                eDynamo.setEUVar(eDynamo.getEUVar() + tStored);
-                tStored = 0L;
-            }
-        }
-        //
         return true;
     }
 
@@ -444,9 +498,16 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
             this.OperatingMode = (this.OperatingMode + 1) % 3;
             GT_Utility.sendChatToPlayer(
                 aPlayer,
-                StatCollector.translateToLocal(
-                    "Lightning Spire is in" + (this.OperatingMode == 0 ? "Operate Mode"
-                        : this.OperatingMode == 1 ? "Input Mode" : "Output Mode")));
+                // #tr LightningSpire.ModeMsg.0
+                // # Lightning Spire is in Operate Mode
+                // #zh_CN 闪电尖塔设置为发电模式
+                // #tr LightningSpire.ModeMsg.1
+                // # Lightning Spire is in Input Mode
+                // #zh_CN 闪电尖塔设置为输入模式
+                // #tr LightningSpire.ModeMsg.2
+                // # Lightning Spire is in Output Mode
+                // #zh_CN 闪电尖塔设置为输出模式
+                StatCollector.translateToLocal(TextEnums.tr("LightningSpire.ModeMsg." + OperatingMode)));
         }
     }
 
