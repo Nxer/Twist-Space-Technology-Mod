@@ -89,11 +89,13 @@ public class RecipeLoader {
                 new NeutronActivatorWithEURecipePool().loadRecipes();
             }
         }
+        if (Config.Enable_IndustrialMagicMatrix) {
+            new IndustrialMagicMatrixRecipePool().loadRecipes();
+        }
     }
 
     public static void loadRecipesPostInit() {
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
-        new IndustrialMagicMatrixRecipePool().loadRecipes();
     }
 
     public static void loadRecipesServerStarted() {
