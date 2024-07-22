@@ -299,6 +299,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
             }
 
             this.mMaxProgresstime = 256;
+            updateSlots();
             return CheckRecipeResultRegistry.GENERATING;
 
         } else if (OperatingMode > 0) {
@@ -328,6 +329,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
                 tProduct = tRods * 28000000L;
                 tMaxStored = tRods * 280000000L;
                 this.mMaxProgresstime = 20;
+                updateSlots();
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             } else if (OperatingMode == 2 && tRods > 0 && tStored == 0) {
                 this.mOutputItems = mStored.toArray(new ItemStack[0]);
@@ -337,6 +339,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
                 tProduct = 0;
                 tMaxStored = 0;
                 this.mMaxProgresstime = 20;
+                updateSlots();
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }
