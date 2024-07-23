@@ -2924,13 +2924,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     public final boolean addCosmeticOpaque(TileEntity tileEntity) {
         if (tileEntity instanceof TileOwned) {
-            if (getPlayName() == null) {
-                return false;
-            }
-            if (Objects.equals(((TileOwned) tileEntity).owner, "")) {
+            if (getPlayName() != null && Objects.equals(((TileOwned) tileEntity).owner, "")) {
                 ((TileOwned) tileEntity).owner = getPlayName();
+                return true;
             }
-            return true;
+            return false;
         }
         return false;
     }
