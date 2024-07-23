@@ -2904,8 +2904,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     ofChain(
                         ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
                         ofBlock(Blocks.air, 0)))
-                .addElement('Z', ofChain(ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addCosmeticOpaque,blockCosmeticOpaque,2),
-                        ofBlock(blockCosmeticOpaque,2)))
+                .addElement(
+                    'Z',
+                    ofChain(
+                        ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addCosmeticOpaque, blockCosmeticOpaque, 2),
+                        ofBlock(blockCosmeticOpaque, 2)))
                 .addElement('0', ofBlock(blockStoneDevice, 2))
                 .addElement('1', ofFrame(Materials.Thaumium))
                 .addElement('3', ofBlock(blockStoneDevice, 10))
@@ -2918,12 +2921,12 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         return STRUCTURE_DEFINITION;
     }
 
-    public final boolean addCosmeticOpaque(TileEntity tileEntity){
-        if (tileEntity instanceof TileOwned){
+    public final boolean addCosmeticOpaque(TileEntity tileEntity) {
+        if (tileEntity instanceof TileOwned) {
             if (getPlayName() == null) {
                 return false;
             }
-             ((TileOwned) tileEntity).owner = getPlayName();
+            ((TileOwned) tileEntity).owner = getPlayName();
             return true;
         }
         return false;
