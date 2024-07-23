@@ -15,6 +15,7 @@ import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlaye
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -2926,7 +2927,9 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             if (getPlayName() == null) {
                 return false;
             }
-            ((TileOwned) tileEntity).owner = getPlayName();
+            if (Objects.equals(((TileOwned) tileEntity).owner, "")) {
+                ((TileOwned) tileEntity).owner = getPlayName();
+            }
             return true;
         }
         return false;
