@@ -1,12 +1,12 @@
 ## GTNH Community Mod :  Twist Space Technology
-Modded elements from normal players .
+Custom GTNH Expansion Mod from a Normal GTNH Player.
 
-Everyone can realize ideas here .
+Everyone can bring their ideas to life here.
 
-Just need the balance not too abstract .
+Of course, the game still needs to remain GTNH-style balanced.
 
 ### Attention
-This is an unofficial mod, please be aware of the occasion when discussing this mod.
+This is an unofficial mod. Please avoid discussing this mod in official GTNH forums.
 
 ### Discord
 https://discord.gg/yR35zmdY4c
