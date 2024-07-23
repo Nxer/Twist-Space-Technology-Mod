@@ -2928,7 +2928,6 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 ((TileOwned) tileEntity).owner = getPlayName();
                 return true;
             }
-            return false;
         }
         return false;
     }
