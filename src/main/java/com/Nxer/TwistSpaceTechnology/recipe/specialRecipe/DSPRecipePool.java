@@ -658,6 +658,28 @@ public class DSPRecipePool implements IRecipePool {
             .duration(20 * 32)
             .addTo(SpaceAssembler);
 
+        // Advanced Annihilation Constrainer recipe
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GTCMItemList.MatterRecombinator.get(0),
+                SpaceWarper.get(4),
+                ParticleTrapTimeSpaceShield.get(64),
+                CriticalPhoton.get(1),
+
+                // TODO Quantum circuit
+                CustomItemList.QuantumCircuit.get(2),
+                ItemList.EnergisedTesseract.get(1))
+            .fluidInputs(
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 8),
+                MaterialsUEVplus.Universium.getMolten(144 * 64),
+                MaterialsUEVplus.PrimordialMatter.getFluid(144 * 24),
+                MaterialsUEVplus.Eternity.getMolten(144 * 24))
+            .itemOutputs(AnnihilationConstrainer.get(128))
+            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(200_000))
+            .eut(RECIPE_MAX)
+            .duration(20 * 60)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
         // Antimatter Fuel Rod
         GT_Values.RA.stdBuilder()
             .itemInputs(
