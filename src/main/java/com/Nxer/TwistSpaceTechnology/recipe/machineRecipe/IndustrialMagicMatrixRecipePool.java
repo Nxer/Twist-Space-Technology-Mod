@@ -56,7 +56,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
                 }
             }
             if (Mods.Gadomancy.isModLoaded()) {
-                Item itemEtherealFamiliar = GameRegistry.findItem(Mods.Gadomancy.ID, "itemEtherealFamiliar");
+                Item itemEtherealFamiliar = GameRegistry.findItem(Mods.Gadomancy.ID, "ItemEtherealFamiliar");
                 if (null != itemEtherealFamiliar) {
                     skips.add(itemEtherealFamiliar);
                 }
