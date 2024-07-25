@@ -384,7 +384,7 @@ Tooltip_MiracleDoor_07= the input will simply annihilate!
 Tooltip_MiracleDoor_08=Put a Programmed Circuit into the controller block to decrease processing time interval.
 Tooltip_MiracleDoor_2_01=Each run takes the same amount of time, (ABS) 25.6s | (EBF) 128s by default.
 Tooltip_MiracleDoor_2_02=If Programmed Circuit exist in controller block,
-Tooltip_MiracleDoor_2_03= actual processing time = default / (Programmed Circuit Number * Stack Size)
+Tooltip_MiracleDoor_2_03=Actual processing time = default / (Programmed Circuit Number * Stack Size)
 Tooltip_MiracleDoor_2_04=Actual EU cost = recipe value * (Programmed Circuit Number * Stack Size) * (ABS) 16 or (EBF) 64
 Tooltip_MiracleDoor_2_05=In ABS mode, each run cost 1 Critical Photon to start.
 MiracleDoor.modeMsg.0=Mode: Alloy Blast Smelter
@@ -944,14 +944,18 @@ Tooltip_BallLightning.0.17=§e (Plasma / Electric) Arc Furnace
 Tooltip_BallLightning.0.18=Parallel number = 2 ^ (Compact Fusion Coil Tier * (Coil Tier - 10))
 Tooltip_BallLightning.0.19=Tiers above Crude Stabilisation Field Generator block enables perfect overclocks
 Tooltip_BallLightning.0.20=§e Fusion Reactor
-Tooltip_BallLightning.0.21=The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.6 ^ (Field Generator Tier - 1) MAX/t
+Tooltip_BallLightning.0.21=The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.7 ^ (Field Generator Tier - 1) MAX/t
 Tooltip_BallLightning.0.22=65536x parallel | Perfect overclocks
 Tooltip_BallLightning.0.23=The max recipe tier is limited by the Compact Fusion Coil Tier
 Tooltip_BallLightning.0.24=§e Star Kernel Generator
 Tooltip_BallLightning.0.25=Almost infinite parallel | Upgrade the Field Generator for faster speeds
-Tooltip_BallLightning.0.26=Extra Speed Bonus = 0.794 ^ (Field Generator Tier - 1)
-Tooltip_BallLightning.0.27=Joining the wireless EU network when machine tier is 4 AND when no energy hatch is installed
-Tooltip_BallLightning.0.28=The Progressing Time will be fixed at 1.0s, and EU cost increase to §c64§7x
+Tooltip_BallLightning.0.26=Eu Modifier = 1 - 9.9%% * (Field Generator Tier - 1)
+Tooltip_BallLightning.0.27=§dWireless Mode :
+Tooltip_BallLightning.0.28=Joining the wireless EU network when machine tier is 4 AND when no energy hatch is installed
+Tooltip_BallLightning.0.29=The Progressing Time will be fixed at 3.2s, and EU cost increase to §c64§7x
+Tooltip_BallLightning.0.30=Put More Upgrade Chip into the controller block to decrease processing time interval and increase Eu Cost
+Tooltip_BallLightning.0.31=Actual processing time = default / Upgrade Chip Stack Size
+Tooltip_BallLightning.0.32=Actual EU cost = recipe value * Upgrade Chip Stack Size ^ 2 * 64
 Tooltip_BallLightning.1.01=§9Base Multi (Tier§51§9):
 Tooltip_BallLightning.1.02=§6NEI §7preview for details
 Tooltip_BallLightning.1.03=§9Tier §52 §9(Adds To §51§9):

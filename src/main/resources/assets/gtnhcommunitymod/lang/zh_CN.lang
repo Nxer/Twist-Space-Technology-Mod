@@ -944,14 +944,18 @@ Tooltip_BallLightning.0.17=§e 电弧炉 | 等离子电弧炉
 Tooltip_BallLightning.0.18=并行数 = 2 ^ (聚变线圈等级 * (线圈等级 - 10))
 Tooltip_BallLightning.0.19=粗制稳定力场发生器等级+ 解锁无损超频
 Tooltip_BallLightning.0.20=§e 聚变反应堆
-Tooltip_BallLightning.0.21=最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.6 ^ (力场发生器等级 - 1) A MAX
+Tooltip_BallLightning.0.21=最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.7 ^ (力场发生器等级 - 1) A MAX
 Tooltip_BallLightning.0.22=65536 并行, 无损超频
 Tooltip_BallLightning.0.23=聚变线圈等级决定配方等级
 Tooltip_BallLightning.0.24=§e 星核发生器
 Tooltip_BallLightning.0.25=几乎无限的并行, 升级力场发生器以获得更高的速度
-Tooltip_BallLightning.0.26=耗时系数 = 0.794 ^ (力场发生器等级 - 1)
-Tooltip_BallLightning.0.27=等级4且未安装能源仓时进入无线模式
-Tooltip_BallLightning.0.28=处理时间固定为1.0s, 同时耗能提高到§c64§7倍
+Tooltip_BallLightning.0.26=每升级一次力场发生器, 降低9.9%%功耗
+Tooltip_BallLightning.0.27=§d无线模式 :
+Tooltip_BallLightning.0.28=机器等级为4且未安装能源仓时进入无线模式
+Tooltip_BallLightning.0.29=处理时间固定为3.2s, 同时耗能提高到§c64§7倍
+Tooltip_BallLightning.0.30=在控制器方块内安装更多升级芯片以减少处理时间间隔, 同时耗能也会增加
+Tooltip_BallLightning.0.31=实际处理时间 = 默认耗时 / 升级芯片数量
+Tooltip_BallLightning.0.32=实际消耗EU = 默认耗能 * 升级芯片数量 ^ 2 * 64
 Tooltip_BallLightning.1.01=§9基础结构(§51§9级):
 Tooltip_BallLightning.1.02=§7详见§6NEI§7预览
 Tooltip_BallLightning.1.03=§52§9级(在§51§9级基础上添加):
@@ -1280,7 +1284,7 @@ Tooltip_IncompactCyclotron_02=粒子在电场下被加速到§e99%%§7光速！
 Tooltip_IncompactCyclotron_03=但是你随时可以取出加工的粒子
 Tooltip_IncompactCyclotron_04=这太神奇了！
 Tooltip_IncompactCyclotron_05=得益于工艺的升级
-Tooltip_IncompactCyclotron_06=加速器拥有了额外100％的额外加速,以及256并行
+Tooltip_IncompactCyclotron_06=加速器拥有了额外100%%的额外加速,以及256并行
 Tooltip_IncompactCyclotron_07=但是需要额外60%%的供电来运行
 tst.megacraftingcenter.desc.5=当前检查样板功能存在性能问题. 谨慎使用.
 tst.recipe.MassFabricatorGenesis=质量发生器 : 创世纪
