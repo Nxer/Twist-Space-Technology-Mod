@@ -760,7 +760,7 @@ public class DSPRecipePool implements IRecipePool {
 
         // spotless:off
         {
-            // spotless:off
+
             GT_Values.RA.stdBuilder()
                 .itemInputs(
                     // first slot is the general input , amount is set by machine internal parameters
@@ -915,7 +915,6 @@ public class DSPRecipePool implements IRecipePool {
                 .duration(20 * 120)
                 .addTo(GTCMRecipe.StrangeMatterAggregatorRecipes);
         }
-        // spotless:off
 
         // Strange Matter Aggregator Controller
         TST_RecipeBuilder.builder()
