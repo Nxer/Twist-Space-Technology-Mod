@@ -17,15 +17,19 @@ public class TCRecipeTools {
 
     public static void getInfusionCraftingRecipe() {
         for (Object r : ThaumcraftApi.getCraftingRecipes()) {
-            if (r instanceof InfusionRecipe && ((InfusionRecipe) r).getRecipeOutput() instanceof ItemStack
-                && ((InfusionRecipe) r).getRecipeInput() != null) // GetInfusionCraftingRecipe
-            {
+            if (!(r instanceof InfusionRecipe recipe)) {
+                continue;
+            }
+
+            if ((recipe.getRecipeOutput() instanceof ItemStack
+                && ((ItemStack) recipe.getRecipeOutput()).getItem() != null
+                && recipe.getRecipeInput() != null)) {
                 InfusionCraftingRecipe y = new InfusionCraftingRecipe(
-                    ((InfusionRecipe) r).getRecipeInput(), // getItemInput
-                    ((InfusionRecipe) r).getRecipeOutput(), // getItemOutput
-                    ((InfusionRecipe) r).getComponents(), // getRecipeItemInput
-                    ((InfusionRecipe) r).getAspects(), // getAspects
-                    ((InfusionRecipe) r).getResearch());// getResearch
+                    recipe.getRecipeInput(), // getItemInput
+                    recipe.getRecipeOutput(), // getItemOutput
+                    recipe.getComponents(), // getRecipeItemInput
+                    recipe.getAspects(), // getAspects
+                    recipe.getResearch());// getResearch
                 ICR.add(y);
             }
         }

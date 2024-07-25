@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
@@ -668,26 +669,22 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
 
     public static void registerUUForArray() {
         // some workaround on UU
-        RecipeMaps.massFabFakeRecipes.addRecipe(
-            false,
-            new ItemStack[] { GT_Utility.getIntegratedCircuit(24) },
-            null,
-            null,
-            null,
-            new FluidStack[] { Materials.UUMatter.getFluid(1) },
-            GT_MetaTileEntity_Massfabricator.sDurationMultiplier,
-            GT_MetaTileEntity_Massfabricator.BASE_EUT,
-            0);
-        RecipeMaps.massFabFakeRecipes.addRecipe(
-            false,
-            new ItemStack[] { GT_Utility.getIntegratedCircuit(23) },
-            null,
-            null,
-            new FluidStack[] { Materials.UUAmplifier.getFluid(GT_MetaTileEntity_Massfabricator.sUUAperUUM) },
-            new FluidStack[] { Materials.UUMatter.getFluid(1L) },
-            GT_MetaTileEntity_Massfabricator.sDurationMultiplier / GT_MetaTileEntity_Massfabricator.sUUASpeedBonus,
-            GT_MetaTileEntity_Massfabricator.BASE_EUT,
-            0);
+        GT_Values.RA.stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(24))
+            .fluidOutputs(Materials.UUMatter.getFluid(1))
+            .noOptimize()
+            .eut(GT_MetaTileEntity_Massfabricator.BASE_EUT)
+            .duration(GT_MetaTileEntity_Massfabricator.sDurationMultiplier)
+            .addTo(RecipeMaps.massFabFakeRecipes);
+        GT_Values.RA.stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(23))
+            .fluidInputs(Materials.UUAmplifier.getFluid(GT_MetaTileEntity_Massfabricator.sUUAperUUM))
+            .fluidOutputs(Materials.UUMatter.getFluid(1))
+            .noOptimize()
+            .eut(GT_MetaTileEntity_Massfabricator.BASE_EUT)
+            .duration(
+                GT_MetaTileEntity_Massfabricator.sDurationMultiplier / GT_MetaTileEntity_Massfabricator.sUUASpeedBonus)
+            .addTo(RecipeMaps.massFabFakeRecipes);
     }
 
     public static void getGeneratorsForArray() {
@@ -1590,26 +1587,37 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     }
 
     public static void addRecipes() {
-        GT_Values.RA.addAssemblerRecipe(
-            new ItemStack[] { ItemList.Processing_Array.get(16), ItemList.Robot_Arm_IV.get(32),
-                ItemList.Emitter_IV.get(32), ItemList.Field_Generator_IV.get(32),
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                ItemList.Processing_Array.get(16),
+                ItemList.Robot_Arm_IV.get(32),
+                ItemList.Emitter_IV.get(32),
+                ItemList.Field_Generator_IV.get(32),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64) },
-            ALLOY.NITINOL_60.getFluidStack(24576),
-            GTCMItemList.BigBroArray.get(1),
-            20 * 1200,
-            7680);
-        GT_Values.RA.addAssemblerRecipe(
-            new ItemStack[] { ItemList.Field_Generator_IV.get(2), ItemList.Casing_RobustTungstenSteel.get(1),
-                ItemList.Robot_Arm_IV.get(16), ItemList.Emitter_IV.get(16),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64))
+            .fluidInputs(ALLOY.NITINOL_60.getFluidStack(24576))
+            .itemOutputs(GTCMItemList.BigBroArray.get(1))
+            .noOptimize()
+            .eut(RECIPE_IV)
+            .duration(20 * 1200)
+            .addTo(RecipeMaps.assemblerRecipes);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                ItemList.Field_Generator_IV.get(2),
+                ItemList.Casing_RobustTungstenSteel.get(1),
+                ItemList.Robot_Arm_IV.get(16),
+                ItemList.Emitter_IV.get(16),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 8),
-                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 4) },
-            Materials.SolderingAlloy.getMolten(9216),
-            GTCMItemList.ParallelismCasing0.get(1),
-            150 * 20,
-            6400);
+                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 4))
+            .fluidInputs(Materials.SolderingAlloy.getMolten(9216))
+            .itemOutputs(GTCMItemList.ParallelismCasing0.get(1))
+            .noOptimize()
+            .eut(6400)
+            .duration(20 * 150)
+            .addTo(RecipeMaps.assemblerRecipes);
 
         GT_Values.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing0.get(1))

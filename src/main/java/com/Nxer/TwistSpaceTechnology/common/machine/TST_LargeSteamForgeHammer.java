@@ -1,12 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.GregTech_API.sBlockCasings1;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_SteamMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -16,8 +17,10 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -41,6 +44,27 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     }
 
     // endregion
+    protected int steamCasingTier = 1;
+    protected int parallel = 1;
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("steamCasingTier", steamCasingTier);
+        aNBT.setInteger("parallel", parallel);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        steamCasingTier = aNBT.getInteger("steamCasingTier");
+        parallel = aNBT.getInteger("parallel");
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return parallel;
+    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -50,7 +74,13 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        return checkPiece(mName, 1, 1, 0);
+        steamCasingTier = -1;
+        if (!checkPiece(mName, 1, 1, 0)) return false;
+        if (steamCasingTier < 1) return false;
+        updateHatchTexture();
+
+        parallel = 16 * steamCasingTier;
+        return true;
     }
 
     protected static IStructureDefinition<TST_LargeSteamForgeHammer> STRUCTURE_DEFINITION = null;
@@ -70,6 +100,21 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
         return survivialBuildPiece(mName, stackSize, 1, 1, 0, elementBudget, env, false, true);
     }
 
+    protected void updateHatchTexture() {
+        int casingIndex = getCasingTextureID(steamCasingTier);
+        for (GT_MetaTileEntity_Hatch h : mSteamInputs) h.updateTexture(casingIndex);
+        for (GT_MetaTileEntity_Hatch h : mSteamOutputs) h.updateTexture(casingIndex);
+        for (GT_MetaTileEntity_Hatch h : mSteamInputFluids) h.updateTexture(casingIndex);
+    }
+
+    public void setSteamCasingTier(int steamCasingTier) {
+        this.steamCasingTier = steamCasingTier;
+    }
+
+    public int getSteamCasingTier() {
+        return steamCasingTier;
+    }
+
     @Override
     public IStructureDefinition<TST_LargeSteamForgeHammer> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
@@ -84,12 +129,19 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
                         buildSteamInput(TST_LargeSteamForgeHammer.class).casingIndex(10)
                             .dot(1)
                             .build(),
+
                         buildHatchAdder(TST_LargeSteamForgeHammer.class)
                             .atLeast(SteamHatchElement.InputBus_Steam, SteamHatchElement.OutputBus_Steam)
                             .casingIndex(10)
                             .dot(1)
                             .build(),
-                        ofBlock(sBlockCasings1, 10)))
+
+                        ofBlocksTiered(
+                            TST_LargeSteamForgeHammer::checkSteamCasingTier,
+                            TST_LargeSteamForgeHammer.STEAM_CASING_LIST,
+                            -1,
+                            TST_LargeSteamForgeHammer::setSteamCasingTier,
+                            TST_LargeSteamForgeHammer::getSteamCasingTier)))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -120,6 +172,27 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     @Override
     protected GT_RenderedTexture getFrontOverlayActive() {
         return new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER_ACTIVE);
+    }
+
+    @Override
+    public void onValueUpdate(byte aValue) {
+        steamCasingTier = aValue;
+    }
+
+    @Override
+    public byte getUpdateData() {
+        return (byte) steamCasingTier;
+    }
+
+    @Override
+    public ITexture[] getTexture(final IGregTechTileEntity aBaseMetaTileEntity, final ForgeDirection side,
+        final ForgeDirection facing, final int aColorIndex, final boolean aActive, final boolean aRedstone) {
+
+        if (side == facing) {
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID(steamCasingTier)),
+                aActive ? getFrontOverlayActive() : getFrontOverlay() };
+        }
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID(steamCasingTier)) };
     }
 
     /**

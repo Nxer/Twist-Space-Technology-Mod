@@ -54,6 +54,11 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
     // region Processing Logic
 
     @Override
+    public int getMaxParallelRecipes() {
+        return 24;
+    }
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.alloySmelterRecipes;
     }

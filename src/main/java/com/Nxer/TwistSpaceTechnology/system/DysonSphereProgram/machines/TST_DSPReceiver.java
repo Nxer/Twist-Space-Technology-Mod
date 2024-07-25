@@ -123,22 +123,23 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     // region Processing Logic
 
-    private static ItemStack ASTRAL_ARRAY_FABRICATOR;
-    private String ownerName; // init when load world
-    private UUID ownerUUID; // init when load world
-    private byte mode = 0;
-    private long usedPowerPoint = 0;
-    private boolean isUsing = false;
-    private long storageEU = 0;
-    private long gravitationalLensTime = 0;
-    private boolean wirelessMode = true;
-    private int astralArrayOverloadMultiplier = 1;
-    private int dimID; // init when load world
-    private double stellarAndPlanetCoefficient = 0;
-    private DSP_DataCell dspDataCell; // init when load world
-    private byte dataSyncFlag = 0;
+    protected static ItemStack ASTRAL_ARRAY_FABRICATOR;
+    protected static ItemStack CRITICAL_PHOTON;
+    protected String ownerName; // init when load world
+    protected UUID ownerUUID; // init when load world
+    protected byte mode = 0;
+    protected long usedPowerPoint = 0;
+    protected boolean isUsing = false;
+    protected long storageEU = 0;
+    protected long gravitationalLensTime = 0;
+    protected boolean wirelessMode = true;
+    protected int astralArrayOverloadMultiplier = 1;
+    protected int dimID; // init when load world
+    protected double stellarAndPlanetCoefficient = 0;
+    protected DSP_DataCell dspDataCell; // init when load world
+    protected byte dataSyncFlag = 0;
 
-    private void decreaseGravitationalLensTime() {
+    protected void decreaseGravitationalLensTime() {
         if (gravitationalLensTime > 0) gravitationalLensTime--;
     }
 
@@ -232,7 +233,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
      *
      * @return The amount, MAX 1024 * Integer.MAX_VALUE.
      */
-    private long getPowerPoint() {
+    protected long getPowerPoint() {
         if (dspDataCell == null) return 0;
         // Limit dsp max * circuit.meta / circuit.stackSize
         ItemStack controllerStack = getControllerSlot();
@@ -252,7 +253,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             return Math.min(DSP_Values.maxPowerPointPerReceiver, Math.min(limited, canUse));
         } else if (metaItemEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
             // use Astral Array Fabricator to overload over max input limitation
-            astralArrayOverloadMultiplier = controllerStack.stackSize * controllerStack.stackSize * 2;
+            astralArrayOverloadMultiplier = calculateAstralArrayOverloadMultiplier(controllerStack.stackSize);
             return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
         } else {
             astralArrayOverloadMultiplier = 1;
@@ -260,10 +261,15 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         }
     }
 
+    protected static int calculateAstralArrayOverloadMultiplier(int astralArrayAmount) {
+        if (astralArrayAmount < 1) return 1;
+        return astralArrayAmount * astralArrayAmount * 2;
+    }
+
     /**
      * Request resources and handle exceptions.
      */
-    private void startUsingDSP() {
+    protected void startUsingDSP() {
         isUsing = true;
         dataSyncFlag = dspDataCell.getDataSyncFlag();
         usedPowerPoint = getPowerPoint();
@@ -278,7 +284,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     /**
      * Release resources and handle exceptions.
      */
-    private void stopUsingDSP() {
+    protected void stopUsingDSP() {
         isUsing = false;
         dataSyncFlag = 0;
         if (!dspDataCell.tryDecreaseUsedPowerPoint(usedPowerPoint)) {
@@ -295,7 +301,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         super.onBlockDestroyed();
     }
 
-    private void syncDSPData() {
+    protected void syncDSPData() {
         if (this.dataSyncFlag != dspDataCell.getDataSyncFlag()) {
             this.stopUsingDSP();
             this.startUsingDSP();
@@ -305,7 +311,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         final ItemStack controllerSlot = getControllerSlot();
         if (astralArrayOverloadMultiplier > 1) {
             if (controllerSlot == null || !metaItemEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)
-                || controllerSlot.stackSize * 2 != astralArrayOverloadMultiplier) {
+                || calculateAstralArrayOverloadMultiplier(controllerSlot.stackSize) != astralArrayOverloadMultiplier) {
                 this.stopUsingDSP();
                 this.startUsingDSP();
             }
@@ -333,20 +339,33 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         } else if (mode == 1) {
             // Generate Photon per int.MAX EU
             if (storageEU >= EUPerCriticalPhoton) {
-                int amount = (int) (storageEU / EUPerCriticalPhoton);
-                mOutputItems = new ItemStack[] { setStackSize(CriticalPhoton.get(1), amount) };
+                long amount = storageEU / EUPerCriticalPhoton;
                 storageEU -= EUPerCriticalPhoton * amount;
+                if (amount > Integer.MAX_VALUE) {
+                    List<ItemStack> output = new ArrayList<>();
+                    while (amount > Integer.MAX_VALUE) {
+                        output.add(setStackSize(CRITICAL_PHOTON.copy(), Integer.MAX_VALUE));
+                        amount -= Integer.MAX_VALUE;
+                    }
+                    if (amount > 0) {
+                        output.add(setStackSize(CRITICAL_PHOTON.copy(), (int) amount));
+                    }
+                    mOutputItems = output.toArray(new ItemStack[0]);
+                } else {
+                    mOutputItems = new ItemStack[] { setStackSize(CRITICAL_PHOTON.copy(), (int) amount) };
+                }
+
             }
         }
         mMaxProgresstime = 128;
         return CheckRecipeResultRegistry.GENERATING;
     }
 
-    private double getGLensSpeedMultiplier() {
-        return gravitationalLensTime == 0 ? 1 : DSP_Values.gravitationalLensSpeedMultiplier;
+    protected double getGLensSpeedMultiplier() {
+        return gravitationalLensTime > 0 ? DSP_Values.gravitationalLensSpeedMultiplier : 1;
     }
 
-    private long generateTickEU() {
+    protected long generateTickEU() {
         return (long) (stellarAndPlanetCoefficient * getGLensSpeedMultiplier() * this.usedPowerPoint);
     }
 
@@ -366,6 +385,9 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         if (ASTRAL_ARRAY_FABRICATOR == null) {
             ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
         }
+        if (CRITICAL_PHOTON == null) {
+            CRITICAL_PHOTON = CriticalPhoton.get(1);
+        }
         if (aBaseMetaTileEntity.isServerSide()) {
             this.dimID = getDimID(aBaseMetaTileEntity);
             this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);
@@ -376,7 +398,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         }
     }
 
-    private void checkGravitationalLensInput() {
+    protected void checkGravitationalLensInput() {
         ArrayList<ItemStack> storedInputs = getStoredInputs();
         if (storedInputs.isEmpty()) return;
         for (ItemStack items : storedInputs) {
@@ -444,10 +466,10 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 			true);
 	}
 
-	private static final String STRUCTURE_PIECE_MAIN = "mainDSPReceiver";
-	private final int horizontalOffSet = 23;
-	private final int verticalOffSet = 45;
-	private final int depthOffSet = 12;
+	protected static final String STRUCTURE_PIECE_MAIN = "mainDSPReceiver";
+	protected final int horizontalOffSet = 23;
+	protected final int verticalOffSet = 45;
+	protected final int depthOffSet = 12;
     // 47,54,47
 	@Override
 	public IStructureDefinition<TST_DSPReceiver> getStructureDefinition() {
@@ -501,7 +523,7 @@ O -> ofBlock...(tile.quantumGlass, 0, ...);
 P -> ofBlock...(gt.blockcasingsSE, 0, ...); // Hatches
 Q -> ofFrame...(NaquadahAlloy, ...);
      */
-	private final String[][] shapeMain = new String[][]{
+	protected final String[][] shapeMain = new String[][]{
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                       D                       ","                     DD DD                     ","                    D     D                    ","                    D  D  D                    ","                   DDDDKDDDD                   ","                    D  D  D                    ","                    D     D                    ","                     DD DD                     ","                       D                       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      DDD                      ","                    DDHRHDD                    ","                    DIHIHID                    ","                   DHHIHIHHD                   ","                  CDRIHIHIRDC                  ","                   DHHIHIHHD                   ","                    DIHIHID                    ","                    DDHRHDD                    ","                      DDD                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     DDDDD                     ","                    DJJJJJD                    ","                   DJJJJJJJD                   ","                  CDJJJJJJJDC                  ","                  CDJJJJJJJDC                  ","                  CDJJJJJJJDC                  ","                   DJJJJJJJD                   ","                    DJJJJJD                    ","                     DDDDD                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},

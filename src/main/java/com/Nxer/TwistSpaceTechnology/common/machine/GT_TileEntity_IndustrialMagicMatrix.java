@@ -15,6 +15,7 @@ import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlaye
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -64,6 +65,7 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.common.tiles.TileNodeEnergized;
+import thaumcraft.common.tiles.TileOwned;
 import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 
@@ -313,8 +315,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         Aspect maxAspect = null;
         int max = 0;
         for (Aspect aspect : aspectList.getAspects()) {
-            max = Math.max(aspectList.getAmount(aspect), max);
-            maxAspect = aspect;
+            int amount = aspectList.getAmount(aspect);
+            if (amount > max) {
+                max = amount;
+                maxAspect = aspect;
+            }
         }
         return maxAspect;
     }
@@ -2900,7 +2905,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     ofChain(
                         ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
                         ofBlock(Blocks.air, 0)))
-                .addElement('Z', ofBlock(blockCosmeticOpaque, 2))
+                .addElement(
+                    'Z',
+                    ofChain(
+                        ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addCosmeticOpaque, blockCosmeticOpaque, 2),
+                        ofBlock(blockCosmeticOpaque, 2)))
                 .addElement('0', ofBlock(blockStoneDevice, 2))
                 .addElement('1', ofFrame(Materials.Thaumium))
                 .addElement('3', ofBlock(blockStoneDevice, 10))
@@ -2911,6 +2920,16 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 .build();
         }
         return STRUCTURE_DEFINITION;
+    }
+
+    public final boolean addCosmeticOpaque(TileEntity tileEntity) {
+        if (tileEntity instanceof TileOwned) {
+            if (getPlayName() != null && Objects.equals(((TileOwned) tileEntity).owner, "")) {
+                ((TileOwned) tileEntity).owner = getPlayName();
+            }
+            return true;
+        }
+        return false;
     }
 
     public final boolean addInfusionProvider(TileEntity aTileEntity) {
@@ -3004,12 +3023,12 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 // #zh_CN 六种原始要素之间的数量越接近倍率系数就会越高。
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_14"))
                 // #tr Tooltip_IndustrialMagicMatrix_15
-                // # The actual acceleration magnification is ((0.4+0.45exp(-0.05Variance)+
-                // #zh_CN 实际加速倍率为{\SPACE}{\AQUA}((0.4+0.45exp(-0.05Variance) +
+                // # The actual acceleration magnification is (0.4+0.45exp(-0.05Variance)+
+                // #zh_CN 实际加速倍率为{\SPACE}{\AQUA}(0.4+0.45exp(-0.05Variance) +
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_15"))
                 // #tr Tooltip_IndustrialMagicMatrix_16
-                // # 0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500).
-                // #zh_CN {\SPACE}{\SPACE}{\AQUA}0.15(ln(1+exp(-Variance)/ln2)) * (Mean / 500)
+                // # 0.15(ln(1+exp(-Variance))/ln2)) * (Mean / 500).
+                // #zh_CN {\SPACE}{\SPACE}{\AQUA}0.15(ln(1+exp(-Variance))/ln2)) * (Mean / 500)
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_16"))
                 // #tr Tooltip_IndustrialMagicMatrix_17
                 // # Variance is the variance of the largest element in the six nodes,

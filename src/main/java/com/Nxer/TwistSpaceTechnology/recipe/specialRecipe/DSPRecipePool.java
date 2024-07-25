@@ -658,6 +658,28 @@ public class DSPRecipePool implements IRecipePool {
             .duration(20 * 32)
             .addTo(SpaceAssembler);
 
+        // Advanced Annihilation Constrainer recipe
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GTCMItemList.MatterRecombinator.get(0),
+                SpaceWarper.get(4),
+                ParticleTrapTimeSpaceShield.get(64),
+                CriticalPhoton.get(1),
+
+                // TODO Quantum circuit
+                CustomItemList.QuantumCircuit.get(2),
+                ItemList.EnergisedTesseract.get(1))
+            .fluidInputs(
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 8),
+                MaterialsUEVplus.Universium.getMolten(144 * 64),
+                MaterialsUEVplus.PrimordialMatter.getFluid(144 * 24),
+                MaterialsUEVplus.Eternity.getMolten(144 * 24))
+            .itemOutputs(AnnihilationConstrainer.get(128))
+            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(200_000))
+            .eut(RECIPE_MAX)
+            .duration(20 * 60)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
         // Antimatter Fuel Rod
         GT_Values.RA.stdBuilder()
             .itemInputs(
@@ -738,6 +760,7 @@ public class DSPRecipePool implements IRecipePool {
 
         // spotless:off
         {
+            // spotless:off
             GT_Values.RA.stdBuilder()
                 .itemInputs(
                     // first slot is the general input , amount is set by machine internal parameters
@@ -795,7 +818,7 @@ public class DSPRecipePool implements IRecipePool {
                 // #tr StrangeMatterAggregation.RecipeDescription.specialSlot
                 // # input from the right input bus, upgrades a portion of the product to T2 product, same ratio as the annihilation constrainer
                 // #zh_CN 由右侧输入总线输入, 将一部分产物升级为2级产物, 比率与湮灭约束器相同
-                .specialItem(
+                .special(
                     addStringToStackName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
@@ -803,6 +826,7 @@ public class DSPRecipePool implements IRecipePool {
                 .eut(RECIPE_MAX)
                 .duration(20 * 120)
                 .addTo(GTCMRecipe.StrangeMatterAggregatorRecipes);
+            // spotless:on
 
             GT_Values.RA.stdBuilder()
                 .itemInputs(
@@ -840,7 +864,7 @@ public class DSPRecipePool implements IRecipePool {
                     // here is T2 byproduct
                     MaterialsUEVplus.SpaceTime.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator),
                     MyMaterial.shirabon.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator))
-                .specialItem(
+                .special(
                     addStringToStackName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
@@ -882,7 +906,7 @@ public class DSPRecipePool implements IRecipePool {
                 .fluidOutputs(
                     // here is T3 byproduct
                     MaterialsUEVplus.Universium.getMolten(Config.ByproductBaseAmount_T3_StrangeMatterAggregator))
-                .specialItem(
+                .special(
                     addStringToStackName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))

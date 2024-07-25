@@ -33,4 +33,10 @@ public final class CheckRecipeResults {
     public static final CheckRecipeResult NoAnnihilationConstrainerInput = SimpleResultWithText
         .ofFailure("CheckRecipeResult.NoAnnihilationConstrainerInput");
 
+    // #tr CheckRecipeResult.NoCorrectFluidInput
+    // # No Correct Fluid Input
+    // #zh_CN 没有正确的流体输入
+    public static final CheckRecipeResult NoCorrectFluidInput = SimpleResultWithText
+        .ofFailurePersistOnShutdown("CheckRecipeResult.NoCorrectFluidInput");
+
 }
