@@ -8,7 +8,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotN
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.isStackInvalid;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
@@ -18,14 +17,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COM
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_GLOW;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import gregtech.api.enums.Materials;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 

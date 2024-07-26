@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology;
 
 import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
 
-import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.devTools.PathHelper;
 import com.Nxer.TwistSpaceTechnology.loader.LazyStaticsInitLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
+import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
 import com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipe;
