@@ -43,12 +43,10 @@ import gregtech.api.util.GT_OreDictUnificator;
 
 public class TSTBufferedEnergyHatchRecipe implements IRecipePool {
 
-
     @Override
     public void loadRecipes() {
 
-        final Object[] circuits = new Object[][] {
-            new Object[] { OrePrefixes.circuit.get(Materials.Basic), 1 },
+        final Object[] circuits = new Object[][] { new Object[] { OrePrefixes.circuit.get(Materials.Basic), 1 },
             new Object[] { OrePrefixes.circuit.get(Materials.Good), 1 },
             new Object[] { OrePrefixes.circuit.get(Materials.Advanced), 1 },
             new Object[] { OrePrefixes.circuit.get(Materials.Data), 1 },
