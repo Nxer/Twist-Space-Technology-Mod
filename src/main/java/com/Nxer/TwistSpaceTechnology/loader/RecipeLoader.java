@@ -39,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.TreeGrowthSimulatorWit
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.NeutronActivatorWithEURecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.CosmicProcessorCircuitRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DragonBloodRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.MegaUniversalSpaceStationRecipePool;
@@ -63,7 +64,7 @@ public class RecipeLoader {
             new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
             new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new DragonBloodRecipe(),
             new FusionReactorRecipePool(), new ModularHatchesRecipePool(), new MassFabricatorGenesisRecipePool(),
-            new SpaceAssemblerRecipePool() };
+            new SpaceAssemblerRecipePool(), new CosmicProcessorCircuitRecipePool() };
 
         new SimpleFurnaceFuelPool().loadRecipes();
         new TCResearches().loadResearches();

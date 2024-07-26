@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology;
 
 import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
 
+import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -114,6 +115,7 @@ public class TwistSpaceTechnology {
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
         MachineLoader.loadMachinePostInit();
+        OreDictLoader.loadOreDictionary();
         RecipeLoader.loadRecipesPostInit();// To init GTCM Recipemap
 
         TextHandler.serializeLangMap(isInDevMode);

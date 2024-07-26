@@ -8,6 +8,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotN
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.isStackInvalid;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
@@ -17,9 +18,14 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COM
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_GLOW;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import gregtech.api.enums.Materials;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -75,6 +81,9 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         // check every input
         for (ItemStack item : inputs) {
             if (isStackInvalid(item)) continue;
+
+            // general convert
+
             ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(item);
 
             if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) continue;
@@ -82,6 +91,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
                 outputs.add(GT_OreDictUnificator.get(false, item, true));
                 item.stackSize = 0;
             }
+
         }
         // inputs are consumed at this point
         updateSlots();
