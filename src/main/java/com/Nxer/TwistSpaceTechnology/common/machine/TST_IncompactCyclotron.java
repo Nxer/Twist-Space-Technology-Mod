@@ -229,7 +229,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
             .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_05"))
             // #tr Tooltip_IncompactCyclotron_06
             // # The accelerator upgraded 100%% speedup and 256 parallel
-            // #zh_CN 加速器拥有了额外100％的额外加速,以及256并行
+            // #zh_CN 加速器拥有了额外100%%的额外加速,以及256并行
             .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_06"))
             // #tr Tooltip_IncompactCyclotron_07
             // # But it requires additional 60%% of power to work

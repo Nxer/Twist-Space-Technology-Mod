@@ -757,8 +757,10 @@ public class DSPRecipePool implements IRecipePool {
             .addTo(GTPPRecipeMaps.cyclotronRecipes);
 
         // region Strange Matter Aggregation
+
+        // spotless:off
         {
-            // spotless:off
+
             GT_Values.RA.stdBuilder()
                 .itemInputs(
                     // first slot is the general input , amount is set by machine internal parameters

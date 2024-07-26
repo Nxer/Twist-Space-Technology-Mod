@@ -313,7 +313,7 @@ public class Config {
     // region Ball Lightning
     public static boolean Enable_BallLightning = true;
     public static int WirelessModeExtraEuCost_BallLightning = 64;
-    public static int WirelessModeTickEveryProcess_BallLightning = 20;
+    public static int WirelessModeTickEveryProcess_BallLightning = 64;
     // end region
 
     // region StarcoreMiner
