@@ -55,10 +55,12 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     // region Class Constructor
     public GT_TileEntity_MegaEggGenerator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        super.useLongPower = true;
     }
 
     public GT_TileEntity_MegaEggGenerator(String aName) {
         super(aName);
+        super.useLongPower = true;
     }
     // endregion
 
@@ -70,7 +72,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     private int mAirPosed = 0;
     private long genVol = 0L;
     private long genAmp = 0L;
-    private int effCap = 10000;
+    private int effCap = 1;
 
     @Override
     @NotNull
@@ -83,12 +85,23 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     }
 
     /**
+     * This efficiency increase is calculated per 20 Tick run
      * When Infinity eggs exist, every infinity egg give 100t efficiency increase boost.
+     * Dragon eggs will give 1t efficiency increase boost for each pairs, but cap at 50 in total.
+     * AS FOR CreeperEggs, who will use them?
      */
     private void getEfficiencyIncrease() {
+        effCap = 1;
         if (mInfinityEggs != 0) {
-            effCap = mInfinityEggs * 100;
-        } else effCap = 1;
+            effCap += mInfinityEggs * 100;
+        }
+        if (mDragonEggs != 0) {
+            if (mDragonEggs < 100) {
+                effCap += mDragonEggs / 2;
+            } else {
+                effCap += 50;
+            }
+        }
     }
 
     /**
@@ -392,6 +405,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_06)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_07)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_08)
+            .addInfo(TextLocalization.Tooltip_MegaEggGenerator_09)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
