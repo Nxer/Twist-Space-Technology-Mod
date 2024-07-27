@@ -326,7 +326,7 @@ public class TextLocalization {
     public static final String Tooltip_HolySeparator_02 = texter("Another form of laser engraving.", "Tooltip_HolySeparator_02");
     public static final String Tooltip_HolySeparator_03 = texter("You can even slice potato chips with this.", "Tooltip_HolySeparator_03");
     public static final String Tooltip_HolySeparator_04 = texter("Extra 8x Parallel per Piece. 16 Piece enable Perfect Overclock.", "Tooltip_HolySeparator_04");
-    public static final String Tooltip_HolySeparator_05 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.", "Tooltip_HolySeparator_05");
+    public static final String Tooltip_HolySeparator_05 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_HolySeparator_05");
 
     // endregion
 
