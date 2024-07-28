@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
-import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeExtraEuCost_BallLightning;
-import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeTickEveryProcess_BallLightning;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.WirelessModeExtraEuCost_BallLightning;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.WirelessModeTickEveryProcess_BallLightning;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -180,7 +180,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         return switch (mode) {
             case (2) -> true;
             case (3) -> false;
-            default -> fieldGeneratorTier > 1;
+            default -> fieldGeneratorTier > 2;
         };
     }
 
@@ -224,9 +224,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
     public void checkBonus() {
         if (mMachineTier - mode > 1) speedBonus = (float) Math.pow(0.25, mMachineTier - mode - 1);
-        // else if (mMachineTier == 4) {
-        // speedBonus = (float) Math.pow(0.794, fieldGeneratorTier - 1);
-        // }
         else speedBonus = 1;
         EuModifier = mode != 3 ? 1 : (float) (1 - 0.099 * (fieldGeneratorTier - 1));
     }
@@ -267,7 +264,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     }
 
     private int getProgressTime(int basicTickCost) {
-        return Math.max(1, basicTickCost / this.overclockParameter);
+        return (int) Math.max(1, Math.ceil((float) basicTickCost / this.overclockParameter));
     }
 
     @Override
@@ -279,7 +276,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
                 setEuModifier(getEuModifier());
-                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
+                setOverclock(isEnablePerfectOverclock() ? 4 : 2, 4);
                 return super.process();
             }
 
@@ -321,7 +318,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             }
         } else {
             FusionMaxEut = (long) (RECIPE_MAX
-                * (Math.pow(4, (compactFusionCoilTier - 2)) * Math.pow(1.7, fieldGeneratorTier - 1)));
+                * (Math.pow(4, (compactFusionCoilTier - 2)) * Math.pow(1.8, fieldGeneratorTier - 1)));
             if (isWirelessMode || FusionMaxEut < getMaxInputEu()) {
                 logic.setAvailableVoltage(FusionMaxEut);
                 logic.setAvailableAmperage(1);
@@ -578,20 +575,12 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        String modeName;
-        switch (tag.getByte("mode")) {
-            case 1:
-                modeName = EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("gt.recipe.plasmaarcfurnace");
-                break;
-            case 2:
-                modeName = EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("gt.recipe.fusionreactor");
-                break;
-            case 3:
-                modeName = EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("tst.recipe.BallLightningRecipes");
-                break;
-            default:
-                modeName = EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("gt.recipe.arcfurnace");
-        }
+        String modeName = switch (tag.getByte("mode")) {
+            case 1 -> EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("gt.recipe.plasmaarcfurnace");
+            case 2 -> EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("gt.recipe.fusionreactor");
+            case 3 -> EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("tst.recipe.BallLightningRecipes");
+            default -> EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("gt.recipe.arcfurnace");
+        };
         currentTip.add(modeName);
         if (tag.getByte("mode") == 2) {
             currentTip.add(
@@ -931,8 +920,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN {\YELLOW} 聚变反应堆
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.20"))
             // #tr Tooltip_BallLightning.0.21
-            // # The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.7 ^ (Field Generator Tier - 1) MAX/t
-            // #zh_CN 最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.7 ^ (力场发生器等级 - 1) A MAX
+            // # The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.8 ^ (Field Generator Tier - 1) MAX/t
+            // #zh_CN 最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.8 ^ (力场发生器等级 - 1) A MAX
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.21"))
             // #tr Tooltip_BallLightning.0.22
             // # 65536x parallel | Perfect overclocks

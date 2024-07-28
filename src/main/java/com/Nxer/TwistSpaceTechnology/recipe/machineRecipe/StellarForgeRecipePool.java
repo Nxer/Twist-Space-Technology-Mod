@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_Utility;
@@ -78,6 +80,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         SpecialRecipeOutputs.add(TST_ItemID.create(WerkstoffLoader.CubicZirconia.get(OrePrefixes.gemFlawed, 1)));
         SpecialRecipeOutputs.add(TST_ItemID.create(Materials.MeteoricIron.getIngots(1)));
         SpecialRecipeOutputs.add(TST_ItemID.create(Materials.MeteoricSteel.getIngots(1)));
+        SpecialRecipeOutputs.add(TST_ItemID.create(GT_ModHandler.getModItem("gregtech", "gt.metaitem.01", 1, 12129)));
 
     }
 
@@ -267,6 +270,18 @@ public class StellarForgeRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(GTCMRecipe.StellarForgeRecipes);
 
+        // Neutronium
+        bd = TST_RecipeBuilder.builder()
+            .itemInputs(Materials.Neutronium.getDust(1));
+
+        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
+            bd.fluidOutputs(Materials.Neutronium.getMolten(144));
+        } else {
+            bd.itemOutputs(Materials.Neutronium.getIngots(1));
+        }
+        bd.eut(RECIPE_UV)
+            .duration(20 * 112)
+            .addTo(GTCMRecipe.StellarForgeRecipes);
     }
 
     public static Collection<GT_Recipe> stellarForgeRecipeListCache;

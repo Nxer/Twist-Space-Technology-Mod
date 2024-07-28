@@ -944,7 +944,7 @@ Tooltip_BallLightning.0.17=§e (Plasma / Electric) Arc Furnace
 Tooltip_BallLightning.0.18=Parallel number = 2 ^ (Compact Fusion Coil Tier * (Coil Tier - 10))
 Tooltip_BallLightning.0.19=Tiers above Crude Stabilisation Field Generator block enables perfect overclocks
 Tooltip_BallLightning.0.20=§e Fusion Reactor
-Tooltip_BallLightning.0.21=The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.7 ^ (Field Generator Tier - 1) MAX/t
+Tooltip_BallLightning.0.21=The maximum Eu consumption is limited at 4 ^ (Compact Fusion Coil Tier - 2) * 1.8 ^ (Field Generator Tier - 1) MAX/t
 Tooltip_BallLightning.0.22=65536x parallel | Perfect overclocks
 Tooltip_BallLightning.0.23=The max recipe tier is limited by the Compact Fusion Coil Tier
 Tooltip_BallLightning.0.24=§e Star Kernel Generator
