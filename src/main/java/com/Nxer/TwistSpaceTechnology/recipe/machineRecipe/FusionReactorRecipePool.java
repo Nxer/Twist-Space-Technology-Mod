@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -17,14 +16,14 @@ public class FusionReactorRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-//        // debug Recipe
-//        GT_Values.RA.stdBuilder()
-//            .fluidInputs(Materials.Water.getFluid(1), Materials.Lava.getFluid(1))
-//            .fluidOutputs(Materials.Water.getGas(1))
-//            .specialValue(2000000000)
-//            .eut(RECIPE_UMV)
-//            .duration(256)
-//            .addTo(fusionRecipes);
+        // // debug Recipe
+        // GT_Values.RA.stdBuilder()
+        // .fluidInputs(Materials.Water.getFluid(1), Materials.Lava.getFluid(1))
+        // .fluidOutputs(Materials.Water.getGas(1))
+        // .specialValue(2000000000)
+        // .eut(RECIPE_UMV)
+        // .duration(256)
+        // .addTo(fusionRecipes);
 
         // Chromium + Oxygen = Germanium
         GT_Values.RA.stdBuilder()

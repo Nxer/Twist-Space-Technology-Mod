@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.WirelessModeExtraEuCost_BallLightning;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.WirelessModeTickEveryProcess_BallLightning;
+import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeExtraEuCost_BallLightning;
+import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeTickEveryProcess_BallLightning;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -276,7 +276,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
                 setEuModifier(getEuModifier());
-                setOverclock(isEnablePerfectOverclock() ? 4 : 2, 4);
+                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
                 return super.process();
             }
 
