@@ -16,6 +16,15 @@ public class FusionReactorRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
 
+        // // debug Recipe
+        // GT_Values.RA.stdBuilder()
+        // .fluidInputs(Materials.Water.getFluid(1), Materials.Lava.getFluid(1))
+        // .fluidOutputs(Materials.Water.getGas(1))
+        // .specialValue(2000000000)
+        // .eut(RECIPE_UMV)
+        // .duration(256)
+        // .addTo(fusionRecipes);
+
         // Chromium + Oxygen = Germanium
         GT_Values.RA.stdBuilder()
             .fluidInputs(Materials.Chrome.getPlasma(144), Materials.Oxygen.getPlasma(1000))

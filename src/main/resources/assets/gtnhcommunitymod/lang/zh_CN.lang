@@ -945,7 +945,7 @@ Tooltip_BallLightning.0.17=§e 电弧炉 | 等离子电弧炉
 Tooltip_BallLightning.0.18=并行数 = 2 ^ (聚变线圈等级 * (线圈等级 - 10))
 Tooltip_BallLightning.0.19=粗制稳定力场发生器等级+ 解锁无损超频
 Tooltip_BallLightning.0.20=§e 聚变反应堆
-Tooltip_BallLightning.0.21=最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.7 ^ (力场发生器等级 - 1) A MAX
+Tooltip_BallLightning.0.21=最高运行功耗为 4 ^ (聚变线圈等级 - 2) * 1.8 ^ (力场发生器等级 - 1) A MAX
 Tooltip_BallLightning.0.22=65536 并行, 无损超频
 Tooltip_BallLightning.0.23=聚变线圈等级决定配方等级
 Tooltip_BallLightning.0.24=§e 星核发生器
