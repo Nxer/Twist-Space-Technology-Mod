@@ -18,6 +18,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static gregtech.api.util.GT_ModHandler.getModItem;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.InfinityInfusedShieldingCore;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 import static thaumcraft.common.config.ConfigBlocks.blockEssentiaReservoir;
 
@@ -290,6 +291,24 @@ public class MiracleTopRecipePool implements IRecipePool {
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(21),
+                InfinityInfusedShieldingCore.get(0),
+                ItemList.Optical_Cpu_Containment_Housing.get(1),
+                Materials.Glowstone.getNanite(4)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.Space.getMolten(36),
+                MaterialsUEVplus.Time.getMolten(36)
+            )
+            .itemOutputs(
+                GTCMItemList.ParticleTrapTimeSpaceShield.get(1)
+            )
+            .eut(RECIPE_UMV)
+            .duration(20 * 64)
+            .addTo(MT);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(21),
                 SpaceTimeBendingCore.get(0),
                 ItemList.Optical_Cpu_Containment_Housing.get(2),
                 Materials.Glowstone.getNanite(4)
@@ -300,7 +319,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 MaterialsUEVplus.SpaceTime.getMolten(144 * 2)
             )
             .itemOutputs(
-                GTCMItemList.ParticleTrapTimeSpaceShield.get(1)
+                GTCMItemList.ParticleTrapTimeSpaceShield.get(16)
             )
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(2500))
             .eut(RECIPE_UMV)
