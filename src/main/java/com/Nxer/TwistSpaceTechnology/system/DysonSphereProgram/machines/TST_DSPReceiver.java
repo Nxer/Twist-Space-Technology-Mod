@@ -52,6 +52,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -70,12 +71,14 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -123,14 +126,27 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     // region Processing Logic
 
+    // region Statics
+    protected static double CRITICAL_PHOTON_MULTIPLE;
     protected static ItemStack ASTRAL_ARRAY_FABRICATOR;
     protected static ItemStack CRITICAL_PHOTON;
+
+    public static void initStatics() {
+        if (ASTRAL_ARRAY_FABRICATOR == null) {
+            CRITICAL_PHOTON_MULTIPLE = (double) Integer.MAX_VALUE / Config.EUPerCriticalPhoton;
+            ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
+            CRITICAL_PHOTON = CriticalPhoton.get(1);
+        }
+    }
+
+    // endregion
     protected String ownerName; // init when load world
     protected UUID ownerUUID; // init when load world
     protected byte mode = 0;
     protected long usedPowerPoint = 0;
     protected boolean isUsing = false;
     protected long storageEU = 0;
+    protected long storageEUMAX = 0;
     protected long gravitationalLensTime = 0;
     protected boolean wirelessMode = true;
     protected int astralArrayOverloadMultiplier = 1;
@@ -209,6 +225,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         aNBT.setByte("mode", mode);
         aNBT.setLong("usedPowerPoint", usedPowerPoint);
         aNBT.setLong("storageEU", storageEU);
+        aNBT.setLong("storageEUMAX", storageEUMAX);
         aNBT.setBoolean("isUsing", isUsing);
         aNBT.setLong("gravitationalLensTime", gravitationalLensTime);
         aNBT.setBoolean("wirelessMode", wirelessMode);
@@ -221,6 +238,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         mode = aNBT.getByte("mode");
         usedPowerPoint = aNBT.getLong("usedPowerPoint");
         storageEU = aNBT.getLong("storageEU");
+        storageEUMAX = aNBT.getLong("storageEUMAX");
         isUsing = aNBT.getBoolean("isUsing");
         gravitationalLensTime = aNBT.getLong("gravitationalLensTime");
         wirelessMode = aNBT.getBoolean("wirelessMode");
@@ -331,16 +349,23 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         if (mode == 0) {
             if (wirelessMode) {
                 // Generate EU directly
-                if (this.storageEU > 0) {
-                    addEUToGlobalEnergyMap(ownerUUID.toString(), this.storageEU);
+                if (this.storageEU > 0 || storageEUMAX > 0) {
+                    BigInteger eu = BigInteger.valueOf(storageEUMAX)
+                        .multiply(Utils.INTEGER_MAX_VALUE)
+                        .add(BigInteger.valueOf(storageEU));
+                    addEUToGlobalEnergyMap(ownerUUID.toString(), eu);
                     this.storageEU = 0;
+                    this.storageEUMAX = 0;
                 }
             }
         } else if (mode == 1) {
             // Generate Photon per int.MAX EU
-            if (storageEU >= EUPerCriticalPhoton) {
+            if (storageEUMAX > 0 || storageEU >= EUPerCriticalPhoton) {
                 long amount = storageEU / EUPerCriticalPhoton;
                 storageEU -= EUPerCriticalPhoton * amount;
+                double cfgMultiple = amount += (long) ((double) storageEUMAX
+                    * (Integer.MAX_VALUE / EUPerCriticalPhoton));
+                storageEUMAX = 0;
                 if (amount > Integer.MAX_VALUE) {
                     List<ItemStack> output = new ArrayList<>();
                     while (amount > Integer.MAX_VALUE) {
@@ -366,13 +391,15 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     }
 
     protected long generateTickEU() {
-        return (long) (stellarAndPlanetCoefficient * getGLensSpeedMultiplier() * this.usedPowerPoint);
+        return (long) (stellarAndPlanetCoefficient * getGLensSpeedMultiplier() * this.usedPowerPoint) * 64;
     }
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
         if (mode == 1 || wirelessMode) {
-            this.storageEU += this.generateTickEU();
+            long gen = this.generateTickEU();
+            storageEUMAX += gen / Integer.MAX_VALUE;
+            storageEU += gen % Integer.MAX_VALUE;
         } else {
             addEnergyOutput(this.generateTickEU());
         }
@@ -382,12 +409,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
-        if (ASTRAL_ARRAY_FABRICATOR == null) {
-            ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
-        }
-        if (CRITICAL_PHOTON == null) {
-            CRITICAL_PHOTON = CriticalPhoton.get(1);
-        }
+
         if (aBaseMetaTileEntity.isServerSide()) {
             this.dimID = getDimID(aBaseMetaTileEntity);
             this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);

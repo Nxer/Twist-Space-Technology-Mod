@@ -75,6 +75,9 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         // check every input
         for (ItemStack item : inputs) {
             if (isStackInvalid(item)) continue;
+
+            // general convert
+
             ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(item);
 
             if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) continue;
@@ -82,6 +85,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
                 outputs.add(GT_OreDictUnificator.get(false, item, true));
                 item.stackSize = 0;
             }
+
         }
         // inputs are consumed at this point
         updateSlots();

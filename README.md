@@ -9,7 +9,7 @@ Of course, the game still needs to remain GTNH-style balanced.
 This is an unofficial mod. Please avoid discussing this mod in official GTNH forums.
 
 ### Discord
-https://discord.gg/yR35zmdY4c
+https://discord.gg/aJS5q2Yspt
 
 ## Version Requirements
 * GTNH-nightly version:

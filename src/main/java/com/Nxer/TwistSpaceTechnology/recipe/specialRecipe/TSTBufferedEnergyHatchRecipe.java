@@ -43,26 +43,26 @@ import gregtech.api.util.GT_OreDictUnificator;
 
 public class TSTBufferedEnergyHatchRecipe implements IRecipePool {
 
-    private static final Object[] circuits = new Object[][] {
-        new Object[] { OrePrefixes.circuit.get(Materials.Basic), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Good), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Advanced), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Data), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Elite), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Master), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Bio), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Piko), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Exotic), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Cosmic), 1 },
-        new Object[] { OrePrefixes.circuit.get(Materials.Transcendent), 1 } };
-
     @Override
     public void loadRecipes() {
+
+        final Object[] circuits = new Object[][] { new Object[] { OrePrefixes.circuit.get(Materials.Basic), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Good), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Advanced), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Data), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Elite), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Master), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Bio), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Piko), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Exotic), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Cosmic), 1 },
+            new Object[] { OrePrefixes.circuit.get(Materials.Transcendent), 1 } };
+
         final IRecipeMap assembler = RecipeMaps.assemblerRecipes;
         GT_Values.RA.stdBuilder()
             .itemInputs(

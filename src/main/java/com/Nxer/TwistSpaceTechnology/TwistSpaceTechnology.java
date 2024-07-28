@@ -15,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.devTools.PathHelper;
 import com.Nxer.TwistSpaceTechnology.loader.LazyStaticsInitLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
+import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
 import com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipe;
@@ -114,6 +115,7 @@ public class TwistSpaceTechnology {
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
         MachineLoader.loadMachinePostInit();
+        OreDictLoader.loadOreDictionary();
         RecipeLoader.loadRecipesPostInit();// To init GTCM Recipemap
 
         TextHandler.serializeLangMap(isInDevMode);

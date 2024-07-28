@@ -326,7 +326,7 @@ public class TextLocalization {
     public static final String Tooltip_HolySeparator_02 = texter("Another form of laser engraving.", "Tooltip_HolySeparator_02");
     public static final String Tooltip_HolySeparator_03 = texter("You can even slice potato chips with this.", "Tooltip_HolySeparator_03");
     public static final String Tooltip_HolySeparator_04 = texter("Extra 8x Parallel per Piece. 16 Piece enable Perfect Overclock.", "Tooltip_HolySeparator_04");
-    public static final String Tooltip_HolySeparator_05 = texter("Additional 10%% reduction in time per Coil Tier, multiplication calculus.", "Tooltip_HolySeparator_05");
+    public static final String Tooltip_HolySeparator_05 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_HolySeparator_05");
 
     // endregion
 
@@ -608,9 +608,11 @@ public class TextLocalization {
     public static final String Tooltip_MegaEggGenerator_03 = texter("Infinity egg generates 2A IV, but you can put only one for one each piece you add.", "Tooltip_MegaEggGenerator_03");
     public static final String Tooltip_MegaEggGenerator_04 = texter("But quantitative change leads to qualitative change,", "Tooltip_MegaEggGenerator_04");
     public static final String Tooltip_MegaEggGenerator_05 = texter("Every 2^n pieces give 2% max efficiency bonus, and every infinity egg gives 1%.", "Tooltip_MegaEggGenerator_05");
-    public static final String Tooltip_MegaEggGenerator_06 = texter("Note its warm-up process is quite slow, about 500 secs in need.", "Tooltip_MegaEggGenerator_06");
-    public static final String Tooltip_MegaEggGenerator_07 = texter("You can also put nothing on the egg pos, but every empty pos decreases 5% max efficiency.", "Tooltip_MegaEggGenerator_07");
-    public static final String Tooltip_MegaEggGenerator_08 = texter("Whether it is the" + EnumChatFormatting.DARK_PURPLE + " Dragon Egg," + EnumChatFormatting.DARK_GREEN + " Creeper Egg, or the " + EnumChatFormatting.GOLD + "Egg of Infinity, " + EnumChatFormatting.GRAY + "only their presence can drive the full circulation of power.", "Tooltip_MegaEggGenerator_08");
+    public static final String Tooltip_MegaEggGenerator_06 = texter("You can also put nothing on the egg pos, but every empty pos decreases 5% max efficiency.", "Tooltip_MegaEggGenerator_06");
+    public static final String Tooltip_MegaEggGenerator_07 = texter("Warm-up process for 0.01%% per second as base, each pair of Dragon Eggs add 0.01%% but limit for 50 pairs, each Infinity Egg add 1%% with no limits.", "Tooltip_MegaEggGenerator_07");
+    public static final String Tooltip_MegaEggGenerator_08 = texter("The process will take about 3 hours if put Creeper Eggs only, but who really care about?", "Tooltip_MegaEggGenerator_08");
+    public static final String Tooltip_MegaEggGenerator_09 = texter("Whether it is the" + EnumChatFormatting.DARK_PURPLE + " Dragon Egg," + EnumChatFormatting.DARK_GREEN + " Creeper Egg, or the " + EnumChatFormatting.GOLD + "Egg of Infinity, " + EnumChatFormatting.GRAY + "only their presence can drive the full circulation of power.", "Tooltip_MegaEggGenerator_09");
+
     public static final String Tooltip_MegaEggGenerator_D = texter("Dynamo or TT Dynamo, one only", "Tooltip_MegaEggGenerator_D");
     public static final String Tooltip_MegaEggGenerator_M = texter("No need for maintenance hatch.", "Tooltip_MegaEggGenerator_M");
     public static final String Tooltip_MegaEggGenerator_L = texter("Lasers unlock at >=16 pieces.", "Tooltip_MegaEggGenerator_L");
