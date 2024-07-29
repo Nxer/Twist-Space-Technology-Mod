@@ -56,6 +56,7 @@ public class Config {
     public static final String ModularizedMachineStuffs = "ModularizedMachineStuffs";
     public static final String DimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = "Dimensionally Transcendent Matter Plasma Forge Prototype MK2";
     public static final String LargeNeutronOscillator = "Large Neutron Oscillator";
+    public static final String MicroSpaceTimeFabricatorio = "Micro SpaceTime Fabricatorio";
     // endregion
 
     // region General
@@ -393,6 +394,10 @@ public class Config {
     public static boolean EnableLargeNeutronOscillator = true;
     // endregion
 
+    // region MicroSpaceTimeFabricatorioRecipes
+    public static int Parallel_MicroSpaceTimeFabricatorio = 16;
+    // endregion
+
     // region Incompact Cyclotron
     public static boolean Enable_IncompactCyclotron =true;
     public static float EuModifier_IncompactCyclotron = 1.6F;
@@ -421,6 +426,10 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        // endregion
+
+        // region MicroSpaceTimeFabricatorioRecipes
+        Parallel_MicroSpaceTimeFabricatorio = configuration.getInt("Parallel_MicroSpaceTimeFabricatorio", MicroSpaceTimeFabricatorio, Parallel_MicroSpaceTimeFabricatorio, 1, 2000000000, "Max parallel of Micro SpaceTime Fabricatorio.");
         // endregion
 
         // region LargeNeutronOscillator

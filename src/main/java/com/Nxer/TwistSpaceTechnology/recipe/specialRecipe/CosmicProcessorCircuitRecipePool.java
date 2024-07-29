@@ -21,12 +21,15 @@ import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.core.material.ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
+import net.minecraft.item.ItemStack;
+
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
+import appeng.items.materials.MaterialType;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.MyMaterial;
 import gregtech.api.enums.GT_Values;
@@ -35,17 +38,21 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_RecipeConstants;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.ELEMENT;
+import gtPlusPlus.core.material.MISC_MATERIALS;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 
 public class CosmicProcessorCircuitRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
+
+        final ItemStack eternal_singularity = GT_ModHandler.getModItem("eternalsingularity", "eternal_singularity", 1);
 
         // Silicon Neutron to UHV circuits
         GT_Values.RA.stdBuilder()
@@ -377,6 +384,67 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .eut(RECIPE_UMV)
             .duration(20 * 1500)
             .addTo(GTCMRecipe.MiracleTopRecipes);
+
+        // Seed of Space and Time
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(24),
+                GT_OreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.SpaceTime, 1),
+                Laser_Lens_Special.get(1),
+                eternal_singularity.copy(),
+                MaterialType.Singularity.stack(1),
+                MyMaterial.shirabon.get(OrePrefixes.stick, 2))
+            .fluidInputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(500))
+            .itemOutputs(SeedsSpaceTime.get(1))
+            .eut(RECIPE_UMV)
+            .duration(20 * 60)
+            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
+
+        // Encapsulated Micro SpaceTime Unit
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                SpaceTimeSuperconductingInlaidMotherboard.get(1),
+                InformationHorizonInterventionShell.get(1),
+                EnergyFluctuationSelfHarmonizer.get(1),
+                eternal_singularity.copy(),
+                GT_OreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 3))
+            .fluidInputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(200))
+            .itemOutputs(EncapsulatedMicroSpaceTimeUnit.get(1))
+            .eut(RECIPE_UMV)
+            .duration(20 * 30)
+            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
+
+        // MicroSpaceTimeFabricatorio
+        GT_Values.RA.stdBuilder()
+            .metadata(
+                RESEARCH_ITEM,
+                GT_OreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 1))
+            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .itemInputs(
+                GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
+                GTCMItemList.SpaceWarper.get(32),
+                GTCMItemList.GravitationalLens.get(32),
+                // TODO piko
+                CustomItemList.PikoCircuit.get(64),
+
+                ItemList.Field_Generator_UIV.get(16),
+                ItemList.Emitter_UIV.get(16),
+                ItemList.Sensor_UIV.get(16),
+                setStackSize(eternal_singularity.copy(), 16),
+
+                CustomItemList.HighEnergyFlowCircuit.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
+            .fluidInputs(
+                MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
+                Materials.Hydrogen.getPlasma(1000 * 64),
+                Materials.UUMatter.getPlasma(1000 * 64),
+                Materials.Quantum.getMolten(144 * 128))
+            .itemOutputs(GTCMItemList.MicroSpaceTimeFabricatorio.get(1))
+            .eut(RECIPE_UMV)
+            .duration(20 * 900)
+            .addTo(GT_RecipeConstants.AssemblyLine);
 
     }
 }

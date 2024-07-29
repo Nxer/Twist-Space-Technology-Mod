@@ -242,4 +242,14 @@ public class GTCMRecipe {
         .frontend(TST_StrangeMatterAggregatorFrontend::new)
         .disableOptimize()
         .build();
+
+    // #tr tst.recipe.MicroSpaceTimeFabricatorioRecipes
+    // # Micro SpaceTime Fabricatorio Recipes
+    // #zh_CN 微型时空发生器
+    public static final RecipeMap<TST_RecipeMapBackend> MicroSpaceTimeFabricatorioRecipes = RecipeMapBuilder
+        .of("tst.recipe.MicroSpaceTimeFabricatorioRecipes", TST_RecipeMapBackend::new)
+        .maxIO(6, 2, 3, 1)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MicroSpaceTimeFabricatorio.get(1)))
+        .disableOptimize()
+        .build();
 }
