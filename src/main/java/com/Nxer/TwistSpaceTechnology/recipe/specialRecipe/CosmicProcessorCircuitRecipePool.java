@@ -443,8 +443,8 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .fluidInputs(
                 MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
                 Materials.Hydrogen.getPlasma(1000 * 64),
-                Materials.UUMatter.getPlasma(1000 * 64),
-                Materials.Quantum.getMolten(144 * 128))
+                Materials.UUMatter.getFluid(1000 * 64),
+                Materials.Quantium.getMolten(144 * 128))
             .itemOutputs(GTCMItemList.MicroSpaceTimeFabricatorio.get(1))
             .eut(RECIPE_UMV)
             .duration(20 * 900)
