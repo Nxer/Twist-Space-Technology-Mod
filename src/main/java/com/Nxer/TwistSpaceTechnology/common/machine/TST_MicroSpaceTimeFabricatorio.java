@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_MicroSpaceTimeFabricatorio;
+import static com.Nxer.TwistSpaceTechnology.config.Config.Safe_Calamity_MicroSpaceTimeFabricatorio;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsBA0;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
@@ -49,6 +51,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
@@ -117,6 +120,14 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
+        // check structure whether cause calamity
+        if (!Safe_Calamity_MicroSpaceTimeFabricatorio && fieldTier > 1) {
+            if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) {
+                explodeMultiblock();
+                return CheckRecipeResultRegistry.NO_RECIPE;
+            }
+        }
+
         setupProcessingLogic(processingLogic);
 
         CheckRecipeResult result = doCheckRecipe();
@@ -206,7 +217,9 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         if (fieldTier < 1) return false;
         if (fieldTier > 1) {
             // using homo field block need use homo structure block at same time
-            if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) return false;
+            if (Safe_Calamity_MicroSpaceTimeFabricatorio) {
+                if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) return false;
+            }
             // using homo field block enable perfect overclock
             perfectOverclock = true;
             if (fieldTier > 2) {
@@ -435,19 +448,52 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     // region General
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
+        // spotless:off
         GT_Multiblock_Tooltip_Builder tooltip = new GT_Multiblock_Tooltip_Builder();
-        tooltip.addMachineType("test")
-            .addInfo("testing")
+
+        tooltip
+            // #tr Tooltip_MicroSpaceTimeFabricatorio_MachineType
+            // # Artificial SpaceTime Fabricator
+            // #zh_CN 人造时空发生器
+            .addMachineType(TextEnums.tr("Tooltip_MicroSpaceTimeFabricatorio_MachineType"))
+            // #tr Tooltip_MicroSpaceTimeFabricatorio_01
+            // # {\DARK_PURPLE}{\BOLD}A little start of Genesis.
+            // #zh_CN {\DARK_PURPLE}{\BOLD}创生之始
+            .addInfo(TextEnums.tr("Tooltip_MicroSpaceTimeFabricatorio_01"))
+            // #tr Tooltip_MicroSpaceTimeFabricatorio_02
+            // # Activate the primordial singularity to begin the creation process of the universe, of course, within controllable limits.
+            // #zh_CN 激活原始奇点以开始宇宙的创建过程, 当然, 在可控范围内.
+            .addInfo(TextEnums.tr("Tooltip_MicroSpaceTimeFabricatorio_02"))
+            // #tr Tooltip_MicroSpaceTimeFabricatorio_03
+            // # Upgrading the T2 Field blocks enables perfect overclock, and further upgrades can significantly increase the running speed.
+            // #zh_CN 升级2级力场方块启用无损超频, 继续升级可大幅提升运行速度.
+            .addInfo(TextEnums.tr("Tooltip_MicroSpaceTimeFabricatorio_03"))
+            // #tr Tooltip_MicroSpaceTimeFabricatorio_04
+            // # But the use of advanced Field blocks requires the use of advanced structure casing block at the same time. Otherwise, it will cause {\RED}{\BOLD}calamity{\RESET}{\GRAY}.
+            // #zh_CN 但使用高级力场方块的需要同时使用高级结构外壳. 否则将引起{\RED}{\BOLD}灾难{\RESET}{\GRAY}.
+            .addInfo(TextEnums.tr("Tooltip_MicroSpaceTimeFabricatorio_04"))
+            // #tr Tooltip_MicroSpaceTimeFabricatorio_05
+            // # Can provide space-time seeds in dedicated input bus, consuming 1 space-time seed per run and doubling the output.
+            // #zh_CN 可以在专用输入总线内提供时空之种, 每次运行消耗1个时空之种, 并将产物翻倍.
+            .addInfo(TextEnums.tr("Tooltip_MicroSpaceTimeFabricatorio_05"))
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .beginStructureBlock(3, 3, 3, false)
+            .beginStructureBlock(19, 22, 22, false)
+            // #tr Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name
+            // # Input Bus of The Seed of Space and Time
+            // #zh_CN 时空之种输入总线
+            // #tr Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location
+            // # Replace the casing at the front of controller block
+            // #zh_CN 替换主方块正前方结构方块
+            .addOtherStructurePart(TextEnums.tr("Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name"), TextEnums.tr("Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location"), 2)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
+            .addInputBus(TextLocalization.textUseBlueprint, 1)
+            .addOutputBus(TextLocalization.textUseBlueprint, 1)
+            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
+        // spotless:on
         return tooltip;
     }
 

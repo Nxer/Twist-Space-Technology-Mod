@@ -396,6 +396,7 @@ public class Config {
 
     // region MicroSpaceTimeFabricatorioRecipes
     public static int Parallel_MicroSpaceTimeFabricatorio = 16;
+    public static boolean Safe_Calamity_MicroSpaceTimeFabricatorio = false;
     // endregion
 
     // region Incompact Cyclotron
@@ -430,6 +431,7 @@ public class Config {
 
         // region MicroSpaceTimeFabricatorioRecipes
         Parallel_MicroSpaceTimeFabricatorio = configuration.getInt("Parallel_MicroSpaceTimeFabricatorio", MicroSpaceTimeFabricatorio, Parallel_MicroSpaceTimeFabricatorio, 1, 2000000000, "Max parallel of Micro SpaceTime Fabricatorio.");
+        Safe_Calamity_MicroSpaceTimeFabricatorio = configuration.getBoolean("Safe_Calamity_MicroSpaceTimeFabricatorio", MicroSpaceTimeFabricatorio, Safe_Calamity_MicroSpaceTimeFabricatorio, "Safe Calamity, Micro SpaceTime Fabricatorio will not explode, but check structure failed.");
         // endregion
 
         // region LargeNeutronOscillator
