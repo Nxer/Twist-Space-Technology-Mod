@@ -15,6 +15,7 @@ import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
+import gregtech.nei.formatter.SimpleSpecialValueFormatter;
 
 public class GTCMRecipe {
 
@@ -68,6 +69,7 @@ public class GTCMRecipe {
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.CrystallineInfinitier.get(1)))
+        .neiSpecialInfoFormatter(new SimpleSpecialValueFormatter("GT5U.nei.tier"))
         .disableOptimize()
         .build();
 
@@ -240,6 +242,16 @@ public class GTCMRecipe {
         .neiHandlerInfo(b -> b.setDisplayStack(GTCMItemList.StrangeMatterAggregator.get(1)))
         .useSpecialSlot()
         .frontend(TST_StrangeMatterAggregatorFrontend::new)
+        .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.MicroSpaceTimeFabricatorioRecipes
+    // # Micro SpaceTime Fabricatorio Recipes
+    // #zh_CN 微型时空发生器
+    public static final RecipeMap<TST_RecipeMapBackend> MicroSpaceTimeFabricatorioRecipes = RecipeMapBuilder
+        .of("tst.recipe.MicroSpaceTimeFabricatorioRecipes", TST_RecipeMapBackend::new)
+        .maxIO(6, 2, 3, 1)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MicroSpaceTimeFabricatorio.get(1)))
         .disableOptimize()
         .build();
 }

@@ -96,6 +96,12 @@ public class ItemRegister {
         // #zh_CN 能量密度和输出功率均大幅提高.
         GTCMItemList.StrangeAnnihilationFuelRod.set(initItem01("Strange Annihilation Fuel Rod", 29, new String[]{ tr("StrangeAnnihilationFuelRod.tooltips.01"), tr("StrangeAnnihilationFuelRod.tooltips.02"), DSPName, RiseOfDarkFog.getText() }));
 
+        GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard.set(initItem01("SpaceTime Superconducting Inlaid Motherboard", 30));
+        GTCMItemList.PacketInformationTranslationArray.set(initItem01("Packet Information Translation Array", 31));
+        GTCMItemList.InformationHorizonInterventionShell.set(initItem01("Information Horizon Intervention Shell", 32));
+        GTCMItemList.EnergyFluctuationSelfHarmonizer.set(initItem01("Energy Fluctuation Self-Harmonizer", 33));
+        GTCMItemList.EncapsulatedMicroSpaceTimeUnit.set(initItem01("Encapsulated Micro SpaceTime Unit", 34));
+        GTCMItemList.SeedsSpaceTime.set(initItem01("Seeds of Space and Time", 35));
 
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));

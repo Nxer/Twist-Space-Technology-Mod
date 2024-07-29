@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_StrangeMatterAggregator;
@@ -10,5 +11,6 @@ public class LazyStaticsInitLoader {
         TST_StrangeMatterAggregator.initStatics();
         TST_ArtificialStar.initStatics();
         TST_DSPReceiver.initStatics();
+        TST_MicroSpaceTimeFabricatorio.initStatics();
     }
 }
