@@ -1,19 +1,31 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EncapsulatedMicroSpaceTimeUnit;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EnergyFluctuationSelfHarmonizer;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InformationHorizonInterventionShell;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PacketInformationTranslationArray;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SeedsSpaceTime;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
+import static com.dreammaster.gthandler.GT_CoreModSupport.RadoxPolymer;
+import static gregtech.api.enums.ItemList.Circuit_CosmicAssembly;
+import static gregtech.api.enums.ItemList.Circuit_CosmicComputer;
+import static gregtech.api.enums.ItemList.Circuit_CosmicProcessor;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
+import static gtPlusPlus.core.material.ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.gthandler.CustomItemList;
 
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.MyMaterial;
@@ -177,7 +189,7 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
                 GTCMItemList.ParticleTrapTimeSpaceShield.get(32),
                 ItemList.EnergisedTesseract.get(2),
                 GT_OreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 16))
-            .fluidInputs(MaterialsUEVplus.Time.getMolten(36), ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(36))
+            .fluidInputs(MaterialsUEVplus.Time.getMolten(36), CELESTIAL_TUNGSTEN.getFluidStack(36))
             .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(16))
             .eut(RECIPE_UMV)
             .duration(20 * 30)
@@ -245,6 +257,125 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .outputChances(10000, 2000)
             .eut(RECIPE_UMV)
             .duration(20 * 120)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
+        // Cosmic processor UEV
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                EncapsulatedMicroSpaceTimeUnit.get(1),
+                InformationHorizonInterventionShell.get(1),
+                PacketInformationTranslationArray.get(1),
+                GT_OreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 2),
+                GT_OreDictUnificator.get(OrePrefixes.screw, MaterialsUEVplus.TranscendentMetal, 2),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Infinity, 4))
+            .fluidInputs(
+                // TODO spacetime glue
+                Materials.Hydrogen.getPlasma(100),
+                Materials.Lead.getPlasma(36),
+                MyMaterial.metastableOganesson.getMolten(144),
+                RadoxPolymer.getMolten(288))
+            .itemOutputs(
+                Circuit_CosmicProcessor.get(1),
+                GT_OreDictUnificator.get(OrePrefixes.nugget, MaterialsUEVplus.SpaceTime, 3))
+            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(333))
+            .eut(RECIPE_UEV)
+            .duration(20 * 50)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
+        // Cosmic processor assembly UIV
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                SpaceTimeSuperconductingInlaidMotherboard.get(1),
+                Circuit_CosmicProcessor.get(1),
+                InformationHorizonInterventionShell.get(1),
+                PacketInformationTranslationArray.get(2),
+                ParticleTrapTimeSpaceShield.get(1),
+                GT_OreDictUnificator.get(OrePrefixes.foil, RadoxPolymer, 4))
+            .fluidInputs(
+                // TODO spacetime glue
+                Materials.Hydrogen.getPlasma(200),
+                ELEMENT.STANDALONE.HYPOGEN.getFluidStack(144),
+                MyMaterial.metastableOganesson.getMolten(288),
+                RadoxPolymer.getMolten(288))
+            .itemOutputs(
+                ItemList.Circuit_CosmicAssembly.get(1),
+                GT_OreDictUnificator.get(OrePrefixes.nugget, MaterialsUEVplus.SpaceTime, 3))
+            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(333))
+            .eut(RECIPE_UIV)
+            .duration(20 * 100)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
+        // Cosmic processor super computer UMV
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                SpaceTimeSuperconductingInlaidMotherboard.get(2),
+                Circuit_CosmicAssembly.get(2),
+                EnergyFluctuationSelfHarmonizer.get(1),
+                InformationHorizonInterventionShell.get(2),
+                PacketInformationTranslationArray.get(4),
+                CustomItemList.PicoWafer.get(4),
+                ItemList.Tesseract.get(1),
+                ItemList.EnergisedTesseract.get(1))
+            .fluidInputs(
+                // TODO spacetime glue
+                Materials.Hydrogen.getPlasma(500),
+                Materials.UUMatter.getFluid(8000),
+                MaterialsUEVplus.SpaceTime.getMolten(288),
+                Materials.Thorium.getPlasma(288))
+            .itemOutputs(
+                ItemList.Circuit_CosmicComputer.get(1),
+                GT_OreDictUnificator.get(OrePrefixes.nugget, MaterialsUEVplus.SpaceTime, 3))
+            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(333))
+            .eut(RECIPE_UIV)
+            .duration(20 * 1000)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
+        // Cosmic processor mainframe UXV
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                SeedsSpaceTime.get(2),
+                Circuit_CosmicComputer.get(2),
+                EnergyFluctuationSelfHarmonizer.get(1),
+                InformationHorizonInterventionShell.get(2),
+                PacketInformationTranslationArray.get(8),
+                SpaceTimeSuperconductingInlaidMotherboard.get(2),
+                CELESTIAL_TUNGSTEN.getPlate(8))
+            .fluidInputs(
+                // TODO spacetime glue
+                Materials.Hydrogen.getPlasma(1000),
+                MyMaterial.shirabon.getMolten(1152),
+                MaterialsUEVplus.Space.getMolten(1152),
+                MaterialsUEVplus.Time.getMolten(1152))
+            .itemOutputs(ItemList.Circuit_CosmicMainframe.get(1), ItemList.Tesseract.get(2))
+            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(666))
+            .eut(RECIPE_UMV)
+            .duration(20 * 1500)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
+
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(1),
+                SeedsSpaceTime.get(2),
+                Circuit_CosmicComputer.get(2),
+                EnergyFluctuationSelfHarmonizer.get(1),
+                InformationHorizonInterventionShell.get(2),
+                PacketInformationTranslationArray.get(8),
+                SpaceTimeSuperconductingInlaidMotherboard.get(2),
+                CELESTIAL_TUNGSTEN.getPlate(8))
+            .fluidInputs(
+                // TODO spacetime glue
+                Materials.Hydrogen.getPlasma(1000),
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(576),
+                MaterialsUEVplus.Space.getMolten(1152),
+                MaterialsUEVplus.Time.getMolten(1152))
+            .itemOutputs(ItemList.Circuit_CosmicMainframe.get(2), ItemList.Tesseract.get(4))
+            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(666))
+            .eut(RECIPE_UMV)
+            .duration(20 * 1500)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
     }
