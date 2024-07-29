@@ -15,6 +15,7 @@ import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
+import gregtech.nei.formatter.SimpleSpecialValueFormatter;
 
 public class GTCMRecipe {
 
@@ -68,6 +69,7 @@ public class GTCMRecipe {
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.CrystallineInfinitier.get(1)))
+        .neiSpecialInfoFormatter(new SimpleSpecialValueFormatter("GT5U.nei.tier"))
         .disableOptimize()
         .build();
 
