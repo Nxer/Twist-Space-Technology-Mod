@@ -474,7 +474,7 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
                 MaterialsUEVplus.Space.getMolten(144),
                 MaterialsUEVplus.Time.getMolten(144),
                 MaterialsUEVplus.SpaceTime.getMolten(144 * 2))
-                .itemOutputs(GTCMItemList.ParticleTrapTimeSpaceShield.get(64))
+            .itemOutputs(GTCMItemList.ParticleTrapTimeSpaceShield.get(64))
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(2500))
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 64)
