@@ -332,7 +332,7 @@ public class TextLocalization {
 
     // region SpaceScaler
     public static final String NameSpaceScaler = texter("Space Scaler", "NameSpaceScaler");
-    public static final String Tooltip_SpaceScaler_MachineType = texter("Compressor | Extractor | Particle Collider", "Tooltip_SpaceScaler_MachineType");
+    public static final String Tooltip_SpaceScaler_MachineType = texter("Compressor | Extractor | Particle Collider | Electric Implosion Compressor", "Tooltip_SpaceScaler_MachineType");
     public static final String Tooltip_SpaceScaler_00 = texter("Controller block for the Space Scaler", "Tooltip_SpaceScaler_00");
     public static final String Tooltip_SpaceScaler_01 = texter(EnumChatFormatting.AQUA + " First Look Space Technology.", "Tooltip_SpaceScaler_01");
     public static final String Tooltip_SpaceScaler_02 = texter("Another method to operate matter.", "Tooltip_SpaceScaler_02");
@@ -340,7 +340,7 @@ public class TextLocalization {
     public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_SpaceScaler_04");
     public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.", "Tooltip_SpaceScaler_05");
     public static final String Tooltip_SpaceScaler_06 = texter("Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.", "Tooltip_SpaceScaler_06");
-    public static final String Tooltip_SpaceScaler_07 = texter("In Particle Collider mode, higher tier has more output.", "Tooltip_SpaceScaler_07");
+    public static final String Tooltip_SpaceScaler_08 = texter("In Particle Collider mode, higher tier has more output.", "Tooltip_SpaceScaler_08");
 
     // endregion
 
