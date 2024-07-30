@@ -28,6 +28,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
+import com.github.bartimaeusnek.bartworks.API.recipe.BartWorksRecipeMaps;
 
 import appeng.items.materials.MaterialType;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
@@ -449,6 +450,15 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .eut(RECIPE_UMV)
             .duration(20 * 900)
             .addTo(GT_RecipeConstants.AssemblyLine);
+
+        // AE Singularity
+        GT_Values.RA.stdBuilder()
+            .itemInputs(Laser_Lens_Special.get(1), eternal_singularity.copy())
+            .itemOutputs(MaterialType.Singularity.stack(16), MaterialType.Singularity.stack(16))
+            .outputChances(5000, 5000)
+            .eut(RECIPE_UMV)
+            .duration(20 * 100)
+            .addTo(BartWorksRecipeMaps.electricImplosionCompressorRecipes);
 
     }
 }
