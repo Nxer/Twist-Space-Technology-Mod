@@ -576,7 +576,7 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                         outputs += origin.stackSize;
                     }
                 }
-                
+
                 while (outputs >= Integer.MAX_VALUE) {
                     toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
                     outputs -= Integer.MAX_VALUE;
