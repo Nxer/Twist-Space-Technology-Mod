@@ -570,10 +570,13 @@ public class GTCM_ParallelHelper extends GT_ParallelHelper {
                 // parameter of this item final amount
                 long outputs = (long) currentParallel * origin.stackSize * outputChance / 10000;
                 long remain = (long) currentParallel * origin.stackSize * outputChance % 10000;
-                // TODO add switch of remain > 0
-                if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
-                    outputs += origin.stackSize;
+
+                if (remain > 0) {
+                    if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
+                        outputs += origin.stackSize;
+                    }
                 }
+                
                 while (outputs >= Integer.MAX_VALUE) {
                     toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
                     outputs -= Integer.MAX_VALUE;
