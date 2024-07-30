@@ -237,9 +237,14 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain)) {
+            IGregTechTileEntity b = getBaseMetaTileEntity();
+            TwistSpaceTechnology.LOG.info("TST: Starcore Miner check main structure failed at x=" + b.getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord() );
+            return false;
+        }
         if (CheckMiningPipeStructure_StarcoreMiner) {
-            int y_value = getBaseMetaTileEntity().getYCoord();
+            IGregTechTileEntity b = getBaseMetaTileEntity();
+            int y_value = b.getYCoord();
             if (y_value > ValueEnum.HeightValueLimit_StarcoreMiner) {
                 // if controller block is at location higher than 20
                 // continue check pipe structure
@@ -251,6 +256,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                     if (checkPiece(STRUCTURE_PIECE_END, horizontalOffSetEnd, verticalOffSetMiddle - p, depthOffSetEnd)) {
                         break;
                     } else {
+                        TwistSpaceTechnology.LOG.info("TST: Starcore Miner check main structure failed at x=" + b.getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord() + " p=" + p );
                         return false;
                     }
                 }
