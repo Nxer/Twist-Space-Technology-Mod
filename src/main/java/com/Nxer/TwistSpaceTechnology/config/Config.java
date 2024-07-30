@@ -325,6 +325,7 @@ public class Config {
     public static int Eut_StarcoreMiner = (int) RECIPE_MAX;
     public static int DurationPerMining_StarcoreMiner = 128;
     public static boolean DebugMode_StarcoreMiner = false;
+    public static boolean CheckMiningPipeStructure_StarcoreMiner = true;
     // endregion
 
     // region Disassembler
@@ -470,7 +471,7 @@ public class Config {
         Eut_StarcoreMiner = configuration.getInt("Eut_StarcoreMiner", StarcoreMiner, Eut_StarcoreMiner, 1, Integer.MAX_VALUE, "EU/t when Starcore Miner working. Type: int");
         DurationPerMining_StarcoreMiner = configuration.getInt("DurationPerMining_StarcoreMiner", StarcoreMiner, DurationPerMining_StarcoreMiner, 1, Integer.MAX_VALUE, "How many ticks per mining cost. 20 tick = 1 second . Type: int");
         DebugMode_StarcoreMiner = configuration.getBoolean("DebugMode_StarcoreMiner", StarcoreMiner, DebugMode_StarcoreMiner, "Debug mode.");
-
+        CheckMiningPipeStructure_StarcoreMiner = configuration.getBoolean("CheckMiningPipeStructure_StarcoreMiner", StarcoreMiner, CheckMiningPipeStructure_StarcoreMiner, "Check Mining Pipe Structure when check machine structure.");
         // endregion
 
         // region CoreDeviceOfHumanPowerGenerationFacility
