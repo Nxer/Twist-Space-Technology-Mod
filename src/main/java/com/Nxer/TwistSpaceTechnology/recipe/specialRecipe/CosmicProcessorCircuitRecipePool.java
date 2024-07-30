@@ -367,23 +367,23 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(1),
-                SeedsSpaceTime.get(2),
+                SeedsSpaceTime.get(3),
                 Circuit_CosmicComputer.get(2),
                 EnergyFluctuationSelfHarmonizer.get(1),
-                InformationHorizonInterventionShell.get(2),
-                PacketInformationTranslationArray.get(8),
-                SpaceTimeSuperconductingInlaidMotherboard.get(2),
-                CELESTIAL_TUNGSTEN.getPlate(8))
+                InformationHorizonInterventionShell.get(3),
+                PacketInformationTranslationArray.get(9),
+                SpaceTimeSuperconductingInlaidMotherboard.get(3),
+                CELESTIAL_TUNGSTEN.getPlate(9))
             .fluidInputs(
                 // TODO spacetime glue
                 Materials.Hydrogen.getPlasma(1000),
-                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(576),
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(72),
                 MaterialsUEVplus.Space.getMolten(1152),
                 MaterialsUEVplus.Time.getMolten(1152))
-            .itemOutputs(ItemList.Circuit_CosmicMainframe.get(2), ItemList.Tesseract.get(4))
+            .itemOutputs(ItemList.Circuit_CosmicMainframe.get(3), ItemList.Tesseract.get(6))
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(666))
             .eut(RECIPE_UMV)
-            .duration(20 * 1500)
+            .duration(20 * 2400)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
         // Seed of Space and Time
