@@ -591,6 +591,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             long toConsume = 0;
             if (coreElementAmount >= consumeAnnihilationConstrainer) {
                 // all output is advanced production
+                toConsume = consumeAnnihilationConstrainer;
 
                 // output strange annihilation fuel rods
                 if (outputRodAmount > Integer.MAX_VALUE) {
