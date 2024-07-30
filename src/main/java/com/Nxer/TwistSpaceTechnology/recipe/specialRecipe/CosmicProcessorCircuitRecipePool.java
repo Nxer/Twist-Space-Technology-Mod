@@ -280,8 +280,8 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .fluidInputs(
                 // TODO spacetime glue
                 Materials.Hydrogen.getPlasma(100),
-                Materials.Lead.getPlasma(36),
-                MyMaterial.metastableOganesson.getMolten(144),
+                Materials.Lead.getPlasma(72),
+                Materials.Plutonium241.getPlasma(72),
                 RadoxPolymer.getMolten(288))
             .itemOutputs(
                 Circuit_CosmicProcessor.get(1),
@@ -304,8 +304,8 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .fluidInputs(
                 // TODO spacetime glue
                 Materials.Hydrogen.getPlasma(200),
-                ELEMENT.STANDALONE.HYPOGEN.getFluidStack(144),
-                MyMaterial.metastableOganesson.getMolten(288),
+                ELEMENT.STANDALONE.HYPOGEN.getFluidStack(72),
+                MyMaterial.metastableOganesson.getMolten(144),
                 RadoxPolymer.getMolten(288))
             .itemOutputs(
                 ItemList.Circuit_CosmicAssembly.get(1),
