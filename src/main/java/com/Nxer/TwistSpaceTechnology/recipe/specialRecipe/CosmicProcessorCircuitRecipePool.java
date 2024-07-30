@@ -20,6 +20,7 @@ import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gtPlusPlus.core.material.ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 
 import net.minecraft.item.ItemStack;
 
@@ -38,6 +39,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
@@ -459,6 +461,23 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .eut(RECIPE_UMV)
             .duration(20 * 100)
             .addTo(BartWorksRecipeMaps.electricImplosionCompressorRecipes);
+
+        // ParticleTrapTimeSpaceShield advanced recipe
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(21),
+                SpaceTimeBendingCore.get(0),
+                SpaceTimeSuperconductingInlaidMotherboard.get(1),
+                Materials.Glowstone.getNanite(16))
+            .fluidInputs(
+                MaterialsUEVplus.Space.getMolten(144),
+                MaterialsUEVplus.Time.getMolten(144),
+                MaterialsUEVplus.SpaceTime.getMolten(144 * 2))
+                .itemOutputs(GTCMItemList.ParticleTrapTimeSpaceShield.get(64))
+            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(2500))
+            .eut(TierEU.RECIPE_UMV)
+            .duration(20 * 64)
+            .addTo(GTCMRecipe.MiracleTopRecipes);
 
     }
 }
