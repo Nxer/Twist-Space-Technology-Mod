@@ -11,6 +11,7 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.dreammaster.gthandler.GT_CoreModSupport.RadoxPolymer;
 import static gregtech.api.enums.ItemList.Circuit_CosmicAssembly;
 import static gregtech.api.enums.ItemList.Circuit_CosmicComputer;
@@ -458,7 +459,7 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .itemInputs(Laser_Lens_Special.get(1), eternal_singularity.copy())
             .itemOutputs(MaterialType.Singularity.stack(16), MaterialType.Singularity.stack(16))
             .outputChances(5000, 5000)
-            .eut(RECIPE_UMV)
+            .eut(RECIPE_UXV)
             .duration(20 * 100)
             .addTo(BartWorksRecipeMaps.electricImplosionCompressorRecipes);
 
