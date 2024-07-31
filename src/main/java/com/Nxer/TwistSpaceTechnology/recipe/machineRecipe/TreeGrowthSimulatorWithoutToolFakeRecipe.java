@@ -46,11 +46,34 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
             count++;
         }
     }
-
+    int allProductsNum=0;
+    public static ItemStack[] allProducts = new ItemStack[treeProductsMap.size()*4];
+    static {
+        int count=0;
+        for(ItemStack Sapling : allSaplings){
+            EnumMap<Mode, ItemStack> productMap=queryTreeProduct(Sapling);
+            for (Mode mode:Mode.values())
+                if(productMap.get(mode)!=null){
+                    allProducts[count]=productMap.get(mode);
+                    allProducts[count].stackSize*=getModeMultiplier(mode);
+                    count++;
+                }
+        }
+    }
+    //这些应该都放到init里面
+    //[]改成Array
+    //List<ItemStack> outputs = new ArrayList<>();
     @Override
     public void loadRecipes() {
+        //initProductsNum();
         loadTreeFarmWithoutToolRecipe();
         loadManualRecipes();
+    }
+    void initProductsNum(){
+        for(ItemStack Sapling : allSaplings){
+            EnumMap<Mode, ItemStack> productMap = queryTreeProduct(Sapling);
+            allProductsNum+=productMap.size();
+        }
     }
 
     void loadTreeFarmWithoutToolRecipe() {

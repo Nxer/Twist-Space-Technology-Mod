@@ -443,7 +443,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             fruit.stackSize = (int) (fruit.stackSize * yield);
             adjustedMap.put(Mode.FRUIT, fruit);
         }
-        // addFakeRecipeToNEI(sapling, log, saplingOut, leaves, fruit, WaterStack);
+
         return adjustedMap;
     }
 
