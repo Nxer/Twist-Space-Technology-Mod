@@ -67,7 +67,7 @@ public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineB
                     .setSpeedBoost(1.5F);
             }
 
-        }.setMaxParallel(getMaxParallelRecipes());
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
     @Override
