@@ -33,7 +33,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
@@ -62,10 +61,7 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
@@ -383,12 +379,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         return -1;
     }
 
-    // public static ItemStack queryTreeProduct(ItemStack sapling, GregtechMetaTileEntityTreeFarm.Mode mode) {
-    // String key = Item.itemRegistry.getNameForObject(sapling.getItem()) + ":" + sapling.getItemDamage();
-    //
-    // EnumMap<GregtechMetaTileEntityTreeFarm.Mode, ItemStack> productsMap = treeProductsMap.get(key);
-    // return productsMap.get(mode);
-    // }
     public static EnumMap<Mode, ItemStack> queryTreeProduct(ItemStack sapling) {
         String key = Item.itemRegistry.getNameForObject(sapling.getItem()) + ":" + sapling.getItemDamage();
         EnumMap<Mode, ItemStack> ProductMap = treeProductsMap.get(key);
@@ -492,7 +482,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         break;
                     }
                     if (aFluid.getFluid()
-                        .equals(BRFluids.UnknowWater)) {
+                        .equals(BRFluids.UnknowWater) && Mods.GalaxySpace.isModLoaded()) {
                         // Normal to BarnardaC`
                         RecipeLiquid = BRFluids.UnknowWater;
                         sapling = GT_ModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 1, 1);
@@ -601,101 +591,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             + (int) this.tierMultiplier;
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Tier" + " : " + EnumChatFormatting.GOLD + this.tier;
         return ret;
-    }
-
-    // @Override
-    // public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-    // super.onFirstTick(aBaseMetaTileEntity);
-    // // generateRecipes();
-    // // addRecipe2(new ItemStack(Blocks.red_mushroom, 1, 0));
-    // }
-    public static final HashMap<String, EnumMap<Mode, ItemStack>> treeProductsMapCopy = new HashMap<>();
-    public static ItemStack[] SaplingStack;
-
-    public static void initStatics() {
-        SaplingStack = new ItemStack[] {
-            // Oak
-            new ItemStack(Blocks.sapling, 1, 0),
-            // Spruce
-            new ItemStack(Blocks.sapling, 1, 1),
-            // Birch
-            new ItemStack(Blocks.sapling, 1, 2),
-            // Jungle
-            new ItemStack(Blocks.sapling, 1, 3),
-            // Acacia
-            new ItemStack(Blocks.sapling, 1, 4),
-            // Dark Oak
-            new ItemStack(Blocks.sapling, 1, 5),
-            // Brown Mushroom
-            new ItemStack(Blocks.brown_mushroom, 1, 0),
-            // Red Mushroom
-            new ItemStack(Blocks.red_mushroom, 1, 0) };
-
-        for (Map.Entry<String, EnumMap<Mode, ItemStack>> entry : treeProductsMap.entrySet()) {
-            String key = entry.getKey();
-            EnumMap<Mode, ItemStack> originalEnumMap = entry.getValue();
-            EnumMap<Mode, ItemStack> copyEnumMap = new EnumMap<>(Mode.class);
-
-            for (Mode mode : Mode.values()) {
-                ItemStack originalItemStack = originalEnumMap.get(mode);
-                if (originalItemStack != null) {
-                    copyEnumMap.put(mode, originalItemStack);
-                }
-                treeProductsMapCopy.put(key, copyEnumMap);
-            }
-        }
-        for (ItemStack SaplingIn : SaplingStack) {
-            addRecipe2(SaplingIn);
-        }
-    }
-
-    public static void addRecipe2(ItemStack sapling) {
-
-        ItemStack specialStack = sapling.copy();
-        specialStack.stackSize = 0;
-        EnumMap<Mode, ItemStack> ProductMap = queryTreeProduct(sapling);
-        ItemStack[] inputStacks = new ItemStack[Mode.values().length];
-        ItemStack[] outputStacks = new ItemStack[Mode.values().length];
-        int count = 0;
-        if (ProductMap != null) {
-            for (Mode mode : Mode.values()) {
-                if (ProductMap.get(mode) != null) {
-                    inputStacks[count] = GT_Utility.getIntegratedCircuit(count + 1)
-                        .copy();
-                    outputStacks[count] = ProductMap.get(mode)
-                        .copy();
-                }
-                count++;
-            }
-            // inputStacks[count] = GTCMItemList.TestItem0.get(1);
-            // outputStacks[count] = GTCMItemList.TestItem0.get(1);
-        } else {
-            inputStacks[0] = sapling.copy();
-            outputStacks[0] = GTCMItemList.TestItem0.get(1);
-        }
-        GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes.addFakeRecipe(
-            false,
-            new GT_Recipe(
-                inputStacks,
-                outputStacks,
-                specialStack,
-                null,
-                new FluidStack[] { WaterStack },
-                null,
-                20,
-                0,
-                GTPPRecipeMaps.treeGrowthSimulatorFakeRecipes.getAllRecipes()
-                    .size() + 1));
-        // GT_Values.RA.stdBuilder()
-        // .itemInputs(inputStacks)
-        // .itemOutputs(outputStacks)
-        // .fluidInputs(WaterStack)
-        // .fluidOutputs()
-        // .eut(0)
-        // .duration(20)
-        // // .noOptimize()
-        // .specialItem(specialStack)
-        // .addTo(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes));
     }
 
 }

@@ -1,113 +1,105 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getModeMultiplier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.queryTreeProduct;
-import static gregtech.api.enums.Mods.Minecraft;
-import static gregtech.api.util.GT_ModHandler.getModItem;
+import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
 
 import java.util.EnumMap;
+import java.util.Map;
 
-import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
-import gregtech.api.enums.GT_Values;
+import galaxyspace.BarnardsSystem.BRFluids;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
 
 public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
     static FluidStack WaterStack = Materials.Water.getFluid(1000);
+    static FluidStack UnknowWaterStack = new FluidStack(BRFluids.UnknowWater, 1000);
+    static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 144);
+    static final ItemStack[] allSaplings = new ItemStack[treeProductsMap.size()];
+    static {
+        ItemStack sapling;
+        int count = 0;
+        for (Map.Entry<String, EnumMap<Mode, ItemStack>> entry : treeProductsMap.entrySet()) {
+            String key = entry.getKey();
+            String[] keyPart;
+            keyPart = key.split(":");
+            sapling = entry.getValue()
+                .get(Mode.SAPLING);
+            if (!key.contains("Forestry:")) sapling = GT_ModHandler
+                .getModItem(keyPart[0], keyPart[1], 0, keyPart[2] == null ? 0 : Integer.parseInt(keyPart[2]));
+            sapling.stackSize = 0;
+            allSaplings[count] = sapling;
+            count++;
+        }
+    }
 
     @Override
     public void loadRecipes() {
-
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GTCMItemList.TestItem0.get(1))
-            .itemOutputs(GTCMItemList.TestItem0.get(1))
-            .fluidInputs(WaterStack)
-            .fluidOutputs()
-            .eut(0)
-            .duration(20)
-            .noOptimize()
-            .specialItem(new ItemStack(Blocks.sapling, 0, 0))
-            .addTo(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes);
-
-        // debug
-        ItemStack[] InputItem = { GT_Utility.getIntegratedCircuit(1), GT_Utility.getIntegratedCircuit(2),
-            GT_Utility.getIntegratedCircuit(3), GT_Utility.getIntegratedCircuit(4) };
-
-        ItemStack[] OutputItem = { getModItem(Minecraft.ID, "log", 5, 0), getModItem(Minecraft.ID, "sapling", 1, 0),
-            getModItem(Minecraft.ID, "leaves", 2, 0), getModItem(Minecraft.ID, "apple", 1, 0) };
-
-        // ItemStack[] SaplingStack = {
-        // // Oak
-        // new ItemStack(Blocks.sapling, 1, 0),
-        // // Spruce
-        // new ItemStack(Blocks.sapling, 1, 1),
-        // // Birch
-        // new ItemStack(Blocks.sapling, 1, 2),
-        // // Jungle
-        // new ItemStack(Blocks.sapling, 1, 3),
-        // // Acacia
-        // new ItemStack(Blocks.sapling, 1, 4),
-        // // Dark Oak
-        // new ItemStack(Blocks.sapling, 1, 5),
-        // // Brown Mushroom
-        // new ItemStack(Blocks.brown_mushroom, 1, 0),
-        // // Red Mushroom
-        // new ItemStack(Blocks.red_mushroom, 1, 0) };
-
-        // for (ItemStack SaplingIn : SaplingStack) {
-        // addRecipe2(SaplingIn);
-        // }
+        loadTreeFarmWithoutToolRecipe();
+        loadManualRecipes();
     }
 
-    public void addRecipe2(ItemStack sapling) {
+    void loadTreeFarmWithoutToolRecipe() {
+        for (ItemStack Sapling : allSaplings) {
+            addFakeRecipe(Sapling, new ItemStack[] { Sapling }, WaterStack);
+        }
+    }
 
-        ItemStack specialStack = sapling.copy();
-        specialStack.stackSize = 0;
-        // String key = Item.itemRegistry.getNameForObject(sapling.getItem()) + ":" + sapling.getItemDamage();
-        EnumMap<Mode, ItemStack> ProductMap = queryTreeProduct(sapling);
+    void loadManualRecipes() {
+        if (Mods.GalaxySpace.isModLoaded()) addSpecialFakeRecipe(
+            GT_ModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 0, 1),
+            UnknowWaterStack);
+        if (Mods.TwilightForest.isModLoaded()) addSpecialFakeRecipe(
+            GT_ModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 0, 5),
+            TemporalLiquidStack);
+
+    }
+
+    void addSpecialFakeRecipe(ItemStack SpecialSapling, FluidStack SpecialFluid) {
+        addFakeRecipe(SpecialSapling, allSaplings, SpecialFluid);
+    }
+
+    void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid) {
+        EnumMap<Mode, ItemStack> ProductMap = queryTreeProduct(Sapling);
         ItemStack[] inputStacks = new ItemStack[Mode.values().length];
         ItemStack[] outputStacks = new ItemStack[Mode.values().length];
         int count = 0;
-        if (ProductMap != null) {
-            for (Mode mode : Mode.values()) {
-                if (ProductMap.get(mode) != null) {
-                    inputStacks[count] = GT_Utility.getIntegratedCircuit(count + 1)
-                        .copy();
-                    outputStacks[count] = ProductMap.get(mode)
-                        .copy();
-                }
-                count++;
+        for (Mode mode : Mode.values()) {
+            if (ProductMap != null && ProductMap.get(mode) != null) {
+                inputStacks[count] = GT_Utility.getIntegratedCircuit(count + 1)
+                    .copy();
+                outputStacks[count] = ProductMap.get(mode)
+                    .copy();
+                outputStacks[count].stackSize *= getModeMultiplier(mode);
             }
-            // inputStacks[count] = GTCMItemList.TestItem0.get(1);
-            // outputStacks[count] = GTCMItemList.TestItem0.get(1);
-            GT_Values.RA.stdBuilder()
-                .itemInputs(inputStacks)
-                .itemOutputs(outputStacks)
-                .fluidInputs(WaterStack)
-                .fluidOutputs()
-                .eut(0)
-                .duration(20)
-                .specialItem(specialStack)
-                .addTo(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes);
-        } else {
-            GT_Values.RA.stdBuilder()
-                .itemInputs(sapling)
-                .itemOutputs(GTCMItemList.TestItem0.get(1))
-                .fluidInputs(WaterStack)
-                .fluidOutputs()
-                .eut(0)
-                .duration(20)
-                .specialItem(specialStack)
-                .addTo(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes);
+            count++;
         }
-
+        GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes.addFakeRecipe(
+            false,
+            new GT_Recipe(
+                inputStacks,
+                outputStacks,
+                specialStacks,
+                null,
+                new FluidStack[] { inputFluid },
+                null,
+                20,
+                0,
+                GTPPRecipeMaps.treeGrowthSimulatorFakeRecipes.getAllRecipes()
+                    .size() + 1));
     }
 }
