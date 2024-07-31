@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
@@ -74,6 +75,7 @@ public class RecipeLoader {
 
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
+        TST_MegaTreeFarm.initStatics();
 
         new OP_NormalProcessing().enumOreProcessingRecipes();
         if (Config.EnableRecipeRegistry_IndistinctTentacle) {
@@ -83,7 +85,7 @@ public class RecipeLoader {
             new StarKernelForgeRecipePool().loadRecipes();
         }
         if (Config.Enable_MegaTreeFarm) {
-            new TreeGrowthSimulatorWithoutToolFakeRecipe();
+            new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
         }
         if (Config.EnableModularizedMachineSystem) {
             if (Config.EnableLargeNeutronOscillator) {
@@ -97,6 +99,7 @@ public class RecipeLoader {
 
     public static void loadRecipesPostInit() {
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
+        new IndustrialMagicMatrixRecipePool().loadRecipes();
     }
 
     public static void loadRecipesServerStarted() {

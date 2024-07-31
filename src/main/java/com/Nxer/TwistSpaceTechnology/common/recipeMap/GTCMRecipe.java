@@ -223,7 +223,9 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> TreeGrowthSimulatorWithoutToolFakeRecipes = RecipeMapBuilder
         .of("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(4, 4, 1, 0)
+        .minInputs(1, 1)
         .useSpecialSlot()
+        .specialSlotSensitive()
         .neiSpecialInfoFormatter(MegaTreeGrowthSimulator_SpecialValueFormatter.INSTANCE)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))

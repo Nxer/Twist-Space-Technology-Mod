@@ -34,6 +34,10 @@ public final class ModBlocksHandler {
 
     // endregion
 
+    // region The Twilight Forest
+    public static Pair<Block, Integer> TreeofTimeSapling;
+
+    // endregion
     public void initStatics() {
         if (Mods.ThaumicBases.isModLoaded()) {
             Block crystalBlock = Block.getBlockFromName(Mods.ThaumicBases.ID + ":crystalBlock");
