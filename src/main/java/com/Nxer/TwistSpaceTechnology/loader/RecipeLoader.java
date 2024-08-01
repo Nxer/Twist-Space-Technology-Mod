@@ -35,9 +35,9 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.SpaceAssemblerRecipePo
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StarKernelForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.NeutronActivatorWithEURecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.CosmicProcessorCircuitRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;

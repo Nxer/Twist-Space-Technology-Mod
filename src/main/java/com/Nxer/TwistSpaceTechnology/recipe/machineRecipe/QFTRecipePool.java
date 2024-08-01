@@ -21,7 +21,7 @@ public class QFTRecipePool implements IRecipePool {
     public void loadRecipes() {
         final IRecipeMap QFT = GTPPRecipeMaps.quantumForceTransformerRecipes;
 
-        // Palladium,
+        // Palladium
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 64),

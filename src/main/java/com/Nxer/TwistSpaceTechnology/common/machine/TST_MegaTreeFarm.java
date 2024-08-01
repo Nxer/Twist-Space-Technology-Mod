@@ -76,8 +76,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         super(aName);
     }
 
-    static FluidStack WaterStack = Materials.Water.getFluid(1000);
-
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MegaTreeFarm(this.mName);
