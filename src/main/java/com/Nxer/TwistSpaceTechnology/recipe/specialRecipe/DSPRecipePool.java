@@ -1180,7 +1180,7 @@ public class DSPRecipePool implements IRecipePool {
             .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(100))
             .itemOutputs(GTCMItemList.MatterRecombinator.get(1))
             .outputChances(114)
-            .eut(RECIPE_MAX)
+            .eut(RECIPE_UMV)
             .duration(20 * 200)
             .addTo(RecipeMaps.assemblerRecipes);
 
@@ -1199,7 +1199,7 @@ public class DSPRecipePool implements IRecipePool {
             .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(100))
             .itemOutputs(GTCMItemList.MatterRecombinator.get(1))
             .outputChances(1140)
-            .eut(RECIPE_MAX)
+            .eut(RECIPE_UXV)
             .duration(20 * 300)
             .addTo(RecipeMaps.assemblerRecipes);
 
