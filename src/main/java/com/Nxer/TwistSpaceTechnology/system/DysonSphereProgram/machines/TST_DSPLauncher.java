@@ -5,10 +5,12 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehic
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
+import static com.Nxer.TwistSpaceTechnology.config.Config.overloadSpecialCalculationParameter;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
+import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
@@ -35,7 +37,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLau
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -63,7 +64,9 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -107,6 +110,19 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     // endregion
 
     // region Processing Logic
+
+    // region Statics
+    public static TST_ItemID SPACE_WARPER;
+    public static TST_ItemID SOLAR_SAIL;
+    public static TST_ItemID LAUNCH_VEHICLE;
+
+    public static void initStatics() {
+        SPACE_WARPER = TST_ItemID.createNoNBT(SpaceWarper.get(1));
+        SOLAR_SAIL = TST_ItemID.createNoNBT(SolarSail.get(1));
+        LAUNCH_VEHICLE = TST_ItemID.createNoNBT(SmallLaunchVehicle.get(1));
+    }
+
+    // endregion
     private String ownerName; // init when loading world
     private UUID ownerUUID; // init when loading world
     private int dimID; // init when loading world
@@ -143,7 +159,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 4];
+        String[] ret = new String[origin.length + 5];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.GOLD + "Owner Name: " + EnumChatFormatting.RESET + ownerName;
         ret[origin.length + 1] = EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + ownerUUID;
@@ -154,6 +170,13 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             + EnumChatFormatting.RESET
             + (overloadTime / 20)
             + " s";
+
+        // #tr TST_DSPLauncher.getInfoData.02
+        // # Speed Up :{\SPACE}
+        // #zh_CN 速度倍率:{\SPACE}
+        ret[origin.length + 4] = EnumChatFormatting.GOLD + tr("TST_DSPLauncher.getInfoData.02")
+            + EnumChatFormatting.RESET
+            + (calculateOverloadSpeedUp());
 
         return ret;
     }
@@ -200,20 +223,20 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         CheckRecipeResult result = CheckRecipeResultRegistry.NO_RECIPE;
         for (ItemStack items : getStoredInputs()) {
             // check input Space Warper
-            if (metaItemEqual(items, SpaceWarper.get(1))) {
+            if (SPACE_WARPER.equalItemStack(items)) {
                 overloadTime += 20L * DSP_Values.secondsOfEverySpaceWarperProvideToOverloadTime * items.stackSize;
                 items.stackSize = 0;
             }
             // check and process recipe
             if (!result.wasSuccessful()) {
-                if (metaItemEqual(items, SolarSail.get(1))) {
+                if (SOLAR_SAIL.equalItemStack(items)) {
                     // launch Solar Sail
                     result = CheckRecipeResultRegistry.SUCCESSFUL;
                     items.stackSize -= 1;
                     mMaxProgresstime = ticksOfLaunchingSolarSail;
                     lEUt = -EUTOfLaunchingSolarSail;
                     dspDataCell.addDSPSolarSail(1);
-                } else if (metaItemEqual(items, SmallLaunchVehicle.get(1))) {
+                } else if (LAUNCH_VEHICLE.equalItemStack(items)) {
                     // launch DSP Node
                     result = CheckRecipeResultRegistry.SUCCESSFUL;
                     items.stackSize -= 1;
@@ -242,9 +265,10 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
 
-        // if in overload condition, reduced time to one-sixtieth
+        // if in overload condition, reduced time
         if (overloadTime > 0) {
-            mMaxProgresstime /= DSP_Values.overloadSpeedUpMultiplier * motorTier;
+            double m = calculateOverloadSpeedUp();
+            mMaxProgresstime = (int) Math.max(1, mMaxProgresstime / m);
         } else {
             mMaxProgresstime /= motorTier;
         }
@@ -252,13 +276,14 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         return result;
     }
 
-    // @Override
-    // protected void setProcessingLogicPower(ProcessingLogic logic) {
-    // // The voltage is only used for recipe finding
-    // logic.setAvailableVoltage(Long.MAX_VALUE);
-    // logic.setAvailableAmperage(1);
-    // logic.setAmperageOC(false);
-    // }
+    protected double calculateOverloadSpeedUp() {
+        if (overloadTime < 1) return motorTier;
+        int s = (int) (overloadTime / 20);
+        if (s <= 1) return DSP_Values.overloadSpeedUpMultiplier;
+        double i = 1d / (5d + 900d * overloadSpecialCalculationParameter / s);
+        double m = 1 + Math.pow(s, i);
+        return m * DSP_Values.overloadSpeedUpMultiplier * motorTier;
+    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -481,6 +506,10 @@ I -> ofFrame...(NaquadahAlloy);
             .addSeparator()
             .addStructureInfo(Tooltip_Details)
             .addStructureInfo(Tooltip_DSPLauncher_2_01)
+            // #tr Tooltip_DSPLauncher_2_01_OverloadParameterCalculation
+            // # Overload Parameter = t^( 1 / (1000*900/t + 5) ) ; t = Overload Time (second)
+            // #zh_CN 过载模式参数 = t^( 1 / (1000*900/t + 5) ) ; t = 过载模式时间 (秒)
+            .addStructureInfo(TextEnums.tr("Tooltip_DSPLauncher_2_01_OverloadParameterCalculation"))
             .addStructureInfo(Tooltip_DSPLauncher_2_02)
             .addStructureInfo(Tooltip_DSPLauncher_2_03)
             .addStructureInfo(Tooltip_DSPLauncher_2_04)
