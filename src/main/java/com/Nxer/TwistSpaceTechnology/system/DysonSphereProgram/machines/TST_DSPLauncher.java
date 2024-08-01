@@ -507,8 +507,8 @@ I -> ofFrame...(NaquadahAlloy);
             .addStructureInfo(Tooltip_Details)
             .addStructureInfo(Tooltip_DSPLauncher_2_01)
             // #tr Tooltip_DSPLauncher_2_01_OverloadParameterCalculation
-            // # Overload Parameter = t^( 1 / (1000*900/t + 5) ) ; t = Overload Time (second)
-            // #zh_CN 过载模式参数 = t^( 1 / (1000*900/t + 5) ) ; t = 过载模式时间 (秒)
+            // # Overload Parameter = t ^ [ 1 / (1000*900/t + 5) ] ; t = Overload Time (second)
+            // #zh_CN 过载模式参数 = t ^ [ 1 / (1000*900/t + 5) ] ; t = 过载模式时间 (秒)
             .addStructureInfo(TextEnums.tr("Tooltip_DSPLauncher_2_01_OverloadParameterCalculation"))
             .addStructureInfo(Tooltip_DSPLauncher_2_02)
             .addStructureInfo(Tooltip_DSPLauncher_2_03)

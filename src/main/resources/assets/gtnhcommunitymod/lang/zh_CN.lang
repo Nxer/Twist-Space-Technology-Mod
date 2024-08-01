@@ -1406,4 +1406,4 @@ Tooltip_MicroSpaceTimeFabricatorio_05=可以在专用输入总线内提供时空
 Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name=时空之种输入总线
 Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location=替换主方块正前方结构方块
 TST_DSPLauncher.getInfoData.02=速度倍率: 
-Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=过载模式参数 = t^( 1 / (1000*900/t + 5) ) ; t = 过载模式时间 (秒)
+Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=过载模式参数 = t ^ [ 1 / (1000*900/t + 5) ] ; t = 过载模式时间 (秒)

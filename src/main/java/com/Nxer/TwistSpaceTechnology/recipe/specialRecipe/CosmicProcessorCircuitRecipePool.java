@@ -197,11 +197,12 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .metadata(RESEARCH_TIME, 24 * HOURS)
             .itemInputs(
                 MaterialsUEVplus.TranscendentMetal.getNanite(1),
-                GTCMItemList.ParticleTrapTimeSpaceShield.get(32),
+                GTCMItemList.ParticleTrapTimeSpaceShield.get(64),
+                GTCMItemList.ParticleTrapTimeSpaceShield.get(64),
                 ItemList.EnergisedTesseract.get(2),
                 GT_OreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 16))
             .fluidInputs(MaterialsUEVplus.Time.getMolten(36), CELESTIAL_TUNGSTEN.getFluidStack(36))
-            .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(16))
+            .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(64))
             .eut(RECIPE_UMV)
             .duration(20 * 30)
             .addTo(GT_RecipeConstants.AssemblyLine);
@@ -210,14 +211,13 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .itemInputs(
                 GTCMItemList.MatterRecombinator.get(0),
                 ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 17, 1),
-                Laser_Lens_Special.get(1),
-                GTCMItemList.ParticleTrapTimeSpaceShield.get(64),
+                GTCMItemList.ParticleTrapTimeSpaceShield.get(128),
                 ItemList.EnergisedTesseract.get(4),
                 GT_OreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 32))
             .fluidInputs(MaterialsUEVplus.Time.getMolten(144))
-            .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(32))
+            .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(128))
             .eut(RECIPE_UMV)
-            .duration(20 * 240)
+            .duration(20 * 120)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
         // EnergyFluctuationSelfHarmonizer
