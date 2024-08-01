@@ -314,7 +314,7 @@ Tooltip_DSPLauncher_03=不会超频且没有额外并行.
 Tooltip_DSPLauncher_04=更高级的加速轨道可以减少发射耗时.
 Tooltip_DSPLauncher_05=输入空间翘曲器可以进入过载模式. 减少发射时间间隔.
 Tooltip_DSPLauncher_06=未安装能源仓时自动进入无线电力网络模式.
-Tooltip_DSPLauncher_2_01=最终处理时间 = 配方时间 /( 加速轨道等级 * 1 或 30 过载模式下 )
+Tooltip_DSPLauncher_2_01=最终处理时间 = 配方时间 /( 加速轨道等级 * 过载模式参数 )
 Tooltip_DSPLauncher_2_02=每个空间翘曲器提供(默认)15分钟的过载模式.
 Tooltip_DSPLauncher_2_03=输入的空间翘曲器会立刻被消耗.
 Tooltip_DSPLauncher_2_04=转换成剩余的过载模式时间.
@@ -1405,3 +1405,5 @@ Tooltip_MicroSpaceTimeFabricatorio_04=但使用高级力场方块的需要同时
 Tooltip_MicroSpaceTimeFabricatorio_05=可以在专用输入总线内提供时空之种, 每次运行消耗1个时空之种, 并将产物翻倍.
 Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name=时空之种输入总线
 Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location=替换主方块正前方结构方块
+TST_DSPLauncher.getInfoData.02=速度倍率: 
+Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=过载模式参数 = t^( 1 / (1000*900/t + 5) ) ; t = 过载模式时间 (秒)

@@ -379,7 +379,7 @@ public class TextLocalization {
     public static final String Tooltip_DSPLauncher_04 = texter("Higher tier of Elevator Module means faster launching.", "Tooltip_DSPLauncher_04");
     public static final String Tooltip_DSPLauncher_05 = texter("Inputting Space Warper will enable overlord mode. Reduce launch intervals.", "Tooltip_DSPLauncher_05");
     public static final String Tooltip_DSPLauncher_06 = texter("Joining the wireless EU network when without installing an energy hatch.", "Tooltip_DSPLauncher_06");
-    public static final String Tooltip_DSPLauncher_2_01 = texter("Final progress time = recipe time / ( module tier * 1 or 30 in overload mode )", "Tooltip_DSPLauncher_2_01");
+    public static final String Tooltip_DSPLauncher_2_01 = texter("Final progress time = recipe time / ( module tier * overload mode parameter )", "Tooltip_DSPLauncher_2_01");
     public static final String Tooltip_DSPLauncher_2_02 = texter("Every Space Warper will provide (default) 15 minutes of overload mode.", "Tooltip_DSPLauncher_2_02");
     public static final String Tooltip_DSPLauncher_2_03 = texter("Input Space Warper will be consumed immediately.", "Tooltip_DSPLauncher_2_03");
     public static final String Tooltip_DSPLauncher_2_04 = texter("Converted to remaining time of overload mode.", "Tooltip_DSPLauncher_2_04");

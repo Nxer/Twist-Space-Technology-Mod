@@ -314,7 +314,7 @@ Tooltip_DSPLauncher_03=No overclocking and no additional parallels.
 Tooltip_DSPLauncher_04=Higher tier of Elevator Motor reduces launch time.
 Tooltip_DSPLauncher_05=Inputting Space Warper will enable overload mode and shorten the launch interval.
 Tooltip_DSPLauncher_06=Joining the wireless EU network when no energy hatch is installed
-Tooltip_DSPLauncher_2_01=Actual processing time = recipe time / (elevator motor tier * 1 or 30 in overload mode)
+Tooltip_DSPLauncher_2_01=Actual processing time = recipe time / (elevator motor tier * overload mode parameter)
 Tooltip_DSPLauncher_2_02=Each Space Warper provides (by default) 15 minutes of overload mode.
 Tooltip_DSPLauncher_2_03=Space Warper will be consumed immediately upon input.
 Tooltip_DSPLauncher_2_04=Converted to overload mode duration.
@@ -1405,3 +1405,5 @@ Tooltip_MicroSpaceTimeFabricatorio_04=But the use of advanced Field blocks requi
 Tooltip_MicroSpaceTimeFabricatorio_05=Can provide space-time seeds in dedicated input bus, consuming 1 space-time seed per run and doubling the output.
 Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name=Input Bus of The Seed of Space and Time
 Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location=Replace the casing at the front of controller block
+TST_DSPLauncher.getInfoData.02=Speed Up : 
+Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=Overload Parameter = t^( 1 / (1000*900/t + 5) ) ; t = Overload Time (second)

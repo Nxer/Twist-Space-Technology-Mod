@@ -78,6 +78,7 @@ public class Config {
     public static double secondsOfArtificialStarProgressCycleTime = 6.4;
     public static int secondsOfEverySpaceWarperProvideToOverloadTime = 60 * 15;
     public static int overloadSpeedUpMultiplier = 30;
+    public static int overloadSpecialCalculationParameter = 1000;
     public static double gravitationalLensSpeedMultiplier = 4;
     public static int secondsOfEveryGravitationalLensProvideToIntensifyTime = 60 * 10;
     public static double secondsOfLaunchingSolarSail = 120;
@@ -644,6 +645,7 @@ public class Config {
         secondsOfArtificialStarProgressCycleTime = Double.parseDouble(configuration.getString("secondsOfArtificialStarProgressCycleTime", DSP, String.valueOf(secondsOfArtificialStarProgressCycleTime), "Seconds of Artificial Star one progress time. Type: double, turn to tick time."));
         secondsOfEverySpaceWarperProvideToOverloadTime = configuration.getInt("secondsOfEverySpaceWarperProvideToOverloadTime", DSP, secondsOfEverySpaceWarperProvideToOverloadTime, 1, Integer.MAX_VALUE, "Overload Time (second) of every Space Warper will provide. Type: int");
         overloadSpeedUpMultiplier = configuration.getInt("overloadSpeedUpMultiplier", DSP, overloadSpeedUpMultiplier, 1, 256, "How much speed up when overload mode. Type: int");
+        overloadSpecialCalculationParameter = configuration.getInt("overloadSpecialCalculationParameter", DSP, overloadSpecialCalculationParameter, 1, 1_000_000_000, "Overload speed up multiplier Special Calculation Parameter. Extra speed = overload time ^ (1 / ((900 / overload time) * this + 5)) Type: int");
         gravitationalLensSpeedMultiplier = Double.parseDouble(configuration.getString("gravitationalLensSpeedMultiplier", DSP, String.valueOf(gravitationalLensSpeedMultiplier), "How much of Speed Multiplier when in Gravitational Lens intensify mode. Type: double"));
         secondsOfEveryGravitationalLensProvideToIntensifyTime = configuration.getInt("secondsOfEveryGravitationalLensProvideToIntensifyTime", DSP, secondsOfEveryGravitationalLensProvideToIntensifyTime, 0, Integer.MAX_VALUE, "Intensify Mode Time (second) of every Gravitational Lens will provide. Type: int");
         secondsOfLaunchingSolarSail = Double.parseDouble(configuration.getString("secondsOfLaunchingSolarSail", DSP, String.valueOf(secondsOfLaunchingSolarSail), "Seconds of launching a Solar Sail."));
