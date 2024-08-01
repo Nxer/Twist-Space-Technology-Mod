@@ -1406,4 +1406,4 @@ Tooltip_MicroSpaceTimeFabricatorio_05=Can provide space-time seeds in dedicated 
 Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name=Input Bus of The Seed of Space and Time
 Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location=Replace the casing at the front of controller block
 TST_DSPLauncher.getInfoData.02=Speed Up : 
-Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=Overload Parameter = t^( 1 / (1000*900/t + 5) ) ; t = Overload Time (second)
+Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=Overload Parameter = t ^ [ 1 / (1000*900/t + 5) ] ; t = Overload Time (second)
