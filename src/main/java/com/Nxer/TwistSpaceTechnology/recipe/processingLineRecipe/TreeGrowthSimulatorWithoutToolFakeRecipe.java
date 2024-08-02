@@ -12,6 +12,8 @@ import java.util.Map;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -116,14 +118,30 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
         // UU Matter
         ItemStack LogSymbol = new ItemStack(Blocks.log, 1, 0);
-        LogSymbol.getEnchantmentTagList();
+        addEnchantmentLight(LogSymbol);
         ItemStack SaplingSymbol = new ItemStack(Blocks.sapling, 1, 0);
-        SaplingSymbol.getEnchantmentTagList();
+        addEnchantmentLight(SaplingSymbol);
         ItemStack LeavesSymbol = new ItemStack(Blocks.leaves, 1, 0);
-        LeavesSymbol.getEnchantmentTagList();
+         addEnchantmentLight(LeavesSymbol);
         ItemStack FruitSymbol = new ItemStack(Items.apple, 1, 0);
-        FruitSymbol.getEnchantmentTagList();
-        addFakeRecipe(IntegratedCircuitStack, new ItemStack[] { FruitSymbol }, allSaplingsIn, UUMatterStack);
+        addEnchantmentLight(FruitSymbol);
+
+        addFakeRecipe(
+            IntegratedCircuitStack,
+            new ItemStack[] { LogSymbol, SaplingSymbol, LeavesSymbol, FruitSymbol },
+            allSaplingsIn,
+            UUMatterStack);
+    }
+
+    public static void addEnchantmentLight(ItemStack aStack) {
+
+        if (!aStack.hasTagCompound()) {
+            aStack.setTagCompound(new NBTTagCompound());
+        }
+
+        NBTTagCompound tag = aStack.getTagCompound();
+        NBTTagList enchantments = new NBTTagList();
+        tag.setTag("ench", enchantments);
     }
 
     void addSpecialFakeRecipe(ItemStack SpecialSapling, FluidStack SpecialFluid) {
