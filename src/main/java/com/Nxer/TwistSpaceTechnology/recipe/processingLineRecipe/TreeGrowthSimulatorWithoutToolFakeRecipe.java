@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -21,7 +23,6 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
 
@@ -29,8 +30,8 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
     static FluidStack WaterStack = Materials.Water.getFluid(1000);
     static FluidStack UnknowWaterStack = new FluidStack(BRFluids.UnknowWater, 1000);
-    static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 144);
-    static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 144);
+    static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 100);
+    static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 1000);
     static FluidStack UUMatterStack = Materials.UUMatter.getFluid(1000);
 
     static ItemStack[] IntegratedCircuitStack = { GT_Utility.getIntegratedCircuit(1),
@@ -72,12 +73,12 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
         for (ItemStack aSapling : allSaplingsIn) {
             EnumMap<Mode, ItemStack> productMap = queryTreeProduct(aSapling);
             for (Mode mode : Mode.values()) {
-                ItemStack originalStack = productMap.get(mode);
-                if (originalStack == null) continue;
-                ItemStack aStack = originalStack.copy();
-                aStack.stackSize *= getModeMultiplier(mode);
+                ItemStack aStack = productMap.get(mode);
+                if (aStack == null) continue;
+                ItemStack aStackCopy = aStack.copy();
+                aStackCopy.stackSize *= getModeMultiplier(mode);
                 ArrayList<ItemStack> productList = allProductsMap.computeIfAbsent(mode, k -> new ArrayList<>());
-                productList.add(aStack);
+                productList.add(aStackCopy);
             }
         }
 
@@ -114,9 +115,15 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
         // Thaumic Tentacle
 
         // UU Matter
-        // addFakeRecipe(IntegratedCircuitStack, new ItemStack[]{
-        // new ItemStack()
-        // }, allSaplingsIn, UUMatterStack);
+        ItemStack LogSymbol = new ItemStack(Blocks.log, 1, 0);
+        LogSymbol.getEnchantmentTagList();
+        ItemStack SaplingSymbol = new ItemStack(Blocks.sapling, 1, 0);
+        SaplingSymbol.getEnchantmentTagList();
+        ItemStack LeavesSymbol = new ItemStack(Blocks.leaves, 1, 0);
+        LeavesSymbol.getEnchantmentTagList();
+        ItemStack FruitSymbol = new ItemStack(Items.apple, 1, 0);
+        FruitSymbol.getEnchantmentTagList();
+        addFakeRecipe(IntegratedCircuitStack, new ItemStack[] { FruitSymbol }, allSaplingsIn, UUMatterStack);
     }
 
     void addSpecialFakeRecipe(ItemStack SpecialSapling, FluidStack SpecialFluid) {
@@ -153,18 +160,18 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
             .eut(0)
             .addTo(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes);
 
-        GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes.addFakeRecipe(
-            false,
-            new GT_Recipe(
-                inputStacks,
-                outputStacks,
-                specialStacks,
-                null,
-                new FluidStack[] { inputFluid },
-                null,
-                20,
-                0,
-                GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes.getAllRecipes()
-                    .size() + 1));
+        // GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes.addFakeRecipe(
+        // false,
+        // new GT_Recipe(
+        // inputStacks,
+        // outputStacks,
+        // specialStacks,
+        // null,
+        // new FluidStack[] { inputFluid },
+        // null,
+        // 20,
+        // 0,
+        // GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes.getAllRecipes()
+        // .size() + 1));
     }
 }

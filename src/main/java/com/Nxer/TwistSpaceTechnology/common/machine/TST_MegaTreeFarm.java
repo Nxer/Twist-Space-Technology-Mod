@@ -340,7 +340,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private static int getTierMultiplier(int tier) {
         return (int) Math
             .floor(2 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
-        // Math.floor(Math.pow(Math.pow(2, tier + 1), 0.8 + 0.1 * Math.log(25 + Math.exp(25 - tier)) / Math.log(5)));
     }
 
     /**
