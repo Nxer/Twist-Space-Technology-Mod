@@ -7,9 +7,9 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
-import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.PowerChairRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.YamatoRenderer;
-import com.Nxer.TwistSpaceTechnology.client.render.TileEntityRenderer;
+import com.Nxer.TwistSpaceTechnology.client.render.TileEntitySpecialRenderer.MachineRenderer;
+import com.Nxer.TwistSpaceTechnology.client.render.TileEntitySpecialRenderer.PowerChairRenderer;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
 
@@ -28,13 +28,16 @@ public class RendereLoader {
     public static void registerItemRenderers() {
         MinecraftForgeClient.registerItemRenderer(
             ItemBlockPowerChair.getItemFromBlock(BlockPowerChair),
-            new PowerChairRenderer(PowerChairModel, new ResourceLocation("gtnhcommunitymod", "model/PowerChair.png")));
+            new com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.PowerChairRenderer(
+                PowerChairModel,
+                new ResourceLocation("gtnhcommunitymod", "model/PowerChair.png")));
         MinecraftForgeClient.registerItemRenderer(
             BasicItems.Yamato,
             new YamatoRenderer(YamatoModel, new ResourceLocation("gtnhcommunitymod", "model/Yamato.png")));
     }
 
     public static void registerTileEntityRenderers() {
-        new TileEntityRenderer(PowerChairModel, new ResourceLocation("gtnhcommunitymod", "model/PowerChair.png"));
+        new MachineRenderer();
+        new PowerChairRenderer(PowerChairModel, new ResourceLocation("gtnhcommunitymod", "model/PowerChair.png"));
     }
 }
