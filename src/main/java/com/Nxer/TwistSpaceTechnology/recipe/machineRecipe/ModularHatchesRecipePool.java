@@ -61,8 +61,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
             GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
             GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 1),
             // TODO piko circuit and quantum circuit
-            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Piko, 1),
-            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Quantum, 1),
+            CustomItemList.PikoCircuit.get(1), CustomItemList.QuantumCircuit.get(1),
             GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Transcendent, 1), };
 
         ItemStack[] fieldGenerators = new ItemStack[] { ItemList.Field_Generator_ZPM.get(1),
@@ -143,7 +142,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
                     ItemList.Field_Generator_UMV.get(48),
                     ItemList.Sensor_UMV.get(8),
                     // TODO Piko circuit will be deprecated.
-                    new Object[] { OrePrefixes.circuit.get(Materials.Piko), 64 },
+                    CustomItemList.PikoCircuit.get(64),
 
                     CustomItemList.HighEnergyFlowCircuit.get(64),
                     ItemList.EnergisedTesseract.get(64),
@@ -178,7 +177,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
                     ItemList.Field_Generator_UXV.get(16),
                     ItemList.Sensor_UXV.get(16),
                     // TODO Quantum circuit will be deprecated.
-                    new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 64 },
+                    CustomItemList.QuantumCircuit.get(64),
 
                     MaterialsUEVplus.Eternity.getNanite(64),
                     MaterialsUEVplus.Eternity.getNanite(64),
@@ -243,7 +242,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
                     ItemList.Emitter_UMV.get(64),
                     ItemList.Emitter_UMV.get(64),
 
-                    new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 64 },
+                    CustomItemList.QuantumCircuit.get(64),
                     MyMaterial.metastableOganesson.get(OrePrefixes.plateDense, 64),
                     MyMaterial.shirabon.get(OrePrefixes.plateDense, 64))
                 .fluidInputs(
@@ -270,7 +269,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
                     copyAmount(8192, MaterialsUEVplus.WhiteDwarfMatter.getNanite(1)),
 
                     copyAmount(65536, ItemList.Timepiece.get(1)),
-                    copyAmount(131072, GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Quantum, 1)))
+                    copyAmount(131072, CustomItemList.QuantumCircuit.get(1)))
                 .fluidInputs(
                     Materials.DarkIron.getMolten(144 * 16384),
                     Materials.Force.getMolten(144 * 65536),

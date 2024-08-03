@@ -28,6 +28,8 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.GT_Loader_Machines.bitsd;
 
+import net.minecraft.item.ItemStack;
+
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
@@ -46,22 +48,20 @@ public class TSTBufferedEnergyHatchRecipe implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-        final Object[] circuits = new Object[][] { new Object[] { OrePrefixes.circuit.get(Materials.Basic), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Good), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Advanced), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Data), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Elite), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Master), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Bio), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Piko), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Optical), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Exotic), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Cosmic), 1 },
-            new Object[] { OrePrefixes.circuit.get(Materials.Transcendent), 1 } };
+        final ItemStack[] circuits = new ItemStack[] {
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Basic, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
+            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 1),
+            // TODO Piko and Quantum circuit
+            CustomItemList.PikoCircuit.get(1), CustomItemList.QuantumCircuit.get(1) };
 
         final IRecipeMap assembler = RecipeMaps.assemblerRecipes;
         GT_Values.RA.stdBuilder()
