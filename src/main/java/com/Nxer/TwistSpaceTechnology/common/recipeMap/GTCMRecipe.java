@@ -218,8 +218,8 @@ public class GTCMRecipe {
         .build();
 
     // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes
-    // # BioSphere : Tree Growth Simulator
-    // #zh_CN 生物圈 : 原木拟生
+    // # Eco-Sphere : Tree Growth Simulator
+    // #zh_CN 生态圈 : 原木拟生
     public static final RecipeMap<TST_RecipeMapBackend> TreeGrowthSimulatorWithoutToolFakeRecipes = RecipeMapBuilder
         .of("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(4, 4, 1, 0)

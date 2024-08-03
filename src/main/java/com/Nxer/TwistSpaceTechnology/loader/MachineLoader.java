@@ -580,7 +580,7 @@ public class MachineLoader {
                 "NameMegaTreeFarm",
                 // #tr NameMegaTreeFarm
                 // # Eco-Sphere Growth Simulator
-                // #zh_CN 拟生圈
+                // #zh_CN 拟似生态圈
                 TextEnums.tr("NameMegaTreeFarm")).getStackForm(1);
             GTCMItemList.MegaTreeFarm.set(MegaTreeFarm);
         }
