@@ -3,9 +3,9 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.MegaTreeGrowthSimulator_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_MegaTreeFarmFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 
 import goodgenerator.client.GUI.GG_UITextures;
@@ -226,7 +226,8 @@ public class GTCMRecipe {
         .minInputs(1, 1)
         .useSpecialSlot()
         .specialSlotSensitive()
-        .neiSpecialInfoFormatter(MegaTreeGrowthSimulator_SpecialValueFormatter.INSTANCE)
+        // .neiSpecialInfoFormatter(TST_MegaTreeGrowthSimulatorFrontend.INSTANCE)
+        .frontend(TST_MegaTreeFarmFrontend::new)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()

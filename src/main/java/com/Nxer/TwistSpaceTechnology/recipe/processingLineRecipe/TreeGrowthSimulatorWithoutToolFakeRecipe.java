@@ -39,6 +39,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
     static ItemStack[] IntegratedCircuitStack = { GT_Utility.getIntegratedCircuit(1),
         GT_Utility.getIntegratedCircuit(2), GT_Utility.getIntegratedCircuit(3), GT_Utility.getIntegratedCircuit(4), };
     static ItemStack[] allSaplingsIn;
+    static ItemStack[] allSaplingWithTag;
     static ItemStack[] allLogs;
     static ItemStack[] allSaplings;
     static ItemStack[] allLeaves;
@@ -96,6 +97,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
             .stream()
             .flatMap(ArrayList::stream)
             .toArray(ItemStack[]::new);
+
     }
 
     void loadTreeFarmWithoutToolRecipe() {
@@ -122,7 +124,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
         ItemStack SaplingSymbol = new ItemStack(Blocks.sapling, 1, 0);
         addEnchantmentLight(SaplingSymbol);
         ItemStack LeavesSymbol = new ItemStack(Blocks.leaves, 1, 0);
-         addEnchantmentLight(LeavesSymbol);
+        addEnchantmentLight(LeavesSymbol);
         ItemStack FruitSymbol = new ItemStack(Items.apple, 1, 0);
         addEnchantmentLight(FruitSymbol);
 
