@@ -191,6 +191,15 @@ public class BlockRegister {
                 (byte) 12,
                 BasicBlocks.MetaBlockCasing01));
 
+        GTCMItemList.AsepticApparatusCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Aseptic System Casing",
+                // #tr MetaBlockCasing01.13.name
+                // # Aseptic Apparatus Casing
+                // #zh_CN 无菌系统机械方块
+                (byte) 13,
+                BasicBlocks.MetaBlockCasing01));
+
         // region SpaceTimeOscillator
 
         // #tr SpaceTimeOscillator.0.name

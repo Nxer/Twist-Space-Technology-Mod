@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import galaxyspace.BarnardsSystem.BRFluids;
 import gregtech.api.enums.GT_Values;
@@ -30,11 +31,11 @@ import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.Gr
 
 public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
-    static FluidStack WaterStack = Materials.Water.getFluid(1000);
-    static FluidStack UnknowWaterStack = new FluidStack(BRFluids.UnknowWater, 1000);
-    static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 100);
-    static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 1000);
-    static FluidStack UUMatterStack = Materials.UUMatter.getFluid(1000);
+    static FluidStack WaterStack = Materials.Water.getFluid(100000);
+    static FluidStack UnknowWaterStack = new FluidStack(BRFluids.UnknowWater, 10000);
+    static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 1000);
+    static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 10000);
+    static FluidStack UUMatterStack = Materials.UUMatter.getFluid(10000);
 
     static ItemStack[] IntegratedCircuitStack = { GT_Utility.getIntegratedCircuit(1),
         GT_Utility.getIntegratedCircuit(2), GT_Utility.getIntegratedCircuit(3), GT_Utility.getIntegratedCircuit(4), };
@@ -44,7 +45,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
     static ItemStack[] allSaplings;
     static ItemStack[] allLeaves;
     static ItemStack[] allFruits;
-    static ItemStack[] allProducts;
+    public static ItemStack[][] allProducts;
 
     @Override
     public void loadRecipes() {
@@ -72,6 +73,18 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
         }
         allSaplingsIn = allSaplingsInCopy.toArray(new ItemStack[0]);
 
+        ArrayList<ItemStack> allSaplingWithTagCopy = new ArrayList<>();
+        for (ItemStack aSapling : allSaplingsIn) {
+            ItemStack aStack = aSapling.copy();
+            aStack.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.tooltip.7"
+            // #tr MegaTreeGrowthSimulator.nei.tooltip.7
+            // # Any Sapling
+            // #zh_CN 任意树苗
+            ));
+            allSaplingWithTagCopy.add(aStack);
+        }
+        allSaplingWithTag = allSaplingWithTagCopy.toArray(new ItemStack[0]);
+
         // init allOuts
         for (ItemStack aSapling : allSaplingsIn) {
             EnumMap<Mode, ItemStack> productMap = queryTreeProduct(aSapling);
@@ -93,11 +106,11 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
             .toArray(new ItemStack[0]);
         allFruits = allProductsMap.get(Mode.FRUIT)
             .toArray(new ItemStack[0]);
-        allProducts = allProductsMap.values()
-            .stream()
-            .flatMap(ArrayList::stream)
-            .toArray(ItemStack[]::new);
-
+        // allProducts = allProductsMap.values()
+        // .stream()
+        // .flatMap(ArrayList::stream)
+        // .toArray(ItemStack[]::new);
+        allProducts = new ItemStack[][] { allLogs, allSaplings, allLeaves, allFruits };
     }
 
     void loadTreeFarmWithoutToolRecipe() {
@@ -116,22 +129,42 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
             GT_ModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 0, 5),
             TemporalLiquidStack);
         // Death Water
-        // Thaumic Tentacle
+        // Thaumic Tentacle?
 
         // UU Matter
         ItemStack LogSymbol = new ItemStack(Blocks.log, 1, 0);
+        LogSymbol.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.fakeItem.0"
+        // #tr MegaTreeGrowthSimulator.nei.fakeItem.0
+        // # Random logs
+        // #zh_CN 随机原木
+        ));
         addEnchantmentLight(LogSymbol);
         ItemStack SaplingSymbol = new ItemStack(Blocks.sapling, 1, 0);
+        SaplingSymbol.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.fakeItem.1"
+        // #tr MegaTreeGrowthSimulator.nei.fakeItem.1
+        // # Random saplings
+        // #zh_CN 随机树苗
+        ));
         addEnchantmentLight(SaplingSymbol);
         ItemStack LeavesSymbol = new ItemStack(Blocks.leaves, 1, 0);
+        LeavesSymbol.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.fakeItem.2"
+        // #tr MegaTreeGrowthSimulator.nei.fakeItem.2
+        // # Random leaves
+        // #zh_CN 随机树叶
+        ));
         addEnchantmentLight(LeavesSymbol);
         ItemStack FruitSymbol = new ItemStack(Items.apple, 1, 0);
+        FruitSymbol.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.fakeItem.3"
+        // #tr MegaTreeGrowthSimulator.nei.fakeItem.3
+        // # Random fruit
+        // #zh_CN 随机果实
+        ));
         addEnchantmentLight(FruitSymbol);
 
         addFakeRecipe(
             IntegratedCircuitStack,
             new ItemStack[] { LogSymbol, SaplingSymbol, LeavesSymbol, FruitSymbol },
-            allSaplingsIn,
+            allSaplingWithTag,
             UUMatterStack);
     }
 
@@ -147,7 +180,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
     }
 
     void addSpecialFakeRecipe(ItemStack SpecialSapling, FluidStack SpecialFluid) {
-        addFakeRecipe(SpecialSapling, allSaplingsIn, SpecialFluid);
+        addFakeRecipe(SpecialSapling, allSaplingWithTag, SpecialFluid);
     }
 
     void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid) {

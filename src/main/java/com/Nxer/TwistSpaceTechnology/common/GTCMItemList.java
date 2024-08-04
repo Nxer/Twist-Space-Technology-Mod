@@ -189,6 +189,7 @@ public enum GTCMItemList {
     CompositeFarmCasing,
     DenseCyclotronOuterCasing,
     CompactCyclotronCoil,
+    AsepticApparatusCasing,
     // endregion
 
     // region Machines
