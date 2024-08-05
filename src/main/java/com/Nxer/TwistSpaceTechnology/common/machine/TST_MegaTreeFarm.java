@@ -747,8 +747,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 if (RecipeLiquid == null) return SimpleCheckRecipeResult.ofFailure("no_fluid");
 
                 if (controllerTier > 0) RecipeLiquidCost /= 100;
+
                 // multi input hatch available
-                List<ItemStack> outputs = new ArrayList<>();
                 long inputWaterAmount = 0;
                 ArrayList<FluidStack> WaterHatchStack = new ArrayList<>();
                 for (FluidStack aFluid : InputFluids) {
@@ -787,6 +787,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 if (outputNum < availableNum) extraOutput = 1 + (float) (availableNum - outputNum) / outputNum / 3;
 
                 // get running output
+                List<ItemStack> outputs = new ArrayList<>();
                 for (Mode mode : Mode.values()) {
                     int checkMode = getModeOutput(mode);
                     ItemStack output = outputPerMode.get(mode);
