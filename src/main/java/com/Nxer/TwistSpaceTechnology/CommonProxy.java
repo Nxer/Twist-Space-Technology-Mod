@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology;
 
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
@@ -63,6 +64,8 @@ public class CommonProxy {
         TST_BigBroArray.initializeMaterials();
         TST_BigBroArray.initializeStructure();
         TST_BigBroArray.addRecipes();
+
+        GTCMRecipe.prepareBloodyHellRecipes();
     }
 
     // register server commands in this event handler (Remove if not needed)

@@ -342,6 +342,7 @@ public enum GTCMItemList {
     EncapsulatedMicroSpaceTimeUnit,
     SeedsSpaceTime,
     MicroSpaceTimeFabricatorio,
+    BloodyHell,
 
     // endregion
 

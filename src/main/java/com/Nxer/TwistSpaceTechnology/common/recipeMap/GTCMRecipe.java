@@ -1,14 +1,23 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
+import WayofTime.alchemicalWizardry.AlchemicalWizardry;
+import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipe;
+import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipeRegistry;
+import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipe;
+import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipeRegistry;
+import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRecipe;
+import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRegistry;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.MegaTreeGrowthSimulator_SpecialValueFormatter;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemicTierKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
-
 import goodgenerator.client.GUI.GG_UITextures;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.gui.modularui.GT_UITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
@@ -16,6 +25,8 @@ import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 import gregtech.nei.formatter.SimpleSpecialValueFormatter;
+import net.minecraftforge.fluids.FluidStack;
+
 
 public class GTCMRecipe {
 
@@ -254,4 +265,75 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MicroSpaceTimeFabricatorio.get(1)))
         .disableOptimize()
         .build();
+
+    // #tr tst.recipe.BloodyHellRecipes
+    // # Bloody Hell Altar Recipes
+    // #zh_CN 血狱祭坛
+    public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipes = RecipeMapBuilder
+        .of("tst.recipe.BloodyHellRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 1, 1, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
+        .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.BloodyHellAlchemicRecipes
+    // # Bloody Hell Alchemic Chemistry Recipes
+    // #zh_CN 血狱炼金
+    public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipe_Alchemic = RecipeMapBuilder
+        .of("tst.recipe.BloodyHellAlchemicRecipes", TST_RecipeMapBackend::new)
+        .maxIO(5, 1, 1, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
+        .build();
+
+    // #tr tst.recipe.BloodyHellBindingRecipes
+    // # Bloody Hell Binding Ritual Recipes
+    // #zh_CN 血狱绑定仪式
+    public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipe_Binding = RecipeMapBuilder
+        .of("tst.recipe.BloodyHellBindingRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 1, 1, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
+        .build();
+
+    /**
+     * Convert Blood Altar and Alchemic Chemistry Set recipes to GT Recipes and add them to {@link #BloodyHellRecipes} and {@link #BloodyHellRecipe_Alchemic}.
+     * <p>
+     * This method is called at Post-init stage,
+     * which the recipes from Blood Magic should've already registered at Init stage.
+     */
+    public static void prepareBloodyHellRecipes() {
+        for(AltarRecipe recipe : AltarRecipeRegistry.altarRecipes) {
+            // filter empty output recipes, which these recipes are most likely charging orbs.
+            if(recipe.result == null) continue;
+
+            GT_Values.RA.stdBuilder()
+                .itemInputs(recipe.requiredItem)
+                .itemOutputs(recipe.result)
+                .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, recipe.liquidRequired))
+                .eut(0)
+                .duration(1)
+                .metadata(BloodyHellTierKey.INSTANCE, recipe.minTier)
+                .addTo(BloodyHellRecipes);
+        }
+
+        for(AlchemyRecipe recipe : AlchemyRecipeRegistry.recipes) {
+            GT_Values.RA.stdBuilder()
+                .itemInputs(recipe.getRecipe())
+                .itemOutputs(recipe.getResult())
+                .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, recipe.getAmountNeeded() * 100))
+                .eut(0)
+                .duration(1)
+                .metadata(BloodyHellAlchemicTierKey.INSTANCE, recipe.getOrbLevel())
+                .addTo(BloodyHellRecipe_Alchemic);
+        }
+
+        for(BindingRecipe recipe : BindingRegistry.bindingRecipes) {
+            GT_Values.RA.stdBuilder()
+                .itemInputs(recipe.requiredItem)
+                .itemOutputs(recipe.outputItem)
+                .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, 30_000))
+                .eut(0)
+                .duration(1)
+                .addTo(BloodyHellRecipe_Binding);
+        }
+    }
 }
