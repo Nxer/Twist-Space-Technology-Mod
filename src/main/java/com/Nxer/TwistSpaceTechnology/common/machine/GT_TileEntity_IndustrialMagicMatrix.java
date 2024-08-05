@@ -2955,11 +2955,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType(
                 // #tr Tooltip_IndustrialMagicMatrix_MachineType
-                // # Controller block for the Industrial Magic Matrix
+                // # Magic Matrix
                 // #zh_CN §0工业注魔矩阵
                 TextEnums.tr("Tooltip_IndustrialMagicMatrix_MachineType"))
                 // #tr Tooltip_IndustrialMagicMatrix_Controller
-                // # Magic Matrix
+                // # Controller block for the Industrial Magic Matrix
                 // #zh_CN 工业注魔矩阵的控制器方块
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_Controller"))
                 // #tr Tooltip_IndustrialMagicMatrix_00

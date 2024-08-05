@@ -57,10 +57,7 @@ public class ItemRegister {
         GTCMItemList.VoidPollen.set(initItem01("Void Pollen", 21, new String[]{TextHandler.texter("Pollen yet to be arisen.", "tooltips.VoidPollen.line1")}));
         GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.set(initItem01("Primitive Man's SpaceTime Distortion Device", 22, new String[]{TextHandler.texter("Anyway...", "tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1")}));
         GTCMItemList.WirelessUpdateItem.set(initItem01("Wireless Computation update circuit", 23, new String[]{}));
-
-        if (Config.Enable_BallLightning) {
-            GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 24, new String[]{TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
-        }
+        GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 24, new String[]{TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
 
         // #tr EnergyShard.tooltips.01
         // # A piece of pure energy, from dark...
@@ -96,6 +93,27 @@ public class ItemRegister {
         // #zh_CN 能量密度和输出功率均大幅提高.
         GTCMItemList.StrangeAnnihilationFuelRod.set(initItem01("Strange Annihilation Fuel Rod", 29, new String[]{ tr("StrangeAnnihilationFuelRod.tooltips.01"), tr("StrangeAnnihilationFuelRod.tooltips.02"), DSPName, RiseOfDarkFog.getText() }));
 
+        // #tr MetaItem01.30.name
+        // # Fount Of Ecology
+        // #zh_CN 生态泉源
+        // #tr FountOfEcology.tooltips.01
+        // # A perfect creature close to the singularity of evolution, The counselor and lear of The Many.
+        // #zh_CN 临近进化奇点的完美生物, 大群的建言者与引航者
+        // #tr FountOfEcology.tooltips.02
+        // # "The Afterborn Firstborn", Seaborn
+        // #zh_CN "后生的出初生", 海嗣
+        GTCMItemList.FountOfEcology.set(initItem01("Fount Of Ecology",30,new String[]{ tr("FountOfEcology.tooltips.01"), tr("FountOfEcology.tooltips.02") }));
+
+        // #tr MetaItem01.31.name
+        // # "Offspring"
+        // #zh_CN "子代"
+        // #tr Offspring.tooltips.01
+        // # A weak little jellyfish
+        // #zh_CN 一只弱不禁风的小水母
+        // #tr Offspring.tooltips.02
+        // # Seems to be containing additional information
+        // #zh_CN 似乎包含着额外的信息
+        GTCMItemList.OffSpring.set(initItem01("Offspring",31,new String[]{ tr("Offspring.tooltips.01"), tr("Offspring.tooltips.02") }));
 
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));

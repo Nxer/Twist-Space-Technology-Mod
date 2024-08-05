@@ -191,14 +191,19 @@ public class BlockRegister {
                 (byte) 12,
                 BasicBlocks.MetaBlockCasing01));
 
-        GTCMItemList.AsepticApparatusCasing.set(
+        GTCMItemList.AsepticGreenhouseCasing.set(
             MetaBlockConstructors.initMetaBlockCasing(
-                "Aseptic System Casing",
+                "Aseptic Greenhouse Casing",
                 // #tr MetaBlockCasing01.13.name
-                // # Aseptic Apparatus Casing
-                // #zh_CN 无菌系统机械方块
+                // # Aseptic Greenhouse Casing
+                // #zh_CN 无菌温室机械方块
                 (byte) 13,
-                BasicBlocks.MetaBlockCasing01));
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltip_AsepticGreenhouseCasing")
+                // #tr Tooltip_AsepticGreenhouseCasing
+                // # Absolutely Clean!
+                // #zh_CN 一尘不染!
+                }));
 
         // region SpaceTimeOscillator
 

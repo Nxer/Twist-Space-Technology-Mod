@@ -486,9 +486,41 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         // #zh_CN 树厂
         tt.addMachineType(TextEnums.tr("Tooltip_MegaTreeFarm_MachineType"))
             // #tr Tooltip_MegaTreeFarm_Controller
-            // # Controller block for the BioSphere Growth Simulator
-            // #zh_CN 拟生圈的控制方块
+            // # Controller block for the Eco-Sphere Growth Simulator
+            // #zh_CN 拟似生态圈的控制方块
             .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm_Controller"))
+            // #tr Tooltip_MegaTreeFarm.0.01
+            // # {\SPACE}
+            // #zh_CN {\SPACE}
+            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.01"))
+            // #tr Tooltip_MegaTreeFarm.0.02
+            // # Hark to the whispers of all creation......
+            // #zh_CN 聆听万物之声......
+            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.02"))
+            // #tr Tooltip_MegaTreeFarm.0.03
+            // # Yet, save the bees, for they do buzz too loudly.
+            // #zh_CN 等一下, 蜜蜂除外. 它实在是太吵了.
+            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.03"))
+            // #tr Tooltip_MegaTreeFarm.0.04
+            // #
+            // #zh_CN
+            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.04"))
+            // #tr Tooltip_MegaTreeFarm.0.05
+            // #
+            // #zh_CN 得益于神秘使们在推动魔电一体化进程的贡献
+            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.05"))
+            // #tr Tooltip_MegaTreeFarm.0.06
+            // #
+            // #zh_CN
+            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.06"))
+            // #tr Tooltip_MegaTreeFarm.0.07
+            // #
+            // #zh_CN
+            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.07"))
+            // #tr Tooltip_MegaTreeFarm.0.08
+            // #
+            // #zh_CN
+            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.08"))
             .addController(textUseBlueprint)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
@@ -664,6 +696,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 if (outputPerMode == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
 
                 tier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
+                if(tier<1) return SimpleCheckRecipeResult.ofFailure("no_energy");
                 int tier_temp = tier;
                 tierMultiplier = getTierMultiplier(tier);
 
@@ -777,7 +810,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 }
 
                 if (outputs.isEmpty()) {
-                    // No outputs can be produced using the tools we have available.
+                    // No outputs can be produced With the Circuit.
                     return SimpleCheckRecipeResult.ofFailure("no_correct_Circuit");
                 }
 
@@ -802,7 +835,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             + " : "
             + EnumChatFormatting.GOLD
             + (int) this.tierMultiplier;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Tier" + " : " + EnumChatFormatting.GOLD + this.tier;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.tier;
         return ret;
     }
 
