@@ -5,7 +5,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
 public final class CheckRecipeResults {
 
-    static {
+    public static void initStatics() {
         CheckRecipeResultRegistry.register(new SimpleResultWithText(false, "", false));
     }
 

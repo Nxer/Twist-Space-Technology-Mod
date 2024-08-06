@@ -101,6 +101,7 @@ public class TwistSpaceTechnology {
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
+        new LazyStaticsInitLoader().initStaticsOnInit();
         MachineLoader.loadMachines();// Load Machines
         GT_Hatch_RackComputationMonitor.run();
         NEIHandler.IMCSender();// NEI reg
