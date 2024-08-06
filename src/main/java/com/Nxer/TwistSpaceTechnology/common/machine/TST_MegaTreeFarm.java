@@ -696,7 +696,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 if (outputPerMode == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
 
                 tier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
-                if(tier<1) return SimpleCheckRecipeResult.ofFailure("no_energy");
+                if (tier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
                 int tier_temp = tier;
                 tierMultiplier = getTierMultiplier(tier);
 
