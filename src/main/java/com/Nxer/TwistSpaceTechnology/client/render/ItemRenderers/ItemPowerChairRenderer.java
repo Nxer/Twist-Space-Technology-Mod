@@ -12,12 +12,12 @@ import org.lwjgl.opengl.GL11;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
 
-public class PowerChairRenderer implements IItemRenderer {
+public class ItemPowerChairRenderer implements IItemRenderer {
 
     protected IModelCustom models;
     protected ResourceLocation textures;
 
-    public PowerChairRenderer(final IModelCustom models, final ResourceLocation textures) {
+    public ItemPowerChairRenderer(final IModelCustom models, final ResourceLocation textures) {
         this.models = models;
         this.textures = textures;
     }

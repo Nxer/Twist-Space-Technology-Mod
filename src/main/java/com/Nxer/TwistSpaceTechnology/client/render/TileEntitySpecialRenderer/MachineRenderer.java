@@ -17,8 +17,8 @@ public class MachineRenderer extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity TileEntity, double x, double y, double z, float timeSinceLastTick) {
         if (TileEntity instanceof BaseMetaTileEntity T) {
-            if (T.getMetaTileEntity() instanceof IMachineTESR TESR) {
-                TESR.render(this, TileEntity, x, y, z, timeSinceLastTick);
+            if (T.getMetaTileEntity() instanceof IMachineTESR Machine) {
+                Machine.render(this, TileEntity, x, y, z, timeSinceLastTick);
             }
         }
     }
