@@ -1418,3 +1418,7 @@ tst.recipe.BloodyHellRecipes=血狱祭坛
 tst.recipe.BloodyHellAlchemicRecipes=血狱炼金
 tst.recipe.BloodyHellBindingRecipes=血狱绑定仪式
 Tooltip_BloodyHell_0=经过多年的研究，你终于找到了量产血魔法物品的最后一块拼图！
+tst.gui.text.insufficient_tier.1=血魔法祭坛
+tst.gui.text.insufficient_tier.2=血气宝珠
+tst.gui.text.insufficient_tier.3=激活水晶
+tst.gui.text.insufficient_tier=§7配方需要更高的%s等级。需要：%s

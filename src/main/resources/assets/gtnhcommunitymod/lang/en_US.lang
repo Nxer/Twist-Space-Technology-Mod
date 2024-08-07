@@ -1418,3 +1418,7 @@ tst.recipe.BloodyHellRecipes=Bloody Hell Altar Recipes
 tst.recipe.BloodyHellAlchemicRecipes=Bloody Hell Alchemic Chemistry Recipes
 tst.recipe.BloodyHellBindingRecipes=Bloody Hell Binding Ritual Recipes
 Tooltip_BloodyHell_0=After years of researching, you finally find the last piece to mass-produce the Blood Magic things!
+tst.gui.text.insufficient_tier.1=Blood Altar Tier
+tst.gui.text.insufficient_tier.2=Blood Orb
+tst.gui.text.insufficient_tier.3=Activation Crystal
+tst.gui.text.insufficient_tier=§7Recipe needs higher %s tier. Required: %s

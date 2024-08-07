@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
@@ -45,6 +47,8 @@ public class CommonProxy {
         FMLCommonHandler.instance()
             .bus()
             .register(new TickingEvent());
+
+        CheckRecipeResultRegistry.register(new ResultInsufficientTier(0, 0));
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)

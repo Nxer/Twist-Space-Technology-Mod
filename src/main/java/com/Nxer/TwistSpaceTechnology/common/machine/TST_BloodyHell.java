@@ -4,6 +4,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemicTierKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -20,6 +21,7 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -230,18 +232,18 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 // check altar tier
                 int requiredTier = recipe.getMetadataOrDefault(BloodyHellTierKey.INSTANCE, 0);
                 if(requiredTier > getAltarTier()) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(requiredTier);
+                    return ResultInsufficientTier.ofBloodAltar(requiredTier);
                 }
 
                 // check blood orb tier
                 int requiredOrbTier = recipe.getMetadataOrDefault(BloodyHellAlchemicTierKey.INSTANCE, 0);
                 if(requiredOrbTier > getOrbTier()) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(requiredOrbTier);
+                    return ResultInsufficientTier.ofBloodOrb(requiredOrbTier);
                 }
 
                 // check weak activation crystal
                 if(mode == MODE_BINDING && getActivationCrystalTier() < 1) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(1);
+                    return ResultInsufficientTier.ofActivationCrystal(1);
                 }
 
                 return super.validateRecipe(recipe);
