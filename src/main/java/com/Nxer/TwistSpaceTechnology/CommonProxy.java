@@ -1,8 +1,5 @@
 package com.Nxer.TwistSpaceTechnology;
 
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
@@ -11,6 +8,8 @@ import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
 import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
 import com.Nxer.TwistSpaceTechnology.event.TickingEvent;
@@ -24,6 +23,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
 public class CommonProxy {
 

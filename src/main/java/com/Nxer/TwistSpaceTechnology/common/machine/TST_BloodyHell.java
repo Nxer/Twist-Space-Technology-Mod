@@ -1,5 +1,20 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
+import static gregtech.api.enums.GT_HatchElement.*;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemicTierKey;
@@ -12,6 +27,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
+
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -20,32 +36,17 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.block.ModBlocks;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.Collection;
-
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static gregtech.api.enums.GT_HatchElement.*;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
 
-    private static final String[][] STRUCTURE_STRING = new String[][]{{"     ", "     ", "  ~  ", "     ", "     "},
-        {"XXXXX", "XRRRX", "XRRRX", "XRRRX", "XXXXX"},};
+    private static final String[][] STRUCTURE_STRING = new String[][] { { "     ", "     ", "  ~  ", "     ", "     " },
+        { "XXXXX", "XRRRX", "XRRRX", "XRRRX", "XXXXX" }, };
 
     private static final String STRUCTURE_PIECE_MAIN = "main";
 
@@ -53,15 +54,15 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     private static final ITexture[] FACING_ACTIVE = {
         TextureFactory.of(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE), TextureFactory.builder()
-        .addIcon(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
-        .glow()
-        .build()};
+            .addIcon(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
+            .glow()
+            .build() };
 
     private static final int MODE_ALTAR = 0;
     private static final int MODE_ALCHEMIC = 1;
     private static final int MODE_BINDING = 2;
 
-    private static final int[] MODES = new int[]{MODE_ALTAR, MODE_ALCHEMIC, MODE_BINDING};
+    private static final int[] MODES = new int[] { MODE_ALTAR, MODE_ALCHEMIC, MODE_BINDING };
 
     private int mode = MODE_ALTAR;
 
@@ -129,14 +130,14 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int colorIndex, boolean active, boolean redstoneLevel) {
+        int colorIndex, boolean active, boolean redstoneLevel) {
         // TODO: texture
         return FACING_ACTIVE;
     }
 
     @Override
     public IStructureDefinition<TST_BloodyHell> getStructureDefinition() {
-        if(StructureDef == null) {
+        if (StructureDef == null) {
             StructureDef = StructureDefinition.<TST_BloodyHell>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, StructureUtility.transpose(STRUCTURE_STRING))
                 .addElement('R', ofBlockAnyMeta(WayofTime.alchemicalWizardry.ModBlocks.bloodRune))
@@ -157,7 +158,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        if(!checkPiece(STRUCTURE_PIECE_MAIN, 2, 0, 2)) {
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, 2, 0, 2)) {
             return false;
         }
         // TODO: add rune check maybe?
@@ -176,13 +177,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if(mMachine) return -1;
+        if (mMachine) return -1;
         return this.survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 2, 0, 2, elementBudget, env, false, true);
     }
 
     @Override
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if(getBaseMetaTileEntity().isServerSide()) {
+        if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (this.mode + 1) % MODES.length;
 
             // #tr BloodyHell.modeMsg.0
@@ -204,12 +205,15 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.BloodyHellRecipes, GTCMRecipe.BloodyHellRecipe_Alchemic, GTCMRecipe.BloodyHellRecipe_Binding);
+        return Arrays.asList(
+            GTCMRecipe.BloodyHellRecipes,
+            GTCMRecipe.BloodyHellRecipe_Alchemic,
+            GTCMRecipe.BloodyHellRecipe_Binding);
     }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch(mode) {
+        switch (mode) {
             case MODE_ALTAR -> {
                 return GTCMRecipe.BloodyHellRecipes;
             }
@@ -226,23 +230,24 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @Override
     protected ProcessingLogic createProcessingLogic() {
         return new ProcessingLogic() {
+
             @NotNull
             @Override
             protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
                 // check altar tier
                 int requiredTier = recipe.getMetadataOrDefault(BloodyHellTierKey.INSTANCE, 0);
-                if(requiredTier > getAltarTier()) {
+                if (requiredTier > getAltarTier()) {
                     return ResultInsufficientTier.ofBloodAltar(requiredTier);
                 }
 
                 // check blood orb tier
                 int requiredOrbTier = recipe.getMetadataOrDefault(BloodyHellAlchemicTierKey.INSTANCE, 0);
-                if(requiredOrbTier > getOrbTier()) {
+                if (requiredOrbTier > getOrbTier()) {
                     return ResultInsufficientTier.ofBloodOrb(requiredOrbTier);
                 }
 
                 // check weak activation crystal
-                if(mode == MODE_BINDING && getActivationCrystalTier() < 1) {
+                if (mode == MODE_BINDING && getActivationCrystalTier() < 1) {
                     return ResultInsufficientTier.ofActivationCrystal(1);
                 }
 

@@ -1,12 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
-import WayofTime.alchemicalWizardry.AlchemicalWizardry;
-import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipe;
-import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipeRegistry;
-import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipe;
-import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipeRegistry;
-import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRecipe;
-import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
@@ -16,6 +11,14 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
+
+import WayofTime.alchemicalWizardry.AlchemicalWizardry;
+import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipe;
+import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipeRegistry;
+import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipe;
+import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipeRegistry;
+import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRecipe;
+import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRegistry;
 import goodgenerator.client.GUI.GG_UITextures;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.gui.modularui.GT_UITextures;
@@ -25,8 +28,6 @@ import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 import gregtech.nei.formatter.SimpleSpecialValueFormatter;
-import net.minecraftforge.fluids.FluidStack;
-
 
 public class GTCMRecipe {
 
@@ -295,15 +296,16 @@ public class GTCMRecipe {
         .build();
 
     /**
-     * Convert Blood Altar and Alchemic Chemistry Set recipes to GT Recipes and add them to {@link #BloodyHellRecipes} and {@link #BloodyHellRecipe_Alchemic}.
+     * Convert Blood Altar and Alchemic Chemistry Set recipes to GT Recipes and add them to {@link #BloodyHellRecipes}
+     * and {@link #BloodyHellRecipe_Alchemic}.
      * <p>
      * This method is called at Post-init stage,
      * which the recipes from Blood Magic should've already registered at Init stage.
      */
     public static void prepareBloodyHellRecipes() {
-        for(AltarRecipe recipe : AltarRecipeRegistry.altarRecipes) {
+        for (AltarRecipe recipe : AltarRecipeRegistry.altarRecipes) {
             // filter empty output recipes, which these recipes are most likely charging orbs.
-            if(recipe.result == null) continue;
+            if (recipe.result == null) continue;
 
             GT_Values.RA.stdBuilder()
                 .itemInputs(recipe.requiredItem)
@@ -315,7 +317,7 @@ public class GTCMRecipe {
                 .addTo(BloodyHellRecipes);
         }
 
-        for(AlchemyRecipe recipe : AlchemyRecipeRegistry.recipes) {
+        for (AlchemyRecipe recipe : AlchemyRecipeRegistry.recipes) {
             GT_Values.RA.stdBuilder()
                 .itemInputs(recipe.getRecipe())
                 .itemOutputs(recipe.getResult())
@@ -326,7 +328,7 @@ public class GTCMRecipe {
                 .addTo(BloodyHellRecipe_Alchemic);
         }
 
-        for(BindingRecipe recipe : BindingRegistry.bindingRecipes) {
+        for (BindingRecipe recipe : BindingRegistry.bindingRecipes) {
             GT_Values.RA.stdBuilder()
                 .itemInputs(recipe.requiredItem)
                 .itemOutputs(recipe.outputItem)

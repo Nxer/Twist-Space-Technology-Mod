@@ -1,9 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+
 import gregtech.api.recipe.RecipeMetadataKey;
 import gregtech.nei.RecipeDisplayInfo;
-import org.jetbrains.annotations.Nullable;
 
 public class BloodyHellTierKey extends RecipeMetadataKey<Integer> {
 

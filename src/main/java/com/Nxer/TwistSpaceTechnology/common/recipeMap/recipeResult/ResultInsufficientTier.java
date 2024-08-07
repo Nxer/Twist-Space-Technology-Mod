@@ -1,16 +1,19 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult;
 
-import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.util.GT_Utility;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.StatCollector;
+
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.util.GT_Utility;
 
 /**
  * This class adds a new "failed recipe result" to show that something of some type is not met the requirement like
  * {@link gregtech.api.recipe.check.ResultInsufficientMachineTier ResultInsufficientMachineTier}.
  * <p>
- * When you need a new type, you should declare it like below with the localization text. This class has already registered,
+ * When you need a new type, you should declare it like below with the localization text. This class has already
+ * registered,
  * so you must not register twice.
  */
 public class ResultInsufficientTier implements CheckRecipeResult {
