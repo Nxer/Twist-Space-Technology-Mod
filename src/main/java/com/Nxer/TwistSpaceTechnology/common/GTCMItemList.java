@@ -321,6 +321,8 @@ public enum GTCMItemList {
     AdvancedExecutionCore,
     PerfectExecutionCore,
 
+    BloodOrbHatch,
+
     // endregion
 
     // region MAX
