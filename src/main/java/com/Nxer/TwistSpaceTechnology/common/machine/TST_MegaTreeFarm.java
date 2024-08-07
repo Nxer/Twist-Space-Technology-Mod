@@ -96,7 +96,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     // region Structure
-    private int controllerTier = 0;
+    private byte controllerTier = 0;
+    private byte mode =0;
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
@@ -131,6 +132,24 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             }
         }
         return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()){
+            if (!checkStructure(true)) {
+                // #tr BallLightning.modeMsg.IncompleteStructure
+                // # INCOMPLETE STRUCTURE!
+                // #zh_CN 结构不完整!
+                GT_Utility.sendChatToPlayer(
+                    aPlayer,
+                    StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
+                return;
+            }
+            this.mode = (byte) ((this.mode + 1) % (controllerTier+1));
+            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MegaTreeFarm.modeMsg." + this.mode));
+
+        }
     }
 
     @Override
