@@ -1,8 +1,16 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+
+import org.jetbrains.annotations.Nullable;
+
+import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+
 import WayofTime.alchemicalWizardry.AlchemicalWizardry;
 import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
-import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -10,33 +18,25 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import org.jetbrains.annotations.Nullable;
 
 public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
 
     private static final String TEXTURE_NAME_OVERLAY_ACTIVE = "gtnhcommunitymod:overlay_blood_hatch";
     private static final String TEXTURE_NAME_OVERLAY_INACTIVE = "gtnhcommunitymod:overlay_blood_hatch_inactive";
 
-    public static Textures.BlockIcons.CustomIcon OVERLAY_ACTIVE = new Textures.BlockIcons.CustomIcon(TEXTURE_NAME_OVERLAY_ACTIVE);
-    public static Textures.BlockIcons.CustomIcon OVERLAY_INACTIVE = new Textures.BlockIcons.CustomIcon(TEXTURE_NAME_OVERLAY_INACTIVE);
+    public static Textures.BlockIcons.CustomIcon OVERLAY_ACTIVE = new Textures.BlockIcons.CustomIcon(
+        TEXTURE_NAME_OVERLAY_ACTIVE);
+    public static Textures.BlockIcons.CustomIcon OVERLAY_INACTIVE = new Textures.BlockIcons.CustomIcon(
+        TEXTURE_NAME_OVERLAY_INACTIVE);
 
     // TODO: localize the desc and tooltip
 
-    private static final String[] DESC = new String[]{
-        "Life Essence Input for Multiblocks",
-        "Capacity is equal to the Blood Orb capacity inserted.",
-        "A hatch drain Life Essence from the Blood Orb.",
-        "Drains LP as much as possible from the Soul Network."
-    };
+    private static final String[] DESC = new String[] { "Life Essence Input for Multiblocks",
+        "Capacity is equal to the Blood Orb capacity inserted.", "A hatch drain Life Essence from the Blood Orb.",
+        "Drains LP as much as possible from the Soul Network." };
 
-    private static final String[] TOOLTIP = new String[] {
-        "A hatch drain Life Essence from the Blood Orb.",
-        "Drains LP as much as possible from the Soul Network."
-    };
+    private static final String[] TOOLTIP = new String[] { "A hatch drain Life Essence from the Blood Orb.",
+        "Drains LP as much as possible from the Soul Network." };
 
     public TST_BloodOrbHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
@@ -125,8 +125,7 @@ public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
     }
 
     @Override
-    public void generateParticles(World aWorld, String name) {
-    }
+    public void generateParticles(World aWorld, String name) {}
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {

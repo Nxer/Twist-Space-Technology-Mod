@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultip
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -69,6 +68,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
@@ -1439,11 +1439,8 @@ public class MachineLoader {
             // #tr NameBloodOrbHatch
             // # Blood Hatch
             // #zh_CN 血液仓
-            BloodOrbHatch = new TST_BloodOrbHatch(
-                18846,
-                "NameBloodOrbHatch",
-                TextEnums.tr("NameBloodOrbHatch"),
-                4).getStackForm(1);
+            BloodOrbHatch = new TST_BloodOrbHatch(18846, "NameBloodOrbHatch", TextEnums.tr("NameBloodOrbHatch"), 4)
+                .getStackForm(1);
             GTCMItemList.BloodOrbHatch.set(BloodOrbHatch);
         }
 

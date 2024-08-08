@@ -1,12 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.function.Consumer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
+import com.google.common.collect.Lists;
 
 @ApiStatus.Internal
 public class InfoDataHelper {

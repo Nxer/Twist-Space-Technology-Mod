@@ -1,11 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
 import net.minecraft.item.ItemStack;
 
 import org.jetbrains.annotations.Nullable;
 
 import WayofTime.alchemicalWizardry.api.items.interfaces.IBloodOrb;
+import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
 import WayofTime.alchemicalWizardry.common.items.ActivationCrystal;
 import WayofTime.alchemicalWizardry.common.items.BloodShard;
 

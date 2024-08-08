@@ -7,10 +7,6 @@ import static gregtech.api.enums.GT_HatchElement.*;
 import java.util.Arrays;
 import java.util.Collection;
 
-import WayofTime.alchemicalWizardry.ModBlocks;
-import com.Nxer.TwistSpaceTechnology.util.InfoDataHelper;
-import com.Nxer.TwistSpaceTechnology.util.StructuralStringArrayBuilder;
-import com.dreammaster.block.BlockList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -27,12 +23,16 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.InfoDataHelper;
+import com.Nxer.TwistSpaceTechnology.util.StructuralStringArrayBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.dreammaster.block.BlockList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import WayofTime.alchemicalWizardry.ModBlocks;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -53,8 +53,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     private static final ITexture[] FACING_ACTIVE = {
         TextureFactory.of(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE), TextureFactory.builder()
-        .addIcon(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
-        .glow().build() };
+            .addIcon(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
+            .glow()
+            .build() };
 
     private static final int MODE_ALTAR = 0;
     private static final int MODE_ALCHEMIC = 1;
@@ -243,12 +244,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 .addShape(STRUCTURE_PIECE_5, transpose(STRUCTURE_TIER_5))
                 .addElement(
                     'R', // rune or hatches
-                    ofChain(
-                        ofBlockAnyMeta(ModBlocks.bloodRune),
-                        onElementPass((x) -> {
-                            System.out.println("speed rune added");
-                            x.speedRuneCount += 1;
-                        }, ofBlockAnyMeta(ModBlocks.speedRune)),
+                    ofChain(ofBlockAnyMeta(ModBlocks.bloodRune), onElementPass((x) -> {
+                        System.out.println("speed rune added");
+                        x.speedRuneCount += 1;
+                    }, ofBlockAnyMeta(ModBlocks.speedRune)),
                         GT_HatchElementBuilder.<TST_BloodyHell>builder()
                             .atLeast(InputBus, InputHatch, OutputBus)
                             .adder(TST_BloodyHell::addToMachineList)
@@ -324,7 +323,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.BloodyHellRecipes,
+        return Arrays.asList(
+            GTCMRecipe.BloodyHellRecipes,
             GTCMRecipe.BloodyHellRecipe_Alchemic,
             GTCMRecipe.BloodyHellRecipe_Binding);
     }
@@ -393,22 +393,22 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @Override
     public String[] getInfoData() {
         return InfoDataHelper.buildInfoData(super.getInfoData(), (info) -> {
-            info.add(EnumChatFormatting.BLUE
-                + "Machine Mode: "
-                + EnumChatFormatting.GOLD
-                + StatCollector.translateToLocal("BloodyHell.modeMsg." + this.mode));
-            info.add(EnumChatFormatting.BLUE
-                + "Machine Tier: "
-                + EnumChatFormatting.GOLD
-                + this.tier
-                + EnumChatFormatting.GRAY
-                + " ("
-                + EnumChatFormatting.BLUE
-                + "Altar Tier: "
-                + EnumChatFormatting.GOLD
-                + this.getAltarTier()
-                + EnumChatFormatting.GRAY
-                + ")");
+            info.add(
+                EnumChatFormatting.BLUE + "Machine Mode: "
+                    + EnumChatFormatting.GOLD
+                    + StatCollector.translateToLocal("BloodyHell.modeMsg." + this.mode));
+            info.add(
+                EnumChatFormatting.BLUE + "Machine Tier: "
+                    + EnumChatFormatting.GOLD
+                    + this.tier
+                    + EnumChatFormatting.GRAY
+                    + " ("
+                    + EnumChatFormatting.BLUE
+                    + "Altar Tier: "
+                    + EnumChatFormatting.GOLD
+                    + this.getAltarTier()
+                    + EnumChatFormatting.GRAY
+                    + ")");
             info.add(EnumChatFormatting.BLUE + "Speed Rune Count: " + EnumChatFormatting.GOLD + speedRuneCount);
         });
     }
