@@ -7,9 +7,12 @@ import static gregtech.api.enums.GT_HatchElement.*;
 import java.util.Arrays;
 import java.util.Collection;
 
+import WayofTime.alchemicalWizardry.ModBlocks;
 import com.Nxer.TwistSpaceTechnology.util.InfoDataHelper;
 import com.Nxer.TwistSpaceTechnology.util.StructuralStringArrayBuilder;
+import com.dreammaster.block.BlockList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -43,7 +46,6 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import gtPlusPlus.core.block.ModBlocks;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
 
@@ -69,6 +71,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
      */
     private int tier = 0;
 
+    private int speedRuneCount = 0;
+
     public TST_BloodyHell(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -92,6 +96,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     public int getActivationCrystalTier() {
         return BloodMagicHelper.getActivationCrystalTier(getControllerSlot());
+    }
+
+    public double getSpeedRuneModifier() {
+        return 0.0; // TODO
     }
 
     @Override
@@ -176,7 +184,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     /** offset 11,3,11 */
     private static final String STRUCTURE_PIECE_5 = "tier5";
 
-    // region FUCKING STRUCTURES
+    // region STRUCTURES
     // spotless:off
 
     // offsets 1,0,1
@@ -235,21 +243,25 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 .addShape(STRUCTURE_PIECE_5, transpose(STRUCTURE_TIER_5))
                 .addElement(
                     'R', // rune or hatches
-                    ofChain(ofBlockAnyMeta(WayofTime.alchemicalWizardry.ModBlocks.bloodRune),
-                        ofBlock(ModBlocks.blockCasings2Misc, 15),
+                    ofChain(
+                        ofBlockAnyMeta(ModBlocks.bloodRune),
+                        onElementPass((x) -> {
+                            System.out.println("speed rune added");
+                            x.speedRuneCount += 1;
+                        }, ofBlockAnyMeta(ModBlocks.speedRune)),
                         GT_HatchElementBuilder.<TST_BloodyHell>builder()
                             .atLeast(InputBus, InputHatch, OutputBus)
                             .adder(TST_BloodyHell::addToMachineList)
                             .dot(1)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
-                .addElement('A', ofBlockAnyMeta(com.dreammaster.block.BlockList.BloodyThaumium.getBlock()))
-                .addElement('G', ofBlockAnyMeta(net.minecraft.init.Blocks.glowstone))
-                .addElement('B', ofBlockAnyMeta(WayofTime.alchemicalWizardry.ModBlocks.bloodStoneBrick))
-                .addElement('V', ofBlockAnyMeta(com.dreammaster.block.BlockList.BloodyVoid.getBlock()))
-                .addElement('N', ofBlockAnyMeta(net.minecraft.init.Blocks.beacon))
-                .addElement('C', ofBlockAnyMeta(WayofTime.alchemicalWizardry.ModBlocks.blockCrystal))
-                .addElement('I', ofBlockAnyMeta(com.dreammaster.block.BlockList.BloodyIchorium.getBlock()))
+                .addElement('A', ofBlockAnyMeta(BlockList.BloodyThaumium.getBlock()))
+                .addElement('G', ofBlockAnyMeta(Blocks.glowstone))
+                .addElement('B', ofBlockAnyMeta(ModBlocks.bloodStoneBrick))
+                .addElement('V', ofBlockAnyMeta(BlockList.BloodyVoid.getBlock()))
+                .addElement('N', ofBlockAnyMeta(Blocks.beacon))
+                .addElement('C', ofBlockAnyMeta(ModBlocks.blockCrystal))
+                .addElement('I', ofBlockAnyMeta(BlockList.BloodyIchorium.getBlock()))
                 .build();
         }
         return StructureDef;
@@ -384,8 +396,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             info.add(EnumChatFormatting.BLUE
                 + "Machine Mode: "
                 + EnumChatFormatting.GOLD
-                + StatCollector.translateToLocal("BloodyHell.modeMsg." + this.mode)
-            );
+                + StatCollector.translateToLocal("BloodyHell.modeMsg." + this.mode));
             info.add(EnumChatFormatting.BLUE
                 + "Machine Tier: "
                 + EnumChatFormatting.GOLD
@@ -398,6 +409,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 + this.getAltarTier()
                 + EnumChatFormatting.GRAY
                 + ")");
+            info.add(EnumChatFormatting.BLUE + "Speed Rune Count: " + EnumChatFormatting.GOLD + speedRuneCount);
         });
     }
 }

@@ -24,6 +24,20 @@ public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
     public static Textures.BlockIcons.CustomIcon OVERLAY_ACTIVE = new Textures.BlockIcons.CustomIcon(TEXTURE_NAME_OVERLAY_ACTIVE);
     public static Textures.BlockIcons.CustomIcon OVERLAY_INACTIVE = new Textures.BlockIcons.CustomIcon(TEXTURE_NAME_OVERLAY_INACTIVE);
 
+    // TODO: localize the desc and tooltip
+
+    private static final String[] DESC = new String[]{
+        "Life Essence Input for Multiblocks",
+        "Capacity is equal to the Blood Orb capacity inserted.",
+        "A hatch drain Life Essence from the Blood Orb.",
+        "Drains LP as much as possible from the Soul Network."
+    };
+
+    private static final String[] TOOLTIP = new String[] {
+        "A hatch drain Life Essence from the Blood Orb.",
+        "Drains LP as much as possible from the Soul Network."
+    };
+
     public TST_BloodOrbHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
     }
@@ -71,12 +85,12 @@ public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
 
     @Override
     public synchronized String[] getDescription() {
-        return super.getDescription();
+        return DESC;
     }
 
     @Override
     public String[] getCustomTooltip() {
-        return new String[0];
+        return TOOLTIP;
     }
 
     @Override
