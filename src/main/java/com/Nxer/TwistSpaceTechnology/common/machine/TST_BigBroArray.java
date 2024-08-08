@@ -101,6 +101,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.maps.FuelBackend;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -112,6 +113,7 @@ import gregtech.common.blocks.GT_Block_Casings_Abstract;
 import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_CraftingInput_ME;
 import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_InputBus_ME;
 import gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Massfabricator;
+import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.ALLOY;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import io.netty.buffer.ByteBuf;
@@ -151,7 +153,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
 
     private static final String MODE_PROCESSOR = "processor";
 
-    private TileEntity solarTE;
+    private TileEntity generatorTE;
 
     private UUID ownerUUID;
 
@@ -178,20 +180,20 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     private static ITexture[] DEFAULT_CASING_TEXTURE;
 
     // spotless:off
-    public static final String[][] PROCESSING_MACHINE_LIST = new String[][] {
+    public static final String[][] PROCESSING_MACHINE_LIST = new String[][]{
         // OP
-        { "Macerator", "Macerator" }, { "OreWasher", "OreWashingPlant" }, { "ChemicalBath", "ChemicalBath" },
-        { "ThermalCentrifuge", "ThermalCentrifuge" },
+        {"Macerator", "Macerator"}, {"OreWasher", "OreWashingPlant"}, {"ChemicalBath", "ChemicalBath"},
+        {"ThermalCentrifuge", "ThermalCentrifuge"},
         // Processing
-        { "E_Furnace", "ElectricFurnace" }, { "ArcFurnace", "ArcFurnace" }, { "Bender", "BendingMachine" },
-        { "Wiremill", "Wiremill" }, { "Lathe", "Lathe" }, { "Hammer", "ForgeHammer" }, { "Extruder", "Extruder" },
-        { "FluidExtractor", "FluidExtractor" }, { "Compressor", "Compressor" }, { "Press", "FormingPress" },
-        { "FluidSolidifier", "FluidSolidifier" }, { "Extractor", "Extractor" },
-        { "LaserEngraver", "PrecisionLaserEngraver" }, { "Autoclave", "Autoclave" }, { "Mixer", "Mixer" },
-        { "AlloySmelter", "AlloySmelter" }, { "Electrolyzer", "Electrolyzer" }, { "Sifter", "SiftingMachine" },
-        { "ChemicalReactor", "ChemicalReactor" }, { "ElectromagneticSeparator", "ElectromagneticSeparator" },
-        { "Recycler", "Recycler" }, { "Massfab", "MassFabricator" }, { "Centrifuge", "Centrifuge" },
-        { "Cutter", "CuttingMachine" }, { "Assembler", "AssemblingMachine" }, { "CircuitAssembler", "CircuitAssembler" }
+        {"E_Furnace", "ElectricFurnace"}, {"ArcFurnace", "ArcFurnace"}, {"Bender", "BendingMachine"},
+        {"Wiremill", "Wiremill"}, {"Lathe", "Lathe"}, {"Hammer", "ForgeHammer"}, {"Extruder", "Extruder"},
+        {"FluidExtractor", "FluidExtractor"}, {"Compressor", "Compressor"}, {"Press", "FormingPress"},
+        {"FluidSolidifier", "FluidSolidifier"}, {"Extractor", "Extractor"},
+        {"LaserEngraver", "PrecisionLaserEngraver"}, {"Autoclave", "Autoclave"}, {"Mixer", "Mixer"},
+        {"AlloySmelter", "AlloySmelter"}, {"Electrolyzer", "Electrolyzer"}, {"Sifter", "SiftingMachine"},
+        {"ChemicalReactor", "ChemicalReactor"}, {"ElectromagneticSeparator", "ElectromagneticSeparator"},
+        {"Recycler", "Recycler"}, {"Massfab", "MassFabricator"}, {"Centrifuge", "Centrifuge"},
+        {"Cutter", "CuttingMachine"}, {"Assembler", "AssemblingMachine"}, {"CircuitAssembler", "CircuitAssembler"}
         // TODO: bartworks bio lab
     };
 
@@ -209,7 +211,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             " AAAAAAAAA ",
             "  AAAAAAA  ",
             "   AAAAA   "
-        },{
+        }, {
         "   CCCCC   ",
         "  CCCCCCC  ",
         " CCCCCCCCC ",
@@ -221,7 +223,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         " CCCCCCCCC ",
         "  CCCCCCC  ",
         "   CCCCC   "
-    },{
+    }, {
         "           ",
         "           ",
         "   B   B   ",
@@ -233,7 +235,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         "   B   B   ",
         "           ",
         "           "
-    },{
+    }, {
         "           ",
         "           ",
         "   B   B   ",
@@ -245,7 +247,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         "   B   B   ",
         "           ",
         "           "
-    },{
+    }, {
         "           ",
         "           ",
         "   B   B   ",
@@ -269,7 +271,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         "   B   B   ",
         "           ",
         "           "
-    },{
+    }, {
         "           ",
         "           ",
         "   B   B   ",
@@ -281,7 +283,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         "   B   B   ",
         "           ",
         "           "
-    },{
+    }, {
         "     F     ",
         "    EEE    ",
         "   EEEEE   ",
@@ -295,6 +297,433 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         "     F     "
     }};
 
+    private static final String[][] PATTERN_ADDON = new String[][]{{
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "        EEE      ",
+        "       EEEEE     ",
+        "       EEEEE     ",
+        "       EEEEE     ",
+        "        EEE      ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "       EEEEE     ",
+        "      EEEEEEE    ",
+        "     EEE A EEE   ",
+        "     EE  A  EE   ",
+        "     EEAAAAAEE   ",
+        "     EE  A  EE   ",
+        "     EEE A EEE   ",
+        "      EEEEEEE    ",
+        "       EEEEE     ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "       EEEEE     ",
+        "      E  A  E    ",
+        "     E   A   E   ",
+        "    E         E  ",
+        "    E         E  ",
+        "    EAA     AAE  ",
+        "    E         E  ",
+        "    E         E  ",
+        "     E   A   E   ",
+        "      E  A  E    ",
+        "       EEEEE     ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "       EEEEE     ",
+        "      E  A  E    ",
+        "     E       E   ",
+        "    E         E  ",
+        "   E           E ",
+        "   E           E ",
+        "   EA         AE ",
+        "   E           E ",
+        "   E           E ",
+        "    E         E  ",
+        "     E       E   ",
+        "      E  A  E    ",
+        "       EEEEE     ",
+        "                 "
+    }, {
+        "                 ",
+        "      EEEEEEE    ",
+        "     E   A   E   ",
+        "    E         E  ",
+        "   E           E ",
+        "   E           E ",
+        "   E           E ",
+        "   EA         AE ",
+        "   E           E ",
+        "   E           E ",
+        "   E           E ",
+        "    E         E  ",
+        "     E   A   E   ",
+        "      EEEEEEE    ",
+        "                 "
+    }, {
+        "        EEE      ",
+        "     EEEAAAEEE   ",
+        "    E         E  ",
+        "   E           E ",
+        "   E           E ",
+        "   E           E ",
+        "  EA           AE",
+        "  EA           AE",
+        "  EA           AE",
+        "   E           E ",
+        "   E           E ",
+        "   E           E ",
+        "    E         E  ",
+        "     EEEAAAEEE   ",
+        "        EEE      "
+    }, {
+        "       EEEEE     ",
+        "     EEA A AEE   ",
+        "    E         E  ",
+        "   E           E ",
+        "   E           E ",
+        "  EA           AE",
+        "  E             E",
+        "  EA           AE",
+        "  E             E",
+        "  EA           AE",
+        "   E           E ",
+        "   E           E ",
+        "    E         E  ",
+        "     EEA A AEE   ",
+        "       EEEEE     "
+    }, {
+        "       EEEEE     ",
+        "     EEAAAAAEE   ",
+        "    EAA     AAE  ",
+        "   EA         AE ",
+        "   EA         AE ",
+        "  EA           AE",
+        "  EA           AE",
+        "  EA           AE",
+        "  EA           AE",
+        "  EA           AE",
+        "   EA         AE ",
+        "   EA         AE ",
+        "    EAA     AAE  ",
+        "     EEAAAAAEE   ",
+        "       EEEEE     "
+    }, {
+        "       EEEEE     ",
+        "     EEA A AEE   ",
+        "    E         E  ",
+        "   E           E ",
+        "   E           E ",
+        "  EA           AE",
+        "  E             E",
+        "  EA           AE",
+        "  E             E",
+        "  EA           AE",
+        "   E           E ",
+        "   E           E ",
+        "    E         E  ",
+        "     EEA A AEE   ",
+        "       EEEEE     "
+    }, {
+        "        EEE      ",
+        "     EEEAAAEEE   ",
+        "    E         E  ",
+        "   E           E ",
+        "   E           E ",
+        "   E           E ",
+        "  EA           AE",
+        "  EA           AE",
+        "  EA           AE",
+        "   E           E ",
+        "   E           E ",
+        "   E           E ",
+        "    E         E  ",
+        "     EEEAAAEEE   ",
+        "        EEE      "
+    }, {
+        "                 ",
+        "      EEEEEEE    ",
+        "     E   A   E   ",
+        "    E         E  ",
+        "   E           E ",
+        "   E           E ",
+        "   E           E ",
+        "   EA         AE ",
+        "   E           E ",
+        "   E           E ",
+        "   E           E ",
+        "    E         E  ",
+        "     E   A   E   ",
+        "      EEEEEEE    ",
+        "                 "
+    }, {
+        "                 ",
+        "       EEEEE     ",
+        "      E  A  E    ",
+        "     E       E   ",
+        "    E         E  ",
+        "   E           E ",
+        "   E           E ",
+        "   EA         AE ",
+        "   E           E ",
+        "   E           E ",
+        "    E         E  ",
+        "     E       E   ",
+        "      E  A  E    ",
+        "       EEEEE     ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "       EEEEE     ",
+        "      E  A  E    ",
+        "     E   A   E   ",
+        "    E         E  ",
+        "    E         E  ",
+        "    EAA     AAE  ",
+        "    E         E  ",
+        "    E         E  ",
+        "     E   A   E   ",
+        "      E  A  E    ",
+        "       EEEEE     ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "       EEEEE     ",
+        "      EEEEEEE    ",
+        "     EEE A EEE   ",
+        "     EE  A  EE   ",
+        "     EEAAAAAEE   ",
+        "     EE  A  EE   ",
+        "     EEE A EEE   ",
+        "      EEEEEEE    ",
+        "       EEEEE     ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "         BB      ",
+        "                 ",
+        "        EEE      ",
+        "       EEEEE     ",
+        "       EEEEE     ",
+        "       EEEEE     ",
+        "        EEE      ",
+        "                 ",
+        "        BB       ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "           B     ",
+        "            B    ",
+        "                 ",
+        "        DDD      ",
+        "        DCD      ",
+        "        DDD      ",
+        "                 ",
+        "      B          ",
+        "       B         ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "             B   ",
+        "        DDD  B   ",
+        "        DCD      ",
+        "     B  DDD      ",
+        "     B           ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "     B  DDD      ",
+        "     B  DCD  B   ",
+        "        DDD  B   ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "      B          ",
+        "     B           ",
+        "        DDD      ",
+        "        DCD      ",
+        "        DDD      ",
+        "             B   ",
+        "            B    ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "       BB        ",
+        "                 ",
+        "                 ",
+        "        DDD      ",
+        "        DCD      ",
+        "        DDD      ",
+        "                 ",
+        "                 ",
+        "          BB     ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "         BB      ",
+        "                 ",
+        "                 ",
+        "        DDD      ",
+        "        DCD      ",
+        "        DDD      ",
+        "                 ",
+        "                 ",
+        "        BB       ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "           B     ",
+        "            B    ",
+        "                 ",
+        "        DDD      ",
+        "        DCD      ",
+        "        DDD      ",
+        "                 ",
+        "      B          ",
+        "       B         ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "             B   ",
+        "        DDD  B   ",
+        "        DCD      ",
+        "     B  DDD      ",
+        "     B           ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "     B  CCC      ",
+        "     B  CCC  B   ",
+        "        CCC  B   ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "      B          ",
+        "     B CCCCC     ",
+        "       CCCCC     ",
+        "       CCCCC     ",
+        "       CCCCC     ",
+        "       CCCCC B   ",
+        "            B    ",
+        "                 ",
+        "                 ",
+        "                 ",
+        "                 "
+    }, {
+        "                 ",
+        "                 ",
+        "                 ",
+        "     FFFFFFFFF   ",
+        "     FFFFFFFFF   ",
+        "     FFFFFFFFF   ",
+        "     FFFFFFFFF   ",
+        "FFFFFFFFFFFFFF   ",
+        "     FFFFFFFFF   ",
+        "     FFFFFFFFF   ",
+        "     FFFFFFFFF   ",
+        "     FFFFFFFFF   ",
+        "                 ",
+        "                 ",
+        "                 "
+    }};
+
+    /*
+    private static final char PLACEHOLDER_GLASS = 'E';
+    private static final char PLACEHOLDER_FRAME = 'I';
+    private static final char PLACEHOLDER_COIL = 'K';
+    private static final char PLACEHOLDER_PARALLELISM = 'H';
+    private static final char PLACEHOLDER_ADDON_STAINLESS = 'J';
+    */
+
+    /*
     private static final String[][] PATTERN_ADDON = new String[][]{{
         "              ",
         "              ",
@@ -445,7 +874,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         "DDEEEEEDD     ",
         "DDDDDDDDD     ",
         "DDDDDDDDD     "
-    }};
+    }}; */
     // spotless:on
 
     private static final String[][] PATTERN_ADDON_90_CW = new String[PATTERN_ADDON.length][PATTERN_ADDON[0][0]
@@ -524,6 +953,12 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 put("CircuitAssembler", RecipeMaps.class.getDeclaredField("circuitAssemblerRecipes"));
                 put("Diesel", RecipeMaps.class.getDeclaredField("dieselFuels"));
                 put("Gas_Turbine", RecipeMaps.class.getDeclaredField("gasTurbineFuels"));
+                put("Naquadah_1", RecipeMaps.class.getDeclaredField("smallNaquadahReactorFuels"));
+                put("Naquadah_2", RecipeMaps.class.getDeclaredField("largeNaquadahReactorFuels"));
+                put("Naquadah_3", RecipeMaps.class.getDeclaredField("hugeNaquadahReactorFuels"));
+                put("Naquadah_4", RecipeMaps.class.getDeclaredField("extremeNaquadahReactorFuels"));
+                put("Naquadah_5", RecipeMaps.class.getDeclaredField("ultraHugeNaquadahReactorFuels"));
+                put("Semi_Fluid", GTPPRecipeMaps.class.getDeclaredField("semiFluidFuels"));
                 // no recipe map for steam, 2MB steam for 1EU, and 1/80mb distilled water, 1 mb sc for 100EU, and 1mb
                 // steam
             } catch (Exception e) {
@@ -534,10 +969,9 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
 
     // added by getDieselGeneratorsForArray in postInit phase
     public static final Map<String, ItemStack[]> GENERATORS = new HashMap<>();
-    public static final String[] GT_GENERATOR_MACHINE_LIST = new String[] { "Diesel", "Gas_Turbine", "Steam_Turbine",
-        "SemiFluid", "Naquadah" };
 
-    public static final String[] INTER_MOD_GENERATORS = new String[] { "ASP_Solar", "EMT_Solar" };
+    public static final String[] GENERATOR_TYPES = new String[] { "ASP_Solar", "EMT_Solar", "Diesel", "Naquadah",
+        "Semi_Fluid", "Gas_Turbine", "Steam_Turbine" };
 
     private static final Map<String, float[]> GENERATOR_EFFICIENCY = new HashMap<>() {
 
@@ -546,11 +980,9 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             put("Gas_Turbine", new float[] { 0.95f, 0.9f, 0.85f, 0.8f, 0.75f });
             put("Steam_Turbine", new float[] { 1f, 1f, 1f });
             put("Semi_Fluid", new float[] { 0.95f, 0.9f, 0.85f, 0.8f, 0.75f });
-            put("Naquadah", new float[] { 0.8f, 1f, 1.5f, 2f, 2.5f });
+            put("Naquadah", new float[] { 80.0f, 100.0f, 150.0f, 200.0f, 250.0f });
         }
     };
-
-    public static final String GENERATOR_NQ = "Generator_Naquadah";
 
     private static List<Pair<Block, Integer>> FRAMES;
 
@@ -703,7 +1135,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 ItemList.Generator_Gas_Turbine_IV.get(1), });
 
         TST_BigBroArray.GENERATORS.put(
-            "SemiFluid",
+            "Semi_Fluid",
             new ItemStack[] { GregtechItemList.Generator_SemiFluid_LV.get(1),
                 GregtechItemList.Generator_SemiFluid_MV.get(1), GregtechItemList.Generator_SemiFluid_HV.get(1),
                 GregtechItemList.Generator_SemiFluid_EV.get(1), GregtechItemList.Generator_SemiFluid_IV.get(1) });
@@ -778,15 +1210,18 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     }
 
     public static void initializeStructure() {
+
         for (int i = 0; i < PATTERN_ADDON.length; i++) {
             for (int j = 0; j < PATTERN_ADDON[i].length; j++) {
                 PATTERN_ADDON[i][j] = PATTERN_ADDON[i][j].replace('A', 'G')
                     .replace('B', 'H')
                     .replace('C', 'I')
                     .replace('D', 'J')
-                    .replace('E', 'K');
+                    .replace('E', 'K')
+                    .replace('F', 'L');
             }
         }
+
         for (int i = 0; i < PATTERN_ADDON.length; i++) {
             for (int j = 0; j < PATTERN_ADDON[0].length; j++) {
                 // cw 180 addon
@@ -870,12 +1305,12 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             String[][] pattern = strings.get(i);
             builder = builder.addShape("addon" + i, StructureUtility.transpose(pattern))
                 .addElement(
-                    'K',
+                    'I',
                     StructureUtility.withChannel(
                         "coil",
                         GT_StructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
                 .addElement(
-                    'I',
+                    'H',
                     StructureUtility.withChannel(
                         "frame",
                         StructureUtility.ofBlocksTiered(
@@ -885,7 +1320,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                             (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
                             (te) -> te.frameTier)))
                 .addElement(
-                    'G',
+                    'K',
                     StructureUtility.withChannel(
                         "glass",
                         BorosilicateGlass.ofBoroGlass(
@@ -893,7 +1328,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                             (te, tier) -> te.glassTier = te.glassTier >= 0 ? Math.min(tier, te.glassTier) : tier,
                             (te) -> (byte) te.glassTier)))
                 .addElement(
-                    'H',
+                    'G',
                     StructureUtility.withChannel(
                         "parallelism",
                         StructureUtility.ofBlocksTiered(
@@ -902,7 +1337,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                             0,
                             (te, tier) -> { te.parallelismTier = Math.max(tier, te.parallelismTier); },
                             (te) -> te.parallelismTier)))
-                .addElement('J', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1));
+                .addElement('L', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1))
+                .addElement('J', StructureUtility.ofBlock(GregTech_API.sBlockCasings2, 5));
         }
 
         STRUCTURE_DEFINITION = builder.build();
@@ -1010,9 +1446,9 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         aNBT.setLong("actualParallelism", actualParallelism);
         if (mode != null) aNBT.setString("mode", mode);
 
-        if (solarTE != null) {
+        if (generatorTE != null) {
             NBTTagCompound compound = new NBTTagCompound();
-            solarTE.writeToNBT(compound);
+            generatorTE.writeToNBT(compound);
             aNBT.setTag("solarTE", compound);
         }
         NBTTagCompound nbtTagCompound = new NBTTagCompound();
@@ -1055,9 +1491,9 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         }
         if (aNBT.hasKey("solarTE")) {
             NBTTagCompound compound = aNBT.getCompoundTag("solarTE");
-            solarTE = Block.getBlockFromItem(machines.getItem())
+            generatorTE = Block.getBlockFromItem(machines.getItem())
                 .createTileEntity(null, machines.getItemDamage());
-            solarTE.readFromNBT(compound);
+            generatorTE.readFromNBT(compound);
         }
         if (aNBT.hasKey("owner")) {
             ownerUUID = UUID.fromString(aNBT.getString("owner"));
@@ -1096,36 +1532,55 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         return gtcm_processingLogic;
     }
 
+    private long getDieselFuelValue(FluidStack stack) {
+        RecipeMap<?> tRecipes = getRecipeMap();
+        if (stack == null || !(tRecipes.getBackend() instanceof FuelBackend tFuels)) return 0;
+        GT_Recipe tFuel = tFuels.findFuel(stack);
+        if (tFuel == null) return 0;
+        return tFuel.mSpecialValue;
+    }
+
+    private long getNaquadahFuelValue(ItemStack stack) {
+        if (GT_Utility.isStackInvalid(stack) || getRecipeMap() == null) return 0;
+        GT_Recipe tFuel = getRecipeMap().findRecipe(getBaseMetaTileEntity(), false, Long.MAX_VALUE, null, stack);
+        if (tFuel == null) return 0;
+        long liters = 10L; // 1000mb/100
+        return (long) tFuel.mSpecialValue * 10;
+    }
+
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing_EM() {
+        startRecipeProcessing();
+        CheckRecipeResult result;
         if (MODE_PROCESSOR.equals(mode)) {
-            return super.checkProcessing_EM();
+            result = super.checkProcessing_EM();
         } else if (MODE_GENERATOR.equals(mode)) {
+            mMaxProgresstime = 20;
             if ("ASP_Solar".equals(machineType) || "EMT_Solar".equals(machineType)) {
-                mMaxProgresstime = 20;
                 int xCoord = getBaseMetaTileEntity().getXCoord();
                 int yCoord = getBaseMetaTileEntity().getYCoord() + 4;
                 int zCoord = getBaseMetaTileEntity().getZCoord();
-                solarTE.xCoord = xCoord;
-                solarTE.yCoord = yCoord;
-                solarTE.zCoord = zCoord;
-                if (!solarTE.hasWorldObj()) {
-                    solarTE.setWorldObj(getBaseMetaTileEntity().getWorld());
+                generatorTE.xCoord = xCoord;
+                generatorTE.yCoord = yCoord;
+                generatorTE.zCoord = zCoord;
+                if (!generatorTE.hasWorldObj()) {
+                    generatorTE.setWorldObj(getBaseMetaTileEntity().getWorld());
                 }
                 double parallelismBlockBoost = Math.pow(1.5, parallelismTier);
                 double coilBoost = Math.pow(1.1, coilTier.getTier());
                 BigDecimal eut;
-                if (solarTE instanceof TileEntitySolarPanel te) {
+                if (generatorTE instanceof TileEntitySolarPanel te) {
                     te.updateEntity();
                     eut = BigDecimal.valueOf(te.storage);
                     te.storage = 0;
-                } else if (solarTE instanceof TileEntitySolarBase te) {
+                } else if (generatorTE instanceof TileEntitySolarBase te) {
                     te.checkConditions();
                     te.updateEntity();
                     eut = BigDecimal.valueOf(te.energySource.getEnergyStored());
                     te.energySource.drawEnergy(te.energySource.getEnergyStored());
                 } else {
+                    endRecipeProcessing();
                     return CheckRecipeResultRegistry.NO_RECIPE;
                 }
                 output = eut.multiply(BigDecimal.valueOf(parallelismBlockBoost))
@@ -1133,24 +1588,62 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                     .multiply(BigDecimal.valueOf(actualParallelism))
                     .multiply(BigDecimal.valueOf(20))
                     .toBigInteger();
+                result = CheckRecipeResultRegistry.SUCCESSFUL;
+            } else if ("Diesel".equals(machineType) || "Semi_Fluid".equals(machineType)
+                || "Gas_Turbine".equals(machineType)) {
+                    result = CheckRecipeResultRegistry.NO_RECIPE;
+                    for (FluidStack storedFluid : getStoredFluids()) {
+                        long liquidFuelValue = getDieselFuelValue(storedFluid);
+                        if (liquidFuelValue > 0) {
+                            float effiency = GENERATOR_EFFICIENCY.get(machineType)[machineTier - 1];
+                            long expectedGeneration = (32L << (machineTier * 2L)) * actualParallelism * 20;
+                            long energyInFuel = (long) (storedFluid.amount * liquidFuelValue * effiency);
+                            long fuelConsumption = (long) (expectedGeneration / liquidFuelValue / effiency);
+                            output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
+                            storedFluid.amount = (int) Math.max(0, storedFluid.amount - fuelConsumption);
+                            result = CheckRecipeResultRegistry.SUCCESSFUL;
+                            break;
+                        }
+                    }
+                } else if ("Naquadah".equals(machineType)) {
+                    result = CheckRecipeResultRegistry.NO_RECIPE;
+                    for (ItemStack storedInput : getStoredInputs()) {
+                        long fuelValue = getNaquadahFuelValue(storedInput);
+                        if (fuelValue > 0) {
+                            float effiency = GENERATOR_EFFICIENCY.get("Naquadah")[machineTier - 1];
+                            long machineEUt = (32L << ((machineTier + 2) * 2L));
+                            mMaxProgresstime = (int) (fuelValue * effiency / machineEUt);
+                            long expectedGeneration = (long) (fuelValue * effiency * actualParallelism);
+                            long energyInFuel = (long) (storedInput.stackSize * fuelValue * effiency);
+                            long fuelConsumption = (long) (expectedGeneration / fuelValue / effiency);
+                            output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
+                            storedInput.stackSize = (int) Math.max(0, storedInput.stackSize - fuelConsumption);
+                            result = CheckRecipeResultRegistry.SUCCESSFUL;
+                            break;
+                        }
+                    }
+
+                } else {
+                    result = CheckRecipeResultRegistry.NO_RECIPE;
+                }
+            if (result == CheckRecipeResultRegistry.SUCCESSFUL) {
                 long lv = output.longValue();
                 lEUt = lv > 0 ? lv : Long.MAX_VALUE;
                 if (isWirelessMode) {
                     if (ownerUUID == null) {
-                        return CheckRecipeResultRegistry.INTERNAL_ERROR;
+                        result = CheckRecipeResultRegistry.INTERNAL_ERROR;
+                    } else {
+                        addEUToGlobalEnergyMap(ownerUUID, output);
                     }
-                    addEUToGlobalEnergyMap(ownerUUID, output);
                 } else {
                     fillAllDynamos(lEUt);
                 }
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-
-            } else {
-                return CheckRecipeResultRegistry.NO_RECIPE;
             }
         } else {
-            return CheckRecipeResultRegistry.NO_RECIPE;
+            result = CheckRecipeResultRegistry.NO_RECIPE;
         }
+        endRecipeProcessing();
+        return result;
     }
 
     @Override
@@ -1158,13 +1651,18 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         super.drawTexts(screenElements, inventorySlot);
         screenElements
             .widget(
-                new TextWidget(String.format("Generating: %sEU/t", output.divide(BigInteger.valueOf(20))))
-                    .setDefaultColor(COLOR_TEXT_WHITE.get())
-                    .setEnabled(
-                        widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && getBaseMetaTileEntity().isActive()
-                            && MODE_GENERATOR.equals(mode)))
+                new TextWidget(
+                    String.format(
+                        "Generating: %sEU/t",
+                        output.divide(BigInteger.valueOf(mMaxProgresstime > 0 ? mMaxProgresstime : 1))))
+                            .setDefaultColor(COLOR_TEXT_WHITE.get())
+                            .setEnabled(
+                                widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0
+                                    && getBaseMetaTileEntity().isActive()
+                                    && MODE_GENERATOR.equals(mode)))
             .widget(new FakeSyncWidget.StringSyncer(() -> mode, (mode) -> TST_BigBroArray.this.mode = mode))
-            .widget(new FakeSyncWidget.StringSyncer(() -> output.toString(), (l) -> output = new BigInteger(l)));
+            .widget(new FakeSyncWidget.StringSyncer(() -> output.toString(), (l) -> output = new BigInteger(l)))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> mMaxProgresstime, (i) -> mMaxProgresstime = i));
 
         screenElements.widget(
             new TextWidget("Machine state: " + mode).setDefaultColor(COLOR_TEXT_WHITE.get())
@@ -1247,7 +1745,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     public RecipeMap<?> getRecipeMap() {
         if (machines != null) {
             try {
-                Field field = recipeBackendRefMapping.get(machineType);
+                String key = "Naquadah".equals(machineType) ? machineType + "_" + machineTier : machineType;
+                Field field = recipeBackendRefMapping.get(key);
                 if (field == null) {
                     return null;
                 }
@@ -1265,19 +1764,19 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         buildPiece("core", itemStack, hintsOnly, 5, 5, 4);
         int addonCount = Math.min(itemStack.stackSize - 1, 4);
         if (addonCount == 4) {
-            buildPiece("addon3", itemStack, hintsOnly, 4, 12, -7);
+            buildPiece("addon3", itemStack, hintsOnly, 7, 23, 21);
             addonCount--;
         }
         if (addonCount == 3) {
-            buildPiece("addon2", itemStack, hintsOnly, -6, 12, 3);
+            buildPiece("addon2", itemStack, hintsOnly, 22, 23, 6);
             addonCount--;
         }
         if (addonCount == 2) {
-            buildPiece("addon1", itemStack, hintsOnly, 4, 12, 18);
+            buildPiece("addon1", itemStack, hintsOnly, 7, 23, -7);
             addonCount--;
         }
         if (addonCount == 1) {
-            buildPiece("addon0", itemStack, hintsOnly, 19, 12, 3);
+            buildPiece("addon0", itemStack, hintsOnly, -6, 23, 6);
         }
     }
 
@@ -1289,16 +1788,16 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         } else {
             switch (this.addonCount) {
                 case 0:
-                    blockPlacedCount += survivialBuildPiece("addon0", stackSize, 19, 12, 3, elementBudget, env, true);
+                    blockPlacedCount += survivialBuildPiece("addon0", stackSize, -6, 23, 6, elementBudget, env, true);
                     break;
                 case 1:
-                    blockPlacedCount += survivialBuildPiece("addon1", stackSize, 4, 12, 18, elementBudget, env, true);
+                    blockPlacedCount += survivialBuildPiece("addon1", stackSize, 7, 23, -7, elementBudget, env, true);
                     break;
                 case 2:
-                    blockPlacedCount += survivialBuildPiece("addon2", stackSize, -6, 12, 3, elementBudget, env, true);
+                    blockPlacedCount += survivialBuildPiece("addon2", stackSize, 22, 23, 6, elementBudget, env, true);
                     break;
                 case 3:
-                    blockPlacedCount += survivialBuildPiece("addon2", stackSize, -4, 12, -7, elementBudget, env, true);
+                    blockPlacedCount += survivialBuildPiece("addon2", stackSize, 7, 23, 21, elementBudget, env, true);
                     break;
                 default:
                     break;
@@ -1362,22 +1861,22 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         this.addonCount = 0;
         int p = 5;
         this.parallelismTier = 0;
-        if (checkPiece("addon0", 19, 12, 3)) {
+        if (checkPiece("addon0", -6, 23, 6)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon1", 4, 12, 18)) {
+        if (checkPiece("addon1", 7, 23, -7)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon2", -6, 12, 3)) {
+        if (checkPiece("addon2", 22, 23, 6)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon3", 4, 12, -7)) {
+        if (checkPiece("addon3", 7, 23, 21)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
@@ -1392,7 +1891,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         // 5 is place holder, max tier is 4
         this.maxParallelism = calculateMaxParallelismByAddonTier();
         this.casingMultiplier = parallelismTier > 3 ? (parallelismTier + 6) : parallelismTier;
-        this.machineCountForMaxParallelism = (int) (this.maxParallelism << casingMultiplier);
+        this.machineCountForMaxParallelism = (int) (this.maxParallelism >> casingMultiplier);
         this.actualParallelism = calculateParallelismByAddonTier();
         processingLogic.setSpeedBonus((float) Math.pow(0.66, parallelismTier));
         processingLogic.setEuModifier((float) Math.pow(0.9, Math.max(0, coilTier.getTier())));
@@ -1479,22 +1978,25 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                     }
                 }
 
-                for (String machineType : INTER_MOD_GENERATORS) {
+                for (String machineType : GENERATOR_TYPES) {
                     for (int i = 0; i < GENERATORS.get(machineType).length; i++) {
                         ItemStack machineTypeToBeUsed = GENERATORS.get(machineType)[i];
                         if (GT_Utility.areStacksEqual(storedInput, machineTypeToBeUsed, true)) {
                             // create dummy TE for solar generation
-                            solarTE = Block.getBlockFromItem(machineTypeToBeUsed.getItem())
+                            generatorTE = Block.getBlockFromItem(machineTypeToBeUsed.getItem())
                                 .createTileEntity(aPlayer.worldObj, machineTypeToBeUsed.getItemDamage());
                             if ("ASP_Solar".equals(machineType) && i >= (frameTier + 4) && addonCount > 0) continue;
                             // calculate tier with log
                             // (int)log(output / 8, 4) = LV(1), MV(2), HV(3), EV(4), IV(5), .......
                             // supports all machines when there's no additional strucutures or frame level >= 6
                             if ("EMT_Solar".equals(machineType)
-                                && (int) Math.floor(Math.log(((TileEntitySolarBase) solarTE).output / 8) / Math.log(4))
+                                && (int) Math
+                                    .floor(Math.log(((TileEntitySolarBase) generatorTE).output / 8) / Math.log(4))
                                     >= (frameTier + 4)
                                 && frameTier < 6
                                 && addonCount > 0) continue;
+                            if ("Diesel".equals(machineType) && i >= (frameTier + 4) && addonCount > 0) continue;
+                            if ("Naquadah".equals(machineType) && i >= (frameTier + 1) && addonCount > 0) continue;
                             if (machines != null) {
                                 if (GT_Utility.areStacksEqual(machines, storedInput)) {
                                     int d = Math
@@ -1508,7 +2010,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                                 machines.stackSize = Math.min(machineCountForMaxParallelism, machines.stackSize);
                                 storedInput.stackSize -= machines.stackSize;
                                 this.machineType = machineType;
-                                solarTE.setWorldObj(aPlayer.worldObj);
+                                if (generatorTE != null) generatorTE.setWorldObj(aPlayer.worldObj);
                                 machineTier = i + 1;
                             }
                         }
@@ -1543,7 +2045,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             // clear
             addOutput(machines);
             machines = null;
-            solarTE = null;
+            generatorTE = null;
             mode = null;
             actualParallelism = 0;
             int xCoord = getBaseMetaTileEntity().getXCoord();
