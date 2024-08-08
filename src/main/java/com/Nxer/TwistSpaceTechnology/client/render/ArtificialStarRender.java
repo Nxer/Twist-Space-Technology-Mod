@@ -1,15 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.client.render;
 
-import com.Nxer.TwistSpaceTechnology.client.ModelEnum;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
+import com.Nxer.TwistSpaceTechnology.client.ModelEnum;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -44,7 +42,8 @@ public class ArtificialStarRender extends TileEntitySpecialRenderer {
         this.bindTexture(STARTEXTURE);
         GL11.glScaled(size, size, size);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
-        ModelEnum.STAR.get().renderAll();
+        ModelEnum.STAR.get()
+            .renderAll();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);

@@ -12,15 +12,14 @@ public enum ModelEnum {
 
     private IModelCustom Model;
 
-    ModelEnum(){}
+    ModelEnum() {}
 
-    public ModelEnum set(ResourceLocation resourceLocation){
-        this.Model = AdvancedModelLoader
-                .loadModel(resourceLocation);;
+    public ModelEnum set(ResourceLocation resourceLocation) {
+        this.Model = AdvancedModelLoader.loadModel(resourceLocation);;
         return this;
     }
 
-    public IModelCustom get(){
+    public IModelCustom get() {
         return this.Model;
     }
 }

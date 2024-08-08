@@ -2,6 +2,8 @@ package com.Nxer.TwistSpaceTechnology;
 
 import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
 
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +32,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 @Mod(
     modid = Tags.MODID,
@@ -37,7 +40,9 @@ import cpw.mods.fml.common.registry.EntityRegistry;
     name = Tags.MODNAME,
     dependencies = "required-before:gregtech; " + "before:dreamcraft;",
     acceptedMinecraftVersions = "[1.7.10]")
-public class TwistSpaceTechnology {
+@IFMLLoadingPlugin.MCVersion("1.7.10")
+@IFMLLoadingPlugin.TransformerExclusions({ "com.Nxer.TwistSpaceTechnology" })
+public class TwistSpaceTechnology implements IFMLLoadingPlugin {
 
     /**
      * <li>The signal of whether in Development Mode.
@@ -148,4 +153,26 @@ public class TwistSpaceTechnology {
         loadRecipesServerStarted();
     }
 
+    @Override
+    public String[] getASMTransformerClass() {
+        return new String[] { "com.Nxer.TwistSpaceTechnology.ASM.BaseMetaTileEntityASM" };
+    }
+
+    @Override
+    public String getModContainerClass() {
+        return null;
+    }
+
+    @Override
+    public String getSetupClass() {
+        return null;
+    }
+
+    @Override
+    public void injectData(Map<String, Object> data) {}
+
+    @Override
+    public String getAccessTransformerClass() {
+        return null;
+    }
 }

@@ -13,23 +13,33 @@ import static thaumcraft.common.config.ConfigBlocks.*;
 import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
 
+import com.Nxer.TwistSpaceTechnology.client.ModelEnum;
+import com.Nxer.TwistSpaceTechnology.client.render.IMachineTESR;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -50,6 +60,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -70,7 +81,7 @@ import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 
 public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT_TileEntity_IndustrialMagicMatrix>
-    implements ISidedInventory {
+    implements ISidedInventory, IMachineTESR {
 
     // region default value
 
@@ -3168,5 +3179,71 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     .build() };
         }
         return new ITexture[] { TextureFactory.of(blockStoneDevice, 2) };
+    }
+
+    private static final ResourceLocation textures = new ResourceLocation(
+        "gtnhcommunitymod:textures/MagicCircle/WellOfSufferingArray.png");
+    private static final ResourceLocation TestTextures = new ResourceLocation(
+        "gtnhcommunitymod:textures/MagicCircle/Test.png");
+
+    /*
+     * 这里现在是用来测试的
+     */
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox(BaseMetaTileEntity baseMetaTile) {
+        return IMachineTESR.super.getRenderBoundingBox(baseMetaTile);
+    }
+
+    @Override
+    public double getMaxRenderDistanceSquared() {
+        return 65536;
+    }
+
+    @Override
+    public void render(TileEntitySpecialRenderer TESR, TileEntity TileEntity, double x, double y, double z,
+        float timeSinceLastTick) {
+        TextureManager textureManager = Minecraft.getMinecraft()
+            .getTextureManager();
+        long worldTime = TileEntity.getWorldObj()
+            .getTotalWorldTime();
+        GL11.glPushMatrix();
+        Tessellator tessellator = Tessellator.instance;
+        textureManager.bindTexture(textures);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glTranslated(x + 0.5, y - 0.1, z + 0.5);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, 10497.0F);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, 10497.0F);
+        tessellator.startDrawingQuads();
+        tessellator.addVertexWithUV(-2.5, 0, -2.5, 0, 0);
+        tessellator.addVertexWithUV(2.5, 0, -2.5, 1, 0);
+        tessellator.addVertexWithUV(2.5, 0, 2.5, 1, 1);
+        tessellator.addVertexWithUV(-2.5, 0, 2.5, 0, 1);
+        double Rotated = (worldTime % 360 + timeSinceLastTick) * 10 % 360;
+        GL11.glRotated(Rotated, 0, 1, 0);
+        tessellator.draw();
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glPopMatrix();
+
+        float hue = (worldTime + timeSinceLastTick) % 60 / 60.0f;
+        int color = Color.HSBtoRGB(hue, 1.0f, 1.0f);
+
+        float red = (color >> 16 & 255) / 255.0f;
+        float green = (color >> 8 & 255) / 255.0f;
+        float blue = (color & 255) / 255.0f;
+        GL11.glPushMatrix();
+        textureManager.bindTexture(TestTextures);
+        GL11.glTranslated(x + 0.5, y + 4, z + 0.5);
+        GL11.glScalef(0.5F, 0.5F, 0.5F);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glColor3f(red, green, blue);
+        ModelEnum.STAR.get()
+            .renderAll();
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glPopMatrix();
     }
 }
