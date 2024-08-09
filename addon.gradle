@@ -7,7 +7,7 @@ def searchSourceFiles(javaFiles, en_lang, langMap) {
     def colorCodeMap = project.ext.colorCodeMap
 
     javaFiles.each { file ->
-        def content = file.text
+        def content = file.getText("UTF-8")
         content.eachLine { line ->
             switch (state) {
                 case 'tr':
@@ -144,7 +144,7 @@ def writeLanguageFiles(namespace, sort, langMap, ignoreKeyInFile, onlyFile, en_l
     langMap.each { fileName, innerMap ->
         def outputFile = new File("src/main/resources/assets/$namespace/lang/${fileName}.lang")
         outputFile.getParentFile().mkdirs()
-        outputFile.withWriter { writer ->
+        outputFile.withWriter("UTF-8") { writer ->
             if (!sort.empty) {
                 sort.each { line ->
                     if (line.startsWith('//'))

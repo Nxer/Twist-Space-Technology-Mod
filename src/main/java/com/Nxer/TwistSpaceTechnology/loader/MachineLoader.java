@@ -33,6 +33,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BiosphereIII;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility;
@@ -67,6 +68,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
@@ -162,6 +164,8 @@ public class MachineLoader {
     public static ItemStack StrangeMatterAggregator;
     public static ItemStack MicroSpaceTimeFabricatorio;
 
+    public static ItemStack BloodyHell;
+
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
@@ -241,6 +245,8 @@ public class MachineLoader {
     public static ItemStack ExecutionCore;
     public static ItemStack AdvancedExecutionCore;
     public static ItemStack PerfectExecutionCore;
+
+    public static ItemStack BloodOrbHatch;
 
     // endregion
 
@@ -685,6 +691,12 @@ public class MachineLoader {
             "NameMicroSpaceTimeFabricatorio",
             TextEnums.tr("NameMicroSpaceTimeFabricatorio")).getStackForm(1);
         GTCMItemList.MicroSpaceTimeFabricatorio.set(MicroSpaceTimeFabricatorio);
+
+        // #tr NameBloodyHell
+        // # Bloody Hell
+        // #zh_CN 血狱
+        BloodyHell = new TST_BloodyHell(19061, "NameBloodyHell", TextEnums.tr("NameBloodyHell")).getStackForm(1);
+        GTCMItemList.BloodyHell.set(BloodyHell);
 
         // endregion
 
@@ -1424,6 +1436,12 @@ public class MachineLoader {
                 14).getStackForm(1);
             GTCMItemList.PerfectExecutionCore.set(PerfectExecutionCore);
 
+            // #tr NameBloodOrbHatch
+            // # Blood Hatch
+            // #zh_CN 血液仓
+            BloodOrbHatch = new TST_BloodOrbHatch(18846, "NameBloodOrbHatch", TextEnums.tr("NameBloodOrbHatch"), 4)
+                .getStackForm(1);
+            GTCMItemList.BloodOrbHatch.set(BloodOrbHatch);
         }
 
         // endregion

@@ -321,6 +321,8 @@ public enum GTCMItemList {
     AdvancedExecutionCore,
     PerfectExecutionCore,
 
+    BloodOrbHatch,
+
     // endregion
 
     // region MAX
@@ -342,6 +344,7 @@ public enum GTCMItemList {
     EncapsulatedMicroSpaceTimeUnit,
     SeedsSpaceTime,
     MicroSpaceTimeFabricatorio,
+    BloodyHell,
 
     // endregion
 
