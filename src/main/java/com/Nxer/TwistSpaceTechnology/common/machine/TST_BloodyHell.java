@@ -297,11 +297,46 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        // TODO: impl
-        // if (mMachine) return -1;
-        construct(stackSize, false);
-        // return this.survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 2, 0, 2, elementBudget, env, false, true);
-        return 0;
+        if (mMachine) return -1;
+        var size = stackSize.stackSize;
+        var blocksBuilt = 0;
+        if (size > 0) {
+            blocksBuilt += this
+                .survivialBuildPiece(STRUCTURE_PIECE_1, stackSize, 1, 0, 1, elementBudget, env, false, true);
+            if (size > 1) {
+                blocksBuilt += this
+                    .survivialBuildPiece(STRUCTURE_PIECE_2, stackSize, 3, 1, 3, elementBudget, env, false, true);
+                if (size > 2) {
+                    blocksBuilt += this
+                        .survivialBuildPiece(STRUCTURE_PIECE_3, stackSize, 5, 2, 5, elementBudget, env, false, true);
+                    if (size > 3) {
+                        blocksBuilt += this.survivialBuildPiece(
+                            STRUCTURE_PIECE_4,
+                            stackSize,
+                            8,
+                            -3,
+                            8,
+                            elementBudget,
+                            env,
+                            false,
+                            true);
+                        if (size > 4) {
+                            blocksBuilt += this.survivialBuildPiece(
+                                STRUCTURE_PIECE_5,
+                                stackSize,
+                                11,
+                                3,
+                                11,
+                                elementBudget,
+                                env,
+                                false,
+                                true);
+                        }
+                    }
+                }
+            }
+        }
+        return blocksBuilt;
     }
 
     @Override
