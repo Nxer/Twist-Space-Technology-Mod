@@ -715,16 +715,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         "                 "
     }};
 
-    /*
-    private static final char PLACEHOLDER_GLASS = 'E';
-    private static final char PLACEHOLDER_FRAME = 'I';
-    private static final char PLACEHOLDER_COIL = 'K';
-    private static final char PLACEHOLDER_PARALLELISM = 'H';
-    private static final char PLACEHOLDER_ADDON_STAINLESS = 'J';
-    */
 
-    /*
-    private static final String[][] PATTERN_ADDON = new String[][]{{
+    private static final String[][] PATTERN_ADDON_OLD = new String[][]{{
         "              ",
         "              ",
         "              ",
@@ -874,8 +866,16 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         "DDEEEEEDD     ",
         "DDDDDDDDD     ",
         "DDDDDDDDD     "
-    }}; */
+    }};
     // spotless:on
+
+    private static final String[][] PATTERN_ADDON_90_CW_OLD = new String[PATTERN_ADDON_OLD.length][PATTERN_ADDON_OLD[0][0]
+        .length()];
+
+    private static final String[][] PATTERN_ADDON_90_CCW_OLD = new String[PATTERN_ADDON_OLD.length][PATTERN_ADDON_OLD[0][0]
+        .length()];
+
+    private static final String[][] PATTERN_ADDON_180_OLD = new String[PATTERN_ADDON_OLD.length][PATTERN_ADDON_OLD[0].length];
 
     private static final String[][] PATTERN_ADDON_90_CW = new String[PATTERN_ADDON.length][PATTERN_ADDON[0][0]
         .length()];
@@ -1209,6 +1209,83 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         return casingTier;
     }
 
+    public static StructureDefinition.Builder<TST_BigBroArray> initializeStructureOld(
+        StructureDefinition.Builder<TST_BigBroArray> builder) {
+        for (int i = 0; i < PATTERN_ADDON_OLD.length; i++) {
+            for (int j = 0; j < PATTERN_ADDON_OLD[i].length; j++) {
+                PATTERN_ADDON_OLD[i][j] = PATTERN_ADDON_OLD[i][j].replace('A', 'K')
+                    .replace('B', 'G')
+                    .replace('C', 'H')
+                    .replace('D', 'L')
+                    .replace('E', 'I');
+            }
+        }
+        for (int i = 0; i < PATTERN_ADDON_OLD.length; i++) {
+            for (int j = 0; j < PATTERN_ADDON_OLD[0].length; j++) {
+                // cw 180 addon
+                PATTERN_ADDON_180_OLD[i][j] = StringUtils.reverse(PATTERN_ADDON_OLD[i][j]);
+            }
+        }
+        for (int i = 0; i < PATTERN_ADDON_OLD.length; i++) {
+            for (int k = 0; k < PATTERN_ADDON_OLD[0][0].length(); k++) {
+                String rotated = "";
+                for (int j = 0; j < PATTERN_ADDON_OLD[0].length; j++) {
+                    // cw 90 addon
+                    rotated += PATTERN_ADDON_OLD[i][j].charAt(k);
+                }
+                PATTERN_ADDON_90_CW_OLD[i][k] = rotated;
+            }
+        }
+
+        for (int i = 0; i < PATTERN_ADDON_90_CW_OLD.length; i++) {
+            for (int j = 0; j <= PATTERN_ADDON_90_CW_OLD.length / 2; j++) {
+                PATTERN_ADDON_90_CCW_OLD[i][j] = PATTERN_ADDON_90_CW_OLD[i][PATTERN_ADDON_90_CW_OLD[0].length - 1 - j];
+                PATTERN_ADDON_90_CCW_OLD[i][PATTERN_ADDON_90_CW_OLD[0].length - 1 - j] = PATTERN_ADDON_90_CW_OLD[i][j];
+            }
+        }
+        List<String[][]> strings = Arrays
+            .asList(PATTERN_ADDON_OLD, PATTERN_ADDON_90_CW_OLD, PATTERN_ADDON_180_OLD, PATTERN_ADDON_90_CCW_OLD);
+        for (int i = 0; i < strings.size(); i++) {
+            String[][] pattern = strings.get(i);
+            builder = builder.addShape("addon_old" + i, StructureUtility.transpose(pattern))
+                .addElement(
+                    'I',
+                    StructureUtility.withChannel(
+                        "coil",
+                        GT_StructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
+                .addElement(
+                    'H',
+                    StructureUtility.withChannel(
+                        "frame",
+                        StructureUtility.ofBlocksTiered(
+                            TST_BigBroArray::getFrameTier,
+                            FRAMES,
+                            -1,
+                            (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
+                            (te) -> te.frameTier)))
+                .addElement(
+                    'K',
+                    StructureUtility.withChannel(
+                        "glass",
+                        BorosilicateGlass.ofBoroGlass(
+                            (byte) -1,
+                            (te, tier) -> te.glassTier = te.glassTier >= 0 ? Math.min(tier, te.glassTier) : tier,
+                            (te) -> (byte) te.glassTier)))
+                .addElement(
+                    'G',
+                    StructureUtility.withChannel(
+                        "parallelism",
+                        StructureUtility.ofBlocksTiered(
+                            TST_BigBroArray::getParallelismCasingTier,
+                            PARALLELISM_CASINGS,
+                            0,
+                            (te, tier) -> { te.parallelismTier = Math.max(tier, te.parallelismTier); },
+                            (te) -> te.parallelismTier)))
+                .addElement('L', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1));
+        }
+        return builder;
+    }
+
     public static void initializeStructure() {
 
         for (int i = 0; i < PATTERN_ADDON.length; i++) {
@@ -1340,7 +1417,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 .addElement('L', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1))
                 .addElement('J', StructureUtility.ofBlock(GregTech_API.sBlockCasings2, 5));
         }
-
+        builder = initializeStructureOld(builder);
         STRUCTURE_DEFINITION = builder.build();
     }
 
@@ -1861,22 +1938,22 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         this.addonCount = 0;
         int p = 5;
         this.parallelismTier = 0;
-        if (checkPiece("addon0", -6, 23, 6)) {
+        if (checkPiece("addon0", -6, 23, 6) || checkPiece("addon_old0", 19, 12, 3)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon1", 7, 23, -7)) {
+        if (checkPiece("addon1", 7, 23, -7) || checkPiece("addon_old1", 4, 12, 18)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon2", 22, 23, 6)) {
+        if (checkPiece("addon2", 22, 23, 6) || checkPiece("addon_old2", -6, 12, 3)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon3", 7, 23, 21)) {
+        if (checkPiece("addon3", 7, 23, 21) || checkPiece("addon_old3", 4, 12, -7)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
