@@ -147,6 +147,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
+    public void clearHatches() {
+        super.clearHatches();
+        speedRuneCount = 0;
+    }
+
+    @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         if (!checkPiece(STRUCTURE_PIECE_1, 1, 0, 1)) {
             return false;
@@ -244,10 +250,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 .addShape(STRUCTURE_PIECE_5, transpose(STRUCTURE_TIER_5))
                 .addElement(
                     'R', // rune or hatches
-                    ofChain(ofBlockAnyMeta(ModBlocks.bloodRune), onElementPass((x) -> {
-                        System.out.println("speed rune added");
-                        x.speedRuneCount += 1;
-                    }, ofBlockAnyMeta(ModBlocks.speedRune)),
+                    ofChain(
+                        ofBlockAnyMeta(ModBlocks.bloodRune),
+                        onElementPass((x) -> { x.speedRuneCount += 1; }, ofBlockAnyMeta(ModBlocks.speedRune)),
                         GT_HatchElementBuilder.<TST_BloodyHell>builder()
                             .atLeast(InputBus, InputHatch, OutputBus)
                             .adder(TST_BloodyHell::addToMachineList)
