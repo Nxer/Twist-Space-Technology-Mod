@@ -3,10 +3,15 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 import static fox.spiteful.avaritia.items.LudicrousItems.bigPearl;
 import static gregtech.api.enums.TierEU.RECIPE_LV;
 import static gregtech.api.enums.TierEU.RECIPE_LuV;
+import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
+import static gregtech.api.util.GT_RecipeConstants.OREDICT_INPUT;
 import static thaumcraft.common.config.ConfigBlocks.blockCosmeticSolid;
 import static thaumcraft.common.config.ConfigItems.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import net.minecraft.item.Item;
@@ -25,7 +30,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import thaumcraft.common.items.ItemEssence;
+import gregtech.api.util.GT_Recipe;
 
 public class IndustrialMagicMatrixRecipePool implements IRecipePool {
 
@@ -42,6 +47,17 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
         }
         return itemStacks;
     }
+
+    private static final IRecipeMap Test = IRecipeMap.newRecipeMap(builder -> {
+        Collection<GT_Recipe> ret = new ArrayList<>();
+        for (ItemStack itemStack : (ItemStack[]) Objects.requireNonNull(builder.getMetadata(OREDICT_INPUT))) {
+            ret.addAll(
+                builder.copy()
+                    .itemInputs(itemStack)
+                    .addTo(GTCMRecipe.IndustrialMagicMatrixRecipe));
+        }
+        return ret;
+    });
 
     protected Set<Item> skips;
 
@@ -69,6 +85,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
         TCRecipeTools.getInfusionCraftingRecipe();
+        TCRecipeTools.getCrucibleRecipe();
 
         final IRecipeMap IIM = GTCMRecipe.IndustrialMagicMatrixRecipe;
         for (TCRecipeTools.InfusionCraftingRecipe Recipe : TCRecipeTools.ICR) {
@@ -83,7 +100,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
             // # Recipe required Essentia
             // #zh_CN 配方所需源质
             Essence.setStackDisplayName(TextEnums.tr("IndustrialMagicMatrixRecipeInputAspects"));
-            new ItemEssence().setAspects(Essence, Recipe.getInputAspects());
+            TCRecipeTools.setAspects(Essence, Recipe.getInputAspects());
             GT_Values.RA.stdBuilder()
                 .ignoreCollision()
                 .clearInvalid()
@@ -96,6 +113,38 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
                 .duration(200 + Recipe.getInputItem().length * 20 + Math.min(Recipe.getAspectAmount(), 600))
                 .eut(RECIPE_LuV)
                 .addTo(IIM);
+        }
+
+        for (TCRecipeTools.TCCrucibleRecipe C : TCRecipeTools.CR) {
+            ItemStack Essence = new ItemStack(itemEssence);
+            Essence.setItemDamage(1);
+            TCRecipeTools.setAspects(Essence, C.getAspects());
+            Object input = C.getCatalyst();
+            if (input instanceof ArrayList<?>) { // 这里处理矿辞物品输入
+                ArrayList<ItemStack> inputs = (ArrayList<ItemStack>) input;
+                ItemStack[] itemStacks = new ItemStack[inputs.size()];
+                for (int i = 0; i < inputs.size(); i++) {
+                    itemStacks[i] = inputs.get(i);
+                }
+                GT_Values.RA.stdBuilder()
+                    .ignoreCollision()
+                    .special(Essence)
+                    .metadata(OREDICT_INPUT, itemStacks)
+                    .itemOutputs((C.getRecipeOutput()))
+                    .duration(600)
+                    .eut(RECIPE_LuV)
+                    .addTo(Test);
+            } else if (input instanceof ItemStack itemStack) { // 这里处理正常物品输入
+                GT_Values.RA.stdBuilder()
+                    .ignoreCollision()
+                    .special(Essence)
+                    .itemInputs(itemStack)
+                    .itemOutputs(C.getRecipeOutput())
+                    .noOptimize()
+                    .duration(600)
+                    .eut(RECIPE_LuV)
+                    .addTo(AssemblyLine);
+            }
         }
 
         GT_Values.RA.stdBuilder()

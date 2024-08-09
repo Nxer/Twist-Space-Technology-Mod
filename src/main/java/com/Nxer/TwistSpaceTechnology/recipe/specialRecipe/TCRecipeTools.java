@@ -3,17 +3,34 @@ package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
 
 public class TCRecipeTools {
 
     public static ArrayList<InfusionCraftingRecipe> ICR = new ArrayList<>();// InfusionCraftingRecipeList
+    public static ArrayList<TCCrucibleRecipe> CR = new ArrayList<>();
 
     public TCRecipeTools() {}
+
+    public static void getCrucibleRecipe() {
+        for (Object r : ThaumcraftApi.getCraftingRecipes()) {
+            if ((r instanceof CrucibleRecipe recipe && recipe.getRecipeOutput() != null)) {
+                TCCrucibleRecipe c = new TCCrucibleRecipe(
+                    recipe.key,
+                    recipe.getRecipeOutput(),
+                    recipe.catalyst,
+                    recipe.aspects);
+                CR.add(c);
+            }
+        }
+    }
 
     public static void getInfusionCraftingRecipe() {
         for (Object r : ThaumcraftApi.getCraftingRecipes()) {
@@ -34,6 +51,14 @@ public class TCRecipeTools {
             }
         }
 
+    }
+
+    public static void setAspects(ItemStack itemstack, AspectList aspects) {
+        if (!itemstack.hasTagCompound()) {
+            itemstack.setTagCompound(new NBTTagCompound());
+        }
+
+        aspects.writeToNBT(itemstack.getTagCompound());
     }
 
     public static class InfusionCraftingRecipe {
@@ -92,5 +117,39 @@ public class TCRecipeTools {
             return i;
         }
 
+    }
+
+    public static class TCCrucibleRecipe {
+
+        private final ItemStack recipeOutput;
+        private Object catalyst;
+        private final AspectList aspects;
+        private final String key;
+
+        public TCCrucibleRecipe(String researchKey, ItemStack result, Object cat, AspectList tags) {
+            this.recipeOutput = result;
+            this.aspects = tags;
+            this.key = researchKey;
+            this.catalyst = cat;
+            if (cat instanceof String) {
+                this.catalyst = OreDictionary.getOres((String) cat);
+            }
+        }
+
+        public Object getCatalyst() {
+            return catalyst;
+        }
+
+        public AspectList getAspects() {
+            return aspects;
+        }
+
+        public ItemStack getRecipeOutput() {
+            return recipeOutput;
+        }
+
+        public String getKey() {
+            return key;
+        }
     }
 }
