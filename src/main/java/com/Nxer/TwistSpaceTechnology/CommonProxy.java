@@ -15,7 +15,9 @@ import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
 import com.Nxer.TwistSpaceTechnology.event.TickingEvent;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
+import com.Nxer.TwistSpaceTechnology.util.TextureUtils;
 
+import WayofTime.alchemicalWizardry.ModBlocks;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -24,6 +26,7 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.common.render.GT_TextureBuilder;
 
 public class CommonProxy {
 
@@ -49,6 +52,12 @@ public class CommonProxy {
             .register(new TickingEvent());
 
         CheckRecipeResultRegistry.register(new ResultInsufficientTier(0, 0));
+
+        TextureUtils.registerTexture(
+            31,
+            0,
+            new GT_TextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
+                .build());
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)

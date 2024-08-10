@@ -27,6 +27,7 @@ import com.Nxer.TwistSpaceTechnology.util.InfoDataHelper;
 import com.Nxer.TwistSpaceTechnology.util.StructuralStringArrayBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TextureUtils;
 import com.dreammaster.block.BlockList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -34,7 +35,6 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
-import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -274,7 +274,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                             .atLeast(InputBus, InputHatch, OutputBus)
                             .adder(TST_BloodyHell::addToMachineList)
                             .dot(1)
-                            .casingIndex(TAE.getIndexFromPage(1, 15))
+                            .casingIndex(TextureUtils.getTextureIndex(31, 0))
                             .build()))
                 .addElement('A', ofBlockAnyMeta(BlockList.BloodyThaumium.getBlock()))
                 .addElement('G', ofBlockAnyMeta(Blocks.glowstone))
