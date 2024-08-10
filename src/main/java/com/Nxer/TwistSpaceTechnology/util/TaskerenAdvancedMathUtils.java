@@ -65,9 +65,9 @@ public class TaskerenAdvancedMathUtils {
         // max: 16
         // magic: 80
         // =======================
-        // half   62.38  => 8x
+        // half 62.38 => 8x
         // almost 207.23 => 14.4x
-        // max    543    => 15.96x
+        // max 543 => 15.96x
 
         return myMagicFunction(16, 80, speedRuneCount);
     }

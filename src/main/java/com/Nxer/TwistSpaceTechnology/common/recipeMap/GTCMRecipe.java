@@ -1,8 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
-import WayofTime.alchemicalWizardry.ModItems;
-import com.Nxer.TwistSpaceTechnology.util.TSTArrayUtils;
-import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -15,8 +12,10 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
+import com.Nxer.TwistSpaceTechnology.util.TSTArrayUtils;
 
 import WayofTime.alchemicalWizardry.AlchemicalWizardry;
+import WayofTime.alchemicalWizardry.ModItems;
 import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipe;
 import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipeRegistry;
 import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipe;
@@ -30,6 +29,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
+import gregtech.api.util.GT_Utility;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 import gregtech.nei.formatter.SimpleSpecialValueFormatter;
 
@@ -298,7 +298,8 @@ public class GTCMRecipe {
         .maxIO(2, 1, 1, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
         .disableOptimize()
-        .slotOverlays((index, isFluid, isOutput, isSpecial) -> !isFluid && !isOutput ? GT_UITextures.OVERLAY_SLOT_CIRCUIT : null)
+        .slotOverlays(
+            (index, isFluid, isOutput, isSpecial) -> !isFluid && !isOutput ? GT_UITextures.OVERLAY_SLOT_CIRCUIT : null)
         .build();
 
     /**
@@ -332,7 +333,8 @@ public class GTCMRecipe {
 
         for (AlchemyRecipe recipe : AlchemyRecipeRegistry.recipes) {
             GT_Values.RA.stdBuilder()
-                .itemInputs(TSTArrayUtils.concatToLast(ItemStack.class, recipe.getRecipe(), GT_Utility.getIntegratedCircuit(2)))
+                .itemInputs(
+                    TSTArrayUtils.concatToLast(ItemStack.class, recipe.getRecipe(), GT_Utility.getIntegratedCircuit(2)))
                 .itemOutputs(recipe.getResult())
                 .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, recipe.getAmountNeeded() * 100))
                 .eut(0)
@@ -343,7 +345,10 @@ public class GTCMRecipe {
 
         for (BindingRecipe recipe : BindingRegistry.bindingRecipes) {
             GT_Values.RA.stdBuilder()
-                .itemInputs(recipe.requiredItem, new ItemStack(ModItems.weakBloodShard, 0), GT_Utility.getIntegratedCircuit(11))
+                .itemInputs(
+                    recipe.requiredItem,
+                    new ItemStack(ModItems.weakBloodShard, 0),
+                    GT_Utility.getIntegratedCircuit(11))
                 .itemOutputs(recipe.outputItem)
                 .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, bindingRecipeLECost))
                 .eut(0)

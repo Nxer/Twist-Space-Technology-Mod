@@ -16,7 +16,7 @@ public class TSTArrayUtils {
      * @return the result array
      */
     public static <T> T[] concat(Class<T> clazz, T[] first, T[] second) {
-        //noinspection unchecked
+        // noinspection unchecked
         T[] ret = (T[]) Array.newInstance(clazz, first.length + second.length);
 
         System.arraycopy(first, 0, ret, 0, first.length);
@@ -34,7 +34,7 @@ public class TSTArrayUtils {
      * @return the result array
      */
     public static <T> T[] concatToLast(Class<T> clazz, T[] array, T element) {
-        //noinspection unchecked
+        // noinspection unchecked
         T[] ret = (T[]) Array.newInstance(clazz, array.length + 1);
 
         System.arraycopy(array, 0, ret, 0, array.length);

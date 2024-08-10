@@ -67,10 +67,10 @@ public class RecipeLoader {
             new SpaceAssemblerRecipePool(), new CosmicProcessorCircuitRecipePool() };
 
         new SimpleFurnaceFuelPool().loadRecipes();
-        new TCResearches().loadResearches();
         for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
         }
+        new TCResearches().loadResearches();
 
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();

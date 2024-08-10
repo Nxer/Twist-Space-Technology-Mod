@@ -1,6 +1,29 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import WayofTime.alchemicalWizardry.ModBlocks;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.InputHatch;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -18,6 +41,8 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
+import WayofTime.alchemicalWizardry.ModBlocks;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -29,32 +54,6 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.Collection;
-
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textScrewdriverChangeMode;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
 
@@ -276,7 +275,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     ofChain(
                         ofBlockAnyMeta(ModBlocks.bloodRune),
                         onElementPass((x) -> { x.speedRuneCount += 1; }, ofBlockAnyMeta(ModBlocks.speedRune)),
-                        onElementPass((x) -> { x.tbSpeedRuneCount += 1; }, ofBlockAnyMeta(BasicBlocks.timeBendingSpeedRune)),
+                        onElementPass(
+                            (x) -> { x.tbSpeedRuneCount += 1; },
+                            ofBlockAnyMeta(BasicBlocks.timeBendingSpeedRune)),
                         GT_HatchElementBuilder.<TST_BloodyHell>builder()
                             .atLeast(InputBus, InputHatch, OutputBus)
                             .adder(TST_BloodyHell::addToMachineList)
@@ -366,9 +367,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(
-            GTCMRecipe.BloodyHellRecipes
-        );
+        return Arrays.asList(GTCMRecipe.BloodyHellRecipes);
     }
 
     @Override
@@ -397,7 +396,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
                 // check weak activation crystal
                 // if (mode == MODE_BINDING && getActivationCrystalTier() < 1) {
-                //    return ResultInsufficientTier.ofActivationCrystal(1);
+                // return ResultInsufficientTier.ofActivationCrystal(1);
                 // }
 
                 return super.validateRecipe(recipe);
@@ -443,15 +442,15 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     + this.getAltarTier()
                     + EnumChatFormatting.GRAY
                     + ")");
-            info.add(EnumChatFormatting.BLUE
-                + "Speed Rune Count: "
-                + EnumChatFormatting.AQUA
-                + speedRuneCount
-                + EnumChatFormatting.GRAY
-                + ", "
-                + EnumChatFormatting.LIGHT_PURPLE
-                + tbSpeedRuneCount
-                + EnumChatFormatting.GRAY);
+            info.add(
+                EnumChatFormatting.BLUE + "Speed Rune Count: "
+                    + EnumChatFormatting.AQUA
+                    + speedRuneCount
+                    + EnumChatFormatting.GRAY
+                    + ", "
+                    + EnumChatFormatting.LIGHT_PURPLE
+                    + tbSpeedRuneCount
+                    + EnumChatFormatting.GRAY);
             info.add(
                 EnumChatFormatting.BLUE + "Speed Bonus from Tier: " + EnumChatFormatting.GOLD + getTierSpeedBonus());
             info.add(

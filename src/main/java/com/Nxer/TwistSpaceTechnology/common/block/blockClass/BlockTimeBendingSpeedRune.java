@@ -1,7 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass;
 
-import WayofTime.alchemicalWizardry.common.block.SpeedRune;
 import net.minecraft.client.renderer.texture.IIconRegister;
+
+import WayofTime.alchemicalWizardry.common.block.SpeedRune;
 
 public class BlockTimeBendingSpeedRune extends SpeedRune {
 
