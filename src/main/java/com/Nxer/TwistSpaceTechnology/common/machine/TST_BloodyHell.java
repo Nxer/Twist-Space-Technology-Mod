@@ -128,6 +128,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         var tt = new GT_Multiblock_Tooltip_Builder();
+        // spotless:off
+
         // #tr Tooltip_BloodyHell_MachineType
         // # Altar of Blood | Alchemic Chemistry Set | Ritual of Binding
         // #zh_CN 血之祭坛 | 炼金术台 | 绑定仪式
@@ -138,8 +140,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .addInfo(TextEnums.tr("Tooltip_BloodyHell_0"))
             .addSeparator()
             // #tr Tooltip_BloodyHell_1
-            // # Researches show that the speed of soaking ritual is highly related to the greatness of the altar and
-            // the runes it used.
+            // # Researches show that the speed of soaking ritual is highly related to the greatness of the altar and the runes it used.
             // #zh_CN 研究表明浸血仪式的速度与祭坛的精致度和它使用的符文高度相关。
             .addInfo(TextEnums.tr("Tooltip_BloodyHell_1"))
             // #tr Tooltip_BloodyHell_2
@@ -157,6 +158,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .addInfo(TextEnums.Author_Taskeren.getText())
             .toolTipFinisher(ModName);
         return tt;
+        // spotless:on
     }
 
     @Override
