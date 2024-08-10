@@ -151,7 +151,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
             .addController(textUseBlueprint)
-            // TODO: add structure tooltip after done with the structure
+            .addInputBus(textAnyCasing)
+            .addOutputBus(textAnyCasing)
+            .addInputHatch(textAnyCasing)
+            .addInfo(TextEnums.Author_Taskeren.getText())
             .toolTipFinisher(ModName);
         return tt;
     }

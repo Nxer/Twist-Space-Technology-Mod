@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import WayofTime.alchemicalWizardry.AlchemicalWizardry;
 import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
@@ -29,14 +30,24 @@ public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
     public static Textures.BlockIcons.CustomIcon OVERLAY_INACTIVE = new Textures.BlockIcons.CustomIcon(
         TEXTURE_NAME_OVERLAY_INACTIVE);
 
-    // TODO: localize the desc and tooltip
+    // TODO: add Chinese localized text
 
-    private static final String[] DESC = new String[] { "Life Essence Input for Multiblocks",
-        "Capacity is equal to the Blood Orb capacity inserted.", "A hatch drain Life Essence from the Blood Orb.",
-        "Drains LP as much as possible from the Soul Network." };
+    private static final String[] DESC = new String[] {
+        // #tr Tooltip_BloodOrbHatch_1
+        // # Life Essence Input for Multiblocks
+        TextEnums.tr("Tooltip_BloodOrbHatch_1"),
+        // #tr Tooltip_BloodOrbHatch_2
+        // # Capacity is equal to the Blood Orb capacity inserted.
+        TextEnums.tr("Tooltip_BloodOrbHatch_2"),
+        // #tr Tooltip_BloodOrbHatch_3
+        // # A hatch drain Life Essence from the Blood Orb.
+        TextEnums.tr("Tooltip_BloodOrbHatch_3"),
+        // #tr Tooltip_BloodOrbHatch_4
+        // # Drains LP as much as possible from the Soul Network.
+        TextEnums.tr("Tooltip_BloodOrbHatch_4"), TextEnums.Author_Taskeren.getText(), };
 
-    private static final String[] TOOLTIP = new String[] { "A hatch drain Life Essence from the Blood Orb.",
-        "Drains LP as much as possible from the Soul Network." };
+    private static final String[] TOOLTIP = new String[] { TextEnums.tr("Tooltip_BloodOrbHatch_3"),
+        TextEnums.tr("Tooltip_BloodOrbHatch_4") };
 
     public TST_BloodOrbHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
