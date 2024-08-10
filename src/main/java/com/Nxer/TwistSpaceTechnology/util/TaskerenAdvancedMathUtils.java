@@ -46,7 +46,7 @@ public class TaskerenAdvancedMathUtils {
     public static double myMagicFunction(double max, double magicConst, double x) {
         if (max <= 0) throw new IllegalArgumentException("Argument 'max' should be greater than zero");
         if (magicConst <= 0) throw new IllegalArgumentException("Argument 'magicConst' should be greater than zero");
-        if (x <= 0) throw new IllegalArgumentException("Argument 'x' should be greater than zero");
+        if (x < 0) throw new IllegalArgumentException("Argument 'x' should be greater than or equals to zero");
 
         return myMagicFunction_unchecked(max, magicConst, x);
     }
