@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
+import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemicTierKey;
@@ -73,6 +74,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     private int tier = 0;
 
     private int speedRuneCount = 0;
+    private int tbSpeedRuneCount = 0;
 
     public TST_BloodyHell(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -106,7 +108,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     private float getSpeedRuneSpeedBonus() {
         // for more, you should go to the Pull Request of this block
-        return (float) TaskerenAdvancedMathUtils.calcBloodyHellSpeedRuneBonus(speedRuneCount);
+        return (float) TaskerenAdvancedMathUtils.calcBloodyHellSpeedRuneBonus(speedRuneCount + 3 * tbSpeedRuneCount);
     }
 
     @Override
@@ -170,6 +172,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public void clearHatches() {
         super.clearHatches();
         speedRuneCount = 0;
+        tbSpeedRuneCount = 0;
     }
 
     @Override
@@ -273,6 +276,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     ofChain(
                         ofBlockAnyMeta(ModBlocks.bloodRune),
                         onElementPass((x) -> { x.speedRuneCount += 1; }, ofBlockAnyMeta(ModBlocks.speedRune)),
+                        onElementPass((x) -> { x.tbSpeedRuneCount += 1; }, ofBlockAnyMeta(BasicBlocks.timeBendingSpeedRune)),
                         GT_HatchElementBuilder.<TST_BloodyHell>builder()
                             .atLeast(InputBus, InputHatch, OutputBus)
                             .adder(TST_BloodyHell::addToMachineList)
@@ -439,7 +443,15 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     + this.getAltarTier()
                     + EnumChatFormatting.GRAY
                     + ")");
-            info.add(EnumChatFormatting.BLUE + "Speed Rune Count: " + EnumChatFormatting.GOLD + speedRuneCount);
+            info.add(EnumChatFormatting.BLUE
+                + "Speed Rune Count: "
+                + EnumChatFormatting.AQUA
+                + speedRuneCount
+                + EnumChatFormatting.GRAY
+                + ", "
+                + EnumChatFormatting.LIGHT_PURPLE
+                + tbSpeedRuneCount
+                + EnumChatFormatting.GRAY);
             info.add(
                 EnumChatFormatting.BLUE + "Speed Bonus from Tier: " + EnumChatFormatting.GOLD + getTierSpeedBonus());
             info.add(

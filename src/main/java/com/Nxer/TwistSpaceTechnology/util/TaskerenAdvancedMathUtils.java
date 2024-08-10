@@ -29,7 +29,7 @@ public class TaskerenAdvancedMathUtils {
      * If {@code x2 > x1}, then {@code f(x2) - f(x1) < f(x1) - f(0)}.
      * <p>
      * It looks like:
-     * 
+     *
      * <pre>
      * max -------------------------------------------------------------------------
      * |                                                               x
@@ -55,12 +55,21 @@ public class TaskerenAdvancedMathUtils {
         // the maximum possible speed rune count for max tier (t5) is about 180,
         // so the `speedRuneCount` is between 0 and 180
 
+        // V1 (Deprecated)
         // max bonus: 500%
         // magic const: 55.0
         // - x at half efficiency (≈250%): 38.1
         // - x at almost efficiency (≈475%): 164.7
 
-        return myMagicFunction(5.0, 55.0, speedRuneCount);
+        // V2
+        // max: 16
+        // magic: 80
+        // =======================
+        // half   62.38  => 8x
+        // almost 207.23 => 14.4x
+        // max    543    => 15.96x
+
+        return myMagicFunction(16, 80, speedRuneCount);
     }
 
 }

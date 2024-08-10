@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockTimeBendingSpeedRune;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
@@ -35,4 +36,6 @@ public class BasicBlocks {
     public static Block NuclearReactorBlock = new BlockNuclearReactor("nuclear", "Mega Nuclear Reactor");
 
     public static Block BlockPowerChair = new BlockPowerChair();
+
+    public static BlockTimeBendingSpeedRune timeBendingSpeedRune = new BlockTimeBendingSpeedRune();
 }

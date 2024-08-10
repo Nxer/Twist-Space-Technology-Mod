@@ -73,6 +73,8 @@ public class BlockRegister {
         BlockStar = new BlockStar();
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
         GameRegistry.registerTileEntity(TilePowerChair.class, "TilePowerChair");
+
+        GameRegistry.registerBlock(BasicBlocks.timeBendingSpeedRune, "TimeBendingSpeedRune");
     }
 
     public static void registryBlockContainers() {
