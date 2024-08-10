@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
+import WayofTime.alchemicalWizardry.ModItems;
+import com.Nxer.TwistSpaceTechnology.util.TSTArrayUtils;
+import gregtech.api.util.GT_Utility;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -272,7 +276,7 @@ public class GTCMRecipe {
     // #zh_CN 血狱祭坛
     public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipes = RecipeMapBuilder
         .of("tst.recipe.BloodyHellRecipes", TST_RecipeMapBackend::new)
-        .maxIO(1, 1, 1, 0)
+        .maxIO(6, 1, 1, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
         .disableOptimize()
         .build();
@@ -282,7 +286,7 @@ public class GTCMRecipe {
     // #zh_CN 血狱炼金
     public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipe_Alchemic = RecipeMapBuilder
         .of("tst.recipe.BloodyHellAlchemicRecipes", TST_RecipeMapBackend::new)
-        .maxIO(5, 1, 1, 0)
+        .maxIO(6, 1, 1, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
         .build();
 
@@ -291,8 +295,10 @@ public class GTCMRecipe {
     // #zh_CN 血狱绑定仪式
     public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipe_Binding = RecipeMapBuilder
         .of("tst.recipe.BloodyHellBindingRecipes", TST_RecipeMapBackend::new)
-        .maxIO(1, 1, 1, 0)
+        .maxIO(2, 1, 1, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
+        .disableOptimize()
+        .slotOverlays((index, isFluid, isOutput, isSpecial) -> !isFluid && !isOutput ? GT_UITextures.OVERLAY_SLOT_CIRCUIT : null)
         .build();
 
     /**
@@ -307,14 +313,15 @@ public class GTCMRecipe {
         // for example, a recipe costs 1,000L of LE, it should take 10 ticks to craft
         var soakingSpeed = 10;
 
-        var bindingRecipeDuration = 5_000;
+        // the LE cost for each binding ritual
+        var bindingRecipeLECost = 30_000;
 
         for (AltarRecipe recipe : AltarRecipeRegistry.altarRecipes) {
             // filter empty output recipes, which these recipes are most likely charging orbs.
             if (recipe.result == null) continue;
 
             GT_Values.RA.stdBuilder()
-                .itemInputs(recipe.requiredItem)
+                .itemInputs(recipe.requiredItem, GT_Utility.getIntegratedCircuit(1))
                 .itemOutputs(recipe.result)
                 .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, recipe.liquidRequired))
                 .eut(0)
@@ -325,23 +332,23 @@ public class GTCMRecipe {
 
         for (AlchemyRecipe recipe : AlchemyRecipeRegistry.recipes) {
             GT_Values.RA.stdBuilder()
-                .itemInputs(recipe.getRecipe())
+                .itemInputs(TSTArrayUtils.concatToLast(ItemStack.class, recipe.getRecipe(), GT_Utility.getIntegratedCircuit(2)))
                 .itemOutputs(recipe.getResult())
                 .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, recipe.getAmountNeeded() * 100))
                 .eut(0)
                 .duration(recipe.getAmountNeeded() * 100 / soakingSpeed)
                 .metadata(BloodyHellAlchemicTierKey.INSTANCE, recipe.getOrbLevel())
-                .addTo(BloodyHellRecipe_Alchemic);
+                .addTo(BloodyHellRecipes);
         }
 
         for (BindingRecipe recipe : BindingRegistry.bindingRecipes) {
             GT_Values.RA.stdBuilder()
-                .itemInputs(recipe.requiredItem)
+                .itemInputs(recipe.requiredItem, new ItemStack(ModItems.weakBloodShard, 0), GT_Utility.getIntegratedCircuit(11))
                 .itemOutputs(recipe.outputItem)
-                .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, 30_000))
+                .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, bindingRecipeLECost))
                 .eut(0)
-                .duration(bindingRecipeDuration)
-                .addTo(BloodyHellRecipe_Binding);
+                .duration(bindingRecipeLECost / soakingSpeed)
+                .addTo(BloodyHellRecipes);
         }
     }
 }

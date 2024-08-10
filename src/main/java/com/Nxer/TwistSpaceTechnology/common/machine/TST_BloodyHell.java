@@ -1,22 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.*;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static gregtech.api.enums.GT_HatchElement.*;
-
-import java.util.Arrays;
-import java.util.Collection;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import org.jetbrains.annotations.NotNull;
-
+import WayofTime.alchemicalWizardry.ModBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemicTierKey;
@@ -33,8 +17,6 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-
-import WayofTime.alchemicalWizardry.ModBlocks;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -47,6 +29,31 @@ import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textScrewdriverChangeMode;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.InputHatch;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
 
@@ -57,14 +64,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .addIcon(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
             .glow()
             .build() };
-
-    private static final int MODE_ALTAR = 0;
-    private static final int MODE_ALCHEMIC = 1;
-    private static final int MODE_BINDING = 2;
-
-    private static final int[] MODES = new int[] { MODE_ALTAR, MODE_ALCHEMIC, MODE_BINDING };
-
-    private int mode = MODE_ALTAR;
 
     /**
      * the machine tier, it is always less than the altar tier by 1.
@@ -148,7 +147,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             // #zh_CN 在角落里有一行小字写道，“速度符文也许是关键。”
             .addInfo(TextEnums.tr("Tooltip_BloodyHell_2"))
             .addSeparator()
-            .addInfo(textScrewdriverChangeMode)
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
             .addController(textUseBlueprint)
@@ -361,49 +359,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         return blocksBuilt;
     }
 
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (this.mode + 1) % MODES.length;
-
-            // #tr BloodyHell.modeMsg.0
-            // # Altar Mode
-            // #zh_CN 祭坛模式
-
-            // #tr BloodyHell.modeMsg.1
-            // # Alchemic Chemistry Mode
-            // #zh_CN 炼金模式
-
-            // #tr BloodyHell.modeMsg.2
-            // # Binding Ritual Mode
-            // #zh_CN 绑定仪式模式
-
-            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("BloodyHell.modeMsg." + this.mode));
-        }
-    }
-
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(
-            GTCMRecipe.BloodyHellRecipes,
-            GTCMRecipe.BloodyHellRecipe_Alchemic,
-            GTCMRecipe.BloodyHellRecipe_Binding);
+            GTCMRecipe.BloodyHellRecipes
+        );
     }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (mode) {
-            case MODE_ALTAR -> {
-                return GTCMRecipe.BloodyHellRecipes;
-            }
-            case MODE_ALCHEMIC -> {
-                return GTCMRecipe.BloodyHellRecipe_Alchemic;
-            }
-            case MODE_BINDING -> {
-                return GTCMRecipe.BloodyHellRecipe_Binding;
-            }
-        }
         return GTCMRecipe.BloodyHellRecipes;
     }
 
@@ -427,9 +392,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 }
 
                 // check weak activation crystal
-                if (mode == MODE_BINDING && getActivationCrystalTier() < 1) {
-                    return ResultInsufficientTier.ofActivationCrystal(1);
-                }
+                // if (mode == MODE_BINDING && getActivationCrystalTier() < 1) {
+                //    return ResultInsufficientTier.ofActivationCrystal(1);
+                // }
 
                 return super.validateRecipe(recipe);
             }
@@ -449,7 +414,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
-        aNBT.setInteger("mode", this.mode);
         aNBT.setInteger("tier", this.tier);
     }
 
@@ -457,17 +421,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
-        mode = aNBT.getInteger("mode");
         tier = aNBT.getInteger("tier");
     }
 
     @Override
     public String[] getInfoData() {
         return InfoDataHelper.buildInfoData(super.getInfoData(), (info) -> {
-            info.add(
-                EnumChatFormatting.BLUE + "Machine Mode: "
-                    + EnumChatFormatting.GOLD
-                    + StatCollector.translateToLocal("BloodyHell.modeMsg." + this.mode));
             info.add(
                 EnumChatFormatting.BLUE + "Machine Tier: "
                     + EnumChatFormatting.GOLD
