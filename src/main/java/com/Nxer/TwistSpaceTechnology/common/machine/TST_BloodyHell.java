@@ -25,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsuffi
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.InfoDataHelper;
 import com.Nxer.TwistSpaceTechnology.util.StructuralStringArrayBuilder;
+import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.dreammaster.block.BlockList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -99,8 +100,14 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         return BloodMagicHelper.getActivationCrystalTier(getControllerSlot());
     }
 
-    public double getSpeedRuneModifier() {
-        return 0.0; // TODO
+    private float getTierSpeedBonus() {
+        // for more, you should go to the Pull Request of this block
+        return (tier - 1) * 0.5F;
+    }
+
+    private float getSpeedRuneSpeedBonus() {
+        // for more, you should go to the Pull Request of this block
+        return (float) TaskerenAdvancedMathUtils.calcBloodyHellSpeedRuneBonus(speedRuneCount);
     }
 
     @Override
@@ -110,12 +117,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     protected float getSpeedBonus() {
-        return 0;
+        return 1.0F / ((1.0F + getTierSpeedBonus()) * (1.0F + getSpeedRuneSpeedBonus()));
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -129,6 +136,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             // # After years of researching, you finally find the last piece to mass-produce the Blood Magic things!
             // #zh_CN 经过多年的研究，你终于找到了量产血魔法物品的最后一块拼图！
             .addInfo(TextEnums.tr("Tooltip_BloodyHell_0"))
+            .addSeparator()
+            // #tr Tooltip_BloodyHell_1
+            // # Researches show that the speed of soaking ritual is highly related to the greatness of the altar and
+            // the runes it used.
+            // #zh_CN 研究表明浸血仪式的速度与祭坛的精致度和它使用的符文高度相关。
+            .addInfo(TextEnums.tr("Tooltip_BloodyHell_1"))
+            // #tr Tooltip_BloodyHell_2
+            // # And there is a small text on the corner said, "Speed Runes can be the key."
+            // #zh_CN 在角落里有一行小字写道，“速度符文也许是关键。”
+            .addInfo(TextEnums.tr("Tooltip_BloodyHell_2"))
             .addSeparator()
             .addInfo(textScrewdriverChangeMode)
             .addInfo(StructureTooComplex)
@@ -411,7 +428,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
                 return super.validateRecipe(recipe);
             }
-        };
+
+            @Override
+            public @NotNull CheckRecipeResult process() {
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
+
+                return super.process();
+            }
+        }.setMaxParallelSupplier(this::getLimitedMaxParallel);
     }
 
     @Override
@@ -450,6 +476,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     + EnumChatFormatting.GRAY
                     + ")");
             info.add(EnumChatFormatting.BLUE + "Speed Rune Count: " + EnumChatFormatting.GOLD + speedRuneCount);
+            info.add(
+                EnumChatFormatting.BLUE + "Speed Bonus from Tier: " + EnumChatFormatting.GOLD + getTierSpeedBonus());
+            info.add(
+                EnumChatFormatting.BLUE + "Speed Bonus from Rune: "
+                    + EnumChatFormatting.GOLD
+                    + getSpeedRuneSpeedBonus());
         });
     }
 }

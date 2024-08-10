@@ -70,6 +70,9 @@ public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
     private int getMaxCanDrainFromOrb() {
         var orb = getOrbItemStack();
         if (orb != null) {
+            if (BloodMagicHelper.isCreativeOrb(orb)) {
+                return getCapacity() - getFluidAmount(); // the unfilled amount
+            }
             return BloodMagicHelper.getOrbOwnerLpAmount(orb);
         }
         return 0;
@@ -78,6 +81,9 @@ public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
     private int drainFromOrb(int lpAmount) {
         var orb = getOrbItemStack();
         if (orb != null) {
+            if (BloodMagicHelper.isCreativeOrb(orb)) { // creative orb, drain them all!
+                return lpAmount;
+            }
             return SoulNetworkHandler.syphonFromNetwork(orb, lpAmount);
         }
         return 0;
@@ -121,7 +127,8 @@ public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
 
     @Override
     public boolean doesHatchMeetConditionsToGenerate() {
-        return BloodMagicHelper.getOrbOwnerName(getOrbItemStack()) != null;
+        return BloodMagicHelper.getOrbOwnerName(getOrbItemStack()) != null
+            || BloodMagicHelper.isCreativeOrb(getOrbItemStack());
     }
 
     @Override

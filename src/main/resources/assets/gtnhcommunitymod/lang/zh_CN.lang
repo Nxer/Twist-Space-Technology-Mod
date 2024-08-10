@@ -1422,3 +1422,6 @@ tst.gui.text.insufficient_tier.1=血魔法祭坛
 tst.gui.text.insufficient_tier.2=血气宝珠
 tst.gui.text.insufficient_tier.3=激活水晶
 tst.gui.text.insufficient_tier=§7配方需要更高的%s等级。需要：%s
+Tooltip_BloodyHell_1=研究表明浸血仪式的速度与祭坛的精致度和它使用的符文高度相关。
+Tooltip_BloodyHell_2=在角落里有一行小字写道，“速度符文也许是关键。”
+NameBloodOrbHatch=血液仓

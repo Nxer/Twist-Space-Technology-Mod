@@ -303,6 +303,12 @@ public class GTCMRecipe {
      * which the recipes from Blood Magic should've already registered at Init stage.
      */
     public static void prepareBloodyHellRecipes() {
+        // total(Life Essence, L) / soakingSpeed(L/tick) = duration(tick)
+        // for example, a recipe costs 1,000L of LE, it should take 10 ticks to craft
+        var soakingSpeed = 10;
+
+        var bindingRecipeDuration = 5_000;
+
         for (AltarRecipe recipe : AltarRecipeRegistry.altarRecipes) {
             // filter empty output recipes, which these recipes are most likely charging orbs.
             if (recipe.result == null) continue;
@@ -312,7 +318,7 @@ public class GTCMRecipe {
                 .itemOutputs(recipe.result)
                 .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, recipe.liquidRequired))
                 .eut(0)
-                .duration(1)
+                .duration(recipe.liquidRequired / soakingSpeed)
                 .metadata(BloodyHellTierKey.INSTANCE, recipe.minTier)
                 .addTo(BloodyHellRecipes);
         }
@@ -323,7 +329,7 @@ public class GTCMRecipe {
                 .itemOutputs(recipe.getResult())
                 .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, recipe.getAmountNeeded() * 100))
                 .eut(0)
-                .duration(1)
+                .duration(recipe.getAmountNeeded() * 100 / soakingSpeed)
                 .metadata(BloodyHellAlchemicTierKey.INSTANCE, recipe.getOrbLevel())
                 .addTo(BloodyHellRecipe_Alchemic);
         }
@@ -334,7 +340,7 @@ public class GTCMRecipe {
                 .itemOutputs(recipe.outputItem)
                 .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, 30_000))
                 .eut(0)
-                .duration(1)
+                .duration(bindingRecipeDuration)
                 .addTo(BloodyHellRecipe_Binding);
         }
     }

@@ -8,8 +8,13 @@ import WayofTime.alchemicalWizardry.api.items.interfaces.IBloodOrb;
 import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
 import WayofTime.alchemicalWizardry.common.items.ActivationCrystal;
 import WayofTime.alchemicalWizardry.common.items.BloodShard;
+import fox.spiteful.avaritia.items.LudicrousItems;
 
 public class BloodMagicHelper {
+
+    public static boolean isCreativeOrb(@Nullable ItemStack stack) {
+        return stack != null && stack.getItem() == LudicrousItems.armok_orb;
+    }
 
     /**
      * @param stack the ItemStack of Blood Orb
@@ -84,5 +89,4 @@ public class BloodMagicHelper {
             return 0;
         }
     }
-
 }
