@@ -97,6 +97,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     // region Structure
+
     private int controllerTier = 0;
     int mode = 0;
     boolean checkWaterFinish = false;
@@ -143,7 +144,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         }
         return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
     }
-
+    
     @Override
     public void onValueUpdate(byte aValue) {
         controllerTier = aValue;
