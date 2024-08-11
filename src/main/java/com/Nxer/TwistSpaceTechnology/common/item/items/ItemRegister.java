@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.item.items;
 
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01.initItem01;
+import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderIzumik.initItemIzumik;
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderRune.initItemRune;
 import static com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems.MultiStructuresLinkTool;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.RiseOfDarkFog;
@@ -23,7 +24,8 @@ public class ItemRegister {
     public static void registryItems() {
         Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes, MultiStructuresLinkTool,
 
-            BasicItems.MetaItemRune, BasicItems.PowerChair, BasicItems.HatchUpdateTool, BasicItems.Yamato };
+            BasicItems.MetaItemRune, BasicItems.MetaItemIzumik, BasicItems.PowerChair, BasicItems.HatchUpdateTool,
+            BasicItems.Yamato };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.getUnlocalizedName());
@@ -92,28 +94,6 @@ public class ItemRegister {
         // # the energy density and output power are greatly improved.
         // #zh_CN 能量密度和输出功率均大幅提高.
         GTCMItemList.StrangeAnnihilationFuelRod.set(initItem01("Strange Annihilation Fuel Rod", 29, new String[]{ tr("StrangeAnnihilationFuelRod.tooltips.01"), tr("StrangeAnnihilationFuelRod.tooltips.02"), DSPName, RiseOfDarkFog.getText() }));
-
-        // #tr MetaItem01.30.name
-        // # Fount Of Ecology
-        // #zh_CN 生态泉源
-        // #tr FountOfEcology.tooltips.01
-        // # A perfect creature close to the singularity of evolution, The counselor and lear of The Many.
-        // #zh_CN 临近进化奇点的完美生物, 大群的建言者与引航者
-        // #tr FountOfEcology.tooltips.02
-        // # "The Afterborn Firstborn", Seaborn
-        // #zh_CN "后生的出初生", 海嗣
-        GTCMItemList.FountOfEcology.set(initItem01("Fount Of Ecology",30,new String[]{ tr("FountOfEcology.tooltips.01"), tr("FountOfEcology.tooltips.02") }));
-
-        // #tr MetaItem01.31.name
-        // # "Offspring"
-        // #zh_CN "子代"
-        // #tr Offspring.tooltips.01
-        // # A weak little jellyfish
-        // #zh_CN 一只弱不禁风的小水母
-        // #tr Offspring.tooltips.02
-        // # Seems to be containing additional information
-        // #zh_CN 似乎包含着额外的信息
-        GTCMItemList.OffSpring.set(initItem01("Offspring",31,new String[]{ tr("Offspring.tooltips.01"), tr("Offspring.tooltips.02") }));
 
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));
@@ -251,6 +231,49 @@ public class ItemRegister {
         GTCMItemList.Rune_of_Ether.set(initItemRune("Rune of Ether", 2, new String[]{TextHandler.texter("Ether.", "tooltips.Rune_of_Ether.line1")}));
         GTCMItemList.Rune_of_Perdition.set(initItemRune("Rune of Perdition", 3, new String[]{TextHandler.texter("Perdition.", "tooltips.Rune_of_Perdition.line1")}));
 
+        GTCMItemList.FountOfEcology.set(initItemIzumik(
+            "Fount Of Ecology"
+            ,0,
+            // #tr MetaItemIzumik.0.name
+            // # {\BOLD}{\BLUE}Fount Of Ecology
+            // #zh_CN {\BOLD}{\BLUE}生态泉源
+            new String[]{tr("FountOfEcology.tooltips.01"), tr("FountOfEcology.tooltips.02")},
+            // #tr FountOfEcology.tooltips.01
+            // # {\AQUA}A unique looking jellyfish
+            // #zh_CN {\AQUA}一只长相奇特的水母
+            // #tr FountOfEcology.tooltips.02
+            // # {\AQUA}Wait......
+            // #zh_CN {\AQUA}等下......
+            new String[]{tr("FountOfEcology.tooltips.03"), tr("FountOfEcology.tooltips.04")}
+            // #tr FountOfEcology.tooltips.03
+            // # {\GOLD}A perfect creature close to the singularity of evolution, The counselor and lear of The Many.
+            // #zh_CN {\GOLD}临近进化奇点的完美生物 大群的建言者与引航者
+            // #tr FountOfEcology.tooltips.04
+            // # {\GOLD}"The Afterborn Firstborn", Seaborn
+            // #zh_CN {\GOLD}"后生的出初生" 海嗣
+        ));
+
+        GTCMItemList.OffSpring.set(initItemIzumik(
+            "OffSpring"
+            ,1,
+            // #tr MetaItemIzumik.1.name
+            // # {\DARK_AQUA}"Offspring"
+            // #zh_CN {\DARK_AQUA}"子代"
+            new String[]{tr("Offspring.tooltips.01"), tr("Offspring.tooltips.02")},
+            // #tr Offspring.tooltips.01
+            // # {\AQUA}A weak little jellyfish
+            // #zh_CN {\AQUA}一只弱不禁风的小水母
+            // #tr Offspring.tooltips.02
+            // # {\AQUA}Seems to be containing additional information
+            // #zh_CN {\AQUA}似乎包含着额外的信息
+            new String[]{tr("Offspring.tooltips.03"), tr("Offspring.tooltips.04")}
+            // #tr Offspring.tooltips.03
+            // # {\LIGHT_PURPLE}The offspring derived from Izu'mik's evolutionary branches
+            // #zh_CN {\LIGHT_PURPLE}伊祖米克进化分支中衍生出的子代
+            // #tr Offspring.tooltips.04
+            // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
+            // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
+        ));
         GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
         GTCMItemList.PowerChair.set(new ItemStack(BasicItems.PowerChair, 1));
 
@@ -260,8 +283,7 @@ public class ItemRegister {
 
     }
 
-
-    // spotless:on
+       // spotless:on
     public static void registry() {
         registryItems();
         registryItemContainers();

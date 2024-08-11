@@ -159,6 +159,7 @@ public enum GTCMItemList {
     HatchUpdateTool,
     FountOfEcology,
     OffSpring,
+
     // endregion
 
     // region Blocks

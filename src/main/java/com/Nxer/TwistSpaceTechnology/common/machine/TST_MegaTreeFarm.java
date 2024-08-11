@@ -21,6 +21,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -97,13 +98,23 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     // region Structure
     private int controllerTier = 0;
+    int mode = 0;
+    boolean checkWaterFinish = false;
+    boolean checkAirFinish = false;
+    private static ItemStack FountOfEcology;
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (FountOfEcology == null) FountOfEcology = GTCMItemList.FountOfEcology.get(1);
+    }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0 && controllerTier == 0) {
             ItemStack ControllerSlot = this.getControllerSlot();
-            if (metaItemEqual(GTCMItemList.TestItem0.get(1), ControllerSlot)) {
+            if (metaItemEqual(FountOfEcology, ControllerSlot)) {
                 controllerTier = 1;
                 mInventory[1] = ItemUtils.depleteStack(ControllerSlot);
                 markDirty();
@@ -118,7 +129,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         float aX, float aY, float aZ) {
         if (controllerTier == 0 && !aPlayer.isSneaking()) {
             ItemStack heldItem = aPlayer.getHeldItem();
-            if (metaItemEqual(GTCMItemList.TestItem0.get(1), heldItem)) {
+            if (metaItemEqual(FountOfEcology, heldItem)) {
                 controllerTier = 1;
                 aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
                 if (getBaseMetaTileEntity().isServerSide()) {
@@ -155,6 +166,16 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         controllerTier = aNBT.getByte("mTier");
     }
 
+    // @Override
+    // public void initDefaultModes(NBTTagCompound aNBT) {
+    // super.initDefaultModes(aNBT);
+    // if (aNBT == null) {
+    // controllerTier = 0;
+    // } else {
+    // controllerTier = aNBT.getByte("mTier");
+    // }
+    // }
+
     @Override
     public void setItemNBT(NBTTagCompound aNBT) {
         super.setItemNBT(aNBT);
@@ -165,7 +186,12 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void addAdditionalTooltipInformation(ItemStack stack, List<String> tooltip) {
         super.addAdditionalTooltipInformation(stack, tooltip);
         NBTTagCompound aNBT = stack.getTagCompound();
-        int tier = aNBT.getInteger("mTier") + 1;
+        int tier;
+        if (aNBT == null) {
+            tier = 1;
+        } else {
+            tier = aNBT.getInteger("mTier") + 1;
+        }
         tooltip.add(StatCollector.translateToLocalFormatted("tooltip.large_macerator.tier", tier));
     }
 
@@ -186,6 +212,22 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 "Tier: " + EnumChatFormatting.YELLOW
                     + GT_Utility.formatNumbers(tag.getInteger("tier"))
                     + EnumChatFormatting.RESET);
+        }
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            if (!checkStructure(true)) {
+                GT_Utility.sendChatToPlayer(
+                    aPlayer,
+                    StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
+                return;
+            }
+
+            this.mode = (byte) ((this.mode + 1) % (controllerTier + 1));
+            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MegaTreeFram.modeMsg." + this.mode));
+
         }
     }
 
@@ -477,6 +519,17 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private final String[][] water = new String[][]{
         {"P"}
     };
+    // Only Use for checkwater()
+    private final String[][] StructureWater = new String[][]{
+        {"ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ"},
+        {"ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ"},
+        {"ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ"},
+        {"ZZZZZZZZZZPPPPPZZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZZPPPPPZZZZZZZZZZ"},
+        {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZPPPPPPPPPZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZPPPPPPPPPZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
+        {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
+        {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZPPPZZZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZZZPPPZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
+        {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
+    };
 
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
@@ -530,9 +583,110 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     // spotless:on
+
+    private void SetRemoveWater() {
+
+        // checkType = true, check Water
+        boolean checkType = mode != 0;
+
+        IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
+        int mDirectionX = aBaseMetaTileEntity.getBackFacing().offsetX;
+        String[][] StructureDef = StructureWater;
+        Block Air = Blocks.air;
+        Block Water = Blocks.water;
+        Block TargetBlock;
+        Block CasingBlock = controllerTier > 0 ? GregTech_API.sBlockCasings4 : GregTech_API.sBlockCasings1;
+        int CasingMeta = controllerTier > 0 ? 1 : 10;
+        int[][] CasingCoordinate = { { 0, 30, 2 }, { 11, 30, -9 }, { -11, 30, -9 }, { 0, 30, -20 } };
+        int OffSetX = 12;
+        int OffSetY = 25;
+        int OffSetZ = 3;
+        int LengthX = StructureDef[0].length;
+        int LengthY = StructureDef.length;
+        int LengthZ = LengthX;
+        int mCurrentDirectionX;
+        int mCurrentDirectionZ;
+
+        if (mDirectionX == 0) {
+            mCurrentDirectionX = 2;
+            mCurrentDirectionZ = 3;
+        } else {
+            mCurrentDirectionX = 3;
+            mCurrentDirectionZ = 2;
+        }
+        final int xDir = aBaseMetaTileEntity.getBackFacing().offsetX * mCurrentDirectionX;
+        final int zDir = aBaseMetaTileEntity.getBackFacing().offsetZ * mCurrentDirectionZ;
+
+        if (checkType && !checkWaterFinish) {
+            checkAirFinish = false;
+            TargetBlock = Water;
+            for (int x = -LengthX / 2; x < LengthX / 2; x++) {
+                for (int z = -LengthZ / 2; z < LengthZ / 2; z++) {
+                    for (int y = 0; y < LengthY; y++) {
+                        String ListStr = String.valueOf(StructureDef[y][x + LengthX / 2].charAt(z + LengthZ / 2));
+                        if (Objects.equals(ListStr, "Z")) continue;
+                        Block aBlock = aBaseMetaTileEntity
+                            .getBlockOffset(OffSetX + xDir + x, OffSetY + y, OffSetZ + zDir + z);
+                        if (aBlock == TargetBlock) continue;
+                        aBaseMetaTileEntity.getWorld()
+                            .setBlock(
+                                aBaseMetaTileEntity.getXCoord() + OffSetX + xDir + x,
+                                aBaseMetaTileEntity.getYCoord() + OffSetY + y,
+                                aBaseMetaTileEntity.getZCoord() + OffSetZ + zDir + z,
+                                TargetBlock);
+                    }
+                }
+            }
+            checkWaterFinish = true;
+        } else if (!checkType && !checkAirFinish) {
+            checkWaterFinish = false;
+            // set Casing to Block Water
+            for (int y = 0; y < 5; y++) {
+                for (int i = 0; i < 4; i++) {
+                    aBaseMetaTileEntity.getWorld()
+                        .setBlock(
+                            aBaseMetaTileEntity.getXCoord() + xDir + CasingCoordinate[i][0],
+                            aBaseMetaTileEntity.getYCoord() + CasingCoordinate[i][1] - y,
+                            aBaseMetaTileEntity.getZCoord() + zDir + CasingCoordinate[i][2],
+                            CasingBlock,
+                            CasingMeta,
+                            3);
+                }
+            }
+            TargetBlock = Air;
+            for (int x = -LengthX / 2; x < LengthX / 2; x++) {
+                for (int z = -LengthZ / 2; z < LengthZ / 2; z++) {
+                    for (int y = LengthY - 1; y >= 0; y--) {
+                        String ListStr = String.valueOf(StructureDef[y][x + LengthX / 2].charAt(z + LengthZ / 2));
+                        if (Objects.equals(ListStr, "Z")) continue;
+                        Block aBlock = aBaseMetaTileEntity
+                            .getBlockOffset(OffSetX + xDir + x, OffSetY + y, OffSetZ + zDir + z);
+                        if (aBlock == TargetBlock) continue;
+                        aBaseMetaTileEntity.getWorld()
+                            .setBlock(
+                                aBaseMetaTileEntity.getXCoord() + OffSetX + xDir + x,
+                                aBaseMetaTileEntity.getYCoord() + OffSetY + y,
+                                aBaseMetaTileEntity.getZCoord() + OffSetZ + zDir + z,
+                                TargetBlock);
+                    }
+                }
+            }
+            // for (int i = 0; i < 4; i++) {
+            // aBaseMetaTileEntity.getWorld()
+            // .setBlock(
+            // aBaseMetaTileEntity.getXCoord() + xDir + CasingCoordinate[i][0],
+            // aBaseMetaTileEntity.getYCoord() + CasingCoordinate[i][1],
+            // aBaseMetaTileEntity.getZCoord() + zDir + CasingCoordinate[i][2],
+            // Air);
+            // }
+            checkAirFinish = true;
+        }
+
+    }
+
     // region Processing Logic
     double tierMultiplier = 1;
-    int tier = 1;
+    int EuTier = 1;
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -689,20 +843,21 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 if (inputFluids == null) {
                     inputFluids = new FluidStack[0];
                 }
+                SetRemoveWater();
 
                 ItemStack sapling = getControllerSlot();
                 if (sapling == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
                 EnumMap<Mode, ItemStack> outputPerMode = queryTreeProduct(sapling);
                 if (outputPerMode == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
 
-                tier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
-                if (tier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
-                int tier_temp = tier;
-                tierMultiplier = getTierMultiplier(tier);
+                EuTier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
+                if (EuTier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
+                int tier_temp = EuTier;
+                tierMultiplier = getTierMultiplier(EuTier);
 
-                // different liquid = different running logic
+                // different liquid = different output
                 Fluid RecipeLiquid = null;
-                int RecipeLiquidCost = 100000;
+                int RecipeLiquidCost = 10000;
                 ArrayList<FluidStack> InputFluids = getStoredFluids();
                 for (FluidStack aFluid : InputFluids) {
                     if (aFluid.getFluid()
@@ -715,7 +870,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         .equals(BRFluids.UnknowWater) && Mods.GalaxySpace.isModLoaded()) {
                         // Normal to BarnardaC`
                         RecipeLiquid = BRFluids.UnknowWater;
-                        RecipeLiquidCost = 10000;
                         sapling = GT_ModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 1, 1);
                         outputPerMode = queryTreeProduct(sapling);
                         break;
@@ -734,7 +888,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         // Random
                         Random random = new Random();
                         RecipeLiquid = FluidRegistry.getFluid("ic2uumatter");
-                        RecipeLiquidCost = 10000;
                         EnumMap<Mode, ItemStack> outputPerModeTemp = new EnumMap<>(Mode.class);
                         for (int i = 0; i < Mode.values().length; i++) {
                             int num = random.nextInt(allProducts[i].length);
@@ -758,7 +911,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         WaterHatchStack.add(aFluid);
                     }
                 }
-                if (inputWaterAmount < Math.pow(2, tier) * RecipeLiquidCost) {
+                if (inputWaterAmount < Math.pow(2, EuTier) * RecipeLiquidCost) {
                     tier_temp = (int) Math.floor(Math.log((double) inputWaterAmount / RecipeLiquidCost) / Math.log(2));
                     if (tier_temp < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
                     tierMultiplier = getTierMultiplier(tier_temp);
@@ -836,7 +989,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             + " : "
             + EnumChatFormatting.GOLD
             + (int) this.tierMultiplier;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.tier;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.EuTier;
         return ret;
     }
 

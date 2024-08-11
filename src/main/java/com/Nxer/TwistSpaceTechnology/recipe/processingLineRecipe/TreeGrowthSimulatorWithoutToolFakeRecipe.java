@@ -31,7 +31,7 @@ import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.Gr
 
 public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
-    static FluidStack WaterStack = Materials.Water.getFluid(100000);
+    static FluidStack WaterStack = Materials.Water.getFluid(10000);
     static FluidStack UnknowWaterStack = new FluidStack(BRFluids.UnknowWater, 10000);
     static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 1000);
     static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 10000);
