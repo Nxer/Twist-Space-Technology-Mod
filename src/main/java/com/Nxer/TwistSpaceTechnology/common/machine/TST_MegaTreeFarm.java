@@ -50,6 +50,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
+import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -99,10 +100,16 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // region Structure
 
     private int controllerTier = 0;
-    int mode = 0;
+    byte mMode = 0;
     boolean checkWaterFinish = false;
     boolean checkAirFinish = false;
     private static ItemStack FountOfEcology;
+
+    @Override
+    protected IAlignmentLimits getInitialAlignmentLimits() {
+        // You're right, but there will be water leakage
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
+    }
 
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
@@ -144,7 +151,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         }
         return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
     }
-    
+
     @Override
     public void onValueUpdate(byte aValue) {
         controllerTier = aValue;
@@ -159,12 +166,18 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mTier", (byte) controllerTier);
+        aNBT.setByte("mMode", mMode);
+        aNBT.setBoolean("checkWater", checkWaterFinish);
+        aNBT.setBoolean("checkAir", checkAirFinish);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         controllerTier = aNBT.getByte("mTier");
+        mMode = aNBT.getByte("mMode");
+        checkWaterFinish = aNBT.getBoolean("checkWater");
+        checkAirFinish = aNBT.getBoolean("checkAir");
     }
 
     // @Override
@@ -225,10 +238,12 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
-
-            this.mode = (byte) ((this.mode + 1) % (controllerTier + 1));
-            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MegaTreeFram.modeMsg." + this.mode));
-
+            if (controllerTier != 0) {
+                this.mMode = (byte) ((this.mMode + 1) % 2);
+                SetRemoveWater();
+                GT_Utility
+                    .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MegaTreeFram.modeMsg." + this.mMode));
+            }
         }
     }
 
@@ -498,7 +513,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                d                ","                d                ","             AAAhAAA             ","           AAAAN NAAAA           ","          AAANNN NNNAAA          ","          AANNNN NNNNAA          ","         AANNNNN NNNNNAA         ","         AANNNNNNNNNNNAA         ","         ANNNNNNNNNNNNNA         ","       ddh    NNNNN    hdd       ","         ANNNNNNNNNNNNNA         ","         AANNNNNNNNNNNAA         ","         AANNNNN NNNNNAA         ","          AANNNN NNNNAA          ","          AAANNN NNNAAA          ","           AAAAN NAAAA           ","             AAAhAAA             ","                d                ","                d                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
         {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                d                ","               AhA               ","             AAAhAAA             ","            AAAAhAAAA            ","           AAANN NNAAA           ","           AANNN NNNAA           ","          AAANNN NNNAAA          ","         dhhh       hhhd         ","          AAANNN NNNAAA          ","           AANNN NNNAA           ","           AAANN NNAAA           ","            AAAAhAAAA            ","             AAAhAAA             ","               AhA               ","                d                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
         {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                d                ","                d                ","              ddddd              ","             dhhhhhd             ","            dhhhhhhhd            ","            dhhhhhhhd            ","          dddhhh hhhddd          ","            dhhhhhhhd            ","            dhhhhhhhd            ","             dhhhhhd             ","              ddddd              ","                d                ","                d                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              ddddd              ","             dd d dd             ","             d  d  d             ","             ddd ddd             ","             d  d  d             ","             dd d dd             ","              ddddd              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
+        {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              ddddd              ","             ddJdJdd             ","             dJJdJJd             ","             ddd ddd             ","             dJJdJJd             ","             ddJdJdd             ","              ddddd              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
         {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
         {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
         {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
@@ -588,10 +603,12 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private void SetRemoveWater() {
 
         // checkType = true, check Water
-        boolean checkType = mode != 0;
-
+        boolean checkType = mMode != 0;
+        if (checkType && checkWaterFinish) return;
+        if (!checkType && checkAirFinish) return;
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        int mDirectionX = aBaseMetaTileEntity.getBackFacing().offsetX;
+        int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
+        int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
         String[][] StructureDef = StructureWater;
         Block Air = Blocks.air;
         Block Water = Blocks.water;
@@ -604,36 +621,46 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         int OffSetZ = 3;
         int LengthX = StructureDef[0].length;
         int LengthY = StructureDef.length;
-        int LengthZ = LengthX;
-        int mCurrentDirectionX;
-        int mCurrentDirectionZ;
-
-        if (mDirectionX == 0) {
-            mCurrentDirectionX = 2;
-            mCurrentDirectionZ = 3;
-        } else {
-            mCurrentDirectionX = 3;
-            mCurrentDirectionZ = 2;
+        int LengthZ = StructureDef[0][0].length();
+        int xDir = 0;
+        int zDir = 0;
+        if (mDirectionX == 1) {
+            // EAST
+            xDir = 1;
+            zDir = 1;
+        } else if (mDirectionX == -1) {
+            // WEST
+            xDir = -1;
+            zDir = -1;
         }
-        final int xDir = aBaseMetaTileEntity.getBackFacing().offsetX * mCurrentDirectionX;
-        final int zDir = aBaseMetaTileEntity.getBackFacing().offsetZ * mCurrentDirectionZ;
+        if (mDirectionZ == 1) {
+            // SOUTH
+            xDir = -1;
+            zDir = 1;
+        } else if (mDirectionZ == -1) {
+            // NORTH
+            xDir = 1;
+            zDir = -1;
+        }
 
         if (checkType && !checkWaterFinish) {
             checkAirFinish = false;
             TargetBlock = Water;
-            for (int x = -LengthX / 2; x < LengthX / 2; x++) {
-                for (int z = -LengthZ / 2; z < LengthZ / 2; z++) {
-                    for (int y = 0; y < LengthY; y++) {
-                        String ListStr = String.valueOf(StructureDef[y][x + LengthX / 2].charAt(z + LengthZ / 2));
+            for (int x = 0; x < LengthX; x++) {
+                for (int z = 0; z < LengthZ; z++) {
+                    for (int y = LengthY - 1; y >= 0; y--) {
+                        String ListStr = String.valueOf(StructureDef[y][x].charAt(z));
                         if (Objects.equals(ListStr, "Z")) continue;
-                        Block aBlock = aBaseMetaTileEntity
-                            .getBlockOffset(OffSetX + xDir + x, OffSetY + y, OffSetZ + zDir + z);
+                        Block aBlock = aBaseMetaTileEntity.getBlockOffset(
+                            aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
+                            aBaseMetaTileEntity.getYCoord() + OffSetY - y,
+                            aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir);
                         if (aBlock == TargetBlock) continue;
                         aBaseMetaTileEntity.getWorld()
                             .setBlock(
-                                aBaseMetaTileEntity.getXCoord() + OffSetX + xDir + x,
-                                aBaseMetaTileEntity.getYCoord() + OffSetY + y,
-                                aBaseMetaTileEntity.getZCoord() + OffSetZ + zDir + z,
+                                aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
+                                aBaseMetaTileEntity.getYCoord() + OffSetY - y,
+                                aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir,
                                 TargetBlock);
                     }
                 }
@@ -642,33 +669,49 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         } else if (!checkType && !checkAirFinish) {
             checkWaterFinish = false;
             // set Casing to Block Water
-            for (int y = 0; y < 5; y++) {
-                for (int i = 0; i < 4; i++) {
-                    aBaseMetaTileEntity.getWorld()
-                        .setBlock(
-                            aBaseMetaTileEntity.getXCoord() + xDir + CasingCoordinate[i][0],
-                            aBaseMetaTileEntity.getYCoord() + CasingCoordinate[i][1] - y,
-                            aBaseMetaTileEntity.getZCoord() + zDir + CasingCoordinate[i][2],
-                            CasingBlock,
-                            CasingMeta,
-                            3);
-                }
-            }
+            // for (int y = 0; y < 5; y++) {
+            // for (int i = 0; i < 4; i++) {
+            // aBaseMetaTileEntity.getWorld()
+            // .setBlock(
+            // aBaseMetaTileEntity.getXCoord() + CasingCoordinate[i][0] * xDir,
+            // aBaseMetaTileEntity.getYCoord() + CasingCoordinate[i][1] - y,
+            // aBaseMetaTileEntity.getZCoord() + CasingCoordinate[i][2] * zDir,
+            // CasingBlock,
+            // CasingMeta,
+            // 3);
+            // }
+            // }
             TargetBlock = Air;
-            for (int x = -LengthX / 2; x < LengthX / 2; x++) {
-                for (int z = -LengthZ / 2; z < LengthZ / 2; z++) {
-                    for (int y = LengthY - 1; y >= 0; y--) {
-                        String ListStr = String.valueOf(StructureDef[y][x + LengthX / 2].charAt(z + LengthZ / 2));
+            for (int x = 0; x < LengthX; x++) {
+                for (int z = 0; z < LengthZ; z++) {
+                    // if (mDirectionX == 1 || mDirectionX == -1) {
+                    // // EAST and WEST exchange x and z
+                    // int temp = x;
+                    // x = z;
+                    // z = temp;
+                    // }
+                    for (int y = 0; y < LengthY; y++) {
+                        String ListStr = String.valueOf(StructureDef[y][x].charAt(z));
                         if (Objects.equals(ListStr, "Z")) continue;
-                        Block aBlock = aBaseMetaTileEntity
-                            .getBlockOffset(OffSetX + xDir + x, OffSetY + y, OffSetZ + zDir + z);
+                        Block aBlock = aBaseMetaTileEntity.getBlockOffset(
+                            aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
+                            aBaseMetaTileEntity.getYCoord() + OffSetY - y,
+                            aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir);
                         if (aBlock == TargetBlock) continue;
+                        // aBaseMetaTileEntity.getWorld()
+                        // .setBlock(
+                        // aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
+                        // aBaseMetaTileEntity.getYCoord() + OffSetY - y,
+                        // aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir,
+                        // CasingBlock,
+                        // CasingMeta,
+                        // 3);
                         aBaseMetaTileEntity.getWorld()
                             .setBlock(
-                                aBaseMetaTileEntity.getXCoord() + OffSetX + xDir + x,
-                                aBaseMetaTileEntity.getYCoord() + OffSetY + y,
-                                aBaseMetaTileEntity.getZCoord() + OffSetZ + zDir + z,
-                                TargetBlock);
+                                aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
+                                aBaseMetaTileEntity.getYCoord() + OffSetY - y,
+                                aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir,
+                                null);
                     }
                 }
             }
