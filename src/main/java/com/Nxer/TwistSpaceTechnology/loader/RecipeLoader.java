@@ -37,11 +37,12 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.NeutronActivatorWithEURecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.CosmicProcessorCircuitRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DragonBloodRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.MegaUniversalSpaceStationRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCResearches;
@@ -101,7 +102,8 @@ public class RecipeLoader {
         new StellarForgeRecipePool().loadOnServerStarted();
     }
 
-    public static void loadRecipeMixIN() {
+    public static void loadRecipeMixINGTPP() {
         new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
+        new AquaticZoneSimulatorFakeRecipe().loadRecipes();
     }
 }

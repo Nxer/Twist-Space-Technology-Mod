@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
-import static com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
+import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
@@ -78,6 +78,8 @@ import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
+import ic2.core.init.BlocksItems;
+import ic2.core.init.InternalName;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -333,7 +335,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     Mods.ProjectRedIllumination.isModLoaded()
                         ? ofBlock(Block.getBlockFromName("ProjRed|Illumination:projectred.illumination.lamp"), 10)
                         : ofBlock(Blocks.redstone_lamp, 0))
-                .addElement('P', ofBlock(Blocks.water, 0))
+                .addElement('P', ofBlock(BlocksItems.getFluidBlock(InternalName.fluidDistilledWater), 0))
                 .addElement(
                     'Q',
                     ofChain(
@@ -374,7 +376,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                             .dot(2)
                             .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(13))
                             .build()))
-                .addElement('S', ofFrame(Materials.Vulcanite))
+                .addElement('S', ofFrame(Materials.Mytryl))
                 .addElement('s', ofFrame(Materials.AstralSilver))
                 .build();
         }
@@ -535,6 +537,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private final String[][] water = new String[][]{
         {"P"}
     };
+
     // Only Use for checkwater()
     private final String[][] StructureWater = new String[][]{
         {"ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ"},
@@ -607,21 +610,28 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         if (checkType && checkWaterFinish) return;
         if (!checkType && checkAirFinish) return;
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
-        int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
         String[][] StructureDef = StructureWater;
         Block Air = Blocks.air;
-        Block Water = Blocks.water;
-        Block TargetBlock;
-        Block CasingBlock = controllerTier > 0 ? GregTech_API.sBlockCasings4 : GregTech_API.sBlockCasings1;
-        int CasingMeta = controllerTier > 0 ? 1 : 10;
-        int[][] CasingCoordinate = { { 0, 30, 2 }, { 11, 30, -9 }, { -11, 30, -9 }, { 0, 30, -20 } };
+        Block Water = BlocksItems.getFluidBlock(InternalName.fluidDistilledWater);
         int OffSetX = 12;
         int OffSetY = 25;
         int OffSetZ = 3;
-        int LengthX = StructureDef[0].length;
-        int LengthY = StructureDef.length;
-        int LengthZ = StructureDef[0][0].length();
+        if (checkType && !checkWaterFinish) {
+            checkAirFinish = false;
+            setStringBlock(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "P", Water);
+            checkWaterFinish = true;
+        } else if (!checkType && !checkAirFinish) {
+            checkWaterFinish = false;
+            setStringBlock(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "P", Air);
+            checkAirFinish = true;
+        }
+
+    }
+
+    public void setStringBlock(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
+        String[][] StructureString, String TargetString, Block TargetBlock, int TargetMeta) {
+        int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
+        int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
         int xDir = 0;
         int zDir = 0;
         if (mDirectionX == 1) {
@@ -642,90 +652,38 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             xDir = 1;
             zDir = -1;
         }
-
-        if (checkType && !checkWaterFinish) {
-            checkAirFinish = false;
-            TargetBlock = Water;
-            for (int x = 0; x < LengthX; x++) {
-                for (int z = 0; z < LengthZ; z++) {
-                    for (int y = LengthY - 1; y >= 0; y--) {
-                        String ListStr = String.valueOf(StructureDef[y][x].charAt(z));
-                        if (Objects.equals(ListStr, "Z")) continue;
-                        Block aBlock = aBaseMetaTileEntity.getBlockOffset(
+        int LengthX = StructureString[0].length;
+        int LengthY = StructureString.length;
+        int LengthZ = StructureString[0][0].length();
+        for (int x = 0; x < LengthX; x++) {
+            for (int z = 0; z < LengthZ; z++) {
+                for (int y = 0; y < LengthY; y++) {
+                    String ListStr = String.valueOf(StructureString[y][x].charAt(z));
+                    if (!Objects.equals(ListStr, TargetString)) continue;
+                    if (mDirectionX == 1 || mDirectionX == -1) aBaseMetaTileEntity.getWorld()
+                        .setBlock(
+                            aBaseMetaTileEntity.getXCoord() + (OffSetZ - z) * zDir,
+                            aBaseMetaTileEntity.getYCoord() + OffSetY - y,
+                            aBaseMetaTileEntity.getZCoord() + (OffSetX - x) * xDir,
+                            TargetBlock,
+                            TargetMeta,
+                            3);
+                    else aBaseMetaTileEntity.getWorld()
+                        .setBlock(
                             aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
                             aBaseMetaTileEntity.getYCoord() + OffSetY - y,
-                            aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir);
-                        if (aBlock == TargetBlock) continue;
-                        aBaseMetaTileEntity.getWorld()
-                            .setBlock(
-                                aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
-                                aBaseMetaTileEntity.getYCoord() + OffSetY - y,
-                                aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir,
-                                TargetBlock);
-                    }
+                            aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir,
+                            TargetBlock,
+                            TargetMeta,
+                            3);
                 }
             }
-            checkWaterFinish = true;
-        } else if (!checkType && !checkAirFinish) {
-            checkWaterFinish = false;
-            // set Casing to Block Water
-            // for (int y = 0; y < 5; y++) {
-            // for (int i = 0; i < 4; i++) {
-            // aBaseMetaTileEntity.getWorld()
-            // .setBlock(
-            // aBaseMetaTileEntity.getXCoord() + CasingCoordinate[i][0] * xDir,
-            // aBaseMetaTileEntity.getYCoord() + CasingCoordinate[i][1] - y,
-            // aBaseMetaTileEntity.getZCoord() + CasingCoordinate[i][2] * zDir,
-            // CasingBlock,
-            // CasingMeta,
-            // 3);
-            // }
-            // }
-            TargetBlock = Air;
-            for (int x = 0; x < LengthX; x++) {
-                for (int z = 0; z < LengthZ; z++) {
-                    // if (mDirectionX == 1 || mDirectionX == -1) {
-                    // // EAST and WEST exchange x and z
-                    // int temp = x;
-                    // x = z;
-                    // z = temp;
-                    // }
-                    for (int y = 0; y < LengthY; y++) {
-                        String ListStr = String.valueOf(StructureDef[y][x].charAt(z));
-                        if (Objects.equals(ListStr, "Z")) continue;
-                        Block aBlock = aBaseMetaTileEntity.getBlockOffset(
-                            aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
-                            aBaseMetaTileEntity.getYCoord() + OffSetY - y,
-                            aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir);
-                        if (aBlock == TargetBlock) continue;
-                        // aBaseMetaTileEntity.getWorld()
-                        // .setBlock(
-                        // aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
-                        // aBaseMetaTileEntity.getYCoord() + OffSetY - y,
-                        // aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir,
-                        // CasingBlock,
-                        // CasingMeta,
-                        // 3);
-                        aBaseMetaTileEntity.getWorld()
-                            .setBlock(
-                                aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
-                                aBaseMetaTileEntity.getYCoord() + OffSetY - y,
-                                aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir,
-                                null);
-                    }
-                }
-            }
-            // for (int i = 0; i < 4; i++) {
-            // aBaseMetaTileEntity.getWorld()
-            // .setBlock(
-            // aBaseMetaTileEntity.getXCoord() + xDir + CasingCoordinate[i][0],
-            // aBaseMetaTileEntity.getYCoord() + CasingCoordinate[i][1],
-            // aBaseMetaTileEntity.getZCoord() + zDir + CasingCoordinate[i][2],
-            // Air);
-            // }
-            checkAirFinish = true;
         }
+    }
 
+    public void setStringBlock(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
+        String[][] StructureString, String TargetString, Block TargetBlock) {
+        setStringBlock(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureString, TargetString, TargetBlock, 0);
     }
 
     // region Processing Logic
@@ -889,6 +847,15 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 }
                 SetRemoveWater();
 
+                switch (mMode) {
+                    case 1:
+                        return WorkMode1();
+                    default:
+                        return TreeGrowthSimulator();
+                }
+            }
+
+            private CheckRecipeResult TreeGrowthSimulator() {
                 ItemStack sapling = getControllerSlot();
                 if (sapling == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
                 EnumMap<Mode, ItemStack> outputPerMode = queryTreeProduct(sapling);
@@ -1022,6 +989,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 return SimpleCheckRecipeResult.ofSuccess("growing_trees");
             }
 
+            private CheckRecipeResult WorkMode1() {
+                return SimpleCheckRecipeResult.ofSuccess("debugMode");
+            }
         };
     }
 

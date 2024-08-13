@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe;
+package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes;
 
 import static cofh.api.transport.RegistryEnderAttuned.inputFluid;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getModeMultiplier;
@@ -212,19 +212,5 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
             .duration(20)
             .eut(0)
             .addTo(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes);
-
-        // GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes.addFakeRecipe(
-        // false,
-        // new GT_Recipe(
-        // inputStacks,
-        // outputStacks,
-        // specialStacks,
-        // null,
-        // new FluidStack[] { inputFluid },
-        // null,
-        // 20,
-        // 0,
-        // GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes.getAllRecipes()
-        // .size() + 1));
     }
 }

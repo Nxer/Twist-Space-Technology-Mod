@@ -226,13 +226,24 @@ public class GTCMRecipe {
         .minInputs(1, 1)
         .useSpecialSlot()
         .specialSlotSensitive()
-        // .neiSpecialInfoFormatter(TST_MegaTreeGrowthSimulatorFrontend.INSTANCE)
         .frontend(TST_MegaTreeFarmFrontend::new)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()
         .build();
 
+    // #tr tst.recipe.AquaticZoneSimulatorFakeRecipes
+    // # Eco-Sphere : Aquatic Zone Simulator
+    // #zh_CN 生态圈 : 水域模拟
+    public static final RecipeMap<TST_RecipeMapBackend> AquaticZoneSimulatorFakeRecipes = RecipeMapBuilder
+        .of("tst.recipe.AquaticZoneSimulatorFakeRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 1, 1, 0)
+        .minInputs(1, 1)
+        .useSpecialSlot()
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .disableOptimize()
+        .build();
     // #tr tst.recipe.StrangeMatterAggregatorRecipes
     // # Strange Matter Aggregation
     // #zh_CN 奇异物质聚合
