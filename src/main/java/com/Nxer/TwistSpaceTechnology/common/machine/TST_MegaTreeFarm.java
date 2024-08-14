@@ -17,6 +17,8 @@ import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.produc
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +43,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
@@ -705,10 +709,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         return 1;
     }
 
+    @NotNull
     @Override
-    public RecipeMap<?> getRecipeMap() {
-        // return GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes;
-        return GTCMRecipe.AquaticZoneSimulatorFakeRecipes;
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays
+            .asList(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes, GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
     }
 
     @Override
@@ -991,6 +996,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             }
 
             private CheckRecipeResult WorkMode1() {
+
                 return SimpleCheckRecipeResult.ofSuccess("debugMode");
             }
         };
