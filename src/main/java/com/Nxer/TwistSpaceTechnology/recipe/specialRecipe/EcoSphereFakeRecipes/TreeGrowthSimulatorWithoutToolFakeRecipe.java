@@ -156,7 +156,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
         ItemStack FruitSymbol = new ItemStack(Items.apple, 1, 0);
         FruitSymbol.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.fakeItem.3"
         // #tr MegaTreeGrowthSimulator.nei.fakeItem.3
-        // # Random fruit
+        // # Random fruits
         // #zh_CN 随机果实
         ));
         addEnchantmentLight(FruitSymbol);

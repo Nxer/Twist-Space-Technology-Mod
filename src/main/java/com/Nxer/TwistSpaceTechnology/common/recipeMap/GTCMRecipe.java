@@ -239,7 +239,6 @@ public class GTCMRecipe {
         .of("tst.recipe.AquaticZoneSimulatorFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(1, 1, 1, 0)
         .minInputs(1, 1)
-        .useSpecialSlot()
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()

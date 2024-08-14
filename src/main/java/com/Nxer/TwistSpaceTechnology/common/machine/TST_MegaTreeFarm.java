@@ -707,7 +707,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes;
+        // return GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes;
+        return GTCMRecipe.AquaticZoneSimulatorFakeRecipes;
     }
 
     @Override
