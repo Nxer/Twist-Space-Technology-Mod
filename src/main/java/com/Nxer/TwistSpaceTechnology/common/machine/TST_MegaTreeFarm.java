@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChance;
+import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
 import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
@@ -13,6 +15,7 @@ import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gtPlusPlus.core.util.data.ArrayUtils.removeNulls;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
 
@@ -25,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -70,6 +74,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
@@ -109,7 +114,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     byte mMode = 0;
     boolean checkWaterFinish = false;
     boolean checkAirFinish = false;
+    boolean isFocusMode = false;
     private static ItemStack FountOfEcology;
+    private static ItemStack Offspring;
 
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
@@ -121,6 +128,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         if (FountOfEcology == null) FountOfEcology = GTCMItemList.FountOfEcology.get(1);
+        if (Offspring == null) Offspring = GTCMItemList.OffSpring.get(1);
     }
 
     @Override
@@ -855,7 +863,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
                 switch (mMode) {
                     case 1:
-                        return WorkMode1();
+                        return AquaticZoneSimulator();
                     default:
                         return TreeGrowthSimulator();
                 }
@@ -995,9 +1003,93 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 return SimpleCheckRecipeResult.ofSuccess("growing_trees");
             }
 
-            private CheckRecipeResult WorkMode1() {
+            private CheckRecipeResult AquaticZoneSimulator() {
+                EuTier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
+                if (EuTier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
+                int tier_temp = EuTier;
+                tierMultiplier = getTierMultiplier(EuTier);
 
-                return SimpleCheckRecipeResult.ofSuccess("debugMode");
+                Fluid RecipeLiquid = FluidRegistry.WATER;
+                int RecipeLiquidCost = 100000;
+                if (controllerTier > 0) RecipeLiquidCost /= 100;
+                ArrayList<FluidStack> InputFluids = getStoredFluids();
+                long inputWaterAmount = 0;
+                ArrayList<FluidStack> WaterHatchStack = new ArrayList<>();
+                for (FluidStack aFluid : InputFluids) {
+                    if (aFluid.getFluid()
+                        .equals(RecipeLiquid)) {
+                        inputWaterAmount += aFluid.amount;
+                        WaterHatchStack.add(aFluid);
+                    }
+                }
+                if (inputWaterAmount < Math.pow(2, EuTier) * RecipeLiquidCost) {
+                    tier_temp = (int) Math.floor(Math.log((double) inputWaterAmount / RecipeLiquidCost) / Math.log(2));
+                    if (tier_temp < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input1");
+                    tierMultiplier = getTierMultiplier(tier_temp);
+                }
+                long costWaterAmount = (long) (Math.pow(2, tier_temp) * RecipeLiquidCost);
+                if (inputWaterAmount < costWaterAmount) return SimpleCheckRecipeResult.ofFailure("no_enough_input2");
+
+                for (FluidStack aFluid : WaterHatchStack) {
+                    if (costWaterAmount > aFluid.amount) {
+                        costWaterAmount -= aFluid.amount;
+                        aFluid.amount = 0;
+                    } else {
+                        aFluid.amount -= (int) costWaterAmount;
+                        break;
+                    }
+                }
+
+                ItemStack controllerStack = getControllerSlot();
+                isFocusMode = WatersOutputs.contains(controllerStack) && !controllerStack.equals(Offspring);
+                List<ItemStack> outputList = WatersOutputs.stream()
+                    .map(ItemStack::copy)
+                    .collect(Collectors.toList());
+                int[] OutputChance = new int[WatersOutputs.size() + 1];
+                for (int i = 0; i < WatersOutputs.size(); i++) {
+                    if (isFocusMode) {
+                        if (WatersOutputs.get(i)
+                            .equals(controllerStack)) OutputChance[i] = WatersChance[i] * 30;
+                        else OutputChance[i] = WatersChance[i] / 30;
+                    } else {
+                        OutputChance[i] = WatersChance[i];
+                    }
+                }
+                outputList.add(Offspring);
+                OutputChance[WatersOutputs.size()] = 1;
+
+                // get running output
+                List<ItemStack> outputs = new ArrayList<>();
+                for (int i = 0; i < outputList.size(); i++) {
+                    ItemStack aStack = outputList.get(i);
+                    int aRandom = XSTR.XSTR_INSTANCE.nextInt(10000);
+                    long outputStackSize = (long) (aStack.stackSize * tierMultiplier
+                        * OutputChance[i]
+                        / 10000
+                        * aRandom);
+                    // long remainStackSize = (long) (aStack.stackSize * tierMultiplier * OutputChance[i] % 10000);
+                    if (aStack.equals(Offspring) & outputStackSize / 10000 > 0) outputStackSize = 1;
+                    while (outputStackSize > Integer.MAX_VALUE) {
+                        ItemStack outUnion = aStack.copy();
+                        outUnion.stackSize = Integer.MAX_VALUE;
+                        outputs.add(outUnion);
+                        outputStackSize -= Integer.MAX_VALUE;
+                    }
+                    aStack.stackSize = (int) outputStackSize;
+                    outputs.add(aStack);
+                }
+
+                // for (ItemStack stack : outputs) {
+                // if (stack.stackSize < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input3");
+                // }
+                outputItems = outputs.toArray(new ItemStack[0]);
+                removeNulls(outputItems);
+
+                duration = 20;
+                calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
+
+                if (isFocusMode) return SimpleCheckRecipeResult.ofSuccess("focus on");
+                return SimpleCheckRecipeResult.ofSuccess("fishing");
             }
         };
     }
