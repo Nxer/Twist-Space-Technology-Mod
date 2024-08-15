@@ -1024,11 +1024,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 }
                 if (inputWaterAmount < Math.pow(2, EuTier) * RecipeLiquidCost) {
                     tier_temp = (int) Math.floor(Math.log((double) inputWaterAmount / RecipeLiquidCost) / Math.log(2));
-                    if (tier_temp < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input1");
+                    if (tier_temp < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
                     tierMultiplier = getTierMultiplier(tier_temp);
                 }
                 long costWaterAmount = (long) (Math.pow(2, tier_temp) * RecipeLiquidCost);
-                if (inputWaterAmount < costWaterAmount) return SimpleCheckRecipeResult.ofFailure("no_enough_input2");
+                if (inputWaterAmount < costWaterAmount) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
 
                 for (FluidStack aFluid : WaterHatchStack) {
                     if (costWaterAmount > aFluid.amount) {
@@ -1062,13 +1062,15 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 List<ItemStack> outputs = new ArrayList<>();
                 for (int i = 0; i < outputList.size(); i++) {
                     ItemStack aStack = outputList.get(i);
-                    int aRandom = XSTR.XSTR_INSTANCE.nextInt(10000);
-                    long outputStackSize = (long) (aStack.stackSize * tierMultiplier
-                        * OutputChance[i]
-                        / 10000
-                        * aRandom);
-                    // long remainStackSize = (long) (aStack.stackSize * tierMultiplier * OutputChance[i] % 10000);
-                    if (aStack.equals(Offspring) & outputStackSize / 10000 > 0) outputStackSize = 1;
+                    int aRandom = XSTR.XSTR_INSTANCE.nextInt(1000);
+                    long outputStackSize;
+                    if (aRandom * OutputChance[i] < 10000) continue;
+                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier
+                        * OutputChance[i]//max 10.7M
+                        * aRandom//rework to true random
+                        / 100000);
+                    if (aStack.equals(Offspring) & outputStackSize / 1000 > 0) outputStackSize = 1;
+
                     while (outputStackSize > Integer.MAX_VALUE) {
                         ItemStack outUnion = aStack.copy();
                         outUnion.stackSize = Integer.MAX_VALUE;
