@@ -1064,12 +1064,21 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     ItemStack aStack = outputList.get(i);
                     int aRandom = XSTR.XSTR_INSTANCE.nextInt(1000);
                     long outputStackSize;
-                    if (aRandom * OutputChance[i] < 10000) continue;
-                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier
-                        * OutputChance[i]//max 10.7M
-                        * aRandom//rework to true random
-                        / 100000);
+
+//                    if (aRandom * OutputChance[i] < 10000) continue;
+//                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier
+//                        * OutputChance[i]//max 10.7M
+//                        * aRandom//rework to true random
+//                        / 100000);
+//                    if (aStack.equals(Offspring) & outputStackSize / 1000 > 0) outputStackSize = 1;
+
+                    // Special random determines run or not
+                    // aRandom * (1,4.9) when us lv 1A or uxv 104
+                    if(aRandom*Math.log(Math.log(tier_temp+1)/Math.log(2))<OutputChance[i]) continue;// /10?
+                    else outputStackSize = (long)(aStack.stackSize *tierMultiplier * OutputChance[i]*aRandom/1000);
                     if (aStack.equals(Offspring) & outputStackSize / 1000 > 0) outputStackSize = 1;
+
+
 
                     while (outputStackSize > Integer.MAX_VALUE) {
                         ItemStack outUnion = aStack.copy();
