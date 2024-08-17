@@ -57,6 +57,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
@@ -73,6 +74,7 @@ import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_RecipeBuilder;
@@ -241,6 +243,23 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             : FluidRegistry.getFluid("molten.solderingalloy");
         final Fluid solderIndalloy = INDALLOY_140.getFluid();
         final Fluid ic2coolant = FluidRegistry.getFluid("ic2coolant");
+
+        {
+            // Dyson Swarm Module
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    GTCMItemList.SolarSail.get(16),
+                    GTCMItemList.StellarConstructionFrameMaterial.get(4),
+                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 24),
+                    ItemList.Circuit_Wafer_QPIC.get(32),
+                    ItemList.Emitter_UMV.get(4),
+                    ItemList.Sensor_UMV.get(4))
+                .fluidInputs(new FluidStack(solderUEV, 144 * 256))
+                .itemOutputs(setStackSize(GT_ModHandler.getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1), 8192))
+                .eut(100000000)
+                .duration(20 * 50)
+                .addTo(MASL);
+        }
 
         {
             // adv radiation proof plate
