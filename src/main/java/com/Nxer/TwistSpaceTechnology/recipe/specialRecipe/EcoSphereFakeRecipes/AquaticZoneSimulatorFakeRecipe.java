@@ -1,8 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getItemStackString;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -25,10 +28,10 @@ import gregtech.api.util.GT_ModHandler;
 public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
 
     private static final Logger LOGGER = LogManager.getLogger(AquaticZoneSimulatorFakeRecipe.class);
-    static FluidStack WaterStack = Materials.Water.getFluid(1000);
+    static FluidStack WaterStack = Materials.Water.getFluid(10000);
+    ItemStack Offspring = GTCMItemList.OffSpring.get(1);
     public static ArrayList<ItemStack> WatersOutputs = new ArrayList<>();
-
-    public static int[] WatersChance;
+    public static HashMap<String, Integer> WatersChances = new HashMap<>();
 
     @Override
     public void loadRecipes() {
@@ -114,12 +117,12 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
         int TotalSize = 0;
         for (ItemStack aStack : WatersOutputs) TotalSize += aStack.stackSize;
         int BasicSize = 10000 / TotalSize;
-        int count = 0;
-        WatersChance = new int[WatersOutputs.size()];
         for (ItemStack aStack : WatersOutputs) {
-            WatersChance[count] = BasicSize * aStack.stackSize;
-            count++;
+            if (aStack == null) continue;
+            WatersChances.put(getItemStackString(aStack), BasicSize * aStack.stackSize);
         }
+        WatersOutputs.add(Offspring);
+        WatersChances.put(getItemStackString(Offspring), 1);
     }
 
     void addFakeRecipe(ItemStack inputStacks, ItemStack outputStacks, FluidStack inputFluid) {

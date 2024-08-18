@@ -91,6 +91,9 @@ public class RecipeLoader {
         if (Config.Enable_IndustrialMagicMatrix) {
             new IndustrialMagicMatrixRecipePool().loadRecipes();
         }
+        if (Config.Enable_MegaTreeFarm) {
+            new AquaticZoneSimulatorFakeRecipe().loadRecipes();
+        }
     }
 
     public static void loadRecipesPostInit() {
@@ -104,6 +107,5 @@ public class RecipeLoader {
 
     public static void loadRecipeMixINGTPP() {
         new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
-        new AquaticZoneSimulatorFakeRecipe().loadRecipes();
     }
 }

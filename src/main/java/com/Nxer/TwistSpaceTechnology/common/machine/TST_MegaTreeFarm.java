@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
-import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChance;
+import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
 import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
 import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -15,7 +15,6 @@ import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
-import static gtPlusPlus.core.util.data.ArrayUtils.removeNulls;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
 
@@ -28,10 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
+import com.kuba6000.mobsinfo.api.utils.FastRandom;
+import kubatech.loaders.MobHandlerLoader;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -194,16 +194,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         checkAirFinish = aNBT.getBoolean("checkAir");
     }
 
-    // @Override
-    // public void initDefaultModes(NBTTagCompound aNBT) {
-    // super.initDefaultModes(aNBT);
-    // if (aNBT == null) {
-    // controllerTier = 0;
-    // } else {
-    // controllerTier = aNBT.getByte("mTier");
-    // }
-    // }
-
     @Override
     public void setItemNBT(NBTTagCompound aNBT) {
         super.setItemNBT(aNBT);
@@ -253,7 +243,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 return;
             }
             if (controllerTier != 0) {
-                this.mMode = (byte) ((this.mMode + 1) % 2);
+                this.mMode = (byte) ((this.mMode + 1) % 3);
                 SetRemoveWater();
                 GT_Utility
                     .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MegaTreeFram.modeMsg." + this.mMode));
@@ -779,12 +769,17 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     public static EnumMap<Mode, ItemStack> queryTreeProduct(ItemStack sapling) {
-        String key = Item.itemRegistry.getNameForObject(sapling.getItem()) + ":" + sapling.getItemDamage();
+        String key = getItemStackString(sapling);
         EnumMap<Mode, ItemStack> ProductMap = treeProductsMap.get(key);
         if (ProductMap != null) {
             return ProductMap;
         }
         return getOutputsForForestrySapling(sapling);
+    }
+
+    public static String getItemStackString(ItemStack aStack) {
+        return Item.itemRegistry.getNameForObject(aStack.getItem()) + ":" + aStack.getItemDamage();
+
     }
 
     public static EnumMap<Mode, ItemStack> getOutputsForForestrySapling(ItemStack sapling) {
@@ -864,6 +859,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 switch (mMode) {
                     case 1:
                         return AquaticZoneSimulator();
+                    case 2:
+                        return MachineMode3();
                     default:
                         return TreeGrowthSimulator();
                 }
@@ -1010,7 +1007,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 tierMultiplier = getTierMultiplier(EuTier);
 
                 Fluid RecipeLiquid = FluidRegistry.WATER;
-                int RecipeLiquidCost = 100000;
+                int RecipeLiquidCost = 10000;
                 if (controllerTier > 0) RecipeLiquidCost /= 100;
                 ArrayList<FluidStack> InputFluids = getStoredFluids();
                 long inputWaterAmount = 0;
@@ -1041,44 +1038,32 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 }
 
                 ItemStack controllerStack = getControllerSlot();
-                isFocusMode = WatersOutputs.contains(controllerStack) && !controllerStack.equals(Offspring);
-                List<ItemStack> outputList = WatersOutputs.stream()
-                    .map(ItemStack::copy)
-                    .collect(Collectors.toList());
-                int[] OutputChance = new int[WatersOutputs.size() + 1];
-                for (int i = 0; i < WatersOutputs.size(); i++) {
-                    if (isFocusMode) {
-                        if (WatersOutputs.get(i)
-                            .equals(controllerStack)) OutputChance[i] = WatersChance[i] * 30;
-                        else OutputChance[i] = WatersChance[i] / 30;
-                    } else {
-                        OutputChance[i] = WatersChance[i];
-                    }
-                }
-                outputList.add(Offspring);
-                OutputChance[WatersOutputs.size()] = 1;
+                isFocusMode = false;
+                if (controllerStack != null)
+                    isFocusMode = WatersChances.containsKey(getItemStackString(controllerStack))
+                // && !controllerStack.isItemEqual(Offspring)
+                ;
 
                 // get running output
                 List<ItemStack> outputs = new ArrayList<>();
-                for (int i = 0; i < outputList.size(); i++) {
-                    ItemStack aStack = outputList.get(i);
-                    int aRandom = XSTR.XSTR_INSTANCE.nextInt(1000);
+                for (ItemStack recipeStack : WatersOutputs) {
+                    ItemStack aStack = recipeStack.copy();
+                    int aChance = WatersChances.get(getItemStackString(aStack));
+                    if (isFocusMode) {
+                        if (controllerStack != null && aStack.isItemEqual(controllerStack)) aChance *= 50;
+                        else aChance = Math.max(aChance / 50, 1);
+                    }
+                    int aRandom = XSTR.XSTR_INSTANCE.nextInt(10000);
                     long outputStackSize;
-
-//                    if (aRandom * OutputChance[i] < 10000) continue;
-//                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier
-//                        * OutputChance[i]//max 10.7M
-//                        * aRandom//rework to true random
-//                        / 100000);
-//                    if (aStack.equals(Offspring) & outputStackSize / 1000 > 0) outputStackSize = 1;
-
-                    // Special random determines run or not
-                    // aRandom * (1,4.9) when us lv 1A or uxv 104
-                    if(aRandom*Math.log(Math.log(tier_temp+1)/Math.log(2))<OutputChance[i]) continue;// /10?
-                    else outputStackSize = (long)(aStack.stackSize *tierMultiplier * OutputChance[i]*aRandom/1000);
-                    if (aStack.equals(Offspring) & outputStackSize / 1000 > 0) outputStackSize = 1;
-
-
+                    double aNum = Math.log(tier_temp + 2) / Math.log(2);
+                    if (aRandom > aChance * aNum) continue;
+                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier * aChance * aRandom / 1500000);
+                    if (aStack.isItemEqual(Offspring)) {
+                        if (outputStackSize > 2)
+                            // when voltage > uxv can output offspring
+                            outputStackSize = 1;
+                        else continue;
+                    }
 
                     while (outputStackSize > Integer.MAX_VALUE) {
                         ItemStack outUnion = aStack.copy();
@@ -1090,17 +1075,26 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     outputs.add(aStack);
                 }
 
-                // for (ItemStack stack : outputs) {
-                // if (stack.stackSize < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input3");
-                // }
                 outputItems = outputs.toArray(new ItemStack[0]);
-                removeNulls(outputItems);
 
                 duration = 20;
                 calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
 
                 if (isFocusMode) return SimpleCheckRecipeResult.ofSuccess("focus on");
                 return SimpleCheckRecipeResult.ofSuccess("fishing");
+            }
+            private CheckRecipeResult MachineMode3(){
+                ItemStack controllerStack = getControllerSlot();
+                IGregTechTileEntity aBaseMetaTileEntity = getBaseMetaTileEntity();
+                if(controllerStack==null) return SimpleCheckRecipeResult.ofFailure("failed");
+                if(controllerStack.isItemEqual(GTCMItemList.TestItem0.get(1))){
+                    String mobType = controllerStack.getTagCompound()
+                        .getString("mobType");
+                    MobHandlerLoader.MobEECRecipe recipe = MobHandlerLoader.recipeMap.get(mobType);
+//                    mOutputItems = recipe
+//                        .generateOutputs(new FastRandom(), this, 7, 3, false, false);
+                }
+                return  SimpleCheckRecipeResult.ofSuccess("debug");
             }
         };
     }
