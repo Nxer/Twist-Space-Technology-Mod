@@ -3,10 +3,11 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_MegaTreeFarmFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
 
 import goodgenerator.client.GUI.GG_UITextures;
 import gregtech.api.gui.modularui.GT_UITextures;
@@ -226,7 +227,7 @@ public class GTCMRecipe {
         .minInputs(1, 1)
         .useSpecialSlot()
         .specialSlotSensitive()
-        .frontend(TST_MegaTreeFarmFrontend::new)
+        .frontend(TST_TreeGrowthSimulatorFrontend::new)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()
@@ -239,10 +240,16 @@ public class GTCMRecipe {
         .of("tst.recipe.AquaticZoneSimulatorFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(1, 1, 1, 0)
         .minInputs(1, 1)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .frontend(TST_AquaticZoneSimulatorFronted::new)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()
         .build();
+
+    // #tr
+    // # Eco-Sphere :
+    // #zh_CN 生态圈 :
+
     // #tr tst.recipe.StrangeMatterAggregatorRecipes
     // # Strange Matter Aggregation
     // #zh_CN 奇异物质聚合

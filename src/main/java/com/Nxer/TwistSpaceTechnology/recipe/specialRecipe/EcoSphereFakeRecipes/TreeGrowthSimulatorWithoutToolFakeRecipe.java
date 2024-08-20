@@ -1,8 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes;
 
-import static cofh.api.transport.RegistryEnderAttuned.inputFluid;
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getModeMultiplier;
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.queryTreeProduct;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.getModeMultiplier;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.queryTreeProduct;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
@@ -76,8 +75,8 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
         ArrayList<ItemStack> allSaplingWithTagCopy = new ArrayList<>();
         for (ItemStack aSapling : allSaplingsIn) {
             ItemStack aStack = aSapling.copy();
-            aStack.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.tooltip.7"
-            // #tr MegaTreeGrowthSimulator.nei.tooltip.7
+            aStack.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.7"
+            // #tr ESS.TreeGrowthSimulator.nei.tooltip.7
             // # Any Sapling
             // #zh_CN 任意树苗
             ));
@@ -133,29 +132,29 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
         // UU Matter
         ItemStack LogSymbol = new ItemStack(Blocks.log, 1, 0);
-        LogSymbol.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.fakeItem.0"
-        // #tr MegaTreeGrowthSimulator.nei.fakeItem.0
+        LogSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.0"
+        // #tr ESS.TreeGrowthSimulator.nei.fakeItem.0
         // # Random logs
         // #zh_CN 随机原木
         ));
         addEnchantmentLight(LogSymbol);
         ItemStack SaplingSymbol = new ItemStack(Blocks.sapling, 1, 0);
-        SaplingSymbol.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.fakeItem.1"
-        // #tr MegaTreeGrowthSimulator.nei.fakeItem.1
+        SaplingSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.1"
+        // #tr ESS.TreeGrowthSimulator.nei.fakeItem.1
         // # Random saplings
         // #zh_CN 随机树苗
         ));
         addEnchantmentLight(SaplingSymbol);
         ItemStack LeavesSymbol = new ItemStack(Blocks.leaves, 1, 0);
-        LeavesSymbol.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.fakeItem.2"
-        // #tr MegaTreeGrowthSimulator.nei.fakeItem.2
+        LeavesSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.2"
+        // #tr ESS.TreeGrowthSimulator.nei.fakeItem.2
         // # Random leaves
         // #zh_CN 随机树叶
         ));
         addEnchantmentLight(LeavesSymbol);
         ItemStack FruitSymbol = new ItemStack(Items.apple, 1, 0);
-        FruitSymbol.setStackDisplayName(TextEnums.tr("MegaTreeGrowthSimulator.nei.fakeItem.3"
-        // #tr MegaTreeGrowthSimulator.nei.fakeItem.3
+        FruitSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.3"
+        // #tr ESS.TreeGrowthSimulator.nei.fakeItem.3
         // # Random fruits
         // #zh_CN 随机果实
         ));

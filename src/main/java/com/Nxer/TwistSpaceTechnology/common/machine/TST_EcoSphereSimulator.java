@@ -18,6 +18,7 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,11 +28,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
 import com.kuba6000.mobsinfo.api.utils.FastRandom;
-import kubatech.loaders.MobHandlerLoader;
+import com.mojang.authlib.GameProfile;
+import kubatech.tileentity.gregtech.multiblock.GT_MetaTileEntity_ExtremeEntityCrusher;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -43,6 +46,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -89,23 +94,24 @@ import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
+import kubatech.loaders.MobHandlerLoader;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
+public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereSimulator> {
 
     // region Class Constructor
-    public TST_MegaTreeFarm(int aID, String aName, String aNameRegional) {
+    public TST_EcoSphereSimulator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public TST_MegaTreeFarm(String aName) {
+    public TST_EcoSphereSimulator(String aName) {
         super(aName);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_MegaTreeFarm(this.mName);
+        return new TST_EcoSphereSimulator(this.mName);
     }
 
     // region Structure
@@ -117,6 +123,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     boolean isFocusMode = false;
     private static ItemStack FountOfEcology;
     private static ItemStack Offspring;
+    public ESSFakePlayer ESSPlayer = null;
+    public final Random rand = new FastRandom();
 
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
@@ -254,7 +262,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private static final String STRUCTURE_PIECE_MAIN = "mainMegaTreeFarm0";
     private static final String STRUCTURE_PIECE_MAIN1 = "mainMegaTreeFarm1";
     private static final String STRUCTURE_PIECE_WATER = "waterMegaTreeFarm";
-    private static IStructureDefinition<TST_MegaTreeFarm> STRUCTURE_DEFINITION = null;
+    private static IStructureDefinition<TST_EcoSphereSimulator> STRUCTURE_DEFINITION = null;
 
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
@@ -295,9 +303,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    public IStructureDefinition<TST_MegaTreeFarm> getStructureDefinition() {
+    public IStructureDefinition<TST_EcoSphereSimulator> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaTreeFarm>builder()
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_EcoSphereSimulator>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addShape(STRUCTURE_PIECE_MAIN1, transpose(shape2))
                 .addShape(STRUCTURE_PIECE_WATER, transpose(water))
@@ -342,9 +350,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'Q',
                     ofChain(
                         ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        GT_HatchElementBuilder.<TST_EcoSphereSimulator>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .adder(TST_EcoSphereSimulator::addToMachineList)
                             .dot(1)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
@@ -352,9 +360,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'q',
                     ofChain(
                         ofBlock(MetaBlockCasing01, 13),
-                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        GT_HatchElementBuilder.<TST_EcoSphereSimulator>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .adder(TST_EcoSphereSimulator::addToMachineList)
                             .dot(1)
                             .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(13))
                             .build()))
@@ -362,9 +370,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'R',
                     ofChain(
                         ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        GT_HatchElementBuilder.<TST_EcoSphereSimulator>builder()
                             .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .adder(TST_EcoSphereSimulator::addToMachineList)
                             .dot(2)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
@@ -372,9 +380,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'r',
                     ofChain(
                         ofBlock(MetaBlockCasing01, 13),
-                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        GT_HatchElementBuilder.<TST_EcoSphereSimulator>builder()
                             .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .adder(TST_EcoSphereSimulator::addToMachineList)
                             .dot(2)
                             .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(13))
                             .build()))
@@ -856,14 +864,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 }
                 SetRemoveWater();
 
-                switch (mMode) {
-                    case 1:
-                        return AquaticZoneSimulator();
-                    case 2:
-                        return MachineMode3();
-                    default:
-                        return TreeGrowthSimulator();
-                }
+                return switch (mMode) {
+                    case 1 -> AquaticZoneSimulator();
+                    case 2 -> MachineMode3();
+                    default -> TreeGrowthSimulator();
+                };
             }
 
             private CheckRecipeResult TreeGrowthSimulator() {
@@ -1083,18 +1088,19 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 if (isFocusMode) return SimpleCheckRecipeResult.ofSuccess("focus on");
                 return SimpleCheckRecipeResult.ofSuccess("fishing");
             }
-            private CheckRecipeResult MachineMode3(){
+
+            private CheckRecipeResult MachineMode3() {
                 ItemStack controllerStack = getControllerSlot();
                 IGregTechTileEntity aBaseMetaTileEntity = getBaseMetaTileEntity();
-                if(controllerStack==null) return SimpleCheckRecipeResult.ofFailure("failed");
-                if(controllerStack.isItemEqual(GTCMItemList.TestItem0.get(1))){
+                if (controllerStack == null) return SimpleCheckRecipeResult.ofFailure("failed");
+                if (controllerStack.isItemEqual(GTCMItemList.TestItem0.get(1))) {
                     String mobType = controllerStack.getTagCompound()
                         .getString("mobType");
                     MobHandlerLoader.MobEECRecipe recipe = MobHandlerLoader.recipeMap.get(mobType);
-//                    mOutputItems = recipe
-//                        .generateOutputs(new FastRandom(), this, 7, 3, false, false);
+                    // mOutputItems = recipe
+                    // .generateOutputs(new FastRandom(), this, 7, 3, false, false);
                 }
-                return  SimpleCheckRecipeResult.ofSuccess("debug");
+                return SimpleCheckRecipeResult.ofSuccess("debug");
             }
         };
     }
@@ -1110,5 +1116,40 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.EuTier;
         return ret;
     }
+    private static class ESSFakePlayer extends FakePlayer {
 
+        TST_EcoSphereSimulator mte;
+        ItemStack currentWeapon;
+
+        public ESSFakePlayer(TST_EcoSphereSimulator mte) {
+            super(
+                (WorldServer) mte.getBaseMetaTileEntity()
+                    .getWorld(),
+                new GameProfile(
+                    UUID.nameUUIDFromBytes("[EEC Fake Player]".getBytes(StandardCharsets.UTF_8)),
+                    "[EEC Fake Player]"));
+            this.mte = mte;
+        }
+
+        @Override
+        public void renderBrokenItemStack(ItemStack p_70669_1_) {}
+
+        @Override
+        public Random getRNG() {
+            return mte.rand;
+        }
+
+        @Override
+        public void destroyCurrentEquippedItem() {}
+
+        @Override
+        public ItemStack getCurrentEquippedItem() {
+            return currentWeapon;
+        }
+
+        @Override
+        public ItemStack getHeldItem() {
+            return currentWeapon;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getItemStackString;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.getItemStackString;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
                     WatersOutputs.add(stackCopy);
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                LOGGER.error("TST_AquaticZoneFakeRecipeGenerateFail_2", e);
+                LOGGER.error("TST_AquaticZoneFakeRecipeGenerateFail", e);
             }
         }
         Collections.addAll(
@@ -98,7 +98,7 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
                 fishField.setAccessible(true);
                 cachedFishList = (ArrayList<WeightedRandomFishable>) fishField.get(null);
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                LOGGER.error("TST_AquaticZoneFakeRecipeGenerateFail_1", e);
+                LOGGER.error("TST_AquaticZoneFakeRecipeGenerateFail", e);
                 return new ArrayList<>();
             }
         }
@@ -107,8 +107,10 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
 
     void loadAquaticZoneFakeRecipes() {
         for (ItemStack aStack : WatersOutputs) {
-            if (aStack == null) aStack = GTCMItemList.TestItem0.get(1);
-            addFakeRecipe(GTCMItemList.TestItem0.get(1), aStack, WaterStack);
+            ItemStack Input = aStack.copy();
+            Input.stackSize = 0;
+//            addEnchantmentLight(Input);
+            addFakeRecipe(Input, aStack, WaterStack);
         }
     }
 

@@ -65,4 +65,6 @@ dependencies {
     implementation('com.google.auto.value:auto-value-annotations:1.10.1')
     annotationProcessor('com.google.auto.value:auto-value:1.10.1')
     //These 2 deps are for mixin
+    devOnlyNonPublishable("com.github.GTNewHorizons:Infernal-Mobs:1.8.1-GTNH:dev")
+
 }

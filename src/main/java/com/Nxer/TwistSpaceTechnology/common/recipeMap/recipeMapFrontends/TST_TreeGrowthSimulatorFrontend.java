@@ -20,7 +20,7 @@ import gregtech.nei.RecipeDisplayInfo;
 import gregtech.nei.formatter.INEISpecialInfoFormatter;
 import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm;
 
-public class TST_MegaTreeFarmFrontend extends RecipeMapFrontend {
+public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 
     private static final int SLOT_SIZE = 18;
     private static final int CENTER_X = 90;
@@ -33,12 +33,10 @@ public class TST_MegaTreeFarmFrontend extends RecipeMapFrontend {
     private static final int OUTPUTS_X = CENTER_X + SLOT_SIZE;
     private static final int OUTPUTS_Y = INPUTS_Y;
 
-    public TST_MegaTreeFarmFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
+    public TST_TreeGrowthSimulatorFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
         super(
-            uiPropertiesBuilder
-                .addNEITransferRect(
-                    new Rectangle(INPUTS_X + SLOT_SIZE * 2, INPUTS_Y + SLOT_SIZE / 2, SLOT_SIZE * 2, SLOT_SIZE))
+            uiPropertiesBuilder.addNEITransferRect(new Rectangle(72, 18, SLOT_SIZE * 2, SLOT_SIZE))
                 .progressBarPos(new Pos2d(CENTER_X - 10, INPUTS_Y + SLOT_SIZE / 2)),
             neiPropertiesBuilder.neiSpecialInfoFormatter(new MegaTreeGrowthSimulator_SpecialValueFormatter()));
     }
@@ -73,8 +71,8 @@ public class TST_MegaTreeFarmFrontend extends RecipeMapFrontend {
         GT_NEI_DefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
         // Special Stack
         if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 2).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("MegaTreeGrowthSimulator.nei.tooltip.0"));
-            // #tr MegaTreeGrowthSimulator.nei.tooltip.0
+            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.0"));
+            // #tr ESP.TreeGrowthSimulator.nei.tooltip.0
             // # Place in machine controller slot
             // #zh_CN 放入控制器插槽
             super.handleNEIItemTooltip(stack, currentTip, neiCachedRecipe);
@@ -82,8 +80,8 @@ public class TST_MegaTreeFarmFrontend extends RecipeMapFrontend {
         }
         // Fluid Stack
         else if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 1).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("MegaTreeGrowthSimulator.nei.tooltip.1"));
-            // #tr MegaTreeGrowthSimulator.nei.tooltip.1
+            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.1"));
+            // #tr ESP.TreeGrowthSimulator.nei.tooltip.1
             // # Input fluid to grow trees
             // #zh_CN 输入流体以拟生树木
             super.handleNEIItemTooltip(stack, currentTip, neiCachedRecipe);
@@ -94,20 +92,20 @@ public class TST_MegaTreeFarmFrontend extends RecipeMapFrontend {
 
         // Inputs
         int slot = 0;
-        String[] tooltipInputs = { TextEnums.tr("MegaTreeGrowthSimulator.nei.tooltip.2"),
-            // #tr MegaTreeGrowthSimulator.nei.tooltip.2
+        String[] tooltipInputs = { TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.2"),
+            // #tr ESP.TreeGrowthSimulator.nei.tooltip.2
             // # Place in an input bus to harvest logs
             // #zh_CN 放入输入总线以收获原木
-            TextEnums.tr("MegaTreeGrowthSimulator.nei.tooltip.3"),
-            // #tr MegaTreeGrowthSimulator.nei.tooltip.3
+            TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.3"),
+            // #tr ESS.TreeGrowthSimulator.nei.tooltip.3
             // # Place in an input bus to harvest saplings
             // #zh_CN 放入输入总线以收获树苗
-            TextEnums.tr("MegaTreeGrowthSimulator.nei.tooltip.4"),
-            // #tr MegaTreeGrowthSimulator.nei.tooltip.4
+            TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.4"),
+            // #tr ESS.TreeGrowthSimulator.nei.tooltip.4
             // # Place in an input bus to harvest leaves
             // #zh_CN 放入输入总线以收获树叶
-            TextEnums.tr("MegaTreeGrowthSimulator.nei.tooltip.5")
-            // #tr MegaTreeGrowthSimulator.nei.tooltip.5
+            TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.5")
+            // #tr ESS.TreeGrowthSimulator.nei.tooltip.5
             // # Place in an input bus to harvest fruit
             // #zh_CN 放入输入总线以收获果实
         };
@@ -129,8 +127,8 @@ public class TST_MegaTreeFarmFrontend extends RecipeMapFrontend {
             if (mode < recipe.mOutputs.length && recipe.mOutputs[mode] != null) {
                 // There is a valid output in this mode.
                 if (slot < neiCachedRecipe.mOutputs.size() && stack == neiCachedRecipe.mOutputs.get(slot).item) {
-                    currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("MegaTreeGrowthSimulator.nei.tooltip.6")
-                    // #tr MegaTreeGrowthSimulator.nei.tooltip.6
+                    currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.6")
+                    // #tr ESS.TreeGrowthSimulator.nei.tooltip.6
                     // # Requires correct Integrated Circuit to harvest
                     // #zh_CN 需要正确的编程电路才能收获
                     );
@@ -151,12 +149,12 @@ public class TST_MegaTreeFarmFrontend extends RecipeMapFrontend {
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
             return Arrays.asList(
-                TextEnums.tr("MegaTreeGrowthSimulator.nei.info.1"),
-                // #tr MegaTreeGrowthSimulator.nei.info.1
+                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"),
+                // #tr ESS.TreeGrowthSimulator.nei.info.1
                 // # Output is further boosted
                 // #zh_CN 产量随电压等级进一步提高
-                TextEnums.tr("MegaTreeGrowthSimulator.nei.info.2")
-            // #tr MegaTreeGrowthSimulator.nei.info.2
+                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.2")
+            // #tr ESS.TreeGrowthSimulator.nei.info.2
             // # by machine energy tier
             // #zh_CN {\SPACE}
             );
