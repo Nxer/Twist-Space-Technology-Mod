@@ -109,7 +109,7 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
         for (ItemStack aStack : WatersOutputs) {
             ItemStack Input = aStack.copy();
             Input.stackSize = 0;
-//            addEnchantmentLight(Input);
+            // addEnchantmentLight(Input);
             addFakeRecipe(Input, aStack, WaterStack);
         }
     }
@@ -134,7 +134,7 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
             .fluidInputs(inputFluid)
             .noOptimize()
             .fake()
-            .duration(20)
+            .duration(20 * 5)
             .eut(0)
             .addTo(GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
     }

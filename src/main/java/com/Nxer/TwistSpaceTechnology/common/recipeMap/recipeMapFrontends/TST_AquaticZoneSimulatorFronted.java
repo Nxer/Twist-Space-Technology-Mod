@@ -32,10 +32,8 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
     public TST_AquaticZoneSimulatorFronted(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
         super(
-            uiPropertiesBuilder
-                .addNEITransferRect(
-                    new Rectangle(72, 18, SLOT_SIZE * 2, SLOT_SIZE))
-                .progressBarPos(new Pos2d(CENTER_X, INPUTS_Y + SLOT_SIZE / 2)),
+            uiPropertiesBuilder.addNEITransferRect(new Rectangle(72, 18, SLOT_SIZE * 2, SLOT_SIZE))
+                .progressBarPos(new Pos2d(CENTER_X - 10, INPUTS_Y)),
             neiPropertiesBuilder.neiSpecialInfoFormatter(
                 new TST_AquaticZoneSimulatorFronted.AquaticZoneSimulator_SpecialValueFormatter()));
     }
@@ -66,7 +64,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
         // Fluid Stack
         if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 1).item) {
             currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.0"));
-            // #tr ESS.AquaticZone.nei.tooltip.0
+            // #tr ESS.AquaticZoneSimulator.nei.tooltip.0
             // # Input fluid to simulate waters
             // #zh_CN 输入流体以模拟水域
             super.handleNEIItemTooltip(stack, currentTip, neiCachedRecipe);
@@ -76,7 +74,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
         // Input Stack
         if (stack == neiCachedRecipe.mInputs.get(0).item) {
             currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.1")
-            // #tr ESS.AquaticZone.nei.tooltip.1
+            // #tr ESS.AquaticZoneSimulator.nei.tooltip.1
             // # Place in machine controller slot to target aquaculture
             // #zh_CN 放入控制器插槽以定向产物
             );
@@ -86,7 +84,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
         // Output Stack
         if (stack == neiCachedRecipe.mOutputs.get(0).item) {
             currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.2")
-            // #tr ESS.AquaticZone.nei.tooltip.2
+            // #tr ESS.AquaticZoneSimulator.nei.tooltip.2
             // # Recipe size determines output chance.
             // #zh_CN 配方数值决定输出权重
             );

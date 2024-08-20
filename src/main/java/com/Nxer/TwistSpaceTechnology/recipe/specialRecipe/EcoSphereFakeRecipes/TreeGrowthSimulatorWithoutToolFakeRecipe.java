@@ -30,11 +30,11 @@ import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.Gr
 
 public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
-    static FluidStack WaterStack = Materials.Water.getFluid(10000);
-    static FluidStack UnknowWaterStack = new FluidStack(BRFluids.UnknowWater, 10000);
-    static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 1000);
-    static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 10000);
-    static FluidStack UUMatterStack = Materials.UUMatter.getFluid(10000);
+    static FluidStack WaterStack = Materials.Water.getFluid(1000);
+    static FluidStack UnknowWaterStack = new FluidStack(BRFluids.UnknowWater, 1000);
+    static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 100);
+    static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 1000);
+    static FluidStack UUMatterStack = Materials.UUMatter.getFluid(500);
 
     static ItemStack[] IntegratedCircuitStack = { GT_Utility.getIntegratedCircuit(1),
         GT_Utility.getIntegratedCircuit(2), GT_Utility.getIntegratedCircuit(3), GT_Utility.getIntegratedCircuit(4), };
@@ -208,7 +208,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
             .special(specialStacks)
             .noOptimize()
             .fake()
-            .duration(20)
+            .duration(20 * 5)
             .eut(0)
             .addTo(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes);
     }

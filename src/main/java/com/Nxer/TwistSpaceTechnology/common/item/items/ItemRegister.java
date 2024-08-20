@@ -235,8 +235,8 @@ public class ItemRegister {
             "Fount Of Ecology"
             ,0,
             // #tr MetaItemIzumik.0.name
-            // # {\BOLD}{\BLUE}Fount Of Ecology
-            // #zh_CN {\BOLD}{\BLUE}生态泉源
+            // # {\BLUE}{\BOLD}Fount Of Ecology
+            // #zh_CN {\BLUE}{\BOLD}生态泉源
             new String[]{tr("FountOfEcology.tooltips.01"), tr("FountOfEcology.tooltips.02")},
             // #tr FountOfEcology.tooltips.01
             // # {\AQUA}A unique looking jellyfish

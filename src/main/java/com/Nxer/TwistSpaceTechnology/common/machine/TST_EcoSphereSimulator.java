@@ -4,8 +4,10 @@ import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCa
 import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
 import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
 import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -18,7 +20,6 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,13 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
-import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import com.kuba6000.mobsinfo.api.utils.FastRandom;
-import com.mojang.authlib.GameProfile;
-import kubatech.tileentity.gregtech.multiblock.GT_MetaTileEntity_ExtremeEntityCrusher;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -46,8 +43,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -62,6 +57,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -94,7 +90,6 @@ import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
-import kubatech.loaders.MobHandlerLoader;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -123,8 +118,8 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     boolean isFocusMode = false;
     private static ItemStack FountOfEcology;
     private static ItemStack Offspring;
-    public ESSFakePlayer ESSPlayer = null;
-    public final Random rand = new FastRandom();
+    // public ESSFakePlayer ESSPlayer = null;
+    // public final Random rand = new FastRandom();
 
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
@@ -250,25 +245,25 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
-            if (controllerTier != 0) {
-                this.mMode = (byte) ((this.mMode + 1) % 3);
-                SetRemoveWater();
-                GT_Utility
-                    .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MegaTreeFram.modeMsg." + this.mMode));
-            }
+            // if (controllerTier != 0) {
+            this.mMode = (byte) ((this.mMode + 1) % 2);
+            SetRemoveWater();
+            GT_Utility
+                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + this.mMode));
+            // }
         }
     }
 
-    private static final String STRUCTURE_PIECE_MAIN = "mainMegaTreeFarm0";
-    private static final String STRUCTURE_PIECE_MAIN1 = "mainMegaTreeFarm1";
-    private static final String STRUCTURE_PIECE_WATER = "waterMegaTreeFarm";
+    private static final String STRUCTURE_PIECE_MAIN = "mainEcoSphereSimulator0";
+    private static final String STRUCTURE_PIECE_MAIN1 = "mainEcoSphereSimulator1";
+    private static final String STRUCTURE_PIECE_WATER = "waterEcoSphereSimulator";
     private static IStructureDefinition<TST_EcoSphereSimulator> STRUCTURE_DEFINITION = null;
 
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
         int structureTier = stackSize.stackSize + controllerTier - 1;
         if (structureTier > 1) structureTier = 1;
-        this.buildPiece("mainMegaTreeFarm" + structureTier, stackSize, hintsOnly, 16, 38, 7);
+        this.buildPiece("mainEcoSphereSimulator" + structureTier, stackSize, hintsOnly, 16, 38, 7);
     }
 
     @Override
@@ -279,7 +274,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         int structureTier = stackSize.stackSize + controllerTier - 1;
         if (structureTier > 1) structureTier = 1;
         built = survivialBuildPiece(
-            "mainMegaTreeFarm" + structureTier,
+            "mainEcoSphereSimulator" + structureTier,
             stackSize,
             16,
             38,
@@ -298,7 +293,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         // setDebugEnabled(true);
-        return checkPiece("mainMegaTreeFarm" + controllerTier, 16, 38, 7)
+        return checkPiece("mainEcoSphereSimulator" + controllerTier, 16, 38, 7)
             & checkPiece(STRUCTURE_PIECE_WATER, 0, 37, -9);
     }
 
@@ -560,57 +555,6 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
     };
 
-    @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        // #tr Tooltip_MegaTreeFarm_MachineType
-        // # Tree Farm
-        // #zh_CN 树厂
-        tt.addMachineType(TextEnums.tr("Tooltip_MegaTreeFarm_MachineType"))
-            // #tr Tooltip_MegaTreeFarm_Controller
-            // # Controller block for the Eco-Sphere Growth Simulator
-            // #zh_CN 拟似生态圈的控制方块
-            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm_Controller"))
-            // #tr Tooltip_MegaTreeFarm.0.01
-            // # {\SPACE}
-            // #zh_CN {\SPACE}
-            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.01"))
-            // #tr Tooltip_MegaTreeFarm.0.02
-            // # Hark to the whispers of all creation......
-            // #zh_CN 聆听万物之声......
-            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.02"))
-            // #tr Tooltip_MegaTreeFarm.0.03
-            // # Yet, save the bees, for they do buzz too loudly.
-            // #zh_CN 等一下, 蜜蜂除外. 它实在是太吵了.
-            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.03"))
-            // #tr Tooltip_MegaTreeFarm.0.04
-            // #
-            // #zh_CN
-            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.04"))
-            // #tr Tooltip_MegaTreeFarm.0.05
-            // #
-            // #zh_CN 得益于神秘使们在推动魔电一体化进程的贡献
-            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.05"))
-            // #tr Tooltip_MegaTreeFarm.0.06
-            // #
-            // #zh_CN
-            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.06"))
-            // #tr Tooltip_MegaTreeFarm.0.07
-            // #
-            // #zh_CN
-            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.07"))
-            // #tr Tooltip_MegaTreeFarm.0.08
-            // #
-            // #zh_CN
-            .addInfo(TextEnums.tr("Tooltip_MegaTreeFarm.0.08"))
-            .addController(textUseBlueprint)
-            .addInputBus(textUseBlueprint, 1)
-            .addOutputBus(textUseBlueprint, 1)
-            .addEnergyHatch(textUseBlueprint, 2)
-            .toolTipFinisher(ModName);
-        return tt;
-    }
-
     // spotless:on
 
     private void SetRemoveWater() {
@@ -863,10 +807,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     inputFluids = new FluidStack[0];
                 }
                 SetRemoveWater();
-
+                EuTier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
+                if (EuTier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
+                tierMultiplier = getTierMultiplier(EuTier);
                 return switch (mMode) {
                     case 1 -> AquaticZoneSimulator();
-                    case 2 -> MachineMode3();
+                    // case 2 -> MachineMode3();
                     default -> TreeGrowthSimulator();
                 };
             }
@@ -877,14 +823,11 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 EnumMap<Mode, ItemStack> outputPerMode = queryTreeProduct(sapling);
                 if (outputPerMode == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
 
-                EuTier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
-                if (EuTier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
                 int tier_temp = EuTier;
-                tierMultiplier = getTierMultiplier(EuTier);
 
                 // different liquid = different output
                 Fluid RecipeLiquid = null;
-                int RecipeLiquidCost = 10000;
+                int RecipeLiquidCost = 1000;
                 ArrayList<FluidStack> InputFluids = getStoredFluids();
                 for (FluidStack aFluid : InputFluids) {
                     if (aFluid.getFluid()
@@ -926,7 +869,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 }
                 if (RecipeLiquid == null) return SimpleCheckRecipeResult.ofFailure("no_fluid");
 
-                if (controllerTier > 0) RecipeLiquidCost /= 100;
+                if (controllerTier > 0) RecipeLiquidCost /= 10;
 
                 // multi input hatch available
                 long inputWaterAmount = 0;
@@ -996,24 +939,21 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 }
 
                 for (ItemStack stack : outputs) {
-                    if (stack.stackSize < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
+                    if (stack.stackSize < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input_fluid");
                 }
                 outputItems = outputs.toArray(new ItemStack[0]);
 
-                duration = 20;
+                duration = controllerTier > 0 ? 20 : 100;
                 calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
                 return SimpleCheckRecipeResult.ofSuccess("growing_trees");
             }
 
             private CheckRecipeResult AquaticZoneSimulator() {
-                EuTier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
-                if (EuTier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
                 int tier_temp = EuTier;
-                tierMultiplier = getTierMultiplier(EuTier);
 
                 Fluid RecipeLiquid = FluidRegistry.WATER;
                 int RecipeLiquidCost = 10000;
-                if (controllerTier > 0) RecipeLiquidCost /= 100;
+                if (controllerTier > 0) RecipeLiquidCost /= 10;
                 ArrayList<FluidStack> InputFluids = getStoredFluids();
                 long inputWaterAmount = 0;
                 ArrayList<FluidStack> WaterHatchStack = new ArrayList<>();
@@ -1082,26 +1022,26 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
                 outputItems = outputs.toArray(new ItemStack[0]);
 
-                duration = 20;
+                duration = controllerTier > 0 ? 20 : 100;
                 calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
 
                 if (isFocusMode) return SimpleCheckRecipeResult.ofSuccess("focus on");
                 return SimpleCheckRecipeResult.ofSuccess("fishing");
             }
 
-            private CheckRecipeResult MachineMode3() {
-                ItemStack controllerStack = getControllerSlot();
-                IGregTechTileEntity aBaseMetaTileEntity = getBaseMetaTileEntity();
-                if (controllerStack == null) return SimpleCheckRecipeResult.ofFailure("failed");
-                if (controllerStack.isItemEqual(GTCMItemList.TestItem0.get(1))) {
-                    String mobType = controllerStack.getTagCompound()
-                        .getString("mobType");
-                    MobHandlerLoader.MobEECRecipe recipe = MobHandlerLoader.recipeMap.get(mobType);
-                    // mOutputItems = recipe
-                    // .generateOutputs(new FastRandom(), this, 7, 3, false, false);
-                }
-                return SimpleCheckRecipeResult.ofSuccess("debug");
-            }
+            // private CheckRecipeResult MachineMode3() {
+            // ItemStack controllerStack = getControllerSlot();
+            // IGregTechTileEntity aBaseMetaTileEntity = getBaseMetaTileEntity();
+            // if (controllerStack == null) return SimpleCheckRecipeResult.ofFailure("failed");
+            // if (controllerStack.isItemEqual(GTCMItemList.TestItem0.get(1))) {
+            // String mobType = controllerStack.getTagCompound()
+            // .getString("mobType");
+            // MobHandlerLoader.MobEECRecipe recipe = MobHandlerLoader.recipeMap.get(mobType);
+            // // mOutputItems = recipe
+            // // .generateOutputs(new FastRandom(), this, 7, 3, false, false);
+            // }
+            // return SimpleCheckRecipeResult.ofSuccess("debug");
+            // }
         };
     }
 
@@ -1116,40 +1056,134 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.EuTier;
         return ret;
     }
-    private static class ESSFakePlayer extends FakePlayer {
 
-        TST_EcoSphereSimulator mte;
-        ItemStack currentWeapon;
-
-        public ESSFakePlayer(TST_EcoSphereSimulator mte) {
-            super(
-                (WorldServer) mte.getBaseMetaTileEntity()
-                    .getWorld(),
-                new GameProfile(
-                    UUID.nameUUIDFromBytes("[EEC Fake Player]".getBytes(StandardCharsets.UTF_8)),
-                    "[EEC Fake Player]"));
-            this.mte = mte;
-        }
-
-        @Override
-        public void renderBrokenItemStack(ItemStack p_70669_1_) {}
-
-        @Override
-        public Random getRNG() {
-            return mte.rand;
-        }
-
-        @Override
-        public void destroyCurrentEquippedItem() {}
-
-        @Override
-        public ItemStack getCurrentEquippedItem() {
-            return currentWeapon;
-        }
-
-        @Override
-        public ItemStack getHeldItem() {
-            return currentWeapon;
-        }
+    // private static class ESSFakePlayer extends FakePlayer {
+    //
+    // TST_EcoSphereSimulator mte;
+    // ItemStack currentWeapon;
+    //
+    // public ESSFakePlayer(TST_EcoSphereSimulator mte) {
+    // super(
+    // (WorldServer) mte.getBaseMetaTileEntity()
+    // .getWorld(),
+    // new GameProfile(
+    // UUID.nameUUIDFromBytes("[EEC Fake Player]".getBytes(StandardCharsets.UTF_8)),
+    // "[EEC Fake Player]"));
+    // this.mte = mte;
+    // }
+    //
+    // @Override
+    // public void renderBrokenItemStack(ItemStack p_70669_1_) {}
+    //
+    // @Override
+    // public Random getRNG() {
+    // return mte.rand;
+    // }
+    //
+    // @Override
+    // public void destroyCurrentEquippedItem() {}
+    //
+    // @Override
+    // public ItemStack getCurrentEquippedItem() {
+    // return currentWeapon;
+    // }
+    //
+    // @Override
+    // public ItemStack getHeldItem() {
+    // return currentWeapon;
+    // }
+    // }
+    @Override
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        // #tr Tooltip_EcoSphereSimulator_MachineType
+        // # Tree Farm | Aquatic Farm
+        // #zh_CN 树厂 | 渔场
+        tt.addMachineType(TextEnums.tr("Tooltip_EcoSphereSimulator_MachineType"))
+            // #tr Tooltip_EcoSphereSimulator_Controller
+            // # Controller block for the Eco-Sphere Growth Simulator
+            // #zh_CN 拟似生态圈的控制方块
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator_Controller"))
+            // #tr Tooltip_EcoSphereSimulator.0.01
+            // # {\SPACE}
+            // #zh_CN {\SPACE}
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.01"))
+            // #tr Tooltip_EcoSphereSimulator.0.02
+            // # {\WHITE}Hark to the whispers of all creation......
+            // #zh_CN {\WHITE}聆听万物之声......
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.02"))
+            // #tr Tooltip_EcoSphereSimulator.0.03
+            // # {\WHITE}Yet, save the bees, for they do buzz too loudly.
+            // #zh_CN {\WHITE}等一下, 蜜蜂除外. 它实在是太吵了.
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.03"))
+            // #tr Tooltip_EcoSphereSimulator.0.04
+            // # {\SPACE}
+            // #zh_CN {\SPACE}
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.04"))
+            // #tr Tooltip_EcoSphereSimulator.0.05
+            // # {\SPACE}
+            // #zh_CN {\SPACE}
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.05"))
+            // #tr Tooltip_EcoSphereSimulator.0.06
+            // # {\AQUA}The thaumaturges' latest masterpiece in the Integration of Magic and Electrical Engineering
+            // #zh_CN {\AQUA}神秘使在魔电一体化领域的又一力作
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.06"))
+            // #tr Tooltip_EcoSphereSimulator.0.07
+            // # {\AQUA}Simulate the growth and development cycle of samples using simple raw materials
+            // #zh_CN {\AQUA}通过简单的原材料就可以模拟样本的生长发育周期
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.07"))
+            .addSeparator()
+            // // #tr Tooltip_EcoSphereSimulator.0.08
+            // // # {\SPACE}
+            // // #zh_CN {\SPACE}
+            // .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.08"))
+            // #tr Tooltip_EcoSphereSimulator.0.09
+            // # Gazing at the creatures in the tank
+            // #zh_CN 看向水缸中的生物
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.09"))
+            // #tr Tooltip_EcoSphereSimulator.0.10
+            // # You find yourself deep in thought......
+            // #zh_CN 你陷入了沉思......
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.10"))
+            // #tr Tooltip_EcoSphereSimulator.0.11
+            // # This machine seems to have room for improvement
+            // #zh_CN 这台机器似乎还有提升空间
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.11"))
+            .addSeparator()
+            .addInfo(StructureTooComplex)
+            .addInfo(BLUE_PRINT_INFO)
+            // #tr Tooltip_EcoSphereSimulator.1.00
+            // # {\SPACE}
+            // #zh_CN {\SPACE}
+            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.00"))
+            // #tr Tooltip_EcoSphereSimulator.1.01
+            // # Upgrade to a secondary structure after inserting the {\BLUE}Fount Of Ecology
+            // #zh_CN 使用{\BLUE}生态泉源{\RESET}以提升主机等级
+            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.01"))
+            // #tr Tooltip_EcoSphereSimulator.1.02
+            // # Benefiting from the diverse biological samples of the Fount Of Ecology
+            // #zh_CN 同时升级结构至等级2
+            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.02"))
+            // #tr Tooltip_EcoSphereSimulator.1.03
+            // # {\SPACE}
+            // #zh_CN {\SPACE}
+            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.03"))
+            // #tr Tooltip_EcoSphereSimulator.1.04
+            // # Benefiting from the diverse biological samples of the {\BLUE}Fount Of Ecology
+            // #zh_CN 得益于{\BLUE}生态泉源{\RESET}繁多的生物样本
+            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.04"))
+            // #tr Tooltip_EcoSphereSimulator.1.05
+            // # Fluid consumption reduces by 90%%, and recipe time shortens to 1s
+            // #zh_CN 配方消耗流体减少90%%, 且配方耗时缩短为1s
+            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.05"))
+            // #tr Tooltip_EcoSphereSimulator.1.06
+            // # And new recipes are available (in progress)
+            // #zh_CN 并且可以使用新配方(未完成)
+            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.06"))
+            .addStructureInfo(Text_SeparatingLine)
+            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
+            .toolTipFinisher(ModName);
+        return tt;
     }
+
 }
