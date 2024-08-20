@@ -35,7 +35,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
@@ -1082,7 +1081,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 verticalOffSet_ring,
                 depthOffSet_ring_first - rings * depthOffSet_ring_distance)) {
 
-                    TwistSpaceTechnology.LOG.info("TEST: checkPiece RING C constraintorPiece++.");
                     constraintorPiece++;
 
                 } else if (checkPiece(
@@ -1091,7 +1089,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     verticalOffSet_ring,
                     depthOffSet_ring_first - rings * depthOffSet_ring_distance)) {
 
-                        TwistSpaceTechnology.LOG.info("TEST: checkPiece RING M mergerPiece++.");
                         mergerPiece++;
 
                     } else break;
@@ -1101,8 +1098,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         }
 
         if (oscillatorPiece < 1 || constraintorPiece < 1 || mergerPiece < 1) {
-            TwistSpaceTechnology.LOG.info(
-                "TEST: checkMachine oscillatorPiece < 1 || constraintorPiece < 1 || mergerPiece < 1. return false;");
             return false;
         }
 
