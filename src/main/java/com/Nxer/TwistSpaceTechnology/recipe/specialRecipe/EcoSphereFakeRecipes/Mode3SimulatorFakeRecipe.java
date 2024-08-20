@@ -6,11 +6,14 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.kuba6000.mobsinfo.api.IChanceModifier;
 import com.kuba6000.mobsinfo.api.MobDrop;
 import com.kuba6000.mobsinfo.api.MobRecipe;
+import com.kuba6000.mobsinfo.api.event.PostMobRegistrationEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import kubatech.config.Config;
 import kubatech.loaders.MobHandlerLoader;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -18,18 +21,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static gregtech.api.enums.Mods.InfernalMobs;
 import static kubatech.tileentity.gregtech.multiblock.GT_MetaTileEntity_ExtremeEntityCrusher.DIAMOND_SPIKES_DAMAGE;
 import static kubatech.tileentity.gregtech.multiblock.GT_MetaTileEntity_ExtremeEntityCrusher.MOB_SPAWN_INTERVAL;
 
 public class Mode3SimulatorFakeRecipe extends MobHandlerLoader implements IRecipePool{
+    private static MobHandlerLoader instance = null;
+    public static Map<String, MobEECRecipe> MobrecipeMap = new HashMap<>();
 
     @Override
-    public void loadRecipes() {}
+    public void loadRecipes() {
+        init();
+    }
 
-    private static MobHandlerLoader instance = null;
-    public static Map<String, MobEECRecipe> recipeMap = new HashMap<>();
+    public static void init() {
+        instance = new Mode3SimulatorFakeRecipe();
+        MinecraftForge.EVENT_BUS.register(instance);
+    }
+
+
 
     public static class MobEECRecipe {
 
@@ -154,13 +166,20 @@ public class Mode3SimulatorFakeRecipe extends MobHandlerLoader implements IRecip
                                 .getItemEnchantability());
                         stacks.add(infernalstack);
                         MTE.lEUt *= 8L;
-                        MTE.mMaxProgresstime *= mods * InfernalMobsCore.instance()
-                            .getMobModHealthFactor();
+                        MTE.mMaxProgresstime *= (int) (mods * InfernalMobsCore.instance()
+                                                    .getMobModHealthFactor());
                     }
                 }
             }
 
             return stacks.toArray(new ItemStack[0]);
         }
+    }
+    void reWriteRecipes(){
+        MobrecipeMap = recipeMap.entrySet().stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                entry -> new MobEECRecipe(entry.getValue()) // 这里假设 MobEECRecipe 有一个复制构造函数
+            ));
     }
 }
