@@ -8,6 +8,10 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_Separatin
 import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.GT_HatchElement.Energy;
+import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
+import static gregtech.api.enums.GT_HatchElement.InputBus;
+import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
@@ -35,7 +39,6 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizon.structurelib.structure.StructureUtility;
 
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridNode;
@@ -59,9 +62,9 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_StructureUtility;
 import gtPlusPlus.core.block.ModBlocks;
 
 public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
@@ -102,10 +105,12 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 .addElement('A', ofBlock(GregTech_API.sBlockCasings1, 14))
                 .addElement(
                     'B',
-                    StructureUtility.ofChain(
-                        GT_StructureUtility
-                            .ofHatchAdder(TST_MegaCraftingCenter::addToMachineList, textureOffset + 12, 1),
-                        StructureUtility.ofBlock(TT_Container_Casings.sBlockCasingsTT, 12)))
+                    GT_HatchElementBuilder.<TST_MegaCraftingCenter>builder()
+                        .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
+                        .adder(TST_MegaCraftingCenter::addToMachineList)
+                        .casingIndex(textureOffset + 12)
+                        .dot(1)
+                        .buildAndChain(ofBlock(TT_Container_Casings.sBlockCasingsTT, 12)))
                 .addElement('C', ofBlock(TT_Container_Casings.sBlockCasingsTT, 10))
                 .addElement('D', ofBlock(ModBlocks.blockCasings3Misc, 15))
                 .addElement('E', ofBlock(QuantumGlassBlock.INSTANCE, 0))
@@ -194,6 +199,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 additionalOutput.add(newStack.copy());
                 p -= Integer.MAX_VALUE;
             }
+
             newStack = stack.copy();
             if (p > 0) newStack.stackSize = (int) p;
             else continue;
@@ -216,13 +222,16 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     @Override
     public AENetworkProxy getProxy() {
         if (gridProxy == null) {
-            if (getBaseMetaTileEntity() instanceof IGridProxyable) {
+            IGregTechTileEntity mte = getBaseMetaTileEntity();
+            if (mte instanceof IGridProxyable) {
                 gridProxy = new AENetworkProxy(this, "proxy", GTCMItemList.ExtremeCraftCenter.get(1), true);
                 gridProxy.setFlags(GridFlags.REQUIRE_CHANNEL);
                 // updateValidGridProxySides();
-                if (getBaseMetaTileEntity().getWorld() != null) gridProxy.setOwner(
-                    getBaseMetaTileEntity().getWorld()
-                        .getPlayerEntityByName(getBaseMetaTileEntity().getOwnerName()));
+                if (mte.getWorld() != null) {
+                    gridProxy.setOwner(
+                        mte.getWorld()
+                            .getPlayerEntityByName(getBaseMetaTileEntity().getOwnerName()));
+                }
             }
             // GT_MetaTileEntity_Hatch_CraftingInput_ME
         }
