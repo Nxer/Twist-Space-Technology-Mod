@@ -507,6 +507,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         // final parallel to process
         parallel = Math.min(parallel, tParallel);
 
+        if (parallel < 1) return CheckRecipeResultRegistry.NO_RECIPE;
+
         // rod amount of output
         long outputRodAmount = (long) (parallel * rodAmountRecipe);
 
