@@ -1,5 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
+import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
+import static gregtech.api.enums.TC_Aspects.ELECTRUM;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_TreeFarm;
+import static kubatech.api.enums.ItemList.ExtremeEntityCrusher;
+import static kubatech.api.enums.ItemList.ExtremeIndustrialGreenhouse;
+import static net.minecraft.init.Items.diamond_sword;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 
@@ -11,8 +18,11 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gtPlusPlus.core.material.ALLOY;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
@@ -104,6 +114,65 @@ public class TCResearches {
                                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                                     new ItemStack(blockMetalDevice, 1, 12) })))
                     .registerResearchItem();
+
+            if (Config.Enable_MegaTreeFarm) {
+                new ResearchItem(
+                    "ECO_SPHERE_SIMULATOR",
+                    "BASICS",
+                    (new AspectList()).merge(Aspect.TREE, 1)
+                        .merge(Aspect.MECHANISM, 1)
+                        .merge(Aspect.WATER, 1)
+                        .merge(Aspect.PLANT, 1)
+                        .merge(Aspect.ELDRITCH, 1)
+                        .merge(Aspect.FLESH, 1),
+                    7,
+                    -12,
+                    10,
+                    GTCMItemList.MegaTreeFarm.get(1, 0))
+                        .setPages(
+                            new ResearchPage("A_STRING"),
+                            new ResearchPage(
+                                new InfusionRecipe(
+                                    "ECO_SPHERE_SIMULATOR",
+                                    GTCMItemList.MegaTreeFarm.get(1),
+                                    100,
+                                    (new AspectList()).merge(Aspect.MECHANISM, 256)
+                                        .merge(Aspect.TREE, 1024)
+                                        .merge(Aspect.HARVEST, 2048)
+                                        .merge(Aspect.WATER, 1024)
+                                        .merge(Aspect.LIFE, 2048)
+                                        .merge(Aspect.PLANT, 1024)
+                                        .merge(Aspect.CROP, 2048)
+                                        .merge(Aspect.FLESH, 1024)
+                                        .merge(Aspect.WEAPON, 2048)
+                                        .merge((Aspect) ELECTRUM.mAspect, 8192),
+//                                        .merge(ULTRA_DEATH, 64)
+                                    GT_ModHandler.getModItem(Mods.Botania.ID, "manaResource", 1, 5),
+                                    new ItemStack[] { Industrial_TreeFarm.get(1),
+                                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                                        ALLOY.TITANSTEEL.getPlateDense(1),
+                                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+
+                                        Industrial_FishingPond.get(1),
+                                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                                        ALLOY.TITANSTEEL.getPlateDense(1),
+                                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+
+                                        ExtremeIndustrialGreenhouse.get(1),
+                                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                                        ALLOY.TITANSTEEL.getPlateDense(1),
+                                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+
+                                        Mods.EnderIO.isModLoaded() ? ExtremeEntityCrusher.get(1)
+                                            : new ItemStack(diamond_sword, 1),
+                                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                                        ALLOY.TITANSTEEL.getPlateDense(1),
+                                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1) })))
+                        .setParents("INDUSTRIAL_MAGIC_MATRIX")
+                        // .setHidden()
+                        .setConcealed()
+                        .registerResearchItem();;
+            }
         }
     }
 }
