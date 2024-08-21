@@ -1407,3 +1407,6 @@ Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name=时空之种�
 Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location=替换主方块正前方结构方块
 TST_DSPLauncher.getInfoData.02=速度倍率: 
 Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=过载模式参数 = t ^ [ 1 / (1000*900/t + 5) ] ; t = 过载模式时间 (秒)
+GTCM_LightningSpire_12=使用剪线钳开启/关闭闪电特效
+LightningSpire.enable_lightning.true=启用闪电特效
+LightningSpire.enable_lightning.false=禁用闪电特效
