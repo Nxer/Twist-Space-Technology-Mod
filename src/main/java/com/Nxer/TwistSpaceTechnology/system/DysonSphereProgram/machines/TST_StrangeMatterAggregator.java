@@ -1162,22 +1162,32 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             horizontalOffSet_main,
             verticalOffSet_main,
             depthOffSet_main);
-        for (int i = 0; i < stackSize.stackSize; i++) {
-            buildPiece(
-                buildingRingPieceArray[i % buildingRingPieceArray.length],
-                stackSize,
-                hintsOnly,
-                horizontalOffSet_ring,
-                verticalOffSet_ring,
-                depthOffSet_ring_first - i * depthOffSet_ring_distance);
+
+        int limit = stackSize.stackSize;
+        if (buildingRingPieceArray.length > 3) limit = Config.StructureLoopBuildingLimit_StrangeMatterAggregator;
+
+        int offset = 0;
+        for (int i = 0; i < limit; i++) {
+            for (int j = 0; j < buildingRingPieceArray.length; j++) {
+                buildPiece(
+                    buildingRingPieceArray[j],
+                    stackSize,
+                    hintsOnly,
+                    horizontalOffSet_ring,
+                    verticalOffSet_ring,
+                    depthOffSet_ring_first - offset * depthOffSet_ring_distance);
+
+                offset++;
+            }
         }
+
         buildPiece(
             STRUCTURE_PIECE_END,
             stackSize,
             hintsOnly,
             horizontalOffSet_main,
             verticalOffSet_main,
-            depthOffSet_ring_first - stackSize.stackSize * depthOffSet_ring_distance);
+            depthOffSet_ring_first - offset * depthOffSet_ring_distance);
     }
 
     @Override
@@ -1197,18 +1207,26 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
 
         if (built >= 0) return built;
 
-        for (int i = 0; i < stackSize.stackSize; i++) {
-            built = survivialBuildPiece(
-                buildingRingPieceArray[i % buildingRingPieceArray.length],
-                stackSize,
-                horizontalOffSet_ring,
-                verticalOffSet_ring,
-                depthOffSet_ring_first - i * depthOffSet_ring_distance,
-                elementBudget,
-                env,
-                false,
-                true);
-            if (built >= 0) return built;
+        int limit = stackSize.stackSize;
+        if (buildingRingPieceArray.length > 3) limit = Config.StructureLoopBuildingLimit_StrangeMatterAggregator;
+
+        int offset = 0;
+
+        for (int i = 0; i < limit; i++) {
+            for (int j = 0; j < buildingRingPieceArray.length; j++) {
+                built = survivialBuildPiece(
+                    buildingRingPieceArray[j],
+                    stackSize,
+                    horizontalOffSet_ring,
+                    verticalOffSet_ring,
+                    depthOffSet_ring_first - offset * depthOffSet_ring_distance,
+                    elementBudget,
+                    env,
+                    false,
+                    true);
+                if (built >= 0) return built;
+                offset++;
+            }
         }
 
         return survivialBuildPiece(
@@ -1216,7 +1234,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             stackSize,
             horizontalOffSet_main,
             verticalOffSet_main,
-            depthOffSet_ring_first - depthOffSet_ring_distance * stackSize.stackSize,
+            depthOffSet_ring_first - depthOffSet_ring_distance * offset,
             elementBudget,
             env,
             false,

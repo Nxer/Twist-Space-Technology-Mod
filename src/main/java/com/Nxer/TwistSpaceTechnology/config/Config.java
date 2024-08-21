@@ -57,6 +57,7 @@ public class Config {
     public static final String DimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = "Dimensionally Transcendent Matter Plasma Forge Prototype MK2";
     public static final String LargeNeutronOscillator = "Large Neutron Oscillator";
     public static final String MicroSpaceTimeFabricatorio = "Micro SpaceTime Fabricatorio";
+    public static final String StrangeMatterAggregator = "Strange Matter Aggregator";
     // endregion
 
     // region General
@@ -90,6 +91,7 @@ public class Config {
 
     // TODO cfg of StrangeMatterAggregator
     // region StrangeMatterAggregator
+    public static int StructureLoopBuildingLimit_StrangeMatterAggregator = 1;
     public static long PowerConsume_StrangeMatterAggregator = RECIPE_MAX * 256L;
     public static int RecipeTime_T1SpaceTimeOscillator_StrangeMatterAggregator = 120 * 20;
     public static int RecipeTime_T2SpaceTimeOscillator_StrangeMatterAggregator = 40 * 20;
@@ -654,8 +656,9 @@ public class Config {
         EUTOfLaunchingNode = configuration.getInt("EUTOfLaunchingNode", DSP, EUTOfLaunchingNode, 1, Integer.MAX_VALUE, "EUt of Launching Node.");
         EnableRenderDefaultArtificialStar = configuration.getBoolean("EnableRenderDefaultArtificialStar", DSP, EnableRenderDefaultArtificialStar, "Enable Render of Artificial Star when placing a new one.");
         EUEveryStrangeAnnihilationFuelRod = Long.parseLong(configuration.getString("EUEveryStrangeAnnihilationFuelRod", DSP, String.valueOf(EUEveryStrangeAnnihilationFuelRod), "EU of every Strange Annihilation Fuel Rod can generate. Type: long"));
-        // region StrangeMatterAggregator
 
+        // region StrangeMatterAggregator
+        StructureLoopBuildingLimit_StrangeMatterAggregator = configuration.getInt("StructureLoopBuildingLimit_StrangeMatterAggregator", StrangeMatterAggregator, StructureLoopBuildingLimit_StrangeMatterAggregator, 1, 64, "Extra limitation of the number of Hologram Projector stack size in structure auto building. Type: int");
         // endregion
         // endregion
 
