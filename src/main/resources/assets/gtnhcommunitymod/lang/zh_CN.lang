@@ -1364,7 +1364,7 @@ Tooltip_StrangeMatterAggregator_18=    §9---------------- §b§l时空维护流
 Tooltip_StrangeMatterAggregator_19=在主机UI内设置使用的时空维护流体:
 Tooltip_StrangeMatterAggregator_20= T1 = 576L 熔融时空 | T2 = 96L 熔融宇宙素 | T3 = 16L 熔融磁流体约束恒星物质
 Tooltip_StrangeMatterAggregator_21=使用高级时空维护流体可以提高每个湮灭约束器和核心素可以制作的燃料棒数量,
-Tooltip_StrangeMatterAggregator_22= 并降低流体原料的消耗量. 副产物类型取决于使用的时空维护流体.
+Tooltip_StrangeMatterAggregator_22= 并降低辅助材料和流体原料的消耗量. 副产物类型取决于使用的时空维护流体.
 Tooltip_StrangeMatterAggregator_23=T1: 熔融无尽和熔融海珀珍; T2: 熔融时空和熔融调律源金; T3: 熔融宇宙素;
 Tooltip_StrangeMatterAggregator_24=§f§l连续运行§r§f时将产出副产物和更多的主产物.
 Tooltip_StrangeMatterAggregator_25=每次成功运行时, §f连续运行点数§7加一.

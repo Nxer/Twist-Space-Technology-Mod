@@ -250,6 +250,12 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     // endregion
 
     // region Parameters set by SpaceTime Maintenance fluid tier
+
+    /**
+     * How many parallels one tesseract can hold.
+     */
+    protected int tesseractFactor = Config.BasicRodAmountPerConstrainerProduce_SpaceTime_StrangeMatterAggregator;
+
     /**
      * How many fuel rods one Annihilation Constrainer or one Core Element can produce.
      */
@@ -329,16 +335,18 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         maintenanceFluidConsumption = (int) Math
             .max(1d, base * Math.pow(oscillatorTier * oscillatorPiece, 0.8d) / constraintorPiece);
 
+        tesseractFactor = switch (spaceTimeMaintenanceFluidTier) {
+            case 2 -> Config.BasicRodAmountPerConstrainerProduce_Universium_StrangeMatterAggregator;
+            case 3 -> Config.BasicRodAmountPerConstrainerProduce_MagnetoConstrainedStarMatter_StrangeMatterAggregator;
+            default -> Config.BasicRodAmountPerConstrainerProduce_SpaceTime_StrangeMatterAggregator;
+        };
+
         constrainerFactor = oscillatorTier * oscillatorPiece
             * constraintorTier
             * constraintorPiece
             * mergerTier
             * mergerPiece
-            * switch (spaceTimeMaintenanceFluidTier) {
-            case 2 -> Config.BasicRodAmountPerConstrainerProduce_Universium_StrangeMatterAggregator;
-            case 3 -> Config.BasicRodAmountPerConstrainerProduce_MagnetoConstrainedStarMatter_StrangeMatterAggregator;
-            default -> Config.BasicRodAmountPerConstrainerProduce_SpaceTime_StrangeMatterAggregator;
-            };
+            * tesseractFactor;
 
         fluidConsumptionFactor = switch (spaceTimeMaintenanceFluidTier) {
             case 2 -> Config.FluidInputMultiply_UniversiumMaintenance_StrangeMatterAggregator;
@@ -479,9 +487,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         // how many anti matter rod can produce
         long antiMatterRodMaxOutput = annihilationConstrainerAmount * constrainerFactor;
 
-        // how many strange rod can produce
-        long strangeRodMaxOutput = coreElementAmount * constrainerFactor;
-
         // output rod amount of one recipe
         long rodAmountRecipe = 1 + consecutivePoint;
 
@@ -498,7 +503,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         parallel = Math.min(parallel, hydrogenPlasmaAmount / recipeHydrogenPlasma);;
 
         // check tesseract
-        parallel = Math.min(parallel, tesseractAmount / auxiliaryMaterialConsumptionRate);
+        parallel = Math.min(parallel, tesseractAmount * tesseractFactor / auxiliaryMaterialConsumptionRate);
 
         // check stellar frame can do how many rods
         long rodsMax = (long) (stellarFramesAmount / auxiliaryMaterialConsumptionRate);
@@ -554,7 +559,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         }
 
         // tesseract consumption calculated by parallel
-        long consumeTesseract = (long) (Math.max(1, parallel * auxiliaryMaterialConsumptionRate));
+        long consumeTesseract = (long) (Math.max(1, parallel * auxiliaryMaterialConsumptionRate / tesseractFactor));
         for (ItemStack i : tesseracts) {
             // if (null == i || i.stackSize <= 0) continue;
             if (i.stackSize >= consumeTesseract) {
@@ -1629,8 +1634,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 // #zh_CN 使用高级时空维护流体可以提高每个湮灭约束器和核心素可以制作的燃料棒数量,
                 .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_21"))
                 // #tr Tooltip_StrangeMatterAggregator_22
-                // # {\SPACE} and reduce the consumption of fluid materials. The type of byproducts depends on the SpaceTime maintenance fluid used.
-                // #zh_CN {\SPACE}并降低流体原料的消耗量. 副产物类型取决于使用的时空维护流体.
+                // # {\SPACE} and reduce the consumption of fluid materials and auxiliary materials. The type of byproducts depends on the SpaceTime maintenance fluid used.
+                // #zh_CN {\SPACE}并降低辅助材料和流体原料的消耗量. 副产物类型取决于使用的时空维护流体.
                 .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_22"))
                 // #tr Tooltip_StrangeMatterAggregator_23
                 // # T1: Molten Infinity and Molten Hypogen; T2: Molten SpaceTime and Molten Shirabon; T3: Molten Universium;

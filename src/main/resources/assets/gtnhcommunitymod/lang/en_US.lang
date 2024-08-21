@@ -1364,7 +1364,7 @@ Tooltip_StrangeMatterAggregator_18=    §9---------------- §b§lSpaceTime Maint
 Tooltip_StrangeMatterAggregator_19=Setting the used SpaceTime maintenance fluid tier within the machine UI:
 Tooltip_StrangeMatterAggregator_20= T1 = 576L Molten SpaceTime | T2 = 96L Molten Universium | T3 = 16L Molten Magnetohydrodynamically Constrained Star Matter
 Tooltip_StrangeMatterAggregator_21=Using Advanced SpaceTime Maintenance Fluid increases num of fuel rods can be crafted per Annihilation Constrainer and Core Element,
-Tooltip_StrangeMatterAggregator_22=  and reduce the consumption of fluid materials. The type of byproducts depends on the SpaceTime maintenance fluid used.
+Tooltip_StrangeMatterAggregator_22=  and reduce the consumption of fluid materials and auxiliary materials. The type of byproducts depends on the SpaceTime maintenance fluid used.
 Tooltip_StrangeMatterAggregator_23=T1: Molten Infinity and Molten Hypogen; T2: Molten SpaceTime and Molten Shirabon; T3: Molten Universium;
 Tooltip_StrangeMatterAggregator_24=§f§lContinuous Operation§r§f will produce by-products and more of the main product.
 Tooltip_StrangeMatterAggregator_25=For each successful run, §fContinuous Running Points§7 is increased by one.
