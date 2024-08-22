@@ -20,6 +20,7 @@ import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -70,13 +71,7 @@ import gtPlusPlus.core.block.ModBlocks;
 public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     implements ICraftingProvider, IActionHost, IGridProxyable, ISurvivalConstructable {
 
-    @NotNull
-    private ArrayList<ICraftingPatternDetails> cachedPatternDetails = new ArrayList<>();
-    private final HashMap<ICraftingPatternDetails, Long> cachedOutput = new HashMap<>();
-
-    private ArrayList<ItemStack> cachedPattern;
-    @Nullable
-    private AENetworkProxy gridProxy;
+    // region Class Constructor
 
     public TST_MegaCraftingCenter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -84,86 +79,43 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     protected TST_MegaCraftingCenter(String aName) {
         super(aName);
-        // TileMolecularAssembler
-    }
-
-    @Override
-    public IStructureDefinition<TST_MegaCraftingCenter> getStructure_EM() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaCraftingCenter>builder()
-                .addShape(
-                    "MAIN",
-                    transpose(
-                        new String[][] {
-                            { "BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB" },
-                            { "BEEEEEB", "E     E", "E  D  E", "E DAD E", "E  D  E", "E     E", "BEEEEEB" },
-                            { "BEEEEEB", "E  D  E", "E D D E", "ED A DE", "E D D E", "E  D  E", "BEEEEEB" },
-                            { "BEE~EEB", "E DAD E", "ED A DE", "EAACAAE", "ED A DE", "E DAD E", "BEEEEEB" },
-                            { "BEEEEEB", "E  D  E", "E D D E", "ED A DE", "E D D E", "E  D  E", "BEEEEEB" },
-                            { "BEEEEEB", "E     E", "E  D  E", "E DAD E", "E  D  E", "E     E", "BEEEEEB" },
-                            { "BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB" } }))
-                .addElement('A', ofBlock(GregTech_API.sBlockCasings1, 14))
-                .addElement(
-                    'B',
-                    GT_HatchElementBuilder.<TST_MegaCraftingCenter>builder()
-                        .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                        .adder(TST_MegaCraftingCenter::addToMachineList)
-                        .casingIndex(textureOffset + 12)
-                        .dot(1)
-                        .buildAndChain(ofBlock(TT_Container_Casings.sBlockCasingsTT, 12)))
-                .addElement('C', ofBlock(TT_Container_Casings.sBlockCasingsTT, 10))
-                .addElement('D', ofBlock(ModBlocks.blockCasings3Misc, 15))
-                .addElement('E', ofBlock(QuantumGlassBlock.INSTANCE, 0))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-    // Blocks:
-    // A -> ofBlock...(gt.blockcasings, 14, ...);
-    // B -> ofBlock...(gt.blockcasingsTT, 4, ...);
-    // C -> ofBlock...(gt.blockcasingsTT, 10, ...);
-    // D -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
-    // E -> ofBlock...(tile.quantumGlass, 0, ...);
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece("MAIN", stackSize, hintsOnly, 3, 3, 0);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivialBuildPiece("MAIN", stackSize, 3, 3, 0, elementBudget, env, true);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) {
-                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_ON)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .build() };
-        }
-
-        return new ITexture[] { casingTexturePages[0][12] };
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MegaCraftingCenter(mName);
     }
+
+    // endregion
+
+    // region Statics
+
+    public static ItemStack[] convertAEToMC(IAEItemStack[] STACK) {
+        // TODO use normal code style instead `Stream`
+        return Arrays.stream(STACK)
+            .filter(Objects::nonNull)
+            .map(IAEItemStack::getItemStack)
+            .toArray(ItemStack[]::new);
+    }
+
+    // endregion
+
+    // region Logic
+
+    /**
+     * An internal inventory to hold valid patterns' item stacks.
+     */
+    protected Collection<ItemStack> internalPatterns = new ArrayList<>();
+
+    @NotNull
+    private ArrayList<ICraftingPatternDetails> cachedPatternDetails = new ArrayList<>();
+
+    private final HashMap<ICraftingPatternDetails, Long> cachedOutput = new HashMap<>();
+
+    private ArrayList<ItemStack> cachedPattern;
+
+    @Nullable
+    private AENetworkProxy gridProxy;
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -217,8 +169,6 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         // "so you will never see it work!");
     }
 
-    private static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
-
     @Override
     public AENetworkProxy getProxy() {
         if (gridProxy == null) {
@@ -267,11 +217,6 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         mHardHammer = true;
         mSolderingTool = true;
         mCrowbar = true;
-    }
-
-    @Override
-    public boolean doRandomMaintenanceDamage() {
-        return true;
     }
 
     @NotNull
@@ -378,6 +323,91 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         }
     }
 
+    // endregion
+
+    // region Structure
+    protected static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
+
+    @Override
+    public IStructureDefinition<TST_MegaCraftingCenter> getStructure_EM() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaCraftingCenter>builder()
+                .addShape(
+                    "MAIN",
+                    transpose(
+                        // spotless:off
+                        new String[][] {
+                            { "BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB" },
+                            { "BEEEEEB", "E     E", "E  D  E", "E DAD E", "E  D  E", "E     E", "BEEEEEB" },
+                            { "BEEEEEB", "E  D  E", "E D D E", "ED A DE", "E D D E", "E  D  E", "BEEEEEB" },
+                            { "BEE~EEB", "E DAD E", "ED A DE", "EAACAAE", "ED A DE", "E DAD E", "BEEEEEB" },
+                            { "BEEEEEB", "E  D  E", "E D D E", "ED A DE", "E D D E", "E  D  E", "BEEEEEB" },
+                            { "BEEEEEB", "E     E", "E  D  E", "E DAD E", "E  D  E", "E     E", "BEEEEEB" },
+                            { "BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB" } }))
+                // spotless:on
+                .addElement('A', ofBlock(GregTech_API.sBlockCasings1, 14))
+                .addElement(
+                    'B',
+                    GT_HatchElementBuilder.<TST_MegaCraftingCenter>builder()
+                        .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
+                        .adder(TST_MegaCraftingCenter::addToMachineList)
+                        .casingIndex(textureOffset + 12)
+                        .dot(1)
+                        .buildAndChain(ofBlock(TT_Container_Casings.sBlockCasingsTT, 12)))
+                .addElement('C', ofBlock(TT_Container_Casings.sBlockCasingsTT, 10))
+                .addElement('D', ofBlock(ModBlocks.blockCasings3Misc, 15))
+                .addElement('E', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    // Blocks:
+    // A -> ofBlock...(gt.blockcasings, 14, ...);
+    // B -> ofBlock...(gt.blockcasingsTT, 4, ...);
+    // C -> ofBlock...(gt.blockcasingsTT, 10, ...);
+    // D -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
+    // E -> ofBlock...(tile.quantumGlass, 0, ...);
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece("MAIN", stackSize, hintsOnly, 3, 3, 0);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivialBuildPiece("MAIN", stackSize, 3, 3, 0, elementBudget, env, true);
+    }
+
+    // endregion
+
+    // region General
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean aActive, boolean aRedstone) {
+        if (side == facing) {
+            if (aActive) {
+                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
+                    .addIcon(OVERLAY_DTPF_ON)
+                    .extFacing()
+                    .build(),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FUSION1_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            }
+
+            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
+                .addIcon(OVERLAY_DTPF_OFF)
+                .extFacing()
+                .build() };
+        }
+
+        return new ITexture[] { casingTexturePages[0][12] };
+    }
+
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
@@ -394,14 +424,6 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             .addInfo(Text_SeparatingLine)
             .toolTipFinisher(ModName);
         return tt;
-    }
-
-    public static ItemStack[] convertAEToMC(IAEItemStack[] STACK) {
-        // TODO use normal code style instead `Stream`
-        return Arrays.stream(STACK)
-            .filter(Objects::nonNull)
-            .map(IAEItemStack::getItemStack)
-            .toArray(ItemStack[]::new);
     }
 
 }
