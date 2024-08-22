@@ -1,6 +1,5 @@
-package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
+package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes;
 
-import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static gregtech.api.enums.TC_Aspects.ELECTRUM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_TreeFarm;
@@ -116,6 +115,7 @@ public class TCResearches {
                     .registerResearchItem();
 
             if (Config.Enable_MegaTreeFarm) {
+                // Machine
                 new ResearchItem(
                     "ECO_SPHERE_SIMULATOR",
                     "BASICS",
@@ -146,7 +146,7 @@ public class TCResearches {
                                         .merge(Aspect.FLESH, 1024)
                                         .merge(Aspect.WEAPON, 2048)
                                         .merge((Aspect) ELECTRUM.mAspect, 8192),
-//                                        .merge(ULTRA_DEATH, 64)
+                                    // .merge(ULTRA_DEATH, 64)
                                     GT_ModHandler.getModItem(Mods.Botania.ID, "manaResource", 1, 5),
                                     new ItemStack[] { Industrial_TreeFarm.get(1),
                                         GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
@@ -171,7 +171,12 @@ public class TCResearches {
                         .setParents("INDUSTRIAL_MAGIC_MATRIX")
                         // .setHidden()
                         .setConcealed()
-                        .registerResearchItem();;
+                        .registerResearchItem();
+
+                // Offspring
+
+                // Font of Ecology
+
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
+package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes;
 
 import java.util.ArrayList;
 
