@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.system.RecipePattern;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
-import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
 import java.util.Objects;
 
@@ -76,8 +75,8 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
                     .ignoreCollision()
                     .itemInputs(inputs)
                     .itemOutputs(output)
-                    .eut(RECIPE_ZPM)
-                    .duration(1)
+                    .eut(0)
+                    .duration(128)
                     .addTo(extremeCraftRecipes);
                 if (pre == extremeCraftRecipes.getAllRecipes()
                     .size()) {
@@ -85,8 +84,8 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
                         .ignoreCollision()
                         .itemInputs(inputs)
                         .itemOutputs(output)
-                        .eut(RECIPE_ZPM)
-                        .duration(1)
+                        .eut(0)
+                        .duration(128)
                         .addTo(extremeCraftRecipes);
                 }
             } else {

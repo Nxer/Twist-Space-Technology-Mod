@@ -33,7 +33,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -298,7 +297,6 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 internalPatterns.add(in.copy());
                 in.stackSize = 0;
                 addNew = true;
-                TwistSpaceTechnology.LOG.info("TEST add new");
             } else {
                 l.add(in.copy());
                 in.stackSize = 0;
@@ -586,18 +584,35 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        // spotless:off
         tt.addMachineType(TextEnums.tr("tst.megacraftingcenter.machinetype"))
+            // #tr tst.megacraftingcenter.desc.0
+            // # Do not use power.
+            // #zh_CN 不需要耗电.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.0"))
+            // #tr tst.megacraftingcenter.desc.1
+            // # Time consumption is fixed at 6.4 second, output items in output buses.
+            // #zh_CN 固定耗时 6.4 秒, 在输出总线产出产物.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.1"))
+            // #tr tst.megacraftingcenter.desc.2
+            // # Input encoded patterns into input bus, the valid will be moved to internal, the invalid will be moved to output bus.
+            // #zh_CN 在输入总线内放入编码样板, 正确的样板将被转移到内部, 错误的样板将被转移到输出总线.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.2"))
+            // #tr tst.megacraftingcenter.desc.3
+            // # Support crafting table pattern and Dire Crafting process pattern.
+            // #zh_CN 支持工作台样板和梦魇工作台处理样板.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.3"))
+            // #tr tst.megacraftingcenter.desc.4
+            // # Allow to double the pattern.
+            // #zh_CN 允许倍增样板.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.4"))
             // #tr tst.megacraftingcenter.desc.5
-            // # There is a performance issue when checking pattern. Please use with caution.
-            // #zh_CN 当前检查样板功能存在性能问题. 谨慎使用.
+            // # Use a screwdriver right click controller to move internal patterns to output bus.
+            // #zh_CN 使用螺丝刀右键主机将内部样板转移至输出总线.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.5"))
             .addInfo(Text_SeparatingLine)
             .toolTipFinisher(ModName);
+        // spotless:on
         return tt;
     }
 
