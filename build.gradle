@@ -5,6 +5,6 @@ plugins {
 }
 
 minecraft {
-    extraRunJvmArguments.add("-Xmx4G")
-    extraRunJvmArguments.add("-Xms4G")
+    extraRunJvmArguments.add("-Xmx8G")
+    extraRunJvmArguments.add("-Xms8G")
 }
