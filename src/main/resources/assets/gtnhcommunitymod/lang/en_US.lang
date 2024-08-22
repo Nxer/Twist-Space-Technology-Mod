@@ -1410,3 +1410,5 @@ Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=Overload Parameter = t ^ [
 GTCM_LightningSpire_12=Use a wire cutter to enable/disable lightning animation.
 LightningSpire.enable_lightning.true=Enable lightning animation
 LightningSpire.enable_lightning.false=Disable lightning animation
+MegaCraftingCenter.onScrewdriverRightClick.failed=The encoded patterns can only be returned when there is no recipe running.
+MegaCraftingCenter.onScrewdriverRightClick.success=Preparing to returning encoded patterns.

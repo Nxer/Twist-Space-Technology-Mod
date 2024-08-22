@@ -1,39 +1,44 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
-import static com.Nxer.TwistSpaceTechnology.system.RecipePattern.CustomCraftRecipe.areStacksEqual;
 import static com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipe.extremeCraftRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.api.enums.TierEU.RECIPE_ZPM;
+import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -41,6 +46,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
@@ -50,7 +56,6 @@ import appeng.api.networking.events.MENetworkCraftingPatternChange;
 import appeng.api.networking.security.IActionHost;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.DimensionalCoord;
-import appeng.items.misc.ItemEncodedPattern;
 import appeng.me.GridAccessException;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
@@ -61,11 +66,12 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.block.ModBlocks;
 
 public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
@@ -90,12 +96,123 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     // region Statics
 
-    public static ItemStack[] convertAEToMC(IAEItemStack[] STACK) {
+    public static ItemStack[] convertAEToMC(IAEItemStack... STACK) {
         // TODO use normal code style instead `Stream`
         return Arrays.stream(STACK)
             .filter(Objects::nonNull)
             .map(IAEItemStack::getItemStack)
             .toArray(ItemStack[]::new);
+    }
+
+    public static @Nullable ICraftingPatternDetails checkPattern(ItemStack pattern) {
+        if (pattern == null || pattern.stackSize < 1) return null;
+        if (pattern.getItem() instanceof ICraftingPatternItem patternItem) {
+            ICraftingPatternDetails d = patternItem.getPatternForItem(pattern, null);
+            if (d == null) return null;
+            if (d.isCraftable()) {
+                return d;
+            } else {
+                IAEItemStack[] dOutputs = d.getOutputs();
+                if (dOutputs == null || dOutputs.length != 1 || dOutputs[0] == null) return null;
+
+                ItemStack[] dInputs = convertAEToMC(d.getInputs());
+                if (!Utils.isValid(dInputs)) return null;
+
+                // fine all available extreme recipes of this pattern
+                GT_Recipe[] validResult = extremeCraftRecipes.findRecipeQuery()
+                    .items(dInputs)
+                    .findAll()
+                    .toArray(GT_Recipe[]::new);
+
+                if (validResult.length < 1) return null;
+
+                @NotNull
+                ItemStack pItems = dOutputs[0].getItemStack();
+                if (pItems == null || pItems.getItem() == null || pItems.stackSize < 1) return null;
+
+                if (validResult.length == 1) {
+                    if (validResult[0] == null) return null;
+
+                    @NotNull
+                    ItemStack rItems = validResult[0].mOutputs[0];
+                    if (Utils.metaItemEqual(pItems, rItems)) {
+                        if (pItems.stackSize < rItems.stackSize || (pItems.stackSize & rItems.stackSize) != 0)
+                            return null;
+                        // allow to double pattern
+                        int multiple = pItems.stackSize / rItems.stackSize;
+                        if (multiple < 1) return null;
+
+                        ItemStack[] rInputs = validResult[0].mInputs;
+                        Map<TST_ItemID, Long> rInputMap = new HashMap<>();
+                        for (int t = 0; t < rInputs.length; t++) {
+                            rInputMap.merge(
+                                TST_ItemID.createNoNBT(GT_OreDictUnificator.get_nocopy(rInputs[t])),
+                                (long) rInputs[t].stackSize,
+                                Long::sum);
+                        }
+
+                        Map<TST_ItemID, Long> pInputMap = new HashMap<>();
+                        for (int t = 0; t < dInputs.length; t++) {
+                            pInputMap.merge(
+                                TST_ItemID.createNoNBT(GT_OreDictUnificator.get_nocopy(dInputs[t])),
+                                (long) dInputs[t].stackSize,
+                                Long::sum);
+                        }
+
+                        if (rInputMap.size() != pInputMap.size()) return null;
+
+                        for (Map.Entry<TST_ItemID, Long> rEntry : rInputMap.entrySet()) {
+                            Long pAmount = pInputMap.get(rEntry.getKey());
+                            if (pAmount == null || !pAmount.equals(rEntry.getValue() * multiple)) return null;
+                        }
+
+                        return d;
+                    } else {
+                        return null;
+                    }
+
+                } else {
+                    recipesLoop: for (int i = 0; i < validResult.length; i++) {
+                        @NotNull
+                        ItemStack rItems = validResult[i].mOutputs[0];
+                        if (Utils.metaItemEqual(pItems, rItems)) {
+                            if (pItems.stackSize < rItems.stackSize || (pItems.stackSize & rItems.stackSize) != 0)
+                                continue;
+                            // allow to double pattern
+                            int multiple = pItems.stackSize / rItems.stackSize;
+                            if (multiple < 1) continue;
+
+                            ItemStack[] rInputs = validResult[i].mInputs;
+                            Map<TST_ItemID, Long> rInputMap = new HashMap<>();
+                            for (int t = 0; t < rInputs.length; t++) {
+                                rInputMap.merge(
+                                    TST_ItemID.createNoNBT(GT_OreDictUnificator.get_nocopy(rInputs[t])),
+                                    (long) rInputs[t].stackSize,
+                                    Long::sum);
+                            }
+
+                            Map<TST_ItemID, Long> pInputMap = new HashMap<>();
+                            for (int t = 0; t < dInputs.length; t++) {
+                                pInputMap.merge(
+                                    TST_ItemID.createNoNBT(GT_OreDictUnificator.get_nocopy(dInputs[t])),
+                                    (long) dInputs[t].stackSize,
+                                    Long::sum);
+                            }
+
+                            if (rInputMap.size() != pInputMap.size()) continue;
+                            for (Map.Entry<TST_ItemID, Long> rEntry : rInputMap.entrySet()) {
+                                Long pAmount = pInputMap.get(rEntry.getKey());
+                                if (pAmount == null || !pAmount.equals(rEntry.getValue() * multiple))
+                                    continue recipesLoop;
+                            }
+
+                            return d;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     // endregion
@@ -107,43 +224,124 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
      */
     protected Collection<ItemStack> internalPatterns = new ArrayList<>();
 
-    @NotNull
-    private ArrayList<ICraftingPatternDetails> cachedPatternDetails = new ArrayList<>();
+    protected Collection<ICraftingPatternDetails> patternDetails = new HashSet<>();
 
     private final HashMap<ICraftingPatternDetails, Long> cachedOutput = new HashMap<>();
-
-    private ArrayList<ItemStack> cachedPattern;
 
     @Nullable
     private AENetworkProxy gridProxy;
 
+    protected boolean toReturnPatterns = false;
+
     @Override
-    public RecipeMap<?> getRecipeMap() {
-        return extremeCraftRecipes;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setBoolean("toReturnPatterns", toReturnPatterns);
+
+        // save internal patterns
+        if (!internalPatterns.isEmpty()) {
+            NBTTagList l = new NBTTagList();
+            for (ItemStack i : internalPatterns) {
+                l.appendTag(i.writeToNBT(new NBTTagCompound()));
+            }
+            aNBT.setTag("internalPatterns", l);
+        }
+
     }
 
     @Override
-    public void onFirstTick_EM(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick_EM(aBaseMetaTileEntity);
-        getProxy().onReady();
-        updatePatterns();
-        // appeng.me.cache.CraftingGridCache.addNode(this);
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        toReturnPatterns = aNBT.getBoolean("toReturnPatterns");
+
+        // load internal patterns
+        NBTTagList l = aNBT.getTagList("internalPatterns", TAG_COMPOUND);
+        if (l != null && l.tagCount() > 0) {
+            internalPatterns.clear();
+            patternDetails.clear();
+
+            for (int i = 0; i < l.tagCount(); i++) {
+                ItemStack pattern = ItemStack.loadItemStackFromNBT(l.getCompoundTagAt(i));
+                ICraftingPatternDetails d = checkPattern(pattern);
+                if (d != null) {
+                    if (!patternDetails.contains(d)) {
+                        patternDetails.add(d);
+                        internalPatterns.add(pattern);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Check input items, move valid patterns to internal inventory.
+     *
+     * @return A list of invalid patterns and items.
+     */
+    protected ArrayList<ItemStack> checkPatternInput() {
+        ArrayList<ItemStack> l = new ArrayList<>();
+        ArrayList<ItemStack> inputs = getStoredInputs();
+        if (inputs.isEmpty()) return l;
+        boolean addNew = false;
+        for (ItemStack in : inputs) {
+            ICraftingPatternDetails d = checkPattern(in);
+            if (d != null && !patternDetails.contains(d)) {
+                patternDetails.add(d);
+
+                if (in.stackSize > 1) {
+                    l.add(Utils.setStackSize(in.copy(), in.stackSize - 1));
+                    in.stackSize = 1;
+                }
+
+                internalPatterns.add(in.copy());
+                in.stackSize = 0;
+                addNew = true;
+                TwistSpaceTechnology.LOG.info("TEST add new");
+            } else {
+                l.add(in.copy());
+                in.stackSize = 0;
+            }
+        }
+        updateSlots();
+
+        if (addNew) {
+            flush();
+        }
+        return l;
+    }
+
+    protected void flush() {
+        if (getProxy().isActive()) {
+            try {
+                getProxy().getGrid()
+                    .postEvent(new MENetworkCraftingPatternChange(this, getProxy().getNode()));
+            } catch (GridAccessException ignored) {}
+        }
     }
 
     @Override
     protected @NotNull CheckRecipeResult checkProcessing_EM() {
-        if (mOutputItems != null) {
-            return SimpleCheckRecipeResult.ofFailure("sadly, there's still something in your machine, what is that?");
+
+        if (toReturnPatterns) {
+            toReturnPatterns = false;
+            mOutputItems = internalPatterns.toArray(new ItemStack[0]);
+            internalPatterns.clear();
+            patternDetails.clear();
+            flush();
+            mMaxProgresstime = 20;
+
+            return CheckRecipeResultRegistry.SUCCESSFUL;
         }
-        long value = 0;
-        ArrayList<ItemStack> additionalOutput = new ArrayList<>();
-        var set = cachedOutput.entrySet();
-        for (var itemstack : set) {
+
+        ArrayList<ItemStack> additionalOutput = checkPatternInput();
+
+        for (Map.Entry<ICraftingPatternDetails, Long> itemstack : cachedOutput.entrySet()) {
             ItemStack stack = itemstack.getKey()
                 .getOutputs()[0].getItemStack()
                     .copy();
             long p = stack.stackSize * itemstack.getValue();
-            value += stack.stackSize * itemstack.getValue();
             ItemStack newStack;
             while (p > Integer.MAX_VALUE) {
                 newStack = stack.copy();
@@ -159,14 +357,67 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         }
         if (additionalOutput.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
         mOutputItems = additionalOutput.toArray(new ItemStack[0]);
-        // LOG.info(Arrays.toString(mOutputItems));
-        lEUt = -RECIPE_ZPM * value;
-        mMaxProgresstime = (int) (2 * (1 + Math.log10(1 + value)));
+        mMaxProgresstime = 128;
         mProgresstime = 0;
         cachedOutput.clear();
-        return CheckRecipeResultRegistry.GENERATING;
-        // return SimpleCheckRecipeResult.ofSuccess("This machine process each valid request with in 0 tick!\n" +
-        // "so you will never see it work!");
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    @Override
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            if (mMaxProgresstime > 0) {
+                // #tr MegaCraftingCenter.onScrewdriverRightClick.failed
+                // # The encoded patterns can only be returned when there is no recipe running.
+                // #zh_CN 仅可在未运行配方状态下退回样板.
+                GT_Utility.sendChatToPlayer(
+                    aPlayer,
+                    StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.failed"));
+                return;
+            }
+
+            // return encoded patterns
+            toReturnPatterns = true;
+
+            // #tr MegaCraftingCenter.onScrewdriverRightClick.success
+            // # Preparing to returning encoded patterns.
+            // #zh_CN 正在准备退回样板.
+            GT_Utility.sendChatToPlayer(
+                aPlayer,
+                StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.success"));
+
+        }
+    }
+
+    @Override
+    public void provideCrafting(@NotNull ICraftingProviderHelper craftingTracker) {
+        AENetworkProxy proxy = this.getProxy();
+        if (proxy != null && proxy.isReady()) {
+            for (var details : patternDetails) {
+                craftingTracker.addCraftingOption(this, details);
+            }
+        }
+    }
+
+    @Override
+    public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
+        if (cachedOutput.containsKey(patternDetails)) {
+            Long pre = cachedOutput.get(patternDetails);
+            return Objects.equals(cachedOutput.put(patternDetails, pre + 1), pre);
+        }
+        cachedOutput.put(patternDetails, 1L);
+        return true;
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return extremeCraftRecipes;
+    }
+
+    @Override
+    public void onFirstTick_EM(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick_EM(aBaseMetaTileEntity);
+        getProxy().onReady();
     }
 
     @Override
@@ -204,8 +455,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
         maintenance_EM();
         if (structureCheck_EM("MAIN", 3, 3, 0)) {
-            return !mInputBusses.isEmpty() && !mOutputBusses.isEmpty()
-                && (!mEnergyHatches.isEmpty() || !eEnergyMulti.isEmpty());
+            return !mOutputBusses.isEmpty();
         }
         return false;
     }
@@ -239,88 +489,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public void provideCrafting(@NotNull ICraftingProviderHelper craftingTracker) {
-        AENetworkProxy proxy = this.getProxy();
-        if (proxy != null && proxy.isReady()) {
-            for (var details : cachedPatternDetails) {
-                craftingTracker.addCraftingOption(this, details);
-            }
-        }
-
-    }
-
-    @Override
-    public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
-        if (cachedOutput.containsKey(patternDetails)) {
-            Long pre = cachedOutput.get(patternDetails);
-            return Objects.equals(cachedOutput.put(patternDetails, pre + 1), pre);
-        }
-        cachedOutput.put(patternDetails, 1L);
-        return true;
-    }
-
-    @Override
     public boolean isBusy() {
         return false;
-    }
-
-    @Override
-    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        if (aTick % 100 == 0 && aBaseMetaTileEntity.isServerSide()) {
-            updatePatterns();
-        }
-        super.onPreTick(aBaseMetaTileEntity, aTick);
-    }
-
-    public void updatePatterns() {
-        ArrayList<ICraftingPatternDetails> patternDetails = new ArrayList<>();
-        ArrayList<ItemStack> patterns = getStoredInputs();
-        if (!patterns.equals(cachedPattern)) {
-            for (var pattern : patterns) {
-                if (pattern.getItem() instanceof ItemEncodedPattern encodedPattern) {
-                    var details = encodedPattern.getPatternForItem(pattern, getBaseMetaTileEntity().getWorld());
-                    if (cachedPatternDetails.contains(details)) patternDetails.add(details);
-                    else if (details.isCraftable()) {
-                        patternDetails.add(details);
-                        LOG.info("details added:" + details);
-                    } else {
-                        if (details.getOutputs().length != 1) continue;
-                        // LOG.info(
-                        // "extremeCraftRecipes have " + extremeCraftRecipes.getAllRecipes()
-                        // .size());
-                        var validResult = extremeCraftRecipes.findRecipeQuery()
-                            .items(convertAEToMC(details.getInputs()))
-                            .findAll()
-                            .toArray(GT_Recipe[]::new);
-                        // LOG.info("what do we find here?" + validResult.length + " recipes " +
-                        // validResult[0].getOutput(0));
-                        // for (var result : validResult) {
-                        // LOG.info("they are:" + Arrays.toString(result.mInputs) + " to " +
-                        // Arrays.toString(result.mOutputs));
-                        // }
-                        if (validResult.length >= 1) {
-                            var recipe = validResult[0];
-                            if (areStacksEqual(recipe.getOutput(0), details.getOutputs()[0].getItemStack(), true)
-                                && details.getOutputs().length == 1) {
-                                patternDetails.add(details);
-                                // LOG.info("details added:" + details);
-                            }
-                        }
-                    }
-                }
-            }
-            cachedPatternDetails = patternDetails;
-            cachedPattern = patterns;
-            // getProxy().getGrid().
-            if (!getProxy().isActive()) return;
-            try {
-                // LOG.info("we submit a MENetworkCraftingPatternChange");
-                getProxy().getGrid()
-                    .postEvent(new MENetworkCraftingPatternChange(this, getProxy().getNode()));
-            } catch (GridAccessException ignored) {
-                // LOG.info(ignored);
-            }
-        }
     }
 
     // endregion
@@ -349,7 +519,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 .addElement(
                     'B',
                     GT_HatchElementBuilder.<TST_MegaCraftingCenter>builder()
-                        .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
+                        .atLeast(InputBus, OutputBus)
                         .adder(TST_MegaCraftingCenter::addToMachineList)
                         .casingIndex(textureOffset + 12)
                         .dot(1)
@@ -377,6 +547,11 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         return survivialBuildPiece("MAIN", stackSize, 3, 3, 0, elementBudget, env, true);
+    }
+
+    @Override
+    protected boolean supportsCraftingMEBuffer() {
+        return false;
     }
 
     // endregion

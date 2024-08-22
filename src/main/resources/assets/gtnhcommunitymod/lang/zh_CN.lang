@@ -1410,3 +1410,5 @@ Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=过载模式参数 = t ^ [
 GTCM_LightningSpire_12=使用剪线钳开启/关闭闪电特效
 LightningSpire.enable_lightning.true=启用闪电特效
 LightningSpire.enable_lightning.false=禁用闪电特效
+MegaCraftingCenter.onScrewdriverRightClick.failed=仅可在未运行配方状态下退回样板.
+MegaCraftingCenter.onScrewdriverRightClick.success=正在准备退回样板.
