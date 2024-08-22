@@ -79,6 +79,14 @@ public final class Utils {
         return result;
     }
 
+    public static boolean isValid(ItemStack... itemStacks) {
+        if (itemStacks == null || itemStacks.length < 1) return false;
+        for (int i = 0; i < itemStacks.length; i++) {
+            if (!isStackValid(itemStacks[i])) return false;
+        }
+        return true;
+    }
+
     public static ItemStack[] mergeItemStackArray(ItemStack[] array1, ItemStack[] array2) {
         if (array1 == null || array1.length < 1) {
             return array2;

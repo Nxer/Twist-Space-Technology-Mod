@@ -1112,11 +1112,11 @@ BlockPowerChair.0.name=PowerChair
 
 NameExtremeCraftCenter=Extreme Crafting Center
 tst.megacraftingcenter.machinetype=molecularAssembler | extremeCraftTable
-tst.megacraftingcenter.desc.0= Process EU: ZPM * n, n is the total number of recipe you are processing
-tst.megacraftingcenter.desc.1= Process Time: (2 * (1 + Math.log10(1 + value))) Tick
-tst.megacraftingcenter.desc.2= Need Output Bus for output items, need input bus for pattern
-tst.megacraftingcenter.desc.3= if the pattern is not a valid crafting Table recipe or extreme craft recipe, if will not be process and display in your AE network
-tst.megacraftingcenter.desc.4= DO NOT DOUBLE YOUR PATTERN, ESPECIALLY THE EXTREME RECIPES
+tst.megacraftingcenter.desc.0=Do not use power.
+tst.megacraftingcenter.desc.1=Time consumption is fixed at 6.4 second, output items in output buses.
+tst.megacraftingcenter.desc.2=Input encoded patterns into input bus, the valid will be moved to internal, the invalid will be moved to output bus.
+tst.megacraftingcenter.desc.3=Support crafting table pattern and Dire Crafting process pattern.
+tst.megacraftingcenter.desc.4=Allow to double the pattern.
 gtcm.recipe.extremeCraftRecipes= Extreme Craft Recipe Transform
 
 item.Yamato.name=Yamato
@@ -1289,7 +1289,7 @@ Tooltip_IncompactCyclotron_04="That's incredible!"
 Tooltip_IncompactCyclotron_05=Thanks to the upgrade of technology
 Tooltip_IncompactCyclotron_06=The accelerator upgraded 100%% speedup and 256 parallel
 Tooltip_IncompactCyclotron_07=But it requires additional 60%% of power to work
-tst.megacraftingcenter.desc.5=There is a performance issue when checking pattern. Please use with caution.
+tst.megacraftingcenter.desc.5=Use a screwdriver right click controller to move internal patterns to output bus.
 tst.recipe.MassFabricatorGenesis=Mass Fabricator : Genesis
 HephaestusAtelier.modeMsg.0=Mode : Furnace
 HephaestusAtelier.modeMsg.1=Mode : Alloy Smelter
@@ -1410,3 +1410,5 @@ Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=Overload Parameter = t ^ [
 GTCM_LightningSpire_12=Use a wire cutter to enable/disable lightning animation.
 LightningSpire.enable_lightning.true=Enable lightning animation
 LightningSpire.enable_lightning.false=Disable lightning animation
+MegaCraftingCenter.onScrewdriverRightClick.failed=The encoded patterns can only be returned when there is no recipe running.
+MegaCraftingCenter.onScrewdriverRightClick.success=Preparing to returning encoded patterns.

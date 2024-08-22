@@ -1112,11 +1112,11 @@ BlockPowerChair.0.name=抛瓦椅
 
 NameExtremeCraftCenter=梦魇工业合成中心
 tst.megacraftingcenter.machinetype=工作台 | 梦魇合成台
-tst.megacraftingcenter.desc.0= 耗电量: ZPM * n, n 是当前并行合成的数量
-tst.megacraftingcenter.desc.1= 处理时间: (2 * (1 + log10(1 + n))) Tick
-tst.megacraftingcenter.desc.2= 需要输出总线进行物品输出，需要输入总线放置样板
-tst.megacraftingcenter.desc.3= 如果样板不是合法的工作台配方或者终极工作台配方，将不会被处理并展示在ae网络中。
-tst.megacraftingcenter.desc.4= 请不要倍增您的样板。数量与展示在NEI中的配方不符的样板将视为不合法。
+tst.megacraftingcenter.desc.0=不需要耗电.
+tst.megacraftingcenter.desc.1=固定耗时 6.4 秒, 在输出总线产出产物.
+tst.megacraftingcenter.desc.2=在输入总线内放入编码样板, 正确的样板将被转移到内部, 错误的样板将被转移到输出总线.
+tst.megacraftingcenter.desc.3=支持工作台样板和梦魇工作台处理样板.
+tst.megacraftingcenter.desc.4=允许倍增样板.
 gtcm.recipe.extremeCraftRecipes= 梦魇工作台配方转换
 
 item.Yamato.name=阎魔刀
@@ -1289,7 +1289,7 @@ Tooltip_IncompactCyclotron_04=这太神奇了！
 Tooltip_IncompactCyclotron_05=得益于工艺的升级
 Tooltip_IncompactCyclotron_06=加速器拥有了额外100%%的额外加速,以及256并行
 Tooltip_IncompactCyclotron_07=但是需要额外60%%的供电来运行
-tst.megacraftingcenter.desc.5=当前检查样板功能存在性能问题. 谨慎使用.
+tst.megacraftingcenter.desc.5=使用螺丝刀右键主机将内部样板转移至输出总线.
 tst.recipe.MassFabricatorGenesis=质量发生器 : 创世纪
 HephaestusAtelier.modeMsg.0=模式 : 熔炉
 HephaestusAtelier.modeMsg.1=模式 : 合金冶炼炉
@@ -1410,3 +1410,5 @@ Tooltip_DSPLauncher_2_01_OverloadParameterCalculation=过载模式参数 = t ^ [
 GTCM_LightningSpire_12=使用剪线钳开启/关闭闪电特效
 LightningSpire.enable_lightning.true=启用闪电特效
 LightningSpire.enable_lightning.false=禁用闪电特效
+MegaCraftingCenter.onScrewdriverRightClick.failed=仅可在未运行配方状态下退回样板.
+MegaCraftingCenter.onScrewdriverRightClick.success=正在准备退回样板.
