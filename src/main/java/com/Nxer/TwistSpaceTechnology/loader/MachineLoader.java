@@ -37,7 +37,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
@@ -49,6 +48,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
@@ -575,7 +575,7 @@ public class MachineLoader {
         }
 
         if (Config.Enable_MegaTreeFarm) {
-            MegaTreeFarm = new TST_EcoSphereSimulator(
+            MegaTreeFarm = new TST_MegaTreeFarm(
                 19051,
                 "NameMegaTreeFarm",
                 // #tr NameMegaTreeFarm

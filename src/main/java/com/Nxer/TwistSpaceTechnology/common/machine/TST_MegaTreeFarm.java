@@ -7,7 +7,8 @@ import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRe
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -57,7 +58,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -93,20 +93,20 @@ import ic2.core.init.InternalName;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereSimulator> {
+public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     // region Class Constructor
-    public TST_EcoSphereSimulator(int aID, String aName, String aNameRegional) {
+    public TST_MegaTreeFarm(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public TST_EcoSphereSimulator(String aName) {
+    public TST_MegaTreeFarm(String aName) {
         super(aName);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_EcoSphereSimulator(this.mName);
+        return new TST_MegaTreeFarm(this.mName);
     }
 
     // region Structure
@@ -257,7 +257,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     private static final String STRUCTURE_PIECE_MAIN = "mainEcoSphereSimulator0";
     private static final String STRUCTURE_PIECE_MAIN1 = "mainEcoSphereSimulator1";
     private static final String STRUCTURE_PIECE_WATER = "waterEcoSphereSimulator";
-    private static IStructureDefinition<TST_EcoSphereSimulator> STRUCTURE_DEFINITION = null;
+    private static IStructureDefinition<TST_MegaTreeFarm> STRUCTURE_DEFINITION = null;
 
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
@@ -298,9 +298,9 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     }
 
     @Override
-    public IStructureDefinition<TST_EcoSphereSimulator> getStructureDefinition() {
+    public IStructureDefinition<TST_MegaTreeFarm> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_EcoSphereSimulator>builder()
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaTreeFarm>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addShape(STRUCTURE_PIECE_MAIN1, transpose(shape2))
                 .addShape(STRUCTURE_PIECE_WATER, transpose(water))
@@ -345,9 +345,9 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     'Q',
                     ofChain(
                         ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        GT_HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                            .adder(TST_EcoSphereSimulator::addToMachineList)
+                            .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(1)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
@@ -355,9 +355,9 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     'q',
                     ofChain(
                         ofBlock(MetaBlockCasing01, 13),
-                        GT_HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                            .adder(TST_EcoSphereSimulator::addToMachineList)
+                            .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(1)
                             .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(13))
                             .build()))
@@ -365,9 +365,9 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     'R',
                     ofChain(
                         ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        GT_HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_EcoSphereSimulator::addToMachineList)
+                            .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(2)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
@@ -375,9 +375,9 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     'r',
                     ofChain(
                         ofBlock(MetaBlockCasing01, 13),
-                        GT_HatchElementBuilder.<TST_EcoSphereSimulator>builder()
+                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_EcoSphereSimulator::addToMachineList)
+                            .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(2)
                             .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(13))
                             .build()))
@@ -1133,57 +1133,46 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             // #zh_CN {\AQUA}通过简单的原材料就可以模拟样本的生长发育周期
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.07"))
             .addSeparator()
-            // // #tr Tooltip_EcoSphereSimulator.0.08
-            // // # {\SPACE}
-            // // #zh_CN {\SPACE}
-            // .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.08"))
+            // #tr Tooltip_EcoSphereSimulator.0.08
+            // # Features a unique method of overclocking
+            // #zh_CN 拥有独特的超频增益方式
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.08"))
             // #tr Tooltip_EcoSphereSimulator.0.09
-            // # Gazing at the creatures in the tank
-            // #zh_CN 看向水缸中的生物
+            // # Recipe time is fixed
+            // #zh_CN 配方时间被固定
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.09"))
             // #tr Tooltip_EcoSphereSimulator.0.10
-            // # You find yourself deep in thought......
-            // #zh_CN 你陷入了沉思......
+            // # The output benefits vary with increasing voltage
+            // #zh_CN 且产物随电压的提升而受到不同的增益
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.10"))
-            // #tr Tooltip_EcoSphereSimulator.0.11
-            // # This machine seems to have room for improvement
-            // #zh_CN 这台机器似乎还有提升空间
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.11"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
-            // #tr Tooltip_EcoSphereSimulator.1.00
-            // # {\SPACE}
-            // #zh_CN {\SPACE}
-            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.00"))
-            // #tr Tooltip_EcoSphereSimulator.1.01
-            // # Upgrade to a secondary structure after inserting the {\BLUE}Fount Of Ecology
-            // #zh_CN 使用{\BLUE}生态泉源{\RESET}以提升主机等级
-            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.01"))
-            // #tr Tooltip_EcoSphereSimulator.1.02
-            // # Benefiting from the diverse biological samples of the Fount Of Ecology
-            // #zh_CN 同时升级结构至等级2
-            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.02"))
-            // #tr Tooltip_EcoSphereSimulator.1.03
-            // # {\SPACE}
-            // #zh_CN {\SPACE}
-            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.03"))
-            // #tr Tooltip_EcoSphereSimulator.1.04
-            // # Benefiting from the diverse biological samples of the {\BLUE}Fount Of Ecology
-            // #zh_CN 得益于{\BLUE}生态泉源{\RESET}繁多的生物样本
-            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.04"))
-            // #tr Tooltip_EcoSphereSimulator.1.05
-            // # Fluid consumption reduces by 90%%, and recipe time shortens to 1s
-            // #zh_CN 配方消耗流体减少90%%, 且配方耗时缩短为1s
-            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.05"))
-            // #tr Tooltip_EcoSphereSimulator.1.06
-            // # And new recipes are available (in progress)
-            // #zh_CN 并且可以使用新配方(未完成)
-            .addStructureInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.1.06"))
-            .addStructureInfo(Text_SeparatingLine)
-            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
+            .beginStructureBlock(33, 45, 33, false)
+            // .addStructureInfo(Text_SeparatingLine)
+            .addInputHatch(textUseBlueprint, 1)
+            .addOutputHatch(textUseBlueprint, 1)
+            .addInputBus(textUseBlueprint, 1)
+            .addOutputBus(textUseBlueprint, 1)
+            .addEnergyHatch(textUseBlueprint, 2)
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher(ModName);
         return tt;
     }
-
+    // # Gazing at the creatures in the tank
+    // #看向水缸中的生物
+    // # You find yourself deep in thought......
+    // #zh_CN 你陷入了沉思......
+    // # This machine seems to have room for improvement
+    // #zh_CN 这台机器似乎还有提升空间
+    // # Upgrade to a secondary structure after inserting the {\BLUE}Fount Of Ecology
+    // #zh_CN 使用{\BLUE}生态泉源{\RESET}以提升主机等级
+    // # Benefiting from the diverse biological samples of the Fount Of Ecology
+    // #zh_CN 同时升级结构至等级2
+    // # Benefiting from the diverse biological samples of the {\BLUE}Fount Of Ecology
+    // #zh_CN 得益于{\BLUE}生态泉源{\RESET}繁多的生物样本
+    // # Fluid consumption reduces by 90%%, and recipe time shortens to 1s
+    // #zh_CN 配方消耗流体减少90%%, 且配方耗时缩短为1s
+    // # And new recipes are available (in progress)
+    // #zh_CN 并且可以使用新配方(未完成)
 }

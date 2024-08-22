@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.getModeMultiplier;
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.queryTreeProduct;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getModeMultiplier;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.queryTreeProduct;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
 
 import java.util.ArrayList;

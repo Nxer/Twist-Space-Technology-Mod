@@ -15,9 +15,9 @@ public class TCBasic {
     public static void registerAspect() {
         EVOLUTION = new Aspect(
             "evolutio",
-            0x4B0082,
+            0x6699FF,
             new Aspect[] { Aspect.LIFE, Aspect.EXCHANGE },
-            new ResourceLocation("avaritia", "textures/misc/terminus.png"),
+            new ResourceLocation("gtnhcommunitymod", "textures/icons/TCAspects/evolutio.png"),
             771);
         ThaumcraftApi.registerObjectTag(
             GTCMItemList.OffSpring.get(1),
