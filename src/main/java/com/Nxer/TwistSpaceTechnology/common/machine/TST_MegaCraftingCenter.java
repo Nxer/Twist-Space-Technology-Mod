@@ -24,11 +24,13 @@ import java.util.Objects;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +64,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -72,6 +75,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.block.ModBlocks;
+import scala.actors.migration.pattern;
 
 public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     implements ICraftingProvider, IActionHost, IGridProxyable, ISurvivalConstructable {
@@ -103,6 +107,70 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             .toArray(ItemStack[]::new);
     }
 
+    /**
+     *
+     * @param r   The find recipe of this pattern.
+     * @param in  The pattern input items.
+     * @param out The pattern output item.
+     * @return If this pattern is valid.
+     */
+    protected static boolean checkPatternRecipe(GT_Recipe r, ItemStack[] in, ItemStack out) {
+        ItemStack rOut = r.mOutputs[0];
+        if (out == null || out.getItem() == null || out.stackSize < 1) return false;
+        if (!Utils.metaItemEqual(out, rOut)) return false;
+        // check amount
+        if (out.stackSize < rOut.stackSize || out.stackSize % rOut.stackSize != 0) return false;
+        // the multiple of pattern
+        int multiple = out.stackSize / rOut.stackSize;
+
+        Map<TST_ItemID, Long> rItemMap = new HashMap<>();
+        Map<Item, Long> rWildcardMap = new HashMap<>();
+        for (ItemStack i : r.mInputs) {
+            if (i == null || i.getItem() == null || i.stackSize < 1) continue;
+            ItemData iData = GT_OreDictUnificator.getAssociation(i);
+            if (iData != null) {
+                rItemMap.merge(TST_ItemID.createNoNBT(iData.mUnificationTarget), (long) i.stackSize, Long::sum);
+            } else if (i.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                rWildcardMap.merge(i.getItem(), (long) i.stackSize, Long::sum);
+            } else {
+                rItemMap.merge(TST_ItemID.createNoNBT(i), (long) i.stackSize, Long::sum);
+            }
+        }
+
+        Map<TST_ItemID, Long> pItemMap = new HashMap<>();
+        Map<Item, Long> pWildcardMap = new HashMap<>();
+        for (ItemStack i : in) {
+            if (i == null || i.getItem() == null || i.stackSize < 1) continue;
+            ItemData iData = GT_OreDictUnificator.getAssociation(i);
+            if (iData != null) {
+                pItemMap.merge(TST_ItemID.createNoNBT(iData.mUnificationTarget), (long) i.stackSize, Long::sum);
+            } else {
+                Item ii = i.getItem();
+                if (rWildcardMap.containsKey(ii)) {
+                    pWildcardMap.merge(ii, (long) i.stackSize, Long::sum);
+                } else {
+                    pItemMap.merge(TST_ItemID.createNoNBT(i), (long) i.stackSize, Long::sum);
+                }
+
+            }
+        }
+
+        if (rItemMap.size() != pItemMap.size() || rWildcardMap.size() != pWildcardMap.size()) return false;
+
+        for (Map.Entry<TST_ItemID, Long> rItemEntry : rItemMap.entrySet()) {
+            Long pAmount = pItemMap.get(rItemEntry.getKey());
+            if (pAmount == null || pAmount == 0 || !pAmount.equals(rItemEntry.getValue() * multiple)) return false;
+        }
+
+        for (Map.Entry<Item, Long> rWildcardEntry : rWildcardMap.entrySet()) {
+            Long pAmount = pWildcardMap.get(rWildcardEntry.getKey());
+            if (pAmount == null || pAmount == 0 || !pAmount.equals(rWildcardEntry.getValue() * multiple)) return false;
+        }
+
+        return true;
+
+    }
+
     public static @Nullable ICraftingPatternDetails checkPattern(ItemStack pattern) {
         if (pattern == null || pattern.stackSize < 1) return null;
         if (pattern.getItem() instanceof ICraftingPatternItem patternItem) {
@@ -132,85 +200,23 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 if (validResult.length == 1) {
                     if (validResult[0] == null) return null;
 
-                    @NotNull
-                    ItemStack rItems = validResult[0].mOutputs[0];
-                    if (Utils.metaItemEqual(pItems, rItems)) {
-                        if (pItems.stackSize < rItems.stackSize || (pItems.stackSize & rItems.stackSize) != 0)
-                            return null;
-                        // allow to double pattern
-                        int multiple = pItems.stackSize / rItems.stackSize;
-                        if (multiple < 1) return null;
-
-                        ItemStack[] rInputs = validResult[0].mInputs;
-                        Map<TST_ItemID, Long> rInputMap = new HashMap<>();
-                        for (int t = 0; t < rInputs.length; t++) {
-                            rInputMap.merge(
-                                TST_ItemID.createNoNBT(GT_OreDictUnificator.get_nocopy(rInputs[t])),
-                                (long) rInputs[t].stackSize,
-                                Long::sum);
-                        }
-
-                        Map<TST_ItemID, Long> pInputMap = new HashMap<>();
-                        for (int t = 0; t < dInputs.length; t++) {
-                            pInputMap.merge(
-                                TST_ItemID.createNoNBT(GT_OreDictUnificator.get_nocopy(dInputs[t])),
-                                (long) dInputs[t].stackSize,
-                                Long::sum);
-                        }
-
-                        if (rInputMap.size() != pInputMap.size()) return null;
-
-                        for (Map.Entry<TST_ItemID, Long> rEntry : rInputMap.entrySet()) {
-                            Long pAmount = pInputMap.get(rEntry.getKey());
-                            if (pAmount == null || !pAmount.equals(rEntry.getValue() * multiple)) return null;
-                        }
-
+                    if (checkPatternRecipe(validResult[0], dInputs, pItems)) {
                         return d;
                     } else {
                         return null;
                     }
 
                 } else {
-                    recipesLoop: for (int i = 0; i < validResult.length; i++) {
-                        @NotNull
-                        ItemStack rItems = validResult[i].mOutputs[0];
-                        if (Utils.metaItemEqual(pItems, rItems)) {
-                            if (pItems.stackSize < rItems.stackSize || (pItems.stackSize & rItems.stackSize) != 0)
-                                continue;
-                            // allow to double pattern
-                            int multiple = pItems.stackSize / rItems.stackSize;
-                            if (multiple < 1) continue;
-
-                            ItemStack[] rInputs = validResult[i].mInputs;
-                            Map<TST_ItemID, Long> rInputMap = new HashMap<>();
-                            for (int t = 0; t < rInputs.length; t++) {
-                                rInputMap.merge(
-                                    TST_ItemID.createNoNBT(GT_OreDictUnificator.get_nocopy(rInputs[t])),
-                                    (long) rInputs[t].stackSize,
-                                    Long::sum);
-                            }
-
-                            Map<TST_ItemID, Long> pInputMap = new HashMap<>();
-                            for (int t = 0; t < dInputs.length; t++) {
-                                pInputMap.merge(
-                                    TST_ItemID.createNoNBT(GT_OreDictUnificator.get_nocopy(dInputs[t])),
-                                    (long) dInputs[t].stackSize,
-                                    Long::sum);
-                            }
-
-                            if (rInputMap.size() != pInputMap.size()) continue;
-                            for (Map.Entry<TST_ItemID, Long> rEntry : rInputMap.entrySet()) {
-                                Long pAmount = pInputMap.get(rEntry.getKey());
-                                if (pAmount == null || !pAmount.equals(rEntry.getValue() * multiple))
-                                    continue recipesLoop;
-                            }
-
+                    for (int i = 0; i < validResult.length; i++) {
+                        if (checkPatternRecipe(validResult[i], dInputs, pItems)) {
                             return d;
                         }
                     }
+
                 }
             }
         }
+
         return null;
     }
 
