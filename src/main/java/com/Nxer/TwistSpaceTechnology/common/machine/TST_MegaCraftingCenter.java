@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
-import gregtech.api.objects.ItemData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -31,8 +30,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import net.minecraftforge.oredict.OreDictionary;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,6 +64,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -109,10 +109,10 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     /**
      *
-     * @param r     The find recipe of this pattern.
-     * @param in    The pattern input items.
-     * @param out   The pattern output item.
-     * @return      If this pattern is valid.
+     * @param r   The find recipe of this pattern.
+     * @param in  The pattern input items.
+     * @param out The pattern output item.
+     * @return If this pattern is valid.
      */
     protected static boolean checkPatternRecipe(GT_Recipe r, ItemStack[] in, ItemStack out) {
         ItemStack rOut = r.mOutputs[0];
@@ -130,7 +130,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             ItemData iData = GT_OreDictUnificator.getAssociation(i);
             if (iData != null) {
                 rItemMap.merge(TST_ItemID.createNoNBT(iData.mUnificationTarget), (long) i.stackSize, Long::sum);
-            } else if (i.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+            } else if (i.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
                 rWildcardMap.merge(i.getItem(), (long) i.stackSize, Long::sum);
             } else {
                 rItemMap.merge(TST_ItemID.createNoNBT(i), (long) i.stackSize, Long::sum);
