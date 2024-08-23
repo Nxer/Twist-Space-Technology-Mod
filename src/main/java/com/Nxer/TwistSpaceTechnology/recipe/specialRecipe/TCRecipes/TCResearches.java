@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes.TCBasic.EVOLUTION;
+import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static gregtech.api.enums.TC_Aspects.ELECTRUM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_TreeFarm;
@@ -9,6 +11,7 @@ import static net.minecraft.init.Items.diamond_sword;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -146,7 +149,7 @@ public class TCResearches {
                                         .merge(Aspect.FLESH, 1024)
                                         .merge(Aspect.WEAPON, 2048)
                                         .merge((Aspect) ELECTRUM.mAspect, 8192),
-                                    // .merge(ULTRA_DEATH, 64)
+
                                     GT_ModHandler.getModItem(Mods.Botania.ID, "manaResource", 1, 5),
                                     new ItemStack[] { Industrial_TreeFarm.get(1),
                                         GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
@@ -174,9 +177,57 @@ public class TCResearches {
                         .registerResearchItem();
 
                 // Offspring
-
+                new ResearchItem(
+                    "OFFSPRING",
+                    "BASIC",
+                    (new AspectList()).merge(Aspect.WATER, 1)
+                        .merge(Aspect.EXCHANGE, 1)
+                        .merge(Aspect.LIFE, 1),
+                    7,
+                    -13,
+                    10,
+                    GTCMItemList.OffSpring.get(1, 0)).setPages(new ResearchPage("A_STRING"))
+                        .registerResearchItem();
                 // Font of Ecology
-
+                new ResearchItem(
+                    "FONT_OF_ECOLOGY",
+                    "BASIC",
+                    (new AspectList()).add(EVOLUTION, 1)
+                        .add(EVOLUTION, 1)
+                        .add(Aspect.ELDRITCH, 1)
+                        .add(EVOLUTION, 1)
+                        .add(EVOLUTION, 1)
+                        .add(Aspect.WATER, 1),
+                    7,
+                    -14,
+                    10,
+                    GTCMItemList.FountOfEcology.get(1, 0))
+                        .setPages(
+                            new ResearchPage("A_STRING"),
+                            new ResearchPage(
+                                new InfusionRecipe(
+                                    "FONT_OF_ECOLOGY",
+                                    GTCMItemList.FountOfEcology.get(1),
+                                    200,
+                                    (new AspectList()).merge(EVOLUTION, 1024)
+                                        .merge(Aspect.WATER, 65536)
+                                        .merge(Aspect.LIFE, 16384)
+                                        .merge(Aspect.FLESH, 4096)
+                                        .merge(ULTRA_DEATH, 256),
+                                    Mods.Witchery.isModLoaded()
+                                        ? GT_ModHandler.getModItem(Mods.Witchery.ID, "infinityegg", 1)
+                                        : new ItemStack(Blocks.dragon_egg, 1),
+                                    new ItemStack[] { GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1) })))
+                        .registerResearchItem();
             }
         }
     }

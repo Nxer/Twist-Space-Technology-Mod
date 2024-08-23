@@ -1,9 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes;
 
+import static gregtech.common.items.GT_MetaGenerated_Item_98.FluidCell.LIQUID_DNA;
+
 import net.minecraft.util.ResourceLocation;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
+import gregtech.api.enums.Mods;
+import gregtech.api.util.GT_ModHandler;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -19,10 +23,30 @@ public class TCBasic {
             new Aspect[] { Aspect.LIFE, Aspect.EXCHANGE },
             new ResourceLocation("gtnhcommunitymod", "textures/icons/TCAspects/evolutio.png"),
             771);
+
         ThaumcraftApi.registerObjectTag(
             GTCMItemList.OffSpring.get(1),
-            new AspectList().add(EVOLUTION, 1)
+            new AspectList().add(EVOLUTION, 2)
                 .add(Aspect.LIFE, 8)
                 .add(Aspect.WATER, 32));
+
+        ThaumcraftApi.registerObjectTag(
+            GTCMItemList.FountOfEcology.get(1),
+            new AspectList().add(EVOLUTION, 4)
+                .add(Aspect.ELDRITCH, 6)
+                .add(Aspect.EXCHANGE, 8)
+                .add(Aspect.LIFE, 16)
+                .add(Aspect.WATER, 24));
+
+        if (Mods.Gendustry.isModLoaded()) {
+            ThaumcraftApi.registerObjectTag(
+                GT_ModHandler.getModItem(Mods.Gendustry.ID, "LiquidDNABucket", 1),
+                new AspectList().add(EVOLUTION, 1)
+                    .add(Aspect.METAL, 1));
+            ThaumcraftApi.registerObjectTag(
+                LIQUID_DNA.get(1),
+                new AspectList().add(EVOLUTION, 1)
+                    .add(Aspect.METAL, 1));
+        }
     }
 }
