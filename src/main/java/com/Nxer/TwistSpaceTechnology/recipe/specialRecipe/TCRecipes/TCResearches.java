@@ -129,7 +129,7 @@ public class TCResearches {
                         .merge(Aspect.ELDRITCH, 1)
                         .merge(Aspect.FLESH, 1),
                     7,
-                    -12,
+                    -9,
                     10,
                     GTCMItemList.MegaTreeFarm.get(1, 0))
                         .setPages(
@@ -179,19 +179,22 @@ public class TCResearches {
                 // Offspring
                 new ResearchItem(
                     "OFFSPRING",
-                    "BASIC",
+                    "BASICS",
                     (new AspectList()).merge(Aspect.WATER, 1)
                         .merge(Aspect.EXCHANGE, 1)
                         .merge(Aspect.LIFE, 1),
                     7,
-                    -13,
+                    -11,
                     10,
                     GTCMItemList.OffSpring.get(1, 0)).setPages(new ResearchPage("A_STRING"))
+                        .setParents("ECO_SPHERE_SIMULATOR")
+                        .setConcealed()
                         .registerResearchItem();
+
                 // Font of Ecology
                 new ResearchItem(
                     "FONT_OF_ECOLOGY",
-                    "BASIC",
+                    "BASICS",
                     (new AspectList()).add(EVOLUTION, 1)
                         .add(EVOLUTION, 1)
                         .add(Aspect.ELDRITCH, 1)
@@ -199,7 +202,7 @@ public class TCResearches {
                         .add(EVOLUTION, 1)
                         .add(Aspect.WATER, 1),
                     7,
-                    -14,
+                    -13,
                     10,
                     GTCMItemList.FountOfEcology.get(1, 0))
                         .setPages(
@@ -227,6 +230,8 @@ public class TCResearches {
                                         GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
                                         GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
                                         GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1) })))
+                        .setParents("OFFSPRING")
+                        .setConcealed()
                         .registerResearchItem();
             }
         }
