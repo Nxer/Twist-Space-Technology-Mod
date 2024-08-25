@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes.TCBasic.EVOLUTION;
+import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static gregtech.api.enums.TC_Aspects.ELECTRUM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_TreeFarm;
@@ -9,6 +11,7 @@ import static net.minecraft.init.Items.diamond_sword;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -114,6 +117,25 @@ public class TCRecipePool implements IRecipePool {
                         GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
                         ALLOY.TITANSTEEL.getPlateDense(1),
                         GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1) });
+
+                ThaumcraftApi.addInfusionCraftingRecipe(
+                    "FONT_OF_ECOLOGY",
+                    GTCMItemList.FountOfEcology.get(1),
+                    200,
+                    (new AspectList()).merge(EVOLUTION, 1024)
+                        .merge(Aspect.WATER, 65536)
+                        .merge(Aspect.LIFE, 16384)
+                        .merge(Aspect.FLESH, 4096)
+                        .merge(ULTRA_DEATH, 256),
+                    Mods.Witchery.isModLoaded() ? GT_ModHandler.getModItem(Mods.Witchery.ID, "infinityegg", 1)
+                        : new ItemStack(Blocks.dragon_egg, 1),
+                    new ItemStack[] { GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1) });
             }
         }
     }
