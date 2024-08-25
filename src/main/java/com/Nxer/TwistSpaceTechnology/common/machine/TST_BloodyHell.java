@@ -65,13 +65,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .glow()
             .build() };
 
-    /**
-     * the machine tier, it is always less than the altar tier by 1.
-     *
-     * @see #getAltarTier()
-     */
-    private int tier = 0;
-
     private int speedRuneCount = 0;
     private int tbSpeedRuneCount = 0;
 
@@ -89,7 +82,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     public int getAltarTier() {
-        return this.tier + 1;
+        return 6;
     }
 
     public int getOrbTier() {
@@ -102,7 +95,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     private float getTierSpeedBonus() {
         // for more, you should go to the Pull Request of this block
-        return (tier - 1) * 0.5F;
+        return (getAltarTier() - 2) * 0.5F;
     }
 
     private float getSpeedRuneSpeedBonus() {
@@ -181,15 +174,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         }
 
         // when the machine structure completes, it begins at 2
-        tier = 1;
         if (checkPiece(STRUCTURE_PIECE_2, 3, 1, 3)) {
-            tier = 2;
             if (checkPiece(STRUCTURE_PIECE_3, 5, 2, 5)) {
-                tier = 3;
                 if (checkPiece(STRUCTURE_PIECE_4, 8, -3, 8)) {
-                    tier = 4;
                     if (checkPiece(STRUCTURE_PIECE_5, 11, 3, 11)) {
-                        tier = 5;
                     }
                 }
             }
@@ -416,32 +404,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-
-        aNBT.setInteger("tier", this.tier);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-
-        tier = aNBT.getInteger("tier");
     }
 
     @Override
     public String[] getInfoData() {
         return InfoDataHelper.buildInfoData(super.getInfoData(), (info) -> {
-            info.add(
-                EnumChatFormatting.BLUE + "Machine Tier: "
-                    + EnumChatFormatting.GOLD
-                    + this.tier
-                    + EnumChatFormatting.GRAY
-                    + " ("
-                    + EnumChatFormatting.BLUE
-                    + "Altar Tier: "
-                    + EnumChatFormatting.GOLD
-                    + this.getAltarTier()
-                    + EnumChatFormatting.GRAY
-                    + ")");
             info.add(
                 EnumChatFormatting.BLUE + "Speed Rune Count: "
                     + EnumChatFormatting.AQUA
