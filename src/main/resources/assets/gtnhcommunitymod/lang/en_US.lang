@@ -1112,7 +1112,7 @@ BlockPowerChair.0.name=PowerChair
 
 NameExtremeCraftCenter=Extreme Crafting Center
 tst.megacraftingcenter.machinetype=molecularAssembler | extremeCraftTable
-tst.megacraftingcenter.desc.0=Do not use power.
+tst.megacraftingcenter.desc.0=Do not use power. Need to connect the controller to ME net.
 tst.megacraftingcenter.desc.1=Time consumption is fixed at 6.4 second, output items in output buses.
 tst.megacraftingcenter.desc.2=Input encoded patterns into input bus, the valid will be moved to internal, the invalid will be moved to output bus.
 tst.megacraftingcenter.desc.3=Support crafting table pattern and Dire Crafting process pattern.

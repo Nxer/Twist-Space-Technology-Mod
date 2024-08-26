@@ -1112,7 +1112,7 @@ BlockPowerChair.0.name=抛瓦椅
 
 NameExtremeCraftCenter=梦魇工业合成中心
 tst.megacraftingcenter.machinetype=工作台 | 梦魇合成台
-tst.megacraftingcenter.desc.0=不需要耗电.
+tst.megacraftingcenter.desc.0=不需要耗电. 需要将主机连接至ME网络.
 tst.megacraftingcenter.desc.1=固定耗时 6.4 秒, 在输出总线产出产物.
 tst.megacraftingcenter.desc.2=在输入总线内放入编码样板, 正确的样板将被转移到内部, 错误的样板将被转移到输出总线.
 tst.megacraftingcenter.desc.3=支持工作台样板和梦魇工作台处理样板.

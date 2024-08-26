@@ -593,8 +593,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         // spotless:off
         tt.addMachineType(TextEnums.tr("tst.megacraftingcenter.machinetype"))
             // #tr tst.megacraftingcenter.desc.0
-            // # Do not use power.
-            // #zh_CN 不需要耗电.
+            // # Do not use power. Need to connect the controller to ME net.
+            // #zh_CN 不需要耗电. 需要将主机连接至ME网络.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.0"))
             // #tr tst.megacraftingcenter.desc.1
             // # Time consumption is fixed at 6.4 second, output items in output buses.
