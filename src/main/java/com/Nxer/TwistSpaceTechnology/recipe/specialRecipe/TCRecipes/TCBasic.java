@@ -28,6 +28,7 @@ public class TCBasic {
             GTCMItemList.OffSpring.get(1),
             new AspectList().add(EVOLUTION, 2)
                 .add(Aspect.LIFE, 8)
+                .add(Aspect.ENTROPY, 12)
                 .add(Aspect.WATER, 32));
 
         ThaumcraftApi.registerObjectTag(
@@ -36,7 +37,8 @@ public class TCBasic {
                 .add(Aspect.ELDRITCH, 6)
                 .add(Aspect.EXCHANGE, 8)
                 .add(Aspect.LIFE, 16)
-                .add(Aspect.WATER, 24));
+                .add(Aspect.ENTROPY, 24)
+                .add(Aspect.WATER, 48));
 
         if (Mods.Gendustry.isModLoaded()) {
             ThaumcraftApi.registerObjectTag(
