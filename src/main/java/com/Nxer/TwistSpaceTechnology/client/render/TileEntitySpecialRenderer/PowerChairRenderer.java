@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.client.render;
+package com.Nxer.TwistSpaceTechnology.client.render.TileEntitySpecialRenderer;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -11,12 +11,12 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 
-public class TileEntityRenderer extends TileEntitySpecialRenderer {
+public class PowerChairRenderer extends TileEntitySpecialRenderer {
 
     private final IModelCustom Renderer;
     private final ResourceLocation textures;
 
-    public TileEntityRenderer(final IModelCustom Renderer, final ResourceLocation textures) {
+    public PowerChairRenderer(final IModelCustom Renderer, final ResourceLocation textures) {
         this.Renderer = Renderer;
         this.textures = textures;
         ClientRegistry.bindTileEntitySpecialRenderer(TilePowerChair.class, this);
