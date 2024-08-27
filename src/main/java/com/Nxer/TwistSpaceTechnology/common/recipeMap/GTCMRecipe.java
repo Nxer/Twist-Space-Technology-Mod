@@ -246,9 +246,29 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
-    // #tr
-    // # Eco-Sphere :
-    // #zh_CN 生态圈 :
+    // #tr tst.recipe.ArtificialGreenHouseFakeRecipes
+    // # Eco-Sphere : Artificial Green House
+    // #zh_CN 生态圈 : 人工温室
+    public static final RecipeMap<TST_RecipeMapBackend> ArtificialGreenHouseFakeRecipes = RecipeMapBuilder
+        .of("tst.recipe.ArtificialGreenHouseFakeRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 1, 1, 0)
+        .minInputs(1, 1)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.DirectedMobClonerFakeRecipes
+    // # Eco-Sphere : Directed Mob Cloner
+    // #zh_CN 生态圈 : 定向克隆
+    public static final RecipeMap<TST_RecipeMapBackend> DirectedMobClonerFakeRecipes = RecipeMapBuilder
+        .of("tst.recipe.DirectedMobClonerFakeRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 1, 1, 0)
+        .minInputs(1, 1)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .disableOptimize()
+        .build();
 
     // #tr tst.recipe.StrangeMatterAggregatorRecipes
     // # Strange Matter Aggregation

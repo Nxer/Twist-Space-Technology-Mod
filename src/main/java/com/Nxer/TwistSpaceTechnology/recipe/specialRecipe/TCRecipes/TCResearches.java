@@ -122,8 +122,8 @@ public class TCResearches {
                 new ResearchItem(
                     "ECO_SPHERE_SIMULATOR",
                     // #tr tc.research_name.ECO_SPHERE_SIMULATOR
-                    // # {\GREEN}Eco-Sphere Simulator
-                    // #zh_CN {\GREEN}拟似生态圈
+                    // # Eco-Sphere Simulator
+                    // #zh_CN 拟似生态圈
                     "BASICS",
                     (new AspectList()).merge(Aspect.TREE, 1)
                         .merge(Aspect.MECHANISM, 1)
@@ -137,8 +137,8 @@ public class TCResearches {
                     GTCMItemList.MegaTreeFarm.get(1, 0)).setPages(
                         // spotless:off
                         // #tr tc.research_text.ECO_SPHERE_SIMULATOR.1
-                        // # null
-                        // #zh_CN 一种将奥术与科技融合的装置,用于模拟自然生态.<BR>使用方法<BR>将机器放置在合适的地点,并连接到可调节功率的外部电源.装置会自动汲取环境的源质,保障树木与水生生物的自然生长.<BR>注意事项<BR>高电压下运行时,尽管效率降低,总产出会有所增加,使用者应合理调整电力输入.<BR>水生生物通常不会异常,如果出现非列表生物,请立即通报上级部门.
+                        // # A device that fuses arcane and technological forces, designed to simulate a natural ecosystem.<BR>{\BOLD}Usage Instructions: <BR>{\RESET}Place the machine and connect it to an adjustable power source. The device will draw ambient vis, ensuring natural tree and aquatic life growth.<BR>{\BOLD}Precautions: <BR>{\RESET}Under high voltage, efficiency may decrease, but output will increase. Adjust power input accordingly.<BR>Aquatic life is usually stable; report any non-listed entities immediately.
+                        // #zh_CN 一种将奥术与科技融合的装置, 用于模拟自然生态. <BR>{\BOLD}使用方法:<BR>{\RESET}将机器放置在合适的地点, 并连接到可调节功率的外部电源. 装置会自动汲取环境的源质, 保障树木与水生生物的自然生长. <BR>{\BOLD}注意事项:<BR>{\RESET}高电压下运行时, 尽管效率降低, 总产出会有所增加, 使用者应合理调整电力输入. <BR>水生生物通常不会异常, 如果出现非列表生物, 请立即通报上级部门.
                         new ResearchPage(TextEnums.tr("tc.research_text.ECO_SPHERE_SIMULATOR.1")),
                         new ResearchPage(
                             new InfusionRecipe(
@@ -178,12 +178,12 @@ public class TCResearches {
                                     ALLOY.TITANSTEEL.getPlateDense(1),
                                     GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1) })),
                         // #tr tc.research_text.ECO_SPHERE_SIMULATOR.2
-                        // # null
-                        // #zh_CN <LINE>运行日志记录：<BR>{\SPACE}在低电压运行时,机器展现出极高的模拟效率,模拟生态系统的状态异常稳定.<BR>当电压超过某个临界值时,机器的运行效率开始逐渐下降,但水域却似乎处于某种不可见的压力之下,使得模拟出现微妙的扭曲与偏差.<BR>极少数情况下,观察者报告称他们目睹了一种罕见且奇异的生物出现在水域中.这种生物散发着微弱的光芒,形态如同水母的轮廓,但却拥有某种不可名状的特质.
+                        // # <LINE>{\BOLD}Operation Log Record:<BR>{\RESET}When operating at low voltage, the machine exhibits extremely high simulation efficiency, remaining the ecosystem exceptionally stable. <BR>As the voltage exceeds a threshold, the machine's efficiency decreases, while the aquatic area shows invisible pressure, causing subtle distortions in the simulation.<BR>In rare cases, observers have reported seeing a strange entity in the water. It emits a faint glow, resembling a jellyfish but with an indescribable quality.
+                        // #zh_CN <LINE>{\BOLD}运行日志记录：<BR>{\RESET}在低电压运行时, 机器展现出极高的模拟效率, 模拟生态系统的状态异常稳定. <BR>当电压超过某个临界值时, 机器的运行效率开始逐渐下降, 但水域却似乎处于某种不可见的压力之下, 使得模拟出现微妙的扭曲与偏差. <BR>极少数情况下, 观察者报告称他们目睹了一种罕见且奇异的生物出现在水域中. 这种生物散发着微弱的光芒, 形态如同水母的轮廓, 但却拥有某种不可名状的特质.
                         new ResearchPage(TextEnums.tr("tc.research_text.ECO_SPHERE_SIMULATOR.2")),
                         // #tr tc.research_text.ECO_SPHERE_SIMULATOR.3
-                        // # null
-                        // #zh_CN <LINE>有传言称,遇见这种变异生物的神秘使,将会从中获得一种无法言明的启示.<BR>这种启示不仅能深化对奥术的理解,甚至能够推动机器本身的进化,使其功能变得更为强大且不可思议.<BR>尽管这种现象极其罕见,但那些执着于奥术探索的神秘使们,似乎从中看到了某种更高的追求,激发了他们对未知的渴望.
+                        // # <LINE><BR><BR>Rumor has it that those thaumaturges who encounter this mutated entity will gain an indescribable revelation.<BR>This revelation not only deepens their understanding of the arcane but could even drive the machine's own evolution, making its functions more powerful and extraordinary.<BR>Though this phenomenon is exceedingly rare, thaumaturges devoted to the exploration of the arcane seem to glimpse a higher pursuit within it, fueling their desire for the unknown.
+                        // #zh_CN <LINE><BR><BR>有传言称,遇见这种变异生物的神秘使,将会从中获得一种无法言明的启示.<BR>这种启示不仅能深化对奥术的理解,甚至能够推动机器本身的进化,使其功能变得更为强大且不可思议.<BR>尽管这种现象极其罕见,但那些执着于奥术探索的神秘使们,似乎从中看到了某种更高的追求,激发了他们对未知的渴望.
                         // spotless:on
                         new ResearchPage(TextEnums.tr("tc.research_text.ECO_SPHERE_SIMULATOR.3")))
                         .setParents("INDUSTRIAL_MAGIC_MATRIX")
@@ -202,11 +202,11 @@ public class TCResearches {
                         .merge(Aspect.EXCHANGE, 1)
                         .merge(Aspect.LIFE, 1),
                     8,
-                    -10,
+                    -9,
                     10,
                     GTCMItemList.OffSpring.get(1, 0))
                         // #tr tc.research_text.OFFSPRING.1
-                        // # null
+                        // # What's this?
                         // #zh_CN 这是什么?
                         .setPages(new ResearchPage("tc.research_text.OFFSPRING.1"))
                         .setParents("ECO_SPHERE_SIMULATOR")
@@ -229,17 +229,17 @@ public class TCResearches {
                         .add(Aspect.WATER, 1)
                         .add(Aspect.EXCHANGE, 1),
                     9,
-                    -11,
+                    -9,
                     10,
                     GTCMItemList.FountOfEcology.get(1, 0)).setPages(
                         // spotless:off
                         // #tr tc.research_text.FONT_OF_ECOLOGY.1
-                        // # null
-                        // #zh_CN 在时间的漩涡中,生命的脉络编织成复杂的画卷,基因作为无形的笔触,暗中涂抹着自然的意志.这些沉默的串联悄然引导着生命的每一步演化.<BR>然而,在这看似秩序井然的背后,神秘使们发现了一只诡异的水母——一个隐匿于自然法则裂缝中的源头,凝聚了万物的基因表现,仿佛在低语着远古的秘密.<BR>它是所有生物进化的终极汇聚,包含着无数基因的交错与融合,仿佛宇宙对生命的反讽.  没有人知道它为什么在这里.
+                        // # In the vortex of time, life’s threads weave a complex tapestry, with genes as invisible brushstrokes shaping nature’s will. These silent connections guide evolution subtly.<BR>Yet, behind this facade, thaumaturges discovered a peculiar jellyfish—an origin hidden within natural law’s cracks, embodying all genetic expressions and whispering ancient secrets.<BR>It represents the ultimate convergence of evolution, with countless interwoven genes, as if mocking life itself.<BR>No one knows why it’s here.
+                        // #zh_CN 在时间的漩涡中, 生命的脉络编织成复杂的画卷, 基因作为无形的笔触, 暗中涂抹着自然的意志. 这些沉默的串联悄然引导着生命的每一步演化. <BR>然而, 在这看似秩序井然的背后, 神秘使们发现了一只诡异的水母——一个隐匿于自然法则裂缝中的源头, 凝聚了万物的基因表现, 仿佛在低语着远古的秘密. <BR>它是所有生物进化的终极汇聚, 包含着无数基因的交错与融合, 仿佛宇宙对生命的反讽.<BR>没有人知道它为什么在这里.
                         new ResearchPage("tc.research_text.FONT_OF_ECOLOGY.1"),
                         // #tr tc.research_text.FONT_OF_ECOLOGY.2
-                        // # null
-                        // #zh_CN 神秘使们试图解读这诡谲的现象,却发现它并非自然演化的产物,而是某种更为深邃的力量所引发的扭曲,仿佛自然本身在引导着生命朝向某个不可名状的终点.<BR>通过对它的逆向研究
+                        // # Thaumaturges attempted to interpret this strange phenomenon but discovered it was not a product of natural evolution, but a distortion caused by a deeper force, as if nature itself were guiding life towards an indescribable end.<BR>Through reverse engineering it
+                        // #zh_CN 神秘使们试图解读这诡谲的现象, 却发现它并非自然演化的产物, 而是某种更为深邃的力量所引发的扭曲, 仿佛自然本身在引导着生命朝向某个不可名状的终点. <BR>通过对它的逆向研究
                         // spotless:on
                         new ResearchPage("tc.research_text.FONT_OF_ECOLOGY.2"),
                         new ResearchPage(

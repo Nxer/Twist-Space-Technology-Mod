@@ -1025,7 +1025,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 duration = controllerTier > 0 ? 20 : 100;
                 calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
 
-                if (isFocusMode) return SimpleCheckRecipeResult.ofSuccess("focus on");
+                if (isFocusMode) return SimpleCheckRecipeResult.ofSuccess("focus_on");
                 return SimpleCheckRecipeResult.ofSuccess("fishing");
             }
 
@@ -1097,8 +1097,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         // #tr Tooltip_EcoSphereSimulator_MachineType
-        // # Tree Farm | Aquatic Farm
-        // #zh_CN 树厂 | 渔场
+        // # Tree Farm | Aquatic Farm | Green House | Mob Cloner
+        // #zh_CN 树厂 | 渔场 | 温室 | 生物克隆
         tt.addMachineType(TextEnums.tr("Tooltip_EcoSphereSimulator_MachineType"))
             // #tr Tooltip_EcoSphereSimulator_Controller
             // # Controller block for the Eco-Sphere Growth Simulator
@@ -1145,6 +1145,14 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             // # The output benefits vary with increasing voltage
             // #zh_CN 且产物随电压的提升而受到不同的增益
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.10"))
+            // #tr Tooltip_EcoSphereSimulator.0.11
+            // # Use screwdriver to change mode
+            // #zh_CN 使用螺丝刀切换模式
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.11"))
+            // #tr Tooltip_EcoSphereSimulator.0.12
+            // # Secondary recipes incomplete
+            // #zh_CN 二级配方尚未完成
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.12"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
@@ -1159,20 +1167,35 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             .toolTipFinisher(ModName);
         return tt;
     }
-    // # Gazing at the creatures in the tank
-    // #看向水缸中的生物
-    // # You find yourself deep in thought......
-    // #zh_CN 你陷入了沉思......
-    // # This machine seems to have room for improvement
-    // #zh_CN 这台机器似乎还有提升空间
-    // # Upgrade to a secondary structure after inserting the {\BLUE}Fount Of Ecology
-    // #zh_CN 使用{\BLUE}生态泉源{\RESET}以提升主机等级
-    // # Benefiting from the diverse biological samples of the Fount Of Ecology
-    // #zh_CN 同时升级结构至等级2
-    // # Benefiting from the diverse biological samples of the {\BLUE}Fount Of Ecology
-    // #zh_CN 得益于{\BLUE}生态泉源{\RESET}繁多的生物样本
-    // # Fluid consumption reduces by 90%%, and recipe time shortens to 1s
-    // #zh_CN 配方消耗流体减少90%%, 且配方耗时缩短为1s
-    // # And new recipes are available (in progress)
-    // #zh_CN 并且可以使用新配方(未完成)
+    // #tr GT5U.gui.text.no_energy
+    // # No power
+    // #zh_CN 能源不足
+
+    // #tr GT5U.gui.text.no_sapling
+    // # Missing Sapling
+    // #zh_CN 缺失树苗
+
+    // #tr GT5U.gui.text.no_fluid
+    // # Missing Fluid
+    // #zh_CN 缺失流体
+
+    // #tr GT5U.gui.text.no_enough_input
+    // # No Enough Fluid
+    // #zh_CN 输入流体不足
+
+    // #tr GT5U.gui.text.no_correct_Circuit
+    // # No Match Circuit
+    // #zh_CN 没有匹配的电路板
+
+    // #tr GT5U.gui.text.growing_trees
+    // # {\GREEN}Growing Trees
+    // #zh_CN {\GREEN}原木拟生中
+
+    // #tr GT5U.gui.text.focus_on
+    // # {\BLUE}Targeting
+    // #zh_CN {\BLUE}定向中
+
+    // #tr GT5U.gui.text.fishing
+    // # {\BLUE}Fishing
+    // #zh_CN {\BLUE}捕鱼中
 }
