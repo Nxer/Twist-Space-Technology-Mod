@@ -1,6 +1,6 @@
-package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes;
+package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
-import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes.TCBasic.EVOLUTION;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static gregtech.api.enums.TC_Aspects.ELECTRUM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;

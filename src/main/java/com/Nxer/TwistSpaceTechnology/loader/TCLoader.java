@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes.TCBasic;
+import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic;
 
 public class TCLoader {
 

@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes;
+package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
 import java.util.ArrayList;
 

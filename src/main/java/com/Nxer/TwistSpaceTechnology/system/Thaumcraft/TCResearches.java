@@ -1,6 +1,6 @@
-package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes;
+package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
-import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes.TCBasic.EVOLUTION;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static gregtech.api.enums.TC_Aspects.ELECTRUM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
@@ -187,7 +187,6 @@ public class TCResearches {
                         // spotless:on
                         new ResearchPage(TextEnums.tr("tc.research_text.ECO_SPHERE_SIMULATOR.3")))
                         .setParents("INDUSTRIAL_MAGIC_MATRIX")
-                        // .setHidden()
                         .setConcealed()
                         .registerResearchItem();
 
@@ -212,8 +211,9 @@ public class TCResearches {
                         // # What's this?
                         // #zh_CN 这是什么?
                         .setPages(new ResearchPage("tc.research_text.OFFSPRING.1"))
+                        .setHidden()
+                        .setAspectTriggers(EVOLUTION)
                         .setParents("ECO_SPHERE_SIMULATOR")
-                        .setConcealed()
                         .registerResearchItem();
 
                 // Evolution
@@ -241,6 +241,7 @@ public class TCResearches {
                                 // #zh_CN <LINE>似曾相识?
                                 new ResearchPage("tc.research_text.EVOLUTIO.1"))
                             .setParents("OFFSPRING")
+                            .setConcealed()
                             .setRound()
                             .registerResearchItem();
 

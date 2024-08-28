@@ -44,11 +44,11 @@ import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DragonBloodRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.MegaUniversalSpaceStationRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes.TCRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes.TCResearches;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TSTBufferedEnergyHatchRecipe;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
+import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool;
+import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches;
 
 public class RecipeLoader {
 

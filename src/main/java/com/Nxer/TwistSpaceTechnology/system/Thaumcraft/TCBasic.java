@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipes;
+package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
 import static gregtech.common.items.GT_MetaGenerated_Item_98.FluidCell.LIQUID_DNA;
 
