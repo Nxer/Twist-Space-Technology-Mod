@@ -12,6 +12,7 @@ import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -76,16 +77,11 @@ public class TCResearches {
                 5,
                 GTCMItemList.IndustrialMagicMatrix.get(1, 0))/* .setParents("ICHORIUM") */
                     .setPages(
+                        // spotless:off
                         // #tr tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1
-                        // # Death,Evil,Abomination,Grievance,Murderous Intent,Curse of Misfortune,Hell,
-                        // Ethics,Fool,
-                        // Tyrant,Sinner,Cunning,Thief,Despicable,Evil,Poison,Hunger,Epidemic,
-                        // Earthquake,Heavenly
-                        // Change,Alien,Human,Calamity Forever,Time,Spirit,Root,Fiction,Darkness,
-                        // Innocence,Life,or
-                        // Something Called Fear.
-                        // #zh_CN
-                        // 死、邪恶、憎恶、怨嗟、杀意、不幸诅咒、地狱、伦理、愚者、暴君、罪人、狡猾、贼徒、卑劣、恶、毒、饥饿、疫病、地震、天变、异形、人间、灾厄永远、时间、精神、根源、虚构、黑暗、无垢、命或者被称为恐惧之物.
+                        // # Death, Evil, Abomination, Grievance, Murderous Intent, Curse of Misfortune, Hell, Ethics, Fool, Tyrant, Sinner, Cunning, Thief, Despicable, Evil, Poison, Hunger, Epidemic, Earthquake, Heavenly Change, Alien, Human, Calamity Forever, Time, Spirit, Root, Fiction, Darkness, Innocence, Life, or Something Called Fear.
+                        // #zh_CN 死、邪恶、憎恶、怨嗟、杀意、不幸诅咒、地狱、伦理、愚者、暴君、罪人、狡猾、贼徒、卑劣、恶、毒、饥饿、疫病、地震、天变、异形、人间、灾厄永远、时间、精神、根源、虚构、黑暗、无垢、命或者被称为恐惧之物.
+                        // spotless:on
                         new ResearchPage(TextEnums.tr("tc.research_text.INDUSTRIAL_MAGIC_MATRIX.1")),
                         new ResearchPage(
                             new InfusionRecipe(
@@ -115,6 +111,7 @@ public class TCResearches {
                                     GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                                     new ItemStack(blockMetalDevice, 1, 12) })))
+                    .setSpecial()
                     .registerResearchItem();
 
             if (Config.Enable_MegaTreeFarm) {
@@ -124,6 +121,9 @@ public class TCResearches {
                     // #tr tc.research_name.ECO_SPHERE_SIMULATOR
                     // # Eco-Sphere Simulator
                     // #zh_CN 拟似生态圈
+                    // #tr tc.research_text.ECO_SPHERE_SIMULATOR
+                    // # Cool, when can we cage the Wither?
+                    // #zh_CN 酷, 我们什么时候能圈养凋零？
                     "BASICS",
                     (new AspectList()).merge(Aspect.TREE, 1)
                         .merge(Aspect.MECHANISM, 1)
@@ -197,6 +197,9 @@ public class TCResearches {
                     // #tr tc.research_name.OFFSPRING
                     // # {\DARK_AQUA}"Offspring"
                     // #zh_CN {\DARK_AQUA}"子代"
+                    // #tr tc.research_text.OFFSPRING
+                    // # Little jellyfish. So can we cage the Wither now?
+                    // #zh_CN 小水母, 所以我们能圈养凋零了吗?
                     "BASICS",
                     (new AspectList()).merge(Aspect.WATER, 1)
                         .merge(Aspect.EXCHANGE, 1)
@@ -213,12 +216,43 @@ public class TCResearches {
                         .setConcealed()
                         .registerResearchItem();
 
+                // Evolution
+                new ResearchItem(
+                    "EVOLUTIO",
+                    // #tr tc.research_name.EVOLUTIO
+                    // # Evolutio
+                    // #zh_CN Evolutio
+                    // #tr tc.research_text.EVOLUTIO
+                    // # New Aspect. What does it have to do with caging the Wither?
+                    // #zh_CN 新源质, 这和圈养凋零有什么关系?
+                    "BASICS",
+                    (new AspectList()).add(EVOLUTION, 1)
+                        .add(Aspect.LIFE, 1)
+                        .add(Aspect.EXCHANGE, 1),
+                    9,
+                    -10,
+                    5,
+                    Mods.Gendustry.isModLoaded() ? GT_ModHandler.getModItem(Mods.Gendustry.ID, "LiquidDNABucket", 1)
+                        : new ItemStack(Items.water_bucket, 1))
+                            .setPages(
+                                new ResearchPage((new AspectList()).add(EVOLUTION, 1)),
+                                // #tr tc.research_text.EVOLUTIO.1
+                                // # <LINE>A sense of familiarity?
+                                // #zh_CN <LINE>似曾相识?
+                                new ResearchPage("tc.research_text.EVOLUTIO.1"))
+                            .setParents("OFFSPRING")
+                            .setRound()
+                            .registerResearchItem();
+
                 // Font of Ecology
                 new ResearchItem(
                     "FONT_OF_ECOLOGY",
                     // #tr tc.research_name.FONT_OF_ECOLOGY
                     // # {\BLUE}{\BOLD}Font of Ecology
                     // #zh_CN {\BLUE}{\BOLD}生态泉源
+                    // #tr tc.research_text.FONT_OF_ECOLOGY
+                    // # We can cage the Wither now!
+                    // #zh_CN 我们能圈养凋零了!
                     "BASICS",
                     (new AspectList()).add(EVOLUTION, 1)
                         .add(Aspect.ENTROPY, 1)
@@ -228,7 +262,7 @@ public class TCResearches {
                         .add(Aspect.ORDER, 1)
                         .add(Aspect.WATER, 1)
                         .add(Aspect.EXCHANGE, 1),
-                    9,
+                    10,
                     -9,
                     10,
                     GTCMItemList.FountOfEcology.get(1, 0)).setPages(

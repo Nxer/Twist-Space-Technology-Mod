@@ -245,12 +245,25 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
-            // if (controllerTier != 0) {
             this.mMode = (byte) ((this.mMode + 1) % 2);
             SetRemoveWater();
             GT_Utility
                 .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + this.mMode));
-            // }
+            // #tr EcoSphereSimulator.modeMsg.0
+            // # Tree Growth Simulator
+            // #zh_CN 原木拟生模式
+
+            // #tr EcoSphereSimulator.modeMsg.1
+            // # Aqua Zone Simulator
+            // #zh_CN 水域模拟模式
+
+            // #tr EcoSphereSimulator.modeMsg.2
+            // # Artificial Green House
+            // #zh_CN 人工温室模式
+
+            // #tr EcoSphereSimulator.modeMsg.3
+            // # Directed Mob Cloner
+            // #zh_CN 定向克隆模式
         }
     }
 
@@ -331,15 +344,10 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     ofBlock(
                         ModBlocksHandler.EarthCrystalBlock.getLeft(),
                         ModBlocksHandler.EarthCrystalBlock.getRight()))
-                .addElement(
-                    'N',
-                    Mods.Forestry.isModLoaded() ? ofBlock(Block.getBlockFromName("Forestry:soil"), 0)
-                        : ofBlock(Blocks.dirt, 0))
+                .addElement('N', ofBlock(ModBlocksHandler.soil.getLeft(), ModBlocksHandler.soil.getRight()))
                 .addElement(
                     'O',
-                    Mods.ProjectRedIllumination.isModLoaded()
-                        ? ofBlock(Block.getBlockFromName("ProjRed|Illumination:projectred.illumination.lamp"), 10)
-                        : ofBlock(Blocks.redstone_lamp, 0))
+                    ofBlock(ModBlocksHandler.PurpleLight.getLeft(), ModBlocksHandler.PurpleLight.getRight()))
                 .addElement('P', ofBlock(BlocksItems.getFluidBlock(InternalName.fluidDistilledWater), 0))
                 .addElement(
                     'Q',

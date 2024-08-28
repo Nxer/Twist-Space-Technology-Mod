@@ -19,6 +19,9 @@ public class TCBasic {
     public static void registerAspect() {
         EVOLUTION = new Aspect(
             "evolutio",
+            // #tr tc.aspect.evolutio
+            // # Evolution
+            // #zh_CN 进化
             0x6699FF,
             new Aspect[] { Aspect.LIFE, Aspect.EXCHANGE },
             new ResourceLocation("gtnhcommunitymod", "textures/icons/TCAspects/evolutio.png"),
