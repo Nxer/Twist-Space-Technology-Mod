@@ -21,6 +21,16 @@ public class ChemicalReactorRecipePool implements IRecipePool {
 
         final IRecipeMap LCR = RecipeMaps.multiblockChemicalReactorRecipes;
 
+        // Lithium Chloride
+        GT_Values.RA.stdBuilder()
+            .itemInputs(GT_Utility.getIntegratedCircuit(2), Materials.Lithium.getDust(1))
+            .fluidInputs(Materials.Chlorine.getGas(1000))
+            .itemOutputs(MyMaterial.lithiumChloride.get(OrePrefixes.dust, 2))
+            .noOptimize()
+            .eut(RECIPE_MV)
+            .duration(64)
+            .addTo(LCR);
+
         // One Step K2Cr2O7
         GT_Values.RA.stdBuilder()
             .itemInputs(

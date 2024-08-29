@@ -40,7 +40,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.github.bartimaeusnek.bartworks.API.recipe.BartWorksRecipeMaps;
 import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -102,6 +104,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
+        if (fieldGeneratorTier < 3 && mode > 1) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        if (fieldGeneratorTier < 11 && mode > 2) return CheckRecipeResultRegistry.INTERNAL_ERROR;
 
         setupProcessingLogic(processingLogic);
 
@@ -216,6 +220,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                 return RecipeMaps.extractorRecipes;
             case 2:
                 return GTPPRecipeMaps.cyclotronRecipes;
+            case 3:
+                return BartWorksRecipeMaps.electricImplosionCompressorRecipes;
             default:
                 return RecipeMaps.compressorRecipes;
         }
@@ -224,14 +230,25 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays
-            .asList(RecipeMaps.extractorRecipes, GTPPRecipeMaps.cyclotronRecipes, RecipeMaps.compressorRecipes);
+        return Arrays.asList(
+            RecipeMaps.extractorRecipes,
+            GTPPRecipeMaps.cyclotronRecipes,
+            RecipeMaps.compressorRecipes,
+            BartWorksRecipeMaps.electricImplosionCompressorRecipes);
     }
 
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = fieldGeneratorTier < 3 ? (byte) ((this.mode + 1) % 2) : (byte) ((this.mode + 1) % 3);
+            int modeAmount;
+            if (fieldGeneratorTier >= 11) {
+                modeAmount = 4;
+            } else if (fieldGeneratorTier >= 3) {
+                modeAmount = 3;
+            } else {
+                modeAmount = 2;
+            }
+            this.mode = (byte) ((this.mode + 1) % modeAmount);
             GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("SpaceScaler.modeMsg." + this.mode));
         }
     }
@@ -241,7 +258,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         repairMachine();
         this.fieldGeneratorTier = 0;
         boolean sign = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
-        if (this.fieldGeneratorTier == 0) {
+        if (this.fieldGeneratorTier < 1) {
             return false;
         }
         multiplier = 1 + Multiplier_ExtraOutputsPerFieldTier_SpaceScaler * Math.max(0, fieldGeneratorTier - 3);
@@ -410,7 +427,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             .addInfo(TextLocalization.Tooltip_SpaceScaler_04)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_05)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_06)
-            .addInfo(TextLocalization.Tooltip_SpaceScaler_07)
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_07"))
+            .addInfo(TextLocalization.Tooltip_SpaceScaler_08)
             .addInfo(TextLocalization.textScrewdriverChangeMode)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)

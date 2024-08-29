@@ -17,7 +17,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COM
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_GLOW;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
@@ -27,10 +29,13 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.dreammaster.gthandler.CustomItemList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -64,6 +69,20 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
 
     // region Processing Logic
 
+    // region Statics
+    public static final Map<TST_ItemID, TST_ItemID> SPECIAL_CONVERTING = new HashMap<>();
+
+    public static void initStatics() {
+        SPECIAL_CONVERTING.put(
+            TST_ItemID.createNoNBT(ItemList.Circuit_CosmicComputer.get(1)),
+            TST_ItemID.createNoNBT(CustomItemList.PikoCircuit.get(1)));
+        SPECIAL_CONVERTING.put(
+            TST_ItemID.createNoNBT(ItemList.Circuit_CosmicMainframe.get(1)),
+            TST_ItemID.createNoNBT(CustomItemList.QuantumCircuit.get(1)));
+    }
+
+    // endregion
+
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
@@ -75,6 +94,15 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         // check every input
         for (ItemStack item : inputs) {
             if (isStackInvalid(item)) continue;
+
+            // check special convert
+            TST_ItemID ii = SPECIAL_CONVERTING.get(TST_ItemID.createNoNBT(item));
+
+            if (ii != null) {
+                outputs.add(ii.getItemStack(item.stackSize));
+                item.stackSize = 0;
+                continue;
+            }
 
             // general convert
 
@@ -98,6 +126,26 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         mOutputItems = outputs.toArray(new ItemStack[0]);
 
         return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerMining_StarcoreMiner;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Eut_StarcoreMiner;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
+import static com.Nxer.TwistSpaceTechnology.config.Config.CheckMiningPipeStructure_StarcoreMiner;
 import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -89,7 +90,6 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     private static final String STRUCTURE_PIECE_MIDDLE = "middleStarcoreMiner";
     private static final String STRUCTURE_PIECE_END = "endStarcoreMiner";
     private static IStructureDefinition<TST_StarcoreMiner> STRUCTURE_DEFINITION;
-    private short y_value = -1;
 
     @Override
     public IStructureDefinition<TST_StarcoreMiner> getStructureDefinition() {
@@ -237,22 +237,28 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain)) return false;
-        if (y_value == -1) {
-            y_value = aBaseMetaTileEntity.getYCoord();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain)) {
+            IGregTechTileEntity b = getBaseMetaTileEntity();
+            TwistSpaceTechnology.LOG.info("TST: Starcore Miner check main structure failed at x=" + b.getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord() );
+            return false;
         }
-        if (y_value > ValueEnum.HeightValueLimit_StarcoreMiner) {
-            // if controller block is at location higher than 20
-            // continue check pipe structure
-            int needPiece = y_value - ValueEnum.HeightValueLimit_StarcoreMiner;
-            int p = 0;
-            for (;p<needPiece;p++) {
-                if (checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSetMiddle, verticalOffSetMiddle - p, depthOffSetMiddle)) continue;
-                // or check if stopped by a bedrock block
-                if (checkPiece(STRUCTURE_PIECE_END, horizontalOffSetEnd, verticalOffSetMiddle - p, depthOffSetEnd)) {
-                    break;
-                } else {
-                    return false;
+        if (CheckMiningPipeStructure_StarcoreMiner) {
+            IGregTechTileEntity b = getBaseMetaTileEntity();
+            int y_value = b.getYCoord();
+            if (y_value > ValueEnum.HeightValueLimit_StarcoreMiner) {
+                // if controller block is at location higher than 20
+                // continue check pipe structure
+                int needPiece = y_value - ValueEnum.HeightValueLimit_StarcoreMiner;
+                int p = 0;
+                for (;p<needPiece;p++) {
+                    if (checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSetMiddle, verticalOffSetMiddle - p, depthOffSetMiddle)) continue;
+                    // or check if stopped by a bedrock block
+                    if (checkPiece(STRUCTURE_PIECE_END, horizontalOffSetEnd, verticalOffSetMiddle - p, depthOffSetEnd)) {
+                        break;
+                    } else {
+                        TwistSpaceTechnology.LOG.info("TST: Starcore Miner check main structure failed at x=" + b.getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord() + " p=" + p );
+                        return false;
+                    }
                 }
             }
         }

@@ -79,6 +79,14 @@ public final class Utils {
         return result;
     }
 
+    public static boolean isValid(ItemStack... itemStacks) {
+        if (itemStacks == null || itemStacks.length < 1) return false;
+        for (int i = 0; i < itemStacks.length; i++) {
+            if (!isStackValid(itemStacks[i])) return false;
+        }
+        return true;
+    }
+
     public static ItemStack[] mergeItemStackArray(ItemStack[] array1, ItemStack[] array2) {
         if (array1 == null || array1.length < 1) {
             return array2;
@@ -186,10 +194,10 @@ public final class Utils {
     }
 
     public static ItemStack copyAmount(int aAmount, ItemStack aStack) {
+        if (isStackInvalid(aStack)) return null;
         ItemStack rStack = aStack.copy();
-        if (isStackInvalid(rStack)) return null;
         // if (aAmount > 64) aAmount = 64;
-        else if (aAmount == -1) aAmount = 111;
+        if (aAmount == -1) aAmount = 111;
         else if (aAmount < 0) aAmount = 0;
         rStack.stackSize = aAmount;
         return rStack;

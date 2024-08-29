@@ -531,7 +531,7 @@ F -> ofBlock...(tile.wood, 0, ...);
                 .addInfo(TextLocalization.BLUE_PRINT_INFO)
                 .addSeparator()
                 // #tr Tooltip_EyeOfWood_2_01
-                // # This machine will constantly consume {\BLUE}Water {\GRAY}and {\RED}Lava {\GRAY} in Input Hatches and store it inside the machine, like the Eye of Harmony.
+                // # This machine will constantly consume {\BLUE}Water {\GRAY}and {\RED}Lava {\GRAY}in Input Hatches and store it inside the machine, like the Eye of Harmony.
                 // #zh_CN 机器会将输入仓中输入的{\BLUE}水{\GRAY}和{\RED}岩浆{\GRAY}存储于机器内部, 就像鸿蒙之眼一样.
                 .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_01"))
                 // #tr Tooltip_EyeOfWood_2_02
@@ -539,7 +539,7 @@ F -> ofBlock...(tile.wood, 0, ...);
                 // #zh_CN 机器运行的成功率取决于已存储的水和岩浆的数量.
                 .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_02"))
                 // #tr Tooltip_EyeOfWood_2_03
-                // # Maximum success rate : 75% when the amount of stored water and lava are both equal to 256,000L.
+                // # Maximum success rate : 75%% when the amount of stored water and lava are both equal to 256,000L.
                 // #zh_CN 当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%%
                 .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_03"))
                 .addStructureInfo(TextLocalization.Text_SeparatingLine)

@@ -338,6 +338,17 @@ public enum GTCMItemList {
     HighDimensionalTransistor,
     // endregion
 
+    // region Cosmic Processor Productions
+    SpaceTimeSuperconductingInlaidMotherboard,
+    PacketInformationTranslationArray,
+    InformationHorizonInterventionShell,
+    EnergyFluctuationSelfHarmonizer,
+    EncapsulatedMicroSpaceTimeUnit,
+    SeedsSpaceTime,
+    MicroSpaceTimeFabricatorio,
+
+    // endregion
+
     // region DSP
     SolarSail,
     DysonSphereFrameComponent,

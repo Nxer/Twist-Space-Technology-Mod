@@ -669,8 +669,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 SpaceWarper.get(64),
                 MaterialsUEVplus.TranscendentMetal.getNanite(48),
 
-                GT_ModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 4),
-                GT_ModHandler.getModItem("dreamcraft", "item.PikoCircuit", 32),
+                eM_Coil.get(64),
+                PikoCircuit.get(32),
                 new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64},
                 new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64},
 
@@ -693,7 +693,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(
                 copyAmount(1, MachineLoader.MiracleTop)
             )
-
             .eut(RECIPE_UMV)
             .duration(20 * 3600)
             .addTo(AssemblyLine);

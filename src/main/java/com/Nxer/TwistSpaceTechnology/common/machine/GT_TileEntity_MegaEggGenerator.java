@@ -11,6 +11,8 @@ import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG_GLOW;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -23,10 +25,12 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
+import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -72,7 +76,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     private int mAirPosed = 0;
     private long genVol = 0L;
     private long genAmp = 0L;
-    private int effCap = 1;
+    private int efficiencyIncrement = 1;
 
     @Override
     @NotNull
@@ -80,7 +84,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
         this.mMaxProgresstime = 20;
         this.lEUt = Math.abs(genVol);
         this.eAmpereFlow = genAmp;
-        this.mEfficiencyIncrease = effCap;
+        this.mEfficiencyIncrease = efficiencyIncrement;
         return CheckRecipeResultRegistry.GENERATING;
     }
 
@@ -90,18 +94,28 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
      * Dragon eggs will give 1t efficiency increase boost for each pairs, but cap at 50 in total.
      * AS FOR CreeperEggs, who will use them?
      */
-    private void getEfficiencyIncrease() {
-        effCap = 1;
+    private void updateEfficiencyIncrement() {
+        efficiencyIncrement = 20;
         if (mInfinityEggs != 0) {
-            effCap += mInfinityEggs * 100;
+            efficiencyIncrement += mInfinityEggs * 100;
         }
         if (mDragonEggs != 0) {
             if (mDragonEggs < 100) {
-                effCap += mDragonEggs / 2;
+                efficiencyIncrement += mDragonEggs / 2;
             } else {
-                effCap += 50;
+                efficiencyIncrement += 50;
             }
         }
+    }
+
+    /**
+     * @return the total output EUt
+     */
+    @SuppressWarnings("deprecation")
+    private long getOutputEUt() {
+        return (long) ValueEnum.MEG_Overall_Multiply
+            * (ValueEnum.MEG_CrepperEgg_Gen * mCreeperEggs + ValueEnum.MEG_DragonEgg_Gen * mDragonEggs
+                + ValueEnum.MEG_InfinityEgg_Gen * mInfinityEggs);
     }
 
     /**
@@ -111,28 +125,26 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
      * Can be defined in config
      * 2024.1.21 Fix vol explode
      */
-    private void getOutput() {
-        long vol = 0, amp = 0, tOutput;
+    private void updateOutput() {
+        long hatchVol = 0, hatchAmp = 0;
         for (GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
-            vol += tHatch.maxEUOutput();
-            amp += tHatch.maxAmperesOut();
+            hatchVol += tHatch.maxEUOutput();
+            hatchAmp += tHatch.maxAmperesOut();
         }
         for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : eDynamoMulti) {
-            vol += tHatch.maxEUOutput();
-            amp += tHatch.maxAmperesOut();
+            hatchVol += tHatch.maxEUOutput();
+            hatchAmp += tHatch.maxAmperesOut();
         }
-        if (vol > Integer.MAX_VALUE) vol = Integer.MAX_VALUE;
-        if (amp > Integer.MAX_VALUE) amp = Integer.MAX_VALUE;
+        if (hatchVol > Integer.MAX_VALUE) hatchVol = Integer.MAX_VALUE;
+        if (hatchAmp > Integer.MAX_VALUE) hatchAmp = Integer.MAX_VALUE;
 
-        tOutput = (long) (ValueEnum.MEG_Overall_Multiply
-            * (ValueEnum.MEG_CrepperEgg_Gen * mCreeperEggs + ValueEnum.MEG_DragonEgg_Gen * mDragonEggs
-                + ValueEnum.MEG_InfinityEgg_Gen * mInfinityEggs));
-        if (tOutput > vol) {
-            genVol = vol;
-            long tmp = tOutput / vol;
-            genAmp = tmp <= amp ? (Math.max(tmp, 1L)) : amp;
+        long expectedEUt = getOutputEUt();
+        if (expectedEUt > hatchVol) { // the expected amp is greater than 1
+            genVol = hatchVol;
+            long expectedAmp = expectedEUt / hatchVol;
+            genAmp = MathUtils.clamp(expectedAmp, 1, hatchAmp); // 1 <= amp <= maxHatchAmp
         } else {
-            genVol = tOutput;
+            genVol = expectedEUt;
             genAmp = 1L;
         }
     }
@@ -141,7 +153,8 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
      * 2% max efficiency buff every 2^n pieces.
      * 1% max efficiency every 1 infinity egg.
      */
-    private int getCalculatedEfficiency() {
+    @SuppressWarnings("deprecation")
+    private int getMaxEfficiency() {
         return Math.max(
             0,
             10000 + ValueEnum.MEG_Efficiency_PiecesBuff * (int) (Math.log(mPieces) / Math.log(2))
@@ -161,7 +174,11 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
         this.mAirPosed = 0;
         this.mPieces = 0;
         // Main checks
-        return checkAllPieces() && checkInfinityEgg() && checkLaser() && checkDynamo() && setVal();
+        return checkAllPieces() && checkInfinityEgg()
+            && checkLaser()
+            && checkDynamo()
+            && checkAnyDynamoHatch()
+            && initValues();
     }
 
     /**
@@ -200,6 +217,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
      *
      * @return If laser is allowed
      */
+    @SuppressWarnings("deprecation")
     private boolean checkLaser() {
         if (mPieces < ValueEnum.MEG_Laser_Pieces) {
             for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : eDynamoMulti) {
@@ -216,13 +234,24 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
      *
      * @return If dynamo is allowed
      */
+    @SuppressWarnings("deprecation")
     private boolean checkDynamo() {
         return (mDynamoHatches.size() + eDynamoMulti.size()) <= ValueEnum.MEG_Dynamo_Limit;
     }
 
-    private boolean setVal() {
-        this.getOutput();
-        this.getEfficiencyIncrease();
+    /**
+     * Must have at least one dynamo hatch
+     */
+    private boolean checkAnyDynamoHatch() {
+        return !mDynamoHatches.isEmpty() || !eDynamoMulti.isEmpty();
+    }
+
+    /**
+     * Calls for initializing the output values (volt, amp) and efficiency increment.
+     */
+    private boolean initValues() {
+        this.updateOutput();
+        this.updateEfficiencyIncrement();
         return true;
     }
 
@@ -349,6 +378,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     };
 
 	// spotless:on
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isRotationChangeAllowed() {
         return ValueEnum.MEG_AllowRotation;
@@ -359,16 +389,51 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
 
     @Override
     public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 5];
-        ret[origin.length] = EnumChatFormatting.AQUA + "Infinity Eggs: " + EnumChatFormatting.GOLD + this.mInfinityEggs;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Dragon Eggs: " + EnumChatFormatting.GOLD + this.mDragonEggs;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Crepper Eggs: "
-            + EnumChatFormatting.GOLD
-            + this.mCreeperEggs;
-        ret[origin.length + 3] = EnumChatFormatting.AQUA + "Air Voids: " + EnumChatFormatting.GOLD + this.mAirPosed;
-        ret[origin.length + 4] = EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.mPieces;
-        return ret;
+        List<String> info = Lists.newArrayList(super.getInfoData());
+        // basic info
+        info.add(EnumChatFormatting.AQUA + "Infinity Eggs: " + EnumChatFormatting.GOLD + this.mInfinityEggs);
+        info.add(EnumChatFormatting.AQUA + "Dragon Eggs: " + EnumChatFormatting.GOLD + this.mDragonEggs);
+        info.add(EnumChatFormatting.AQUA + "Crepper Eggs: " + EnumChatFormatting.GOLD + this.mCreeperEggs);
+        info.add(EnumChatFormatting.AQUA + "Air Voids: " + EnumChatFormatting.GOLD + this.mAirPosed);
+        info.add(EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.mPieces);
+        // dynamic info
+        info.add(EnumChatFormatting.BLUE + "Generating Vol: " + EnumChatFormatting.GOLD + this.genVol);
+        info.add(EnumChatFormatting.BLUE + "Generating Amp: " + EnumChatFormatting.GOLD + this.genAmp);
+        info.add(
+            EnumChatFormatting.BLUE + "Efficiency: "
+                + EnumChatFormatting.GOLD
+                + this.mEfficiency
+                + EnumChatFormatting.GRAY
+                + " ("
+                + EnumChatFormatting.GREEN
+                + String.format("%.2f%%", (double) this.mEfficiency * 100 / this.getMaxEfficiency())
+                + EnumChatFormatting.GRAY
+                + ", "
+                + EnumChatFormatting.BLUE
+                + "Max: "
+                + EnumChatFormatting.GOLD
+                + this.getMaxEfficiency()
+                + EnumChatFormatting.GRAY
+                + ", "
+                + EnumChatFormatting.BLUE
+                + "Incr.: "
+                + EnumChatFormatting.GOLD
+                + this.efficiencyIncrement
+                + EnumChatFormatting.GRAY
+                + ")");
+        info.add(
+            EnumChatFormatting.BLUE + "Possibly Generating EUt: "
+                + EnumChatFormatting.GOLD
+                + (this.genVol * this.mEfficiency) / 10000
+                + EnumChatFormatting.GRAY
+                + " ("
+                + EnumChatFormatting.BLUE
+                + "Max: "
+                + EnumChatFormatting.GOLD
+                + getOutputEUt()
+                + EnumChatFormatting.GRAY
+                + ")");
+        return info.toArray(new String[0]);
     }
 
     @Override
@@ -391,6 +456,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
         mPieces = aNBT.getInteger("mPieces");
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
@@ -421,7 +487,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
-        return getCalculatedEfficiency();
+        return getMaxEfficiency();
     }
 
     @Override

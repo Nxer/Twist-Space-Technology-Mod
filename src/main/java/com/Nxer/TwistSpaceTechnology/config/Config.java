@@ -56,6 +56,8 @@ public class Config {
     public static final String ModularizedMachineStuffs = "ModularizedMachineStuffs";
     public static final String DimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = "Dimensionally Transcendent Matter Plasma Forge Prototype MK2";
     public static final String LargeNeutronOscillator = "Large Neutron Oscillator";
+    public static final String MicroSpaceTimeFabricatorio = "Micro SpaceTime Fabricatorio";
+    public static final String StrangeMatterAggregator = "Strange Matter Aggregator";
     // endregion
 
     // region General
@@ -77,6 +79,7 @@ public class Config {
     public static double secondsOfArtificialStarProgressCycleTime = 6.4;
     public static int secondsOfEverySpaceWarperProvideToOverloadTime = 60 * 15;
     public static int overloadSpeedUpMultiplier = 30;
+    public static int overloadSpecialCalculationParameter = 1000;
     public static double gravitationalLensSpeedMultiplier = 4;
     public static int secondsOfEveryGravitationalLensProvideToIntensifyTime = 60 * 10;
     public static double secondsOfLaunchingSolarSail = 120;
@@ -88,6 +91,7 @@ public class Config {
 
     // TODO cfg of StrangeMatterAggregator
     // region StrangeMatterAggregator
+    public static int StructureLoopBuildingLimit_StrangeMatterAggregator = 1;
     public static long PowerConsume_StrangeMatterAggregator = RECIPE_MAX * 256L;
     public static int RecipeTime_T1SpaceTimeOscillator_StrangeMatterAggregator = 120 * 20;
     public static int RecipeTime_T2SpaceTimeOscillator_StrangeMatterAggregator = 40 * 20;
@@ -324,6 +328,7 @@ public class Config {
     public static int Eut_StarcoreMiner = (int) RECIPE_MAX;
     public static int DurationPerMining_StarcoreMiner = 128;
     public static boolean DebugMode_StarcoreMiner = false;
+    public static boolean CheckMiningPipeStructure_StarcoreMiner = true;
     // endregion
 
     // region Disassembler
@@ -393,6 +398,11 @@ public class Config {
     public static boolean EnableLargeNeutronOscillator = true;
     // endregion
 
+    // region MicroSpaceTimeFabricatorioRecipes
+    public static int Parallel_MicroSpaceTimeFabricatorio = 16;
+    public static boolean Safe_Calamity_MicroSpaceTimeFabricatorio = false;
+    // endregion
+
     // region Incompact Cyclotron
     public static boolean Enable_IncompactCyclotron =true;
     public static float EuModifier_IncompactCyclotron = 1.6F;
@@ -421,6 +431,11 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        // endregion
+
+        // region MicroSpaceTimeFabricatorioRecipes
+        Parallel_MicroSpaceTimeFabricatorio = configuration.getInt("Parallel_MicroSpaceTimeFabricatorio", MicroSpaceTimeFabricatorio, Parallel_MicroSpaceTimeFabricatorio, 1, 2000000000, "Max parallel of Micro SpaceTime Fabricatorio.");
+        Safe_Calamity_MicroSpaceTimeFabricatorio = configuration.getBoolean("Safe_Calamity_MicroSpaceTimeFabricatorio", MicroSpaceTimeFabricatorio, Safe_Calamity_MicroSpaceTimeFabricatorio, "Safe Calamity, Micro SpaceTime Fabricatorio will not explode, but check structure failed.");
         // endregion
 
         // region LargeNeutronOscillator
@@ -459,7 +474,7 @@ public class Config {
         Eut_StarcoreMiner = configuration.getInt("Eut_StarcoreMiner", StarcoreMiner, Eut_StarcoreMiner, 1, Integer.MAX_VALUE, "EU/t when Starcore Miner working. Type: int");
         DurationPerMining_StarcoreMiner = configuration.getInt("DurationPerMining_StarcoreMiner", StarcoreMiner, DurationPerMining_StarcoreMiner, 1, Integer.MAX_VALUE, "How many ticks per mining cost. 20 tick = 1 second . Type: int");
         DebugMode_StarcoreMiner = configuration.getBoolean("DebugMode_StarcoreMiner", StarcoreMiner, DebugMode_StarcoreMiner, "Debug mode.");
-
+        CheckMiningPipeStructure_StarcoreMiner = configuration.getBoolean("CheckMiningPipeStructure_StarcoreMiner", StarcoreMiner, CheckMiningPipeStructure_StarcoreMiner, "Check Mining Pipe Structure when check machine structure.");
         // endregion
 
         // region CoreDeviceOfHumanPowerGenerationFacility
@@ -632,6 +647,7 @@ public class Config {
         secondsOfArtificialStarProgressCycleTime = Double.parseDouble(configuration.getString("secondsOfArtificialStarProgressCycleTime", DSP, String.valueOf(secondsOfArtificialStarProgressCycleTime), "Seconds of Artificial Star one progress time. Type: double, turn to tick time."));
         secondsOfEverySpaceWarperProvideToOverloadTime = configuration.getInt("secondsOfEverySpaceWarperProvideToOverloadTime", DSP, secondsOfEverySpaceWarperProvideToOverloadTime, 1, Integer.MAX_VALUE, "Overload Time (second) of every Space Warper will provide. Type: int");
         overloadSpeedUpMultiplier = configuration.getInt("overloadSpeedUpMultiplier", DSP, overloadSpeedUpMultiplier, 1, 256, "How much speed up when overload mode. Type: int");
+        overloadSpecialCalculationParameter = configuration.getInt("overloadSpecialCalculationParameter", DSP, overloadSpecialCalculationParameter, 1, 1_000_000_000, "Overload speed up multiplier Special Calculation Parameter. Extra speed = overload time ^ (1 / ((900 / overload time) * this + 5)) Type: int");
         gravitationalLensSpeedMultiplier = Double.parseDouble(configuration.getString("gravitationalLensSpeedMultiplier", DSP, String.valueOf(gravitationalLensSpeedMultiplier), "How much of Speed Multiplier when in Gravitational Lens intensify mode. Type: double"));
         secondsOfEveryGravitationalLensProvideToIntensifyTime = configuration.getInt("secondsOfEveryGravitationalLensProvideToIntensifyTime", DSP, secondsOfEveryGravitationalLensProvideToIntensifyTime, 0, Integer.MAX_VALUE, "Intensify Mode Time (second) of every Gravitational Lens will provide. Type: int");
         secondsOfLaunchingSolarSail = Double.parseDouble(configuration.getString("secondsOfLaunchingSolarSail", DSP, String.valueOf(secondsOfLaunchingSolarSail), "Seconds of launching a Solar Sail."));
@@ -640,8 +656,9 @@ public class Config {
         EUTOfLaunchingNode = configuration.getInt("EUTOfLaunchingNode", DSP, EUTOfLaunchingNode, 1, Integer.MAX_VALUE, "EUt of Launching Node.");
         EnableRenderDefaultArtificialStar = configuration.getBoolean("EnableRenderDefaultArtificialStar", DSP, EnableRenderDefaultArtificialStar, "Enable Render of Artificial Star when placing a new one.");
         EUEveryStrangeAnnihilationFuelRod = Long.parseLong(configuration.getString("EUEveryStrangeAnnihilationFuelRod", DSP, String.valueOf(EUEveryStrangeAnnihilationFuelRod), "EU of every Strange Annihilation Fuel Rod can generate. Type: long"));
-        // region StrangeMatterAggregator
 
+        // region StrangeMatterAggregator
+        StructureLoopBuildingLimit_StrangeMatterAggregator = configuration.getInt("StructureLoopBuildingLimit_StrangeMatterAggregator", StrangeMatterAggregator, StructureLoopBuildingLimit_StrangeMatterAggregator, 1, 64, "Extra limitation of the number of Hologram Projector stack size in structure auto building. Type: int");
         // endregion
         // endregion
 

@@ -391,7 +391,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     }
 
     protected long generateTickEU() {
-        return (long) (stellarAndPlanetCoefficient * getGLensSpeedMultiplier() * this.usedPowerPoint) * 64;
+        return (long) (stellarAndPlanetCoefficient * getGLensSpeedMultiplier() * this.usedPowerPoint);
     }
 
     @Override

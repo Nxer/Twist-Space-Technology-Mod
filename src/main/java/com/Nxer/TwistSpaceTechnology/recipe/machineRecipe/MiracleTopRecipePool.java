@@ -7,6 +7,7 @@ import static com.github.technus.tectech.thing.CustomItemList.DATApipe;
 import static com.glodblock.github.loader.ItemAndBlockHolder.SINGULARITY_CELL;
 import static gregtech.api.enums.Mods.EternalSingularity;
 import static gregtech.api.enums.Mods.GTPlusPlus;
+import static gregtech.api.enums.Mods.SuperSolarPanels;
 import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
 import static gregtech.api.enums.TierEU.RECIPE_LuV;
@@ -18,6 +19,7 @@ import static gregtech.api.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static gregtech.api.util.GT_ModHandler.getModItem;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.InfinityInfusedShieldingCore;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 import static thaumcraft.common.config.ConfigBlocks.blockEssentiaReservoir;
 
@@ -51,6 +53,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gtPlusPlus.core.material.ELEMENT;
 import thaumicenergistics.implementaion.ThEAPIImplementation;
 
 // spotless:off
@@ -284,9 +287,77 @@ public class MiracleTopRecipePool implements IRecipePool {
             .addTo(MT);
         // endregion
 
+        // region Optical Component
+
+        // optical cpu
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(16),
+                setStackSize(ItemList.Circuit_Chip_Optical.get(1), 192),
+                setStackSize(ItemList.Optical_Cpu_Containment_Housing.get(1), 192),
+                setStackSize(DATApipe.get(1), 192)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 1152 * 12),
+                ELEMENT.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(144 * 24),
+                MaterialsUEVplus.SpaceTime.getMolten(144 * 24),
+                Materials.Tritanium.getMolten(144 * 24),
+                MyMaterial.enrichedNaquadahAlloy.getMolten(144 * 24),
+                MyMaterial.shirabon.getMolten(144 * 24)
+            )
+            .itemOutputs(setStackSize(ItemList.Optically_Perfected_CPU.get(1), 256))
+            .eut(RECIPE_UIV)
+            .duration(20 * 20 * 12)
+            .addTo(MT);
+
+        // optical memory
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(16),
+                setStackSize(ItemList.Circuit_Chip_Optical.get(1), 192),
+                getModItem(SuperSolarPanels.ID, "solarsplitter", 192),
+                setStackSize(DATApipe.get(1), 768),
+                setStackSize(ItemList.Circuit_Chip_Ram.get(1), 192),
+                setStackSize(ItemList.Circuit_Chip_SoC.get(1), 192),
+                setStackSize(ItemList.Circuit_Chip_NAND.get(1), 192)
+            )
+            .fluidInputs(
+                new FluidStack(solderPlasma, 1152 * 12),
+                Materials.VanadiumGallium.getMolten(144 * 48),
+                Materials.Infinity.getMolten(144 * 48),
+                Materials.SuperconductorUMVBase.getMolten(144 * 24),
+                MaterialsUEVplus.SpaceTime.getMolten(144 * 7)
+            )
+            .itemOutputs(setStackSize(ItemList.Optically_Compatible_Memory.get(1), 512))
+            .eut(RECIPE_UIV)
+            .duration(20 * 20 * 12)
+            .addTo(MT);
+
+        // endregion
+
         // region Optical Circuit
 
         // Optical SoC frame
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(21),
+                InfinityInfusedShieldingCore.get(0),
+                ItemList.Optical_Cpu_Containment_Housing.get(1),
+                Materials.Glowstone.getNanite(4)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.Space.getMolten(36),
+                MaterialsUEVplus.Time.getMolten(36)
+            )
+            .itemOutputs(
+                GTCMItemList.ParticleTrapTimeSpaceShield.get(1)
+            )
+            .eut(RECIPE_UMV)
+            .duration(20 * 64)
+            .addTo(MT);
+
         GT_Values.RA.stdBuilder()
             .itemInputs(
                 GT_Utility.getIntegratedCircuit(21),
@@ -300,7 +371,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 MaterialsUEVplus.SpaceTime.getMolten(144 * 2)
             )
             .itemOutputs(
-                GTCMItemList.ParticleTrapTimeSpaceShield.get(1)
+                GTCMItemList.ParticleTrapTimeSpaceShield.get(16)
             )
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(2500))
             .eut(RECIPE_UMV)

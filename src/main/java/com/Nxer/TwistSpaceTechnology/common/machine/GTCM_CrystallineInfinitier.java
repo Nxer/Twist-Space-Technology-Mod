@@ -38,6 +38,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
@@ -53,12 +54,16 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_HatchElementBuilder;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Casings8;
 
@@ -108,6 +113,32 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         speedBonus = aNBT.getFloat("speedBonus");
         maxParallel = aNBT.getInteger("maxParallel");
         enablePerfectOverclock = aNBT.getBoolean("enablePerfectOverclock");
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
+                if (recipe.mSpecialValue > fieldGeneratorTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
+                }
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
+                return super.process();
+            }
+
+        }.setMaxParallelSupplier(this::getLimitedMaxParallel);
     }
 
     protected float getEuModifier() {

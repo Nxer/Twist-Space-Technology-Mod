@@ -49,6 +49,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
@@ -159,6 +160,7 @@ public class MachineLoader {
     public static ItemStack MassFabricatorGenesis;
     public static ItemStack IncompactCyclotron;
     public static ItemStack StrangeMatterAggregator;
+    public static ItemStack MicroSpaceTimeFabricatorio;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -674,6 +676,15 @@ public class MachineLoader {
             GTCMItemList.StrangeMatterAggregator.set(StrangeMatterAggregator);
 
         }
+
+        // #tr NameMicroSpaceTimeFabricatorio
+        // # Micro SpaceTime Fabricatorio
+        // #zh_CN 微型时空发生器
+        MicroSpaceTimeFabricatorio = new TST_MicroSpaceTimeFabricatorio(
+            19060,
+            "NameMicroSpaceTimeFabricatorio",
+            TextEnums.tr("NameMicroSpaceTimeFabricatorio")).getStackForm(1);
+        GTCMItemList.MicroSpaceTimeFabricatorio.set(MicroSpaceTimeFabricatorio);
 
         // endregion
 

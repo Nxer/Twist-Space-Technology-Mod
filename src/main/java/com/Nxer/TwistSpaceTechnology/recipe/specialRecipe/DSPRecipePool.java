@@ -1175,11 +1175,49 @@ public class DSPRecipePool implements IRecipePool {
                 Laser_Lens_Special.get(16),
                 Materials.Void.getPlates(64),
 
+                MaterialsUEVplus.WhiteDwarfMatter.getNanite(1),
+                MaterialsUEVplus.BlackDwarfMatter.getNanite(1))
+            .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(100))
+            .itemOutputs(GTCMItemList.MatterRecombinator.get(1))
+            .outputChances(114)
+            .eut(RECIPE_UMV)
+            .duration(20 * 200)
+            .addTo(RecipeMaps.assemblerRecipes);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(11),
+                ItemList.Field_Generator_UMV.get(4),
+                ItemList.Emitter_UMV.get(8),
+
+                GravitationalLens.get(32),
+                Laser_Lens_Special.get(16),
+                Materials.Void.getPlates(64),
+
                 MaterialsUEVplus.Eternity.getNanite(1),
                 MaterialsUEVplus.Universium.getNanite(1))
             .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(100))
             .itemOutputs(GTCMItemList.MatterRecombinator.get(1))
-            .outputChances(114)
+            .outputChances(1140)
+            .eut(RECIPE_UXV)
+            .duration(20 * 300)
+            .addTo(RecipeMaps.assemblerRecipes);
+
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                GT_Utility.getIntegratedCircuit(11),
+                ItemList.Field_Generator_UMV.get(4),
+                ItemList.Emitter_UMV.get(8),
+
+                GravitationalLens.get(32),
+                Laser_Lens_Special.get(16),
+                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getPlates(16),
+
+                MaterialsUEVplus.Eternity.getNanite(1),
+                MaterialsUEVplus.Universium.getNanite(1))
+            .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(100))
+            .itemOutputs(GTCMItemList.MatterRecombinator.get(1))
+            .outputChances(5140)
             .eut(RECIPE_MAX)
             .duration(20 * 300)
             .addTo(RecipeMaps.assemblerRecipes);
