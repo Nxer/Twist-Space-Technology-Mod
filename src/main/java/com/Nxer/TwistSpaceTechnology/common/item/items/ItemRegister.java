@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.item.items;
 
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01.initItem01;
+import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderIzumik.initItemIzumik;
 import static com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderRune.initItemRune;
 import static com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems.MultiStructuresLinkTool;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.RiseOfDarkFog;
