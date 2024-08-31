@@ -157,6 +157,9 @@ public enum GTCMItemList {
     PrimitiveMansSpaceTimeDistortionDevice,
     BallLightningUpgradeChip,
     HatchUpdateTool,
+    FountOfEcology,
+    OffSpring,
+
     // endregion
 
     // region Blocks
@@ -189,6 +192,7 @@ public enum GTCMItemList {
     CompositeFarmCasing,
     DenseCyclotronOuterCasing,
     CompactCyclotronCoil,
+    AsepticGreenhouseCasing,
     // endregion
 
     // region Machines

@@ -36,19 +36,20 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.SpaceAssemblerRecipePo
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StarKernelForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.NeutronActivatorWithEURecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.CosmicProcessorCircuitRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DragonBloodRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.MegaUniversalSpaceStationRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCResearches;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TSTBufferedEnergyHatchRecipe;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
+import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool;
+import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches;
 
 public class RecipeLoader {
 
@@ -84,9 +85,6 @@ public class RecipeLoader {
         if (Config.Enable_BallLightning) {
             new StarKernelForgeRecipePool().loadRecipes();
         }
-        if (Config.Enable_MegaTreeFarm) {
-            new TreeGrowthSimulatorWithoutToolFakeRecipe();
-        }
         if (Config.EnableModularizedMachineSystem) {
             if (Config.EnableLargeNeutronOscillator) {
                 new NeutronActivatorWithEURecipePool().loadRecipes();
@@ -95,14 +93,22 @@ public class RecipeLoader {
         if (Config.Enable_IndustrialMagicMatrix) {
             new IndustrialMagicMatrixRecipePool().loadRecipes();
         }
+        if (Config.Enable_MegaTreeFarm) {
+            new AquaticZoneSimulatorFakeRecipe().loadRecipes();
+        }
     }
 
     public static void loadRecipesPostInit() {
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
+        new IndustrialMagicMatrixRecipePool().loadRecipes();
     }
 
     public static void loadRecipesServerStarted() {
         new StellarForgeRecipePool().loadOnServerStarted();
     }
 
+    public static void loadRecipemixin() {
+        new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
+        // new Mode3SimulatorFakeRecipe().loadRecipes();
+    }
 }

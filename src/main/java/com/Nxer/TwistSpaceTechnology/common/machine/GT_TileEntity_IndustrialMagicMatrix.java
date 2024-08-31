@@ -35,7 +35,7 @@ import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
+import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -2955,11 +2955,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType(
                 // #tr Tooltip_IndustrialMagicMatrix_MachineType
-                // # Controller block for the Industrial Magic Matrix
+                // # Magic Matrix
                 // #zh_CN §0工业注魔矩阵
                 TextEnums.tr("Tooltip_IndustrialMagicMatrix_MachineType"))
                 // #tr Tooltip_IndustrialMagicMatrix_Controller
-                // # Magic Matrix
+                // # Controller block for the Industrial Magic Matrix
                 // #zh_CN 工业注魔矩阵的控制器方块
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_Controller"))
                 // #tr Tooltip_IndustrialMagicMatrix_00

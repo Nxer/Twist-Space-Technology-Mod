@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder01;
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderIzumik;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdderRune;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresLinkTool;
@@ -21,6 +22,11 @@ public final class BasicItems {
     public static final Item MetaItemRune = new ItemAdderRune(
         "MetaItemRuneBase",
         "MetaItemRune",
+        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItem01/0");
+
+    public static final Item MetaItemIzumik = new ItemAdderIzumik(
+        "MetaItemIzumikBase",
+        "MetaItemIzumik",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItem01/0");
 
     public static final Item ProofOfHeroes = new ItemProofOfHeroes(

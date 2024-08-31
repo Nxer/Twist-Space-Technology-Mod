@@ -3,10 +3,11 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.MegaTreeGrowthSimulator_SpecialValueFormatter;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
 
 import goodgenerator.client.GUI.GG_UITextures;
 import gregtech.api.gui.modularui.GT_UITextures;
@@ -220,14 +221,53 @@ public class GTCMRecipe {
         .build();
 
     // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes
-    // # BioSphere : Tree Growth Simulator
-    // #zh_CN 生物圈 : 原木拟生
+    // # Eco-Sphere : Tree Growth Simulator
+    // #zh_CN 生态圈 : 原木拟生
     public static final RecipeMap<TST_RecipeMapBackend> TreeGrowthSimulatorWithoutToolFakeRecipes = RecipeMapBuilder
         .of("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(4, 4, 1, 0)
+        .minInputs(1, 1)
         .useSpecialSlot()
-        .neiSpecialInfoFormatter(MegaTreeGrowthSimulator_SpecialValueFormatter.INSTANCE)
+        .specialSlotSensitive()
+        .frontend(TST_TreeGrowthSimulatorFrontend::new)
         .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.AquaticZoneSimulatorFakeRecipes
+    // # Eco-Sphere : Aquatic Zone Simulator
+    // #zh_CN 生态圈 : 水域模拟
+    public static final RecipeMap<TST_RecipeMapBackend> AquaticZoneSimulatorFakeRecipes = RecipeMapBuilder
+        .of("tst.recipe.AquaticZoneSimulatorFakeRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 1, 1, 0)
+        .minInputs(1, 1)
+        .frontend(TST_AquaticZoneSimulatorFronted::new)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.ArtificialGreenHouseFakeRecipes
+    // # Eco-Sphere : Artificial Green House
+    // #zh_CN 生态圈 : 人工温室
+    public static final RecipeMap<TST_RecipeMapBackend> ArtificialGreenHouseFakeRecipes = RecipeMapBuilder
+        .of("tst.recipe.ArtificialGreenHouseFakeRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 1, 1, 0)
+        .minInputs(1, 1)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.DirectedMobClonerFakeRecipes
+    // # Eco-Sphere : Directed Mob Cloner
+    // #zh_CN 生态圈 : 定向克隆
+    public static final RecipeMap<TST_RecipeMapBackend> DirectedMobClonerFakeRecipes = RecipeMapBuilder
+        .of("tst.recipe.DirectedMobClonerFakeRecipes", TST_RecipeMapBackend::new)
+        .maxIO(1, 1, 1, 0)
+        .minInputs(1, 1)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()
         .build();
