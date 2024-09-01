@@ -157,6 +157,9 @@ public enum GTCMItemList {
     PrimitiveMansSpaceTimeDistortionDevice,
     BallLightningUpgradeChip,
     HatchUpdateTool,
+    FountOfEcology,
+    OffSpring,
+
     // endregion
 
     // region Blocks
@@ -189,6 +192,9 @@ public enum GTCMItemList {
     CompositeFarmCasing,
     DenseCyclotronOuterCasing,
     CompactCyclotronCoil,
+    AsepticGreenhouseCasing,
+    BloodyCasing1,
+    BloodyCasing2,
     // endregion
 
     // region Machines
@@ -249,6 +255,7 @@ public enum GTCMItemList {
     ExtremeCraftCenter,
     MassFabricatorGenesis,
     IncompactCyclotron,
+    BloodyHell,
 
     // endregion
 
@@ -321,8 +328,6 @@ public enum GTCMItemList {
     AdvancedExecutionCore,
     PerfectExecutionCore,
 
-    BloodOrbHatch,
-
     // endregion
 
     // region MAX
@@ -344,7 +349,6 @@ public enum GTCMItemList {
     EncapsulatedMicroSpaceTimeUnit,
     SeedsSpaceTime,
     MicroSpaceTimeFabricatorio,
-    BloodyHell,
 
     // endregion
 
@@ -406,9 +410,9 @@ public enum GTCMItemList {
     LaserSmartNode,
     FackRackHatch,
     RealRackHatch,
-
     WirelessDataInputHatch,
     WirelessDataOutputHatch,
+    BloodOrbHatch,
 
     // endregion
 
