@@ -185,7 +185,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 break;
             }
         }
-        if (mTier > 2 && !isBloodChecked) return checkBlood();
+
+        int FluidTier = (mTier == 6) ? 2 : (mTier > 2) ? 1 : 0;
+        if (FluidTier > 0 && checkPiece(
+            "fluid" + FluidTier,
+            getOffset(1, FluidTier, 0),
+            getOffset(1, FluidTier, 1),
+            getOffset(1, FluidTier, 2))) {
+            isBloodChecked = true;
+        }
+
         return mTier > 0;
 
         // TODO: add rune check maybe?
@@ -324,7 +333,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
 
                 // check structure blood
-                if (!isBloodChecked) return SimpleCheckRecipeResult.ofFailure("no_enough_blood");
+                if (!isBloodChecked && !(isBloodChecked = checkBlood()))
+                    return SimpleCheckRecipeResult.ofFailure("no_enough_blood");
 
                 // check altar tier
                 int requiredTier = recipe.getMetadataOrDefault(BloodyHellTierKey.INSTANCE, 0);
@@ -396,8 +406,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         int LengthZ = StructureDef[0][0].length();
 
         // BloodMagic has not registered block flowing life essence, so it is necessary to place all fluids at once
-        int mBloodAmount = 0;
         ArrayList<FluidStack> InputFluids = this.getStoredFluids();
+        int mBloodAmount = 0;
         for (FluidStack aFluid : InputFluids) {
             if (aFluid.isFluidEqual(FluidUtils.getFluidStack("lifeessence", 1))) {
                 mBloodAmount += aFluid.amount;
@@ -420,16 +430,17 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                         aX = aZ;
                         aZ = temp;
                     }
+
+                    // Block aBlock = aBaseMetaTileEntity.getBlockOffset(aX, aY, aZ);
+                    // if (aBlock.equals(Blood)) {
+                    // setCount++;
+                    // continue;
+                    // }
+                    // Actually flowing life essence is identified as block, so it is better to enforce it directly
+
                     aX += aBaseMetaTileEntity.getXCoord();
                     aY += aBaseMetaTileEntity.getYCoord();
                     aZ += aBaseMetaTileEntity.getZCoord();
-
-                    Block aBlock = aBaseMetaTileEntity.getBlockOffset(aX, aY, aZ);
-                    if (aBlock == Blood) {
-                        setCount++;
-                        continue;
-                    }
-                    // Actually flowing life essence is identified as block, so it is better to enforce it directly
 
                     boolean isVaildFluid = false;
                     if (this.getStoredFluids() != null) {
@@ -444,7 +455,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     }
                     setCount++;
                     if (isVaildFluid) aBaseMetaTileEntity.getWorld()
-                        .setBlock(aX, aY, aZ, Blood, 0, 3);
+                        .setBlock(aX, aY, aZ, Blood);
                     else return false;
 
                     if (setCount == BloodAmountNeeded / 1000) break;
