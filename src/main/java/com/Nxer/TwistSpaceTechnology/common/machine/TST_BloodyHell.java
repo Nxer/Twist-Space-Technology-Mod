@@ -177,14 +177,17 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        boolean aStructureCheck = false;
         mTier = 0;
-        for (int i = 1; i <= 6; i++) {
-            if (!checkPiece("tier" + i, getOffset(0, i, 0), getOffset(0, i, 1), getOffset(0, i, 2))) continue;
-            aStructureCheck = true;
-            mTier = i;
+        isBloodChecked = false;
+        for (int i = 6; i > 0; i--) {
+            if (checkPiece("tier" + i, getOffset(0, i, 0), getOffset(0, i, 1), getOffset(0, i, 2))) {
+                mTier = i;
+                break;
+            }
         }
-        return aStructureCheck;
+        if (mTier > 2 && !isBloodChecked) return checkBlood();
+        return mTier > 0;
+
         // TODO: add rune check maybe?
     }
 
@@ -321,7 +324,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
 
                 // check structure blood
-                if (!checkBlood()) return SimpleCheckRecipeResult.ofFailure("no_enough_blood");
+                if (!isBloodChecked) return SimpleCheckRecipeResult.ofFailure("no_enough_blood");
 
                 // check altar tier
                 int requiredTier = recipe.getMetadataOrDefault(BloodyHellTierKey.INSTANCE, 0);
@@ -402,6 +405,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         }
         if (BloodAmountNeeded > mBloodAmount) return false;
 
+        int setCount = 0;
         for (int x = 0; x < LengthX; x++) {
             for (int z = 0; z < LengthZ; z++) {
                 for (int y = 0; y < LengthY; y++) {
@@ -421,12 +425,15 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     aZ += aBaseMetaTileEntity.getZCoord();
 
                     Block aBlock = aBaseMetaTileEntity.getBlockOffset(aX, aY, aZ);
-                    if (aBlock == Blood) continue;
-                    else if (aBlock != Blocks.air) return false;
+                    if (aBlock == Blood) {
+                        setCount++;
+                        continue;
+                    }
+                    // Actually flowing life essence is identified as block, so it is better to enforce it directly
 
                     boolean isVaildFluid = false;
                     if (this.getStoredFluids() != null) {
-                        for (FluidStack aFluid : this.getStoredFluids()) {
+                        for (FluidStack aFluid : InputFluids) {
                             if (aFluid.isFluidEqual(FluidUtils.getFluidStack("lifeessence", 1))
                                 && aFluid.amount >= 1000) {
                                 aFluid.amount -= 1000;
@@ -435,10 +442,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                             }
                         }
                     }
-
+                    setCount++;
                     if (isVaildFluid) aBaseMetaTileEntity.getWorld()
                         .setBlock(aX, aY, aZ, Blood, 0, 3);
                     else return false;
+
+                    if (setCount == BloodAmountNeeded / 1000) break;
                 }
             }
         }
@@ -482,8 +491,14 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     private static IStructureDefinition<TST_BloodyHell> StructureDef = null;
     // spotless:off
 
+    /**
+     *
+     * @param mode 0 is Base Structure, 1 is Fluid Structure
+     * @param tier tier of the machine
+     * @param offset 0,1,2 corresponds to a,b,c of Structure Printer
+     * @return horizontalOffset, verticalOffset, depthOffset
+     */
     int getOffset(int mode,int tier,int offset){
-        // offset: 0,1,2 -> a,b,c
         if(mode>0){
             // blood
             if(offset!=1)
