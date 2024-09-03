@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LegendaryWirelessEnergyHatch;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
@@ -92,6 +93,7 @@ import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessin
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_WirelessMulti;
 
 public class MachineLoader {
 
@@ -193,6 +195,9 @@ public class MachineLoader {
 
     public static ItemStack WirelessDataInputHatch;
     public static ItemStack WirelessDataOutputHatch;
+
+    public static ItemStack LegendaryWirelessEnergyHatch;
+    public static ItemStack HarmoniousWirelessEnergyHatch;
 
     // region Modularized Stuff
     public static ItemStack DynamicParallelControllerT1;
@@ -899,6 +904,22 @@ public class MachineLoader {
             TextLocalization.NameWirelessDataOutputHatch,
             12).getStackForm(1);
         GTCMItemList.WirelessDataOutputHatch.set(WirelessDataOutputHatch);
+
+        LegendaryWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_WirelessMulti(
+            18798,
+            "NameLegendaryWirelessEnergyHatch",
+            "Legendary Wireless Energy Hatch",
+            13,
+            536870912).getStackForm(1);
+        GTCMItemList.LegendaryWirelessEnergyHatch.set(LegendaryWirelessEnergyHatch);
+
+         HarmoniousWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_WirelessMulti(
+         18799,
+         "NameHarmoniousWirelessEnergyHatch",
+         "Harmonious Wireless Energy Hatch",
+         14,
+         2147483647).getStackForm(1);
+         GTCMItemList.HarmoniousWirelessEnergyHatch.set(HarmoniousWirelessEnergyHatch);
 
         // region Modularized Stuff
 

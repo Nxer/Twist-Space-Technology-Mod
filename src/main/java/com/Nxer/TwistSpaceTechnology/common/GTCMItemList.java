@@ -157,6 +157,7 @@ public enum GTCMItemList {
     PrimitiveMansSpaceTimeDistortionDevice,
     BallLightningUpgradeChip,
     HatchUpdateTool,
+    WirelessUpdateItem,
     FountOfEcology,
     OffSpring,
 
@@ -218,9 +219,6 @@ public enum GTCMItemList {
     MegaEggGenerator,
     AstralComputingArray,
     IndustrialMagicMatrix,
-
-    WirelessUpdateItem,
-
     StellarMaterialSiphon,
     ElvenWorkshop,
     HyperSpacetimeTransformer,
@@ -410,6 +408,9 @@ public enum GTCMItemList {
 
     WirelessDataInputHatch,
     WirelessDataOutputHatch,
+
+    LegendaryWirelessEnergyHatch,
+    HarmoniousWirelessEnergyHatch,
 
     // endregion
 
