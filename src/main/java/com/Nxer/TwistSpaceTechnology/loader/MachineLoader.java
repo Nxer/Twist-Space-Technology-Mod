@@ -65,6 +65,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_W
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_output;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_InfiniteWirelessMulti;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
@@ -93,7 +94,6 @@ import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessin
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_WirelessMulti;
 
 public class MachineLoader {
 
@@ -905,7 +905,7 @@ public class MachineLoader {
             12).getStackForm(1);
         GTCMItemList.WirelessDataOutputHatch.set(WirelessDataOutputHatch);
 
-        LegendaryWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_WirelessMulti(
+        LegendaryWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_InfiniteWirelessMulti(
             18798,
             "NameLegendaryWirelessEnergyHatch",
             "Legendary Wireless Energy Hatch",
@@ -913,7 +913,7 @@ public class MachineLoader {
             536870912).getStackForm(1);
         GTCMItemList.LegendaryWirelessEnergyHatch.set(LegendaryWirelessEnergyHatch);
 
-        HarmoniousWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_WirelessMulti(
+        HarmoniousWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_InfiniteWirelessMulti(
             18799,
             "NameHarmoniousWirelessEnergyHatch",
             "Harmonious Wireless Energy Hatch",
