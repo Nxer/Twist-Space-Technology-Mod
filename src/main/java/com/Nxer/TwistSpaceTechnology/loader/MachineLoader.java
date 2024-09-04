@@ -913,13 +913,13 @@ public class MachineLoader {
             536870912).getStackForm(1);
         GTCMItemList.LegendaryWirelessEnergyHatch.set(LegendaryWirelessEnergyHatch);
 
-         HarmoniousWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_WirelessMulti(
-         18799,
-         "NameHarmoniousWirelessEnergyHatch",
-         "Harmonious Wireless Energy Hatch",
-         14,
-         2147483647).getStackForm(1);
-         GTCMItemList.HarmoniousWirelessEnergyHatch.set(HarmoniousWirelessEnergyHatch);
+        HarmoniousWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_WirelessMulti(
+            18799,
+            "NameHarmoniousWirelessEnergyHatch",
+            "Harmonious Wireless Energy Hatch",
+            14,
+            2147483647).getStackForm(1);
+        GTCMItemList.HarmoniousWirelessEnergyHatch.set(HarmoniousWirelessEnergyHatch);
 
         // region Modularized Stuff
 
