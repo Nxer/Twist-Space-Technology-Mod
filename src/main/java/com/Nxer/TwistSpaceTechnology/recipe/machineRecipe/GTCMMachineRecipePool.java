@@ -126,7 +126,6 @@ import static com.github.technus.tectech.thing.CustomItemList.eM_Teleportation;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static com.github.technus.tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
-import static com.github.technus.tectech.thing.CustomItemList.eM_energyWirelessTunnel7_UXV;
 import static com.github.technus.tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static com.github.technus.tectech.thing.CustomItemList.rack_Hatch;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
@@ -1809,10 +1808,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region Legend Laser Hatch
-        IItemContainer LegendTarget = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel9001;
-        IItemContainer LegendSource = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel9001;
-        IItemContainer UXVTarget104 = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel7_UXV;
-        IItemContainer UXVSource104 = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel7_UXV;
+        IItemContainer LegendTarget = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel9001;
+        IItemContainer LegendSource = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel9001;
+        IItemContainer UXVTarget104 = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel7_UXV;
+        IItemContainer UXVSource104 = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel7_UXV;
         IItemContainer HomoStructureTime = com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
         IItemContainer HomoStructureSpace = com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
         IItemContainer HomoStructureMain = com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
@@ -1889,7 +1888,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(AssemblyLine);
 
         TT_recipeAdder.addResearchableAssemblylineRecipe(
-            eM_energyWirelessTunnel7_UXV.get(1),
+            LegendTarget.get(1),
             256_000_000,
             2048,
             512_000_000,
