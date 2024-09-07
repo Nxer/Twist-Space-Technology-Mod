@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LegendaryWirelessEnergyHatch;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
@@ -60,12 +59,12 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessMulti;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_input;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_output;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_InfiniteWirelessMulti;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
@@ -905,18 +904,24 @@ public class MachineLoader {
             12).getStackForm(1);
         GTCMItemList.WirelessDataOutputHatch.set(WirelessDataOutputHatch);
 
-        LegendaryWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_InfiniteWirelessMulti(
+        // #tr NameLegendaryWirelessEnergyHatch
+        // # Legendary Wireless Energy Hatch
+        // #zh_CN 传奇无线能源仓
+        LegendaryWirelessEnergyHatch = new GT_Hatch_InfiniteWirelessMulti(
             18798,
             "NameLegendaryWirelessEnergyHatch",
-            "Legendary Wireless Energy Hatch",
+            TextEnums.tr("NameLegendaryWirelessEnergyHatch"),
             13,
             536870912).getStackForm(1);
         GTCMItemList.LegendaryWirelessEnergyHatch.set(LegendaryWirelessEnergyHatch);
 
-        HarmoniousWirelessEnergyHatch = new GT_MetaTileEntity_Hatch_InfiniteWirelessMulti(
+        // #tr NameHarmoniousWirelessEnergyHatch
+        // # Harmonious Wireless Energy Hatch
+        // #zh_CN 鸿蒙无线能源仓
+        HarmoniousWirelessEnergyHatch = new GT_Hatch_InfiniteWirelessMulti(
             18799,
             "NameHarmoniousWirelessEnergyHatch",
-            "Harmonious Wireless Energy Hatch",
+            TextEnums.tr("NameHarmoniousWirelessEnergyHatch"),
             14,
             2147483647).getStackForm(1);
         GTCMItemList.HarmoniousWirelessEnergyHatch.set(HarmoniousWirelessEnergyHatch);
