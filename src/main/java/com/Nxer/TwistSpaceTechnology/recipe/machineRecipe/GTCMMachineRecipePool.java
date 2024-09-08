@@ -132,10 +132,13 @@ import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.ItemList.Hatch_Energy_MAX;
 import static gregtech.api.enums.ItemList.ZPM3;
+import static gregtech.api.enums.ItemList.ZPM6;
 import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
+import static gregtech.api.enums.Mods.GalaxySpace;
+import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.util.GT_ModHandler.addCraftingRecipe;
 import static gregtech.api.util.GT_ModHandler.getModItem;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
@@ -1805,12 +1808,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region Legend Laser Hatch
-        IItemContainer LegendTarget = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel9001;
-        IItemContainer LegendSource = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel9001;
-        IItemContainer UXVTarget104 = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel7_UXV;
-        IItemContainer UXVSource104 = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel7_UXV;
+        IItemContainer LegendTarget = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel9001;
+        IItemContainer LegendSource = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel9001;
+        IItemContainer UXVTarget104 = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel7_UXV;
+        IItemContainer UXVSource104 = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel7_UXV;
         IItemContainer HomoStructureTime = com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
         IItemContainer HomoStructureSpace = com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
+        IItemContainer HomoStructureMain = com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
         GT_Values.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, UXVTarget104.get(1))
@@ -1824,7 +1828,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 UXVTarget104.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcillium, 64),
                 UXVTarget104.get(64),
-                ItemList.ZPM6.get(1),
+                ZPM6.get(1),
 
                 UXVTarget104.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcicium, 64),
@@ -1860,7 +1864,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 UXVSource104.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcillium, 64),
                 UXVSource104.get(64),
-                ItemList.ZPM6.get(1),
+                ZPM6.get(1),
 
                 UXVSource104.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcicium, 64),
@@ -1883,6 +1887,63 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20 * 512)
             .addTo(AssemblyLine);
 
+        TT_recipeAdder.addResearchableAssemblylineRecipe(
+            LegendTarget.get(1),
+            256_000_000,
+            2048,
+            512_000_000,
+            1_048_576,
+            new Object[]{
+                LegendTarget.get(1),
+                getModItem(GoodGenerator.ID, "compactFusionCoil", 1, 4),
+                getModItem(GalaxySpace.ID, "dysonswarmparts", 1, 4),
+                com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Transformer.get(1),
+
+                com.github.technus.tectech.thing.CustomItemList.eM_Power.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 32),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 16),
+
+                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Quantum, 16L),
+                ItemList.EnergisedTesseract.get(1)
+            },
+            new FluidStack[] {
+                new FluidStack(solderPlasma, 1_296 * 64 * 4),
+                MaterialsUEVplus.ExcitedDTSC.getFluid(500L * 64)
+            },
+            GTCMItemList.LegendaryWirelessEnergyHatch.get(1),
+            20*60,
+            (int) RECIPE_UMV
+        );
+
+        TT_recipeAdder.addResearchableAssemblylineRecipe(
+            GTCMItemList.LegendaryWirelessEnergyHatch.get(1),
+            2048_000_000,
+            16384,
+            512_000_000,
+            512_000_000,
+            new Object[]{
+                GTCMItemList.LegendaryWirelessEnergyHatch.get(16),
+                AdvancedHighPowerCoilBlock.get(64),
+                ZPM6.get(64),
+                GTCMItemList.MassFabricatorGenesis.get(1),
+
+                HomoStructureMain.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 32),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 16),
+
+                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Transcendent, 16L),
+                ItemList.EnergisedTesseract.get(64)
+            },
+            new FluidStack[] {
+                new FluidStack(solderPlasma, 1_296 * 256 * 4),
+                MaterialsUEVplus.ExcitedDTSC.getFluid(500L * 256)
+            },
+            GTCMItemList.HarmoniousWirelessEnergyHatch.get(1),
+            20*60,
+            (int) RECIPE_UXV
+        );
         // endregion
 
         // region Deployed Nano Core
@@ -2909,7 +2970,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                         ItemList.Emitter_UMV.get(64),
 
                         AdvancedHighPowerCoilBlock.get(64),
-                        ItemList.ZPM6.get(64),
+                        ZPM6.get(64),
                         GravitationalLens.get(64),
                         AdvancedHighPowerCoilBlock.get(64)
                     )
