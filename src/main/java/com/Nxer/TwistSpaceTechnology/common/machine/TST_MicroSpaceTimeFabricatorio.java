@@ -250,7 +250,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         if (block == StabilisationFieldGenerators && meta <= 8) {
             return meta + 2;
         }
-        return 0;
+        return -1;
     }
 
     public static int getBlockTranscendentCasingTier(Block block, int meta) {
