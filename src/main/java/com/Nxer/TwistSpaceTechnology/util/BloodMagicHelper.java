@@ -1,7 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+import com.Nxer.TwistSpaceTechnology.config.Config;
+import gtPlusPlus.core.util.minecraft.FluidUtils;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import WayofTime.alchemicalWizardry.api.items.interfaces.IBloodOrb;
@@ -13,7 +16,8 @@ import fox.spiteful.avaritia.items.LudicrousItems;
 public class BloodMagicHelper {
 
     public static boolean isCreativeOrb(@Nullable ItemStack stack) {
-        return stack != null && stack.getItem() == LudicrousItems.armok_orb;
+        return stack != null && stack.getItem() == LudicrousItems.armok_orb
+            && Config.Enable_BloodHatch_Armok_InfiniteDrain;
     }
 
     /**
@@ -88,5 +92,14 @@ public class BloodMagicHelper {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * @param amount the amount of life essence to get
+     * @return a FluidStack of life essence with the given amount, or null if the fluid is not registered.
+     */
+    @Nullable
+    public static FluidStack getLifeEssence(int amount) {
+        return FluidUtils.getFluidStack("lifeessence", amount);
     }
 }

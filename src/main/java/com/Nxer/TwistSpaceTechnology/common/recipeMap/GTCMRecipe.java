@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
+import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
@@ -14,7 +14,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Ind
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.util.TSTArrayUtils;
 
-import WayofTime.alchemicalWizardry.AlchemicalWizardry;
 import WayofTime.alchemicalWizardry.ModItems;
 import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipe;
 import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipeRegistry;
@@ -284,6 +283,7 @@ public class GTCMRecipe {
     // #tr tst.recipe.BloodyHellAlchemicRecipes
     // # Bloody Hell Alchemic Chemistry Recipes
     // #zh_CN 血狱炼金
+    @Deprecated
     public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipe_Alchemic = RecipeMapBuilder
         .of("tst.recipe.BloodyHellAlchemicRecipes", TST_RecipeMapBackend::new)
         .maxIO(6, 1, 1, 0)
@@ -293,6 +293,7 @@ public class GTCMRecipe {
     // #tr tst.recipe.BloodyHellBindingRecipes
     // # Bloody Hell Binding Ritual Recipes
     // #zh_CN 血狱绑定仪式
+    @Deprecated
     public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipe_Binding = RecipeMapBuilder
         .of("tst.recipe.BloodyHellBindingRecipes", TST_RecipeMapBackend::new)
         .maxIO(2, 1, 1, 0)
@@ -324,7 +325,7 @@ public class GTCMRecipe {
             GT_Values.RA.stdBuilder()
                 .itemInputs(recipe.requiredItem, GT_Utility.getIntegratedCircuit(1))
                 .itemOutputs(recipe.result)
-                .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, recipe.liquidRequired))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(recipe.liquidRequired))
                 .eut(0)
                 .duration(recipe.liquidRequired / soakingSpeed)
                 .metadata(BloodyHellTierKey.INSTANCE, recipe.minTier)
@@ -336,7 +337,7 @@ public class GTCMRecipe {
                 .itemInputs(
                     TSTArrayUtils.concatToLast(ItemStack.class, recipe.getRecipe(), GT_Utility.getIntegratedCircuit(2)))
                 .itemOutputs(recipe.getResult())
-                .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, recipe.getAmountNeeded() * 100))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(recipe.getAmountNeeded() * 100))
                 .eut(0)
                 .duration(recipe.getAmountNeeded() * 100 / soakingSpeed)
                 .metadata(BloodyHellAlchemicTierKey.INSTANCE, recipe.getOrbLevel())
@@ -350,7 +351,7 @@ public class GTCMRecipe {
                     new ItemStack(ModItems.weakBloodShard, 0),
                     GT_Utility.getIntegratedCircuit(11))
                 .itemOutputs(recipe.outputItem)
-                .fluidInputs(new FluidStack(AlchemicalWizardry.lifeEssenceFluid, bindingRecipeLECost))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(bindingRecipeLECost))
                 .eut(0)
                 .duration(bindingRecipeLECost / soakingSpeed)
                 .addTo(BloodyHellRecipes);

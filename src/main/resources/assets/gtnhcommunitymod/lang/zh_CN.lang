@@ -1440,3 +1440,7 @@ tc.research_name.BLOODY_HELL=血狱
 tc.research_text.BLOOD_HATCH.1=僵尸的脑子渴望得到血液。也许我们能够利用这一点。
 tc.research_name.TIME_BENDING_SPEED_RUNE=时间扭曲速度符文
 tc.research_text.TIME_BENDING_SPEED_RUNE.1=使用速度符文和世界加速器扭曲的时空展现出对高级祭坛的兼容性。
+MetaBlockCasing01.13.name=无菌温室机械方块
+Tooltip_AsepticGreenhouseCasing=一尘不染!
+MetaBlockCasing02.0.name=凝血机械方块
+MetaBlockCasing02.1.name=脓血机械方块

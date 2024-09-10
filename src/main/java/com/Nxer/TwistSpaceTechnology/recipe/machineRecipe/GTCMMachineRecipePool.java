@@ -159,6 +159,9 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Spe
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.TransmissionComponent_UV;
 
+import WayofTime.alchemicalWizardry.ModBlocks;
+import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.dreammaster.block.BlockList;
 import net.glease.ggfab.GGItemList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -2917,7 +2920,54 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         }
 
+        if(Config.Enable_BloodHell) {
+            // the more expensive recipes
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(new ItemStack(Blocks.brick_block), Materials.AnyCopper.getPlates(6))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(250))
+                .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
+                .eut(RECIPE_HV)
+                .duration(20 * 12)
+                .addTo(RecipeMaps.assemblerRecipes);
 
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(new ItemStack(ModBlocks.bloodRune), Materials.StainlessSteel.getPlates(6))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(500))
+                .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
+                .eut(RECIPE_EV)
+                .duration(20 * 12)
+                .addTo(RecipeMaps.assemblerRecipes);
+
+            // the cheaper recipes
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(new ItemStack(Blocks.brick_block), GT_Utility.getIntegratedCircuit(7))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(100))
+                .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
+                .eut(0)
+                .duration(60)
+                .addTo(GTCMRecipe.BloodyHellRecipes);
+
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(new ItemStack(ModBlocks.bloodRune), GT_Utility.getIntegratedCircuit(7))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(250))
+                .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
+                .eut(0)
+                .duration(60)
+                .addTo(GTCMRecipe.BloodyHellRecipes);
+
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(BlockList.BloodyIchorium.getIS(1), GT_Utility.getIntegratedCircuit(7))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(500))
+                .itemOutputs(GTCMItemList.BloodyCasing2.get(1))
+                .eut(0)
+                .duration(60)
+                .addTo(GTCMRecipe.BloodyHellRecipes);
+        }
 
     }
     // spotless:on

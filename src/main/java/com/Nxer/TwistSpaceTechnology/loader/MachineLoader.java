@@ -692,11 +692,22 @@ public class MachineLoader {
             TextEnums.tr("NameMicroSpaceTimeFabricatorio")).getStackForm(1);
         GTCMItemList.MicroSpaceTimeFabricatorio.set(MicroSpaceTimeFabricatorio);
 
-        // #tr NameBloodyHell
-        // # Bloody Hell
-        // #zh_CN 血狱
-        BloodyHell = new TST_BloodyHell(19061, "NameBloodyHell", TextEnums.tr("NameBloodyHell")).getStackForm(1);
-        GTCMItemList.BloodyHell.set(BloodyHell);
+        if(Config.Enable_BloodHell) {
+            // #tr NameBloodyHell
+            // # Bloody Hell
+            // #zh_CN 血狱
+            BloodyHell = new TST_BloodyHell(19061, "NameBloodyHell", TextEnums.tr("NameBloodyHell")).getStackForm(1);
+            GTCMItemList.BloodyHell.set(BloodyHell);
+
+            if(Config.Enable_BloodHatch) {
+                // #tr NameBloodOrbHatch
+                // # Blood Hatch
+                // #zh_CN 血液仓
+                BloodOrbHatch = new TST_BloodOrbHatch(18846, "NameBloodOrbHatch", TextEnums.tr("NameBloodOrbHatch"), 4)
+                    .getStackForm(1);
+                GTCMItemList.BloodOrbHatch.set(BloodOrbHatch);
+            }
+        }
 
         // endregion
 
@@ -1435,13 +1446,6 @@ public class MachineLoader {
                 TextEnums.tr("NamePerfectExecutionCore"),
                 14).getStackForm(1);
             GTCMItemList.PerfectExecutionCore.set(PerfectExecutionCore);
-
-            // #tr NameBloodOrbHatch
-            // # Blood Hatch
-            // #zh_CN 血液仓
-            BloodOrbHatch = new TST_BloodOrbHatch(18846, "NameBloodOrbHatch", TextEnums.tr("NameBloodOrbHatch"), 4)
-                .getStackForm(1);
-            GTCMItemList.BloodOrbHatch.set(BloodOrbHatch);
         }
 
         // endregion

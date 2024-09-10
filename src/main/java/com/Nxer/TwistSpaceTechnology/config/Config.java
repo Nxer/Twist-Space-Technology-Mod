@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import java.io.File;
 import java.math.BigInteger;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
@@ -57,6 +58,7 @@ public class Config {
     public static final String DimensionallyTranscendentMatterPlasmaForgePrototypeMK2 = "Dimensionally Transcendent Matter Plasma Forge Prototype MK2";
     public static final String LargeNeutronOscillator = "Large Neutron Oscillator";
     public static final String MicroSpaceTimeFabricatorio = "Micro SpaceTime Fabricatorio";
+    public static final String BloodHell = "BloodHell";
     // endregion
 
     // region General
@@ -419,6 +421,13 @@ public class Config {
     public static double[] PowerConsumptionMultiplierOfPowerConsumptionController = new double[]{0.95d, 0.9d, 0.85d, 0.8d, 0.75d, 0.7d, 0.5d, 0.25d};
     // endregion
 
+    // region Blood Hell
+    public static boolean Enable_BloodHell = true;
+    public static boolean Enable_BloodHatch = true; // depends on Blood Hell
+    /** @see com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper#isCreativeOrb(ItemStack) */
+    public static boolean Enable_BloodHatch_Armok_InfiniteDrain = true;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -746,6 +755,12 @@ public class Config {
 
         // region Mega Tree Farm
 
+        // endregion
+
+        // region Blood Hell
+        Enable_BloodHell = configuration.getBoolean("Enable Blood Hell", BloodHell, Enable_BloodHell, "Enable Blood Hell");
+        Enable_BloodHatch = configuration.getBoolean("Enable Blood Hatch", BloodHell, Enable_BloodHatch, "Enable Blood Hatch\nThis depends on Enable Blood Hell");
+        Enable_BloodHatch_Armok_InfiniteDrain = configuration.getBoolean("Enable Blood Hatch Armok Infinite Drain", BloodHell, Enable_BloodHatch_Armok_InfiniteDrain, "Enable Blood Hatch Drains Armok Orb Infinitely");
         // endregion
 
         TST_CleanRoom.loadConfig(configuration);

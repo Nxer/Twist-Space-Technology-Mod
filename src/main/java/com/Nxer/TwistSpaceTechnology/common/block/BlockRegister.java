@@ -216,8 +216,8 @@ public class BlockRegister {
             MetaBlockConstructors.initMetaBlockCasing(
                 "BloodyCasing1",
                 // #tr MetaBlockCasing02.0.name
-                // #
-                // #zh_CN
+                // # Gore Casing
+                // #zh_CN 凝血机械方块
                 (byte) 0,
                 BasicBlocks.MetaBlockCasing02));
 
@@ -225,8 +225,8 @@ public class BlockRegister {
             MetaBlockConstructors.initMetaBlockCasing(
                 "BloodyCasing2",
                 // #tr MetaBlockCasing02.1.name
-                // #
-                // #zh_CN
+                // # Ichor Casing
+                // #zh_CN 脓血机械方块
                 (byte) 1,
                 BasicBlocks.MetaBlockCasing02));
 
