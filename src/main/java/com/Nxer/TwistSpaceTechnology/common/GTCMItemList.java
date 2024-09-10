@@ -161,9 +161,6 @@ public enum GTCMItemList {
     FountOfEcology,
     OffSpring,
 
-    FountOfEcology,
-    OffSpring,
-
     // endregion
 
     // region Blocks
@@ -196,7 +193,6 @@ public enum GTCMItemList {
     CompositeFarmCasing,
     DenseCyclotronOuterCasing,
     CompactCyclotronCoil,
-    AsepticGreenhouseCasing,
     AsepticGreenhouseCasing,
     BloodyCasing1,
     BloodyCasing2,

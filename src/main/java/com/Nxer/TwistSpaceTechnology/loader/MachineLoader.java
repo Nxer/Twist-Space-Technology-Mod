@@ -696,14 +696,14 @@ public class MachineLoader {
             TextEnums.tr("NameMicroSpaceTimeFabricatorio")).getStackForm(1);
         GTCMItemList.MicroSpaceTimeFabricatorio.set(MicroSpaceTimeFabricatorio);
 
-        if(Config.Enable_BloodHell) {
+        if (Config.Enable_BloodHell) {
             // #tr NameBloodyHell
             // # Bloody Hell
             // #zh_CN 血狱
             BloodyHell = new TST_BloodyHell(19061, "NameBloodyHell", TextEnums.tr("NameBloodyHell")).getStackForm(1);
             GTCMItemList.BloodyHell.set(BloodyHell);
 
-            if(Config.Enable_BloodHatch) {
+            if (Config.Enable_BloodHatch) {
                 // #tr NameBloodOrbHatch
                 // # Blood Hatch
                 // #zh_CN 血液仓

@@ -1,8 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
-import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
-import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
-
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -10,22 +7,15 @@ import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_OreDictUnificator;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
-import vazkii.botania.common.block.ModBlocks;
-import vazkii.botania.common.item.ModItems;
 
 public class TCResearches {
 
     public void loadResearches() {
-        if(Config.Enable_BloodHell) {
+        if (Config.Enable_BloodHell) {
 
             // #tr tc.research_name.BLOODY_HELL
             // # Bloody Hell
@@ -45,9 +35,9 @@ public class TCResearches {
                     // #zh_CN 血！血！血！
                     new ResearchPage(TextEnums.tr("tc.research_text.BLOODY_HELL.1")),
                     new ResearchPage(TCRecipePool.infusionRecipeBloodyHell))
-                .registerResearchItem();
+                    .registerResearchItem();
 
-            if(Config.Enable_BloodHatch) {
+            if (Config.Enable_BloodHatch) {
                 // #tr tc.research_name.BLOOD_HATCH
                 // # Blood Hatch
                 // #zh_CN 血液仓
@@ -66,7 +56,7 @@ public class TCResearches {
                         // #zh_CN 僵尸的脑子渴望得到血液。也许我们能够利用这一点。
                         new ResearchPage(TextEnums.tr("tc.research_text.BLOOD_HATCH.1")),
                         new ResearchPage(TCRecipePool.infusionRecipeBloodHatch))
-                    .registerResearchItem();
+                        .registerResearchItem();
             }
 
             // #tr tc.research_name.TIME_BENDING_SPEED_RUNE
@@ -88,7 +78,7 @@ public class TCResearches {
                     // #zh_CN 使用速度符文和世界加速器扭曲的时空展现出对高级祭坛的兼容性。
                     new ResearchPage(TextEnums.tr("tc.research_text.TIME_BENDING_SPEED_RUNE.1")),
                     new ResearchPage(TCRecipePool.infusionRecipeTimeBendingSpeedRune))
-                .registerResearchItem();
+                    .registerResearchItem();
         }
     }
 }

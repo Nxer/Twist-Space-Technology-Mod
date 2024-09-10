@@ -162,9 +162,6 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Spe
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.TransmissionComponent_UV;
 
-import WayofTime.alchemicalWizardry.ModBlocks;
-import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
-import com.dreammaster.block.BlockList;
 import net.glease.ggfab.GGItemList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -180,7 +177,9 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.block.BlockList;
 import com.dreammaster.gthandler.CustomItemList;
 import com.dreammaster.gthandler.GT_CoreModSupport;
 import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
@@ -195,6 +194,7 @@ import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
 import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
+import WayofTime.alchemicalWizardry.ModBlocks;
 import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import fox.spiteful.avaritia.items.LudicrousItems;

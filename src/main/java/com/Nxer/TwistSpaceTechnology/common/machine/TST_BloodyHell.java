@@ -219,7 +219,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPreTick(aBaseMetaTileEntity, aTick);
 
-        if(aTick % 20 == 0) { // for every second
+        if (aTick % 20 == 0) { // for every second
             if (aBaseMetaTileEntity.isServerSide()) {
                 if (!isBloodChecked) { // check blood if it has not been checked yet
                     checkBlood();
@@ -478,7 +478,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     }
                     setCount++;
                     if (isVaildFluid) {
-                        aBaseMetaTileEntity.getWorld().setBlock(aX, aY, aZ, blood);
+                        aBaseMetaTileEntity.getWorld()
+                            .setBlock(aX, aY, aZ, blood);
                     } else {
                         return false;
                     }

@@ -1,8 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
-import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
-import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
-
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -12,18 +9,13 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
 
 import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Mods;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_OreDictUnificator;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.common.config.ConfigItems;
-import vazkii.botania.common.block.ModBlocks;
-import vazkii.botania.common.item.ModItems;
 
 public class TCRecipePool implements IRecipePool {
 
@@ -33,7 +25,7 @@ public class TCRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
-        if(Config.Enable_BloodHell) {
+        if (Config.Enable_BloodHell) {
             infusionRecipeBloodyHell = ThaumcraftApi.addInfusionCraftingRecipe(
                 "BLOODY_HELL",
                 GTCMItemList.BloodyHell.get(1, 0),
@@ -55,7 +47,7 @@ public class TCRecipePool implements IRecipePool {
                     new ItemStack(WayofTime.alchemicalWizardry.ModItems.lavaSigil),
                     new ItemStack(WayofTime.alchemicalWizardry.ModItems.voidSigil),
                     new ItemStack(WayofTime.alchemicalWizardry.ModItems.airSigil), });
-            if(Config.Enable_BloodHatch) {
+            if (Config.Enable_BloodHatch) {
                 infusionRecipeBloodHatch = ThaumcraftApi.addInfusionCraftingRecipe(
                     "BLOOD_HATCH",
                     GTCMItemList.BloodOrbHatch.get(1, 0),
