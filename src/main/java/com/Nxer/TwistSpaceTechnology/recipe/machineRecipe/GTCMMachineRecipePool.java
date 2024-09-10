@@ -132,10 +132,13 @@ import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.ItemList.Hatch_Energy_MAX;
 import static gregtech.api.enums.ItemList.ZPM3;
+import static gregtech.api.enums.ItemList.ZPM6;
 import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
+import static gregtech.api.enums.Mods.GalaxySpace;
+import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.util.GT_ModHandler.addCraftingRecipe;
 import static gregtech.api.util.GT_ModHandler.getModItem;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
@@ -185,6 +188,7 @@ import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
 import com.github.bartimaeusnek.bartworks.common.loaders.BioItemList;
 import com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
+import com.github.technus.tectech.recipe.TT_recipeAdder;
 import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
@@ -203,6 +207,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IItemContainer;
@@ -238,7 +243,21 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         final IRecipeMap assemblyLine = GT_RecipeConstants.AssemblyLine;
         final IRecipeMap assembler = RecipeMaps.assemblerRecipes;
-
+        ItemStack FarmGear;
+        ItemStack FarmOutput;
+        ItemStack FarmPump;
+        ItemStack FarmController;
+        if(Forestry.isModLoaded()){
+            FarmGear = GT_ModHandler.getModItem(Forestry.ID,"ffarm",1,2);
+            FarmOutput= GT_ModHandler.getModItem(Forestry.ID,"ffarm",1,3);
+            FarmPump= GT_ModHandler.getModItem(Forestry.ID,"ffarm",1,4);
+            FarmController= GT_ModHandler.getModItem(Forestry.ID,"ffarm",1,5);
+        }else {
+            FarmGear = new ItemStack(Blocks.stonebrick,1);
+            FarmOutput= new ItemStack(Blocks.stonebrick,1);
+            FarmPump= new ItemStack(Blocks.stonebrick,1);
+            FarmController= new ItemStack(Blocks.stonebrick,1);
+        }
         // test machine recipe
         /*
         GT_Values.RA.stdBuilder()
@@ -1792,12 +1811,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region Legend Laser Hatch
-        IItemContainer LegendTarget = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel9001;
-        IItemContainer LegendSource = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel9001;
-        IItemContainer UXVTarget104 = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel7_UXV;
-        IItemContainer UXVSource104 = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel7_UXV;
+        IItemContainer LegendTarget = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel9001;
+        IItemContainer LegendSource = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel9001;
+        IItemContainer UXVTarget104 = com.github.technus.tectech.thing.CustomItemList.eM_energyTunnel7_UXV;
+        IItemContainer UXVSource104 = com.github.technus.tectech.thing.CustomItemList.eM_dynamoTunnel7_UXV;
         IItemContainer HomoStructureTime = com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
         IItemContainer HomoStructureSpace = com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
+        IItemContainer HomoStructureMain = com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
         GT_Values.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, UXVTarget104.get(1))
@@ -1811,7 +1831,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 UXVTarget104.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcillium, 64),
                 UXVTarget104.get(64),
-                ItemList.ZPM6.get(1),
+                ZPM6.get(1),
 
                 UXVTarget104.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcicium, 64),
@@ -1847,7 +1867,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 UXVSource104.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcillium, 64),
                 UXVSource104.get(64),
-                ItemList.ZPM6.get(1),
+                ZPM6.get(1),
 
                 UXVSource104.get(64),
                 GT_OreDictUnificator.get(OrePrefixes.lens, Materials.Forcicium, 64),
@@ -1870,6 +1890,63 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20 * 512)
             .addTo(AssemblyLine);
 
+        TT_recipeAdder.addResearchableAssemblylineRecipe(
+            LegendTarget.get(1),
+            256_000_000,
+            2048,
+            512_000_000,
+            1_048_576,
+            new Object[]{
+                LegendTarget.get(1),
+                getModItem(GoodGenerator.ID, "compactFusionCoil", 1, 4),
+                getModItem(GalaxySpace.ID, "dysonswarmparts", 1, 4),
+                com.github.technus.tectech.thing.CustomItemList.Machine_Multi_Transformer.get(1),
+
+                com.github.technus.tectech.thing.CustomItemList.eM_Power.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 32),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 16),
+
+                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Quantum, 16L),
+                ItemList.EnergisedTesseract.get(1)
+            },
+            new FluidStack[] {
+                new FluidStack(solderPlasma, 1_296 * 64 * 4),
+                MaterialsUEVplus.ExcitedDTSC.getFluid(500L * 64)
+            },
+            GTCMItemList.LegendaryWirelessEnergyHatch.get(1),
+            20*60,
+            (int) RECIPE_UMV
+        );
+
+        TT_recipeAdder.addResearchableAssemblylineRecipe(
+            GTCMItemList.LegendaryWirelessEnergyHatch.get(1),
+            2048_000_000,
+            16384,
+            512_000_000,
+            512_000_000,
+            new Object[]{
+                GTCMItemList.LegendaryWirelessEnergyHatch.get(16),
+                AdvancedHighPowerCoilBlock.get(64),
+                ZPM6.get(64),
+                GTCMItemList.MassFabricatorGenesis.get(1),
+
+                HomoStructureMain.get(64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 64),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 32),
+                GT_OreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 16),
+
+                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Transcendent, 16L),
+                ItemList.EnergisedTesseract.get(64)
+            },
+            new FluidStack[] {
+                new FluidStack(solderPlasma, 1_296 * 256 * 4),
+                MaterialsUEVplus.ExcitedDTSC.getFluid(500L * 256)
+            },
+            GTCMItemList.HarmoniousWirelessEnergyHatch.get(1),
+            20*60,
+            (int) RECIPE_UXV
+        );
         // endregion
 
         // region Deployed Nano Core
@@ -2789,6 +2866,87 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .addTo(assemblyLine);
         }
 
+        if(Config.Enable_MegaTreeFarm){
+            // Casing Stone
+            GT_Values.RA
+                .stdBuilder()
+                .itemInputs(
+                    Mods.ExtraUtilities.isModLoaded()?GT_ModHandler.getModItem(Mods.ExtraUtilities.ID, "block_bedrockium",1,0):new ItemStack(Blocks.bedrock,1),
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 1),
+                    com.dreammaster.item.ItemList.StonePlate.getIS(6)
+                )
+                .fluidInputs(
+                    ALLOY.TRINIUM_NAQUADAH_CARBON.getFluidStack(9216)
+                )
+                .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
+                .eut(RECIPE_ZPM)
+                .duration(20 * 30)
+                .addTo(assembler);
+
+            // Casing Farm
+            TT_recipeAdder.addResearchableAssemblylineRecipe(
+                GTCMItemList.ReinforcedStoneBrickCasing.get(1),
+                1_000_000,
+                512,
+                2_000_000,
+                4,
+                new Object[]{
+                    GTCMItemList.ReinforcedStoneBrickCasing.get(1),
+                    GT_OreDictUnificator.get(OrePrefixes.pipeHuge, Materials.Polybenzimidazole, 4),
+                    GT_OreDictUnificator.get(OrePrefixes.pipeRestrictiveHuge, Materials.BlackPlutonium, 4),
+                    ItemList.Casing_Vent.get(1),
+
+                    FarmGear,
+                    FarmOutput,
+                    FarmPump,
+                    FarmController,
+
+                    MyMaterial.marCeM200.get(OrePrefixes.gearGt, 4),
+                    ItemList.Electric_Piston_UV.get(2),
+                    ItemList.Electric_Pump_UV.get(2),
+                    ItemRefer.HiC_T3.get(4),
+
+                    new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 4},
+                    new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2},
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 18)
+                },
+                new FluidStack[]{
+                    ALLOY.TRINIUM_NAQUADAH_CARBON.getFluidStack(2304),
+                    ALLOY.BLACK_TITANIUM.getFluidStack(1728),
+                    ALLOY.ARCANITE.getFluidStack(864)
+                },
+                GTCMItemList.CompositeFarmCasing.get(1),
+                20*60,
+                (int) RECIPE_UV
+            );
+
+            // Casing Clean
+            TT_recipeAdder.addResearchableAssemblylineRecipe(
+                GregtechItemList.Casing_PLACEHOLDER_TreeFarmer.get(1),
+                    2_000_000,
+                    512,
+                    2_000_000,
+                    16,
+                    new Object[]{
+                        GregtechItemList.Casing_PLACEHOLDER_TreeFarmer.get(1),
+                        ItemList.Casing_Coil_Superconductor.get(1),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.SterlingSilver, 1),
+                        GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.NetherStar, 4),
+
+                        ItemList.Circuit_Parts_Chip_Bioware.get(8),
+                        MyMaterial.adamantiumAlloy.get(OrePrefixes.plateDouble, 6),
+                        ItemList.neutroniumHeatCapacitor.get(1)
+                    },
+                    new FluidStack[]{
+                        Materials.Grade8PurifiedWater.getFluid(8000),
+                        new FluidStack(FluidRegistry.getFluid("liquid helium"), 64000)
+                    },
+                    GTCMItemList.AsepticGreenhouseCasing.get(1),
+                    20*240,
+                (int) RECIPE_UHV
+            );
+
+        }
 
 
         if (Config.EnableModularizedMachineSystem) {
@@ -2815,7 +2973,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                         ItemList.Emitter_UMV.get(64),
 
                         AdvancedHighPowerCoilBlock.get(64),
-                        ItemList.ZPM6.get(64),
+                        ZPM6.get(64),
                         GravitationalLens.get(64),
                         AdvancedHighPowerCoilBlock.get(64)
                     )

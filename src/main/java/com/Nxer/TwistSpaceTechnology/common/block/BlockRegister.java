@@ -212,6 +212,20 @@ public class BlockRegister {
                 // #zh_CN 一尘不染!
                 }));
 
+        GTCMItemList.AsepticGreenhouseCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Aseptic Greenhouse Casing",
+                // #tr MetaBlockCasing01.13.name
+                // # Aseptic Greenhouse Casing
+                // #zh_CN 无菌温室机械方块
+                (byte) 13,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltip_AsepticGreenhouseCasing")
+                // #tr Tooltip_AsepticGreenhouseCasing
+                // # Absolutely Clean!
+                // #zh_CN 一尘不染!
+                }));
+
         GTCMItemList.BloodyCasing1.set(
             MetaBlockConstructors.initMetaBlockCasing(
                 "BloodyCasing1",

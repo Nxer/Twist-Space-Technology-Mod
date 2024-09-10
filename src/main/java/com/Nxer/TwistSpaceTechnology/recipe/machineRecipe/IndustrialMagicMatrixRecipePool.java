@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TCRecipeTools;
+import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 

@@ -134,6 +134,16 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     /**
+     * Prevent overflow during power consumption calculation.
+     *
+     * @return Eu consumption per tick.
+     */
+    @Override
+    protected long getActualEnergyUsage() {
+        return (long) (-this.lEUt * (10000.0 / Math.max(1000, mEfficiency)));
+    }
+
+    /**
      * Checks recipe and setup machine if it's successful.
      * <p>
      * For generic machine working with recipemap, use {@link #createProcessingLogic()} to make use of shared codebase.
@@ -285,7 +295,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     /**
      * Forced get all input fluids, include all Dual Input Hatch slot.
-     * 
+     *
      * @return ArrayList of all fluid stacks, contains fluid stacks in Crafting Input Hatch.
      */
     public ArrayList<FluidStack> getStoredFluidsWithDualInput() {

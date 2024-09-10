@@ -15,6 +15,8 @@ public class ItemStaticDataClientOnly {
     public static Map<Integer, IIcon> iconsMap01 = new HashMap<>();
     @SideOnly(Side.CLIENT)
     public static Map<Integer, IIcon> iconsMapRune = new HashMap<>();
+    @SideOnly(Side.CLIENT)
+    public static Map<Integer, IIcon> iconsMapIzumik = new HashMap<>();
 
     /**
      * @param aMetaName The Name of the Icon.

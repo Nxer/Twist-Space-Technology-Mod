@@ -17,6 +17,7 @@ import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
+import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
 import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
 import com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
@@ -101,6 +102,7 @@ public class TwistSpaceTechnology {
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
+        new LazyStaticsInitLoader().initStaticsOnInit();
         MachineLoader.loadMachines();// Load Machines
         GT_Hatch_RackComputationMonitor.run();
         NEIHandler.IMCSender();// NEI reg
@@ -123,6 +125,7 @@ public class TwistSpaceTechnology {
         CropLoader.register();
         CropLoader.registerBaseSeed();
 
+        TCLoader.load();
     }
 
     @Mod.EventHandler

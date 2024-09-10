@@ -34,6 +34,21 @@ public final class ModBlocksHandler {
 
     // endregion
 
+    // region The Twilight Forest
+    public static Pair<Block, Integer> TreeofTimeSapling;
+
+    // endregion
+
+    // region Forestry
+    public static Pair<Block, Integer> soil;
+
+    // endregion
+
+    // region ProjRed|Illumination
+    public static Pair<Block, Integer> PurpleLight;
+
+    // endregion
+
     public void initStatics() {
         if (Mods.ThaumicBases.isModLoaded()) {
             Block crystalBlock = Block.getBlockFromName(Mods.ThaumicBases.ID + ":crystalBlock");
@@ -74,6 +89,17 @@ public final class ModBlocksHandler {
             BlockTranslucent = Pair.of(Blocks.glowstone, 0);
         }
 
+        if (Mods.Forestry.isModLoaded()) {
+            soil = Pair.of(Block.getBlockFromName("Forestry:soil"), 0);
+        } else {
+            soil = Pair.of(Blocks.dirt, 0);
+        }
+
+        if (Mods.ProjectRedIllumination.isModLoaded()) {
+            PurpleLight = Pair.of(Block.getBlockFromName("ProjRed|Illumination:projectred.illumination.lamp"), 10);
+        } else {
+            PurpleLight = Pair.of(Blocks.redstone_lamp, 0);
+        }
     }
 
 }
