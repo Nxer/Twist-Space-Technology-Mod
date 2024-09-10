@@ -89,7 +89,17 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         return new TST_BloodyHell(mName);
     }
 
-    public int getAltarTier() {
+    public int getAltarTierForSpeed() {
+        return mTier;
+    }
+
+    /*
+     * BH is now placed at the graduation of the Blood Magic mod, so the recipes should be all available at this time.
+     * So the tier of BH for recipes is constantly 6 for now.
+     * May it be changed?
+     * Who knows.
+     */
+    public int getAltarTierForRecipe() {
         return 6;
     }
 
@@ -97,13 +107,19 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         return BloodMagicHelper.getBloodOrbTier(getControllerSlot());
     }
 
+    /*
+     * The activation crystal is now included in the ritual recipes.
+     * So it is no need to check the crystal in the controller.
+     * But this method is still here, just in case.
+     */
+    @Deprecated
     public int getActivationCrystalTier() {
         return BloodMagicHelper.getActivationCrystalTier(getControllerSlot());
     }
 
     private float getTierSpeedBonus() {
         // for more, you should go to the Pull Request of this block
-        return (getAltarTier() - 2) * 0.5F;
+        return (getAltarTierForSpeed() - 2) * 0.5F;
     }
 
     private float getSpeedRuneSpeedBonus() {
@@ -156,6 +172,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .addOutputBus(textAnyCasing)
             .addInputHatch(textAnyCasing)
             .addInfo(TextEnums.Author_Taskeren.getText())
+            .addInfo(TextEnums.Author_Goderium.getText())
             .toolTipFinisher(ModName);
         return tt;
         // spotless:on
@@ -186,18 +203,29 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             }
         }
 
-        int FluidTier = (mTier == 6) ? 2 : (mTier > 2) ? 1 : 0;
-        if (FluidTier > 0 && checkPiece(
-            "fluid" + FluidTier,
-            getOffset(1, FluidTier, 0),
-            getOffset(1, FluidTier, 1),
-            getOffset(1, FluidTier, 2))) {
+        int fluidTier = (mTier == 6) ? 2 : (mTier > 2) ? 1 : 0;
+        if (fluidTier > 0 && checkPiece(
+            "fluid" + fluidTier,
+            getOffset(1, fluidTier, 0),
+            getOffset(1, fluidTier, 1),
+            getOffset(1, fluidTier, 2))) {
             isBloodChecked = true;
         }
 
         return mTier > 0;
+    }
 
-        // TODO: add rune check maybe?
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPreTick(aBaseMetaTileEntity, aTick);
+
+        if(aTick % 20 == 0) { // for every second
+            if (aBaseMetaTileEntity.isServerSide()) {
+                if (!isBloodChecked) { // check blood if it has not been checked yet
+                    checkBlood();
+                }
+            }
+        }
     }
 
     // note that the actual altar tier is machine structure tier + 1!
@@ -338,7 +366,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
                 // check altar tier
                 int requiredTier = recipe.getMetadataOrDefault(BloodyHellTierKey.INSTANCE, 0);
-                if (requiredTier > getAltarTier()) {
+                if (requiredTier > getAltarTierForRecipe()) {
                     return ResultInsufficientTier.ofBloodAltar(requiredTier);
                 }
 
@@ -347,11 +375,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 if (requiredOrbTier > getOrbTier()) {
                     return ResultInsufficientTier.ofBloodOrb(requiredOrbTier);
                 }
-
-                // check weak activation crystal
-                // if (mode == MODE_BINDING && getActivationCrystalTier() < 1) {
-                // return ResultInsufficientTier.ofActivationCrystal(1);
-                // }
 
                 return super.validateRecipe(recipe);
             }
@@ -367,16 +390,23 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         }.setMaxParallelSupplier(this::getLimitedMaxParallel);
     }
 
+    /**
+     * Check the blood fluids in the structure and place them if not valid and has enough bloods.
+     * <p>
+     * Invoking this in tiers without fluid structures is ok, and always return true.
+     *
+     * @return true if the blood is valid, or placed.
+     */
     private boolean checkBlood() {
-        if (mTier < 1) return false;
-        else if (mTier < 3) return true;
+        if (mTier <= 0) return false; // invalid tiers
+        else if (mTier < 3) return true; // no blood needed
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        String[][] StructureDef = mTier > 5 ? STRUCTURE_BLOOD_2 : STRUCTURE_BLOOD_1;
-        int BloodAmountNeeded = mTier > 5 ? 2244000 : 324000;
-        int OffSetX = getOffset(1, mTier, 0);
-        int OffSetY = getOffset(1, mTier, 1);
-        int OffSetZ = getOffset(1, mTier, 2);
-        Block Blood = blockLifeEssence;
+        String[][] structureDef = mTier > 5 ? STRUCTURE_BLOOD_2 : STRUCTURE_BLOOD_1;
+        int bloodAmountNeeded = mTier > 5 ? BLOOD_AMOUNT_NEEDED_2 : BLOOD_AMOUNT_NEEDED_1;
+        int offsetX = getOffset(1, mTier, 0);
+        int offsetY = getOffset(1, mTier, 1);
+        int offsetZ = getOffset(1, mTier, 2);
+        Block blood = blockLifeEssence;
 
         int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
         int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
@@ -401,42 +431,35 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             zDir = -1;
         }
 
-        int LengthX = StructureDef[0].length;
-        int LengthY = StructureDef.length;
-        int LengthZ = StructureDef[0][0].length();
+        int lengthX = structureDef[0].length;
+        int lengthY = structureDef.length;
+        int lengthZ = structureDef[0][0].length();
 
         // BloodMagic has not registered block flowing life essence, so it is necessary to place all fluids at once
-        ArrayList<FluidStack> InputFluids = this.getStoredFluids();
+        ArrayList<FluidStack> inputFluids = this.getStoredFluids();
         int mBloodAmount = 0;
-        for (FluidStack aFluid : InputFluids) {
+        for (FluidStack aFluid : inputFluids) {
             if (aFluid.isFluidEqual(FluidUtils.getFluidStack("lifeessence", 1))) {
                 mBloodAmount += aFluid.amount;
             }
         }
-        if (BloodAmountNeeded > mBloodAmount) return false;
+        if (bloodAmountNeeded > mBloodAmount) return false;
 
         int setCount = 0;
-        for (int x = 0; x < LengthX; x++) {
-            for (int z = 0; z < LengthZ; z++) {
-                for (int y = 0; y < LengthY; y++) {
-                    String ListStr = String.valueOf(StructureDef[y][x].charAt(z));
-                    if (!Objects.equals(ListStr, "Z")) continue;
+        for (int x = 0; x < lengthX; x++) {
+            for (int z = 0; z < lengthZ; z++) {
+                for (int y = 0; y < lengthY; y++) {
+                    String strList = String.valueOf(structureDef[y][x].charAt(z));
+                    if (!Objects.equals(strList, "Z")) continue;
 
-                    int aX = (OffSetX - x) * xDir;
-                    int aY = OffSetY - y;
-                    int aZ = (OffSetZ - z) * zDir;
+                    int aX = (offsetX - x) * xDir;
+                    int aY = offsetY - y;
+                    int aZ = (offsetZ - z) * zDir;
                     if (mDirectionX == 1 || mDirectionX == -1) {
                         int temp = aX;
                         aX = aZ;
                         aZ = temp;
                     }
-
-                    // Block aBlock = aBaseMetaTileEntity.getBlockOffset(aX, aY, aZ);
-                    // if (aBlock.equals(Blood)) {
-                    // setCount++;
-                    // continue;
-                    // }
-                    // Actually flowing life essence is identified as block, so it is better to enforce it directly
 
                     aX += aBaseMetaTileEntity.getXCoord();
                     aY += aBaseMetaTileEntity.getYCoord();
@@ -444,7 +467,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
                     boolean isVaildFluid = false;
                     if (this.getStoredFluids() != null) {
-                        for (FluidStack aFluid : InputFluids) {
+                        for (FluidStack aFluid : inputFluids) {
                             if (aFluid.isFluidEqual(FluidUtils.getFluidStack("lifeessence", 1))
                                 && aFluid.amount >= 1000) {
                                 aFluid.amount -= 1000;
@@ -454,11 +477,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                         }
                     }
                     setCount++;
-                    if (isVaildFluid) aBaseMetaTileEntity.getWorld()
-                        .setBlock(aX, aY, aZ, Blood);
-                    else return false;
+                    if (isVaildFluid) {
+                        aBaseMetaTileEntity.getWorld().setBlock(aX, aY, aZ, blood);
+                    } else {
+                        return false;
+                    }
 
-                    if (setCount == BloodAmountNeeded / 1000) break;
+                    if (setCount == bloodAmountNeeded / 1000) break;
                 }
             }
         }
@@ -506,21 +531,18 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
      *
      * @param mode 0 is Base Structure, 1 is Fluid Structure
      * @param tier tier of the machine
-     * @param offset 0,1,2 corresponds to a,b,c of Structure Printer
+     * @param offset 0,1,2 corresponds to a, b, c of Structure Printer
      * @return horizontalOffset, verticalOffset, depthOffset
      */
-    int getOffset(int mode,int tier,int offset){
-        if(mode>0){
+    private int getOffset(int mode, int tier, int offset) {
+        if (mode > 0) {
             // blood
-            if(offset!=1)
-                return 20;
-            else if(tier>5)
-                return 18;
-            else if(tier>2)
-                return -5;
-        }else{
+            if (offset != 1) return 20;
+            else if (tier > 5) return 18;
+            else if (tier > 2) return -5;
+        } else {
             // structure
-            int[] offsets = {6, 0, 6};
+            int[] offsets = { 6, 0, 6 };
             if (tier >= 3) {
                 offsets[0] = offsets[2] = 23;
             }
@@ -529,8 +551,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             }
             return offsets[offset];
         }
-            return 0;
+        return 0;
     }
+
+    private static final int BLOOD_AMOUNT_NEEDED_1 = 324_000;
+    private static final int BLOOD_AMOUNT_NEEDED_2 = 2244_000;
+
     // offsets 6,0,6
     private static final String[][] STRUCTURE_TIER_1 = new String[][]{
         {"             ","             ","             ","             ","             ","             ","      ~      ","             ","             ","             ","             ","             ","             "},

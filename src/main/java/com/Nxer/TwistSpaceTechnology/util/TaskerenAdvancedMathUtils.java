@@ -61,7 +61,7 @@ public class TaskerenAdvancedMathUtils {
         // - x at half efficiency (≈250%): 38.1
         // - x at almost efficiency (≈475%): 164.7
 
-        // V2
+        // V2 (Deprecated)
         // max: 16
         // magic: 80
         // =======================
@@ -69,7 +69,15 @@ public class TaskerenAdvancedMathUtils {
         // almost 207.23 => 14.4x
         // max 543 => 15.96x
 
-        return myMagicFunction(16, 80, speedRuneCount);
+        // V3
+        // max: 35
+        // magic: 500
+        // =======================
+        // half 346 => 17.5x
+        // almost 1152 => 31.5x
+        // max 1980 => 34.34x
+
+        return myMagicFunction(35, 500, speedRuneCount);
     }
 
 }

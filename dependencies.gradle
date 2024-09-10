@@ -63,4 +63,8 @@ dependencies {
     implementation('com.github.GTNewHorizons:WitcheryExtras:1.2.2:dev')
 //    implementation('com.github.RealSilverMoon:BoxPlusPlus:1.2.0:dev')
     implementation('com.github.GTNewHorizons:BloodMagic:1.6.2:dev')
+
+    // dependencies for mod testing
+    // using transitive to prevent mod duplication and conflicts
+    runtimeOnlyNonPublishable("com.github.GTNewHorizons:BlockRenderer6343:1.2.8:dev") { transitive = false }
 }
