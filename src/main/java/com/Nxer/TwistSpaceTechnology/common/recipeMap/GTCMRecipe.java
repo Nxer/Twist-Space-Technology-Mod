@@ -1,6 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
-import gregtech.api.util.GT_Recipe;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -33,10 +36,6 @@ import gregtech.api.recipe.maps.AssemblyLineFrontend;
 import gregtech.api.util.GT_Utility;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 import gregtech.nei.formatter.SimpleSpecialValueFormatter;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Optional;
 
 public class GTCMRecipe {
 
@@ -315,7 +314,8 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
-    private static final Comparator<ItemStack> COMPARE_ITEMSTACK_BY_DAMAGE = Comparator.comparingInt(ItemStack::getItemDamage);
+    private static final Comparator<ItemStack> COMPARE_ITEMSTACK_BY_DAMAGE = Comparator
+        .comparingInt(ItemStack::getItemDamage);
 
     // #tr tst.recipe.BloodyHellRecipes
     // # Bloody Hell Altar Recipes
@@ -325,12 +325,15 @@ public class GTCMRecipe {
         .maxIO(6, 1, 1, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
         .neiRecipeComparator((r1, r2) -> {
-            Optional<ItemStack> circuit1 = Arrays.stream(r1.mInputs).filter(GT_Utility::isAnyIntegratedCircuit).findFirst();
-            Optional<ItemStack> circuit2 = Arrays.stream(r2.mInputs).filter(GT_Utility::isAnyIntegratedCircuit).findFirst();
+            Optional<ItemStack> circuit1 = Arrays.stream(r1.mInputs)
+                .filter(GT_Utility::isAnyIntegratedCircuit)
+                .findFirst();
+            Optional<ItemStack> circuit2 = Arrays.stream(r2.mInputs)
+                .filter(GT_Utility::isAnyIntegratedCircuit)
+                .findFirst();
 
-            return circuit1
-                .map(c1 -> circuit2
-                    .map(c2 -> COMPARE_ITEMSTACK_BY_DAMAGE.compare(c1, c2))
+            return circuit1.map(
+                c1 -> circuit2.map(c2 -> COMPARE_ITEMSTACK_BY_DAMAGE.compare(c1, c2))
                     .orElse(-1))
                 .orElse(1);
         })
