@@ -35,15 +35,19 @@ public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
     private static final String[] DESC = new String[] {
         // #tr Tooltip_BloodOrbHatch_1
         // # Life Essence Input for Multiblocks
+        // #zh_CN 多方块结构的生命本质输入仓
         TextEnums.tr("Tooltip_BloodOrbHatch_1"),
         // #tr Tooltip_BloodOrbHatch_2
         // # Capacity is equal to the Blood Orb capacity inserted.
+        // #zh_CN 容量等于插入的气血宝珠的容量
         TextEnums.tr("Tooltip_BloodOrbHatch_2"),
         // #tr Tooltip_BloodOrbHatch_3
         // # A hatch drain Life Essence from the Blood Orb.
+        // #zh_CN 可以从气血宝珠中提取生命本质
         TextEnums.tr("Tooltip_BloodOrbHatch_3"),
         // #tr Tooltip_BloodOrbHatch_4
         // # Drains LP as much as possible from the Soul Network.
+        // #zh_CN 尽可能多地从灵魂网络中抽取LP
         TextEnums.tr("Tooltip_BloodOrbHatch_4"), TextEnums.Author_Taskeren.getText(), };
 
     private static final String[] TOOLTIP = new String[] { TextEnums.tr("Tooltip_BloodOrbHatch_3"),

@@ -42,6 +42,7 @@ import com.Nxer.TwistSpaceTechnology.util.InfoDataHelper;
 import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.dreammaster.block.BlockList;
+import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -70,7 +71,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .addIcon(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
             .glow()
             .build() };
-
+    private static final ITexture[] FACING_FRONT = {
+        TextureFactory.of(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_INACTIVE) };
+    private static final ITexture[] FACING_SIDE = { TextureFactory.of(Textures.BlockIcons.MACHINE_CASING_DENSEBRICKS) };
     private int speedRuneCount = 0;
     private int tbSpeedRuneCount = 0;
     private int mTier = 0;
@@ -138,6 +141,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
+    protected IAlignmentLimits getInitialAlignmentLimits() {
+        // Prevent tilting or inversion
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
+    }
+
+    @Override
     protected int getMaxParallelRecipes() {
         return 1;
     }
@@ -181,7 +190,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
-        // TODO: texture
         return FACING_ACTIVE;
     }
 
@@ -206,9 +214,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         int fluidTier = (mTier == 6) ? 2 : (mTier > 2) ? 1 : 0;
         if (fluidTier > 0 && checkPiece(
             "fluid" + fluidTier,
-            getOffset(1, fluidTier, 0),
-            getOffset(1, fluidTier, 1),
-            getOffset(1, fluidTier, 2))) {
+            getOffset(1, mTier, 0),
+            getOffset(1, mTier, 1),
+            getOffset(1, mTier, 2))) {
             isBloodChecked = true;
         }
 
@@ -399,7 +407,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
      */
     private boolean checkBlood() {
         if (mTier <= 0) return false; // invalid tiers
-        else if (mTier < 3) return true; // no blood needed
+        else if (mTier < 3 || isBloodChecked) return true; // no blood needed
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
         String[][] structureDef = mTier > 5 ? STRUCTURE_BLOOD_2 : STRUCTURE_BLOOD_1;
         int bloodAmountNeeded = mTier > 5 ? BLOOD_AMOUNT_NEEDED_2 : BLOOD_AMOUNT_NEEDED_1;
@@ -495,16 +503,25 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
+        aNBT.setBoolean("isBloodChecked", isBloodChecked);
+        aNBT.setInteger("speedRuneCount", speedRuneCount);
+        aNBT.setInteger("tbSpeedRuneCount", tbSpeedRuneCount);
+        aNBT.setInteger("mTier", mTier);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+        isBloodChecked = aNBT.getBoolean("isBloodChecked");
+        speedRuneCount = aNBT.getInteger("speedRuneCount");
+        tbSpeedRuneCount = aNBT.getInteger("tbSpeedRuneCount");
+        mTier = aNBT.getInteger("mTier");
     }
 
     @Override
     public String[] getInfoData() {
         return InfoDataHelper.buildInfoData(super.getInfoData(), (info) -> {
+            info.add(EnumChatFormatting.BLUE + "Structure Tier: " + EnumChatFormatting.GOLD + mTier);
             info.add(
                 EnumChatFormatting.BLUE + "Speed Rune Count: "
                     + EnumChatFormatting.AQUA
@@ -520,7 +537,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 EnumChatFormatting.BLUE + "Speed Bonus from Rune: "
                     + EnumChatFormatting.GOLD
                     + getSpeedRuneSpeedBonus());
-            info.add("tier" + mTier);
         });
     }
 

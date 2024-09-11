@@ -6,6 +6,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.AssemblyLineWithoutResearchRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.BloodyHellRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CentrifugeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ChemicalReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CircuitAssemblerRecipePool;
@@ -67,13 +68,13 @@ public class RecipeLoader {
             new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new DragonBloodRecipe(),
             new FusionReactorRecipePool(), new ModularHatchesRecipePool(), new MassFabricatorGenesisRecipePool(),
             new SpaceAssemblerRecipePool(), new CosmicProcessorCircuitRecipePool(),
-            new MicroSpaceTimeFabricatorioRecipePool() };
+            new MicroSpaceTimeFabricatorioRecipePool(), new BloodyHellRecipePool() };
 
         new SimpleFurnaceFuelPool().loadRecipes();
         for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
         }
-        new TCResearches().loadResearches();
+        new TCResearches().register();
 
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
