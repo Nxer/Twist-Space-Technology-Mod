@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -44,6 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
@@ -1042,8 +1044,13 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                         .get(1);
                     int level = itemStack.getItemDamage();
                     return Pair.of(Block.getBlockFromItem(itemStack.getItem()), level);
+                } catch (IllegalAccessError error) {
+                    // todo
+                    TwistSpaceTechnology.LOG.warn("TST BigBroArray An error has occurred: {}", error.getMessage());
+                    return null;
                 }
             })
+            .filter(Objects::nonNull)
             .collect(Collectors.toList());
         FRAMES = Arrays.asList(
             Pair.of(
