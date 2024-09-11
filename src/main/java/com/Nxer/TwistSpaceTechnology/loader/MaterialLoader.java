@@ -3,7 +3,8 @@ package com.Nxer.TwistSpaceTechnology.loader;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockRegister;
 import com.Nxer.TwistSpaceTechnology.common.item.items.ItemRegister;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.github.bartimaeusnek.bartworks.API.WerkstoffAdderRegistry;
+
+import bartworks.API.WerkstoffAdderRegistry;
 
 /**
  * New Material Pool

@@ -1,19 +1,19 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine;
 
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.AllModule;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -27,7 +27,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import goodgenerator.loader.Loaders;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -36,10 +36,10 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.common.blocks.GT_Block_Casings4;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.blocks.BlockCasings4;
+import gregtech.common.blocks.BlockCasings8;
 
 public class MM_LargeNeutronOscillator
     extends MultiExecutionCoreMachineSupportAllModuleBase<MM_LargeNeutronOscillator> {
@@ -163,28 +163,28 @@ public class MM_LargeNeutronOscillator
                 // spotless:on
                 .addElement(
                     'A',
-                    GT_HatchElementBuilder.<MM_LargeNeutronOscillator>builder()
+                    HatchElementBuilder.<MM_LargeNeutronOscillator>builder()
                         .atLeast(AllModule)
                         .adder(MM_LargeNeutronOscillator::addModularHatchToMachineList)
                         .dot(1)
-                        .casingIndex(((GT_Block_Casings4) GregTech_API.sBlockCasings4).getTextureIndex(1))
-                        .buildAndChain(GregTech_API.sBlockCasings4, 1))
+                        .casingIndex(((BlockCasings4) GregTechAPI.sBlockCasings4).getTextureIndex(1))
+                        .buildAndChain(GregTechAPI.sBlockCasings4, 1))
                 .addElement(
                     'B',
-                    GT_HatchElementBuilder.<MM_LargeNeutronOscillator>builder()
+                    HatchElementBuilder.<MM_LargeNeutronOscillator>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(MM_LargeNeutronOscillator::addNormalHatchToMachineList)
                         .dot(2)
-                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'C',
-                    GT_HatchElementBuilder.<MM_LargeNeutronOscillator>builder()
+                    HatchElementBuilder.<MM_LargeNeutronOscillator>builder()
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus)
                         .adder(MM_LargeNeutronOscillator::addNormalHatchToMachineList)
                         .dot(3)
-                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
-                        .buildAndChain(GregTech_API.sBlockCasings8, 10))
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .addElement('D', ofBlock(sBlockCasingsTT, 0))
                 .addElement('E', ofBlock(Loaders.speedingPipe, 0))
                 .addElement('F', Glasses.chainAllGlasses())
@@ -206,13 +206,13 @@ public class MM_LargeNeutronOscillator
     // endregion
 
     // region General
-    private static GT_Multiblock_Tooltip_Builder tooltip;
+    private static MultiblockTooltipBuilder tooltip;
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tooltip == null) {
-            tooltip = new GT_Multiblock_Tooltip_Builder();
+            tooltip = new MultiblockTooltipBuilder();
             // #tr Tooltip_LargeNeutronOscillator_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}中子活化器

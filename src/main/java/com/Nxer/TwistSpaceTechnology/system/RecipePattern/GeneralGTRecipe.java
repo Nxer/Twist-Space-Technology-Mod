@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import appeng.api.storage.data.IAEItemStack;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GTRecipe;
 
 public class GeneralGTRecipe extends CustomCraftRecipe {
 
@@ -37,7 +37,7 @@ public class GeneralGTRecipe extends CustomCraftRecipe {
         super(inputItem, inputFluid, outputItem, outputFluid, itemPriority, fluidPriority, rounds, provider);
     }
 
-    public GeneralGTRecipe(GT_Recipe recipe, String provider) {
+    public GeneralGTRecipe(GTRecipe recipe, String provider) {
         this(
             recipe.mInputs == null ? new ItemStack[0]
                 : (ItemStack[]) Arrays.stream(recipe.mInputs)

@@ -10,8 +10,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
+import bartworks.system.material.WerkstoffLoader;
 import cpw.mods.fml.common.Loader;
 import galaxyspace.SolarSystem.SolarSystemPlanets;
 import gregtech.api.enums.Materials;

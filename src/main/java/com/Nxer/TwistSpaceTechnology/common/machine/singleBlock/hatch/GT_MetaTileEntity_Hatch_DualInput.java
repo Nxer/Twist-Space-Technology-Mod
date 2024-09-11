@@ -22,18 +22,17 @@ import com.gtnewhorizons.modularui.common.fluid.FluidStackTank;
 import com.gtnewhorizons.modularui.common.widget.FluidSlotWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 
-import gregtech.api.gui.modularui.GT_UITextures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
+import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.render.TextureFactory;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
 
-public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_InputBus
-    implements IAddUIWidgets, IDualInputHatch {
+public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implements IAddUIWidgets, IDualInputHatch {
 
     private final FluidStack[] mStoredFluid;
     private final FluidStackTank[] fluidTanks;
@@ -406,10 +405,10 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
         };
     }
 
-    @Override
-    public boolean useModularUI() {
-        return true;
-    }
+    // @Override
+    // public boolean useModularUI() {
+    // return true;
+    // }
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
@@ -432,7 +431,7 @@ public class GT_MetaTileEntity_Hatch_DualInput extends GT_MetaTileEntity_Hatch_I
             SlotGroup.ofItemHandler(inventoryHandler, 2)
                 .startFromSlot(CATALYST_SLOT_1)
                 .endAtSlot(CATALYST_SLOT_2)
-                .background(ModularUITextures.ITEM_SLOT, GT_UITextures.OVERLAY_SLOT_MOLECULAR_1)
+                .background(ModularUITextures.ITEM_SLOT, GTUITextures.OVERLAY_SLOT_MOLECULAR_1)
                 .build()
                 .setPos(7, 7));
         getBaseMetaTileEntity().add4by4Slots(builder);

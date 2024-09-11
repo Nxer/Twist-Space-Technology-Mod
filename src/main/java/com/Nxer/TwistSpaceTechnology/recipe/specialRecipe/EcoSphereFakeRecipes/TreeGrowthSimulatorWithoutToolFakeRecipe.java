@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getModeMultiplier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.queryTreeProduct;
-import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
+import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -21,12 +21,12 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import galaxyspace.BarnardsSystem.BRFluids;
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Utility;
-import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTUtility;
+import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.Mode;
 
 public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
@@ -36,8 +36,8 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
     static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 1000);
     static FluidStack UUMatterStack = Materials.UUMatter.getFluid(500);
 
-    static ItemStack[] IntegratedCircuitStack = { GT_Utility.getIntegratedCircuit(1),
-        GT_Utility.getIntegratedCircuit(2), GT_Utility.getIntegratedCircuit(3), GT_Utility.getIntegratedCircuit(4), };
+    static ItemStack[] IntegratedCircuitStack = { GTUtility.getIntegratedCircuit(1), GTUtility.getIntegratedCircuit(2),
+        GTUtility.getIntegratedCircuit(3), GTUtility.getIntegratedCircuit(4), };
     static ItemStack[] allSaplingsIn;
     static ItemStack[] allSaplingWithTag;
     static ItemStack[] allLogs;
@@ -65,7 +65,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
             keyPart = key.split(":");
             saplingIn = entry.getValue()
                 .get(Mode.SAPLING);
-            if (!key.contains("Forestry:")) saplingIn = GT_ModHandler
+            if (!key.contains("Forestry:")) saplingIn = GTModHandler
                 .getModItem(keyPart[0], keyPart[1], 0, keyPart[2] == null ? 0 : Integer.parseInt(keyPart[2]));
             saplingIn.stackSize = 0;
             allSaplingsInCopy.add(saplingIn);
@@ -121,11 +121,11 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
     void loadManualRecipes() {
         // Barnarda C
         if (Mods.GalaxySpace.isModLoaded()) addSpecialFakeRecipe(
-            GT_ModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 0, 1),
+            GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 0, 1),
             UnknowWaterStack);
         // Time
         if (Mods.TwilightForest.isModLoaded()) addSpecialFakeRecipe(
-            GT_ModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 0, 5),
+            GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 0, 5),
             TemporalLiquidStack);
         // Death Water
         // Thaumic Tentacle?
@@ -201,7 +201,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
     void addFakeRecipe(ItemStack[] inputStacks, ItemStack[] outputStacks, ItemStack[] specialStacks,
         FluidStack inputFluid) {
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)

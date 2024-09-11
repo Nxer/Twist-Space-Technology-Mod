@@ -11,11 +11,11 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class GT_TileEntity_LagrangeDysonSpaceStation
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_IntensifyChemicalDistorter>
+    extends MTEExtendedPowerMultiBlockBase<GT_TileEntity_IntensifyChemicalDistorter>
     implements IConstructable, ISurvivalConstructable {
 
     // nodes types: 0:Maintain nodes, 1:compute nodes, 2:wireless energy output nodes, 3:advanced dyson nodes, 4:dyson
@@ -115,7 +115,7 @@ public class GT_TileEntity_LagrangeDysonSpaceStation
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         return null;
     }
 

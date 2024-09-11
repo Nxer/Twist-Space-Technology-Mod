@@ -8,25 +8,26 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Defaul
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.github.technus.tectech.thing.CustomItemList.astralArrayFabricator;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsBA0;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
+import static tectech.thing.CustomItemList.astralArrayFabricator;
+import static tectech.thing.casing.BlockGTCasingsTT.texturePage;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -56,36 +57,36 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import bartworks.API.BorosilicateGlass;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.loader.Loaders;
-import gregtech.api.GregTech_API;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
+import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import tectech.thing.block.BlockQuantumGlass;
 
 public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_IndistinctTentacle>
-    implements IGlobalWirelessEnergy {
+    implements IWirelessEnergyHatchInformation {
 
     // region Class Constructor
     public TST_IndistinctTentacle(int aID, String aName, String aNameRegional) {
@@ -227,7 +228,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 4);
-            GT_Utility
+            GTUtility
                 .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + this.mode));
         }
     }
@@ -238,13 +239,13 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
 
             @NotNull
             @Override
-            protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
                 // component assembly line
                 if (mode == 1 && recipe.mSpecialValue > tierComponentCasing + 1) {
                     return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
                 }
                 // check component block tier
-                byte recipeTier = GT_Utility.getTier(recipe.mEUt);
+                byte recipeTier = GTUtility.getTier(recipe.mEUt);
                 if (recipeTier > tierComponentCasing + 2) {
                     return CheckRecipeResultRegistry.insufficientMachineTier(recipeTier);
                 }
@@ -265,9 +266,9 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
 
             @Nonnull
             @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
                 if (isWirelessMode) {
-                    return GT_OverclockCalculator.ofNoOverclock(recipe);
+                    return OverclockCalculator.ofNoOverclock(recipe);
                 } else {
                     return super.createOverclockCalculator(recipe);
                 }
@@ -316,7 +317,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                 BigInteger finalCostEU = BigInteger.valueOf(processingLogic.getCalculatedEut())
                     .multiply(BigInteger.valueOf(processingLogic.getDuration()))
                     .multiply(BigInteger.valueOf(extraEuCostMultiplier));
-                costingWirelessEUTemp = GT_Utility.formatNumbers(finalCostEU);
+                costingWirelessEUTemp = GTUtility.formatNumbers(finalCostEU);
                 if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU.multiply(Utils.NEGATIVE_ONE))) {
                     return CheckRecipeResultRegistry.insufficientPower(finalCostEU.longValue());
                 }
@@ -331,7 +332,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                 // overflow because multiply extraCost
                 BigInteger finalCostEU = BigInteger.valueOf(originEUCost)
                     .multiply(BigInteger.valueOf(extraEuCostMultiplier));
-                costingWirelessEUTemp = GT_Utility.formatNumbers(finalCostEU);
+                costingWirelessEUTemp = GTUtility.formatNumbers(finalCostEU);
                 if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU.multiply(Utils.NEGATIVE_ONE))) {
                     return CheckRecipeResultRegistry.insufficientPower(finalCostEU.longValue());
                 }
@@ -380,17 +381,17 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
             // normal mode
             // glass tier limit hatch tier
             isWirelessMode = false;
-            for (GT_MetaTileEntity_Hatch hatch : this.mExoticEnergyHatches) {
+            for (MTEHatch hatch : this.mExoticEnergyHatches) {
                 // osmium glass allow use laser hatch
                 if (this.glassTier < GlassTierLimit_LaserHatch_IndistinctTentacle
-                    && hatch.getConnectionType() == GT_MetaTileEntity_Hatch.ConnectionType.LASER) {
+                    && hatch.getConnectionType() == MTEHatch.ConnectionType.LASER) {
                     return false;
                 }
                 if (this.glassTier < hatch.mTier) {
                     return false;
                 }
             }
-            for (GT_MetaTileEntity_Hatch hatch : this.mEnergyHatches) {
+            for (MTEHatch hatch : this.mEnergyHatches) {
                 if (this.glassTier < hatch.mTier) {
                     return false;
                 }
@@ -517,11 +518,11 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
                             -2,
                             (t, meta) -> t.tierComponentCasing = meta,
                             t -> t.tierComponentCasing)))
-                .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 9))
-                .addElement('D', ofBlock(GregTech_API.sBlockCasings9, 1))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 1))
                 .addElement(
                     'E',
-                    GT_HatchElementBuilder.<TST_IndistinctTentacle>builder()
+                    HatchElementBuilder.<TST_IndistinctTentacle>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_IndistinctTentacle::addEnergyHatchOrExoticEnergyHatchToMachineList)
                         .dot(1)
@@ -532,10 +533,10 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
                 .addElement('H', ofBlock(sBlockCasingsTT, 10))
                 .addElement('I', ofBlock(sBlockCasingsTT, 12))
                 .addElement('J', ofBlock(sBlockCasingsTT, 13))
-                .addElement('K', ofChain(ofBlock(QuantumGlassBlock.INSTANCE, 0), ofBlock(sBlockCasingsTT, 13)))
+                .addElement('K', ofChain(ofBlock(BlockQuantumGlass.INSTANCE, 0), ofBlock(sBlockCasingsTT, 13)))
                 .addElement(
                     'L',
-                    GT_HatchElementBuilder.<TST_IndistinctTentacle>builder()
+                    HatchElementBuilder.<TST_IndistinctTentacle>builder()
                         .atLeast(InputBus, InputHatch, OutputBus)
                         .adder(TST_IndistinctTentacle::addToMachineList)
                         .dot(2)
@@ -552,8 +553,8 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
     // region General
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_IndistinctTentacle_MachineType)
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_Controller)
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_01)

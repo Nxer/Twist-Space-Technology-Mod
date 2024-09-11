@@ -4,16 +4,16 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
-import gregtech.api.enums.GT_Values;
+import bartworks.system.material.WerkstoffLoader;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.item.chemistry.GenericChem;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
+import gtnhlanth.common.register.WerkstoffMaterialPool;
 
 public class QFTRecipePool implements IRecipePool {
 
@@ -22,7 +22,7 @@ public class QFTRecipePool implements IRecipePool {
         final IRecipeMap QFT = GTPPRecipeMaps.quantumForceTransformerRecipes;
 
         // Palladium
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 64),
                 WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 64),
@@ -42,7 +42,7 @@ public class QFTRecipePool implements IRecipePool {
             .addTo(QFT);
 
         // Osmium
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 32),
                 ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
@@ -61,7 +61,7 @@ public class QFTRecipePool implements IRecipePool {
             .addTo(QFT);
 
         // Iridium
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 WerkstoffLoader.IrLeachResidue.get(OrePrefixes.dust, 8),
                 ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
@@ -79,7 +79,7 @@ public class QFTRecipePool implements IRecipePool {
             .addTo(QFT);
 
         // Rh? Ru?
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 WerkstoffLoader.LeachResidue.get(OrePrefixes.dust, 16),
                 WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 16),
@@ -97,7 +97,7 @@ public class QFTRecipePool implements IRecipePool {
             .addTo(QFT);
 
         // FeTiO3
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 Materials.Ilmenite.getDust(32),
                 ItemUtils.getSimpleStack(GenericChem.mTitaTungstenIndiumCatalyst, 0))
@@ -116,7 +116,7 @@ public class QFTRecipePool implements IRecipePool {
             .addTo(QFT);
 
         // Samarium
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 WerkstoffMaterialPool.SamariumOreConcentrate.get(OrePrefixes.dust, 32),
                 ItemUtils.getSimpleStack(GenericChem.mRareEarthGroupCatalyst, 0))
@@ -134,7 +134,7 @@ public class QFTRecipePool implements IRecipePool {
             .addTo(QFT);
 
         // Cerium
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 WerkstoffMaterialPool.CeriumRichMixture.get(OrePrefixes.dust, 32),
                 ItemUtils.getSimpleStack(GenericChem.mRareEarthGroupCatalyst, 0))

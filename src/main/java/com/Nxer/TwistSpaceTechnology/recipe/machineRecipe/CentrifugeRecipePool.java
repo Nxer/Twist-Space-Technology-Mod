@@ -5,11 +5,11 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class CentrifugeRecipePool implements IRecipePool {
@@ -20,33 +20,33 @@ public class CentrifugeRecipePool implements IRecipePool {
         final IRecipeMap centrifugeSingleBlock = RecipeMaps.centrifugeRecipes;
 
         // gun powder
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(1), Materials.Gunpowder.getDust(6))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Gunpowder.getDust(6))
             .itemOutputs(Materials.Sulfur.getDust(1), Materials.Coal.getDust(3), Materials.Saltpeter.getDust(2))
             .noOptimize()
             .eut(RECIPE_LV)
             .duration(70)
             .addTo(centrifuge);
 
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(2), Materials.Gunpowder.getDust(6))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(2), Materials.Gunpowder.getDust(6))
             .itemOutputs(Materials.Sulfur.getDust(1), Materials.Carbon.getDust(3), Materials.Saltpeter.getDust(2))
             .noOptimize()
             .eut(RECIPE_LV)
             .duration(70)
             .addTo(centrifuge);
 
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(3), Materials.Gunpowder.getDust(6))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(3), Materials.Gunpowder.getDust(6))
             .itemOutputs(Materials.Sulfur.getDust(1), Materials.Charcoal.getDust(3), Materials.Saltpeter.getDust(2))
             .noOptimize()
             .eut(RECIPE_LV)
             .duration(70)
             .addTo(centrifuge);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(11),
+                GTUtility.getIntegratedCircuit(11),
                 Materials.Gunpowder.getDust(64),
                 Materials.Gunpowder.getDust(64),
                 Materials.Gunpowder.getDust(64))
@@ -60,9 +60,9 @@ public class CentrifugeRecipePool implements IRecipePool {
             .duration(30)
             .addTo(centrifuge);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(12),
+                GTUtility.getIntegratedCircuit(12),
                 Materials.Gunpowder.getDust(64),
                 Materials.Gunpowder.getDust(64),
                 Materials.Gunpowder.getDust(64))
@@ -76,9 +76,9 @@ public class CentrifugeRecipePool implements IRecipePool {
             .duration(30)
             .addTo(centrifuge);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(13),
+                GTUtility.getIntegratedCircuit(13),
                 Materials.Gunpowder.getDust(64),
                 Materials.Gunpowder.getDust(64),
                 Materials.Gunpowder.getDust(64))

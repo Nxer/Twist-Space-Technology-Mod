@@ -1,21 +1,20 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_NEUTRAL;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_OK;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_TOO_LOW;
-import static com.github.technus.tectech.util.CommonValues.MULTI_CHECK_AT;
-import static com.github.technus.tectech.util.CommonValues.V;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static goodgenerator.loader.Loaders.FRF_Coil_1;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static gregtech.api.util.GTUtility.filterValidMTEs;
 import static gtPlusPlus.core.block.ModBlocks.blockCasings3Misc;
 import static net.minecraft.util.StatCollector.translateToLocal;
+import static tectech.thing.casing.BlockGTCasingsTT.textureOffset;
+import static tectech.thing.casing.BlockGTCasingsTT.texturePage;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
+import static tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_NEUTRAL;
+import static tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_OK;
+import static tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_TOO_LOW;
+import static tectech.util.CommonValues.MULTI_CHECK_AT;
 import static vazkii.botania.common.block.ModBlocks.pylon;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -32,16 +31,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_Multi
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.technus.tectech.mechanics.dataTransport.QuantumDataPacket;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
-import com.github.technus.tectech.thing.metaTileEntity.multi.GT_MetaTileEntity_EM_switch;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.INameFunction;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.IStatusFunction;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.Parameters;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.render.TT_RenderedExtendedFacingTexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -51,6 +40,7 @@ import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -59,10 +49,20 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_StructureUtility;
+import gregtech.api.util.GTStructureUtility;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
+import tectech.mechanics.dataTransport.QuantumDataPacket;
+import tectech.thing.block.BlockQuantumGlass;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDataInput;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDataOutput;
+import tectech.thing.metaTileEntity.multi.base.INameFunction;
+import tectech.thing.metaTileEntity.multi.base.IStatusFunction;
+import tectech.thing.metaTileEntity.multi.base.LedStatus;
+import tectech.thing.metaTileEntity.multi.base.Parameters;
+import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
+import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
 public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalConstructable {
 
@@ -1084,11 +1084,11 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
             return SimpleCheckRecipeResult.ofFailure("no_computing");
         }
         if (overclock.getStatus(true).isOk && overvolt.getStatus(true).isOk) {
-            float eut = V[8] * (float) overVoltageRatio * (float) overClockRatio;
+            float eut = GTValues.V[8] * (float) overVoltageRatio * (float) overClockRatio;
             if (eut < Integer.MAX_VALUE - 7) {
                 lEUt = (long) -eut;
             } else {
-                lEUt = -V[8];
+                lEUt = -GTValues.V[8];
                 return CheckRecipeResultRegistry.POWER_OVERFLOW;
             }
             long thingsActive = 0;
@@ -1109,7 +1109,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                     .setActive(true);
             }
 
-            for (GT_MetaTileEntity_Hatch_InputData di : eInputData) {
+            for (MTEHatchDataInput di : eInputData) {
                 if (di.q != null) {
                     thingsActive++;
                 }
@@ -1126,7 +1126,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                 return SimpleCheckRecipeResult.ofSuccess("computing");
             } else {
                 eAvailableData = 0;
-                lEUt = -V[8];
+                lEUt = -GTValues.V[8];
                 eAmpereFlow = 1;
                 mMaxProgresstime = 20;
                 mEfficiencyIncrease = 10000;
@@ -1189,7 +1189,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
             if (pack == null) {
                 return;
             }
-            for (GT_MetaTileEntity_Hatch_InputData hatch : eInputData) {
+            for (MTEHatchDataInput hatch : eInputData) {
                 if (hatch.q == null || hatch.q.contains(pos)) {
                     continue;
                 }
@@ -1199,15 +1199,15 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                 }
             }
 
-            for (GT_MetaTileEntity_Hatch_OutputData o : eOutputData) {
+            for (MTEHatchDataOutput o : eOutputData) {
                 o.q = pack;
             }
         }
     }
 
     @Override
-    public GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    public MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(translateToLocal("gt.blockmachines.multimachine.em.computer.name")) // Machine Type: Quantum
             // Computer
             .addInfo(translateToLocal("gt.blockmachines.multimachine.em.computer.desc.0")) // Controller block of
@@ -1252,7 +1252,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
         int colorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
             return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3],
-                new TT_RenderedExtendedFacingTexture(aActive ? ScreenON : ScreenOFF) };
+                new TTRenderedExtendedFacingTexture(aActive ? ScreenON : ScreenOFF) };
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3] };
     }
@@ -1260,7 +1260,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     @Override
     @SideOnly(Side.CLIENT)
     protected ResourceLocation getActivitySound() {
-        return GT_MetaTileEntity_EM_switch.activitySound;
+        return TTMultiblockBase.activitySound;
     }
 
     @Override
@@ -1281,7 +1281,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
         // .doExplosion(V[9]);
         // }
         realMonitor.getBaseMetaTileEntity()
-            .doExplosion(V[9]);
+            .doExplosion(GTValues.V[9]);
     }
 
     @Override
@@ -1346,14 +1346,14 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                 // ofBlock...(radiationProtectionSteelFrame, 0,
                 // ...);
                 .addElement('K', ofBlock(blockCasings3Misc, 15)) // K -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
-                .addElement('M', ofBlock(QuantumGlassBlock.INSTANCE, 0)) // M -> ofBlock...(tile.quantumGlass, 0, ...);
+                .addElement('M', ofBlock(BlockQuantumGlass.INSTANCE, 0)) // M -> ofBlock...(tile.quantumGlass, 0, ...);
                 .addElement('O', ofBlock(pylon, 1))
                 // .addElement('N', ofBlock(Block.getBlockById(1), 0))
                 .addElement('P', ofBlock(sBlockCasingsTT, 2))
                 .addElement(
                     'E',
                     StructureUtility.ofChain(
-                        GT_StructureUtility.ofHatchAdder(TST_Computer::superAddToMachineList, textureOffset + 2, 1),
+                        GTStructureUtility.ofHatchAdder(TST_Computer::superAddToMachineList, textureOffset + 2, 1),
                         StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 2)))
                 .addElement('Q', ofBlock(sBlockCasingsTT, 3))
                 .build();

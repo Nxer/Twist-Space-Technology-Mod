@@ -5,22 +5,22 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static galaxyspace.core.register.GSMaterials.tantalumCarbideHafniumCarbideMixture;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
+import gtnhlanth.common.register.WerkstoffMaterialPool;
 
 public class MixerRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
         // region Ta4HfC5
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(1),
+                GTUtility.getIntegratedCircuit(1),
                 WerkstoffMaterialPool.Hafnium.get(OrePrefixes.dust, 1),
                 Materials.Tantalum.getDust(4),
                 Materials.Carbon.getDust(5))
@@ -33,9 +33,9 @@ public class MixerRecipePool implements IRecipePool {
         // endregion
 
         // One Step HSS-S
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(6),
+                GTUtility.getIntegratedCircuit(6),
                 Materials.TungstenSteel.getDust(10),
                 Materials.Iridium.getDust(6),
                 Materials.Molybdenum.getDust(4),

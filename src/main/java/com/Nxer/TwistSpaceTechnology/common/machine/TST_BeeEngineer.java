@@ -2,9 +2,9 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static forestry.api.apiculture.BeeManager.beeRoot;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
@@ -27,7 +27,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -36,8 +36,8 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
@@ -228,12 +228,12 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(STRUCTURE))
                 .addElement(
                     'C',
-                    GT_HatchElementBuilder.<TST_BeeEngineer>builder()
+                    HatchElementBuilder.<TST_BeeEngineer>builder()
                         .atLeast(InputBus, InputHatch, OutputBus)
                         .adder(TST_BeeEngineer::addToMachineList)
                         .dot(1)
                         .casingIndex(CASING_INDEX)
-                        .buildAndChain(GregTech_API.sBlockCasings1, 10))
+                        .buildAndChain(GregTechAPI.sBlockCasings1, 10))
                 .build();
         }
         return STRUCTURE_DEF;
@@ -261,8 +261,8 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     // endregion
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_BeeEngineer_Type)
             .addInfo(TextLocalization.Tooltip_BeeEngineer_Controller)
             .addInfo(TextLocalization.Tooltip_BeeEngineer_01)

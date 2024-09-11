@@ -9,8 +9,8 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Ind
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
 
-import goodgenerator.client.GUI.GG_UITextures;
-import gregtech.api.gui.modularui.GT_UITextures;
+import goodgenerator.client.GUI.GGUITextures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
@@ -26,7 +26,7 @@ public class GTCMRecipe {
         .of("gtcm.recipe.IntensifyChemicalDistorterRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 16)
         .neiSpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.IntensifyChemicalDistorter.get(1))
@@ -37,7 +37,7 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> PreciseHighEnergyPhotonicQuantumMasterRecipes = RecipeMapBuilder
         .of("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 16)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.get(1))
@@ -48,7 +48,7 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> MiracleTopRecipes = RecipeMapBuilder
         .of("gtcm.recipe.MiracleTopRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 4)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1))
@@ -59,7 +59,7 @@ public class GTCMRecipe {
     public static final RecipeMap<RecipeMapBackend> QuantumInversionRecipes = RecipeMapBuilder
         .of("gtcm.recipe.QuantumInversionRecipes")
         .maxIO(4, 4, 2, 2)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
         .disableOptimize()
         .build();
@@ -67,7 +67,7 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> CrystallineInfinitierRecipes = RecipeMapBuilder
         .of("gtcm.recipe.CrystallineInfinitierRecipes", TST_RecipeMapBackend::new)
         .maxIO(4, 4, 4, 1)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.CrystallineInfinitier.get(1)))
         .neiSpecialInfoFormatter(new SimpleSpecialValueFormatter("GT5U.nei.tier"))
@@ -77,7 +77,7 @@ public class GTCMRecipe {
     public static final RecipeMap<RecipeMapBackend> DSP_LauncherRecipes = RecipeMapBuilder
         .of("gtcm.recipe.DSPLauncherRecipes")
         .maxIO(1, 1, 1, 0)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .disableOptimize()
         .build();
 
@@ -85,7 +85,7 @@ public class GTCMRecipe {
         .of("gtcm.recipe.DSPReceiverRecipes")
         .maxIO(0, 1, 0, 0)
         .neiSpecialInfoFormatter(DSP_Receiver_SpecialValueFormatter.INSTANCE)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.DSPReceiver.get(1)))
         .disableOptimize()
         .build();
@@ -93,7 +93,7 @@ public class GTCMRecipe {
     public static final RecipeMap<RecipeMapBackend> ElvenWorkshopRecipes = RecipeMapBuilder
         .of("gtcm.recipe.ElvenWorkshopRecipes")
         .maxIO(4, 4, 1, 0)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.ElvenWorkshop.get(1)))
         .disableOptimize()
         .build();
@@ -101,7 +101,7 @@ public class GTCMRecipe {
     public static final RecipeMap<RecipeMapBackend> RuneEngraverRecipes = RecipeMapBuilder
         .of("gtcm.recipe.RuneEngraverRecipes")
         .maxIO(6, 1, 1, 0)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.ElvenWorkshop.get(1)))
         .disableOptimize()
         .build();
@@ -110,7 +110,7 @@ public class GTCMRecipe {
         .of("gtcm.recipe.ArtificialStarGeneratingRecipes")
         .maxIO(1, 1, 0, 0)
         .neiSpecialInfoFormatter(ArtificialStar_SpecialValueFormatter.INSTANCE)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.ArtificialStar.get(1)))
         .disableOptimize()
         .build();
@@ -118,7 +118,7 @@ public class GTCMRecipe {
     public static final RecipeMap<RecipeMapBackend> megaUniversalSpaceStationRecipePool = RecipeMapBuilder
         .of("gtcm.recipe.megaUniversalSpaceStationRecipePool")
         .maxIO(16, 4, 16, 1)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
         .disableOptimize()
@@ -127,7 +127,7 @@ public class GTCMRecipe {
     public static final RecipeMap<RecipeMapBackend> OreProcessingRecipes = RecipeMapBuilder
         .of("tst.recipe.OreProcessingRecipes")
         .maxIO(1, 9, 1, 0)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.OreProcessingFactory.get(1)))
         .disableOptimize()
         .build();
@@ -135,14 +135,14 @@ public class GTCMRecipe {
     public static final RecipeMap<RecipeMapBackend> CokingFactoryRecipes = RecipeMapBuilder
         .of("tst.recipe.CokingFactoryRecipes")
         .maxIO(2, 2, 1, 1)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .disableOptimize()
         .build();
 
     public static final RecipeMap<RecipeMapBackend> StellarForgeRecipes = RecipeMapBuilder
         .of("tst.recipe.StellarForgeRecipes")
         .maxIO(4, 4, 1, 2)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
         .disableOptimize()
         .build();
@@ -150,7 +150,7 @@ public class GTCMRecipe {
     public static final RecipeMap<RecipeMapBackend> HyperSpacetimeTransformerRecipe = RecipeMapBuilder
         .of("tst.recipe.HyperSpacetimeTransformerRecipe")
         .maxIO(4, 4, 4, 4)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HyperSpacetimeTransformer.get(1)))
         .disableOptimize()
@@ -172,7 +172,7 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> TombOfTheDragonRecipe = RecipeMapBuilder
         .of("tst.recipe.TombOfTheDragonRecipe", TST_RecipeMapBackend::new)
         .maxIO(1, 1, 1, 1)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
         .disableOptimize()
         .build();
@@ -181,7 +181,7 @@ public class GTCMRecipe {
         .of("tst.recipe.BallLightningRecipes", TST_RecipeMapBackend::new)
         .maxIO(4, 4, 4, 4)
         .neiSpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.BallLightning.get(1))
@@ -205,7 +205,7 @@ public class GTCMRecipe {
         .of("tst.recipe.neutronActivatorRecipesWithEU", TST_RecipeMapBackend::new)
         .maxIO(9, 9, 1, 1)
         .dontUseProgressBar()
-        .addSpecialTexture(73, 22, 31, 21, GG_UITextures.PICTURE_NEUTRON_ACTIVATOR)
+        .addSpecialTexture(73, 22, 31, 21, GGUITextures.PICTURE_NEUTRON_ACTIVATOR)
         .disableOptimize()
         .build();
 
@@ -215,7 +215,7 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> MassFabricatorGenesis = RecipeMapBuilder
         .of("tst.recipe.MassFabricatorGenesis", TST_RecipeMapBackend::new)
         .maxIO(1, 0, 0, 1)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MassFabricatorGenesis.get(1)))
         .disableOptimize()
         .build();
@@ -230,7 +230,7 @@ public class GTCMRecipe {
         .useSpecialSlot()
         .specialSlotSensitive()
         .frontend(TST_TreeGrowthSimulatorFrontend::new)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()
         .build();
@@ -243,7 +243,7 @@ public class GTCMRecipe {
         .maxIO(1, 1, 1, 0)
         .minInputs(1, 1)
         .frontend(TST_AquaticZoneSimulatorFronted::new)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()
         .build();
@@ -255,7 +255,7 @@ public class GTCMRecipe {
         .of("tst.recipe.ArtificialGreenHouseFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(1, 1, 1, 0)
         .minInputs(1, 1)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()
         .build();
@@ -267,7 +267,7 @@ public class GTCMRecipe {
         .of("tst.recipe.DirectedMobClonerFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(1, 1, 1, 0)
         .minInputs(1, 1)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .disableOptimize()
         .build();
@@ -278,7 +278,7 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> StrangeMatterAggregatorRecipes = RecipeMapBuilder
         .of("tst.recipe.StrangeMatterAggregatorRecipes", TST_RecipeMapBackend::new)
         .maxIO(4, 2, 2, 2)
-        .progressBar(GT_UITextures.PROGRESSBAR_COMPRESS)
+        .progressBar(GTUITextures.PROGRESSBAR_COMPRESS)
         .neiHandlerInfo(b -> b.setDisplayStack(GTCMItemList.StrangeMatterAggregator.get(1)))
         .useSpecialSlot()
         .frontend(TST_StrangeMatterAggregatorFrontend::new)

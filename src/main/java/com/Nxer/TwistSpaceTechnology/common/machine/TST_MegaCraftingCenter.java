@@ -3,16 +3,16 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipe.extremeCraftRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
+import static tectech.thing.casing.BlockGTCasingsTT.textureOffset;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,8 +40,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_Multi
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
-import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -60,7 +58,7 @@ import appeng.api.util.DimensionalCoord;
 import appeng.me.GridAccessException;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -69,13 +67,15 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
 import scala.actors.migration.pattern;
+import tectech.thing.block.BlockQuantumGlass;
+import tectech.thing.casing.TTCasingsContainer;
 
 public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     implements ICraftingProvider, IActionHost, IGridProxyable, ISurvivalConstructable {
@@ -114,7 +114,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
      * @param out The pattern output item.
      * @return If this pattern is valid.
      */
-    protected static boolean checkPatternRecipe(GT_Recipe r, ItemStack[] in, ItemStack out) {
+    protected static boolean checkPatternRecipe(GTRecipe r, ItemStack[] in, ItemStack out) {
         ItemStack rOut = r.mOutputs[0];
         if (out == null || out.getItem() == null || out.stackSize < 1) return false;
         if (!Utils.metaItemEqual(out, rOut)) return false;
@@ -127,7 +127,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         Map<Item, Long> rWildcardMap = new HashMap<>();
         for (ItemStack i : r.mInputs) {
             if (i == null || i.getItem() == null || i.stackSize < 1) continue;
-            ItemData iData = GT_OreDictUnificator.getAssociation(i);
+            ItemData iData = GTOreDictUnificator.getAssociation(i);
             if (iData != null) {
                 rItemMap.merge(TST_ItemID.createNoNBT(iData.mUnificationTarget), (long) i.stackSize, Long::sum);
             } else if (i.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
@@ -141,7 +141,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         Map<Item, Long> pWildcardMap = new HashMap<>();
         for (ItemStack i : in) {
             if (i == null || i.getItem() == null || i.stackSize < 1) continue;
-            ItemData iData = GT_OreDictUnificator.getAssociation(i);
+            ItemData iData = GTOreDictUnificator.getAssociation(i);
             if (iData != null) {
                 pItemMap.merge(TST_ItemID.createNoNBT(iData.mUnificationTarget), (long) i.stackSize, Long::sum);
             } else {
@@ -186,10 +186,10 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 if (!Utils.isValid(dInputs)) return null;
 
                 // fine all available extreme recipes of this pattern
-                GT_Recipe[] validResult = extremeCraftRecipes.findRecipeQuery()
+                GTRecipe[] validResult = extremeCraftRecipes.findRecipeQuery()
                     .items(dInputs)
                     .findAll()
-                    .toArray(GT_Recipe[]::new);
+                    .toArray(GTRecipe[]::new);
 
                 if (validResult.length < 1) return null;
 
@@ -374,7 +374,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 // #tr MegaCraftingCenter.onScrewdriverRightClick.failed
                 // # The encoded patterns can only be returned when there is no recipe running.
                 // #zh_CN 仅可在未运行配方状态下退回样板.
-                GT_Utility.sendChatToPlayer(
+                GTUtility.sendChatToPlayer(
                     aPlayer,
                     StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.failed"));
                 return;
@@ -386,7 +386,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             // #tr MegaCraftingCenter.onScrewdriverRightClick.success
             // # Preparing to returning encoded patterns.
             // #zh_CN 正在准备退回样板.
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.success"));
 
@@ -438,14 +438,14 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                             .getPlayerEntityByName(getBaseMetaTileEntity().getOwnerName()));
                 }
             }
-            // GT_MetaTileEntity_Hatch_CraftingInput_ME
+            // MTEHatchCraftingInputME
         }
         return this.gridProxy;
     }
 
     @Nullable
     public IGridNode getGridNode(@Nullable ForgeDirection dir) {
-        // GT_MetaTileEntity_Hatch_Input_ME
+        // MTEHatchInput_ME
         AENetworkProxy proxy = this.getProxy();
         return proxy != null ? proxy.getNode() : null;
     }
@@ -519,18 +519,18 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                             { "BEEEEEB", "E     E", "E  D  E", "E DAD E", "E  D  E", "E     E", "BEEEEEB" },
                             { "BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB" } }))
                 // spotless:on
-                .addElement('A', ofBlock(GregTech_API.sBlockCasings1, 14))
+                .addElement('A', ofBlock(GregTechAPI.sBlockCasings1, 14))
                 .addElement(
                     'B',
-                    GT_HatchElementBuilder.<TST_MegaCraftingCenter>builder()
+                    HatchElementBuilder.<TST_MegaCraftingCenter>builder()
                         .atLeast(InputBus, OutputBus)
                         .adder(TST_MegaCraftingCenter::addToMachineList)
                         .casingIndex(textureOffset + 12)
                         .dot(1)
-                        .buildAndChain(ofBlock(TT_Container_Casings.sBlockCasingsTT, 12)))
-                .addElement('C', ofBlock(TT_Container_Casings.sBlockCasingsTT, 10))
+                        .buildAndChain(ofBlock(TTCasingsContainer.sBlockCasingsTT, 12)))
+                .addElement('C', ofBlock(TTCasingsContainer.sBlockCasingsTT, 10))
                 .addElement('D', ofBlock(ModBlocks.blockCasings3Misc, 15))
-                .addElement('E', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                .addElement('E', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -588,8 +588,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // spotless:off
         tt.addMachineType(TextEnums.tr("tst.megacraftingcenter.machinetype"))
             // #tr tst.megacraftingcenter.desc.0

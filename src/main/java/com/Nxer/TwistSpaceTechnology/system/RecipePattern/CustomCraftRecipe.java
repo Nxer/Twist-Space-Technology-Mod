@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.RecipePattern;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
-import static gregtech.api.enums.GT_Values.W;
+import static gregtech.api.enums.GTValues.W;
 
 import java.util.ArrayList;
 import java.util.Arrays;
