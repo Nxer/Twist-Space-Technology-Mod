@@ -344,6 +344,7 @@ public enum GTCMItemList {
     EncapsulatedMicroSpaceTimeUnit,
     SeedsSpaceTime,
     MicroSpaceTimeFabricatorio,
+    WhiteDwarfMold_Ingot,
 
     // endregion
 

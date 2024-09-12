@@ -107,8 +107,10 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             Set<ItemStack> inputItems = new HashSet<>();
             Set<FluidStack> inputFluids = new HashSet<>();
-            Set<ItemStack> outputItems = new HashSet<>();
-            Set<FluidStack> outputFluids = new HashSet<>();
+            Set<ItemStack> outputItemsBase = new HashSet<>();
+            Set<FluidStack> outputFluidsBase = new HashSet<>();
+            Set<ItemStack> outputItemsExtra = new HashSet<>();
+            Set<FluidStack> outputFluidsExtra = new HashSet<>();
 
             // process Item input
             byte integrateNum = 0;
@@ -137,12 +139,12 @@ public class StellarForgeRecipePool implements IRecipePool {
                     if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
                         FluidStack fluidStack = getMoltenFluids(normalIngot, outputs.stackSize);
                         if (fluidStack != null) {
-                            outputFluids.add(fluidStack);
+                            outputFluidsBase.add(fluidStack);
                         }
                     } else {
                         ItemStack out = normalIngot.copy();
                         out.stackSize = outputs.stackSize;
-                        outputItems.add(out);
+                        outputItemsBase.add(out);
                     }
 
                 } else if (Ingots.contains(outputItemID)) {
@@ -150,15 +152,15 @@ public class StellarForgeRecipePool implements IRecipePool {
                     if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
                         FluidStack fluidStack = getMoltenFluids(copyAmount(1, outputs), outputs.stackSize);
                         if (fluidStack != null) {
-                            outputFluids.add(fluidStack);
+                            outputFluidsBase.add(fluidStack);
                         }
                     } else {
-                        outputItems.add(outputs.copy());
+                        outputItemsBase.add(outputs.copy());
                     }
 
                 } else {
                     // if this output item is not Ingot
-                    outputItems.add(outputs.copy());
+                    outputItemsBase.add(outputs.copy());
                 }
             }
 
@@ -171,11 +173,11 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             // process Fluid output
             for (FluidStack fluids : recipe.mFluidOutputs) {
-                outputFluids.add(fluids.copy());
+                outputFluidsBase.add(fluids.copy());
             }
 
             ItemStack[] inputItemsArray = inputItems.toArray(new ItemStack[0]);
-            FluidStack[] outputFluidsArray = outputFluids.toArray(new FluidStack[0]);
+            FluidStack[] outputFluidsArray = outputFluidsBase.toArray(new FluidStack[0]);
             boolean canAddNewRecipe = true;
 
             int duration = Math.max(1, recipe.mDuration / 3);
@@ -194,7 +196,7 @@ public class StellarForgeRecipePool implements IRecipePool {
                 addToRecipes(
                     inputItemsArray,
                     inputFluids.toArray(new FluidStack[0]),
-                    outputItems.toArray(new ItemStack[0]),
+                    outputItemsBase.toArray(new ItemStack[0]),
                     outputFluidsArray,
                     recipe.mEUt,
                     Math.max(1, recipe.mDuration / 3));

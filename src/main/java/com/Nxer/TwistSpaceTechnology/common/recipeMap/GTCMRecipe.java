@@ -147,6 +147,22 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
+    public static final RecipeMap<RecipeMapBackend> StellarForgeWithIngotRecipes = RecipeMapBuilder
+        .of("tst.recipe.StellarForgeRecipes")
+        .maxIO(4, 4, 1, 2)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
+        .disableOptimize()
+        .build();
+
+    public static final RecipeMap<RecipeMapBackend> AlloyBlastSmelterWithIngotRecipes = RecipeMapBuilder
+        .of("tst.recipe.StellarForgeRecipes")
+        .maxIO(4, 4, 1, 2)
+        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
+        .disableOptimize()
+        .build();
+
     public static final RecipeMap<RecipeMapBackend> HyperSpacetimeTransformerRecipe = RecipeMapBuilder
         .of("tst.recipe.HyperSpacetimeTransformerRecipe")
         .maxIO(4, 4, 4, 4)

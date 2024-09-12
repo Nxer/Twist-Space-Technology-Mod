@@ -63,6 +63,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ThermalEnergyDevourer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.VacuumFilterExtractor;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WhiteDwarfMold_Ingot;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataInputHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataOutputHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
@@ -1148,6 +1149,19 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .eut(RECIPE_UXV)
             .duration(20 * 3600)
             .addTo(AssemblyLine);
+
+        // White Dwarf Mold(Ingot)
+        GT_Values.RA.stdBuilder()
+            .itemInputs(
+                Materials.Neutronium.getIngots(1)
+            )
+            .fluidInputs(
+                MaterialsUEVplus.WhiteDwarfMatter.getMolten(576)
+            )
+            .itemOutputs(WhiteDwarfMold_Ingot.get(1))
+            .eut(RECIPE_UMV)
+            .duration(20 * 10)
+            .addTo(RecipeMaps.fluidSolidifierRecipes);
 
         // eM_Teleportation blockCasingsTT 10
         GT_Values.RA.stdBuilder()

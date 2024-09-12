@@ -57,6 +57,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -114,6 +115,8 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     private int needPhotonAmount = 0;
     private String costingWirelessEU = "0";
     private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
+    private boolean isIngotMode = false;
+    ItemStack IngotMold;
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -168,7 +171,8 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public RecipeMap<?> getRecipeMap() {
         if (mode == 1) return GTCMRecipe.StellarForgeRecipes;
-        return GTPPRecipeMaps.alloyBlastSmelterRecipes;
+//        return GTPPRecipeMaps.alloyBlastSmelterRecipes;
+        return GTCMRecipe.CrystallineInfinitierRecipes;
     }
 
     @NotNull
@@ -188,6 +192,10 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
+        for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
+            isIngotMode = true;
+            break;
+        } else isIngotMode = false;
         return mode == 1 ? checkProcessing_EBF() : checkProcessing_ABS();
     }
 
@@ -327,6 +335,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
+        if (IngotMold == null) IngotMold = GTCMItemList.WhiteDwarfMold_Ingot.get(1);
     }
 
     @Override
