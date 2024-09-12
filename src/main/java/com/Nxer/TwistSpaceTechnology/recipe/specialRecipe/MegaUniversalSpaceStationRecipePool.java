@@ -13,17 +13,17 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
-import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
-import goodgenerator.items.MyMaterial;
-import gregtech.api.enums.GT_Values;
+import bartworks.system.material.Werkstoff;
+import goodgenerator.items.GGMaterial;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
-import gregtech.api.util.GT_RecipeConstants;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTRecipeConstants;
+import gregtech.api.util.GTUtility;
 
 public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
 
@@ -134,14 +134,14 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
         // region umv
         var processor = uevPlusCircuit[4].copy();
         processor.stackSize = 4;
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 highDimensionalItem[3],
                 highDimensionalItem[4],
                 GTCMItemList.HighDimensionalCircuitDoard.get(48),
                 maxMaterials[0].get(OrePrefixes.bolt),
                 maxMaterials[0].get(OrePrefixes.wireGt16),
-                MyMaterial.shirabon.get(OrePrefixes.plate, 64))
+                GGMaterial.shirabon.get(OrePrefixes.plate, 64))
             .fluidInputs(MaterialsUEVplus.Universium.getFluid(1440))
             .itemOutputs(processor)
 
@@ -151,7 +151,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .addTo(MT);
         var assembly = uevPlusCircuit[5].copy();
         assembly.stackSize = 2;
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 highDimensionalItem[0],
                 highDimensionalItem[1],
@@ -170,7 +170,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .addTo(MT);
         var computer = uevPlusCircuit[6].copy();
         computer.stackSize = 1;
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 highDimensionalItem[2],
                 highDimensionalItem[4],
@@ -189,9 +189,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .eut(RECIPE_UMV)
             .duration(2000)
             .addTo(MT);
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(24),
+                GTUtility.getIntegratedCircuit(24),
                 ItemList.Field_Generator_UEV.get(16),
                 GTCMItemList.HighDimensionalResistor.get(16),
                 GTCMItemList.HighDimensionalDiode.get(16),
@@ -216,9 +216,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
         // endregion
 
         // region uxv
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(24),
+                GTUtility.getIntegratedCircuit(24),
                 ItemList.Field_Generator_UEV.get(2),
                 GTCMItemList.HighDimensionalResistor.get(2),
                 GTCMItemList.HighDimensionalDiode.get(2),
@@ -239,9 +239,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .eut(RECIPE_UXV)
             .duration(1600)
             .addTo(MT);
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(24),
+                GTUtility.getIntegratedCircuit(24),
                 ItemList.Field_Generator_UEV.get(8),
                 GTCMItemList.HighDimensionalResistor.get(8),
                 GTCMItemList.HighDimensionalDiode.get(8),
@@ -263,9 +263,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .eut(RECIPE_UXV)
             .duration(1600)
             .addTo(MT);
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(24),
+                GTUtility.getIntegratedCircuit(24),
                 ItemList.Field_Generator_UEV.get(12),
                 GTCMItemList.HighDimensionalResistor.get(12),
                 GTCMItemList.HighDimensionalDiode.get(12),
@@ -287,9 +287,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .duration(20 * 1000)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(1),
+                GTUtility.getIntegratedCircuit(1),
                 ItemList.Field_Generator_UIV.get(16),
                 GTCMItemList.HighDimensionalResistor.get(32),
                 GTCMItemList.HighDimensionalDiode.get(32),
@@ -310,9 +310,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
 
         // region max
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(24),
+                GTUtility.getIntegratedCircuit(24),
                 ItemList.Field_Generator_UMV.get(1),
                 GTCMItemList.HighDimensionalResistor.get(2),
                 GTCMItemList.HighDimensionalDiode.get(2),
@@ -334,9 +334,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .duration(20 * 1000)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(24),
+                GTUtility.getIntegratedCircuit(24),
                 ItemList.Field_Generator_UEV.get(8),
                 GTCMItemList.HighDimensionalResistor.get(8),
                 GTCMItemList.HighDimensionalDiode.get(8),
@@ -358,9 +358,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .duration(20 * 1000)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(24),
+                GTUtility.getIntegratedCircuit(24),
                 ItemList.Field_Generator_UEV.get(16),
                 GTCMItemList.HighDimensionalResistor.get(16),
                 GTCMItemList.HighDimensionalDiode.get(16),
@@ -383,9 +383,9 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .duration(20 * 1000)
             .addTo(MT);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(1),
+                GTUtility.getIntegratedCircuit(1),
                 ItemList.EnergisedTesseract.get(64),
                 ItemList.Field_Generator_UMV.get(16),
                 GTCMItemList.HighDimensionalResistor.get(64),
@@ -591,7 +591,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
     // this method loads recipe for recipe that not use MUSS but related to MUSS, eg, structure blocks and controller
     // blocks recipes.
     public void loadOriginalRecipeForConstruct() {
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 ItemList.Circuit_OpticalMainframe.get(64),
                 ItemList.Circuit_OpticalMainframe.get(64),
@@ -600,15 +600,15 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 CustomItemList.StargateFramePart.get(64),
                 // GT_material.TestMaterial.getPlates(64),
                 CustomItemList.StargateChevron.get(64),
-                com.github.technus.tectech.thing.CustomItemList.Machine_Multi_EyeOfHarmony.get(64),
-                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
-                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
-                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
-                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
-                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
-                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
-                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
-                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
+                tectech.thing.CustomItemList.Machine_Multi_EyeOfHarmony.get(64),
+                tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
+                tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
+                tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
+                tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
+                tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
+                tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
+                tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
+                tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
                 MiracleTop.get(64))
 
             .itemOutputs(GTCMItemList.megaUniversalSpaceStation.get(1))
@@ -619,7 +619,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
         for (int i = 0; i < 10; i++) {
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(blockCasings[i], blockCasing6s[i], processor[Math.max(i - 3, 0)])
                 .fluidInputs(Materials.Plastic.getFluid(1440 * i))
                 .itemOutputs(spaceStationStructureBlock[i])
@@ -627,8 +627,8 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 .noOptimize()
                 .eut((int) (32 * Math.pow(4, i)))
                 .duration(20 * 10 * i)
-                .addTo(GT_RecipeConstants.AssemblerOD);
-            GT_Values.RA.stdBuilder()
+                .addTo(GTRecipeConstants.AssemblerOD);
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     spaceStationStructureBlock[2 + i],
                     Field_Generators[2 + i],
@@ -640,10 +640,10 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 .noOptimize()
                 .eut((long) (32 * Math.pow(2, i)))
                 .duration(20 * 10 * i)
-                .addTo(GT_RecipeConstants.AssemblerOD);
+                .addTo(GTRecipeConstants.AssemblerOD);
         }
         for (int i = 10; i < 12; i++) {
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     spaceStationStructureBlock[i - 1],
                     processor[i - 3],
@@ -660,7 +660,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 .eut((long) (Math.pow(16, i)))
                 .duration(200 * 10 * i)
                 .addTo(GTCMRecipe.MiracleTopRecipes);
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     spaceStationStructureBlock[i],
                     Field_Generators[i],
@@ -674,7 +674,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 .noOptimize()
                 .eut((long) (32 * Math.pow(2, i)))
                 .duration(20 * 10 * i)
-                .addTo(GT_RecipeConstants.AssemblerOD);
+                .addTo(GTRecipeConstants.AssemblerOD);
         }
 
     }

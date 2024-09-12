@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.RecipePattern;
 
 import static com.Nxer.TwistSpaceTechnology.system.RecipePattern.CustomCraftRecipe.areStacksEqual;
-import static gregtech.api.util.GT_Utility.areFluidsEqual;
+import static gregtech.api.util.GTUtility.areFluidsEqual;
 
 import java.util.ArrayList;
 import java.util.HashMap;

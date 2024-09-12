@@ -71,23 +71,23 @@ import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import appeng.util.IWideReadableNumberConverter;
 import appeng.util.ReadableNumberConverter;
-import gregtech.GT_Mod;
+import gregtech.GTMod;
 import gregtech.api.enums.ItemList;
-import gregtech.api.gui.modularui.GT_UITextures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IConfigurationCircuitSupport;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddGregtechLogo;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class TST_TileEntity_Hatch_UltimateMEIO extends GT_MetaTileEntity_Hatch
+public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
     implements IConfigurationCircuitSupport, IAddGregtechLogo, IAddUIWidgets, IPowerChannelState, ICraftingProvider,
     IGridProxyable, IDualInputHatch, ICustomNameObject, IInterfaceViewable {
 
@@ -121,10 +121,10 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends GT_MetaTileEntity_Hatch
         super.onUnload();
     }
 
-    @Override
-    public boolean useModularUI() {
-        return super.useModularUI();
-    }
+    // @Override
+    // public boolean useModularUI() {
+    // return super.useModularUI();
+    // }
 
     @Override
     public boolean isMachineBlockUpdateRecursive() {
@@ -477,7 +477,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends GT_MetaTileEntity_Hatch
                     patternSlotNBT,
                     getBaseMetaTileEntity().getWorld());
             } else {
-                GT_Mod.GT_FML_LOGGER.warn(
+                GTMod.GT_FML_LOGGER.warn(
                     "An error occurred while loading contents of ME Crafting Input Bus. This pattern has been voided: "
                         + patternSlotNBT);
             }
@@ -613,7 +613,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends GT_MetaTileEntity_Hatch
                 .startFromSlot(0)
                 .endAtSlot(MAX_PATTERN_COUNT - 1)
                 .phantom(false)
-                .background(getGUITextureSet().getItemSlot(), GT_UITextures.OVERLAY_SLOT_PATTERN_ME)
+                .background(getGUITextureSet().getItemSlot(), GTUITextures.OVERLAY_SLOT_PATTERN_ME)
                 .widgetCreator(slot -> new SlotWidget(slot) {
 
                     @Override
@@ -636,7 +636,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends GT_MetaTileEntity_Hatch
                 }
             })
                 .setPlayClickSound(true)
-                .setBackground(GT_UITextures.BUTTON_STANDARD, GT_UITextures.OVERLAY_BUTTON_PLUS_LARGE)
+                .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_PLUS_LARGE)
                 .addTooltips(ImmutableList.of("Place manual items"))
                 .setSize(16, 16)
                 .setPos(170, 45))
@@ -646,7 +646,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends GT_MetaTileEntity_Hatch
                 }
             })
                 .setPlayClickSound(true)
-                .setBackground(GT_UITextures.BUTTON_STANDARD, GT_UITextures.OVERLAY_BUTTON_EXPORT)
+                .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_EXPORT)
                 .addTooltips(ImmutableList.of("Return all internally stored items back to AE"))
                 .setSize(16, 16)
                 .setPos(170, 28));
@@ -757,7 +757,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends GT_MetaTileEntity_Hatch
             if (slot == null) continue;
             ICraftingPatternDetails details = slot.getPatternDetails();
             if (details == null) {
-                GT_Mod.GT_FML_LOGGER.warn(
+                GTMod.GT_FML_LOGGER.warn(
                     "Found an invalid pattern at " + getBaseMetaTileEntity().getCoords()
                         + " in dim "
                         + getBaseMetaTileEntity().getWorld().provider.dimensionId);
@@ -871,7 +871,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends GT_MetaTileEntity_Hatch
         final int PARENT_WIDTH = getGUIWidth();
         final int PARENT_HEIGHT = getGUIHeight();
         ModularWindow.Builder builder = ModularWindow.builder(WIDTH, HEIGHT);
-        builder.setBackground(GT_UITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
+        builder.setBackground(GTUITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
         builder.setGuiTint(getGUIColorization());
         builder.setDraggable(true);
         // make sure the manual window is within the parent window

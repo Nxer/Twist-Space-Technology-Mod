@@ -10,9 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
-import gtPlusPlus.xmod.gregtech.HANDLER_GT;
+import gtPlusPlus.xmod.gregtech.HandlerGT;
 
-@Mixin(HANDLER_GT.class)
+@Mixin(HandlerGT.class)
 public class mixin {
 
     // Init Fake Recipe

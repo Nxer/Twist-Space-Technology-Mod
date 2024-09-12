@@ -14,16 +14,16 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.Maintenance;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -36,13 +36,13 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import bartworks.API.BorosilicateGlass;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -54,12 +54,12 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings2;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.blocks.BlockCasings2;
+import gregtech.common.blocks.BlockCasings8;
 
 public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> {
 
@@ -104,8 +104,8 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
             @NotNull
             @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
-                mRecipeTier = GT_Utility.getTier(recipe.mEUt);
+            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+                mRecipeTier = GTUtility.getTier(recipe.mEUt);
                 setSpeedBonus(getSpeedBonus());
                 if (glassTier < 12 && glassTier < mRecipeTier) {
                     return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTier);
@@ -143,13 +143,13 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         if (block == null) {
             return -1;
         }
-        if (block == GregTech_API.sBlockMetal2 && meta == 9) {
+        if (block == GregTechAPI.sBlockMetal2 && meta == 9) {
             return 1; // Damascus Steel
         }
-        if (block == GregTech_API.sBlockMetal5 && meta == 2) {
+        if (block == GregTechAPI.sBlockMetal5 && meta == 2) {
             return 2; // Neutronium
         }
-        if (block == GregTech_API.sBlockMetal9 && meta == 8) {
+        if (block == GregTechAPI.sBlockMetal9 && meta == 8) {
             return 3; // Universium
         }
         return -1;
@@ -201,24 +201,24 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                             te -> te.glassTier)))
                 .addElement(
                     'B',
-                    GT_HatchElementBuilder.<TST_MegaMacerator>builder()
+                    HatchElementBuilder.<TST_MegaMacerator>builder()
                         .atLeast(InputBus, OutputBus, Maintenance)
                         .adder(TST_MegaMacerator::addToMachineList)
                         .dot(2)
-                        .casingIndex(((GT_Block_Casings2) GregTech_API.sBlockCasings2).getTextureIndex(0))
-                        .buildAndChain(GregTech_API.sBlockCasings2, 0))
-                .addElement('b', ofBlock(GregTech_API.sBlockCasings2, 0))
-                .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 8))
+                        .casingIndex(((BlockCasings2) GregTechAPI.sBlockCasings2).getTextureIndex(0))
+                        .buildAndChain(GregTechAPI.sBlockCasings2, 0))
+                .addElement('b', ofBlock(GregTechAPI.sBlockCasings2, 0))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 8))
                 .addElement(
                     'D',
-                    GT_HatchElementBuilder.<TST_MegaMacerator>builder()
+                    HatchElementBuilder.<TST_MegaMacerator>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_MegaMacerator::addToMachineList)
                         .dot(1)
-                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(3))
-                        .buildAndChain(GregTech_API.sBlockCasings8, 3))
-                .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 7))
-                .addElement('F', ofBlock(GregTech_API.sBlockCasings8, 10))
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 3))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
+                .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
                 // .addElement('G', ofBlock(WerkstoffLoader.BWBlocks, 10097))
                 .addElement(
                     'G',
@@ -227,9 +227,9 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                         ofBlocksTiered(
                             TST_MegaMacerator::getTierOfBlock,
                             ImmutableList.of(
-                                Pair.of(GregTech_API.sBlockMetal2, 9),
-                                Pair.of(GregTech_API.sBlockMetal5, 2),
-                                Pair.of(GregTech_API.sBlockMetal9, 8)),
+                                Pair.of(GregTechAPI.sBlockMetal2, 9),
+                                Pair.of(GregTechAPI.sBlockMetal5, 2),
+                                Pair.of(GregTechAPI.sBlockMetal9, 8)),
                             0,
                             (m, t) -> m.mBlockTier = t,
                             m -> m.mBlockTier)))
@@ -310,8 +310,8 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MegaMacerator_MachineType)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_Controller)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_01)
@@ -339,7 +339,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         if (side == facing) {
             if (aActive) return new ITexture[] {
                 Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings2, 0)),
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings2, 0)),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE)
                     .extFacing()
@@ -351,7 +351,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                     .build() };
             return new ITexture[] {
                 Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings2, 0)),
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings2, 0)),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
                     .extFacing()
@@ -362,8 +362,8 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                     .glow()
                     .build() };
         }
-        return new ITexture[] { Textures.BlockIcons
-            .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings2, 0)) };
+        return new ITexture[] {
+            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings2, 0)) };
     }
     // end region
 }

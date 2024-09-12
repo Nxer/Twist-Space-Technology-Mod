@@ -21,21 +21,21 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
-import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
-import goodgenerator.items.MyMaterial;
-import gregtech.api.enums.GT_Values;
+import bartworks.system.material.WerkstoffLoader;
+import goodgenerator.items.GGMaterial;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.chemistry.GenericChem;
-import gtPlusPlus.core.material.MISC_MATERIALS;
+import gtPlusPlus.core.material.MaterialMisc;
+import gtnhlanth.common.register.WerkstoffMaterialPool;
 
 public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
 
@@ -51,7 +51,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(19),
+                GTUtility.getIntegratedCircuit(19),
                 copyAmount(0, Materials.Potassiumdichromate.getDust(1)),
                 Materials.Copper.getDust(16),
                 setStackSize(Materials.Zinc.getDust(1), 144))
@@ -72,7 +72,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(19),
+                GTUtility.getIntegratedCircuit(19),
                 Materials.Copper.getDust(16),
                 setStackSize(Materials.Zinc.getDust(1), 144))
             .fluidInputs(
@@ -91,7 +91,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(18),
+                GTUtility.getIntegratedCircuit(18),
                 copyAmount(0, Materials.Potassiumdichromate.getDust(1)),
                 setStackSize(Materials.Carbon.getDust(1), 64*18),
                 Materials.Copper.getDust(16),
@@ -112,10 +112,10 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         // endregion
 
         // region Phthalic acid
-        GT_Values.RA
+        GTValues.RA
             .stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(6),
+                GTUtility.getIntegratedCircuit(6),
                 copyAmount(0,Materials.Potassiumdichromate.getDust(1)),
                 Materials.Carbon.getDust(8))
             .fluidInputs(
@@ -132,7 +132,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(7),
+                GTUtility.getIntegratedCircuit(7),
                 copyAmount(0,Materials.Potassiumdichromate.getDust(1)),
                 setStackSize(Materials.Carbon.getDust(1),64*8))
             .fluidInputs(
@@ -147,9 +147,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         // endregion
 
         // region Phosphoric Acid
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(11),
+                GTUtility.getIntegratedCircuit(11),
                 Materials.Apatite.getDust(9))
             .fluidInputs(
                 Materials.Water.getFluid(1000 * 5))
@@ -166,7 +166,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(19),
+                GTUtility.getIntegratedCircuit(19),
                 setStackSize(Materials.Apatite.getDust(1), 64*9))
             .fluidInputs(Materials.Water.getFluid(1000 * 5 * 64))
             .itemOutputs(setStackSize(Materials.Calcium.getDust(1), 64*5))
@@ -180,9 +180,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         // endregion
 
         // region Silicone
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(11),
+                GTUtility.getIntegratedCircuit(11),
                 Materials.Sulfur.getDust(1),
                 Materials.Silicon.getDust(3),
                 Materials.Carbon.getDust(6))
@@ -198,7 +198,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(19),
+                GTUtility.getIntegratedCircuit(19),
                 Materials.Sulfur.getDust(64),
                 setStackSize(Materials.Silicon.getDust(1), 64*3),
                 setStackSize(Materials.Carbon.getDust(1), 64*6)
@@ -214,8 +214,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         // endregion
 
         // region Polyphenylene sulfide
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.Sulfur.getDust(1))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(11), Materials.Sulfur.getDust(1))
             .fluidInputs(Materials.Benzene.getFluid(1000))
             .fluidOutputs(Materials.PolyphenyleneSulfide.getMolten(1500), Materials.Hydrogen.getGas(2000))
             .noOptimize()
@@ -224,8 +224,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .duration(128)
             .addTo(ICD);
 
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(19), Materials.Sulfur.getDust(64))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(19), Materials.Sulfur.getDust(64))
             .fluidInputs(Materials.Benzene.getFluid(64000))
             .fluidOutputs(Materials.PolyphenyleneSulfide.getMolten(96000), Materials.Hydrogen.getGas(128000))
             .noOptimize()
@@ -237,13 +237,13 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         // endregion
 
         // region Agar
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.MeatRaw.getDust(8))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(11), Materials.MeatRaw.getDust(8))
             .fluidInputs(
                 Materials.SulfuricAcid.getFluid(4000),
                 Materials.PhosphoricAcid.getFluid(1000),
                 Materials.Water.getFluid(8000))
-            .itemOutputs(GT_ModHandler.getModItem("dreamcraft", "GTNHBioItems", 8, 2))
+            .itemOutputs(GTModHandler.getModItem("dreamcraft", "GTNHBioItems", 8, 2))
             .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_IV)
@@ -253,14 +253,14 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(19),
+                GTUtility.getIntegratedCircuit(19),
                 setStackSize(Materials.MeatRaw.getDust(64), 64*6))
             .fluidInputs(
                 Materials.SulfuricAcid.getFluid(4000 * 64),
                 Materials.PhosphoricAcid.getFluid(64000))
             .itemOutputs(
                 setStackSize(
-                    GT_ModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2),
+                    GTModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2),
                     64*8)
             )
             .noOptimize()
@@ -274,7 +274,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(23),
+                GTUtility.getIntegratedCircuit(23),
                 ItemList.Spinneret.get(0),
                 setStackSize(Materials.Carbon.getDust(64),64*4+6),
                 Materials.Calcium.getDust(2))
@@ -293,7 +293,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(22),
+                GTUtility.getIntegratedCircuit(22),
                 Materials.Tin.getDust(45),
                 setStackSize(Materials.Carbon.getDust(1),64*71+11),
                 Materials.Nickel.getDust(5),
@@ -314,8 +314,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         // endregion
 
         // region PTFE
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.Carbon.getDust(2 * 9))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(11), Materials.Carbon.getDust(2 * 9))
             .fluidInputs(Materials.Fluorine.getGas(4000 * 9), Materials.Oxygen.getGas(125000))
             .fluidOutputs(Materials.Polytetrafluoroethylene.getMolten(36000))
             .noOptimize()
@@ -327,7 +327,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(19),
+                GTUtility.getIntegratedCircuit(19),
                 setStackSize(Materials.Carbon.getDust(64), 64*9))
             .fluidInputs(Materials.Fluorine.getGas(4000 * 9 * 32), Materials.Oxygen.getGas(125000 * 32))
             .fluidOutputs(Materials.Polytetrafluoroethylene.getMolten(36000 * 32))
@@ -339,10 +339,10 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         // endregion
 
         // region HSbF6
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(10), Materials.Antimony.getDust(12))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(10), Materials.Antimony.getDust(12))
             .fluidInputs(Materials.Fluorine.getGas(1000 * 5 * 12), Materials.HydrofluoricAcid.getFluid(1000 * 12))
-            .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
+            .fluidOutputs(GGMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
             .specialValue(9900)
             .eut(RECIPE_UHV)
             .duration(16)
@@ -351,21 +351,21 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(18),
+                GTUtility.getIntegratedCircuit(18),
                 setStackSize(Materials.Antimony.getDust(64),64*12))
             .fluidInputs(
                 Materials.Fluorine.getGas(1000 * 5 * 12 * 64),
                 Materials.HydrofluoricAcid.getFluid(1000 * 12 * 64))
-            .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
+            .fluidOutputs(GGMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
             .specialValue(9900)
             .eut(RECIPE_UHV)
             .duration(16 * 64)
             .addTo(ICD);
 
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(11), Materials.Antimony.getDust(12))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(11), Materials.Antimony.getDust(12))
             .fluidInputs(Materials.Fluorine.getGas(1000 * 6 * 12), Materials.Hydrogen.getGas(1000 * 12))
-            .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
+            .fluidOutputs(GGMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12))
             .specialValue(9900)
             .eut(RECIPE_UHV)
             .duration(16)
@@ -374,11 +374,11 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(19),
+                GTUtility.getIntegratedCircuit(19),
                 setStackSize(Materials.Antimony.getDust(64),64*12))
             .fluidInputs(Materials.Fluorine.getGas(1000 * 6 * 12 * 64), Materials.Hydrogen.getGas(1000 * 12 * 64))
 
-            .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
+            .fluidOutputs(GGMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
             .specialValue(9900)
             .eut(RECIPE_UHV)
             .duration(16 * 64)
@@ -387,8 +387,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         // endregion
 
         // region Epoxid
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(3), Materials.Carbon.getDust(21))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(3), Materials.Carbon.getDust(21))
             .fluidInputs(Materials.Hydrogen.getGas(1000 * 24), Materials.Oxygen.getGas(1000 * 4))
             .fluidOutputs(Materials.Epoxid.getMolten(1000))
             .eut(RECIPE_HV)
@@ -398,7 +398,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(4),
+                GTUtility.getIntegratedCircuit(4),
                 setStackSize(Materials.Carbon.getDust(64), 64*11+52))
             .fluidInputs(Materials.Hydrogen.getGas(1000 * 24 * 36), Materials.Oxygen.getGas(1000 * 4 * 36))
             .fluidOutputs(Materials.Epoxid.getMolten(1000 * 36))
@@ -410,7 +410,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(5),
+                GTUtility.getIntegratedCircuit(5),
                 setStackSize(Materials.Carbon.getDust(64), 64*13+49))
             .fluidInputs(Materials.Hydrogen.getGas(1000 * 24 * 36), Materials.Oxygen.getGas(1000 * 4 * 36))
             .itemOutputs(
@@ -426,12 +426,12 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(3),
-                GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Bastnasite, 64),// Bastnasite
+                GTUtility.getIntegratedCircuit(3),
+                GTOreDictUnificator.get(OrePrefixes.crushed, Materials.Bastnasite, 64),// Bastnasite
                 setStackSize(Materials.Carbon.getDust(1), 64*3),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 16),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 16),
                 setStackSize(Materials.Sugar.getDust(1), 64*2)
             )
             .fluidInputs(
@@ -441,13 +441,13 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             )
             .itemOutputs(
                 setStackSize(Materials.Cerium.getDust(1), 64+15),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
                 WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
                 setStackSize(Materials.Silicon.getDust(1), 64*3),
                 setStackSize(Materials.Titanium.getDust(1), 64*2+35)
             )
@@ -463,12 +463,12 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(3),
-                GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Bastnasite, 64),// Bastnasite
+                GTUtility.getIntegratedCircuit(3),
+                GTOreDictUnificator.get(OrePrefixes.crushed, Materials.Bastnasite, 64),// Bastnasite
                 setStackSize(Materials.Carbon.getDust(1), 64*3),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 48),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 48),
                 setStackSize(Materials.Sugar.getDust(1), 64*2)
             )
             .fluidInputs(
@@ -478,13 +478,13 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             )
             .itemOutputs(
                 setStackSize(Materials.Cerium.getDust(1), 64+15),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
                 WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
                 setStackSize(Materials.Silicon.getDust(1), 64*3),
                 setStackSize(Materials.Titanium.getDust(1), 64*2+35)
             )
@@ -500,12 +500,12 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(3),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Bastnasite, 64),// Bastnasite
+                GTUtility.getIntegratedCircuit(3),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Bastnasite, 64),// Bastnasite
                 setStackSize(Materials.Carbon.getDust(1), 64*3),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 16),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 16),
                 setStackSize(Materials.Sugar.getDust(1), 64*2)
             )
             .fluidInputs(
@@ -515,13 +515,13 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             )
             .itemOutputs(
                 setStackSize(Materials.Cerium.getDust(1), 64+15),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
                 WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
                 setStackSize(Materials.Silicon.getDust(1), 64*3),
                 setStackSize(Materials.Titanium.getDust(1), 64*2+35)
             )
@@ -537,12 +537,12 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(3),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Bastnasite, 64),// Bastnasite
+                GTUtility.getIntegratedCircuit(3),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Bastnasite, 64),// Bastnasite
                 setStackSize(Materials.Carbon.getDust(1), 64*3),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 48),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 48),
                 setStackSize(Materials.Sugar.getDust(1), 64*2)
 
             )
@@ -553,13 +553,13 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             )
             .itemOutputs(
                 setStackSize(Materials.Cerium.getDust(1), 64+15),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Samarium, 11),
                 WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
                 setStackSize(Materials.Silicon.getDust(1), 64*3),
                 setStackSize(Materials.Titanium.getDust(1), 64*2+35)
             )
@@ -578,9 +578,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(1),
+                GTUtility.getIntegratedCircuit(1),
                 ItemList.Circuit_Chip_Biocell.get(64),
-                GT_OreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8),
+                GTOreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8),
                 Materials.InfinityCatalyst.getDust(2)
             )
             .fluidInputs(
@@ -590,7 +590,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Neutronium.getMolten(144*16)
             )
             .fluidOutputs(
-                MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144*280*2)
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144*280*2)
             )
             .specialValue(11700)
             .eut(RECIPE_UEV)
@@ -600,9 +600,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(9),
+                GTUtility.getIntegratedCircuit(9),
                 setStackSize(ItemList.Circuit_Chip_Biocell.get(64),64*12),
-                setStackSize(GT_OreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8),8*12),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8),8*12),
                 Materials.InfinityCatalyst.getDust(2*12)
             )
             .fluidInputs(
@@ -612,7 +612,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Neutronium.getMolten(144*16*12)
             )
             .fluidOutputs(
-                MISC_MATERIALS.MUTATED_LIVING_SOLDER.getFluidStack(144*280*2*16)
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144*280*2*16)
             )
             .specialValue(12600)
             .eut(RECIPE_UEV)
@@ -624,7 +624,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(15),
+                GTUtility.getIntegratedCircuit(15),
                 Materials.Carbon.getDust(41)
             )
             .fluidInputs(
@@ -632,7 +632,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Oxygen.getGas(1000*41)
             )
             .fluidOutputs(
-                MISC_MATERIALS.ETHYL_CYANOACRYLATE.getFluidStack(1000*10)
+                MaterialMisc.ETHYL_CYANOACRYLATE.getFluidStack(1000*10)
             )
             .specialValue(11700)
             .eut(RECIPE_UEV)
@@ -644,7 +644,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(14),
+                GTUtility.getIntegratedCircuit(14),
                 Materials.Carbon.getDust(3),
                 Materials.Sulfur.getDust(2),
                 Materials.Potassium.getDust(1)
@@ -666,7 +666,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GT_Utility.getIntegratedCircuit(14),
+                GTUtility.getIntegratedCircuit(14),
                 Materials.Carbon.getDust(3),
                 Materials.Sulfur.getDust(2),
                 Materials.Sodium.getDust(1)
@@ -874,12 +874,12 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 copyAmount(0, Materials.Neutronium.getNanite(1)),
-                setStackSize(MyMaterial.naquadahEarth.get(OrePrefixes.dust,1), 480),
+                setStackSize(GGMaterial.naquadahEarth.get(OrePrefixes.dust,1), 480),
                 setStackSize(Materials.Sodium.getDust(1), 1128)
             )
             .fluidInputs(Materials.Fluorine.getGas(1000*800))
             .itemOutputs(
-                MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 25),
+                GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 25),
                 setStackSize(Materials.Gallium.getDust(1), 960),
                 setStackSize(Materials.Adamantium.getDust(1), 384),
                 setStackSize(Materials.Sulfur.getDust(1), 1210)
@@ -891,7 +891,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Titanium.getMolten(144*480),
                 Materials.Hydrogen.getGas(1000*3368),
                 Materials.Oxygen.getGas(1000*5816),
-                MyMaterial.wasteLiquid.getFluidOrGas(1000*160)
+                GGMaterial.wasteLiquid.getFluidOrGas(1000*160)
             )
             .specialValue(11700)
             .eut(RECIPE_ZPM)
@@ -903,19 +903,19 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 copyAmount(0, Materials.Neutronium.getNanite(1)),
-                setStackSize(MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust,1), 220),
+                setStackSize(GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust,1), 220),
                 setStackSize(Materials.Sulfur.getDust(1), 102)
             )
             .fluidInputs(Materials.Oxygen.getGas(1000*288))
             .itemOutputs(
-                MyMaterial.naquadahEarth.get(OrePrefixes.dust, 60),
+                GGMaterial.naquadahEarth.get(OrePrefixes.dust, 60),
                 Materials.Trinium.getDust(10)
             )
             .fluidOutputs(
                 Materials.NaquadahEnriched.getMolten(144*180),
                 Materials.Naquadria.getMolten(144*24),
                 Materials.Hydrogen.getGas(1000*600),
-                MyMaterial.wasteLiquid.getFluidOrGas(1000*60)
+                GGMaterial.wasteLiquid.getFluidOrGas(1000*60)
             )
             .specialValue(11700)
             .eut(RECIPE_ZPM)
@@ -927,11 +927,11 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 copyAmount(0, Materials.Neutronium.getNanite(1)),
-                setStackSize(MyMaterial.naquadriaEarth.get(OrePrefixes.dust,1), 100),
+                setStackSize(GGMaterial.naquadriaEarth.get(OrePrefixes.dust,1), 100),
                 setStackSize(Materials.Phosphorus.getDust(1), 95)
             )
             .itemOutputs(
-                MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 50),
+                GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 50),
                 Materials.Barium.getDust(2),
                 Materials.Indium.getDust(5),
                 setStackSize(Materials.Sulfur.getDust(1), 102)
@@ -950,12 +950,12 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 copyAmount(0, Materials.Gold.getNanite(1)),
-                setStackSize(MyMaterial.naquadahEarth.get(OrePrefixes.dust,1), 480),
+                setStackSize(GGMaterial.naquadahEarth.get(OrePrefixes.dust,1), 480),
                 setStackSize(Materials.Sodium.getDust(1), 112)
             )
             .fluidInputs(Materials.Fluorine.getGas(1000*800))
             .itemOutputs(
-                MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 25),
+                GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 25),
                 setStackSize(Materials.Gallium.getDust(1), 960),
                 setStackSize(Materials.Adamantium.getDust(1), 384),
                 setStackSize(Materials.Sulfur.getDust(1), 1210)
@@ -967,7 +967,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Titanium.getMolten(144*480),
                 Materials.Hydrogen.getGas(1000*3368),
                 Materials.Oxygen.getGas(1000*5816),
-                MyMaterial.wasteLiquid.getFluidOrGas(1000*160)
+                GGMaterial.wasteLiquid.getFluidOrGas(1000*160)
             )
             .specialValue(12600)
             .eut(RECIPE_UV)
@@ -979,19 +979,19 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 copyAmount(0, Materials.Gold.getNanite(1)),
-                setStackSize(MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust,1), 220),
+                setStackSize(GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust,1), 220),
                 setStackSize(Materials.Sulfur.getDust(1), 10)
             )
             .fluidInputs(Materials.Oxygen.getGas(1000*288))
             .itemOutputs(
-                MyMaterial.naquadahEarth.get(OrePrefixes.dust, 60),
+                GGMaterial.naquadahEarth.get(OrePrefixes.dust, 60),
                 Materials.Trinium.getDust(10)
             )
             .fluidOutputs(
                 Materials.NaquadahEnriched.getMolten(144*180),
                 Materials.Naquadria.getMolten(144*24),
                 Materials.Hydrogen.getGas(1000*600),
-                MyMaterial.wasteLiquid.getFluidOrGas(1000*60)
+                GGMaterial.wasteLiquid.getFluidOrGas(1000*60)
             )
             .specialValue(12600)
             .eut(RECIPE_UV)
@@ -1003,11 +1003,11 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 copyAmount(0, Materials.Gold.getNanite(1)),
-                setStackSize(MyMaterial.naquadriaEarth.get(OrePrefixes.dust,1), 100),
+                setStackSize(GGMaterial.naquadriaEarth.get(OrePrefixes.dust,1), 100),
                 setStackSize(Materials.Phosphorus.getDust(1), 9)
             )
             .itemOutputs(
-                MyMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 50),
+                GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 50),
                 Materials.Barium.getDust(2),
                 Materials.Indium.getDust(5),
                 setStackSize(Materials.Sulfur.getDust(1), 102)
@@ -1026,9 +1026,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
     }
     public void loadRecipePostInit() {
         // region H2O2
-        GT_Values.RA
+        GTValues.RA
             .stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(16))
+            .itemInputs(GTUtility.getIntegratedCircuit(16))
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*128),
                 Materials.Oxygen.getGas(1000*128))

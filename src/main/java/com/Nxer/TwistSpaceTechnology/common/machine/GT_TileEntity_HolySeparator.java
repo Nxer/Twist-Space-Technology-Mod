@@ -4,19 +4,19 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Defaul
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelPerPiece_HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Piece_EnablePerfectOverclock_HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_HolySeparator;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,7 +38,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -48,10 +48,10 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.blocks.BlockCasings8;
 import gtPlusPlus.core.block.ModBlocks;
 
 public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEntity_HolySeparator> {
@@ -96,7 +96,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
 
     public float getSpeedBonus() {
         return (float) (Math
-            .pow(SpeedBonus_MultiplyPerTier_HolySeparator, GT_Utility.getTier(this.getAverageInputVoltage())));
+            .pow(SpeedBonus_MultiplyPerTier_HolySeparator, GTUtility.getTier(this.getAverageInputVoltage())));
     }
 
     @Override
@@ -122,7 +122,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 3);
 
-            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("HolySeparator.modeMsg." + this.mode));
+            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("HolySeparator.modeMsg." + this.mode));
         }
     }
 
@@ -220,13 +220,13 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
                                                       .addShape(STRUCTURE_PIECE_MIDDLE, transpose(shapeMiddle))
                                                       .addShape(STRUCTURE_PIECE_END, transpose(shapeEnd))
                                                       .addElement('A',
-                                                                  GT_HatchElementBuilder.<GT_TileEntity_HolySeparator>builder()
+                                                                  HatchElementBuilder.<GT_TileEntity_HolySeparator>builder()
                                                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                                                         .adder(GT_TileEntity_HolySeparator::addToMachineList)
                                                                                         .dot(1)
-                                                                                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-                                                                                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
-                                                      .addElement('B',ofBlock(GregTech_API.sBlockCasings8, 10))
+                                                                                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
+                                                                                        .buildAndChain(GregTechAPI.sBlockCasings8, 7))
+                                                      .addElement('B',ofBlock(GregTechAPI.sBlockCasings8, 10))
                                                       .addElement('C',ofBlock(sBlockCasingsTT, 0))
                                                       .addElement('D',ofBlock(sBlockCasingsTT, 4))
                                                       .addElement('E',ofBlock(sBlockCasingsTT, 6))
@@ -311,8 +311,8 @@ G -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_HolySeparator_MachineType)
             .addInfo(TextLocalization.Tooltip_HolySeparator_00)
             .addInfo(TextLocalization.Tooltip_HolySeparator_01)

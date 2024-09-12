@@ -4,12 +4,12 @@ import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.Modularize
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW;
@@ -32,18 +32,18 @@ import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.common.blocks.GT_Block_Casings2;
-import gregtech.common.blocks.GT_Block_Casings4;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.blocks.BlockCasings2;
+import gregtech.common.blocks.BlockCasings4;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 
 public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAllModuleBase<Test_ModularizedMachine> {
@@ -141,21 +141,21 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
      */
     protected void updateHatchTexture() {
         for (IDualInputHatch h : mDualInputHatches) h.updateTexture(getCasingTextureID());
-        for (GT_MetaTileEntity_Hatch h : mInputBusses) h.updateTexture(getCasingTextureID());
-        for (GT_MetaTileEntity_Hatch h : mMaintenanceHatches) h.updateTexture(getCasingTextureID());
-        for (GT_MetaTileEntity_Hatch h : mEnergyHatches) h.updateTexture(getCasingTextureID());
-        for (GT_MetaTileEntity_Hatch h : mOutputBusses) h.updateTexture(getCasingTextureID());
-        for (GT_MetaTileEntity_Hatch h : mInputHatches) h.updateTexture(getCasingTextureID());
-        for (GT_MetaTileEntity_Hatch h : mOutputHatches) h.updateTexture(getCasingTextureID());
-        for (IModularHatch h : allModularHatches) ((GT_MetaTileEntity_Hatch) h).updateTexture(getCasingTextureID());
+        for (MTEHatch h : mInputBusses) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mMaintenanceHatches) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mEnergyHatches) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mOutputBusses) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mInputHatches) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mOutputHatches) h.updateTexture(getCasingTextureID());
+        for (IModularHatch h : allModularHatches) ((MTEHatch) h).updateTexture(getCasingTextureID());
     }
 
     /**
      * Package a method to get Texture ID for hatches from machine tier.
      */
     private int getCasingTextureID() {
-        if (tierMachine > 1) return ((GT_Block_Casings4) GregTech_API.sBlockCasings4).getTextureIndex(10);
-        return ((GT_Block_Casings2) GregTech_API.sBlockCasings2).getTextureIndex(0);
+        if (tierMachine > 1) return ((BlockCasings4) GregTechAPI.sBlockCasings4).getTextureIndex(10);
+        return ((BlockCasings2) GregTechAPI.sBlockCasings2).getTextureIndex(0);
     }
 
     /**
@@ -194,9 +194,9 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
                         // A method to confirm this tier from the structure block
                         // (Block block, int meta) -> return (int) tier;
                         (b, m) -> {
-                            if (b == GregTech_API.sBlockCasings2 && m == 0) {
+                            if (b == GregTechAPI.sBlockCasings2 && m == 0) {
                                 return 1;
-                            } else if (b == GregTech_API.sBlockCasings4 && m == 10) {
+                            } else if (b == GregTechAPI.sBlockCasings4 && m == 10) {
                                 return 2;
                             }
                             return 0;
@@ -207,7 +207,7 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
                         // An ordered List contains all blocks in tier.
                         // List< Pair<Block block, Integer meta> >
                         ImmutableList
-                            .of(Pair.of(GregTech_API.sBlockCasings2, 0), Pair.of(GregTech_API.sBlockCasings4, 10)),
+                            .of(Pair.of(GregTechAPI.sBlockCasings2, 0), Pair.of(GregTechAPI.sBlockCasings4, 10)),
                         // --------------------------------------------------------
 
                         // Method third input :
@@ -230,7 +230,7 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addElement(
                     'A',
-                    GT_HatchElementBuilder.<Test_ModularizedMachine>builder()
+                    HatchElementBuilder.<Test_ModularizedMachine>builder()
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), AllModule)
                         .adder(Test_ModularizedMachine::addToMachineList)
                         .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(0))
@@ -245,12 +245,12 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
 
     // region General
 
-    private static GT_Multiblock_Tooltip_Builder tooltip;
+    private static MultiblockTooltipBuilder tooltip;
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         if (tooltip == null) {
-            tooltip = new GT_Multiblock_Tooltip_Builder();
+            tooltip = new MultiblockTooltipBuilder();
             tooltip.addMachineType("test")
                 .addInfo("testing")
                 .addSeparator()

@@ -1,15 +1,15 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM.HatchElement.DynamoMulti;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Dynamo;
+import static gregtech.api.enums.HatchElement.Dynamo;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static tectech.thing.metaTileEntity.multi.base.TTMultiblockBase.HatchElement.DynamoMulti;
 
 import java.util.List;
 
@@ -27,9 +27,6 @@ import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.technus.tectech.thing.casing.TT_Container_Casings;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
 import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -38,20 +35,23 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import goodgenerator.loader.Loaders;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
+import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
+import tectech.thing.casing.TTCasingsContainer;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 
 public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     implements IConstructable, ISurvivalConstructable {
@@ -127,11 +127,11 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
      */
     private void updateOutput() {
         long hatchVol = 0, hatchAmp = 0;
-        for (GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
+        for (MTEHatchDynamo tHatch : mDynamoHatches) {
             hatchVol += tHatch.maxEUOutput();
             hatchAmp += tHatch.maxAmperesOut();
         }
-        for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : eDynamoMulti) {
+        for (MTEHatchDynamoMulti tHatch : eDynamoMulti) {
             hatchVol += tHatch.maxEUOutput();
             hatchAmp += tHatch.maxAmperesOut();
         }
@@ -220,8 +220,8 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     @SuppressWarnings("deprecation")
     private boolean checkLaser() {
         if (mPieces < ValueEnum.MEG_Laser_Pieces) {
-            for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : eDynamoMulti) {
-                if (tHatch instanceof GT_MetaTileEntity_Hatch_DynamoTunnel) {
+            for (MTEHatchDynamoMulti tHatch : eDynamoMulti) {
+                if (tHatch instanceof MTEHatchDynamoTunnel) {
                     return false;
                 }
             }
@@ -343,7 +343,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
 			       .addShape(STRUCTURE_PIECE_MIDDLE, transpose(shapeMiddle))
 			       .addShape(STRUCTURE_PIECE_TOP, transpose(shapeTop))
 			       .addElement('A',
-                       GT_HatchElementBuilder.<GT_TileEntity_MegaEggGenerator>builder()
+                       HatchElementBuilder.<GT_TileEntity_MegaEggGenerator>builder()
                                        .atLeast(Dynamo.or(DynamoMulti))
                            .adder(GT_TileEntity_MegaEggGenerator::addToMachineList)
                                        .casingIndex(1536)
@@ -352,8 +352,8 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
 			       .addElement('B',ofFrame(Materials.Trinium))
 			       .addElement('C',ofBlock(Loaders.essentiaCell, 0))
 			       .addElement('D',ofFrame(Materials.Iridium))
-			       .addElement('F',ofBlock(TT_Container_Casings.sBlockCasingsBA0, 8))
-			       .addElement('G',ofBlock(GregTech_API.sBlockCasings8, 7))
+			       .addElement('F',ofBlock(TTCasingsContainer.sBlockCasingsBA0, 8))
+			       .addElement('G',ofBlock(GregTechAPI.sBlockCasings8, 7))
 			       .addElement('K',
                        ofChain(
                            onElementPass(k -> ++k.mAirPosed, isAir()),
@@ -458,8 +458,8 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
 
     @SuppressWarnings("deprecation")
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MegaEggGenerator_MachineType)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_Controller)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_00)

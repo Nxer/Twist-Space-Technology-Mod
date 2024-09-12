@@ -17,7 +17,7 @@ import com.Nxer.TwistSpaceTechnology.common.ship.system.RadarSystem;
 import com.Nxer.TwistSpaceTechnology.common.ship.system.ShieldSystem;
 import com.Nxer.TwistSpaceTechnology.common.ship.system.WeaponSystem;
 
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 
 public class Ship extends EntityMob implements Runnable {
 
@@ -51,7 +51,7 @@ public class Ship extends EntityMob implements Runnable {
     @Override
     public void travelToDimension(int dimensionId) {
         if (!validDimId.contains(dimensionId) && !forceTravel) {
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 owner,
                 "your ship :" + shipName + "is trying to travel to a dimension which can destroy it immediately");
         }

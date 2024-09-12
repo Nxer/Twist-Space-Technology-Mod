@@ -7,13 +7,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
-
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
-public abstract class TST_TileEntity_PatternRecipeBaseMachine extends GT_MetaTileEntity_MultiblockBase_EM {
+public abstract class TST_TileEntity_PatternRecipeBaseMachine extends TTMultiblockBase {
 
     private final ArrayList<TST_TileEntity_Hatch_UltimateMEIO> ultimateIOHatchesList = new ArrayList<>();
 

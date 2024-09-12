@@ -1,21 +1,21 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
-import static com.github.technus.tectech.util.CommonValues.V;
-import static com.github.technus.tectech.util.CommonValues.VN;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static gregtech.api.enums.GTValues.V;
+import static gregtech.api.enums.GTValues.VN;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.Maintenance;
+import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
+import static gregtech.api.util.GTUtility.filterValidMTEs;
 import static mcp.mobius.waila.api.SpecialChars.GREEN;
 import static mcp.mobius.waila.api.SpecialChars.RED;
 import static mcp.mobius.waila.api.SpecialChars.RESET;
 import static net.minecraft.util.StatCollector.translateToLocal;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
+import static tectech.thing.casing.BlockGTCasingsTT.textureOffset;
+import static tectech.thing.casing.BlockGTCasingsTT.texturePage;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,11 +34,6 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyMulti;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_Holder;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.render.TT_RenderedExtendedFacingTexture;
-import com.github.technus.tectech.util.CommonValues;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -50,16 +45,21 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
+import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
-import gregtech.api.util.IGT_HatchAdder;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.IGTHatchAdder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyMulti;
+import tectech.thing.metaTileEntity.hatch.MTEHatchRack;
+import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
+import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
+import tectech.util.CommonValues;
 
 @SuppressWarnings("unchecked")
 public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvivalConstructable {
@@ -67,7 +67,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
     public static final String machine = "EM Machinery";
     public static final String crafter = "EM Crafting";
     // region variables
-    private final ArrayList<GT_MetaTileEntity_Hatch_Holder> eHolders = new ArrayList<>();
+    private final ArrayList<MTEHatchRack> eHolders = new ArrayList<>();
     private boolean Training;
     private static final String assembly = "Assembly line";
     private ItemStack holdItem;
@@ -125,7 +125,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
 
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
-        for (GT_MetaTileEntity_Hatch_Holder rack : filterValidMTEs(eHolders)) {
+        for (MTEHatchRack rack : filterValidMTEs(eHolders)) {
             rack.getBaseMetaTileEntity()
                 .setActive(false);
         }
@@ -135,7 +135,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
             return false;
         }
 
-        for (GT_MetaTileEntity_Hatch_Holder rack : filterValidMTEs(eHolders)) {
+        for (MTEHatchRack rack : filterValidMTEs(eHolders)) {
             rack.getBaseMetaTileEntity()
                 .setActive(iGregTechTileEntity.isActive());
         }
@@ -166,7 +166,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
         }
         holdItem = null;
         computationRequired = computationRemaining = 0;
-        for (GT_MetaTileEntity_Hatch_Holder r : eHolders) {
+        for (MTEHatchRack r : eHolders) {
             r.getBaseMetaTileEntity()
                 .setActive(false);
         }
@@ -174,8 +174,8 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
     }
 
     @Override
-    public GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    public MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(translateToLocal("gt.blockmachines.multimachine.em.research.name")) // Machine Type: Research
             // Station
             .addInfo(translateToLocal("gt.blockmachines.multimachine.em.research.desc.0")) // Controller block of
@@ -221,13 +221,13 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
     public String[] getInfoData() {
         long storedEnergy = 0;
         long maxEnergy = 0;
-        for (GT_MetaTileEntity_Hatch_Energy tHatch : filterValidMTEs(mEnergyHatches)) {
+        for (MTEHatchEnergy tHatch : filterValidMTEs(mEnergyHatches)) {
             storedEnergy += tHatch.getBaseMetaTileEntity()
                 .getStoredEU();
             maxEnergy += tHatch.getBaseMetaTileEntity()
                 .getEUCapacity();
         }
-        for (GT_MetaTileEntity_Hatch_EnergyMulti tHatch : filterValidMTEs(eEnergyMulti)) {
+        for (MTEHatchEnergyMulti tHatch : filterValidMTEs(eEnergyMulti)) {
             storedEnergy += tHatch.getBaseMetaTileEntity()
                 .getStoredEU();
             maxEnergy += tHatch.getBaseMetaTileEntity()
@@ -235,23 +235,23 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
         }
 
         return new String[] { translateToLocalFormatted("tt.keyphrase.Energy_Hatches", clientLocale) + ":",
-            EnumChatFormatting.GREEN + GT_Utility.formatNumbers(storedEnergy)
+            EnumChatFormatting.GREEN + GTUtility.formatNumbers(storedEnergy)
                 + EnumChatFormatting.RESET
                 + " EU / "
                 + EnumChatFormatting.YELLOW
-                + GT_Utility.formatNumbers(maxEnergy)
+                + GTUtility.formatNumbers(maxEnergy)
                 + EnumChatFormatting.RESET
                 + " EU",
             (mEUt <= 0 ? translateToLocalFormatted("tt.keyphrase.Probably_uses", clientLocale) + ": "
                 : translateToLocalFormatted("tt.keyphrase.Probably_makes", clientLocale) + ": ")
                 + EnumChatFormatting.RED
-                + GT_Utility.formatNumbers(Math.abs(mEUt))
+                + GTUtility.formatNumbers(Math.abs(mEUt))
                 + EnumChatFormatting.RESET
                 + " EU/t "
                 + translateToLocalFormatted("tt.keyword.at", clientLocale)
                 + " "
                 + EnumChatFormatting.RED
-                + GT_Utility.formatNumbers(eAmpereFlow)
+                + GTUtility.formatNumbers(eAmpereFlow)
                 + EnumChatFormatting.RESET
                 + " A",
             translateToLocalFormatted("tt.keyphrase.Tier_Rating", clientLocale) + ": "
@@ -266,7 +266,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
                 + translateToLocalFormatted("tt.keyphrase.Amp_Rating", clientLocale)
                 + ": "
                 + EnumChatFormatting.GREEN
-                + GT_Utility.formatNumbers(eMaxAmpereFlow)
+                + GTUtility.formatNumbers(eMaxAmpereFlow)
                 + EnumChatFormatting.RESET
                 + " A",
             translateToLocalFormatted("tt.keyword.Problems", clientLocale) + ": "
@@ -291,18 +291,18 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
                 + eSafeVoid,
             translateToLocalFormatted("tt.keyphrase.Computation_Available", clientLocale) + ": "
                 + EnumChatFormatting.GREEN
-                + GT_Utility.formatNumbers(eAvailableData)
+                + GTUtility.formatNumbers(eAvailableData)
                 + EnumChatFormatting.RESET
                 + " / "
                 + EnumChatFormatting.YELLOW
-                + GT_Utility.formatNumbers(eRequiredData)
+                + GTUtility.formatNumbers(eRequiredData)
                 + EnumChatFormatting.RESET,
             translateToLocalFormatted("tt.keyphrase.Computation_Remaining", clientLocale) + ":",
-            EnumChatFormatting.GREEN + GT_Utility.formatNumbers(computationRemaining / 20L)
+            EnumChatFormatting.GREEN + GTUtility.formatNumbers(computationRemaining / 20L)
                 + EnumChatFormatting.RESET
                 + " / "
                 + EnumChatFormatting.YELLOW
-                + GT_Utility.formatNumbers(computationRequired / 20L) };
+                + GTUtility.formatNumbers(computationRequired / 20L) };
     }
 
     @Override
@@ -310,9 +310,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
         int colorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
             return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3],
-                new TT_RenderedExtendedFacingTexture(
-                    aActive ? GT_MetaTileEntity_MultiblockBase_EM.ScreenON
-                        : GT_MetaTileEntity_MultiblockBase_EM.ScreenOFF) };
+                new TTRenderedExtendedFacingTexture(aActive ? TTMultiblockBase.ScreenON : TTMultiblockBase.ScreenOFF) };
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3] };
     }
@@ -320,7 +318,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
     @Override
     public void onRemoval() {
         super.onRemoval();
-        for (GT_MetaTileEntity_Hatch_Holder r : eHolders) {
+        for (MTEHatchRack r : eHolders) {
             r.getBaseMetaTileEntity()
                 .setActive(false);
         }
@@ -361,7 +359,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
     @Override
     public void stopMachine() {
         super.stopMachine();
-        for (GT_MetaTileEntity_Hatch_Holder r : eHolders) {
+        for (MTEHatchRack r : eHolders) {
             r.getBaseMetaTileEntity()
                 .setActive(false);
         }
@@ -384,7 +382,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
                     computationRequired = computationRemaining = 0;
                     mMaxProgresstime = 0;
                     mEfficiencyIncrease = 0;
-                    for (GT_MetaTileEntity_Hatch_Holder r : eHolders) {
+                    for (MTEHatchRack r : eHolders) {
                         r.getBaseMetaTileEntity()
                             .setActive(false);
                     }
@@ -415,9 +413,9 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
         if (aMetaTileEntity == null) {
             return false;
         }
-        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Holder) {
-            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            return eHolders.add((GT_MetaTileEntity_Hatch_Holder) aMetaTileEntity);
+        if (aMetaTileEntity instanceof MTEHatchRack) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            return eHolders.add((MTEHatchRack) aMetaTileEntity);
         }
         return false;
     }
@@ -502,11 +500,11 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
 
         @Override
         public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
-            return Collections.singletonList(GT_MetaTileEntity_Hatch_Holder.class);
+            return Collections.singletonList(MTEHatchRack.class);
         }
 
         @Override
-        public IGT_HatchAdder<? super TST_ResearchCenter> adder() {
+        public IGTHatchAdder<? super TST_ResearchCenter> adder() {
             return TST_ResearchCenter::addHolderToMachineList;
         }
 

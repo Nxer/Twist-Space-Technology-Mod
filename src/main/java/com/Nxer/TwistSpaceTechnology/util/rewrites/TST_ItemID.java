@@ -9,9 +9,9 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.jetbrains.annotations.Nullable;
 
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 
-public class TST_ItemID extends GT_Utility.ItemId {
+public class TST_ItemID extends GTUtility.ItemId {
 
     // region Member Variables
     private Item item;
@@ -115,6 +115,13 @@ public class TST_ItemID extends GT_Utility.ItemId {
     @Override
     protected NBTTagCompound nbt() {
         return nbt;
+    }
+
+    @Nullable
+    @Override
+    protected Integer stackSize() {
+        // todo
+        return null;
     }
 
     @Nullable

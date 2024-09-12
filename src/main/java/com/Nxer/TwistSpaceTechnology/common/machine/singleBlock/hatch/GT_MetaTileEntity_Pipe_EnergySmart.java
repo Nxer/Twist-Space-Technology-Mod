@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
-import static com.github.technus.tectech.thing.metaTileEntity.Textures.OVERLAYS_ENERGY_IN_LASER_TT;
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
+import static tectech.thing.metaTileEntity.Textures.OVERLAYS_ENERGY_IN_LASER_TT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +15,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.github.technus.tectech.mechanics.pipe.IConnectsToEnergyTunnel;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyTunnel;
-import com.github.technus.tectech.thing.metaTileEntity.pipe.GT_MetaTileEntity_Pipe_Energy;
-import com.github.technus.tectech.util.CommonValues;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -29,11 +24,15 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.metatileentity.implementations.MTETieredMachineBlock;
+import gregtech.api.objects.GTRenderedTexture;
+import tectech.mechanics.pipe.IConnectsToEnergyTunnel;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
+import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
+import tectech.thing.metaTileEntity.pipe.MTEPipeEnergy;
+import tectech.util.CommonValues;
 
-public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_TieredMachineBlock
-    implements IConnectsToEnergyTunnel {
+public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock implements IConnectsToEnergyTunnel {
 
     public long Voltage;
     public long Amperes;
@@ -91,11 +90,11 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
         if (side == aFacing) {
-            return new ITexture[] { new GT_RenderedTexture(EMpipe), OVERLAYS_ENERGY_IN_LASER_TT[mTier],
-                new GT_RenderedTexture(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
+            return new ITexture[] { new GTRenderedTexture(EMpipe), OVERLAYS_ENERGY_IN_LASER_TT[mTier],
+                new GTRenderedTexture(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
         } else {
-            return new ITexture[] { new GT_RenderedTexture(EMpipe),
-                new GT_RenderedTexture(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
+            return new ITexture[] { new GTRenderedTexture(EMpipe),
+                new GTRenderedTexture(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
         }
     }
 
@@ -182,7 +181,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
                             .getIGregTechTileEntityAtSideAndDistance(side, dist);
                         if (tGTTileEntity != null && tGTTileEntity.getColorization() == color) {
                             IMetaTileEntity aMetaTileEntity = tGTTileEntity.getMetaTileEntity();
-                            if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_DynamoTunnel dynamoTunnel
+                            if (aMetaTileEntity instanceof MTEHatchDynamoTunnel dynamoTunnel
                                 && opposite == tGTTileEntity.getFrontFacing()) {
                                 dynamo = dynamoTunnel;
                                 Voltage = dynamoTunnel.maxEUOutput();
@@ -193,7 +192,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
                                     Voltage = energySmart.maxEUOutput();
                                     Amperes = energySmart.Amperes;
                                     break;
-                                } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_Energy pipe) {
+                                } else if (aMetaTileEntity instanceof MTEPipeEnergy pipe) {
                                     if (pipe.connectionCount < 2) {
                                         break;
                                     } else {
@@ -209,12 +208,12 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends GT_MetaTileEntity_Tiered
                             .getIGregTechTileEntityAtSideAndDistance(side, dist);
                         if (tGTTileEntity != null && tGTTileEntity.getColorization() == color) {
                             IMetaTileEntity aMetaTileEntity = tGTTileEntity.getMetaTileEntity();
-                            if ((aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_EnergyTunnel
+                            if ((aMetaTileEntity instanceof MTEHatchEnergyTunnel
                                 || aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart)
                                 && opposite == tGTTileEntity.getFrontFacing()) {
                                 energies.add((MetaTileEntity) aMetaTileEntity);
                                 break;
-                            } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_Energy pipe) {
+                            } else if (aMetaTileEntity instanceof MTEPipeEnergy pipe) {
                                 if (pipe.connectionCount < 2) {
                                     break;
                                 } else {

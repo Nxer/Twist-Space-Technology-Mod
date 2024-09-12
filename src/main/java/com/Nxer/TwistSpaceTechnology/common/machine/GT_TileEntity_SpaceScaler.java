@@ -4,22 +4,22 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Defaul
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Multiplier_ExtraOutputsPerFieldTier_SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_BeyondTier2Block_SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_Tier1Block_SpaceScaler;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerators;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,8 +42,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.bartworks.API.recipe.BartWorksRecipeMaps;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -51,6 +49,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import bartworks.API.recipe.BartWorksRecipeMaps;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -60,10 +59,11 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
+import tectech.thing.block.BlockQuantumGlass;
 
 public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEntity_SpaceScaler>
     implements IConstructable, ISurvivalConstructable {
@@ -249,7 +249,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                 modeAmount = 2;
             }
             this.mode = (byte) ((this.mode + 1) % modeAmount);
-            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("SpaceScaler.modeMsg." + this.mode));
+            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("SpaceScaler.modeMsg." + this.mode));
         }
     }
 
@@ -318,7 +318,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
                                .addElement(
                                    'A',
-                                   GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+                                   HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
                                                          .atLeast(Energy.or(ExoticEnergy))
                                                          .adder(GT_TileEntity_SpaceScaler::addToMachineList)
                                                          .dot(1)
@@ -326,10 +326,10 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                                                          .buildAndChain(sBlockCasingsTT, 0))
                                .addElement('B', ofBlock(sBlockCasingsTT, 4))
                                .addElement('C', ofBlock(sBlockCasingsTT, 6))
-                               .addElement('D', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                               .addElement('D', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                                .addElement(
                                    'E',
-                                   GT_HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+                                   HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
                                                          .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
                                                          .adder(GT_TileEntity_SpaceScaler::addToMachineList)
                                                          .dot(2)
@@ -417,8 +417,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     // region Overrides
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_SpaceScaler_MachineType)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_00)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_01)

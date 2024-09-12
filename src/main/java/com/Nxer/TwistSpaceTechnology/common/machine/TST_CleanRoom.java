@@ -1,12 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static gregtech.api.enums.GT_Values.debugCleanroom;
+import static gregtech.api.enums.GTValues.debugCleanroom;
 import static gregtech.api.enums.Textures.BlockIcons.BLOCK_PLASCRETE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_GLOW;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static gregtech.api.util.GTUtility.filterValidMTEs;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
 import java.util.HashMap;
@@ -26,26 +26,26 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 
-import gregtech.api.GregTech_API;
-import gregtech.api.enums.GT_Values;
+import gregtech.api.GregTechAPI;
+import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.ICleanroom;
 import gregtech.api.interfaces.ICleanroomReceiver;
 import gregtech.api.interfaces.ISecondaryDescribable;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
+import gregtech.api.metatileentity.implementations.MTEBasicHull;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Log;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_OutputBus_ME;
+import gregtech.api.util.GTLog;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.tileentities.machines.MTEHatchOutputBusME;
+import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
 public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructable, ISecondaryDescribable, ICleanroom {
 
@@ -74,7 +74,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
     }
 
     @Override
-    public IStructureDefinition<? extends GT_MetaTileEntity_MultiblockBase_EM> getStructure_EM() {
+    public IStructureDefinition<? extends TTMultiblockBase> getStructure_EM() {
         return null;
     }
 
@@ -105,8 +105,8 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(translateToLocal("Tooltip_TST_CleanRoom_MachineType"));
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_00"));
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_01"));
@@ -125,7 +125,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         tt.addController("Top center");
         tt.addCasingInfoRange("Plascrete", 20, 1007, false);
         tt.addStructureInfo(
-            GT_Values.cleanroomGlass
+            GTValues.cleanroomGlass
                 + "% of the Plascrete can be replaced with Reinforced Glass (not counting the top layer)");
         tt.addStructureInfo(
             "Other material can be used in place of Plascrete, even in higher percentages. See config for detail");
@@ -162,7 +162,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                 for (var item : c.get(i).mInventory) {
                     if (item != null) {
                         if (item_me) {
-                            item.stackSize -= ((GT_MetaTileEntity_Hatch_OutputBus_ME) d.get(0)).store(item);
+                            item.stackSize -= ((MTEHatchOutputBusME) d.get(0)).store(item);
                         } else if (d.get(i)
                             .storeAll(item.copy())) {
                                 item.stackSize = 0;
@@ -222,18 +222,18 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         cleanroomReceivers.clear();
         debugCleanroom = true;
         if (debugCleanroom) {
-            GT_Log.out.println("Cleanroom: Checking machine");
+            GTLog.out.println("Cleanroom: Checking machine");
         }
         for (int i = 1; i <= maxX / 2; i++) {
             final Block tBlock = aBaseMetaTileEntity.getBlockOffset(i, 0, 0);
             final int tMeta = aBaseMetaTileEntity.getMetaIDOffset(i, 0, 0);
-            if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
-                if (tBlock == GregTech_API.sBlockReinforced || tMeta == 2) {
+            if (tBlock != GregTechAPI.sBlockCasings3 || tMeta != 11) {
+                if (tBlock == GregTechAPI.sBlockReinforced || tMeta == 2) {
                     x = i;
                     break;
                 } else {
                     if (debugCleanroom) {
-                        GT_Log.out.println("Cleanroom: Unable to detect room X edge?");
+                        GTLog.out.println("Cleanroom: Unable to detect room X edge?");
                     }
                     return false;
                 }
@@ -242,13 +242,13 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         for (int i = 1; i <= maxZ / 2; i++) {
             final Block tBlock = aBaseMetaTileEntity.getBlockOffset(0, 0, i);
             final int tMeta = aBaseMetaTileEntity.getMetaIDOffset(0, 0, i);
-            if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
-                if (tBlock == GregTech_API.sBlockReinforced || tMeta == 2) {
+            if (tBlock != GregTechAPI.sBlockCasings3 || tMeta != 11) {
+                if (tBlock == GregTechAPI.sBlockReinforced || tMeta == 2) {
                     z = i;
                     break;
                 } else {
                     if (debugCleanroom) {
-                        GT_Log.out.println("Cleanroom: Unable to detect room Z edge?");
+                        GTLog.out.println("Cleanroom: Unable to detect room Z edge?");
                     }
                     return false;
                 }
@@ -260,9 +260,9 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                 if (i == 0 && j == 0) continue;
                 final Block tBlock = aBaseMetaTileEntity.getBlockOffset(i, 0, j);
                 final int tMeta = aBaseMetaTileEntity.getMetaIDOffset(i, 0, j);
-                if (tBlock != GregTech_API.sBlockCasings3 && tMeta != 11) {
+                if (tBlock != GregTechAPI.sBlockCasings3 && tMeta != 11) {
                     if (debugCleanroom) {
-                        GT_Log.out.println("Cleanroom: This is not a filter.");
+                        GTLog.out.println("Cleanroom: This is not a filter.");
                     }
                     return false;
                 }
@@ -271,7 +271,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         for (int i = -1; i > -maxY; i--) {
             final Block tBlock = aBaseMetaTileEntity.getBlockOffset(x, i, z);
             final int tMeta = aBaseMetaTileEntity.getMetaIDOffset(x, i, z);
-            if (tBlock != GregTech_API.sBlockReinforced || tMeta != 2) {
+            if (tBlock != GregTechAPI.sBlockReinforced || tMeta != 2) {
                 y = i + 1;
                 break;
 
@@ -279,7 +279,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         }
         if (y > -2) {
             if (debugCleanroom) {
-                GT_Log.out.println("Cleanroom: Room not tall enough?");
+                GTLog.out.println("Cleanroom: Room not tall enough?");
             }
             return false;
         }
@@ -291,22 +291,22 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                         int tMeta = aBaseMetaTileEntity.getMetaIDOffset(dX, dY, dZ);
                         if (dY == 0) { // TOP
                             if (dX == -x || dX == x || dZ == -z || dZ == z) { // Top Border
-                                if (tBlock != GregTech_API.sBlockReinforced || tMeta != 2) {
+                                if (tBlock != GregTechAPI.sBlockReinforced || tMeta != 2) {
                                     if (debugCleanroom) {
-                                        GT_Log.out.println("Cleanroom: Non reinforced block on top edge? tMeta != 2");
+                                        GTLog.out.println("Cleanroom: Non reinforced block on top edge? tMeta != 2");
                                     }
                                     return false;
                                 }
                             } else if (dX != 0 || dZ != 0) { // Top Inner exclude center
-                                if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
+                                if (tBlock != GregTechAPI.sBlockCasings3 || tMeta != 11) {
                                     if (debugCleanroom) {
-                                        GT_Log.out.println(
+                                        GTLog.out.println(
                                             "Cleanroom: Non reinforced block on top face interior? tMeta != 11");
                                     }
                                     return false;
                                 }
                             }
-                        } else if (tBlock == GregTech_API.sBlockReinforced && tMeta == 2) {
+                        } else if (tBlock == GregTechAPI.sBlockReinforced && tMeta == 2) {
                             mPlascreteCount++;
                         } else {
                             final IGregTechTileEntity tTileEntity = aBaseMetaTileEntity
@@ -327,15 +327,15 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                                         final IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
                                         if (aMetaTileEntity == null) {
                                             if (debugCleanroom) {
-                                                GT_Log.out.println("Cleanroom: Missing block? Not a aMetaTileEntity");
+                                                GTLog.out.println("Cleanroom: Missing block? Not a aMetaTileEntity");
                                             }
                                             return false;
                                         }
-                                        if (aMetaTileEntity instanceof GT_MetaTileEntity_BasicHull) {
+                                        if (aMetaTileEntity instanceof MTEBasicHull) {
                                             mHullCount++;
                                         } else {
                                             if (debugCleanroom) {
-                                                GT_Log.out.println(
+                                                GTLog.out.println(
                                                     "Cleanroom: Incorrect GT block? " + tBlock.getUnlocalizedName());
                                             }
                                             return false;
@@ -350,7 +350,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                                                 otherBlocks.compute(key, (k, v) -> v == null ? 1 : v + 1);
                                             } else {
                                                 if (debugCleanroom) {
-                                                    GT_Log.out.println(
+                                                    GTLog.out.println(
                                                         "Cleanroom: not allowed block " + tBlock.getUnlocalizedName());
                                                 }
                                                 return false;
@@ -368,13 +368,13 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
             || mDoorCount > 4
             || mHullCount > 10) {
             if (debugCleanroom) {
-                GT_Log.out.println("Cleanroom: Incorrect number of doors, hulls, or hatches.");
+                GTLog.out.println("Cleanroom: Incorrect number of doors, hulls, or hatches.");
             }
             return false;
         }
         if (mPlascreteCount < 20) {
             if (debugCleanroom) {
-                GT_Log.out.println("Cleanroom: Could not find 20 Plascrete.");
+                GTLog.out.println("Cleanroom: Could not find 20 Plascrete.");
             }
             return false;
         }
@@ -384,13 +384,13 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
             if (ce.allowedCount > 0) { // count has priority
                 if (e.getValue() > ce.allowedCount) {
                     if (debugCleanroom) {
-                        GT_Log.out.println("Cleanroom: Absolute count too high for a block.");
+                        GTLog.out.println("Cleanroom: Absolute count too high for a block.");
                     }
                     return false;
                 }
             } else if (e.getValue() > ratio * ce.percentage) {
                 if (debugCleanroom) {
-                    GT_Log.out.println("Cleanroom: Relative count too high for a block.");
+                    GTLog.out.println("Cleanroom: Relative count too high for a block.");
                 }
                 return false;
             }
@@ -407,7 +407,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         }
         this.mHeight = -y;
         if (debugCleanroom) {
-            GT_Log.out.println("Cleanroom: Check successful.");
+            GTLog.out.println("Cleanroom: Check successful.");
         }
         return true;
     }
@@ -482,11 +482,11 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         for (int X = x - i; X <= x + i; X++) for (int Y = y; Y >= y - yoff; Y--) for (int Z = z - i; Z <= z + i; Z++) {
             if (X == x && Y == y && Z == z) continue;
             if (X == x - i || X == x + i || Z == z - i || Z == z + i || Y == y - yoff) {
-                if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockReinforced, 2);
-                else world.setBlock(X, Y, Z, GregTech_API.sBlockReinforced, 2, 2);
+                if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTechAPI.sBlockReinforced, 2);
+                else world.setBlock(X, Y, Z, GregTechAPI.sBlockReinforced, 2, 2);
             } else if (Y == y) {
-                if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTech_API.sBlockCasings3, 11);
-                else world.setBlock(X, Y, Z, GregTech_API.sBlockCasings3, 11, 2);
+                if (b) StructureLibAPI.hintParticle(world, X, Y, Z, GregTechAPI.sBlockCasings3, 11);
+                else world.setBlock(X, Y, Z, GregTechAPI.sBlockCasings3, 11, 2);
             }
         }
     }

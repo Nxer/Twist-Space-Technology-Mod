@@ -13,12 +13,12 @@ import com.gtnewhorizons.modularui.api.math.Pos2d;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GTRecipe;
 import gregtech.common.gui.modularui.UIHelper;
-import gregtech.nei.GT_NEI_DefaultHandler;
+import gregtech.nei.GTNEIDefaultHandler;
 import gregtech.nei.RecipeDisplayInfo;
 import gregtech.nei.formatter.INEISpecialInfoFormatter;
-import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm;
+import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm;
 
 public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 
@@ -53,12 +53,12 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 
     @Override
     public List<Pos2d> getItemInputPositions(int itemInputCount) {
-        return UIHelper.getGridPositions(GregtechMetaTileEntityTreeFarm.Mode.values().length, INPUTS_X, INPUTS_Y, 2);
+        return UIHelper.getGridPositions(MTETreeFarm.Mode.values().length, INPUTS_X, INPUTS_Y, 2);
     }
 
     @Override
     public List<Pos2d> getItemOutputPositions(int itemOutputCount) {
-        return UIHelper.getGridPositions(GregtechMetaTileEntityTreeFarm.Mode.values().length, OUTPUTS_X, OUTPUTS_Y, 2);
+        return UIHelper.getGridPositions(MTETreeFarm.Mode.values().length, OUTPUTS_X, OUTPUTS_Y, 2);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 
     @Override
     public List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
-        GT_NEI_DefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
+        GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
         // Special Stack
         if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 2).item) {
             currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.0"));
@@ -88,7 +88,7 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
             return currentTip;
         }
 
-        GT_Recipe recipe = neiCachedRecipe.mRecipe;
+        GTRecipe recipe = neiCachedRecipe.mRecipe;
 
         // Inputs
         int slot = 0;
@@ -110,7 +110,7 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
             // #zh_CN 放入输入总线以收获果实
         };
 
-        for (int mode = 0; mode < GregtechMetaTileEntityTreeFarm.Mode.values().length; ++mode) {
+        for (int mode = 0; mode < MTETreeFarm.Mode.values().length; ++mode) {
             if (mode < recipe.mInputs.length && recipe.mInputs[mode] != null) {
                 // There is a valid input in this mode.
                 if (slot < neiCachedRecipe.mInputs.size() && stack == neiCachedRecipe.mInputs.get(slot).item) {
@@ -123,7 +123,7 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 
         // Outputs
         slot = 0;
-        for (int mode = 0; mode < GregtechMetaTileEntityTreeFarm.Mode.values().length; ++mode) {
+        for (int mode = 0; mode < MTETreeFarm.Mode.values().length; ++mode) {
             if (mode < recipe.mOutputs.length && recipe.mOutputs[mode] != null) {
                 // There is a valid output in this mode.
                 if (slot < neiCachedRecipe.mOutputs.size() && stack == neiCachedRecipe.mOutputs.get(slot).item) {

@@ -37,18 +37,19 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLau
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.UUID;
 
@@ -75,23 +76,23 @@ import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevator.ElevatorUtil;
 
 import galaxyspace.core.register.GSBlocks;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
-    implements IConstructable, ISurvivalConstructable, IDSP_IO, IGlobalWirelessEnergy {
+    implements IConstructable, ISurvivalConstructable, IDSP_IO, IWirelessEnergyHatchInformation {
 
     // region Class Constructor
     public TST_DSPLauncher(int aID, String aName, String aNameRegional) {
@@ -186,7 +187,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
      * return new GTCM_ProcessingLogic() {
      * @NotNull
      * @Override
-     * protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+     * protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
      * // check motor tier
      * if (recipe.mSpecialValue > motorTier) {
      * return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
@@ -201,7 +202,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
      * }
      * @Nonnull
      * @Override
-     * protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+     * protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
      * // no generic overclock
      * return GTCM_OverclockCalculator.ofNoOverclock(recipe);
      * }
@@ -354,7 +355,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 	public IStructureDefinition<TST_DSPLauncher> getStructureDefinition() {
 		return IStructureDefinition.<TST_DSPLauncher>builder()
 		                           .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-		                           .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 7))// A -> ofBlock...(gt.blockcasings8, 7, ...);
+		                           .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 7))// A -> ofBlock...(gt.blockcasings8, 7, ...);
 		                           .addElement('B', ofBlock(IGBlocks.SpaceElevatorCasing, 0))// B -> ofBlock...(gt.blockcasingsSE, 0, ...);
 		                           .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 1))// C -> ofBlock...(gt.blockcasingsSE, 1, ...);
 		                           .addElement('D', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// D -> ofBlock...(gt.blockcasingsSE, 2, ...);
@@ -369,7 +370,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 		                           .addElement('G', ofBlock(GSBlocks.DysonSwarmBlocks, 9))// G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
 		                           .addElement(
 						                       'H',
-						                       GT_HatchElementBuilder.<TST_DSPLauncher>builder()
+						                       HatchElementBuilder.<TST_DSPLauncher>builder()
 						                                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
 						                                             .adder(TST_DSPLauncher::addToMachineList)
 						                                             .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
@@ -491,8 +492,8 @@ I -> ofFrame...(NaquadahAlloy);
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_DSPLauncher_MachineType)
             .addInfo(Tooltip_DSPLauncher_00)
             .addInfo(Tooltip_DSPLauncher_01)

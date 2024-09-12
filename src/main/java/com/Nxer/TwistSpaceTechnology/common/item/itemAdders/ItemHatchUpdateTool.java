@@ -22,8 +22,8 @@ import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.metatileentity.implementations.MTEMultiBlockBase;
 
 public class ItemHatchUpdateTool extends Item {
 
@@ -73,7 +73,7 @@ public class ItemHatchUpdateTool extends Item {
             "Triggered TileEntity: " + tileEntity.getBlockType()
                 .getLocalizedName());
         if (tileEntity instanceof BaseMetaTileEntity te) {
-            if (te.getMetaTileEntity() instanceof GT_MetaTileEntity_Hatch hatch) {
+            if (te.getMetaTileEntity() instanceof MTEHatch hatch) {
                 chainUpdateHatch(worldIn, player, position.blockX, position.blockY, position.blockZ, hatch);
             }
         }
@@ -81,8 +81,7 @@ public class ItemHatchUpdateTool extends Item {
         return super.onItemRightClick(itemStackIn, worldIn, player);
     }
 
-    public static boolean chainUpdateHatch(World worldIn, EntityPlayer player, int x, int y, int z,
-        GT_MetaTileEntity_Hatch hatch) {
+    public static boolean chainUpdateHatch(World worldIn, EntityPlayer player, int x, int y, int z, MTEHatch hatch) {
         int tier = hatch.mTier;
         int id = hatch.getBaseMetaTileEntity()
             .getMetaTileID();
@@ -130,7 +129,7 @@ public class ItemHatchUpdateTool extends Item {
                         // TileEntity nearTile = worldIn.getTileEntity(x + i, y + j, z + k);
                         // LOG.info("Triggered TileEntity: " + tileEntity.getBlockType().getLocalizedName());
                         // if (tileEntity instanceof BaseMetaTileEntity te) {
-                        // if (te.getMetaTileEntity() instanceof GT_MetaTileEntity_Hatch nearHatch) {
+                        // if (te.getMetaTileEntity() instanceof MTEHatch nearHatch) {
                         // if (tier == nearHatch.mTier) continue;
                         // if (!chainUpdateHatch(worldIn, player, x + i, y + j, z + k, hatch)) {
                         // return false;
@@ -157,7 +156,7 @@ public class ItemHatchUpdateTool extends Item {
                 for (int k = -8; k < 8; k++) {
                     TileEntity tileEntity = worldIn.getTileEntity(x + i, y + j, z + k);
                     if (tileEntity instanceof BaseMetaTileEntity te) {
-                        if (te.getMetaTileEntity() instanceof GT_MetaTileEntity_MultiBlockBase machine) {
+                        if (te.getMetaTileEntity() instanceof MTEMultiBlockBase machine) {
                             LOG.info("Find nearby machine named: " + machine.getLocalName());
                             LOG.info("is it ok after force replace and check? " + machine.checkStructure(true));
                         }

@@ -11,18 +11,18 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMult
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.api.util.GT_StructureUtility.ofCoil;
+import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,7 +43,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -54,12 +54,12 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
-// GT_MetaTileEntity_EnhancedMultiBlockBase called failed to use 64A energy hatch
+// MTEEnhancedMultiBlockBase called failed to use 64A energy hatch
 // GT_TileEntity_MegaMultiBlockBase then use megaClass to success to apply 64A hatch
 // Why ?
 //
@@ -111,7 +111,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             }
 
             @Override
-            protected @NotNull CheckRecipeResult validateRecipe(GT_Recipe recipe) {
+            protected @NotNull CheckRecipeResult validateRecipe(GTRecipe recipe) {
                 return recipe.mSpecialValue <= coilLevel.getHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
                     : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
             }
@@ -206,9 +206,9 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_IntensifyChemicalDistorter>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addElement('s', ofBlock(GregTech_API.sBlockCasings4, 1))
-                .addElement('v', ofBlock(GregTech_API.sBlockCasings8, 0))
-                .addElement('p', ofBlock(GregTech_API.sBlockCasings8, 1))
+                .addElement('s', ofBlock(GregTechAPI.sBlockCasings4, 1))
+                .addElement('v', ofBlock(GregTechAPI.sBlockCasings8, 0))
+                .addElement('p', ofBlock(GregTechAPI.sBlockCasings8, 1))
                 .addElement(
                     'c',
                     withChannel(
@@ -218,28 +218,28 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                             GT_TileEntity_IntensifyChemicalDistorter::getCoilLevel)))
                 .addElement(
                     'h',
-                    GT_HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
+                    HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
                         .atLeast(InputHatch, OutputHatch)
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(176)/* index of stainless steal casing */
                         .dot(1)/* preview channel of blueprint */
-                        .buildAndChain(GregTech_API.sBlockCasings8, 0))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 0))
                 .addElement(
                     'b',
-                    GT_HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
+                    HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
                         .atLeast(InputBus, OutputBus)
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(49)/* index of chem inert casing */
                         .dot(2)/* preview channel of blueprint */
-                        .buildAndChain(GregTech_API.sBlockCasings4, 1))
+                        .buildAndChain(GregTechAPI.sBlockCasings4, 1))
                 .addElement(
                     'e',
-                    GT_HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
+                    HatchElementBuilder.<GT_TileEntity_IntensifyChemicalDistorter>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(11)
                         .dot(3)
-                        .buildAndChain(GregTech_API.sBlockCasings1, 11))
+                        .buildAndChain(GregTechAPI.sBlockCasings1, 11))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -283,7 +283,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (this.mode + 1) % 2;
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
         }
@@ -424,8 +424,8 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     // Tooltips
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
             .addInfo(TextLocalization.Tooltip_ICD_00)
             .addInfo(TextLocalization.Tooltip_ICD_01)

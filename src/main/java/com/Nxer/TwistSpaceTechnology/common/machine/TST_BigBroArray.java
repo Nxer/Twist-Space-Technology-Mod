@@ -1,11 +1,16 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
-import static gregtech.api.enums.Textures.BlockIcons.*;
-import static gregtech.api.util.GT_RecipeBuilder.HOURS;
-import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
-import static gregtech.api.util.GT_RecipeConstants.*;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_ROBUST_TUNGSTENSTEEL;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
+import static gregtech.api.util.GTRecipeBuilder.HOURS;
+import static gregtech.api.util.GTRecipeBuilder.SECONDS;
+import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
+import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
+import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -16,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -39,6 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
@@ -46,14 +53,6 @@ import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.dreammaster.gthandler.CustomItemList;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
-import com.github.technus.tectech.recipe.TT_recipeAdder;
-import com.github.technus.tectech.thing.casing.TT_Container_Casings;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyMulti;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyTunnel;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -67,6 +66,7 @@ import com.supsolpans.MainSSP;
 
 import advsolar.common.AdvancedSolarPanel;
 import advsolar.common.tiles.TileEntitySolarPanel;
+import bartworks.API.BorosilicateGlass;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -78,9 +78,8 @@ import emt.block.BlockSolars;
 import emt.tile.solar.Solars;
 import emt.tile.solar.TileEntitySolarBase;
 import goodgenerator.loader.Loaders;
-import gregtech.api.GregTech_API;
-import gregtech.api.enums.GT_HatchElement;
-import gregtech.api.enums.GT_Values;
+import gregtech.api.GregTechAPI;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -88,37 +87,45 @@ import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.TierEU;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
+import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
+import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
+import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.maps.FuelBackend;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_StructureUtility;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings_Abstract;
-import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_CraftingInput_ME;
-import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_InputBus_ME;
-import gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Massfabricator;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTStructureUtility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.blocks.BlockCasingsAbstract;
+import gregtech.common.tileentities.machines.MTEHatchCraftingInputME;
+import gregtech.common.tileentities.machines.MTEHatchInputBusME;
+import gregtech.common.tileentities.machines.basic.MTEMassfabricator;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
-import gtPlusPlus.core.material.ALLOY;
+import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import io.netty.buffer.ByteBuf;
+import tectech.recipe.TTRecipeAdder;
+import tectech.thing.casing.TTCasingsContainer;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
+import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyMulti;
+import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
+import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
-public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvivalConstructable, IGlobalWirelessEnergy {
+public class TST_BigBroArray extends TT_MultiMachineBase_EM
+    implements ISurvivalConstructable, IWirelessEnergyHatchInformation {
 
     private ItemStack machines;
 
@@ -1037,38 +1044,43 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                         .get(1);
                     int level = itemStack.getItemDamage();
                     return Pair.of(Block.getBlockFromItem(itemStack.getItem()), level);
+                } catch (IllegalAccessError error) {
+                    // todo
+                    TwistSpaceTechnology.LOG.warn("TST BigBroArray An error has occurred: {}", error.getMessage());
+                    return null;
                 }
             })
+            .filter(Objects::nonNull)
             .collect(Collectors.toList());
         FRAMES = Arrays.asList(
             Pair.of(
                 Block.getBlockFromItem(
-                    ALLOY.ARCANITE.getFrameBox(1)
+                    MaterialsAlloy.ARCANITE.getFrameBox(1)
                         .getItem()),
                 0), // IV
             Pair.of(
                 Block.getBlockFromItem(
-                    ALLOY.ZERON_100.getFrameBox(1)
+                    MaterialsAlloy.ZERON_100.getFrameBox(1)
                         .getItem()),
                 0), // LuV
             Pair.of(
                 Block.getBlockFromItem(
-                    ALLOY.PIKYONIUM.getFrameBox(1)
+                    MaterialsAlloy.PIKYONIUM.getFrameBox(1)
                         .getItem()),
                 0), // ZPM
             Pair.of(
                 Block.getBlockFromItem(
-                    ALLOY.BOTMIUM.getFrameBox(1)
+                    MaterialsAlloy.BOTMIUM.getFrameBox(1)
                         .getItem()),
                 0), // UV
             Pair.of(
                 Block.getBlockFromItem(
-                    ALLOY.ABYSSAL.getFrameBox(1)
+                    MaterialsAlloy.ABYSSAL.getFrameBox(1)
                         .getItem()),
                 0), // UHV
             Pair.of(
                 Block.getBlockFromItem(
-                    ALLOY.QUANTUM.getFrameBox(1)
+                    MaterialsAlloy.QUANTUM.getFrameBox(1)
                         .getItem()),
                 0)); // UEV - MAX
         PARALLELISM_CASINGS = Arrays.asList(
@@ -1101,21 +1113,20 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
 
     public static void registerUUForArray() {
         // some workaround on UU
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(24))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(24))
             .fluidOutputs(Materials.UUMatter.getFluid(1))
             .noOptimize()
-            .eut(GT_MetaTileEntity_Massfabricator.BASE_EUT)
-            .duration(GT_MetaTileEntity_Massfabricator.sDurationMultiplier)
+            .eut(MTEMassfabricator.BASE_EUT)
+            .duration(MTEMassfabricator.sDurationMultiplier)
             .addTo(RecipeMaps.massFabFakeRecipes);
-        GT_Values.RA.stdBuilder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(23))
-            .fluidInputs(Materials.UUAmplifier.getFluid(GT_MetaTileEntity_Massfabricator.sUUAperUUM))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(23))
+            .fluidInputs(Materials.UUAmplifier.getFluid(MTEMassfabricator.sUUAperUUM))
             .fluidOutputs(Materials.UUMatter.getFluid(1))
             .noOptimize()
-            .eut(GT_MetaTileEntity_Massfabricator.BASE_EUT)
-            .duration(
-                GT_MetaTileEntity_Massfabricator.sDurationMultiplier / GT_MetaTileEntity_Massfabricator.sUUASpeedBonus)
+            .eut(MTEMassfabricator.BASE_EUT)
+            .duration(MTEMassfabricator.sDurationMultiplier / MTEMassfabricator.sUUASpeedBonus)
             .addTo(RecipeMaps.massFabFakeRecipes);
     }
 
@@ -1252,7 +1263,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                     'I',
                     StructureUtility.withChannel(
                         "coil",
-                        GT_StructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
+                        GTStructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
                 .addElement(
                     'H',
                     StructureUtility.withChannel(
@@ -1281,7 +1292,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                             0,
                             (te, tier) -> { te.parallelismTier = Math.max(tier, te.parallelismTier); },
                             (te) -> te.parallelismTier)))
-                .addElement('L', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1));
+                .addElement('L', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 1));
         }
         return builder;
     }
@@ -1327,16 +1338,16 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             .addShape("core", StructureUtility.transpose(PATTERN_CORE))
             .addElement(
                 'D',
-                GT_HatchElementBuilder.<TST_BigBroArray>builder()
+                HatchElementBuilder.<TST_BigBroArray>builder()
                     .atLeast(
-                        GT_HatchElement.Maintenance,
-                        GT_HatchElement.InputBus.or(GT_HatchElement.InputHatch),
-                        GT_HatchElement.OutputBus.or(GT_HatchElement.OutputHatch),
-                        GT_HatchElement.Muffler)
+                        gregtech.api.enums.HatchElement.Maintenance,
+                        gregtech.api.enums.HatchElement.InputBus.or(gregtech.api.enums.HatchElement.InputHatch),
+                        gregtech.api.enums.HatchElement.OutputBus.or(gregtech.api.enums.HatchElement.OutputHatch),
+                        gregtech.api.enums.HatchElement.Muffler)
                     .adder(TST_BigBroArray::addToMachineList)
                     .dot(1)
-                    .casingIndex(((GT_Block_Casings_Abstract) GregTech_API.sBlockCasings4).getTextureIndex(0))
-                    .buildAndChain(GregTech_API.sBlockCasings4, 0))
+                    .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(0))
+                    .buildAndChain(GregTechAPI.sBlockCasings4, 0))
             .addElement(
                 'A',
                 StructureUtility.withChannel(
@@ -1355,17 +1366,17 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                         -1,
                         (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
                         (te) -> te.frameTier)))
-            .addElement('E', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1))
+            .addElement('E', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 1))
             .addElement(
                 'F',
-                GT_HatchElementBuilder.<TST_BigBroArray>builder()
+                HatchElementBuilder.<TST_BigBroArray>builder()
                     .atLeast(
-                        HatchElement.DynamoMulti.or(GT_HatchElement.ExoticEnergy)
-                            .or(GT_HatchElement.Dynamo))
+                        HatchElement.DynamoMulti.or(gregtech.api.enums.HatchElement.ExoticEnergy)
+                            .or(gregtech.api.enums.HatchElement.Dynamo))
                     .adder(TST_BigBroArray::addToMachineList)
                     .dot(2)
-                    .casingIndex(((GT_Block_Casings_Abstract) GregTech_API.sBlockCasings4).getTextureIndex(1))
-                    .buildAndChain(GregTech_API.sBlockCasings4, 1))
+                    .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(1))
+                    .buildAndChain(GregTechAPI.sBlockCasings4, 1))
             .addElement(
                 'C',
                 StructureUtility.withChannel(
@@ -1385,7 +1396,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                     'I',
                     StructureUtility.withChannel(
                         "coil",
-                        GT_StructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
+                        GTStructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
                 .addElement(
                     'H',
                     StructureUtility.withChannel(
@@ -1414,8 +1425,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                             0,
                             (te, tier) -> { te.parallelismTier = Math.max(tier, te.parallelismTier); },
                             (te) -> te.parallelismTier)))
-                .addElement('L', StructureUtility.ofBlock(GregTech_API.sBlockCasings4, 1))
-                .addElement('J', StructureUtility.ofBlock(GregTech_API.sBlockCasings2, 5));
+                .addElement('L', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 1))
+                .addElement('J', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 5));
         }
         builder = initializeStructureOld(builder);
         STRUCTURE_DEFINITION = builder.build();
@@ -1424,7 +1435,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     @SideOnly(Side.CLIENT)
     public static void initializeDefaultTextures() {
         DEFAULT_FRONT_ACTIVE = new ITexture[] {
-            Textures.BlockIcons.getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings4, 0)),
+            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings4, 0)),
             TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
                 .extFacing()
@@ -1436,7 +1447,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 .build(), };
 
         DEFAULT_FRONT_IDLE = new ITexture[] {
-            Textures.BlockIcons.getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings4, 0)),
+            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings4, 0)),
             TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
                 .extFacing()
@@ -1447,8 +1458,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 .glow()
                 .build(), };
 
-        DEFAULT_CASING_TEXTURE = new ITexture[] { Textures.BlockIcons
-            .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings4, 0)) };
+        DEFAULT_CASING_TEXTURE = new ITexture[] {
+            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings4, 0)) };
 
     }
 
@@ -1463,9 +1474,9 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         }
         String front = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE", overlay);
         String frontGlow = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE_GLOW", overlay);
-        CustomIcon frontIcon = new CustomIcon(front);
+        Textures.BlockIcons.CustomIcon frontIcon = new Textures.BlockIcons.CustomIcon(front);
         frontIcon.run();
-        CustomIcon frontGlowIcon = new CustomIcon(frontGlow);
+        Textures.BlockIcons.CustomIcon frontGlowIcon = new Textures.BlockIcons.CustomIcon(frontGlow);
         frontGlowIcon.run();
         return new ITexture[] { TextureFactory.builder()
             .addIcon(MACHINE_CASING_ROBUST_TUNGSTENSTEEL)
@@ -1496,9 +1507,9 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         }
         String front = String.format("basicmachines/%s/OVERLAY_FRONT", overlay);
         String frontGlow = String.format("basicmachines/%s/OVERLAY_FRONT_GLOW", overlay);
-        CustomIcon frontIcon = new CustomIcon(front);
+        Textures.BlockIcons.CustomIcon frontIcon = new Textures.BlockIcons.CustomIcon(front);
         frontIcon.run();
-        CustomIcon frontGlowIcon = new CustomIcon(frontGlow);
+        Textures.BlockIcons.CustomIcon frontGlowIcon = new Textures.BlockIcons.CustomIcon(frontGlow);
         frontGlowIcon.run();
         return new ITexture[] { TextureFactory.builder()
             .addIcon(MACHINE_CASING_ROBUST_TUNGSTENSTEEL)
@@ -1588,7 +1599,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     }
 
     @Override
-    public IStructureDefinition<? extends GT_MetaTileEntity_MultiblockBase_EM> getStructure_EM() {
+    public IStructureDefinition<? extends TTMultiblockBase> getStructure_EM() {
         return STRUCTURE_DEFINITION;
     }
 
@@ -1598,7 +1609,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
 
             @NotNull
             @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
+            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
                 return recipe.mEUt <= 8 * Math.pow(4, machineTier) ? CheckRecipeResultRegistry.SUCCESSFUL
                     : CheckRecipeResultRegistry.insufficientMachineTier((int) (Math.log(recipe.mEUt) / Math.log(4)));
             }
@@ -1612,14 +1623,23 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     private long getDieselFuelValue(FluidStack stack) {
         RecipeMap<?> tRecipes = getRecipeMap();
         if (stack == null || !(tRecipes.getBackend() instanceof FuelBackend tFuels)) return 0;
-        GT_Recipe tFuel = tFuels.findFuel(stack);
+        GTRecipe tFuel = tFuels.findFuel(stack);
         if (tFuel == null) return 0;
         return tFuel.mSpecialValue;
     }
 
     private long getNaquadahFuelValue(ItemStack stack) {
-        if (GT_Utility.isStackInvalid(stack) || getRecipeMap() == null) return 0;
-        GT_Recipe tFuel = getRecipeMap().findRecipe(getBaseMetaTileEntity(), false, Long.MAX_VALUE, null, stack);
+        if (GTUtility.isStackInvalid(stack) || getRecipeMap() == null) return 0;
+
+        GTRecipe tFuel = getRecipeMap().findRecipeQuery()
+            .items(stack)
+            .fluids()
+            .specialSlot(null)
+            .voltage(Long.MAX_VALUE)
+            .cachedRecipe(null)
+            .notUnificated(false)
+            .dontCheckStackSizes(false)
+            .find();
         if (tFuel == null) return 0;
         long liters = 10L; // 1000mb/100
         return (long) tFuel.mSpecialValue * 10;
@@ -1777,12 +1797,12 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     }
 
     private long fillAllDynamos(long energy) {
-        for (GT_MetaTileEntity_Hatch_Dynamo dynamo : mDynamoHatches) {
+        for (MTEHatchDynamo dynamo : mDynamoHatches) {
             long drain = Math.min(energy, dynamo.maxEUStore() - dynamo.getEUVar());
             energy -= drain;
             dynamo.setEUVar(dynamo.getEUVar() + drain);
         }
-        for (GT_MetaTileEntity_Hatch_DynamoMulti dynamo : eDynamoMulti) {
+        for (MTEHatchDynamoMulti dynamo : eDynamoMulti) {
             long drain = Math.min(energy, dynamo.maxEUStore() - dynamo.getEUVar());
             energy -= drain;
             dynamo.setEUVar(dynamo.getEUVar() + drain);
@@ -1796,8 +1816,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder getTooltip() {
-        GT_Multiblock_Tooltip_Builder gt_multiblock_tooltip_builder = new GT_Multiblock_Tooltip_Builder()
+    protected MultiblockTooltipBuilder getTooltip() {
+        MultiblockTooltipBuilder gt_multiblock_tooltip_builder = new MultiblockTooltipBuilder()
             .addMachineType(TextEnums.BigBroArrayType.toString())
             .addInfo(TextEnums.BigBroArrayName.toString())
             .addInfo(TextEnums.BigBroArrayDesc1.toString())
@@ -1884,7 +1904,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         return getTooltip();
     }
 
@@ -1902,7 +1922,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         if (mDynamoHatches.isEmpty() && eDynamoMulti.isEmpty() && casingTier >= 12) {
             isWirelessMode = true;
         } else {
-            for (GT_MetaTileEntity_Hatch_Dynamo mDynamoHatch : mDynamoHatches) {
+            for (MTEHatchDynamo mDynamoHatch : mDynamoHatches) {
                 if (casingTier >= 12) {
                     continue;
                 }
@@ -1910,27 +1930,25 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                     return false;
                 }
             }
-            for (GT_MetaTileEntity_Hatch_DynamoMulti gt_metaTileEntity_hatch_dynamoMulti : eDynamoMulti) {
+            for (MTEHatchDynamoMulti gt_metaTileEntity_hatch_dynamoMulti : eDynamoMulti) {
                 if (casingTier >= 12) {
                     continue;
                 }
                 if (gt_metaTileEntity_hatch_dynamoMulti.mTier > casingTier
-                    || (gt_metaTileEntity_hatch_dynamoMulti instanceof GT_MetaTileEntity_Hatch_DynamoTunnel
-                        && casingTier < 8)) {
+                    || (gt_metaTileEntity_hatch_dynamoMulti instanceof MTEHatchDynamoTunnel && casingTier < 8)) {
                     return false;
                 }
             }
         }
         // energy hatch level follows glass level
-        for (GT_MetaTileEntity_Hatch_Energy mEnergyHatch : mEnergyHatches) {
+        for (MTEHatchEnergy mEnergyHatch : mEnergyHatches) {
             if (mEnergyHatch.mTier > glassTier) {
                 return false;
             }
         }
-        for (GT_MetaTileEntity_Hatch_EnergyMulti gt_metaTileEntity_hatch_energyMulti : eEnergyMulti) {
+        for (MTEHatchEnergyMulti gt_metaTileEntity_hatch_energyMulti : eEnergyMulti) {
             if (Math.min(gt_metaTileEntity_hatch_energyMulti.mTier, 12) > glassTier
-                || (gt_metaTileEntity_hatch_energyMulti instanceof GT_MetaTileEntity_Hatch_EnergyTunnel
-                    && glassTier < 6)) {
+                || (gt_metaTileEntity_hatch_energyMulti instanceof MTEHatchEnergyTunnel && glassTier < 6)) {
                 return false;
             }
         }
@@ -2027,11 +2045,11 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                             }
                         }
                         if (machineTypeToBeUsed != null) {
-                            if (GT_Utility.areStacksEqual(machineTypeToBeUsed, storedInput, true)) {
+                            if (GTUtility.areStacksEqual(machineTypeToBeUsed, storedInput, true)) {
                                 // supports all machines when there's no additional strucutures or frame level >= 6
                                 if (i < frameTier + 5 || frameTier >= 6 || addonCount == 0) {
                                     if (machines != null) {
-                                        if (GT_Utility.areStacksEqual(machines, storedInput)) {
+                                        if (GTUtility.areStacksEqual(machines, storedInput)) {
                                             int d = Math
                                                 // every parallelism tier provides 4x parallelism each machine
                                                 .min(
@@ -2058,7 +2076,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 for (String machineType : GENERATOR_TYPES) {
                     for (int i = 0; i < GENERATORS.get(machineType).length; i++) {
                         ItemStack machineTypeToBeUsed = GENERATORS.get(machineType)[i];
-                        if (GT_Utility.areStacksEqual(storedInput, machineTypeToBeUsed, true)) {
+                        if (GTUtility.areStacksEqual(storedInput, machineTypeToBeUsed, true)) {
                             // create dummy TE for solar generation
                             generatorTE = Block.getBlockFromItem(machineTypeToBeUsed.getItem())
                                 .createTileEntity(aPlayer.worldObj, machineTypeToBeUsed.getItemDamage());
@@ -2075,7 +2093,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                             if ("Diesel".equals(machineType) && i >= (frameTier + 4) && addonCount > 0) continue;
                             if ("Naquadah".equals(machineType) && i >= (frameTier + 1) && addonCount > 0) continue;
                             if (machines != null) {
-                                if (GT_Utility.areStacksEqual(machines, storedInput)) {
+                                if (GTUtility.areStacksEqual(machines, storedInput)) {
                                     int d = Math
                                         .min(machineCountForMaxParallelism - machines.stackSize, storedInput.stackSize);
                                     machines.stackSize += d;
@@ -2096,7 +2114,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             }
             if (machineType != null) {
                 this.actualParallelism = calculateParallelismByAddonTier();
-                GT_Utility.sendChatToPlayer(
+                GTUtility.sendChatToPlayer(
                     aPlayer,
                     String.format(
                         "Machine [%s] is set, parallelism is %s",
@@ -2107,18 +2125,18 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 int zCoord = getBaseMetaTileEntity().getZCoord();
                 TST_Network.tst.sendToAll(new PackSyncMachineType(xCoord, yCoord, zCoord, machineType));
             } else {
-                GT_Utility.sendChatToPlayer(
+                GTUtility.sendChatToPlayer(
                     aPlayer,
                     "No valid machine detected, machines will always be accepted when there's no addons.");
-                GT_Utility.sendChatToPlayer(
+                GTUtility.sendChatToPlayer(
                     aPlayer,
                     "When there's addon attached, arcanite frames unlock IV machines, quantum alloy frames unlock UEV and higher tier machines.");
-                GT_Utility
+                GTUtility
                     .sendChatToPlayer(aPlayer, "Valid processing machine types: " + recipeBackendRefMapping.keySet());
-                GT_Utility.sendChatToPlayer(aPlayer, "Valid generators: ASP & EMT Solars");
+                GTUtility.sendChatToPlayer(aPlayer, "Valid generators: ASP & EMT Solars");
             }
         } else {
-            GT_Utility.sendChatToPlayer(aPlayer, "Machines are sent to output bus");
+            GTUtility.sendChatToPlayer(aPlayer, "Machines are sent to output bus");
             // clear
             addOutput(machines);
             machines = null;
@@ -2136,20 +2154,20 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     @Override
     public ArrayList<ItemStack> getStoredInputs() {
         ArrayList<ItemStack> rList = new ArrayList<>();
-        Map<GT_Utility.ItemId, ItemStack> inputsFromME = new HashMap<>();
-        for (GT_MetaTileEntity_Hatch_InputBus tHatch : filterValidMTEs(mInputBusses)) {
-            if (tHatch instanceof GT_MetaTileEntity_Hatch_CraftingInput_ME) {
+        Map<GTUtility.ItemId, ItemStack> inputsFromME = new HashMap<>();
+        for (MTEHatchInputBus tHatch : GTUtility.filterValidMTEs(mInputBusses)) {
+            if (tHatch instanceof MTEHatchCraftingInputME) {
                 continue;
             }
             tHatch.mRecipeMap = getRecipeMap();
             IGregTechTileEntity tileEntity = tHatch.getBaseMetaTileEntity();
-            boolean isMEBus = tHatch instanceof GT_MetaTileEntity_Hatch_InputBus_ME;
+            boolean isMEBus = tHatch instanceof MTEHatchInputBusME;
             for (int i = tileEntity.getSizeInventory() - 1; i >= 0; i--) {
                 ItemStack itemStack = tileEntity.getStackInSlot(i);
                 if (itemStack != null) {
                     if (isMEBus && i >= 16) {
                         // Prevent the same item from different ME buses from being recognized
-                        inputsFromME.put(GT_Utility.ItemId.createNoCopy(itemStack), itemStack);
+                        inputsFromME.put(GTUtility.ItemId.createNoCopy(itemStack), itemStack);
                     } else {
                         rList.add(itemStack);
                     }
@@ -2166,31 +2184,31 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     }
 
     public static void addRecipes() {
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 ItemList.Processing_Array.get(16),
                 ItemList.Robot_Arm_IV.get(32),
                 ItemList.Emitter_IV.get(32),
                 ItemList.Field_Generator_IV.get(32),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64))
-            .fluidInputs(ALLOY.NITINOL_60.getFluidStack(24576))
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64))
+            .fluidInputs(MaterialsAlloy.NITINOL_60.getFluidStack(24576))
             .itemOutputs(GTCMItemList.BigBroArray.get(1))
             .noOptimize()
-            .eut(RECIPE_IV)
+            .eut(TierEU.RECIPE_IV)
             .duration(20 * 1200)
             .addTo(RecipeMaps.assemblerRecipes);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 ItemList.Field_Generator_IV.get(2),
                 ItemList.Casing_RobustTungstenSteel.get(1),
                 ItemList.Robot_Arm_IV.get(16),
                 ItemList.Emitter_IV.get(16),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 8),
-                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 4))
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 8),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 4))
             .fluidInputs(Materials.SolderingAlloy.getMolten(9216))
             .itemOutputs(GTCMItemList.ParallelismCasing0.get(1))
             .noOptimize()
@@ -2198,7 +2216,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             .duration(20 * 150)
             .addTo(RecipeMaps.assemblerRecipes);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing0.get(1))
             .metadata(RESEARCH_TIME, 4 * HOURS)
             .itemInputs(
@@ -2207,15 +2225,17 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 GTCMItemList.ParallelismCasing0.get(4),
                 ItemList.Robot_Arm_ZPM.get(16),
                 ItemList.Emitter_ZPM.get(16),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 8),
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 8),
                 new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 4 })
             .itemOutputs(GTCMItemList.ParallelismCasing1.get(1))
-            .fluidInputs(Materials.SolderingAlloy.getMolten(9216), new FluidStack(ALLOY.HELICOPTER.getFluid(), 24576))
+            .fluidInputs(
+                Materials.SolderingAlloy.getMolten(9216),
+                new FluidStack(MaterialsAlloy.HELICOPTER.getFluid(), 24576))
             .duration(600 * SECONDS)
             .eut((int) TierEU.RECIPE_ZPM)
             .addTo(AssemblyLine);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing1.get(1))
             .metadata(RESEARCH_TIME, 8 * HOURS)
             .itemInputs(
@@ -2224,13 +2244,13 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 GTCMItemList.ParallelismCasing1.get(4),
                 ItemList.Robot_Arm_UHV.get(16),
                 ItemList.Emitter_UHV.get(16),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 8),
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 8),
                 new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 4 })
             .itemOutputs(GTCMItemList.ParallelismCasing2.get(1))
             .fluidInputs(
-                new FluidStack(ALLOY.INDALLOY_140.getFluid(), 9216),
-                new FluidStack(ALLOY.HELICOPTER.getFluid(), 14400),
-                new FluidStack(ALLOY.PIKYONIUM.getFluid(), 24576))
+                new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 9216),
+                new FluidStack(MaterialsAlloy.HELICOPTER.getFluid(), 14400),
+                new FluidStack(MaterialsAlloy.PIKYONIUM.getFluid(), 24576))
             .duration(1200 * SECONDS)
             .eut((int) TierEU.RECIPE_UHV)
             .addTo(AssemblyLine);
@@ -2239,7 +2259,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             ? FluidRegistry.getFluid("molten.mutatedlivingsolder")
             : FluidRegistry.getFluid("molten.solderingalloy");
 
-        TT_recipeAdder.addResearchableAssemblylineRecipe(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
             GTCMItemList.ParallelismCasing2.get(1),
             20000000,
             2000,
@@ -2247,18 +2267,18 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             1,
             new Object[] { ItemList.Casing_Dim_Bridge.get(64), ItemList.Casing_Dim_Injector.get(64),
                 ItemList.Casing_Dim_Trans.get(64),
-                new ItemStack(ItemBlock.getItemFromBlock(TT_Container_Casings.sBlockCasingsTT), 2, 14),
+                new ItemStack(ItemBlock.getItemFromBlock(TTCasingsContainer.sBlockCasingsTT), 2, 14),
                 GTCMItemList.SolarSail.get(64), GTCMItemList.SolarSail.get(64), GTCMItemList.SolarSail.get(64),
                 GTCMItemList.SolarSail.get(64), ItemList.Casing_FrostProof.get(1),
                 GTCMItemList.ParallelismCasing2.get(16), ItemList.Robot_Arm_UIV.get(16), ItemList.Emitter_UIV.get(16),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64),
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64),
                 new Object[] { OrePrefixes.circuit.get(Materials.Optical), 8 } },
             new FluidStack[] { new FluidStack(solderUEV, 9216) },
             GTCMItemList.ParallelismCasing3.get(1),
             20 * 1200,
             31457280);
 
-        TT_recipeAdder.addResearchableAssemblylineRecipe(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
             GTCMItemList.ParallelismCasing3.get(1),
             200000000,
             20000,
@@ -2268,11 +2288,11 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 GTCMItemList.SolarSail.get(64), GTCMItemList.SolarSail.get(64), GTCMItemList.SolarSail.get(64),
                 GTCMItemList.SolarSail.get(64), ItemList.Field_Generator_UXV.get(8), ItemList.Casing_SolidSteel.get(1),
                 GTCMItemList.ParallelismCasing3.get(16),
-                com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier2.get(4),
-                com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier2.get(4),
-                com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2.get(4),
-                ItemList.Robot_Arm_UXV.get(16), ItemList.Emitter_UXV.get(16),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 8),
+                tectech.thing.CustomItemList.StabilisationFieldGeneratorTier2.get(4),
+                tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier2.get(4),
+                tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2.get(4), ItemList.Robot_Arm_UXV.get(16),
+                ItemList.Emitter_UXV.get(16),
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 8),
                 com.dreammaster.item.ItemList.QuantumCircuit.getIS(4) },
             new FluidStack[] { MaterialsUEVplus.SpaceTime.getMolten(9216) },
             GTCMItemList.ParallelismCasing4.get(1),

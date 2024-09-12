@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachi
 
 import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTE;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.mergeArray;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static gregtech.api.util.GTUtility.filterValidMTEs;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,13 +37,13 @@ import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
+import gregtech.api.metatileentity.implementations.MTEHatchInput;
+import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
@@ -127,12 +127,12 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         maxEutCanUse = (long) (0.975d * getMaxInputEu());
 
         // collect ME input hatches to easier flush
-        for (GT_MetaTileEntity_Hatch_InputBus hatch : filterValidMTEs(mInputBusses)) {
+        for (MTEHatchInputBus hatch : filterValidMTEs(mInputBusses)) {
             if (hatch instanceof IRecipeProcessingAwareHatch aware) {
                 MEInputHatches.add(aware);
             }
         }
-        for (GT_MetaTileEntity_Hatch_Input hatch : filterValidMTEs(mInputHatches)) {
+        for (MTEHatchInput hatch : filterValidMTEs(mInputHatches)) {
             if (hatch instanceof IRecipeProcessingAwareHatch aware) {
                 MEInputHatches.add(aware);
             }
@@ -542,7 +542,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             // #tr MultiExecutionCoreMachineBase.progressingTickIndex
             // # The base run cycle time is set to{\SPACE}
             // #zh_CN 基础运行循环时间设置为{\SPACE}
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("MultiExecutionCoreMachineBase.progressingTickIndex")
                     + getBaseProgressingTick()
@@ -756,9 +756,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
             @Nonnull
             @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
                 if (isNoOverclockCalculator) {
-                    return GT_OverclockCalculator.ofNoOverclock(recipe);
+                    return OverclockCalculator.ofNoOverclock(recipe);
                 } else {
                     return super.createOverclockCalculator(recipe);
                 }

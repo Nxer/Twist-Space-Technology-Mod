@@ -2,7 +2,8 @@ package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
-import static gregtech.api.enums.TC_Aspects.ELECTRUM;
+import static gregtech.api.enums.TCAspects.ELECTRUM;
+import static gtPlusPlus.core.material.MaterialsAlloy.TITANSTEEL;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_TreeFarm;
 import static kubatech.api.enums.ItemList.ExtremeEntityCrusher;
@@ -23,9 +24,8 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gtPlusPlus.core.material.ALLOY;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTOreDictUnificator;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
@@ -99,16 +99,16 @@ public class TCResearches {
                                     .merge(Aspect.ORDER, 128)
                                     .merge(Aspect.ENTROPY, 128),
                                 ItemList.Machine_Multi_Assemblyline.get(1, 0),
-                                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                                     new ItemStack(blockMetalDevice, 1, 12),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                                     new ItemStack(blockMetalDevice, 1, 12),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                                     new ItemStack(blockMetalDevice, 1, 12),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                                     new ItemStack(blockMetalDevice, 1, 12) })))
                     .setSpecial()
@@ -156,27 +156,27 @@ public class TCResearches {
                                     .merge(Aspect.WEAPON,2048)
                                     .merge((Aspect) ELECTRUM.mAspect,8192),
 
-                                GT_ModHandler.getModItem(Mods.Botania.ID,"manaResource",1,5),
+                                GTModHandler.getModItem(Mods.Botania.ID,"manaResource",1,5),
                                 new ItemStack[] { Industrial_TreeFarm.get(1),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
-                                    ALLOY.TITANSTEEL.getPlateDense(1),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
+                                    TITANSTEEL.getPlateDense(1),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
 
                                     Industrial_FishingPond.get(1),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
-                                    ALLOY.TITANSTEEL.getPlateDense(1),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
+                                    TITANSTEEL.getPlateDense(1),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
 
                                     ExtremeIndustrialGreenhouse.get(1),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
-                                    ALLOY.TITANSTEEL.getPlateDense(1),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
+                                    TITANSTEEL.getPlateDense(1),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
 
                                     Mods.EnderIO.isModLoaded() ? ExtremeEntityCrusher.get(1)
                                         : new ItemStack(diamond_sword,1),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
-                                    ALLOY.TITANSTEEL.getPlateDense(1),
-                                    GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1) })),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1),
+                                    TITANSTEEL.getPlateDense(1),
+                                    GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite),1) })),
                         // #tr tc.research_text.ECO_SPHERE_SIMULATOR.2
                         // # <LINE>{\BOLD}Operation Log Record:<BR>{\RESET}When operating at low voltage, the machine exhibits extremely high simulation efficiency, remaining the ecosystem exceptionally stable. <BR>As the voltage exceeds a threshold, the machine's efficiency decreases, while the aquatic area shows invisible pressure, causing subtle distortions in the simulation.<BR>In rare cases, observers have reported seeing a strange entity in the water. It emits a faint glow, resembling a jellyfish but with an indescribable quality.
                         // #zh_CN <LINE>{\BOLD}运行日志记录：<BR>{\RESET}在低电压运行时, 机器展现出极高的模拟效率, 模拟生态系统的状态异常稳定. <BR>当电压超过某个临界值时, 机器的运行效率开始逐渐下降, 但水域却似乎处于某种不可见的压力之下, 使得模拟出现微妙的扭曲与偏差. <BR>极少数情况下, 观察者报告称他们目睹了一种罕见且奇异的生物出现在水域中. 这种生物散发着微弱的光芒, 形态如同水母的轮廓, 但却拥有某种不可名状的特质.
@@ -232,7 +232,7 @@ public class TCResearches {
                     9,
                     -10,
                     5,
-                    Mods.Gendustry.isModLoaded() ? GT_ModHandler.getModItem(Mods.Gendustry.ID, "LiquidDNABucket", 1)
+                    Mods.Gendustry.isModLoaded() ? GTModHandler.getModItem(Mods.Gendustry.ID, "LiquidDNABucket", 1)
                         : new ItemStack(Items.water_bucket, 1))
                             .setPages(
                                 new ResearchPage((new AspectList()).add(EVOLUTION, 1)),
@@ -288,7 +288,7 @@ public class TCResearches {
                                     .merge(Aspect.FLESH, 4096)
                                     .merge(ULTRA_DEATH, 256),
                                 Mods.Witchery.isModLoaded()
-                                    ? GT_ModHandler.getModItem(Mods.Witchery.ID, "infinityegg", 1)
+                                    ? GTModHandler.getModItem(Mods.Witchery.ID, "infinityegg", 1)
                                     : new ItemStack(Blocks.dragon_egg, 1),
                                 new ItemStack[] { GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
                                     GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),

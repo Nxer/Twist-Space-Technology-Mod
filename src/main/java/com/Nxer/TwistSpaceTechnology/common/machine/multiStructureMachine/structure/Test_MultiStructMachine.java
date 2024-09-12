@@ -28,7 +28,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine<Test_MultiStructMachine> {
 
@@ -165,8 +165,8 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
 
     // Tooltips
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)

@@ -12,29 +12,29 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBotto
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import bartworks.API.BorosilicateGlass;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -43,11 +43,11 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings4;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.blocks.BlockCasings4;
+import gregtech.common.blocks.BlockCasings8;
 
 public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
 
@@ -111,7 +111,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         this.speedBonus = (float) Math
-            .pow(SpeedBonus_MultiplyPerTier_Scavenger, GT_Utility.getTier(this.getMaxInputEu()));
+            .pow(SpeedBonus_MultiplyPerTier_Scavenger, GTUtility.getTier(this.getMaxInputEu()));
         return true;
     }
 
@@ -141,33 +141,31 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_Scavenger>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 7))
+                .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'B',
-                    GT_HatchElementBuilder.<TST_Scavenger>builder()
+                    HatchElementBuilder.<TST_Scavenger>builder()
                         .atLeast(OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_Scavenger::addToMachineList)
                         .dot(2)
-                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'C',
-                    GT_HatchElementBuilder.<TST_Scavenger>builder()
+                    HatchElementBuilder.<TST_Scavenger>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(TST_Scavenger::addToMachineList)
                         .dot(1)
-                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-                        .buildAndChain(
-                            BorosilicateGlass.ofBoroGlassAnyTier(),
-                            ofBlock(GregTech_API.sBlockCasings4, 14)))
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
+                        .buildAndChain(BorosilicateGlass.ofBoroGlassAnyTier(), ofBlock(GregTechAPI.sBlockCasings4, 14)))
                 .addElement(
                     'D',
-                    GT_HatchElementBuilder.<TST_Scavenger>builder()
+                    HatchElementBuilder.<TST_Scavenger>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(TST_Scavenger::addToMachineList)
                         .dot(1)
-                        .casingIndex(((GT_Block_Casings4) GregTech_API.sBlockCasings4).getTextureIndex(14))
-                        .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                        .casingIndex(((BlockCasings4) GregTechAPI.sBlockCasings4).getTextureIndex(14))
+                        .buildAndChain(GregTechAPI.sBlockCasings4, 14))
                 .addElement('E', ofFrame(Materials.Osmiridium))
                 .build();
         }
@@ -221,8 +219,8 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_Scavenger_MachineType)
             .addInfo(TextLocalization.Tooltip_Scavenger_Controller)
             .addInfo(TextLocalization.Tooltip_Scavenger_01)

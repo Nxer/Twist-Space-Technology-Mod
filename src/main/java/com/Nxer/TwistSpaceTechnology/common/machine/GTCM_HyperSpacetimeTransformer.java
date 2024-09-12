@@ -5,24 +5,24 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Defaul
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiplier_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer;
-import static com.github.technus.tectech.thing.block.QuantumGlassBlock.INSTANCE;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.SpacetimeCompressionFieldGenerators;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.TimeAccelerationFieldGenerator;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsBA0;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static tectech.thing.block.BlockQuantumGlass.INSTANCE;
+import static tectech.thing.casing.TTCasingsContainer.SpacetimeCompressionFieldGenerators;
+import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerators;
+import static tectech.thing.casing.TTCasingsContainer.TimeAccelerationFieldGenerator;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,9 +50,9 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
@@ -129,7 +129,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 2);
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("HyperSpacetimeTransformer.modeMsg." + this.mode));
         }
@@ -198,7 +198,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
             STRUCTURE_DEFINITION = StructureDefinition.<GTCM_HyperSpacetimeTransformer>builder()
                                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                                                       .addElement(
-                                                          'A',GT_HatchElementBuilder.<GTCM_HyperSpacetimeTransformer>builder()
+                                                          'A',HatchElementBuilder.<GTCM_HyperSpacetimeTransformer>builder()
                                                                                     .atLeast(Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch, OutputHatch)
                                                                                     .adder(GTCM_HyperSpacetimeTransformer::addToMachineList)
                                                                                     .dot(1)
@@ -856,8 +856,8 @@ J -> ofBlock...(tile.quantumGlass, 0, ...);
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_HyperSpacetimeTransformer_MachineType)
             .addInfo(TextLocalization.Tooltip_HyperSpacetimeTransformer_00)
             .addInfo(TextLocalization.Tooltip_HyperSpacetimeTransformer_01)

@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
+import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,11 +20,11 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.objects.GTRenderedTexture;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_LargeSteamForgeHammer>
     implements ISurvivalConstructable {
@@ -102,9 +102,9 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
 
     protected void updateHatchTexture() {
         int casingIndex = getCasingTextureID(steamCasingTier);
-        for (GT_MetaTileEntity_Hatch h : mSteamInputs) h.updateTexture(casingIndex);
-        for (GT_MetaTileEntity_Hatch h : mSteamOutputs) h.updateTexture(casingIndex);
-        for (GT_MetaTileEntity_Hatch h : mSteamInputFluids) h.updateTexture(casingIndex);
+        for (MTEHatch h : mSteamInputs) h.updateTexture(casingIndex);
+        for (MTEHatch h : mSteamOutputs) h.updateTexture(casingIndex);
+        for (MTEHatch h : mSteamInputFluids) h.updateTexture(casingIndex);
     }
 
     public void setSteamCasingTier(int steamCasingTier) {
@@ -148,8 +148,8 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_LargeSteamForgeHammer_MachineType)
             .addInfo(TextLocalization.Tooltip_LargeSteamForgeHammer_Controller)
             .addInfo(TextLocalization.Tooltip_LargeSteamForgeHammer_01)
@@ -165,13 +165,19 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     }
 
     @Override
-    protected GT_RenderedTexture getFrontOverlay() {
-        return new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER);
+    protected GTRenderedTexture getFrontOverlay() {
+        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER);
     }
 
     @Override
-    protected GT_RenderedTexture getFrontOverlayActive() {
-        return new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER_ACTIVE);
+    protected GTRenderedTexture getFrontOverlayActive() {
+        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER_ACTIVE);
+    }
+
+    @Override
+    public int getTierRecipes() {
+        // todo
+        return 0;
     }
 
     @Override

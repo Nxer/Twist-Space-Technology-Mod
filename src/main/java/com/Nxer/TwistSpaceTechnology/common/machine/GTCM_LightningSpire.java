@@ -1,22 +1,22 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
-import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.texturePage;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsBA0;
-import static com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM.HatchElement.DynamoMulti;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Dynamo;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.Dynamo;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.ItemList.Machine_HV_LightningRod;
-import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
+import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static net.minecraftforge.common.util.ForgeDirection.EAST;
 import static net.minecraftforge.common.util.ForgeDirection.NORTH;
 import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
 import static net.minecraftforge.common.util.ForgeDirection.WEST;
+import static tectech.thing.casing.BlockGTCasingsTT.textureOffset;
+import static tectech.thing.casing.BlockGTCasingsTT.texturePage;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
+import static tectech.thing.metaTileEntity.multi.base.TTMultiblockBase.HatchElement.DynamoMulti;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +40,6 @@ import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeR
 import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.render.TT_RenderedExtendedFacingTexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -58,15 +55,18 @@ import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GT_UITextures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
+import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
+import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
+import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
 public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements IConstructable, ISurvivalConstructable {
 
@@ -315,12 +315,12 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
                     if (null == machine || machine.stackSize < 1) continue;
                     if (LightningRod.equalItemStack(machine)) {
                         if (canAdd > machine.stackSize) {
-                            mStored.add(GT_Utility.copy(machine));
+                            mStored.add(GTUtility.copy(machine));
                             tRods += machine.stackSize;
                             canAdd -= machine.stackSize;
                             machine.stackSize = 0;
                         } else {
-                            mStored.add(GT_Utility.copyAmount(MAXRODS - tRods, machine));
+                            mStored.add(GTUtility.copyAmount(MAXRODS - tRods, machine));
                             machine.stackSize -= canAdd;
                             tRods = MAXRODS;
                             break;
@@ -353,7 +353,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
     public boolean onRunningTick(ItemStack stack) {
         if (tStored > 0) {
             // push eu to dynamo
-            for (GT_MetaTileEntity_Hatch_Dynamo eDynamo : super.mDynamoHatches) {
+            for (MTEHatchDynamo eDynamo : super.mDynamoHatches) {
                 if (eDynamo == null || !eDynamo.isValid()) {
                     continue;
                 }
@@ -367,7 +367,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
                 }
             }
 
-            for (GT_MetaTileEntity_Hatch_DynamoMulti eDynamo : eDynamoMulti) {
+            for (MTEHatchDynamoMulti eDynamo : eDynamoMulti) {
                 if (eDynamo == null || !eDynamo.isValid()) {
                     continue;
                 }
@@ -424,17 +424,15 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
         int colorIndex, boolean active, boolean redstoneLevel) {
         if (side == facing) {
             return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][16 + 6],
-                new TT_RenderedExtendedFacingTexture(
-                    active ? GT_MetaTileEntity_MultiblockBase_EM.ScreenON
-                        : GT_MetaTileEntity_MultiblockBase_EM.ScreenOFF) };
+                new TTRenderedExtendedFacingTexture(active ? TTMultiblockBase.ScreenON : TTMultiblockBase.ScreenOFF) };
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][16 + 6] };
     }
 
     // spotless:off
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // #tr GTCM_LightningSpire_MachineType
         // # Multi Lightning Rod
         // #zh_CN 多方块避雷针
@@ -507,7 +505,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.OperatingMode = (this.OperatingMode + 1) % 3;
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 // #tr LightningSpire.ModeMsg.0
                 // # Lightning Spire is in Operate Mode
@@ -533,7 +531,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
             // #tr LightningSpire.enable_lightning.false
             // # Disable lightning animation
             // #zh_CN 禁用闪电特效
-            GT_Utility.sendChatToPlayer(aPlayer, tr("LightningSpire.enable_lightning." + enable_lightning));
+            GTUtility.sendChatToPlayer(aPlayer, tr("LightningSpire.enable_lightning." + enable_lightning));
             return true;
         }
         return false;
@@ -555,7 +553,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
         builder.widget(
             new ProgressBar().setProgress(() -> (float) tStored / tMaxStored)
                 .setDirection(ProgressBar.Direction.RIGHT)
-                .setTexture(GT_UITextures.PROGRESSBAR_STORED_EU, 147)
+                .setTexture(GTUITextures.PROGRESSBAR_STORED_EU, 147)
                 .setPos(7, 85)
                 .setSize(130, 5));
     }

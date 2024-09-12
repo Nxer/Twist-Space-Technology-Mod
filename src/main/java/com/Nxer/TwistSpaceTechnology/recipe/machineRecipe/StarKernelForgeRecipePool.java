@@ -7,13 +7,13 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
+import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.Materials;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gtPlusPlus.core.material.ELEMENT;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gtPlusPlus.core.material.MaterialsElements;
 
 public class StarKernelForgeRecipePool implements IRecipePool {
 
@@ -48,8 +48,8 @@ public class StarKernelForgeRecipePool implements IRecipePool {
     }
 
     private void loadGeneralRecipes() {
-        for (GT_Recipe plasmaFuel : RecipeMaps.plasmaFuels.getAllRecipes()) {
-            FluidStack plasma = GT_Utility.getFluidForFilledItem(plasmaFuel.mInputs[0], true);
+        for (GTRecipe plasmaFuel : RecipeMaps.plasmaFuels.getAllRecipes()) {
+            FluidStack plasma = GTUtility.getFluidForFilledItem(plasmaFuel.mInputs[0], true);
             if (plasma == null) {
                 continue;
             }
@@ -82,31 +82,31 @@ public class StarKernelForgeRecipePool implements IRecipePool {
         // Neon
         addRecipe(
             WerkstoffLoader.Neon.getFluidOrGas(1000),
-            new FluidStack(ELEMENT.getInstance().NEON.getPlasma(), 1000),
+            new FluidStack(MaterialsElements.getInstance().NEON.getPlasma(), 1000),
             10_000_000);
 
         // Krypton
         addRecipe(
             WerkstoffLoader.Krypton.getFluidOrGas(1000),
-            new FluidStack(ELEMENT.getInstance().KRYPTON.getPlasma(), 1000),
+            new FluidStack(MaterialsElements.getInstance().KRYPTON.getPlasma(), 1000),
             30_000_000);
 
         // Xenon
         addRecipe(
             WerkstoffLoader.Xenon.getFluidOrGas(1000),
-            new FluidStack(ELEMENT.getInstance().XENON.getPlasma(), 1000),
+            new FluidStack(MaterialsElements.getInstance().XENON.getPlasma(), 1000),
             90_000_000);
 
         // Technetium
         addRecipe(
-            new FluidStack(ELEMENT.getInstance().TECHNETIUM.getFluid(), 1000),
-            new FluidStack(ELEMENT.getInstance().TECHNETIUM.getPlasma(), 1000),
+            new FluidStack(MaterialsElements.getInstance().TECHNETIUM.getFluid(), 1000),
+            new FluidStack(MaterialsElements.getInstance().TECHNETIUM.getPlasma(), 1000),
             100_000_000);
 
         // Bromine
         addRecipe(
-            new FluidStack(ELEMENT.getInstance().BROMINE.getFluid(), 1000),
-            new FluidStack(ELEMENT.getInstance().BROMINE.getPlasma(), 1000),
+            new FluidStack(MaterialsElements.getInstance().BROMINE.getFluid(), 1000),
+            new FluidStack(MaterialsElements.getInstance().BROMINE.getPlasma(), 1000),
             100_000_000);
 
         // Tritanium
@@ -116,31 +116,31 @@ public class StarKernelForgeRecipePool implements IRecipePool {
         addRecipe(
             Materials.Carbon.getDust(1),
             Materials.Carbon.getPlasma(144),
-            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Carbon) * 144);
+            GTUtility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Carbon) * 144);
 
         // Sulfur
         addRecipe(
             Materials.Sulfur.getDust(1),
             Materials.Sulfur.getPlasma(144),
-            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Sulfur) * 144);
+            GTUtility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Sulfur) * 144);
 
         // Phosphorus
         addRecipe(
             Materials.Phosphorus.getDust(1),
             Materials.Phosphorus.getPlasma(144),
-            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Phosphorus) * 144);
+            GTUtility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Phosphorus) * 144);
 
         // Strontium
         addRecipe(
             Materials.Strontium.getDust(1),
             Materials.Strontium.getPlasma(144),
-            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Strontium) * 144);
+            GTUtility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Strontium) * 144);
 
         // Cadmium
         addRecipe(
             Materials.Cadmium.getDust(1),
             Materials.Cadmium.getPlasma(144),
-            GT_Utility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Cadmium) * 144);
+            GTUtility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Cadmium) * 144);
 
     }
 

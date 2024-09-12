@@ -13,13 +13,13 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
-import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.Mode;
-import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.GregtechMetaTileEntityTreeFarm.treeProductsMap;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.Mode;
+import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,16 +58,16 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import bartworks.API.BorosilicateGlass;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import galaxyspace.BarnardsSystem.BRFluids;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.TAE;
@@ -80,11 +80,11 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.items.GT_IntegratedCircuit_Item;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.items.ItemIntegratedCircuit;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
@@ -231,7 +231,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         if (tag.hasKey("tier")) {
             currentTip.add(
                 "Tier: " + EnumChatFormatting.YELLOW
-                    + GT_Utility.formatNumbers(tag.getInteger("tier"))
+                    + GTUtility.formatNumbers(tag.getInteger("tier"))
                     + EnumChatFormatting.RESET);
         }
     }
@@ -240,14 +240,14 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (!checkStructure(true)) {
-                GT_Utility.sendChatToPlayer(
+                GTUtility.sendChatToPlayer(
                     aPlayer,
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
             this.mMode = (byte) ((this.mMode + 1) % 2);
             SetRemoveWater();
-            GT_Utility
+            GTUtility
                 .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + this.mMode));
             // #tr EcoSphereSimulator.modeMsg.0
             // # Tree Growth Simulator
@@ -320,11 +320,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 .addElement('A', BorosilicateGlass.ofBoroGlassAnyTier())
                 .addElement('B', ofBlock(MetaBlockCasing01, 9))
                 .addElement('C', ofBlock(MetaBlockCasing01, 10))
-                .addElement('D', ofBlock(GregTech_API.sBlockCasings1, 10))
-                .addElement('d', ofBlock(GregTech_API.sBlockCasings4, 1))
-                .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 5))
-                .addElement('F', ofBlock(GregTech_API.sBlockCasings8, 10))
-                .addElement('G', ofBlock(GregTech_API.sBlockCasings9, 1))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings1, 10))
+                .addElement('d', ofBlock(GregTechAPI.sBlockCasings4, 1))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 5))
+                .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
+                .addElement('G', ofBlock(GregTechAPI.sBlockCasings9, 1))
                 .addElement('H', ofBlock(ModBlocks.blockCasings2Misc, 15))
                 .addElement('h', ofBlock(MetaBlockCasing01, 13))
                 .addElement('I', ofBlock(ModBlocks.blockCasingsTieredGTPP, 8))
@@ -353,7 +353,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'Q',
                     ofChain(
                         ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(1)
@@ -363,7 +363,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'q',
                     ofChain(
                         ofBlock(MetaBlockCasing01, 13),
-                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(1)
@@ -373,7 +373,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'R',
                     ofChain(
                         ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(2)
@@ -383,7 +383,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'r',
                     ofChain(
                         ofBlock(MetaBlockCasing01, 13),
-                        GT_HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(2)
@@ -718,7 +718,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     public int getModeOutput(Mode mode) {
         for (ItemStack stack : getStoredInputs()) {
-            if (stack.getItem() instanceof GT_IntegratedCircuit_Item && stack.getItemDamage() > 0) {
+            if (stack.getItem() instanceof ItemIntegratedCircuit && stack.getItemDamage() > 0) {
                 Mode mappedMode = damageModeMap.get(stack.getItemDamage());
                 if (mode == mappedMode) {
                     return 1;
@@ -848,7 +848,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         .equals(BRFluids.UnknowWater) && Mods.GalaxySpace.isModLoaded()) {
                         // Normal to BarnardaC`
                         RecipeLiquid = BRFluids.UnknowWater;
-                        sapling = GT_ModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 1, 1);
+                        sapling = GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 1, 1);
                         outputPerMode = queryTreeProduct(sapling);
                         break;
                     }
@@ -857,7 +857,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         // Normal to Time Tree
                         RecipeLiquid = FluidRegistry.getFluid("temporalfluid");
                         RecipeLiquidCost = 1000;
-                        sapling = GT_ModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 1, 5);
+                        sapling = GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 1, 5);
                         outputPerMode = queryTreeProduct(sapling);
                         break;
                     }
@@ -1102,8 +1102,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // }
     // }
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // #tr Tooltip_EcoSphereSimulator_MachineType
         // # Tree Farm | Aquatic Farm | Green House | Mob Cloner
         // #zh_CN 树厂 | 渔场 | 温室 | 生物克隆

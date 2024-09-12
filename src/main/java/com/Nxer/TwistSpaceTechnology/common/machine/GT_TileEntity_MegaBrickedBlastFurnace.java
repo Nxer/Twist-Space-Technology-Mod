@@ -1,11 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Mods.Chisel;
 import static gregtech.api.enums.Textures.BlockIcons;
-import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
+import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,25 +35,25 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.GT_ChunkManager;
+import gregtech.api.objects.GTChunkManager;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.GT_Pollution;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.Pollution;
 
 public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase<GT_TileEntity_MegaBrickedBlastFurnace>
     implements ISurvivalConstructable {
@@ -86,9 +86,9 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     private static ItemStack ash;
 
     public static void initStatics() {
-        cokeCoal = GT_ModHandler.getModItem("Railcraft", "fuel.coke", 1);
+        cokeCoal = GTModHandler.getModItem("Railcraft", "fuel.coke", 1);
         if (cokeCoal == null) cokeCoal = Materials.Coal.getGems(1);
-        cokeCoalBlock = GT_ModHandler.getModItem("Railcraft", "cube", 1);
+        cokeCoalBlock = GTModHandler.getModItem("Railcraft", "cube", 1);
         if (cokeCoalBlock == null) cokeCoalBlock = Materials.Coal.getBlocks(1);
 
         ItemStack charCoal = Materials.Charcoal.getGems(1);
@@ -97,10 +97,10 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         ItemStack dustCoal = Materials.Coal.getDust(1);
         ItemStack blockCoal = Materials.Coal.getBlocks(1);
         ItemStack dustCharCoal = Materials.Charcoal.getDust(1);
-        ItemStack cactusCoke = GT_ModHandler.getModItem("miscutils", "itemCactusCoke", 1);
-        ItemStack cactusCharCoal = GT_ModHandler.getModItem("miscutils", "itemCactusCharcoal", 1);
-        ItemStack sugarCharCoal = GT_ModHandler.getModItem("miscutils", "itemSugarCharcoal", 1);
-        ItemStack sugarCoke = GT_ModHandler.getModItem("miscutils", "itemSugarCoke", 1);
+        ItemStack cactusCoke = GTModHandler.getModItem("miscutils", "itemCactusCoke", 1);
+        ItemStack cactusCharCoal = GTModHandler.getModItem("miscutils", "itemCactusCharcoal", 1);
+        ItemStack sugarCharCoal = GTModHandler.getModItem("miscutils", "itemSugarCharcoal", 1);
+        ItemStack sugarCoke = GTModHandler.getModItem("miscutils", "itemSugarCoke", 1);
 
         fuels = Sets.newHashSet(
             TST_ItemID.create(charCoal),
@@ -118,10 +118,10 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
         fuelBlocks = Sets.newHashSet(TST_ItemID.create(charCoalBlock), TST_ItemID.create(cokeCoalBlock));
 
-        iron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L);
-        wroughtIron = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.WroughtIron, 1L);
-        steel = GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L);
-        ash = GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 1L);
+        iron = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L);
+        wroughtIron = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.WroughtIron, 1L);
+        steel = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L);
+        ash = GTOreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 1L);
     }
 
     private static final int max_input_bus = 6;
@@ -548,8 +548,8 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             buildHatchAdder(GT_TileEntity_MegaBrickedBlastFurnace.class).atLeast(InputBus, OutputBus)
                 .casingIndex(BRONZE_PLATED_BRICKS_INDEX)
                 .dot(1)
-                .buildAndChain(ofBlock(GregTech_API.sBlockCasings1, BRONZE_PLATED_BRICKS_INDEX)))
-        .addElement('N', ofBlock(GregTech_API.sBlockCasings4, FIREBRICK_METAID))
+                .buildAndChain(ofBlock(GregTechAPI.sBlockCasings1, BRONZE_PLATED_BRICKS_INDEX)))
+        .addElement('N', ofBlock(GregTechAPI.sBlockCasings4, FIREBRICK_METAID))
         .addElement('s', ofBlock(Blocks.brick_block, 0))
         .build();
 
@@ -582,8 +582,8 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MegaBrickedBlastFurnace_MachineType)
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_Controller)
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_00)
@@ -610,7 +610,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     @Override
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         usePrimitiveRecipes = !usePrimitiveRecipes;
-        GT_Utility.sendChatToPlayer(
+        GTUtility.sendChatToPlayer(
             aPlayer,
             usePrimitiveRecipes ? "Now Bricked DTPF accepts primitive blast furnace recipes"
                 : "Now Bricked DTPF only accepts iron/wrought iron and charcoal");
@@ -635,17 +635,19 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         return STRUCTURE_DEFINITION;
     }
 
-    private GT_Recipe findRecipe(ArrayList<ItemStack> inputList) {
+    private GTRecipe findRecipe(ArrayList<ItemStack> inputList) {
         RecipeMap<RecipeMapBackend> primitiveBlastRecipes = RecipeMaps.primitiveBlastRecipes;
         ItemStack[] inputArr = inputList.toArray(new ItemStack[inputList.size()]);
-        return primitiveBlastRecipes.findRecipe(null, false, 0, null, inputArr);
+        return primitiveBlastRecipes.findRecipeQuery()
+            .items(inputArr)
+            .find();
     }
 
     /*
      * calculate parallelism, material/fuel ratio
      * if there're multiple materials, use that of the largest amount
      */
-    static MaterialConsumption calculateMaterialConsumption(GT_Recipe recipe, List<ItemStack> inputList) {
+    static MaterialConsumption calculateMaterialConsumption(GTRecipe recipe, List<ItemStack> inputList) {
         // merge stacks
         MaterialConsumption result = new MaterialConsumption();
         Map<TST_ItemID, Integer> itemCountInput = new HashMap<>();
@@ -706,7 +708,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         return result;
     }
 
-    public ItemStack[] getPrimitiveOutputs(GT_Recipe recipe, int parallelism) {
+    public ItemStack[] getPrimitiveOutputs(GTRecipe recipe, int parallelism) {
         List<ItemStack> result = new ArrayList<>();
         for (ItemStack output : recipe.mOutputs) {
             if (output != null) {
@@ -734,7 +736,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             while (consumeSize > 0) {
                 for (int i = 0; i < inputList.size(); i++) {
                     ItemStack input = inputList.get(i);
-                    if (input != null && GT_Utility.areStacksEqual(input, toBeConsumed, false)) {
+                    if (input != null && GTUtility.areStacksEqual(input, toBeConsumed, false)) {
                         int consumeThisTime = Math.min(input.stackSize, consumeSize);
                         input.stackSize -= consumeThisTime;
                         consumeSize -= consumeThisTime;
@@ -756,7 +758,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         double time_percentage = running_time / max_efficiency_time_in_ticks;
         time_percentage = Math.min(time_percentage, 1.0d);
         if (usePrimitiveRecipes) {
-            GT_Recipe recipe = findRecipe(tInputList);
+            GTRecipe recipe = findRecipe(tInputList);
             if (recipe == null) return CheckRecipeResultRegistry.NO_RECIPE;
             MaterialConsumption materialConsumption = calculateMaterialConsumption(recipe, tInputList);
 
@@ -931,19 +933,19 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         return new String[] {
             StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
                 + EnumChatFormatting.GREEN
-                + GT_Utility.formatNumbers(mProgresstime)
+                + GTUtility.formatNumbers(mProgresstime)
                 + EnumChatFormatting.RESET
                 + "t / "
                 + EnumChatFormatting.YELLOW
-                + GT_Utility.formatNumbers(mMaxProgresstime)
+                + GTUtility.formatNumbers(mMaxProgresstime)
                 + EnumChatFormatting.RESET
                 + "t",
             "Ticks run: " + EnumChatFormatting.GREEN
-                + GT_Utility.formatNumbers(running_time)
+                + GTUtility.formatNumbers(running_time)
                 + EnumChatFormatting.RESET
                 + ", Fuel Efficiency: "
                 + EnumChatFormatting.RED
-                + GT_Utility.formatNumbers(100 * fuelEfficiency)
+                + GTUtility.formatNumbers(100 * fuelEfficiency)
                 + EnumChatFormatting.RESET
                 + "%" };
     }
@@ -952,40 +954,40 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide() && !aBaseMetaTileEntity.isAllowedToWork()) {
             // If machine has stopped, stop chunkloading.
-            GT_ChunkManager.releaseTicket((TileEntity) aBaseMetaTileEntity);
+            GTChunkManager.releaseTicket((TileEntity) aBaseMetaTileEntity);
             isMultiChunkloaded = false;
         } else if (aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isAllowedToWork() && !isMultiChunkloaded) {
             // Load a 3x3 area centered on controller when machine is running.
-            GT_ChunkManager.releaseTicket((TileEntity) aBaseMetaTileEntity);
+            GTChunkManager.releaseTicket((TileEntity) aBaseMetaTileEntity);
 
             int ControllerXCoordinate = ((TileEntity) aBaseMetaTileEntity).xCoord;
             int ControllerZCoordinate = ((TileEntity) aBaseMetaTileEntity).zCoord;
 
-            GT_ChunkManager.requestChunkLoad(
+            GTChunkManager.requestChunkLoad(
                 (TileEntity) aBaseMetaTileEntity,
                 new ChunkCoordIntPair(ControllerXCoordinate, ControllerZCoordinate));
-            GT_ChunkManager.requestChunkLoad(
+            GTChunkManager.requestChunkLoad(
                 (TileEntity) aBaseMetaTileEntity,
                 new ChunkCoordIntPair(ControllerXCoordinate + 16, ControllerZCoordinate));
-            GT_ChunkManager.requestChunkLoad(
+            GTChunkManager.requestChunkLoad(
                 (TileEntity) aBaseMetaTileEntity,
                 new ChunkCoordIntPair(ControllerXCoordinate - 16, ControllerZCoordinate));
-            GT_ChunkManager.requestChunkLoad(
+            GTChunkManager.requestChunkLoad(
                 (TileEntity) aBaseMetaTileEntity,
                 new ChunkCoordIntPair(ControllerXCoordinate, ControllerZCoordinate + 16));
-            GT_ChunkManager.requestChunkLoad(
+            GTChunkManager.requestChunkLoad(
                 (TileEntity) aBaseMetaTileEntity,
                 new ChunkCoordIntPair(ControllerXCoordinate, ControllerZCoordinate - 16));
-            GT_ChunkManager.requestChunkLoad(
+            GTChunkManager.requestChunkLoad(
                 (TileEntity) aBaseMetaTileEntity,
                 new ChunkCoordIntPair(ControllerXCoordinate + 16, ControllerZCoordinate + 16));
-            GT_ChunkManager.requestChunkLoad(
+            GTChunkManager.requestChunkLoad(
                 (TileEntity) aBaseMetaTileEntity,
                 new ChunkCoordIntPair(ControllerXCoordinate + 16, ControllerZCoordinate - 16));
-            GT_ChunkManager.requestChunkLoad(
+            GTChunkManager.requestChunkLoad(
                 (TileEntity) aBaseMetaTileEntity,
                 new ChunkCoordIntPair(ControllerXCoordinate - 16, ControllerZCoordinate + 16));
-            GT_ChunkManager.requestChunkLoad(
+            GTChunkManager.requestChunkLoad(
                 (TileEntity) aBaseMetaTileEntity,
                 new ChunkCoordIntPair(ControllerXCoordinate - 16, ControllerZCoordinate - 16));
 
@@ -997,7 +999,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     // No muffler hatch needed.
     @Override
     public boolean polluteEnvironment(int aPollutionLevel) {
-        GT_Pollution.addPollution(getBaseMetaTileEntity(), getPollutionPerTick(null));
+        Pollution.addPollution(getBaseMetaTileEntity(), getPollutionPerTick(null));
         return true;
     }
 

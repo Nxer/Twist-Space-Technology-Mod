@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 
 /**
  * Use {@link MetaBlockCasing} with {@link MetaBlockConstructors}
@@ -42,7 +42,7 @@ public class MetaBlockCasing01 extends MetaBlockCasingBase {
     }
 
     private static int getTextureIndexStatic(int aMeta) {
-        return GT_Utility.getTextureId(TEXTURE_PAGE_INDEX, getTextureIndexInPageStatic(aMeta));
+        return GTUtility.getTextureId(TEXTURE_PAGE_INDEX, getTextureIndexInPageStatic(aMeta));
     }
 
     private static byte getTextureIndexInPageStatic(int meta) {
