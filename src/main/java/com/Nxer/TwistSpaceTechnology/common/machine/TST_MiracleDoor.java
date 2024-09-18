@@ -171,8 +171,9 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public RecipeMap<?> getRecipeMap() {
         if (mode == 1) return GTCMRecipe.StellarForgeRecipes;
-//        return GTPPRecipeMaps.alloyBlastSmelterRecipes;
-        return GTCMRecipe.CrystallineInfinitierRecipes;
+        else if (mode == 2) return GTCMRecipe.StellarForgeWithIngotRecipes;
+        else if (mode == 3) return GTCMRecipe.AlloyBlastSmelterWithIngotRecipes;
+        return GTPPRecipeMaps.alloyBlastSmelterRecipes;
     }
 
     @NotNull
@@ -184,7 +185,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
+            this.mode = (byte) ((this.mode + 1) % 4);
             GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MiracleDoor.modeMsg." + this.mode));
         }
     }

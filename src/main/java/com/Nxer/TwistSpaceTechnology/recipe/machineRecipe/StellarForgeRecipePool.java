@@ -284,6 +284,30 @@ public class StellarForgeRecipePool implements IRecipePool {
         bd.eut(RECIPE_UV)
             .duration(20 * 112)
             .addTo(GTCMRecipe.StellarForgeRecipes);
+
+        bd = TST_RecipeBuilder.builder()
+            .itemInputs(Materials.Neutronium.getDust(1));
+
+        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
+            bd.fluidOutputs(Materials.Neutronium.getMolten(144));
+        } else {
+            bd.itemOutputs(Materials.Neutronium.getIngots(1));
+        }
+        bd.eut(RECIPE_UV)
+            .duration(20 * 112)
+            .addTo(GTCMRecipe.StellarForgeWithIngotRecipes);
+
+        bd = TST_RecipeBuilder.builder()
+            .itemInputs(Materials.Neutronium.getDust(1));
+
+        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
+            bd.fluidOutputs(Materials.Neutronium.getMolten(144));
+        } else {
+            bd.itemOutputs(Materials.Neutronium.getIngots(1));
+        }
+        bd.eut(RECIPE_UV)
+            .duration(20 * 112)
+            .addTo(GTCMRecipe.AlloyBlastSmelterWithIngotRecipes);
     }
 
     public static Collection<GT_Recipe> stellarForgeRecipeListCache;
