@@ -1898,7 +1898,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 32),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 16),
 
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Quantum, 16L),
+                GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UXV), 16),
                 ItemList.EnergisedTesseract.get(1)
             },
             new FluidStack[] {

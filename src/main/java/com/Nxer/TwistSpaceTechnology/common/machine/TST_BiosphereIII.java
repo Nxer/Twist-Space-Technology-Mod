@@ -43,7 +43,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.BorosilicateGlass;
 import bartworks.API.recipe.BartWorksRecipeMaps;
-import bartworks.common.configs.ConfigHandler;
+import bartworks.common.configs.Configuration;
 import bartworks.common.tileentities.multis.MTEBioVat;
 import bartworks.common.tileentities.tiered.GT_MetaTileEntity_RadioHatch;
 import bartworks.util.BWUtil;
@@ -191,7 +191,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         GTRecipe tRecipe = recipe.copy();
         if (mode == 0) efficiency = getExpectedMultiplier(tRecipe.mFluidOutputs[0]);// Bio Vat Normal
         else efficiency = (int) (((mGlassTier - mNeededGlassTier) * 600 + 1601.0) / 1000
-            * ConfigHandler.bioVatMaxParallelBonus);// Bio Vat Automation
+            * Configuration.Multiblocks.bioVatMaxParallelBonus);// Bio Vat Automation
 
         long fluidAmount = 0;
         for (FluidStack fluid : inputFluids) {
@@ -217,9 +217,9 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     }
 
     private int calcMod(double x) {
-        double y = getOutputCapacity() / 2D, z = ConfigHandler.bioVatMaxParallelBonus;
+        double y = getOutputCapacity() / 2D, z = Configuration.Multiblocks.bioVatMaxParallelBonus;
         int ret = (int) Math.ceil((-1D / y * Math.pow(x - y, 2D) + y) / y * z);
-        return MathUtils.clamp(1, ret, ConfigHandler.bioVatMaxParallelBonus);
+        return MathUtils.clamp(1, ret, Configuration.Multiblocks.bioVatMaxParallelBonus);
     }
 
     private int getOutputCapacity() {
