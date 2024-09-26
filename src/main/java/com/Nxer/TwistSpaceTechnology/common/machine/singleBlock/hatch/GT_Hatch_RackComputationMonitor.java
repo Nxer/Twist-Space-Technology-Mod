@@ -1,10 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.gtnewhorizon.structurelib.StructureLib.DEBUG_MODE;
 import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.enums.Mods.OpenComputers;
 import static net.minecraft.util.StatCollector.translateToLocal;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
-import static tectech.loader.TecTechConfig.DEBUG_MODE;
 import static tectech.util.CommonValues.MULTI_CHECK_AT;
 import static tectech.util.TTUtility.getUniqueIdentifier;
 
