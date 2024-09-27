@@ -38,8 +38,10 @@ import static gregtech.api.enums.GT_HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,6 +56,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -291,6 +295,26 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         // needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
 
         return result;
+    }
+
+    private ArrayList<ItemStack> getMoltenIngot(ProcessingLogic aProcessingLogic) {
+        HashMap<Fluid, Long> CacheFuilds = new HashMap<>();
+        ArrayList<ItemStack> moltenIngots = new ArrayList<>();
+        for (FluidStack aFluidStack : aProcessingLogic.getOutputFluids()) {
+            if (aFluidStack.getLocalizedName()
+                .contains("molten")) {
+                long currentAmount = CacheFuilds.getOrDefault(aFluidStack.getFluid(), 0L);
+                currentAmount += aFluidStack.amount;
+                CacheFuilds.put(aFluidStack.getFluid(), currentAmount);
+            }
+        }
+
+        for (Fluid aFluid : CacheFuilds.keySet()) {
+            long currentAmount = CacheFuilds.get(aFluid);
+            long IngotAmonut = currentAmount / 144;
+            long ResidualAmount = currentAmount % 144;
+            
+        }
     }
 
     private void flushOverclockParameter() {

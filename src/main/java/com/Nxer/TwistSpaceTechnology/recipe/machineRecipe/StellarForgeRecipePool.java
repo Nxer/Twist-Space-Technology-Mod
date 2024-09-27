@@ -295,7 +295,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         }
         bd.eut(RECIPE_UV)
             .duration(20 * 112)
-            .addTo(GTCMRecipe.StellarForgeWithIngotRecipes);
+            .addTo(GTCMRecipe.StellarForgeRecipes);
 
         bd = TST_RecipeBuilder.builder()
             .itemInputs(Materials.Neutronium.getDust(1));
@@ -307,7 +307,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         }
         bd.eut(RECIPE_UV)
             .duration(20 * 112)
-            .addTo(GTCMRecipe.AlloyBlastSmelterWithIngotRecipes);
+            .addTo(GTCMRecipe.StellarForgeRecipes);
     }
 
     public static Collection<GT_Recipe> stellarForgeRecipeListCache;
