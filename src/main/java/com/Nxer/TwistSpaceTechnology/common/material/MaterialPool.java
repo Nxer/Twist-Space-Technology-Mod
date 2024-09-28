@@ -116,6 +116,32 @@ public class MaterialPool implements Runnable {
         new Pair<>(PureMana, 1),
         new Pair<>(Materials.Stone, 2));
 
+    public static final Werkstoff StabiliseVoidMatter = new Werkstoff(
+        new short[] { 0, 0, 0 }, // Dark
+        "Stabilise Void Matter",
+        subscriptNumbers("??SvM⨕??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 8,
+        TextureSet.SET_FLUID,
+        new Pair<>(PureMana, 1),
+        new Pair<>(Materials.Stone, 2));
+
+    public static final Werkstoff LiquidStargate = new Werkstoff(
+        new short[] { 66, 170, 255 }, // Dark
+        "Liquid Stargate",
+        subscriptNumbers("??Stargate??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 9,
+        TextureSet.SET_FLUID,
+        new Pair<>(PureMana, 1),
+        new Pair<>(Materials.Stone, 2));
+
     // Bartworks' Material System run on Runnable.class
     @Override
     public void run() {
