@@ -1464,13 +1464,13 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getDust(1),10_000_000)
             )
             .fluidInputs(
-                Materials.Void.getMolten(10_000_000),
-                Materials.DeepIron.getMolten(10_000_000),
+                Materials.Polycaprolactam.getMolten(10_000_000),
+                Materials.NickelZincFerrite.getMolten(10_000_000),
                 Materials.DarkSteel.getMolten(10_000_000),
                 Materials.DarkIron.getMolten(10_000_000),
                 GGMaterial.tairitsu.getMolten(10_000_000),
                 Materials.Tungsten.getMolten(10_000_000),
-                Materials.Obsidian.getMolten(10_000_000),
+                GGMaterial.marM200.getMolten(10_000_000),
                 Materials.Vanadium.getMolten(10_000_000),
                 MaterialsElements.STANDALONE.BLACK_METAL.getFluidStack(10_000_000),
                 Materials.ShadowIron.getMolten(10_000_000),
