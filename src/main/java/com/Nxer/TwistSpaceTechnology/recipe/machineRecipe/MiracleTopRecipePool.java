@@ -1458,7 +1458,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(Materials.NaquadahAlloy.getDust(1),10_000_000),
                 setStackSize(Materials.Tungsten.getDust(1),10_000_000),
                 setStackSize(MaterialsUEVplus.TranscendentMetal.getDust(1),10_000_000),
-                setStackSize(Materials.BlackBronze.getDust(1),10_000_000),
+                setStackSize(Materials.Perlite.getDust(1),10_000_000),
                 setStackSize(Materials.DarkAsh.getDust(1),10_000_000),
                 setStackSize(Materials.GraniticMineralSand.getDust(1),10_000_000),
                 setStackSize(MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getDust(1),10_000_000)
@@ -1467,7 +1467,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Polycaprolactam.getMolten(10_000_000),
                 Materials.NickelZincFerrite.getMolten(10_000_000),
                 Materials.DarkSteel.getMolten(10_000_000),
-                Materials.DarkIron.getMolten(10_000_000),
+                Materials.Polybenzimidazole.getMolten(10_000_000),
                 GGMaterial.tairitsu.getMolten(10_000_000),
                 Materials.Tungsten.getMolten(10_000_000),
                 GGMaterial.marM200.getMolten(10_000_000),
