@@ -88,7 +88,6 @@ import gregtech.api.util.GT_OverclockCalculator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -175,15 +174,13 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public RecipeMap<?> getRecipeMap() {
         if (mode == 1) return GTCMRecipe.StellarForgeRecipes;
-        else if (mode == 2) return GTCMRecipe.StellarForgeWithIngotRecipes;
-        else if (mode == 3) return GTCMRecipe.AlloyBlastSmelterWithIngotRecipes;
-        return GTPPRecipeMaps.alloyBlastSmelterRecipes;
+        return GTCMRecipe.MiracleDoorRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.StellarForgeRecipes, GTPPRecipeMaps.alloyBlastSmelterRecipes);
+        return Arrays.asList(GTCMRecipe.StellarForgeRecipes, GTCMRecipe.MiracleDoorRecipes);
     }
 
     @Override
@@ -313,8 +310,9 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
             long currentAmount = CacheFuilds.get(aFluid);
             long IngotAmonut = currentAmount / 144;
             long ResidualAmount = currentAmount % 144;
-            
+
         }
+        return moltenIngots;
     }
 
     private void flushOverclockParameter() {
