@@ -193,7 +193,6 @@ import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
 import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
-import WayofTime.alchemicalWizardry.ModBlocks;
 import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import fox.spiteful.avaritia.items.LudicrousItems;
@@ -3092,8 +3091,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
             GT_Values.RA
                 .stdBuilder()
-                .itemInputs(new ItemStack(ModBlocks.bloodRune), Materials.StainlessSteel.getPlates(6))
-                .fluidInputs(BloodMagicHelper.getLifeEssence(500))
+                .itemInputs(
+                    GT_OreDictUnificator.get(OrePrefixes.frameGt,Materials.BloodInfusedIron,1),
+                    new ItemStack(WayofTime.alchemicalWizardry.ModItems.blankSlate,6))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(2500))
                 .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
                 .eut(RECIPE_EV)
                 .duration(20 * 12)
@@ -3101,20 +3102,26 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
             GT_Values.RA
                 .stdBuilder()
-                .itemInputs(new ItemStack(ModBlocks.bloodRune), GT_Utility.getIntegratedCircuit(7))
-                .fluidInputs(BloodMagicHelper.getLifeEssence(250))
+                .itemInputs(
+                    Mods.BloodArsenal.isModLoaded() ?
+                        GT_ModHandler.getModItem(Mods.BloodArsenal.ID,"blood_stone",1) :
+                        new ItemStack(Blocks.stone,1),
+                    GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(1000))
                 .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
                 .eut(0)
-                .duration(60)
+                .duration(20 * 18)
                 .addTo(GTCMRecipe.BloodyHellRecipes);
 
             GT_Values.RA
                 .stdBuilder()
-                .itemInputs(GT_ModHandler.getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1), GT_Utility.getIntegratedCircuit(7))
+                .itemInputs(
+                    GT_ModHandler.getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1),
+                    GT_Utility.getIntegratedCircuit(1))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(100000))
                 .itemOutputs(GTCMItemList.BloodyCasing2.get(1))
                 .eut(0)
-                .duration(60)
+                .duration(20 * 300)
                 .addTo(GTCMRecipe.BloodyHellRecipes);
         }
 

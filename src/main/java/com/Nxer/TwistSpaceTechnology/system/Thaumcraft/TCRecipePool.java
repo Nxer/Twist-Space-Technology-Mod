@@ -163,10 +163,14 @@ public class TCRecipePool implements IRecipePool {
                         .merge(Aspect.DEATH, 64)
                         .merge(Aspect.UNDEAD, 64)
                         .merge(Aspect.MECHANISM, 16),
-                    new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
-                    new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModItems.transcendentBloodOrb),
+                    Mods.BloodArsenal.isModLoaded()
+                        ? GT_ModHandler.getModItem(Mods.BloodArsenal.ID, "blood_infused_diamond_block", 1, 0)
+                        : new ItemStack(Blocks.stone, 1),
+                    new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockMasterStone),
                         new ItemStack(WayofTime.alchemicalWizardry.ModItems.activationCrystal, 1, 1),
+                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockWritingTable),
+                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.demonBloodShard),
                         new ItemStack(WayofTime.alchemicalWizardry.ModItems.itemSeerSigil),
                         new ItemStack(WayofTime.alchemicalWizardry.ModItems.divinationSigil),
                         new ItemStack(WayofTime.alchemicalWizardry.ModItems.waterSigil),
