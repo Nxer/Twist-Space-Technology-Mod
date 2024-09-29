@@ -432,31 +432,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         int offsetZ = getOffset(1, mTier, 2);
         Block blood = blockLifeEssence;
 
-        // int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
-        // int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
-        int xDir = 1;
-        int zDir = 1;
-        // if (mDirectionX == 1) {
-        // // EAST
-        // xDir = 1;
-        // zDir = 1;
-        // } else if (mDirectionX == -1) {
-        // // WEST
-        // xDir = -1;
-        // zDir = -1;
-        // }
-        // if (mDirectionZ == 1) {
-        // // SOUTH
-        // xDir = -1;
-        // zDir = 1;
-        // } else if (mDirectionZ == -1) {
-        // // NORTH
-        // xDir = 1;
-        // zDir = -1;
-        // }
-
-        int lengthX = structureDef[0].length;
-        int lengthY = structureDef.length;
+        int lengthX = structureDef.length;
+        int lengthY = structureDef[0].length;
         int lengthZ = structureDef[0][0].length();
 
         // BloodMagic has not registered block flowing life essence, so it is necessary to place all fluids at once
@@ -473,17 +450,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         for (int y = 0; y < lengthY; y++) {
             for (int x = 0; x < lengthX; x++) {
                 for (int z = 0; z < lengthZ; z++) {
-                    String strList = String.valueOf(structureDef[y][x].charAt(z));
+                    String strList = String.valueOf(structureDef[x][y].charAt(z));
                     if (!Objects.equals(strList, "Z")) continue;
 
-                    int aX = (offsetX - x) * xDir;
-                    int aY = offsetY - y;
-                    int aZ = (offsetZ - z) * zDir;
-                    // if (mDirectionX == 1 || mDirectionX == -1) {
-                    // int temp = aX;
-                    // aX = aZ;
-                    // aZ = temp;
-                    // }
+                    int aX = offsetX - x;
+                    int aY = offsetY - y - 1;
+                    int aZ = offsetZ - z + 1;
 
                     aX += aBaseMetaTileEntity.getXCoord();
                     aY += aBaseMetaTileEntity.getYCoord();
