@@ -15,6 +15,9 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose
 import static gregtech.api.enums.GT_HatchElement.InputBus;
 import static gregtech.api.enums.GT_HatchElement.InputHatch;
 import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static net.minecraft.block.Block.getBlockFromName;
 
 import java.util.ArrayList;
@@ -51,7 +54,6 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
 import gregtech.api.enums.Mods;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -67,14 +69,6 @@ import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
 
-    private static final ITexture[] FACING_ACTIVE = {
-        TextureFactory.of(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE), TextureFactory.builder()
-            .addIcon(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
-            .glow()
-            .build() };
-    private static final ITexture[] FACING_FRONT = {
-        TextureFactory.of(Textures.BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_INACTIVE) };
-    private static final ITexture[] FACING_SIDE = { TextureFactory.of(Textures.BlockIcons.MACHINE_CASING_DENSEBRICKS) };
     private int speedRuneCount = 0;
     private int tbSpeedRuneCount = 0;
     private int mTier = 0;
@@ -191,7 +185,23 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
-        return FACING_ACTIVE;
+        ITexture base = casingTexturePages[115][MetaBlockCasing02.getTextureIndexInPage(0)];
+        ITexture[] FACING_ACTIVE = { TextureFactory.of(base), TextureFactory.builder()
+            .addIcon(OVERLAY_DTPF_ON)
+            .extFacing()
+            .glow()
+            .build() };
+        ITexture[] FACING_FRONT = { TextureFactory.of(base), TextureFactory.builder()
+            .addIcon(OVERLAY_DTPF_OFF)
+            .extFacing()
+            .glow()
+            .build() };
+        ITexture[] FACING_SIDE = { TextureFactory.of(base) };
+        if (side == facing) {
+            if (active) return FACING_ACTIVE;
+            return FACING_FRONT;
+        }
+        return FACING_SIDE;
     }
 
     @Override
@@ -422,28 +432,28 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         int offsetZ = getOffset(1, mTier, 2);
         Block blood = blockLifeEssence;
 
-        int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
-        int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
-        int xDir = 0;
-        int zDir = 0;
-        if (mDirectionX == 1) {
-            // EAST
-            xDir = 1;
-            zDir = 1;
-        } else if (mDirectionX == -1) {
-            // WEST
-            xDir = -1;
-            zDir = -1;
-        }
-        if (mDirectionZ == 1) {
-            // SOUTH
-            xDir = -1;
-            zDir = 1;
-        } else if (mDirectionZ == -1) {
-            // NORTH
-            xDir = 1;
-            zDir = -1;
-        }
+        // int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
+        // int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
+        int xDir = 1;
+        int zDir = 1;
+        // if (mDirectionX == 1) {
+        // // EAST
+        // xDir = 1;
+        // zDir = 1;
+        // } else if (mDirectionX == -1) {
+        // // WEST
+        // xDir = -1;
+        // zDir = -1;
+        // }
+        // if (mDirectionZ == 1) {
+        // // SOUTH
+        // xDir = -1;
+        // zDir = 1;
+        // } else if (mDirectionZ == -1) {
+        // // NORTH
+        // xDir = 1;
+        // zDir = -1;
+        // }
 
         int lengthX = structureDef[0].length;
         int lengthY = structureDef.length;
@@ -460,20 +470,20 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         if (bloodAmountNeeded > mBloodAmount) return false;
 
         int setCount = 0;
-        for (int x = 0; x < lengthX; x++) {
-            for (int z = 0; z < lengthZ; z++) {
-                for (int y = 0; y < lengthY; y++) {
+        for (int y = 0; y < lengthY; y++) {
+            for (int x = 0; x < lengthX; x++) {
+                for (int z = 0; z < lengthZ; z++) {
                     String strList = String.valueOf(structureDef[y][x].charAt(z));
                     if (!Objects.equals(strList, "Z")) continue;
 
                     int aX = (offsetX - x) * xDir;
                     int aY = offsetY - y;
                     int aZ = (offsetZ - z) * zDir;
-                    if (mDirectionX == 1 || mDirectionX == -1) {
-                        int temp = aX;
-                        aX = aZ;
-                        aZ = temp;
-                    }
+                    // if (mDirectionX == 1 || mDirectionX == -1) {
+                    // int temp = aX;
+                    // aX = aZ;
+                    // aZ = temp;
+                    // }
 
                     aX += aBaseMetaTileEntity.getXCoord();
                     aY += aBaseMetaTileEntity.getYCoord();

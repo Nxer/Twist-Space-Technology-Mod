@@ -174,6 +174,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -3111,6 +3112,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
                 .eut(0)
                 .duration(20 * 18)
+                .metadata(BloodyHellTierKey.INSTANCE, 1)
                 .addTo(GTCMRecipe.BloodyHellRecipes);
 
             GT_Values.RA
@@ -3122,6 +3124,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(GTCMItemList.BloodyCasing2.get(1))
                 .eut(0)
                 .duration(20 * 300)
+                .metadata(BloodyHellTierKey.INSTANCE, 5)
                 .addTo(GTCMRecipe.BloodyHellRecipes);
         }
 

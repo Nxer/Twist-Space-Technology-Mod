@@ -622,19 +622,21 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 for (int y = 0; y < LengthY; y++) {
                     String ListStr = String.valueOf(StructureString[y][x].charAt(z));
                     if (!Objects.equals(ListStr, TargetString)) continue;
-                    if (mDirectionX == 1 || mDirectionX == -1) aBaseMetaTileEntity.getWorld()
+
+                    int aX = (OffSetX - x) * xDir;
+                    int aY = OffSetY - y;
+                    int aZ = (OffSetZ - z) * zDir;
+                    if (mDirectionX == 1 || mDirectionX == -1) {
+                        int temp = aX;
+                        aX = aZ;
+                        aZ = temp;
+                    }
+
+                    aBaseMetaTileEntity.getWorld()
                         .setBlock(
-                            aBaseMetaTileEntity.getXCoord() + (OffSetZ - z) * zDir,
-                            aBaseMetaTileEntity.getYCoord() + OffSetY - y,
-                            aBaseMetaTileEntity.getZCoord() + (OffSetX - x) * xDir,
-                            TargetBlock,
-                            TargetMeta,
-                            3);
-                    else aBaseMetaTileEntity.getWorld()
-                        .setBlock(
-                            aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
-                            aBaseMetaTileEntity.getYCoord() + OffSetY - y,
-                            aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir,
+                            aBaseMetaTileEntity.getXCoord() + aX,
+                            aBaseMetaTileEntity.getYCoord() + aY,
+                            aBaseMetaTileEntity.getZCoord() + aZ,
                             TargetBlock,
                             TargetMeta,
                             3);
