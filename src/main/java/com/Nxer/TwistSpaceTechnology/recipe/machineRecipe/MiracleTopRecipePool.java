@@ -1493,8 +1493,6 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemInputs(
                 GTCMItemList.UxvFlask.get(1),
                 GTCMItemList.ProofOfHeroes.get(64),
-                setStackSize(Materials.Iron.getNanite(1), 1_000),
-                setStackSize(Materials.Copper.getNanite(1), 1_000),
                 setStackSize(Materials.Silver.getNanite(1), 1_000),
                 setStackSize(Materials.Gold.getNanite(1), 1_000),
                 setStackSize(Materials.Neutronium.getNanite(1), 1_000),
