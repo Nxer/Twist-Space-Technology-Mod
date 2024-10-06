@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -88,6 +89,14 @@ public class MiracleTopRecipePool implements IRecipePool {
         final ItemStack Wrapped_Circuit_Parts_InductorXSMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32706);
 
         final ItemStack Wrapped_Circuit_Board_Bio_Ultra = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32746);
+
+        final ItemStack ringBlock = GTModHandler.getModItem("SGCraft", "stargateRing" , 1, 0);
+        final ItemStack chevronBlock = GTModHandler.getModItem("SGCraft", "stargateRing", 1, 1);
+        final ItemStack irisUpgrade = GTModHandler.getModItem("SGCraft", "sgIrisUpgrade" , 1, 0);
+
+
+
+
 
         // region ME Storage Component
         {
@@ -1397,6 +1406,118 @@ public class MiracleTopRecipePool implements IRecipePool {
 
 
         // endregion
+
+        // region Endgame Challenge content
+
+        // Liquid Stargate
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                Utils.copyAmount(1, ringBlock),
+                Utils.copyAmount(1, chevronBlock),
+                Utils.copyAmount(1, chevronBlock),
+                Utils.copyAmount(1, ringBlock),
+
+                Utils.copyAmount(1, chevronBlock),
+                Utils.copyAmount(1, irisUpgrade),
+                Utils.copyAmount(1, irisUpgrade),
+                Utils.copyAmount(1, chevronBlock),
+
+                Utils.copyAmount(1, ringBlock),
+                Utils.copyAmount(1, irisUpgrade),
+                Utils.copyAmount(1, irisUpgrade),
+                Utils.copyAmount(1, ringBlock),
+
+                Utils.copyAmount(1, chevronBlock),
+                Utils.copyAmount(1, ringBlock),
+                Utils.copyAmount(1, ringBlock),
+                Utils.copyAmount(1, chevronBlock)
+            )
+            .fluidInputs(
+                MaterialPool.StabiliseVoidMatter.getFluidOrGas(1_000)
+            )
+            .fluidOutputs(MaterialPool.LiquidStargate.getFluidOrGas(1000))
+            .noOptimize()
+            .specialValue(13500)
+            .eut(RECIPE_MAX)
+            .duration(20 *99_999_999)
+            .addTo(MT);
+
+        // StabiliseVoidMatter
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                setStackSize(Materials.CosmicNeutronium.getDust(1), 10_000_000),
+                setStackSize(Materials.Bedrockium.getDust(1),10_000_000),
+                setStackSize(Materials.Carbon.getDust(1),10_000_000),
+                setStackSize(Materials.Oilsands.getDust(1),10_000_000),
+                setStackSize(Materials.NiobiumTitanium.getDust(1),10_000_000),
+                setStackSize(MaterialsElements.STANDALONE.BLACK_METAL.getDust(1),10_000_000),
+                setStackSize(Materials.Naquadria.getDust(1),10_000_000),
+                setStackSize(Materials.Obsidian.getDust(1),10_000_000),
+                setStackSize(Materials.Coal.getDust(1),10_000_000),
+                setStackSize(Materials.NaquadahAlloy.getDust(1),10_000_000),
+                setStackSize(Materials.Tungsten.getDust(1),10_000_000),
+                setStackSize(MaterialsUEVplus.TranscendentMetal.getDust(1),10_000_000),
+                setStackSize(Materials.Perlite.getDust(1),10_000_000),
+                setStackSize(Materials.DarkAsh.getDust(1),10_000_000),
+                setStackSize(Materials.GraniticMineralSand.getDust(1),10_000_000),
+                setStackSize(MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getDust(1),10_000_000)
+            )
+            .fluidInputs(
+                Materials.Polycaprolactam.getMolten(10_000_000),
+                Materials.NickelZincFerrite.getMolten(10_000_000),
+                Materials.DarkSteel.getMolten(10_000_000),
+                Materials.Polybenzimidazole.getMolten(10_000_000),
+                GGMaterial.tairitsu.getMolten(10_000_000),
+                Materials.Tungsten.getMolten(10_000_000),
+                GGMaterial.marM200.getMolten(10_000_000),
+                Materials.Vanadium.getMolten(10_000_000),
+                MaterialsElements.STANDALONE.BLACK_METAL.getFluidStack(10_000_000),
+                Materials.ShadowIron.getMolten(10_000_000),
+                Materials.NaquadahAlloy.getMolten(10_000_000),
+                Materials.ShadowSteel.getMolten(10_000_000),
+                Materials.Cadmium.getMolten(10_000_000),
+                Materials.Desh.getMolten(10_000_000),
+                Materials.BlackPlutonium.getMolten(10_000_000),
+                Materials.BlackSteel.getMolten(10_000_000),
+                MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(10_000_000)
+            )
+            .fluidOutputs(MaterialPool.StabiliseVoidMatter.getFluidOrGas(1))
+            .eut(RECIPE_MAX)
+            .duration(20 * 99_999_999)
+            .addTo(MT);
+
+        // ProofOfGods
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                GTCMItemList.UxvFlask.get(1),
+                GTCMItemList.ProofOfHeroes.get(64),
+                setStackSize(Materials.Silver.getNanite(1), 1_000),
+                setStackSize(Materials.Gold.getNanite(1), 1_000),
+                setStackSize(Materials.Neutronium.getNanite(1), 1_000),
+                setStackSize(MaterialsUEVplus.Universium.getNanite(1), 1_000),
+                setStackSize(MaterialsUEVplus.Eternity.getNanite(1), 1_000),
+                setStackSize(MaterialsUEVplus.TranscendentMetal.getNanite(1), 1_000),
+                setStackSize(Materials.Glowstone.getNanite(1), 1_000),
+                setStackSize(MaterialsUEVplus.WhiteDwarfMatter.getNanite(1), 1_000),
+                setStackSize(MaterialsUEVplus.BlackDwarfMatter.getNanite(1), 1_000)
+            )
+            .fluidInputs(
+                MaterialPool.LiquidStargate.getFluidOrGas(50_000),
+                MaterialPool.StabiliseVoidMatter.getFluidOrGas(1_000)
+            )
+            .itemOutputs(
+                GTCMItemList.ProofOfGods.get(1)
+            )
+            .eut(RECIPE_MAX)
+            .duration(20 * 99_999_999)
+            .addTo(MT);
+
+        // FLASK
+        loadFlaskRecipe();
+
+        // endregion
         if (Config.activateMegaSpaceStation) {
             loadMaxRecipe();
         }
@@ -1438,6 +1559,321 @@ public class MiracleTopRecipePool implements IRecipePool {
         }
 
 
+    }
+
+    public void loadFlaskRecipe() {
+        final int ITEMS_FLASK_COUNT = 100_000;
+
+        // LV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                setStackSize(ItemList.Electric_Motor_LV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_LV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_LV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_LV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_LV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_LV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_LV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_LV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_Microprocessor.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.RedstoneAlloy, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Iron.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.LvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(32 * 20)
+            .addTo(MT);
+
+        // MV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.LvFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_MV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_MV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_MV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_MV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_MV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_MV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_MV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_MV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_Processor.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorMV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Copper.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.MvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(128 * 20)
+            .addTo(MT);
+
+        // HV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.MvFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_HV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_HV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_HV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_HV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_HV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_HV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_HV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_HV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_Nanoprocessor.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorHV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Nickel.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.HvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(512 * 20)
+            .addTo(MT);
+
+        // EV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.HvFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_EV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_EV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_EV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_EV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_EV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_EV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_EV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_EV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_Quantumprocessor.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorEV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Titanium.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.EvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(2_048 * 20)
+            .addTo(MT);
+
+        // IV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.EvFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_IV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_IV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_IV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_IV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_IV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_IV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_IV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_IV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_Crystalprocessor.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Tungsten.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.IvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(8_192 * 20)
+            .addTo(MT);
+
+        // LUV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.IvFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_LuV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_LuV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_LuV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_LuV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_LuV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_LuV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_LuV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_LuV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_Wetwarecomputer.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Osmium.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.LuvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(32_768 * 20)
+            .addTo(MT);
+
+        // ZPM FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.LuvFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_ZPM.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_ZPM.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_ZPM.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_ZPM.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_ZPM.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_ZPM.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_ZPM.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_ZPM.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_Bioprocessor.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Naquadah.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.ZpmFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(131_072 * 20)
+            .addTo(MT);
+
+        // UV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.ZpmFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_UV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_UV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_UV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_UV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_UV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_UV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_UV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_UV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_OpticalProcessor.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Neutronium.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.UvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(524_288 * 20)
+            .addTo(MT);
+
+        // UHV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.UvFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_UHV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_UHV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_UHV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_UHV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_UHV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_UHV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_UHV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_UHV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_OpticalAssembly.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Samarium.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.UhvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(2_097_152 * 20)
+            .addTo(MT);
+
+        // UEV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.UhvFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_UEV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_UEV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_UEV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_UEV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_UEV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_UEV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_UEV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_UEV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_CosmicProcessor.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Americium.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.UevFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(8_388_608 * 20)
+            .addTo(MT);
+
+        // UIV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.UevFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_UIV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_UIV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_UIV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_UIV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_UIV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_UIV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_UIV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_UIV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_CosmicAssembly.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Thorium.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.UivFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(33_554_432 * 20)
+            .addTo(MT);
+
+        // UMV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.UivFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_UMV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_UMV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_UMV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_UMV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_UMV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_UMV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_UMV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_UMV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_CosmicComputer.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Plutonium241.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.UmvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(100_000_000 * 20)
+            .addTo(MT);
+
+        // UXV FLASK
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTCMItemList.UmvFlask.get(1),
+                setStackSize(ItemList.Electric_Motor_UXV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Piston_UXV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Electric_Pump_UXV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Field_Generator_UXV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Conveyor_Module_UXV.get(1), ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Robot_Arm_UXV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Emitter_UXV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Sensor_UXV.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_CosmicMainframe.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Infinity, 1),ITEMS_FLASK_COUNT)
+            )
+            .fluidInputs(
+                Materials.Radon.getPlasma(1_000_000_000)
+            )
+            .itemOutputs(GTCMItemList.UxvFlask.get(1))
+            .noOptimize()
+            .eut(RECIPE_MAX)
+            .duration(100_000_000 * 20)
+            .addTo(MT);
     }
 
 //    HighDimensionalExtend,

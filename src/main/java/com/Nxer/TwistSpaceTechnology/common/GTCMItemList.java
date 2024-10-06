@@ -15,6 +15,7 @@ public enum GTCMItemList {
     SpaceWarper,
     OpticalSOC,
     ProofOfHeroes,
+    ProofOfGods,
     MoldSingularity,
     ParticleTrapTimeSpaceShield,
     LapotronShard,
@@ -160,6 +161,20 @@ public enum GTCMItemList {
     WirelessUpdateItem,
     FountOfEcology,
     OffSpring,
+
+    LvFlask,
+    MvFlask,
+    HvFlask,
+    EvFlask,
+    IvFlask,
+    LuvFlask,
+    ZpmFlask,
+    UvFlask,
+    UhvFlask,
+    UevFlask,
+    UivFlask,
+    UmvFlask,
+    UxvFlask,
 
     // endregion
 

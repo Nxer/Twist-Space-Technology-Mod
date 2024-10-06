@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.item.items;
 
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
@@ -32,7 +33,14 @@ public final class BasicItems {
     public static final Item ProofOfHeroes = new ItemProofOfHeroes(
         "英雄の証",
         "ProofOfHeroes",
+        EnumRarity.common,
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:ProofOfHeroes");
+
+    public static final Item ProofOfGods = new ItemProofOfHeroes(
+        "Twist Token",
+        "ProofOfGods",
+        EnumRarity.epic,
+        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:ProofOfGods");
 
     public static final Item MultiStructuresLinkTool = new ItemMultiStructuresLinkTool(
         "Multi-Structures Link Tool",
