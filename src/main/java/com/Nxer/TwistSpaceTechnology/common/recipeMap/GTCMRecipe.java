@@ -1,20 +1,39 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Optional;
+
+import net.minecraft.item.ItemStack;
+
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemicTierKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
+import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.TSTArrayUtils;
 
+import WayofTime.alchemicalWizardry.ModItems;
+import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipe;
+import WayofTime.alchemicalWizardry.api.alchemy.AlchemyRecipeRegistry;
+import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipe;
+import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipeRegistry;
+import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRecipe;
+import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRegistry;
 import goodgenerator.client.GUI.GGUITextures;
+import gregtech.api.enums.GTValues;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
+import gregtech.api.util.GTUtility;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 import gregtech.nei.formatter.SimpleSpecialValueFormatter;
 
@@ -294,4 +313,108 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MicroSpaceTimeFabricatorio.get(1)))
         .disableOptimize()
         .build();
+
+    private static final Comparator<ItemStack> COMPARE_ITEMSTACK_BY_DAMAGE = Comparator
+        .comparingInt(ItemStack::getItemDamage);
+
+    // #tr tst.recipe.BloodyHellRecipes
+    // # Bloody Hell Altar Recipes
+    // #zh_CN 血狱祭坛
+    public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipes = RecipeMapBuilder
+        .of("tst.recipe.BloodyHellRecipes", TST_RecipeMapBackend::new)
+        .maxIO(6, 1, 1, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
+        .neiRecipeComparator((r1, r2) -> {
+            Optional<ItemStack> circuit1 = Arrays.stream(r1.mInputs)
+                .filter(GTUtility::isAnyIntegratedCircuit)
+                .findFirst();
+            Optional<ItemStack> circuit2 = Arrays.stream(r2.mInputs)
+                .filter(GTUtility::isAnyIntegratedCircuit)
+                .findFirst();
+
+            return circuit1.map(
+                c1 -> circuit2.map(c2 -> COMPARE_ITEMSTACK_BY_DAMAGE.compare(c1, c2))
+                    .orElse(-1))
+                .orElse(1);
+        })
+        .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.BloodyHellAlchemicRecipes
+    // # Bloody Hell Alchemic Chemistry Recipes
+    // #zh_CN 血狱炼金
+    @Deprecated
+    public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipe_Alchemic = RecipeMapBuilder
+        .of("tst.recipe.BloodyHellAlchemicRecipes", TST_RecipeMapBackend::new)
+        .maxIO(6, 1, 1, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
+        .build();
+
+    // #tr tst.recipe.BloodyHellBindingRecipes
+    // # Bloody Hell Binding Ritual Recipes
+    // #zh_CN 血狱绑定仪式
+    @Deprecated
+    public static final RecipeMap<TST_RecipeMapBackend> BloodyHellRecipe_Binding = RecipeMapBuilder
+        .of("tst.recipe.BloodyHellBindingRecipes", TST_RecipeMapBackend::new)
+        .maxIO(2, 1, 1, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
+        .disableOptimize()
+        .slotOverlays(
+            (index, isFluid, isOutput, isSpecial) -> !isFluid && !isOutput ? GTUITextures.OVERLAY_SLOT_CIRCUIT : null)
+        .build();
+
+    /**
+     * Convert Blood Altar and Alchemic Chemistry Set recipes to GT Recipes and add them to {@link #BloodyHellRecipes}
+     * and {@link #BloodyHellRecipe_Alchemic}.
+     * <p>
+     * This method is called at Post-init stage,
+     * which the recipes from Blood Magic should've already registered at Init stage.
+     */
+    public static void prepareBloodyHellRecipes() {
+        // total(Life Essence, L) / soakingSpeed(L/tick) = duration(tick)
+        // for example, a recipe costs 1,000L of LE, it should take 10 ticks to craft
+        var soakingSpeed = 10;
+
+        // the LE cost for each binding ritual
+        var bindingRecipeLECost = 30_000;
+
+        for (AltarRecipe recipe : AltarRecipeRegistry.altarRecipes) {
+            // filter empty output recipes, which these recipes are most likely charging orbs.
+            if (recipe.result == null) continue;
+
+            GTValues.RA.stdBuilder()
+                .itemInputs(recipe.requiredItem, GTUtility.getIntegratedCircuit(1))
+                .itemOutputs(recipe.result)
+                .fluidInputs(BloodMagicHelper.getLifeEssence(recipe.liquidRequired))
+                .eut(0)
+                .duration(recipe.liquidRequired / soakingSpeed)
+                .metadata(BloodyHellTierKey.INSTANCE, recipe.minTier)
+                .addTo(BloodyHellRecipes);
+        }
+
+        for (AlchemyRecipe recipe : AlchemyRecipeRegistry.recipes) {
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    TSTArrayUtils.concatToLast(ItemStack.class, recipe.getRecipe(), GTUtility.getIntegratedCircuit(2)))
+                .itemOutputs(recipe.getResult())
+                .fluidInputs(BloodMagicHelper.getLifeEssence(recipe.getAmountNeeded() * 100))
+                .eut(0)
+                .duration(recipe.getAmountNeeded() * 100 / soakingSpeed)
+                .metadata(BloodyHellAlchemicTierKey.INSTANCE, recipe.getOrbLevel())
+                .addTo(BloodyHellRecipes);
+        }
+
+        for (BindingRecipe recipe : BindingRegistry.bindingRecipes) {
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    recipe.requiredItem,
+                    new ItemStack(ModItems.weakBloodShard, 0),
+                    GTUtility.getIntegratedCircuit(11))
+                .itemOutputs(recipe.outputItem)
+                .fluidInputs(BloodMagicHelper.getLifeEssence(bindingRecipeLECost))
+                .eut(0)
+                .duration(bindingRecipeLECost / soakingSpeed)
+                .addTo(BloodyHellRecipes);
+        }
+    }
 }

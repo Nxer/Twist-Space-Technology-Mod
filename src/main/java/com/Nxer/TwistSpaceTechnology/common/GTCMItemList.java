@@ -194,6 +194,8 @@ public enum GTCMItemList {
     DenseCyclotronOuterCasing,
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
+    BloodyCasing1,
+    BloodyCasing2,
     // endregion
 
     // region Machines
@@ -251,6 +253,7 @@ public enum GTCMItemList {
     ExtremeCraftCenter,
     MassFabricatorGenesis,
     IncompactCyclotron,
+    BloodyHell,
 
     // endregion
 
@@ -405,9 +408,9 @@ public enum GTCMItemList {
     LaserSmartNode,
     FackRackHatch,
     RealRackHatch,
-
     WirelessDataInputHatch,
     WirelessDataOutputHatch,
+    BloodOrbHatch,
 
     LegendaryWirelessEnergyHatch,
     HarmoniousWirelessEnergyHatch,

@@ -39,6 +39,11 @@ public class BlockRegister {
             BasicBlocks.MetaBlockCasing01.getUnlocalizedName());
 
         GameRegistry.registerBlock(
+            BasicBlocks.MetaBlockCasing02,
+            MetaItemBlockCasing.class,
+            BasicBlocks.MetaBlockCasing02.getUnlocalizedName());
+
+        GameRegistry.registerBlock(
             PhotonControllerUpgrade,
             PhotonControllerUpgradeCasingItemBlock.class,
             PhotonControllerUpgrade.getUnlocalizedName());
@@ -73,6 +78,8 @@ public class BlockRegister {
         BlockStar = new BlockStar();
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
         GameRegistry.registerTileEntity(TilePowerChair.class, "TilePowerChair");
+
+        GameRegistry.registerBlock(BasicBlocks.timeBendingSpeedRune, "TimeBendingSpeedRune");
     }
 
     public static void registryBlockContainers() {
@@ -204,6 +211,38 @@ public class BlockRegister {
                 // # Absolutely Clean!
                 // #zh_CN 一尘不染!
                 }));
+
+        GTCMItemList.AsepticGreenhouseCasing.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "Aseptic Greenhouse Casing",
+                // #tr MetaBlockCasing01.13.name
+                // # Aseptic Greenhouse Casing
+                // #zh_CN 无菌温室机械方块
+                (byte) 13,
+                BasicBlocks.MetaBlockCasing01,
+                new String[] { TextEnums.tr("Tooltip_AsepticGreenhouseCasing")
+                // #tr Tooltip_AsepticGreenhouseCasing
+                // # Absolutely Clean!
+                // #zh_CN 一尘不染!
+                }));
+
+        GTCMItemList.BloodyCasing1.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "BloodyCasing1",
+                // #tr MetaBlockCasing02.0.name
+                // # Gore Casing
+                // #zh_CN 凝血机械方块
+                (byte) 0,
+                BasicBlocks.MetaBlockCasing02));
+
+        GTCMItemList.BloodyCasing2.set(
+            MetaBlockConstructors.initMetaBlockCasing(
+                "BloodyCasing2",
+                // #tr MetaBlockCasing02.1.name
+                // # Ichor Casing
+                // #zh_CN 脓血机械方块
+                (byte) 1,
+                BasicBlocks.MetaBlockCasing02));
 
         // region SpaceTimeOscillator
 

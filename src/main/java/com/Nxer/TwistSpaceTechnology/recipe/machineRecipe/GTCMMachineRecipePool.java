@@ -172,13 +172,16 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.block.BlockList;
 import com.dreammaster.gthandler.CustomItemList;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
 import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
+import WayofTime.alchemicalWizardry.ModBlocks;
 import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import bartworks.common.loaders.BioItemList;
@@ -3069,7 +3072,54 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         }
 
+        if(Config.Enable_BloodHell) {
+            // the more expensive recipes
+            GTValues.RA
+                .stdBuilder()
+                .itemInputs(new ItemStack(Blocks.brick_block), Materials.AnyCopper.getPlates(6))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(250))
+                .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
+                .eut(RECIPE_HV)
+                .duration(20 * 12)
+                .addTo(RecipeMaps.assemblerRecipes);
 
+            GTValues.RA
+                .stdBuilder()
+                .itemInputs(new ItemStack(ModBlocks.bloodRune), Materials.StainlessSteel.getPlates(6))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(500))
+                .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
+                .eut(RECIPE_EV)
+                .duration(20 * 12)
+                .addTo(RecipeMaps.assemblerRecipes);
+
+            // the cheaper recipes
+            GTValues.RA
+                .stdBuilder()
+                .itemInputs(new ItemStack(Blocks.brick_block), GTUtility.getIntegratedCircuit(7))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(100))
+                .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
+                .eut(0)
+                .duration(60)
+                .addTo(GTCMRecipe.BloodyHellRecipes);
+
+            GTValues.RA
+                .stdBuilder()
+                .itemInputs(new ItemStack(ModBlocks.bloodRune), GTUtility.getIntegratedCircuit(7))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(250))
+                .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
+                .eut(0)
+                .duration(60)
+                .addTo(GTCMRecipe.BloodyHellRecipes);
+
+            GTValues.RA
+                .stdBuilder()
+                .itemInputs(BlockList.BloodyIchorium.getIS(1), GTUtility.getIntegratedCircuit(7))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(500))
+                .itemOutputs(GTCMItemList.BloodyCasing2.get(1))
+                .eut(0)
+                .duration(60)
+                .addTo(GTCMRecipe.BloodyHellRecipes);
+        }
 
     }
     // spotless:on

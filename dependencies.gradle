@@ -67,4 +67,9 @@ dependencies {
     //These 2 deps are for mixin
 //    devOnlyNonPublishable("com.github.GTNewHorizons:Infernal-Mobs:1.9.0-GTNH:dev")
 
+    implementation('com.github.GTNewHorizons:BloodMagic:1.6.2:dev')
+
+    // dependencies for mod testing
+    // using transitive to prevent mod duplication and conflicts
+    runtimeOnlyNonPublishable("com.github.GTNewHorizons:BlockRenderer6343:1.2.12:dev") { transitive = false }
 }
