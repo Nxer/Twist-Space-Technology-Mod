@@ -16,20 +16,20 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+import gregtech.api.metatileentity.implementations.MTEEnhancedMultiBlockBase;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_LargeChemicalReactor;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.tileentities.machines.multi.MTELargeChemicalReactor;
 
 public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TST_GeneralProcessor> {
 
-    public GT_MetaTileEntity_EnhancedMultiBlockBase<?> monitor = null;
+    public MTEEnhancedMultiBlockBase<?> monitor = null;
 
     public static IStructureDefinition<TST_GeneralProcessor> structureDefinition;
 
     public Integer structureCount = 0;
-    public static HashMap<Item, GT_MetaTileEntity_EnhancedMultiBlockBase<?>> machineSupport = new HashMap<>();
+    public static HashMap<Item, MTEEnhancedMultiBlockBase<?>> machineSupport = new HashMap<>();
 
     protected TST_GeneralProcessor(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -84,7 +84,7 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         return null;
     }
 
@@ -110,8 +110,7 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
     }
 
     public static void loadMachineSupport() {
-        machineSupport.put(
-            ItemList.Machine_Multi_LargeChemicalReactor.getItem(),
-            new GT_MetaTileEntity_LargeChemicalReactor("monitor"));
+        machineSupport
+            .put(ItemList.Machine_Multi_LargeChemicalReactor.getItem(), new MTELargeChemicalReactor("monitor"));
     }
 }

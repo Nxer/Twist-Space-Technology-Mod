@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GTValues.V;
 
 import java.util.List;
 
@@ -21,19 +21,19 @@ import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.internal.wrapper.BaseSlot;
 import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 
-import gregtech.api.gui.modularui.GT_UIInfos;
+import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.items.GT_MetaBase_Item;
+import gregtech.api.items.MetaBaseItem;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTUtility;
 import ic2.api.item.IElectricItem;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy {
+public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
 
     public boolean mCharge = false, mDecharge = false;
     public int mBatteryCount = 0, mChargeableCount = 0;
@@ -132,7 +132,7 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
 
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
-        GT_UIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
+        GTUIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
         return true;
     }
 
@@ -143,8 +143,8 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
             mDecharge = aBaseMetaTileEntity.getStoredEU() < aBaseMetaTileEntity.getEUCapacity() / 3;
             mBatteryCount = 0;
             mChargeableCount = 0;
-            for (ItemStack tStack : mInventory) if (GT_ModHandler.isElectricItem(tStack, mTier)) {
-                if (GT_ModHandler.isChargerItem(tStack)) mBatteryCount++;
+            for (ItemStack tStack : mInventory) if (GTModHandler.isElectricItem(tStack, mTier)) {
+                if (GTModHandler.isChargerItem(tStack)) mBatteryCount++;
                 mChargeableCount++;
             }
         }
@@ -154,7 +154,7 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
         ItemStack aStack) {
-        if (GT_ModHandler.isElectricItem(aStack) && aStack.getUnlocalizedName()
+        if (GTModHandler.isElectricItem(aStack) && aStack.getUnlocalizedName()
             .startsWith("gt.metaitem.01.")) {
             String name = aStack.getUnlocalizedName();
             if (name.equals("gt.metaitem.01.32510") || name.equals("gt.metaitem.01.32511")
@@ -171,10 +171,10 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
         ItemStack aStack) {
-        if (!GT_Utility.isStackValid(aStack)) {
+        if (!GTUtility.isStackValid(aStack)) {
             return false;
         }
-        return mInventory[aIndex] == null && GT_ModHandler.isElectricItem(aStack, this.mTier);
+        return mInventory[aIndex] == null && GTModHandler.isElectricItem(aStack, this.mTier);
     }
 
     @Override
@@ -190,16 +190,16 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
         long tStep = 0;
         if (mInventory != null) {
             for (ItemStack aStack : mInventory) {
-                if (GT_ModHandler.isElectricItem(aStack)) {
+                if (GTModHandler.isElectricItem(aStack)) {
 
-                    if (aStack.getItem() instanceof GT_MetaBase_Item) {
-                        Long[] stats = ((GT_MetaBase_Item) aStack.getItem()).getElectricStats(aStack);
+                    if (aStack.getItem() instanceof MetaBaseItem) {
+                        Long[] stats = ((MetaBaseItem) aStack.getItem()).getElectricStats(aStack);
                         if (stats != null) {
                             if (stats[0] > Long.MAX_VALUE / 2) {
                                 scaleOverflow = true;
                             }
                             tScale = tScale + stats[0];
-                            tStep = ((GT_MetaBase_Item) aStack.getItem()).getRealCharge(aStack);
+                            tStep = ((MetaBaseItem) aStack.getItem()).getRealCharge(aStack);
                             if (tStep > Long.MAX_VALUE / 2) {
                                 storedOverflow = true;
                             }
@@ -226,15 +226,15 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
         updateStorageInfo();
 
         return new String[] { EnumChatFormatting.BLUE + getLocalName() + EnumChatFormatting.RESET, "Stored Items:",
-            EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mStored)
+            EnumChatFormatting.GREEN + GTUtility.formatNumbers(mStored)
                 + EnumChatFormatting.RESET
                 + " EU / "
                 + EnumChatFormatting.YELLOW
-                + GT_Utility.formatNumbers(mMax)
+                + GTUtility.formatNumbers(mMax)
                 + EnumChatFormatting.RESET
                 + " EU",
-            "Average input:", GT_Utility.formatNumbers(getBaseMetaTileEntity().getAverageElectricInput()) + " EU/t",
-            "Average output:", GT_Utility.formatNumbers(getBaseMetaTileEntity().getAverageElectricOutput()) + " EU/t" };
+            "Average input:", GTUtility.formatNumbers(getBaseMetaTileEntity().getAverageElectricInput()) + " EU/t",
+            "Average output:", GTUtility.formatNumbers(getBaseMetaTileEntity().getAverageElectricOutput()) + " EU/t" };
     }
 
     private void updateStorageInfo() {
@@ -253,22 +253,22 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
         currenttip.add(
             StatCollector.translateToLocalFormatted(
                 "GT5U.waila.energy.stored",
-                GT_Utility.formatNumbers(tag.getLong("mStored")),
-                GT_Utility.formatNumbers(tag.getLong("mMax"))));
+                GTUtility.formatNumbers(tag.getLong("mStored")),
+                GTUtility.formatNumbers(tag.getLong("mMax"))));
         long avgIn = tag.getLong("AvgIn");
         long avgOut = tag.getLong("AvgOut");
         currenttip.add(
             StatCollector.translateToLocalFormatted(
                 "GT5U.waila.energy.avg_in_with_amperage",
-                GT_Utility.formatNumbers(avgIn),
-                GT_Utility.getAmperageForTier(avgIn, (byte) getInputTier()),
-                GT_Utility.getColoredTierNameFromTier((byte) getInputTier())));
+                GTUtility.formatNumbers(avgIn),
+                GTUtility.getAmperageForTier(avgIn, (byte) getInputTier()),
+                GTUtility.getColoredTierNameFromTier((byte) getInputTier())));
         currenttip.add(
             StatCollector.translateToLocalFormatted(
                 "GT5U.waila.energy.avg_out_with_amperage",
-                GT_Utility.formatNumbers(avgOut),
-                GT_Utility.getAmperageForTier(avgOut, (byte) getOutputTier()),
-                GT_Utility.getColoredTierNameFromTier((byte) getOutputTier())));
+                GTUtility.formatNumbers(avgOut),
+                GTUtility.getAmperageForTier(avgOut, (byte) getOutputTier()),
+                GTUtility.getColoredTierNameFromTier((byte) getOutputTier())));
         super.getWailaBody(itemStack, currenttip, accessor, config);
     }
 
@@ -285,11 +285,6 @@ public class GT_Hatch_BufferedEnergyHatch extends GT_MetaTileEntity_Hatch_Energy
 
     @Override
     public boolean isGivingInformation() {
-        return true;
-    }
-
-    @Override
-    public boolean useModularUI() {
         return true;
     }
 

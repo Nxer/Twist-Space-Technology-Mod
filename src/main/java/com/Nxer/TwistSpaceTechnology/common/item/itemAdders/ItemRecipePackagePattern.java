@@ -3,7 +3,7 @@
 // import appeng.api.networking.crafting.ICraftingPatternDetails;
 // import com.Nxer.TwistSpaceTechnology.common.machine.ultimateMachines.PatternRecipePackage;
 // import com.Nxer.TwistSpaceTechnology.common.machine.ultimateMachines.TST_UltimateMachineBase;
-// import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
+// import gregtech.api.metatileentity.implementations.MTEEnhancedMultiBlockBase;
 // import net.minecraft.entity.player.EntityPlayer;
 // import net.minecraft.item.Item;
 // import net.minecraft.item.ItemStack;

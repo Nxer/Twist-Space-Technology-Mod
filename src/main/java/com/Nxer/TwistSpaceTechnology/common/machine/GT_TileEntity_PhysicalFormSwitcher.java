@@ -6,17 +6,17 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.MAR_Casing;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,12 +33,12 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import bartworks.API.BorosilicateGlass;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -50,11 +50,11 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.blocks.BlockCasings8;
 
 public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT_TileEntity_PhysicalFormSwitcher> {
 
@@ -86,9 +86,9 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
             }
 
             @Override
-            protected @NotNull CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
-                if (glassTier < 12 && glassTier < GT_Utility.getTier(recipe.mEUt)) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt));
+            protected @NotNull CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+                if (glassTier < 12 && glassTier < GTUtility.getTier(recipe.mEUt)) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(GTUtility.getTier(recipe.mEUt));
                 }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
@@ -106,7 +106,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     public float getSpeedBonus() {
         return (float) Math
-            .pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, GT_Utility.getTier(this.getAverageInputVoltage()));
+            .pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, GTUtility.getTier(this.getAverageInputVoltage()));
     }
 
     @Override
@@ -128,7 +128,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = !this.mode;
 
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("PhysicalFormSwitcher.modeMsg." + (this.mode ? "0" : "1")));
         }
@@ -190,15 +190,15 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                                                            te -> te.glassTier
                                                        )))
                                        .addElement('B', ofBlock(MAR_Casing,0))
-                                       .addElement('C', ofBlock(GregTech_API.sBlockCasings2,8))
-                                       .addElement('D', ofBlock(GregTech_API.sBlockCasings2,15))
+                                       .addElement('C', ofBlock(GregTechAPI.sBlockCasings2,8))
+                                       .addElement('D', ofBlock(GregTechAPI.sBlockCasings2,15))
                                        .addElement('E',
-                                                   GT_HatchElementBuilder.<GT_TileEntity_PhysicalFormSwitcher>builder()
+                                                   HatchElementBuilder.<GT_TileEntity_PhysicalFormSwitcher>builder()
                                                                          .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                                                                          .adder(GT_TileEntity_PhysicalFormSwitcher::addToMachineList)
                                                                          .dot(1)
-                                                                         .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
-                                                                         .buildAndChain(GregTech_API.sBlockCasings8,10))
+                                                                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
+                                                                         .buildAndChain(GregTechAPI.sBlockCasings8,10))
                                        .addElement('F', ofFrame(Materials.NaquadahAlloy))
                                        .build();
         }
@@ -272,8 +272,8 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_PhysicalFormSwitcher_MachineType)
             .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_00)
             .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_01)
@@ -312,7 +312,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
         if (sideDirection == facingDirection) {
             if (active) return new ITexture[] {
                 Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 10)),
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 10)),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
                     .extFacing()
@@ -324,7 +324,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                     .build() };
             return new ITexture[] {
                 Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 10)),
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 10)),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
                     .extFacing()
@@ -336,7 +336,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                     .build() };
         }
         return new ITexture[] { Textures.BlockIcons
-            .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 10)) };
+            .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 10)) };
     }
 
     // endregion

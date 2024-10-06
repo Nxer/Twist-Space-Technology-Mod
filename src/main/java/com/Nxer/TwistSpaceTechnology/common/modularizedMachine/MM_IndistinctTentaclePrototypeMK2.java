@@ -1,23 +1,24 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine;
 
+import static bartworks.API.BorosilicateGlass.ofBoroGlass;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ExecutionCoreModule;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ParallelController;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.PowerConsumptionController;
-import static com.github.bartimaeusnek.bartworks.API.BorosilicateGlass.ofBoroGlass;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsBA0;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -49,7 +50,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -57,26 +57,28 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.loader.Loaders;
-import gregtech.api.GregTech_API;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
+import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import tectech.thing.block.BlockQuantumGlass;
 
-public class MM_IndistinctTentaclePrototypeMK2 extends
-    MultiExecutionCoreMachineSupportAllModuleBase<MM_IndistinctTentaclePrototypeMK2> implements IGlobalWirelessEnergy {
+public class MM_IndistinctTentaclePrototypeMK2
+    extends MultiExecutionCoreMachineSupportAllModuleBase<MM_IndistinctTentaclePrototypeMK2>
+    implements IWirelessEnergyHatchInformation {
 
     // region Class Constructor
     public MM_IndistinctTentaclePrototypeMK2(int aID, String aName, String aNameRegional) {
@@ -112,7 +114,7 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
             return false;
         }
 
-        this.costEU = GT_Utility.formatNumbers(costEU);
+        this.costEU = GTUtility.formatNumbers(costEU);
         eMaxProgressingTime = 20;
 
         return true;
@@ -139,7 +141,7 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 4);
-            GT_Utility
+            GTUtility
                 .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + this.mode));
         }
     }
@@ -179,8 +181,8 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
 
             @Nonnull
             @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
-                return GT_OverclockCalculator.ofNoOverclock(recipe);
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                return OverclockCalculator.ofNoOverclock(recipe);
             }
 
         };
@@ -330,18 +332,18 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
                     ofChain(
                         ofBlock(Loaders.componentAssemblylineCasing, 12),
                         ofBlock(Loaders.componentAssemblylineCasing, 13)))
-                .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 9))
-                .addElement('D', ofBlock(GregTech_API.sBlockCasings9, 1))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 1))
                 .addElement('E', ofBlock(sBlockCasingsBA0, 12))
                 .addElement('F', ofBlock(sBlockCasingsTT, 7))
                 .addElement('G', ofBlock(sBlockCasingsTT, 9))
                 .addElement('H', ofBlock(sBlockCasingsTT, 10))
                 .addElement('I', ofBlock(sBlockCasingsTT, 12))
                 .addElement('J', ofBlock(sBlockCasingsTT, 13))
-                .addElement('K', ofChain(ofBlock(QuantumGlassBlock.INSTANCE, 0), ofBlock(sBlockCasingsTT, 13)))
+                .addElement('K', ofChain(ofBlock(BlockQuantumGlass.INSTANCE, 0), ofBlock(sBlockCasingsTT, 13)))
                 .addElement(
                     'L',
-                    GT_HatchElementBuilder.<MM_IndistinctTentaclePrototypeMK2>builder()
+                    HatchElementBuilder.<MM_IndistinctTentaclePrototypeMK2>builder()
                         .atLeast(
                             InputBus,
                             InputHatch,
@@ -356,12 +358,12 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
                 .addElement('M', ofBlock(sBlockCasingsTT, 14))
                 .addElement(
                     'N',
-                    GT_HatchElementBuilder.<MM_IndistinctTentaclePrototypeMK2>builder()
+                    HatchElementBuilder.<MM_IndistinctTentaclePrototypeMK2>builder()
                         .atLeast(ExecutionCoreModule, ParallelController, PowerConsumptionController)
                         .adder(MM_IndistinctTentaclePrototypeMK2::addAnyModularHatchToMachineList)
                         .dot(2)
                         .casingIndex(1024 + 13)
-                        .buildAndChain(ofBlock(QuantumGlassBlock.INSTANCE, 0), ofBlock(sBlockCasingsTT, 13)))
+                        .buildAndChain(ofBlock(BlockQuantumGlass.INSTANCE, 0), ofBlock(sBlockCasingsTT, 13)))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -435,13 +437,13 @@ public class MM_IndistinctTentaclePrototypeMK2 extends
     }
 
     // endregion
-    private static GT_Multiblock_Tooltip_Builder tooltip;
+    private static MultiblockTooltipBuilder tooltip;
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tooltip == null) {
-            tooltip = new GT_Multiblock_Tooltip_Builder();
+            tooltip = new MultiblockTooltipBuilder();
             // #tr Tooltip_IndistinctTentaclePrototypeMK2_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Assembly Line | Component Assembly Line | Assembler | Precise Assembler
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}巨型装配线 | 部件装配线 | 组装机 | 精密组装机

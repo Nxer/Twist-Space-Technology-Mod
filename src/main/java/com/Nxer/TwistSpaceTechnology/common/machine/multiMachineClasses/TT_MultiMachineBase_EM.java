@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.GT_MetaTileEntity_MultiblockBase_EM;
+import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
-public abstract class TT_MultiMachineBase_EM extends GT_MetaTileEntity_MultiblockBase_EM {
+public abstract class TT_MultiMachineBase_EM extends TTMultiblockBase {
 
     public TT_MultiMachineBase_EM(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);

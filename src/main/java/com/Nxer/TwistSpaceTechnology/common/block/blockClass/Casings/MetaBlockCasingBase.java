@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ICasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
 
-import gregtech.api.GregTech_API;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.GregTechAPI;
+import gregtech.api.util.GTUtility;
 
 /**
  * A base block class of GregTech casings that textures will be called for update hatches' textures.
@@ -21,14 +21,14 @@ public abstract class MetaBlockCasingBase extends MetaBlockBase implements ICasi
     public static final byte TEXTURE_PAGE_INDEX = 115;
 
     static {
-        GT_Utility.addTexturePage(TEXTURE_PAGE_INDEX);
+        GTUtility.addTexturePage(TEXTURE_PAGE_INDEX);
     }
 
     public MetaBlockCasingBase(String unlocalizedName) {
         super(unlocalizedName);
         this.setHardness(9.0F);
         this.setResistance(5.0F);
-        GregTech_API.registerMachineBlock(this, -1);
+        GregTechAPI.registerMachineBlock(this, -1);
     }
 
     // region Texture
@@ -67,15 +67,15 @@ public abstract class MetaBlockCasingBase extends MetaBlockBase implements ICasi
 
     @Override
     public void onBlockAdded(World aWorld, int aX, int aY, int aZ) {
-        if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
-            GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
+        if (GregTechAPI.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
+            GregTechAPI.causeMachineUpdate(aWorld, aX, aY, aZ);
         }
     }
 
     @Override
     public void breakBlock(World aWorld, int aX, int aY, int aZ, Block aBlock, int aMetaData) {
-        if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
-            GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
+        if (GregTechAPI.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
+            GregTechAPI.causeMachineUpdate(aWorld, aX, aY, aZ);
         }
     }
 

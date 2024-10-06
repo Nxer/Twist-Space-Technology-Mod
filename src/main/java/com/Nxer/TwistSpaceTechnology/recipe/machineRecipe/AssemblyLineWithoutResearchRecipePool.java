@@ -7,35 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
-import static com.github.technus.tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
-import static com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
-import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier0;
-import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier1;
-import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier2;
-import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier3;
-import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier4;
-import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier5;
-import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier6;
-import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier7;
-import static com.github.technus.tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8;
-import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier0;
-import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier1;
-import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier2;
-import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier3;
-import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier4;
-import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier5;
-import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier6;
-import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier7;
-import static com.github.technus.tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8;
-import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier0;
-import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier1;
-import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2;
-import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier3;
-import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier4;
-import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier5;
-import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier6;
-import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier7;
-import static com.github.technus.tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8;
 import static com.google.common.math.LongMath.pow;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GalaxySpace;
@@ -44,9 +15,37 @@ import static gregtech.api.enums.Mods.GraviSuite;
 import static gregtech.api.enums.Mods.GregTech;
 import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.enums.Mods.SuperSolarPanels;
-import static gregtech.api.util.GT_ModHandler.getModItem;
-import static gtPlusPlus.core.material.ALLOY.INDALLOY_140;
-import static gtPlusPlus.core.material.MISC_MATERIALS.MUTATED_LIVING_SOLDER;
+import static gregtech.api.util.GTModHandler.getModItem;
+import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
+import static tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
+import static tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
+import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier0;
+import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier1;
+import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier2;
+import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier3;
+import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier4;
+import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier5;
+import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier6;
+import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier7;
+import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8;
+import static tectech.thing.CustomItemList.StabilisationFieldGeneratorTier0;
+import static tectech.thing.CustomItemList.StabilisationFieldGeneratorTier1;
+import static tectech.thing.CustomItemList.StabilisationFieldGeneratorTier2;
+import static tectech.thing.CustomItemList.StabilisationFieldGeneratorTier3;
+import static tectech.thing.CustomItemList.StabilisationFieldGeneratorTier4;
+import static tectech.thing.CustomItemList.StabilisationFieldGeneratorTier5;
+import static tectech.thing.CustomItemList.StabilisationFieldGeneratorTier6;
+import static tectech.thing.CustomItemList.StabilisationFieldGeneratorTier7;
+import static tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8;
+import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier0;
+import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier1;
+import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2;
+import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier3;
+import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier4;
+import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier5;
+import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier6;
+import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier7;
+import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,24 +62,25 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
-import goodgenerator.items.MyMaterial;
+import bartworks.system.material.WerkstoffLoader;
+import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_RecipeBuilder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTRecipeBuilder;
+import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
-import gtPlusPlus.core.material.ELEMENT;
+import gtPlusPlus.core.material.MaterialsAlloy;
+import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
@@ -88,11 +88,11 @@ import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
     public ItemStack transToWildCircuit(ItemStack items) {
-        ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(items);
+        ItemData tPrefixMaterial = GTOreDictUnificator.getAssociation(items);
 
         if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) return null;
         if (tPrefixMaterial.mPrefix == OrePrefixes.circuit) {
-            return GT_OreDictUnificator.get(false, items, true);
+            return GTOreDictUnificator.get(false, items, true);
         }
         return null;
     }
@@ -140,12 +140,12 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             StabilisationFieldGeneratorTier5.get(1), StabilisationFieldGeneratorTier6.get(1),
             StabilisationFieldGeneratorTier7.get(1), StabilisationFieldGeneratorTier8.get(1),
             ItemList.Hatch_Energy_LuV.get(1), ItemList.Hatch_Energy_ZPM.get(1), ItemList.Hatch_Energy_UV.get(1),
-            ItemList.Hatch_Energy_MAX.get(1), ItemList.Hatch_Dynamo_LuV.get(1), ItemList.Hatch_Dynamo_ZPM.get(1),
-            ItemList.Hatch_Dynamo_UV.get(1), ItemList.Hatch_Dynamo_MAX.get(1), ItemList.Casing_Dim_Injector.get(1),
+            ItemList.Hatch_Energy_UXV.get(1), ItemList.Hatch_Dynamo_LuV.get(1), ItemList.Hatch_Dynamo_ZPM.get(1),
+            ItemList.Hatch_Dynamo_UV.get(1), ItemList.Hatch_Dynamo_UXV.get(1), ItemList.Casing_Dim_Injector.get(1),
             ItemList.Casing_Dim_Trans.get(1), ItemRefer.Advanced_Radiation_Protection_Plate.get(1) };
 
         // start check assembly line recipes
-        checkRecipe: for (var recipe : GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes) {
+        checkRecipe: for (var recipe : GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes) {
             // debugLogInfo("Recipe output: " + recipe.mOutput.getDisplayName());
 
             for (ItemStack skip : skipRecipeOutputs) {
@@ -186,7 +186,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
             if (!hasCustomWildcardItemList) {
                 // debugLogInfo("Normal recipe generating.");
-                GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
+                GTRecipeBuilder ra = GTValues.RA.stdBuilder();
                 ra.itemInputs(Utils.sortNoNullArray(inputItems))
                     .itemOutputs(recipe.mOutput);
                 if (recipe.mFluidInputs != null) {
@@ -214,7 +214,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     // debugLogInfo("Input item list: " + Arrays.toString(inputs));
                     // loopFlag++;
 
-                    GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
+                    GTRecipeBuilder ra = GTValues.RA.stdBuilder();
                     ra.itemInputs(Utils.sortNoNullArray(inputs))
                         .itemOutputs(recipe.mOutput);
                     if (recipe.mFluidInputs != null) {
@@ -241,7 +241,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
         final Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
             ? FluidRegistry.getFluid("molten.mutatedlivingsolder")
             : FluidRegistry.getFluid("molten.solderingalloy");
-        final Fluid solderIndalloy = INDALLOY_140.getFluid();
+        final Fluid solderIndalloy = MaterialsAlloy.INDALLOY_140.getFluid();
         final Fluid ic2coolant = FluidRegistry.getFluid("ic2coolant");
 
         {
@@ -250,12 +250,12 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     GTCMItemList.SolarSail.get(16),
                     GTCMItemList.StellarConstructionFrameMaterial.get(4),
-                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 24),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 24),
                     ItemList.Circuit_Wafer_QPIC.get(32),
                     ItemList.Emitter_UMV.get(4),
                     ItemList.Sensor_UMV.get(4))
                 .fluidInputs(new FluidStack(solderUEV, 144 * 256))
-                .itemOutputs(setStackSize(GT_ModHandler.getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1), 8192))
+                .itemOutputs(setStackSize(GTModHandler.getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1), 8192))
                 .eut(100000000)
                 .duration(20 * 50)
                 .addTo(MASL);
@@ -265,7 +265,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             // adv radiation proof plate
             TST_RecipeBuilder.builder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(24),
+                    GTUtility.getIntegratedCircuit(24),
                     Materials.Neutronium.getNanite(1),
                     setStackSize(Materials.Lanthanum.getPlates(1), 4096),
                     setStackSize(Materials.NaquadahAlloy.getPlates(1), 6144),
@@ -287,17 +287,17 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             // UMV
             TST_RecipeBuilder.builder()
                 .itemInputs(
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
                     setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 6144),
-                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 16),
                     ItemList.Field_Generator_UEV.get(8),
 
                     ItemList.Circuit_Wafer_PPIC.get(64),
                     CustomItemList.HighEnergyFlowCircuit.get(64),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 64))
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 64))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 64),
-                    ELEMENT.STANDALONE.HYPOGEN.getFluidStack(144 * 64),
+                    MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(144 * 64),
                     Materials.UUMatter.getFluid(1000 * 64))
                 .itemOutputs(ItemList.ZPM3.get(1))
                 .eut(32_000_000)
@@ -307,14 +307,14 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             // UXV
             TST_RecipeBuilder.builder()
                 .itemInputs(
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Infinity, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Infinity, 64),
                     setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 48912),
-                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 16),
                     ItemList.Field_Generator_UIV.get(8),
 
                     ItemList.Circuit_Wafer_QPIC.get(64),
                     CustomItemList.HighEnergyFlowCircuit.get(64),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64))
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 128),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 128),
@@ -327,7 +327,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             // MAX
             TST_RecipeBuilder.builder()
                 .itemInputs(
-                    ELEMENT.STANDALONE.HYPOGEN.getPlateDense(64),
+                    MaterialsElements.STANDALONE.HYPOGEN.getPlateDense(64),
                     setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 391296),
                     // TODO piko circuit
                     CustomItemList.PikoCircuit.get(16),
@@ -335,7 +335,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     setStackSize(ItemList.Circuit_Wafer_QPIC.get(1), 2048),
                     CustomItemList.HighEnergyFlowCircuit.get(64),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 64))
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 64))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 256),
                     MaterialsUEVplus.Eternity.getMolten(144 * 256),
@@ -348,7 +348,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             // ERR
             TST_RecipeBuilder.builder()
                 .itemInputs(
-                    ELEMENT.STANDALONE.DRAGON_METAL.getBlock(64),
+                    MaterialsElements.STANDALONE.DRAGON_METAL.getBlock(64),
                     setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 3130368),
                     // TODO piko circuit
                     CustomItemList.QuantumCircuit.get(16),
@@ -356,7 +356,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     ItemList.EnergisedTesseract.get(64),
                     CustomItemList.HighEnergyFlowCircuit.get(64),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64))
+                    GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 512),
                     MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 128),
@@ -371,16 +371,16 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
         {
 
             // Dimensionally Injection Casing
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(2),
-                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Osmiridium, 4),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Ledox, 1),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CallistoIce, 1),
+                    GTUtility.getIntegratedCircuit(2),
+                    GTOreDictUnificator.get(OrePrefixes.plate, Materials.Osmiridium, 4),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Ledox, 1),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.CallistoIce, 1),
                     ItemList.Reactor_Coolant_Sp_6.get(1L),
                     getModItem(GTPlusPlus.ID, "itemScrewLaurenium", 12, 0),
                     new Object[] { OrePrefixes.circuit.get(Materials.Elite), 2L },
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 2),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 2),
                     ItemList.Super_Chest_IV.get(1),
                     ItemList.Super_Tank_IV.get(1),
                     getModItem(NewHorizonsCoreMod.ID, "item.PicoWafer", 1, 0))
@@ -394,13 +394,13 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .addTo(MASL);
 
             // Dimensionally Transcendent Casing
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(1),
-                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Osmiridium, 6),
+                    GTUtility.getIntegratedCircuit(1),
+                    GTOreDictUnificator.get(OrePrefixes.plate, Materials.Osmiridium, 6),
                     getModItem(GTPlusPlus.ID, "itemScrewLaurenium", 12, 0),
                     ItemList.Reactor_Coolant_Sp_6.get(1L),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1))
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1))
                 .fluidInputs(
                     WerkstoffLoader.Oganesson.getFluidOrGas(500),
                     new FluidStack(solderUEV, 288),
@@ -415,10 +415,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
         {
 
             // LuV energy hatch
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     ItemList.Hull_LuV.get(1),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 2),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 2),
                     ItemList.Circuit_Chip_UHPIC.get(2),
                     new Object[] { OrePrefixes.circuit.get(Materials.Master), 2 },
                     ItemList.LuV_Coil.get(2),
@@ -429,10 +429,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .eut(RECIPE_LuV)
                 .addTo(MASL);
             // ZPM energy hatch
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     ItemList.Hull_ZPM.get(1),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorZPM, 2),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorZPM, 2),
                     ItemList.Circuit_Chip_NPIC.get(2),
                     new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 2 },
                     ItemList.ZPM_Coil.get(2),
@@ -443,10 +443,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .eut(RECIPE_ZPM)
                 .addTo(MASL);
             // UV energy hatch
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     ItemList.Hull_UV.get(1),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUV, 2),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUV, 2),
                     ItemList.Circuit_Chip_PPIC.get(2),
                     new Object[] { OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2 },
                     ItemList.UV_Coil.get(2),
@@ -457,25 +457,25 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .eut(RECIPE_UV)
                 .addTo(MASL);
             // UHV energy hatch
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     ItemList.Hull_MAX.get(1L),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 2L),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 2L),
                     ItemList.Circuit_Chip_QPIC.get(2L),
                     new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
-                .itemOutputs(ItemList.Hatch_Energy_MAX.get(1))
+                .itemOutputs(ItemList.Hatch_Energy_UXV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 16000), new FluidStack(solderIndalloy, 40 * 144))
                 .duration(50 * 20)
                 .eut(RECIPE_UHV)
                 .addTo(MASL);
 
             // LuV dynamo hatch
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     ItemList.Hull_LuV.get(1),
-                    GT_OreDictUnificator.get(
+                    GTOreDictUnificator.get(
                         OrePrefixes.spring,
                         Materials.Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid,
                         2),
@@ -489,10 +489,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .eut(RECIPE_LuV)
                 .addTo(MASL);
             // ZPM dynamo hatch
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     ItemList.Hull_ZPM.get(1),
-                    GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Tetranaquadahdiindiumhexaplatiumosminid, 4),
+                    GTOreDictUnificator.get(OrePrefixes.spring, Materials.Tetranaquadahdiindiumhexaplatiumosminid, 4),
                     ItemList.Circuit_Chip_NPIC.get(2),
                     new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 2 },
                     ItemList.ZPM_Coil.get(2),
@@ -503,10 +503,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .eut(RECIPE_ZPM)
                 .addTo(MASL);
             // UV dynamo hatch
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     ItemList.Hull_UV.get(1),
-                    GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuvwire, 4),
+                    GTOreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuvwire, 4),
                     ItemList.Circuit_Chip_PPIC.get(2),
                     new Object[] { OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2 },
                     ItemList.UV_Coil.get(2),
@@ -517,15 +517,15 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .eut(RECIPE_UV)
                 .addTo(MASL);
             // UHV dynamo hatch
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     ItemList.Hull_MAX.get(1L),
-                    GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuhvwire, 8L),
+                    GTOreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuhvwire, 8L),
                     ItemList.Circuit_Chip_QPIC.get(2L),
                     new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
-                .itemOutputs(ItemList.Hatch_Dynamo_MAX.get(1))
+                .itemOutputs(ItemList.Hatch_Dynamo_UXV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 16000), new FluidStack(solderIndalloy, 40 * 144))
                 .duration(50 * 20)
                 .eut(RECIPE_UHV)
@@ -543,21 +543,21 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
             final ItemStack[] boltList = new ItemStack[] {
                 // Dense Shirabon plate.
-                GT_OreDictUnificator.get("boltShirabon", 2),
-                GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 2),
-                GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 8),
-                GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 32),
-                GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 2),
-                GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 8),
-                GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 32),
-                GT_OreDictUnificator
+                GTOreDictUnificator.get("boltShirabon", 2),
+                GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 2),
+                GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 8),
+                GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 32),
+                GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 2),
+                GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 8),
+                GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 32),
+                GTOreDictUnificator
                     .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 2),
-                GT_OreDictUnificator
+                GTOreDictUnificator
                     .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 8) };
             // spacetime 1
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(1),
+                    GTUtility.getIntegratedCircuit(1),
 
                     EOH_Reinforced_Spatial_Casing.get(1),
                     ItemRefer.YOTTank_Cell_T7.get(1),
@@ -566,7 +566,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     GregtechItemList.CosmicFabricManipulator.get(1),
                     Utils.copyAmount(1, ME_Singularity),
-                    MyMaterial.shirabon.get(OrePrefixes.bolt, 2),
+                    GGMaterial.shirabon.get(OrePrefixes.bolt, 2),
                     CustomItemList.QuantumCircuit.get(1))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 20),
@@ -578,9 +578,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .addTo(MASL);
 
             // spacetime 2
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(2),
+                    GTUtility.getIntegratedCircuit(2),
 
                     EOH_Reinforced_Spatial_Casing.get(1),
                     ItemRefer.YOTTank_Cell_T7.get(2),
@@ -589,7 +589,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     GregtechItemList.CosmicFabricManipulator.get(2),
                     Utils.copyAmount(2, ME_Singularity),
-                    GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 2),
+                    GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 2),
                     CustomItemList.QuantumCircuit.get(1))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 40),
@@ -601,9 +601,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .addTo(MASL);
 
             // spacetime 3
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(3),
+                    GTUtility.getIntegratedCircuit(3),
 
                     EOH_Reinforced_Spatial_Casing.get(1),
                     ItemRefer.YOTTank_Cell_T7.get(3),
@@ -612,7 +612,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     GregtechItemList.CosmicFabricManipulator.get(3),
                     Utils.copyAmount(3, ME_Singularity),
-                    GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 8),
+                    GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 8),
                     CustomItemList.QuantumCircuit.get(1))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 80),
@@ -624,9 +624,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .addTo(MASL);
 
             // spacetime 4
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(4),
+                    GTUtility.getIntegratedCircuit(4),
 
                     EOH_Reinforced_Spatial_Casing.get(1),
                     ItemRefer.YOTTank_Cell_T8.get(1),
@@ -635,7 +635,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     GregtechItemList.InfinityInfusedManipulator.get(1),
                     Utils.copyAmount(4, ME_Singularity),
-                    GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 32),
+                    GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 32),
                     CustomItemList.QuantumCircuit.get(2))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 160),
@@ -647,9 +647,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .addTo(MASL);
 
             // spacetime 5
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(5),
+                    GTUtility.getIntegratedCircuit(5),
 
                     EOH_Reinforced_Spatial_Casing.get(1),
                     ItemRefer.YOTTank_Cell_T8.get(2),
@@ -658,7 +658,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     GregtechItemList.InfinityInfusedManipulator.get(2),
                     Utils.copyAmount(5, ME_Singularity),
-                    GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 2),
+                    GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 2),
                     CustomItemList.QuantumCircuit.get(2))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 320),
@@ -670,9 +670,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .addTo(MASL);
 
             // spacetime 6
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(6),
+                    GTUtility.getIntegratedCircuit(6),
 
                     EOH_Reinforced_Spatial_Casing.get(1),
                     ItemRefer.YOTTank_Cell_T8.get(3),
@@ -681,7 +681,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     GregtechItemList.InfinityInfusedManipulator.get(3),
                     Utils.copyAmount(6, ME_Singularity),
-                    GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 8),
+                    GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 8),
                     CustomItemList.QuantumCircuit.get(2))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 640),
@@ -693,9 +693,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .addTo(MASL);
 
             // spacetime 7
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(7),
+                    GTUtility.getIntegratedCircuit(7),
 
                     EOH_Reinforced_Spatial_Casing.get(1),
                     ItemRefer.YOTTank_Cell_T9.get(1),
@@ -704,7 +704,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     GregtechItemList.SpaceTimeContinuumRipper.get(1),
                     Utils.copyAmount(7, ME_Singularity),
-                    GT_OreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 32),
+                    GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 32),
                     CustomItemList.QuantumCircuit.get(3))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 1280),
@@ -716,9 +716,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .addTo(MASL);
 
             // spacetime 8
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(8),
+                    GTUtility.getIntegratedCircuit(8),
 
                     EOH_Reinforced_Spatial_Casing.get(1),
                     ItemRefer.YOTTank_Cell_T9.get(2),
@@ -727,7 +727,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     GregtechItemList.SpaceTimeContinuumRipper.get(2),
                     Utils.copyAmount(8, ME_Singularity),
-                    GT_OreDictUnificator
+                    GTOreDictUnificator
                         .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 2),
                     CustomItemList.QuantumCircuit.get(3))
                 .fluidInputs(
@@ -740,9 +740,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .addTo(MASL);
 
             // spacetime 9
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(9),
+                    GTUtility.getIntegratedCircuit(9),
 
                     EOH_Reinforced_Spatial_Casing.get(1),
                     ItemRefer.YOTTank_Cell_T9.get(3),
@@ -751,7 +751,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                     GregtechItemList.SpaceTimeContinuumRipper.get(3),
                     Utils.copyAmount(9, ME_Singularity),
-                    GT_OreDictUnificator
+                    GTOreDictUnificator
                         .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 8),
                     CustomItemList.QuantumCircuit.get(3))
                 .fluidInputs(
@@ -765,8 +765,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
             // EOH Time Dilation Field Generators.
             {
-                final ItemStack baseCasing = com.github.technus.tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing
-                    .get(1);
+                final ItemStack baseCasing = tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing.get(1);
 
                 // T0 - Shirabon
                 // T1 - White Dwarf Matter
@@ -806,9 +805,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     TimeAccelerationFieldGeneratorTier8.get(1) };
 
                 for (int absoluteTier = 0; absoluteTier < 9; absoluteTier++) {
-                    GT_Values.RA.stdBuilder()
+                    GTValues.RA.stdBuilder()
                         .itemInputs(
-                            GT_Utility.getIntegratedCircuit(absoluteTier + 1),
+                            GTUtility.getIntegratedCircuit(absoluteTier + 1),
 
                             baseCasing,
                             fusionReactors[absoluteTier],
@@ -826,7 +825,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             getModItem(GregTech.ID, "gt.blockmachines", (absoluteTier + 1) * 4, 11107),
 
                             ItemList.Energy_Module.get(absoluteTier + 1),
-                            GT_OreDictUnificator
+                            GTOreDictUnificator
                                 .get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, (absoluteTier + 1) * 4))
                         .fluidInputs(
                             MUTATED_LIVING_SOLDER.getFluidStack((int) (2_880 * pow(2, absoluteTier))),
@@ -841,8 +840,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             }
 
             {
-                final ItemStack baseCasing = com.github.technus.tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing
-                    .get(1);
+                final ItemStack baseCasing = tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing.get(1);
 
                 int baseCompPerSec = 16_384;
 
@@ -875,7 +873,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     SpacetimeCompressionFieldGeneratorTier7.get(1), SpacetimeCompressionFieldGeneratorTier8.get(1) };
 
                 for (int absoluteTier = 0; absoluteTier < 9; absoluteTier++) {
-                    GT_Values.RA.stdBuilder()
+                    GTValues.RA.stdBuilder()
                         .itemInputs(
                             timeCasings[absoluteTier],
                             spatialCasings[absoluteTier],
@@ -883,13 +881,13 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             // Dyson Swarm Module.
                             getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 4 * (absoluteTier + 1), 0),
 
-                            GT_OreDictUnificator
+                            GTOreDictUnificator
                                 .get(OrePrefixes.frameGt, Materials.SuperconductorUMVBase, 4 * (absoluteTier + 1)),
-                            GT_OreDictUnificator
+                            GTOreDictUnificator
                                 .get(OrePrefixes.frameGt, Materials.SuperconductorUIVBase, 4 * (absoluteTier + 1)),
-                            GT_OreDictUnificator
+                            GTOreDictUnificator
                                 .get(OrePrefixes.frameGt, Materials.SuperconductorUEVBase, 4 * (absoluteTier + 1)),
-                            GT_OreDictUnificator.get(
+                            GTOreDictUnificator.get(
                                 OrePrefixes.frameGt,
                                 Materials.Longasssuperconductornameforuhvwire,
                                 4 * (absoluteTier + 1)),
@@ -902,8 +900,8 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
                             boltList[absoluteTier],
                             getItemContainer("QuantumCircuit").get(2 * (absoluteTier + 1)),
-                            GT_OreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SpaceTime, absoluteTier + 1),
-                            GT_OreDictUnificator
+                            GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SpaceTime, absoluteTier + 1),
+                            GTOreDictUnificator
                                 .get(OrePrefixes.gearGtSmall, MaterialsUEVplus.SpaceTime, absoluteTier + 1))
                         .fluidInputs(
                             MUTATED_LIVING_SOLDER.getFluidStack((int) (2_880 * pow(2, absoluteTier))),

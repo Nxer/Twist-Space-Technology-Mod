@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.Disassembler;
 
 import static gregtech.api.enums.Mods.PamsHarvestCraft;
-import static gregtech.api.util.GT_ModHandler.getModItem;
+import static gregtech.api.util.GTModHandler.getModItem;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,10 +22,10 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.items.GT_MetaGenerated_Tool_01;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.common.items.MetaGeneratedTool01;
 import micdoodle8.mods.galacticraft.planets.asteroids.items.AsteroidsItems;
 
 public class TST_DisassemblerRecipeHandler {
@@ -65,9 +65,9 @@ public class TST_DisassemblerRecipeHandler {
                         ItemList.Casing_Coil_Superconductor.get(1),
                         ItemList.Neutron_Reflector.get(2),
                         ItemList.Field_Generator_MV.get(2),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 4))
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 4))
                     .setEut(480)
-                    .setTier(GT_Utility.getTier(480)));
+                    .setTier(GTUtility.getTier(480)));
 
             // Thermal Cloth
             DisassemblerRecipeMap.put(
@@ -77,11 +77,11 @@ public class TST_DisassemblerRecipeHandler {
                     .setItemAmount(1)
                     .setOutputItems(
                         getModItem(PamsHarvestCraft.ID, "wovencottonItem", 8, 0, missing),
-                        GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Aluminium, 8),
+                        GTOreDictUnificator.get(OrePrefixes.foil, Materials.Aluminium, 8),
                         CustomItemList.MeteoricIronString.get(8))
                     .setOutputFluids(Materials.Silicone.getMolten(144))
                     .setEut(256)
-                    .setTier(GT_Utility.getTier(256)));
+                    .setTier(GTUtility.getTier(256)));
 
             // Thermal Cloth T2
             DisassemblerRecipeMap.put(
@@ -91,10 +91,10 @@ public class TST_DisassemblerRecipeHandler {
                     .setItemAmount(1)
                     .setOutputItems(
                         new ItemStack(AsteroidsItems.basicItem, 1, 7),
-                        GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Titanium, 8),
+                        GTOreDictUnificator.get(OrePrefixes.foil, Materials.Titanium, 8),
                         CustomItemList.TungstenString.get(8))
                     .setEut(1024)
-                    .setTier(GT_Utility.getTier(1024)));
+                    .setTier(GTUtility.getTier(1024)));
 
             // 1080k Space Cell
             DisassemblerRecipeMap.put(
@@ -104,7 +104,7 @@ public class TST_DisassemblerRecipeHandler {
                     .setItemAmount(1)
                     .setOutputItems(CustomItemList.Empty180SpCell.get(6))
                     .setEut(1024)
-                    .setTier(GT_Utility.getTier(1024)));
+                    .setTier(GTUtility.getTier(1024)));
 
             // 540k Space Cell
             DisassemblerRecipeMap.put(
@@ -114,7 +114,7 @@ public class TST_DisassemblerRecipeHandler {
                     .setItemAmount(1)
                     .setOutputItems(CustomItemList.Empty180SpCell.get(3))
                     .setEut(480)
-                    .setTier(GT_Utility.getTier(480)));
+                    .setTier(GTUtility.getTier(480)));
 
             // 360k Space Cell
             DisassemblerRecipeMap.put(
@@ -124,7 +124,7 @@ public class TST_DisassemblerRecipeHandler {
                     .setItemAmount(1)
                     .setOutputItems(CustomItemList.Empty180SpCell.get(2))
                     .setEut(480)
-                    .setTier(GT_Utility.getTier(480)));
+                    .setTier(GTUtility.getTier(480)));
 
             // 60k Cell
             DisassemblerRecipeMap.put(
@@ -134,7 +134,7 @@ public class TST_DisassemblerRecipeHandler {
                     .setItemAmount(1)
                     .setOutputItems(ItemList.Cell_Empty.get(6))
                     .setEut(60)
-                    .setTier(GT_Utility.getTier(60)));
+                    .setTier(GTUtility.getTier(60)));
 
             // 30k Cell
             DisassemblerRecipeMap.put(
@@ -144,7 +144,7 @@ public class TST_DisassemblerRecipeHandler {
                     .setItemAmount(1)
                     .setOutputItems(ItemList.Cell_Empty.get(3))
                     .setEut(60)
-                    .setTier(GT_Utility.getTier(60)));
+                    .setTier(GTUtility.getTier(60)));
 
         }
 
@@ -157,21 +157,21 @@ public class TST_DisassemblerRecipeHandler {
             TST_ItemID.createNoNBT(ItemList.ZPM5.get(1)),
             TST_ItemID.createNoNBT(ItemList.ZPM6.get(1)),
             TST_ItemID.createNoNBT(Materials.Carbon.getNanite(1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorMV, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorHV, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorEV, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUV, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 1)),
-            TST_ItemID.createNoNBT(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 1)));
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorMV, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorHV, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorEV, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUV, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 1)),
+            TST_ItemID.createNoNBT(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 1)));
 
-        private void generateDisassemblyRecipes(Collection<GT_Recipe> originRecipes) {
+        private void generateDisassemblyRecipes(Collection<GTRecipe> originRecipes) {
             if (originRecipes == null || originRecipes.isEmpty()) return;
-            for (GT_Recipe recipe : originRecipes) {
+            for (GTRecipe recipe : originRecipes) {
                 if (recipe == null || recipe.mOutputs == null || recipe.mOutputs.length != 1) continue;
                 if (recipe.mFluidOutputs != null && recipe.mFluidOutputs.length > 0) continue;
                 ItemStack toDisassemble = recipe.mOutputs[0];
@@ -187,7 +187,7 @@ public class TST_DisassemblerRecipeHandler {
                     .setOutputItems(recipe.mInputs)
                     .setOutputFluids(recipe.mFluidInputs)
                     .setEut(recipe.mEUt)
-                    .setTier(GT_Utility.getTier(recipe.mEUt));
+                    .setTier(GTUtility.getTier(recipe.mEUt));
 
                 DisassemblerRecipeMap.put(itemIDtd, disassemblyRecipe);
 
@@ -195,7 +195,7 @@ public class TST_DisassemblerRecipeHandler {
         }
 
         private boolean isGTTool(ItemStack itemStack) {
-            return itemStack.getItem() instanceof GT_MetaGenerated_Tool_01;
+            return itemStack.getItem() instanceof MetaGeneratedTool01;
         }
 
     }

@@ -19,7 +19,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_TombOfTheDragon extends GTCM_MultiMachineBase<TST_TombOfTheDragon> {
 
@@ -98,12 +98,12 @@ public class TST_TombOfTheDragon extends GTCM_MultiMachineBase<TST_TombOfTheDrag
 
     // region General
 
-    private static GT_Multiblock_Tooltip_Builder tooltip;
+    private static MultiblockTooltipBuilder tooltip;
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         if (tooltip == null) {
-            tooltip = new GT_Multiblock_Tooltip_Builder();
+            tooltip = new MultiblockTooltipBuilder();
             tooltip.addMachineType("test")
                 .addInfo("testing")
                 .addSeparator()

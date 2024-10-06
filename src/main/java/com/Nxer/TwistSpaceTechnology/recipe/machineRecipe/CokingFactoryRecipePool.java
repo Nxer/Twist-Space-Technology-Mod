@@ -9,13 +9,12 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.dreammaster.gthandler.GT_CoreModSupport;
 
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.IRecipeMap;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTUtility;
 
 public class CokingFactoryRecipePool implements IRecipePool {
 
@@ -25,12 +24,10 @@ public class CokingFactoryRecipePool implements IRecipePool {
         final IRecipeMap coke = GTCMRecipe.CokingFactoryRecipes;
 
         // Raw Radox
-        GT_Values.RA.stdBuilder()
-            .itemInputs(
-                GT_Utility.getIntegratedCircuit(24),
-                GT_ModHandler.getModItem("GalaxySpace", "barnardaClog", 64))
-            .fluidInputs(GT_CoreModSupport.Xenoxene.getFluid(1000))
-            .fluidOutputs(GT_CoreModSupport.RawRadox.getFluid(1000 * 2))
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(24), GTModHandler.getModItem("GalaxySpace", "barnardaClog", 64))
+            .fluidInputs(Materials.Xenoxene.getFluid(1000))
+            .fluidOutputs(Materials.RawRadox.getFluid(1000 * 2))
             .eut(RECIPE_UV)
             .duration(20 * 120)
             .addTo(coke);
@@ -38,8 +35,8 @@ public class CokingFactoryRecipePool implements IRecipePool {
         // generals
         for (ItemStack logWood : OreDictionary.getOres("logWood")) {
             // Charcoal Byproducts
-            GT_Values.RA.stdBuilder()
-                .itemInputs(GT_Utility.getIntegratedCircuit(1), copyAmount(64, logWood))
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTUtility.getIntegratedCircuit(1), copyAmount(64, logWood))
                 .itemOutputs(Materials.Charcoal.getGems(64), Materials.Charcoal.getGems(64))
                 .fluidOutputs(Materials.CharcoalByproducts.getGas(1000 * 32))
                 .eut(RECIPE_MV)
@@ -47,8 +44,8 @@ public class CokingFactoryRecipePool implements IRecipePool {
                 .addTo(coke);
 
             // Wood Tar
-            GT_Values.RA.stdBuilder()
-                .itemInputs(GT_Utility.getIntegratedCircuit(2), copyAmount(64, logWood))
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTUtility.getIntegratedCircuit(2), copyAmount(64, logWood))
                 .itemOutputs(Materials.Charcoal.getGems(64), Materials.Charcoal.getGems(64))
                 .fluidOutputs(Materials.WoodTar.getFluid(1000 * 12))
                 .eut(RECIPE_MV)
@@ -56,8 +53,8 @@ public class CokingFactoryRecipePool implements IRecipePool {
                 .addTo(coke);
 
             // Wood Vinegar
-            GT_Values.RA.stdBuilder()
-                .itemInputs(GT_Utility.getIntegratedCircuit(3), copyAmount(64, logWood))
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTUtility.getIntegratedCircuit(3), copyAmount(64, logWood))
                 .itemOutputs(Materials.Charcoal.getGems(64), Materials.Charcoal.getGems(64))
                 .fluidOutputs(Materials.WoodVinegar.getFluid(1000 * 24))
                 .eut(RECIPE_MV)
@@ -65,8 +62,8 @@ public class CokingFactoryRecipePool implements IRecipePool {
                 .addTo(coke);
 
             // Wood Gas
-            GT_Values.RA.stdBuilder()
-                .itemInputs(GT_Utility.getIntegratedCircuit(4), copyAmount(64, logWood))
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTUtility.getIntegratedCircuit(4), copyAmount(64, logWood))
                 .itemOutputs(Materials.Charcoal.getGems(64), Materials.Charcoal.getGems(64))
                 .fluidOutputs(Materials.WoodGas.getGas(1000 * 12))
                 .eut(RECIPE_MV)
@@ -74,8 +71,8 @@ public class CokingFactoryRecipePool implements IRecipePool {
                 .addTo(coke);
 
             // Creosote Oil
-            GT_Values.RA.stdBuilder()
-                .itemInputs(GT_Utility.getIntegratedCircuit(5), copyAmount(64, logWood))
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTUtility.getIntegratedCircuit(5), copyAmount(64, logWood))
                 .itemOutputs(Materials.Charcoal.getGems(64), Materials.Charcoal.getGems(64))
                 .fluidOutputs(Materials.Creosote.getFluid(1000 * 32))
                 .eut(RECIPE_MV)
@@ -83,8 +80,8 @@ public class CokingFactoryRecipePool implements IRecipePool {
                 .addTo(coke);
 
             // Heavy Oil
-            GT_Values.RA.stdBuilder()
-                .itemInputs(GT_Utility.getIntegratedCircuit(6), copyAmount(64, logWood))
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTUtility.getIntegratedCircuit(6), copyAmount(64, logWood))
                 .itemOutputs(Materials.Charcoal.getGems(64), Materials.Charcoal.getGems(64))
                 .fluidOutputs(Materials.OilHeavy.getFluid(100 * 16))
                 .eut(RECIPE_MV)

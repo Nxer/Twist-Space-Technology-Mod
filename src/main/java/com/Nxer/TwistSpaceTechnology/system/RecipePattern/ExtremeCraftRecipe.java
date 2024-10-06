@@ -14,11 +14,11 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Gen
 import fox.spiteful.avaritia.crafting.ExtremeCraftingManager;
 import fox.spiteful.avaritia.crafting.ExtremeShapedOreRecipe;
 import fox.spiteful.avaritia.crafting.ExtremeShapedRecipe;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.gui.modularui.GT_UITextures;
+import gregtech.api.enums.GTValues;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBuilder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 
 public class ExtremeCraftRecipe extends CustomCraftRecipe {
 
@@ -27,7 +27,7 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
     public static RecipeMap<TST_RecipeMapBackend> extremeCraftRecipes = RecipeMapBuilder
         .of("gtcm.recipe.extremeCraftRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 1, 0, 0)
-        .progressBar(GT_UITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.ExtremeCraftCenter.get(1))
@@ -71,7 +71,7 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
                 // LOG.info("insert into recipemap");
                 int pre = extremeCraftRecipes.getAllRecipes()
                     .size();
-                GT_Values.RA.stdBuilder()
+                GTValues.RA.stdBuilder()
                     .ignoreCollision()
                     .itemInputs(inputs)
                     .itemOutputs(output)
@@ -80,7 +80,7 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
                     .addTo(extremeCraftRecipes);
                 if (pre == extremeCraftRecipes.getAllRecipes()
                     .size()) {
-                    GT_Values.RA.stdBuilder()
+                    GTValues.RA.stdBuilder()
                         .ignoreCollision()
                         .itemInputs(inputs)
                         .itemOutputs(output)
@@ -98,7 +98,7 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
     public static Object[] addCircuit(Object[] obj, int n) {
         Object[] newObj = new Object[obj.length + 1];
         System.arraycopy(obj, 0, newObj, 1, obj.length);
-        newObj[0] = GT_Utility.getIntegratedCircuit(n);
+        newObj[0] = GTUtility.getIntegratedCircuit(n);
         return newObj;
     }
 

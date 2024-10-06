@@ -22,7 +22,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 
 public class SpaceStationStructureCasing extends BlockBase01 {
 
@@ -32,7 +32,7 @@ public class SpaceStationStructureCasing extends BlockBase01 {
         this.setHarvestLevel("wrench", 1);
         this.setCreativeTab(GTCMCreativeTabs.tabGTCMGeneralTab);
         SpaceStationStructureCasingCasingSet.add(0);
-        GregTech_API.registerMachineBlock(this, -1);
+        GregTechAPI.registerMachineBlock(this, -1);
     }
 
     public SpaceStationStructureCasing(String unlocalizedName, String localName) {
@@ -82,15 +82,15 @@ public class SpaceStationStructureCasing extends BlockBase01 {
 
     @Override
     public void onBlockAdded(World aWorld, int aX, int aY, int aZ) {
-        if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
-            GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
+        if (GregTechAPI.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
+            GregTechAPI.causeMachineUpdate(aWorld, aX, aY, aZ);
         }
     }
 
     @Override
     public void breakBlock(World aWorld, int aX, int aY, int aZ, Block aBlock, int aMetaData) {
-        if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
-            GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
+        if (GregTechAPI.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
+            GregTechAPI.causeMachineUpdate(aWorld, aX, aY, aZ);
         }
     }
 

@@ -1,19 +1,19 @@
 package com.Nxer.TwistSpaceTechnology.system.Disassembler;
 
 import static com.Nxer.TwistSpaceTechnology.config.Config.CostTicksPerItemDisassembling_Disassembler;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,14 +37,14 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import bartworks.API.BorosilicateGlass;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.loader.Loaders;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -53,10 +53,10 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
 
@@ -141,15 +141,15 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                                 (t, meta) -> t.tierComponentCasing = meta,
                                 t -> t.tierComponentCasing))
                     )
-                    .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 5))
-                    .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 8))
-                    .addElement('E', ofBlock(GregTech_API.sBlockCasings2, 9))
-                    .addElement('F', ofBlock(GregTech_API.sBlockCasings9, 1))
+                    .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
+                    .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 8))
+                    .addElement('E', ofBlock(GregTechAPI.sBlockCasings2, 9))
+                    .addElement('F', ofBlock(GregTechAPI.sBlockCasings9, 1))
                     .addElement('G', ofBlock(sBlockCasingsTT, 4))
                     .addElement('H', ofBlock(sBlockCasingsTT, 8))
                     .addElement(
                         'I',
-                        GT_HatchElementBuilder
+                        HatchElementBuilder
                             .<TST_Disassembler>builder()
                             .atLeast(InputBus, OutputBus, OutputHatch)
                             .adder(TST_Disassembler::addToMachineList)
@@ -187,9 +187,9 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
 
     // region Processing Logic
     public int tierComponentCasing = -2;
-    private static Set<GT_Recipe> allRecipes = null;
+    private static Set<GTRecipe> allRecipes = null;
 
-    public Set<GT_Recipe> getAllRecipes() {
+    public Set<GTRecipe> getAllRecipes() {
         if (allRecipes == null) {
             allRecipes = new HashSet<>();
             allRecipes.addAll(GoodGeneratorRecipeMaps.componentAssemblyLineRecipes.getAllRecipes());
@@ -313,7 +313,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
         long processed = 0;
         base: for (ItemStack items : inputItems) {
             if (items.stackSize <= 0) continue;
-            for (GT_Recipe recipe : getAllRecipes()) {
+            for (GTRecipe recipe : getAllRecipes()) {
                 // Item things are not correct state.
                 if (items.stackSize <= 0) continue base;
                 // Recipe is not just output 1 item.
@@ -325,7 +325,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                 if (items.stackSize < recipe.mOutputs[0].stackSize) continue base;
                 // Tier block limit.
                 if (tier < 14) {
-                    byte recipeTier = GT_Utility.getTier(recipe.mEUt);
+                    byte recipeTier = GTUtility.getTier(recipe.mEUt);
                     if (recipeTier > tier + 1) {
                         if (processed == 0) {
                             return CheckRecipeResultRegistry.insufficientMachineTier(recipeTier - 1);
@@ -445,13 +445,13 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
     // endregion
 
     // region General
-    private static GT_Multiblock_Tooltip_Builder tooltip;
+    private static MultiblockTooltipBuilder tooltip;
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         if (tooltip == null) {
             // spotless:off
-            tooltip = new GT_Multiblock_Tooltip_Builder();
+            tooltip = new MultiblockTooltipBuilder();
             // #tr Tooltip_TSTDisassembler_MachineType
             // # Disassembler
             // #zh_CN 拆解机

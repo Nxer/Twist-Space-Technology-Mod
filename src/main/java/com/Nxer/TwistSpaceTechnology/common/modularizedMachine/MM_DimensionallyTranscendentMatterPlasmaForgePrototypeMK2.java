@@ -2,21 +2,21 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine;
 
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.AllModule;
 import static com.Nxer.TwistSpaceTechnology.config.Config.MaxFuelDiscount_DTMPFP;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsBA0;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.api.util.GT_StructureUtility.ofCoil;
+import static gregtech.api.util.GTStructureUtility.ofCoil;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import javax.annotation.Nonnull;
 
@@ -33,7 +33,6 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -49,12 +48,13 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_ParallelHelper;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
+import gregtech.api.util.ParallelHelper;
 import gregtech.api.util.shutdown.ShutDownReason;
+import tectech.thing.block.BlockQuantumGlass;
 
 public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     extends MultiExecutionCoreMachineSupportAllModuleBase<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> {
@@ -203,13 +203,13 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
             // save fuel
             @NotNull
             @Override
-            protected GT_ParallelHelper createParallelHelper(@NotNull GT_Recipe recipe) {
+            protected ParallelHelper createParallelHelper(@NotNull GTRecipe recipe) {
                 return super.createParallelHelper(recipeAfterDiscount(recipe));
             }
 
             // validate
             @Override
-            protected @Nonnull CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+            protected @Nonnull CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
                 return recipe.mSpecialValue <= coilHeat ? CheckRecipeResultRegistry.SUCCESSFUL
                     : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
             }
@@ -227,9 +227,9 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
 
             @Nonnull
             @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
                 if (isNoOverclockCalculator) {
-                    return GT_OverclockCalculator.ofNoOverclock(recipe);
+                    return OverclockCalculator.ofNoOverclock(recipe);
                 } else {
                     return super.createOverclockCalculator(recipe);
                 }
@@ -239,8 +239,8 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     }
 
     @Nonnull
-    protected GT_Recipe recipeAfterDiscount(@Nonnull GT_Recipe recipe) {
-        GT_Recipe tRecipe = recipe.copy();
+    protected GTRecipe recipeAfterDiscount(@Nonnull GTRecipe recipe) {
+        GTRecipe tRecipe = recipe.copy();
         for (int i = 0; i < recipe.mFluidInputs.length; i++) {
             for (FluidStack fuel : valid_fuels) {
                 if (tRecipe.mFluidInputs[i].isFluidEqual(fuel)) {
@@ -360,7 +360,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                         MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2::getCoilLevel))
                 .addElement(
                     'B',
-                    GT_HatchElementBuilder.<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2>builder()
+                    HatchElementBuilder.<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2>builder()
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2::addNormalHatchToMachineList)
                         .dot(1)
@@ -368,10 +368,10 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                         .buildAndChain(sBlockCasingsBA0, 12))
                 .addElement('C', ofBlock(sBlockCasingsTT, 10))
                 .addElement('D', ofBlock(sBlockCasingsTT, 12))
-                .addElement('E', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                .addElement('E', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .addElement(
                     'F',
-                    GT_HatchElementBuilder.<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2>builder()
+                    HatchElementBuilder.<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2>builder()
                         .atLeast(AllModule)
                         .adder(MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2::addModularHatchToMachineList)
                         .dot(2)
@@ -412,13 +412,13 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         return ret;
     }
 
-    private static GT_Multiblock_Tooltip_Builder tooltip;
+    private static MultiblockTooltipBuilder tooltip;
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tooltip == null) {
-            tooltip = new GT_Multiblock_Tooltip_Builder();
+            tooltip = new MultiblockTooltipBuilder();
             // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Plasma Forge
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}等离子锻炉

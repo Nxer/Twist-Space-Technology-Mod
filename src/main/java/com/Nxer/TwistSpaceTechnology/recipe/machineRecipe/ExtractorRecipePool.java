@@ -6,7 +6,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import magicbees.item.types.CombType;
@@ -19,7 +19,7 @@ public class ExtractorRecipePool implements IRecipePool {
 
         final IRecipeMap Extractor = RecipeMaps.fluidExtractionRecipes;
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(Config.combs.getStackForType(CombType.OTHERWORLDLY))
             .fluidOutputs(MaterialPool.LiquidMana.getFluidOrGas(10))
             .noOptimize()
@@ -27,7 +27,7 @@ public class ExtractorRecipePool implements IRecipePool {
             .duration(30 * 20)
             .addTo(Extractor);
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(GTCMItemList.PurpleMagnoliaPetal.get(1))
             .fluidOutputs(MaterialPool.LiquidMana.getFluidOrGas(5))
             .noOptimize()

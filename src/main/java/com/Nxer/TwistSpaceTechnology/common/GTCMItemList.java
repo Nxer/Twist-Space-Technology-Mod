@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
-import gregtech.api.util.GT_Log;
+import gregtech.api.util.GTLog;
 
 public enum GTCMItemList {
 
@@ -500,8 +500,8 @@ public enum GTCMItemList {
         sanityCheck();
         // if invalid, return a replacements
         if (Utils.isStackInvalid(mStack)) {
-            GT_Log.out.println("Object in the ItemList is null at:");
-            new NullPointerException().printStackTrace(GT_Log.out);
+            GTLog.out.println("Object in the ItemList is null at:");
+            new NullPointerException().printStackTrace(GTLog.out);
             return Utils.copyAmount(aAmount, TestItem0.get(1));
         }
         return Utils.copyAmount(aAmount, mStack);
@@ -543,7 +543,7 @@ public enum GTCMItemList {
         if (mHasNotBeenSet)
             throw new IllegalAccessError("The Enum '" + name() + "' has not been set to an Item at this time!");
         if (mDeprecated && !mWarned) {
-            new Exception(this + " is now deprecated").printStackTrace(GT_Log.err);
+            new Exception(this + " is now deprecated").printStackTrace(GTLog.err);
             // warn only once
             mWarned = true;
         }

@@ -12,17 +12,17 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofCoil;
+import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,24 +38,24 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import bartworks.API.BorosilicateGlass;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class GT_TileEntity_MagneticDrivePressureFormer
     extends GTCM_MultiMachineBase<GT_TileEntity_MagneticDrivePressureFormer> {
@@ -127,8 +127,8 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         if (this.glassTier <= 0) return false;
         // Infinity Glass enable Laser Energy Hatch
         if (this.glassTier < GlassTier_LimitLaserHatch_MagneticDrivePressureFormer) {
-            for (GT_MetaTileEntity_Hatch hatch : this.mExoticEnergyHatches) {
-                if (hatch.getConnectionType() == GT_MetaTileEntity_Hatch.ConnectionType.LASER) {
+            for (MTEHatch hatch : this.mExoticEnergyHatches) {
+                if (hatch.getConnectionType() == MTEHatch.ConnectionType.LASER) {
                     return false;
                 }
             }
@@ -165,7 +165,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 4);
 
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + this.mode));
         }
@@ -226,15 +226,15 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                                                        ))
                                        )
                                        .addElement('B', ofBlock(compactFusionCoil,0))
-                                       .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 5))
+                                       .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
                                        .addElement(
                                            'D',
-                                           GT_HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
+                                           HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
                                                                  .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                                  .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
                                                                  .dot(1)
                                                                  .casingIndex(62)
-                                                                 .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                                                                 .buildAndChain(GregTechAPI.sBlockCasings4, 14))
                                        .addElement(
                                            'E',
                                            withChannel("coil",
@@ -243,12 +243,12 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                                                            GT_TileEntity_MagneticDrivePressureFormer::getCoilLevel)))
                                        .addElement(
                                            'F',
-                                           GT_HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
+                                           HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
                                                                  .atLeast(Energy.or(ExoticEnergy))
                                                                  .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
                                                                  .dot(2)
                                                                  .casingIndex(183)
-                                                                 .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                                        .build();
         }
         return STRUCTURE_DEFINITION;
@@ -304,8 +304,8 @@ public class GT_TileEntity_MagneticDrivePressureFormer
 
     // tooltips
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MagneticDrivePressureFormer_MachineType)
             .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_00)
             .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_01)

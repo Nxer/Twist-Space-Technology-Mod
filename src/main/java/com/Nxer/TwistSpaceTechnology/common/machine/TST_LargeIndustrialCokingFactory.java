@@ -6,18 +6,18 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockUnlocalizedName;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofCoil;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofCoil;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -29,7 +29,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -38,8 +38,8 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
 
 public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_LargeIndustrialCokingFactory> {
@@ -167,17 +167,17 @@ I -> ofFrame...(Materials.Steel, ...);
             STRUCTURE_DEFINITION = StructureDefinition
                                        .<TST_LargeIndustrialCokingFactory>builder()
                                        .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                                       .addElement('A', ofBlock(GregTech_API.sBlockCasings2, 15))
-                                       .addElement('B', ofBlock(GregTech_API.sBlockCasings3, 15))
+                                       .addElement('A', ofBlock(GregTechAPI.sBlockCasings2, 15))
+                                       .addElement('B', ofBlock(GregTechAPI.sBlockCasings3, 15))
                                        .addElement(
                                            'C',
-                                           GT_HatchElementBuilder
+                                           HatchElementBuilder
                                                .<TST_LargeIndustrialCokingFactory>builder()
                                                .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                .adder(TST_LargeIndustrialCokingFactory::addToMachineList)
                                                .dot(1)
                                                .casingIndex(48)
-                                               .buildAndChain(GregTech_API.sBlockCasings4, 0))
+                                               .buildAndChain(GregTechAPI.sBlockCasings4, 0))
                                        .addElement(
                                            'D',
                                            withChannel(
@@ -200,8 +200,8 @@ I -> ofFrame...(Materials.Steel, ...);
 
     // region Info
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_LargeIndustrialCokingFactory_MachineType)
             .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_Controller)
             .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_01)
