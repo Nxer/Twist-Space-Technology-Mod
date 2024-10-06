@@ -26,14 +26,14 @@ import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipe;
 import WayofTime.alchemicalWizardry.api.altarRecipeRegistry.AltarRecipeRegistry;
 import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRecipe;
 import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRegistry;
-import goodgenerator.client.GUI.GG_UITextures;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.gui.modularui.GT_UITextures;
+import goodgenerator.client.GUI.GGUITextures;
+import gregtech.api.enums.GTValues;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.recipe.maps.AssemblyLineFrontend;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 import gregtech.nei.formatter.HeatingCoilSpecialValueFormatter;
 import gregtech.nei.formatter.SimpleSpecialValueFormatter;
 
@@ -326,10 +326,10 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
         .neiRecipeComparator((r1, r2) -> {
             Optional<ItemStack> circuit1 = Arrays.stream(r1.mInputs)
-                .filter(GT_Utility::isAnyIntegratedCircuit)
+                .filter(GTUtility::isAnyIntegratedCircuit)
                 .findFirst();
             Optional<ItemStack> circuit2 = Arrays.stream(r2.mInputs)
-                .filter(GT_Utility::isAnyIntegratedCircuit)
+                .filter(GTUtility::isAnyIntegratedCircuit)
                 .findFirst();
 
             return circuit1.map(
@@ -360,7 +360,7 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.BloodyHell.get(1)))
         .disableOptimize()
         .slotOverlays(
-            (index, isFluid, isOutput, isSpecial) -> !isFluid && !isOutput ? GT_UITextures.OVERLAY_SLOT_CIRCUIT : null)
+            (index, isFluid, isOutput, isSpecial) -> !isFluid && !isOutput ? GTUITextures.OVERLAY_SLOT_CIRCUIT : null)
         .build();
 
     /**
@@ -382,8 +382,8 @@ public class GTCMRecipe {
             // filter empty output recipes, which these recipes are most likely charging orbs.
             if (recipe.result == null) continue;
 
-            GT_Values.RA.stdBuilder()
-                .itemInputs(recipe.requiredItem, GT_Utility.getIntegratedCircuit(1))
+            GTValues.RA.stdBuilder()
+                .itemInputs(recipe.requiredItem, GTUtility.getIntegratedCircuit(1))
                 .itemOutputs(recipe.result)
                 .fluidInputs(BloodMagicHelper.getLifeEssence(recipe.liquidRequired))
                 .eut(0)
@@ -393,9 +393,9 @@ public class GTCMRecipe {
         }
 
         for (AlchemyRecipe recipe : AlchemyRecipeRegistry.recipes) {
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
-                    TSTArrayUtils.concatToLast(ItemStack.class, recipe.getRecipe(), GT_Utility.getIntegratedCircuit(2)))
+                    TSTArrayUtils.concatToLast(ItemStack.class, recipe.getRecipe(), GTUtility.getIntegratedCircuit(2)))
                 .itemOutputs(recipe.getResult())
                 .fluidInputs(BloodMagicHelper.getLifeEssence(recipe.getAmountNeeded() * 100))
                 .eut(0)
@@ -405,11 +405,11 @@ public class GTCMRecipe {
         }
 
         for (BindingRecipe recipe : BindingRegistry.bindingRecipes) {
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(
                     recipe.requiredItem,
                     new ItemStack(ModItems.weakBloodShard, 0),
-                    GT_Utility.getIntegratedCircuit(11))
+                    GTUtility.getIntegratedCircuit(11))
                 .itemOutputs(recipe.outputItem)
                 .fluidInputs(BloodMagicHelper.getLifeEssence(bindingRecipeLECost))
                 .eut(0)

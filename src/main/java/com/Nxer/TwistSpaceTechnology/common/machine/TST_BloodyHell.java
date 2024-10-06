@@ -12,9 +12,9 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAn
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,9 +58,9 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
@@ -143,8 +143,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        var tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        var tt = new MultiblockTooltipBuilder();
         // spotless:off
 
         // #tr Tooltip_BloodyHell_MachineType
@@ -277,7 +277,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     'L',
                     ofChain(
                         ofBlock(MetaBlockCasing02, 0),
-                        GT_HatchElementBuilder.<TST_BloodyHell>builder()
+                        HatchElementBuilder.<TST_BloodyHell>builder()
                             .atLeast(InputBus, InputHatch, OutputBus)
                             .adder(TST_BloodyHell::addToMachineList)
                             .dot(1)
@@ -358,7 +358,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
             @NotNull
             @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
+            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
 
                 // check structure blood
                 if (!isBloodChecked && !(isBloodChecked = checkBlood()))
