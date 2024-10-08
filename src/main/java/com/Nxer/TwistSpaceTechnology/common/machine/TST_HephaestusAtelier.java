@@ -7,20 +7,21 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPer
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.NEGATIVE_ONE;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -45,32 +46,32 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
+import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
+import tectech.thing.block.BlockQuantumGlass;
 
 public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusAtelier>
-    implements IGlobalWirelessEnergy {
+    implements IWirelessEnergyHatchInformation {
 
     // region Class Constructor
     public TST_HephaestusAtelier(int aID, String aName, String aNameRegional) {
@@ -128,7 +129,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             // #tr HephaestusAtelier.modeMsg.1
             // # Mode : Alloy Smelter
             // #zh_CN 模式 : 合金冶炼炉
-            GT_Utility
+            GTUtility
                 .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("HephaestusAtelier.modeMsg." + this.mode));
         }
     }
@@ -171,8 +172,8 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
             @Nonnull
             @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
-                return isWirelessMode() ? GT_OverclockCalculator.ofNoOverclock(recipe)
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                return isWirelessMode() ? OverclockCalculator.ofNoOverclock(recipe)
                     : super.createOverclockCalculator(recipe);
             }
 
@@ -314,7 +315,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         ArrayList<ItemStack> outputs = new ArrayList<>();
         long smeltedAmount = 0;
         for (ItemStack items : inputItems) {
-            ItemStack smeltedOutput = GT_ModHandler.getSmeltingOutput(items, false, null);
+            ItemStack smeltedOutput = GTModHandler.getSmeltingOutput(items, false, null);
             if (smeltedOutput == null) {
                 // move to outputs
                 outputs.add(items.copy());
@@ -360,7 +361,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         for (ItemStack items : inputItems) {
             if (canProcess <= 0) break;
 
-            ItemStack smeltedOutput = GT_ModHandler.getSmeltingOutput(items, false, null);
+            ItemStack smeltedOutput = GTModHandler.getSmeltingOutput(items, false, null);
             if (smeltedOutput == null) {
                 // move to outputs
                 outputs.add(items.copy());
@@ -389,7 +390,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
         long maxEut = getMaxInputEu();
 
-        GT_OverclockCalculator calculator = new GT_OverclockCalculator()
+        OverclockCalculator calculator = new OverclockCalculator()
             .setRecipeEUt((long) ConsumeEutPerParallel_HephaestusAtelier * (maxProcessNormalModeFurnace - canProcess))
             .setEUt(maxEut)
             .setDuration(ConsumeDuration_HephaestusAtelier)
@@ -496,16 +497,16 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                     )
                     .addElement(
                         'A',
-                        GT_HatchElementBuilder
+                        HatchElementBuilder
                             .<TST_HephaestusAtelier>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy) )
                             .adder(TST_HephaestusAtelier::addToMachineList)
                             .dot(1)
                             .casingIndex(11)
-                            .buildAndChain(GregTech_API.sBlockCasings1, 11))
+                            .buildAndChain(GregTechAPI.sBlockCasings1, 11))
                     .addElement('B', ofBlock(sBlockCasingsTT, 4))
                     .addElement('C', ofBlock(sBlockCasingsTT, 7))
-                    .addElement('D', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                    .addElement('D', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                     .addElement(
                         'E',
                         withChannel(
@@ -567,8 +568,8 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_HephaestusAtelier_MachineType)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_Controller)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_01)

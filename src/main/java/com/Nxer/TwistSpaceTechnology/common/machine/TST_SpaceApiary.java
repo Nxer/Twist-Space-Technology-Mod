@@ -34,10 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.INameFunction;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.IStatusFunction;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.LedStatus;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.Parameters;
 import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevatormodules.TileEntityModuleBase;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
@@ -48,12 +44,16 @@ import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import forestry.api.apiculture.*;
 import forestry.apiculture.genetics.Bee;
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import tectech.thing.metaTileEntity.multi.base.INameFunction;
+import tectech.thing.metaTileEntity.multi.base.IStatusFunction;
+import tectech.thing.metaTileEntity.multi.base.LedStatus;
+import tectech.thing.metaTileEntity.multi.base.Parameters;
 
 public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
@@ -85,7 +85,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
     protected float voltageTierExact;
 
     public double getVoltageTierExact() {
-        return Math.log((double) GT_Values.V[6] / 8d) / Math.log(4d) + 1e-8d;
+        return Math.log((double) GTValues.V[6] / 8d) / Math.log(4d) + 1e-8d;
     }
 
     @Override
@@ -238,7 +238,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         public double getVoltageTierExact() {
-            return Math.log((double) GT_Values.V[8] / 8d) / Math.log(4d) + 1e-8d; // UV Tier
+            return Math.log((double) GTValues.V[8] / 8d) / Math.log(4d) + 1e-8d; // UV Tier
         }
 
         @Override
@@ -260,8 +260,8 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         @Override
-        protected GT_Multiblock_Tooltip_Builder createTooltip() {
-            final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        protected MultiblockTooltipBuilder createTooltip() {
+            final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
             tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
                 .addInfo(
                     EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
@@ -303,7 +303,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         public double getVoltageTierExact() {
-            return Math.log((double) GT_Values.V[9] / 8d) / Math.log(4d) + 1e-8d; // UHV Tier
+            return Math.log((double) GTValues.V[9] / 8d) / Math.log(4d) + 1e-8d; // UHV Tier
         }
 
         public TST_SpaceApiaryT2(int aID, String aName, String aNameRegional) {
@@ -320,8 +320,8 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         @Override
-        protected GT_Multiblock_Tooltip_Builder createTooltip() {
-            final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        protected MultiblockTooltipBuilder createTooltip() {
+            final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
             tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
                 .addInfo(
                     EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
@@ -363,7 +363,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         public double getVoltageTierExact() {
-            return Math.log((double) GT_Values.V[10] / 8d) / Math.log(4d) + 1e-8d; // UEV Tier
+            return Math.log((double) GTValues.V[10] / 8d) / Math.log(4d) + 1e-8d; // UEV Tier
         }
 
         public TST_SpaceApiaryT3(int aID, String aName, String aNameRegional) {
@@ -380,8 +380,8 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         @Override
-        protected GT_Multiblock_Tooltip_Builder createTooltip() {
-            final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        protected MultiblockTooltipBuilder createTooltip() {
+            final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
             tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
                 .addInfo(
                     EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
@@ -440,8 +440,8 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         @Override
-        protected GT_Multiblock_Tooltip_Builder createTooltip() {
-            final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        protected MultiblockTooltipBuilder createTooltip() {
+            final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
             tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
                 .addInfo(
                     EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD

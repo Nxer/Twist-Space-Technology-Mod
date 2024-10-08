@@ -5,18 +5,18 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotN
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static goodgenerator.loader.Loaders.MAR_Casing;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
@@ -46,7 +46,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
@@ -58,13 +58,13 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings2;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
+import gregtech.common.blocks.BlockCasings2;
+import gregtech.common.blocks.BlockCasings8;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -109,7 +109,7 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
                     + EnumChatFormatting.RESET
                     + ": "
                     + EnumChatFormatting.GOLD
-                    + GT_Utility.formatNumbers(tag.getLong("costingWirelessEUTemp"))
+                    + GTUtility.formatNumbers(tag.getLong("costingWirelessEUTemp"))
                     + EnumChatFormatting.RESET
                     + " EU");
         } else {
@@ -165,7 +165,7 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 2);
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("ThermalEnergyDevourer.modeMsg." + this.mode));
         }
@@ -188,8 +188,8 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
 
             @Nonnull
             @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
-                return isWirelessMode ? GT_OverclockCalculator.ofNoOverclock(recipe)
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                return isWirelessMode ? OverclockCalculator.ofNoOverclock(recipe)
                     : super.createOverclockCalculator(recipe);
             }
         }.setMaxParallelSupplier(this::getLimitedMaxParallel);
@@ -359,26 +359,26 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
                     {"     CC~CC     ","   CCEEEEECC   ","  CEEEEEEEEEC  "," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC","CEEEEEEEEEEEEEC"," CEEEEEEEEEEEC "," CEEEEEEEEEEEC ","  CEEEEEEEEEC  ","   CCEEEEECC   ","     CCCCC     "}
                 }))
                 .addElement('A', ofBlock(MAR_Casing,0))
-                .addElement('B', ofBlock(GregTech_API.sBlockCasings1, 11))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 11))
                 .addElement(
                     'C',
-                    GT_HatchElementBuilder
+                    HatchElementBuilder
                         .<TST_ThermalEnergyDevourer>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                         .adder(TST_ThermalEnergyDevourer::addToMachineList)
                         .dot(1)
-                        .casingIndex(((GT_Block_Casings2) GregTech_API.sBlockCasings2).getTextureIndex(1))
-                        .buildAndChain(ofBlock(GregTech_API.sBlockCasings2, 1)))
-                .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 8))
+                        .casingIndex(((BlockCasings2) GregTechAPI.sBlockCasings2).getTextureIndex(1))
+                        .buildAndChain(ofBlock(GregTechAPI.sBlockCasings2, 1)))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 8))
                 .addElement(
                     'E',
-                    GT_HatchElementBuilder
+                    HatchElementBuilder
                         .<TST_ThermalEnergyDevourer>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_ThermalEnergyDevourer::addToMachineList)
                         .dot(2)
-                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(3))
-                        .buildAndChain(ofBlock(GregTech_API.sBlockCasings8, 3)))
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3))
+                        .buildAndChain(ofBlock(GregTechAPI.sBlockCasings8, 3)))
                 .addElement('F', ofFrame(Materials.NaquadahAlloy))
                 .build();
         }
@@ -406,8 +406,8 @@ F -> ofFrame...(Materials.NaquadahAlloy);
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_ThermalEnergyDevourer_MachineType)
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_Controller)
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_01)

@@ -22,17 +22,17 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.google.common.collect.Sets;
 
-import gregtech.api.enums.GT_Values;
+import bartworks.system.material.WerkstoffLoader;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_RecipeBuilder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTRecipeBuilder;
+import gregtech.api.util.GTUtility;
 
 public class StellarForgeRecipePool implements IRecipePool {
 
@@ -62,7 +62,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         }
 
         // iterate Vacuum Freezer recipes
-        for (GT_Recipe recipeFreezer : RecipeMaps.vacuumFreezerRecipes.getAllRecipes()) {
+        for (GTRecipe recipeFreezer : RecipeMaps.vacuumFreezerRecipes.getAllRecipes()) {
             if (recipeFreezer.mInputs == null || recipeFreezer.mInputs.length < 1
                 || recipeFreezer.mOutputs == null
                 || recipeFreezer.mOutputs.length < 1) continue;
@@ -80,7 +80,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         SpecialRecipeOutputs.add(TST_ItemID.create(WerkstoffLoader.CubicZirconia.get(OrePrefixes.gemFlawed, 1)));
         SpecialRecipeOutputs.add(TST_ItemID.create(Materials.MeteoricIron.getIngots(1)));
         SpecialRecipeOutputs.add(TST_ItemID.create(Materials.MeteoricSteel.getIngots(1)));
-        SpecialRecipeOutputs.add(TST_ItemID.create(GT_ModHandler.getModItem("gregtech", "gt.metaitem.01", 1, 12129)));
+        SpecialRecipeOutputs.add(TST_ItemID.create(GTModHandler.getModItem("gregtech", "gt.metaitem.01", 1, 12129)));
 
     }
 
@@ -101,7 +101,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             Materials.Argon.mGas,
             Materials.Helium.mGas);
 
-        for (GT_Recipe recipe : RecipeMaps.blastFurnaceRecipes.getAllRecipes()) {
+        for (GTRecipe recipe : RecipeMaps.blastFurnaceRecipes.getAllRecipes()) {
             if (recipe.mOutputs.length == 1 && SpecialRecipeOutputs.contains(TST_ItemID.create(recipe.mOutputs[0])))
                 continue;
 
@@ -116,11 +116,11 @@ public class StellarForgeRecipePool implements IRecipePool {
             byte integrateNum = 0;
             for (ItemStack inputs : recipe.mInputs) {
 
-                if (metaItemEqual(inputs, GT_Utility.getIntegratedCircuit(1))) {
+                if (metaItemEqual(inputs, GTUtility.getIntegratedCircuit(1))) {
                     integrateNum = 1;
                     continue;
                 }
-                if (metaItemEqual(inputs, GT_Utility.getIntegratedCircuit(11))) {
+                if (metaItemEqual(inputs, GTUtility.getIntegratedCircuit(11))) {
                     integrateNum = 11;
                     continue;
                 }
@@ -182,7 +182,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             int duration = Math.max(1, recipe.mDuration / 3);
             if (integrateNum != 0) {
-                for (GT_Recipe recipeCheck : GTCMRecipe.StellarForgeRecipes.getAllRecipes()) {
+                for (GTRecipe recipeCheck : GTCMRecipe.StellarForgeRecipes.getAllRecipes()) {
                     if (!itemStackArrayEqualFuzzy(recipeCheck.mInputs, inputItemsArray)) continue;
                     if (!fluidStackEqualFuzzy(recipeCheck.mFluidOutputs, outputFluidsArray)) continue;
                     canAddNewRecipe = false;
@@ -207,7 +207,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
     public void addToRecipes(ItemStack[] inputItems, FluidStack[] inputFluids, ItemStack[] outputItems,
         FluidStack[] outputFluids, int eut, int duration) {
-        GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
+        GTRecipeBuilder ra = GTValues.RA.stdBuilder();
 
         if (inputItems != null && inputItems.length > 0) {
             ra.itemInputs(inputItems);
@@ -232,7 +232,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
     public FluidStack getMoltenFluids(ItemStack ingot, int ingotAmount) {
         FluidStack out = null;
-        for (GT_Recipe recipeMolten : RecipeMaps.fluidExtractionRecipes.getAllRecipes()) {
+        for (GTRecipe recipeMolten : RecipeMaps.fluidExtractionRecipes.getAllRecipes()) {
             if (metaItemEqual(ingot, recipeMolten.mInputs[0])) {
                 if (recipeMolten.mFluidOutputs[0] != null) {
                     out = recipeMolten.mFluidOutputs[0].copy();
@@ -249,7 +249,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         // Meteoric Iron and Meteoric Steel
         // Meteoric Iron
         TST_RecipeBuilder bd = TST_RecipeBuilder.builder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(1), Materials.MeteoricIron.getDust(1));
+            .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.MeteoricIron.getDust(1));
         if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
             bd.fluidOutputs(Materials.MeteoricIron.getMolten(144));
         } else {
@@ -261,7 +261,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
         // Meteoric Steel
         bd = TST_RecipeBuilder.builder()
-            .itemInputs(GT_Utility.getIntegratedCircuit(2), Materials.MeteoricIron.getDust(1));
+            .itemInputs(GTUtility.getIntegratedCircuit(2), Materials.MeteoricIron.getDust(1));
 
         if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
             bd.fluidOutputs(Materials.MeteoricSteel.getMolten(144));
@@ -310,14 +310,14 @@ public class StellarForgeRecipePool implements IRecipePool {
             .addTo(GTCMRecipe.AlloyBlastSmelterWithIngotRecipes);
     }
 
-    public static Collection<GT_Recipe> stellarForgeRecipeListCache;
+    public static Collection<GTRecipe> stellarForgeRecipeListCache;
 
     private void cacheRecipeList() {
         stellarForgeRecipeListCache = new HashSet<>(GTCMRecipe.StellarForgeRecipes.getAllRecipes());
     }
 
     private void loadRecipeListCache() {
-        for (GT_Recipe recipe : stellarForgeRecipeListCache) {
+        for (GTRecipe recipe : stellarForgeRecipeListCache) {
             GTCMRecipe.StellarForgeRecipes.addRecipe(recipe);
         }
     }

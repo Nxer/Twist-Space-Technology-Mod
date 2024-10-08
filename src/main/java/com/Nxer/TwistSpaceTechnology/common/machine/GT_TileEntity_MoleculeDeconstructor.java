@@ -17,21 +17,21 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Molecu
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textScrewdriverChangeMode;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.Maintenance;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -47,25 +47,25 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import bartworks.API.BorosilicateGlass;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<GT_TileEntity_MoleculeDeconstructor>
@@ -121,7 +121,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 2);
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("MoleculeDeconstructor.modeMsg." + this.mode));
         }
@@ -146,7 +146,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
 
         if (this.glassTier <= 0) return false;
         if (glassTier < 12) {
-            for (GT_MetaTileEntity_Hatch hatch : this.mExoticEnergyHatches) {
+            for (MTEHatch hatch : this.mExoticEnergyHatches) {
                 if (this.glassTier < hatch.mTier) {
                     return false;
                 }
@@ -154,7 +154,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
         }
 
         speedBonus = (float) (Math
-            .pow(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor, GT_Utility.getTier(this.getMaxInputEu())));
+            .pow(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor, GTUtility.getTier(this.getMaxInputEu())));
 
         return true;
     }
@@ -242,10 +242,10 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
                                                                                   (te, t) -> te.glassTier = t,
                                                                                   te -> te.glassTier
                                                                               )))
-                                                      .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 15))
-                                                      .addElement('C', ofBlock(GregTech_API.sBlockCasings4, 14))
+                                                      .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 15))
+                                                      .addElement('C', ofBlock(GregTechAPI.sBlockCasings4, 14))
                                                       .addElement('D',
-                                                                  GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
+                                                                  HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
                                                                                         .atLeast(Energy.or(ExoticEnergy))
                                                                                         .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
                                                                                         .dot(1)
@@ -253,26 +253,26 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
                                                                                         .buildAndChain(sBlockCasingsTT, 0))
                                                       .addElement('E', ofBlock(sBlockCasingsTT, 8))
                                                       .addElement('F',
-                                                                  GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
+                                                                  HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
                                                                                         .atLeast(OutputBus, OutputHatch)
                                                                                         .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
                                                                                         .dot(2)
                                                                                         .casingIndex(62)
-                                                                                        .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                                                                                        .buildAndChain(GregTechAPI.sBlockCasings4, 14))
                                                       .addElement('G',
-                                                                  GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
+                                                                  HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
                                                                                         .atLeast(Maintenance)
                                                                                         .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
                                                                                         .dot(3)
                                                                                         .casingIndex(62)
-                                                                                        .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                                                                                        .buildAndChain(GregTechAPI.sBlockCasings4, 14))
                                                       .addElement('H',
-                                                                  GT_HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
+                                                                  HatchElementBuilder.<GT_TileEntity_MoleculeDeconstructor>builder()
                                                                                         .atLeast(InputBus, InputHatch)
                                                                                         .adder(GT_TileEntity_MoleculeDeconstructor::addToMachineList)
                                                                                         .dot(4)
                                                                                         .casingIndex(62)
-                                                                                        .buildAndChain(GregTech_API.sBlockCasings4, 14))
+                                                                                        .buildAndChain(GregTechAPI.sBlockCasings4, 14))
                                                       .addElement('I', ofFrame(Materials.CosmicNeutronium))
                                                       .build();
         }
@@ -441,8 +441,8 @@ I -> ofFrame...();
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_MoleculeDeconstructor_MachineType)
             .addInfo(Tooltip_MoleculeDeconstructor_00)
             .addInfo(Tooltip_MoleculeDeconstructor_01)

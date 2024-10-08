@@ -40,17 +40,18 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_Curre
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
-import static com.github.technus.tectech.thing.CustomItemList.astralArrayFabricator;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static tectech.thing.CustomItemList.astralArrayFabricator;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -79,7 +80,6 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -87,26 +87,27 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import galaxyspace.core.register.GSBlocks;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.items.GT_IntegratedCircuit_Item;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.items.ItemIntegratedCircuit;
 import gtPlusPlus.core.block.ModBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import tectech.thing.block.BlockQuantumGlass;
 
 public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
-    implements IConstructable, ISurvivalConstructable, IDSP_IO, IGlobalWirelessEnergy {
+    implements IConstructable, ISurvivalConstructable, IDSP_IO, IWirelessEnergyHatchInformation {
 
     // region Class Constructor
     public TST_DSPReceiver(int aID, String aName, String aNameRegional) {
@@ -192,7 +193,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             currentTip.add(
                 EnumChatFormatting.AQUA + texter("Energy Receiving: ", "Waila.TST_DSPReceiver.1")
                     + EnumChatFormatting.GOLD
-                    + GT_Utility.formatNumbers(tag.getLong("TickEU"))
+                    + GTUtility.formatNumbers(tag.getLong("TickEU"))
                     + EnumChatFormatting.RESET
                     + " EU/t");
         }
@@ -214,8 +215,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 2);
-            GT_Utility
-                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("TST_DSPReceiver.modeMsg." + this.mode));
+            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("TST_DSPReceiver.modeMsg." + this.mode));
         }
     }
 
@@ -262,7 +262,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             // normal
             astralArrayOverloadMultiplier = 1;
             return Math.min(DSP_Values.maxPowerPointPerReceiver, canUse);
-        } else if (controllerStack.getItem() instanceof GT_IntegratedCircuit_Item) {
+        } else if (controllerStack.getItem() instanceof ItemIntegratedCircuit) {
             // use integrated circuit to limit
             double multiplier = Math
                 .min(1, ((double) controllerStack.getItemDamage()) / ((double) controllerStack.stackSize));
@@ -353,7 +353,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                     BigInteger eu = BigInteger.valueOf(storageEUMAX)
                         .multiply(Utils.INTEGER_MAX_VALUE)
                         .add(BigInteger.valueOf(storageEU));
-                    addEUToGlobalEnergyMap(ownerUUID.toString(), eu);
+                    addEUToGlobalEnergyMap(ownerUUID, eu);
                     this.storageEU = 0;
                     this.storageEUMAX = 0;
                 }
@@ -497,10 +497,10 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 	public IStructureDefinition<TST_DSPReceiver> getStructureDefinition() {
 		return IStructureDefinition.<TST_DSPReceiver>builder()
                                    .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                                   .addElement('A', ofBlock(GregTech_API.sBlockCasings1, 14)) // A -> ofBlock...(gt.blockcasings, 14, ...);
-                                   .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 8)) // B -> ofBlock...(gt.blockcasings2, 8, ...);
-                                   .addElement('C', ofBlock(GregTech_API.sBlockCasings8, 2)) // C -> ofBlock...(gt.blockcasings8, 2, ...);
-                                   .addElement('D', ofBlock(GregTech_API.sBlockCasings8, 10)) // D -> ofBlock...(gt.blockcasings8, 10, ...);
+                                   .addElement('A', ofBlock(GregTechAPI.sBlockCasings1, 14)) // A -> ofBlock...(gt.blockcasings, 14, ...);
+                                   .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 8)) // B -> ofBlock...(gt.blockcasings2, 8, ...);
+                                   .addElement('C', ofBlock(GregTechAPI.sBlockCasings8, 2)) // C -> ofBlock...(gt.blockcasings8, 2, ...);
+                                   .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 10)) // D -> ofBlock...(gt.blockcasings8, 10, ...);
                                    .addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 0)) // E -> ofBlock...(gt.blockcasingsSE, 0, ...);
                                    .addElement('F', ofBlock(IGBlocks.SpaceElevatorCasing, 1)) // F -> ofBlock...(gt.blockcasingsSE, 1, ...);
                                    .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 2)) // G -> ofBlock...(gt.blockcasingsSE, 2, ...);
@@ -511,10 +511,10 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                                    .addElement('L', ofBlock(ModBlocks.blockCasings4Misc, 4)) // L -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
                                    .addElement('M', ofBlock(GSBlocks.DysonSwarmBlocks, 1)) // M -> ofBlock...(tile.DysonSwarmPart, 1, ...);
                                    .addElement('N', ofBlock(GSBlocks.DysonSwarmBlocks, 9)) // N -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-                                   .addElement('O', ofBlock(QuantumGlassBlock.INSTANCE, 0)) // O -> ofBlock...(tile.quantumGlass, 0, ...);
+                                   .addElement('O', ofBlock(BlockQuantumGlass.INSTANCE, 0)) // O -> ofBlock...(tile.quantumGlass, 0, ...);
                                    .addElement(
 			                           'P',
-			                           GT_HatchElementBuilder.<TST_DSPReceiver>builder()
+			                           HatchElementBuilder.<TST_DSPReceiver>builder()
 			                                                 .atLeast(InputBus, OutputBus)
 			                                                 .adder(TST_DSPReceiver::addToMachineList)
 			                                                 .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
@@ -522,7 +522,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 			                                                 .buildAndChain(IGBlocks.SpaceElevatorCasing, 0)
                                    )
                                    .addElement('Q', ofFrame(Materials.NaquadahAlloy))
-                                   .addElement('R', ofChain(ofBlock(sBlockCasingsTT, 0), ofBlock(GregTech_API.sBlockCasings8, 10)))
+                                   .addElement('R', ofChain(ofBlock(sBlockCasingsTT, 0), ofBlock(GregTechAPI.sBlockCasings8, 10)))
                                    .build();
 	}
     /*
@@ -642,8 +642,8 @@ Q -> ofFrame...(NaquadahAlloy, ...);
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_DSPReceiver_MachineType)
             .addInfo(Tooltip_DSPReceiver_00)
             .addInfo(Tooltip_DSPReceiver_01)

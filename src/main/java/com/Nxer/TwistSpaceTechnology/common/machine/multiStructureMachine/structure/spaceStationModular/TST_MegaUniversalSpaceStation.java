@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular;// spotless:off
 
+import static bartworks.common.loaders.ItemRegistry.bw_realglas2;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
-import static com.github.bartimaeusnek.bartworks.common.loaders.ItemRegistry.bw_realglas2;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -28,7 +27,7 @@ import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.client.IGTextures;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -36,10 +35,11 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_StructureUtility;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTStructureUtility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
+import tectech.thing.casing.TTCasingsContainer;
 
 // spotless:off
 public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureMachine<TST_MegaUniversalSpaceStation> {
@@ -120,7 +120,7 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        GT_Utility.sendChatToPlayer(
+        GTUtility.sendChatToPlayer(
             env.getActor(),
             "warning! you should not use general method to construct such a "
                 + "big structure! this will still process for you anyway.");
@@ -178,32 +178,32 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
                 .addElement(
                     'R',
                     StructureUtility.ofChain(
-                        GT_StructureUtility.ofHatchAdder(
+                        GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addMaintenanceToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
-                        GT_StructureUtility.ofHatchAdder(
+                        GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addExoticEnergyInputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
-                        GT_StructureUtility.ofHatchAdder(
+                        GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addInputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
-                        GT_StructureUtility.ofHatchAdder(
+                        GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addOutputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
                         StructureUtility.ofBlock(SpaceStationAntiGravityBlock, 13)))
-                .addElement('D', ofBlock(GregTech_API.sBlockCasings9, 1))
-                .addElement('E', ofBlock(TT_Container_Casings.sBlockCasingsBA0, 10))
-                .addElement('F', ofBlock(TT_Container_Casings.sBlockCasingsBA0, 12))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 1))
+                .addElement('E', ofBlock(TTCasingsContainer.sBlockCasingsBA0, 10))
+                .addElement('F', ofBlock(TTCasingsContainer.sBlockCasingsBA0, 12))
                 .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
                 .addElement('H', ofBlock(IGBlocks.SpaceElevatorCasing, 2))
-                .addElement('I', ofBlock(TT_Container_Casings.sBlockCasingsTT, 2))
-                .addElement('J', ofBlock(TT_Container_Casings.sBlockCasingsTT, 3))
-                .addElement('K', ofBlock(GregTech_API.sBlockMetal9, 6))
-                .addElement('L', ofBlock(GregTech_API.sBlockMetal9, 7))
+                .addElement('I', ofBlock(TTCasingsContainer.sBlockCasingsTT, 2))
+                .addElement('J', ofBlock(TTCasingsContainer.sBlockCasingsTT, 3))
+                .addElement('K', ofBlock(GregTechAPI.sBlockMetal9, 6))
+                .addElement('L', ofBlock(GregTechAPI.sBlockMetal9, 7))
                 .addElement('M', ofBlock(spaceStationStructureBlock, 13))
                 .addElement('N', ofBlock(ModBlocks.blockCasings5Misc, 10))
                 .addElement('O', ofBlock(ModBlocks.blockCasings5Misc, 14))
@@ -258,8 +258,8 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MegaUniversalSpaceStation_MachineType)
             .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_00)
             .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_01)

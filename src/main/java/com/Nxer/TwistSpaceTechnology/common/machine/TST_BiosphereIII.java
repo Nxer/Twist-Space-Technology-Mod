@@ -7,18 +7,18 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
-import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofHatchAdder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,19 +37,19 @@ import org.jetbrains.annotations.Nullable;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
-import com.github.bartimaeusnek.bartworks.API.recipe.BartWorksRecipeMaps;
-import com.github.bartimaeusnek.bartworks.common.configs.ConfigHandler;
-import com.github.bartimaeusnek.bartworks.common.tileentities.multis.GT_TileEntity_BioVat;
-import com.github.bartimaeusnek.bartworks.common.tileentities.tiered.GT_MetaTileEntity_RadioHatch;
-import com.github.bartimaeusnek.bartworks.util.BW_Util;
-import com.github.bartimaeusnek.bartworks.util.MathUtils;
-import com.github.bartimaeusnek.bartworks.util.ResultWrongSievert;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import bartworks.API.BorosilicateGlass;
+import bartworks.API.recipe.BartWorksRecipeMaps;
+import bartworks.common.configs.Configuration;
+import bartworks.common.tileentities.multis.MTEBioVat;
+import bartworks.common.tileentities.tiered.GT_MetaTileEntity_RadioHatch;
+import bartworks.util.BWUtil;
+import bartworks.util.MathUtils;
+import bartworks.util.ResultWrongSievert;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -61,11 +61,11 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_ParallelHelper;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.ParallelHelper;
 
 public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
@@ -139,17 +139,17 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
             @NotNull
             @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
+            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
                 // no check for Brewing & Fermenting
                 if (mode == 2 || mode == 3) return CheckRecipeResultRegistry.SUCCESSFUL;
 
                 // Bio Vat check
                 // Petri Dish check
-                if (!BW_Util
+                if (!BWUtil
                     .areStacksEqualOrNull((ItemStack) recipe.mSpecialItems, TST_BiosphereIII.this.getControllerSlot()))
                     return CheckRecipeResultRegistry.NO_RECIPE;
 
-                int[] conditions = GT_TileEntity_BioVat.specialValueUnpack(recipe.mSpecialValue);
+                int[] conditions = MTEBioVat.specialValueUnpack(recipe.mSpecialValue);
                 TST_BiosphereIII.this.mNeededGlassTier = conditions[0];
                 TST_BiosphereIII.this.mNeededSievert = conditions[3];
 
@@ -172,7 +172,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
             @NotNull
             @Override
-            protected GT_ParallelHelper createParallelHelper(@NotNull GT_Recipe recipe) {
+            protected ParallelHelper createParallelHelper(@NotNull GTRecipe recipe) {
                 return super.createParallelHelper(recipeAfterEfficiencyCalculation(recipe, inputFluids));
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
@@ -184,14 +184,14 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         logic.setSpecialSlotItem(this.getControllerSlot());
     }
 
-    private GT_Recipe recipeAfterEfficiencyCalculation(GT_Recipe recipe, FluidStack[] inputFluids) {
+    private GTRecipe recipeAfterEfficiencyCalculation(GTRecipe recipe, FluidStack[] inputFluids) {
         // Brewing & Fermenting, no change to the recipe
         if (mode == 2 || mode == 3) return recipe;
 
-        GT_Recipe tRecipe = recipe.copy();
+        GTRecipe tRecipe = recipe.copy();
         if (mode == 0) efficiency = getExpectedMultiplier(tRecipe.mFluidOutputs[0]);// Bio Vat Normal
         else efficiency = (int) (((mGlassTier - mNeededGlassTier) * 600 + 1601.0) / 1000
-            * ConfigHandler.bioVatMaxParallelBonus);// Bio Vat Automation
+            * Configuration.Multiblocks.bioVatMaxParallelBonus);// Bio Vat Automation
 
         long fluidAmount = 0;
         for (FluidStack fluid : inputFluids) {
@@ -217,9 +217,9 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     }
 
     private int calcMod(double x) {
-        double y = getOutputCapacity() / 2D, z = ConfigHandler.bioVatMaxParallelBonus;
+        double y = getOutputCapacity() / 2D, z = Configuration.Multiblocks.bioVatMaxParallelBonus;
         int ret = (int) Math.ceil((-1D / y * Math.pow(x - y, 2D) + y) / y * z);
-        return MathUtils.clamp(1, ret, ConfigHandler.bioVatMaxParallelBonus);
+        return MathUtils.clamp(1, ret, Configuration.Multiblocks.bioVatMaxParallelBonus);
     }
 
     private int getOutputCapacity() {
@@ -312,21 +312,21 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
                                                                   Byte.MAX_VALUE,
                                                                   (te, t) -> te.mGlassTier = t,
                                                                   te -> te.mGlassTier)))
-                                                      .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 15))
-                                                      .addElement('C', ofBlock(GregTech_API.sBlockCasings4, 1))
-                                                      .addElement('D', ofBlock(GregTech_API.sBlockCasings8, 0))
-                                                      .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 6))
-                                                      .addElement('F', ofBlock(GregTech_API.sBlockCasings8, 5))
+                                                      .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 15))
+                                                      .addElement('C', ofBlock(GregTechAPI.sBlockCasings4, 1))
+                                                      .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 0))
+                                                      .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 6))
+                                                      .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 5))
                                                       .addElement(
                                                           'H',
                                                           ofChain(
                                                               ofHatchAdder(TST_BiosphereIII::addRadiationInputToMachineList, STAINLESS_STEEL_CASING_INDEX, 1),
-                                                              GT_HatchElementBuilder.<TST_BiosphereIII>builder()
+                                                              HatchElementBuilder.<TST_BiosphereIII>builder()
                                                                                     .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                                                     .adder(TST_BiosphereIII::addToMachineList)
                                                                                     .dot(1)
                                                                                     .casingIndex(STAINLESS_STEEL_CASING_INDEX)
-                                                                                    .buildAndChain(GregTech_API.sBlockCasings4, 1)))
+                                                                                    .buildAndChain(GregTechAPI.sBlockCasings4, 1)))
                                                       .addElement('I', isAir())
                                                       .addElement('J', ofFrame(Materials.Osmiridium))
                                                       .build();
@@ -351,8 +351,8 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
     // region Info
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_BiosphereIII_MachineType)
             .addInfo(TextLocalization.Tooltip_BiosphereIII_Controller)
             .addInfo(TextLocalization.Tooltip_BiosphereIII_00)
@@ -445,7 +445,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         if (getBaseMetaTileEntity().isServerSide()) {
             mode = (byte) ((mode + 1) % 4);
             String des = getDisplayMode(mode);
-            GT_Utility.sendChatToPlayer(aPlayer, String.join("", des));
+            GTUtility.sendChatToPlayer(aPlayer, String.join("", des));
         }
     }
 
@@ -477,7 +477,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         // Brewing & Fermenting
             (EnumChatFormatting.GREEN + "100" + EnumChatFormatting.RESET + "%") :
             // Bio Vat
-            (EnumChatFormatting.GREEN + GT_Utility.formatNumbers(efficiency) + EnumChatFormatting.RESET + "x"));
+            (EnumChatFormatting.GREEN + GTUtility.formatNumbers(efficiency) + EnumChatFormatting.RESET + "x"));
         return ret;
     }
 }

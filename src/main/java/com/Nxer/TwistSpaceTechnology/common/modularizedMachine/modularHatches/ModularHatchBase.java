@@ -7,10 +7,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 
-public abstract class ModularHatchBase extends GT_MetaTileEntity_Hatch implements IModularHatch {
+public abstract class ModularHatchBase extends MTEHatch implements IModularHatch {
 
     public ModularHatchBase(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount,
         String[] aDescription, ITexture... aTextures) {

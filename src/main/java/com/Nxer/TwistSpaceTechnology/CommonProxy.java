@@ -8,12 +8,16 @@ import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
 import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
 import com.Nxer.TwistSpaceTechnology.event.TickingEvent;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
+import com.Nxer.TwistSpaceTechnology.util.TextureUtils;
 
+import WayofTime.alchemicalWizardry.ModBlocks;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -21,6 +25,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.common.render.GTTextureBuilder;
 
 public class CommonProxy {
 
@@ -44,6 +50,14 @@ public class CommonProxy {
         FMLCommonHandler.instance()
             .bus()
             .register(new TickingEvent());
+
+        CheckRecipeResultRegistry.register(new ResultInsufficientTier(0, 0));
+
+        TextureUtils.registerTexture(
+            31,
+            0,
+            new GTTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
+                .build());
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
@@ -63,6 +77,8 @@ public class CommonProxy {
         TST_BigBroArray.initializeMaterials();
         TST_BigBroArray.initializeStructure();
         TST_BigBroArray.addRecipes();
+
+        GTCMRecipe.prepareBloodyHellRecipes();
     }
 
     // register server commands in this event handler (Remove if not needed)

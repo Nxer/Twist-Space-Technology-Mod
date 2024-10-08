@@ -12,11 +12,11 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCente
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.enums.GT_HatchElement.Muffler;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.Maintenance;
+import static gregtech.api.enums.HatchElement.Muffler;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
@@ -39,9 +39,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_IndustrialMagnetarSeparator> {
 
@@ -81,7 +81,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
 
     @Override
     protected int getMaxParallelRecipes() {
-        return ParallelMultiply_IndustrialMagnetarSeparator * GT_Utility.getTier(this.getMaxInputVoltage());
+        return ParallelMultiply_IndustrialMagnetarSeparator * GTUtility.getTier(this.getMaxInputVoltage());
     }
 
     @Override
@@ -130,7 +130,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(STRUCTURE))
                 .addElement(
                     'C',
-                    GT_HatchElementBuilder.<TST_IndustrialMagnetarSeparator>builder()
+                    HatchElementBuilder.<TST_IndustrialMagnetarSeparator>builder()
                         .atLeast(InputBus, OutputBus, Maintenance, Muffler, Energy)
                         .adder(TST_IndustrialMagnetarSeparator::addToMachineList)
                         .dot(1)
@@ -159,8 +159,8 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
 
     // spotless:off
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // #tr Tooltip_IndustrialMagnetarSeparator_MachineType
         // # Electromagnetic Separator
         // #zh_CN 电磁离析机

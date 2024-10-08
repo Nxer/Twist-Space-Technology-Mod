@@ -25,7 +25,7 @@ import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 
 /**
  * An ItemStack Generator used Meta Item System.
@@ -178,7 +178,7 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
         if (!itemNBT.hasKey("CurrentCooldown")) {
             itemNBT.setLong("CurrentCooldown", getCooldown());
         } else if (itemNBT.getLong("CurrentCooldown") > 0) {
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 player,
                 "This item has a cooldown of " + (float) (itemNBT.getLong("CurrentCooldown")) / 20.0F + 's');
             return itemStackIn;

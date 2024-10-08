@@ -1,18 +1,18 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +36,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -47,12 +47,12 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
+import gregtech.common.blocks.BlockCasings8;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -147,8 +147,8 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
 
             @Nonnull
             @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
-                return isWirelessMode ? GT_OverclockCalculator.ofNoOverclock(recipe)
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                return isWirelessMode ? OverclockCalculator.ofNoOverclock(recipe)
                     : super.createOverclockCalculator(recipe);
             }
         }.setMaxParallel(Integer.MAX_VALUE);
@@ -173,7 +173,7 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
             return CheckRecipeResultRegistry.insufficientPower(costEu);
         }
 
-        currentUsingEu = GT_Utility.formatNumbers(costEu);
+        currentUsingEu = GTUtility.formatNumbers(costEu);
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
@@ -318,20 +318,20 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
             STRUCTURE_DEFINITION = StructureDefinition.<TST_DeployedNanoCore>builder()
                 .addShape(STRUCTURE_PIECE_BOTTOM, transpose(SHAPE_BOTTOM))
                 .addShape(STRUCTURE_PIECE_MIDDLE, transpose(SHAPE_MIDDLE))
-                .addElement('A', ofBlock(GregTech_API.sBlockCasings2, 5))
-                .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 8))
-                .addElement('C', ofBlock(GregTech_API.sBlockCasings8, 10))
+                .addElement('A', ofBlock(GregTechAPI.sBlockCasings2, 5))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 8))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings8, 10))
                 .addElement('D', ofBlock(sBlockCasingsTT, 9))
                 .addElement('E', ofBlock(sBlockCasingsTT, 10))
                 .addElement('F', ofBlock(sBlockCasingsTT, 12))
                 .addElement(
                     'G',
-                    GT_HatchElementBuilder.<TST_DeployedNanoCore>builder()
+                    HatchElementBuilder.<TST_DeployedNanoCore>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_DeployedNanoCore::addToMachineList)
                         .dot(1)
-                        .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(10))
-                        .buildAndChain(GregTech_API.sBlockCasings8, 10))
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -4612,8 +4612,8 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
     // region General
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_DeployedNanoCore_MachineType)
             .addInfo(TextLocalization.Tooltip_DeployedNanoCore_Controller)
             .addInfo(TextLocalization.Tooltip_DeployedNanoCore_01)
@@ -4642,7 +4642,7 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
         if (sideDirection == facingDirection) {
             if (active) return new ITexture[] {
                 Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 10)),
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 10)),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_DTPF_ON)
                     .extFacing()
@@ -4654,13 +4654,13 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
                     .build() };
             return new ITexture[] {
                 Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 10)),
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 10)),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_DTPF_OFF)
                     .extFacing()
                     .build() };
         }
         return new ITexture[] { Textures.BlockIcons
-            .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 10)) };
+            .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 10)) };
     }
 }

@@ -20,7 +20,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.interfaces.IRecipeMap;
@@ -84,7 +84,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
             // #zh_CN 配方所需源质
             Essence.setStackDisplayName(TextEnums.tr("IndustrialMagicMatrixRecipeInputAspects"));
             new ItemEssence().setAspects(Essence, Recipe.getInputAspects());
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .ignoreCollision()
                 .clearInvalid()
                 .special(Essence)
@@ -98,7 +98,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
                 .addTo(IIM);
         }
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .clearInvalid()
             .itemInputs(new ItemStack(blockCosmeticSolid, 8, 6), new ItemStack(itemShard, 1, 6))
             .itemOutputs(new ItemStack(ModBlocksHandler.BlockCrystalDeep.getLeft(), 8))

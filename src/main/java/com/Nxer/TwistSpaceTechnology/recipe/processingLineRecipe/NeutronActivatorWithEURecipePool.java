@@ -5,15 +5,15 @@ import static goodgenerator.api.recipe.GoodGeneratorRecipeMaps.neutronActivatorR
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GTRecipe;
 
 public class NeutronActivatorWithEURecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
 
-        for (GT_Recipe recipeOrigin : neutronActivatorRecipes.getAllRecipes()) {
-            GT_Recipe recipeNew = recipeOrigin.copy();
+        for (GTRecipe recipeOrigin : neutronActivatorRecipes.getAllRecipes()) {
+            GTRecipe recipeNew = recipeOrigin.copy();
             int kn = recipeNew.mSpecialValue / 10000;
             recipeNew.mEUt = kn * kn;
             NeutronActivatorRecipesWithEU.addRecipe(recipeNew);

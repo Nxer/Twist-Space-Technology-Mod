@@ -4,10 +4,10 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
@@ -32,11 +32,11 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.crossmod.galacticgreg.VoidMinerUtility;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
-import gregtech.api.GregTech_API;
+import bwcrossmod.galacticgreg.VoidMinerUtility;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
@@ -48,10 +48,10 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
 
@@ -174,7 +174,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     private ItemStack[] getItemOutputs() {
         List<ItemStack> outputs = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            ItemData oreData = GT_OreDictUnificator.getItemData(generateOneStackOre());
+            ItemData oreData = GTOreDictUnificator.getItemData(generateOneStackOre());
             if (oreData == null) {
                 TwistSpaceTechnology.LOG.info("EOW getItemOutputs error: oreData is null");
                 return new ItemStack[0];
@@ -215,16 +215,16 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         }
 
         // check gem style
-        if (GT_OreDictUnificator.get(OrePrefixes.gem, material, 1) != null) {
-            if (GT_OreDictUnificator.get(OrePrefixes.gemExquisite, material, 1) != null) {
+        if (GTOreDictUnificator.get(OrePrefixes.gem, material, 1) != null) {
+            if (GTOreDictUnificator.get(OrePrefixes.gemExquisite, material, 1) != null) {
                 // has gem style
-                outputs.add(GT_OreDictUnificator.get(OrePrefixes.gemExquisite, material, 16));
-                outputs.add(GT_OreDictUnificator.get(OrePrefixes.gemFlawless, material, 32));
-                outputs.add(GT_OreDictUnificator.get(OrePrefixes.gem, material, 32));
+                outputs.add(GTOreDictUnificator.get(OrePrefixes.gemExquisite, material, 16));
+                outputs.add(GTOreDictUnificator.get(OrePrefixes.gemFlawless, material, 32));
+                outputs.add(GTOreDictUnificator.get(OrePrefixes.gem, material, 32));
 
             } else {
                 // just normal gem
-                outputs.add(GT_OreDictUnificator.get(OrePrefixes.gem, material, 64));
+                outputs.add(GTOreDictUnificator.get(OrePrefixes.gem, material, 64));
             }
         }
 
@@ -238,7 +238,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     }
 
     public ItemStack getDustStack(Materials material, int amount) {
-        return setStackSize(GT_OreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
+        return setStackSize(GTOreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
     }
 
     /**
@@ -271,13 +271,13 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         float currentWeight = 0.f;
         while (true) {
             float randomNumber = XSTR.XSTR_INSTANCE.nextFloat() * totalWeight;
-            for (Map.Entry<GT_Utility.ItemId, Float> entry : dropMap.getInternalMap()
+            for (Map.Entry<GTUtility.ItemId, Float> entry : dropMap.getInternalMap()
                 .entrySet()) {
                 currentWeight += entry.getValue();
                 if (randomNumber < currentWeight) return entry.getKey()
                     .getItemStack();
             }
-            for (Map.Entry<GT_Utility.ItemId, Float> entry : extraDropMap.getInternalMap()
+            for (Map.Entry<GTUtility.ItemId, Float> entry : extraDropMap.getInternalMap()
                 .entrySet()) {
                 currentWeight += entry.getValue();
                 if (randomNumber < currentWeight) return entry.getKey()
@@ -467,13 +467,13 @@ F -> ofBlock...(tile.wood, 0, ...);
                     )
                     .addElement(
                         'A',
-                        GT_HatchElementBuilder
+                        HatchElementBuilder
                             .<TST_EyeOfWood>builder()
                             .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                             .adder(TST_EyeOfWood::addToMachineList)
                             .dot(1)
                             .casingIndex(10)
-                            .buildAndChain(GregTech_API.sBlockCasings1, 10))
+                            .buildAndChain(GregTechAPI.sBlockCasings1, 10))
                     .addElement('B', ofBlock(Blocks.lapis_block, 0))
                     .addElement('C', ofBlock(Blocks.bookshelf, 0))
                     .addElement('D', ofBlock(Blocks.brick_block, 0))
@@ -513,13 +513,13 @@ F -> ofBlock...(tile.wood, 0, ...);
         return false;
     }
 
-    private static GT_Multiblock_Tooltip_Builder tt = null;
+    private static MultiblockTooltipBuilder tt = null;
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tt == null) {
-            tt = new GT_Multiblock_Tooltip_Builder();
+            tt = new MultiblockTooltipBuilder();
             tt.addMachineType(TextLocalization.Tooltip_EyeOfWood_MachineType)
                 .addInfo(TextLocalization.Tooltip_EyeOfWood_Controller)
                 .addInfo(TextLocalization.Tooltip_EyeOfWood_01)

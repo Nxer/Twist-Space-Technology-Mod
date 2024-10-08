@@ -11,8 +11,6 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.github.technus.tectech.thing.gui.TecTechUITextures;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_InputData;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -21,16 +19,17 @@ import com.gtnewhorizons.modularui.common.widget.DrawableWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
 import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
 
-import gregtech.api.gui.modularui.GT_UIInfos;
-import gregtech.api.gui.modularui.GT_UITextures;
+import gregtech.api.gui.modularui.GTUIInfos;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddGregtechLogo;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import tectech.thing.gui.TecTechUITextures;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDataInput;
 
-public class GT_Hatch_WirelessData_input extends GT_MetaTileEntity_Hatch_InputData
-    implements IAddGregtechLogo, IAddUIWidgets {
+public class GT_Hatch_WirelessData_input extends MTEHatchDataInput implements IAddGregtechLogo, IAddUIWidgets {
 
     public long requiredComputation = 1000000;
 
@@ -60,7 +59,7 @@ public class GT_Hatch_WirelessData_input extends GT_MetaTileEntity_Hatch_InputDa
             clientLocale = "en_US";
         }
         if (!aPlayer.isUsingItem()) {
-            GT_UIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
+            GTUIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
         }
         return super.onRightclick(aBaseMetaTileEntity, aPlayer);
     }
@@ -89,10 +88,10 @@ public class GT_Hatch_WirelessData_input extends GT_MetaTileEntity_Hatch_InputDa
         super.onFirstTick(aBaseMetaTileEntity);
     }
 
-    @Override
-    public boolean useModularUI() {
-        return true;
-    }
+    // @Override
+    // public boolean useModularUI() {
+    // return true;
+    // }
 
     @Override
     public void addGregTechLogo(ModularWindow.Builder builder) {
@@ -129,7 +128,7 @@ public class GT_Hatch_WirelessData_input extends GT_MetaTileEntity_Hatch_InputDa
                     .setTextColor(Color.WHITE.normal)
                     .setSize(70, 18)
                     .setPos(54, 36)
-                    .setBackground(GT_UITextures.BACKGROUND_TEXT_FIELD));
+                    .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD));
     }
 
     private static String[] tooltips;

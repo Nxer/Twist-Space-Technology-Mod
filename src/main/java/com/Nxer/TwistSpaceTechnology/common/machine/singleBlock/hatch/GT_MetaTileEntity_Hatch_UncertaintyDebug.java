@@ -6,16 +6,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_Uncertainty;
-import com.github.technus.tectech.util.CommonValues;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import tectech.thing.metaTileEntity.hatch.MTEHatchUncertainty;
+import tectech.util.CommonValues;
 
-public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends GT_MetaTileEntity_Hatch_Uncertainty {
+public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertainty {
 
     public GT_MetaTileEntity_Hatch_UncertaintyDebug(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);

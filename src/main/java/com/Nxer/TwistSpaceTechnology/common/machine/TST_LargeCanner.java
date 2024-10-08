@@ -2,17 +2,17 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,7 +32,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import goodgenerator.loader.Loaders;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -41,9 +41,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
 
@@ -96,18 +96,18 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = IStructureDefinition.<TST_LargeCanner>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                .addElement('G', ofBlock(GregTech_API.sBlockCasings2, 15))
+                .addElement('G', ofBlock(GregTechAPI.sBlockCasings2, 15))
                 .addElement('K', ofFrame(Materials.NaquadahAlloy))
-                .addElement('C', ofBlock(GregTech_API.sBlockCasings8, 0))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings8, 0))
                 .addElement('R', ofBlock(Loaders.MAR_Casing, 0))
                 .addElement(
                     'B',
-                    GT_HatchElementBuilder.<TST_LargeCanner>builder()
+                    HatchElementBuilder.<TST_LargeCanner>builder()
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(TST_LargeCanner::addToMachineList)
                         .dot(1)
                         .casingIndex(48)
-                        .buildAndChain(GregTech_API.sBlockCasings4, 0))
+                        .buildAndChain(GregTechAPI.sBlockCasings4, 0))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -165,7 +165,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
             // #tr LargeCanner.modeMsg.false
             // # Mode: Canning Machine
             // #zh_CN 装罐机模式
-            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("LargeCanner.modeMsg." + fluidMode));
+            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("LargeCanner.modeMsg." + fluidMode));
         }
     }
 
@@ -223,8 +223,8 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // #tr Tooltip_LargeCanner_MachineType
         // # Fluid/Solid Canner
         // #zh_CN 流体/固体装罐机

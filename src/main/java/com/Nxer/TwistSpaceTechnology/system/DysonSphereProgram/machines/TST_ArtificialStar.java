@@ -37,21 +37,22 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Detail
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.SpacetimeCompressionFieldGenerators;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.TimeAccelerationFieldGenerator;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static com.gtnewhorizons.gtnhintergalactic.block.IGBlocks.SpaceElevatorCasing;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static tectech.thing.casing.TTCasingsContainer.SpacetimeCompressionFieldGenerators;
+import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerators;
+import static tectech.thing.casing.TTCasingsContainer.TimeAccelerationFieldGenerator;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
 import java.text.DecimalFormat;
@@ -80,29 +81,30 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
-import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import galaxyspace.core.register.GSBlocks;
-import gregtech.api.GregTech_API;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
+import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import tectech.thing.block.BlockQuantumGlass;
+import tectech.thing.casing.TTCasingsContainer;
 
-public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar> implements IGlobalWirelessEnergy {
+public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar>
+    implements IWirelessEnergyHatchInformation {
 
     // region Class Constructor
     public TST_ArtificialStar(int aID, String aName, String aNameRegional) {
@@ -209,7 +211,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.enableRender = (byte) ((this.enableRender + 1) % 2);
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("ArtificialStar.enableRender." + this.enableRender));
             if (enableRender == 0 && isRendering) {
@@ -450,16 +452,16 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                                    ofBlocksTiered(
                                        TST_ArtificialStar::getTierDimensionFieldBlockFromBlock,
                                        ImmutableList.of(
-                                           Pair.of(GregTech_API.sBlockCasings1, 14),
-                                           Pair.of(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 0),
-                                           Pair.of(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 1),
-                                           Pair.of(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 2),
-                                           Pair.of(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 3),
-                                           Pair.of(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 4),
-                                           Pair.of(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 5),
-                                           Pair.of(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 6),
-                                           Pair.of(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 7),
-                                           Pair.of(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 8)),
+                                           Pair.of(GregTechAPI.sBlockCasings1, 14),
+                                           Pair.of(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 0),
+                                           Pair.of(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 1),
+                                           Pair.of(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 2),
+                                           Pair.of(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 3),
+                                           Pair.of(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 4),
+                                           Pair.of(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 5),
+                                           Pair.of(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 6),
+                                           Pair.of(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 7),
+                                           Pair.of(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 8)),
                                        -1,
                                        (t,m) -> t.tierDimensionField = m,
                                        t -> t.tierDimensionField
@@ -473,15 +475,15 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                                        TST_ArtificialStar::getTierTimeFieldBlockFromBlock,
                                        ImmutableList.of(
                                            Pair.of(sBlockCasingsTT, 14),
-                                           Pair.of(TT_Container_Casings.TimeAccelerationFieldGenerator, 0),
-                                           Pair.of(TT_Container_Casings.TimeAccelerationFieldGenerator, 1),
-                                           Pair.of(TT_Container_Casings.TimeAccelerationFieldGenerator, 2),
-                                           Pair.of(TT_Container_Casings.TimeAccelerationFieldGenerator, 3),
-                                           Pair.of(TT_Container_Casings.TimeAccelerationFieldGenerator, 4),
-                                           Pair.of(TT_Container_Casings.TimeAccelerationFieldGenerator, 5),
-                                           Pair.of(TT_Container_Casings.TimeAccelerationFieldGenerator, 6),
-                                           Pair.of(TT_Container_Casings.TimeAccelerationFieldGenerator, 7),
-                                           Pair.of(TT_Container_Casings.TimeAccelerationFieldGenerator, 8)),
+                                           Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 0),
+                                           Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 1),
+                                           Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 2),
+                                           Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 3),
+                                           Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 4),
+                                           Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 5),
+                                           Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 6),
+                                           Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 7),
+                                           Pair.of(TTCasingsContainer.TimeAccelerationFieldGenerator, 8)),
                                        -1,
                                        (t,m) -> t.tierTimeField = m,
                                        t -> t.tierTimeField)))
@@ -509,9 +511,9 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                    .addElement('H', ofBlock(sBlockCasingsTT, 12))
                    .addElement('I', ofBlock(sBlockCasingsTT, 13))
                    .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
-                   .addElement('K', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                   .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                    .addElement('L',
-                               GT_HatchElementBuilder.<TST_ArtificialStar>builder()
+                               HatchElementBuilder.<TST_ArtificialStar>builder()
                                    .atLeast(InputBus, OutputBus)
                                    .adder(TST_ArtificialStar::addInputBusOrOutputBusToMachineList)
                                    .dot(1)
@@ -520,7 +522,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                    .build();
     }
     public static int getTierDimensionFieldBlockFromBlock(Block block, int meta){
-        if (block == GregTech_API.sBlockCasings1 && 14 == meta) return 1;
+        if (block == GregTechAPI.sBlockCasings1 && 14 == meta) return 1;
         if (block == SpacetimeCompressionFieldGenerators) return meta + 2;
         return -1;
     }
@@ -535,8 +537,8 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
         return -1;
     }
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_ArtificialStar_MachineType)
             .addInfo(Tooltip_ArtificialStar_Controller)
             .addInfo(Tooltip_ArtificialStar_00)

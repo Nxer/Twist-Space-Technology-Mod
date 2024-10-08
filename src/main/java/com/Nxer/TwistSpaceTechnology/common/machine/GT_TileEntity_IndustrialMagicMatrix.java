@@ -6,9 +6,9 @@ import static com.dreammaster.block.BlockList.BloodyThaumium;
 import static com.dreammaster.block.BlockList.BloodyVoid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static goodgenerator.loader.Loaders.magicCasing;
-import static gregtech.api.enums.GT_HatchElement.*;
+import static gregtech.api.enums.HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static thaumcraft.common.config.ConfigBlocks.*;
 import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
@@ -44,7 +44,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import fox.spiteful.avaritia.items.LudicrousItems;
 import goodgenerator.loader.Loaders;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -55,9 +55,9 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import scala.Int;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -120,7 +120,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
             @Nonnull
             @Override
-            protected CheckRecipeResult validateRecipe(@Nonnull GT_Recipe recipe) {
+            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
                 int Para = createParallelHelper(recipe).setConsumption(false)
                     .build()
                     .getCurrentParallel();
@@ -2841,12 +2841,12 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                         onElementPass(x -> x.onEssentiaCellFound(2), ofBlock(Loaders.essentiaCell, 1)),
                         onElementPass(x -> x.onEssentiaCellFound(3), ofBlock(Loaders.essentiaCell, 2)),
                         onElementPass(x -> x.onEssentiaCellFound(4), ofBlock(Loaders.essentiaCell, 3))))
-                .addElement('B', ofBlock(GregTech_API.sBlockCasings8, 8))
-                .addElement('C', ofBlock(GregTech_API.sBlockMetal4, 10))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings8, 8))
+                .addElement('C', ofBlock(GregTechAPI.sBlockMetal4, 10))
                 .addElement(
                     'D',
                     ofChain(
-                        GT_HatchElementBuilder.<GT_TileEntity_IndustrialMagicMatrix>builder()
+                        HatchElementBuilder.<GT_TileEntity_IndustrialMagicMatrix>builder()
                             .atLeast(InputBus, OutputBus, Energy)
                             .adder(GT_TileEntity_IndustrialMagicMatrix::addToMachineList)
                             .casingIndex(1536)
@@ -2951,8 +2951,8 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     // spotless:off
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(
                 // #tr Tooltip_IndustrialMagicMatrix_MachineType
                 // # Magic Matrix

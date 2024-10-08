@@ -1,12 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.github.technus.tectech.loader.TecTechConfig.DEBUG_MODE;
-import static com.github.technus.tectech.util.CommonValues.MULTI_CHECK_AT;
-import static com.github.technus.tectech.util.TT_Utility.getUniqueIdentifier;
+import static com.gtnewhorizon.structurelib.StructureLib.DEBUG_MODE;
 import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.enums.Mods.OpenComputers;
 import static net.minecraft.util.StatCollector.translateToLocal;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
+import static tectech.util.CommonValues.MULTI_CHECK_AT;
+import static tectech.util.TTUtility.getUniqueIdentifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +22,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.technus.tectech.TecTech;
-import com.github.technus.tectech.thing.gui.TecTechUITextures;
-import com.github.technus.tectech.util.TT_Utility;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
@@ -37,17 +34,19 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GT_UIInfos;
+import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddGregtechLogo;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.objects.GTRenderedTexture;
+import tectech.TecTech;
+import tectech.thing.gui.TecTechUITextures;
+import tectech.util.TTUtility;
 
-public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
-    implements IAddGregtechLogo, IAddUIWidgets {
+public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGregtechLogo, IAddUIWidgets {
 
     private static Textures.BlockIcons.CustomIcon EM_R;
     private static Textures.BlockIcons.CustomIcon EM_R_ACTIVE;
@@ -70,7 +69,7 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
             new String[] { TextLocalization.Mark_TwistSpaceTechnology_TecTech,
                 translateToLocal("tst.computationhatchmonitor.desc1"),
                 EnumChatFormatting.AQUA + translateToLocal("tst.computationhatchmonitor.desc2") });
-        TT_Utility.setTier(aTier, this);
+        TTUtility.setTier(aTier, this);
         this.isMeanHatch = isMeanHatch;
 
     }
@@ -107,19 +106,19 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
         super.registerIcons(aBlockIconRegister);
-        // GT_MetaTileEntity_Hatch_Rack.RackComponent
+        // MTEHatch_Rack.RackComponent
         EM_R_ACTIVE = new Textures.BlockIcons.CustomIcon("iconsets/EM_RACK_ACTIVE");
         EM_R = new Textures.BlockIcons.CustomIcon("iconsets/EM_RACK");
     }
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, new GT_RenderedTexture(EM_R_ACTIVE) };
+        return new ITexture[] { aBaseTexture, new GTRenderedTexture(EM_R_ACTIVE) };
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, new GT_RenderedTexture(EM_R) };
+        return new ITexture[] { aBaseTexture, new GTRenderedTexture(EM_R) };
     }
 
     @Override
@@ -182,7 +181,7 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
         // else if(heat>0)
         // aPlayer.addChatComponentMessage(new ChatComponentText("It is still warm..."));
         // else
-        GT_UIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
+        GTUIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
         return true;
     }
 
@@ -318,10 +317,10 @@ public class GT_Hatch_RackComputationMonitor extends GT_MetaTileEntity_Hatch
         // Heat==1-10? --> 1
     }
 
-    @Override
-    public boolean useModularUI() {
-        return isMeanHatch;
-    }
+    // @Override
+    // public boolean useModularUI() {
+    // return isMeanHatch;
+    // }
 
     @Override
     public void addGregTechLogo(ModularWindow.Builder builder) {
