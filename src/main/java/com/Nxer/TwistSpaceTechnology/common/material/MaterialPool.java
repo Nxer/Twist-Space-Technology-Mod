@@ -1,11 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.material;
 
-import static com.github.bartimaeusnek.bartworks.util.BW_Util.subscriptNumbers;
+import static bartworks.util.BWUtil.subscriptNumbers;
 
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
-import com.github.bartimaeusnek.bartworks.util.Pair;
 
+import bartworks.system.material.Werkstoff;
+import bartworks.util.Pair;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TextureSet;
@@ -112,6 +112,32 @@ public class MaterialPool implements Runnable {
         new Werkstoff.GenerationFeatures().disable()
             .addCells(),
         offsetID_01 + 7,
+        TextureSet.SET_FLUID,
+        new Pair<>(PureMana, 1),
+        new Pair<>(Materials.Stone, 2));
+
+    public static final Werkstoff StabiliseVoidMatter = new Werkstoff(
+        new short[] { 0, 0, 0 }, // Dark
+        "Stabilise Void Matter",
+        subscriptNumbers("??SvM⨕??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 8,
+        TextureSet.SET_FLUID,
+        new Pair<>(PureMana, 1),
+        new Pair<>(Materials.Stone, 2));
+
+    public static final Werkstoff LiquidStargate = new Werkstoff(
+        new short[] { 66, 170, 255 }, // Dark
+        "Liquid Stargate",
+        subscriptNumbers("??Stargate??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 9,
         TextureSet.SET_FLUID,
         new Pair<>(PureMana, 1),
         new Pair<>(Materials.Stone, 2));

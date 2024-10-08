@@ -2,17 +2,18 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.PowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.SpeedController;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsBA0;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,8 +47,6 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
-import com.github.technus.tectech.thing.metaTileEntity.multi.base.render.TT_RenderedExtendedFacingTexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -64,31 +63,32 @@ import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import goodgenerator.items.MyMaterial;
+import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GT_UITextures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_MultiInput;
+import gregtech.api.metatileentity.implementations.MTEHatchInput;
+import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
+import gregtech.api.metatileentity.implementations.MTEHatchMultiInput;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
-import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_CraftingInput_ME;
-import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_Input_ME;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
-import gtPlusPlus.core.material.ELEMENT;
+import gregtech.common.tileentities.machines.MTEHatchCraftingInputME;
+import gregtech.common.tileentities.machines.MTEHatchInputME;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import tectech.thing.block.BlockQuantumGlass;
+import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
 public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllModuleBase<TST_StrangeMatterAggregator> {
 
@@ -149,8 +149,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         };
 
         ByproductFluids = new Fluid[][] {
-            new Fluid[] { Materials.Infinity.getMolten(1).getFluid(), ELEMENT.STANDALONE.HYPOGEN.getFluid() },
-            new Fluid[] { MaterialsUEVplus.SpaceTime.getMolten(1).getFluid(), MyMaterial.shirabon.getMolten(1).getFluid() },
+            new Fluid[] { Materials.Infinity.getMolten(1).getFluid(), HYPOGEN.getFluid() },
+            new Fluid[] { MaterialsUEVplus.SpaceTime.getMolten(1).getFluid(), GGMaterial.shirabon.getMolten(1).getFluid() },
             new Fluid[] { MaterialsUEVplus.Universium.getMolten(1).getFluid() }
         };
 
@@ -171,8 +171,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     // endregion
 
     // region Extra Hatches
-    protected GT_MetaTileEntity_Hatch_Input SpaceTimeMaintenanceConsumablesInputHatch;
-    protected GT_MetaTileEntity_Hatch_InputBus CoreElementInputBus;
+    protected MTEHatchInput SpaceTimeMaintenanceConsumablesInputHatch;
+    protected MTEHatchInputBus CoreElementInputBus;
 
     // endregion
 
@@ -763,7 +763,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
      */
     protected Pair<List<ItemStack>, List<ItemStack>> getCoreElementAndAnnihilationConstrainerStacks() {
         if (null == CoreElementInputBus || !CoreElementInputBus.isValid()
-            || CoreElementInputBus instanceof GT_MetaTileEntity_Hatch_CraftingInput_ME)
+            || CoreElementInputBus instanceof MTEHatchCraftingInputME)
             return Pair.of(Collections.emptyList(), Collections.emptyList());
         List<ItemStack> coreElements = new ArrayList<>();
         List<ItemStack> annihilationConstrainers = new ArrayList<>();
@@ -789,7 +789,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         if (null == SpaceTimeMaintenanceConsumablesInputHatch || !SpaceTimeMaintenanceConsumablesInputHatch.isValid()) {
             return false;
         }
-        if (SpaceTimeMaintenanceConsumablesInputHatch instanceof GT_MetaTileEntity_Hatch_MultiInput m) {
+        if (SpaceTimeMaintenanceConsumablesInputHatch instanceof MTEHatchMultiInput m) {
             // multi fluid input hatch
             ArrayList<FluidStack> matchedFluidStacks = new ArrayList<>();
             int matchedAmount = 0;
@@ -814,7 +814,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             }
             return false;
 
-        } else if (SpaceTimeMaintenanceConsumablesInputHatch instanceof GT_MetaTileEntity_Hatch_Input_ME me) {
+        } else if (SpaceTimeMaintenanceConsumablesInputHatch instanceof MTEHatchInputME me) {
             // me input hatch
             for (FluidStack f : me.getStoredFluids()) {
                 if (null != f && f.getFluid() == spaceTimeMaintenanceFluidInUse) {
@@ -916,7 +916,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     + EnumChatFormatting.GRAY
                     + " : "
                     + EnumChatFormatting.WHITE
-                    + GT_Utility.formatNumbers(tag.getLong("powerConsumption"))
+                    + GTUtility.formatNumbers(tag.getLong("powerConsumption"))
                     + " EU/t");
         }
     }
@@ -1019,7 +1019,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         if (aTileEntity == null) return false;
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Input hatch) {
+        if (aMetaTileEntity instanceof MTEHatchInput hatch) {
             hatch.updateTexture(aBaseCasingIndex);
             hatch.updateCraftingIcon(this.getMachineCraftingIcon());
             setHatchRecipeMap(hatch);
@@ -1034,7 +1034,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
 
-        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_InputBus hatch) {
+        if (aMetaTileEntity instanceof MTEHatchInputBus hatch) {
             hatch.updateTexture(aBaseCasingIndex);
             hatch.updateCraftingIcon(this.getMachineCraftingIcon());
             hatch.mRecipeMap = getRecipeMap();
@@ -1262,11 +1262,11 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .addElement('D', ofBlock(sBlockCasingsTT, 9))
                 .addElement('E', ofBlock(sBlockCasingsTT, 10))
                 .addElement('F', ofBlock(sBlockCasingsTT, 14))
-                .addElement('G', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                .addElement('G', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .addElement(
                     'H',
                     // H -> ofBlock...(gt.blockcasingsBA0, 12, ...); // modular hatches and output bus hatches
-                    GT_HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
+                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(OutputBus, OutputHatch, SpeedController, PowerConsumptionController)
                         .adder(TST_StrangeMatterAggregator::addToMachineList)
                         .dot(1)
@@ -1276,7 +1276,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     'I',
                     // I -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input hatch at left which input space-time
                     // holding consumables
-                    GT_HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
+                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(InputHatch)
                         .adder(TST_StrangeMatterAggregator::addSpaceTimeMaintenanceConsumablesInputHatchToMachineList)
                         .dot(3)
@@ -1285,7 +1285,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .addElement(
                     'J',
                     // J -> ofBlock...(gt.blockcasingsBA0, 12, ...); // normal input at up and down hatches and buses
-                    GT_HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
+                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(TST_StrangeMatterAggregator::addToMachineList)
                         .dot(2)
@@ -1295,7 +1295,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     'K',
                     // K -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input bus at right which input Core Element to
                     // set machine processing tier.
-                    GT_HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
+                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(InputBus)
                         .adder(TST_StrangeMatterAggregator::addCoreElementInputBusToMachineList)
                         .dot(4)
@@ -1536,13 +1536,13 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     // endregion
 
     // region General
-    private static GT_Multiblock_Tooltip_Builder tooltip;
+    private static MultiblockTooltipBuilder tooltip;
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tooltip == null) {
-            tooltip = new GT_Multiblock_Tooltip_Builder();
+            tooltip = new MultiblockTooltipBuilder();
             // #tr Tooltip_StrangeMatterAggregator_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Strange Matter Aggregator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}奇异物质聚合器
@@ -1745,8 +1745,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .setSize(16, 16)
                 .setBackground(() -> {
                     List<UITexture> ret = new ArrayList<>();
-                    ret.add(GT_UITextures.BUTTON_STANDARD);
-                    ret.add(GT_UITextures.OVERLAY_BUTTON_CYCLIC);
+                    ret.add(GTUITextures.BUTTON_STANDARD);
+                    ret.add(GTUITextures.OVERLAY_BUTTON_CYCLIC);
                     return ret.toArray(new IDrawable[0]);
                 })
                 // #tr StrangeMatterAggregator.UI.BuildingInfoMenuButton.name
@@ -1763,8 +1763,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     .setSize(16, 16)
                     .setBackground(() -> {
                         List<UITexture> ret = new ArrayList<>();
-                        ret.add(GT_UITextures.BUTTON_STANDARD);
-                        ret.add(GT_UITextures.OVERLAY_BUTTON_CYCLIC);
+                        ret.add(GTUITextures.BUTTON_STANDARD);
+                        ret.add(GTUITextures.OVERLAY_BUTTON_CYCLIC);
                         return ret.toArray(new IDrawable[0]);
                     })
                     // #tr StrangeMatterAggregator.UI.RunningInfoMenuButton.name
@@ -1776,7 +1776,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
 
     protected ModularWindow createStructureConfigurationWindow(final EntityPlayer player) {
         ModularWindow.Builder builder = ModularWindow.builder(240, 80);
-        builder.setBackground(GT_UITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
+        builder.setBackground(GTUITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
         builder.setGuiTint(getGUIColorization());
 
         builder.widget(
@@ -1806,7 +1806,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .setTextColor(Color.WHITE.normal)
                 .setSize(40, 18)
                 .setPos(30, 50)
-                .setBackground(GT_UITextures.BACKGROUND_TEXT_FIELD))
+                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD))
             .widget(
                 // #tr StrangeMatterAggregator.UI.ConstraintorPieceNeed.text
                 // # Constraintor
@@ -1825,7 +1825,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .setTextColor(Color.WHITE.normal)
                 .setSize(40, 18)
                 .setPos(100, 50)
-                .setBackground(GT_UITextures.BACKGROUND_TEXT_FIELD))
+                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD))
             .widget(
                 // #tr StrangeMatterAggregator.UI.MergerPieceNeed.text
                 // # Merger
@@ -1844,14 +1844,14 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .setTextColor(Color.WHITE.normal)
                 .setSize(40, 18)
                 .setPos(170, 50)
-                .setBackground(GT_UITextures.BACKGROUND_TEXT_FIELD));
+                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD));
 
         return builder.build();
     }
 
     protected ModularWindow createRunningConfigurationWindow(final EntityPlayer player) {
         ModularWindow.Builder builder = ModularWindow.builder(240, 80);
-        builder.setBackground(GT_UITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
+        builder.setBackground(GTUITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
         builder.setGuiTint(getGUIColorization());
 
         builder.widget(
@@ -1874,7 +1874,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .setTextColor(Color.WHITE.normal)
                 .setSize(40, 18)
                 .setPos(100, 36)
-                .setBackground(GT_UITextures.BACKGROUND_TEXT_FIELD));
+                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD));
 
         return builder.build();
     }
@@ -1897,7 +1897,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         int colorIndex, boolean active, boolean redstoneLevel) {
         if (side == facing) {
             return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12],
-                new TT_RenderedExtendedFacingTexture(active ? ActiveFace : InactiveFace) };
+                new TTRenderedExtendedFacingTexture(active ? ActiveFace : InactiveFace) };
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12] };
     }

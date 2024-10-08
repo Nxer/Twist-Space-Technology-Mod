@@ -6,7 +6,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 
@@ -17,7 +17,7 @@ public class DistillationRecipePool implements IRecipePool {
 
         final IRecipeMap DT = RecipeMaps.distillationTowerRecipes;
 
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(1000))
             .itemOutputs(GTCMItemList.VoidPollen.get(1))
             .fluidOutputs(MaterialPool.PurifiedMana.getFluidOrGas(800))

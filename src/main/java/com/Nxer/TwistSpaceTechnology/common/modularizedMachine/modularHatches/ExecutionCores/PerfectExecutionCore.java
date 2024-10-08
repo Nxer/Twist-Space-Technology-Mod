@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores;
 
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
@@ -19,16 +21,16 @@ import com.Nxer.TwistSpaceTechnology.util.Utils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class PerfectExecutionCore extends ExecutionCoreBase implements IGlobalWirelessEnergy {
+public class PerfectExecutionCore extends ExecutionCoreBase implements IWirelessEnergyHatchInformation {
 
     public PerfectExecutionCore(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
@@ -73,7 +75,7 @@ public class PerfectExecutionCore extends ExecutionCoreBase implements IGlobalWi
             return false;
         }
 
-        this.costEU = GT_Utility.formatNumbers(costEU);
+        this.costEU = GTUtility.formatNumbers(costEU);
         maxProgressingTime = 20;
 
         trySetActive();

@@ -25,7 +25,7 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.common.render.GT_TextureBuilder;
+import gregtech.common.render.GTTextureBuilder;
 
 public class CommonProxy {
 
@@ -55,7 +55,7 @@ public class CommonProxy {
         TextureUtils.registerTexture(
             31,
             0,
-            new GT_TextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
+            new GTTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
                 .build());
     }
 

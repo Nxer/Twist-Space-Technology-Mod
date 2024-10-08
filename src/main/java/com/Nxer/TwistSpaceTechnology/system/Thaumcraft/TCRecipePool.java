@@ -2,7 +2,8 @@ package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
-import static gregtech.api.enums.TC_Aspects.ELECTRUM;
+import static gregtech.api.enums.TCAspects.ELECTRUM;
+import static gtPlusPlus.core.material.MaterialsAlloy.TITANSTEEL;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_TreeFarm;
 import static kubatech.api.enums.ItemList.ExtremeEntityCrusher;
@@ -25,9 +26,8 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gtPlusPlus.core.material.ALLOY;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTOreDictUnificator;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -80,16 +80,16 @@ public class TCRecipePool implements IRecipePool {
                     .merge(Aspect.ORDER, 128)
                     .merge(Aspect.ENTROPY, 128),
                 ItemList.Machine_Multi_Assemblyline.get(1, 0),
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                     new ItemStack(blockMetalDevice, 1, 12),
-                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                     new ItemStack(blockMetalDevice, 1, 12),
-                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                     new ItemStack(blockMetalDevice, 1, 12),
-                    GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                     new ItemStack(blockMetalDevice, 1, 12) });
 
@@ -110,26 +110,26 @@ public class TCRecipePool implements IRecipePool {
                         .merge(Aspect.WEAPON, 2048)
                         .merge((Aspect) ELECTRUM.mAspect, 8192),
 
-                    GT_ModHandler.getModItem(Mods.Botania.ID, "manaResource", 1, 5),
+                    GTModHandler.getModItem(Mods.Botania.ID, "manaResource", 1, 5),
                     new ItemStack[] { Industrial_TreeFarm.get(1),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
-                        ALLOY.TITANSTEEL.getPlateDense(1),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        TITANSTEEL.getPlateDense(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
 
                         Industrial_FishingPond.get(1),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
-                        ALLOY.TITANSTEEL.getPlateDense(1),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        TITANSTEEL.getPlateDense(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
 
                         ExtremeIndustrialGreenhouse.get(1),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
-                        ALLOY.TITANSTEEL.getPlateDense(1),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        TITANSTEEL.getPlateDense(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
 
                         Mods.EnderIO.isModLoaded() ? ExtremeEntityCrusher.get(1) : new ItemStack(diamond_sword, 1),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
-                        ALLOY.TITANSTEEL.getPlateDense(1),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1) });
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        TITANSTEEL.getPlateDense(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1) });
 
                 infusionRecipeFontOfEcology = ThaumcraftApi.addInfusionCraftingRecipe(
                     "FONT_OF_ECOLOGY",
@@ -140,7 +140,7 @@ public class TCRecipePool implements IRecipePool {
                         .merge(Aspect.LIFE, 16384)
                         .merge(Aspect.FLESH, 4096)
                         .merge(ULTRA_DEATH, 256),
-                    Mods.Witchery.isModLoaded() ? GT_ModHandler.getModItem(Mods.Witchery.ID, "infinityegg", 1)
+                    Mods.Witchery.isModLoaded() ? GTModHandler.getModItem(Mods.Witchery.ID, "infinityegg", 1)
                         : new ItemStack(Blocks.dragon_egg, 1),
                     new ItemStack[] { GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
                         GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),

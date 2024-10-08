@@ -9,7 +9,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_GLOW;
-import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
+import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -21,16 +21,16 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.objects.GTRenderedTexture;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_LargeSteamAlloySmelter>
     implements ISurvivalConstructable {
@@ -94,7 +94,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
                     transpose(
                         new String[][] { { "BBBBB", "BBBBB", "BBBBB" }, { "BB~BB", "AAAAA", "BBBBB" },
                             { "BBBBB", "BBBBB", "BBBBB" } }))
-                .addElement('A', ofBlock(GregTech_API.sBlockCasings3, 14))
+                .addElement('A', ofBlock(GregTechAPI.sBlockCasings3, 14))
                 .addElement(
                     'B',
                     ofChain(
@@ -115,13 +115,19 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     // region General
     @Override
-    protected GT_RenderedTexture getFrontOverlay() {
-        return new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER);
+    protected GTRenderedTexture getFrontOverlay() {
+        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER);
     }
 
     @Override
-    protected GT_RenderedTexture getFrontOverlayActive() {
-        return new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER_ACTIVE);
+    protected GTRenderedTexture getFrontOverlayActive() {
+        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER_ACTIVE);
+    }
+
+    @Override
+    public int getTierRecipes() {
+        // todo
+        return 0;
     }
 
     @Override
@@ -130,8 +136,8 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_LargeSteamAlloySmelter_MachineType)
             .addInfo(TextLocalization.Tooltip_LargeSteamAlloySmelter_Controller)
             .addInfo(TextLocalization.Tooltip_LargeSteamAlloySmelter_01)

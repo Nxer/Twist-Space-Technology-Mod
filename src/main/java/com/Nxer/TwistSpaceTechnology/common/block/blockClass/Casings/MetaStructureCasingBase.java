@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 
 /**
  * A base block class of GregTech multiblock machine structure casings without need for textures.
@@ -22,7 +22,7 @@ public class MetaStructureCasingBase extends MetaBlockBase {
         super(unlocalizedName);
         this.setHardness(8.0F);
         this.setResistance(5.0F);
-        GregTech_API.registerMachineBlock(this, -1);
+        GregTechAPI.registerMachineBlock(this, -1);
     }
 
     @Override
@@ -52,15 +52,15 @@ public class MetaStructureCasingBase extends MetaBlockBase {
 
     @Override
     public void onBlockAdded(World aWorld, int aX, int aY, int aZ) {
-        if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
-            GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
+        if (GregTechAPI.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
+            GregTechAPI.causeMachineUpdate(aWorld, aX, aY, aZ);
         }
     }
 
     @Override
     public void breakBlock(World aWorld, int aX, int aY, int aZ, Block aBlock, int aMetaData) {
-        if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
-            GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
+        if (GregTechAPI.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
+            GregTechAPI.causeMachineUpdate(aWorld, aX, aY, aZ);
         }
     }
 

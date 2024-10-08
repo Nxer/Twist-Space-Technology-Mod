@@ -2,21 +2,21 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_VacuumFilterExtractor;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_VacuumFilterExtractor;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.getCasingTextureForId;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,12 +27,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
-import com.github.technus.tectech.thing.block.QuantumGlassBlock;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -40,11 +39,12 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings4;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.blocks.BlockCasings4;
+import gregtech.common.blocks.BlockCasings8;
+import tectech.thing.block.BlockQuantumGlass;
 
 // 真空抽滤器
 public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumFilterExtractor> {
@@ -92,7 +92,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (byte) ((this.mode + 1) % 2);
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + this.mode));
         }
@@ -159,28 +159,28 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
             STRUCTURE_DEFINITION = StructureDefinition
                                        .<TST_VacuumFilterExtractor>builder()
                                        .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE))
-                                       .addElement('A', ofBlock(GregTech_API.sBlockCasings2, 8))
+                                       .addElement('A', ofBlock(GregTechAPI.sBlockCasings2, 8))
                                        .addElement(
                                            'B',
-                                           GT_HatchElementBuilder
+                                           HatchElementBuilder
                                                .<TST_VacuumFilterExtractor>builder()
                                                .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                .adder(TST_VacuumFilterExtractor::addToMachineList)
                                                .dot(1)
-                                               .casingIndex(((GT_Block_Casings4)GregTech_API.sBlockCasings4).getTextureIndex(10))
-                                               .buildAndChain(GregTech_API.sBlockCasings4, 10))
+                                               .casingIndex(((BlockCasings4)GregTechAPI.sBlockCasings4).getTextureIndex(10))
+                                               .buildAndChain(GregTechAPI.sBlockCasings4, 10))
                                        .addElement(
                                            'C',
-                                           GT_HatchElementBuilder
+                                           HatchElementBuilder
                                                .<TST_VacuumFilterExtractor>builder()
                                                .atLeast(Energy.or(ExoticEnergy))
                                                .adder(TST_VacuumFilterExtractor::addToMachineList)
                                                .dot(2)
-                                               .casingIndex(((GT_Block_Casings8)GregTech_API.sBlockCasings8).getTextureIndex(3))
-                                               .buildAndChain(GregTech_API.sBlockCasings8, 3))
-                                       .addElement('D', ofBlock(GregTech_API.sBlockCasings9, 0))
+                                               .casingIndex(((BlockCasings8)GregTechAPI.sBlockCasings8).getTextureIndex(3))
+                                               .buildAndChain(GregTechAPI.sBlockCasings8, 3))
+                                       .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 0))
                                        .addElement('E', ofBlock(sBlockCasingsTT, 8))
-                                       .addElement('F', ofBlock(QuantumGlassBlock.INSTANCE, 0))
+                                       .addElement('F', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                                        .addElement('G', ofFrame(Materials.Neutronium))
                                        .build();
         }
@@ -233,8 +233,8 @@ G -> ofFrame...(Materials.Neutronium);
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_VacuumFilterExtractor_MachineType)
             .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_Controller)
             .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_01)

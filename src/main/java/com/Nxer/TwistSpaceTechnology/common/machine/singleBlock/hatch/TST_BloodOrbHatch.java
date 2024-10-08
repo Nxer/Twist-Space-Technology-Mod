@@ -18,9 +18,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
-import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
+import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluidGenerator;
 
-public class TST_BloodOrbHatch extends GT_MetaTileEntity_Hatch_FluidGenerator {
+public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
 
     private static final String TEXTURE_NAME_OVERLAY_ACTIVE = "gtnhcommunitymod:overlay_blood_hatch";
     private static final String TEXTURE_NAME_OVERLAY_INACTIVE = "gtnhcommunitymod:overlay_blood_hatch_inactive";

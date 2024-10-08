@@ -26,7 +26,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
-import com.github.technus.tectech.thing.casing.TT_Container_Casings;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
@@ -34,28 +33,29 @@ import com.gtnewhorizons.gtnhintergalactic.Tags;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.client.IGTextures;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IChunkLoader;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_ExtendedPowerMultiBlockBase;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
-import gregtech.api.objects.GT_ChunkManager;
+import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
+import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
+import gregtech.api.objects.GTChunkManager;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_StructureUtility;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTStructureUtility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
+import tectech.thing.casing.TTCasingsContainer;
 
 public class GT_TileEntity_StellarMaterialSiphon
-    extends GT_MetaTileEntity_ExtendedPowerMultiBlockBase<GT_TileEntity_StellarMaterialSiphon> implements IChunkLoader {
+    extends MTEExtendedPowerMultiBlockBase<GT_TileEntity_StellarMaterialSiphon> implements IChunkLoader {
 
     /**
      * Lore string, which will be randomly picked from a selection each time the resources are reloaded
@@ -257,8 +257,8 @@ public class GT_TileEntity_StellarMaterialSiphon
      * @return Tooltip builder for this machine
      */
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.type"))
             .addInfo(loreTooltip != null ? ITALIC + loreTooltip : "")
             .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc1"))
@@ -297,15 +297,15 @@ public class GT_TileEntity_StellarMaterialSiphon
                 .addElement('A', ofBlock(spaceStationStructureBlock, 12)) // A ->
                 // ofBlock...(BW_GlasBlocks2, 0,
                 // ...);
-                .addElement('B', ofBlock(GregTech_API.sBlockCasings5, 13))// B -> ofBlock...(gt.blockcasings5, 13, ...);
-                .addElement('C', ofBlock(TT_Container_Casings.sBlockCasingsBA0, 12))// C ->
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings5, 13))// B -> ofBlock...(gt.blockcasings5, 13, ...);
+                .addElement('C', ofBlock(TTCasingsContainer.sBlockCasingsBA0, 12))// C ->
                 // ofBlock...(gt.blockcasingsBA0,
                 // 12,//
                 // ...);
                 .addElement('D', ofBlock(IGBlocks.SpaceElevatorCasing, 0))// D -> ofBlock...(gt.blockcasingsSE, 0, ...);
                 .addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 1))// E -> ofBlock...(gt.blockcasingsSE, 1, ...);
                 .addElement('F', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// F -> ofBlock...(gt.blockcasingsSE, 2, ...);
-                .addElement('G', ofBlock(TT_Container_Casings.SpacetimeCompressionFieldGenerators, 2))// G ->
+                .addElement('G', ofBlock(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 2))// G ->
                 // ofBlock...(gt.spacetime_compression_field_generator,
                 // 2, ...);
                 .addElement('H', ofBlock(ModBlocks.blockCasings5Misc, 7))// H -> ofBlock...(gtplusplus.blockcasings.5,
@@ -320,19 +320,19 @@ public class GT_TileEntity_StellarMaterialSiphon
                 .addElement(
                     'L',
                     StructureUtility.ofChain(
-                        GT_StructureUtility.ofHatchAdder(
+                        GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addMaintenanceToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
-                        GT_StructureUtility.ofHatchAdder(
+                        GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addExoticEnergyInputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
-                        GT_StructureUtility.ofHatchAdder(
+                        GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addInputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
-                        GT_StructureUtility.ofHatchAdder(
+                        GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addOutputToMachineList,
                             IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
                             1),
@@ -411,7 +411,7 @@ public class GT_TileEntity_StellarMaterialSiphon
         }
         Map<Integer, FluidStack> planetRecipes = StellarMaterialSiphonRecipePool.RECIPES.get("blackHole");
 
-        GT_MetaTileEntity_Hatch_InputBus bus = mInputBusses.get(0);
+        MTEHatchInputBus bus = mInputBusses.get(0);
 
         // count mining pipes, get depth
         for (int i = 0; i < bus.getBaseMetaTileEntity()
@@ -556,10 +556,10 @@ public class GT_TileEntity_StellarMaterialSiphon
         float x, float y, float z) {
         if (side == getBaseMetaTileEntity().getFrontFacing()) {
             mChunkLoadingEnabled = !mChunkLoadingEnabled;
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 player,
-                mChunkLoadingEnabled ? GT_Utility.trans("502", "Mining chunk loading enabled")
-                    : GT_Utility.trans("503", "Mining chunk loading disabled"));
+                mChunkLoadingEnabled ? GTUtility.trans("502", "Mining chunk loading enabled")
+                    : GTUtility.trans("503", "Mining chunk loading disabled"));
             return true;
         }
         return super.onSolderingToolRightClick(side, wrenchingSide, player, x, y, z);
@@ -583,7 +583,7 @@ public class GT_TileEntity_StellarMaterialSiphon
      */
     @Override
     public void onRemoval() {
-        if (mChunkLoadingEnabled) GT_ChunkManager.releaseTicket((TileEntity) getBaseMetaTileEntity());
+        if (mChunkLoadingEnabled) GTChunkManager.releaseTicket((TileEntity) getBaseMetaTileEntity());
         super.onRemoval();
     }
 
@@ -600,7 +600,7 @@ public class GT_TileEntity_StellarMaterialSiphon
             && !mWorkChunkNeedsReload
             && !baseMetaTileEntity.isAllowedToWork()) {
             // if machine has stopped, stop chunk loading
-            GT_ChunkManager.releaseTicket((TileEntity) baseMetaTileEntity);
+            GTChunkManager.releaseTicket((TileEntity) baseMetaTileEntity);
             mWorkChunkNeedsReload = true;
         }
     }
@@ -612,7 +612,7 @@ public class GT_TileEntity_StellarMaterialSiphon
     public String[] getInfoData() {
         return new String[] { LIGHT_PURPLE + "Operational Data:" + RESET, "Depth: " + YELLOW + depth + RESET,
             "Fluid: " + YELLOW + fluid.amount + RESET + "L/s " + BLUE + fluid.getLocalizedName() + RESET,
-            "EU/t required: " + YELLOW + GT_Utility.formatNumbers(-mEUt) + RESET + " EU/t",
+            "EU/t required: " + YELLOW + GTUtility.formatNumbers(-mEUt) + RESET + " EU/t",
             "Maintenance Status: " + (getRepairStatus() == getIdealStatus() ? GREEN + "Working perfectly" + RESET
                 : RED + "Has problems" + RESET),
             "---------------------------------------------" };

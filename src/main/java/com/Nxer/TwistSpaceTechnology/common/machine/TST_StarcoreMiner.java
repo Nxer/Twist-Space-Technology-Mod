@@ -4,19 +4,20 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPer
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Eut_StarcoreMiner;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.config.Config.CheckMiningPipeStructure_StarcoreMiner;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Map;
 import java.util.UUID;
@@ -34,31 +35,32 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
-import com.github.bartimaeusnek.crossmod.galacticgreg.VoidMinerUtility;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
+import bartworks.API.BorosilicateGlass;
+import bwcrossmod.galacticgreg.VoidMinerUtility;
 import galaxyspace.core.register.GSBlocks;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 
-public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> implements IGlobalWirelessEnergy {
+public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
+    implements IWirelessEnergyHatchInformation {
 
     // region Class Constructor
     public TST_StarcoreMiner(int aID, String aName, String aNameRegional) {
@@ -141,11 +143,11 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                         }
                     )
                     .addElement('A', BorosilicateGlass.ofBoroGlassAnyTier())
-                    .addElement('B', ofBlock(GregTech_API.sBlockCasings1, 11))
-                    .addElement('C', ofBlock(GregTech_API.sBlockCasings1, 14))
-                    .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 15))
-                    .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 7))
-                    .addElement('F', ofBlock(GregTech_API.sBlockCasings8, 10))
+                    .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 11))
+                    .addElement('C', ofBlock(GregTechAPI.sBlockCasings1, 14))
+                    .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 15))
+                    .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
+                    .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
                     .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 0))
                     .addElement('H', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
                     .addElement('I', ofBlock(sBlockCasingsTT, 8))
@@ -155,11 +157,11 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                         ofChain(
                             BorosilicateGlass.ofBoroGlassAnyTier(),
                             ofFrame(Materials.NaquadahAlloy),
-                            ofBlock(GregTech_API.sBlockCasings8, 10)
+                            ofBlock(GregTechAPI.sBlockCasings8, 10)
                         ))
                     .addElement(
                         'L',
-                        GT_HatchElementBuilder
+                        HatchElementBuilder
                             .<TST_StarcoreMiner>builder()
                             .atLeast(InputBus, InputHatch, OutputBus, Energy.or(ExoticEnergy))
                             .adder(TST_StarcoreMiner::addToMachineList)
@@ -404,13 +406,13 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
         float currentWeight = 0.f;
         while (true) {
             float randomNumber = XSTR.XSTR_INSTANCE.nextFloat() * this.totalWeight;
-            for (Map.Entry<GT_Utility.ItemId, Float> entry : this.dropMap.getInternalMap()
+            for (Map.Entry<GTUtility.ItemId, Float> entry : this.dropMap.getInternalMap()
                 .entrySet()) {
                 currentWeight += entry.getValue();
                 if (randomNumber < currentWeight) return entry.getKey()
                     .getItemStack();
             }
-            for (Map.Entry<GT_Utility.ItemId, Float> entry : this.extraDropMap.getInternalMap()
+            for (Map.Entry<GTUtility.ItemId, Float> entry : this.extraDropMap.getInternalMap()
                 .entrySet()) {
                 currentWeight += entry.getValue();
                 if (randomNumber < currentWeight) return entry.getKey()
@@ -464,8 +466,8 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     // region General
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // #tr VoidMiner
         // # Void Miner
         // #zh_CN 虚空采矿场

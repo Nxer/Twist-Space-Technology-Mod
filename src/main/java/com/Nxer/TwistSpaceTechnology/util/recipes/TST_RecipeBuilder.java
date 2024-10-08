@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GTRecipe;
 
 public class TST_RecipeBuilder {
 
@@ -81,7 +81,7 @@ public class TST_RecipeBuilder {
     }
 
     public TST_RecipeBuilder addTo(RecipeMap<?> recipeMap) {
-        GT_Recipe tempRecipe = new GT_Recipe(
+        GTRecipe tempRecipe = new GTRecipe(
             false,
             inputItems,
             outputItems,

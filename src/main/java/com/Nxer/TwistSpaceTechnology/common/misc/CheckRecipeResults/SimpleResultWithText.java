@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +40,22 @@ public class SimpleResultWithText implements CheckRecipeResult {
     @Nonnull
     public String getDisplayString() {
         return Objects.requireNonNull(TextEnums.tr(key));
+    }
+
+    @Override
+    public @NotNull NBTTagCompound writeToNBT(@NotNull NBTTagCompound tag) {
+        tag.setBoolean("success", success);
+        tag.setBoolean("persistsOnShutdown", persistsOnShutdown);
+        tag.setString("key", key);
+
+        return tag;
+    }
+
+    @Override
+    public void readFromNBT(@NotNull NBTTagCompound tag) {
+        success = tag.getBoolean("success");
+        persistsOnShutdown = tag.getBoolean("persistsOnShutdown");
+        key = tag.getString("key");
     }
 
     @Override

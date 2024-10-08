@@ -6,22 +6,22 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_La
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.Maintenance;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,7 +43,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -51,9 +51,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_StructureUtility;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTStructureUtility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     extends GTCM_MultiMachineBase<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster> {
@@ -111,27 +111,27 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 5))
-                .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 9))
-                .addElement('D', ofBlock(GregTech_API.sBlockCasings8, 7))
-                .addElement('E', ofBlock(GregTech_API.sBlockCasings9, 1))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 5))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 7))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings9, 1))
                 .addElement(
                     'M',
-                    GT_StructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
+                    GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(Maintenance)
                         .dot(1)
                         .casingIndex(183)
-                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'I',
-                    GT_StructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
+                    GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
                         .dot(2)
                         .casingIndex(183)
-                        .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'X',
-                    GT_StructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
+                    GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(Energy.or(ExoticEnergy))
                         .dot(3)
                         .casingIndex(1024)
@@ -184,7 +184,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
                             x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[13];
                             x.enablePerfectOverclockSignal = true;
                         }, ofBlock(PhotonControllerUpgrade, 13)),
-                        ofBlock(GregTech_API.sBlockCasings8, 7)))
+                        ofBlock(GregTechAPI.sBlockCasings8, 7)))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -242,7 +242,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     //
     // @NotNull
     // @Override
-    // protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe) {
+    // protected OverclockCalculator createOverclockCalculator(@NotNull GTRecipe recipe) {
     // return super.createOverclockCalculator(recipe)
     // .setSpeedBoost((mode ? 10000F : 5000F) / (10000F + totalSpeedIncrement));
     // }
@@ -286,7 +286,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = !this.mode;
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + (this.mode ? 1 : 0)));
         }
@@ -336,8 +336,8 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
 
     // tooltips
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_PhC_MachineType)
             .addInfo(TextLocalization.Tooltip_PhC_00)
             .addInfo(TextLocalization.Tooltip_PhC_01)

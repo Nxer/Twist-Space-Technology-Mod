@@ -1,12 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.StatCollector;
 
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 
 /**
  * This class adds a new "failed recipe result" to show that something of some type is not met the requirement like
@@ -57,6 +58,20 @@ public class ResultInsufficientTier implements CheckRecipeResult {
         this.tierRequired = tierRequired;
     }
 
+    @Override
+    public @NotNull NBTTagCompound writeToNBT(@NotNull NBTTagCompound tag) {
+        tag.setInteger("typeRequired", typeRequired);
+        tag.setInteger("tierRequired", tierRequired);
+
+        return tag;
+    }
+
+    @Override
+    public void readFromNBT(@NotNull NBTTagCompound tag) {
+        typeRequired = tag.getInteger("typeRequired");
+        tierRequired = tag.getInteger("tierRequired");
+    }
+
     @NotNull
     @Override
     public String getID() {
@@ -77,7 +92,7 @@ public class ResultInsufficientTier implements CheckRecipeResult {
         return StatCollector.translateToLocalFormatted(
             "tst.gui.text.insufficient_tier",
             StatCollector.translateToLocalFormatted("tst.gui.text.insufficient_tier." + typeRequired),
-            GT_Utility.formatNumbers(tierRequired));
+            GTUtility.formatNumbers(tierRequired));
     }
 
     @NotNull

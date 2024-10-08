@@ -4,19 +4,22 @@ import static com.Nxer.TwistSpaceTechnology.util.TextEnums.AddByTwistSpaceTechno
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Author_Goderium;
 import static com.gtnewhorizon.gtnhlib.util.AnimatedTooltipHandler.GRAY;
 import static com.gtnewhorizon.gtnhlib.util.AnimatedTooltipHandler.GREEN;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser;
+
+import java.util.UUID;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_WirelessMulti;
-import com.github.technus.tectech.util.TT_Utility;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import tectech.thing.metaTileEntity.hatch.MTEHatchWirelessMulti;
+import tectech.util.TTUtility;
 
-public class GT_Hatch_InfiniteWirelessMulti extends GT_MetaTileEntity_Hatch_WirelessMulti {
+public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti {
 
-    private String owner_uuid;
-    private String owner_name;
+    private UUID owner_uuid;
     public static final long[] Vst = new long[] { 8L, 32L, 128L, 512L, 2048L, 8192L, 32_768L, 131_072L, 524_288L,
         2_097_152L, 8_388_608L, 33_554_432L, 134_217_728L, 536_870_912L, 2_147_483_647L };
     long eu_transferred_per_tick = Vst[mTier] * Amperes;
@@ -25,7 +28,7 @@ public class GT_Hatch_InfiniteWirelessMulti extends GT_MetaTileEntity_Hatch_Wire
 
     public GT_Hatch_InfiniteWirelessMulti(int aID, String aName, String aNameRegional, int aTier, int aAmp) {
         super(aID, aName, aNameRegional, aTier, aAmp);
-        TT_Utility.setTier(aTier, this);
+        TTUtility.setTier(aTier, this);
     }
 
     public GT_Hatch_InfiniteWirelessMulti(String aName, int aTier, int aAmp, String[] aDescription,
@@ -71,12 +74,10 @@ public class GT_Hatch_InfiniteWirelessMulti extends GT_MetaTileEntity_Hatch_Wire
         if (aBaseMetaTileEntity.isServerSide()) {
             // On first tick find the player name and attempt to add them to the map.
 
-            // UUID and username of the owner.
-            owner_uuid = aBaseMetaTileEntity.getOwnerUuid()
-                .toString();
-            owner_name = aBaseMetaTileEntity.getOwnerName();
+            // UUID of the owner.
+            owner_uuid = aBaseMetaTileEntity.getOwnerUuid();
 
-            strongCheckOrAddUser(owner_uuid, owner_name);
+            strongCheckOrAddUser(owner_uuid);
 
             tryFetchingEnergy();
         }
