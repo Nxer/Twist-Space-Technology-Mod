@@ -19,7 +19,6 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.dreammaster.gthandler.CustomItemList;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -164,7 +163,7 @@ public class TCRecipePool implements IRecipePool {
                         .merge(Aspect.UNDEAD, 64)
                         .merge(Aspect.MECHANISM, 16),
                     Mods.BloodArsenal.isModLoaded()
-                        ? GT_ModHandler.getModItem(Mods.BloodArsenal.ID, "blood_infused_diamond_block", 1, 0)
+                        ? GTModHandler.getModItem(Mods.BloodArsenal.ID, "blood_infused_diamond_block", 1, 0)
                         : new ItemStack(Blocks.stone, 1),
                     new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockMasterStone),
@@ -198,7 +197,7 @@ public class TCRecipePool implements IRecipePool {
                         .merge(Aspect.MOTION, 256)
                         .merge((Mods.MagicBees.isModLoaded() ? Aspect.getAspect("tempus") : Aspect.AIR), 64),
                     MaterialsUEVplus.SpaceTime.getBlocks(1),
-                    new ItemStack[] { CustomItemList.AcceleratorZPM.get(1), CustomItemList.AcceleratorZPM.get(1),
+                    new ItemStack[] { ItemList.AcceleratorZPM.get(1), ItemList.AcceleratorZPM.get(1),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), // Rune of Acceleration
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), });
             }

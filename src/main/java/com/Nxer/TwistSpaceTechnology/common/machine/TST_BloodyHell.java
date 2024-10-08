@@ -12,9 +12,8 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAn
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
@@ -298,7 +297,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     ofChain(
                         ofBlock(MetaBlockCasing02, 0),
                         HatchElementBuilder.<TST_BloodyHell>builder()
-                            .atLeast(InputBus, InputHatch, OutputBus)
+                            .atLeast(InputBus, OutputBus)
                             .adder(TST_BloodyHell::addToMachineList)
                             .dot(1)
                             .casingIndex(MetaBlockCasing02.getTextureIndex(0))

@@ -2860,10 +2860,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
         }
 
         // Casing Stone Brick
-        GT_Values.RA
+        GTValues.RA
             .stdBuilder()
             .itemInputs(
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Palladium, 1),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Palladium, 1),
                 com.dreammaster.item.ItemList.StonePlate.getIS(6)
             )
             .fluidInputs(
@@ -2875,15 +2875,15 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(assembler);
 
             // Casing Stone Brick Advanced
-            GT_Values.RA
+            GTValues.RA
                 .stdBuilder()
                 .itemInputs(
                     GTCMItemList.ReinforcedStoneBrickCasing.get(1),
-                    GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 1),
-                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Bedrockium, 6)
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 1),
+                    GTOreDictUnificator.get(OrePrefixes.plate, Materials.Bedrockium, 6)
                 )
                 .fluidInputs(
-                    ALLOY.TRINIUM_NAQUADAH_CARBON.getFluidStack(1728)
+                    MaterialsAlloy.TRINIUM_NAQUADAH_CARBON.getFluidStack(1728)
                 )
                 .itemOutputs(GTCMItemList.ReinforcedBedrockCasing.get(1))
                 .eut(RECIPE_ZPM)
@@ -2919,8 +2919,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 },
                 new FluidStack[]{
                     new FluidStack(FluidRegistry.getFluid("liquid helium"), 16000),
-                    ALLOY.ARCANITE.getFluidStack(864),
-                    ALLOY.TITANSTEEL.getFluidStack(144)
+                    MaterialsAlloy.ARCANITE.getFluidStack(864),
+                    MaterialsAlloy.TITANSTEEL.getFluidStack(144)
                 },
                 GTCMItemList.CompositeFarmCasing.get(1),
                 20*60,
@@ -3084,12 +3084,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         if(Config.Enable_BloodHell) {
 
-            GT_Values.RA
-            // the more expensive recipes
             GTValues.RA
                 .stdBuilder()
                 .itemInputs(
-                    GT_OreDictUnificator.get(OrePrefixes.frameGt,Materials.BloodInfusedIron,1),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.BloodInfusedIron,1),
                     new ItemStack(WayofTime.alchemicalWizardry.ModItems.blankSlate,6))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(2500))
                 .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
@@ -3097,13 +3095,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .duration(20 * 12)
                 .addTo(RecipeMaps.assemblerRecipes);
 
-            GT_Values.RA
+            GTValues.RA
                 .stdBuilder()
                 .itemInputs(
                     Mods.BloodArsenal.isModLoaded() ?
-                        GT_ModHandler.getModItem(Mods.BloodArsenal.ID,"blood_stone",1) :
+                        GTModHandler.getModItem(Mods.BloodArsenal.ID,"blood_stone",1) :
                         new ItemStack(Blocks.stone,1),
-                    GT_Utility.getIntegratedCircuit(1))
+                    GTUtility.getIntegratedCircuit(1))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(1000))
                 .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
                 .eut(0)
@@ -3114,8 +3112,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .itemInputs(
-                    GT_ModHandler.getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1),
-                    GT_Utility.getIntegratedCircuit(1))
+                    GTModHandler.getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1),
+                    GTUtility.getIntegratedCircuit(1))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(100000))
                 .itemOutputs(GTCMItemList.BloodyCasing2.get(1))
                 .eut(0)

@@ -15,8 +15,8 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Ind
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
 
-import goodgenerator.client.GUI.GG_UITextures;
-import gregtech.api.gui.modularui.GT_UITextures;
+import goodgenerator.client.GUI.GGUITextures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;

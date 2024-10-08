@@ -19,7 +19,7 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.Mods;
-import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GTModHandler;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.research.ResearchCategories;
@@ -191,7 +191,7 @@ public class TCResearches {
                 4,
                 -1,
                 5,
-                Mods.Gendustry.isModLoaded() ? GT_ModHandler.getModItem(Mods.Gendustry.ID, "LiquidDNABucket", 1)
+                Mods.Gendustry.isModLoaded() ? GTModHandler.getModItem(Mods.Gendustry.ID, "LiquidDNABucket", 1)
                     : new ItemStack(Items.water_bucket, 1))
                         .setPages(
                             new ResearchPage((new AspectList()).add(EVOLUTION, 1)),
