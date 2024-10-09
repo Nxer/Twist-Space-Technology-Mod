@@ -72,6 +72,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     private int tbSpeedRuneCount = 0;
     private int mTier = 0;
     private boolean isBloodChecked = false;
+    private boolean mIsAnimated = true;
 
     public TST_BloodyHell(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -143,6 +144,11 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @Override
     protected int getMaxParallelRecipes() {
         return 1;
+    }
+
+    public boolean usingAnimations() {
+        // Play controller animation
+        return this.mIsAnimated;
     }
 
     @Override
