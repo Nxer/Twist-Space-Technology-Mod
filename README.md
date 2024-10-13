@@ -1,5 +1,5 @@
 ## GTNH Community Mod :  Twist Space Technology
-Custom GTNH Expansion Mod from a Normal GTNH Player.
+Custom GTNH Expansion Mod from normal GTNH players.
 
 Everyone can bring their ideas to life here.
 
