@@ -2,25 +2,14 @@ package com.Nxer.TwistSpaceTechnology.common.block.textures;
 
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.TST_ID;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.IIconContainer;
-import gregtech.common.blocks.BlockCasingsAbstract;
 
-public class GTCasingTextures extends BlockCasingsAbstract {
-
-    public GTCasingTextures(Class<? extends ItemBlock> aItemClass, String aName, Material aMaterial) {
-        super(aItemClass, aName, aMaterial);
-    }
+public class TSTCasingTextures {
 
     public static class TSTIcon implements IIconContainer, Runnable {
 
@@ -57,15 +46,6 @@ public class GTCasingTextures extends BlockCasingsAbstract {
         public ResourceLocation getTextureFile() {
             return TextureMap.locationBlocksTexture;
         }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(final IBlockAccess aWorld, final int xCoord, final int yCoord, final int zCoord,
-        final int ordinalSide) {
-        final GTCasingTextures i = this;
-        return CasingTextureHandler
-            .handleCasingsTST(aWorld, xCoord, yCoord, zCoord, ForgeDirection.getOrientation(ordinalSide), i);
     }
 
     // Bloody Hell Casing

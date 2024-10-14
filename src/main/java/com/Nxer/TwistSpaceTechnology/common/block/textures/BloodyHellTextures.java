@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.block.textures;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.textures.GTCasingTextures.BloodyHellIcons;
-import static com.Nxer.TwistSpaceTechnology.common.block.textures.GTCasingTextures.BloodyHellIconsActive;
+import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BloodyHellIcons;
+import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BloodyHellIconsActive;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -24,11 +24,11 @@ public class BloodyHellTextures {
     }
 
     public IIcon handleCasingsTST(final IBlockAccess aWorld, final int xCoord, final int yCoord, final int zCoord,
-        final ForgeDirection side, final GTCasingTextures thisBlock) {
+        final ForgeDirection side, final TSTCasingTextures thisBlock) {
         final int tMeta = aWorld.getBlockMetadata(xCoord, yCoord, zCoord);
         final int ordinalSide = side.ordinal();
         if (tMeta != 0) {
-            return GTCasingTextures.CasingBloodyHell.getIcon();
+            return TSTCasingTextures.CasingBloodyHell.getIcon();
         }
 
         int tInvertLeftRightMod = ordinalSide % 2 * 2 - 1;
@@ -70,7 +70,7 @@ public class BloodyHellTextures {
                 }
             }
         }
-        return GTCasingTextures.CasingBloodyHell.getIcon();
+        return TSTCasingTextures.CasingBloodyHell.getIcon();
     }
 
     public boolean isMachineRunning(IMetaTileEntity aTile) {

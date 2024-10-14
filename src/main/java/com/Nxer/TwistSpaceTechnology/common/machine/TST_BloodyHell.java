@@ -16,6 +16,8 @@ import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
+import static gregtech.api.enums.Textures.BlockIcons.TURBINE_NEW;
+import static gregtech.api.enums.Textures.BlockIcons.TURBINE_NEW_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static net.minecraft.block.Block.getBlockFromName;
 
@@ -25,10 +27,13 @@ import java.util.Collection;
 import java.util.Objects;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -47,12 +52,15 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.dreammaster.block.BlockList;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
+import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
+import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Mods;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -63,7 +71,9 @@ import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.LightingHelper;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.render.GTRenderUtil;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
@@ -149,6 +159,77 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public boolean usingAnimations() {
         // Play controller animation
         return this.mIsAnimated;
+    }
+
+    public boolean isNewStyleRendering() {
+        return true;
+    }
+
+    public Block getCasingBlock() {
+        return MetaBlockCasing02;
+    }
+
+    public IIconContainer[] getTurbineTextureActive() {
+        return TURBINE_NEW_ACTIVE;
+    }
+
+    public IIconContainer[] getTurbineTextureFull() {
+        return TURBINE_NEW;
+    }
+
+    @Override
+    public boolean renderInWorld(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock, RenderBlocks aRenderer) {
+        int[] tABCCoord = new int[] { -1, -1, 0 };
+        int[] tXYZOffset = new int[3];
+        final ForgeDirection tFacing = getBaseMetaTileEntity().getFrontFacing();
+        final ExtendedFacing tExtendedFacing = getExtendedFacing();
+        final ForgeDirection tDirection = tExtendedFacing.getDirection();
+        final LightingHelper tLighting = new LightingHelper(aRenderer);
+
+        // for some reason +x and -z need this field set to true, but not any other sides
+        if (tFacing == ForgeDirection.NORTH || tFacing == ForgeDirection.EAST) aRenderer.field_152631_f = true;
+        final Block tBlock = getCasingBlock();
+
+        IIconContainer[] tTextures;
+        if (getBaseMetaTileEntity().isActive()) tTextures = getTurbineTextureActive();
+        else tTextures = getTurbineTextureFull();
+
+        assert tTextures != null && tTextures.length == tABCCoord.length;
+
+        for (int i = 0; i < 9; i++) {
+            if (i != 4) { // do not draw ourselves again.
+                tExtendedFacing.getWorldOffset(tABCCoord, tXYZOffset);
+                // since structure check passed, we can assume it is turbine casing
+                int tX = tXYZOffset[0] + aX;
+                int tY = tXYZOffset[1] + aY;
+                int tZ = tXYZOffset[2] + aZ;
+                // we skip the occlusion test, as we always require a working turbine to have a block of air before it
+                // so the front face cannot be occluded whatsoever in the most cases.
+                Tessellator.instance.setBrightness(
+                    tBlock.getMixedBrightnessForBlock(
+                        aWorld,
+                        aX + tDirection.offsetX,
+                        tY + tDirection.offsetY,
+                        aZ + tDirection.offsetZ));
+                tLighting.setupLighting(tBlock, tX, tY, tZ, tFacing)
+                    .setupColor(tFacing, Dyes._NULL.mRGBa);
+                GTRenderUtil.renderBlockIcon(
+                    aRenderer,
+                    tBlock,
+                    tX + tDirection.offsetX * 0.01,
+                    tY + tDirection.offsetY * 0.01,
+                    tZ + tDirection.offsetZ * 0.01,
+                    tTextures[i].getIcon(),
+                    tFacing);
+            }
+            if (++tABCCoord[0] == 2) {
+                tABCCoord[0] = -1;
+                tABCCoord[1]++;
+            }
+        }
+
+        aRenderer.field_152631_f = false;
+        return false;
     }
 
     @Override
