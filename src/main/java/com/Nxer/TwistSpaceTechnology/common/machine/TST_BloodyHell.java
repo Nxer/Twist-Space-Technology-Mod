@@ -83,6 +83,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     private int mTier = 0;
     private boolean isBloodChecked = false;
     private boolean mIsAnimated = true;
+    protected boolean mFormed;
 
     public TST_BloodyHell(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -178,10 +179,24 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
+    public void onValueUpdate(byte aValue) {
+        mFormed = (aValue & 0x2) != 0;
+        super.onValueUpdate(aValue);
+    }
+
+    @Override
+    public byte getUpdateData() {
+        return (byte) (mMachine ? 2 : 0);
+    }
+
+    @Override
     public boolean renderInWorld(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock, RenderBlocks aRenderer) {
+        if (!isNewStyleRendering() || !mFormed) return false;
         int[] tABCCoord = new int[] { -1, -1, 0 };
         int[] tXYZOffset = new int[3];
-        final ForgeDirection tFacing = getBaseMetaTileEntity().getFrontFacing();
+        final IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
+        boolean mActive = aBaseMetaTileEntity.isActive();
+        final ForgeDirection tFacing = aBaseMetaTileEntity.getFrontFacing();
         final ExtendedFacing tExtendedFacing = getExtendedFacing();
         final ForgeDirection tDirection = tExtendedFacing.getDirection();
         final LightingHelper tLighting = new LightingHelper(aRenderer);
@@ -191,7 +206,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         final Block tBlock = getCasingBlock();
 
         IIconContainer[] tTextures;
-        if (getBaseMetaTileEntity().isActive()) tTextures = getTurbineTextureActive();
+        if (mActive) tTextures = getTurbineTextureActive();
         else tTextures = getTurbineTextureFull();
 
         assert tTextures != null && tTextures.length == tABCCoord.length;
