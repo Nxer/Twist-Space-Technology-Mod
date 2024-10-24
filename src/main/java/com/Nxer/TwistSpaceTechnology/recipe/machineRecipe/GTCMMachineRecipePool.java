@@ -63,6 +63,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.TestItem0;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ThermalEnergyDevourer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.VacuumFilterExtractor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataInputHatch;
@@ -3112,7 +3113,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .itemInputs(
-                    GTModHandler.getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1),
+                    Mods.DraconicEvolution.isModLoaded()?
+                    GTModHandler.getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1):TestItem0.get(1),
                     GTUtility.getIntegratedCircuit(1))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(100000))
                 .itemOutputs(GTCMItemList.BloodyCasing2.get(1))
