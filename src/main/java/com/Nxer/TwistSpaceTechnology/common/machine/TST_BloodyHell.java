@@ -2,6 +2,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static WayofTime.alchemicalWizardry.ModBlocks.blockLifeEssence;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing02;
+import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BH_5;
+import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BH_5_Active;
+import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BloodyHellIcons;
+import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BloodyHellIconsActive;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -14,10 +18,6 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElement
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
-import static gregtech.api.enums.Textures.BlockIcons.TURBINE_NEW;
-import static gregtech.api.enums.Textures.BlockIcons.TURBINE_NEW_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static net.minecraft.block.Block.getBlockFromName;
 
@@ -171,11 +171,11 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     public IIconContainer[] getTurbineTextureActive() {
-        return TURBINE_NEW_ACTIVE;
+        return BloodyHellIconsActive;
     }
 
     public IIconContainer[] getTurbineTextureFull() {
-        return TURBINE_NEW;
+        return BloodyHellIcons;
     }
 
     @Override
@@ -288,12 +288,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         int colorIndex, boolean active, boolean redstoneLevel) {
         ITexture base = casingTexturePages[115][MetaBlockCasing02.getTextureIndexInPage(0)];
         ITexture[] FACING_ACTIVE = { TextureFactory.of(base), TextureFactory.builder()
-            .addIcon(OVERLAY_DTPF_ON)
+            .addIcon(BH_5_Active)
             .extFacing()
             .glow()
             .build() };
         ITexture[] FACING_FRONT = { TextureFactory.of(base), TextureFactory.builder()
-            .addIcon(OVERLAY_DTPF_OFF)
+            .addIcon(BH_5)
             .extFacing()
             .glow()
             .build() };

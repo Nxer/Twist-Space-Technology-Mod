@@ -693,7 +693,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     private static int getTierMultiplier(int tier) {
         return (int) Math
-            .floor(2 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
+            .floor(3 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
     }
 
     /**
@@ -1012,9 +1012,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     long outputStackSize;
                     double aNum = Math.log(tier_temp + 2) / Math.log(2);
                     if (aRandom > aChance * aNum) continue;
-                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier * aChance * aRandom / 1500000);
+                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier * aChance * aRandom / 1000000);
                     if (aStack.isItemEqual(Offspring)) {
-                        if (outputStackSize > 2)
+                        if (outputStackSize > 3)
                             // when voltage > uxv can output offspring
                             outputStackSize = 1;
                         else continue;
