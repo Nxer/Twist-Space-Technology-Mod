@@ -3089,25 +3089,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .stdBuilder()
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.BloodInfusedIron,1),
-                    new ItemStack(WayofTime.alchemicalWizardry.ModItems.blankSlate,6))
-                .fluidInputs(BloodMagicHelper.getLifeEssence(2500))
-                .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
-                .eut(RECIPE_EV)
-                .duration(20 * 12)
-                .addTo(RecipeMaps.assemblerRecipes);
-
-            GTValues.RA
-                .stdBuilder()
-                .itemInputs(
-                    Mods.BloodArsenal.isModLoaded() ?
-                        GTModHandler.getModItem(Mods.BloodArsenal.ID,"blood_stone",1) :
-                        new ItemStack(Blocks.stone,1),
+                    new ItemStack(WayofTime.alchemicalWizardry.ModItems.blankSlate,6),
                     GTUtility.getIntegratedCircuit(1))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(1000))
                 .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
                 .eut(0)
                 .duration(20 * 18)
-                .metadata(BloodyHellTierKey.INSTANCE, 1)
+                .metadata(BloodyHellTierKey.INSTANCE, 2)
                 .addTo(GTCMRecipe.BloodyHellRecipes);
 
             GTValues.RA

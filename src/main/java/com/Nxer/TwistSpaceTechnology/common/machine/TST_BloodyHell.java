@@ -1,11 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static WayofTime.alchemicalWizardry.ModBlocks.blockLifeEssence;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedDiamondBlock;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedGlowstone;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedIronBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing02;
-import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BH_5;
-import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BH_5_Active;
-import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BloodyHellIcons;
-import static com.Nxer.TwistSpaceTechnology.common.block.textures.TSTCasingTextures.BloodyHellIconsActive;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -29,6 +28,7 @@ import java.util.Objects;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -58,8 +58,11 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Mods;
+import gregtech.api.enums.Textures.BlockIcons.CustomIcon;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -157,96 +160,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         return 1;
     }
 
-    public boolean usingAnimations() {
-        // Play controller animation
-        return this.mIsAnimated;
-    }
-
-    public boolean isNewStyleRendering() {
-        return true;
-    }
-
-    public Block getCasingBlock() {
-        return MetaBlockCasing02;
-    }
-
-    public IIconContainer[] getTurbineTextureActive() {
-        return BloodyHellIconsActive;
-    }
-
-    public IIconContainer[] getTurbineTextureFull() {
-        return BloodyHellIcons;
-    }
-
-    @Override
-    public void onValueUpdate(byte aValue) {
-        mFormed = (aValue & 0x2) != 0;
-        super.onValueUpdate(aValue);
-    }
-
-    @Override
-    public byte getUpdateData() {
-        return (byte) (mMachine ? 2 : 0);
-    }
-
-    @Override
-    public boolean renderInWorld(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock, RenderBlocks aRenderer) {
-        if (!isNewStyleRendering() || !mFormed) return false;
-        int[] tABCCoord = new int[] { -1, -1, 0 };
-        int[] tXYZOffset = new int[3];
-        final IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        boolean mActive = aBaseMetaTileEntity.isActive();
-        final ForgeDirection tFacing = aBaseMetaTileEntity.getFrontFacing();
-        final ExtendedFacing tExtendedFacing = getExtendedFacing();
-        final ForgeDirection tDirection = tExtendedFacing.getDirection();
-        final LightingHelper tLighting = new LightingHelper(aRenderer);
-
-        // for some reason +x and -z need this field set to true, but not any other sides
-        if (tFacing == ForgeDirection.NORTH || tFacing == ForgeDirection.EAST) aRenderer.field_152631_f = true;
-        final Block tBlock = getCasingBlock();
-
-        IIconContainer[] tTextures;
-        if (mActive) tTextures = getTurbineTextureActive();
-        else tTextures = getTurbineTextureFull();
-
-        assert tTextures != null && tTextures.length == tABCCoord.length;
-
-        for (int i = 0; i < 9; i++) {
-            if (i != 4) { // do not draw ourselves again.
-                tExtendedFacing.getWorldOffset(tABCCoord, tXYZOffset);
-                // since structure check passed, we can assume it is turbine casing
-                int tX = tXYZOffset[0] + aX;
-                int tY = tXYZOffset[1] + aY;
-                int tZ = tXYZOffset[2] + aZ;
-                // we skip the occlusion test, as we always require a working turbine to have a block of air before it
-                // so the front face cannot be occluded whatsoever in the most cases.
-                Tessellator.instance.setBrightness(
-                    tBlock.getMixedBrightnessForBlock(
-                        aWorld,
-                        aX + tDirection.offsetX,
-                        tY + tDirection.offsetY,
-                        aZ + tDirection.offsetZ));
-                tLighting.setupLighting(tBlock, tX, tY, tZ, tFacing)
-                    .setupColor(tFacing, Dyes._NULL.mRGBa);
-                GTRenderUtil.renderBlockIcon(
-                    aRenderer,
-                    tBlock,
-                    tX + tDirection.offsetX * 0.01,
-                    tY + tDirection.offsetY * 0.01,
-                    tZ + tDirection.offsetZ * 0.01,
-                    tTextures[i].getIcon(),
-                    tFacing);
-            }
-            if (++tABCCoord[0] == 2) {
-                tABCCoord[0] = -1;
-                tABCCoord[1]++;
-            }
-        }
-
-        aRenderer.field_152631_f = false;
-        return false;
-    }
-
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         var tt = new MultiblockTooltipBuilder();
@@ -281,28 +194,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .toolTipFinisher(ModName);
         return tt;
         // spotless:on
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstoneLevel) {
-        ITexture base = casingTexturePages[115][MetaBlockCasing02.getTextureIndexInPage(0)];
-        ITexture[] FACING_ACTIVE = { TextureFactory.of(base), TextureFactory.builder()
-            .addIcon(BH_5_Active)
-            .extFacing()
-            .glow()
-            .build() };
-        ITexture[] FACING_FRONT = { TextureFactory.of(base), TextureFactory.builder()
-            .addIcon(BH_5)
-            .extFacing()
-            .glow()
-            .build() };
-        ITexture[] FACING_SIDE = { TextureFactory.of(base) };
-        if (side == facing) {
-            if (active) return FACING_ACTIVE;
-            return FACING_FRONT;
-        }
-        return FACING_SIDE;
     }
 
     @Override
@@ -386,16 +277,17 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                         onElementPass(
                             (x) -> { x.tbSpeedRuneCount += 1; },
                             ofBlockAnyMeta(BasicBlocks.timeBendingSpeedRune))))
-                .addElement('H', ofBlockAnyMeta(ModBlocks.bloodStoneBrick))
-                .addElement(
-                    'I',
-                    Mods.BloodArsenal.isModLoaded()
-                        ? ofBlock(getBlockFromName(Mods.BloodArsenal.ID + ":blood_infused_iron_block"), 0)
-                        : ofBlockAnyMeta(Blocks.iron_block))
+                .addElement('H', ofBlockAnyMeta(ModBlocks.largeBloodStoneBrick))
+                .addElement('I', ofBlock(BloodInfusedIronBlock.getLeft(), BloodInfusedIronBlock.getRight()))
                 .addElement('J', ofBlockAnyMeta(ModBlocks.blockCrystal))
-                .addElement('K', ofBlockAnyMeta(Blocks.glowstone))
+                .addElement('K', ofBlock(BloodInfusedGlowstone.getLeft(), BloodInfusedGlowstone.getRight()))
+                .addElement('L', ofBlock(BloodInfusedDiamondBlock.getLeft(), BloodInfusedDiamondBlock.getRight()))
                 .addElement(
-                    'L',
+                    'M',
+                    Mods.Chisel.isModLoaded() ? ofBlock(getBlockFromName("chisel:beacon"), 1)
+                        : ofBlockAnyMeta(Blocks.beacon))
+                .addElement(
+                    'N',
                     ofChain(
                         ofBlock(MetaBlockCasing02, 0),
                         HatchElementBuilder.<TST_BloodyHell>builder()
@@ -404,10 +296,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                             .dot(1)
                             .casingIndex(MetaBlockCasing02.getTextureIndex(0))
                             .buildAndChain(MetaBlockCasing02, 0)))
-                .addElement(
-                    'M',
-                    Mods.Chisel.isModLoaded() ? ofBlock(getBlockFromName("chisel:beacon"), 1)
-                        : ofBlockAnyMeta(Blocks.beacon))
                 .addElement('Z', ofBlock(blockLifeEssence, 0))
                 .build();
         }
@@ -664,13 +552,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"             ","             ","             ","             ","             ","    AAAAA    "},
         {"     ABA     ","      A      ","             ","             ","             ","  AAAAAAAA   "},
         {"    AABAA    ","      A      ","             ","             ","             "," AAAAAAAAAA  "},
-        {"   ALLLLLA   ","    AAAAA    ","      A      ","             ","    AAAAA    "," AAAAAAAAAAA "},
-        {"  ALLLLLLLA  ","   AAAAAAA   ","      A      ","      A      ","   AGGAGGA   ","AAAAAAAAAAAAA"},
-        {" AALLLLLLLAA ","   AAAAAAA   ","             ","      A      ","   AGAAAGA   ","AAAAAAAAAAAAA"},
-        {" BBLLL~LLLBB "," AAAAAAAAAAA ","   AA   AA   ","    AAAAA    ","   AAAAAAA   ","AAAAAAAAAAAAA"},
-        {" AALLLLLLLAA ","   AAAAAAA   ","             ","      A      ","   AGAAAGA   ","AAAAAAAAAAAAA"},
-        {"  ALLLLLLLA  ","   AAAAAAA   ","      A      ","      A      ","   AGGAGGA   ","AAAAAAAAAAAAA"},
-        {"   ALLLLLA   ","    AAAAA    ","      A      ","             ","    AAAAA    "," AAAAAAAAAAA "},
+        {"   ANNNNNA   ","    AAAAA    ","      A      ","             ","    AAAAA    "," AAAAAAAAAAA "},
+        {"  ANNNNNNNA  ","   AAAAAAA   ","      A      ","      A      ","   AGGAGGA   ","AAAAAAAAAAAAA"},
+        {" AANNNNNNNAA ","   AAAAAAA   ","             ","      A      ","   AGAAAGA   ","AAAAAAAAAAAAA"},
+        {" BBNNN~NNNBB "," AAAAAAAAAAA ","   AA   AA   ","    AAAAA    ","   AAAAAAA   ","AAAAAAAAAAAAA"},
+        {" AANNNNNNNAA ","   AAAAAAA   ","             ","      A      ","   AGAAAGA   ","AAAAAAAAAAAAA"},
+        {"  ANNNNNNNA  ","   AAAAAAA   ","      A      ","      A      ","   AGGAGGA   ","AAAAAAAAAAAAA"},
+        {"   ANNNNNA   ","    AAAAA    ","      A      ","             ","    AAAAA    "," AAAAAAAAAAA "},
         {"    AABAA    ","      A      ","             ","             ","             "," AAAAAAAAAAA "},
         {"     ABA     ","      A      ","             ","             ","             ","  AAAAAAAAA  "},
         {"             ","             ","             ","             ","             ","    AAAAA    "}
@@ -679,13 +567,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"             ","             ","             ","             ","             ","    AAAAA    "},
         {"     ABA     ","      A      ","             ","             ","             ","  AAAAAAAAA  "},
         {"    AABAA    ","      A      ","             ","             ","      A      "," AAAAAAAAAAA "},
-        {"   ALLLLLA   ","    AAAAA    ","    G A G    ","    G G G    ","    AAAAA    "," AAAAAAAAAAA "},
-        {"  ALLLLLLLA  ","   AAAAAAA   ","   GE A EG   ","   GE A EG   ","   AGGAGGA   ","AAAAAAAAAAAAA"},
-        {" AALLLLLLLAA ","   AAAAAAA   ","             ","      A      ","   AGAAAGA   ","AAAAAAAAAAAAA"},
-        {" BBLLL~LLLBB "," AAAAAAAAAAA ","   AA K AA   ","   GAAAAAG   ","  AAAAAAAAA  ","AAAAAAAAAAAAA"},
-        {" AALLLLLLLAA ","   AAAAAAA   ","             ","      A      ","   AGAAAGA   ","AAAAAAAAAAAAA"},
-        {"  ALLLLLLLA  ","   AAAAAAA   ","   GE A EG   ","   GE A EG   ","   AGGAGGA   ","AAAAAAAAAAAAA"},
-        {"   ALLLLLA   ","    AAAAA    ","    G A G    ","    G G G    ","    AAAAA    "," AAAAAAAAAAA "},
+        {"   ANNNNNA   ","    AAAAA    ","    G A G    ","    G G G    ","    AAAAA    "," AAAAAAAAAAA "},
+        {"  ANNNNNNNA  ","   AAAAAAA   ","   GE A EG   ","   GE A EG   ","   AGGAGGA   ","AAAAAAAAAAAAA"},
+        {" AANNNNNNNAA ","   AAAAAAA   ","             ","      A      ","   AGAAAGA   ","AAAAAAAAAAAAA"},
+        {" BBNNN~NNNBB "," AAAAAAAAAAA ","   AA   AA   ","   GAAAAAG   ","  AAAAAAAAA  ","AAAAAAAAAAAAA"},
+        {" AANNNNNNNAA ","   AAAAAAA   ","             ","      A      ","   AGAAAGA   ","AAAAAAAAAAAAA"},
+        {"  ANNNNNNNA  ","   AAAAAAA   ","   GE A EG   ","   GE A EG   ","   AGGAGGA   ","AAAAAAAAAAAAA"},
+        {"   ANNNNNA   ","    AAAAA    ","    G A G    ","    G G G    ","    AAAAA    "," AAAAAAAAAAA "},
         {"    AABAA    ","      A      ","             ","             ","      A      "," AAAAAAAAAAA "},
         {"     ABA     ","      A      ","             ","             ","             ","  AAAAAAAAA  "},
         {"             ","             ","             ","             ","             ","    AAAAA    "}
@@ -711,13 +599,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"                      ABA                      ","                       A                       ","                       G                       ","                       A                       ","  A   A                                 A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
         {"                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
         {"                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                    ALLLLLA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                   ALLLLLLLA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                 AAALLLLLLLAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                 BBBLLL~LLLBBB                 ","            BBBBBAAAAAAAAAAAAABBBBB            ","       BBBBBAAAAAGGGAAHKHAAGGGAAAAABBBBB       ","   BBBBAAAAA     AGGGAAAAAGGGA     AAAAABBBB   "," ABA AA           AAAAAAAAAAA           AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                 AAALLLLLLLAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                   ALLLLLLLA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                    ALLLLLA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                    ANNNNNA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                   ANNNNNNNA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                 AAANNNNNNNAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                 BBBNNN~NNNBBB                 ","            BBBBBAAAAAAAAAAAAABBBBB            ","       BBBBBAAAAAGGGAAHKHAAGGGAAAAABBBBB       ","   BBBBAAAAA     AGGGAAAAAGGGA     AAAAABBBB   "," ABA AA           AAAAAAAAAAA           AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                 AAANNNNNNNAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                   ANNNNNNNA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                    ANNNNNA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
         {"                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
         {"                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
         {"                      ABA                      ","                       A                       ","                       G                       ","                       A                       ","  A   A                                 A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
@@ -760,13 +648,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"                      ABA                      ","                       A                       ","                       G                       ","                       A                       ","  A   A      AAA               AAA      A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
         {"                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
         {"                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                    ALLLLLA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                   ALLLLLLLA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GDEAEDG        AAABB       ","   BBBBAA           GDEAEDG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                 AAALLLLLLLAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GEEHEEG     AAABBBBB       ","   BBBBAAAAA        GEEAEEG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                 BBBLLL~LLLBBB                 ","            BBBBBAAAAAAAAAAAAABBBBB            ","       BBBBBAAAAAGGGAAHKHAAGGGAAAAABBBBB       ","   BBBBAAAAA     AGGGAAAAAGGGA     AAAAABBBB   "," ABA AA           AAAAAAAAAAA           AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                 AAALLLLLLLAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GEEHEEG     AAABBBBB       ","   BBBBAAAAA        GEEAEEG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                   ALLLLLLLA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GDEAEDG        AAABB       ","   BBBBAA           GDEAEDG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                    ALLLLLA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                    ANNNNNA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                   ANNNNNNNA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GDEAEDG        AAABB       ","   BBBBAA           GDEAEDG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                 AAANNNNNNNAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GEEHEEG     AAABBBBB       ","   BBBBAAAAA        GEEAEEG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                 BBBNNN~NNNBBB                 ","            BBBBBAAAAAAAAAAAAABBBBB            ","       BBBBBAAAAAGGGAAHKHAAGGGAAAAABBBBB       ","   BBBBAAAAA     AGGGAAAAAGGGA     AAAAABBBB   "," ABA AA           AAAAAAAAAAA           AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                 AAANNNNNNNAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GEEHEEG     AAABBBBB       ","   BBBBAAAAA        GEEAEEG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                   ANNNNNNNA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GDEAEDG        AAABB       ","   BBBBAA           GDEAEDG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                    ANNNNNA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
         {"                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
         {"                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
         {"                      ABA                      ","                       A                       ","                       G                       ","                       A                       ","  A   A      AAA               AAA      A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
@@ -809,13 +697,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"                                               ","                      ABA                      ","                       A                       ","             A A       G       A A             ","             A A       A       A A             ","  A   A      AAA               AAA      A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
         {"                                               ","                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
         {"                                               ","                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                                               ","                    ALLLLLA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                                               ","                   ALLLLLLLA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                                               ","                 AAALLLLLLLAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                                               ","                 BBBLLL~LLLBBB                 ","            BBBBBAAAAAAAAAAAAABBBBB            ","       BBBBBAAAAAGGGAAHKHAAGGGAAAAABBBBB       ","   BBBBAAAAA     AGGGAAAAAGGGA     AAAAABBBB   "," ABA AA           AAAAAAAAAAA           AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                                               ","                 AAALLLLLLLAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                                               ","                   ALLLLLLLA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"                                               ","                    ALLLLLA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                                               ","                    ANNNNNA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                                               ","                   ANNNNNNNA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                                               ","                 AAANNNNNNNAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                                               ","                 BBBNNN~NNNBBB                 ","            BBBBBAAAAAAAAAAAAABBBBB            ","       BBBBBAAAAAGGGAAHKHAAGGGAAAAABBBBB       ","   BBBBAAAAA     AGGGAAAAAGGGA     AAAAABBBB   "," ABA AA           AAAAAAAAAAA           AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                                               ","                 AAANNNNNNNAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                                               ","                   ANNNNNNNA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"                                               ","                    ANNNNNA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
         {"                                               ","                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
         {"                                               ","                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
         {"                                               ","                      ABA                      ","                       A                       ","             A A       G       A A             ","             A A       A       A A             ","  A   A      AAA               AAA      A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
@@ -851,27 +739,27 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"           A     A           A     A           ","            AAAAA             AAAAA            ","           GAAAAAG           GAAAAAG           ","             AGA               AGA             ","             AGA               AGA             ","              G                 G              ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     ABBBA                     ","                      AAA                      ","     A    A                         A    A     ","    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA    "},
         {"          A       AAAAAAAAAAA       A          ","           A     AAA       AAA     A           ","          GAAAAAAAGGG     GGGAAAAAAAG          ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","              G                 G              ","              G                 G              ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","             A A     ABBBA     A A             ","             A A      AAA      A A             ","    A    A   AAA               AAA   A    A    ","   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   "},
         {"         A                           A         ","          A         AAAAAAA         A          ","         GAAA     AAAGGGGGAAA     AAAG         ","           AAAAAAAAGGAAAAAGGAAAAAAAA           ","           AACCCCAGAA     AAGAACCCAA           ","           AACCCAGA         AGACCCAA           ","            AAAAGA           AGAAAA            ","            AAAGA             AGAAA            ","            AAAGA             AGAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","             AGA     ABBBA     AGA             ","             GGG      AAA      GGG             ","             GGG               GGG             ","    A    A  AAAAA             AAAAA  A    A    ","   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   "},
-        {"         A                           A         ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          AAAAAAAAAAACCCCCAAAAAAAAAAA          ","          AACCCCCCCCCAAAAACCCCCCCCCAA          ","           ACCCCCCCAA     AACCCCCCCA           ","           AACCCCCA         ACCCCCAA           ","            ACCCCA           ACCCCA            ","            ACCCCA           ACCCCA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","            ADJDA    ABBBA    ADJDA            ","           AGDDDGA    AAA    AGDDDGA           ","           AGAAAGA           AGAAAGA           ","   A    A  AAIIIAA           AAIIIAA  A    A   ","  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  "},
-        {"                                               ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          GAAA AAAAAACCCCCAAAAAA AAAG          ","          GACC CCCCCCGGGGGCCCCCC CCAG          ","          GACC CCCCGG     GGCCCC CCAG          ","           GAC CCCG         GCCC CAG           ","           GAC CCG           GCC CAG           ","           GAC CCG           GCC CAG           ","            GA AG             GA AG            ","            GA AG             GA AG            ","            GA AG             GA AG            ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","            GJ JG    ABBBA    GJ JG            ","            GD DG     AAA     GD DG            ","            GAMAG             GAMAG            ","   A   A   AAIIIAA           AAIIIAA   A   A   ","  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  "},
-        {"         A                           A         ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          AAAAAAAAAAACCCCCAAAAAAAAAAA          ","          AACCCCCCCCCAAAAACCCCCCCCCAA          ","           ACCCCCCCAA     AACCCCCCCA           ","           AACCCCCA         ACCCCCAA           ","            GCCCCA           ACCCCG            ","            GCCCCA           ACCCCG            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","            ADJDA     ABA     ADJDA            ","           AGDDDGA     A     AGDDDGA           ","           AGAAAGA           AGAAAGA           ","  A    A   AAIIIAA           AAIIIAA   A    A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
-        {"         A                           A         ","          A          AAAAA          A          ","         GAA       AAGGGGGAA       AAG         ","           AAAAAAAACCAAAAACCAAAAAAAA           ","           AACCCCCCAA     AACCCCCCCA           ","           AACCCCCA         ACCCCCAA           ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","            ACCCA             ACCCA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","             AGA      ABA      AGA             ","             GGG       A       GGG             ","             GGG               GGG             ","  A   A     AAAAA             AAAAA     A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
-        {"          A          AAAAA          A          ","           A       AAAAAAAAA       A           ","          GA      AGG     GGA      AG          ","            AAAAAACAA     AACAAAAAA            ","            ACCCCCA         ACCCCCA            ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      ABA                      ","                       A                       ","             A A       G       A A             ","             A A       A       A A             ","  A   A      AAA               AAA      A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
-        {"           A        A     A        A           ","           A      AAA     AAA      A           ","           GA    AG         GA    AG           ","            AAAAACA         ACAAAAA            ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
-        {"           A                       A           ","           A     AA         AA     A           ","           GA   AG           GA   AG           ","            GAAACA           ACAAAG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"           A      A         A      A           ","            A    AA         AA    A            ","           GA   AG           GA   AG           ","            GAAACA           ACAAAG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    ALLLLLA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                   ALLLLLLLA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                 AAALLLLLLLAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                 BBBLLL~LLLBBB                 ","            BBBBBAAAAAAAAAAAAABBBBB            ","       BBBBBAAAAAGGGAAHKHAAGGGAAAAABBBBB       ","   BBBBAAAAA     AGGGAAAAAGGGA     AAAAABBBB   "," ABA AA           AAAAAAAAAAA           AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                 AAALLLLLLLAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                   ALLLLLLLA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"           A      A         A      A           ","            A    AA         AA    A            ","           GA   AG           GA   AG           ","            GAAACA           ACAAAG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    ALLLLLA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"           A                       A           ","           A     AA         AA     A           ","           GA   AG           GA   AG           ","            GAAACA           ACAAAG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        {"           A        A     A        A           ","           A      AAA     AAA      A           ","           GA    AG         GA    AG           ","            AAAAACA         ACAAAAA            ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
-        {"          A          AAAAA          A          ","           A       AAAAAAAAA       A           ","          GA      AGG     GGA      AG          ","            AAAAAACAA     AACAAAAAA            ","            ACCCCCA         ACCCCCA            ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      ABA                      ","                       A                       ","             A A       G       A A             ","             A A       A       A A             ","  A   A      AAA               AAA      A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
-        {"         A                           A         ","          A          AAAAA          A          ","         GAA       AAGGGGGAA       AAG         ","           AAAAAAAACCAAAAACCAAAAAAAA           ","           ACCCCCCCAA     AACCCCCCAA           ","           AACCCCCA         ACCCCCAA           ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","            ACCCA             ACCCA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","             AGA      ABA      AGA             ","             GGG       A       GGG             ","             GGG               GGG             ","  A   A     AAAAA             AAAAA     A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
-        {"         A                           A         ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          AAAAAAAAAAACCCCCAAAAAAAAAAA          ","          AACCCCCCCCCAAAAACCCCCCCCCAA          ","           ACCCCCCCAA     AACCCCCCCA           ","           AACCCCCA         ACCCCCAA           ","            GCCCCA           ACCCCG            ","            GCCCCA           ACCCCG            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","            ADJDA     ABA     ADJDA            ","           AGDDDGA     A     AGDDDGA           ","           AGAAAGA           AGAAAGA           ","  A    A   AAIIIAA           AAIIIAA   A    A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
-        {"                                               ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          GAAA AAAAAACCCCCAAAAAA AAAG          ","          GACC CCCCCCGGGGGCCCCCC CCAG          ","          GACC CCCCGG     GGCCCC CCAG          ","           GAC CCCG         GCCC CAG           ","           GAC CCG           GCC CAG           ","           GAC CCG           GCC CAG           ","            GA AG             GA AG            ","            GA AG             GA AG            ","            GA AG             GA AG            ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","            GJ JG    ABBBA    GJ JG            ","            GD DG     AAA     GD DG            ","            GAMAG             GAMAG            ","   A   A   AAIIIAA           AAIIIAA   A   A   ","  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  "},
-        {"         A                           A         ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          AAAAAAAAAAACCCCCAAAAAAAAAAA          ","          AACCCCCCCCCAAAAACCCCCCCCCAA          ","           ACCCCCCCAA     AACCCCCCCA           ","           AACCCCCA         ACCCCCAA           ","            ACCCCA           ACCCCA            ","            ACCCCA           ACCCCA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","            ADJDA    ABBBA    ADJDA            ","           AGDDDGA    AAA    AGDDDGA           ","           AGAAAGA           AGAAAGA           ","   A    A  AAIIIAA           AAIIIAA  A    A   ","  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  "},
+        {"         A                           A         ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          AAAAAAAAAAACCCCCAAAAAAAAAAA          ","          AACLLLCCCCCAAAAACCCCCLLLCAA          ","           ACCCCCCCAA     AACCCCCCCA           ","           AACCCCCA         ACCCCCAA           ","            ACCCCA           ACCCCA            ","            ACCCCA           ACCCCA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","            ADJDA    ABBBA    ADJDA            ","           AGDDDGA    AAA    AGDDDGA           ","           AGAAAGA           AGAAAGA           ","   A    A  AAIIIAA           AAIIIAA  A    A   ","  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  "},
+        {"                                               ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          GAAA AAAAAALLLLLAAAAAA AAAG          ","          GACL LLLLLLGGGGGLLLLLL LCAG          ","          GACC CCCCGG     GGCCCC CCAG          ","           GAC CCCG         GCCC CAG           ","           GAC CCG           GCC CAG           ","           GAC CCG           GCC CAG           ","            GA AG             GA AG            ","            GA AG             GA AG            ","            GA AG             GA AG            ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","            GJ JG    ABBBA    GJ JG            ","            GD DG     AAA     GD DG            ","            GAMAG             GAMAG            ","   A   A   AAIIIAA           AAIIIAA   A   A   ","  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  "},
+        {"         A                           A         ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          AAAAAAAAAAACCCCCAAAAAAAAAAA          ","          AACLLLCCCCCAAAAACCCCCLLLCAA          ","           ACCCCCCCAA     AACCCCCCCA           ","           AACCCCCA         ACCCCCAA           ","            GCCCCA           ACCCCG            ","            GCCCCA           ACCCCG            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","            ADJDA     ABA     ADJDA            ","           AGDDDGA     A     AGDDDGA           ","           AGAAAGA           AGAAAGA           ","  A    A   AAIIIAA           AAIIIAA   A    A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
+        {"         A                           A         ","          A          AAAAA          A          ","         GAA       AAGGGGGAA       AAG         ","           AAAAAAAACCAAAAACCAAAAAAAA           ","           AACLCCCCAA     AACCCCLCCA           ","           AACCCCCA         ACCCCCAA           ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","            ACCCA             ACCCA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","             AGA      ABA      AGA             ","             GGG       A       GGG             ","             GGG               GGG             ","  A   A     AAAAA             AAAAA     A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
+        {"          A          AAAAA          A          ","           A       AAAAAAAAA       A           ","          GA      AGG     GGA      AG          ","            AAAAAACAA     AACAAAAAA            ","            ACLCCCA         ACCCLCA            ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      ABA                      ","                       A                       ","             A A       G       A A             ","             A A       A       A A             ","  A   A      AAA               AAA      A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
+        {"           A        A     A        A           ","           A      AAA     AAA      A           ","           GA    AG         GA    AG           ","            AAAAACA         ACAAAAA            ","            GCLCCA           ACCLCG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
+        {"           A                       A           ","           A     AA         AA     A           ","           GA   AG           GA   AG           ","            GAAACA           ACAAAG            ","            ACLCA             ACLCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"           A      A         A      A           ","            A    AA         AA    A            ","           GA   AG           GA   AG           ","            GAAACA           ACAAAG            ","            ACLCA             ACLCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    ANNNNNA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACLCA             ACLCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                   ANNNNNNNA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACLCA             ACLCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                 AAANNNNNNNAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACLCA             ACLCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                 BBBNNN~NNNBBB                 ","            BBBBBAAAAAAAAAAAAABBBBB            ","       BBBBBAAAAAGGGAAHKHAAGGGAAAAABBBBB       ","   BBBBAAAAA     AGGGAAAAAGGGA     AAAAABBBB   "," ABA AA           AAAAAAAAAAA           AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACLCA             ACLCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                 AAANNNNNNNAAA                 ","            BBBAA   AAAAAAA   AABBB            ","       BBBBBAAA     GFFHFFG     AAABBBBB       ","   BBBBAAAAA        GFFAFFG        AAAAABBBB   "," ABA AA             AGAAAGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"           A     A           A     A           ","            A   AA           AA   A            ","            GAAAG             GAAAG            ","            ACLCA             ACLCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                   ANNNNNNNA                   ","            AAA     AAAAAAA     AAA            ","       BBAAA        GEFAFEG        AAABB       ","   BBBBAA           GEFAFEG           AABBBB   "," ABA AA             AGGAGGA             AA ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"           A      A         A      A           ","            A    AA         AA    A            ","           GA   AG           GA   AG           ","            GAAACA           ACAAAG            ","            ACLCA             ACLCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    ANNNNNA                    ","                     AAAAA                     ","       AA            GGAGG            AA       ","   AAAA              GGGGG              AAAA   "," ABA A               AAAAA               A ABA ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"           A                       A           ","           A     AA         AA     A           ","           GA   AG           GA   AG           ","            GAAACA           ACAAAG            ","            ACLCA             ACLCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     AABAA                     ","                       A                       ","                       G                       ","                       G                       ","AAA  A                 A                 A  AAA","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
+        {"           A        A     A        A           ","           A      AAA     AAA      A           ","           GA    AG         GA    AG           ","            AAAAACA         ACAAAAA            ","            GCLCCA           ACCLCG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      ABA                      ","                       A                       ","                       G                       ","                       G                       ","  A   A                A                A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
+        {"          A          AAAAA          A          ","           A       AAAAAAAAA       A           ","          GA      AGG     GGA      AG          ","            AAAAAACAA     AACAAAAAA            ","            ACLCCCA         ACCCLCA            ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      ABA                      ","                       A                       ","             A A       G       A A             ","             A A       A       A A             ","  A   A      AAA               AAA      A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
+        {"         A                           A         ","          A          AAAAA          A          ","         GAA       AAGGGGGAA       AAG         ","           AAAAAAAACCAAAAACCAAAAAAAA           ","           ACCLCCCCAA     AACCCCLCAA           ","           AACCCCCA         ACCCCCAA           ","            GCCCCA           ACCCCG            ","            ACCCA             ACCCA            ","            ACCCA             ACCCA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","             AGA      ABA      AGA             ","             GGG       A       GGG             ","             GGG               GGG             ","  A   A     AAAAA             AAAAA     A   A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
+        {"         A                           A         ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          AAAAAAAAAAACCCCCAAAAAAAAAAA          ","          AACLLLCCCCCAAAAACCCCCLLLCAA          ","           ACCCCCCCAA     AACCCCCCCA           ","           AACCCCCA         ACCCCCAA           ","            GCCCCA           ACCCCG            ","            GCCCCA           ACCCCG            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","            ADJDA     ABA     ADJDA            ","           AGDDDGA     A     AGDDDGA           ","           AGAAAGA           AGAAAGA           ","  A    A   AAIIIAA           AAIIIAA   A    A  "," AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "},
+        {"                                               ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          GAAA AAAAAALLLLLAAAAAA AAAG          ","          GACL LLLLLLGGGGGLLLLLL LCAG          ","          GACC CCCCGG     GGCCCC CCAG          ","           GAC CCCG         GCCC CAG           ","           GAC CCG           GCC CAG           ","           GAC CCG           GCC CAG           ","            GA AG             GA AG            ","            GA AG             GA AG            ","            GA AG             GA AG            ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","             G G               G G             ","            GJ JG    ABBBA    GJ JG            ","            GD DG     AAA     GD DG            ","            GAMAG             GAMAG            ","   A   A   AAIIIAA           AAIIIAA   A   A   ","  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  "},
+        {"         A                           A         ","         AA                         AA         ","         GAA         AAAAA         AAG         ","          AAAAAAAAAAACCCCCAAAAAAAAAAA          ","          AACLLLCCCCCAAAAACCCCCLLLCAA          ","           ACCCCCCCAA     AACCCCCCCA           ","           AACCCCCA         ACCCCCAA           ","            ACCCCA           ACCCCA            ","            ACCCCA           ACCCCA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","            ADJDA    ABBBA    ADJDA            ","           AGDDDGA    AAA    AGDDDGA           ","           AGAAAGA           AGAAAGA           ","   A    A  AAIIIAA           AAIIIAA  A    A   ","  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  "},
         {"         A                           A         ","          A         AAAAAAA         A          ","         GAAA     AAAGGGGGAAA     AAAG         ","           AAAAAAAAGGAAAAAGGAAAAAAAA           ","           AACCCAAGAA     AAGACCCCAA           ","           AACCCAGA         AGACCCAA           ","            AAAAGA           AGAAAA            ","            AAAGA             AGAAA            ","            AAAGA             AGAAA            ","             AGA               AGA             ","             AGA               AGA             ","             AGA               AGA             ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","             AGA     ABBBA     AGA             ","             GGG      AAA      GGG             ","             GGG               GGG             ","    A    A  AAAAA             AAAAA  A    A    ","   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   "},
         {"          A       AAAAAAAAAAA       A          ","           A     AAA       AAA     A           ","          GAAAAAAAGGG     GGGAAAAAAAG          ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","            AAAAA             AAAAA            ","             AGA               AGA             ","              G                 G              ","              G                 G              ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","             A A     ABBBA     A A             ","             A A      AAA      A A             ","    A    A   AAA               AAA   A    A    ","   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   "},
         {"           A     A           A     A           ","            AAAAA             AAAAA            ","           GAAAAAG           GAAAAAG           ","             AGA               AGA             ","             AGA               AGA             ","              G                 G              ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     ABBBA                     ","                      AAA                      ","     A    A                         A    A     ","    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA    "},
@@ -976,4 +864,174 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     // endregion
 
+    // region Texture
+    private static CustomIcon BH_1_Active;
+    private static CustomIcon BH_1;
+    private static CustomIcon BH_2_Active;
+    private static CustomIcon BH_2;
+    private static CustomIcon BH_3_Active;
+    private static CustomIcon BH_3;
+    private static CustomIcon BH_4_Active;
+    private static CustomIcon BH_4;
+    private static CustomIcon BH_5_Active;
+    private static CustomIcon BH_5;
+    private static CustomIcon BH_6_Active;
+    private static CustomIcon BH_6;
+    private static CustomIcon BH_7_Active;
+    private static CustomIcon BH_7;
+    private static CustomIcon BH_8_Active;
+    private static CustomIcon BH_8;
+    private static CustomIcon BH_9_Active;
+    private static CustomIcon BH_9;
+
+    private static IIconContainer[] BloodyHellIcons;
+    private static IIconContainer[] BloodyHellIconsActive;
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        BH_1_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_1");
+        BH_1 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_1");
+        BH_2_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_2");
+        BH_2 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_2");
+        BH_3_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_3");
+        BH_3 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_3");
+        BH_4_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_4");
+        BH_4 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_4");
+        BH_5_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_5");
+        BH_5 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_5");
+        BH_6_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_6");
+        BH_6 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_6");
+        BH_7_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_7");
+        BH_7 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_7");
+        BH_8_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_8");
+        BH_8 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_8");
+        BH_9_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_9");
+        BH_9 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_9");
+        BloodyHellIcons = new IIconContainer[] { BH_1, BH_2, BH_3, BH_4, BH_5, BH_6, BH_7, BH_8, BH_9, BH_1, BH_2, BH_3,
+            BH_4, BH_5, BH_6, BH_7, BH_8, BH_9, BH_1, BH_2, BH_3, BH_4, BH_5, BH_6, BH_7 };
+        BloodyHellIconsActive = new IIconContainer[] { BH_1_Active, BH_2_Active, BH_3_Active, BH_4_Active, BH_5_Active,
+            BH_6_Active, BH_7_Active, BH_8_Active, BH_9_Active, BH_1_Active, BH_2_Active, BH_3_Active, BH_4_Active,
+            BH_5_Active, BH_6_Active, BH_7_Active, BH_8_Active, BH_9_Active, BH_1_Active, BH_2_Active, BH_3_Active,
+            BH_4_Active, BH_5_Active, BH_6_Active, BH_7_Active };
+        super.registerIcons(aBlockIconRegister);
+    }
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean active, boolean redstoneLevel) {
+        ITexture base = casingTexturePages[115][MetaBlockCasing02.getTextureIndexInPage(0)];
+        ITexture[] FACING_ACTIVE = { TextureFactory.of(base), TextureFactory.builder()
+            .addIcon(BH_5_Active)
+            .extFacing()
+            .glow()
+            .build() };
+        ITexture[] FACING_FRONT = { TextureFactory.of(base), TextureFactory.builder()
+            .addIcon(BH_5)
+            .extFacing()
+            .glow()
+            .build() };
+        ITexture[] FACING_SIDE = { TextureFactory.of(base) };
+        if (side == facing) {
+            if (active) return FACING_ACTIVE;
+            return FACING_FRONT;
+        }
+        return FACING_SIDE;
+    }
+
+    // endregion
+
+    // region render
+
+    public boolean usingAnimations() {
+        // Play controller animation
+        return this.mIsAnimated;
+    }
+
+    public boolean isNewStyleRendering() {
+        return true;
+    }
+
+    public Block getCasingBlock() {
+        return MetaBlockCasing02;
+    }
+
+    public IIconContainer[] getTurbineTextureActive() {
+        return BloodyHellIconsActive;
+    }
+
+    public IIconContainer[] getTurbineTextureFull() {
+        return BloodyHellIcons;
+    }
+
+    @Override
+    public void onValueUpdate(byte aValue) {
+        mFormed = (aValue & 0x2) != 0;
+        super.onValueUpdate(aValue);
+    }
+
+    @Override
+    public byte getUpdateData() {
+        return (byte) (mMachine ? 2 : 0);
+    }
+
+    @Override
+    public boolean renderInWorld(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock, RenderBlocks aRenderer) {
+        if (!isNewStyleRendering() || !mFormed) return false;
+        int[] tABCCoord = new int[] { -2, -2, 0 };
+        int[] tXYZOffset = new int[3];
+        final IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
+        boolean mActive = aBaseMetaTileEntity.isActive();
+        final ForgeDirection tFacing = aBaseMetaTileEntity.getFrontFacing();
+        final ExtendedFacing tExtendedFacing = getExtendedFacing();
+        final ForgeDirection tDirection = tExtendedFacing.getDirection();
+        final LightingHelper tLighting = new LightingHelper(aRenderer);
+
+        // for some reason +x and -z need this field set to true, but not any other sides
+        if (tFacing == ForgeDirection.NORTH || tFacing == ForgeDirection.EAST) aRenderer.field_152631_f = true;
+        final Block tBlock = getCasingBlock();
+
+        IIconContainer[] tTextures;
+        if (mActive) tTextures = getTurbineTextureActive();
+        else tTextures = getTurbineTextureFull();
+
+        assert tTextures != null && tTextures.length == tABCCoord.length;
+
+        for (int i = 0; i < 25; i++) {
+            // if (i != 4) { // do not draw ourselves again.
+            tExtendedFacing.getWorldOffset(tABCCoord, tXYZOffset);
+            // since structure check passed, we can assume it is turbine casing
+            int tX = tXYZOffset[0] + aX;
+            int tY = tXYZOffset[1] + aY;
+            int tZ = tXYZOffset[2] + aZ;
+            // we skip the occlusion test, as we always require a working turbine to have a block of air before it
+            // so the front face cannot be occluded whatsoever in the most cases.
+            Tessellator.instance.setBrightness(
+                tBlock.getMixedBrightnessForBlock(
+                    aWorld,
+                    aX + tDirection.offsetX,
+                    tY + tDirection.offsetY,
+                    aZ + tDirection.offsetZ));
+            tLighting.setupLighting(tBlock, tX, tY, tZ, tFacing)
+                .setupColor(tFacing, Dyes._NULL.mRGBa);
+            GTRenderUtil.renderBlockIcon(
+                aRenderer,
+                tBlock,
+                tX + tDirection.offsetX * 0.01,
+                tY + tDirection.offsetY * 0.01,
+                tZ + tDirection.offsetZ * 0.01,
+                tTextures[i].getIcon(),
+                tFacing);
+            // }
+            if (++tABCCoord[0] == 3) {
+                tABCCoord[0] = -2;
+                tABCCoord[1]++;
+            }
+        }
+
+        aRenderer.field_152631_f = false;
+        return false;
+    }
+
+    // endregion
 }

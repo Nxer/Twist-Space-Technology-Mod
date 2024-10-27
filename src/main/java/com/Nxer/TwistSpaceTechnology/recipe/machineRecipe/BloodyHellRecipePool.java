@@ -60,12 +60,13 @@ public class BloodyHellRecipePool implements IRecipePool {
             GTValues.RA.stdBuilder()
                 .itemInputs(
                     recipe.requiredItem,
-                    new ItemStack(ModItems.weakBloodShard, 0),
+                    new ItemStack(ModItems.weakBloodShard, 1),
                     GTUtility.getIntegratedCircuit(11))
                 .itemOutputs(recipe.outputItem)
                 .fluidInputs(BloodMagicHelper.getLifeEssence(bindingRecipeLECost))
                 .eut(0)
                 .duration(bindingRecipeLECost / soakingSpeed)
+                .metadata(BloodyHellTierKey.INSTANCE, 1)
                 .addTo(BloodyHellRecipes);
         }
     }

@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler.AmorphicCatalyst;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static gregtech.api.enums.TCAspects.ELECTRUM;
@@ -42,6 +43,7 @@ public class TCRecipePool implements IRecipePool {
     public static InfusionRecipe infusionRecipeEcoSphereSimulator;
     public static InfusionRecipe infusionRecipeFontOfEcology;
     public static InfusionRecipe infusionRecipeBloodyHell;
+    public static InfusionRecipe infusionRecipeCoagulatedBloodCasing;
     public static InfusionRecipe infusionRecipeBloodHatch;
     public static InfusionRecipe infusionRecipeTimeBendingSpeedRune;
 
@@ -162,20 +164,27 @@ public class TCRecipePool implements IRecipePool {
                         .merge(Aspect.DEATH, 64)
                         .merge(Aspect.UNDEAD, 64)
                         .merge(Aspect.MECHANISM, 16),
-                    Mods.BloodArsenal.isModLoaded()
-                        ? GTModHandler.getModItem(Mods.BloodArsenal.ID, "blood_infused_diamond_block", 1, 0)
-                        : new ItemStack(Blocks.stone, 1),
-                    new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockMasterStone),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.activationCrystal, 1, 1),
+                    new ItemStack(WayofTime.alchemicalWizardry.ModItems.activationCrystal),
+                    new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockMasterStone),
+                        AmorphicCatalyst.getLeft(),
+                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
+                        AmorphicCatalyst.getLeft(),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockWritingTable),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.demonBloodShard),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.itemSeerSigil),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.divinationSigil),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.waterSigil),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.lavaSigil),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.voidSigil),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.airSigil), });
+                        AmorphicCatalyst.getLeft() });
+
+                infusionRecipeCoagulatedBloodCasing = ThaumcraftApi.addInfusionCraftingRecipe(
+                    "BLOODY_HELL",
+                    GTCMItemList.BloodyCasing1.get(1),
+                    13,
+                    new AspectList().merge(Aspect.LIFE, 13)
+                        .merge(Aspect.HEAL, 13)
+                        .merge(Aspect.MECHANISM, 26),
+                    Mods.BloodArsenal.isModLoaded() ? GTModHandler.getModItem(Mods.BloodArsenal.ID, "blood_stone", 1, 1)
+                        : new ItemStack(Blocks.stone, 1),
+                    new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModItems.waterSigil, 1),
+                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.sigilOfTheFastMiner, 1),
+                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.itemSeerSigil, 1) });
+
                 if (Config.Enable_BloodHatch) {
                     infusionRecipeBloodHatch = ThaumcraftApi.addInfusionCraftingRecipe(
                         "BLOOD_HATCH",
