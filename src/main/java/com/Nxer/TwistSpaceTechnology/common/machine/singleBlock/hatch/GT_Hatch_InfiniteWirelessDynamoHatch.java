@@ -10,9 +10,9 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Wireless_Dynamo;
+import gregtech.api.metatileentity.implementations.MTEWirelessDynamo;
 
-public class GT_Hatch_InfiniteWirelessDynamoHatch extends GT_MetaTileEntity_Wireless_Dynamo {
+public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEWirelessDynamo {
 
     // region Class Constructor
     public GT_Hatch_InfiniteWirelessDynamoHatch(String aName, byte aTier, String[] aDescription,

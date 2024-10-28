@@ -4,12 +4,12 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.elisis.gtnhlanth.api.recipe.LanthanidesRecipeMaps;
-import com.elisis.gtnhlanth.common.register.WerkstoffMaterialPool;
 
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.IRecipeMap;
+import gtnhlanth.api.recipe.LanthanidesRecipeMaps;
+import gtnhlanth.common.register.WerkstoffMaterialPool;
 
 public class LanthanidesRecipePool implements IRecipePool {
 
@@ -19,7 +19,7 @@ public class LanthanidesRecipePool implements IRecipePool {
         IRecipeMap digester = LanthanidesRecipeMaps.digesterRecipes;
 
         // GT Rare Earth to Lanthanides process
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(Materials.RareEarth.getDust(8))
             .fluidInputs(Materials.Chlorine.getGas(6000))
             .itemOutputs(Materials.SiliconDioxide.getDust(1))
@@ -30,7 +30,7 @@ public class LanthanidesRecipePool implements IRecipePool {
             .addTo(digester);
 
         // add dust of Monazite to Lanthanides process
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(Materials.Monazite.getDust(2))
             .fluidInputs(Materials.NitricAcid.getFluid(700))
             .itemOutputs(Materials.SiliconDioxide.getDust(1))
@@ -42,7 +42,7 @@ public class LanthanidesRecipePool implements IRecipePool {
             .addTo(digester);
 
         // add dust of Bastnasite to Lanthanides process
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(Materials.Bastnasite.getDust(2))
             .fluidInputs(Materials.NitricAcid.getFluid(700))
             .itemOutputs(Materials.SiliconDioxide.getDust(1))

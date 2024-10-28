@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 
-import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GTOreDictUnificator;
 
 public final class NBTUtils {
 
@@ -32,7 +32,7 @@ public final class NBTUtils {
         } else if (tRawStack != null) {
             tRealStackSize = tRawStack.stackSize;
         }
-        ItemStack tRet = GT_OreDictUnificator.get(true, tRawStack);
+        ItemStack tRet = GTOreDictUnificator.get(true, tRawStack);
         if (tRet != null) tRet.stackSize = tRealStackSize;
         return tRet;
     }

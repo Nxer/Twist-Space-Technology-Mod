@@ -9,8 +9,8 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotN
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.isStackInvalid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_ACTIVE_GLOW;
@@ -34,7 +34,7 @@ import com.dreammaster.gthandler.CustomItemList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
@@ -45,9 +45,9 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConverter> {
 
@@ -106,11 +106,11 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
 
             // general convert
 
-            ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(item);
+            ItemData tPrefixMaterial = GTOreDictUnificator.getAssociation(item);
 
             if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) continue;
             if (tPrefixMaterial.mPrefix == OrePrefixes.circuit) {
-                outputs.add(GT_OreDictUnificator.get(false, item, true));
+                outputs.add(GTOreDictUnificator.get(false, item, true));
                 item.stackSize = 0;
             }
 
@@ -195,12 +195,12 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
         .addElement(
             'A',
-            GT_HatchElementBuilder.<TST_CircuitConverter>builder()
+            HatchElementBuilder.<TST_CircuitConverter>builder()
                 .atLeast(InputBus, OutputBus)
                 .adder(TST_CircuitConverter::addInputBusOrOutputBusToMachineList)
                 .dot(1)
                 .casingIndex(16)
-                .buildAndChain(GregTech_API.sBlockCasings2, 6))
+                .buildAndChain(GregTechAPI.sBlockCasings2, 6))
         .build();
 
     // endregion
@@ -222,8 +222,8 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_CircuitConverter_MachineType)
             .addInfo(Tooltip_CircuitConverter_Controller)
             .addInfo(Tooltip_CircuitConverter_01)

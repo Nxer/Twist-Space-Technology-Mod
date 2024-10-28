@@ -22,7 +22,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemRegister {
 
     public static void registryItems() {
-        Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes, MultiStructuresLinkTool,
+        Item[] itemsToReg = { BasicItems.MetaItem01, BasicItems.ProofOfHeroes, BasicItems.ProofOfGods,
+            MultiStructuresLinkTool,
 
             BasicItems.MetaItemRune, BasicItems.MetaItemIzumik, BasicItems.PowerChair, BasicItems.HatchUpdateTool,
             BasicItems.Yamato };
@@ -236,6 +237,21 @@ public class ItemRegister {
             GTCMItemList.Space_TimeLifeCore.set(initItem01("Space-time life core", 419));
         }
 
+        // Endgame Challenge content
+        GTCMItemList.LvFlask.set(initItem01("LV FLASK", 420));
+        GTCMItemList.MvFlask.set(initItem01("MV FLASK", 421));
+        GTCMItemList.HvFlask.set(initItem01("HV FLASK", 422));
+        GTCMItemList.EvFlask.set(initItem01("EV FLASK", 423));
+        GTCMItemList.IvFlask.set(initItem01("IV FLASK", 424));
+        GTCMItemList.LuvFlask.set(initItem01("LUV FLASK", 425));
+        GTCMItemList.ZpmFlask.set(initItem01("ZPM FLASK", 426));
+        GTCMItemList.UvFlask.set(initItem01("UV FLASK", 427));
+        GTCMItemList.UhvFlask.set(initItem01("UHV FLASK", 428));
+        GTCMItemList.UevFlask.set(initItem01("UEV FLASK", 429));
+        GTCMItemList.UivFlask.set(initItem01("UIV FLASK", 430));
+        GTCMItemList.UmvFlask.set(initItem01("UMV FLASK", 431));
+        GTCMItemList.UxvFlask.set(initItem01("UXV FLASK", 432));
+
         GTCMItemList.Rune_of_Vigilance.set(initItemRune("Rune of Vigilance", 0, new String[]{TextHandler.texter("Vigilance.", "tooltips.Rune_of_Vigilance.line1")}));
         GTCMItemList.Rune_of_Erelong.set(initItemRune("Rune of Erelong", 1, new String[]{TextHandler.texter("Erelong.", "tooltips.Rune_of_Erelong.line1")}));
         GTCMItemList.Rune_of_Ether.set(initItemRune("Rune of Ether", 2, new String[]{TextHandler.texter("Ether.", "tooltips.Rune_of_Ether.line1")}));
@@ -284,7 +300,8 @@ public class ItemRegister {
             // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
             // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
         ));
-        GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 1));
+        GTCMItemList.ProofOfGods.set(new ItemStack(BasicItems.ProofOfGods, 1));
+        GTCMItemList.ProofOfHeroes.set(new ItemStack(BasicItems.ProofOfHeroes, 2));
         GTCMItemList.PowerChair.set(new ItemStack(BasicItems.PowerChair, 1));
 
         GTCMItemList.HatchUpdateTool.set(new ItemStack(BasicItems.HatchUpdateTool, 1));

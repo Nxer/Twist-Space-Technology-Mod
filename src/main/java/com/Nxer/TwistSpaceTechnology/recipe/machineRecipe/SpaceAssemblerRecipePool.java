@@ -15,8 +15,8 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 
@@ -35,22 +35,22 @@ public class SpaceAssemblerRecipePool implements IRecipePool {
             // adv radiation proof plate
             TST_RecipeBuilder.builder()
                 .itemInputs(
-                    GT_Utility.getIntegratedCircuit(24),
+                    GTUtility.getIntegratedCircuit(24),
                     Materials.Neutronium.getNanite(1),
                     ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 0, 3),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.ElectrumFlux, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64))
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.ElectrumFlux, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 1024),
                     Materials.Lead.getMolten(144 * 16 * 1024),

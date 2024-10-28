@@ -19,7 +19,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.Sp
 
 import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.util.IGT_HatchAdder;
+import gregtech.api.util.IGTHatchAdder;
 
 public enum ModularizedHatchElement implements IHatchElement<ModularizedMachineBase> {
 
@@ -47,11 +47,11 @@ public enum ModularizedHatchElement implements IHatchElement<ModularizedMachineB
     };
 
     private final List<Class<? extends IMetaTileEntity>> mteClasses;
-    private final IGT_HatchAdder<ModularizedMachineBase> adder;
+    private final IGTHatchAdder<ModularizedMachineBase> adder;
     private final ModularHatchTypes type;
 
     @SafeVarargs
-    ModularizedHatchElement(ModularHatchTypes type, IGT_HatchAdder<ModularizedMachineBase> adder,
+    ModularizedHatchElement(ModularHatchTypes type, IGTHatchAdder<ModularizedMachineBase> adder,
         Class<? extends IMetaTileEntity>... mteClasses) {
         this.type = type;
         this.mteClasses = Collections.unmodifiableList(Arrays.asList(mteClasses));
@@ -64,7 +64,7 @@ public enum ModularizedHatchElement implements IHatchElement<ModularizedMachineB
     }
 
     @Override
-    public IGT_HatchAdder<? super ModularizedMachineBase> adder() {
+    public IGTHatchAdder<? super ModularizedMachineBase> adder() {
         return adder;
     }
 

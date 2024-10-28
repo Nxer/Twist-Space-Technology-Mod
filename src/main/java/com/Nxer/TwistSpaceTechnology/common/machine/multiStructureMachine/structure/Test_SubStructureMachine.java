@@ -28,8 +28,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachine<Test_SubStructureMachine> {
 
@@ -112,7 +112,7 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (this.mode + 1) % 2;
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 aPlayer,
                 StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
         }
@@ -166,8 +166,8 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
 
     // Tooltips
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)

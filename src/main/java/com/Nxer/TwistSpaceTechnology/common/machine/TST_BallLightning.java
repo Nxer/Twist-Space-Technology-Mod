@@ -10,27 +10,28 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooCo
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.StabilisationFieldGenerators;
-import static com.github.technus.tectech.thing.casing.TT_Container_Casings.sBlockCasingsTT;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.api.util.GT_StructureUtility.ofCoil;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
-import static gregtech.api.util.GT_Utility.getCasingTextureIndex;
+import static gregtech.api.util.GTStructureUtility.ofCoil;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static gregtech.api.util.GTUtility.getCasingTextureIndex;
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
+import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerators;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -61,36 +62,37 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import bartworks.API.BorosilicateGlass;
 import galaxyspace.core.register.GSBlocks;
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_OverclockCalculator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
 import gtPlusPlus.core.block.ModBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> implements IGlobalWirelessEnergy {
+public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
+    implements IWirelessEnergyHatchInformation {
 
     // region Class Constructor
     public TST_BallLightning(int aID, String aName, String aNameRegional) {
@@ -239,14 +241,14 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                 // #tr BallLightning.modeMsg.IncompleteStructure
                 // # INCOMPLETE STRUCTURE!
                 // #zh_CN 结构不完整!
-                GT_Utility.sendChatToPlayer(
+                GTUtility.sendChatToPlayer(
                     aPlayer,
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
 
             this.mode = (byte) ((this.mode + 1) % mMachineTier);
-            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("BallLightning.modeMsg." + this.mode));
+            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("BallLightning.modeMsg." + this.mode));
 
         }
     }
@@ -281,12 +283,12 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             }
 
             @Override
-            protected @NotNull CheckRecipeResult validateRecipe(@NotNull GT_Recipe recipe) {
-                if (glassTier < 12 && glassTier < GT_Utility.getTier(recipe.mEUt)) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(GT_Utility.getTier(recipe.mEUt));
+            protected @NotNull CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+                if (glassTier < 12 && glassTier < GTUtility.getTier(recipe.mEUt)) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(GTUtility.getTier(recipe.mEUt));
                 }
                 if (mode == 2) {
-                    mRecipeTierModeFusion = getFusionRecipeTier(recipe.mSpecialValue, GT_Utility.getTier(recipe.mEUt));
+                    mRecipeTierModeFusion = getFusionRecipeTier(recipe.mSpecialValue, GTUtility.getTier(recipe.mEUt));
                     if (mRecipeTierModeFusion > compactFusionCoilTier)
                         return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTierModeFusion);
                 }
@@ -295,9 +297,9 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
             @Nonnull
             @Override
-            protected GT_OverclockCalculator createOverclockCalculator(@Nonnull GT_Recipe recipe) {
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
                 if (isWirelessMode) {
-                    return GT_OverclockCalculator.ofNoOverclock(recipe);
+                    return OverclockCalculator.ofNoOverclock(recipe);
                 } else {
                     return super.createOverclockCalculator(recipe);
                 }
@@ -354,7 +356,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                 .multiply(BigInteger.valueOf(processingLogic.getDuration()))
                 .multiply(BigInteger.valueOf(Math.round((extraEuCostMultiplier * speedBonus))))
                 .divide(BigInteger.valueOf((long) (1 / EuModifier)));
-            costingWirelessEU = GT_Utility.formatNumbers(costingWirelessEUTemp);
+            costingWirelessEU = GTUtility.formatNumbers(costingWirelessEUTemp);
             if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
                 return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
             }
@@ -501,11 +503,11 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                             0,
                             (me, m) -> me.compactFusionCoilTier = m,
                             me -> me.compactFusionCoilTier)))
-                .addElement('C', ofBlock(GregTech_API.sBlockCasings1, 14))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings1, 14))
                 .addElement(
                     'D',
                     withChannel("coil", ofCoil(TST_BallLightning::setCoilLevel, TST_BallLightning::getCoilLevel)))
-                .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 5))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 5))
                 .addElement(
                     'F',
                     withChannel(
@@ -538,7 +540,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                 .addElement('O', ofFrame(Materials.Neutronium))
                 .addElement(
                     'Y',
-                    GT_HatchElementBuilder.<TST_BallLightning>builder()
+                    HatchElementBuilder.<TST_BallLightning>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
                         .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(1))
@@ -546,12 +548,12 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                         .buildAndChain(BasicBlocks.MetaBlockCasing01, 1))
                 .addElement(
                     'Z',
-                    GT_HatchElementBuilder.<TST_BallLightning>builder()
+                    HatchElementBuilder.<TST_BallLightning>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
-                        .casingIndex(getCasingTextureIndex(GregTech_API.sBlockCasings8, 5))
+                        .casingIndex(getCasingTextureIndex(GregTechAPI.sBlockCasings8, 5))
                         .dot(2)
-                        .buildAndChain(GregTech_API.sBlockCasings8, 5))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 5))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -625,7 +627,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
             tag.setByte("mode", mode);
-            tag.setString("FusionMaxEut", GT_Utility.formatNumbers(FusionMaxEut));
+            tag.setString("FusionMaxEut", GTUtility.formatNumbers(FusionMaxEut));
             tag.setBoolean("isWirelessMode", isWirelessMode);
             tag.setString("costingWirelessEU", costingWirelessEU);
             tag.setInteger("extraEuCostMultiplier", Math.round(extraEuCostMultiplier * speedBonus));
@@ -829,8 +831,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         {"                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                GGGGGGGGGGGGG                                ","                                ZZZZZZZZZZZZZ                                ","                                GGGGGGGGGGGGG                                ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             ","                                                                             "}
     };
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // #tr Tooltip_BallLightning_MachineType
         // # (Plasma / Electric) Arc Furnace / Fusion Reactor / Star Kernel Generator
         // #zh_CN 电弧炉 | 等离子电弧炉 | 聚变反应堆 | 星核发生器

@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
-import gregtech.api.util.GT_Log;
+import gregtech.api.util.GTLog;
 
 public enum GTCMItemList {
 
@@ -15,6 +15,7 @@ public enum GTCMItemList {
     SpaceWarper,
     OpticalSOC,
     ProofOfHeroes,
+    ProofOfGods,
     MoldSingularity,
     ParticleTrapTimeSpaceShield,
     LapotronShard,
@@ -161,6 +162,20 @@ public enum GTCMItemList {
     FountOfEcology,
     OffSpring,
 
+    LvFlask,
+    MvFlask,
+    HvFlask,
+    EvFlask,
+    IvFlask,
+    LuvFlask,
+    ZpmFlask,
+    UvFlask,
+    UhvFlask,
+    UevFlask,
+    UivFlask,
+    UmvFlask,
+    UxvFlask,
+
     // endregion
 
     // region Blocks
@@ -194,6 +209,8 @@ public enum GTCMItemList {
     DenseCyclotronOuterCasing,
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
+    BloodyCasing1,
+    BloodyCasing2,
     // endregion
 
     // region Machines
@@ -251,6 +268,7 @@ public enum GTCMItemList {
     ExtremeCraftCenter,
     MassFabricatorGenesis,
     IncompactCyclotron,
+    BloodyHell,
 
     // endregion
 
@@ -406,9 +424,9 @@ public enum GTCMItemList {
     LaserSmartNode,
     FackRackHatch,
     RealRackHatch,
-
     WirelessDataInputHatch,
     WirelessDataOutputHatch,
+    BloodOrbHatch,
 
     LegendaryWirelessEnergyHatch,
     HarmoniousWirelessEnergyHatch,
@@ -498,8 +516,8 @@ public enum GTCMItemList {
         sanityCheck();
         // if invalid, return a replacements
         if (Utils.isStackInvalid(mStack)) {
-            GT_Log.out.println("Object in the ItemList is null at:");
-            new NullPointerException().printStackTrace(GT_Log.out);
+            GTLog.out.println("Object in the ItemList is null at:");
+            new NullPointerException().printStackTrace(GTLog.out);
             return Utils.copyAmount(aAmount, TestItem0.get(1));
         }
         return Utils.copyAmount(aAmount, mStack);
@@ -541,7 +559,7 @@ public enum GTCMItemList {
         if (mHasNotBeenSet)
             throw new IllegalAccessError("The Enum '" + name() + "' has not been set to an Item at this time!");
         if (mDeprecated && !mWarned) {
-            new Exception(this + " is now deprecated").printStackTrace(GT_Log.err);
+            new Exception(this + " is now deprecated").printStackTrace(GTLog.err);
             // warn only once
             mWarned = true;
         }

@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores;
 
+import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+
 import java.math.BigInteger;
 import java.util.UUID;
 
@@ -12,14 +14,14 @@ import com.Nxer.TwistSpaceTechnology.util.Utils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.IGlobalWirelessEnergy;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.render.TextureFactory;
 
 // TODO Wireless EU costings
-public class AdvExecutionCore extends ExecutionCoreBase implements IGlobalWirelessEnergy {
+public class AdvExecutionCore extends ExecutionCoreBase implements IWirelessEnergyHatchInformation {
 
     public AdvExecutionCore(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);

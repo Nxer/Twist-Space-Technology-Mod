@@ -3,8 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.process
 import javax.annotation.Nonnull;
 
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.util.GT_ParallelHelper;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.ParallelHelper;
 
 public class GTCM_ProcessingLogic extends ProcessingLogic {
 
@@ -13,7 +13,7 @@ public class GTCM_ProcessingLogic extends ProcessingLogic {
      */
     @Nonnull
     @Override
-    protected GT_ParallelHelper createParallelHelper(@Nonnull GT_Recipe recipe) {
+    protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
         return new GTCM_ParallelHelper().setRecipe(recipe)
             .setItemInputs(inputItems)
             .setFluidInputs(inputFluids)

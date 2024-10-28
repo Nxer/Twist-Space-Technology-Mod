@@ -5,8 +5,8 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
-import gregtech.api.util.GT_Log;
-import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GTLog;
+import gregtech.api.util.GTOreDictUnificator;
 
 public enum ItemGearList {
 
@@ -32,11 +32,11 @@ public enum ItemGearList {
         sanityCheck();
         // if invalid, return a replacements
         if (Utils.isStackInvalid(mStack)) {
-            GT_Log.out.println("Object in the ItemList is null at:");
-            new NullPointerException().printStackTrace(GT_Log.out);
+            GTLog.out.println("Object in the ItemList is null at:");
+            new NullPointerException().printStackTrace(GTLog.out);
             return Utils.copyAmount(aAmount, WoodenSword.get(1));
         }
-        return Utils.copyAmount(aAmount, GT_OreDictUnificator.get(mStack));
+        return Utils.copyAmount(aAmount, GTOreDictUnificator.get(mStack));
     }
 
     public ItemGearList set(Item aItem) {

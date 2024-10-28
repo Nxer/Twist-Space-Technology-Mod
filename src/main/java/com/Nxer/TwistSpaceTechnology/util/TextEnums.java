@@ -15,6 +15,11 @@ public enum TextEnums {
     // #zh_CN 作者 : {\WHITE}{\BOLD}Goderium
     Author_Goderium("Author_Goderium"),
 
+    // #tr Author_Taskeren
+    // # Author: {\GOLD}Taskeren
+    // #zh_CN 作者：{\GOLD}Taskeren（楓）
+    Author_Taskeren("Author_Taskeren"),
+
     // #tr AddByTwistSpaceTechnology
     // # Added by {\GREEN}Twist Space Technology{\GRAY}
     // #zh_CN 由 {\GREEN}Twist Space Technology{\GRAY} 添加

@@ -6,18 +6,18 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplier_CoilTi
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.pressureResistantWalls;
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.ExoticEnergy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
-import static gregtech.api.util.GT_StructureUtility.ofCoil;
-import static gregtech.api.util.GT_StructureUtility.ofFrame;
+import static gregtech.api.util.GTStructureUtility.ofCoil;
+import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,7 +30,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -40,11 +40,11 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_HatchElementBuilder;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Casings1;
-import gregtech.common.blocks.GT_Block_Casings8;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.blocks.BlockCasings1;
+import gregtech.common.blocks.BlockCasings8;
 
 public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_Silksong> {
 
@@ -137,7 +137,7 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
 
         // speed bonus = 0.85^voltageTier / (coilTier * 1)
         speedBonus = (float) (Math
-            .pow(SpeedBonus_MultiplyPerVoltageTier_Silksong, GT_Utility.getTier(this.getMaxInputEu()))
+            .pow(SpeedBonus_MultiplyPerVoltageTier_Silksong, GTUtility.getTier(this.getMaxInputEu()))
             / (getCoilTier() * SpeedMultiplier_CoilTier_Silksong));
 
         return true;
@@ -231,38 +231,38 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
                                                       .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
                                                       .addShape(STRUCTURE_PIECE_MIDDLE, shapeMiddle)
                                                       .addShape(STRUCTURE_PIECE_END, shapeEnd)
-                                                      .addElement('A', ofBlock(GregTech_API.sBlockCasings1, 11))
-                                                      .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 15))
+                                                      .addElement('A', ofBlock(GregTechAPI.sBlockCasings1, 11))
+                                                      .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 15))
                                                       .addElement(
                                                           'C',
                                                           withChannel("coil", ofCoil(GT_TileEntity_Silksong::setCoilLevel, GT_TileEntity_Silksong::getCoilLevel)))
                                                       .addElement(
                                                           'D',
-                                                          GT_HatchElementBuilder.<GT_TileEntity_Silksong>builder()
+                                                          HatchElementBuilder.<GT_TileEntity_Silksong>builder()
                                                                                 .atLeast(Energy.or(ExoticEnergy))
                                                                                 .adder(GT_TileEntity_Silksong::addToMachineList)
                                                                                 .dot(1)
-                                                                                .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(2))
-                                                                                .buildAndChain(GregTech_API.sBlockCasings8, 2))
-                                                      .addElement('E', ofBlock(GregTech_API.sBlockCasings8, 7))
+                                                                                .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
+                                                                                .buildAndChain(GregTechAPI.sBlockCasings8, 2))
+                                                      .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
                                                       .addElement('F', ofBlock(pressureResistantWalls, 0))
                                                       .addElement(
                                                           'G',
-                                                          GT_HatchElementBuilder.<GT_TileEntity_Silksong>builder()
+                                                          HatchElementBuilder.<GT_TileEntity_Silksong>builder()
                                                                                 .atLeast(OutputBus, OutputHatch)
                                                                                 .adder(GT_TileEntity_Silksong::addToMachineList)
                                                                                 .dot(2)
-                                                                                .casingIndex(((GT_Block_Casings8) GregTech_API.sBlockCasings8).getTextureIndex(7))
-                                                                                .buildAndChain(GregTech_API.sBlockCasings8, 7))
+                                                                                .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
+                                                                                .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                                                       .addElement('H', ofFrame(Materials.Neutronium))
                                                       .addElement(
                                                           'I',
-                                                          GT_HatchElementBuilder.<GT_TileEntity_Silksong>builder()
+                                                          HatchElementBuilder.<GT_TileEntity_Silksong>builder()
                                                                                 .atLeast(InputBus, InputHatch)
                                                                                 .adder(GT_TileEntity_Silksong::addToMachineList)
                                                                                 .dot(3)
-                                                                                .casingIndex(((GT_Block_Casings1) GregTech_API.sBlockCasings1).getTextureIndex(11))
-                                                                                .buildAndChain(GregTech_API.sBlockCasings1, 11))
+                                                                                .casingIndex(((BlockCasings1) GregTechAPI.sBlockCasings1).getTextureIndex(11))
+                                                                                .buildAndChain(GregTechAPI.sBlockCasings1, 11))
                                                       .build();
         }
         return STRUCTURE_DEFINITION;
@@ -307,8 +307,8 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
     // region Overrides
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_Silksong_MachineType)
             .addInfo(TextLocalization.Tooltip_Silksong_00)
             .addInfo(TextLocalization.Tooltip_Silksong_01)
@@ -370,7 +370,7 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
         if (sideDirection == facingDirection) {
             if (active) return new ITexture[] {
                 Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 2)),
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
                     .extFacing()
@@ -382,7 +382,7 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
                     .build() };
             return new ITexture[] {
                 Textures.BlockIcons
-                    .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 2)),
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
                     .extFacing()
@@ -393,8 +393,8 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
                     .glow()
                     .build() };
         }
-        return new ITexture[] { Textures.BlockIcons
-            .getCasingTextureForId(GT_Utility.getCasingTextureIndex(GregTech_API.sBlockCasings8, 2)) };
+        return new ITexture[] {
+            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)) };
     }
 
     // endregion

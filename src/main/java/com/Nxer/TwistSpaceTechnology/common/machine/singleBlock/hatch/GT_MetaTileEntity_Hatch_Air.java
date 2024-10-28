@@ -12,13 +12,13 @@ import net.minecraftforge.fluids.Fluid;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.objects.GTRenderedTexture;
+import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
-import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_FluidGenerator;
+import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
-public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGenerator {
+public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
 
     public GT_MetaTileEntity_Hatch_Air(final int aID, final String aName, final String aNameRegional, final int aTier) {
         super(aID, aName, aNameRegional, aTier);
@@ -36,8 +36,8 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
 
     @Override
     public synchronized String[] getDescription() {
-        mDescriptionArray[1] = FluidCapacity + GT_Utility.formatNumbers(getCapacity()) + "L";
-        final String[] hatchTierString = new String[] { HatchTier + GT_Utility.getColoredTierNameFromTier(mTier) };
+        mDescriptionArray[1] = FluidCapacity + GTUtility.formatNumbers(getCapacity()) + "L";
+        final String[] hatchTierString = new String[] { HatchTier + GTUtility.getColoredTierNameFromTier(mTier) };
 
         String[] aCustomTips = getCustomTooltip();
         final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 2];
@@ -87,11 +87,11 @@ public class GT_MetaTileEntity_Hatch_Air extends GT_MetaTileEntity_Hatch_FluidGe
 
     @Override
     public ITexture[] getTexturesActive(final ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, new GT_RenderedTexture(TexturesGtBlock.Overlay_Hatch_Muffler_Adv) };
+        return new ITexture[] { aBaseTexture, new GTRenderedTexture(TexturesGtBlock.Overlay_Hatch_Muffler_Adv) };
     }
 
     @Override
     public ITexture[] getTexturesInactive(final ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, new GT_RenderedTexture(TexturesGtBlock.Overlay_Hatch_Muffler_Adv) };
+        return new ITexture[] { aBaseTexture, new GTRenderedTexture(TexturesGtBlock.Overlay_Hatch_Muffler_Adv) };
     }
 }

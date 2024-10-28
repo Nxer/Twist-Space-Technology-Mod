@@ -20,7 +20,7 @@ import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GTLanguageManager;
 
 public class ItemBlockBase01 extends ItemBlock {
 
@@ -60,9 +60,9 @@ public class ItemBlockBase01 extends ItemBlock {
     // -----------------------
     // region Member Variables
 
-    public final String mNoMobsToolTip = GT_LanguageManager
+    public final String mNoMobsToolTip = GTLanguageManager
         .addStringLocalization("gt.nomobspawnsonthisblock", "Mobs cannot Spawn on this Block");
-    public final String mNoTileEntityToolTip = GT_LanguageManager
+    public final String mNoTileEntityToolTip = GTLanguageManager
         .addStringLocalization("gt.notileentityinthisblock", "This is NOT a TileEntity!");
 
     // endregion

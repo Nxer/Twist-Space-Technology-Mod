@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.github.bartimaeusnek.bartworks.system.material.Werkstoff;
 
-import gregtech.api.enums.GT_Values;
+import bartworks.system.material.Werkstoff;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 
 public class OP_Bartworks_OreHandler {
@@ -53,7 +53,7 @@ public class OP_Bartworks_OreHandler {
             }
 
             // generate recipes
-            GT_Values.RA.stdBuilder()
+            GTValues.RA.stdBuilder()
                 .itemInputs(werkstoff.get(ore, 1))
                 .itemOutputs(outputs.toArray(new ItemStack[] {}))
                 .fluidInputs(Materials.Lubricant.getFluid(1))

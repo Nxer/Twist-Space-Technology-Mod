@@ -1,20 +1,20 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
-import static gregtech.api.enums.GT_HatchElement.Energy;
-import static gregtech.api.enums.GT_HatchElement.InputBus;
-import static gregtech.api.enums.GT_HatchElement.InputHatch;
-import static gregtech.api.enums.GT_HatchElement.Maintenance;
-import static gregtech.api.enums.GT_HatchElement.Muffler;
-import static gregtech.api.enums.GT_HatchElement.OutputBus;
-import static gregtech.api.enums.GT_HatchElement.OutputHatch;
-import static gregtech.api.enums.GT_Values.W;
+import static gregtech.api.enums.GTValues.W;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.Maintenance;
+import static gregtech.api.enums.HatchElement.Muffler;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.getCasingTextureForId;
 import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
-import static gregtech.api.util.GT_Utility.filterValidMTEs;
+import static gregtech.api.util.GTUtility.filterValidMTEs;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,35 +52,35 @@ import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
-import gregtech.api.GregTech_API;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.gui.modularui.GT_UITextures;
-import gregtech.api.gui.widgets.GT_LockedWhileActiveButton;
+import gregtech.api.gui.modularui.GTUITextures;
+import gregtech.api.gui.widgets.LockedWhileActiveButton;
 import gregtech.api.interfaces.IChunkLoader;
 import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_DataAccess;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
-import gregtech.api.objects.GT_ChunkManager;
+import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.metatileentity.implementations.MTEHatchDataAccess;
+import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
+import gregtech.api.objects.GTChunkManager;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Utility;
-import gregtech.api.util.IGT_HatchAdder;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.IGTHatchAdder;
 
 public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> extends GTCM_MultiMachineBase<T>
     implements IChunkLoader, ISurvivalConstructable {
 
-    private static final ItemStack miningPipe = GT_ModHandler.getIC2Item("miningPipe", 0);
-    private static final ItemStack miningPipeTip = GT_ModHandler.getIC2Item("miningPipeTip", 0);
-    private static final Block miningPipeBlock = GT_Utility.getBlockFromStack(miningPipe);
-    private static final Block miningPipeTipBlock = GT_Utility.getBlockFromStack(miningPipeTip);
+    private static final ItemStack miningPipe = GTModHandler.getIC2Item("miningPipe", 0);
+    private static final ItemStack miningPipeTip = GTModHandler.getIC2Item("miningPipeTip", 0);
+    private static final Block miningPipeBlock = GTUtility.getBlockFromStack(miningPipe);
+    private static final Block miningPipeTipBlock = GTUtility.getBlockFromStack(miningPipeTip);
     protected static final String STRUCTURE_PIECE_MAIN = "main";
 
     private Block casingBlock;
@@ -140,8 +140,8 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
         casingMeta = getCasingBlockItem().get(0)
             .getItemDamage();
         int frameId = 4096 + getFrameMaterial().mMetaItemSubID;
-        frameMeta = GregTech_API.METATILEENTITIES[frameId] != null
-            ? GregTech_API.METATILEENTITIES[frameId].getTileEntityBaseType()
+        frameMeta = GregTechAPI.METATILEENTITIES[frameId] != null
+            ? GregTechAPI.METATILEENTITIES[frameId].getTileEntityBaseType()
             : W;
         casingTextureIndex = getCasingTextureIndex();
         workState = STATE_DOWNWARD;
@@ -214,10 +214,10 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
         EntityPlayer entityPlayer, float aX, float aY, float aZ) {
         if (side == getBaseMetaTileEntity().getFrontFacing()) {
             mChunkLoadingEnabled = !mChunkLoadingEnabled;
-            GT_Utility.sendChatToPlayer(
+            GTUtility.sendChatToPlayer(
                 entityPlayer,
-                mChunkLoadingEnabled ? GT_Utility.trans("502", "Mining chunk loading enabled")
-                    : GT_Utility.trans("503", "Mining chunk loading disabled"));
+                mChunkLoadingEnabled ? GTUtility.trans("502", "Mining chunk loading enabled")
+                    : GTUtility.trans("503", "Mining chunk loading disabled"));
             return true;
         }
         return super.onSolderingToolRightClick(side, wrenchingSide, entityPlayer, aX, aY, aZ);
@@ -225,7 +225,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
 
     @Override
     public void onRemoval() {
-        if (mChunkLoadingEnabled) GT_ChunkManager.releaseTicket((TileEntity) getBaseMetaTileEntity());
+        if (mChunkLoadingEnabled) GTChunkManager.releaseTicket((TileEntity) getBaseMetaTileEntity());
         super.onRemoval();
     }
 
@@ -236,7 +236,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
             && !mWorkChunkNeedsReload
             && !aBaseMetaTileEntity.isAllowedToWork()) {
             // if machine has stopped, stop chunkloading
-            GT_ChunkManager.releaseTicket((TileEntity) aBaseMetaTileEntity);
+            GTChunkManager.releaseTicket((TileEntity) aBaseMetaTileEntity);
             mWorkChunkNeedsReload = true;
         }
     }
@@ -286,7 +286,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
         }
 
         Block b = getBaseMetaTileEntity().getBlock(xPipe, yHead - 1, zPipe);
-        if (b != miningPipeTipBlock && !GT_Utility.setBlockByFakePlayer(
+        if (b != miningPipeTipBlock && !GTUtility.setBlockByFakePlayer(
             getFakePlayer(getBaseMetaTileEntity()),
             xPipe,
             yHead - 1,
@@ -313,7 +313,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
             if (!storedItem.isItemEqual(miningPipe)) continue;
 
             if (pipes == null) {
-                setInventorySlotContents(1, GT_Utility.copyOrNull(miningPipe));
+                setInventorySlotContents(1, GTUtility.copyOrNull(miningPipe));
                 pipes = getStackInSlot(1);
             }
 
@@ -329,8 +329,8 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
     }
 
     private boolean tryOutputPipe() {
-        if (!getBaseMetaTileEntity().addStackToSlot(1, GT_Utility.copyAmount(1, miningPipe)))
-            mOutputItems = new ItemStack[] { GT_Utility.copyAmount(1, miningPipe) };
+        if (!getBaseMetaTileEntity().addStackToSlot(1, GTUtility.copyAmount(1, miningPipe)))
+            mOutputItems = new ItemStack[] { GTUtility.copyAmount(1, miningPipe) };
         return true;
     }
 
@@ -339,8 +339,8 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
      */
     protected int canLowerPipe() {
         IGregTechTileEntity aBaseTile = getBaseMetaTileEntity();
-        if (yHead > 0 && GT_Utility.getBlockHardnessAt(aBaseTile.getWorld(), xPipe, yHead - 1, zPipe) >= 0) {
-            return GT_Utility.eraseBlockByFakePlayer(getFakePlayer(aBaseTile), xPipe, yHead - 1, zPipe, true) ? 0 : 2;
+        if (yHead > 0 && GTUtility.getBlockHardnessAt(aBaseTile.getWorld(), xPipe, yHead - 1, zPipe) >= 0) {
+            return GTUtility.eraseBlockByFakePlayer(getFakePlayer(aBaseTile), xPipe, yHead - 1, zPipe, true) ? 0 : 2;
         }
         return 1;
     }
@@ -369,7 +369,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
 
     private boolean isEnergyEnough() {
         long requiredEnergy = 512 + getMaxInputVoltage() * 4;
-        for (GT_MetaTileEntity_Hatch_Energy energyHatch : mEnergyHatches) {
+        for (MTEHatchEnergy energyHatch : mEnergyHatches) {
             requiredEnergy -= energyHatch.getEUVar();
             if (requiredEnergy <= 0) return true;
         }
@@ -589,7 +589,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         updateCoordinates();
         return checkPiece(STRUCTURE_PIECE_MAIN, 1, 6, 0) && checkHatches()
-            && GT_Utility.getTier(getMaxInputVoltage()) >= getMinTier()
+            && GTUtility.getTier(getMaxInputVoltage()) >= getMinTier()
             && mMaintenanceHatches.size() == 1;
     }
 
@@ -622,7 +622,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
     // operation)
     @Deprecated
     protected boolean checkFrameBlock(int xOff, int yOff, int zOff) {
-        return checkBlockAndMetaOffset(xOff, yOff, zOff, GregTech_API.sBlockMachines, frameMeta);
+        return checkBlockAndMetaOffset(xOff, yOff, zOff, GregTechAPI.sBlockMachines, frameMeta);
     }
 
     @Deprecated
@@ -638,7 +638,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
     private FakePlayer mFakePlayer = null;
 
     protected FakePlayer getFakePlayer(IGregTechTileEntity aBaseTile) {
-        if (mFakePlayer == null) mFakePlayer = GT_Utility.getFakePlayer(aBaseTile);
+        if (mFakePlayer == null) mFakePlayer = GTUtility.getFakePlayer(aBaseTile);
         mFakePlayer.setWorld(aBaseTile.getWorld());
         mFakePlayer.setPosition(aBaseTile.getXCoord(), aBaseTile.getYCoord(), aBaseTile.getZCoord());
         return mFakePlayer;
@@ -688,7 +688,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
         return config;
     }
 
-    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<>();
+    public ArrayList<MTEHatchDataAccess> mDataAccessHatches = new ArrayList<>();
 
     /**
      * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
@@ -704,10 +704,10 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
      */
     public ArrayList<ItemStack> getDataItems(int state) {
         ArrayList<ItemStack> rList = new ArrayList<>();
-        if (GT_Utility.isStackValid(mInventory[1]) && isCorrectDataItem(mInventory[1], state)) {
+        if (GTUtility.isStackValid(mInventory[1]) && isCorrectDataItem(mInventory[1], state)) {
             rList.add(mInventory[1]);
         }
-        for (GT_MetaTileEntity_Hatch_DataAccess tHatch : filterValidMTEs(mDataAccessHatches)) {
+        for (MTEHatchDataAccess tHatch : filterValidMTEs(mDataAccessHatches)) {
             for (int i = 0; i < tHatch.getBaseMetaTileEntity()
                 .getSizeInventory(); i++) {
                 if (tHatch.getBaseMetaTileEntity()
@@ -733,9 +733,9 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
         if (aTileEntity == null) return false;
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_DataAccess) {
-            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture((byte) aBaseCasingIndex);
-            return mDataAccessHatches.add((GT_MetaTileEntity_Hatch_DataAccess) aMetaTileEntity);
+        if (aMetaTileEntity instanceof MTEHatchDataAccess) {
+            ((MTEHatch) aMetaTileEntity).updateTexture((byte) aBaseCasingIndex);
+            return mDataAccessHatches.add((MTEHatchDataAccess) aMetaTileEntity);
         }
         return false;
     }
@@ -788,16 +788,16 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
         final int BUTTON_Y_LEVEL = 91;
 
         builder.widget(
-            new GT_LockedWhileActiveButton(this.getBaseMetaTileEntity(), builder)
+            new LockedWhileActiveButton(this.getBaseMetaTileEntity(), builder)
                 .setOnClick((clickData, widget) -> mChunkLoadingEnabled = !mChunkLoadingEnabled)
                 .setPlayClickSound(true)
                 .setBackground(() -> {
                     if (mChunkLoadingEnabled) {
-                        return new IDrawable[] { GT_UITextures.BUTTON_STANDARD_PRESSED,
-                            GT_UITextures.OVERLAY_BUTTON_CHUNK_LOADING };
+                        return new IDrawable[] { GTUITextures.BUTTON_STANDARD_PRESSED,
+                            GTUITextures.OVERLAY_BUTTON_CHUNK_LOADING };
                     }
-                    return new IDrawable[] { GT_UITextures.BUTTON_STANDARD,
-                        GT_UITextures.OVERLAY_BUTTON_CHUNK_LOADING_OFF };
+                    return new IDrawable[] { GTUITextures.BUTTON_STANDARD,
+                        GTUITextures.OVERLAY_BUTTON_CHUNK_LOADING_OFF };
                 })
                 .attachSyncer(
                     new FakeSyncWidget.BooleanSyncer(
@@ -818,11 +818,11 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
                     .setPlayClickSound(true)
                     .setBackground(() -> {
                         if (workState == STATE_ABORT) {
-                            return new IDrawable[] { GT_UITextures.BUTTON_STANDARD_PRESSED,
-                                GT_UITextures.OVERLAY_BUTTON_RETRACT_PIPE, GT_UITextures.OVERLAY_BUTTON_LOCKED };
+                            return new IDrawable[] { GTUITextures.BUTTON_STANDARD_PRESSED,
+                                GTUITextures.OVERLAY_BUTTON_RETRACT_PIPE, GTUITextures.OVERLAY_BUTTON_LOCKED };
                         }
-                        return new IDrawable[] { GT_UITextures.BUTTON_STANDARD,
-                            GT_UITextures.OVERLAY_BUTTON_RETRACT_PIPE };
+                        return new IDrawable[] { GTUITextures.BUTTON_STANDARD,
+                            GTUITextures.OVERLAY_BUTTON_RETRACT_PIPE };
                     })
                     .attachSyncer(
                         new FakeSyncWidget.IntegerSyncer(() -> workState, (newInt) -> workState = newInt),
@@ -864,11 +864,11 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
 
         @Override
         public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
-            return Collections.singletonList(GT_MetaTileEntity_Hatch_DataAccess.class);
+            return Collections.singletonList(MTEHatchDataAccess.class);
         }
 
         @Override
-        public IGT_HatchAdder<TST_DrillerBaseRework> adder() {
+        public IGTHatchAdder<TST_DrillerBaseRework> adder() {
             return TST_DrillerBaseRework::addDataAccessToMachineList;
         }
 

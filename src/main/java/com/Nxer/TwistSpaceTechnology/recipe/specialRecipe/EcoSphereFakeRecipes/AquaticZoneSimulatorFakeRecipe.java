@@ -20,10 +20,10 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
-import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
-import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GTModHandler;
 
 public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
 
@@ -63,31 +63,31 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
         }
         Collections.addAll(
             WatersOutputs,
-            GT_ModHandler.getModItem(Mods.Minecraft.ID, "waterlily", 1, 0),
-            GT_ModHandler.getModItem(Mods.Minecraft.ID, "vine", 3, 0),
-            GT_ModHandler.getModItem(Mods.Minecraft.ID, "bone", 3, 0),
-            GT_ModHandler.getModItem(Mods.Minecraft.ID, "dye", 2, 0));
+            GTModHandler.getModItem(Mods.Minecraft.ID, "waterlily", 1, 0),
+            GTModHandler.getModItem(Mods.Minecraft.ID, "vine", 3, 0),
+            GTModHandler.getModItem(Mods.Minecraft.ID, "bone", 3, 0),
+            GTModHandler.getModItem(Mods.Minecraft.ID, "dye", 2, 0));
         if (Mods.BiomesOPlenty.isModLoaded()) {
             Collections.addAll(
                 WatersOutputs,
-                GT_ModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 0),
-                GT_ModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 1),
-                GT_ModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 2),
-                GT_ModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 3),
-                GT_ModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 3),
-                GT_ModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 12),
-                GT_ModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 13),
-                GT_ModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 14),
-                GT_ModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 15));
+                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 0),
+                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 1),
+                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 2),
+                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 3),
+                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 3),
+                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 12),
+                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 13),
+                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 14),
+                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 15));
         }
         if (Mods.PamsHarvestCraft.isModLoaded()) Collections.addAll(
             WatersOutputs,
-            GT_ModHandler.getModItem(Mods.PamsHarvestCraft.ID, "cranberryItem", 1, 0),
-            GT_ModHandler.getModItem(Mods.PamsHarvestCraft.ID, "riceItem", 1, 0),
-            GT_ModHandler.getModItem(Mods.PamsHarvestCraft.ID, "seaweedItem", 5, 0),
-            GT_ModHandler.getModItem(Mods.PamsHarvestCraft.ID, "waterchestnutItem", 2, 0));
+            GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "cranberryItem", 1, 0),
+            GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "riceItem", 1, 0),
+            GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "seaweedItem", 5, 0),
+            GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "waterchestnutItem", 2, 0));
         if (Mods.TwilightForest.isModLoaded()) Collections
-            .addAll(WatersOutputs, GT_ModHandler.getModItem(Mods.TwilightForest.ID, "tile.HugeLilyPad", 1, 0));
+            .addAll(WatersOutputs, GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.HugeLilyPad", 1, 0));
     }
 
     @SuppressWarnings("unchecked")
@@ -128,7 +128,7 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
     }
 
     void addFakeRecipe(ItemStack inputStacks, ItemStack outputStacks, FluidStack inputFluid) {
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)

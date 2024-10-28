@@ -6,13 +6,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_OutputData;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import tectech.thing.metaTileEntity.hatch.MTEHatchDataOutput;
 
-public class GT_Hatch_WirelessData_output extends GT_MetaTileEntity_Hatch_OutputData {
+public class GT_Hatch_WirelessData_output extends MTEHatchDataOutput {
 
     public GT_Hatch_WirelessData_output(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);

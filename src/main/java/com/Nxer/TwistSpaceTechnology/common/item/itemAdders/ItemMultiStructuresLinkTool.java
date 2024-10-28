@@ -16,7 +16,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.MultiS
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GTUtility;
 
 public class ItemMultiStructuresLinkTool extends Item {
 
@@ -55,11 +55,11 @@ public class ItemMultiStructuresLinkTool extends Item {
             var main = MultiStructureManager.getMachine(firstPosition);
             var sub = MultiStructureManager.getMachine(secondPosition);
             if (MultiStructureManager.linkMachine(main, sub)) {
-                GT_Utility.sendChatToPlayer(
+                GTUtility.sendChatToPlayer(
                     aPlayer,
                     "linked main structure:" + main.getLocalName() + " with sub structure:" + sub.getLocalName());
             } else {
-                GT_Utility.sendChatToPlayer(aPlayer, "the structure is incomplete please check your build");
+                GTUtility.sendChatToPlayer(aPlayer, "the structure is incomplete please check your build");
             }
             firstPosition = -1;
             secondPosition = -1;
@@ -71,15 +71,15 @@ public class ItemMultiStructuresLinkTool extends Item {
         if (player.isSneaking()) {
             firstPosition = -1;
             secondPosition = -1;
-            GT_Utility.sendChatToPlayer(player, "cleared the settings");
+            GTUtility.sendChatToPlayer(player, "cleared the settings");
         } else {
             var main = MultiStructureManager.getMachine(firstPosition);
             var sub = MultiStructureManager.getMachine(secondPosition);
             if (main != null) {
-                GT_Utility.sendChatToPlayer(player, "linked structure:" + main.getLocalName());
+                GTUtility.sendChatToPlayer(player, "linked structure:" + main.getLocalName());
             }
             if (sub != null) {
-                GT_Utility.sendChatToPlayer(player, "linked structure:" + sub.getLocalName());
+                GTUtility.sendChatToPlayer(player, "linked structure:" + sub.getLocalName());
             }
         }
         return super.onItemRightClick(itemStackIn, worldIn, player);

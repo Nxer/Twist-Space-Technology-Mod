@@ -5,9 +5,9 @@ import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.Tags;
-import com.github.technus.tectech.util.CommonValues;
 
-import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GTLanguageManager;
+import tectech.util.CommonValues;
 
 // spotless:off
 
@@ -39,9 +39,9 @@ public class TextLocalization {
     public static final String DSPName = texter(EnumChatFormatting.BLUE + "Dyson Sphere Program", "DSPName");
     public static final String Tooltip_Details = texter(EnumChatFormatting.LIGHT_PURPLE + "Details: ", "Tooltip_Details");
     public static final String Tooltips_JoinWirelessNetWithoutEnergyHatch = texter("Joining the wireless EU network when without installing an energy hatch.", "Tooltips_JoinWirelessNetWithoutEnergyHatch");
-    public static final String mNoMobsToolTip = GT_LanguageManager
+    public static final String mNoMobsToolTip = GTLanguageManager
                                              .addStringLocalization("gt.nomobspawnsonthisblock", "Mobs cannot Spawn on this Block");
-    public static final String mNoTileEntityToolTip = GT_LanguageManager
+    public static final String mNoTileEntityToolTip = GTLanguageManager
                                                    .addStringLocalization("gt.notileentityinthisblock", "This is NOT a TileEntity!");
     // endregion
 

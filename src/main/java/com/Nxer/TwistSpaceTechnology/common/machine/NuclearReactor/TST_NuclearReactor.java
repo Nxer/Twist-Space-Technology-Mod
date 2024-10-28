@@ -9,7 +9,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_NuclearReactor extends GTCM_MultiMachineBase<TST_NuclearReactor> {
 
@@ -65,7 +65,7 @@ public class TST_NuclearReactor extends GTCM_MultiMachineBase<TST_NuclearReactor
     }
 
     @Override
-    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         return null;
     }
 
