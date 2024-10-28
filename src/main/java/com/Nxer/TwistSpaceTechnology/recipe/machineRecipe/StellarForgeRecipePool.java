@@ -1,12 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.min;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
+import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
+import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +31,7 @@ import com.google.common.collect.Sets;
 import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -36,6 +39,7 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeBuilder;
 import gregtech.api.util.GTUtility;
+import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class StellarForgeRecipePool implements IRecipePool {
 
@@ -48,7 +52,7 @@ public class StellarForgeRecipePool implements IRecipePool {
     public static final HashSet<TST_ItemID> SpecialRecipeOutputs = new HashSet<>();
 
     public void initData() {
-        //
+
         for (String name : OreDictionary.getOreNames()) {
             if (name.startsWith("ingotHot")) {
                 IngotHotOreDictNames.add(name);
@@ -210,72 +214,68 @@ public class StellarForgeRecipePool implements IRecipePool {
     }
 
     public void prepareABSRecipes() {
-        for (GT_Recipe recipe : GTPPRecipeMaps.alloyBlastSmelterRecipes.getAllRecipes()) {
-            int minOutputFluidAmount=144;
+        for (GTRecipe recipe : GTPPRecipeMaps.alloyBlastSmelterRecipes.getAllRecipes()) {
+
+            int minOutputFluidAmount = 144;
+            // if there is more than one output fluid, find the fewest
             for (FluidStack aOutputFluid : recipe.mFluidOutputs) {
-                int aFluidAmount = aOutputFluid.amount;
-                if (aFluidAmount % 144 == 0) continue;
-                minOutputFluidAmount=Math.min(minOutputFluidAmount, aFluidAmount);
+                // if (aOutputFluid.amount % 144 == 0) continue;
+                minOutputFluidAmount = Math.min(minOutputFluidAmount, aOutputFluid.amount);
             }
-                ArrayList<ItemStack> inputItemList = new ArrayList<>();
-                ArrayList<ItemStack> outputItemList = new ArrayList<>();
-                ArrayList<FluidStack> inputFluidList = new ArrayList<>();
-                ArrayList<FluidStack> outputFluidList = new ArrayList<>();
+            ArrayList<ItemStack> inputItemList = new ArrayList<>();
+            ArrayList<ItemStack> outputItemList = new ArrayList<>();
+            ArrayList<FluidStack> inputFluidList = new ArrayList<>();
+            ArrayList<FluidStack> outputFluidList = new ArrayList<>();
 
-                if(minOutputFluidAmount<144) {
-                    int CorrectFluidAmount = minOutputFluidAmount;
-                    while (CorrectFluidAmount % 144 != 0) {
-                        CorrectFluidAmount++;
-                    }
-                    int multiplier = CorrectFluidAmount / minOutputFluidAmount;
-                    for (ItemStack aItemStack : recipe.mInputs) {
-                        ItemStack aStackCopy = aItemStack.copy();
-                        aStackCopy.stackSize *= multiplier;
-                        inputItemList.add(aStackCopy);
-                    }
-                    for (ItemStack aItemStack : recipe.mOutputs) {
-                        ItemStack aStackCopy = aItemStack.copy();
-                        aStackCopy.stackSize *= multiplier;
-                        outputItemList.add(aStackCopy);
-                    }
-                    for (FluidStack aFluidStack : recipe.mFluidInputs) {
-                        FluidStack aFluidCopy = aFluidStack.copy();
-                        aFluidCopy.amount *= multiplier;
-                        inputFluidList.add(aFluidCopy);
-                    }
-                    for (FluidStack aFluidStack : recipe.mFluidOutputs) {
-                        FluidStack aFluidCopy = aFluidStack.copy();
-                        aFluidCopy.amount *= multiplier;
-                        outputFluidList.add(aFluidCopy);
-                    }
+            int RecipeMultiplier = 1;
+            if (minOutputFluidAmount < 144) {
+                int CorrectFluidAmount = minOutputFluidAmount;
+                while (CorrectFluidAmount % 144 != 0) {
+                    CorrectFluidAmount += minOutputFluidAmount;
                 }
-
-
-
-                ItemStack[] inputItems = inputItemList.toArray(new ItemStack[0]);
-                ItemStack[] outputItems = outputItemList.toArray(new ItemStack[0]);
-                FluidStack[] inputFluids = inputFluidList.toArray(new FluidStack[0]);
-                FluidStack[] outputFluids = outputFluidList.toArray(new FluidStack[0]);
-                addToRecipes(
-                    inputItems,
-                    inputFluids,
-                    outputItems,
-                    outputFluids,
-                    recipe.mEUt,
-                    recipe.mDuration,
-                    GTCMRecipe.MiracleDoorRecipes);
-                break;
-
+                RecipeMultiplier = CorrectFluidAmount / minOutputFluidAmount;
             }
 
+            if (recipe.mInputs != null) for (ItemStack aItemStack : recipe.mInputs) {
+                ItemStack aStackCopy = aItemStack.copy();
+                aStackCopy.stackSize *= RecipeMultiplier;
+                inputItemList.add(aStackCopy);
+            }
+            if (recipe.mOutputs != null) for (ItemStack aItemStack : recipe.mOutputs) {
+                ItemStack aStackCopy = aItemStack.copy();
+                aStackCopy.stackSize *= RecipeMultiplier;
+                outputItemList.add(aStackCopy);
+            }
+            if (recipe.mFluidInputs != null) for (FluidStack aFluidStack : recipe.mFluidInputs) {
+                FluidStack aFluidCopy = aFluidStack.copy();
+                aFluidCopy.amount *= RecipeMultiplier;
+                inputFluidList.add(aFluidCopy);
+            }
+            if (recipe.mOutputs != null) for (FluidStack aFluidStack : recipe.mFluidOutputs) {
+                FluidStack aFluidCopy = aFluidStack.copy();
+                aFluidCopy.amount *= RecipeMultiplier;
+                outputFluidList.add(aFluidCopy);
+            }
+
+            ItemStack[] inputItems = inputItemList.toArray(new ItemStack[0]);
+            ItemStack[] outputItems = outputItemList.toArray(new ItemStack[0]);
+            FluidStack[] inputFluids = inputFluidList.toArray(new FluidStack[0]);
+            FluidStack[] outputFluids = outputFluidList.toArray(new FluidStack[0]);
+            addToRecipes(
+                inputItems,
+                inputFluids,
+                outputItems,
+                outputFluids,
+                recipe.mEUt,
+                recipe.mDuration,
+                GTCMRecipe.MiracleDoorRecipes);
+        }
 
     }
 
     public void addToRecipes(ItemStack[] inputItems, FluidStack[] inputFluids, ItemStack[] outputItems,
-        FluidStack[] outputFluids, int eut, int duration) {
-        GTRecipeBuilder ra = GTValues.RA.stdBuilder();
         FluidStack[] outputFluids, int eut, int duration, IRecipeMap aRecipeMap) {
-        GT_RecipeBuilder ra = GT_Values.RA.stdBuilder();
+        GTRecipeBuilder ra = GTValues.RA.stdBuilder();
 
         if (inputItems != null && inputItems.length > 0) {
             ra.itemInputs(inputItems);
@@ -300,7 +300,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
     public FluidStack getMoltenFluids(ItemStack ingot, int ingotAmount) {
         FluidStack out = null;
-        for (GTRecipe recipeMolten : RecipeMaps.fluidExtractionRecipes.getAllRecipes()) {
+        for (GTRecipe recipeMolten : fluidExtractionRecipes.getAllRecipes()) {
             if (metaItemEqual(ingot, recipeMolten.mInputs[0])) {
                 if (recipeMolten.mFluidOutputs[0] != null) {
                     out = recipeMolten.mFluidOutputs[0].copy();
@@ -312,9 +312,24 @@ public class StellarForgeRecipePool implements IRecipePool {
         return out;
     }
 
+    public ItemStack getIngotItems(FluidStack molten, int moltenAmount) {
+        ItemStack out = null;
+        for (GTRecipe recipeSolidifier : fluidSolidifierRecipes.getAllRecipes()) {
+            if (metaItemEqual(
+                GTModHandler.getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32306),
+                recipeSolidifier.mInputs[0]) && fluidEqual(molten, recipeSolidifier.mFluidOutputs[0])) {
+                if (recipeSolidifier.mOutputs[0] != null) {
+                    out = recipeSolidifier.mOutputs[0].copy();
+                    out.stackSize = moltenAmount / 144;
+                }
+                break;
+            }
+        }
+        return out;
+    }
+
     public void loadManualRecipes() {
 
-        // Meteoric Iron and Meteoric Steel
         // Meteoric Iron
         TST_RecipeBuilder bd = TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.MeteoricIron.getDust(1));
@@ -353,29 +368,6 @@ public class StellarForgeRecipePool implements IRecipePool {
             .duration(20 * 112)
             .addTo(GTCMRecipe.StellarForgeRecipes);
 
-        bd = TST_RecipeBuilder.builder()
-            .itemInputs(Materials.Neutronium.getDust(1));
-
-        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-            bd.fluidOutputs(Materials.Neutronium.getMolten(144));
-        } else {
-            bd.itemOutputs(Materials.Neutronium.getIngots(1));
-        }
-        bd.eut(RECIPE_UV)
-            .duration(20 * 112)
-            .addTo(GTCMRecipe.StellarForgeRecipes);
-
-        bd = TST_RecipeBuilder.builder()
-            .itemInputs(Materials.Neutronium.getDust(1));
-
-        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-            bd.fluidOutputs(Materials.Neutronium.getMolten(144));
-        } else {
-            bd.itemOutputs(Materials.Neutronium.getIngots(1));
-        }
-        bd.eut(RECIPE_UV)
-            .duration(20 * 112)
-            .addTo(GTCMRecipe.StellarForgeRecipes);
     }
 
     public static Collection<GTRecipe> stellarForgeRecipeListCache;
@@ -394,7 +386,7 @@ public class StellarForgeRecipePool implements IRecipePool {
     public void loadRecipes() {
         initData();
         prepareEBFRecipes();
-        prepareABSRecipes();
+        // prepareABSRecipes();
         loadManualRecipes();
         cacheRecipeList();
     }
