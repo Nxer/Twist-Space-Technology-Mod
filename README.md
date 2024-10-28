@@ -1,5 +1,5 @@
 ## GTNH Community Mod :  Twist Space Technology
-Custom GTNH Expansion Mod from a Normal GTNH Player.
+Custom GTNH Expansion Mod from normal GTNH players.
 
 Everyone can bring their ideas to life here.
 
@@ -13,9 +13,10 @@ https://discord.gg/aJS5q2Yspt
 
 ## Version Requirements
 * GTNH-nightly version:
-  * Directly add this mod 0.5.0+ version.
+  * Do not support GTNH-2.7.0-nightly yet.
+  * Waiting for GTNH-2.7.0 stable.
 * GTNH-2.6.1 version:
-  * Directly add this mod 0.5.0+ version.
+  * Directly add this mod 0.5.11 version.
 * GTNH-2.6.0 version:
   * Maintenance of this version has stopped
   * 0.4.30 is the last version to support GTNH-2.6.0
@@ -48,9 +49,10 @@ https://discord.gg/yR35zmdY4c
 
 ## 版本需求
 * GTNH-nightly 版本：
-  * 此mod 0.5.0 版本以上版本直接添加即可
+  * 暂时不支持 GTNH-2.7.0-nightly
+  * 等待 GTNH-2.7.0 稳定版发布
 * GTNH-2.6.1 版本：
-  * 此mod 0.5.0 版本以上版本直接添加即可
+  * 此mod 0.5.11 版本
 * GTNH-2.6.0 版本：
   * 已停止维护
   * 0.4.30是最后一个支持GTNH-2.6.0的版本
