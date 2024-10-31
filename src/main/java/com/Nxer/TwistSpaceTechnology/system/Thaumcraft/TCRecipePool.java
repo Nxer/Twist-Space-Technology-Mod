@@ -166,8 +166,7 @@ public class TCRecipePool implements IRecipePool {
                         .merge(Aspect.MECHANISM, 16),
                     new ItemStack(WayofTime.alchemicalWizardry.ModItems.activationCrystal),
                     new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockMasterStone),
-                        AmorphicCatalyst.getLeft(),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
+                        AmorphicCatalyst.getLeft(), new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
                         AmorphicCatalyst.getLeft(),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockWritingTable),
                         AmorphicCatalyst.getLeft() });

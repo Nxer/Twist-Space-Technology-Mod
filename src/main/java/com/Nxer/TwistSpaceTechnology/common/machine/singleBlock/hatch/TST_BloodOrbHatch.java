@@ -22,8 +22,8 @@ import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluid
 
 public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
 
-    private static final String TEXTURE_NAME_OVERLAY_ACTIVE = "gtnhcommunitymod:overlay_blood_hatch";
-    private static final String TEXTURE_NAME_OVERLAY_INACTIVE = "gtnhcommunitymod:overlay_blood_hatch_inactive";
+    private static final String TEXTURE_NAME_OVERLAY_ACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch";
+    private static final String TEXTURE_NAME_OVERLAY_INACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch_inactive";
 
     public static Textures.BlockIcons.CustomIcon OVERLAY_ACTIVE = new Textures.BlockIcons.CustomIcon(
         TEXTURE_NAME_OVERLAY_ACTIVE);

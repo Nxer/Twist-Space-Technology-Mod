@@ -1,4 +1,4 @@
-General.getInfoData.Wireless_mode_enabled=已启用 无线模式
+FGeneral.getInfoData.Wireless_mode_enabled=已启用 无线模式
 textFrontBottom=正面底中
 Tooltip_ICD_MachineType=深度化学扭曲仪/化学反应釜
 textAnyCasing=任意机械方块
@@ -1044,7 +1044,7 @@ Tooltip_SpaceApiary_t4_desc5=人无一物以报Bee.
 Mark_TwistSpaceTechnology_TecTech=§b§lTwist Space Technology : §r§9Tec§1Tech
 WirelessDataInput.tooltips.01=多方块机器无线数据输入
 WirelessDataOutput.tooltips.01=多方块机器无线数据输出
-Author_Goderium=作者 : §f§lGoderium
+Author_Goderium=作者:§f§lGoderium_
 MachineInfoData.CoilTier=线圈等级
 MachineInfoData.MachineMode=机器模式
 MachineInfoData.MachineTier=机器等级
