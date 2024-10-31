@@ -964,7 +964,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         final ExtendedFacing tExtendedFacing = getExtendedFacing();
         final ForgeDirection tDirection = tExtendedFacing.getDirection();
         final LightingHelper tLighting = new LightingHelper(aRenderer);
-        
+
         if (tFacing == ForgeDirection.NORTH || tFacing == ForgeDirection.EAST) aRenderer.field_152631_f = true;
         final Block tBlock = MetaBlockCasing02;
 
