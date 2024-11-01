@@ -622,19 +622,21 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 for (int y = 0; y < LengthY; y++) {
                     String ListStr = String.valueOf(StructureString[y][x].charAt(z));
                     if (!Objects.equals(ListStr, TargetString)) continue;
-                    if (mDirectionX == 1 || mDirectionX == -1) aBaseMetaTileEntity.getWorld()
+
+                    int aX = (OffSetX - x) * xDir;
+                    int aY = OffSetY - y;
+                    int aZ = (OffSetZ - z) * zDir;
+                    if (mDirectionX == 1 || mDirectionX == -1) {
+                        int temp = aX;
+                        aX = aZ;
+                        aZ = temp;
+                    }
+
+                    aBaseMetaTileEntity.getWorld()
                         .setBlock(
-                            aBaseMetaTileEntity.getXCoord() + (OffSetZ - z) * zDir,
-                            aBaseMetaTileEntity.getYCoord() + OffSetY - y,
-                            aBaseMetaTileEntity.getZCoord() + (OffSetX - x) * xDir,
-                            TargetBlock,
-                            TargetMeta,
-                            3);
-                    else aBaseMetaTileEntity.getWorld()
-                        .setBlock(
-                            aBaseMetaTileEntity.getXCoord() + (OffSetX - x) * xDir,
-                            aBaseMetaTileEntity.getYCoord() + OffSetY - y,
-                            aBaseMetaTileEntity.getZCoord() + (OffSetZ - z) * zDir,
+                            aBaseMetaTileEntity.getXCoord() + aX,
+                            aBaseMetaTileEntity.getYCoord() + aY,
+                            aBaseMetaTileEntity.getZCoord() + aZ,
                             TargetBlock,
                             TargetMeta,
                             3);
@@ -691,7 +693,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     private static int getTierMultiplier(int tier) {
         return (int) Math
-            .floor(2 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
+            .floor(3 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
     }
 
     /**
@@ -1010,9 +1012,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     long outputStackSize;
                     double aNum = Math.log(tier_temp + 2) / Math.log(2);
                     if (aRandom > aChance * aNum) continue;
-                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier * aChance * aRandom / 1500000);
+                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier * aChance * aRandom / 1000000);
                     if (aStack.isItemEqual(Offspring)) {
-                        if (outputStackSize > 2)
+                        if (outputStackSize > 3)
                             // when voltage > uxv can output offspring
                             outputStackSize = 1;
                         else continue;

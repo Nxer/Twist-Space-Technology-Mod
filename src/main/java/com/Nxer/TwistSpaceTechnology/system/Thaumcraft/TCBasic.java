@@ -15,6 +15,7 @@ import thaumcraft.api.aspects.AspectList;
 public class TCBasic {
 
     public static Aspect EVOLUTION;
+    public static String TST_ID = "gtnhcommunitymod";
 
     public static void registerAspect() {
         EVOLUTION = new Aspect(
@@ -24,7 +25,7 @@ public class TCBasic {
             // #zh_CN 进化
             0x6699FF,
             new Aspect[] { Aspect.LIFE, Aspect.EXCHANGE },
-            new ResourceLocation("gtnhcommunitymod", "textures/icons/TCAspects/evolutio.png"),
+            new ResourceLocation(TST_ID, "textures/icons/TCAspects/evolutio.png"),
             771);
 
         ThaumcraftApi.registerObjectTag(
