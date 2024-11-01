@@ -16,7 +16,7 @@ public class BlockTimeBendingSpeedRune extends SpeedRune {
 
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
-        this.blockIcon = iconRegister.registerIcon("gtnhcommunitymod:TimeBendingSpeedRune");
+        this.blockIcon = iconRegister.registerIcon("gtnhcommunitymod:iconSets/TimeBendingSpeedRune");
     }
 
     @Override

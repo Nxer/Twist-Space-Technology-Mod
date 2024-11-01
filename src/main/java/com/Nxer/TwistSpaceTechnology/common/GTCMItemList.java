@@ -209,6 +209,7 @@ public enum GTCMItemList {
     DenseCyclotronOuterCasing,
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
+    ReinforcedBedrockCasing,
     BloodyCasing1,
     BloodyCasing2,
     // endregion
