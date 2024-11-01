@@ -969,7 +969,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         final Block tBlock = MetaBlockCasing02;
 
         IIconContainer[] tTextures;
-        if (mActive) tTextures =  BloodyHellIconsActive;
+        if (mActive) tTextures = BloodyHellIconsActive;
         else tTextures = BloodyHellIcons;
         assert tTextures != null && tTextures.length == tABCCoord.length;
 
