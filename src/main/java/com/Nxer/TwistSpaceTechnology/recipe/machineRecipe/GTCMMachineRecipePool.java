@@ -1148,7 +1148,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(AssemblyLine);
 
         // White Dwarf Mold(Ingot)
-        GT_Values.RA.stdBuilder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 Materials.Neutronium.getIngots(1)
             )
