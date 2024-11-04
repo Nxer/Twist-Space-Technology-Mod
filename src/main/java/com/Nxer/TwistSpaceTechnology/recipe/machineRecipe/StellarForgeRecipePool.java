@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
+import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
@@ -45,7 +47,7 @@ public class StellarForgeRecipePool implements IRecipePool {
     public static final HashSet<TST_ItemID> SpecialRecipeOutputs = new HashSet<>();
 
     public void initData() {
-        //
+
         for (String name : OreDictionary.getOreNames()) {
             if (name.startsWith("ingotHot")) {
                 IngotHotOreDictNames.add(name);
@@ -58,7 +60,6 @@ public class StellarForgeRecipePool implements IRecipePool {
                     Ingots.add(TST_ItemID.createNoNBT(items));
                 }
             }
-
         }
 
         // iterate Vacuum Freezer recipes
@@ -199,14 +200,15 @@ public class StellarForgeRecipePool implements IRecipePool {
                     outputItemsBase.toArray(new ItemStack[0]),
                     outputFluidsArray,
                     recipe.mEUt,
-                    Math.max(1, recipe.mDuration / 3));
+                    Math.max(1, recipe.mDuration / 3),
+                    GTCMRecipe.StellarForgeRecipes);
             }
 
         }
     }
 
-    public void addToRecipes(ItemStack[] inputItems, FluidStack[] inputFluids, ItemStack[] outputItems,
-        FluidStack[] outputFluids, int eut, int duration) {
+    public static void addToRecipes(ItemStack[] inputItems, FluidStack[] inputFluids, ItemStack[] outputItems,
+        FluidStack[] outputFluids, int eut, int duration, IRecipeMap aRecipeMap) {
         GTRecipeBuilder ra = GTValues.RA.stdBuilder();
 
         if (inputItems != null && inputItems.length > 0) {
@@ -227,12 +229,12 @@ public class StellarForgeRecipePool implements IRecipePool {
 
         ra.eut(eut)
             .duration(duration)
-            .addTo(GTCMRecipe.StellarForgeRecipes);
+            .addTo(aRecipeMap);
     }
 
-    public FluidStack getMoltenFluids(ItemStack ingot, int ingotAmount) {
+    public static FluidStack getMoltenFluids(ItemStack ingot, int ingotAmount) {
         FluidStack out = null;
-        for (GTRecipe recipeMolten : RecipeMaps.fluidExtractionRecipes.getAllRecipes()) {
+        for (GTRecipe recipeMolten : fluidExtractionRecipes.getAllRecipes()) {
             if (metaItemEqual(ingot, recipeMolten.mInputs[0])) {
                 if (recipeMolten.mFluidOutputs[0] != null) {
                     out = recipeMolten.mFluidOutputs[0].copy();
@@ -241,12 +243,20 @@ public class StellarForgeRecipePool implements IRecipePool {
                 break;
             }
         }
+        // ItemData data = getAssociation(ingot);
+        // Materials ingotMaterial = data != null ? data.mMaterial.mMaterial : null;
+        // if (ingotMaterial != null) {
+        // if (ingotMaterial.mStandardMoltenFluid != null) {
+        // out = ingotMaterial.getMolten(INGOTS);
+        // } else if (ingotMaterial.mFluid != null) {
+        // out = ingotMaterial.getFluid(BUCKETS);
+        // }
+        // }
         return out;
     }
 
     public void loadManualRecipes() {
 
-        // Meteoric Iron and Meteoric Steel
         // Meteoric Iron
         TST_RecipeBuilder bd = TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.MeteoricIron.getDust(1));
@@ -285,29 +295,6 @@ public class StellarForgeRecipePool implements IRecipePool {
             .duration(20 * 112)
             .addTo(GTCMRecipe.StellarForgeRecipes);
 
-        bd = TST_RecipeBuilder.builder()
-            .itemInputs(Materials.Neutronium.getDust(1));
-
-        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-            bd.fluidOutputs(Materials.Neutronium.getMolten(144));
-        } else {
-            bd.itemOutputs(Materials.Neutronium.getIngots(1));
-        }
-        bd.eut(RECIPE_UV)
-            .duration(20 * 112)
-            .addTo(GTCMRecipe.StellarForgeWithIngotRecipes);
-
-        bd = TST_RecipeBuilder.builder()
-            .itemInputs(Materials.Neutronium.getDust(1));
-
-        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-            bd.fluidOutputs(Materials.Neutronium.getMolten(144));
-        } else {
-            bd.itemOutputs(Materials.Neutronium.getIngots(1));
-        }
-        bd.eut(RECIPE_UV)
-            .duration(20 * 112)
-            .addTo(GTCMRecipe.AlloyBlastSmelterWithIngotRecipes);
     }
 
     public static Collection<GTRecipe> stellarForgeRecipeListCache;
@@ -326,6 +313,7 @@ public class StellarForgeRecipePool implements IRecipePool {
     public void loadRecipes() {
         initData();
         prepareEBFRecipes();
+        // prepareABSRecipes();
         loadManualRecipes();
         cacheRecipeList();
     }
