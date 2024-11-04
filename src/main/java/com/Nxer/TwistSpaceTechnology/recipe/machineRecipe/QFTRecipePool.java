@@ -22,79 +22,79 @@ public class QFTRecipePool implements IRecipePool {
         final IRecipeMap QFT = GTPPRecipeMaps.quantumForceTransformerRecipes;
 
         // Palladium
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 64),
-                WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 64),
-                ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
-            .itemOutputs(
-                Materials.Palladium.getDust(64),
-                Materials.Palladium.getDust(64),
-                Materials.Palladium.getDust(64),
-                Materials.Palladium.getDust(64),
-                Materials.Palladium.getDust(64),
-                Materials.Palladium.getDust(64))
-            .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
-            .noOptimize()
-            .specialValue(1)
-            .eut(RECIPE_UV)
-            .duration(400)
-            .addTo(QFT);
+        // GTValues.RA.stdBuilder()
+        // .itemInputs(
+        // WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 64),
+        // WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 64),
+        // ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
+        // .itemOutputs(
+        // Materials.Palladium.getDust(64),
+        // Materials.Palladium.getDust(64),
+        // Materials.Palladium.getDust(64),
+        // Materials.Palladium.getDust(64),
+        // Materials.Palladium.getDust(64),
+        // Materials.Palladium.getDust(64))
+        // .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
+        // .noOptimize()
+        // .specialValue(1)
+        // .eut(RECIPE_UV)
+        // .duration(400)
+        // .addTo(QFT);
 
         // Osmium
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 32),
-                ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
-            .itemOutputs(
-                Materials.Osmium.getDust(64),
-                Materials.Iridium.getDust(64),
-                Materials.Nickel.getDust(64),
-                Materials.Copper.getDust(64),
-                Materials.Gold.getDust(64),
-                Materials.Silicon.getDust(64))
-            .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
-            .noOptimize()
-            .specialValue(1)
-            .eut(RECIPE_UV)
-            .duration(400)
-            .addTo(QFT);
+        // GTValues.RA.stdBuilder()
+        // .itemInputs(
+        // WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 32),
+        // ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
+        // .itemOutputs(
+        // Materials.Osmium.getDust(64),
+        // Materials.Iridium.getDust(64),
+        // Materials.Nickel.getDust(64),
+        // Materials.Copper.getDust(64),
+        // Materials.Gold.getDust(64),
+        // Materials.Silicon.getDust(64))
+        // .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
+        // .noOptimize()
+        // .specialValue(1)
+        // .eut(RECIPE_UV)
+        // .duration(400)
+        // .addTo(QFT);
 
         // Iridium
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                WerkstoffLoader.IrLeachResidue.get(OrePrefixes.dust, 8),
-                ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
-            .itemOutputs(
-                Materials.Iridium.getDust(64),
-                Materials.Nickel.getDust(64),
-                Materials.Copper.getDust(64),
-                Materials.Gold.getDust(64),
-                Materials.Silicon.getDust(64))
-            .outputChances(2000, 2000, 2000, 2000, 2000)
-            .noOptimize()
-            .specialValue(1)
-            .eut(RECIPE_UV)
-            .duration(400)
-            .addTo(QFT);
+        // GTValues.RA.stdBuilder()
+        // .itemInputs(
+        // WerkstoffLoader.IrLeachResidue.get(OrePrefixes.dust, 8),
+        // ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
+        // .itemOutputs(
+        // Materials.Iridium.getDust(64),
+        // Materials.Nickel.getDust(64),
+        // Materials.Copper.getDust(64),
+        // Materials.Gold.getDust(64),
+        // Materials.Silicon.getDust(64))
+        // .outputChances(2000, 2000, 2000, 2000, 2000)
+        // .noOptimize()
+        // .specialValue(1)
+        // .eut(RECIPE_UV)
+        // .duration(400)
+        // .addTo(QFT);
 
         // Rh? Ru?
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                WerkstoffLoader.LeachResidue.get(OrePrefixes.dust, 16),
-                WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 16),
-                ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
-            .itemOutputs(
-                WerkstoffLoader.Ruthenium.get(OrePrefixes.dust, 64),
-                WerkstoffLoader.Rhodium.get(OrePrefixes.dust, 64),
-                Materials.Iridium.getDust(64),
-                Materials.Osmium.getDust(64))
-            .outputChances(2000, 2000, 2000, 2000)
-            .noOptimize()
-            .specialValue(1)
-            .eut(RECIPE_UV)
-            .duration(400)
-            .addTo(QFT);
+        // GTValues.RA.stdBuilder()
+        // .itemInputs(
+        // WerkstoffLoader.LeachResidue.get(OrePrefixes.dust, 16),
+        // WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 16),
+        // ItemUtils.getSimpleStack(GenericChem.mPlatinumGroupCatalyst, 0))
+        // .itemOutputs(
+        // WerkstoffLoader.Ruthenium.get(OrePrefixes.dust, 64),
+        // WerkstoffLoader.Rhodium.get(OrePrefixes.dust, 64),
+        // Materials.Iridium.getDust(64),
+        // Materials.Osmium.getDust(64))
+        // .outputChances(2000, 2000, 2000, 2000)
+        // .noOptimize()
+        // .specialValue(1)
+        // .eut(RECIPE_UV)
+        // .duration(400)
+        // .addTo(QFT);
 
         // FeTiO3
         GTValues.RA.stdBuilder()

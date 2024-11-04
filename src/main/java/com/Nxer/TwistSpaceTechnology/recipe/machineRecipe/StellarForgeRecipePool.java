@@ -1,16 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
-import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,7 +28,6 @@ import com.google.common.collect.Sets;
 import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -39,7 +35,6 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeBuilder;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class StellarForgeRecipePool implements IRecipePool {
 
@@ -65,7 +60,6 @@ public class StellarForgeRecipePool implements IRecipePool {
                     Ingots.add(TST_ItemID.createNoNBT(items));
                 }
             }
-
         }
 
         // iterate Vacuum Freezer recipes
@@ -114,10 +108,8 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             Set<ItemStack> inputItems = new HashSet<>();
             Set<FluidStack> inputFluids = new HashSet<>();
-            Set<ItemStack> outputItemsBase = new HashSet<>();
-            Set<FluidStack> outputFluidsBase = new HashSet<>();
-            Set<ItemStack> outputItemsExtra = new HashSet<>();
-            Set<FluidStack> outputFluidsExtra = new HashSet<>();
+            Set<ItemStack> outputItems = new HashSet<>();
+            Set<FluidStack> outputFluids = new HashSet<>();
 
             // process Item input
             byte integrateNum = 0;
@@ -146,12 +138,12 @@ public class StellarForgeRecipePool implements IRecipePool {
                     if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
                         FluidStack fluidStack = getMoltenFluids(normalIngot, outputs.stackSize);
                         if (fluidStack != null) {
-                            outputFluidsBase.add(fluidStack);
+                            outputFluids.add(fluidStack);
                         }
                     } else {
                         ItemStack out = normalIngot.copy();
                         out.stackSize = outputs.stackSize;
-                        outputItemsBase.add(out);
+                        outputItems.add(out);
                     }
 
                 } else if (Ingots.contains(outputItemID)) {
@@ -159,15 +151,15 @@ public class StellarForgeRecipePool implements IRecipePool {
                     if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
                         FluidStack fluidStack = getMoltenFluids(copyAmount(1, outputs), outputs.stackSize);
                         if (fluidStack != null) {
-                            outputFluidsBase.add(fluidStack);
+                            outputFluids.add(fluidStack);
                         }
                     } else {
-                        outputItemsBase.add(outputs.copy());
+                        outputItems.add(outputs.copy());
                     }
 
                 } else {
                     // if this output item is not Ingot
-                    outputItemsBase.add(outputs.copy());
+                    outputItems.add(outputs.copy());
                 }
             }
 
@@ -180,11 +172,11 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             // process Fluid output
             for (FluidStack fluids : recipe.mFluidOutputs) {
-                outputFluidsBase.add(fluids.copy());
+                outputFluids.add(fluids.copy());
             }
 
             ItemStack[] inputItemsArray = inputItems.toArray(new ItemStack[0]);
-            FluidStack[] outputFluidsArray = outputFluidsBase.toArray(new FluidStack[0]);
+            FluidStack[] outputFluidsArray = outputFluids.toArray(new FluidStack[0]);
             boolean canAddNewRecipe = true;
 
             int duration = Math.max(1, recipe.mDuration / 3);
@@ -203,7 +195,7 @@ public class StellarForgeRecipePool implements IRecipePool {
                 addToRecipes(
                     inputItemsArray,
                     inputFluids.toArray(new FluidStack[0]),
-                    outputItemsBase.toArray(new ItemStack[0]),
+                    outputItems.toArray(new ItemStack[0]),
                     outputFluidsArray,
                     recipe.mEUt,
                     Math.max(1, recipe.mDuration / 3),
@@ -213,67 +205,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         }
     }
 
-    public void prepareABSRecipes() {
-        for (GTRecipe recipe : GTPPRecipeMaps.alloyBlastSmelterRecipes.getAllRecipes()) {
-
-            int minOutputFluidAmount = 144;
-            // if there is more than one output fluid, find the fewest
-            for (FluidStack aOutputFluid : recipe.mFluidOutputs) {
-                // if (aOutputFluid.amount % 144 == 0) continue;
-                minOutputFluidAmount = Math.min(minOutputFluidAmount, aOutputFluid.amount);
-            }
-            ArrayList<ItemStack> inputItemList = new ArrayList<>();
-            ArrayList<ItemStack> outputItemList = new ArrayList<>();
-            ArrayList<FluidStack> inputFluidList = new ArrayList<>();
-            ArrayList<FluidStack> outputFluidList = new ArrayList<>();
-
-            int RecipeMultiplier = 1;
-            if (minOutputFluidAmount < 144) {
-                int CorrectFluidAmount = minOutputFluidAmount;
-                while (CorrectFluidAmount % 144 != 0) {
-                    CorrectFluidAmount += minOutputFluidAmount;
-                }
-                RecipeMultiplier = CorrectFluidAmount / minOutputFluidAmount;
-            }
-
-            if (recipe.mInputs != null) for (ItemStack aItemStack : recipe.mInputs) {
-                ItemStack aStackCopy = aItemStack.copy();
-                aStackCopy.stackSize *= RecipeMultiplier;
-                inputItemList.add(aStackCopy);
-            }
-            if (recipe.mOutputs != null) for (ItemStack aItemStack : recipe.mOutputs) {
-                ItemStack aStackCopy = aItemStack.copy();
-                aStackCopy.stackSize *= RecipeMultiplier;
-                outputItemList.add(aStackCopy);
-            }
-            if (recipe.mFluidInputs != null) for (FluidStack aFluidStack : recipe.mFluidInputs) {
-                FluidStack aFluidCopy = aFluidStack.copy();
-                aFluidCopy.amount *= RecipeMultiplier;
-                inputFluidList.add(aFluidCopy);
-            }
-            if (recipe.mOutputs != null) for (FluidStack aFluidStack : recipe.mFluidOutputs) {
-                FluidStack aFluidCopy = aFluidStack.copy();
-                aFluidCopy.amount *= RecipeMultiplier;
-                outputFluidList.add(aFluidCopy);
-            }
-
-            ItemStack[] inputItems = inputItemList.toArray(new ItemStack[0]);
-            ItemStack[] outputItems = outputItemList.toArray(new ItemStack[0]);
-            FluidStack[] inputFluids = inputFluidList.toArray(new FluidStack[0]);
-            FluidStack[] outputFluids = outputFluidList.toArray(new FluidStack[0]);
-            addToRecipes(
-                inputItems,
-                inputFluids,
-                outputItems,
-                outputFluids,
-                recipe.mEUt,
-                recipe.mDuration,
-                GTCMRecipe.MiracleDoorRecipes);
-        }
-
-    }
-
-    public void addToRecipes(ItemStack[] inputItems, FluidStack[] inputFluids, ItemStack[] outputItems,
+    public static void addToRecipes(ItemStack[] inputItems, FluidStack[] inputFluids, ItemStack[] outputItems,
         FluidStack[] outputFluids, int eut, int duration, IRecipeMap aRecipeMap) {
         GTRecipeBuilder ra = GTValues.RA.stdBuilder();
 
@@ -298,7 +230,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             .addTo(aRecipeMap);
     }
 
-    public FluidStack getMoltenFluids(ItemStack ingot, int ingotAmount) {
+    public static FluidStack getMoltenFluids(ItemStack ingot, int ingotAmount) {
         FluidStack out = null;
         for (GTRecipe recipeMolten : fluidExtractionRecipes.getAllRecipes()) {
             if (metaItemEqual(ingot, recipeMolten.mInputs[0])) {
@@ -309,22 +241,15 @@ public class StellarForgeRecipePool implements IRecipePool {
                 break;
             }
         }
-        return out;
-    }
-
-    public ItemStack getIngotItems(FluidStack molten, int moltenAmount) {
-        ItemStack out = null;
-        for (GTRecipe recipeSolidifier : fluidSolidifierRecipes.getAllRecipes()) {
-            if (metaItemEqual(
-                GTModHandler.getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32306),
-                recipeSolidifier.mInputs[0]) && fluidEqual(molten, recipeSolidifier.mFluidOutputs[0])) {
-                if (recipeSolidifier.mOutputs[0] != null) {
-                    out = recipeSolidifier.mOutputs[0].copy();
-                    out.stackSize = moltenAmount / 144;
-                }
-                break;
-            }
-        }
+        // ItemData data = getAssociation(ingot);
+        // Materials ingotMaterial = data != null ? data.mMaterial.mMaterial : null;
+        // if (ingotMaterial != null) {
+        // if (ingotMaterial.mStandardMoltenFluid != null) {
+        // out = ingotMaterial.getMolten(INGOTS);
+        // } else if (ingotMaterial.mFluid != null) {
+        // out = ingotMaterial.getFluid(BUCKETS);
+        // }
+        // }
         return out;
     }
 
@@ -393,7 +318,6 @@ public class StellarForgeRecipePool implements IRecipePool {
 
     public void loadOnServerStarted() {
         prepareEBFRecipes();
-        prepareABSRecipes();
         loadRecipeListCache();
     }
 }
