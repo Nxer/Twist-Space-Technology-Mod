@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
 import com.Nxer.TwistSpaceTechnology.common.Entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
+import com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler;
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -110,6 +111,7 @@ public class TwistSpaceTechnology {
             .registerModEntity(EntityMountableBlock.class, "TST:EntityMountableBlock", 1, this, 256, 20, false);
 
         new ModBlocksHandler().initStatics();
+        new ModItemsHandler().initStatics();
     }
 
     @Mod.EventHandler

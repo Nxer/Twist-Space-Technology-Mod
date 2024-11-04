@@ -49,6 +49,14 @@ public final class ModBlocksHandler {
 
     // endregion
 
+    // region Blood Arsenal
+
+    public static Pair<Block, Integer> BloodInfusedDiamondBlock;
+    public static Pair<Block, Integer> BloodInfusedIronBlock;
+    public static Pair<Block, Integer> BloodInfusedGlowstone;
+
+    // endregion
+
     public void initStatics() {
         if (Mods.ThaumicBases.isModLoaded()) {
             Block crystalBlock = Block.getBlockFromName(Mods.ThaumicBases.ID + ":crystalBlock");
@@ -90,15 +98,29 @@ public final class ModBlocksHandler {
         }
 
         if (Mods.Forestry.isModLoaded()) {
-            soil = Pair.of(Block.getBlockFromName("Forestry:soil"), 0);
+            soil = Pair.of(Block.getBlockFromName(Mods.Forestry.ID + ":soil"), 0);
         } else {
             soil = Pair.of(Blocks.dirt, 0);
         }
 
         if (Mods.ProjectRedIllumination.isModLoaded()) {
-            PurpleLight = Pair.of(Block.getBlockFromName("ProjRed|Illumination:projectred.illumination.lamp"), 10);
+            PurpleLight = Pair
+                .of(Block.getBlockFromName(Mods.ProjectRedIllumination.ID + ":projectred.illumination.lamp"), 10);
         } else {
             PurpleLight = Pair.of(Blocks.redstone_lamp, 0);
+        }
+
+        if (Mods.BloodArsenal.isModLoaded()) {
+            BloodInfusedDiamondBlock = Pair
+                .of(Block.getBlockFromName(Mods.BloodArsenal.ID + ":blood_infused_diamond_block"), 0);
+            BloodInfusedIronBlock = Pair
+                .of(Block.getBlockFromName(Mods.BloodArsenal.ID + ":blood_infused_iron_block"), 0);
+            BloodInfusedGlowstone = Pair
+                .of(Block.getBlockFromName(Mods.BloodArsenal.ID + ":blood_infused_glowstone"), 0);
+        } else {
+            BloodInfusedDiamondBlock = Pair.of(Blocks.diamond_block, 0);
+            BloodInfusedIronBlock = Pair.of(Blocks.iron_block, 0);
+            BloodInfusedGlowstone = Pair.of(Blocks.glowstone, 0);
         }
     }
 

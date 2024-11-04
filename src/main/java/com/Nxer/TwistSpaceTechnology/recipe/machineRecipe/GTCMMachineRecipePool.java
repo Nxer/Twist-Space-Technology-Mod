@@ -63,6 +63,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.TestItem0;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ThermalEnergyDevourer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.VacuumFilterExtractor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WhiteDwarfMold_Ingot;
@@ -170,19 +171,18 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.block.BlockList;
 import com.dreammaster.gthandler.CustomItemList;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
 import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
-import WayofTime.alchemicalWizardry.ModBlocks;
 import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import bartworks.common.loaders.BioItemList;
@@ -2874,19 +2874,33 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .addTo(assemblyLine);
         }
 
-        if(Config.Enable_MegaTreeFarm){
-            // Casing Stone
+        // Casing Stone Brick
+        GTValues.RA
+            .stdBuilder()
+            .itemInputs(
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Palladium, 1),
+                com.dreammaster.item.ItemList.StonePlate.getIS(6)
+            )
+            .fluidInputs(
+                new FluidStack(FluidRegistry.getFluid("concrete"), 36000)
+            )
+            .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
+            .eut(RECIPE_EV)
+            .duration(20 * 12)
+            .addTo(assembler);
+
+            // Casing Stone Brick Advanced
             GTValues.RA
                 .stdBuilder()
                 .itemInputs(
-                    Mods.ExtraUtilities.isModLoaded()?GTModHandler.getModItem(Mods.ExtraUtilities.ID, "block_bedrockium",1,0):new ItemStack(Blocks.bedrock,1),
+                    GTCMItemList.ReinforcedStoneBrickCasing.get(1),
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 1),
-                    com.dreammaster.item.ItemList.StonePlate.getIS(6)
+                    GTOreDictUnificator.get(OrePrefixes.plate, Materials.Bedrockium, 6)
                 )
                 .fluidInputs(
-                    MaterialsAlloy.TRINIUM_NAQUADAH_CARBON.getFluidStack(9216)
+                    MaterialsAlloy.TRINIUM_NAQUADAH_CARBON.getFluidStack(1728)
                 )
-                .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
+                .itemOutputs(GTCMItemList.ReinforcedBedrockCasing.get(1))
                 .eut(RECIPE_ZPM)
                 .duration(20 * 30)
                 .addTo(assembler);
@@ -2919,9 +2933,9 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 18)
                 },
                 new FluidStack[]{
-                    MaterialsAlloy.TRINIUM_NAQUADAH_CARBON.getFluidStack(2304),
-                    MaterialsAlloy.BLACK_TITANIUM.getFluidStack(1728),
-                    MaterialsAlloy.ARCANITE.getFluidStack(864)
+                    new FluidStack(FluidRegistry.getFluid("liquid helium"), 16000),
+                    MaterialsAlloy.ARCANITE.getFluidStack(864),
+                    MaterialsAlloy.TITANSTEEL.getFluidStack(144)
                 },
                 GTCMItemList.CompositeFarmCasing.get(1),
                 20*60,
@@ -2953,9 +2967,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     20*240,
                 (int) RECIPE_UHV
             );
-
-        }
-
 
         if (Config.EnableModularizedMachineSystem) {
 
@@ -3087,51 +3098,31 @@ public class GTCMMachineRecipePool implements IRecipePool {
         }
 
         if(Config.Enable_BloodHell) {
-            // the more expensive recipes
-            GTValues.RA
-                .stdBuilder()
-                .itemInputs(new ItemStack(Blocks.brick_block), Materials.AnyCopper.getPlates(6))
-                .fluidInputs(BloodMagicHelper.getLifeEssence(250))
-                .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
-                .eut(RECIPE_HV)
-                .duration(20 * 12)
-                .addTo(RecipeMaps.assemblerRecipes);
 
             GTValues.RA
                 .stdBuilder()
-                .itemInputs(new ItemStack(ModBlocks.bloodRune), Materials.StainlessSteel.getPlates(6))
-                .fluidInputs(BloodMagicHelper.getLifeEssence(500))
+                .itemInputs(
+                    GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.BloodInfusedIron,1),
+                    new ItemStack(WayofTime.alchemicalWizardry.ModItems.blankSlate,6),
+                    GTUtility.getIntegratedCircuit(1))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(1000))
                 .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
-                .eut(RECIPE_EV)
-                .duration(20 * 12)
-                .addTo(RecipeMaps.assemblerRecipes);
-
-            // the cheaper recipes
-            GTValues.RA
-                .stdBuilder()
-                .itemInputs(new ItemStack(Blocks.brick_block), GTUtility.getIntegratedCircuit(7))
-                .fluidInputs(BloodMagicHelper.getLifeEssence(100))
-                .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
                 .eut(0)
-                .duration(60)
+                .duration(20 * 18)
+                .metadata(BloodyHellTierKey.INSTANCE, 2)
                 .addTo(GTCMRecipe.BloodyHellRecipes);
 
             GTValues.RA
                 .stdBuilder()
-                .itemInputs(new ItemStack(ModBlocks.bloodRune), GTUtility.getIntegratedCircuit(7))
-                .fluidInputs(BloodMagicHelper.getLifeEssence(250))
-                .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
-                .eut(0)
-                .duration(60)
-                .addTo(GTCMRecipe.BloodyHellRecipes);
-
-            GTValues.RA
-                .stdBuilder()
-                .itemInputs(BlockList.BloodyIchorium.getIS(1), GTUtility.getIntegratedCircuit(7))
-                .fluidInputs(BloodMagicHelper.getLifeEssence(500))
+                .itemInputs(
+                    Mods.DraconicEvolution.isModLoaded()?
+                    GTModHandler.getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1):TestItem0.get(1),
+                    GTUtility.getIntegratedCircuit(1))
+                .fluidInputs(BloodMagicHelper.getLifeEssence(100000))
                 .itemOutputs(GTCMItemList.BloodyCasing2.get(1))
                 .eut(0)
-                .duration(60)
+                .duration(20 * 300)
+                .metadata(BloodyHellTierKey.INSTANCE, 5)
                 .addTo(GTCMRecipe.BloodyHellRecipes);
         }
 

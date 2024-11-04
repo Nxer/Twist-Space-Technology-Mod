@@ -162,8 +162,8 @@ public class BlockRegister {
                 BasicBlocks.MetaBlockCasing01,
                 new String[] { TextEnums.tr("Tooltip_ReinforcedStoneBrickCasing")
                 // #tr Tooltip_ReinforcedStoneBrickCasing
-                // # Stronger than bedrock!
-                // #zh_CN 比磐石更坚！
+                // # Just a stone?
+                // #zh_CN 只是块石头?
                 }));
 
         GTCMItemList.CompositeFarmCasing.set(
@@ -212,18 +212,18 @@ public class BlockRegister {
                 // #zh_CN 一尘不染!
                 }));
 
-        GTCMItemList.AsepticGreenhouseCasing.set(
+        GTCMItemList.ReinforcedBedrockCasing.set(
             MetaBlockConstructors.initMetaBlockCasing(
-                "Aseptic Greenhouse Casing",
-                // #tr MetaBlockCasing01.13.name
-                // # Aseptic Greenhouse Casing
-                // #zh_CN 无菌温室机械方块
-                (byte) 13,
+                "Enhanced Bedrock Casing",
+                // #tr MetaBlockCasing01.14.name
+                // # Reinforced Bedrock Casing
+                // #zh_CN 强化基岩机械方块
+                (byte) 14,
                 BasicBlocks.MetaBlockCasing01,
-                new String[] { TextEnums.tr("Tooltip_AsepticGreenhouseCasing")
-                // #tr Tooltip_AsepticGreenhouseCasing
-                // # Absolutely Clean!
-                // #zh_CN 一尘不染!
+                new String[] { TextEnums.tr("Tooltip_ReinforcedBedrockCasing")
+                // #tr Tooltip_ReinforcedBedrockCasing
+                // # Stronger than bedrock!
+                // #zh_CN 比磐石更坚！
                 }));
 
         GTCMItemList.BloodyCasing1.set(
@@ -239,8 +239,8 @@ public class BlockRegister {
             MetaBlockConstructors.initMetaBlockCasing(
                 "BloodyCasing2",
                 // #tr MetaBlockCasing02.1.name
-                // # Ichor Casing
-                // #zh_CN 脓血机械方块
+                // # Ichor Draconic Block
+                // #zh_CN 血腥龙块
                 (byte) 1,
                 BasicBlocks.MetaBlockCasing02));
 

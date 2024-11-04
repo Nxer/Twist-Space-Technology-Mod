@@ -121,6 +121,8 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     private int needPhotonAmount = 0;
     private String costingWirelessEU = "0";
     private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
+    private boolean isIngotMode = false;
+
     ItemStack IngotMold;
 
     @Override
@@ -196,6 +198,10 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
+        for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
+            isIngotMode = true;
+            break;
+        } else isIngotMode = false;
         return mode == 1 ? checkProcessing_EBF() : checkProcessing_ABS();
     }
 

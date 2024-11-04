@@ -8,7 +8,6 @@ import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
 import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
@@ -77,8 +76,6 @@ public class CommonProxy {
         TST_BigBroArray.initializeMaterials();
         TST_BigBroArray.initializeStructure();
         TST_BigBroArray.addRecipes();
-
-        GTCMRecipe.prepareBloodyHellRecipes();
     }
 
     // register server commands in this event handler (Remove if not needed)
