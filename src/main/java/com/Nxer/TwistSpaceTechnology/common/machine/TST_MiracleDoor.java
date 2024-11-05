@@ -36,6 +36,8 @@ import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.ParallelHelper.addFluidsLong;
+import static gregtech.api.util.ParallelHelper.addItemsLong;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
@@ -48,8 +50,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ParallelHelper;
-import gregtech.api.util.ParallelHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -60,8 +60,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
 import net.minecraftforge.fluids.FluidStack;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -89,6 +89,7 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
+import gregtech.api.util.ParallelHelper;
 import gregtech.common.items.ItemIntegratedCircuit;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -121,8 +122,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     private int needPhotonAmount = 0;
     private String costingWirelessEU = "0";
     private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
-    private boolean isIngotMode = false;
-
     ItemStack IngotMold;
 
     @Override
@@ -198,10 +197,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
-            isIngotMode = true;
-            break;
-        } else isIngotMode = false;
         return mode == 1 ? checkProcessing_EBF() : checkProcessing_ABS();
     }
 
@@ -293,7 +288,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         // normal output
         mOutputItems = processingLogic.getOutputItems();
         mOutputFluids = processingLogic.getOutputFluids();
-         needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
+        needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
 
         return result;
     }
@@ -321,8 +316,10 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     protected ProcessingLogic createProcessingLogic() {
 
         return new GTCM_ProcessingLogic() {
-            boolean isIngotMode=false;
-            ArrayList<ItemStack> outputItemList = new ArrayList<>();
+
+            boolean isIngotMode = false;
+            final ArrayList<ItemStack> outputItemList = new ArrayList<>();
+
             @Nonnull
             @Override
             protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
@@ -332,26 +329,50 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
             @Nonnull
             @Override
             protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+
                 for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
                     isIngotMode = true;
                     break;
                 }
 
-                if(isIngotMode) {
-
-                    for (FluidStack recipeFluidStack : recipe.mFluidOutputs) {
-                        Item IngotItem = MoltenToIngot.get(recipeFluidStack.getFluid());
-                        if(IngotItem!=null)
-                            outputItemList.add(new ItemStack(IngotItem,recipeFluidStack.amount/144));
-                    }
-                }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
 
             @NotNull
             @Override
-            public GTCM_ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
-                return createParallelHelper(recipe)
+            protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
+                return super.createParallelHelper(recipe).setCustomFluidOutputCalculation(parallel -> {
+                    ArrayList<FluidStack> outputFluidList = new ArrayList<>();
+
+                    if (isIngotMode) {
+                        for (FluidStack recipeFluidStack : recipe.mFluidOutputs) {
+                            if (recipeFluidStack != null) {
+                                Item IngotItem = MoltenToIngot.get(recipeFluidStack.getFluid());
+                                if (IngotItem != null) addItemsLong(
+                                    outputItemList,
+                                    new ItemStack(IngotItem, 1),
+                                    (long) parallel * recipeFluidStack.amount / 144);
+                                else addFluidsLong(
+                                    outputFluidList,
+                                    recipeFluidStack,
+                                    (long) parallel * recipeFluidStack.amount);
+                            }
+                        }
+                    }
+
+                    return outputFluidList.toArray(new FluidStack[0]);
+                })
+                    .setCustomItemOutputCalculation(parallel -> {
+
+                        for (ItemStack recipeItemStack : recipe.mOutputs) {
+                            if (recipeItemStack != null) addItemsLong(
+                                outputItemList,
+                                recipeItemStack,
+                                (long) parallel * recipeItemStack.stackSize);
+                        }
+
+                        return outputItemList.toArray(new ItemStack[0]);
+                    });
             }
         }.setMaxParallel(Integer.MAX_VALUE);
     }

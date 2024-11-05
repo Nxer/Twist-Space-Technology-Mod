@@ -69,7 +69,8 @@ public class RecipeLoader {
             new NanoForgeRecipePool(), new FluidHeaterRecipePool(), new ParticleColliderRecipePool(),
             new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool(),
             new MassFabricatorGenesisRecipePool(), new SpaceAssemblerRecipePool(),
-            new CosmicProcessorCircuitRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(), new BloodyHellRecipePool() };
+            new CosmicProcessorCircuitRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
+            new BloodyHellRecipePool() };
 
         new SimpleFurnaceFuelPool().loadRecipes();
         for (IRecipePool recipePool : recipePools) {

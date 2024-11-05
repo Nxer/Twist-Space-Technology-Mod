@@ -399,6 +399,7 @@ public class GTCM_ParallelHelper extends ParallelHelper {
      * Called by build(). Determines the parallels and everything else that needs to be done at build time
      */
     protected void determineParallel() {
+
         if (itemInputs == null) {
             itemInputs = new ItemStack[0];
         }
