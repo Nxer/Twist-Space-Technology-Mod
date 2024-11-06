@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -38,7 +37,6 @@ import gregtech.api.util.GTUtility;
 
 public class StellarForgeRecipePool implements IRecipePool {
 
-    public static final boolean OutputMoltenFluidInsteadIngotInStellarForgeRecipe = Config.OutputMoltenFluidInsteadIngotInStellarForgeRecipe;
     public static final HashSet<String> IngotHotOreDictNames = new HashSet<>();
     public static final HashSet<String> IngotOreDictNames = new HashSet<>();
     public static final HashSet<TST_ItemID> IngotHots = new HashSet<>();
@@ -108,10 +106,8 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             Set<ItemStack> inputItems = new HashSet<>();
             Set<FluidStack> inputFluids = new HashSet<>();
-            Set<ItemStack> outputItemsBase = new HashSet<>();
-            Set<FluidStack> outputFluidsBase = new HashSet<>();
-            Set<ItemStack> outputItemsExtra = new HashSet<>();
-            Set<FluidStack> outputFluidsExtra = new HashSet<>();
+            Set<ItemStack> outputItems = new HashSet<>();
+            Set<FluidStack> outputFluids = new HashSet<>();
 
             // process Item input
             byte integrateNum = 0;
@@ -133,35 +129,28 @@ public class StellarForgeRecipePool implements IRecipePool {
             // process Item output
             for (ItemStack outputs : recipe.mOutputs) {
                 TST_ItemID outputItemID = TST_ItemID.createNoNBT(outputs);
+                boolean isRecipeAdded = false;
                 if (IngotHots.contains(outputItemID)) {
                     // if this output item is Hot Ingot
                     ItemStack normalIngot = IngotHotToIngot.get(outputItemID);
 
-                    if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-                        FluidStack fluidStack = getMoltenFluids(normalIngot, outputs.stackSize);
-                        if (fluidStack != null) {
-                            outputFluidsBase.add(fluidStack);
-                        }
-                    } else {
-                        ItemStack out = normalIngot.copy();
-                        out.stackSize = outputs.stackSize;
-                        outputItemsBase.add(out);
+                    FluidStack fluidStack = getMoltenFluids(normalIngot, outputs.stackSize);
+                    if (fluidStack != null) {
+                        outputFluids.add(fluidStack);
+                        isRecipeAdded = true;
                     }
 
                 } else if (Ingots.contains(outputItemID)) {
                     // if this output item is normal Ingot
-                    if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-                        FluidStack fluidStack = getMoltenFluids(copyAmount(1, outputs), outputs.stackSize);
-                        if (fluidStack != null) {
-                            outputFluidsBase.add(fluidStack);
-                        }
-                    } else {
-                        outputItemsBase.add(outputs.copy());
+                    FluidStack fluidStack = getMoltenFluids(copyAmount(1, outputs), outputs.stackSize);
+                    if (fluidStack != null) {
+                        outputFluids.add(fluidStack);
+                        isRecipeAdded = true;
                     }
-
-                } else {
+                }
+                if (!isRecipeAdded) {
                     // if this output item is not Ingot
-                    outputItemsBase.add(outputs.copy());
+                    outputItems.add(outputs.copy());
                 }
             }
 
@@ -174,11 +163,11 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             // process Fluid output
             for (FluidStack fluids : recipe.mFluidOutputs) {
-                outputFluidsBase.add(fluids.copy());
+                outputFluids.add(fluids.copy());
             }
 
             ItemStack[] inputItemsArray = inputItems.toArray(new ItemStack[0]);
-            FluidStack[] outputFluidsArray = outputFluidsBase.toArray(new FluidStack[0]);
+            FluidStack[] outputFluidsArray = outputFluids.toArray(new FluidStack[0]);
             boolean canAddNewRecipe = true;
 
             int duration = Math.max(1, recipe.mDuration / 3);
@@ -197,7 +186,7 @@ public class StellarForgeRecipePool implements IRecipePool {
                 addToRecipes(
                     inputItemsArray,
                     inputFluids.toArray(new FluidStack[0]),
-                    outputItemsBase.toArray(new ItemStack[0]),
+                    outputItems.toArray(new ItemStack[0]),
                     outputFluidsArray,
                     recipe.mEUt,
                     Math.max(1, recipe.mDuration / 3),
@@ -258,40 +247,26 @@ public class StellarForgeRecipePool implements IRecipePool {
     public void loadManualRecipes() {
 
         // Meteoric Iron
-        TST_RecipeBuilder bd = TST_RecipeBuilder.builder()
-            .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.MeteoricIron.getDust(1));
-        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-            bd.fluidOutputs(Materials.MeteoricIron.getMolten(144));
-        } else {
-            bd.itemOutputs(Materials.MeteoricIron.getIngots(1));
-        }
-        bd.eut(RECIPE_MV)
+        TST_RecipeBuilder.builder()
+            .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.MeteoricIron.getDust(1))
+            .fluidOutputs(Materials.MeteoricIron.getMolten(144))
+            .eut(RECIPE_MV)
             .duration(20 * 25)
             .addTo(GTCMRecipe.StellarForgeRecipes);
 
         // Meteoric Steel
-        bd = TST_RecipeBuilder.builder()
-            .itemInputs(GTUtility.getIntegratedCircuit(2), Materials.MeteoricIron.getDust(1));
-
-        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-            bd.fluidOutputs(Materials.MeteoricSteel.getMolten(144));
-        } else {
-            bd.itemOutputs(Materials.MeteoricSteel.getIngots(1));
-        }
-        bd.eut(RECIPE_MV)
+        TST_RecipeBuilder.builder()
+            .itemInputs(GTUtility.getIntegratedCircuit(2), Materials.MeteoricIron.getDust(1))
+            .fluidOutputs(Materials.MeteoricSteel.getMolten(144))
+            .eut(RECIPE_MV)
             .duration(20 * 10)
             .addTo(GTCMRecipe.StellarForgeRecipes);
 
         // Neutronium
-        bd = TST_RecipeBuilder.builder()
-            .itemInputs(Materials.Neutronium.getDust(1));
-
-        if (OutputMoltenFluidInsteadIngotInStellarForgeRecipe) {
-            bd.fluidOutputs(Materials.Neutronium.getMolten(144));
-        } else {
-            bd.itemOutputs(Materials.Neutronium.getIngots(1));
-        }
-        bd.eut(RECIPE_UV)
+        TST_RecipeBuilder.builder()
+            .itemInputs(Materials.Neutronium.getDust(1))
+            .fluidOutputs(Materials.Neutronium.getMolten(144))
+            .eut(RECIPE_UV)
             .duration(20 * 112)
             .addTo(GTCMRecipe.StellarForgeRecipes);
 

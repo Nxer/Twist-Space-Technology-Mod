@@ -507,9 +507,9 @@ public class GTCM_ParallelHelper extends ParallelHelper {
         }
 
 
-        long eutUseAfterOC = calculator.setCurrentParallel(currentParallel).setParallel(originalMaxParallel).calculate().getConsumption();;
-        calculator.setParallel(Math.min(currentParallel, originalMaxParallel))
-                  .calculate();
+        long eutUseAfterOC = calculator.setCurrentParallel(currentParallel).setParallel(Math.min(currentParallel, originalMaxParallel)).calculate().getConsumption();;
+//        calculator.setParallel(Math.min(currentParallel, originalMaxParallel))
+//                  .calculate();
         if (currentParallel > originalMaxParallel) {
             calculator.setRecipeEUt(eutUseAfterOC);
         }

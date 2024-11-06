@@ -52,7 +52,6 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -122,6 +121,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     private int needPhotonAmount = 0;
     private String costingWirelessEU = "0";
     private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
+    boolean isIngotMode = false;
     ItemStack IngotMold;
 
     @Override
@@ -197,6 +197,10 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
+        for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
+            isIngotMode = true;
+            break;
+        }
         return mode == 1 ? checkProcessing_EBF() : checkProcessing_ABS();
     }
 
@@ -317,8 +321,8 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
         return new GTCM_ProcessingLogic() {
 
-            boolean isIngotMode = false;
-            final ArrayList<ItemStack> outputItemList = new ArrayList<>();
+            ArrayList<ItemStack> outputItemList = new ArrayList<>();
+            ArrayList<FluidStack> outputFluidList = new ArrayList<>();
 
             @Nonnull
             @Override
@@ -329,50 +333,35 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
             @Nonnull
             @Override
             protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
-
-                for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
-                    isIngotMode = true;
-                    break;
-                }
-
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
 
             @NotNull
             @Override
             protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
-                return super.createParallelHelper(recipe).setCustomFluidOutputCalculation(parallel -> {
-                    ArrayList<FluidStack> outputFluidList = new ArrayList<>();
+                return super.createParallelHelper(recipe).setCustomItemOutputCalculation(parallel -> {
 
-                    if (isIngotMode) {
-                        for (FluidStack recipeFluidStack : recipe.mFluidOutputs) {
-                            if (recipeFluidStack != null) {
-                                Item IngotItem = MoltenToIngot.get(recipeFluidStack.getFluid());
-                                if (IngotItem != null) addItemsLong(
-                                    outputItemList,
-                                    new ItemStack(IngotItem, 1),
-                                    (long) parallel * recipeFluidStack.amount / 144);
-                                else addFluidsLong(
-                                    outputFluidList,
-                                    recipeFluidStack,
-                                    (long) parallel * recipeFluidStack.amount);
-                            }
+                    outputItemList = new ArrayList<>();
+                    outputFluidList = new ArrayList<>();
+                    for (FluidStack recipeFluidStack : recipe.mFluidOutputs) {
+                        if (recipeFluidStack == null) continue;
+
+                        long amount = (long) parallel * recipeFluidStack.amount;
+                        if (isIngotMode && MoltenToIngot.containsKey(recipeFluidStack.getFluid())) {
+                            addItemsLong(outputItemList, MoltenToIngot.get(recipeFluidStack.getFluid()), amount / 144);
+                        } else {
+                            addFluidsLong(outputFluidList, recipeFluidStack, amount);
                         }
                     }
 
-                    return outputFluidList.toArray(new FluidStack[0]);
+                    for (ItemStack recipeItemStack : recipe.mOutputs) {
+                        if (recipeItemStack != null)
+                            addItemsLong(outputItemList, recipeItemStack, (long) parallel * recipeItemStack.stackSize);
+                    }
+
+                    return outputItemList.toArray(new ItemStack[0]);
                 })
-                    .setCustomItemOutputCalculation(parallel -> {
-
-                        for (ItemStack recipeItemStack : recipe.mOutputs) {
-                            if (recipeItemStack != null) addItemsLong(
-                                outputItemList,
-                                recipeItemStack,
-                                (long) parallel * recipeItemStack.stackSize);
-                        }
-
-                        return outputItemList.toArray(new ItemStack[0]);
-                    });
+                    .setCustomFluidOutputCalculation(parallel -> outputFluidList.toArray(new FluidStack[0]));
             }
         }.setMaxParallel(Integer.MAX_VALUE);
     }

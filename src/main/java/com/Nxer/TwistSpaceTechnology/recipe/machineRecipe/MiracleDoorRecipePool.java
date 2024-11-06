@@ -6,7 +6,6 @@ import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -21,7 +20,7 @@ import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class MiracleDoorRecipePool implements IRecipePool {
 
-    public static final HashMap<Fluid, Item> MoltenToIngot = new HashMap<>();
+    public static final HashMap<Fluid, ItemStack> MoltenToIngot = new HashMap<>();
 
     public void initData() {
 
@@ -33,7 +32,7 @@ public class MiracleDoorRecipePool implements IRecipePool {
             if (metaItemEqual(
                 GTModHandler.getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32306),
                 recipeSolidifier.mInputs[0])) {
-                MoltenToIngot.put(recipeSolidifier.mFluidInputs[0].getFluid(), recipeSolidifier.mOutputs[0].getItem());
+                MoltenToIngot.put(recipeSolidifier.mFluidInputs[0].getFluid(), recipeSolidifier.mOutputs[0]);
             }
         }
     }

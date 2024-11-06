@@ -129,7 +129,6 @@ public class Config {
     public static int amountOfPhotonsEveryMiracleDoorProcessingCost = 1;
     public static int multiplierOfMiracleDoorEUCostABSMode = 16;
     public static int multiplierOfMiracleDoorEUCostEBFMode = 64;
-    public static boolean OutputMoltenFluidInsteadIngotInStellarForgeRecipe = true;
 
     // endregion
 
@@ -635,7 +634,6 @@ public class Config {
         amountOfPhotonsEveryMiracleDoorProcessingCost = configuration.getInt("amountOfPhotonsEveryMiracleDoorProcessingCost", MiracleDoor, amountOfPhotonsEveryMiracleDoorProcessingCost, 0, 64, "Needed Photons amount of Miracle Door each run cost. Type: int");
         multiplierOfMiracleDoorEUCostABSMode = configuration.getInt("multiplierOfMiracleDoorEUCostABSMode", MiracleDoor, multiplierOfMiracleDoorEUCostABSMode, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier in Alloy Blast Smelter mode. Type: int");
         multiplierOfMiracleDoorEUCostEBFMode = configuration.getInt("multiplierOfMiracleDoorEUCostEBFMode", MiracleDoor, multiplierOfMiracleDoorEUCostEBFMode, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier in Electric Blast Furnace mode. Type: int");
-        OutputMoltenFluidInsteadIngotInStellarForgeRecipe = configuration.getBoolean("OutputMoltenFluidInsteadIngotInStellarForgeRecipe", MiracleDoor, OutputMoltenFluidInsteadIngotInStellarForgeRecipe, "Set the Stellar Forge recipe output material type. true = output molten fluid ; false = output ingot . Type: boolean");
 
         // endregion
 
@@ -668,7 +666,6 @@ public class Config {
 
         // region StrangeMatterAggregator
         StructureLoopBuildingLimit_StrangeMatterAggregator = configuration.getInt("StructureLoopBuildingLimit_StrangeMatterAggregator", StrangeMatterAggregator, StructureLoopBuildingLimit_StrangeMatterAggregator, 1, 64, "Extra limitation of the number of Hologram Projector stack size in structure auto building. Type: int");
-        // endregion
         // endregion
 
         // region Space Station
