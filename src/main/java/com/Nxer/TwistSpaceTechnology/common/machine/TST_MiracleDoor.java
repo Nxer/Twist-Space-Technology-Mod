@@ -1,12 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.amountOfPhotonsEveryMiracleDoorProcessingCost;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostABSMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeABSMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleDoorRecipePool.MoltenToIngot;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool.MoltenToIngot;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
@@ -50,7 +49,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -116,7 +114,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
     // region Processing Logic
 
-    private byte mode = 0;
+    private byte mode = 1;
     private int overclockParameter = 1;
     private UUID ownerUUID;
     private int needPhotonAmount = 0;
@@ -177,13 +175,13 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public RecipeMap<?> getRecipeMap() {
         if (mode == 1) return GTCMRecipe.StellarForgeRecipes;
-        return GTCMRecipe.MiracleDoorRecipes;
+        return GTCMRecipe.StellarForgeAlloySmelterRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.StellarForgeRecipes, GTCMRecipe.MiracleDoorRecipes);
+        return Arrays.asList(GTCMRecipe.StellarForgeRecipes, GTCMRecipe.StellarForgeAlloySmelterRecipes);
     }
 
     @Override
@@ -392,7 +390,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
                 endRecipeProcessing();
             } else {
                 endRecipeProcessing();
-                stopMachine(ShutDownReasonRegistry.getSampleFromRegistry("aReason"));
+                criticalStopMachine();
                 return false;
             }
         }

@@ -25,7 +25,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IndustrialMagicMatrixR
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IntensifyChemicalDistorterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MassFabricatorGenesisRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MicroSpaceTimeFabricatorioRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleDoorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MixerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ModularHatchesRecipePool;
@@ -63,14 +62,13 @@ public class RecipeLoader {
             new DSPRecipePool(), new MegaUniversalSpaceStationRecipePool(), new StellarMaterialSiphonRecipePool(),
             new DistillationRecipePool(), new ExtractorRecipePool(), new CompressorRecipePool(), new BOTRecipePool(),
             new TCRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
-            new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new MiracleDoorRecipePool(),
-            new LanthanidesRecipePool(), new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(),
-            new CentrifugeRecipePool(), new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(),
-            new NanoForgeRecipePool(), new FluidHeaterRecipePool(), new ParticleColliderRecipePool(),
-            new DragonBloodRecipe(), new FusionReactorRecipePool(), new ModularHatchesRecipePool(),
-            new MassFabricatorGenesisRecipePool(), new SpaceAssemblerRecipePool(),
-            new CosmicProcessorCircuitRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
-            new BloodyHellRecipePool() };
+            new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool(),
+            new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
+            new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
+            new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new DragonBloodRecipe(),
+            new FusionReactorRecipePool(), new ModularHatchesRecipePool(), new MassFabricatorGenesisRecipePool(),
+            new SpaceAssemblerRecipePool(), new CosmicProcessorCircuitRecipePool(),
+            new MicroSpaceTimeFabricatorioRecipePool(), new BloodyHellRecipePool() };
 
         new SimpleFurnaceFuelPool().loadRecipes();
         for (IRecipePool recipePool : recipePools) {
@@ -108,7 +106,6 @@ public class RecipeLoader {
 
     public static void loadRecipesServerStarted() {
         new StellarForgeRecipePool().loadOnServerStarted();
-        new MiracleDoorRecipePool().loadOnServerStarted();
     }
 
     public static void loadRecipemixin() {
