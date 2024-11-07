@@ -385,7 +385,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         // prepareABSRecipes();
         loadManualRecipes();
         // cacheRecipeList();
-        //New version no longer requires this
+        // New version no longer requires this
     }
 
     public void loadOnServerStarted() {
