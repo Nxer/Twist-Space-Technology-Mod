@@ -151,23 +151,16 @@ public class GTCMRecipe {
         .maxIO(4, 4, 1, 2)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
-        .disableOptimize()
-        .build();
-
-    public static final RecipeMap<RecipeMapBackend> StellarForgeWithIngotRecipes = RecipeMapBuilder
-        .of("tst.recipe.StellarForgeWithIngotRecipes")
-        .maxIO(4, 4, 1, 2)
-        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
+        .useSpecialSlot()
         .disableOptimize()
         .build();
 
     public static final RecipeMap<RecipeMapBackend> MiracleDoorRecipes = RecipeMapBuilder
         .of("tst.recipe.MiracleDoorRecipes")
         .maxIO(9, 9, 3, 3)
-
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
+        .useSpecialSlot()
         .disableOptimize()
         .build();
 

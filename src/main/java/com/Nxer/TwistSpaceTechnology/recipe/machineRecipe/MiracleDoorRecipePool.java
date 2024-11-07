@@ -94,7 +94,7 @@ public class MiracleDoorRecipePool implements IRecipePool {
                 outputFluidList.add(aFluidCopy);
             }
 
-            StellarForgeRecipePool.addToRecipes(
+            StellarForgeRecipePool.addToMiracleDoorRecipes(
                 inputItemList.toArray(new ItemStack[0]),
                 inputFluidList.toArray(new FluidStack[0]),
                 outputItemList.toArray(new ItemStack[0]),

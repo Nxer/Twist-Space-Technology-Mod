@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
@@ -183,7 +184,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             // add to recipe map
             if (canAddNewRecipe) {
-                addToRecipes(
+                addToMiracleDoorRecipes(
                     inputItemsArray,
                     inputFluids.toArray(new FluidStack[0]),
                     outputItems.toArray(new ItemStack[0]),
@@ -196,8 +197,8 @@ public class StellarForgeRecipePool implements IRecipePool {
         }
     }
 
-    public static void addToRecipes(ItemStack[] inputItems, FluidStack[] inputFluids, ItemStack[] outputItems,
-        FluidStack[] outputFluids, int eut, int duration, IRecipeMap aRecipeMap) {
+    public static void addToMiracleDoorRecipes(ItemStack[] inputItems, FluidStack[] inputFluids,
+        ItemStack[] outputItems, FluidStack[] outputFluids, int eut, int duration, IRecipeMap aRecipeMap) {
         GTRecipeBuilder ra = GTValues.RA.stdBuilder();
 
         if (inputItems != null && inputItems.length > 0) {
@@ -216,7 +217,8 @@ public class StellarForgeRecipePool implements IRecipePool {
             ra.fluidOutputs(outputFluids);
         }
 
-        ra.eut(eut)
+        ra.special(GTCMItemList.WhiteDwarfMold_Ingot.get(1))
+            .eut(eut)
             .duration(duration)
             .addTo(aRecipeMap);
     }

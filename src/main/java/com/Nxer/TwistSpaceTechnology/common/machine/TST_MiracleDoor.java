@@ -50,6 +50,7 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -121,7 +122,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     private int needPhotonAmount = 0;
     private String costingWirelessEU = "0";
     private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
-    boolean isIngotMode = false;
     ItemStack IngotMold;
 
     @Override
@@ -197,10 +197,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
-            isIngotMode = true;
-            break;
-        }
         return mode == 1 ? checkProcessing_EBF() : checkProcessing_ABS();
     }
 
@@ -260,7 +256,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         // normal output
         mOutputItems = processingLogic.getOutputItems();
         mOutputFluids = processingLogic.getOutputFluids();
-        needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
+        needPhotonAmount = this.overclockParameter;
 
         return result;
     }
@@ -292,7 +288,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         // normal output
         mOutputItems = processingLogic.getOutputItems();
         mOutputFluids = processingLogic.getOutputFluids();
-        needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
+        needPhotonAmount = this.overclockParameter;
 
         return result;
     }
@@ -321,6 +317,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
         return new GTCM_ProcessingLogic() {
 
+            boolean isIngotMode = false;
             ArrayList<ItemStack> outputItemList = new ArrayList<>();
             ArrayList<FluidStack> outputFluidList = new ArrayList<>();
 
@@ -332,7 +329,12 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
             @Nonnull
             @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+            protected CheckRecipeResult onRecipeStart(@Nonnull GTRecipe recipe) {
+                isIngotMode = false;
+                for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
+                    isIngotMode = true;
+                    break;
+                }
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
 
@@ -390,7 +392,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
                 endRecipeProcessing();
             } else {
                 endRecipeProcessing();
-                criticalStopMachine();
+                stopMachine(ShutDownReasonRegistry.getSampleFromRegistry("aReason"));
                 return false;
             }
         }
