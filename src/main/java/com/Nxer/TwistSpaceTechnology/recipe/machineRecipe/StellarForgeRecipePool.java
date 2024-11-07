@@ -280,7 +280,7 @@ public class StellarForgeRecipePool implements IRecipePool {
                 }
             }
 
-            StellarForgeRecipePool.addToMiracleDoorRecipes(
+            addToMiracleDoorRecipes(
                 inputItemList.toArray(new ItemStack[0]),
                 inputFluidList.toArray(new FluidStack[0]),
                 outputItemList.toArray(new ItemStack[0]),
@@ -329,15 +329,6 @@ public class StellarForgeRecipePool implements IRecipePool {
                 break;
             }
         }
-        // ItemData data = getAssociation(ingot);
-        // Materials ingotMaterial = data != null ? data.mMaterial.mMaterial : null;
-        // if (ingotMaterial != null) {
-        // if (ingotMaterial.mStandardMoltenFluid != null) {
-        // out = ingotMaterial.getMolten(INGOTS);
-        // } else if (ingotMaterial.mFluid != null) {
-        // out = ingotMaterial.getFluid(BUCKETS);
-        // }
-        // }
         return out;
     }
 
@@ -352,12 +343,6 @@ public class StellarForgeRecipePool implements IRecipePool {
             (int) RECIPE_MV,
             20 * 25,
             GTCMRecipe.StellarForgeRecipes);
-        // TST_RecipeBuilder.builder()
-        // .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.MeteoricIron.getDust(1))
-        // .fluidOutputs(Materials.MeteoricIron.getMolten(144))
-        // .eut(RECIPE_MV)
-        // .duration(20 * 25)
-        // .addTo(GTCMRecipe.StellarForgeRecipes);
 
         // Meteoric Steel
         addToMiracleDoorRecipes(
@@ -368,12 +353,6 @@ public class StellarForgeRecipePool implements IRecipePool {
             (int) RECIPE_MV,
             20 * 10,
             GTCMRecipe.StellarForgeRecipes);
-        // TST_RecipeBuilder.builder()
-        // .itemInputs(GTUtility.getIntegratedCircuit(2), Materials.MeteoricIron.getDust(1))
-        // .fluidOutputs(Materials.MeteoricSteel.getMolten(144))
-        // .eut(RECIPE_MV)
-        // .duration(20 * 10)
-        // .addTo(GTCMRecipe.StellarForgeRecipes);
 
         // Neutronium
         addToMiracleDoorRecipes(
@@ -384,12 +363,6 @@ public class StellarForgeRecipePool implements IRecipePool {
             (int) RECIPE_UV,
             20 * 112,
             GTCMRecipe.StellarForgeRecipes);
-        // TST_RecipeBuilder.builder()
-        // .itemInputs(Materials.Neutronium.getDust(1))
-        // .fluidOutputs(Materials.Neutronium.getMolten(144))
-        // .eut(RECIPE_UV)
-        // .duration(20 * 112)
-        // .addTo(GTCMRecipe.StellarForgeRecipes);
 
     }
 
@@ -412,6 +385,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         // prepareABSRecipes();
         loadManualRecipes();
         // cacheRecipeList();
+        //New version no longer requires this
     }
 
     public void loadOnServerStarted() {
