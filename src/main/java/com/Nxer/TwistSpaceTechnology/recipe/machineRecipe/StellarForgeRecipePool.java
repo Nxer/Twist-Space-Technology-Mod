@@ -122,10 +122,10 @@ public class StellarForgeRecipePool implements IRecipePool {
             if (recipe.mOutputs.length == 1 && SpecialRecipeOutputs.contains(TST_ItemID.create(recipe.mOutputs[0])))
                 continue;
 
-            Set<ItemStack> inputItems = new HashSet<>();
-            Set<FluidStack> inputFluids = new HashSet<>();
-            Set<ItemStack> outputItems = new HashSet<>();
-            Set<FluidStack> outputFluids = new HashSet<>();
+            ArrayList<ItemStack> inputItems = new ArrayList<>();
+            ArrayList<FluidStack> inputFluids = new ArrayList<>();
+            ArrayList<ItemStack> outputItems = new ArrayList<>();
+            ArrayList<FluidStack> outputFluids = new ArrayList<>();
 
             // process Item input
             byte integrateNum = 0;
@@ -299,6 +299,16 @@ public class StellarForgeRecipePool implements IRecipePool {
 
                 if (!isFluidRepetitious) {
                     outputFluidList.add(aFluidTemp);
+                }
+            }
+
+            // Move the Integrated Circuit to the start of the recipe
+            for (int i = 0; i < inputItemList.size(); i++) {
+                if (inputItemList.get(i)
+                    .getItem() == ItemList.Circuit_Integrated.getItem() && i != 0) {
+                    ItemStack integratedCircuit = inputItemList.remove(i);
+                    inputItemList.add(0, integratedCircuit);
+                    break;
                 }
             }
 
