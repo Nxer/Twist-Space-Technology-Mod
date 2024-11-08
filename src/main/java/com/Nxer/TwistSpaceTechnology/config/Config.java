@@ -125,8 +125,7 @@ public class Config {
 
     // region Miracle Door
     public static double secondsOfMiracleDoorProcessingTimeABSMode = 25.6;
-    public static double secondsOfMiracleDoorProcessingTimeEBFMode = 128;
-    public static int amountOfPhotonsEveryMiracleDoorProcessingCost = 1;
+    public static double secondsOfMiracleDoorProcessingTimeEBFMode = 64;
     public static int multiplierOfMiracleDoorEUCostABSMode = 16;
     public static int multiplierOfMiracleDoorEUCostEBFMode = 64;
 
@@ -631,7 +630,6 @@ public class Config {
         // region Miracle Door
         secondsOfMiracleDoorProcessingTimeABSMode = Double.parseDouble(configuration.getString("secondsOfMiracleDoorProcessingTimeABSMode", MiracleDoor, String.valueOf(secondsOfMiracleDoorProcessingTimeABSMode), "Seconds of Miracle Door Default Progress Time in Alloy Blast Smelter mode. Type: double"));
         secondsOfMiracleDoorProcessingTimeEBFMode = Double.parseDouble(configuration.getString("secondsOfMiracleDoorProcessingTimeEBFMode", MiracleDoor, String.valueOf(secondsOfMiracleDoorProcessingTimeEBFMode), "Seconds of Miracle Door Default Progress Time in Electric Blast Furnace mode. Type: double"));
-        amountOfPhotonsEveryMiracleDoorProcessingCost = configuration.getInt("amountOfPhotonsEveryMiracleDoorProcessingCost", MiracleDoor, amountOfPhotonsEveryMiracleDoorProcessingCost, 0, 64, "Needed Photons amount of Miracle Door each run cost. Type: int");
         multiplierOfMiracleDoorEUCostABSMode = configuration.getInt("multiplierOfMiracleDoorEUCostABSMode", MiracleDoor, multiplierOfMiracleDoorEUCostABSMode, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier in Alloy Blast Smelter mode. Type: int");
         multiplierOfMiracleDoorEUCostEBFMode = configuration.getInt("multiplierOfMiracleDoorEUCostEBFMode", MiracleDoor, multiplierOfMiracleDoorEUCostEBFMode, 1, Integer.MAX_VALUE, "Miracle Door EU Cost multiplier in Electric Blast Furnace mode. Type: int");
 

@@ -387,10 +387,10 @@ Tooltip_MiracleDoor_05=直接从无线EU网络获取能量.
 Tooltip_MiracleDoor_06=警告! 如果尝试在网络内能量不足时启动机器,
 Tooltip_MiracleDoor_07= 输入的原料将直接寂灭.
 Tooltip_MiracleDoor_08=在控制器方块内放置编程电路以减少处理时间间隔.
-Tooltip_MiracleDoor_2_01=每次运行消耗相同的时间, 默认 (合金冶炼) 25.6s | (恒星锻炉) 128s .
+Tooltip_MiracleDoor_2_01=每次运行消耗相同的时间, 默认 (恒星锻炉) 64s | (合金冶炼) 25.6s .
 Tooltip_MiracleDoor_2_02=如果在控制器方块输入槽放置编程电路,
 Tooltip_MiracleDoor_2_03=实际处理时间 = 默认耗时 / (编号 * 物品数量)
-Tooltip_MiracleDoor_2_04=实际消耗 EU = 配方数值 * (编号 * 物品数量) * (合金冶炼) 16 (恒星锻炉) 64
+Tooltip_MiracleDoor_2_04=实际消耗 EU = 配方数值 * (编号 * 物品数量) * (恒星锻炉) 64 (合金冶炼) 16 
 Tooltip_MiracleDoor_2_05=每次运行需要消耗超频次数颗临界光子(默认为1).
 MiracleDoor.modeMsg.0=恒星锻炉:合金冶炼模式
 MiracleDoor.modeMsg.1=恒星锻炉模式

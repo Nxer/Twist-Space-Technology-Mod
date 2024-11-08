@@ -457,7 +457,7 @@ public class TextLocalization {
     public static final String Tooltip_MiracleDoor_06 = texter("Warning! If trying to start machine when Wireless EU Net has not enough EU,", "Tooltip_MiracleDoor_06");
     public static final String Tooltip_MiracleDoor_07 = texter(" the materials will fade.", "Tooltip_MiracleDoor_07");
     public static final String Tooltip_MiracleDoor_08 = texter("Put Integrated Circuit into Controller block to decrease process time interval.", "Tooltip_MiracleDoor_08");
-    public static final String Tooltip_MiracleDoor_2_01 = texter("Each run takes the same amount of time, (ABS) 25.6s | (EBF) 128s default.", "Tooltip_MiracleDoor_2_01");
+    public static final String Tooltip_MiracleDoor_2_01 = texter("Each run takes the same amount of time, (ABS) 25.6s | (EBF) 64s default.", "Tooltip_MiracleDoor_2_01");
     public static final String Tooltip_MiracleDoor_2_02 = texter("If putting Integrated Circuit into Controller block slot,", "Tooltip_MiracleDoor_2_02");
     public static final String Tooltip_MiracleDoor_2_03 = texter(" actual progress time = default / (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_03");
     public static final String Tooltip_MiracleDoor_2_04 = texter("Actual cost EU = recipe value * 16 * (Integrated Circuit Number * Stack Size)", "Tooltip_MiracleDoor_2_04");

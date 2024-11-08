@@ -387,10 +387,10 @@ Tooltip_MiracleDoor_05=Directly get EU from the wireless EU network.
 Tooltip_MiracleDoor_06=Warning! If an attempt is made to start the machine when there is not enough energy in the network,
 Tooltip_MiracleDoor_07= the input will simply annihilate!
 Tooltip_MiracleDoor_08=Put a Programmed Circuit into the controller block to decrease processing time interval.
-Tooltip_MiracleDoor_2_01=Each run takes the same amount of time, (ABS) 25.6s | (EBF) 128s by default.
+Tooltip_MiracleDoor_2_01=Each run takes the same amount of time, (EBF) 64s | (ABS) 25.6s by default.
 Tooltip_MiracleDoor_2_02=If Programmed Circuit exist in controller block,
 Tooltip_MiracleDoor_2_03=Actual processing time = default / (Programmed Circuit Number * Stack Size)
-Tooltip_MiracleDoor_2_04=Actual EU cost = recipe value * (Programmed Circuit Number * Stack Size) * (ABS) 16 or (EBF) 64
+Tooltip_MiracleDoor_2_04=Actual EU cost = recipe value * (Programmed Circuit Number * Stack Size) * (EBF) 64 or (ABS) 16
 Tooltip_MiracleDoor_2_05=Each run cost number of OverClock Times Critical Photon to start(1 by default).
 MiracleDoor.modeMsg.0=Mode: Stellar Forge : Alloy Smelter
 MiracleDoor.modeMsg.1=Mode: Stellar Forge
