@@ -22,6 +22,7 @@ import com.Nxer.TwistSpaceTechnology.util.Utils;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTUtility;
 import gtPlusPlus.xmod.forestry.bees.handler.GTPPCombType;
 import gtPlusPlus.xmod.forestry.bees.handler.GTPPDropType;
 import gtPlusPlus.xmod.forestry.bees.handler.GTPPPropolisType;
@@ -85,7 +86,8 @@ public class DragonBloodRecipe implements IRecipePool {
 
             // Stellar Forge
             addToMiracleDoorRecipes(
-                new ItemStack[] { new ItemStack(Blocks.dragon_egg, 1), GTPPCombType.DRAGONBLOOD.getStackForType(4) },
+                new ItemStack[] { new ItemStack(Blocks.dragon_egg, 1), GTPPCombType.DRAGONBLOOD.getStackForType(4),
+                    GTUtility.getIntegratedCircuit(2) },
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 96) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 12) },
@@ -96,7 +98,7 @@ public class DragonBloodRecipe implements IRecipePool {
             addToMiracleDoorRecipes(
                 new ItemStack[] { Utils.setStackSize(
                     GTModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1)),
-                    0), GTPPCombType.DRAGONBLOOD.getStackForType(4) },
+                    0), GTPPCombType.DRAGONBLOOD.getStackForType(4), GTUtility.getIntegratedCircuit(2) },
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 48) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 3) },
@@ -105,7 +107,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 GTCMRecipe.StellarForgeRecipes);
 
             addToMiracleDoorRecipes(
-                new ItemStack[] { new ItemStack(Blocks.dragon_egg, 1) },
+                new ItemStack[] { new ItemStack(Blocks.dragon_egg, 1), GTUtility.getIntegratedCircuit(1) },
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 128) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 8) },
@@ -116,7 +118,7 @@ public class DragonBloodRecipe implements IRecipePool {
             addToMiracleDoorRecipes(
                 new ItemStack[] { Utils.setStackSize(
                     GTModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1)),
-                    0) },
+                    0), GTUtility.getIntegratedCircuit(1) },
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 64) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 2) },

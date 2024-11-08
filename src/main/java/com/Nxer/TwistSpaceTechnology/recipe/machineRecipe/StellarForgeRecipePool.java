@@ -29,6 +29,7 @@ import com.google.common.collect.Sets;
 
 import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
@@ -183,6 +184,11 @@ public class StellarForgeRecipePool implements IRecipePool {
                 outputFluids.add(fluids.copy());
             }
 
+            // New Alloy Recipe in Blast Furnace conflicts with some single item recipes
+            if (integrateNum != 0 || inputItems.size() < 2) {
+                inputItems.add(GTUtility.getIntegratedCircuit(1));
+            }
+
             ItemStack[] inputItemsArray = inputItems.toArray(new ItemStack[0]);
             FluidStack[] outputFluidsArray = outputFluids.toArray(new FluidStack[0]);
             boolean canAddNewRecipe = true;
@@ -200,6 +206,21 @@ public class StellarForgeRecipePool implements IRecipePool {
 
             // add to recipe map
             if (canAddNewRecipe) {
+
+                // Move the Integrated Circuit to the end of the recipe
+                int InputItemLength = inputItemsArray.length;
+                for (int i = 0; i < InputItemLength; i++) {
+                    if (inputItemsArray[i].getItem() == ItemList.Circuit_Integrated.getItem()
+                        && i != InputItemLength - 1) {
+                        ItemStack IntegratedCircuit = inputItemsArray[i];
+                        for (int j = i; j < InputItemLength - 1; j++) {
+                            inputItemsArray[j] = inputItemsArray[j + 1];
+                        }
+                        inputItemsArray[InputItemLength - 1] = IntegratedCircuit;
+                        break;
+                    }
+                }
+
                 addToMiracleDoorRecipes(
                     inputItemsArray,
                     inputFluids.toArray(new FluidStack[0]),
@@ -236,6 +257,7 @@ public class StellarForgeRecipePool implements IRecipePool {
                 }
                 RecipeMultiplier = CorrectFluidAmount / minOutputFluidAmount;
             }
+            // Multiply the recipe
 
             if (recipe.mInputs != null) for (ItemStack aItemStack : recipe.mInputs) {
                 ItemStack aStackCopy = aItemStack.copy();
