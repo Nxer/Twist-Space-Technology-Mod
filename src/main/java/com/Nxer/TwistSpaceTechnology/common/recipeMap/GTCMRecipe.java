@@ -12,6 +12,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.D
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StellarForgeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
 
@@ -146,11 +147,29 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
+    // #tr tst.recipe.StellarForgeRecipes
+    // # Stellar Forge
+    // #zh_CN 恒星锻炉
     public static final RecipeMap<RecipeMapBackend> StellarForgeRecipes = RecipeMapBuilder
         .of("tst.recipe.StellarForgeRecipes")
-        .maxIO(4, 4, 1, 2)
+        .maxIO(6, 6, 1, 2)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
+        .frontend(TST_StellarForgeFrontend::new)
+        .useSpecialSlot()
+        .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.StellarForgeAlloySmelterRecipes
+    // # Stellar Forge : Alloy Smelter
+    // #zh_CN 恒星锻炉:合金冶炼
+    public static final RecipeMap<RecipeMapBackend> StellarForgeAlloySmelterRecipes = RecipeMapBuilder
+        .of("tst.recipe.StellarForgeAlloySmelterRecipes")
+        .maxIO(9, 9, 3, 3)
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
+        .frontend(TST_StellarForgeFrontend::new)
+        .useSpecialSlot()
         .disableOptimize()
         .build();
 

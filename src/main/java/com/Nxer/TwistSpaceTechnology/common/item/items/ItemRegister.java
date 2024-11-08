@@ -102,7 +102,10 @@ public class ItemRegister {
         GTCMItemList.EnergyFluctuationSelfHarmonizer.set(initItem01("Energy Fluctuation Self-Harmonizer", 33));
         GTCMItemList.EncapsulatedMicroSpaceTimeUnit.set(initItem01("Encapsulated Micro SpaceTime Unit", 34));
         GTCMItemList.SeedsSpaceTime.set(initItem01("Seeds of Space and Time", 35));
-
+        GTCMItemList.WhiteDwarfMold_Ingot.set(initItem01("White Dwarf Mold(Ingot)", 36));
+        // #tr MetaItem01.36.name
+        // # White Dwarf Mold(Ingot)
+        // #zh_CN 白矮星模具(锭)
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));
             GTCMItemList.HighDimensionalCircuitDoard.set(initItem01("High-dimensional circuit board", 177));

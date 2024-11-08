@@ -399,6 +399,7 @@ public class GTCM_ParallelHelper extends ParallelHelper {
      * Called by build(). Determines the parallels and everything else that needs to be done at build time
      */
     protected void determineParallel() {
+
         if (itemInputs == null) {
             itemInputs = new ItemStack[0];
         }
@@ -506,9 +507,9 @@ public class GTCM_ParallelHelper extends ParallelHelper {
         }
 
 
-        long eutUseAfterOC = calculator.setCurrentParallel(currentParallel).setParallel(originalMaxParallel).calculate().getConsumption();;
-        calculator.setParallel(Math.min(currentParallel, originalMaxParallel))
-                  .calculate();
+        long eutUseAfterOC = calculator.setCurrentParallel(currentParallel).setParallel(Math.min(currentParallel, originalMaxParallel)).calculate().getConsumption();;
+//        calculator.setParallel(Math.min(currentParallel, originalMaxParallel))
+//                  .calculate();
         if (currentParallel > originalMaxParallel) {
             calculator.setRecipeEUt(eutUseAfterOC);
         }

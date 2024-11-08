@@ -154,7 +154,6 @@ public final class ValueEnum {
         * Config.secondsOfMiracleDoorProcessingTimeABSMode);
     public static final int ticksOfMiracleDoorProcessingTimeEBFMode = (int) (20
         * Config.secondsOfMiracleDoorProcessingTimeEBFMode);
-    public static final int amountOfPhotonsEveryMiracleDoorProcessingCost = Config.amountOfPhotonsEveryMiracleDoorProcessingCost;
     public static final int multiplierOfMiracleDoorEUCostABSMode = Config.multiplierOfMiracleDoorEUCostABSMode;
     public static final int multiplierOfMiracleDoorEUCostEBFMode = Config.multiplierOfMiracleDoorEUCostEBFMode;
 

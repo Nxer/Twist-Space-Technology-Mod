@@ -1,11 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.amountOfPhotonsEveryMiracleDoorProcessingCost;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostABSMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeABSMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool.MoltenToIngot;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
@@ -35,10 +35,13 @@ import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.ParallelHelper.addFluidsLong;
+import static gregtech.api.util.ParallelHelper.addItemsLong;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -55,9 +58,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -82,8 +87,8 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
+import gregtech.api.util.ParallelHelper;
 import gregtech.common.items.ItemIntegratedCircuit;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -109,12 +114,13 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
     // region Processing Logic
 
-    private byte mode = 0;
+    private byte mode = 1;
     private int overclockParameter = 1;
     private UUID ownerUUID;
     private int needPhotonAmount = 0;
     private String costingWirelessEU = "0";
     private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
+    ItemStack IngotMold;
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -169,13 +175,13 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     @Override
     public RecipeMap<?> getRecipeMap() {
         if (mode == 1) return GTCMRecipe.StellarForgeRecipes;
-        return GTPPRecipeMaps.alloyBlastSmelterRecipes;
+        return GTCMRecipe.StellarForgeAlloySmelterRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.StellarForgeRecipes, GTPPRecipeMaps.alloyBlastSmelterRecipes);
+        return Arrays.asList(GTCMRecipe.StellarForgeRecipes, GTCMRecipe.StellarForgeAlloySmelterRecipes);
     }
 
     @Override
@@ -248,7 +254,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         // normal output
         mOutputItems = processingLogic.getOutputItems();
         mOutputFluids = processingLogic.getOutputFluids();
-        needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
+        needPhotonAmount = this.overclockParameter;
 
         return result;
     }
@@ -280,7 +286,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         // normal output
         mOutputItems = processingLogic.getOutputItems();
         mOutputFluids = processingLogic.getOutputFluids();
-        // needPhotonAmount = amountOfPhotonsEveryMiracleDoorProcessingCost;
+        needPhotonAmount = this.overclockParameter;
 
         return result;
     }
@@ -306,12 +312,56 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
+
         return new GTCM_ProcessingLogic() {
+
+            boolean isIngotMode = false;
+            ArrayList<ItemStack> outputItemList = new ArrayList<>();
+            ArrayList<FluidStack> outputFluidList = new ArrayList<>();
 
             @Nonnull
             @Override
             protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
                 return OverclockCalculator.ofNoOverclock(recipe);
+            }
+
+            @Nonnull
+            @Override
+            protected CheckRecipeResult onRecipeStart(@Nonnull GTRecipe recipe) {
+                isIngotMode = false;
+                for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
+                    isIngotMode = true;
+                    break;
+                }
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
+                return super.createParallelHelper(recipe).setCustomItemOutputCalculation(parallel -> {
+
+                    outputItemList = new ArrayList<>();
+                    outputFluidList = new ArrayList<>();
+                    for (FluidStack recipeFluidStack : recipe.mFluidOutputs) {
+                        if (recipeFluidStack == null) continue;
+
+                        long amount = (long) parallel * recipeFluidStack.amount;
+                        if (isIngotMode && MoltenToIngot.containsKey(recipeFluidStack.getFluid())) {
+                            addItemsLong(outputItemList, MoltenToIngot.get(recipeFluidStack.getFluid()), amount / 144);
+                        } else {
+                            addFluidsLong(outputFluidList, recipeFluidStack, amount);
+                        }
+                    }
+
+                    for (ItemStack recipeItemStack : recipe.mOutputs) {
+                        if (recipeItemStack != null)
+                            addItemsLong(outputItemList, recipeItemStack, (long) parallel * recipeItemStack.stackSize);
+                    }
+
+                    return outputItemList.toArray(new ItemStack[0]);
+                })
+                    .setCustomFluidOutputCalculation(parallel -> outputFluidList.toArray(new FluidStack[0]));
             }
         }.setMaxParallel(Integer.MAX_VALUE);
     }
@@ -328,6 +378,7 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
+        if (IngotMold == null) IngotMold = GTCMItemList.WhiteDwarfMold_Ingot.get(1);
     }
 
     @Override

@@ -19,7 +19,6 @@ import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
-import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
 import com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 
@@ -106,7 +105,7 @@ public class TwistSpaceTechnology {
         new LazyStaticsInitLoader().initStaticsOnInit();
         MachineLoader.loadMachines();// Load Machines
         GT_Hatch_RackComputationMonitor.run();
-        NEIHandler.IMCSender();// NEI reg
+        // NEIHandler.IMCSender();// NEI reg
         EntityRegistry
             .registerModEntity(EntityMountableBlock.class, "TST:EntityMountableBlock", 1, this, 256, 20, false);
 
