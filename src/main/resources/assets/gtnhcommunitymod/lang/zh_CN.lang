@@ -1556,3 +1556,4 @@ Tooltip_MegaStoneBreaker.4=当侧面输入仓输入等量的水和岩浆时执�
 Tooltip_MegaStoneBreaker_Hatch_0=§f岩浆输入仓:§7结构的§a左§7侧
 Tooltip_MegaStoneBreaker_Hatch_1=§f岩浆输入仓:§7结构的§a右§7侧
 tst.recipe.MegaStoneBreakerRecipes=巨型碎石机
+NameMegaStoneBreaker=巨型碎石机

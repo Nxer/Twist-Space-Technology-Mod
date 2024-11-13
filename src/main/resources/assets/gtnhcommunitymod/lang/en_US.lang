@@ -1556,3 +1556,4 @@ Tooltip_MegaStoneBreaker.4=When equal amounts of water and lava are input from t
 Tooltip_MegaStoneBreaker_Hatch_0=§fLava Hatch:{GREEN\} Left§7 side of Structure
 Tooltip_MegaStoneBreaker_Hatch_1=§fWater Hatch:{GREEN\} Right§7 side of Structure
 tst.recipe.MegaStoneBreakerRecipes=Mega Stone Breaker
+NameMegaStoneBreaker=Mega Stone Breaker

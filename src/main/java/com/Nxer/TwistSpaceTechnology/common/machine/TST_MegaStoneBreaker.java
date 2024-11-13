@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MegaStoneBreakerRecipes;
 import static com.Nxer.TwistSpaceTechnology.config.Config.EuModifier_MegaStoneBreaker;
-import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelMultiplyPerTier_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedBonus_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -11,7 +10,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_Separatin
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.calculatePowerTier;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidEqual;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;

@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
@@ -713,10 +714,16 @@ public class MachineLoader {
                 GTCMItemList.BloodOrbHatch.set(BloodOrbHatch);
             }
         }
-
-        MegaStoneBreaer = new TST_MegaStoneBreaker(19062, "NameMegaStoneBreaker", TextEnums.tr("NameMegaStoneBreaker"))
-            .getStackForm(1);
-        GTCMItemList.MegaStoneBreaker.set(MegaStoneBreaer);
+        if (Enable_MegaStoneBreaker) {
+            // #tr NameMegaStoneBreaker
+            // # Mega Stone Breaker
+            // #zh_CN 巨型碎石机
+            MegaStoneBreaer = new TST_MegaStoneBreaker(
+                19062,
+                "NameMegaStoneBreaker",
+                TextEnums.tr("NameMegaStoneBreaker")).getStackForm(1);
+            GTCMItemList.MegaStoneBreaker.set(MegaStoneBreaer);
+        }
 
         // endregion
 
