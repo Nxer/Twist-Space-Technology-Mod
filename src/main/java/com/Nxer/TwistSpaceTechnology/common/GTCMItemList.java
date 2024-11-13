@@ -270,6 +270,7 @@ public enum GTCMItemList {
     MassFabricatorGenesis,
     IncompactCyclotron,
     BloodyHell,
+    MegaStoneBreaker,
 
     // endregion
 

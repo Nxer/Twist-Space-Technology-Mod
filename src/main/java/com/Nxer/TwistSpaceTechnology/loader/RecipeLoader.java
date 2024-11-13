@@ -24,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.HyperSpacetimeTransfor
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IndustrialMagicMatrixRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IntensifyChemicalDistorterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MassFabricatorGenesisRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MegaStoneBreakerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MicroSpaceTimeFabricatorioRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MixerRecipePool;
@@ -68,7 +69,7 @@ public class RecipeLoader {
             new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new DragonBloodRecipe(),
             new FusionReactorRecipePool(), new ModularHatchesRecipePool(), new MassFabricatorGenesisRecipePool(),
             new SpaceAssemblerRecipePool(), new CosmicProcessorCircuitRecipePool(),
-            new MicroSpaceTimeFabricatorioRecipePool(), new BloodyHellRecipePool() };
+            new MicroSpaceTimeFabricatorioRecipePool(), new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool() };
 
         new SimpleFurnaceFuelPool().loadRecipes();
         for (IRecipePool recipePool : recipePools) {

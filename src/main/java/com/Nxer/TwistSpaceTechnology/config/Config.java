@@ -407,8 +407,16 @@ public class Config {
     public static boolean Enable_IncompactCyclotron =true;
     public static float EuModifier_IncompactCyclotron = 1.6F;
     public static boolean EnablePerfectOverclock_IncompactCyclotron =false;
-    public static float SpeedBouns_IncompactCyclotron =0.5F;
+    public static float SpeedBonus_IncompactCyclotron =0.5F;
     public static int MaxParallel_IncompactCyclotron =256;
+    // endregion
+
+    // region Mega Stone Breaker
+    public static boolean Enable_MegaStoneBreaker=true;
+    public static float EuModifier_MegaStoneBreaker=1F;
+    public static float SpeedBonus_MegaStoneBreaker=1F;
+    public static int ParallelMultiplyPerTier_MegaStoneBreaker =2;
+    // endregion
 
     // region PowerChair BGM
     public static boolean Enable_PowerChairBGM = true;

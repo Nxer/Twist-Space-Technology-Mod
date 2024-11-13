@@ -2890,83 +2890,84 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .addTo(assembler);
 
             // Casing Stone Brick Advanced
-            GTValues.RA
-                .stdBuilder()
-                .itemInputs(
-                    GTCMItemList.ReinforcedStoneBrickCasing.get(1),
-                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 1),
-                    GTOreDictUnificator.get(OrePrefixes.plate, Materials.Bedrockium, 6)
-                )
-                .fluidInputs(
-                    MaterialsAlloy.TRINIUM_NAQUADAH_CARBON.getFluidStack(1728)
-                )
-                .itemOutputs(GTCMItemList.ReinforcedBedrockCasing.get(1))
-                .eut(RECIPE_ZPM)
-                .duration(20 * 30)
-                .addTo(assembler);
+        GTValues.RA
+            .stdBuilder()
+            .itemInputs(
+                GTCMItemList.ReinforcedStoneBrickCasing.get(1),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 1),
+                GTOreDictUnificator.get(OrePrefixes.plate, Materials.Bedrockium, 6)
+            )
+            .fluidInputs(
+                MaterialsAlloy.TRINIUM_NAQUADAH_CARBON.getFluidStack(1728)
+            )
+            .itemOutputs(GTCMItemList.ReinforcedBedrockCasing.get(1))
+            .eut(RECIPE_ZPM)
+            .duration(20 * 30)
+            .addTo(assembler);
 
             // Casing Farm
-            TTRecipeAdder.addResearchableAssemblylineRecipe(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            GTCMItemList.ReinforcedStoneBrickCasing.get(1),
+            1_000_000,
+            512,
+            2_000_000,
+            4,
+            new Object[]{
                 GTCMItemList.ReinforcedStoneBrickCasing.get(1),
-                1_000_000,
-                512,
-                2_000_000,
-                4,
-                new Object[]{
-                    GTCMItemList.ReinforcedStoneBrickCasing.get(1),
-                    GTOreDictUnificator.get(OrePrefixes.pipeHuge, Materials.Polybenzimidazole, 4),
-                    GTOreDictUnificator.get(OrePrefixes.pipeRestrictiveHuge, Materials.BlackPlutonium, 4),
-                    ItemList.Casing_Vent.get(1),
+                GTOreDictUnificator.get(OrePrefixes.pipeHuge, Materials.Polybenzimidazole, 4),
+                GTOreDictUnificator.get(OrePrefixes.pipeRestrictiveHuge, Materials.BlackPlutonium, 4),
+                ItemList.Casing_Vent.get(1),
 
-                    FarmGear,
-                    FarmOutput,
-                    FarmPump,
-                    FarmController,
+                FarmGear,
+                FarmOutput,
+                FarmPump,
+                FarmController,
 
-                    GGMaterial.marCeM200.get(OrePrefixes.gearGt, 4),
-                    ItemList.Electric_Piston_UV.get(2),
-                    ItemList.Electric_Pump_UV.get(2),
-                    ItemRefer.HiC_T3.get(4),
+                GGMaterial.marCeM200.get(OrePrefixes.gearGt, 4),
+                ItemList.Electric_Piston_UV.get(2),
+                ItemList.Electric_Pump_UV.get(2),
+                ItemRefer.HiC_T3.get(4),
 
-                    new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 4},
-                    new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2},
-                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 18)
-                },
-                new FluidStack[]{
-                    new FluidStack(FluidRegistry.getFluid("liquid helium"), 16000),
-                    MaterialsAlloy.ARCANITE.getFluidStack(864),
-                    MaterialsAlloy.TITANSTEEL.getFluidStack(144)
-                },
-                GTCMItemList.CompositeFarmCasing.get(1),
-                20*60,
-                (int) RECIPE_UV
-            );
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 4},
+                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2},
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 18)
+            },
+            new FluidStack[]{
+                new FluidStack(FluidRegistry.getFluid("liquid helium"), 16000),
+                MaterialsAlloy.ARCANITE.getFluidStack(864),
+                MaterialsAlloy.TITANSTEEL.getFluidStack(144)
+            },
+            GTCMItemList.CompositeFarmCasing.get(1),
+            20*60,
+            (int) RECIPE_UV
+        );
 
             // Casing Clean
-            TTRecipeAdder.addResearchableAssemblylineRecipe(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            GregtechItemList.Casing_PLACEHOLDER_TreeFarmer.get(1),
+            2_000_000,
+            512,
+            2_000_000,
+            16,
+            new Object[]{
                 GregtechItemList.Casing_PLACEHOLDER_TreeFarmer.get(1),
-                    2_000_000,
-                    512,
-                    2_000_000,
-                    16,
-                    new Object[]{
-                        GregtechItemList.Casing_PLACEHOLDER_TreeFarmer.get(1),
-                        ItemList.Casing_Coil_Superconductor.get(1),
-                        GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.SterlingSilver, 1),
-                        GTOreDictUnificator.get(OrePrefixes.pipeLarge, Materials.NetherStar, 4),
+                ItemList.Casing_Coil_Superconductor.get(1),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.SterlingSilver, 1),
+                GTOreDictUnificator.get(OrePrefixes.pipeLarge, Materials.NetherStar, 4),
 
-                        ItemList.Circuit_Parts_Chip_Bioware.get(8),
-                        GGMaterial.adamantiumAlloy.get(OrePrefixes.plateDouble, 6),
-                        ItemList.neutroniumHeatCapacitor.get(1)
-                    },
-                    new FluidStack[]{
-                        Materials.Grade8PurifiedWater.getFluid(8000),
-                        new FluidStack(FluidRegistry.getFluid("liquid helium"), 64000)
-                    },
-                    GTCMItemList.AsepticGreenhouseCasing.get(1),
-                    20*240,
-                (int) RECIPE_UHV
-            );
+                ItemList.Circuit_Parts_Chip_Bioware.get(8),
+                GGMaterial.adamantiumAlloy.get(OrePrefixes.plateDouble, 6),
+                ItemList.neutroniumHeatCapacitor.get(1)
+            },
+            new FluidStack[]{
+                Materials.Grade8PurifiedWater.getFluid(8000),
+                new FluidStack(FluidRegistry.getFluid("liquid helium"), 64000)
+            },
+            GTCMItemList.AsepticGreenhouseCasing.get(1),
+            20*240,
+            (int) RECIPE_UHV
+        );
+        if(Config.Enable_MegaStoneBreaker){}
 
         if (Config.EnableModularizedMachineSystem) {
 

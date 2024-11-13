@@ -285,6 +285,6 @@ public final class ValueEnum {
     // region Incompact Cyclotron
     public static float EuModifier_IncompactCyclotron = Config.EuModifier_IncompactCyclotron;
     public static boolean EnablePerfectOverclock_IncompactCyclotron = Config.EnablePerfectOverclock_IncompactCyclotron;
-    public static float SpeedBouns_IncompactCyclotron = Config.SpeedBouns_IncompactCyclotron;
+    public static float SpeedBouns_IncompactCyclotron = Config.SpeedBonus_IncompactCyclotron;
     public static int MaxParallel_IncompactCyclotron = Config.MaxParallel_IncompactCyclotron;
 }
