@@ -413,9 +413,7 @@ public class Config {
 
     // region Mega Stone Breaker
     public static boolean Enable_MegaStoneBreaker=true;
-    public static float EuModifier_MegaStoneBreaker=1F;
-    public static float SpeedBonus_MegaStoneBreaker=1F;
-    public static int ParallelMultiplyPerTier_MegaStoneBreaker =2;
+
     // endregion
 
     // region PowerChair BGM

@@ -714,10 +714,11 @@ public class MachineLoader {
                 GTCMItemList.BloodOrbHatch.set(BloodOrbHatch);
             }
         }
+
         if (Enable_MegaStoneBreaker) {
             // #tr NameMegaStoneBreaker
-            // # Mega Stone Breaker
-            // #zh_CN 巨型碎石机
+            // # Silicon Rock Synthesizer
+            // #zh_CN 硅岩制造机
             MegaStoneBreaer = new TST_MegaStoneBreaker(
                 19062,
                 "NameMegaStoneBreaker",
