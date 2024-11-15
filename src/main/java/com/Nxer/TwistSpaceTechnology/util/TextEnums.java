@@ -11,8 +11,8 @@ public enum TextEnums {
     // region General
 
     // #tr Author_Goderium
-    // # Author: {\WHITE}{\BOLD}Goderium
-    // #zh_CN 作者: {\WHITE}{\BOLD}Goderium
+    // # Author: {\WHITE}{\BOLD}Goderium_
+    // #zh_CN 作者: {\WHITE}{\BOLD}Goderium_
     Author_Goderium("Author_Goderium"),
 
     // #tr Author_Taskeren

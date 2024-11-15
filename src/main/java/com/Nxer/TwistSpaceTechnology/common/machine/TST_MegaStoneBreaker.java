@@ -124,7 +124,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
             protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
                 return super.createParallelHelper(recipe).setCustomItemOutputCalculation(parallel -> {
                     ArrayList<ItemStack> outputItemList = new ArrayList<>();
-                    int OutputBonus = isOutputMultiply ? 64 : 1;
+                    int OutputBonus = isOutputMultiply ? 1024 : 4;
 
                     for (ItemStack recipeItemStack : recipe.mOutputs) {
                         if (recipeItemStack != null) addItemsLong(
@@ -308,8 +308,8 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
             // #zh_CN 基础并行为4, 拥有等同于有损超频的并行加成
             .addInfo(TextEnums.tr("Tooltip_MegaStoneBreaker.2"))
             // #tr Tooltip_MegaStoneBreaker.3
-            // # When water and lava are input from the side input hatch, Increase to 64x of output
-            // #zh_CN 当侧面输入仓输入水和岩浆时获得64倍增产
+            // # Basic increase in output by 4x, When water and lava are input from the side input hatch, Increase to 1024x of output
+            // #zh_CN 基础增产4倍, 当侧面输入仓输入水和岩浆时增产1024倍
             .addInfo(TextEnums.tr("Tooltip_MegaStoneBreaker.3"))
             .addSeparator()
             .addInfo(StructureTooComplex)
