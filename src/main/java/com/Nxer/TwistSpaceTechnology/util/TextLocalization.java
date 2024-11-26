@@ -171,7 +171,7 @@ public class TextLocalization {
     public static final String Tooltip_PhC_01 = texter(EnumChatFormatting.BLUE + "Prism tank in order, sir.", "Tooltip_PhC_01");
     public static final String Tooltip_PhC_02 = texter("Control Photons on the scale of 10\u00AF\u00B9\u00B2 meters.", "Tooltip_PhC_02");
     public static final String Tooltip_PhC_03 = texter("Install Photonic Intensifier on the back side of the structure to dramatically increase production speeds.", "Tooltip_PhC_03");
-    public static final String Tooltip_PhC_04 = texter("Multi upgrade modules can be stacked. Also can be uninstalled. Replace using normal Casing.", "Tooltip_PhC_04");
+    public static final String Tooltip_PhC_04 = texter("Multi upgrade modules can be stacked. Also can be uninstalled. Replace using normal Casing. Module tier limits recipe tier", "Tooltip_PhC_04");
     public static final String Tooltip_PhC_05 = textScrewdriverChangeMode;
     public static final String Tooltip_PhC_06 = texter(EnumChatFormatting.GOLD + "Photon Controller mode:", "Tooltip_PhC_06");
     public static final String Tooltip_PhC_07 = texter("16x Parallel", "Tooltip_PhC_07");
@@ -191,8 +191,7 @@ public class TextLocalization {
     public static final String[] Tooltips_Upgrades_UHV = new String[]{texter("Extra 70%% Speed Up !", "PhotonControllerUpgradeUHV.tooltips.01")};
     public static final String[] Tooltips_Upgrades_UEV = new String[]{texter("Extra 100%% Speed Up !", "PhotonControllerUpgradeUEV.tooltips.01")};
     public static final String[] Tooltips_Upgrades_UIV = new String[]{texter("Extra 140%% Speed Up !", "PhotonControllerUpgradeUiV.tooltips.01")};
-    public static final String[] Tooltips_Upgrades_UMV = new String[]{texter("Extra 190%% Speed Up !", "PhotonControllerUpgradeUMV.tooltips.01"),
-        texter("Enable Perfect Overclock !", "PhotonControllerUpgradeUMV.tooltips.02")};
+    public static final String[] Tooltips_Upgrades_UMV = new String[]{texter("Extra 190%% Speed Up !", "PhotonControllerUpgradeUMV.tooltips.01")};
     public static final String[] Tooltips_Upgrades_UXV = new String[]{texter("Extra 250%% Speed Up !", "PhotonControllerUpgradeUXV.tooltips.01"),
         texter("Enable Perfect Overclock !", "PhotonControllerUpgradeUXV.tooltips.02")};
     public static final String[] Tooltips_Upgrades_MAX = new String[]{texter("Extra 320%% Speed Up !", "PhotonControllerUpgradeMAX.tooltips.01"),
