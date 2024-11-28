@@ -181,7 +181,7 @@ public class Config {
     // region Magnetic Domain Constructor
     public static byte Mode_Default_MagneticDomainConstructor = 0;
     public static float SpeedBonus_MultiplyPerTier_MagneticDomainConstructor = 0.75F;
-    public static int Parallel_PerRing_MagneticDomainConstructor = 64;
+    public static int Parallel_PerRing_MagneticDomainConstructor = 256;
     // endregion
 
     // region Silksong
@@ -344,7 +344,7 @@ public class Config {
     // endregion
 
     // region Industrial Magnetar Separator
-    public static boolean Enable_IndustrialMagnetarSeparator = true;
+    public static boolean Enable_IndustrialMagnetarSeparator = false;
     public static float SpeedBouns_IndustrialMagnetarSeparator = 0.25F;
     public static float EuModifier_IndustrialMagnetarSeparator = 0.8F;
     public static int ParallelMultiply_IndustrialMagnetarSeparator = 4;
