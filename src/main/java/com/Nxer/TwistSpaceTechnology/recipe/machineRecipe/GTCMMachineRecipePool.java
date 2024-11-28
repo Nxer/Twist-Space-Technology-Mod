@@ -817,10 +817,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region MagneticDrivePressureFormer
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, Industrial_Extruder.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
-            .itemInputs(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Neutronium, 1),
+            512_000,
+            256,
+            (int) RECIPE_UV,
+            64,
+            new Object[]{
                 ItemList.Casing_MiningOsmiridium.get(64),
                 Industrial_Extruder.get(64),
                 Industrial_PlatePress.get(64),
@@ -831,50 +834,64 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.block, Materials.Neutronium, 64),
                 ItemList.UV_Coil.get(64),
 
-                ItemList.Field_Generator_UV.get(2),
+                ItemList.Field_Generator_UV.get(8),
                 ItemList.Robot_Arm_UV.get(16),
-                ItemList.Conveyor_Module_UV.get(16),
+                ItemList.Conveyor_Module_UV.get(32),
                 new Object[]{OrePrefixes.circuit.get(Materials.UV), 64},
 
-                HighEnergyFlowCircuit.get(32),
-                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Neutronium, 64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUV, 64)
-            )
-            .fluidInputs(
+                HighEnergyFlowCircuit.get(64),
+                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUV, 64),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Osmiridium, 64),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Iridium, 64)
+            },
+            new FluidStack[]{
                 new FluidStack(solderIndAlloy, 144 * 256),
-                Materials.Naquadria.getMolten(144 * 256),
-                Materials.Lubricant.getFluid(1000 * 256),
-                Materials.Samarium.getMolten(144 * 256)
-            )
-            .itemOutputs(MagneticDrivePressureFormer.get(1))
-
-            .eut(RECIPE_UHV)
-            .duration(20 * 256)
-            .addTo(AssemblyLine);
-
+                Materials.Samarium.getMolten(144 * 256),
+                new FluidStack(FluidRegistry.getFluid("liquid helium"), 1000 * 256),
+                Materials.Lubricant.getFluid(1000 * 256)
+            },
+            MagneticDrivePressureFormer.get(1),
+            20 * 256,
+            (int) RECIPE_UHV
+        );
         // endregion
 
         // region PhysicalFormSwitcher
-        GTValues.RA.stdBuilder()
-            .itemInputs(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            Materials.Infinity.getCells(1),
+            512_000,
+            256,
+            (int) RECIPE_UV,
+            16,
+            new Object[]{
                 ItemList.Machine_Multi_IndustrialExtractor.get(64),
                 ItemList.Machine_Multi_Solidifier.get(64),
                 FluidExtractorUV.get(64),
-
                 FluidSolidifierUV.get(64),
-                ItemList.Field_Generator_UV.get(16),
-                GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 16),
 
-                new Object[]{OrePrefixes.circuit.get(Materials.UV), 16},
-                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUV, 8),
-                GTUtility.getIntegratedCircuit(10)
-            )
-            .fluidInputs(Materials.Iridium.getMolten(144 * 64))
-            .itemOutputs(PhysicalFormSwitcher.get(1))
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Naquadria, 32),
+                //Cell
+                //SuperConductCoilUV
+                //tbd
 
-            .eut(RECIPE_UV)
-            .duration(20 * 180)
-            .addTo(assembler);
+                ItemList.Pump_UV.get(16),
+                ItemList.Field_Generator_UV.get(8),
+                new Object[]{OrePrefixes.circuit.get(Materials.UV), 4},
+                GTOreDictUnificator.get(OrePrefixes.wireGt08, Materials.SuperconductorUV, 8),
+
+                GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
+            },
+            new FluidStack[]{
+                new FluidStack(solderIndAlloy, 144 * 64),
+                MaterialsAlloy.TRINIUM_NAQUADAH_CARBON.getFluidStack(144 * 32),
+                Materials.Samarium.getMolten(144 * 256),
+                new FluidStack(FluidRegistry.getFluid("liquid helium"), 1000 * 256),
+                Materials.Lubricant.getFluid(1000 * 256)
+            },
+            PhysicalFormSwitcher.get(1),
+            20 * 180,
+            (int) RECIPE_UV
+        );
 
         // Containment Field casing
         GTValues.RA.stdBuilder()
