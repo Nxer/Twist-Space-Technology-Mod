@@ -278,7 +278,7 @@ public class TextLocalization {
     public static final String Tooltip_PhysicalFormSwitcher_00 = texter("Controller block for the Physical Form Switcher", "Tooltip_PhysicalFormSwitcher_00");
     public static final String Tooltip_PhysicalFormSwitcher_01 = texter(EnumChatFormatting.YELLOW + "Forming Master !", "Tooltip_PhysicalFormSwitcher_01");
     public static final String Tooltip_PhysicalFormSwitcher_02 = texter("The ultimate method of melt operation.", "Tooltip_PhysicalFormSwitcher_02");
-    public static final String Tooltip_PhysicalFormSwitcher_03 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_PhysicalFormSwitcher_03");
+    public static final String Tooltip_PhysicalFormSwitcher_03 = texter("Almost infinite parallel.(But imperfect overclock)(But imperfect overclock)", "Tooltip_PhysicalFormSwitcher_03");
     public static final String Tooltip_PhysicalFormSwitcher_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_PhysicalFormSwitcher_04");
     public static final String Tooltip_PhysicalFormSwitcher_05 = texter("The Glass Tier limit the recipe voltage tier.", "Tooltip_PhysicalFormSwitcher_05");
 
@@ -338,8 +338,7 @@ public class TextLocalization {
     public static final String Tooltip_SpaceScaler_03 = texter("Only if the space is manageable...", "Tooltip_SpaceScaler_03");
     public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_SpaceScaler_04");
     public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.", "Tooltip_SpaceScaler_05");
-    public static final String Tooltip_SpaceScaler_06 = texter("Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.", "Tooltip_SpaceScaler_06");
-    public static final String Tooltip_SpaceScaler_08 = texter("In Particle Collider mode, higher tier has more output.", "Tooltip_SpaceScaler_08");
+    public static final String Tooltip_SpaceScaler_06 = texter("Harmony Stabilisation Field Generator block enables Electric Implosion Compressor mode and Neutronium Compressor mode.", "Tooltip_SpaceScaler_06");
 
     // endregion
 
