@@ -348,7 +348,7 @@ public class TextLocalization {
     public static final String Tooltip_MoleculeDeconstructor_00 = texter("Controller block for the Molecule Deconstructor", "Tooltip_MoleculeDeconstructor_00");
     public static final String Tooltip_MoleculeDeconstructor_01 = texter(EnumChatFormatting.AQUA + "The lightning seemed to roll down a ladder.", "Tooltip_MoleculeDeconstructor_01");
     public static final String Tooltip_MoleculeDeconstructor_02 = texter("Separate the molecules one by one with tweezers.", "Tooltip_MoleculeDeconstructor_02");
-    public static final String Tooltip_MoleculeDeconstructor_03 = texter("Extra 24x Parallel per Piece. 16 Piece enable Perfect Overclock.", "Tooltip_MoleculeDeconstructor_03");
+    public static final String Tooltip_MoleculeDeconstructor_03 = texter("Extra 32x Parallel per Piece. 16 Piece enable Perfect Overclock.", "Tooltip_MoleculeDeconstructor_03");
     public static final String Tooltip_MoleculeDeconstructor_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_MoleculeDeconstructor_04");
     public static final String Tooltip_MoleculeDeconstructor_05 = texter("The Glass Tier limit the Energy hatch voltage Tier.", "Tooltip_MoleculeDeconstructor_05");
 

@@ -215,7 +215,7 @@ public class Config {
     // region Molecule Deconstructor
     public static byte Mode_Default_MoleculeDeconstructor = 0;
     public static int PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor = 16;
-    public static int Parallel_PerPiece_MoleculeDeconstructor = 24;
+    public static int Parallel_PerPiece_MoleculeDeconstructor = 32;
     public static float SpeedBonus_MultiplyPerTier_MoleculeDeconstructor = 0.9F;
     // endregion
 
