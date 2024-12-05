@@ -101,6 +101,7 @@ import static gregtech.api.enums.ItemList.ElectromagneticSeparatorUHV;
 import static gregtech.api.enums.ItemList.ExtractorUHV;
 import static gregtech.api.enums.ItemList.FluidExtractorUV;
 import static gregtech.api.enums.ItemList.FluidSolidifierUV;
+import static gregtech.api.enums.ItemList.Machine_Multi_Autoclave;
 import static gregtech.api.enums.ItemList.MixerUV;
 import static gregtech.api.enums.ItemList.PlasmaArcFurnaceUEV;
 import static gregtech.api.enums.ItemList.PolarizerUHV;
@@ -174,6 +175,7 @@ import static tectech.thing.CustomItemList.rack_Hatch;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
@@ -867,7 +869,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         );
         // endregion
 
-//        // region PhysicalFormSwitcher
+        // region PhysicalFormSwitcher
         TTRecipeAdder.addResearchableAssemblylineRecipe(
             GTModHandler.getModItem(Mods.GregTech.ID, "gt.metaitem.99",1,397),
             1_024_000,
@@ -1201,34 +1203,43 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // endregion
 
         // region CrystallineInfinitier
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, ItemList.AutoclaveUHV.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
-            .itemInputs(
-                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 16),
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            Machine_Multi_Autoclave.get(1),
+            2_048_000,
+            512,
+            (int) RECIPE_UEV,
+            16,
+            new Object[]{
                 eM_Containment_Field.get(4),
-                ItemList.AutoclaveUHV.get(64),
+                Machine_Multi_Autoclave.get(64),
+                ItemList.AutoclaveUEV.get(64),
+                ItemList.ChemicalBathUEV.get(64),
+
+                ItemList.Field_Generator_UEV.get(32),
                 ItemList.Electric_Pump_UEV.get(16),
-
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 64),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 64),
-                GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
-                GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
 
-                GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
-                GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.UV, 64)
-            )
-            .fluidInputs(
+                ItemList.EnergisedTesseract.get(64),
+                ItemList.NuclearStar.get(64),
+                ItemList.Circuit_Wafer_PPIC.get(64),
+                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.UV, 64),
+
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Neutronium, 64),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Neutronium, 64),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.NaquadahAlloy, 64),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.NaquadahAlloy, 64)
+            },
+            new FluidStack[]{
                 new FluidStack(solderPlasma, 144 * 256),
-                Materials.NaquadahAlloy.getMolten(144 * 256),
+                GGMaterial.tairitsu.getMolten(144 * 512),
+                Materials.StableBaryonicMatter.getFluid(1000 *64),
                 Materials.UUMatter.getFluid(1000 * 128)
-            )
-            .itemOutputs(CrystallineInfinitier.get(1))
-
-            .eut(RECIPE_UEV)
-            .duration(20 * 1800)
-            .addTo(AssemblyLine);
+            },
+            CrystallineInfinitier.get(1),
+            20 * 1800,
+            (int) RECIPE_UEV
+        );
 
         GTValues.RA.stdBuilder()
             .itemInputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 1))
