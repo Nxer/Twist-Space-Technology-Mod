@@ -370,4 +370,13 @@ public class GTCMRecipe {
             (index, isFluid, isOutput, isSpecial) -> !isFluid && !isOutput ? GTUITextures.OVERLAY_SLOT_CIRCUIT : null)
         .build();
 
+    // #tr tst.recipe.MegaStoneBreakerRecipes
+    // # Mega Stone Breaker
+    // #zh_CN 巨型碎石机
+    public static final RecipeMap<TST_RecipeMapBackend> MegaStoneBreakerRecipes = RecipeMapBuilder
+        .of("tst.recipe.MegaStoneBreakerRecipes", TST_RecipeMapBackend::new)
+        .maxIO(2, 1, 0, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaStoneBreaker.get(1)))
+        .disableOptimize()
+        .build();
 }

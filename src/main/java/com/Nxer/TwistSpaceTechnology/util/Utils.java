@@ -369,5 +369,4 @@ public final class Utils {
     public static double calculatePowerTier(double voltage) {
         return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
     }
-
 }

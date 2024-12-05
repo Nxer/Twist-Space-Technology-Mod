@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
@@ -49,6 +50,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaStoneBreaker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
@@ -164,8 +166,8 @@ public class MachineLoader {
     public static ItemStack IncompactCyclotron;
     public static ItemStack StrangeMatterAggregator;
     public static ItemStack MicroSpaceTimeFabricatorio;
-
     public static ItemStack BloodyHell;
+    public static ItemStack MegaStoneBreaer;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -711,6 +713,17 @@ public class MachineLoader {
                     .getStackForm(1);
                 GTCMItemList.BloodOrbHatch.set(BloodOrbHatch);
             }
+        }
+
+        if (Enable_MegaStoneBreaker) {
+            // #tr NameMegaStoneBreaker
+            // # Silicon Rock Synthesizer
+            // #zh_CN 硅岩制造机
+            MegaStoneBreaer = new TST_MegaStoneBreaker(
+                19062,
+                "NameMegaStoneBreaker",
+                TextEnums.tr("NameMegaStoneBreaker")).getStackForm(1);
+            GTCMItemList.MegaStoneBreaker.set(MegaStoneBreaer);
         }
 
         // endregion
