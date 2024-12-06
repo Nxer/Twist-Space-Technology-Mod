@@ -6,7 +6,6 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AntimatterFuelRo
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CoreElement;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DSPLauncher;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DSPReceiver;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrameComponent;
@@ -29,12 +28,10 @@ import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.addStringToStackName;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
-import static gregtech.api.enums.ItemList.Machine_Multi_Autoclave;
 import static gregtech.api.enums.ItemList.ZPM6;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
-import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
@@ -46,10 +43,7 @@ import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.CELESTIAL_TU
 import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
-import static tectech.thing.CustomItemList.eM_Coil;
 import static tectech.thing.CustomItemList.eM_Containment;
-import static tectech.thing.CustomItemList.eM_Containment_Field;
-import static tectech.thing.CustomItemList.eM_Hollow;
 import static tectech.thing.CustomItemList.eM_Power;
 import static tectech.thing.CustomItemList.eM_Spacetime;
 import static tectech.thing.CustomItemList.eM_Teleportation;
@@ -57,9 +51,7 @@ import static tectech.thing.CustomItemList.eM_Ultimate_Containment;
 import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 
-import com.Nxer.TwistSpaceTechnology.util.enums.TierEU;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -70,6 +62,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.enums.TierEU;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
@@ -115,6 +108,8 @@ public class DSPRecipePool implements IRecipePool {
             ? GTModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "tile.machines2", 1, 1)
             : new ItemStack(Blocks.fire);
 
+        // spotless:off
+
         // DSP Ray Receiving Station
         TTRecipeAdder.addResearchableAssemblylineRecipe(
             SolarSail.get(1),
@@ -122,7 +117,7 @@ public class DSPRecipePool implements IRecipePool {
             4096,
             (int) TierEU.RECIPE_UIV,
             64,
-            new Object[]{
+            new Object[] {
                 ItemList.ZPM3.get(1),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 CustomItemList.HighEnergyFlowCircuit.get(64),
@@ -143,7 +138,7 @@ public class DSPRecipePool implements IRecipePool {
                 new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Neutronium, 64)
             },
-            new FluidStack[]{
+            new FluidStack[] {
                 new FluidStack(solderPlasma, 144 * 8192),
                 Materials.UUMatter.getFluid(1000 * 1024),
                 FluidRegistry.getFluidStack("cryotheum", 1000 * 8192),
@@ -161,7 +156,7 @@ public class DSPRecipePool implements IRecipePool {
             4096,
             (int) TierEU.RECIPE_UIV,
             16,
-            new Object[]{
+            new Object[] {
                 new ItemStack(GCBlocks.landingPad, 64),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 ItemList.Field_Generator_UEV.get(64),
@@ -182,7 +177,7 @@ public class DSPRecipePool implements IRecipePool {
                 new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
                 new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9)
             },
-            new FluidStack[]{
+            new FluidStack[] {
                 new FluidStack(solderPlasma, 144 * 8192),
                 Materials.UUMatter.getFluid(1000 * 128),
                 Materials.SuperCoolant.getFluid(1000 * 1024),
@@ -206,7 +201,9 @@ public class DSPRecipePool implements IRecipePool {
 
                 ItemList.Field_Generator_UMV.get(8),
                 copyAmount(64, Particle.getBaseParticle(Particle.HIGGS_BOSON)))
-            .fluidInputs(GGMaterial.metastableOganesson.getMolten(144 * 256))
+            .fluidInputs(
+                GGMaterial.metastableOganesson.getMolten(144 * 256)
+            )
             .itemOutputs(eM_Ultimate_Containment_Advanced.get(8))
 
             .noOptimize()
@@ -225,8 +222,11 @@ public class DSPRecipePool implements IRecipePool {
                 CELESTIAL_TUNGSTEN.getScrew(64),
                 CELESTIAL_TUNGSTEN.getRing(64),
 
-                ItemList.Field_Generator_UIV.get(1))
-            .fluidInputs(GGMaterial.preciousMetalAlloy.getMolten(144 * 64))
+                ItemList.Field_Generator_UIV.get(1)
+            )
+            .fluidInputs(
+                GGMaterial.preciousMetalAlloy.getMolten(144 * 64)
+            )
             .itemOutputs(eM_Ultimate_Containment.get(1))
 
             .noOptimize()
@@ -241,7 +241,7 @@ public class DSPRecipePool implements IRecipePool {
             16384,
             (int) TierEU.RECIPE_UXV,
             64,
-            new Object[]{
+            new Object[] {
                 eM_Spacetime.get(64),
                 eM_Ultimate_Containment_Field.get(64),
                 ItemList.Casing_Dim_Bridge.get(64),
@@ -262,7 +262,7 @@ public class DSPRecipePool implements IRecipePool {
                 ItemList.EnergisedTesseract.get(64),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 64)
             },
-            new FluidStack[]{
+            new FluidStack[] {
                 new FluidStack(solderPlasma, 144 * 8192),
                 MaterialsUEVplus.Antimatter.getMolten(144 * 8192),
                 MaterialsUEVplus.SpaceTime.getMolten(144 * 8192),

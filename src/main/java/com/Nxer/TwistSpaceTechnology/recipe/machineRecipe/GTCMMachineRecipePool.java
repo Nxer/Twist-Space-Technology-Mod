@@ -26,7 +26,6 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HarmoniousWirele
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HighPowerRadiationProofCasing;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IncompactCyclotron;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
@@ -127,8 +126,8 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Advance
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_Coil;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_External;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Industrial_Arc_Furnace;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Controller_IndustrialRockBreaker;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Controller_IndustrialForgeHammer;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Controller_IndustrialRockBreaker;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GTPP_Casing_UHV;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Arc_Furnace;
@@ -175,7 +174,6 @@ import static tectech.thing.CustomItemList.rack_Hatch;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
@@ -859,7 +857,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             },
             new FluidStack[]{
                 new FluidStack(solderIndAlloy, 144 * 256),
-                Materials.Samarium.getMolten(144 * 256),
+                Materials.Terbium.getMolten(144 * 256),
                 new FluidStack(FluidRegistry.getFluid("liquid helium"), 1000 * 256),
                 Materials.Lubricant.getFluid(1000 * 256)
             },

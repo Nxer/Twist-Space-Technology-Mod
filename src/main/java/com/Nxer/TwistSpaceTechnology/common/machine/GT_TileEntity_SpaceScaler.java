@@ -27,8 +27,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -36,7 +34,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -44,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -210,7 +206,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
 
     public int getMaxParallelRecipes() {
         int EuTier = (int) calculatePowerTier(getMaxInputEu());
-        return EuTier<31? (int) Math.pow(4, EuTier) :Integer.MAX_VALUE;
+        return EuTier < 31 ? (int) Math.pow(4, EuTier) : Integer.MAX_VALUE;
     }
 
     public float getSpeedBonus() {
@@ -268,27 +264,26 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         return sign;
     }
 
-    private byte runningTick = 0;
-    @Override
-    public boolean onRunningTick(ItemStack aStack) {
-        boolean canDrain =false;
-        if (runningTick % 20 == 0) {
-            if (mode>1) {
-                for (FluidStack aFluidStack : getStoredFluids()) {
-                    if (aFluidStack.amount > 1000 && aFluidStack.getFluid().equals(MaterialsUEVplus.SpaceTime.mFluid)) {
-                        canDrain = true;
-                        break;
-                    }
-                }
-                if(!canDrain) return false;
-            }
-            runningTick = 1;
-        } else {
-            runningTick++;
-        }
-        return super.onRunningTick(aStack);
-    }
-
+    // private byte runningTick = 0;
+    // @Override
+    // public boolean onRunningTick(ItemStack aStack) {
+    // boolean canDrain =false;
+    // if (runningTick % 20 == 0) {
+    // if (mode>1) {
+    // for (FluidStack aFluidStack : getStoredFluids()) {
+    // if (aFluidStack.amount > 1000 && aFluidStack.getFluid().equals(MaterialsUEVplus.SpaceTime.mFluid)) {
+    // canDrain = true;
+    // break;
+    // }
+    // }
+    // if(!canDrain) return false;
+    // }
+    // runningTick = 1;
+    // } else {
+    // runningTick++;
+    // }
+    // return super.onRunningTick(aStack);
+    // }
 
     // endregion
 
