@@ -71,5 +71,6 @@ dependencies {
 
     // dependencies for mod testing
     // using transitive to prevent mod duplication and conflicts
+
     // runtimeOnlyNonPublishable("com.github.GTNewHorizons:BlockRenderer6343:1.2.16:dev") { transitive = false }
 }
