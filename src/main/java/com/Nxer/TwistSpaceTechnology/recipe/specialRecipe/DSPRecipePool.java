@@ -44,7 +44,6 @@ import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
 import static tectech.thing.CustomItemList.eM_Containment;
-import static tectech.thing.CustomItemList.eM_Power;
 import static tectech.thing.CustomItemList.eM_Spacetime;
 import static tectech.thing.CustomItemList.eM_Teleportation;
 import static tectech.thing.CustomItemList.eM_Ultimate_Containment;
@@ -118,31 +117,31 @@ public class DSPRecipePool implements IRecipePool {
             (int) TierEU.RECIPE_UIV,
             64,
             new Object[] {
-                ItemList.ZPM3.get(1),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
+                new ItemStack(GSBlocks.DysonSwarmBlocks, 64,1),
+                new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
+                StellarConstructionFrameMaterial.get(64),
+
+                ItemList.Sensor_UEV.get(64),
+                ItemList.Sensor_UEV.get(64),
+                ItemList.Emitter_UEV.get(64),
+                ItemList.Emitter_UEV.get(64),
+
+                ItemList.Field_Generator_UEV.get(64),
+                Laser_Lens_Special.get(64),
+                SpaceWarper.get(64),
+                ItemList.ZPM4.get(1),
+
                 CustomItemList.HighEnergyFlowCircuit.get(64),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
-
-                ItemList.Sensor_UEV.get(64),
-                ItemList.Sensor_UEV.get(64),
-                ItemList.Emitter_UEV.get(64),
-                ItemList.Emitter_UEV.get(64),
-
-                StellarConstructionFrameMaterial.get(64),
-                ItemList.Field_Generator_UEV.get(64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64),
-                Laser_Lens_Special.get(64),
-
-                SpaceWarper.get(64),
-                new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
-                new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Neutronium, 64)
             },
             new FluidStack[] {
                 new FluidStack(solderPlasma, 144 * 8192),
                 Materials.UUMatter.getFluid(1000 * 1024),
-                FluidRegistry.getFluidStack("cryotheum", 1000 * 8192),
-                Materials.CosmicNeutronium.getMolten(144 * 1024)
+                Materials.Grade8PurifiedWater.getFluid(1000 * 1024),
+                Materials.CosmicNeutronium.getMolten(144 * 8192)
             },
             DSPReceiver.get(1),
             20 * 2400,
@@ -159,29 +158,29 @@ public class DSPRecipePool implements IRecipePool {
             new Object[] {
                 new ItemStack(GCBlocks.landingPad, 64),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
-                ItemList.Field_Generator_UEV.get(64),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
+                new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
+                new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9),
 
                 ItemList.Electric_Motor_UEV.get(64),
                 ItemList.Electric_Piston_UEV.get(64),
                 ItemList.Robot_Arm_UEV.get(64),
                 ItemList.Sensor_UEV.get(64),
 
+                ItemList.Field_Generator_UEV.get(64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
+                GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SixPhasedCopper, 64),
+                GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SixPhasedCopper, 64),
+
+                MaterialsUEVplus.SixPhasedCopper.getNanite(64),
                 StellarConstructionFrameMaterial.get(64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64),
-                GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
-                GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
-
                 setStackSize(LightWeightPlate.copy(), 64),
-                eM_Power.get(64),
-                new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
-                new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9)
             },
             new FluidStack[] {
                 new FluidStack(solderPlasma, 144 * 8192),
-                Materials.UUMatter.getFluid(1000 * 128),
+                Materials.UUMatter.getFluid(1000 * 1024),
                 Materials.SuperCoolant.getFluid(1000 * 1024),
-                Materials.CosmicNeutronium.getMolten(144 * 1024)
+                Materials.Bedrockium.getMolten(144 * 8192)
             },
             DSPLauncher.get(1),
             20 * 2400,
@@ -236,7 +235,7 @@ public class DSPRecipePool implements IRecipePool {
 
         // ArtificialStar
         TTRecipeAdder.addResearchableAssemblylineRecipe(
-            GTCMItemList.CriticalPhoton.get(1),
+            AntimatterFuelRod.get(1),
             1_024_000_000,
             16384,
             (int) TierEU.RECIPE_UXV,
@@ -248,25 +247,25 @@ public class DSPRecipePool implements IRecipePool {
                 eM_Ultimate_Containment_Advanced.get(64),
 
                 ItemList.Field_Generator_UXV.get(64),
+                ItemList.Field_Generator_UXV.get(64),
+                ItemList.Emitter_UXV.get(64),
+                ItemList.Emitter_UXV.get(64),
+
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
                 StellarConstructionFrameMaterial.get(64),
                 AnnihilationConstrainer.get(64),
-                ItemList.Field_Generator_UXV.get(64),
 
-                ItemList.Emitter_UXV.get(64),
-                ItemList.Emitter_UXV.get(64),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
-
-                ZPM6.get(16),
+                ZPM6.get(64),
                 MaterialsUEVplus.MagMatter.getNanite(64),
-                ItemList.EnergisedTesseract.get(64),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.MagMatter, 64),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 64)
             },
             new FluidStack[] {
-                new FluidStack(solderPlasma, 144 * 8192),
-                MaterialsUEVplus.Antimatter.getMolten(144 * 8192),
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 8192),
-                Materials.SuperconductorUMVBase.getMolten(144 * 8192)
+                MaterialsUEVplus.SpaceTime.getMolten(144 * 262144),
+                MaterialsUEVplus.Antimatter.getFluid(144 * 262144),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(1000 * 65536),
+                MaterialsUEVplus.PhononMedium.getFluid(1000 * 65536)
             },
             ArtificialStar.get(1),
             20 * 4800,

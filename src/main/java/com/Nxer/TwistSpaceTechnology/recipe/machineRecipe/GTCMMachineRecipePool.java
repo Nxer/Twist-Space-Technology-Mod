@@ -160,6 +160,7 @@ import static tectech.thing.CustomItemList.eM_Teleportation;
 import static tectech.thing.CustomItemList.eM_Ultimate_Containment;
 import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
+import static tectech.thing.CustomItemList.eM_dynamoTunnel5_UEV;
 import static tectech.thing.CustomItemList.eM_energyTunnel1_IV;
 import static tectech.thing.CustomItemList.eM_energyTunnel2_LuV;
 import static tectech.thing.CustomItemList.eM_energyTunnel3_ZPM;
@@ -550,7 +551,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // Upgrade UHV
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
+            .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUV.get(1))
             .metadata(RESEARCH_TIME, 8 * HOURS)
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
@@ -612,7 +613,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 ItemList.Casing_Advanced_Iridium.get(1),
                 SpaceWarper.get(1),
                 eM_energyTunnel7_UIV.get(1),
-                ItemList.Casing_Dim_Injector.get(1),
+                ItemList.Casing_Dim_Injector.get(16),
 
                 ItemList.Emitter_UIV.get(4),
                 GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 4L, 32105),
@@ -642,7 +643,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 PhotonControllerUpgradeUIV.get(1),
                 SpaceWarper.get(4),
                 eM_energyTunnel8_UMV.get(1),
-                ItemList.Casing_Dim_Injector.get(4),
+                ItemList.Casing_Dim_Injector.get(64),
 
                 ItemList.Emitter_UMV.get(8),
                 GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16L, 32105),
@@ -770,10 +771,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
                 OpticalSOC.get(64),
 
-                eM_Spacetime.get(16),
+                eM_Spacetime.get(64),
                 ItemList.Field_Generator_UIV.get(32),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Infinity, 64),
-                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.TranscendentMetal, 9)
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.TranscendentMetal, 64)
             },
             new FluidStack[]{
                 new FluidStack(solderPlasma, 1024 * 144),
@@ -1335,23 +1336,23 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // region Infinite Dynamo Hatch
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, tectech.thing.CustomItemList.eM_dynamoMulti64_UMV.get(1))
+            .metadata(RESEARCH_ITEM, eM_dynamoTunnel5_UEV.get(1))
             .metadata(RESEARCH_TIME, 24 * HOURS)
             .itemInputs(
-                AnnihilationConstrainer.get(1),
+                eM_dynamoTunnel5_UEV.get(1),
                 ItemRefer.Compact_Fusion_Coil_T0.get(1),
-                ItemRefer.Compact_Fusion_Coil_T4.get(1),
+                ItemList.Casing_Coil_Superconductor.get(1),
                 Machine_Multi_Transformer.get(1),
 
-                eM_Power.get(16),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, MaterialsUEVplus.SpaceTime, 16),
-                ItemList.Field_Generator_UMV.get(2),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 4),
-
+                ItemList.Casing_Dim_Injector.get(2),
+                GTOreDictUnificator.get(OrePrefixes.wireGt01, MaterialsUEVplus.SpaceTime, 2),
+                GTOreDictUnificator.get(OrePrefixes.plateDense,Materials.Infinity,1),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 4),
+
+                ItemList.Field_Generator_UEV.get(2),
                 ItemList.EnergisedTesseract.get(4),
-                ItemList.Tesseract.get(4),
-                GravitationalLens.get(8)
+
+                GravitationalLens.get(16)
             )
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 36),
