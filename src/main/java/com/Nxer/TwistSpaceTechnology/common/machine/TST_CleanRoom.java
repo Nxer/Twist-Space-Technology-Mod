@@ -145,10 +145,26 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         return new String[] { "The base can be rectangular." };
     }
 
+    @Nonnull
     @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aTick % 20 == 0) {
+    public CheckRecipeResult checkProcessing_EM() {
+        mEfficiencyIncrease = 100;
+
+        // use the standard overclock mechanism to determine duration and estimate a maximum consumption
+        calculateOverclockedNessMultiInternal(40, 45 * Math.max(1, mHeight - 1), 1, getMaxInputVoltage(), false);
+        // negate it to trigger the special energy consumption function. divide by 10 to get the actual final
+        // consumption.
+        lEUt /= -10;
+        if (ePowerPass) {
+            mMaxProgresstime = 20;
+        } else {
+            mEfficiencyIncrease = 0;
+            mMaxProgresstime = 0;
+        }
+        eAmpereFlow = 0;
+        mEUt = 0;
+
+        {
             var a = filterValidMTEs(mInputHatches);
             var b = filterValidMTEs(mOutputHatches);
             var c = filterValidMTEs(mInputBusses);
@@ -181,26 +197,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                             true);
             }
         }
-    }
 
-    @Nonnull
-    @Override
-    public CheckRecipeResult checkProcessing_EM() {
-        mEfficiencyIncrease = 100;
-
-        // use the standard overclock mechanism to determine duration and estimate a maximum consumption
-        calculateOverclockedNessMultiInternal(40, 45 * Math.max(1, mHeight - 1), 1, getMaxInputVoltage(), false);
-        // negate it to trigger the special energy consumption function. divide by 10 to get the actual final
-        // consumption.
-        lEUt /= -10;
-        if (ePowerPass) {
-            mMaxProgresstime = 20;
-        } else {
-            mEfficiencyIncrease = 0;
-            mMaxProgresstime = 0;
-        }
-        eAmpereFlow = 0;
-        mEUt = 0;
         return ePowerPass ? SimpleCheckRecipeResult.ofSuccess("routing")
             : SimpleCheckRecipeResult.ofFailure("running fine");
     }
