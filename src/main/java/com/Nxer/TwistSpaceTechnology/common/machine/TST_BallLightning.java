@@ -59,6 +59,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -278,7 +279,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
                 setEuModifier(getEuModifier());
-                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
+                setOverclockType(
+                    isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
                 return super.process();
             }
 

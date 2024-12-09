@@ -12,19 +12,19 @@ This is an unofficial mod. Please avoid discussing this mod in official GTNH for
 https://discord.gg/aJS5q2Yspt
 
 ## Version Requirements
-* GTNH-nightly version:
-  * Do not support GTNH-2.7.0-nightly yet.
-  * Waiting for GTNH-2.7.0 stable.
+* GTNH-2.7.0 version:
+  * Directly add this mod 0.6.+ version.
 * GTNH-2.6.1 version:
-  * Directly add this mod 0.5.11 version.
+  * Maintenance of this version has stopped.
+  * 0.5.11 is the last version to support GTNH-2.6.1
 * GTNH-2.6.0 version:
-  * Maintenance of this version has stopped
+  * Maintenance of this version has stopped.
   * 0.4.30 is the last version to support GTNH-2.6.0
 * GTNH-2.5.1 version:
-  * Maintenance of this version has stopped
+  * Maintenance of this version has stopped.
   * 0.4.30 is the last version to support GTNH-2.5.1
 * GTNH-2.4.0 version:
-  * Maintenance of this version has stopped
+  * Maintenance of this version has stopped.
   * GTNH-Lanthanides mod need version 0.11.0+ .
   * GregTech mod need version 5.09.44.03+ .
   * The last fitted GTNH-2.4.0 version is 0.3.7
@@ -48,11 +48,11 @@ https://discord.gg/aJS5q2Yspt
 https://discord.gg/yR35zmdY4c
 
 ## 版本需求
-* GTNH-nightly 版本：
-  * 暂时不支持 GTNH-2.7.0-nightly
-  * 等待 GTNH-2.7.0 稳定版发布
+* GTNH-2.7.0 版本：
+  * 此mod 0.6.+ 版本
 * GTNH-2.6.1 版本：
-  * 此mod 0.5.11 版本
+  * 已停止维护
+  * 0.5.11是最后一个支持GTNH-2.6.1的版本
 * GTNH-2.6.0 版本：
   * 已停止维护
   * 0.4.30是最后一个支持GTNH-2.6.0的版本

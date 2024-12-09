@@ -2,6 +2,8 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.process
 
 import javax.annotation.Nonnull;
 
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
+
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.ParallelHelper;
@@ -25,5 +27,10 @@ public class GTCM_ProcessingLogic extends ProcessingLogic {
             .enableBatchMode(batchSize)
             .setConsumption(true)
             .setOutputCalculation(true);
+    }
+
+    public GTCM_ProcessingLogic setOverclockType(OverclockType t) {
+        setOverclock(t.timeReduction, t.powerIncrease);
+        return this;
     }
 }

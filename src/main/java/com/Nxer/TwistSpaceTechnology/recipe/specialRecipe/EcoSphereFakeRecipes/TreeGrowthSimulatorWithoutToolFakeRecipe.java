@@ -184,19 +184,33 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
 
     void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid) {
         EnumMap<Mode, ItemStack> ProductMap = queryTreeProduct(Sapling);
-        ItemStack[] inputStacks = new ItemStack[Mode.values().length];
-        ItemStack[] outputStacks = new ItemStack[Mode.values().length];
+
+        // ItemStack[] inputStacks = new ItemStack[Mode.values().length];
+        // ItemStack[] outputStacks = new ItemStack[Mode.values().length];
+
+        ArrayList<ItemStack> input = new ArrayList<>();
+        ArrayList<ItemStack> output = new ArrayList<>();
+
         int count = 0;
         for (Mode mode : Mode.values()) {
             if (ProductMap != null && ProductMap.get(mode) != null) {
-                inputStacks[count] = IntegratedCircuitStack[count];
-                outputStacks[count] = ProductMap.get(mode)
+
+                input.add(IntegratedCircuitStack[count]);
+                ItemStack stack = ProductMap.get(mode)
                     .copy();
-                outputStacks[count].stackSize *= getModeMultiplier(mode);
+                stack.stackSize *= getModeMultiplier(mode);
+                output.add(stack);
+
+                // inputStacks[count] = IntegratedCircuitStack[count];
+                // outputStacks[count] = ProductMap.get(mode)
+                // .copy();
+                // outputStacks[count].stackSize *= getModeMultiplier(mode);
             }
             count++;
         }
-        addFakeRecipe(inputStacks, outputStacks, specialStacks, inputFluid);
+        var i = input.toArray(new ItemStack[0]);
+        var o = output.toArray(new ItemStack[0]);
+        addFakeRecipe(i, o, specialStacks, inputFluid);
     }
 
     void addFakeRecipe(ItemStack[] inputStacks, ItemStack[] outputStacks, ItemStack[] specialStacks,

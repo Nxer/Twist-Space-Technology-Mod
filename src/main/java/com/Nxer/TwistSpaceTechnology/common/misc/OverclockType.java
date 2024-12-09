@@ -6,12 +6,12 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 public enum OverclockType {
 
-    NONE(0, 0),
-    NormalOverclock(1, 2),
-    LowSpeedPerfectOverclock(1, 1),
-    PerfectOverclock(2, 2),
-    SingularityPerfectOverclock(3, 2),
-    EOHStupidOverclock(1, 3);
+    NONE(1, 1),
+    NormalOverclock(2, 4),
+    LowSpeedPerfectOverclock(2, 2),
+    PerfectOverclock(4, 4),
+    SingularityPerfectOverclock(8, 4),
+    EOHStupidOverclock(2, 8);
 
     public final int timeReduction;
     public final int powerIncrease;
@@ -56,7 +56,7 @@ public enum OverclockType {
         // #tr OverclockType.Description.02
         // # Power Consumption multiply by
         // #zh_CN 耗电乘以
-        return TextEnums.tr("OverclockType.Description.01") + " " + EnumChatFormatting.AQUA + (int) Math.pow(2, timeReduction) + EnumChatFormatting.GRAY + " , " + TextEnums.tr("OverclockType.Description.02") + " " + EnumChatFormatting.RED + (int) Math.pow(2, powerIncrease) + EnumChatFormatting.GRAY + " .";
+        return TextEnums.tr("OverclockType.Description.01") + " " + EnumChatFormatting.AQUA + timeReduction + EnumChatFormatting.GRAY + " , " + TextEnums.tr("OverclockType.Description.02") + " " + EnumChatFormatting.RED + powerIncrease + EnumChatFormatting.GRAY + " .";
     }
     // spotless:on
 
