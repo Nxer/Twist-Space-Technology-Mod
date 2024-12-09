@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.google.common.collect.ImmutableList;
@@ -192,7 +193,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
-                setOverclock(fieldGeneratorTier >= 2 ? 2 : 1, 2);
+                setOverclockType(
+                    fieldGeneratorTier >= 2 ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
                 return super.process();
             }
 

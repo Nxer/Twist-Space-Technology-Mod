@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -141,7 +142,8 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
             public CheckRecipeResult process() {
                 setEuModifier(getEuModifier());
                 setSpeedBonus(getSpeedBonus());
-                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
+                setOverclockType(
+                    isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
                 return super.process();
             }
 

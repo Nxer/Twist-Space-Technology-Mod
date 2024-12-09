@@ -54,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
@@ -251,7 +252,8 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                 }
                 // if component block tier higher than recipe voltage tier,
                 // use perfect overclock
-                setOverclock(recipeTier <= tierComponentCasing ? 2 : 1, 2);
+                setOverclockType(
+                    recipeTier <= tierComponentCasing ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
 
