@@ -252,32 +252,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
 
     public int amountRings = 1;
 
-    /*
-     * @Override
-     * protected ProcessingLogic createProcessingLogic() {
-     * return new GTCM_ProcessingLogic() {
-     * @Override
-     * public ProcessingLogic enablePerfectOverclock() {
-     * if (amountRings < 8) {
-     * return this.setOverclock(1, 2);
-     * }
-     * return this.setOverclock(2, 2);
-     * }
-     * @NotNull
-     * @Override
-     * protected OverclockCalculator createOverclockCalculator(@NotNull GTRecipe recipe) {
-     * return super.createOverclockCalculator(recipe).setSpeedBoost(1.0F / (amountRings * 4));
-     * }
-     * // @Override
-     * // public ProcessingLogic setMaxParallel(int maxParallel) {
-     * // this.maxParallel = maxParallel * 16;
-     * // return this;
-     * // }
-     * }.enablePerfectOverclock()
-     * .setMaxParallel(256);
-     * }
-     */
-
     @Override
     protected boolean isEnablePerfectOverclock() {
         return amountRings >= RingsAmount_EnablePerfectOverclock_MiracleTop;

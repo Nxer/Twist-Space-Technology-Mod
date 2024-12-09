@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -79,7 +80,9 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
-                setOverclock(piece >= Piece_EnablePerfectOverclock_HolySeparator ? 2 : 1, 2);
+                setOverclockType(
+                    piece >= Piece_EnablePerfectOverclock_HolySeparator ? OverclockType.PerfectOverclock
+                        : OverclockType.NormalOverclock);
                 return super.process();
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
