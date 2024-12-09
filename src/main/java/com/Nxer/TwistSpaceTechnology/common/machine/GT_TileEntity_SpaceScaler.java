@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.google.common.collect.ImmutableList;
@@ -329,49 +330,49 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     public IStructureDefinition<GT_TileEntity_SpaceScaler> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_SpaceScaler>builder()
-                               .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                               .addElement(
-                                   'A',
-                                   HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
-                                                         .atLeast(Energy.or(ExoticEnergy))
-                                                         .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                                                         .dot(1)
-                                                         .casingIndex(1024)
-                                                         .buildAndChain(sBlockCasingsTT, 0))
-                               .addElement('B', ofBlock(sBlockCasingsTT, 4))
-                               .addElement('C', ofBlock(sBlockCasingsTT, 6))
-                               .addElement('D', ofBlock(BlockQuantumGlass.INSTANCE, 0))
-                               .addElement(
-                                   'E',
-                                   HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
-                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
-                                                         .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                                                         .dot(2)
-                                                         .casingIndex(1028)
-                                                         .buildAndChain(sBlockCasingsTT, 4))
-                               .addElement(
-                                   'G',
-                                   withChannel("fieldgeneratortier",
-                                               ofBlocksTiered(
-                                                   GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
-                                                   ImmutableList.of(
-                                                       Pair.of(sBlockCasingsTT, 6),
-                                                       Pair.of(sBlockCasingsTT, 14),
-                                                       Pair.of(StabilisationFieldGenerators, 0),
-                                                       Pair.of(StabilisationFieldGenerators, 1),
-                                                       Pair.of(StabilisationFieldGenerators, 2),
-                                                       Pair.of(StabilisationFieldGenerators, 3),
-                                                       Pair.of(StabilisationFieldGenerators, 4),
-                                                       Pair.of(StabilisationFieldGenerators, 5),
-                                                       Pair.of(StabilisationFieldGenerators, 6),
-                                                       Pair.of(StabilisationFieldGenerators, 7),
-                                                       Pair.of(StabilisationFieldGenerators, 8)
-                                                   ),
-                                                   0,
-                                                   (m, t) -> m.fieldGeneratorTier = t,
-                                                   m -> m.fieldGeneratorTier))
-                               )
-                               .build();
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement(
+                    'A',
+                    HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .adder(GT_TileEntity_SpaceScaler::addToMachineList)
+                        .dot(1)
+                        .casingIndex(1024)
+                        .buildAndChain(sBlockCasingsTT, 0))
+                .addElement('B', ofBlock(sBlockCasingsTT, 4))
+                .addElement('C', ofBlock(sBlockCasingsTT, 6))
+                .addElement('D', ofBlock(BlockQuantumGlass.INSTANCE, 0))
+                .addElement(
+                    'E',
+                    HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
+                        .adder(GT_TileEntity_SpaceScaler::addToMachineList)
+                        .dot(2)
+                        .casingIndex(1028)
+                        .buildAndChain(sBlockCasingsTT, 4))
+                .addElement(
+                    'G',
+                    withChannel("fieldgeneratortier",
+                        ofBlocksTiered(
+                            GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
+                            ImmutableList.of(
+                                Pair.of(sBlockCasingsTT, 6),
+                                Pair.of(sBlockCasingsTT, 14),
+                                Pair.of(StabilisationFieldGenerators, 0),
+                                Pair.of(StabilisationFieldGenerators, 1),
+                                Pair.of(StabilisationFieldGenerators, 2),
+                                Pair.of(StabilisationFieldGenerators, 3),
+                                Pair.of(StabilisationFieldGenerators, 4),
+                                Pair.of(StabilisationFieldGenerators, 5),
+                                Pair.of(StabilisationFieldGenerators, 6),
+                                Pair.of(StabilisationFieldGenerators, 7),
+                                Pair.of(StabilisationFieldGenerators, 8)
+                            ),
+                            0,
+                            (m, t) -> m.fieldGeneratorTier = t,
+                            m -> m.fieldGeneratorTier))
+                )
+                .build();
         }
         return STRUCTURE_DEFINITION;
     }
@@ -444,6 +445,10 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             .addInfo(TextLocalization.Tooltip_SpaceScaler_06)
             .addInfo(TextEnums.tr("Tooltip_SpaceScaler_07"))
             .addInfo(TextLocalization.Tooltip_SpaceScaler_08)
+            // #tr Tooltip_SpaceScaler_09
+            // # T2 block unlock HIP Unit limitation, T3 block unlock Stabilized Black Hole limitation.
+            // #zh_CN 2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_09"))
             .addInfo(TextLocalization.textScrewdriverChangeMode)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
@@ -478,7 +483,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
-        int colorIndex, boolean aActive, boolean redstoneLevel) {
+                                 int colorIndex, boolean aActive, boolean redstoneLevel) {
         if (side == aFacing) {
 
             if (aActive) {

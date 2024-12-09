@@ -558,7 +558,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 8, 11107),
                 eM_energyTunnel5_UHV.get(1),
-                eM_Power.get(4),
+                ItemList.Casing_Dim_Injector.get(4),
 
                 ItemList.Emitter_UHV.get(4),
                 WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.lens, 32),
@@ -1261,10 +1261,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 Mega_AlloyBlastSmelter.get(64),
                 Mega_AlloyBlastSmelter.get(64),
 
+                eM_Teleportation.get(64),
                 StellarConstructionFrameMaterial.get(64),
                 ItemList.Emitter_UMV.get(64),
                 ItemList.Field_Generator_UMV.get(64),
-                eM_Teleportation.get(64),
 
                 HighEnergyFlowCircuit.get(64),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),

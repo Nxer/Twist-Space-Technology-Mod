@@ -339,6 +339,7 @@ public class TextLocalization {
     public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_SpaceScaler_04");
     public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.", "Tooltip_SpaceScaler_05");
     public static final String Tooltip_SpaceScaler_06 = texter("Harmony Stabilisation Field Generator block enables Electric Implosion Compressor mode and Neutronium Compressor mode.", "Tooltip_SpaceScaler_06");
+    public static final String Tooltip_SpaceScaler_08 = texter("In Particle Collider mode, higher tier has more output.", "Tooltip_SpaceScaler_08");
 
     // endregion
 
