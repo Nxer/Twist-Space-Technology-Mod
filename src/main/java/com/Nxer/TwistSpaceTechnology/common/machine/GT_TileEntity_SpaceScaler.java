@@ -59,7 +59,9 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.metadata.CompressionTierKey;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -196,6 +198,17 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                 setOverclockType(
                     fieldGeneratorTier >= 2 ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
                 return super.process();
+            }
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+
+                int recipeReq = 1 + recipe.getMetadataOrDefault(CompressionTierKey.INSTANCE, 0);
+                if (recipeReq > fieldGeneratorTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(recipeReq);
+                }
+                return super.validateRecipe(recipe);
             }
 
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
@@ -420,6 +433,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
+        // spotless:off
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_SpaceScaler_MachineType)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_00)
@@ -431,6 +445,10 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             .addInfo(TextLocalization.Tooltip_SpaceScaler_06)
             .addInfo(TextEnums.tr("Tooltip_SpaceScaler_07"))
             .addInfo(TextLocalization.Tooltip_SpaceScaler_08)
+            // #tr Tooltip_SpaceScaler_09
+            // # T2 block unlock HIP Unit limitation, T3 block unlock Stabilized Black Hole limitation.
+            // #zh_CN 2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_09"))
             .addInfo(TextLocalization.textScrewdriverChangeMode)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
@@ -443,6 +461,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
+        // spotless:on
     }
 
     @Override
