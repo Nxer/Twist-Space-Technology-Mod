@@ -16,6 +16,8 @@ import static gregtech.api.enums.Mods.GregTech;
 import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.enums.Mods.SuperSolarPanels;
 import static gregtech.api.util.GTModHandler.getModItem;
+import static gregtech.api.util.GTRecipeBuilder.MINUTES;
+import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
 import static tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
@@ -140,9 +142,13 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             StabilisationFieldGeneratorTier5.get(1), StabilisationFieldGeneratorTier6.get(1),
             StabilisationFieldGeneratorTier7.get(1), StabilisationFieldGeneratorTier8.get(1),
             ItemList.Hatch_Energy_LuV.get(1), ItemList.Hatch_Energy_ZPM.get(1), ItemList.Hatch_Energy_UV.get(1),
-            ItemList.Hatch_Energy_UXV.get(1), ItemList.Hatch_Dynamo_LuV.get(1), ItemList.Hatch_Dynamo_ZPM.get(1),
-            ItemList.Hatch_Dynamo_UV.get(1), ItemList.Hatch_Dynamo_UXV.get(1), ItemList.Casing_Dim_Injector.get(1),
-            ItemList.Casing_Dim_Trans.get(1), ItemRefer.Advanced_Radiation_Protection_Plate.get(1) };
+            ItemList.Hatch_Energy_UHV.get(1), ItemList.Hatch_Dynamo_LuV.get(1), ItemList.Hatch_Dynamo_ZPM.get(1),
+            ItemList.Hatch_Dynamo_UV.get(1), ItemList.Hatch_Dynamo_UHV.get(1), ItemList.Casing_Dim_Injector.get(1),
+            ItemList.Casing_Dim_Trans.get(1), ItemRefer.Advanced_Radiation_Protection_Plate.get(1),
+            tectech.thing.CustomItemList.eM_energyTunnel8_UXV.get(1),
+            tectech.thing.CustomItemList.eM_dynamoTunnel8_UXV.get(1),
+            tectech.thing.CustomItemList.eM_energyTunnel9_UXV.get(1),
+            tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1) };
 
         // start check assembly line recipes
         checkRecipe: for (var recipe : GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes) {
@@ -465,7 +471,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
-                .itemOutputs(ItemList.Hatch_Energy_UXV.get(1))
+                .itemOutputs(ItemList.Hatch_Energy_UHV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 16000), new FluidStack(solderIndalloy, 40 * 144))
                 .duration(50 * 20)
                 .eut(RECIPE_UHV)
@@ -525,10 +531,87 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
-                .itemOutputs(ItemList.Hatch_Dynamo_UXV.get(1))
+                .itemOutputs(ItemList.Hatch_Dynamo_UHV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 16000), new FluidStack(solderIndalloy, 40 * 144))
                 .duration(50 * 20)
                 .eut(RECIPE_UHV)
+                .addTo(MASL);
+
+        }
+
+        // 4MA+ Lasers Target or Source
+        {
+
+            // 4M UXV Target
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(1),
+                    ItemList.Hull_UXV.get(1),
+                    // copyAmount(128, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    setStackSize(ItemList.Sensor_UXV.get(1), 128),
+                    setStackSize(ItemList.Electric_Pump_UXV.get(1), 128),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 32))
+                .itemOutputs(tectech.thing.CustomItemList.eM_energyTunnel8_UXV.get(1))
+                .fluidInputs(new FluidStack(solderUEV, 1_296 * 64 * 4))
+                .duration(106 * MINUTES + 40 * SECONDS)
+                .eut(RECIPE_UXV)
+                .addTo(MASL);
+
+            // 4M UXV Source
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(1),
+                    ItemList.Hull_UXV.get(1),
+                    // copyAmount(128, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    setStackSize(ItemList.Emitter_UXV.get(1), 128),
+                    setStackSize(ItemList.Electric_Pump_UXV.get(1), 128),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 32))
+                .itemOutputs(tectech.thing.CustomItemList.eM_dynamoTunnel8_UXV.get(1))
+                .fluidInputs(new FluidStack(solderUEV, 1_296 * 64 * 4))
+                .duration(106 * MINUTES + 40 * SECONDS)
+                .eut(RECIPE_UXV)
+                .addTo(MASL);
+
+            // 16M UXV Target
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(2),
+                    ItemList.Hull_UXV.get(1),
+                    // copyAmount(256, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    setStackSize(ItemList.Sensor_UXV.get(1), 256),
+                    setStackSize(ItemList.Electric_Pump_UXV.get(1), 256),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 64))
+                .itemOutputs(tectech.thing.CustomItemList.eM_energyTunnel9_UXV.get(1))
+                .fluidInputs(new FluidStack(solderUEV, 1_296 * 128 * 4))
+                .duration(213 * MINUTES + 20 * SECONDS)
+                .eut(RECIPE_UXV)
+                .addTo(MASL);
+
+            // 16M UXV Source
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(2),
+                    ItemList.Hull_UXV.get(1),
+                    // copyAmount(256, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    setStackSize(ItemList.Emitter_UXV.get(1), 256),
+                    setStackSize(ItemList.Electric_Pump_UXV.get(1), 256),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 64))
+                .itemOutputs(tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1))
+                .fluidInputs(new FluidStack(solderUEV, 1_296 * 128 * 4))
+                .duration(213 * MINUTES + 20 * SECONDS)
+                .eut(RECIPE_UXV)
                 .addTo(MASL);
 
         }

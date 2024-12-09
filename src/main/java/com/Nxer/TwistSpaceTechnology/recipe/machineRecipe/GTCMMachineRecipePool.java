@@ -222,6 +222,7 @@ import tectech.recipe.TTRecipeAdder;
 import tectech.thing.casing.TTCasingsContainer;
 import wanion.avaritiaddons.block.extremeautocrafter.BlockExtremeAutoCrafter;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class GTCMMachineRecipePool implements IRecipePool {
 
     @Override
@@ -1694,7 +1695,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 LASERpipe.get(64),
                 Laser_Lens_Special.get(1),
                 new Object[]{OrePrefixes.circuit.get(Materials.Bio), 1},
-                ItemList.Hatch_Energy_UXV.get(1)
+                ItemList.Hatch_Energy_UHV.get(1)
             )
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144))
             .itemOutputs(LaserSmartNode.get(1))
