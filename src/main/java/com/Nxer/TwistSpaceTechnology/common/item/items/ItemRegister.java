@@ -61,6 +61,8 @@ public class ItemRegister {
         GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.set(initItem01("Primitive Man's SpaceTime Distortion Device", 22, new String[]{TextHandler.texter("Anyway...", "tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1")}));
         GTCMItemList.WirelessUpdateItem.set(initItem01("Wireless Computation update circuit", 23, new String[]{}));
         GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 24, new String[]{TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
+        GTCMItemList.WhiteDwarfMold_Ingot.set(initItem01("White Dwarf Mold(Ingot)", 36));
+        GTCMItemList.ChargedEngravedLaptronChip.set(initItem01("Charged Engraved Laptron Chip", 37));
 
         // #tr EnergyShard.tooltips.01
         // # A piece of pure energy, from dark...
@@ -102,7 +104,6 @@ public class ItemRegister {
         GTCMItemList.EnergyFluctuationSelfHarmonizer.set(initItem01("Energy Fluctuation Self-Harmonizer", 33));
         GTCMItemList.EncapsulatedMicroSpaceTimeUnit.set(initItem01("Encapsulated Micro SpaceTime Unit", 34));
         GTCMItemList.SeedsSpaceTime.set(initItem01("Seeds of Space and Time", 35));
-        GTCMItemList.WhiteDwarfMold_Ingot.set(initItem01("White Dwarf Mold(Ingot)", 36));
         // #tr MetaItem01.36.name
         // # White Dwarf Mold(Ingot)
         // #zh_CN 白矮星模具(锭)

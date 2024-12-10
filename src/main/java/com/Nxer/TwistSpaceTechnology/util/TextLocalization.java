@@ -171,7 +171,7 @@ public class TextLocalization {
     public static final String Tooltip_PhC_01 = texter(EnumChatFormatting.BLUE + "Prism tank in order, sir.", "Tooltip_PhC_01");
     public static final String Tooltip_PhC_02 = texter("Control Photons on the scale of 10\u00AF\u00B9\u00B2 meters.", "Tooltip_PhC_02");
     public static final String Tooltip_PhC_03 = texter("Install Photonic Intensifier on the back side of the structure to dramatically increase production speeds.", "Tooltip_PhC_03");
-    public static final String Tooltip_PhC_04 = texter("Multi upgrade modules can be stacked. Also can be uninstalled. Replace using normal Casing.", "Tooltip_PhC_04");
+    public static final String Tooltip_PhC_04 = texter("Multi upgrade modules can be stacked. Also can be uninstalled. Replace using normal Casing. Module tier limits recipe tier", "Tooltip_PhC_04");
     public static final String Tooltip_PhC_05 = textScrewdriverChangeMode;
     public static final String Tooltip_PhC_06 = texter(EnumChatFormatting.GOLD + "Photon Controller mode:", "Tooltip_PhC_06");
     public static final String Tooltip_PhC_07 = texter("16x Parallel", "Tooltip_PhC_07");
@@ -191,8 +191,7 @@ public class TextLocalization {
     public static final String[] Tooltips_Upgrades_UHV = new String[]{texter("Extra 70%% Speed Up !", "PhotonControllerUpgradeUHV.tooltips.01")};
     public static final String[] Tooltips_Upgrades_UEV = new String[]{texter("Extra 100%% Speed Up !", "PhotonControllerUpgradeUEV.tooltips.01")};
     public static final String[] Tooltips_Upgrades_UIV = new String[]{texter("Extra 140%% Speed Up !", "PhotonControllerUpgradeUiV.tooltips.01")};
-    public static final String[] Tooltips_Upgrades_UMV = new String[]{texter("Extra 190%% Speed Up !", "PhotonControllerUpgradeUMV.tooltips.01"),
-        texter("Enable Perfect Overclock !", "PhotonControllerUpgradeUMV.tooltips.02")};
+    public static final String[] Tooltips_Upgrades_UMV = new String[]{texter("Extra 190%% Speed Up !", "PhotonControllerUpgradeUMV.tooltips.01")};
     public static final String[] Tooltips_Upgrades_UXV = new String[]{texter("Extra 250%% Speed Up !", "PhotonControllerUpgradeUXV.tooltips.01"),
         texter("Enable Perfect Overclock !", "PhotonControllerUpgradeUXV.tooltips.02")};
     public static final String[] Tooltips_Upgrades_MAX = new String[]{texter("Extra 320%% Speed Up !", "PhotonControllerUpgradeMAX.tooltips.01"),
@@ -279,7 +278,7 @@ public class TextLocalization {
     public static final String Tooltip_PhysicalFormSwitcher_00 = texter("Controller block for the Physical Form Switcher", "Tooltip_PhysicalFormSwitcher_00");
     public static final String Tooltip_PhysicalFormSwitcher_01 = texter(EnumChatFormatting.YELLOW + "Forming Master !", "Tooltip_PhysicalFormSwitcher_01");
     public static final String Tooltip_PhysicalFormSwitcher_02 = texter("The ultimate method of melt operation.", "Tooltip_PhysicalFormSwitcher_02");
-    public static final String Tooltip_PhysicalFormSwitcher_03 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_PhysicalFormSwitcher_03");
+    public static final String Tooltip_PhysicalFormSwitcher_03 = texter("Almost infinite parallel.(But imperfect overclock)(But imperfect overclock)", "Tooltip_PhysicalFormSwitcher_03");
     public static final String Tooltip_PhysicalFormSwitcher_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_PhysicalFormSwitcher_04");
     public static final String Tooltip_PhysicalFormSwitcher_05 = texter("The Glass Tier limit the recipe voltage tier.", "Tooltip_PhysicalFormSwitcher_05");
 
@@ -302,7 +301,7 @@ public class TextLocalization {
     public static final String Tooltip_MagneticDomainConstructor_00 = texter("Controller block for the Magnetic Domain Constructor", "Tooltip_MagneticDomainConstructor_00");
     public static final String Tooltip_MagneticDomainConstructor_01 = texter(EnumChatFormatting.DARK_GRAY + "Don't give up your imagination.", "Tooltip_MagneticDomainConstructor_01");
     public static final String Tooltip_MagneticDomainConstructor_02 = texter("Controlling the magnetic domains inside the crystal, yes that's it.", "Tooltip_MagneticDomainConstructor_02");
-    public static final String Tooltip_MagneticDomainConstructor_03 = texter("64x Parallel per Ring.(Don't use a lot of blueprints when first scanning.)", "Tooltip_MagneticDomainConstructor_03");
+    public static final String Tooltip_MagneticDomainConstructor_03 = texter("256x Parallel per Ring.(Don't use a lot of blueprints when first scanning.)", "Tooltip_MagneticDomainConstructor_03");
     public static final String Tooltip_MagneticDomainConstructor_04 = texter("Additional 25%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_MagneticDomainConstructor_04");
 
     // endregion
@@ -339,7 +338,7 @@ public class TextLocalization {
     public static final String Tooltip_SpaceScaler_03 = texter("Only if the space is manageable...", "Tooltip_SpaceScaler_03");
     public static final String Tooltip_SpaceScaler_04 = texter("Has parallel equivalent to Perfect Overclock.", "Tooltip_SpaceScaler_04");
     public static final String Tooltip_SpaceScaler_05 = texter("If use Ultimate Containment Field Generator, enable 10x speed multiplier.", "Tooltip_SpaceScaler_05");
-    public static final String Tooltip_SpaceScaler_06 = texter("Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.", "Tooltip_SpaceScaler_06");
+    public static final String Tooltip_SpaceScaler_06 = texter("Harmony Stabilisation Field Generator block enables Electric Implosion Compressor mode and Neutronium Compressor mode.", "Tooltip_SpaceScaler_06");
     public static final String Tooltip_SpaceScaler_08 = texter("In Particle Collider mode, higher tier has more output.", "Tooltip_SpaceScaler_08");
 
     // endregion
@@ -350,7 +349,7 @@ public class TextLocalization {
     public static final String Tooltip_MoleculeDeconstructor_00 = texter("Controller block for the Molecule Deconstructor", "Tooltip_MoleculeDeconstructor_00");
     public static final String Tooltip_MoleculeDeconstructor_01 = texter(EnumChatFormatting.AQUA + "The lightning seemed to roll down a ladder.", "Tooltip_MoleculeDeconstructor_01");
     public static final String Tooltip_MoleculeDeconstructor_02 = texter("Separate the molecules one by one with tweezers.", "Tooltip_MoleculeDeconstructor_02");
-    public static final String Tooltip_MoleculeDeconstructor_03 = texter("Extra 24x Parallel per Piece. 16 Piece enable Perfect Overclock.", "Tooltip_MoleculeDeconstructor_03");
+    public static final String Tooltip_MoleculeDeconstructor_03 = texter("Extra 32x Parallel per Piece. 16 Piece enable Perfect Overclock.", "Tooltip_MoleculeDeconstructor_03");
     public static final String Tooltip_MoleculeDeconstructor_04 = texter("Additional 10%% reduction in time per Voltage Tier, multiplication calculus.", "Tooltip_MoleculeDeconstructor_04");
     public static final String Tooltip_MoleculeDeconstructor_05 = texter("The Glass Tier limit the Energy hatch voltage Tier.", "Tooltip_MoleculeDeconstructor_05");
 
