@@ -161,8 +161,8 @@ public class TSTBufferedEnergyHatchRecipe implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                ItemList.Battery_Buffer_4by4_UXV.get(1),
-                ItemList.Hatch_Energy_UXV.get(1),
+                ItemList.Battery_Buffer_4by4_UHV.get(1),
+                ItemList.Hatch_Energy_UHV.get(1),
                 circuits[8],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUHV, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
