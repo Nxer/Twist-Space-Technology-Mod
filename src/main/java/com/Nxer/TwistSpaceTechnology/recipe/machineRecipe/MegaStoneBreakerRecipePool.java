@@ -119,7 +119,7 @@ public class MegaStoneBreakerRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(24),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Redstone, 1))
-            .itemOutputs(new ItemStack(Blocks.stone))
+            .itemOutputs(new ItemStack(Blocks.obsidian))
             .eut(6)
             .duration(20)
             .addTo(MegaStoneBreakerRecipes);
