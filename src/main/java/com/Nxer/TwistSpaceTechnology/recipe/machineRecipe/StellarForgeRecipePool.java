@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static cofh.lib.util.helpers.FluidHelper.isFluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
@@ -96,8 +97,13 @@ public class StellarForgeRecipePool implements IRecipePool {
             if (metaItemEqual(
                 GTModHandler.getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32306),
                 recipeSolidifier.mInputs[0])) {
-                MoltenToIngot.put(recipeSolidifier.mFluidInputs[0].getFluid(), recipeSolidifier.mOutputs[0]);
+                if (!isFluidEqual(recipeSolidifier.mFluidInputs[0], Materials.AnnealedCopper.getMolten(1)))
+                    MoltenToIngot.put(recipeSolidifier.mFluidInputs[0].getFluid(), recipeSolidifier.mOutputs[0]);
             }
+            MoltenToIngot.put(
+                Materials.AnnealedCopper.getMolten(1)
+                    .getFluid(),
+                Materials.AnnealedCopper.getIngots(1));
         }
     }
 
