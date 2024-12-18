@@ -63,6 +63,9 @@ public class ItemRegister {
         GTCMItemList.BallLightningUpgradeChip.set(initItem01("Ball Lightning Upgrade Chip", 24, new String[]{TextHandler.texter("Power, give me, more power!", "tooltips.ItemBallLightningUpgradeChip.line1")}));
         GTCMItemList.WhiteDwarfMold_Ingot.set(initItem01("White Dwarf Mold(Ingot)", 36));
         GTCMItemList.ChargedEngravedLaptronChip.set(initItem01("Charged Engraved Laptron Chip", 37));
+        GTCMItemList.ChargedEngravedEnergyChip.set(initItem01("Charged Engraved Energy Chip", 38));
+        GTCMItemList.ChargedEngravedLaptronCircuit.set(initItem01("Charged Engraved Laptron Circuit", 39));
+        GTCMItemList.SingularityEnergyCircuit.set(initItem01("Singularity Energy Circuit", 40));
 
         // #tr EnergyShard.tooltips.01
         // # A piece of pure energy, from dark...

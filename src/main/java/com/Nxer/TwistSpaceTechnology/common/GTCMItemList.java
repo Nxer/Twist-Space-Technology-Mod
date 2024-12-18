@@ -160,6 +160,10 @@ public enum GTCMItemList {
     BallLightningUpgradeChip,
     WhiteDwarfMold_Ingot,
     ChargedEngravedLaptronChip,
+    ChargedEngravedEnergyChip,
+    ChargedEngravedLaptronCircuit,
+    HighEnergyFlowCircuit,
+    SingularityEnergyCircuit,
 
     HatchUpdateTool,
     FountOfEcology,
