@@ -156,9 +156,16 @@ public enum GTCMItemList {
     Rune_of_Perdition,
     PowerChair,
     PrimitiveMansSpaceTimeDistortionDevice,
-    BallLightningUpgradeChip,
-    HatchUpdateTool,
     WirelessUpdateItem,
+    BallLightningUpgradeChip,
+    WhiteDwarfMold_Ingot,
+    ChargedEngravedLaptronChip,
+    ChargedEngravedEnergyChip,
+    ChargedEngravedLaptronCircuit,
+    HighEnergyFlowCircuit,
+    SingularityEnergyCircuit,
+
+    HatchUpdateTool,
     FountOfEcology,
     OffSpring,
 
@@ -364,7 +371,6 @@ public enum GTCMItemList {
     EncapsulatedMicroSpaceTimeUnit,
     SeedsSpaceTime,
     MicroSpaceTimeFabricatorio,
-    WhiteDwarfMold_Ingot,
 
     // endregion
 
