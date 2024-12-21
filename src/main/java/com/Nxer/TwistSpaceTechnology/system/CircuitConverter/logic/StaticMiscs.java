@@ -4,8 +4,6 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
-import com.dreammaster.gthandler.CustomItemList;
-
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
@@ -42,9 +40,7 @@ public class StaticMiscs {
         CircuitUEV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Bio));
         CircuitUIV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Optical));
         CircuitUMV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Exotic));
-        CircuitUMV.add(CustomItemList.PikoCircuit.get(1));
         CircuitUXV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Cosmic));
-        CircuitUXV.add(CustomItemList.QuantumCircuit.get(1));
         CircuitMAX = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Transcendent));
     }
 }

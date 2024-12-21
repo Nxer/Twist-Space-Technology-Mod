@@ -19,7 +19,6 @@ import static gregtech.api.util.GTModHandler.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.MINUTES;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
-import static tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
 import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier0;
 import static tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier1;
@@ -335,8 +334,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     MaterialsElements.STANDALONE.HYPOGEN.getPlateDense(64),
                     setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 391296),
-                    // TODO piko circuit
-                    CustomItemList.PikoCircuit.get(16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
                     ItemList.Field_Generator_UMV.get(8),
 
                     setStackSize(ItemList.Circuit_Wafer_QPIC.get(1), 2048),
@@ -356,8 +354,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     MaterialsElements.STANDALONE.DRAGON_METAL.getBlock(64),
                     setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 3130368),
-                    // TODO piko circuit
-                    CustomItemList.QuantumCircuit.get(16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 16),
                     ItemList.Field_Generator_UXV.get(2),
 
                     ItemList.EnergisedTesseract.get(64),
@@ -650,7 +647,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GregtechItemList.CosmicFabricManipulator.get(1),
                     Utils.copyAmount(1, ME_Singularity),
                     GGMaterial.shirabon.get(OrePrefixes.bolt, 2),
-                    CustomItemList.QuantumCircuit.get(1))
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 20),
                     MaterialsUEVplus.Space.getMolten(144 * 10),
@@ -673,7 +670,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GregtechItemList.CosmicFabricManipulator.get(2),
                     Utils.copyAmount(2, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 2),
-                    CustomItemList.QuantumCircuit.get(1))
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 40),
                     MaterialsUEVplus.Space.getMolten(144 * 20),
@@ -696,7 +693,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GregtechItemList.CosmicFabricManipulator.get(3),
                     Utils.copyAmount(3, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 8),
-                    CustomItemList.QuantumCircuit.get(1))
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 80),
                     MaterialsUEVplus.Space.getMolten(144 * 30),
@@ -719,7 +716,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GregtechItemList.InfinityInfusedManipulator.get(1),
                     Utils.copyAmount(4, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 32),
-                    CustomItemList.QuantumCircuit.get(2))
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 160),
                     MaterialsUEVplus.Space.getMolten(144 * 40),
@@ -742,7 +739,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GregtechItemList.InfinityInfusedManipulator.get(2),
                     Utils.copyAmount(5, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 2),
-                    CustomItemList.QuantumCircuit.get(2))
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 320),
                     MaterialsUEVplus.Space.getMolten(144 * 50),
@@ -765,7 +762,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GregtechItemList.InfinityInfusedManipulator.get(3),
                     Utils.copyAmount(6, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 8),
-                    CustomItemList.QuantumCircuit.get(2))
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 640),
                     MaterialsUEVplus.Space.getMolten(144 * 60),
@@ -788,7 +785,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GregtechItemList.SpaceTimeContinuumRipper.get(1),
                     Utils.copyAmount(7, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 32),
-                    CustomItemList.QuantumCircuit.get(3))
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 3))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 1280),
                     MaterialsUEVplus.Space.getMolten(144 * 70),
@@ -812,7 +809,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     Utils.copyAmount(8, ME_Singularity),
                     GTOreDictUnificator
                         .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 2),
-                    CustomItemList.QuantumCircuit.get(3))
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 3))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 2560),
                     MaterialsUEVplus.Space.getMolten(144 * 80),
@@ -836,7 +833,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     Utils.copyAmount(9, ME_Singularity),
                     GTOreDictUnificator
                         .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 8),
-                    CustomItemList.QuantumCircuit.get(3))
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 3))
                 .fluidInputs(
                     MUTATED_LIVING_SOLDER.getFluidStack(144 * 5120),
                     MaterialsUEVplus.Space.getMolten(144 * 90),
@@ -897,7 +894,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             fusionCoils[absoluteTier],
                             getModItem(SuperSolarPanels.ID, "PhotonicSolarPanel", absoluteTier + 1, 0),
 
-                            getItemContainer("QuantumCircuit").get(absoluteTier + 1),
+                            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, absoluteTier + 1),
                             getModItem(SuperSolarPanels.ID, "redcomponent", 64),
                             getModItem(SuperSolarPanels.ID, "greencomponent", 64),
                             getModItem(SuperSolarPanels.ID, "bluecomponent", 64),
@@ -982,7 +979,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             getModItem(GraviSuite.ID, "itemSimpleItem", 64, 3),
 
                             boltList[absoluteTier],
-                            getItemContainer("QuantumCircuit").get(2 * (absoluteTier + 1)),
+                            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2 * (absoluteTier + 1)),
                             GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SpaceTime, absoluteTier + 1),
                             GTOreDictUnificator
                                 .get(OrePrefixes.gearGtSmall, MaterialsUEVplus.SpaceTime, absoluteTier + 1))
