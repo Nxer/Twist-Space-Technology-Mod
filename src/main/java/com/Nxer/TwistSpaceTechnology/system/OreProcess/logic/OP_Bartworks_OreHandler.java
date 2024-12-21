@@ -8,6 +8,7 @@ import static gregtech.api.enums.OrePrefixes.gem;
 import static gregtech.api.enums.OrePrefixes.gemExquisite;
 import static gregtech.api.enums.OrePrefixes.gemFlawless;
 import static gregtech.api.enums.OrePrefixes.ore;
+import static gregtech.api.enums.OrePrefixes.rawOre;
 
 import java.util.ArrayList;
 
@@ -57,7 +58,14 @@ public class OP_Bartworks_OreHandler {
                 .itemInputs(werkstoff.get(ore, 1))
                 .itemOutputs(outputs.toArray(new ItemStack[] {}))
                 .fluidInputs(Materials.Lubricant.getFluid(1))
+                .eut(OreProcessRecipeEUt)
+                .duration(OreProcessRecipeDuration)
+                .addTo(GTCMRecipe.OreProcessingRecipes);
 
+            GTValues.RA.stdBuilder()
+                .itemInputs(werkstoff.get(rawOre, 1))
+                .itemOutputs(outputs.toArray(new ItemStack[] {}))
+                .fluidInputs(Materials.Lubricant.getFluid(1))
                 .eut(OreProcessRecipeEUt)
                 .duration(OreProcessRecipeDuration)
                 .addTo(GTCMRecipe.OreProcessingRecipes);

@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
+import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static gtPlusPlus.core.material.MaterialMisc.RARE_EARTH_HIGH;
 import static gtPlusPlus.core.material.MaterialMisc.RARE_EARTH_LOW;
 import static gtPlusPlus.core.material.MaterialMisc.RARE_EARTH_MID;
@@ -50,7 +51,15 @@ public class OP_GTPP_OreHandler {
                 .itemInputs(ore.getOre(1))
                 .itemOutputs(ore.getDust(12))
                 .fluidInputs(Materials.Lubricant.getFluid(1))
-                .eut(120)
+                .eut(OreProcessRecipeEUt)
+                .duration(OreProcessRecipeDuration)
+                .addTo(GTCMRecipe.OreProcessingRecipes);
+
+            GTValues.RA.stdBuilder()
+                .itemInputs(ore.getRawOre(1))
+                .itemOutputs(ore.getDust(12))
+                .fluidInputs(Materials.Lubricant.getFluid(1))
+                .eut(OreProcessRecipeEUt)
                 .duration(OreProcessRecipeDuration)
                 .addTo(GTCMRecipe.OreProcessingRecipes);
         }
