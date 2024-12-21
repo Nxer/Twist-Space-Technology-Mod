@@ -11,10 +11,12 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.item.ItemStack;
+
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
-import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gtPlusPlus.core.material.Material;
 import gtPlusPlus.core.material.MaterialsOres;
@@ -47,7 +49,7 @@ public class OP_GTPP_OreHandler {
 
     public void processGTPPOreRecipes() {
         for (Material ore : addSpecials(getGTPPOreMaterials())) {
-            GTValues.RA.stdBuilder()
+            TST_RecipeBuilder.builder()
                 .itemInputs(ore.getOre(1))
                 .itemOutputs(ore.getDust(12))
                 .fluidInputs(Materials.Lubricant.getFluid(1))
@@ -55,13 +57,17 @@ public class OP_GTPP_OreHandler {
                 .duration(OreProcessRecipeDuration)
                 .addTo(GTCMRecipe.OreProcessingRecipes);
 
-            GTValues.RA.stdBuilder()
-                .itemInputs(ore.getRawOre(1))
-                .itemOutputs(ore.getDust(12))
-                .fluidInputs(Materials.Lubricant.getFluid(1))
-                .eut(OreProcessRecipeEUt)
-                .duration(OreProcessRecipeDuration)
-                .addTo(GTCMRecipe.OreProcessingRecipes);
+            ItemStack r = ore.getRawOre(1);
+            if (r != null) {
+                TST_RecipeBuilder.builder()
+                    .itemInputs(r)
+                    .itemOutputs(ore.getDust(12))
+                    .fluidInputs(Materials.Lubricant.getFluid(1))
+                    .eut(OreProcessRecipeEUt)
+                    .duration(OreProcessRecipeDuration)
+                    .addTo(GTCMRecipe.OreProcessingRecipes);
+            }
+
         }
     }
 
