@@ -89,8 +89,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static com.dreammaster.gthandler.CustomItemList.PicoWafer;
-import static com.dreammaster.gthandler.CustomItemList.PikoCircuit;
-import static com.dreammaster.gthandler.CustomItemList.QuantumCircuit;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.ItemList.ArcFurnaceUEV;
@@ -178,7 +176,6 @@ import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
 import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
@@ -612,7 +609,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 PhotonControllerUpgradeUMV.get(1),
-                GTModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
                 EOH_Infinite_Energy_Casing.get(16),
                 ItemList.Transformer_MAX_UXV.get(1),
                 SpaceWarper.get(16),
@@ -643,7 +640,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemInputs(
                 PhotonControllerUpgradeUXV.get(1),
                 SpaceWarper.get(64),
-                GTModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
                 GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 15),
                 GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 16),
                 GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 20),
@@ -682,7 +679,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 MaterialsUEVplus.TranscendentMetal.getNanite(48),
 
                 eM_Coil.get(64),
-                PikoCircuit.get(32),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 32),
                 new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64},
                 new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64},
 
@@ -1138,8 +1135,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 eM_Teleportation.get(64),
 
                 HighEnergyFlowCircuit.get(64),
-                QuantumCircuit.get(64),
-                QuantumCircuit.get(64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
                 HighEnergyFlowCircuit.get(64),
 
                 SpaceWarper.get(64),
@@ -1184,7 +1181,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 StellarConstructionFrameMaterial.get(4),
                 ItemList.Field_Generator_UMV.get(3),
                 ItemList.Emitter_UMV.get(6),
-                PikoCircuit.get(1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1),
 
                 SpaceWarper.get(24),
                 ParticleTrapTimeSpaceShield.get(32),
@@ -1219,9 +1216,9 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 eM_Power.get(16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, MaterialsUEVplus.SpaceTime, 16),
                 ItemList.Field_Generator_UMV.get(2),
-                QuantumCircuit.get(4),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 4),
 
-                PikoCircuit.get(4),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 4),
                 ItemList.EnergisedTesseract.get(4),
                 ItemList.Tesseract.get(4),
                 GravitationalLens.get(8)
@@ -1583,7 +1580,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 setStackSize(GTCMItemList.SpaceWarper.get(64), 128),
 
                 setStackSize(GTCMItemList.GravitationalLens.get(64), 128),
-                setStackSize(CustomItemList.QuantumCircuit.get(1), 128),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1), 128),
                 setStackSize(eM_Ultimate_Containment_Advanced.get(64), 128)
             )
             .fluidInputs(
@@ -1986,7 +1983,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     PerfectLapotronCrystal.get(2048),
                     setStackSize(ItemList.Field_Generator_UMV.get(1), 1024),
                     setStackSize(ItemList.Emitter_UMV.get(1), 2048),
-                    setStackSize(QuantumCircuit.get(1), 4096),
+                    setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1), 4096),
 
                     StellarConstructionFrameMaterial.get(2048),
                     setStackSize(GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 1), 4096)
@@ -2314,7 +2311,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .stdBuilder()
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
-                    PikoCircuit.get(64),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
                     HighEnergyFlowCircuit.get(64),
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
 
@@ -2352,7 +2349,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .stdBuilder()
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
-                    PikoCircuit.get(64),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
                     HighEnergyFlowCircuit.get(64),
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
 
@@ -2532,7 +2529,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemList.Robot_Arm_UIV.get(16),
                     ItemList.Electric_Pump_UIV.get(16),
 
-                    PikoCircuit.get(64)
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64)
                 )
                 .fluidInputs(
                     Materials.UUMatter.getFluid(1000 * 512),
@@ -2563,7 +2560,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemList.Robot_Arm_UMV.get(16),
                     ItemList.Electric_Pump_UMV.get(16),
 
-                    QuantumCircuit.get(64)
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64)
                 )
                 .fluidInputs(
                     Materials.UUMatter.getFluid(1000 * 1024),
@@ -2686,7 +2683,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemList.Robot_Arm_UIV.get(16),
                     ItemList.Electric_Pump_UIV.get(16),
 
-                    PikoCircuit.get(64)
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64)
                 )
                 .fluidInputs(
                     Materials.UUMatter.getFluid(1000 * 512),
@@ -2717,7 +2714,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemList.Robot_Arm_UMV.get(16),
                     ItemList.Electric_Pump_UMV.get(16),
 
-                    QuantumCircuit.get(64)
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64)
                 )
                 .fluidInputs(
                     Materials.UUMatter.getFluid(1000 * 1024),
@@ -3090,8 +3087,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                         StellarConstructionFrameMaterial.get(512),
                         DysonSphereFrameComponent.get(512),
                         AnnihilationConstrainer.get(512),
-                        // TODO Quantum Circuit
-                        copyAmount(1024, QuantumCircuit.get(1)),
+                        copyAmount(1024, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)),
                         copyAmount(1024, eM_Ultimate_Containment_Advanced.get(1))
                     )
                     .fluidInputs(
@@ -3114,8 +3110,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 64),
                     Industrial_MassFab.get(64),
                     ZPM3.get(64),
-                    // TODO quantum circuit
-                    QuantumCircuit.get(64),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
 
                     ItemList.Field_Generator_UMV.get(64),
                     ItemList.Field_Generator_UMV.get(64),

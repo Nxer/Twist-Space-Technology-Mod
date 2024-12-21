@@ -32,7 +32,6 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.dreammaster.gthandler.CustomItemList;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
@@ -59,8 +58,8 @@ public class TSTBufferedEnergyHatchRecipe implements IRecipePool {
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 1),
-            // TODO Piko and Quantum circuit
-            CustomItemList.PikoCircuit.get(1), CustomItemList.QuantumCircuit.get(1) };
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1) };
 
         final IRecipeMap assembler = RecipeMaps.assemblerRecipes;
         GTValues.RA.stdBuilder()

@@ -116,7 +116,7 @@ public class DSPRecipePool implements IRecipePool {
                 ItemList.ZPM3.get(1),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 CustomItemList.HighEnergyFlowCircuit.get(64),
-                CustomItemList.PikoCircuit.get(64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
 
                 ItemList.Sensor_UEV.get(64),
                 ItemList.Sensor_UEV.get(64),
@@ -150,7 +150,7 @@ public class DSPRecipePool implements IRecipePool {
                 new ItemStack(GCBlocks.landingPad, 64),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 ItemList.Field_Generator_UEV.get(64),
-                CustomItemList.PikoCircuit.get(64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
 
                 ItemList.Electric_Motor_UEV.get(64),
                 ItemList.Electric_Piston_UEV.get(64),
@@ -235,8 +235,8 @@ public class DSPRecipePool implements IRecipePool {
 
                 AnnihilationConstrainer.get(64),
                 ItemList.Field_Generator_UMV.get(64),
-                CustomItemList.QuantumCircuit.get(64),
-                CustomItemList.PikoCircuit.get(64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
 
                 CustomItemList.HighEnergyFlowCircuit.get(64),
                 ItemList.Tesseract.get(64),
@@ -404,7 +404,7 @@ public class DSPRecipePool implements IRecipePool {
                 setStackSize(ShuttleNoseCone.copy(), 1),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
                 SpaceWarper.get(16),
-                CustomItemList.PikoCircuit.get(32),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 32),
 
                 StellarConstructionFrameMaterial.get(32),
                 setStackSize(LightWeightPlate.copy(), 32),
@@ -429,7 +429,7 @@ public class DSPRecipePool implements IRecipePool {
                 SpaceWarper.get(1),
                 DysonSphereFrameComponent.get(24),
                 copyAmount(16, Particle.getBaseParticle(Particle.GRAVITON)),
-                CustomItemList.QuantumCircuit.get(1))
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 16))
             .itemOutputs(SmallLaunchVehicle.get(1))
 
@@ -463,7 +463,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 StellarConstructionFrameMaterial.get(18),
                 SolarSail.get(18),
-                CustomItemList.PikoCircuit.get(15),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 15),
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 6),
 
                 CustomItemList.HighEnergyFlowCircuit.get(64),
@@ -483,7 +483,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 StellarConstructionFrameMaterial.get(18),
                 SolarSail.get(18),
-                CustomItemList.QuantumCircuit.get(12),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 12),
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 6),
 
                 CustomItemList.HighEnergyFlowCircuit.get(64),
@@ -507,7 +507,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 StellarConstructionFrameMaterial.get(18),
                 SolarSail.get(18),
-                CustomItemList.QuantumCircuit.get(6),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 6),
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 6),
 
                 CustomItemList.HighEnergyFlowCircuit.get(64),
@@ -558,7 +558,7 @@ public class DSPRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .itemInputs(
-                CustomItemList.PikoCircuit.get(16),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Graphene, 64),
                 ItemList.Circuit_Silicon_Wafer7.get(8),
                 ItemList.Emitter_UMV.get(8))
@@ -575,7 +575,7 @@ public class DSPRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .itemInputs(
-                CustomItemList.QuantumCircuit.get(8),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 8),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Graphene, 64),
                 ItemList.Circuit_Silicon_Wafer7.get(6),
                 ItemList.Emitter_UXV.get(2))
@@ -599,7 +599,7 @@ public class DSPRecipePool implements IRecipePool {
                 ParticleTrapTimeSpaceShield.get(8),
 
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 4),
-                CustomItemList.QuantumCircuit.get(1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),
                 ItemList.EnergisedTesseract.get(1),
                 GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.TranscendentMetal, 16))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 16), MaterialsUEVplus.TranscendentMetal.getMolten(144 * 16))
@@ -619,7 +619,7 @@ public class DSPRecipePool implements IRecipePool {
                 ParticleTrapTimeSpaceShield.get(8),
 
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 4),
-                CustomItemList.QuantumCircuit.get(1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),
                 ItemList.EnergisedTesseract.get(1),
                 GGMaterial.shirabon.get(OrePrefixes.foil, 64))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 16), MaterialsUEVplus.RawStarMatter.getFluid(144 * 16))
@@ -642,7 +642,7 @@ public class DSPRecipePool implements IRecipePool {
                 SpaceWarper.get(4),
                 ParticleTrapTimeSpaceShield.get(8),
                 GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 4),
-                CustomItemList.QuantumCircuit.get(1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),
 
                 ItemList.EnergisedTesseract.get(1),
                 GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.Universium, 64),
@@ -665,8 +665,7 @@ public class DSPRecipePool implements IRecipePool {
                 ParticleTrapTimeSpaceShield.get(64),
                 CriticalPhoton.get(1),
 
-                // TODO Quantum circuit
-                CustomItemList.QuantumCircuit.get(2),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2),
                 ItemList.EnergisedTesseract.get(1))
             .fluidInputs(
                 MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 8),
@@ -933,8 +932,7 @@ public class DSPRecipePool implements IRecipePool {
                 setStackSize(ItemList.Tesseract.get(1), 512),
                 setStackSize(ItemList.EnergisedTesseract.get(1), 512),
 
-                // TODO quantum circuit
-                setStackSize(CustomItemList.QuantumCircuit.get(1), 512),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1), 512),
                 ItemList.ZPM.get(1))
             .fluidInputs(
                 Materials.Void.getMolten(144 * 131072),

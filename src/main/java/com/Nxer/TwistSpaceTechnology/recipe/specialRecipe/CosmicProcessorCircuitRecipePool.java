@@ -429,8 +429,7 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
                 GTCMItemList.SpaceWarper.get(16),
                 GTCMItemList.GravitationalLens.get(16),
-                // TODO piko
-                CustomItemList.PikoCircuit.get(16),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
 
                 EnergyFluctuationSelfHarmonizer.get(16),
                 PacketInformationTranslationArray.get(16),
