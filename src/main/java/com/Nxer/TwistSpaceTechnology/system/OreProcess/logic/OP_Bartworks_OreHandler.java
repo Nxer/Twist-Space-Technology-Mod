@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import bartworks.system.material.Werkstoff;
-import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 
 public class OP_Bartworks_OreHandler {
@@ -54,7 +54,7 @@ public class OP_Bartworks_OreHandler {
             }
 
             // generate recipes
-            GTValues.RA.stdBuilder()
+            TST_RecipeBuilder.builder()
                 .itemInputs(werkstoff.get(ore, 1))
                 .itemOutputs(outputs.toArray(new ItemStack[] {}))
                 .fluidInputs(Materials.Lubricant.getFluid(1))
@@ -62,13 +62,17 @@ public class OP_Bartworks_OreHandler {
                 .duration(OreProcessRecipeDuration)
                 .addTo(GTCMRecipe.OreProcessingRecipes);
 
-            GTValues.RA.stdBuilder()
-                .itemInputs(werkstoff.get(rawOre, 1))
-                .itemOutputs(outputs.toArray(new ItemStack[] {}))
-                .fluidInputs(Materials.Lubricant.getFluid(1))
-                .eut(OreProcessRecipeEUt)
-                .duration(OreProcessRecipeDuration)
-                .addTo(GTCMRecipe.OreProcessingRecipes);
+            ItemStack r = werkstoff.get(rawOre, 1);
+            if (r != null) {
+                TST_RecipeBuilder.builder()
+                    .itemInputs(r)
+                    .itemOutputs(outputs.toArray(new ItemStack[] {}))
+                    .fluidInputs(Materials.Lubricant.getFluid(1))
+                    .eut(OreProcessRecipeEUt)
+                    .duration(OreProcessRecipeDuration)
+                    .addTo(GTCMRecipe.OreProcessingRecipes);
+            }
+
         }
     }
 }

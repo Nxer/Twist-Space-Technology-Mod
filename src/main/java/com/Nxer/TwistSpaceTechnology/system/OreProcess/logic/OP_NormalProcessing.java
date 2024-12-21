@@ -17,12 +17,12 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.google.common.collect.Sets;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.GregTechAPI;
-import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTModHandler;
@@ -325,8 +325,8 @@ public class OP_NormalProcessing {
     }
 
     public void registryOreProcessRecipe(ItemStack input, ItemStack[] output) {
-        if (input == null) TwistSpaceTechnology.LOG.info("ERROR : " + input);
-        GTValues.RA.stdBuilder()
+        if (input == null) return;
+        TST_RecipeBuilder.builder()
             .itemInputs(input)
             .itemOutputs(output)
             .fluidInputs(Materials.Lubricant.getFluid(1))
