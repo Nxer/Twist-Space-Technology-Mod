@@ -434,12 +434,20 @@ public class Config {
     public static boolean Enable_BloodHatch_Armok_InfiniteDrain = true;
     // endregion
 
+    // region Machine Base Class
+    public static int DefaultCycleNum_WirelessEnergyMultiMachineBase = 100_000;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
         DEFAULT_BATCH_MODE = configuration.getBoolean("DEFAULT_BATCH_MODE", GENERAL, DEFAULT_BATCH_MODE, "Default Batch mode state of machine when placed. True is auto enable Batch mode.");
+        // endregion
+
+        // region Machine Base Class
+        DefaultCycleNum_WirelessEnergyMultiMachineBase = configuration.getInt("DefaultCycleNum_WirelessEnergyMultiMachineBase", GENERAL, DefaultCycleNum_WirelessEnergyMultiMachineBase, 1, Integer.MAX_VALUE, "Wireless energy machine parallel over recipes limitation in one processing. How many recipes can be processed at once.");
         // endregion
 
         // region Recipe
