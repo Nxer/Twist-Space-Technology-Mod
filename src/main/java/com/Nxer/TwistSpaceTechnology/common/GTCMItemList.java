@@ -161,8 +161,6 @@ public enum GTCMItemList {
     WhiteDwarfMold_Ingot,
     ChargedEngravedLaptronChip,
     ChargedEngravedEnergyChip,
-    ChargedEngravedLaptronCircuit,
-    HighEnergyFlowCircuit,
     SingularityEnergyCircuit,
 
     HatchUpdateTool,
