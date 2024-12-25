@@ -1414,8 +1414,8 @@ public class MachineLoader {
                 "NameLowSpeedPerfectOverclockController",
                 TextEnums.tr("NameLowSpeedPerfectOverclockController"),
                 12,
-                1,
-                1).getStackForm(1);
+                2,
+                2).getStackForm(1);
             GTCMItemList.LowSpeedPerfectOverclockController.set(LowSpeedPerfectOverclockController);
 
             // #tr NamePerfectOverclockController
@@ -1426,8 +1426,8 @@ public class MachineLoader {
                 "NamePerfectOverclockController",
                 TextEnums.tr("NamePerfectOverclockController"),
                 13,
-                2,
-                2).getStackForm(1);
+                4,
+                4).getStackForm(1);
             GTCMItemList.PerfectOverclockController.set(PerfectOverclockController);
 
             // #tr NameSingularityPerfectOverclockController
@@ -1438,8 +1438,8 @@ public class MachineLoader {
                 "NameSingularityPerfectOverclockController",
                 TextEnums.tr("NameSingularityPerfectOverclockController"),
                 14,
-                3,
-                2).getStackForm(1);
+                8,
+                4).getStackForm(1);
             GTCMItemList.SingularityPerfectOverclockController.set(SingularityPerfectOverclockController);
 
             /*
