@@ -16,4 +16,10 @@ public final class SimpleShutDownReasons {
     // #zh_CN 没有正确的流体输入
     public static final ShutDownReason NoCorrectFluidInput = SimpleShutDownReason
         .ofCritical("SimpleShutDownReasons.NoCorrectFluidInput");
+
+    // #tr GT5U.gui.text.SimpleShutDownReasons.NoEnoughCriticalPhotonInput
+    // # No Enough Critical Photon Input
+    // #zh_CN 没有足够临界光子输入
+    public static final ShutDownReason NoCriticalPhotonInput = SimpleShutDownReason
+        .ofCritical("SimpleShutDownReasons.NoEnoughCriticalPhotonInput");
 }

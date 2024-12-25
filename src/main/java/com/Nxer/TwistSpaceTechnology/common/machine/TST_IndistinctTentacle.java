@@ -22,18 +22,14 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
-import static tectech.thing.CustomItemList.astralArrayFabricator;
 import static tectech.thing.casing.BlockGTCasingsTT.texturePage;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -52,10 +48,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -86,7 +83,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
-public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_IndistinctTentacle>
+public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_IndistinctTentacle>
     implements IWirelessEnergyHatchInformation {
 
     // region Class Constructor
@@ -105,14 +102,20 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
 
     // endregion
 
+    // region Statics
+
+    // endregion
+
     // region Processing Logic
     private byte mode = Mode_Default_IndistinctTentacle;
-    private boolean isWirelessMode = false;
     public int tierComponentCasing = -2;
     public byte glassTier = 0;
-    private UUID ownerUUID;
-    private String costingWirelessEUTemp = "0";
     private int extraEuCostMultiplier = 1;
+    protected boolean hasAstralArray = false;
+
+    public void checkAstralArray() {
+        hasAstralArray = Utils.metaItemEqual(getControllerSlot(), MiscHelper.ASTRAL_ARRAY_FABRICATOR);
+    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -163,17 +166,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
             default -> EnumChatFormatting.BOLD
                 + translateToLocalFormatted("tst.recipe.AssemblyLineWithoutResearchRecipe");
         };
-        currentTip.add(modeName);
-        if (tag.getBoolean("isWirelessMode")) {
-            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + texter("Wireless Mode", "Waila.TST_IndistinctTentacle.1"));
-            currentTip.add(
-                EnumChatFormatting.AQUA + texter("Current EU cost", "Waila.TST_MiracleDoor.1")
-                    + EnumChatFormatting.RESET
-                    + ": "
-                    + EnumChatFormatting.GOLD
-                    + tag.getString("costingWirelessEUTemp")
-                    + EnumChatFormatting.RESET
-                    + " EU");
+        if (tag.getBoolean("wirelessMode")) {
 
             if (1 != tag.getInteger("extraEuCostMultiplier")) {
                 currentTip.add(
@@ -188,6 +181,8 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                         + EnumChatFormatting.RESET);
             }
         }
+        currentTip.add(modeName);
+
     }
 
     @Override
@@ -197,8 +192,6 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
             tag.setByte("mode", mode);
-            tag.setBoolean("isWirelessMode", isWirelessMode);
-            tag.setString("costingWirelessEUTemp", costingWirelessEUTemp);
             tag.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
         }
     }
@@ -207,10 +200,9 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", mode);
-        aNBT.setBoolean("isWirelessMode", isWirelessMode);
+        aNBT.setBoolean("hasAstralArray", hasAstralArray);
         aNBT.setInteger("tierComponentCasing", tierComponentCasing);
         aNBT.setByte("glassTier", glassTier);
-        aNBT.setString("costingWirelessEUTemp", costingWirelessEUTemp);
         aNBT.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
     }
 
@@ -218,10 +210,9 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         mode = aNBT.getByte("mode");
-        isWirelessMode = aNBT.getBoolean("isWirelessMode");
+        hasAstralArray = aNBT.getBoolean("hasAstralArray");
         tierComponentCasing = aNBT.getInteger("tierComponentCasing");
         glassTier = aNBT.getByte("glassTier");
-        costingWirelessEUTemp = aNBT.getString("costingWirelessEUTemp");
         extraEuCostMultiplier = aNBT.getInteger("extraEuCostMultiplier");
     }
 
@@ -269,7 +260,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
             @Nonnull
             @Override
             protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                if (isWirelessMode) {
+                if (wirelessMode) {
                     return OverclockCalculator.ofNoOverclock(recipe);
                 } else {
                     return super.createOverclockCalculator(recipe);
@@ -280,74 +271,22 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
     }
 
     @Override
-    protected void setProcessingLogicPower(ProcessingLogic logic) {
-        if (isWirelessMode) {
-            // wireless mode ignore voltage limit
-            logic.setAvailableVoltage(Long.MAX_VALUE);
-            logic.setAvailableAmperage(1);
-            logic.setAmperageOC(false);
-        } else {
-            super.setProcessingLogicPower(logic);
-        }
+    protected void prepareProcessing() {
+        super.prepareProcessing();
+        checkAstralArray();
+        extraEuCostMultiplier = hasAstralArray
+            ? ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle
+            : 1;
     }
 
-    @NotNull
+    public int getExtraEUCostMultiplier() {
+        return extraEuCostMultiplier;
+    }
+
     @Override
-    public CheckRecipeResult checkProcessing() {
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        if (isWirelessMode) {
-            if (Utils.metaItemEqual(getControllerSlot(), astralArrayFabricator.get(1))) {
-                mMaxProgresstime = ValueEnum.AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle;
-                extraEuCostMultiplier = ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle;
-            } else {
-                mMaxProgresstime = ValueEnum.TickEveryProcess_WirelessMode_IndistinctTentacle;
-                extraEuCostMultiplier = 1;
-            }
-
-            long originEUCost = processingLogic.getCalculatedEut() * processingLogic.getDuration();
-            if (processingLogic.getCalculatedEut() > Long.MAX_VALUE / processingLogic.getDuration()) {
-                // total eu cost has overflowed
-                BigInteger finalCostEU = BigInteger.valueOf(processingLogic.getCalculatedEut())
-                    .multiply(BigInteger.valueOf(processingLogic.getDuration()))
-                    .multiply(BigInteger.valueOf(extraEuCostMultiplier));
-                costingWirelessEUTemp = GTUtility.formatNumbers(finalCostEU);
-                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU.multiply(Utils.NEGATIVE_ONE))) {
-                    return CheckRecipeResultRegistry.insufficientPower(finalCostEU.longValue());
-                }
-            } else if (originEUCost < Long.MAX_VALUE / extraEuCostMultiplier) {
-                // not overflow
-                long costEU = originEUCost * extraEuCostMultiplier;
-                costingWirelessEUTemp = String.valueOf(costEU);
-                if (!addEUToGlobalEnergyMap(ownerUUID, -costEU)) {
-                    return CheckRecipeResultRegistry.insufficientPower(costEU);
-                }
-            } else {
-                // overflow because multiply extraCost
-                BigInteger finalCostEU = BigInteger.valueOf(originEUCost)
-                    .multiply(BigInteger.valueOf(extraEuCostMultiplier));
-                costingWirelessEUTemp = GTUtility.formatNumbers(finalCostEU);
-                if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU.multiply(Utils.NEGATIVE_ONE))) {
-                    return CheckRecipeResultRegistry.insufficientPower(finalCostEU.longValue());
-                }
-            }
-        } else {
-            mMaxProgresstime = processingLogic.getDuration();
-            setEnergyUsage(processingLogic);
-        }
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
-        return result;
+    public int getWirelessModeProcessingTime() {
+        return hasAstralArray ? Config.AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle
+            : Config.TickEveryProcess_WirelessMode_IndistinctTentacle;
     }
 
     @Override
@@ -367,7 +306,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
 
     @Override
     protected int getMaxParallelRecipes() {
-        return isWirelessMode ? Integer.MAX_VALUE : ValueEnum.Parallel_Default_IndistinctTentacle;
+        return wirelessMode ? Integer.MAX_VALUE : ValueEnum.Parallel_Default_IndistinctTentacle;
     }
 
     @Override
@@ -382,7 +321,7 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
             || tierComponentCasing + 1 < ComponentCasingTierLimit_WirelessMode_IndistinctTentacle) {
             // normal mode
             // glass tier limit hatch tier
-            isWirelessMode = false;
+            wirelessMode = false;
             for (MTEHatch hatch : this.mExoticEnergyHatches) {
                 // osmium glass allow use laser hatch
                 if (this.glassTier < GlassTierLimit_LaserHatch_IndistinctTentacle
@@ -399,16 +338,11 @@ public class TST_IndistinctTentacle extends GTCM_MultiMachineBase<TST_Indistinct
                 }
             }
         } else {
-            isWirelessMode = mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty();
+            wirelessMode = mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty();
         }
         return true;
     }
 
-    @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
-    }
     // endregion
 
     // region Structure
