@@ -17,14 +17,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
-import java.math.BigInteger;
 import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -36,11 +31,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -53,23 +44,18 @@ import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.api.util.OverclockCalculator;
 import gregtech.common.blocks.BlockCasings2;
 import gregtech.common.blocks.BlockCasings8;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_ThermalEnergyDevourer> {
+public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TST_ThermalEnergyDevourer> {
 
     // region Class Constructor
     public TST_ThermalEnergyDevourer(int aID, String aName, String aNameRegional) {
@@ -95,25 +81,12 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
      */
     private byte mode = ValueEnum.Mode_Default_ThermalEnergyDevourer;
     private int coefficientMultiplier = 1;
-    private boolean isWirelessMode = false;
-    private UUID ownerUUID;
-    private long costingWirelessEUTemp = 0;
 
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getBoolean("isWirelessMode")) {
-            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + TextLocalization.Waila_WirelessMode);
-            currentTip.add(
-                EnumChatFormatting.AQUA + TextLocalization.Waila_CurrentEuCost
-                    + EnumChatFormatting.RESET
-                    + ": "
-                    + EnumChatFormatting.GOLD
-                    + GTUtility.formatNumbers(tag.getLong("costingWirelessEUTemp"))
-                    + EnumChatFormatting.RESET
-                    + " EU");
-        } else {
+        if (!tag.getBoolean("wirelessMode")) {
             currentTip.add(
                 EnumChatFormatting.GOLD
                     + translateToLocalFormatted("ThermalEnergyDevourer.modeMsg." + tag.getByte("mode")));
@@ -127,8 +100,6 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
             tag.setByte("mode", mode);
-            tag.setBoolean("isWirelessMode", isWirelessMode);
-            tag.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
         }
     }
 
@@ -149,8 +120,6 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", mode);
         aNBT.setInteger("coefficientMultiplier", coefficientMultiplier);
-        aNBT.setBoolean("isWirelessMode", isWirelessMode);
-        aNBT.setLong("costingWirelessEUTemp", costingWirelessEUTemp);
     }
 
     @Override
@@ -158,8 +127,6 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
         super.loadNBTData(aNBT);
         mode = aNBT.getByte("mode");
         coefficientMultiplier = aNBT.getInteger("coefficientMultiplier");
-        isWirelessMode = aNBT.getBoolean("isWirelessMode");
-        costingWirelessEUTemp = aNBT.getLong("costingWirelessEUTemp");
     }
 
     @Override
@@ -173,81 +140,8 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
     }
 
     @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                if (!isWirelessMode) {
-                    setEuModifier(getEuModifier());
-                    setSpeedBonus(getSpeedBonus());
-                    setOverclockType(
-                        isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
-                }
-                return super.process();
-            }
-
-            @Nonnull
-            @Override
-            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                return isWirelessMode ? OverclockCalculator.ofNoOverclock(recipe)
-                    : super.createOverclockCalculator(recipe);
-            }
-        }.setMaxParallelSupplier(this::getLimitedMaxParallel);
-    }
-
-    @Override
-    protected void setProcessingLogicPower(ProcessingLogic logic) {
-        if (isWirelessMode) {
-            // wireless mode ignore voltage limit
-            logic.setAvailableVoltage(Long.MAX_VALUE);
-            logic.setAvailableAmperage(1);
-            logic.setAmperageOC(false);
-        } else {
-            super.setProcessingLogicPower(logic);
-        }
-    }
-
-    @Nonnull
-    @Override
-    public CheckRecipeResult checkProcessing() {
-        if (!isWirelessMode) return super.checkProcessing();
-
-        // wireless mode
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-
-        if (processingLogic.getCalculatedEut() > Long.MAX_VALUE / processingLogic.getDuration()) {
-            // total eu cost has overflowed
-            costingWirelessEUTemp = 1145141919810L;
-            BigInteger finalCostEU = BigInteger.valueOf(-1)
-                .multiply(BigInteger.valueOf(processingLogic.getCalculatedEut()))
-                .multiply(BigInteger.valueOf(processingLogic.getDuration()));
-            if (!addEUToGlobalEnergyMap(ownerUUID, finalCostEU)) {
-                return CheckRecipeResultRegistry.insufficientPower(1145141919810L);
-            }
-        } else {
-            // fine
-            costingWirelessEUTemp = processingLogic.getCalculatedEut() * processingLogic.getDuration();
-            if (!addEUToGlobalEnergyMap(ownerUUID, -costingWirelessEUTemp)) {
-                return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp);
-            }
-        }
-        mMaxProgresstime = ValueEnum.TickPerProgressing_WirelessMode_ThermalEnergyDevourer;
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
-        return result;
+    public int getWirelessModeProcessingTime() {
+        return ValueEnum.TickPerProgressing_WirelessMode_ThermalEnergyDevourer;
     }
 
     @Override
@@ -268,17 +162,19 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
 
     @Override
     protected float getEuModifier() {
+        if (wirelessMode) return 1;
         return mode == 0 ? 1 : 1F / coefficientMultiplier;
     }
 
     @Override
     protected float getSpeedBonus() {
+        if (wirelessMode) return 1;
         return mode == 1 ? 1 : 0.5F / coefficientMultiplier;
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        if (isWirelessMode) return Integer.MAX_VALUE;
+        if (wirelessMode) return Integer.MAX_VALUE;
         return mode == 1 ? ValueEnum.Parallel_HighParallelMode_ThermalEnergyDevourer
             : ValueEnum.Parallel_HighSpeedMode_ThermalEnergyDevourer;
     }
@@ -289,7 +185,7 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         coefficientMultiplier = 1 + getExtraCoefficientMultiplierByVoltageTier();
         ItemStack controllerSlot = getControllerSlot();
-        isWirelessMode = controllerSlot != null && controllerSlot.stackSize > 0
+        wirelessMode = controllerSlot != null && controllerSlot.stackSize > 0
             && Utils.metaItemEqual(controllerSlot, ItemList.EnergisedTesseract.get(1));
         return true;
     }
@@ -301,9 +197,9 @@ public class TST_ThermalEnergyDevourer extends GTCM_MultiMachineBase<TST_Thermal
 
     // region Structure
     // spotless:off
-    private final int horizontalOffSet = 7;
-    private final int verticalOffSet = 36;
-    private final int depthOffSet = 0;
+    private static final int horizontalOffSet = 7;
+    private static final int verticalOffSet = 36;
+    private static final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainThermalEnergyDevourer";
     private static IStructureDefinition<TST_ThermalEnergyDevourer> STRUCTURE_DEFINITION = null;
 

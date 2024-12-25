@@ -11,27 +11,20 @@ import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
-import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
-
-import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -46,7 +39,6 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
@@ -54,10 +46,8 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.common.blocks.BlockCasings8;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNanoCore> {
+public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_DeployedNanoCore> {
 
     // region Class Constructor
     public TST_DeployedNanoCore(int aID, String aName, String aNameRegional) {
@@ -75,41 +65,8 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
     // endregion
 
     // region Processing Logic
-    private boolean isWirelessMode = false;
-    private UUID ownerUUID;
-    private String currentUsingEu = "0";
-
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getBoolean("isWirelessMode")) {
-            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + TextLocalization.Waila_WirelessMode);
-            currentTip.add(
-                EnumChatFormatting.AQUA + TextLocalization.Waila_CurrentEuCost
-                    + EnumChatFormatting.RESET
-                    + ": "
-                    + EnumChatFormatting.GOLD
-                    + tag.getString("currentUsingEu")
-                    + EnumChatFormatting.RESET
-                    + " EU");
-        }
-    }
-
-    @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
-        if (tileEntity != null) {
-            tag.setBoolean("isWirelessMode", isWirelessMode);
-            tag.setString("currentUsingEu", currentUsingEu);
-        }
-    }
-
     public String[] getInfoData() {
-        if (!isWirelessMode) return super.getInfoData();
+        if (!wirelessMode) return super.getInfoData();
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
@@ -117,20 +74,6 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
             + EnumChatFormatting.BOLD
             + TextLocalization.Info_Wireless_mode_enabled;
         return ret;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setBoolean("isWirelessMode", isWirelessMode);
-        aNBT.setString("currentUsingEu", currentUsingEu);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        isWirelessMode = aNBT.getBoolean("isWirelessMode");
-        currentUsingEu = aNBT.getString("currentUsingEu");
     }
 
     @Override
@@ -150,54 +93,15 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
             @Nonnull
             @Override
             protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                return isWirelessMode ? OverclockCalculator.ofNoOverclock(recipe)
+                return wirelessMode ? OverclockCalculator.ofNoOverclock(recipe)
                     : super.createOverclockCalculator(recipe);
             }
         }.setMaxParallel(Integer.MAX_VALUE);
     }
 
-    @NotNull
     @Override
-    public CheckRecipeResult checkProcessing() {
-        if (!isWirelessMode) return super.checkProcessing();
-
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        // calculate Eu cost
-        long costEu = processingLogic.getCalculatedEut() * processingLogic.getDuration();
-        if (!addEUToGlobalEnergyMap(ownerUUID, -costEu)) {
-            return CheckRecipeResultRegistry.insufficientPower(costEu);
-        }
-
-        currentUsingEu = GTUtility.formatNumbers(costEu);
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = ValueEnum.TickPerProgressing_WirelessMode_DeployedNanoCore;
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
-        return result;
-
-    }
-
-    @Override
-    protected void setProcessingLogicPower(ProcessingLogic logic) {
-        if (isWirelessMode) {
-            // wireless mode ignore voltage limit
-            logic.setAvailableVoltage(Long.MAX_VALUE);
-            logic.setAvailableAmperage(1);
-            logic.setAmperageOC(false);
-        } else {
-            super.setProcessingLogicPower(logic);
-        }
+    public int getWirelessModeProcessingTime() {
+        return Config.TickPerProgressing_WirelessMode_DeployedNanoCore;
     }
 
     @Override
@@ -236,7 +140,7 @@ public class TST_DeployedNanoCore extends GTCM_MultiMachineBase<TST_DeployedNano
             //
             return false;
         }
-        isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
+        wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
         return true;
     }
     // endregion

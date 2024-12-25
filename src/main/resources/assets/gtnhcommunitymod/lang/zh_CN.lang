@@ -1558,3 +1558,4 @@ Tooltip_MegaStoneBreaker_Hatch_1=§f水输入仓:§7结构的§a右§7侧
 tst.recipe.MegaStoneBreakerRecipes=巨型碎石机
 NameMegaStoneBreaker=硅岩制造机
 Tooltip_SpaceScaler_09=2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
+GT5U.gui.text.SimpleShutDownReasons.NoEnoughCriticalPhotonInput=没有足够临界光子输入

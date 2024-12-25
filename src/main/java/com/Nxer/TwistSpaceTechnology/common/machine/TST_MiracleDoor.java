@@ -1,10 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostABSMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeABSMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
+import static com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons.NoCriticalPhotonInput;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool.MoltenToIngot;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
@@ -37,15 +37,12 @@ import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.ParallelHelper.addFluidsLong;
 import static gregtech.api.util.ParallelHelper.addItemsLong;
-import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
@@ -63,7 +60,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -94,7 +91,8 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
-public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> implements IWirelessEnergyHatchInformation {
+public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleDoor>
+    implements IWirelessEnergyHatchInformation {
 
     // region Class Constructor
     public TST_MiracleDoor(int aID, String aName, String aNameRegional) {
@@ -116,25 +114,17 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
 
     private byte mode = 1;
     private int overclockParameter = 1;
-    private UUID ownerUUID;
-    private int needPhotonAmount = 0;
-    private String costingWirelessEU = "0";
-    private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
-    ItemStack IngotMold;
+    private static ItemStack IngotMold;
+
+    public static void initStatics() {
+        IngotMold = GTCMItemList.WhiteDwarfMold_Ingot.get(1);
+    }
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        currentTip.add(
-            EnumChatFormatting.AQUA + texter("Current EU cost", "Waila.TST_MiracleDoor.1")
-                + EnumChatFormatting.RESET
-                + ": "
-                + EnumChatFormatting.GOLD
-                + tag.getString("costingWirelessEU")
-                + EnumChatFormatting.RESET
-                + " EU");
         if (tag.getBoolean("isActive")) {
             currentTip.add(
                 EnumChatFormatting.AQUA + texter("Current Overclock Parameter", "Waila.TST_MiracleDoor.2")
@@ -143,6 +133,8 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
                     + EnumChatFormatting.GOLD
                     + tag.getLong("overclockParameter"));
         }
+        currentTip.add(
+            EnumChatFormatting.BOLD + StatCollector.translateToLocal("MiracleDoor.modeMsg." + tag.getByte("mode")));
     }
 
     @Override
@@ -151,8 +143,8 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setString("costingWirelessEU", costingWirelessEU);
             tag.setInteger("overclockParameter", overclockParameter);
+            tag.setByte("mode", mode);
         }
     }
 
@@ -160,7 +152,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", mode);
-        aNBT.setInteger("needPhotonAmount", needPhotonAmount);
         aNBT.setInteger("overclockParameter", overclockParameter);
     }
 
@@ -168,7 +159,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         mode = aNBT.getByte("mode");
-        needPhotonAmount = aNBT.getInteger("needPhotonAmount");
         overclockParameter = aNBT.getInteger("overclockParameter");
     }
 
@@ -192,29 +182,49 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         }
     }
 
+    @Override
+    public boolean getDefaultWirelessMode() {
+        return true;
+    }
+
+    @Override
+    protected void prepareProcessing() {
+        super.prepareProcessing();
+        flushOverclockParameter();
+    }
+
+    @Override
+    public int getExtraEUCostMultiplier() {
+        return overclockParameter
+            * (mode == 1 ? multiplierOfMiracleDoorEUCostEBFMode : multiplierOfMiracleDoorEUCostABSMode);
+    }
+
+    @Override
+    public int getWirelessModeProcessingTime() {
+        return Math.max(
+            1,
+            (mode == 1 ? ticksOfMiracleDoorProcessingTimeEBFMode : ticksOfMiracleDoorProcessingTimeABSMode)
+                / this.overclockParameter);
+    }
+
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        return mode == 1 ? checkProcessing_EBF() : checkProcessing_ABS();
+        CheckRecipeResult r = super.checkProcessing();
+        if (!r.wasSuccessful()) return r;
+        if (!isRecipeProcessing) startRecipeProcessing();
+        if (!consumePhoton(overclockParameter)) {
+            stopMachine(NoCriticalPhotonInput);
+            return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+        }
+        return CheckRecipeResultRegistry.SUCCESSFUL;
     }
-
-    // private boolean checkPhotonsInputting(int amount) {
-    // int containedAmount = 0;
-    // for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
-    // if (items == null) continue;
-    // if (metaItemEqual(items, CriticalPhoton.get(1))) {
-    // containedAmount += items.stackSize;
-    // if (containedAmount >= amount) return true;
-    // }
-    // }
-    // return false;
-    // }
 
     private boolean consumePhoton(int amount) {
         int needAmount = amount;
         for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
             if (items == null) continue;
-            if (metaItemEqual(items, CriticalPhoton.get(1))) {
+            if (metaItemEqual(items, MiscHelper.CRITICAL_PHOTON)) {
                 if (items.stackSize >= needAmount) {
                     items.stackSize -= needAmount;
                     return true;
@@ -227,70 +237,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         return false;
     }
 
-    private CheckRecipeResult checkProcessing_ABS() {
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-
-        // process wireless EU cost
-        flushOverclockParameter();
-        BigInteger costingWirelessEUTemp = BigInteger.valueOf(processingLogic.getCalculatedEut())
-            .multiply(BigInteger.valueOf(processingLogic.getDuration()))
-            .multiply(BigInteger.valueOf((long) multiplierOfMiracleDoorEUCostABSMode * getOverclockEUCostMultiplier()));
-        costingWirelessEU = GTUtility.formatNumbers(costingWirelessEUTemp);
-        if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
-            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
-        }
-
-        // set progress time a fixed value
-        mMaxProgresstime = getProgressTime(ticksOfMiracleDoorProcessingTimeABSMode);
-
-        // normal output
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-        needPhotonAmount = this.overclockParameter;
-
-        return result;
-    }
-
-    private CheckRecipeResult checkProcessing_EBF() {
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-
-        // process wireless EU cost
-        flushOverclockParameter();
-        BigInteger costingWirelessEUTemp = BigInteger.valueOf(processingLogic.getCalculatedEut())
-            .multiply(BigInteger.valueOf(processingLogic.getDuration()))
-            .multiply(BigInteger.valueOf((long) multiplierOfMiracleDoorEUCostEBFMode * getOverclockEUCostMultiplier()));
-        costingWirelessEU = GTUtility.formatNumbers(costingWirelessEUTemp);
-        if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
-            return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
-        }
-
-        // set progress time a fixed value
-        mMaxProgresstime = getProgressTime(ticksOfMiracleDoorProcessingTimeEBFMode);
-
-        // normal output
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-        needPhotonAmount = this.overclockParameter;
-
-        return result;
-    }
-
     private void flushOverclockParameter() {
         ItemStack items = getControllerSlot();
         if (items != null && items.getItem() instanceof ItemIntegratedCircuit
@@ -300,14 +246,6 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
         } else {
             this.overclockParameter = 1;
         }
-    }
-
-    private int getOverclockEUCostMultiplier() {
-        return this.overclockParameter;
-    }
-
-    private int getProgressTime(int basicTickCost) {
-        return Math.max(1, basicTickCost / this.overclockParameter);
     }
 
     @Override
@@ -375,26 +313,8 @@ public class TST_MiracleDoor extends GTCM_MultiMachineBase<TST_MiracleDoor> impl
     }
 
     @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
-        if (IngotMold == null) IngotMold = GTCMItemList.WhiteDwarfMold_Ingot.get(1);
-    }
-
-    @Override
     public boolean onRunningTick(ItemStack aStack) {
-        if (needPhotonAmount > 0) {
-            startRecipeProcessing();
-            if (consumePhoton(needPhotonAmount)) {
-                needPhotonAmount = 0;
-                endRecipeProcessing();
-            } else {
-                endRecipeProcessing();
-                criticalStopMachine();
-                return false;
-            }
-        }
-        return super.onRunningTick(aStack);
+        return true;
     }
 
     @Override
