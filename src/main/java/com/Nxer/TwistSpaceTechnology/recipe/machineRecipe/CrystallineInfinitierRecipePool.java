@@ -234,7 +234,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         // Chip
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensBlue")) {
             GTValues.RA.stdBuilder()
-                .itemInputs(Utils.copyAmount(0, itemStack), GTCMItemList.PerfectLapotronCrystal.get(1))
+                .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(1),Utils.copyAmount(0, itemStack))
 
                 .itemOutputs(
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
@@ -254,7 +254,6 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         // Shard
         GTValues.RA.stdBuilder()
             .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(1))
-
             .itemOutputs(GTCMItemList.EnergyCrystalShard.get(64))
 
             .eut(RECIPE_ZPM)
@@ -285,8 +284,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         // Chip
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensRed")) {
             GTValues.RA.stdBuilder()
-                .itemInputs(Utils.copyAmount(0, itemStack), GTCMItemList.PerfectEnergyCrystal.get(1))
-
+                .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(1), Utils.copyAmount(0, itemStack))
                 .itemOutputs(CustomItemList.EngravedEnergyChip.get(64), CustomItemList.EngravedEnergyChip.get(64))
 
                 .noOptimize()
