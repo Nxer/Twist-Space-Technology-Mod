@@ -261,7 +261,9 @@ public class MachineLoader {
 
     public static void loadMachines() {
 
-        EntityList.addMapping(Ship.class, "Ship", 114);
+        if (Config.activateMegaSpaceStation) {
+            EntityList.addMapping(Ship.class, "Ship", 114);
+        }
         // test
         // TestMachine = new Test_ModularizedMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 

@@ -380,7 +380,12 @@ public class Config {
 
     // endregion
 
+    // region Mega Space Station
     public static boolean activateMegaSpaceStation = false;
+    public static int EntityShipID = 114;
+
+    // endregion
+
     public static boolean activateCombatStats = false;
     public static boolean Enable_LargeCanner = true;
     public static boolean Enable_LightningSpire = true;
@@ -682,6 +687,7 @@ public class Config {
 
         // region Space Station
         activateMegaSpaceStation = configuration.getBoolean("activateMegaSpaceStation", spaceStation, activateMegaSpaceStation, "decide whether can use mega space station.");
+        EntityShipID = configuration.getInt("EntityShipID", spaceStation, EntityShipID, 1, 32767, "Entity Ship ID");
         // endregion
 
         // region CombatRework
