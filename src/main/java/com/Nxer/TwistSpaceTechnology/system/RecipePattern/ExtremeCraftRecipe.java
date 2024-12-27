@@ -22,8 +22,6 @@ import gregtech.api.util.GTUtility;
 
 public class ExtremeCraftRecipe extends CustomCraftRecipe {
 
-    public static ExtremeCraftingManager originRecipes = ExtremeCraftingManager.getInstance();
-
     public static RecipeMap<TST_RecipeMapBackend> extremeCraftRecipes = RecipeMapBuilder
         .of("gtcm.recipe.extremeCraftRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 1, 0, 0)
@@ -36,6 +34,8 @@ public class ExtremeCraftRecipe extends CustomCraftRecipe {
         .build();
 
     public static void initECRecipe() {
+
+        ExtremeCraftingManager originRecipes = ExtremeCraftingManager.getInstance();
 
         LOG.info(
             "start init extreme craft table recipe :" + originRecipes.getRecipeList()
