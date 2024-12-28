@@ -419,16 +419,11 @@ public class StellarForgeRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
         initData();
-        prepareEBFRecipes();
-        prepareABSRecipes();
-        loadManualRecipes();
-        // cacheRecipeList();
-        // New version no longer requires this
     }
 
     public void loadOnServerStarted() {
-        // prepareEBFRecipes();
-        // prepareABSRecipes();
-        // loadRecipeListCache();
+        prepareEBFRecipes();
+        prepareABSRecipes();
+        loadManualRecipes();
     }
 }
