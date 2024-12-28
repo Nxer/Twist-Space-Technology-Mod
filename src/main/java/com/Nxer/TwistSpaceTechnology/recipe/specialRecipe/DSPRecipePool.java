@@ -69,7 +69,6 @@ import com.dreammaster.gthandler.CustomItemList;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
-import galaxyspace.core.register.GSBlocks;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
@@ -130,7 +129,7 @@ public class DSPRecipePool implements IRecipePool {
 
                 SpaceWarper.get(64),
                 new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
-                new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9))
+                new ItemStack(IGBlocks.DysonSwarmCasing, 64, 9))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 8192),
                 Materials.UUMatter.getFluid(1000 * 1024),
@@ -165,7 +164,7 @@ public class DSPRecipePool implements IRecipePool {
                 setStackSize(LightWeightPlate.copy(), 64),
                 eM_Power.get(64),
                 new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
-                new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9))
+                new ItemStack(IGBlocks.DysonSwarmCasing, 64, 9))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 8192),
                 Materials.UUMatter.getFluid(1000 * 128),

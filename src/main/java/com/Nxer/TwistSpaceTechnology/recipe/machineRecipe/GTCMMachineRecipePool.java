@@ -187,7 +187,6 @@ import bartworks.common.loaders.BioItemList;
 import bartworks.common.loaders.ItemRegistry;
 import bartworks.system.material.WerkstoffLoader;
 import fox.spiteful.avaritia.items.LudicrousItems;
-import galaxyspace.core.register.GSItems;
 import ggfab.GGItemList;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
@@ -2285,7 +2284,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     Casing_Industrial_Arc_Furnace.get(8),
                     eM_Power.get(8),
                     ItemRefer.Advanced_Radiation_Protection_Plate.get(64),
-                    new ItemStack(GSItems.DysonSwarmItems, 64, 3),
+                    new ItemStack(IGItems.DysonSwarmItems, 64, 3),
 
                     TransmissionComponent_UV.get(16),
                     ItemList.Electric_Piston_UHV.get(8),

@@ -33,6 +33,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import galaxyspace.BarnardsSystem.BRFluids;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -66,7 +67,6 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import bartworks.API.BorosilicateGlass;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
-import galaxyspace.BarnardsSystem.BRFluids;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;

@@ -86,7 +86,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -509,8 +508,8 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                                    .addElement('J', ofBlock(sBlockCasingsTT, 7)) // J -> ofBlock...(gt.blockcasingsTT, 7, ...);
                                    .addElement('K', ofBlock(sBlockCasingsTT, 9)) // K -> ofBlock...(gt.blockcasingsTT, 9, ...);
                                    .addElement('L', ofBlock(ModBlocks.blockCasings4Misc, 4)) // L -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-                                   .addElement('M', ofBlock(GSBlocks.DysonSwarmBlocks, 1)) // M -> ofBlock...(tile.DysonSwarmPart, 1, ...);
-                                   .addElement('N', ofBlock(GSBlocks.DysonSwarmBlocks, 9)) // N -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+                                   .addElement('M', ofBlock(IGBlocks.DysonSwarmCasing, 1)) // M -> ofBlock...(tile.DysonSwarmPart, 1, ...);
+                                   .addElement('N', ofBlock(IGBlocks.DysonSwarmCasing, 9)) // N -> ofBlock...(tile.DysonSwarmPart, 9, ...);
                                    .addElement('O', ofBlock(BlockQuantumGlass.INSTANCE, 0)) // O -> ofBlock...(tile.quantumGlass, 0, ...);
                                    .addElement(
 			                           'P',

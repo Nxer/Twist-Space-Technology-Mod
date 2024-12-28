@@ -75,7 +75,6 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevator.ElevatorUtil;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -367,7 +366,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 			                                       TST_DSPLauncher::setMotorTier,
 			                                       TST_DSPLauncher::getMotorTier))
 		                           .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
-		                           .addElement('G', ofBlock(GSBlocks.DysonSwarmBlocks, 9))// G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+		                           .addElement('G', ofBlock(IGBlocks.DysonSwarmCasing, 9))// G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
 		                           .addElement(
 						                       'H',
 						                       HatchElementBuilder.<TST_DSPLauncher>builder()

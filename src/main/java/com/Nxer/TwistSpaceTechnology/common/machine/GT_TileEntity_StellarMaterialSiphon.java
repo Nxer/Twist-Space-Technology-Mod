@@ -322,19 +322,19 @@ public class GT_TileEntity_StellarMaterialSiphon
                     StructureUtility.ofChain(
                         GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addMaintenanceToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addExoticEnergyInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addOutputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 0)))// L -> ofBlock...(tile.stone, 0,
                                                                                    // ...);
@@ -371,18 +371,18 @@ public class GT_TileEntity_StellarMaterialSiphon
         int colorIndex, boolean active, boolean redstone) {
         if (side == facing) {
             if (active) return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX),
+                Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
                 TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
                     .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_ACTIVE_GLOW)
                     .glow()
                     .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX),
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
                 TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
                     .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_GLOW)
                     .glow()
                     .build() };
         }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX) };
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON) };
     }
 
     /**

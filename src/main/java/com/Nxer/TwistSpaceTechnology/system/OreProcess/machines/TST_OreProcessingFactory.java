@@ -28,6 +28,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
@@ -66,7 +67,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
-import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -489,7 +489,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         return IStructureDefinition
                    .<TST_OreProcessingFactory>builder()
                    .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                   .addElement('A', Glasses.chainAllGlasses())
+                   .addElement('A', chainAllGlasses())
                    .addElement('B', ofBlock(GregTechAPI.sBlockCasings2,4))
                    .addElement('C', ofBlock(GregTechAPI.sBlockCasings2,6))
                    .addElement('D', ofBlock(GregTechAPI.sBlockCasings2,15))
