@@ -36,7 +36,7 @@
 dependencies {
     api('com.github.GTNewHorizons:GT5-Unofficial:5.09.51.33:dev')
     implementation('com.github.GTNewHorizons:AE2FluidCraft-Rework:1.4.4-gtnh:dev')
-//    implementation('com.github.GTNewHorizons:Galaxy-Space-GTNH:1.1.105-GTNH:dev')
+    implementation('com.github.GTNewHorizons:Galaxy-Space-GTNH:1.1.105-GTNH:dev')
     implementation('com.github.GTNewHorizons:GTNH-Intergalactic:1.5.10:dev')
     implementation('com.github.GTNewHorizons:NewHorizonsCoreMod:2.7.20:dev')
     implementation('com.github.GTNewHorizons:Avaritia:1.57:dev')
