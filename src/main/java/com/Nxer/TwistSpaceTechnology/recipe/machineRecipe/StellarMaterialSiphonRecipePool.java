@@ -6,7 +6,6 @@ import static com.Nxer.TwistSpaceTechnology.common.material.MaterialPool.eventHo
 import java.util.HashMap;
 import java.util.Map;
 
-import galaxyspace.SolarSystem.SolarSystemPlanets;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -14,6 +13,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import bartworks.system.material.WerkstoffLoader;
 import cpw.mods.fml.common.Loader;
+import galaxyspace.SolarSystem.SolarSystemPlanets;
 import gregtech.api.enums.Materials;
 
 public class StellarMaterialSiphonRecipePool implements IRecipePool {

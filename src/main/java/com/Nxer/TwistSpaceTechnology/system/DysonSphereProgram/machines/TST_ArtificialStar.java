@@ -59,7 +59,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
 
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -85,6 +84,7 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;

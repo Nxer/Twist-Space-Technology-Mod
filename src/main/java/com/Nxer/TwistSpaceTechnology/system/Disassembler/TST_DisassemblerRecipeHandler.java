@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import galaxyspace.core.register.GSItems;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
@@ -17,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.dreammaster.gthandler.CustomItemList;
 import com.google.common.collect.Sets;
 
+import galaxyspace.core.register.GSItems;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;

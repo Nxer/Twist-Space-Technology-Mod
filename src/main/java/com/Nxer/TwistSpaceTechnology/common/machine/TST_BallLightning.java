@@ -41,7 +41,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -68,6 +67,7 @@ import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;

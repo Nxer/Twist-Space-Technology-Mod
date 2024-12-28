@@ -370,12 +370,12 @@ public class GT_TileEntity_StellarMaterialSiphon
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstone) {
         if (side == facing) {
-            if (active) return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
-                TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
-                    .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_ACTIVE_GLOW)
-                    .glow()
-                    .build() };
+            if (active)
+                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
+                    TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
+                        .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_ACTIVE_GLOW)
+                        .glow()
+                        .build() };
             return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
                 TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
                     .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_GLOW)
