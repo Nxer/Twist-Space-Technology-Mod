@@ -12,6 +12,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemMultiStructuresL
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemProofOfHeroes;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemYamato;
+import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.TSTGeneratedItem;
 
 public final class BasicItems {
 
@@ -58,5 +59,9 @@ public final class BasicItems {
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:HatchUpdateTool");
 
     public static final Item Yamato = new ItemYamato("Yamato", "Yamato", GTCMCreativeTabs.tabMetaItem01);
+
+    // don't use this item, but found its stack instance in the class, remember to copy the stacks!
+    @SuppressWarnings("unused")
+    public static final TSTGeneratedItem Generated = new TSTGeneratedItem();
 
 }
