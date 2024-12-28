@@ -2186,7 +2186,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
     public static void addRecipes() {
         GTValues.RA.stdBuilder()
             .itemInputs(
-                ItemList.Processing_Array.get(16),
+                GTCMItemList.ResearchOnAncientPA.get(16),
                 ItemList.Robot_Arm_IV.get(32),
                 ItemList.Emitter_IV.get(32),
                 ItemList.Field_Generator_IV.get(32),
