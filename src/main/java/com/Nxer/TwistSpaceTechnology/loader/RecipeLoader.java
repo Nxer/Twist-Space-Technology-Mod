@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -105,12 +106,20 @@ public class RecipeLoader {
         new IndustrialMagicMatrixRecipePool().loadRecipes();
     }
 
+    public static boolean hasLoadedRecipesServerStarted = false;
+
     public static void loadRecipesServerStarted() {
+        if (hasLoadedRecipesServerStarted) {
+            TwistSpaceTechnology.LOG.info("Has loaded recipes server started.");
+            return;
+        }
+        hasLoadedRecipesServerStarted = true;
+
         new StellarForgeRecipePool().loadOnServerStarted();
+        new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
     }
 
     public static void loadRecipemixin() {
-        new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
         // new Mode3SimulatorFakeRecipe().loadRecipes();
     }
 }
