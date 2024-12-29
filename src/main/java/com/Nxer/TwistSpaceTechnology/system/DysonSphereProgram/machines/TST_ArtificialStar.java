@@ -84,8 +84,8 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -510,7 +510,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                                        t -> t.tierStabilisationField)))
                    .addElement('H', ofBlock(sBlockCasingsTT, 12))
                    .addElement('I', ofBlock(sBlockCasingsTT, 13))
-                   .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                   .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 9))
                    .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                    .addElement('L',
                                HatchElementBuilder.<TST_ArtificialStar>builder()

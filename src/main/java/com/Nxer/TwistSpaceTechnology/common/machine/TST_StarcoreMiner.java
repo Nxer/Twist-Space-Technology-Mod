@@ -42,7 +42,6 @@ import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import bartworks.API.BorosilicateGlass;
 import bwcrossmod.galacticgreg.VoidMinerUtility;
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -151,7 +150,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
                     .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 0))
                     .addElement('H', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
                     .addElement('I', ofBlock(sBlockCasingsTT, 8))
-                    .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                    .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 9))
                     .addElement(
                         'K',
                         ofChain(

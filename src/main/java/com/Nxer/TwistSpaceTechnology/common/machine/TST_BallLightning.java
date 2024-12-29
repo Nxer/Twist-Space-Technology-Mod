@@ -67,9 +67,9 @@ import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import bartworks.API.BorosilicateGlass;
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
@@ -533,10 +533,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                             ne -> ne.fieldGeneratorTier)))
                 .addElement('G', ofBlock(MetaBlockCasing01, 1))
                 .addElement('H', ofBlock(ModBlocks.blockCasingsTieredGTPP, 9))
-                .addElement('I', ofBlock(GSBlocks.DysonSwarmBlocks, 1))
-                .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 8))
-                .addElement('K', ofBlock(GSBlocks.DysonSwarmBlocks, 0))
-                .addElement('L', ofBlock(GSBlocks.DysonSwarmBlocks, 5))
+                .addElement('I', ofBlock(IGBlocks.DysonSwarmCasing, 1))
+                .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 8))
+                .addElement('K', ofBlock(IGBlocks.DysonSwarmCasing, 0))
+                .addElement('L', ofBlock(IGBlocks.DysonSwarmCasing, 5))
                 .addElement('M', ofBlock(sBlockCasingsTT, 10))
                 .addElement('N', ofFrame(Materials.SuperconductorUIVBase))
                 .addElement('O', ofFrame(Materials.Neutronium))

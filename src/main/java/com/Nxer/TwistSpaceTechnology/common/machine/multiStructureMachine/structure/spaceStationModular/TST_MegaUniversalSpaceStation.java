@@ -180,19 +180,19 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
                     StructureUtility.ofChain(
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addMaintenanceToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addExoticEnergyInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addOutputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         StructureUtility.ofBlock(SpaceStationAntiGravityBlock, 13)))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 1))

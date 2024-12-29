@@ -68,7 +68,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -385,7 +384,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                 .addElement('G', ofBlock(sBlockCasingsTT, 10))
                 .addElement('H', ofBlock(sBlockCasingsTT, 12))
                 .addElement('I', ofBlock(sBlockCasingsTT, 14))
-                .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 9))
                 .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .addElement(
                     'L',
