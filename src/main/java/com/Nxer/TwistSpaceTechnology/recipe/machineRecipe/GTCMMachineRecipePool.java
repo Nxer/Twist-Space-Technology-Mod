@@ -70,6 +70,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WhiteDwarfMold_I
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataInputHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataOutputHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler.NitronicSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleTopRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
@@ -2534,7 +2535,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemRefer.HiC_T5.get(64),
                     GravitationalLens.get(64),
                     PerfectLapotronCrystal.get(64),
-                    GTModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 0),
+                    NitronicSingularity.getLeft(),
 
                     AnnihilationConstrainer.get(1),
                     ItemList.ZPM2.get(1),

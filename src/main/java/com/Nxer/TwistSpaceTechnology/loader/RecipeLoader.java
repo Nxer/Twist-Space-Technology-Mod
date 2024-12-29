@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.craftRecipeList.craftRecipe;
+
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -53,12 +55,10 @@ import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches;
 
-import static com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.craftRecipeList.craftRecipe;
-
 public class RecipeLoader {
 
     public static void loadRecipes() {
-        IRecipePool[] recipePools = new IRecipePool[] {new GTCMMachineRecipePool(),
+        IRecipePool[] recipePools = new IRecipePool[] { new GTCMMachineRecipePool(),
             new IntensifyChemicalDistorterRecipePool(), new ChemicalReactorRecipePool(),
             new PreciseHighEnergyPhotonicQuantumMasterRecipePool(), new CircuitAssemblerRecipePool(),
             new MiracleTopRecipePool(), new FluidSolidifierRecipePool(), new CrystallineInfinitierRecipePool(),
@@ -77,7 +77,7 @@ public class RecipeLoader {
         for (IRecipePool recipePool : recipePools) {
             recipePool.loadRecipes();
         }
-        for (IRecipePool recipePool : craftRecipe){
+        for (IRecipePool recipePool : craftRecipe) {
             recipePool.loadRecipes();
         }
         new TCResearches().register();

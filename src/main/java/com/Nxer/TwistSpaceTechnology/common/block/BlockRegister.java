@@ -52,23 +52,32 @@ public class BlockRegister {
             BasicBlocks.SpaceTimeOscillator,
             MetaItemBlockCasing.class,
             BasicBlocks.SpaceTimeOscillator.getUnlocalizedName());
+
         GameRegistry.registerBlock(
             BasicBlocks.SpaceTimeConstraintor,
             MetaItemBlockCasing.class,
             BasicBlocks.SpaceTimeConstraintor.getUnlocalizedName());
+
         GameRegistry.registerBlock(
             BasicBlocks.SpaceTimeMerger,
             MetaItemBlockCasing.class,
             BasicBlocks.SpaceTimeMerger.getUnlocalizedName());
 
         GameRegistry.registerBlock(
+            BasicBlocks.StabilisationFieldGenerator,
+            MetaItemBlockCasing.class,
+            BasicBlocks.StabilisationFieldGenerator.getUnlocalizedName());
+
+        GameRegistry.registerBlock(
             spaceStationStructureBlock,
             SpaceStationStructureCasingItemBlock.class,
             spaceStationStructureBlock.getUnlocalizedName());
+
         GameRegistry.registerBlock(
             SpaceStationAntiGravityBlock,
             SpaceStationAntiGravityCasingItemBlock.class,
             SpaceStationAntiGravityBlock.getUnlocalizedName());
+
         GameRegistry.registerBlock(
             NuclearReactorBlock,
             BlockNuclearReactor.innerItemBlock.class,
@@ -85,6 +94,8 @@ public class BlockRegister {
     public static void registryBlockContainers() {
 
         GTCMItemList.TestMetaBlock01_0.set(ItemBlockBase01.initMetaBlock01("TestMetaBlock01_0", 0));
+
+        // region Casing 01
         GTCMItemList.TestCasing
             .set(MetaBlockConstructors.initMetaBlockCasing("Test Casing", (byte) 0, BasicBlocks.MetaBlockCasing01));
         GTCMItemList.HighPowerRadiationProofCasing.set(
@@ -226,6 +237,7 @@ public class BlockRegister {
                 // #zh_CN 比磐石更坚！
                 }));
 
+        // region Casing 02
         GTCMItemList.BloodyCasing1.set(
             MetaBlockConstructors.initMetaBlockCasing(
                 "BloodyCasing1",
@@ -322,6 +334,79 @@ public class BlockRegister {
         GTCMItemList.SpaceTimeMergerT3.set(
             MetaBlockConstructors
                 .initMetaBlock("SpaceTime Merger T3", (byte) 2, (MetaBlockBase) BasicBlocks.SpaceTimeMerger));
+
+        // endregion
+
+        // region Stabilisation Field Generator
+        GTCMItemList.StabilisationFieldGeneratorFramework.set(
+            MetaBlockConstructors.initMetaBlock(
+                "StabilisationFieldGeneratorFramework",
+                // #tr StabilisationFieldGenerator.0.name
+                // # Stabilisation Field Generator Framework
+                // #zh_CN 稳定力场发生器框架
+                (byte) 0,
+                (MetaBlockBase) BasicBlocks.StabilisationFieldGenerator,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.0") }
+            // #tr Tooltip_StabilisationFieldGenerator.0
+            // # The Beginning.
+            // #zh_CN 开始了.
+            ));
+
+        GTCMItemList.StabilisationFieldGeneratorUEV.set(
+            MetaBlockConstructors.initMetaBlock(
+                "StabilisationFieldGeneratorUEV",
+                // #tr StabilisationFieldGenerator.1.name
+                // # Stabilisation Field Generator UEV Tier
+                // #zh_CN 稳定力场发生器UEV
+                (byte) 1,
+                (MetaBlockBase) BasicBlocks.StabilisationFieldGenerator,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.1") }
+            // #tr Tooltip_StabilisationFieldGenerator.1
+            // # Very basic, isn't it?
+            // #zh_CN 很基础, 不是吗?
+            ));
+
+        GTCMItemList.StabilisationFieldGeneratorUIV.set(
+            MetaBlockConstructors.initMetaBlock(
+                "StabilisationFieldGeneratorUIV",
+                // #tr StabilisationFieldGenerator.2.name
+                // # Stabilisation Field Generator UIV Tier
+                // #zh_CN 稳定力场发生器UIV
+                (byte) 2,
+                (MetaBlockBase) BasicBlocks.StabilisationFieldGenerator,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.2") }
+            // #tr Tooltip_StabilisationFieldGenerator.2
+            // # Praise the Star！
+            // #zh_CN 赞美太阳!
+            ));
+
+        GTCMItemList.StabilisationFieldGeneratorUMV.set(
+            MetaBlockConstructors.initMetaBlock(
+                "StabilisationFieldGeneratorUMV",
+                // #tr StabilisationFieldGenerator.3.name
+                // # Stabilisation Field Generator UMV Tier
+                // #zh_CN 稳定力场发生器UMV
+                (byte) 3,
+                (MetaBlockBase) BasicBlocks.StabilisationFieldGenerator,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.3") }
+            // #tr Tooltip_StabilisationFieldGenerator.3
+            // # We Need to Go Deeper
+            // #zh_CN 我们需要再深入些.
+            ));
+
+        GTCMItemList.StabilisationFieldGeneratorUXV.set(
+            MetaBlockConstructors.initMetaBlock(
+                "StabilisationFieldGeneratorUXV",
+                // #tr StabilisationFieldGenerator.4.name
+                // # Stabilisation Field Generator UXV Tier
+                // #zh_CN 稳定力场发生器UXV
+                (byte) 4,
+                (MetaBlockBase) BasicBlocks.StabilisationFieldGenerator,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.4") }
+            // #tr Tooltip_StabilisationFieldGenerator.4
+            // # The End?
+            // #zh_CN 结束了?
+            ));
 
         // endregion
 

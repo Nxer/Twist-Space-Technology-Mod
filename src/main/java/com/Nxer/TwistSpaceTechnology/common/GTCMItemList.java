@@ -203,6 +203,8 @@ public enum GTCMItemList {
     PhotonControllerUpgradeUMV,
     PhotonControllerUpgradeUXV,
     PhotonControllerUpgradeMAX,
+
+    // Casing 01
     HighPowerRadiationProofCasing,
     AdvancedHighPowerCoilBlock,
     ParallelismCasing0,
@@ -217,8 +219,11 @@ public enum GTCMItemList {
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
     ReinforcedBedrockCasing,
+
+    // Casing 02
     BloodyCasing1,
     BloodyCasing2,
+
     // endregion
 
     // region Machines
@@ -403,7 +408,11 @@ public enum GTCMItemList {
     SpaceTimeMergerT1,
     SpaceTimeMergerT2,
     SpaceTimeMergerT3,
-
+    StabilisationFieldGeneratorFramework,
+    StabilisationFieldGeneratorUEV,
+    StabilisationFieldGeneratorUIV,
+    StabilisationFieldGeneratorUMV,
+    StabilisationFieldGeneratorUXV,
     // endregion
 
     // region single block Machines
