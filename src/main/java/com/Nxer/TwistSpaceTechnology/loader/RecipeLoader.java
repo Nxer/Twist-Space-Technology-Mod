@@ -22,6 +22,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.FluidSolidifierRecipeP
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.FusionReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.GTCMMachineRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.HyperSpacetimeTransformerRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IndustrialAlchemyTowerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IndustrialMagicMatrixRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IntensifyChemicalDistorterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MassFabricatorGenesisRecipePool;
@@ -99,6 +100,7 @@ public class RecipeLoader {
         if (Config.Enable_MegaTreeFarm) {
             new AquaticZoneSimulatorFakeRecipe().loadRecipes();
         }
+        new IndustrialAlchemyTowerRecipePool().loadRecipes();
     }
 
     public static void loadRecipesPostInit() {

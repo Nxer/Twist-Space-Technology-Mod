@@ -203,6 +203,11 @@ public final class Utils {
         return rStack;
     }
 
+    public static ItemStack copy(ItemStack aItemStack) {
+        if (isStackValid(aItemStack)) return aItemStack.copy();
+        return null;
+    }
+
     public static boolean isStackValid(ItemStack aStack) {
         return (aStack != null) && aStack.getItem() != null && aStack.stackSize >= 0;
     }
