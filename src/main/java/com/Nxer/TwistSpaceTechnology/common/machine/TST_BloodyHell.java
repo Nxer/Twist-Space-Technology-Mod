@@ -439,6 +439,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         }
         if (bloodAmountNeeded > mBloodAmount) return false;
 
+        int fixX = 0;
+        int fixY = mTier > 5 ? -1 : -24;
+        int fixZ = mTier > 5 ? 1 : 24;
+
         int setCount = 0;
         for (int y = 0; y < lengthY; y++) {
             for (int x = 0; x < lengthX; x++) {
@@ -446,9 +450,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     String strList = String.valueOf(structureDef[x][y].charAt(z));
                     if (!Objects.equals(strList, "Z")) continue;
 
-                    int aX = offsetX - x;
-                    int aY = offsetY - y - 1;
-                    int aZ = offsetZ - z + 1;
+                    int aX = offsetX - x + fixX;
+                    int aY = offsetY - y + fixY;
+                    int aZ = offsetZ - z + fixZ;
 
                     aX += aBaseMetaTileEntity.getXCoord();
                     aY += aBaseMetaTileEntity.getYCoord();
