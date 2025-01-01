@@ -325,9 +325,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
         int tier = stackSize.stackSize;
         if (tier > 6) tier = 6;
+        if (mMachine && tier <= mTier) return -1;
 
         int blocksBuilt = this.survivialBuildPiece(
             "tier" + tier,
