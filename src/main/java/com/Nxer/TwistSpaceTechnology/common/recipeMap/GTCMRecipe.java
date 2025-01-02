@@ -386,7 +386,7 @@ public class GTCMRecipe {
     public static final RecipeMap<RecipeMapBackend> IndustrialAlchemyTowerRecipe = RecipeMapBuilder
         .of("tst.recipe.IndustrialAlchemyTowerRecipe")
         .maxIO(2, 1, 0, 0)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.TestItem0.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialAlchemyTower.get(1)))
         .useSpecialSlot()
         .disableOptimize()
         .build();

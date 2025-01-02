@@ -1,12 +1,16 @@
 package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.isStackValid;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
+import gregtech.api.util.GTOreDictUnificator;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -18,6 +22,10 @@ public class TCRecipeTools {
     public static ArrayList<InfusionCraftingRecipe> ICR = new ArrayList<>();// InfusionCraftingRecipeList
 
     public static HashMap<String, ArrayList<CrucibleCraftingRecipe>> CCR = new HashMap<>();// CrucibleCraftingRecipeMap
+
+    public static String toStringWithoutStackSize(ItemStack itemStack) {
+        return itemStack.getUnlocalizedName() + "@" + itemStack.getItemDamage();
+    }
 
     public TCRecipeTools() {}
 
@@ -45,33 +53,28 @@ public class TCRecipeTools {
     public static void getCrucibleCraftingRecipe() {
         for (var o : ThaumcraftApi.getCraftingRecipes()) {
             if (!(o instanceof CrucibleRecipe o1)) continue;
-            if (Utils.isStackValid(o1.getRecipeOutput())) {
-                Object input;
+            if (isStackValid(o1.getRecipeOutput())) {
+                ItemStack input;
                 Object cat = o1.catalyst;
                 if (cat instanceof ArrayList<?>catalyst1) {
-                    var warped = new ItemStack[catalyst1.size()];
-                    for (int i = 0; i < warped.length; i++) {
-                        warped[i] = Utils.copyAmount(1, (ItemStack) catalyst1.get(i));
-                    }
-                    input = warped;
+                    input = GTOreDictUnificator.get(false, (ItemStack) catalyst1.get(0), true);
                 } else if (cat instanceof ItemStack itemStack) {
                     input = Utils.copyAmount(1, itemStack);
                 } else continue;
-                String inputKey = cat.toString();
+                String inputKey = null;
+                if (input != null) {
+                    inputKey = toStringWithoutStackSize(input);
+                } else {
+                    TwistSpaceTechnology.LOG.info("input is null when getting CrucibleCraftingRecipe");
+                }
                 CrucibleCraftingRecipe p = new CrucibleCraftingRecipe(
                     input,
-                    Utils.copy(o1.getRecipeOutput()),
+                    o1.getRecipeOutput()
+                        .copy(),
                     o1.aspects,
                     o1.key);
-                if (CCR.get(inputKey) == null) {
-                    var arrayList = new ArrayList<CrucibleCraftingRecipe>();
-                    arrayList.add(p);
-                    CCR.put(inputKey, arrayList);
-                } else {
-                    var old = CCR.get(inputKey);
-                    old.add(p);
-                    CCR.replace(inputKey, old);
-                }
+                CCR.computeIfAbsent(inputKey, K -> new ArrayList<>())
+                    .add(p);
             }
         }
     }

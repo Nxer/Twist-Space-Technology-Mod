@@ -15,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_LightningSpire;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IndustrialAlchemyTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IndustrialMagicMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
@@ -137,6 +138,7 @@ public class MachineLoader {
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
     public static ItemStack IndustrialMagicMatrix;
+    public static ItemStack IndustrialAlchemyTower;
     public static ItemStack EyeOfWood;
     public static ItemStack BeeEngineer;
     public static ItemStack MegaMacerator;
@@ -727,6 +729,12 @@ public class MachineLoader {
                 TextEnums.tr("NameMegaStoneBreaker")).getStackForm(1);
             GTCMItemList.MegaStoneBreaker.set(MegaStoneBreaer);
         }
+
+        IndustrialAlchemyTower = new GT_TileEntity_IndustrialAlchemyTower(
+            19063,
+            "IndustrialAlchemyTower",
+            TextEnums.tr("NameIndustrialAlchemyTower")).getStackForm(1);
+        GTCMItemList.IndustrialAlchemyTower.set(IndustrialAlchemyTower);
 
         // endregion
 

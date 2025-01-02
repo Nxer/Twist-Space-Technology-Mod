@@ -271,6 +271,7 @@ public enum GTCMItemList {
     IncompactCyclotron,
     BloodyHell,
     MegaStoneBreaker,
+    IndustrialAlchemyTower,
 
     // endregion
 
