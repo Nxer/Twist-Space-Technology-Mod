@@ -1144,25 +1144,29 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.07"))
             .addSeparator()
             // #tr Tooltip_EcoSphereSimulator.0.08
-            // # Features a unique method of overclocking
-            // #zh_CN 拥有独特的超频增益方式
+            // # {\GOLD}Features a unique method of overclocking
+            // #zh_CN {\GOLD}拥有独特的超频增益方式
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.08"))
             // #tr Tooltip_EcoSphereSimulator.0.09
             // # Recipe time is fixed
             // #zh_CN 配方时间被固定
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.09"))
             // #tr Tooltip_EcoSphereSimulator.0.10
-            // # The output benefits vary with increasing voltage
-            // #zh_CN 且产物随电压的提升而受到不同的增益
+            // # The product increases nonlinearly with the increase of voltage
+            // #zh_CN 且产物随着电压的增加而非线性提升
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.10"))
             // #tr Tooltip_EcoSphereSimulator.0.11
             // # Use screwdriver to change mode
             // #zh_CN 使用螺丝刀切换模式
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.11"))
             // #tr Tooltip_EcoSphereSimulator.0.12
+            // # Need to pour a bucket of {\AQUA}distilled water {\GRAY}at the top to drive the machine
+            // #zh_CN 需要在顶端倒一桶{\AQUA}蒸馏水{\GRAY}来驱动机器
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.12"))
+            // #tr Tooltip_EcoSphereSimulator.0.13
             // # Secondary recipes incomplete
             // #zh_CN 二级配方尚未完成
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.12"))
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.13"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
