@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooCo
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofTileAdder;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static goodgenerator.loader.Loaders.magicCasing;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -34,6 +35,7 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.interfaces.ITexture;
@@ -164,27 +166,33 @@ public class GT_TileEntity_IndustrialAlchemyTower extends GTCM_MultiMachineBase<
     private final int verticalOffSet = 1;
     private final int depthOffSet = 0;
     // spotless:off
-    private static final String[][] shape = new String[][]{{
-        "AAA",
-        "A~A",
-        "AAA"
-    },{
-        "AAA",
-        "A A",
-        "AAA"
-    },{
-        "AAA",
-        "AAA",
-        "AAA"
-    }};
+    private static final String[][] shape = new String[][]{
+        {"AAA","AAA","AAA"},
+        {"A~A","A A","AAA"},
+        {"AAA","AAA","AAA"}
+    };
     // spotless:on
     private static IStructureDefinition<GT_TileEntity_IndustrialAlchemyTower> STRUCTURE_DEFINITION = null;
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivialBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
 
     @Override
     public IStructureDefinition<GT_TileEntity_IndustrialAlchemyTower> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_IndustrialAlchemyTower>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, shape)
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addElement(
                     'A',
                     ofChain(
