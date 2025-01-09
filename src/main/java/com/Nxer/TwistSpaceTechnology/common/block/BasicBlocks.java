@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
@@ -8,6 +7,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockTimeBendingSpeedRune;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.nuclear.BlockNuclearReactor;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationAntiGravityCasing;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation.SpaceStationStructureCasing;

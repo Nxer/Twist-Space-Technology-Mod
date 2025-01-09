@@ -1,5 +1,23 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.github.bsideup.jabel.Desugar;
@@ -10,6 +28,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
+
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HatchElement;
 import gregtech.api.enums.TAE;
@@ -31,24 +50,9 @@ import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.PlayerUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.GTPPMultiBlockBase;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-
-public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_ManufacturingCenter> implements ISurvivalConstructable {
+public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_ManufacturingCenter>
+    implements ISurvivalConstructable {
 
     public static final int LOWEST_CORE_TIER = 5;
 
@@ -74,9 +78,13 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     @Desugar
     private record ManufacturingMachineType(String typeName, RecipeMap<?> recipeMap, String unlocalizedName) {
+
         public static ManufacturingMachineType of(RecipeMap<?> recipeMap) {
             var recipeMapNameParts = recipeMap.unlocalizedName.split("\\.");
-            return new ManufacturingMachineType(recipeMapNameParts[recipeMapNameParts.length - 1], recipeMap, recipeMap.unlocalizedName);
+            return new ManufacturingMachineType(
+                recipeMapNameParts[recipeMapNameParts.length - 1],
+                recipeMap,
+                recipeMap.unlocalizedName);
         }
     }
 
@@ -139,6 +147,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     protected ProcessingLogic createProcessingLogic() {
         return new ProcessingLogic() {
+
             @Override
             protected @NotNull CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
                 if (recipe.getMetadataOrDefault(CompressionTierKey.INSTANCE, 0) > 0) {
@@ -152,7 +161,8 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     @Override
     protected void setProcessingLogicPower(ProcessingLogic logic) {
-        logic.setAvailableVoltage(Math.min(getMaxVoltageTierAtCurrentMode(), GTUtility.roundUpVoltage(this.getMaxInputVoltage())));
+        logic.setAvailableVoltage(
+            Math.min(getMaxVoltageTierAtCurrentMode(), GTUtility.roundUpVoltage(this.getMaxInputVoltage())));
         logic.setAvailableAmperage(1);
         logic.setSpeedBonus(getSpeedBonusAtCurrentCore());
         logic.setEuModifier(getEuModifierAtCurrentCore());
@@ -174,9 +184,20 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         tt.addMachineType(getMachineType())
             .addInfo("A Combination of Machines.")
             .addInfo("Voltages are limited by the MultiUse Core.")
-            .addInfo("Manufacturing Center cannot handle recipes over " + GTUtility.getColoredTierNameFromTier((byte) 9) + EnumChatFormatting.GRAY + ".")
-            .addInfo("Each core tier over " + GTUtility.getColoredTierNameFromTier((byte) 5) + EnumChatFormatting.GRAY + " gains 50% speed bonus comparing to single block machines.")
-            .addInfo(GTUtility.getColoredTierNameFromTier((byte) 7) + EnumChatFormatting.GRAY + " core saves 20% EU energy, " + GTUtility.getColoredTierNameFromTier((byte) 8) + EnumChatFormatting.GRAY + " core saves 40% EU energy.")
+            .addInfo(
+                "Manufacturing Center cannot handle recipes over " + GTUtility.getColoredTierNameFromTier((byte) 9)
+                    + EnumChatFormatting.GRAY
+                    + ".")
+            .addInfo(
+                "Each core tier over " + GTUtility.getColoredTierNameFromTier((byte) 5)
+                    + EnumChatFormatting.GRAY
+                    + " gains 50% speed bonus comparing to single block machines.")
+            .addInfo(
+                GTUtility.getColoredTierNameFromTier((byte) 7) + EnumChatFormatting.GRAY
+                    + " core saves 20% EU energy, "
+                    + GTUtility.getColoredTierNameFromTier((byte) 8)
+                    + EnumChatFormatting.GRAY
+                    + " core saves 40% EU energy.")
             .addInfo("Max Parallel is limited by 2x Max Voltage.")
             .addPollutionAmount(getPollutionPerSecond(null))
             .beginStructureBlock(3, 3, 3, false)
@@ -192,8 +213,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             .addMufflerHatch("Any Casing", 1)
             .addSeparator()
             .addInfo(TextEnums.Author_Taskeren.toString())
-            .toolTipFinisher()
-        ;
+            .toolTipFinisher();
 
         return tt;
     }
@@ -247,7 +267,9 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public void onModeChangeByScrewdriver(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         setMachineMode(nextMachineMode());
-        PlayerUtils.messagePlayer(aPlayer, String.format(StatCollector.translateToLocal("GT5U.MULTI_MACHINE_CHANGE"), getMachineModeName()));
+        PlayerUtils.messagePlayer(
+            aPlayer,
+            String.format(StatCollector.translateToLocal("GT5U.MULTI_MACHINE_CHANGE"), getMachineModeName()));
     }
 
     private static int getMachineModesCount() {
@@ -339,19 +361,30 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     public IStructureDefinition<TST_ManufacturingCenter> getStructureDefinition() {
         if (StructureDef == null) {
             StructureDef = StructureDefinition.<TST_ManufacturingCenter>builder()
-                .addShape("main", StructureUtility.transpose(
-                    new String[][]{{"CCC", "CCC", "CCC"}, {"C~C", "CAC", "CCC"}, {"CCC", "CCC", "CCC"}}
-                ))
-                .addElement('C',
+                .addShape(
+                    "main",
+                    StructureUtility.transpose(
+                        new String[][] { { "CCC", "CCC", "CCC" }, { "C~C", "CAC", "CCC" }, { "CCC", "CCC", "CCC" } }))
+                .addElement(
+                    'C',
                     GTStructureUtility.buildHatchAdder(TST_ManufacturingCenter.class)
-                        .atLeast(HatchElement.InputBus, HatchElement.OutputBus, HatchElement.InputHatch, HatchElement.OutputHatch, HatchElement.Energy.or(HatchElement.ExoticEnergy), HatchElement.Maintenance, HatchElement.Muffler)
+                        .atLeast(
+                            HatchElement.InputBus,
+                            HatchElement.OutputBus,
+                            HatchElement.InputHatch,
+                            HatchElement.OutputHatch,
+                            HatchElement.Energy.or(HatchElement.ExoticEnergy),
+                            HatchElement.Maintenance,
+                            HatchElement.Muffler)
                         .casingIndex(getTextureIndex())
                         .dot(1)
-                        .buildAndChain(onElementPass((te) -> te.casingCount++, ofBlock(ModBlocks.blockCasings3Misc, 2))))
-                .addElement('A', withChannel("core", BlockMultiUseCore.ofMultiUseCore(
-                    -1,
-                    (te, tier) -> te.coreTier = tier,
-                    (te) -> te.coreTier)))
+                        .buildAndChain(
+                            onElementPass((te) -> te.casingCount++, ofBlock(ModBlocks.blockCasings3Misc, 2))))
+                .addElement(
+                    'A',
+                    withChannel(
+                        "core",
+                        BlockMultiUseCore.ofMultiUseCore(-1, (te, tier) -> te.coreTier = tier, (te) -> te.coreTier)))
                 .build();
         }
 

@@ -1,28 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.gtnewhorizon.structurelib.structure.IStructureElement;
-import gregtech.api.enums.GTValues;
-import gregtech.api.interfaces.IItemContainer;
-import gregtech.api.util.GTModHandler;
-import gregtech.common.blocks.MaterialCasings;
-import gtPlusPlus.xmod.gregtech.common.blocks.GregtechMetaCasingBlocksAbstract;
-import gtPlusPlus.xmod.gregtech.common.blocks.GregtechMetaCasingItems;
-import gtPlusPlus.xmod.gregtech.common.blocks.textures.CasingTextureHandler3;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import org.apache.commons.lang3.tuple.Pair;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,8 +12,32 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.gtnewhorizon.structurelib.structure.IStructureElement;
+
+import gregtech.api.enums.GTValues;
+import gregtech.api.interfaces.IItemContainer;
+import gregtech.api.util.GTModHandler;
+import gregtech.common.blocks.MaterialCasings;
+import gtPlusPlus.xmod.gregtech.common.blocks.GregtechMetaCasingBlocksAbstract;
+import gtPlusPlus.xmod.gregtech.common.blocks.GregtechMetaCasingItems;
+import gtPlusPlus.xmod.gregtech.common.blocks.textures.CasingTextureHandler3;
 
 public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
 
@@ -50,6 +53,7 @@ public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
     private static final Map<Integer, IItemContainer[]> BlockBreakDropTable = Maps.newHashMap();
 
     public static class BlockItemMultiUseCore extends GregtechMetaCasingItems {
+
         public BlockItemMultiUseCore(Block par1) {
             super(par1);
         }
@@ -148,7 +152,8 @@ public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
     }
 
     public static List<Pair<Block, Integer>> getRepresentatives() {
-        return Representatives.entries().stream()
+        return Representatives.entries()
+            .stream()
             .sorted(Comparator.comparingInt(Map.Entry::getKey))
             .map(Map.Entry::getValue)
             .collect(Collectors.toList());
@@ -156,15 +161,20 @@ public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
 
     public static Integer getTier(Block block, int i) {
         var other = Pair.of(block, i);
-        return Representatives.entries().stream()
-            .filter(x -> x.getValue().equals(other))
+        return Representatives.entries()
+            .stream()
+            .filter(
+                x -> x.getValue()
+                    .equals(other))
             .findFirst()
             .map(Map.Entry::getKey)
             .orElse(null);
     }
 
-    public static <T> IStructureElement<T> ofMultiUseCore(int initialValue, BiConsumer<T, Integer> setter, Function<T, Integer> getter) {
-        return lazy(t -> ofBlocksTiered(BlockMultiUseCore::getTier, getRepresentatives(), initialValue, setter, getter));
+    public static <T> IStructureElement<T> ofMultiUseCore(int initialValue, BiConsumer<T, Integer> setter,
+        Function<T, Integer> getter) {
+        return lazy(
+            t -> ofBlocksTiered(BlockMultiUseCore::getTier, getRepresentatives(), initialValue, setter, getter));
     }
 
 }
