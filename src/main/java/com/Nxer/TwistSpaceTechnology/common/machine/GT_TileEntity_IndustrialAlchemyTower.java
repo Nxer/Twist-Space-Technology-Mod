@@ -15,6 +15,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
+import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -34,6 +36,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -50,24 +53,30 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.research.ResearchCategories;
 import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 
 public class GT_TileEntity_IndustrialAlchemyTower extends GTCM_MultiMachineBase<GT_TileEntity_IndustrialAlchemyTower>
     implements ISidedInventory {
 
+    // region default value
+
+    private int mParallel;
+    private double mSpeedBonus;
     private final ItemStack EssentiaCell_Creative = EnumEssentiaStorageTypes.Type_Creative.getCell();
     private final ItemStack ProofOfHeroes = GTCMItemList.ProofOfHeroes.get(1, 0);
     protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
+    protected ArrayList<String> Research = new ArrayList<>();
     public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
         .ofFailurePersistOnShutdown("Essentiainsentia");
     public static final CheckRecipeResult Research_not_completed = SimpleCheckRecipeResult
         .ofFailurePersistOnShutdown("Research_not_completed");
 
-    private int mParallel;
-    private double mSpeedBonus;
+    // endregion
+
+    // region constructor
 
     public GT_TileEntity_IndustrialAlchemyTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -76,6 +85,10 @@ public class GT_TileEntity_IndustrialAlchemyTower extends GTCM_MultiMachineBase<
     public GT_TileEntity_IndustrialAlchemyTower(String aName) {
         super(aName);
     }
+
+    // endregion
+
+    // region Processing Logic
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
@@ -104,8 +117,7 @@ public class GT_TileEntity_IndustrialAlchemyTower extends GTCM_MultiMachineBase<
                 ArrayList<TCRecipeTools.CrucibleCraftingRecipe> recipes = TCRecipeTools.CCR.get(key);
                 if (recipes.size() < circuitNum) return CheckRecipeResultRegistry.NO_RECIPE;
                 TCRecipeTools.CrucibleCraftingRecipe recipe1 = recipes.get(circuitNum - 1);
-                if (!ThaumcraftApiHelper.isResearchComplete(getUsername(), recipe1.getResearch()))
-                    return Research_not_completed;
+                if (!isResearchComplete(recipe1.getResearch())) return Research_not_completed;
                 if (!(getControllerSlot() == null)) {
                     if (getControllerSlot().isItemEqual(EssentiaCell_Creative)
                         || getControllerSlot().isItemEqual(ProofOfHeroes)) {
@@ -123,7 +135,21 @@ public class GT_TileEntity_IndustrialAlchemyTower extends GTCM_MultiMachineBase<
                 }
                 return CheckRecipeResultRegistry.NO_RECIPE;
             }
-        };
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    }
+
+    public boolean isResearchComplete(String key) {
+        if (!key.startsWith("@") && ResearchCategories.getResearch(key) == null) {
+            return false;
+        } else {
+            return this.Research != null && !this.Research.isEmpty() && this.Research.contains(key);
+        }
+    }
+
+    // WIP
+    @Override
+    public @NotNull CheckRecipeResult checkProcessing() {
+        return super.checkProcessing();
     }
 
     private String getUsername() {
@@ -156,16 +182,27 @@ public class GT_TileEntity_IndustrialAlchemyTower extends GTCM_MultiMachineBase<
         return 4;
     }
 
+    // endregion
+
+    @Override
+    public String[] getInfoData() {
+        return super.getInfoData();
+    }
+
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
+    // region Structure
+
+    // WIP
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private final int horizontalOffSet = 1;
     private final int verticalOffSet = 1;
     private final int depthOffSet = 0;
     // spotless:off
+    //WIP
     private static final String[][] shape = new String[][]{
         {"AAA","AAA","AAA"},
         {"A~A","A A","AAA"},
@@ -188,6 +225,7 @@ public class GT_TileEntity_IndustrialAlchemyTower extends GTCM_MultiMachineBase<
             true);
     }
 
+    // WIP
     @Override
     public IStructureDefinition<GT_TileEntity_IndustrialAlchemyTower> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
@@ -216,20 +254,30 @@ public class GT_TileEntity_IndustrialAlchemyTower extends GTCM_MultiMachineBase<
         return false;
     }
 
+    // WIP
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType("CCR")
-            .addInfo("test")
+        // #tr Tooltip_IndustrialAlchemyTower_MachineType
+        // # Alchemy Tower
+        // #zh_CN 工业炼金塔
+        tt.addMachineType(TextEnums.tr("Tooltip_IndustrialAlchemyTower_MachineType"))
             .addSeparator()
             .addInfo(StructureTooComplex)
-            .addInfo("Tc_traveler")
             .toolTipFinisher(ModName);
         return tt;
     }
 
+    // endregion
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
+        NBTTagList nbtTagList = new NBTTagList();
+        for (String string : Research) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("ResearchName", string);
+            nbtTagList.appendTag(tag);
+        }
         aNBT.setInteger("mParallel", this.mParallel);
         aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
         super.saveNBTData(aNBT);
@@ -237,9 +285,35 @@ public class GT_TileEntity_IndustrialAlchemyTower extends GTCM_MultiMachineBase<
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
+        this.Research.clear();
+        for (int i = 0; i < aNBT.getTagList("Research", 10)
+            .tagCount(); i++) {
+            if (aNBT.getTagList("Research", 10)
+                .getCompoundTagAt(i)
+                .hasKey("ResearchName")) {
+                this.Research.add(
+                    aNBT.getTagList("Research", 10)
+                        .getCompoundTagAt(i)
+                        .getString("ResearchName"));
+            }
+        }
         this.mParallel = aNBT.getInteger("mParallel");
         this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
         super.loadNBTData(aNBT);
+    }
+
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if (aTick % 100 == 0) {
+            super.onPreTick(aBaseMetaTileEntity, aTick);
+            if (aBaseMetaTileEntity.isServerSide()) {
+                ArrayList<String> list = getResearchForPlayer(getUsername());
+                if ((this.Research == null && list != null)
+                    || (list != null && !list.isEmpty() && this.Research.size() != list.size())) {
+                    this.Research = list;
+                }
+            }
+        }
     }
 
     @Override

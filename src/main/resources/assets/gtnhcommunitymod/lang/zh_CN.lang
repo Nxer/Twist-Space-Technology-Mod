@@ -1560,3 +1560,7 @@ NameMegaStoneBreaker=硅岩制造机
 Tooltip_SpaceScaler_09=2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
 GT5U.gui.text.SimpleShutDownReasons.NoEnoughCriticalPhotonInput=没有足够临界光子输入
 Tooltip_EcoSphereSimulator.0.13=二级配方尚未完成
+NameIndustrialAlchemyTower=工业炼金塔
+tst.recipe.IndustrialAlchemyTowerRecipe=工业炼金塔配方
+IndustrialAlchemyTowerRecipeInputAspects=配方所需要素
+Tooltip_IndustrialAlchemyTower_MachineType=工业炼金塔的控制器方块

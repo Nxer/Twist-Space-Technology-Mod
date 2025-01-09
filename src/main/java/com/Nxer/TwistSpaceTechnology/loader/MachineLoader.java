@@ -731,6 +731,9 @@ public class MachineLoader {
         }
 
         IndustrialAlchemyTower = new GT_TileEntity_IndustrialAlchemyTower(
+            // #tr NameIndustrialAlchemyTower
+            // # Industrial Alchemy Tower
+            // #zh_CN 工业炼金塔
             19063,
             "IndustrialAlchemyTower",
             TextEnums.tr("NameIndustrialAlchemyTower")).getStackForm(1);
