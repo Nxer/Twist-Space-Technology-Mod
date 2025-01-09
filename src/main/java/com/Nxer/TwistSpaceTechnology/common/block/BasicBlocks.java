@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
@@ -38,4 +39,6 @@ public class BasicBlocks {
     public static Block BlockPowerChair = new BlockPowerChair();
 
     public static BlockTimeBendingSpeedRune timeBendingSpeedRune = new BlockTimeBendingSpeedRune();
+
+    public static BlockMultiUseCore multiUseCore = new BlockMultiUseCore();
 }

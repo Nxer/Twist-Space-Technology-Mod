@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultip
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_ManufacturingCenter;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -168,6 +169,7 @@ public class MachineLoader {
     public static ItemStack MicroSpaceTimeFabricatorio;
     public static ItemStack BloodyHell;
     public static ItemStack MegaStoneBreaer;
+    public static ItemStack ManufacturingCenter;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -727,6 +729,15 @@ public class MachineLoader {
                 TextEnums.tr("NameMegaStoneBreaker")).getStackForm(1);
             GTCMItemList.MegaStoneBreaker.set(MegaStoneBreaer);
         }
+
+        // #tr NameManufacturingCenter
+        // # Manufacturing Center
+        // #zh_CN 加工中心
+        ManufacturingCenter = new TST_ManufacturingCenter(
+            19063,
+            "NameManufacturingCenter",
+            TextEnums.tr("NameManufacturingCenter")).getStackForm(1);
+        GTCMItemList.ManufacturingCenter.set(ManufacturingCenter);
 
         // endregion
 
