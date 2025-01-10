@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TextWithColor;
 import com.github.bsideup.jabel.Desugar;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -32,6 +33,7 @@ import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HatchElement;
 import gregtech.api.enums.TAE;
+import gregtech.api.enums.VoltageIndex;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -54,7 +56,13 @@ import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_ManufacturingCenter>
     implements ISurvivalConstructable {
 
-    public static final int LOWEST_CORE_TIER = 5;
+    private static final int LOWEST_CORE_TIER = 5;
+
+    private static final double SPEED_BONUS_BASE = 0.2F;
+    private static final double SPEED_BONUS_FOR_CORE_TIER = 0.5F;
+
+    // for core tier at ZPM and UV
+    private static final double EU_REDUCTION_FOR_CORE_TIER = 0.2F;
 
     public int coreTier = -1;
     public int casingCount = 0;
@@ -117,12 +125,12 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         return GTValues.V[coreTier];
     }
 
-    private float getSpeedBonusAtCurrentCore() {
-        return (float) 1 / (1 + 0.5f * (coreTier - LOWEST_CORE_TIER));
+    private double getSpeedBonusAtCurrentCore() {
+        return 1.0 / (1 + SPEED_BONUS_BASE + SPEED_BONUS_FOR_CORE_TIER * (coreTier - LOWEST_CORE_TIER));
     }
 
     private double getEuModifierAtCurrentCore() {
-        return 1.0 - (0.2 * Math.max(0, coreTier - LOWEST_CORE_TIER - 2));
+        return 1.0 - (EU_REDUCTION_FOR_CORE_TIER * Math.max(0, coreTier - LOWEST_CORE_TIER - 2));
     }
 
     // endregion
@@ -174,31 +182,52 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     @Override
     public String getMachineType() {
-        return "Nine in One";
+        return "Manufacturing Center | Nine in One";
     }
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         var tt = new MultiblockTooltipBuilder();
 
+        TextWithColor.setDefaultColor(EnumChatFormatting.GRAY);
+
         tt.addMachineType(getMachineType())
-            .addInfo("A Combination of Machines.")
-            .addInfo("Voltages are limited by the MultiUse Core.")
+            // #tr ManufacturingCenter_Tooltips_1
+            // # A Combination of Machines.
+            // #zh_CN 一些机器的组合。
+            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_1"))
+            // #tr ManufacturingCenter_Tooltips_2
+            // # Recipe voltages are limited by the §aMultiUse Core§7.
+            // #zh_CN §a多功能核心§7限制配方电压等级。
+            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_2"))
+            // #tr ManufacturingCenter_Tooltips_3
+            // # Manufacturing Center cannot handle recipes over %s.
+            // #zh_CN 加工中心不能制作%s以上的配方。
+            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_3", TextWithColor.getTierName(VoltageIndex.UHV)))
+            // #tr ManufacturingCenter_Tooltips_4
+            // # §b20%%§7 faster than single blocks.
+            // #zh_CN 比单方块机器快§b20%%§7。
+            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_4"))
+            // #tr ManufacturingCenter_Tooltips_5
+            // # Each Core Tier over %s gains §b%d%%§7 Speed Bonus comparing to single block machines.
+            // #zh_CN 每级超过%s的核心等级获得§b%d%%§7的速度提升。
             .addInfo(
-                "Manufacturing Center cannot handle recipes over " + GTUtility.getColoredTierNameFromTier((byte) 9)
-                    + EnumChatFormatting.GRAY
-                    + ".")
+                TextEnums.tr(
+                    "ManufacturingCenter_Tooltips_5",
+                    TextWithColor.getTierName(VoltageIndex.IV),
+                    SPEED_BONUS_FOR_CORE_TIER * 100))
+            // #tr ManufacturingCenter_Tooltips_6
+            // # Each Core Tier over %s gains §b%d%%§7 EU/t Reduction.
+            // #zh_CN 每级超过%s的核心等级获得§b%d%%§7的能量减免。
             .addInfo(
-                "Each core tier over " + GTUtility.getColoredTierNameFromTier((byte) 5)
-                    + EnumChatFormatting.GRAY
-                    + " gains 50% speed bonus comparing to single block machines.")
-            .addInfo(
-                GTUtility.getColoredTierNameFromTier((byte) 7) + EnumChatFormatting.GRAY
-                    + " core saves 20% EU energy, "
-                    + GTUtility.getColoredTierNameFromTier((byte) 8)
-                    + EnumChatFormatting.GRAY
-                    + " core saves 40% EU energy.")
-            .addInfo("Max Parallel is limited by 2x Max Voltage.")
+                TextEnums.tr(
+                    "ManufacturingCenter_Tooltips_6",
+                    TextWithColor.getTierName(VoltageIndex.LuV),
+                    EU_REDUCTION_FOR_CORE_TIER * 100))
+            // #tr ManufacturingCenter_Tooltips_7
+            // # Max parallel is §b2x§7 max voltage tier.
+            // #zh_CN 最大并行为2x最大电压等级。
+            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_7"))
             .addPollutionAmount(getPollutionPerSecond(null))
             .beginStructureBlock(3, 3, 3, false)
             .addController("Front Center")
@@ -213,7 +242,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             .addMufflerHatch("Any Casing", 1)
             .addSeparator()
             .addInfo(TextEnums.Author_Taskeren.toString())
-            .toolTipFinisher();
+            .toolTipFinisher(TextEnums.Mod_TwistSpaceTechnology.toString());
 
         return tt;
     }

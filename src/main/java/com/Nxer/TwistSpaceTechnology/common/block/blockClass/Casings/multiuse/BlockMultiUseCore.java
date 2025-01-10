@@ -13,12 +13,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -37,7 +37,6 @@ import gregtech.api.util.GTModHandler;
 import gregtech.common.blocks.MaterialCasings;
 import gtPlusPlus.xmod.gregtech.common.blocks.GregtechMetaCasingBlocksAbstract;
 import gtPlusPlus.xmod.gregtech.common.blocks.GregtechMetaCasingItems;
-import gtPlusPlus.xmod.gregtech.common.blocks.textures.CasingTextureHandler3;
 
 public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
 
@@ -142,9 +141,8 @@ public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
     }
 
     @Override
-    public IIcon getIcon(int side, int meta) {
-        // FIXME: change this
-        return CasingTextureHandler3.getIcon(side, 2);
+    public void registerBlockIcons(IIconRegister aIconRegister) {
+        blockIcon = aIconRegister.registerIcon("gtnhcommunitymod:MultiUseCore_Default");
     }
 
     public static boolean hasCoreInTier(int tier) {
