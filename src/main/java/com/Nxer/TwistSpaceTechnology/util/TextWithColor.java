@@ -34,4 +34,28 @@ public class TextWithColor {
         // noinspection MagicConstant getTier always returns valid values
         return getTierName(GTUtility.getTier(voltage));
     }
+
+    public static String numeric(String value) {
+        return EnumChatFormatting.AQUA + value + EnumChatFormatting.RESET;
+    }
+
+    public static String numeric(int value) {
+        return numeric(String.valueOf(value));
+    }
+
+    public static String numeric(double value) {
+        return numeric(String.valueOf(value));
+    }
+
+    public static String numeric(double value, String pattern) {
+        return numeric(String.format(pattern, value));
+    }
+
+    public static String factor(double factor) {
+        return numeric(factor, "%.2fx");
+    }
+
+    public static String percentage(double percent) {
+        return numeric(percent, "%.2f%%");
+    }
 }

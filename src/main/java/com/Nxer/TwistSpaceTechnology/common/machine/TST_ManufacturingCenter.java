@@ -64,6 +64,8 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     // for core tier at ZPM and UV
     private static final double EU_REDUCTION_FOR_CORE_TIER = 0.2F;
 
+    private static final int MAX_PARALLEL_MODIFIER = 2;
+
     public int coreTier = -1;
     public int casingCount = 0;
 
@@ -118,7 +120,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     @Override
     public int getMaxParallelRecipes() {
-        return (2 * GTUtility.getTier(this.getMaxInputVoltage()));
+        return (MAX_PARALLEL_MODIFIER * GTUtility.getTier(this.getMaxInputVoltage()));
     }
 
     private long getMaxVoltageTierAtCurrentMode() {
@@ -209,25 +211,25 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             // #zh_CN 比单方块机器快§b20%%§7。
             .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_4"))
             // #tr ManufacturingCenter_Tooltips_5
-            // # Each Core Tier over %s gains §b%d%%§7 Speed Bonus comparing to single block machines.
-            // #zh_CN 每级超过%s的核心等级获得§b%d%%§7的速度提升。
+            // # Each Core Tier over %s gains §b%s§7 Speed Bonus comparing to single block machines.
+            // #zh_CN 每级超过%s的核心等级获得§b%s§7的速度提升。
             .addInfo(
                 TextEnums.tr(
                     "ManufacturingCenter_Tooltips_5",
                     TextWithColor.getTierName(VoltageIndex.IV),
-                    SPEED_BONUS_FOR_CORE_TIER * 100))
+                    TextWithColor.percentage(SPEED_BONUS_FOR_CORE_TIER * 100)))
             // #tr ManufacturingCenter_Tooltips_6
-            // # Each Core Tier over %s gains §b%d%%§7 EU/t Reduction.
-            // #zh_CN 每级超过%s的核心等级获得§b%d%%§7的能量减免。
+            // # Each Core Tier over %s gains §b%s§7 EU/t Reduction.
+            // #zh_CN 每级超过%s的核心等级获得§b%s§7的能量减免。
             .addInfo(
                 TextEnums.tr(
                     "ManufacturingCenter_Tooltips_6",
                     TextWithColor.getTierName(VoltageIndex.LuV),
-                    EU_REDUCTION_FOR_CORE_TIER * 100))
+                    TextWithColor.percentage(EU_REDUCTION_FOR_CORE_TIER * 100)))
             // #tr ManufacturingCenter_Tooltips_7
-            // # Max parallel is §b2x§7 max voltage tier.
-            // #zh_CN 最大并行为2x最大电压等级。
-            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_7"))
+            // # Max parallel is §b%s§7 max voltage tier.
+            // #zh_CN 最大并行为§b%s§7最大电压等级。
+            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_7", TextWithColor.factor(MAX_PARALLEL_MODIFIER)))
             .addPollutionAmount(getPollutionPerSecond(null))
             .beginStructureBlock(3, 3, 3, false)
             .addController("Front Center")
