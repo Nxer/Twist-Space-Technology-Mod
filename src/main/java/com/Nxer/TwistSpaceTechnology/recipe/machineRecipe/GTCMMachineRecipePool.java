@@ -3149,7 +3149,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.BloodInfusedIron,1),
                     new ItemStack(WayofTime.alchemicalWizardry.ModItems.blankSlate,6),
-                    GTUtility.getIntegratedCircuit(1))
+                    GTUtility.getIntegratedCircuit(2))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(1000))
                 .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
                 .eut(0)

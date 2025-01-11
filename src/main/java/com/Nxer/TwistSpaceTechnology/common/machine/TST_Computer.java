@@ -1157,6 +1157,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
         // FluidStack output = null;
         for (var input : filterValidMTEs(mInputHatches)) {
             FluidStack fluid = input.getFluid();
+            if (fluid == null || fluid.amount < 1) continue;
             if (requiredAmount == 0) break;
             if (coolant.getFluid() == fluid.getFluid()) {
                 int mx = (int) Math.min(requiredAmount, fluid.amount);
