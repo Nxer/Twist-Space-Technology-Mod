@@ -9,7 +9,7 @@ import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gregtech.api.util.GTRecipeConstants.SCANNING;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
 import java.lang.reflect.Field;
@@ -50,6 +50,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
+import com.Nxer.TwistSpaceTechnology.util.ScanningWorkaround;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.dreammaster.gthandler.CustomItemList;
@@ -2218,7 +2219,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
 
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing0.get(1))
-            .metadata(RESEARCH_TIME, 4 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(4 * HOURS))
             .itemInputs(
                 ItemList.Field_Generator_ZPM.get(2),
                 ItemList.Casing_StableTitanium.get(1),
@@ -2237,7 +2238,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
 
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing1.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, ScanningWorkaround.fromLegacy(8 * HOURS))
             .itemInputs(
                 ItemList.Field_Generator_UHV.get(4),
                 ItemList.Casing_CleanStainlessSteel.get(1),

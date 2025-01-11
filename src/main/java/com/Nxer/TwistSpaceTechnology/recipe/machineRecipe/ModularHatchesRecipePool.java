@@ -12,7 +12,7 @@ import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gregtech.api.util.GTRecipeConstants.SCANNING;
 
 import net.minecraft.item.ItemStack;
 
@@ -20,6 +20,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.ScanningWorkaround;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
@@ -99,7 +100,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
             // Normal Execution Core
             GTValues.RA.stdBuilder()
                 .metadata(RESEARCH_ITEM, ItemList.Cover_Screen.get(1))
-                .metadata(RESEARCH_TIME, 24 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(24 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UIV.get(1),
                     ItemList.Electric_Motor_UV.get(16),
@@ -131,7 +132,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
             // Advanced Execution Core
             GTValues.RA.stdBuilder()
                 .metadata(RESEARCH_ITEM, GTCMItemList.ExecutionCore.get(1))
-                .metadata(RESEARCH_TIME, 48 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(48 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UMV.get(1),
                     ItemList.Electric_Motor_UMV.get(64),
@@ -165,7 +166,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
             // Perfect Execution Core
             GTValues.RA.stdBuilder()
                 .metadata(RESEARCH_ITEM, GTCMItemList.AdvancedExecutionCore.get(1))
-                .metadata(RESEARCH_TIME, 96 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(96 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UXV.get(1),
                     ItemList.Electric_Motor_UXV.get(64),
@@ -223,7 +224,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
             // perfect overclock
             GTValues.RA.stdBuilder()
                 .metadata(RESEARCH_ITEM, GTCMItemList.LowSpeedPerfectOverclockController.get(1))
-                .metadata(RESEARCH_TIME, 48 * HOURS)
+                .metadata(SCANNING, ScanningWorkaround.fromLegacy(48 * HOURS))
                 .itemInputs(
                     GTCMItemList.LowSpeedPerfectOverclockController.get(1),
                     GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 16),
