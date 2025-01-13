@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import com.Nxer.TwistSpaceTechnology.client.Sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.loader.RendereLoader;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.CooldownEventHandler;
 
@@ -21,6 +22,7 @@ public class ClientProxy extends CommonProxy {
         new ArtificialStarRender();
         MinecraftForge.EVENT_BUS.register(new CooldownEventHandler());// load cooldown HUD
         TST_BigBroArray.initializeDefaultTextures();
+        MaterialsTST.initClient();
     }
 
     @Override

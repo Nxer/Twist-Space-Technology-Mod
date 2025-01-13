@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.loader;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockRegister;
 import com.Nxer.TwistSpaceTechnology.common.item.items.ItemRegister;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 
 import bartworks.API.WerkstoffAdderRegistry;
 
@@ -19,7 +20,7 @@ public class MaterialLoader {
         BlockRegister.registry();
 
         WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialPool());
-
+        MaterialsTST.init();
     }
 
 }
