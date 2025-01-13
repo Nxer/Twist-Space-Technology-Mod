@@ -89,7 +89,7 @@ public class MaterialsTST {
     }
 
     public static void initClient() {
-        Axonium.renderer=new InfinityRenderer();
+        Axonium.renderer = new InfinityRenderer();
     }
 
     public static void init() {
