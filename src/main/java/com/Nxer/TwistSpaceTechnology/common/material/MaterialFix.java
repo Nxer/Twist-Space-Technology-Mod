@@ -1,11 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.material;
 
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
-import static goodgenerator.util.CrackRecipeAdder.reAddBlastRecipe;
-import static goodgenerator.util.MaterialFix.MaterialFluidExtractionFix;
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
@@ -31,46 +30,56 @@ public class MaterialFix {
 
     // spotless:off
     public static void loadRecipes() {
-        addBlastRecipe(MaterialsTST.NeutroniumAlloy, 2880, (int) RECIPE_UIV, 12500, true);
+        addBlastRecipe(MaterialsTST.NeutroniumAlloy, (int) RECIPE_UIV, 54 * 20, 12500, true);
         addMixerRecipe(
             new ItemStack[] {
-                Materials.Neutronium.getDust(11),
-                GGMaterial.adamantiumAlloy.get(OrePrefixes.dust, 2),
-                Materials.Duranium.getDust(1),
+                Materials.Neutronium.getDust(7),
+                Materials.Duranium.getDust(2),
                 Materials.Flerovium.getDust(1),
                 MaterialsElements.STANDALONE.WHITE_METAL.getDust(1),
-                GTUtility.getIntegratedCircuit(2) },
-            new FluidStack[]{ Materials.Hydrogen.getPlasma(1000 * 22)},
-            new ItemStack[] { MaterialsTST.NeutroniumAlloy.getDust(16)},
-            16 * 20,
-            (int) RECIPE_UHV);
+                Materials.DarkIron.getDust(1),
+                GTUtility.getIntegratedCircuit(2)},
+            new FluidStack[] { Materials.Hydrogen.getPlasma(1000 * 14)},
+            new ItemStack[] { MaterialsTST.NeutroniumAlloy.getDust(12)},
+            (int) RECIPE_UHV,
+            12 * 20);
         addAlloySmelterRecipe(new ItemStack[]{
-            GTUtility.getIntegratedCircuit(5),
-                Materials.Neutronium.getDust(11),
-                GGMaterial.adamantiumAlloy.get(OrePrefixes.dust, 2),
-                Materials.Duranium.getDust(1),
+            GTUtility.getIntegratedCircuit(6),
+                Materials.Neutronium.getDust(7),
+                Materials.Duranium.getDust(2),
                 Materials.Flerovium.getDust(1),
-                MaterialsElements.STANDALONE.WHITE_METAL.getDust(1)},
-            new FluidStack[]{ Materials.Hydrogen.getGas(1000 * 22)},
+                MaterialsElements.STANDALONE.WHITE_METAL.getDust(1),
+                Materials.DarkIron.getDust(1)},
+            new FluidStack[]{ Materials.Hydrogen.getGas(1000 * 14)},
             new FluidStack[]{ MaterialsTST.NeutroniumAlloy.getMolten(16 * 144)},
-            (int) RECIPE_UMV,
-            720 * 20);
-        addVacuumFreezerRecipe( MaterialsTST.NeutroniumAlloy,(int)RECIPE_UEV,2880);
+            (int) RECIPE_UIV,
+            660 * 20);
+        addVacuumFreezerRecipe( MaterialsTST.NeutroniumAlloy,(int)RECIPE_UEV,18 * 20);
 
-        reAddBlastRecipe(MaterialPool.AxonisAlloy, 720, (int) RECIPE_UMV, 13200, true);
-        MaterialFluidExtractionFix(MaterialPool.AxonisAlloy);
+        addBlastRecipe(MaterialsTST.AxonisAlloy, (int) RECIPE_UMV, 720, 13200, true);
         addAlloySmelterRecipe(
             new ItemStack[] {
+                GTUtility.getIntegratedCircuit(6),
                 MaterialsElements.STANDALONE.DRAGON_METAL.getDust(5),
-                MaterialsElements.STANDALONE.HYPOGEN.getDust(3),
+                MaterialsElements.STANDALONE.HYPOGEN.getDust(2),
                 MaterialsUEVplus.Creon.getDust(2),
                 Materials.Ichorium.getDust(1),
+                MaterialsTST.NeutroniumAlloy.getDust(1),
                 Materials.Terbium.getDust(1),
-                GGMaterial.shirabon.get(OrePrefixes.dust,1),
-                GTUtility.getIntegratedCircuit(6) },
-            new FluidStack[]{ MaterialPool.AxonisAlloy.getMolten(144 * 12)},
-            720 * 20,
-            (int) RECIPE_UMV);
+                GGMaterial.shirabon.get(OrePrefixes.dust,1)},
+            new FluidStack[]{ MaterialsTST.AxonisAlloy.getMolten(144 * 12)},
+            (int) RECIPE_UMV,
+            720 * 20);
+
+        addFusionRecipe(
+            new FluidStack[]{
+                MaterialsTST.AxonisAlloy.getMolten(144),
+                MaterialsUEVplus.Protomatter.getFluid(1000)},
+            MaterialsTST.Axonium.getMolten(144),
+            (int) RECIPE_UEV,
+            20 * 20,
+            2_000_000_000
+            );
         addPlasmaMixerRecipe(
             GTUtility.getIntegratedCircuit(20),
             new FluidStack[] {
@@ -81,9 +90,9 @@ public class MaterialFix {
                 Materials.Terbium.getPlasma(1000),
                 GGMaterial.shirabon.getMolten(1000),
                 MaterialsUEVplus.PrimordialMatter.getFluid(1000)},
-            MaterialPool.AxonisAlloy.getMolten(120000),
-            720 * 20,
-            (int) RECIPE_UMV);
+            MaterialsTST.Axonium.getPlasma(120000),
+            (int) RECIPE_MAX,
+            45 * 20);
     }
 
     // spotless:on
