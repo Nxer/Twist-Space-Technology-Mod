@@ -168,6 +168,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
@@ -1926,12 +1927,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UXV), 16),
                 ItemList.EnergisedTesseract.get(1)
             },
-            new FluidStack[] {
+            new FluidStack[]{
                 new FluidStack(solderPlasma, 1_296 * 64 * 4),
                 MaterialsUEVplus.ExcitedDTSC.getFluid(500L * 64)
             },
             GTCMItemList.LegendaryWirelessEnergyHatch.get(1),
-            20*60,
+            20 * 60,
             (int) RECIPE_UMV
         );
 
@@ -3147,7 +3148,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.BloodInfusedIron,1),
                     new ItemStack(WayofTime.alchemicalWizardry.ModItems.blankSlate,6),
-                    GTUtility.getIntegratedCircuit(1))
+                    GTUtility.getIntegratedCircuit(6))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(1000))
                 .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
                 .eut(0)
@@ -3160,7 +3161,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemInputs(
                     Mods.DraconicEvolution.isModLoaded()?
                     GTModHandler.getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1):TestItem0.get(1),
-                    GTUtility.getIntegratedCircuit(1))
+                    GTUtility.getIntegratedCircuit(6))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(100000))
                 .itemOutputs(GTCMItemList.BloodyCasing2.get(1))
                 .eut(0)
@@ -3169,6 +3170,66 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .addTo(GTCMRecipe.BloodyHellRecipes);
         }
 
+        // Manufacturing Center
+        GTModHandler.addCraftingRecipe(GTCMItemList.ManufacturingCenter.get(1), new Object[]{
+            "AhA",
+            "BHB",
+            "CdC",
+            'A', MaterialsAlloy.STABALLOY.getPlate(1),
+            'B', Materials.StainlessSteel.getPlates(1),
+            'C', MaterialsAlloy.ZIRCONIUM_CARBIDE.getPlate(1),
+            'H', ItemList.Hull_IV,
+        });
+
+        // MultiUse Core
+
+        BlockMultiUseCore.setupMultiUseCoreRecipe(GTCMItemList.MultiUseCore_IV.get(1), new IItemContainer[] {
+            ItemList.Machine_IV_Compressor,
+            ItemList.Machine_IV_Lathe,
+            ItemList.Machine_IV_Polarizer,
+            ItemList.Machine_IV_Fermenter,
+            ItemList.Machine_IV_FluidExtractor,
+            ItemList.Machine_IV_Extractor,
+            ItemList.Machine_IV_LaserEngraver,
+            ItemList.Machine_IV_Autoclave,
+            ItemList.Machine_IV_FluidSolidifier,
+        });
+
+        BlockMultiUseCore.setupMultiUseCoreRecipe(GTCMItemList.MultiUseCore_LuV.get(1), new IItemContainer[] {
+            ItemList.CompressorLuV,
+            ItemList.LatheLuV,
+            ItemList.PolarizerLuV,
+            ItemList.FermenterLuV,
+            ItemList.FluidExtractorLuV,
+            ItemList.ExtractorLuV,
+            ItemList.PrecisionLaserEngraverLuV,
+            ItemList.AutoclaveLuV,
+            ItemList.FluidSolidifierLuV,
+        });
+
+        BlockMultiUseCore.setupMultiUseCoreRecipe(GTCMItemList.MultiUseCore_ZPM.get(1), new IItemContainer[] {
+            ItemList.CompressorZPM,
+            ItemList.LatheZPM,
+            ItemList.PolarizerZPM,
+            ItemList.FermenterZPM,
+            ItemList.FluidExtractorZPM,
+            ItemList.ExtractorZPM,
+            ItemList.PrecisionLaserEngraverZPM,
+            ItemList.AutoclaveZPM,
+            ItemList.FluidSolidifierZPM,
+        });
+
+        BlockMultiUseCore.setupMultiUseCoreRecipe(GTCMItemList.MultiUseCore_UV.get(1), new IItemContainer[] {
+            ItemList.CompressorUV,
+            ItemList.LatheUV,
+            ItemList.PolarizerUV,
+            ItemList.FermenterUV,
+            ItemList.FluidExtractorUV,
+            ItemList.ExtractorUV,
+            ItemList.PrecisionLaserEngraverUV,
+            ItemList.AutoclaveUV,
+            ItemList.FluidSolidifierUV,
+        });
     }
     // spotless:on
 }

@@ -197,4 +197,21 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
             this.mMaxProgresstime = 0;
         }
     }
+
+    @Override
+    public boolean isValidSlot(final int aIndex) {
+        return true;
+    }
+
+    @Override
+    public boolean allowPullStack(final IGregTechTileEntity aBaseMetaTileEntity, final int aIndex,
+        final ForgeDirection side, final ItemStack aStack) {
+        return true;
+    }
+
+    @Override
+    public boolean allowPutStack(final IGregTechTileEntity aBaseMetaTileEntity, final int aIndex,
+        final ForgeDirection side, final ItemStack aStack) {
+        return true;
+    }
 }

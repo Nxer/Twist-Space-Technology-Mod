@@ -16,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 public class Config {
     // region Regions enum
     public static final String GENERAL = "General";
+    public static final String NETWORK = "Network";
     public static final String RECIPE = "Recipe";
     public static final String DSP = "DSP";
     public static final String IntensifyChemicalDistorter = "IntensifyChemicalDistorter";
@@ -66,6 +67,10 @@ public class Config {
     public static int MAX_PARALLEL_LIMIT = Integer.MAX_VALUE;
     public static boolean DEFAULT_BATCH_MODE = false;
 
+    // endregion
+
+    // region Network
+    public static byte IDServerJoinedPacket = 99;
     // endregion
 
     // region Dyson Sphere Program
