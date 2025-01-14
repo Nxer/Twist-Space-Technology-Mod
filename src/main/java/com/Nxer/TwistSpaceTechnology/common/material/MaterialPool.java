@@ -142,6 +142,16 @@ public class MaterialPool implements Runnable {
         new Pair<>(PureMana, 1),
         new Pair<>(Materials.Stone, 2));
 
+    public static final Werkstoff ConcentratedUUMatter = new Werkstoff(
+        new short[] { 90, 0, 128 },
+        "Concentrated UU-Matter",
+        new Werkstoff.Stats(),
+        Werkstoff.Types.ELEMENT,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 10,
+        TextureSet.SET_FLUID);
+
     // Bartworks' Material System run on Runnable.class
     @Override
     public void run() {
