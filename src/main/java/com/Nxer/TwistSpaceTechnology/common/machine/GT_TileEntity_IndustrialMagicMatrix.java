@@ -77,6 +77,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     // region default value
 
+    private int mParallel;
     private int mEssentiaCellTier;
     private int ExtraTime;
     private double mSpeedBonus;
@@ -331,16 +332,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     @Override
     protected int getMaxParallelRecipes() {
         if (getControllerSlot() == null) {
-            return calculateParallel();
+            return this.mParallel;
         } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
             return Int.MaxValue();
-        } else return calculateParallel();
+        } else return this.mParallel;
     }
-
-    private int calculateParallel() {
-        return this.mEssentiaCellTier * 8;
-    }
-
     // end region
 
     @Override
@@ -3116,6 +3112,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             list.appendTag(tag);
         }
         aNBT.setInteger("mEssentiaCellTier", this.mEssentiaCellTier);
+        aNBT.setInteger("mParallel", this.mParallel);
         aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
         aNBT.setTag("Research", list);
         super.saveNBTData(aNBT);
@@ -3136,6 +3133,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             }
         }
         this.mEssentiaCellTier = aNBT.getInteger("mEssentiaCellTier");
+        this.mParallel = aNBT.getInteger("mParallel");
         this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
         super.loadNBTData(aNBT);
     }
@@ -3157,8 +3155,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)
+        this.mEssentiaCellTier = 0;
+        var built = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)
             || checkPiece(STRUCTURE_PIECE_MAIN_ERR, horizontalOffSet, verticalOffSet, depthOffSet);
+        this.mParallel = built ? this.mEssentiaCellTier * 8 : 0;
+        return built;
     }
 
     @Override
