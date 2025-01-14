@@ -2,13 +2,14 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_1;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_4;
-import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_6;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockBrickTranslucent;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockTranslucent;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockTravelAnchor;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.CarvedEminenceStone;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.EldritchArk;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.FieryBlock;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.StructureDefinitionBuilder;
+import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateBlockAdder;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTile;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileAdder;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileExt;
@@ -18,6 +19,8 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofTileAdder;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static emt.init.EMTBlocks.electricCloud;
@@ -36,7 +39,7 @@ import static thaumcraft.common.config.ConfigBlocks.blockCosmeticOpaque;
 import static thaumcraft.common.config.ConfigBlocks.blockCosmeticSolid;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 import static thaumcraft.common.config.ConfigBlocks.blockSlabStone;
-import static thaumcraft.common.config.ConfigBlocks.blockStairsArcaneStone;
+import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
 import java.util.ArrayList;
@@ -44,6 +47,8 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -56,10 +61,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.google.common.collect.ImmutableList;
@@ -83,7 +90,11 @@ import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.tiles.TileCrucible;
 import thaumcraft.common.tiles.TileNitor;
+import thaumcraft.common.tiles.TileNodeConverter;
+import thaumcraft.common.tiles.TileNodeEnergized;
+import thaumcraft.common.tiles.TileNodeStabilizer;
 import thaumcraft.common.tiles.TileOwned;
+import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 
@@ -96,6 +107,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     private final ItemStack EssentiaCell_Creative = EnumEssentiaStorageTypes.Type_Creative.getCell();
     private final ItemStack ProofOfHeroes = GTCMItemList.ProofOfHeroes.get(1, 0);
     protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
+    protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
     protected ArrayList<String> Research = new ArrayList<>();
     public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
         .ofFailurePersistOnShutdown("Essentiainsentia");
@@ -225,30 +237,29 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private final int horizontalOffSet = 7;
-    private final int verticalOffSet = 17;
-    private final int depthOffSet = 7;
+    private final int verticalOffSet = 15;
+    private final int depthOffSet = 1;
     // spotless:off
     @SuppressWarnings("SpellCheckingInspection")
     private static final String[][] shape = new String[][]{
-        {"               ","               ","               ","               ","               ","               ","       D       ","      D D      ","       D       ","               ","               ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","               ","               ","      FFF      ","      F F      ","      FFF      ","               ","               ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","               ","      FFF      ","     FDDDF     ","     FD DF     ","     FDDDF     ","      FFF      ","               ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","     DFMFD     ","    DFDDDFD    ","    FD   DF    ","    MD   DM    ","    FD   DF    ","    DFDDDFD    ","     DFMFD     ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","     N   N     ","    N     N    ","               ","               ","               ","    N     N    ","     N   N     ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","     N   N     ","    N     N    ","               ","               ","               ","    N     N    ","     N   N     ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","     N   N     ","    NU   UN    ","               ","       V       ","               ","    NU   UN    ","     N   N     ","               ","               ","               ","               "},
-        {"               ","               ","               ","     DDDDD     ","    DFBBBFD    ","   DFEBBBEFD   ","   DBBCCCBBD   ","   DBBCCCBBD   ","   DBBCCCBBD   ","   DFEBBBEFD   ","    DFBBBFD    ","     DDDDD     ","               ","               ","               "},
-        {"               ","               ","     FFMFF     ","    FFQQQFF    ","   FFQQBQQFF   ","  FFQQBBBQQFF  ","  FQQBCCCBQQF  ","  MQBBCCCBBQM  ","  FQQBCCCBQQF  ","  FFQQBBBQQFF  ","   FFQQBQQFF   ","    FFQQQFF    ","     FFMFF     ","               ","               "},
-        {"               ","               ","     N   N     ","    S     S    ","   S       S   ","  N         N  ","               ","               ","               ","  N         N  ","   S       S   ","    S     S    ","     N   N     ","               ","               "},
-        {"               ","               ","     N   N     ","    S     S    ","   S       S   ","  N         N  ","               ","               ","               ","  N         N  ","   S       S   ","    S     S    ","     N   N     ","               ","               "},
-        {"               ","               ","     N U N     ","    S     S    ","   S       S   ","  N         N  ","               ","  U    U    U  ","               ","  N         N  ","   S       S   ","    S     S    ","     N U N     ","               ","               "},
-        {"               ","     DDDDD     ","    DFBBBFD    ","   DBBHSHBBD   ","  DBBSHSHSBBD  "," DFBSSHSHSSBFD "," DBHHHSSSHHHBD "," DBSSSSRSSSSBD "," DBHHHSSSHHHBD "," DFBSSHSHSSBFD ","  DBBSHSHSBBD  ","   DBBHSHBBD   ","    DFFFFFD    ","     DDDDD     ","               "},
-        {"               ","    FFFMFFF    ","   FFBBBBBFF   ","  FFBBAKABBFF  "," FFBBBAIABBBFF "," FBBBIAIAIBBBF "," FBAAAIIIAAABF "," MBKIIIIIIIKBM "," FBAAAIIIAAABF "," FBBBIAIAIBBBF "," FFBBBAIABBBFF ","  FFBBAKABBFF  ","   FFBBBBBFF   ","    FFFMFFF    ","               "},
-        {"               ","    GN   NG    ","   GB     BG   ","  GB       BG  "," GB         BG "," N           N ","               ","               ","               "," N           N "," GB         BG ","  GB       BG  ","   GB     BG   ","    GN   NG    ","               "},
-        {"               ","     N   N     ","    S     S    ","   S       S   ","  S         S  "," N           N ","               ","               ","               "," N           N ","  S         S  ","   S       S   ","    S     S    ","     N   N     ","               "},
-        {"               ","     N   N     ","    S     S    ","   S       S   ","  S         S  "," N           N ","               ","               ","               "," N           N ","  S         S  ","   S       S   ","    S     S    ","     N   N     ","               "},
-        {"     W   W     ","    DN   ND    ","   DB     BD   ","  DB       BD  "," DB         BD ","WN           NW","               ","       ~       ","               ","WN           NW"," DB         BD ","  DB       BD  ","   DB     BD   ","    DN   ND    ","     W   W     "},
-        {"     MJJJM     ","   FFFFFFFFF   ","  MFLLLLLLLFM  "," FFLLOOOOOLLFF "," FLLOOPPPOOLLF ","MFLOOPPCPPOOLFM","JFLOPPCCCPPOLFJ","JFLOPCCCCCPOLFJ","JFLOPPCCCPPOLFJ","MFLOOPPCPPOOLFM"," FLLOOPPPOOLLF "," FFLLOOOOOLLFF ","  MFLLLLLLLFM  ","   FFFFFFFFF   ","     MJJJM     "}};
+        {"               ","               ","               ","               ","               ","               ","      HHH      ","      H H      ","      HHH      ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","      HHH      ","     H   H     ","     H   H     ","     H   H     ","      HHH      ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","      ONO      ","     O   O     ","    O     O    ","    N     N    ","    O     O    ","     O   O     ","      ONO      ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","     GSSSG     ","    G     G    ","    D     D    ","    D     D    ","    D     D    ","    G     G    ","     GSSSG     ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","     GSSSG     ","    G     G    ","    D     D    ","    D     D    ","    D     D    ","    G     G    ","     GSSSG     ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","     GSSSG     ","    GX   XG    ","    D     D    ","    D  Y  D    ","    D     D    ","    GX   XG    ","     GSSSG     ","               ","               ","               ","               "},
+        {"               ","               ","      EEE      ","     EHHHE     ","    EHBBBHE    ","   EHFBBBFHE   ","  EHBBCCCBBHE  ","  EHBBCCCBBHE  ","  EHBBCCCBBHE  ","   EHFBBBFHE   ","    EHBBBHE    ","     EHHHE     ","      EEE      ","               ","               "},
+        {"               ","               ","     OONOO     ","    OHQQQHO    ","   OHQQBQQHO   ","  OHQQBCBQQHO  ","  OQQBCCCBQQO  ","  NQBCCCCCBQN  ","  OQQBCCCBQQO  ","  OHQQBCBQQHO  ","   OHQQBQQHO   ","    OHQQQHO    ","     OONOO     ","               ","               "},
+        {"               ","               ","     GSSSG     ","    S     S    ","   S       S   ","  G         G  ","  D         D  ","  D         D  ","  D         D  ","  G         G  ","   S       S   ","    S     S    ","     GSSSG     ","               ","               "},
+        {"               ","               ","     GSSSG     ","    S     S    ","   S       S   ","  G         G  ","  D         D  ","  D         D  ","  D         D  ","  G         G  ","   S       S   ","    S     S    ","     GSSSG     ","               ","               "},
+        {"               ","               ","     GSSSG     ","    S  X  S    ","   S       S   ","  G         G  ","  D         D  ","  DX   X   XD  ","  D         D  ","  G         G  ","   S       S   ","    S  X  S    ","     GSSSG     ","               ","               "},
+        {"               ","     EEEEE     ","    EHBBBHE    ","   EBBBFBBBE   ","  EBAABBBAABE  "," EHBABBSBBABHE "," EBBBBSSSBBBBE "," EBFBSSSSSBFBE "," EBBBBSSSBBBBE "," EHBABBSBBABHE ","  EBAABBBAABE  ","   EBBBFBBBE   ","    EHBBBHE    ","     EEEEE     ","               "},
+        {"               ","    OOONOOO    ","   OHBBBBBHO   ","  OHBBALABBHO  "," OHBBBAJABBBHO "," OBBBJAJAJBBBO "," OBAAAJJJAAABO "," NBLJJJJJJJLBN "," OBAAAJJJAAABO "," OBBBJAJAJBBBO "," OHBBBAJABBBHO ","  OHBBALABBHO  ","   OHBBBBBHO   ","    OOONOOO    ","               "},
+        {"               ","    IGHHHGI    ","   IB     BI   ","  IB       BI  "," IB         BI "," G           G "," H           H "," H           H "," H           H "," G           G "," IB         BI ","  IB       BI  ","   IB     BI   ","    IGHHHGI    ","               "},
+        {"               ","     GSSSG     ","    S     S    ","   S       S   ","  S V     V S  "," G           G "," D           D "," D     K     D "," D           D "," G           G ","  S V     V S  ","   S       S   ","    S     S    ","     GSSSG     ","               "},
+        {"               ","     GS~SG     ","    S     S    ","   S       S   ","  S W     W S  "," G           G "," D           D "," D     K     D "," D           D "," G           G ","  S W     W S  ","   S       S   ","    S     S    ","     GSSSG     ","               "},
+        {"     Z   Z     ","    EGSSSGE    ","   EB     BE   ","  EB       BE  "," EB U     U BE ","ZG           GZ"," D           D "," D     R     D "," D           D ","ZG           GZ"," EB U     U BE ","  EB       BE  ","   EB     BE   ","    EGSSSGE    ","     Z   Z     "},
+        {"     NEEEN     ","   OOHHHHHOO   ","  OHMMMMMMMHO  "," OHMMBBBBBMMHO "," OMMBBPPPBBMMO ","NHMBBPPCPPBBMHN","EHMBPPCCCPPBMHE","EHMBPCCCCCPBMHE","EHMBPPCCCPPBMHE","NHMBBPPCPPBBMHN"," OMMBBPPPBBMMO "," OHMMBBBBBMMHO ","  OHMMMMMMMHO  ","   OOHHHHHOO   ","     NEEEN     "}};
     // spotless:on
     private static IStructureDefinition<TST_IndustrialAlchemyTower> STRUCTURE_DEFINITION = null;
 
@@ -273,33 +284,61 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                             x -> x.essentiaCellTier)))
                 .addElement(
                     'B',
-                    buildHatchAdder(TST_IndustrialAlchemyTower.class).atLeast(InputBus, OutputBus, Energy)
-                        .adder(TST_IndustrialAlchemyTower::addToMachineList)
-                        .casingIndex(1536)
-                        .dot(1)
-                        .buildAndChain(magicCasing, 0))
+                    ofChain(
+                        buildHatchAdder(TST_IndustrialAlchemyTower.class).atLeast(InputBus, OutputBus, Energy)
+                            .adder(TST_IndustrialAlchemyTower::addToMachineList)
+                            .casingIndex(1536)
+                            .dot(1)
+                            .buildAndChain(magicCasing, 0),
+                        ofAccurateTileAdder(
+                            TST_IndustrialAlchemyTower::addInfusionProvider,
+                            BlockEnum.INFUSION_PROVIDER.getBlock(),
+                            0),
+                        ofAccurateBlockAdder(
+                            TST_IndustrialAlchemyTower::addTravelAnchor,
+                            BlockTravelAnchor.getLeft(),
+                            BlockTravelAnchor.getRight())))
                 .addElement('C', ofBlock(FieryBlock.getLeft(), FieryBlock.getRight()))
-                .addElement('D', ofBlockStrict(blockSlabStone, 0))
-                .addElement('E', ofBlock(blockCosmeticSolid, 0))
-                .addElement('F', ofBlock(blockCosmeticSolid, 7))
-                .addElement('G', ofBlockStrictExt(blockSlabStone, 8, blockSlabStone, 0))
-                .addElement('H', ofBlock(Blocks.lapis_block, 0)) // for updating block
-                .addElement('I', ofBlock(blockMetalDevice, 3))
-                .addElement('J', ofBlock(blockStairsArcaneStone, 0))
-                .addElement('K', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
-                .addElement('L', ofBlock(BlockBrickTranslucent.getLeft(), BlockBrickTranslucent.getRight()))
-                .addElement('M', ofBlock(BlockArcane_1.getLeft(), BlockArcane_1.getRight()))
-                .addElement('N', ofBlock(BlockArcane_4.getLeft(), BlockArcane_4.getRight()))
-                .addElement('O', ofBlock(BlockArcane_6.getLeft(), BlockArcane_6.getRight()))
+                .addElement(
+                    'D',
+                    ofChain(
+                        ofAccurateTileAdder(TST_IndustrialAlchemyTower::addCosmeticOpaque, blockCosmeticOpaque, 2),
+                        ofAccurateTile(TileArcaneHole.class, BasicBlocks.BlockArcaneHole, 0)))
+                .addElement('E', ofBlockStrict(blockSlabStone, 0))
+                .addElement('F', ofBlock(blockCosmeticSolid, 0))
+                .addElement('G', ofBlock(blockCosmeticSolid, 6))
+                .addElement('H', ofBlock(blockCosmeticSolid, 7))
+                .addElement('I', ofBlockStrictExt(blockSlabStone, 8, blockSlabStone, 0))
+                .addElement('J', ofBlock(blockMetalDevice, 3))
+                .addElement('K', ofBlock(blockMetalDevice, 9))
+                .addElement('L', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
+                .addElement('M', ofBlock(BlockBrickTranslucent.getLeft(), BlockBrickTranslucent.getRight()))
+                .addElement(
+                    'N',
+                    ofChain(
+                        ofBlock(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
+                        ofBlockStrictExt(BlockArcane_1.getLeft(), BlockArcane_1.getRight(), blockCosmeticSolid, 6)))
+                .addElement(
+                    'O',
+                    ofChain(
+                        ofBlock(BlockArcane_4.getLeft(), BlockArcane_4.getRight()),
+                        ofBlockStrictExt(BlockArcane_4.getLeft(), BlockArcane_4.getRight(), blockCosmeticSolid, 6)))
                 .addElement('P', ofBlock(EldritchArk.getLeft(), EldritchArk.getRight()))
                 .addElement('Q', ofBlock(CarvedEminenceStone.getLeft(), CarvedEminenceStone.getRight()))
                 .addElement('R', ofAccurateTile(TileCrucible.class, blockMetalDevice, 0))
                 .addElement(
                     'S',
                     ofAccurateTileAdder(TST_IndustrialAlchemyTower::addCosmeticOpaque, blockCosmeticOpaque, 2))
-                .addElement('U', ofAccurateTile(TileElectricCloud.class, electricCloud, 0))
-                .addElement('V', ofAccurateTile(TileEntityBeacon.class, Blocks.beacon, 0))
-                .addElement('W', ofAccurateTileExt(TileNitor.class, blockAiry, 1, ConfigItems.itemResource, 1))
+                .addElement('U', ofAccurateTile(TileNodeStabilizer.class, blockStoneDevice, 10))
+                .addElement('V', ofAccurateTile(TileNodeConverter.class, blockStoneDevice, 11))
+                .addElement(
+                    'W',
+                    ofChain(
+                        ofTileAdder(TST_IndustrialAlchemyTower::addNodeEnergized, blockAiry, 0),
+                        ofBlock(Blocks.air, 0)))
+                .addElement('X', ofAccurateTile(TileElectricCloud.class, electricCloud, 0))
+                .addElement('Y', ofAccurateTile(TileEntityBeacon.class, Blocks.beacon, 0))
+                .addElement('Z', ofAccurateTileExt(TileNitor.class, blockAiry, 1, ConfigItems.itemResource, 1))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -310,12 +349,29 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             .getOwnerName();
     }
 
+    public boolean addTravelAnchor(Block block, int meta) {
+        if (block instanceof ITileEntityProvider) {
+            return block.getClass()
+                .getSimpleName()
+                .equals("BlockTravelAnchor");
+        } else return block == Blocks.stone; // dev environment subs
+    }
+
     public boolean addCosmeticOpaque(TileEntity tileEntity) {
         if (tileEntity instanceof TileOwned tileOwned) {
             if (getPlayName() != null && Objects.equals(tileOwned.owner, "")) {
                 tileOwned.owner = getPlayName();
             }
             return true;
+        }
+        return false;
+    }
+
+    public final boolean addNodeEnergized(TileEntity aTileEntity) {
+        if (aTileEntity instanceof TileNodeEnergized) {
+            if (!(mNodeEnergized.size() == 4)) {
+                return this.mNodeEnergized.add((TileNodeEnergized) aTileEntity);
+            } else return true;
         }
         return false;
     }
@@ -418,7 +474,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
         if (side == facing) {
-            if (active) return new ITexture[] { TextureFactory.of(blockMetalDevice, 3), TextureFactory.builder()
+            if (active) return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE)
                 .extFacing()
                 .build(),
@@ -427,7 +483,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     .extFacing()
                     .glow()
                     .build() };
-            return new ITexture[] { TextureFactory.of(blockMetalDevice, 3), TextureFactory.builder()
+            return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
                 .extFacing()
                 .build(),
@@ -437,7 +493,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     .glow()
                     .build() };
         }
-        return new ITexture[] { TextureFactory.of(blockMetalDevice, 3) };
+        return new ITexture[] { TextureFactory.of(blockMetalDevice, 9) };
     }
 }
 
