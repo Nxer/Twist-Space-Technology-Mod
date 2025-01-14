@@ -67,12 +67,17 @@ public final class ModBlocksHandler {
     // region Chisel
     public static Pair<Block, Integer> BlockArcane_1;
     public static Pair<Block, Integer> BlockArcane_4;
-    public static Pair<Block, Integer> BlockArcane_6;
+    // public static Pair<Block, Integer> BlockArcane_6;
 
     // endregion
 
     // region Extra Utilities
     public static Pair<Block, Integer> CarvedEminenceStone;
+
+    // endregion
+
+    // region Ender IO
+    public static Pair<Block, Integer> BlockTravelAnchor;
 
     // endregion
 
@@ -159,17 +164,23 @@ public final class ModBlocksHandler {
         if (Mods.Chisel.isModLoaded()) {
             BlockArcane_1 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 1);
             BlockArcane_4 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 4);
-            BlockArcane_6 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 6);
+            // BlockArcane_6 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 6);
         } else {
             BlockArcane_1 = Pair.of(Blocks.quartz_block, 0);
             BlockArcane_4 = Pair.of(Blocks.quartz_block, 1);
-            BlockArcane_6 = Pair.of(Blocks.quartz_block, 2);
+            // BlockArcane_6 = Pair.of(Blocks.quartz_block, 2);
         }
 
         if (Mods.ExtraUtilities.isModLoaded()) {
             CarvedEminenceStone = Pair.of(Block.getBlockFromName(Mods.ExtraUtilities + ":decorativeBlock1"), 14);
         } else {
             CarvedEminenceStone = Pair.of(Blocks.soul_sand, 0);
+        }
+
+        if (Mods.EnderIO.isModLoaded()) {
+            BlockTravelAnchor = Pair.of(Block.getBlockFromName(Mods.EnderIO + ":blockTravelAnchor"), 0);
+        } else {
+            BlockTravelAnchor = Pair.of(Blocks.stone, 0);
         }
     }
 

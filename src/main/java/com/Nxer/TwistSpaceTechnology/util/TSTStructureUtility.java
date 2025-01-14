@@ -17,6 +17,7 @@ import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.structure.AutoPlaceEnvironment;
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizon.structurelib.structure.adders.IBlockAdder;
 import com.gtnewhorizon.structurelib.structure.adders.ITileAdder;
 
 @SuppressWarnings("unused")
@@ -57,7 +58,9 @@ public class TSTStructureUtility {
 
             @Override
             public boolean placeBlock(T t, World world, int x, int y, int z, ItemStack trigger) {
-                return world.setBlock(x, y, z, block, meta, 2);
+                world.setBlock(x, y, z, block, meta, 2);
+                if (check(t, world, x, y, z)) return true;
+                else return world.setBlockToAir(x, y, z);
             }
 
             @Override
@@ -98,7 +101,15 @@ public class TSTStructureUtility {
 
             @Override
             public boolean placeBlock(T t, World world, int x, int y, int z, ItemStack trigger) {
-                return world.setBlock(x, y, z, block, meta, 2);
+                world.setBlock(x, y, z, block, meta, 2);
+                if (check(t, world, x, y, z)) return true;
+                else return world.setBlockToAir(x, y, z);
+            }
+
+            @Override
+            public BlocksToPlace getBlocksToPlace(T t, World world, int x, int y, int z, ItemStack trigger,
+                AutoPlaceEnvironment env) {
+                return BlocksToPlace.create(block, meta);
             }
 
             @Override
@@ -112,8 +123,8 @@ public class TSTStructureUtility {
                 var chatter = env.getChatter();
 
                 if (!StructureLibAPI.isBlockTriviallyReplaceable(world, x, y, z, actor)) return PlaceResult.REJECT;
-                if (!source.takeOne(specialItemStack, true) && chatter != null) {
-                    chatter.accept(
+                if (!source.takeOne(specialItemStack, true)) {
+                    if (chatter != null) chatter.accept(
                         new ChatComponentTranslation(
                             "structurelib.autoplace.error.no_item_stack",
                             specialItemStack.func_151000_E()));
@@ -134,15 +145,43 @@ public class TSTStructureUtility {
             }
         };
     }
+
+    @NotNull
+    public static <T> IStructureElement<T> ofAccurateBlockAdder(IBlockAdder<T> iBlockAdder, Block block, int meta) {
+        if (iBlockAdder == null || block == null) {
+            throw new IllegalArgumentException();
+        }
+        return new IStructureElement<>() {
+
+            @Override
+            public boolean check(T t, World world, int x, int y, int z) {
+                // Gets the meta value of a block in the real world
+                return iBlockAdder.apply(t, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+            }
+
+            @Override
+            public boolean spawnHint(T t, World world, int x, int y, int z, ItemStack trigger) {
+                StructureLibAPI.hintParticle(world, x, y, z, block, meta);
+                return true;
+            }
+
+            @Override
+            public boolean placeBlock(T t, World world, int x, int y, int z, ItemStack trigger) {
+                world.setBlock(x, y, z, block, meta, 2);
+                if (check(t, world, x, y, z)) return true;
+                else return world.setBlockToAir(x, y, z);
+            }
+
+            @Override
+            public BlocksToPlace getBlocksToPlace(T t, World world, int x, int y, int z, ItemStack trigger,
+                AutoPlaceEnvironment env) {
+                return BlocksToPlace.create(block, meta);
+            }
+        };
+    }
     // endregion
 
     // region TileAdder
-    @NotNull
-    public static <T> IStructureElement<T> ofAccurateTileAdder(ITileAdder<T> iTileAdder, Block tileBlock,
-        int tileBlockMeta) {
-        return ofAccurateTileAdder(iTileAdder, tileBlock, tileBlockMeta, tileBlock, tileBlockMeta);
-    }
-
     @NotNull
     public static <T, E> IStructureElement<T> ofAccurateTile(Class<E> tileClass, Block tileBlock, int tileBlockMeta) {
         return ofAccurateTile(tileClass, tileBlock, tileBlockMeta, tileBlock, tileBlockMeta);
@@ -153,6 +192,12 @@ public class TSTStructureUtility {
         Block hintBlock, int hintMeta) {
         if (tileClass == null) throw new IllegalArgumentException();
         return ofAccurateTileAdder((a, b) -> tileClass.isInstance(b), tileBlock, tileBlockMeta, hintBlock, hintMeta);
+    }
+
+    @NotNull
+    public static <T> IStructureElement<T> ofAccurateTileAdder(ITileAdder<T> iTileAdder, Block tileBlock,
+        int tileBlockMeta) {
+        return ofAccurateTileAdder(iTileAdder, tileBlock, tileBlockMeta, tileBlock, tileBlockMeta);
     }
 
     @NotNull
@@ -255,8 +300,8 @@ public class TSTStructureUtility {
                 var chatter = env.getChatter();
 
                 if (!StructureLibAPI.isBlockTriviallyReplaceable(world, x, y, z, actor)) return PlaceResult.REJECT;
-                if (!source.takeOne(specialItemStack, true) && chatter != null) {
-                    chatter.accept(
+                if (!source.takeOne(specialItemStack, true)) {
+                    if (chatter != null) chatter.accept(
                         new ChatComponentTranslation(
                             "structurelib.autoplace.error.no_item_stack",
                             specialItemStack.func_151000_E()));
