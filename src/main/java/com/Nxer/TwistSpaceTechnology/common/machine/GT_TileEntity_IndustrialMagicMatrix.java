@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooCo
 import static com.dreammaster.block.BlockList.BloodyThaumium;
 import static com.dreammaster.block.BlockList.BloodyVoid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
+import static goodgenerator.loader.Loaders.essentiaCell;
 import static goodgenerator.loader.Loaders.magicCasing;
 import static gregtech.api.enums.HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
@@ -28,6 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -39,12 +41,12 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import fox.spiteful.avaritia.items.LudicrousItems;
-import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
@@ -75,7 +77,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     // region default value
 
-    private int mParallel;
+    private int mEssentiaCellTier;
     private int ExtraTime;
     private double mSpeedBonus;
     private double Mean;
@@ -329,10 +331,14 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     @Override
     protected int getMaxParallelRecipes() {
         if (getControllerSlot() == null) {
-            return mParallel;
+            return calculateParallel();
         } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
             return Int.MaxValue();
-        } else return mParallel;
+        } else return calculateParallel();
+    }
+
+    private int calculateParallel() {
+        return this.mEssentiaCellTier * 8;
     }
 
     // end region
@@ -352,9 +358,9 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             .getOwnerName();
     }
 
-    protected void onEssentiaCellFound(int tier) {
-        this.mParallel = (int) (tier * 8L);
-    }
+    // protected void onEssentiaCellFound(int tier) {
+    // this.mParallel = (int) (tier * 8L);
+    // }
 
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -2836,13 +2842,27 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_IndustrialMagicMatrix>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addShape(STRUCTURE_PIECE_MAIN_ERR, transpose(shapeErr))
+                // .addElement(
+                // 'A',
+                // ofChain(
+                // onElementPass(x -> x.onEssentiaCellFound(1), ofBlock(Loaders.essentiaCell, 0)),
+                // onElementPass(x -> x.onEssentiaCellFound(2), ofBlock(Loaders.essentiaCell, 1)),
+                // onElementPass(x -> x.onEssentiaCellFound(3), ofBlock(Loaders.essentiaCell, 2)),
+                // onElementPass(x -> x.onEssentiaCellFound(4), ofBlock(Loaders.essentiaCell, 3))))
                 .addElement(
                     'A',
-                    ofChain(
-                        onElementPass(x -> x.onEssentiaCellFound(1), ofBlock(Loaders.essentiaCell, 0)),
-                        onElementPass(x -> x.onEssentiaCellFound(2), ofBlock(Loaders.essentiaCell, 1)),
-                        onElementPass(x -> x.onEssentiaCellFound(3), ofBlock(Loaders.essentiaCell, 2)),
-                        onElementPass(x -> x.onEssentiaCellFound(4), ofBlock(Loaders.essentiaCell, 3))))
+                    withChannel(
+                        "essentia_cell",
+                        ofBlocksTiered(
+                            (a, b) -> a == essentiaCell ? b + 1 : 0,
+                            ImmutableList.of(
+                                Pair.of(essentiaCell, 0),
+                                Pair.of(essentiaCell, 1),
+                                Pair.of(essentiaCell, 2),
+                                Pair.of(essentiaCell, 3)),
+                            0,
+                            (x, y) -> x.mEssentiaCellTier = y,
+                            x -> x.mEssentiaCellTier)))
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings8, 8))
                 .addElement('C', ofBlock(GregTechAPI.sBlockMetal4, 10))
                 .addElement(
@@ -3095,7 +3115,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             tag.setString("ResearchName", string);
             list.appendTag(tag);
         }
-        aNBT.setInteger("mParallel", this.mParallel);
+        aNBT.setInteger("mEssentiaCellTier", this.mEssentiaCellTier);
         aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
         aNBT.setTag("Research", list);
         super.saveNBTData(aNBT);
@@ -3115,7 +3135,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                         .getString("ResearchName"));
             }
         }
-        this.mParallel = aNBT.getInteger("mParallel");
+        this.mEssentiaCellTier = aNBT.getInteger("mEssentiaCellTier");
         this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
         super.loadNBTData(aNBT);
     }
