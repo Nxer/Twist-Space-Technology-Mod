@@ -41,8 +41,7 @@ public class NanoForgeRecipePool implements IRecipePool {
                 MaterialsTST.Axonium.getBlocks(8),
                 GTCMItemList.InformationHorizonInterventionShell.get(32),
                 GTCMItemList.PerfectEngravedEnergyChip.get(4),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV,2)
-                )
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 2))
             .fluidInputs(
                 Materials.UUMatter.getFluid(2000000),
                 MaterialsUEVplus.PhononMedium.getFluid(16000),

@@ -16,11 +16,12 @@ public class MaterialLoader {
 
     public static void load() {
 
+        WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialPool());
+        MaterialsTST.init();
+
         ItemRegister.registry();
         BlockRegister.registry();
 
-        WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialPool());
-        MaterialsTST.init();
     }
 
 }

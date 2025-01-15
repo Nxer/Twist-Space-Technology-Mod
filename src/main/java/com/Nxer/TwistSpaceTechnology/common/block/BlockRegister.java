@@ -20,12 +20,17 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStatio
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.common.blocks.BlockMetal;
 
 public class BlockRegister {
 
@@ -279,7 +284,7 @@ public class BlockRegister {
             MetaBlockConstructors
                 .initMetaBlock("SpaceTime Oscillator T3", (byte) 2, (MetaBlockBase) BasicBlocks.SpaceTimeOscillator));
 
-        // endregion
+        // end region
 
         // region SpaceTimeConstraintor
 
@@ -310,7 +315,7 @@ public class BlockRegister {
                 (byte) 2,
                 (MetaBlockBase) BasicBlocks.SpaceTimeConstraintor));
 
-        // endregion
+        // end region
 
         // region SpaceTimeMerger
 
@@ -335,7 +340,7 @@ public class BlockRegister {
             MetaBlockConstructors
                 .initMetaBlock("SpaceTime Merger T3", (byte) 2, (MetaBlockBase) BasicBlocks.SpaceTimeMerger));
 
-        // endregion
+        // end region
 
         // region Stabilisation Field Generator
         GTCMItemList.StabilisationFieldGeneratorFramework.set(
@@ -408,7 +413,15 @@ public class BlockRegister {
             // #zh_CN 结束了?
             ));
 
-        // endregion
+        // end region
+
+        // region MaterialBlock
+        BasicBlocks.MetalBlock = new BlockMetal(
+            "tst.blockmetal01",
+            new Materials[] { MaterialsTST.NeutroniumAlloy, MaterialsTST.AxonisAlloy, MaterialsTST.Axonium },
+            OrePrefixes.block,
+            new IIconContainer[] {});
+        // end region
 
         // region PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
@@ -439,7 +452,7 @@ public class BlockRegister {
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier UXV Tier", 12));
         GTCMItemList.PhotonControllerUpgradeMAX
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier MAX Tier", 13));
-        // endregion
+        // end region
         // ---------------------------------------------------------------------------------------------------------------------------//
         // region MegaSpaceStation
         if (Config.activateMegaSpaceStation) {
@@ -523,7 +536,7 @@ public class BlockRegister {
             // GTCMItemList.NuclearReactorStructure3.set(NuclearReactorBlockMeta("Nuclear Reactor structure block3",
             // 3));
         }
-        // endregion
+        // end region
     }
 
     public static void registry() {

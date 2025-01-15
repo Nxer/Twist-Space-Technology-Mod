@@ -8,7 +8,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
-import static gregtech.api.recipe.RecipeMaps.nanoForgeRecipes;
 import static gregtech.api.recipe.RecipeMaps.transcendentPlasmaMixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GTRecipeBuilder.TICKS;
@@ -17,8 +16,6 @@ import static gtPlusPlus.api.recipe.GTPPRecipeMaps.alloyBlastSmelterRecipes;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
