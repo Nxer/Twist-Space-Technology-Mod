@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_IndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
@@ -43,6 +44,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialMagnetarSeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
@@ -138,6 +140,7 @@ public class MachineLoader {
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
     public static ItemStack IndustrialMagicMatrix;
+    public static ItemStack IndustrialAlchemyTower;
     public static ItemStack EyeOfWood;
     public static ItemStack BeeEngineer;
     public static ItemStack MegaMacerator;
@@ -738,6 +741,17 @@ public class MachineLoader {
             "NameManufacturingCenter",
             TextEnums.tr("NameManufacturingCenter")).getStackForm(1);
         GTCMItemList.ManufacturingCenter.set(ManufacturingCenter);
+
+        if (Enable_IndustrialAlchemyTower) {
+            IndustrialAlchemyTower = new TST_IndustrialAlchemyTower(
+                // #tr NameIndustrialAlchemyTower
+                // # Industrial Alchemy Tower
+                // #zh_CN 工业炼金塔
+                19064,
+                "IndustrialAlchemyTower",
+                TextEnums.tr("NameIndustrialAlchemyTower")).getStackForm(1);
+            GTCMItemList.IndustrialAlchemyTower.set(IndustrialAlchemyTower);
+        }
 
         // endregion
 

@@ -31,11 +31,18 @@ public final class ModBlocksHandler {
 
     // region Automagy
     public static Pair<Block, Integer> BlockTranslucent;
+    public static Pair<Block, Integer> BlockBrickTranslucent;
+
+    // endregion
+
+    // region ThaumicBases
+    public static Pair<Block, Integer> EldritchArk;
 
     // endregion
 
     // region The Twilight Forest
     public static Pair<Block, Integer> TreeofTimeSapling;
+    public static Pair<Block, Integer> FieryBlock;
 
     // endregion
 
@@ -54,6 +61,23 @@ public final class ModBlocksHandler {
     public static Pair<Block, Integer> BloodInfusedDiamondBlock;
     public static Pair<Block, Integer> BloodInfusedIronBlock;
     public static Pair<Block, Integer> BloodInfusedGlowstone;
+
+    // endregion
+
+    // region Chisel
+    public static Pair<Block, Integer> BlockArcane_1;
+    public static Pair<Block, Integer> BlockArcane_4;
+    // public static Pair<Block, Integer> BlockArcane_6;
+
+    // endregion
+
+    // region Extra Utilities
+    public static Pair<Block, Integer> CarvedEminenceStone;
+
+    // endregion
+
+    // region Ender IO
+    public static Pair<Block, Integer> BlockTravelAnchor;
 
     // endregion
 
@@ -93,8 +117,22 @@ public final class ModBlocksHandler {
 
         if (Mods.Automagy.isModLoaded()) {
             BlockTranslucent = Pair.of(Block.getBlockFromName(Mods.Automagy.ID + ":blockTranslucent"), 0);
+            BlockBrickTranslucent = Pair.of(Block.getBlockFromName(Mods.Automagy.ID + ":blockTranslucent"), 1);
         } else {
             BlockTranslucent = Pair.of(Blocks.glowstone, 0);
+            BlockBrickTranslucent = Pair.of(Blocks.brick_block, 0);
+        }
+
+        if (Mods.ThaumicBases.isModLoaded()) {
+            EldritchArk = Pair.of(Block.getBlockFromName(Mods.ThaumicBases.ID + ":eldritchArk"), 0);
+        } else {
+            EldritchArk = Pair.of(Blocks.obsidian, 0);
+        }
+
+        if (Mods.TwilightForest.isModLoaded()) {
+            FieryBlock = Pair.of(Block.getBlockFromName(Mods.TwilightForest.ID + ":tile.FieryBlock"), 0);
+        } else {
+            FieryBlock = Pair.of(Blocks.nether_brick, 0);
         }
 
         if (Mods.Forestry.isModLoaded()) {
@@ -121,6 +159,28 @@ public final class ModBlocksHandler {
             BloodInfusedDiamondBlock = Pair.of(Blocks.diamond_block, 0);
             BloodInfusedIronBlock = Pair.of(Blocks.iron_block, 0);
             BloodInfusedGlowstone = Pair.of(Blocks.glowstone, 0);
+        }
+
+        if (Mods.Chisel.isModLoaded()) {
+            BlockArcane_1 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 1);
+            BlockArcane_4 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 4);
+            // BlockArcane_6 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 6);
+        } else {
+            BlockArcane_1 = Pair.of(Blocks.quartz_block, 0);
+            BlockArcane_4 = Pair.of(Blocks.quartz_block, 1);
+            // BlockArcane_6 = Pair.of(Blocks.quartz_block, 2);
+        }
+
+        if (Mods.ExtraUtilities.isModLoaded()) {
+            CarvedEminenceStone = Pair.of(Block.getBlockFromName(Mods.ExtraUtilities + ":decorativeBlock1"), 14);
+        } else {
+            CarvedEminenceStone = Pair.of(Blocks.soul_sand, 0);
+        }
+
+        if (Mods.EnderIO.isModLoaded()) {
+            BlockTravelAnchor = Pair.of(Block.getBlockFromName(Mods.EnderIO + ":blockTravelAnchor"), 0);
+        } else {
+            BlockTravelAnchor = Pair.of(Blocks.stone, 0);
         }
     }
 

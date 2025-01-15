@@ -272,6 +272,7 @@ public enum GTCMItemList {
     BloodyHell,
     MegaStoneBreaker,
     ManufacturingCenter,
+    IndustrialAlchemyTower,
 
     // endregion
 
