@@ -72,6 +72,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTModHandler;
@@ -84,6 +85,7 @@ import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
+import gtnhlanth.common.register.LanthItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 
 public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
@@ -147,7 +149,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             tectech.thing.CustomItemList.eM_energyTunnel8_UXV.get(1),
             tectech.thing.CustomItemList.eM_dynamoTunnel8_UXV.get(1),
             tectech.thing.CustomItemList.eM_energyTunnel9_UXV.get(1),
-            tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1) };
+            tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1),
+            new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING),
+            new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING) };
 
         // start check assembly line recipes
         checkRecipe: for (var recipe : GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes) {
@@ -248,6 +252,45 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             : FluidRegistry.getFluid("molten.solderingalloy");
         final Fluid solderIndalloy = MaterialsAlloy.INDALLOY_140.getFluid();
         final Fluid ic2coolant = FluidRegistry.getFluid("ic2coolant");
+
+        // GTNH Lanthanides Focus Manipulation Casing and Target Receptacle Casing
+        {
+            TST_RecipeBuilder.builder()
+                .fluidInputs(
+                    Materials.SolderingAlloy.getMolten(8000),
+                    Materials.Gold.getMolten(2000),
+                    Materials.Argon.getGas(1000))
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(1),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 4),
+                    ItemList.Robot_Arm_LuV.get(4),
+                    ItemList.Conveyor_Module_LuV.get(2),
+                    GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 32),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
+                .itemOutputs(new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING))
+                .duration(60 * GTRecipeBuilder.SECONDS)
+                .eut(TierEU.RECIPE_LuV)
+                .addTo(MASL);
+
+            TST_RecipeBuilder.builder()
+                .fluidInputs(
+                    Materials.SolderingAlloy.getMolten(8000),
+                    Materials.Gold.getMolten(2000),
+                    Materials.Argon.getGas(1000))
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(2),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 4),
+                    ItemList.Robot_Arm_LuV.get(4),
+                    GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 16),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
+                .itemOutputs(new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING))
+                .duration(60 * GTRecipeBuilder.SECONDS)
+                .eut(TierEU.RECIPE_LuV)
+                .addTo(MASL);
+
+        }
 
         {
             // Dyson Swarm Module
