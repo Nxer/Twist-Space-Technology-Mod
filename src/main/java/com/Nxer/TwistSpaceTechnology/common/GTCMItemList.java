@@ -271,6 +271,7 @@ public enum GTCMItemList {
     IncompactCyclotron,
     BloodyHell,
     MegaStoneBreaker,
+    ManufacturingCenter,
     IndustrialAlchemyTower,
 
     // endregion
@@ -483,7 +484,20 @@ public enum GTCMItemList {
 
     // endregion
 
+    // region Misc
+
     ResearchOnAncientPA,
+
+    // endregion
+
+    // region MultiUse Core
+
+    MultiUseCore_IV,
+    MultiUseCore_LuV,
+    MultiUseCore_ZPM,
+    MultiUseCore_UV,
+
+    // endregion
 
     ;
 
