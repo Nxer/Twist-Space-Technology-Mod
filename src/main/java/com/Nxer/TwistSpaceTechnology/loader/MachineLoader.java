@@ -732,7 +732,7 @@ public class MachineLoader {
                 TextEnums.tr("NameMegaStoneBreaker")).getStackForm(1);
             GTCMItemList.MegaStoneBreaker.set(MegaStoneBreaer);
         }
-      
+
         // #tr NameManufacturingCenter
         // # Manufacturing Center
         // #zh_CN 加工中心
@@ -747,7 +747,7 @@ public class MachineLoader {
                 // #tr NameIndustrialAlchemyTower
                 // # Industrial Alchemy Tower
                 // #zh_CN 工业炼金塔
-                19063,
+                19064,
                 "IndustrialAlchemyTower",
                 TextEnums.tr("NameIndustrialAlchemyTower")).getStackForm(1);
             GTCMItemList.IndustrialAlchemyTower.set(IndustrialAlchemyTower);
