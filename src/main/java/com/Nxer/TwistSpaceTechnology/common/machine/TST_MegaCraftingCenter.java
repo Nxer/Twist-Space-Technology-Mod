@@ -404,12 +404,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     @Override
     public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
-        if (cachedOutput.containsKey(patternDetails)) {
-            Long pre = cachedOutput.get(patternDetails);
-            return Objects.equals(cachedOutput.put(patternDetails, pre + 1), pre);
-        }
-        cachedOutput.put(patternDetails, 1L);
-        return true;
+        return cachedOutput.merge(patternDetails, 1L, Long::sum) >= 1;
     }
 
     @Override
