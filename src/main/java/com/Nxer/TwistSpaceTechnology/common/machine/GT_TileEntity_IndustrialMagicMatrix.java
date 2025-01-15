@@ -78,7 +78,6 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     // region default value
 
     private int mParallel;
-    private int mEssentiaCellTier;
     private int ExtraTime;
     private double mSpeedBonus;
     private double Mean;
@@ -2850,15 +2849,15 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     withChannel(
                         "essentia_cell",
                         ofBlocksTiered(
-                            (a, b) -> a == essentiaCell ? b + 1 : 0,
+                            (a, b) -> a == essentiaCell ? (b + 1) << 3 : 0,
                             ImmutableList.of(
                                 Pair.of(essentiaCell, 0),
                                 Pair.of(essentiaCell, 1),
                                 Pair.of(essentiaCell, 2),
                                 Pair.of(essentiaCell, 3)),
                             0,
-                            (x, y) -> x.mEssentiaCellTier = y,
-                            x -> x.mEssentiaCellTier)))
+                            (x, y) -> x.mParallel = y,
+                            x -> x.mParallel)))
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings8, 8))
                 .addElement('C', ofBlock(GregTechAPI.sBlockMetal4, 10))
                 .addElement(
@@ -2951,16 +2950,16 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     }
 
     public final boolean addInfusionProvider(TileEntity aTileEntity) {
-        if (aTileEntity instanceof TileInfusionProvider) {
-            return this.mTileInfusionProvider.add((TileInfusionProvider) aTileEntity);
+        if (aTileEntity instanceof TileInfusionProvider provider) {
+            return this.mTileInfusionProvider.add(provider);
         }
         return false;
     }
 
     public final boolean addNodeEnergized(TileEntity aTileEntity) {
-        if (aTileEntity instanceof TileNodeEnergized) {
+        if (aTileEntity instanceof TileNodeEnergized nodeEnergized) {
             if (!(mNodeEnergized.size() == 6)) {
-                return this.mNodeEnergized.add((TileNodeEnergized) aTileEntity);
+                return this.mNodeEnergized.add(nodeEnergized);
             } else return true;
         }
         return false;
@@ -3111,7 +3110,6 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             tag.setString("ResearchName", string);
             list.appendTag(tag);
         }
-        aNBT.setInteger("mEssentiaCellTier", this.mEssentiaCellTier);
         aNBT.setInteger("mParallel", this.mParallel);
         aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
         aNBT.setTag("Research", list);
@@ -3132,7 +3130,6 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                         .getString("ResearchName"));
             }
         }
-        this.mEssentiaCellTier = aNBT.getInteger("mEssentiaCellTier");
         this.mParallel = aNBT.getInteger("mParallel");
         this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
         super.loadNBTData(aNBT);
@@ -3155,11 +3152,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.mEssentiaCellTier = 0;
-        var built = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)
+        this.mParallel = 0;
+        this.mNodeEnergized.clear();
+        this.mTileInfusionProvider.clear();
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)
             || checkPiece(STRUCTURE_PIECE_MAIN_ERR, horizontalOffSet, verticalOffSet, depthOffSet);
-        this.mParallel = built ? this.mEssentiaCellTier * 8 : 0;
-        return built;
     }
 
     @Override
