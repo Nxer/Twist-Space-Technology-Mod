@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_IndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
@@ -730,14 +731,16 @@ public class MachineLoader {
             GTCMItemList.MegaStoneBreaker.set(MegaStoneBreaer);
         }
 
-        IndustrialAlchemyTower = new TST_IndustrialAlchemyTower(
-            // #tr NameIndustrialAlchemyTower
-            // # Industrial Alchemy Tower
-            // #zh_CN 工业炼金塔
-            19063,
-            "IndustrialAlchemyTower",
-            TextEnums.tr("NameIndustrialAlchemyTower")).getStackForm(1);
-        GTCMItemList.IndustrialAlchemyTower.set(IndustrialAlchemyTower);
+        if (Enable_IndustrialAlchemyTower) {
+            IndustrialAlchemyTower = new TST_IndustrialAlchemyTower(
+                // #tr NameIndustrialAlchemyTower
+                // # Industrial Alchemy Tower
+                // #zh_CN 工业炼金塔
+                19063,
+                "IndustrialAlchemyTower",
+                TextEnums.tr("NameIndustrialAlchemyTower")).getStackForm(1);
+            GTCMItemList.IndustrialAlchemyTower.set(IndustrialAlchemyTower);
+        }
 
         // endregion
 

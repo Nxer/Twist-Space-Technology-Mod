@@ -43,6 +43,9 @@ import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -69,6 +72,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -86,6 +90,7 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.tiles.TileCrucible;
@@ -101,7 +106,6 @@ import thaumicenergistics.common.tiles.TileInfusionProvider;
 public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_IndustrialAlchemyTower> {
 
     // region default value
-    private int mParallel;
     private double mSpeedBonus;
     private int essentiaCellTier = 0;
     private final ItemStack EssentiaCell_Creative = EnumEssentiaStorageTypes.Type_Creative.getCell();
@@ -204,12 +208,68 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return false;
+        return mSpeedBonus == (double) 1 / 11.4514;
     }
 
     @Override
     protected float getSpeedBonus() {
-        return 1.0F;
+        mSpeedBonus = 0.0;
+        countSpeedBonus();
+        return (float) mSpeedBonus;
+    }
+
+    private void countSpeedBonus() {
+        if (mNodeEnergized.isEmpty()) {
+            mSpeedBonus = 1.0;
+            return;
+        } else if (mNodeEnergized.size() < 4) {
+            mSpeedBonus = 1 - mNodeEnergized.size() * 0.1;
+            return;
+        } else {
+            int fire = getMaxPurityNodeAmount(mNodeEnergized, Aspect.FIRE);
+            int air = getMaxPurityNodeAmount(mNodeEnergized, Aspect.AIR);
+            int order = getMaxPurityNodeAmount(mNodeEnergized, Aspect.ORDER);
+            int entropy = getMaxPurityNodeAmount(mNodeEnergized, Aspect.ENTROPY);
+            List<Integer> data = Arrays.asList(fire, air, order, entropy, 10);
+            int min = Collections.min(data);
+            int max = Collections.max(data);
+            double baseSpeedBonus = 1 / 11.4514 + (0.7 - 1 / 11.4514) * (1 - Math.pow(Math.E, min - 10));
+            double punishSpeedBonus = (0.7 - baseSpeedBonus) * (max - min) / max;
+            mSpeedBonus = baseSpeedBonus + punishSpeedBonus;
+            return;
+        }
+    }
+
+    private int findMaxIndex(ArrayList<Double> arrayList) {
+        int index = 0;
+        for (int i = 1; i < arrayList.size(); i++) {
+            if (arrayList.get(i) > arrayList.get(index)) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    private int getMaxPurityNodeAmount(ArrayList<TileNodeEnergized> mNodeEnergized, Aspect aspect) {
+        ArrayList<Double> Purity = new ArrayList<>();
+        for (TileNodeEnergized node : mNodeEnergized) {
+            AspectList aspects = node.getAspects();
+            double sum = 0;
+            for (Aspect a : node.getAspects()
+                .getPrimalAspects()) {
+                sum += aspects.getAmount(a);
+            }
+            double sAspect = node.getAspects()
+                .getAmount(aspect);
+            Purity.add(sAspect / sum);
+        }
+        return mNodeEnergized.get(findMaxIndex(Purity))
+            .getAspects()
+            .getAmount(aspect);
+    }
+
+    private int getmParallel() {
+        return (int) Math.pow(essentiaCellTier, 5);
     }
 
     @Override
@@ -219,7 +279,11 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
 
     @Override
     protected int getMaxParallelRecipes() {
-        return 4;
+        if (getControllerSlot() == null) {
+            return getmParallel();
+        } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
+            return Integer.MAX_VALUE;
+        } else return getmParallel();
     }
 
     // endregion
@@ -397,19 +461,127 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             true);
     }
 
-    // WIP
+    // spotless:off
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // #tr Tooltip_IndustrialAlchemyTower_MachineType
         // # Alchemy Tower
-        // #zh_CN 工业炼金塔
+        // #zh_CN 炼金塔
         tt.addMachineType(TextEnums.tr("Tooltip_IndustrialAlchemyTower_MachineType"))
+            // #tr Tooltip_IndustrialAlchemyTower_Controller
+            // # Controller block for the Industrial Alchemy Tower
+            // #zh_CN 工业炼金塔的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_Controller"))
+            // #tr Tooltip_IndustrialAlchemyTower_00
+            // # Gurgling
+            // #zh_CN 咕噜咕噜
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_00"))
+            // #tr Tooltip_IndustrialAlchemyTower_01
+            // # Please use the Infusion Supplier to supply Essence!
+            // #zh_CN 请使用注魔供应器供给源质！
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_01"))
+            // #tr Tooltip_IndustrialAlchemyTower_02
+            // # Parallelism depends on the level of the structure block.
+            // #zh_CN 并行取决于结构方块的等级。
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_02"))
+            // #tr Tooltip_IndustrialAlchemyTower_03
+            // # Do an 4/2 overclock.Turn on lossless overclocking after reaching the maximum acceleration rate.
+            // #zh_CN 进行4/2超频。达到最高加速倍率后开启无损超频.
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_03"))
+            // #tr Tooltip_IndustrialAlchemyTower_04
+            // # Use Charged Nodes to get acceleration rewards,
+            // #zh_CN §b使用充能节点以获得加速奖励§7，
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_04"))
+            // #tr Tooltip_IndustrialAlchemyTower_05
+            // # No acceleration when there are no charging nodes.
+            // #zh_CN 无充能节点时不加速。
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_05"))
+            // #tr Tooltip_IndustrialAlchemyTower_06
+            // # When the number of nodes is less than 4, each charging node increases acceleration by 10%%,
+            // #zh_CN 当节点数量小于4时每有一个充能节点就加速10%%，
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_06"))
+            // #tr Tooltip_IndustrialAlchemyTower_07
+            // # When the number of nodes is 4, calculate the nodes with the highest rates of air, fire, entropy, and order.
+            // #zh_CN 当节点数量为4时，计算含有风、火、混沌、秩序率最高的节点，
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_07"))
+            // #tr Tooltip_IndustrialAlchemyTower_08
+            // # Use the essence quantity of the node with the highest rate of each essence for subsequent calculations.
+            // #zh_CN 将含该要素率最多的节点的该要素量参与后续的计算。
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_08"))
+            // #tr Tooltip_IndustrialAlchemyTower_09
+            // # min=min(fire,air,entropy,order,10);max=max(fire,air,entropy,order,10);
+            // #zh_CN {\SPACE}{\AQUA}min=min(fire,air,entropy,order,10);max=max(fire,air,entropy,order,10);
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_09"))
+            // #tr Tooltip_IndustrialAlchemyTower_10
+            // # Basic speed bonus equals 1/11.4514 + (0.7-1/11.4514)*(1-exp(min-10)).
+            // #zh_CN 基础加速倍率为{\SPACE}{\AQUA}baseSpeedBonus=1/11.4514 + (0.7-1/11.4514)*(1-exp(min-10))
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_10"))
+            // #tr Tooltip_IndustrialAlchemyTower_11
+            // # If there is too much disparity in the quantity of the above essence, there will be a penalty mechanism.
+            // #zh_CN 如果上述的要素量差距过大会有惩罚机制。
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_11"))
+            // #tr Tooltip_IndustrialAlchemyTower_12
+            // # Punishment speed bonus equals (0.7-baseSpeedBonus)*(max-min)/max
+            // #zh_CN 惩罚倍率为{\SPACE}{\AQUA}punishSpeedBonus=(0.7-baseSpeedBonus)*(max-min)/max;
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_12"))
+            // #tr Tooltip_IndustrialAlchemyTower_13
+            // # Final speed bonus equals the sum of the two.
+            // #zh_CN 最终倍率为二者相加。
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_13"))
+            // #tr Tooltip_IndustrialAlchemyTower_14
+            // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
+            // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
+            .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_14"))
             .addSeparator()
             .addInfo(StructureTooComplex)
+            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            // #tr Tooltip_IndustrialAlchemyTower_15
+            // # Infusion Provider
+            // #zh_CN 注魔供应器
+            // #tr Tooltip_IndustrialAlchemyTower_16
+            // # §bAny magic mechanical block
+            // #zh_CN §b任意魔法机械方块
+            .addOtherStructurePart(
+                TextEnums.tr("Tooltip_IndustrialAlchemyTower_15"),
+                TextEnums.tr("Tooltip_IndustrialAlchemyTower_16"))
+            // #tr Tooltip_IndustrialAlchemyTower_16
+            // # §bAny magic mechanical block
+            // #zh_CN §b任意魔法机械方块
+            .addInputBus(TextEnums.tr("Tooltip_IndustrialAlchemyTower_16"))
+            .addOutputBus(TextEnums.tr("Tooltip_IndustrialAlchemyTower_16"))
+            .addEnergyHatch(TextEnums.tr("Tooltip_IndustrialAlchemyTower_16"))
+            // #tr Tooltip_IndustrialAlchemyTower_17
+            // # Travel anchor
+            // #zh_CN 旅行锚
+            // #tr Tooltip_IndustrialAlchemyTower_16
+            // # §bAny magic mechanical block
+            // #zh_CN §b任意魔法机械方块
+            .addOtherStructurePart(
+                TextEnums.tr("Tooltip_IndustrialAlchemyTower_17"),
+                TextEnums.tr("Tooltip_IndustrialAlchemyTower_16"))
+            // #tr Tooltip_IndustrialAlchemyTower_18
+            // # Essentia diffusion unit
+            // #zh_CN 源质扩散单元
+            // #tr Tooltip_IndustrialAlchemyTower_19
+            // # Each level provides tier^5 parallel
+            // #zh_CN §b每级提供tier^5的并行
+            .addOtherStructurePart(
+                TextEnums.tr("Tooltip_IndustrialAlchemyTower_18"),
+                TextEnums.tr("Tooltip_IndustrialAlchemyTower_19"))
+            // #tr Tooltip_IndustrialAlchemyTower_20
+            // # §l§dArcane Empty Space
+            // #zh_CN §l§d奥术裂隙
+            // #tr Tooltip_IndustrialAlchemyTower_21
+            // # Replaceable warded glass on both sides of the machine
+            // #zh_CN 可替换机器两侧守卫者玻璃
+            .addOtherStructurePart(
+                TextEnums.tr("Tooltip_IndustrialAlchemyTower_20"),
+                TextEnums.tr("Tooltip_IndustrialAlchemyTower_21"))
             .toolTipFinisher(ModName);
         return tt;
     }
+    // spotless:on
 
     // endregion
 
@@ -421,7 +593,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             tag.setString("ResearchName", string);
             nbtTagList.appendTag(tag);
         }
-        aNBT.setInteger("mParallel", this.mParallel);
+        aNBT.setInteger("essentiaCellTier", this.essentiaCellTier);
         aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
         super.saveNBTData(aNBT);
     }
@@ -440,7 +612,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                         .getString("ResearchName"));
             }
         }
-        this.mParallel = aNBT.getInteger("mParallel");
+        this.essentiaCellTier = aNBT.getInteger("essentiaCellTier");
         this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
         super.loadNBTData(aNBT);
     }
@@ -461,6 +633,8 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        essentiaCellTier = 0;
+        mNodeEnergized.clear();
         repairMachine();
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
@@ -497,22 +671,24 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     }
 }
 
+// Structure:
+//
 // Blocks:
 // A -> ofBlock...(essentiaCell, 2, ...);
 // B -> ofBlock...(magicCasing, 0, ...);
 // C -> ofBlock...(tile.FieryBlock, 0, ...);
-// D -> ofBlock...(tile.blockCosmeticSlabStone, 0, ...);
-// E -> ofBlock...(tile.blockCosmeticSolid, 0, ...);
-// F -> ofBlock...(tile.blockCosmeticSolid, 7, ...);
-// G -> ofBlock...(tile.blockDiamond, 0, ...);
-// H -> ofBlock...(tile.blockLapis, 0, ...);
-// I -> ofBlock...(tile.blockMetalDevice, 3, ...);
-// J -> ofBlock...(tile.blockStairsArcaneStone, 0, ...);
-// K -> ofBlock...(tile.blockTranslucent, 0, ...);
-// L -> ofBlock...(tile.blockTranslucent, 1, ...);
-// M -> ofBlock...(tile.chisel.arcane, 1, ...);
-// N -> ofBlock...(tile.chisel.arcane, 4, ...);
-// O -> ofBlock...(tile.chisel.arcane, 6, ...);
+// D -> ofBlock...(tile.TBoldLapis, 0, ...);
+// E -> ofBlock...(tile.blockCosmeticSlabStone, 0, ...);
+// F -> ofBlock...(tile.blockCosmeticSolid, 0, ...);
+// G -> ofBlock...(tile.blockCosmeticSolid, 6, ...);
+// H -> ofBlock...(tile.blockCosmeticSolid, 7, ...);
+// I -> ofBlock...(tile.blockDiamond, 0, ...);
+// J -> ofBlock...(tile.blockMetalDevice, 3, ...);
+// K -> ofBlock...(tile.blockMetalDevice, 9, ...);
+// L -> ofBlock...(tile.blockTranslucent, 0, ...);
+// M -> ofBlock...(tile.blockTranslucent, 1, ...);
+// N -> ofBlock...(tile.chisel.arcane, 1, ...);
+// O -> ofBlock...(tile.chisel.arcane, 4, ...);
 // P -> ofBlock...(tile.eldritchArk, 0, ...);
 // Q -> ofBlock...(tile.extrautils:decorativeBlock1, 14, ...);
 //
@@ -525,11 +701,17 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
 // else
 // T -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaTileEntity, ...); // You will probably want to change it
 // to something else
-// U -> ofSpecialTileAdder(emt.tile.TileElectricCloud, ...); // You will probably want to change it to something else
-// V -> ofSpecialTileAdder(net.minecraft.tileentity.TileEntityBeacon, ...); // You will probably want to change it to
+// U -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNodeStabilizer, ...); // You will probably want to change it to
 // something else
-// W -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNitor, ...); // You will probably want to change it to something
+// V -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNodeConverter, ...); // You will probably want to change it to
+// something else
+// W -> ofSpecialTileAdder(makeo.gadomancy.common.blocks.tiles.TileExtendedNode, ...); // You will probably want to
+// change it to something else
+// X -> ofSpecialTileAdder(emt.tile.TileElectricCloud, ...); // You will probably want to change it to something else
+// Y -> ofSpecialTileAdder(net.minecraft.tileentity.TileEntityBeacon, ...); // You will probably want to change it to
+// something else
+// Z -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNitor, ...); // You will probably want to change it to something
 // else
 //
 // Offsets:
-// 7 17 7
+// 7 15 1

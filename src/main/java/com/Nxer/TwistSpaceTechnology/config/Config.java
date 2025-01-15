@@ -61,6 +61,7 @@ public class Config {
     public static final String MicroSpaceTimeFabricatorio = "Micro SpaceTime Fabricatorio";
     public static final String StrangeMatterAggregator = "Strange Matter Aggregator";
     public static final String BloodHell = "BloodHell";
+    public static final String IndustrialAlchemyTower = "IndustrialAlchemyTower";
     // endregion
 
     // region General
@@ -448,6 +449,10 @@ public class Config {
     public static int DefaultCycleNum_WirelessEnergyMultiMachineBase = 100_000;
     // endregion
 
+    // region Industrial Alchemy Tower
+    public static boolean Enable_IndustrialAlchemyTower = true;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -784,6 +789,10 @@ public class Config {
         Enable_BloodHell = configuration.getBoolean("Enable Blood Hell", BloodHell, Enable_BloodHell, "Enable Blood Hell");
         Enable_BloodHatch = configuration.getBoolean("Enable Blood Hatch", BloodHell, Enable_BloodHatch, "Enable Blood Hatch\nThis depends on Enable Blood Hell");
         Enable_BloodHatch_Armok_InfiniteDrain = configuration.getBoolean("Enable Blood Hatch Armok Infinite Drain", BloodHell, Enable_BloodHatch_Armok_InfiniteDrain, "Enable Blood Hatch Drains Armok Orb Infinitely");
+        // endregion
+
+        // region Industrial Alchemy Tower
+        Enable_IndustrialAlchemyTower = configuration.getBoolean("Enable Industrial Alchemy Tower",IndustrialAlchemyTower,Enable_IndustrialAlchemyTower,"Enable Industrial Alchemy Tower");
         // endregion
 
         TST_CleanRoom.loadConfig(configuration);

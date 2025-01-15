@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static gregtech.api.enums.TierEU.RECIPE_EV;
+import static gregtech.api.enums.TierEU.RECIPE_IV;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static thaumcraft.common.config.ConfigItems.itemEssence;
 
@@ -43,7 +43,7 @@ public class IndustrialAlchemyTowerRecipePool implements IRecipePool {
                     .itemOutputs(recipe.getOutputItem())
                     .noOptimize()
                     .duration(30 * SECONDS + Math.min(recipe.getAspectAmount() * SECONDS, 600))
-                    .eut(RECIPE_EV)
+                    .eut(RECIPE_IV)
                     .addTo(IIA);
             }
         }

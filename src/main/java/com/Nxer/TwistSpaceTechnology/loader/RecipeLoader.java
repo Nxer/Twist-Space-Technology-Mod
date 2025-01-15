@@ -100,7 +100,9 @@ public class RecipeLoader {
         if (Config.Enable_MegaTreeFarm) {
             new AquaticZoneSimulatorFakeRecipe().loadRecipes();
         }
-        new IndustrialAlchemyTowerRecipePool().loadRecipes();
+        if (Config.Enable_IndustrialAlchemyTower) {
+            new IndustrialAlchemyTowerRecipePool().loadRecipes();
+        }
     }
 
     public static void loadRecipesPostInit() {
