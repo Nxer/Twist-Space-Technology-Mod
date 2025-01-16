@@ -22,7 +22,6 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_ZPM;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrameComponent;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HarmoniousWirelessEnergyHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HighPowerRadiationProofCasing;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IncompactCyclotron;
@@ -42,20 +41,6 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OpticalSOC;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OreProcessingFactory;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PerfectLapotronCrystal;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeEV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeHV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeIV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeLV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeLuV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeMAX;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeMV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUEV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUHV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUIV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUMV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUXV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeZPM;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhysicalFormSwitcher;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.RealRackHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Scavenger;
@@ -75,12 +60,10 @@ import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleT
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
@@ -115,6 +98,7 @@ import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GalaxySpace;
 import static gregtech.api.enums.Mods.GoodGenerator;
+import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 import static gregtech.api.util.GTModHandler.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
@@ -144,41 +128,11 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Wir
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.TransmissionComponent_UV;
-import static tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
-import static tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
-import static tectech.thing.CustomItemList.LASERpipe;
-import static tectech.thing.CustomItemList.Machine_Multi_Computer;
-import static tectech.thing.CustomItemList.Machine_Multi_Switch;
-import static tectech.thing.CustomItemList.Machine_Multi_Transformer;
-import static tectech.thing.CustomItemList.UncertaintyX_Hatch;
-import static tectech.thing.CustomItemList.dataIn_Hatch;
-import static tectech.thing.CustomItemList.dataOut_Hatch;
-import static tectech.thing.CustomItemList.eM_Coil;
-import static tectech.thing.CustomItemList.eM_Containment_Field;
-import static tectech.thing.CustomItemList.eM_Hollow;
-import static tectech.thing.CustomItemList.eM_Spacetime;
-import static tectech.thing.CustomItemList.eM_Teleportation;
-import static tectech.thing.CustomItemList.eM_Ultimate_Containment;
-import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
-import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
-import static tectech.thing.CustomItemList.eM_dynamoTunnel5_UEV;
-import static tectech.thing.CustomItemList.eM_energyTunnel1_IV;
-import static tectech.thing.CustomItemList.eM_energyTunnel2_LuV;
-import static tectech.thing.CustomItemList.eM_energyTunnel3_ZPM;
-import static tectech.thing.CustomItemList.eM_energyTunnel4_UV;
-import static tectech.thing.CustomItemList.eM_energyTunnel5_UHV;
-import static tectech.thing.CustomItemList.eM_energyTunnel6_UEV;
-import static tectech.thing.CustomItemList.eM_energyTunnel7_UIV;
-import static tectech.thing.CustomItemList.eM_energyTunnel8_UMV;
-import static tectech.thing.CustomItemList.eM_energyTunnel9_UXV;
-import static tectech.thing.CustomItemList.hatch_CreativeMaintenance;
-import static tectech.thing.CustomItemList.rack_Hatch;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -188,7 +142,6 @@ import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
@@ -221,7 +174,6 @@ import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
-import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.item.*;
@@ -229,9 +181,9 @@ import gtPlusPlus.core.material.*;
 import gtPlusPlus.core.recipe.common.CI;
 import gtPlusPlus.core.util.minecraft.*;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
-import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
 import tectech.recipe.TTRecipeAdder;
+import tectech.thing.CustomItemList;
 import tectech.thing.casing.TTCasingsContainer;
 import wanion.avaritiaddons.block.extremeautocrafter.BlockExtremeAutoCrafter;
 
@@ -242,16 +194,6 @@ public class GTCMMachineRecipePool implements IRecipePool {
     public void loadRecipes() {
         TwistSpaceTechnology.LOG.info("GTCMMachineRecipePool loading recipes.");
 
-        Fluid solderIndAlloy = FluidRegistry.getFluid("molten.indalloy140");
-
-        Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
-
-        Fluid celestialTungsten = FluidRegistry.getFluid("molten.celestialtungsten");
-
-        IItemContainer eM_Power = tectech.thing.CustomItemList.eM_Power;
-
-        final IRecipeMap assemblyLine = GTRecipeConstants.AssemblyLine;
-        final IRecipeMap assembler = RecipeMaps.assemblerRecipes;
         ItemStack FarmGear;
         ItemStack FarmOutput;
         ItemStack FarmPump;
@@ -330,421 +272,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20 * 120)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // region PreciseHighEnergyPhotonicQuantumMaster
 
         // PreciseHighEnergyPhotonicQuantumMaster Controller
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                eM_Power.get(6),
-                tectech.thing.CustomItemList.Machine_Multi_Transformer.get(2),
-                ItemList.Machine_Multi_IndustrialLaserEngraver.get(64),
 
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 3L, 32105),
-                ItemList.Emitter_UV.get(16),
-                ItemList.Field_Generator_UV.get(8),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 8),
-                copyAmount(64, Ic2Items.iridiumPlate),
-                GTUtility.getIntegratedCircuit(10)
-            )
-            .fluidInputs(
-                Materials.SolderingAlloy.getMolten(144 * 128)
-            )
-
-            .itemOutputs(copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
-            .noOptimize()
-            .eut(RECIPE_UHV)
-            .duration(20 * 120)
-            .addTo(assembler);
-
-        // Upgrade LV
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11100),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 900),
-
-                ItemList.Emitter_LV.get(1),
-                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 3),
-                ItemList.Field_Generator_LV.get(1),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 4),
-                GTUtility.getIntegratedCircuit(10)
-            )
-            .fluidInputs(
-                Materials.SolderingAlloy.getMolten(144 * 2)
-            )
-            .itemOutputs(PhotonControllerUpgradeLV.get(1))
-            .eut(RECIPE_LV)
-            .duration(20 * 10)
-            .addTo(assembler);
-
-        // Upgrade MV
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11101),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 901),
-
-                ItemList.Emitter_MV.get(1),
-                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 6),
-                ItemList.Field_Generator_MV.get(1),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 4),
-                GTUtility.getIntegratedCircuit(10)
-            )
-            .fluidInputs(
-                Materials.SolderingAlloy.getMolten(144 * 8)
-            )
-            .itemOutputs(PhotonControllerUpgradeMV.get(1))
-            .eut(RECIPE_MV)
-            .duration(20 * 20)
-            .addTo(assembler);
-
-        // Upgrade HV
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11102),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 902),
-
-                ItemList.Emitter_HV.get(1),
-                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 12),
-                ItemList.Field_Generator_HV.get(1),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.HV, 4),
-                GTUtility.getIntegratedCircuit(10)
-            )
-            .fluidInputs(
-                Materials.SolderingAlloy.getMolten(144 * 32)
-            )
-            .itemOutputs(PhotonControllerUpgradeHV.get(1))
-            .eut(RECIPE_HV)
-            .duration(20 * 40)
-            .addTo(assembler);
-
-        // Upgrade EV
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11103),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 15229),
-
-                ItemList.Emitter_EV.get(1),
-                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 24),
-                ItemList.Field_Generator_EV.get(1),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.EV, 4),
-                GTUtility.getIntegratedCircuit(10)
-            )
-            .fluidInputs(
-                Materials.SolderingAlloy.getMolten(144 * 128)
-            )
-            .itemOutputs(PhotonControllerUpgradeEV.get(1))
-            .eut(RECIPE_EV)
-            .duration(20 * 80)
-            .addTo(assembler);
-
-        // Upgrade IV
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11104),
-                eM_energyTunnel1_IV.get(1),
-
-                ItemList.Emitter_IV.get(1),
-                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 48),
-                ItemList.Field_Generator_IV.get(1),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 4),
-                GTUtility.getIntegratedCircuit(10)
-            )
-            .fluidInputs(
-                Materials.SolderingAlloy.getMolten(144 * 512)
-            )
-            .itemOutputs(PhotonControllerUpgradeIV.get(1))
-
-            .eut(RECIPE_IV)
-            .duration(20 * 160)
-            .addTo(assembler);
-
-        // Upgrade LuV
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11105))
-            .metadata(RESEARCH_TIME, 1 * HOURS)
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11105),
-                eM_energyTunnel2_LuV.get(1),
-                eM_Power.get(4),
-
-                ItemList.Emitter_LuV.get(4),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.lens, 4),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 4),
-                ItemList.Field_Generator_LuV.get(2),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 4),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 4)
-            )
-            .fluidInputs(
-                new FluidStack(solderIndAlloy, 144 * 4)
-            )
-            .itemOutputs(PhotonControllerUpgradeLuV.get(1))
-            .eut(RECIPE_LuV)
-            .duration(20 * 20)
-            .addTo(AssemblyLine);
-
-        // Upgrade ZPM
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11106))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11106),
-                eM_energyTunnel3_ZPM.get(1),
-                eM_Power.get(4),
-
-                ItemList.Emitter_ZPM.get(4),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.lens, 8),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 8),
-                ItemList.Field_Generator_ZPM.get(2),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ZPM, 4),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorZPM, 4)
-            )
-            .fluidInputs(
-                new FluidStack(solderIndAlloy, 144 * 8)
-            )
-            .itemOutputs(PhotonControllerUpgradeZPM.get(1))
-
-            .eut(RECIPE_ZPM)
-            .duration(20 * 40)
-            .addTo(AssemblyLine);
-
-        // Upgrade UV
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11107))
-            .metadata(RESEARCH_TIME, 4 * HOURS)
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11107),
-                eM_energyTunnel4_UV.get(1),
-                eM_Power.get(4),
-
-                ItemList.Emitter_UV.get(4),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.lens, 16),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 16),
-                ItemList.Field_Generator_UV.get(2),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 4),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ZPM, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUV, 4)
-            )
-            .fluidInputs(
-                new FluidStack(solderIndAlloy, 144 * 16)
-            )
-            .itemOutputs(PhotonControllerUpgradeUV.get(1))
-            .eut(RECIPE_UV)
-            .duration(20 * 80)
-            .addTo(AssemblyLine);
-
-        // Upgrade UHV
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUV.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 8, 11107),
-                eM_energyTunnel5_UHV.get(1),
-                ItemList.Casing_Dim_Injector.get(4),
-
-                ItemList.Emitter_UHV.get(4),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.lens, 32),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 32),
-                ItemList.Field_Generator_UHV.get(2),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 4),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.UV, 4)
-            )
-            .fluidInputs(
-                new FluidStack(solderPlasma, 16 * 144)
-            )
-            .itemOutputs(PhotonControllerUpgradeUHV.get(1))
-            .eut(RECIPE_UHV)
-            .duration(20 * 160)
-            .addTo(AssemblyLine);
-
-        // Upgrade UEV
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUHV.get(1))
-            .metadata(RESEARCH_TIME, 16 * HOURS)
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 64, 11107),
-                eM_energyTunnel6_UEV.get(1),
-                eM_Power.get(4),
-
-                ItemList.Emitter_UEV.get(4),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.lens, 64),
-                WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 64),
-                ItemList.Field_Generator_UEV.get(2),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 4),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUEV, 4)
-            )
-            .fluidInputs(
-                new FluidStack(solderPlasma, 64 * 144),
-                Materials.SuperconductorUEVBase.getMolten(64 * 144)
-            )
-            .itemOutputs(PhotonControllerUpgradeUEV.get(1))
-
-            .eut(RECIPE_UEV)
-            .duration(20 * 320)
-            .addTo(AssemblyLine);
-
-        // Upgrade UIV
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUEV.get(1))
-            .metadata(RESEARCH_TIME, 32 * HOURS)
-            .itemInputs(
-                ItemList.Casing_Advanced_Iridium.get(1),
-                SpaceWarper.get(1),
-                eM_energyTunnel7_UIV.get(1),
-                ItemList.Casing_Dim_Injector.get(16),
-
-                ItemList.Emitter_UIV.get(4),
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 4L, 32105),
-                ItemList.EnergisedTesseract.get(4),
-                ItemList.Field_Generator_UIV.get(2),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 4),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUIV, 8)
-            )
-            .fluidInputs(
-                new FluidStack(solderPlasma, 256 * 144),
-                Materials.SuperconductorUIVBase.getMolten(64 * 144),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(256 * 1000)
-            )
-            .itemOutputs(PhotonControllerUpgradeUIV.get(1))
-
-            .eut(RECIPE_UIV)
-            .duration(20 * 640)
-            .addTo(AssemblyLine);
-
-        // Upgrade UMV
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUIV.get(1))
-            .metadata(RESEARCH_TIME, 64 * HOURS)
-            .itemInputs(
-                PhotonControllerUpgradeUIV.get(1),
-                SpaceWarper.get(4),
-                eM_energyTunnel8_UMV.get(1),
-                ItemList.Casing_Dim_Injector.get(64),
-
-                ItemList.Emitter_UMV.get(8),
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16L, 32105),
-                ItemList.EnergisedTesseract.get(16),
-                ItemList.Field_Generator_UMV.get(4),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 8),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 32),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUMV, 16),
-                MaterialsUEVplus.SixPhasedCopper.getNanite(16),
-
-                EOH_Reinforced_Temporal_Casing.get(4)
-            )
-            .fluidInputs(
-                new FluidStack(solderPlasma, 1024 * 144),
-                Materials.SuperconductorUMVBase.getMolten(64 * 144),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid( 1024 * 1000),
-                MaterialsUEVplus.Time.getMolten(144 * 64 * 8)
-            )
-            .itemOutputs(PhotonControllerUpgradeUMV.get(1))
-
-            .eut(RECIPE_UMV)
-            .duration(20 * 1280)
-            .addTo(AssemblyLine);
-
-        // Upgrade UXV
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUMV.get(1))
-            .metadata(RESEARCH_TIME, 128 * HOURS)
-            .itemInputs(
-                PhotonControllerUpgradeUMV.get(1),
-                SpaceWarper.get(16),
-                eM_energyTunnel9_UXV.get(1),
-                EOH_Infinite_Energy_Casing.get(16),
-
-                ItemList.Emitter_UXV.get(16),
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 64L, 32105),
-                ItemList.EnergisedTesseract.get(64),
-                ItemList.Field_Generator_UXV.get(8),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 16),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 64),
-
-                MaterialsUEVplus.WhiteDwarfMatter.getNanite(64),
-                MaterialsUEVplus.BlackDwarfMatter.getNanite(64),
-                MaterialsUEVplus.Eternity.getNanite(16),
-                EOH_Reinforced_Temporal_Casing.get(16)
-            )
-            .fluidInputs(
-                new FluidStack(solderPlasma, 4096 * 144),
-                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64), // SuperconductorUXVBase
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid( 4096 * 1000),
-                MaterialsUEVplus.Time.getMolten(144 * 64 * 32)
-            )
-            .itemOutputs(PhotonControllerUpgradeUXV.get(1))
-            .eut(RECIPE_UXV)
-            .duration(20 * 2560)
-            .addTo(AssemblyLine);
-
-        // Upgrade MAX  ---Hang on---
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                PhotonControllerUpgradeUXV.get(1),
-                SpaceWarper.get(64),
-                HarmoniousWirelessEnergyHatch.get(2),
-                EOH_Infinite_Energy_Casing.get(64),
-
-                ItemList.Emitter_MAX.get(32),
-                setStackSize(GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 1L, 32105),256),
-                setStackSize(ItemList.EnergisedTesseract.get(1),256),
-                ItemList.Field_Generator_MAX.get(16),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 32),
-                setStackSize(CircuitUXV.getIS(1),256),
-                setStackSize(CircuitUXV.getIS(1),256),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 1),1024),
-
-                MaterialsUEVplus.MagMatter.getNanite(64),
-                ZPM6.get(4),
-                ItemList.Timepiece.get(4),
-                EOH_Reinforced_Temporal_Casing.get(64)
-            )
-            .fluidInputs(
-                new FluidStack(solderPlasma, 65536 * 144),
-                MaterialsUEVplus.QuarkGluonPlasma.getFluid( 4096 * 1000),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid( 65536 * 1000),
-                MaterialsUEVplus.Time.getMolten(144 * 64 * 512),
-
-                MaterialsUEVplus.Universium.getMolten(144 * 8192),
-                MaterialsUEVplus.Eternity.getMolten(144 * 8192),
-                MaterialsUEVplus.PrimordialMatter.getFluid(144 * 8192),
-                Materials.Tritanium.getPlasma(144 * 8192)
-            )
-            .itemOutputs(PhotonControllerUpgradeMAX.get(1))
-            .eut(RECIPE_MAX)
-            .duration(20 * 20480)
-            .addTo(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes);
 
         // endregion
 
@@ -763,7 +296,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 SpaceWarper.get(64),
                 MaterialsUEVplus.TranscendentMetal.getNanite(48),
 
-                eM_Coil.get(64),
+                CustomItemList.eM_Coil.get(64),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 32),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 64),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 64),
@@ -773,13 +306,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
                 OpticalSOC.get(64),
 
-                eM_Spacetime.get(64),
+                CustomItemList.eM_Spacetime.get(64),
                 ItemList.Field_Generator_UIV.get(32),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Infinity, 64),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.TranscendentMetal, 64)
             },
             new FluidStack[]{
-                new FluidStack(solderPlasma, 1024 * 144),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 1024 * 144),
                 MaterialsUEVplus.SpaceTime.getMolten(16 * 144),
                 Materials.SuperconductorUIVBase.getMolten(256 * 144),
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getMolten(64 * 1000)
@@ -791,14 +324,14 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // Casing
         TTRecipeAdder.addResearchableAssemblylineRecipe(
-            eM_Coil.get(1),
+            CustomItemList.eM_Coil.get(1),
             1_024_000,
             512,
             (int) RECIPE_UEV,
             16,
             new Object[]{
-                eM_Hollow.get(4),
-                eM_Coil.get(8),
+                CustomItemList.eM_Hollow.get(4),
+                CustomItemList.eM_Coil.get(8),
                 ItemList.Casing_Assembler.get(24),
                 ItemList.Casing_Gearbox_TungstenSteel.get(24),
 
@@ -818,12 +351,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Neutronium, 36)
             },
             new FluidStack[]{
-                new FluidStack(solderPlasma, 1024 * 144),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 1024 * 144),
                 Materials.UUMatter.getFluid(1000 * 256),
                 Materials.SuperconductorUEVBase.getMolten(32 * 144),
                 GGMaterial.metastableOganesson.getMolten(16 * 144)
             },
-            eM_Spacetime.get(1),
+            CustomItemList.eM_Spacetime.get(1),
             20 * 512,
             (int) RECIPE_UHV
         );
@@ -859,7 +392,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Iridium, 64)
             },
             new FluidStack[]{
-                new FluidStack(solderIndAlloy, 144 * 256),
+                new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 144 * 256),
                 Materials.Terbium.getMolten(144 * 256),
                 new FluidStack(FluidRegistry.getFluid("liquid helium"), 1000 * 256),
                 Materials.Lubricant.getFluid(1000 * 256)
@@ -899,7 +432,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.NaquadahAlloy, 64)
             },
             new FluidStack[]{
-                new FluidStack(solderPlasma, 144 * 64),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 64),
                 Materials.UUMatter.getFluid(1000 * 512),
                 MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(144 * 4096),
                 MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFluidStack(144 * 8192)
@@ -924,7 +457,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 30)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // endregion
 
@@ -948,7 +481,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 384)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // endregion
 
@@ -964,7 +497,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
             .eut(RECIPE_UHV)
             .duration(20 * 30)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region MagneticDomainConstructor
@@ -991,7 +524,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.NaquadahAlloy, 8)
             },
             new FluidStack[]{
-                new FluidStack(solderPlasma, 144 * 64),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 64),
                 GGMaterial.tairitsu.getMolten(144 * 256),
                 Materials.TengamAttuned.getMolten(144 * 1024),
                 MaterialsAlloy.TRINIUM_NAQUADAH_CARBON.getFluidStack(144 * 4096)
@@ -1023,7 +556,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_ZPM)
             .duration(20 * 600)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // endregion
 
@@ -1038,7 +571,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 Industrial_CuttingFactoryController.get(64),
                 ItemList.CuttingMachineUHV.get(32),
                 ItemList.SlicingMachineUHV.get(32),
-                eM_Power.get(16),
+                CustomItemList.eM_Power.get(16),
 
                 ItemList.Field_Generator_UHV.get(16),
                 ItemList.Emitter_UHV.get(64),
@@ -1056,7 +589,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 copyAmount(64, Ic2Items.iridiumPlate)
             },
             new FluidStack[]{
-                new FluidStack(solderPlasma, 144 * 128),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 128),
                 Materials.Naquadria.getMolten(144 * 256),
                 Materials.SuperCoolant.getFluid(1000 * 512),
                 Materials.Lubricant.getFluid(1000 * 1024)
@@ -1069,25 +602,25 @@ public class GTCMMachineRecipePool implements IRecipePool {
         // Casing
         GTValues.RA.stdBuilder()
             .itemInputs(
-                eM_Hollow.get(4),
+                CustomItemList.eM_Hollow.get(4),
                 ItemList.Field_Generator_UHV.get(8),
                 ItemList.Field_Generator_UV.get(16),
 
                 ItemList.Field_Generator_ZPM.get(64),
                 ItemRefer.Advanced_Radiation_Protection_Plate.get(16),
-                eM_Power.get(4),
+                CustomItemList.eM_Power.get(4),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 6),
                 GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.UV, 2),
                 GTUtility.getIntegratedCircuit(10)
             )
-            .fluidInputs(new FluidStack(solderPlasma, 144 * 32))
-            .itemOutputs(eM_Containment_Field.get(4))
+            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 32))
+            .itemOutputs(CustomItemList.eM_Containment_Field.get(4))
 
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20 * 60)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // endregion
 
@@ -1120,7 +653,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.UV, 64)
             },
             new FluidStack[]{
-                new FluidStack(solderPlasma, 144 * 256),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 256),
                 Materials.UUMatter.getFluid(1000 * 256),
                 Materials.SuperCoolant.getFluid(1000 * 256),
                 Materials.NaquadahAlloy.getMolten(144 * 256)
@@ -1132,13 +665,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // Casing
         TTRecipeAdder.addResearchableAssemblylineRecipe(
-            eM_Containment_Field.get(1),
+            CustomItemList.eM_Containment_Field.get(1),
             2_048_000,
             1024,
             (int) RECIPE_UIV,
             4,
             new Object[]{
-                eM_Containment_Field.get(4),
+                CustomItemList.eM_Containment_Field.get(4),
                 ItemList.Field_Generator_UIV.get(16),
                 ItemList.Field_Generator_UEV.get(64),
                 SpaceWarper.get(4),
@@ -1151,11 +684,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUIV, 16)
             },
             new FluidStack[]{
-                new FluidStack(solderPlasma, 144 * 256),
-                new FluidStack(celestialTungsten, 144 * 256),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 256),
+                MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(144 * 256),
                 Materials.Infinity.getMolten(144 * 32)
             },
-            eM_Ultimate_Containment_Field.get(1),
+            CustomItemList.eM_Ultimate_Containment_Field.get(1),
             20 * 180,
             (int) RECIPE_UIV
         );
@@ -1191,7 +724,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Osmiridium, 64)
             },
             new FluidStack[]{
-                new FluidStack(solderPlasma, 144 * 256),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 256),
                 MaterialsAlloy.BLACK_TITANIUM.getFluidStack(144 * 256),
                 Materials.UUMatter.getFluid(1000 * 64),
                 Materials.SuperCoolant.getFluid(1000 * 128)
@@ -1211,7 +744,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             (int) RECIPE_UEV,
             16,
             new Object[]{
-                eM_Containment_Field.get(4),
+                CustomItemList.eM_Containment_Field.get(4),
                 Machine_Multi_Autoclave.get(64),
                 ItemList.AutoclaveUEV.get(64),
                 ItemList.ChemicalBathUEV.get(64),
@@ -1232,7 +765,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.NaquadahAlloy, 64)
             },
             new FluidStack[]{
-                new FluidStack(solderPlasma, 144 * 256),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 256),
                 GGMaterial.tairitsu.getMolten(144 * 512),
                 Materials.StableBaryonicMatter.getFluid(1000 *64),
                 Materials.UUMatter.getFluid(1000 * 128)
@@ -1254,7 +787,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // region Miracle Door
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, eM_Teleportation.get(1))
+            .metadata(RESEARCH_ITEM, CustomItemList.eM_Teleportation.get(1))
             .metadata(RESEARCH_TIME, 24 * HOURS)
             .itemInputs(
                 Mega_AlloyBlastSmelter.get(64),
@@ -1262,7 +795,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 Mega_AlloyBlastSmelter.get(64),
                 Mega_AlloyBlastSmelter.get(64),
 
-                eM_Teleportation.get(64),
+                CustomItemList.eM_Teleportation.get(64),
                 StellarConstructionFrameMaterial.get(64),
                 ItemList.Emitter_UMV.get(64),
                 ItemList.Field_Generator_UMV.get(64),
@@ -1278,7 +811,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 ItemList.EnergisedTesseract.get(64)
             )
             .fluidInputs(
-                new FluidStack(solderPlasma, 144 * 65536),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 65536),
                 MaterialsAlloy.PIKYONIUM.getFluidStack(144 * 65536),
                 Materials.UUMatter.getFluid(1000 * 65536),
                 MaterialsUEVplus.ExcitedDTEC.getFluid(1000 * 16384)
@@ -1301,13 +834,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(RecipeMaps.fluidSolidifierRecipes);
 
-        // eM_Teleportation blockCasingsTT 10
+        // CustomItemList.eM_Teleportation blockCasingsTT 10
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.Machine_Multi_PlasmaForge.get(1))
             .metadata(RESEARCH_TIME, 24 * HOURS)
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 16),
-                eM_Ultimate_Containment.get(4),
+                CustomItemList.eM_Ultimate_Containment.get(4),
                 ItemList.Casing_Dim_Bridge.get(4),
                 ItemList.Casing_Dim_Injector.get(4),
 
@@ -1324,12 +857,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.TranscendentMetal, 8)
             )
             .fluidInputs(
-                new FluidStack(solderPlasma, 144 * 128),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 128),
                 MaterialsAlloy.PIKYONIUM.getFluidStack(144 * 64),
                 Materials.UUMatter.getFluid(1000 * 64),
                 MaterialsUEVplus.ExcitedDTEC.getFluid(1000 * 16)
             )
-            .itemOutputs(eM_Teleportation.get(1))
+            .itemOutputs(CustomItemList.eM_Teleportation.get(1))
             .eut(RECIPE_UMV)
             .duration(20 * 120)
             .addTo(AssemblyLine);
@@ -1338,13 +871,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // region Infinite Dynamo Hatch
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, eM_dynamoTunnel5_UEV.get(1))
+            .metadata(RESEARCH_ITEM, CustomItemList.eM_dynamoTunnel5_UEV.get(1))
             .metadata(RESEARCH_TIME, 24 * HOURS)
             .itemInputs(
-                eM_dynamoTunnel5_UEV.get(1),
+                CustomItemList.eM_dynamoTunnel5_UEV.get(1),
                 ItemRefer.Compact_Fusion_Coil_T0.get(1),
                 ItemList.Casing_Coil_Superconductor.get(1),
-                Machine_Multi_Transformer.get(1),
+                CustomItemList.Machine_Multi_Transformer.get(1),
 
                 ItemList.Casing_Dim_Injector.get(2),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, MaterialsUEVplus.SpaceTime, 2),
@@ -1357,7 +890,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GravitationalLens.get(16)
             )
             .fluidInputs(
-                new FluidStack(solderPlasma, 144 * 36),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 36),
                 Materials.UUMatter.getFluid(1000 * 8),
                 MaterialsUEVplus.ExcitedDTEC.getFluid(1000 * 64)
             )
@@ -1389,11 +922,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Iridium, 64),
 
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.StainlessSteel, 64),
-                eM_Power.get(64),
+                CustomItemList.eM_Power.get(64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64)
             )
             .fluidInputs(
-                new FluidStack(solderPlasma, 144 * 512),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 512),
                 Materials.TungstenSteel.getMolten(144 * 1024),
                 Materials.Neutronium.getMolten(144 * 1024),
                 Materials.Osmiridium.getMolten(144 * 1024)
@@ -1507,7 +1040,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_IV)
             .duration(20 * 30)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // endregion
 
@@ -1533,7 +1066,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20 * 128)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region Mega Bricked Blast Furnace
@@ -1554,7 +1087,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_LV)
             .duration(20 * 114)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region Dual Input Buffer
@@ -1567,11 +1100,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1),
                 Materials.TungstenSteel.getPlates(4)
             )
-            .fluidInputs(new FluidStack(solderIndAlloy, 144 * 4))
+            .fluidInputs(new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 144 * 4))
             .itemOutputs(DualInputBuffer_IV.get(1))
             .eut(RECIPE_IV)
             .duration(20 * 15)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // LuV
         GTValues.RA
@@ -1582,11 +1115,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ZPM, 1),
                 WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.plate, 4)
             )
-            .fluidInputs(new FluidStack(solderIndAlloy, 144 * 8))
+            .fluidInputs(new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 144 * 8))
             .itemOutputs(DualInputBuffer_LuV.get(1))
             .eut(RECIPE_LuV)
             .duration(20 * 15)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // ZPM
         GTValues.RA
@@ -1598,11 +1131,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.Iridium, 4)
 
             )
-            .fluidInputs(new FluidStack(solderIndAlloy, 144 * 16))
+            .fluidInputs(new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 144 * 16))
             .itemOutputs(DualInputBuffer_ZPM.get(1))
             .eut(RECIPE_ZPM)
             .duration(20 * 15)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // UV
         GTValues.RA
@@ -1613,11 +1146,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.Osmium, 4)
             )
-            .fluidInputs(new FluidStack(solderIndAlloy, 144 * 32))
+            .fluidInputs(new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 144 * 32))
             .itemOutputs(DualInputBuffer_UV.get(1))
             .eut(RECIPE_UV)
             .duration(20 * 15)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         // endregion
 
@@ -1640,7 +1173,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_ZPM)
             .duration(20 * 60)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region BiosphereIII
@@ -1670,7 +1203,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.UV, 16)
             )
             .fluidInputs(
-                new FluidStack(solderPlasma, 144 * 64),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 64),
                 Materials.Naquadria.getMolten(144 * 64),
                 Materials.CosmicNeutronium.getMolten(144 * 64),
                 GGMaterial.metastableOganesson.getMolten(144 * 32)
@@ -1695,7 +1228,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(AdvancedMegaOilCracker.get(1))
             .eut(RECIPE_EV)
             .duration(20 * 3600)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region Indistinct Tentacle
@@ -1714,7 +1247,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
                 setStackSize(GTCMItemList.GravitationalLens.get(64), 128),
                 setStackSize(CircuitUXV.getIS(1),128),
-                setStackSize(eM_Ultimate_Containment_Advanced.get(64), 128)
+                setStackSize(CustomItemList.eM_Ultimate_Containment_Advanced.get(64), 128)
             )
             .fluidInputs(
                 MaterialsUEVplus.SpaceTime.getMolten(144 * 524288),
@@ -1730,7 +1263,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GGMaterial.metastableOganesson.getMolten(144 * 524288),
                 GGMaterial.shirabon.getMolten(144 * 524288),
                 Materials.UUMatter.getFluid(1000 * 2097152),
-                new FluidStack(solderPlasma, 144 * 2097152)
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 2097152)
             )
             .itemOutputs(GTCMItemList.IndistinctTentacle.get(1))
             .eut(TierEU.RECIPE_MAX)
@@ -1756,7 +1289,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(GTCMItemList.MegaEggGenerator.get(1))
             .eut(TierEU.RECIPE_LuV)
             .duration(120 * 20)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region ThermalEnergyDevourer
@@ -1779,7 +1312,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.UV, 16)
             )
             .fluidInputs(
-                new FluidStack(solderIndAlloy, 144 * 64),
+                new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 144 * 64),
                 Materials.NaquadahAlloy.getMolten(144 * 64),
                 Materials.UUMatter.getFluid(1000 * 64))
             .itemOutputs(ThermalEnergyDevourer.get(1))
@@ -1793,21 +1326,21 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(5),
-                UncertaintyX_Hatch.get(1),
-                hatch_CreativeMaintenance.get(1),
+                CustomItemList.UncertaintyX_Hatch.get(1),
+                CustomItemList.hatch_CreativeMaintenance.get(1),
                 ItemList.Tool_DataOrb.get(1)
             )
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128))
             .itemOutputs(DebugUncertaintyHatch.get(1))
             .eut(RECIPE_UEV)
             .duration(20 * 120)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         GTValues.RA
             .stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(6),
-                UncertaintyX_Hatch.get(1),
-                hatch_CreativeMaintenance.get(1),
+                CustomItemList.UncertaintyX_Hatch.get(1),
+                CustomItemList.hatch_CreativeMaintenance.get(1),
                 ItemList.Tool_DataOrb.get(1),
                 ItemList.Timepiece.get(1)
             )
@@ -1815,14 +1348,14 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(DebugUncertaintyHatch.get(16))
             .eut(RECIPE_UXV)
             .duration(20 * 120)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region LaserSmartNode
         GTValues.RA
             .stdBuilder()
             .itemInputs(
-                LASERpipe.get(64),
+                CustomItemList.LASERpipe.get(64),
                 Laser_Lens_Special.get(1),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 1),
                 ItemList.Hatch_Energy_UHV.get(1)
@@ -1831,7 +1364,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(LaserSmartNode.get(1))
             .eut(RECIPE_UHV)
             .duration(20 * 5)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region VacuumFilterExtractor
@@ -1858,7 +1391,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.UV, 16)
             )
             .fluidInputs(
-                new FluidStack(solderPlasma, 144 * 128),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 128),
                 Materials.Neutronium.getMolten(144 * 64),
                 Materials.BlackPlutonium.getMolten(144 * 64))
             .itemOutputs(VacuumFilterExtractor.get(1))
@@ -1880,7 +1413,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.get(1))
             .eut(RECIPE_LV)
             .duration(20 * 114)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
         addCraftingRecipe(
             GTCMItemList.EyeOfWood.get(1),
@@ -1908,12 +1441,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorZPM, 8),
                 GGMaterial.adamantiumAlloy.get(OrePrefixes.plateDense, 16)
             )
-            .fluidInputs(new FluidStack(solderIndAlloy, 144 * 64))
+            .fluidInputs(new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 144 * 64))
             .itemOutputs(MegaMacerator.get(1))
             .noOptimize()
             .eut(RECIPE_ZPM)
             .duration(20 * 300)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region Hephaestus' Atelier
@@ -1932,7 +1465,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemList.Casing_Coil_Eternal.get(1),
                 },
 
-                eM_Hollow.get(64),
+                CustomItemList.eM_Hollow.get(64),
                 ItemList.Field_Generator_UHV.get(16),
                 ItemList.Electric_Pump_UHV.get(64),
                 ItemList.Conveyor_Module_UHV.get(64),
@@ -1947,7 +1480,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.UV, 16)
             )
             .fluidInputs(
-                new FluidStack(solderPlasma, 144 * 128),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 128),
                 Materials.CosmicNeutronium.getMolten(144 * 64),
                 Materials.UUMatter.getFluid(1000 * 64),
                 Materials.SuperCoolant.getFluid(1000 * 64)
@@ -1955,18 +1488,18 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(GTCMItemList.HephaestusAtelier.get(1))
             .eut(RECIPE_UEV)
             .duration(20 * 600)
-            .addTo(assemblyLine);
+            .addTo(AssemblyLine);
 
         // endregion
 
         // region Legend Laser Hatch
-        IItemContainer LegendTarget = tectech.thing.CustomItemList.eM_energyTunnel9001;
-        IItemContainer LegendSource = tectech.thing.CustomItemList.eM_dynamoTunnel9001;
-        IItemContainer UXVTarget104 = tectech.thing.CustomItemList.eM_energyTunnel7_UXV;
-        IItemContainer UXVSource104 = tectech.thing.CustomItemList.eM_dynamoTunnel7_UXV;
-        IItemContainer HomoStructureTime = tectech.thing.CustomItemList.EOH_Reinforced_Temporal_Casing;
-        IItemContainer HomoStructureSpace = tectech.thing.CustomItemList.EOH_Reinforced_Spatial_Casing;
-        IItemContainer HomoStructureMain = tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
+        IItemContainer LegendTarget = CustomItemList.eM_energyTunnel9001;
+        IItemContainer LegendSource = CustomItemList.eM_dynamoTunnel9001;
+        IItemContainer UXVTarget104 = CustomItemList.eM_energyTunnel7_UXV;
+        IItemContainer UXVSource104 = CustomItemList.eM_dynamoTunnel7_UXV;
+        IItemContainer HomoStructureTime = CustomItemList.EOH_Reinforced_Temporal_Casing;
+        IItemContainer HomoStructureSpace = CustomItemList.EOH_Reinforced_Spatial_Casing;
+        IItemContainer HomoStructureMain = CustomItemList.EOH_Infinite_Energy_Casing;
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, UXVTarget104.get(1))
@@ -2049,9 +1582,9 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 LegendTarget.get(1),
                 getModItem(GoodGenerator.ID, "compactFusionCoil", 1, 4),
                 getModItem(GalaxySpace.ID, "dysonswarmparts", 1, 4),
-                tectech.thing.CustomItemList.Machine_Multi_Transformer.get(1),
+                CustomItemList.Machine_Multi_Transformer.get(1),
 
-                tectech.thing.CustomItemList.eM_Power.get(64),
+                CustomItemList.eM_Power.get(64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 64),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 32),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 16),
@@ -2060,7 +1593,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 ItemList.EnergisedTesseract.get(1)
             },
             new FluidStack[] {
-                new FluidStack(solderPlasma, 1_296 * 64 * 4),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 1_296 * 64 * 4),
                 MaterialsUEVplus.ExcitedDTSC.getFluid(500L * 64)
             },
             GTCMItemList.LegendaryWirelessEnergyHatch.get(1),
@@ -2089,7 +1622,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 ItemList.EnergisedTesseract.get(64)
             },
             new FluidStack[] {
-                new FluidStack(solderPlasma, 1_296 * 256 * 4),
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 1_296 * 256 * 4),
                 MaterialsUEVplus.ExcitedDTSC.getFluid(500L * 256)
             },
             GTCMItemList.HarmoniousWirelessEnergyHatch.get(1),
@@ -2142,13 +1675,13 @@ public class GTCMMachineRecipePool implements IRecipePool {
         {
             GTValues.RA
                 .stdBuilder()
-                .metadata(RESEARCH_ITEM, Machine_Multi_Computer.get(1))
+                .metadata(RESEARCH_ITEM, CustomItemList.Machine_Multi_Computer.get(1))
                 .metadata(RESEARCH_TIME, 114514 * 20)
                 .itemInputs(
-                    Machine_Multi_Computer.get(64),
-                    Machine_Multi_Computer.get(64),
-                    Machine_Multi_Computer.get(64),
-                    Machine_Multi_Computer.get(64),
+                    CustomItemList.Machine_Multi_Computer.get(64),
+                    CustomItemList.Machine_Multi_Computer.get(64),
+                    CustomItemList.Machine_Multi_Computer.get(64),
+                    CustomItemList.Machine_Multi_Computer.get(64),
                     HiC_T5.get(64),
                     HiC_T5.get(64),
                     ItemList.Circuit_OpticalMainframe.get(64),
@@ -2171,14 +1704,14 @@ public class GTCMMachineRecipePool implements IRecipePool {
             GTValues.RA
                 .stdBuilder()
                 .itemInputs(
-                    rack_Hatch.get(64),
+                    CustomItemList.rack_Hatch.get(64),
                     ItemList.Field_Generator_UEV.get(64),
                     new ItemStack(TTCasingsContainer.sBlockCasingsTT, 64, 1),
                     HiC_T5.get(64))
                 .itemOutputs(RealRackHatch.get(1))
                 .eut(RECIPE_UEV * 2)
                 .duration(20 * 500)
-                .addTo(assembler);
+                .addTo(assemblerRecipes);
 
             final ItemStack wirelessCard = getModItem(AppliedEnergistics2.ID, "item.ItemMultiMaterial", 1, 42);
             final ItemStack quantumCard = getModItem(AE2WCT.ID, "infinityBoosterCard", 1);
@@ -2197,7 +1730,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(copyAmount(1, wirelessCard))
                 .eut(RECIPE_LV)
                 .duration(100)
-                .addTo(assembler);
+                .addTo(assemblerRecipes);
 
             // Infinity Booster Card
             GTValues.RA
@@ -2212,15 +1745,15 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(copyAmount(1, quantumCard))
                 .eut(RECIPE_UHV)
                 .duration(20)
-                .addTo(assembler);
+                .addTo(assemblerRecipes);
 
             // Wireless Data Input Hatch
             GTValues.RA
                 .stdBuilder()
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(10),
-                    dataIn_Hatch.get(1),
-                    Machine_Multi_Switch.get(1),
+                    CustomItemList.dataIn_Hatch.get(1),
+                    CustomItemList.Machine_Multi_Switch.get(1),
                     copyAmount(16, quantumCard),
                     ItemList.Sensor_UIV.get(16),
                     ItemList.Tesseract.get(64)
@@ -2229,15 +1762,15 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(WirelessDataInputHatch.get(1))
                 .eut(RECIPE_UMV)
                 .duration(800)
-                .addTo(assembler);
+                .addTo(assemblerRecipes);
 
             // Wireless Data Output Hatch
             GTValues.RA
                 .stdBuilder()
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(10),
-                    dataOut_Hatch.get(1),
-                    Machine_Multi_Switch.get(1),
+                    CustomItemList.dataOut_Hatch.get(1),
+                    CustomItemList.Machine_Multi_Switch.get(1),
                     copyAmount(16, quantumCard),
                     ItemList.Emitter_UIV.get(16),
                     ItemList.EnergisedTesseract.get(64)
@@ -2246,7 +1779,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(WirelessDataOutputHatch.get(1))
                 .eut(RECIPE_UMV)
                 .duration(800)
-                .addTo(assembler);
+                .addTo(assemblerRecipes);
 
             // Wireless computation update card
             GTValues.RA
@@ -2264,10 +1797,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemList.Field_Generator_UMV.get(64),
                     ItemList.Wireless_Dynamo_Energy_UMV.get(8),
 
-                    Machine_Multi_Switch.get(64),
-                    Machine_Multi_Switch.get(64),
-                    Machine_Multi_Switch.get(64),
-                    Machine_Multi_Switch.get(64)
+                    CustomItemList.Machine_Multi_Switch.get(64),
+                    CustomItemList.Machine_Multi_Switch.get(64),
+                    CustomItemList.Machine_Multi_Switch.get(64),
+                    CustomItemList.Machine_Multi_Switch.get(64)
                 )
                 .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 200), Materials.UUMatter.getFluid(20480000), Materials.SuperconductorUIVBase.getMolten(5000000))
                 .itemOutputs(WirelessUpdateItem.get(1))
@@ -2294,11 +1827,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
                     GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUV, 64)
                 )
-                .fluidInputs(new FluidStack(solderPlasma, 144 * 64))
+                .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 64))
                 .itemOutputs(GTCMItemList.CoreDeviceOfHumanPowerGenerationFacility.get(1))
                 .eut(RECIPE_UV)
                 .duration(20 * 900)
-                .addTo(assembler);
+                .addTo(assemblerRecipes);
         }
         // endregion
 
@@ -2321,11 +1854,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 64),
                     HighEnergyFlowCircuit.get(64),
-                    eM_Power.get(64),
+                    CustomItemList.eM_Power.get(64),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64)
                 )
                 .fluidInputs(
-                    new FluidStack(solderPlasma, 144 * 1024),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 1024),
                     Materials.Quantium.getMolten(144 * 1024),
                     Materials.UUMatter.getFluid(1000 * 2048),
                     GGMaterial.metastableOganesson.getMolten(144 * 512)
@@ -2333,7 +1866,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(GTCMItemList.StarcoreMiner.get(1))
                 .eut(RECIPE_UIV)
                 .duration(20 * 7200)
-                .addTo(assemblyLine);
+                .addTo(AssemblyLine);
 
         }
         // endregion
@@ -2355,19 +1888,19 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     ItemList.Robot_Arm_UHV.get(64),
                     ItemList.Robot_Arm_UHV.get(64),
 
-                    eM_Power.get(64),
+                    CustomItemList.eM_Power.get(64),
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 16),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 16)
                 )
                 .fluidInputs(
-                    new FluidStack(solderPlasma, 144 * 64 * 16),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 64 * 16),
                     Materials.UUMatter.getFluid(1000 * 128),
                     Materials.SuperCoolant.getFluid(1000 * 128 * 6)
                 )
                 .itemOutputs(GTCMItemList.Disassembler.get(1))
                 .eut(RECIPE_UEV)
                 .duration(20 * 3600)
-                .addTo(assemblyLine);
+                .addTo(AssemblyLine);
         }
         // endregion
 
@@ -2407,7 +1940,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(BallLightning.get(1))
                 .eut(RECIPE_UEV)
                 .duration(20 * 1800)
-                .addTo(assemblyLine);
+                .addTo(AssemblyLine);
 
             //Casing
             GTValues.RA
@@ -2416,7 +1949,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .metadata(RESEARCH_TIME, 2 * HOURS)
                 .itemInputs(
                     Casing_Industrial_Arc_Furnace.get(8),
-                    eM_Power.get(8),
+                    CustomItemList.eM_Power.get(8),
                     ItemRefer.Advanced_Radiation_Protection_Plate.get(64),
                     new ItemStack(GSItems.DysonSwarmItems, 64, 3),
 
@@ -2430,14 +1963,14 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFineWire(64)
                 )
                 .fluidInputs(
-                    new FluidStack(solderPlasma, 144 * 40),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack( 144 * 40),
                     Materials.UUMatter.getFluid(1000 * 8),
                     MaterialsAlloy.ABYSSAL.getFluidStack(144 * 28)
                 )
                 .itemOutputs(HighPowerRadiationProofCasing.get(4))
                 .eut(RECIPE_UHV)
                 .duration(20 * 120)
-                .addTo(assemblyLine);
+                .addTo(AssemblyLine);
 
             //Chip
             GTValues.RA
@@ -2551,7 +2084,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(AdvancedHighPowerCoilBlock.get(1))
                 .eut(RECIPE_UIV)
                 .duration(20 * 240)
-                .addTo(assemblyLine);
+                .addTo(AssemblyLine);
         }
         // endregion
 
@@ -2574,7 +2107,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(GTCMItemList.BeeEngineer.get(1))
             .eut(RECIPE_ZPM)
             .duration(20 * 300)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region Space Apiary Module
@@ -2728,7 +2261,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(GTCMItemList.BeeEngineer.get(1))
             .eut(RECIPE_ZPM)
             .duration(20 * 300)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
         // endregion
 
         // region Space Apiary Module
@@ -2884,7 +2417,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(GTCMItemList.LargeCanner.get(1))
                 .eut(RECIPE_UV)
                 .duration(20 * 300)
-                .addTo(assembler);
+                .addTo(assemblerRecipes);
         }
         {
             ItemStack extremeCraftTable = new ItemStack(BlockExtremeAutoCrafter.instance);
@@ -2931,7 +2464,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(GTCMItemList.LightningSpire.get(1))
                 .eut(RECIPE_IV)
                 .duration(20 * 120)
-                .addTo(assembler);
+                .addTo(assemblerRecipes);
         }
 
         //region Incompact Cyclotron
@@ -2963,7 +2496,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(IncompactCyclotron.get(1))
                 .eut(RECIPE_UEV)
                 .duration(20 * 900)
-                .addTo(assemblyLine);
+                .addTo(AssemblyLine);
 
                 GTValues.RA
                     .stdBuilder()
@@ -2987,7 +2520,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     .itemOutputs(DenseCyclotronOuterCasing.get(1))
                     .eut(RECIPE_UHV)
                     .duration(20 * 30)
-                    .addTo(assemblyLine);
+                    .addTo(AssemblyLine);
 
             GTValues.RA
                 .stdBuilder()
@@ -3005,14 +2538,14 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 )
                 .fluidInputs(
                     Materials.UUMatter.getFluid(1000 * 64),
-                    new FluidStack(celestialTungsten, 1000 * 16),
+                    MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(1000 * 16),
                     Materials.Longasssuperconductornameforuhvwire.getMolten(144 * 8),
                     GGMaterial.enrichedNaquadahAlloy.getMolten(144 * 2)
                 )
                 .itemOutputs(CompactCyclotronCoil.get(1))
                 .eut(RECIPE_UHV)
                 .duration(20 * 60)
-                .addTo(assemblyLine);
+                .addTo(AssemblyLine);
         }
 
         // Casing Stone Brick
@@ -3028,7 +2561,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
             .eut(RECIPE_EV)
             .duration(20 * 12)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
             // Casing Stone Brick Advanced
         GTValues.RA
@@ -3044,7 +2577,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .itemOutputs(GTCMItemList.ReinforcedBedrockCasing.get(1))
             .eut(RECIPE_ZPM)
             .duration(20 * 30)
-            .addTo(assembler);
+            .addTo(assemblerRecipes);
 
             // Casing Farm
         TTRecipeAdder.addResearchableAssemblylineRecipe(
@@ -3143,7 +2676,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(GTCMItemList.MegaStoneBreaker.get(1))
                 .eut(RECIPE_UV)
                 .duration(20 * 120)
-                .addTo(assemblyLine);
+                .addTo(AssemblyLine);
         }
 
         if (Config.EnableModularizedMachineSystem) {
@@ -3154,7 +2687,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     .metadata(RESEARCH_ITEM, MiracleDoor.get(1))
                     .metadata(RESEARCH_TIME, 24 * HOURS)
                     .itemInputs(
-                        eM_Teleportation.get(64),
+                        CustomItemList.eM_Teleportation.get(64),
                         ItemList.Machine_Multi_PlasmaForge.get(64),
                         ItemRefer.Compact_Fusion_Coil_T4.get(64),
                         GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64),
@@ -3183,7 +2716,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     .itemOutputs(GTCMItemList.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.get(1))
                     .eut(RECIPE_UXV)
                     .duration(20 * 3600 * 24)
-                    .addTo(assemblyLine);
+                    .addTo(AssemblyLine);
             }
 
             if (Config.EnableLargeNeutronOscillator) {
@@ -3222,7 +2755,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                         AnnihilationConstrainer.get(512),
                         // TODO Quantum Circuit
                         copyAmount(1024, CircuitUXV.getIS(1)),
-                        copyAmount(1024, eM_Ultimate_Containment_Advanced.get(1))
+                        copyAmount(1024, CustomItemList.eM_Ultimate_Containment_Advanced.get(1))
                     )
                     .fluidInputs(
                         Materials.UUMatter.getFluid(2_000_000_000),
@@ -3258,7 +2791,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     Laser_Lens_Special.get(64),
 
                     HighEnergyFlowCircuit.get(64),
-                    Machine_Multi_Transformer.get(64),
+                    CustomItemList.Machine_Multi_Transformer.get(64),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 64)
                 )
@@ -3271,7 +2804,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemOutputs(GTCMItemList.MassFabricatorGenesis.get(1))
                 .eut(RECIPE_UMV)
                 .duration(20 * 3600)
-                .addTo(assemblyLine);
+                .addTo(AssemblyLine);
 
         }
 

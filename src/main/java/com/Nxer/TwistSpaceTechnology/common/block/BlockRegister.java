@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.NuclearReac
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.PhotonControllerUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.TST_ID;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStar;
@@ -29,6 +30,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.Textures.BlockIcons.CustomIcon;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.common.blocks.BlockMetal;
 
@@ -420,7 +422,9 @@ public class BlockRegister {
             "tst.blockmetal01",
             new Materials[] { MaterialsTST.NeutroniumAlloy, MaterialsTST.AxonisAlloy, MaterialsTST.Axonium },
             OrePrefixes.block,
-            new IIconContainer[] {});
+            new IIconContainer[] { new CustomIcon(TST_ID + ":MetaBlocks/BlockNeutroniumAlloy"),
+                new CustomIcon(TST_ID + ":MetaBlocks/BlockAxonisAlloy"),
+                new CustomIcon(TST_ID + ":MetaBlocks/BlockAxonium") });
         // end region
 
         // region PhotonControllerUpgrade

@@ -13,9 +13,7 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GTOreDictUnificator;
 
 public class NanoForgeRecipePool implements IRecipePool {
 
@@ -36,12 +34,12 @@ public class NanoForgeRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTCMItemList.AnnihilationConstrainer.get(0),
-                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Dilithium, 0, false),
+                GTCMItemList.EnergyFluctuationSelfHarmonizer.get(0),
+                GTCMItemList.CoreElement.get(0),
                 MaterialsTST.Axonium.getBlocks(8),
-                GTCMItemList.InformationHorizonInterventionShell.get(32),
+                GTCMItemList.AnnihilationConstrainer.get(1),
                 GTCMItemList.PerfectEngravedEnergyChip.get(4),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 2))
+                GTCMItemList.InformationHorizonInterventionShell.get(16))
             .fluidInputs(
                 Materials.UUMatter.getFluid(2000000),
                 MaterialsUEVplus.PhononMedium.getFluid(16000),
