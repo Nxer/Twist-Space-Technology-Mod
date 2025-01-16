@@ -26,7 +26,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import gregtech.api.util.GTModHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -103,6 +102,7 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.maps.FuelBackend;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTStructureUtility;
@@ -1468,30 +1468,31 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                             break;
                         }
                     }
-                } else if("Steam_Turbine".equals(machineType)) {
-                result = CheckRecipeResultRegistry.NO_RECIPE;
-                for (FluidStack storedFluid : getStoredFluids()) {
-                    if(GTModHandler.isAnySteam(storedFluid)) {
-                        long liquidFuelValue = 3;
-                        consumeFuel(machineType, storedFluid, liquidFuelValue);
-                        result = CheckRecipeResultRegistry.SUCCESSFUL;
-                        break;
+                } else if ("Steam_Turbine".equals(machineType)) {
+                    result = CheckRecipeResultRegistry.NO_RECIPE;
+                    for (FluidStack storedFluid : getStoredFluids()) {
+                        if (GTModHandler.isAnySteam(storedFluid)) {
+                            long liquidFuelValue = 3;
+                            consumeFuel(machineType, storedFluid, liquidFuelValue);
+                            result = CheckRecipeResultRegistry.SUCCESSFUL;
+                            break;
+                        }
                     }
-                }
-            }else if ("Naquadah".equals(machineType)) {
+                } else if ("Naquadah".equals(machineType)) {
                     result = CheckRecipeResultRegistry.NO_RECIPE;
                     List<ItemStack> outputItems = new ArrayList<>();
                     for (ItemStack storedInput : getStoredInputs()) {
                         GTRecipe recipe = getNaquadahFuelRecipe(storedInput);
                         if (recipe != null) {
                             long fuelValue = recipe.mSpecialValue * 1000;
-                            for(ItemStack out: recipe.mOutputs) {
-                                if(out != null) {
+                            for (ItemStack out : recipe.mOutputs) {
+                                if (out != null) {
                                     ItemStack stack = ItemStack.copyItemStack(out);
-                                    //暂时不知道怎么处理，捏妈的
-                                    //如果是Long.MAX个2333
-                                    //谁知道什么时候会有人丢那么多个螺栓呢
-                                    stack.stackSize = (int)Math.min(Math.min(storedInput.stackSize, actualParallelism), 2147483647L);
+                                    // 暂时不知道怎么处理，捏妈的
+                                    // 如果是Long.MAX个2333
+                                    // 谁知道什么时候会有人丢那么多个螺栓呢
+                                    stack.stackSize = (int) Math
+                                        .min(Math.min(storedInput.stackSize, actualParallelism), 2147483647L);
                                     outputItems.add(stack);
                                 }
                             }
@@ -1501,7 +1502,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                             long energyInFuel = (long) (storedInput.stackSize * fuelValue * effiency);
                             long fuelConsumption = (long) (expectedGeneration / fuelValue / effiency);
                             output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
-                            mMaxProgresstime = output.divide(BigInteger.valueOf(machineEUt)).intValue();
+                            mMaxProgresstime = output.divide(BigInteger.valueOf(machineEUt))
+                                .intValue();
                             storedInput.stackSize = (int) Math.max(0, storedInput.stackSize - fuelConsumption);
                             result = CheckRecipeResultRegistry.SUCCESSFUL;
                             break;
@@ -1536,11 +1538,15 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
         super.drawTexts(screenElements, inventorySlot);
         screenElements
             .widget(
-                new TextWidget(String.format("Generating: %sEU/t", output.divide(BigInteger.valueOf(mMaxProgresstime > 0 ? mMaxProgresstime : 1))))
-                    .setDefaultColor(COLOR_TEXT_WHITE.get())
-                    .setEnabled(
-                        widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && getBaseMetaTileEntity().isActive()
-                            && MODE_GENERATOR.equals(mode)))
+                new TextWidget(
+                    String.format(
+                        "Generating: %sEU/t",
+                        output.divide(BigInteger.valueOf(mMaxProgresstime > 0 ? mMaxProgresstime : 1))))
+                            .setDefaultColor(COLOR_TEXT_WHITE.get())
+                            .setEnabled(
+                                widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0
+                                    && getBaseMetaTileEntity().isActive()
+                                    && MODE_GENERATOR.equals(mode)))
             .widget(new FakeSyncWidget.StringSyncer(() -> mode, (mode) -> TST_BigBroArray.this.mode = mode))
             .widget(new FakeSyncWidget.StringSyncer(() -> output.toString(), (l) -> output = new BigInteger(l)))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> mMaxProgresstime, (i) -> mMaxProgresstime = i));
