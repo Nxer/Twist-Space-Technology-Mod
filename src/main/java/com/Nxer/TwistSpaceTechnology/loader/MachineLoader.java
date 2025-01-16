@@ -71,10 +71,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_W
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_output;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
@@ -774,8 +774,7 @@ public class MachineLoader {
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
 
         //
-        ManaHatch = new GT_MetaTileEntity_Hatch_Mana(18979, "NameManaHatch", TextLocalization.NameManaHatch, 9)
-            .getStackForm(1);
+        ManaHatch = new TST_ManaHatch(18979, "NameManaHatch", TextLocalization.NameManaHatch, 9).getStackForm(1);
         GTCMItemList.ManaHatch.set(ManaHatch);
 
         // region Dual Input Buffer
