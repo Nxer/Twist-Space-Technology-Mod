@@ -67,6 +67,7 @@ public final class ModBlocksHandler {
     // region Chisel
     public static Pair<Block, Integer> BlockArcane_1;
     public static Pair<Block, Integer> BlockArcane_4;
+    public static Pair<Block, Integer> HorizontalDirt;
     // public static Pair<Block, Integer> BlockArcane_6;
 
     // endregion
@@ -164,10 +165,12 @@ public final class ModBlocksHandler {
         if (Mods.Chisel.isModLoaded()) {
             BlockArcane_1 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 1);
             BlockArcane_4 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 4);
+            HorizontalDirt = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":dirt"), 9);
             // BlockArcane_6 = Pair.of(Block.getBlockFromName(Mods.Chisel.ID + ":arcane"), 6);
         } else {
             BlockArcane_1 = Pair.of(Blocks.quartz_block, 0);
             BlockArcane_4 = Pair.of(Blocks.quartz_block, 1);
+            HorizontalDirt = Pair.of(Blocks.dirt, 0);
             // BlockArcane_6 = Pair.of(Blocks.quartz_block, 2);
         }
 

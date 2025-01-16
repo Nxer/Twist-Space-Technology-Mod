@@ -12,8 +12,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.IntFunction;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
@@ -220,6 +224,24 @@ public final class Utils {
         }
         itemStack.stackSize = amount;
         return itemStack;
+    }
+
+    /**
+     * Used to create a size of 1 itemStack, a very light method to reduce the "new" keyword and obfuscated fields are
+     * displayed。
+     */
+    @NotNull
+    public static ItemStack createItemStack(Item item, int meta) {
+        return new ItemStack(item, 1, meta);
+    }
+
+    /**
+     * Used to create a size of 1 itemStack, a very light method to reduce the "new" keyword and obfuscated fields are
+     * displayed。
+     */
+    @NotNull
+    public static ItemStack createItemStack(Block block, int meta) {
+        return new ItemStack(block, 1, meta);
     }
     // endregion
 

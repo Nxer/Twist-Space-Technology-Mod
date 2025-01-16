@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_1;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_4;
-import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockBrickTranslucent;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockTranslucent;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockTravelAnchor;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.CarvedEminenceStone;
@@ -15,8 +14,10 @@ import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateT
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileExt;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofBlockStrict;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofBlockStrictExt;
+import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.createItemStack;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -330,6 +331,11 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     @Override
     public IStructureDefinition<TST_IndustrialAlchemyTower> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
+            var channel = "chisel";
+            var list = ImmutableList.of(
+                createItemStack(blockCosmeticSolid, 6),
+                createItemStack(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
+                createItemStack(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
             STRUCTURE_DEFINITION = StructureDefinitionBuilder(TST_IndustrialAlchemyTower.class)
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addElement(
@@ -370,23 +376,16 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                         ofAccurateTile(TileArcaneHole.class, BasicBlocks.BlockArcaneHole, 0)))
                 .addElement('E', ofBlockStrict(blockSlabStone, 0))
                 .addElement('F', ofBlock(blockCosmeticSolid, 0))
-                .addElement('G', ofBlock(blockCosmeticSolid, 6))
+                .addElement('G', ofVariableBlock(channel, blockCosmeticSolid, 6, list))
                 .addElement('H', ofBlock(blockCosmeticSolid, 7))
                 .addElement('I', ofBlockStrictExt(blockSlabStone, 8, blockSlabStone, 0))
                 .addElement('J', ofBlock(blockMetalDevice, 3))
                 .addElement('K', ofBlock(blockMetalDevice, 9))
                 .addElement('L', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
-                .addElement('M', ofBlock(BlockBrickTranslucent.getLeft(), BlockBrickTranslucent.getRight()))
-                .addElement(
-                    'N',
-                    ofChain(
-                        ofBlock(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
-                        ofBlockStrictExt(BlockArcane_1.getLeft(), BlockArcane_1.getRight(), blockCosmeticSolid, 6)))
-                .addElement(
-                    'O',
-                    ofChain(
-                        ofBlock(BlockArcane_4.getLeft(), BlockArcane_4.getRight()),
-                        ofBlockStrictExt(BlockArcane_4.getLeft(), BlockArcane_4.getRight(), blockCosmeticSolid, 6)))
+                // .addElement('M', ofBlock(BlockBrickTranslucent.getLeft(), BlockBrickTranslucent.getRight()))
+                .addElement('M', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
+                .addElement('N', ofVariableBlock(channel, BlockArcane_1.getLeft(), BlockArcane_1.getRight(), list))
+                .addElement('O', ofVariableBlock(channel, BlockArcane_4.getLeft(), BlockArcane_4.getRight(), list))
                 .addElement('P', ofBlock(EldritchArk.getLeft(), EldritchArk.getRight()))
                 .addElement('Q', ofBlock(CarvedEminenceStone.getLeft(), CarvedEminenceStone.getRight()))
                 .addElement('R', ofAccurateTile(TileCrucible.class, blockMetalDevice, 0))
@@ -536,6 +535,10 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            // #tr Tooltip_Channel_Helper
+            // # You can use the {\BLUE} channel:{\YELLOW}chisel{\GRAY} to automatically convert chisel blocks when building, and you can see nei to preview the available blocks
+            // #zh_CN 可以使用{\BLUE}信道:{\YELLOW}chisel{\GRAY}进行搭建时自动转换凿子方块，可以查看nei进行预览可用方块
+            .addInfo(TextEnums.tr("Tooltip_Channel_Helper"))
             // #tr Tooltip_IndustrialAlchemyTower_15
             // # Infusion Provider
             // #zh_CN 注魔供应器
