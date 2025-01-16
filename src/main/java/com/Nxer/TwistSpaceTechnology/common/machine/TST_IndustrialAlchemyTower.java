@@ -534,11 +534,11 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_14"))
             .addSeparator()
             .addInfo(StructureTooComplex)
+            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             // #tr Tooltip_Channel_Helper
             // # You can use the {\BLUE} channel:{\YELLOW}chisel{\GRAY} to automatically convert chisel blocks when building, and you can see nei to preview the available blocks
             // #zh_CN 可以使用{\BLUE}信道:{\YELLOW}chisel{\GRAY}进行搭建时自动转换凿子方块，可以查看nei进行预览可用方块
             .addInfo(TextEnums.tr("Tooltip_Channel_Helper"))
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             // #tr Tooltip_IndustrialAlchemyTower_15
             // # Infusion Provider
             // #zh_CN 注魔供应器
