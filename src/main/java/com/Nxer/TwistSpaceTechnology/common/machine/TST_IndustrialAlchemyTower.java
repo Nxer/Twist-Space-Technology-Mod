@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_1;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_4;
-import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockBrickTranslucent;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockTranslucent;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockTravelAnchor;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.CarvedEminenceStone;
@@ -383,7 +382,8 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                 .addElement('J', ofBlock(blockMetalDevice, 3))
                 .addElement('K', ofBlock(blockMetalDevice, 9))
                 .addElement('L', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
-                .addElement('M', ofBlock(BlockBrickTranslucent.getLeft(), BlockBrickTranslucent.getRight()))
+                // .addElement('M', ofBlock(BlockBrickTranslucent.getLeft(), BlockBrickTranslucent.getRight()))
+                .addElement('M', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
                 .addElement('N', ofVariableBlock(channel, BlockArcane_1.getLeft(), BlockArcane_1.getRight(), list))
                 .addElement('O', ofVariableBlock(channel, BlockArcane_4.getLeft(), BlockArcane_4.getRight(), list))
                 .addElement('P', ofBlock(EldritchArk.getLeft(), EldritchArk.getRight()))
