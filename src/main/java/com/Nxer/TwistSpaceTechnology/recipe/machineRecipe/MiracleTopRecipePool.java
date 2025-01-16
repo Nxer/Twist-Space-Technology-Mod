@@ -1575,7 +1575,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_LV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_LV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_LV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Microprocessor.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.LV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.RedstoneAlloy, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1599,7 +1599,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_MV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_MV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_MV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Processor.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.MV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorMV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1623,7 +1623,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_HV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_HV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_HV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Nanoprocessor.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.HV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorHV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1647,7 +1647,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_EV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_EV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_EV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Quantumprocessor.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.EV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorEV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1671,7 +1671,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_IV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_IV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_IV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Crystalprocessor.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.IV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1695,7 +1695,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_LuV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_LuV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_LuV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Wetwarecomputer.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.LuV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1719,7 +1719,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_ZPM.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_ZPM.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_ZPM.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Bioprocessor.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.ZPM,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1743,7 +1743,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_UV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_UV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_UV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_OpticalProcessor.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.UV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1767,7 +1767,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_UHV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_UHV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_UHV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_OpticalAssembly.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.UHV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1791,7 +1791,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_UEV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_UEV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_UEV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_CosmicProcessor.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.UEV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1815,7 +1815,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_UIV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_UIV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_UIV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_CosmicAssembly.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.UIV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1839,7 +1839,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_UMV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_UMV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_UMV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_CosmicComputer.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.UMV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
@@ -1863,7 +1863,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_UXV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_UXV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_UXV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_CosmicMainframe.get(1),ITEMS_FLASK_COUNT),
+                GTOreDictUnificator.get(OrePrefixes.circuit,Materials.UXV,ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Infinity, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
