@@ -468,6 +468,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        // spotless:off
         // #tr VoidMiner
         // # Void Miner
         // #zh_CN 虚空采矿场
@@ -526,6 +527,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
             .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
+        // spotless:on
     }
 
     @Override
