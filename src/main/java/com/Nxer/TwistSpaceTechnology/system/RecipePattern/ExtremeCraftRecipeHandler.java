@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.system.RecipePattern;
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +50,7 @@ public class ExtremeCraftRecipeHandler {
     }
 
     protected ItemStack[] sortOutInputs(ItemStack... in) {
-        Map<TST_ItemID, ItemStack> inputsMap = new HashMap<>();
+        Map<TST_ItemID, ItemStack> inputsMap = new LinkedHashMap<>();
         for (ItemStack is : in) {
             if (is == null || is.stackSize < 1) continue;
             TST_ItemID itemID = TST_ItemID.create(is);
@@ -61,7 +61,7 @@ public class ExtremeCraftRecipeHandler {
     }
 
     protected ItemStack[] sortOutInputs(Object... in) {
-        Map<Object, Integer> inputsMap = new HashMap<>();
+        Map<Object, Integer> inputsMap = new LinkedHashMap<>();
         for (Object o : in) {
             if (o == null) continue;
             inputsMap.merge(o, 1, Integer::sum);
