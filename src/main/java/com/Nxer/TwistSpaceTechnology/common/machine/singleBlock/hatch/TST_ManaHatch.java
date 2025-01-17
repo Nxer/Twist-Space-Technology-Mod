@@ -91,7 +91,7 @@ public class TST_ManaHatch extends MTEHatchInput {
 
     private static FluidStack createFluidStack(int amount) {
         var c = fluidMana.copy();
-        fluidMana.amount = amount;
+        c.amount = amount;
         return c;
     }
 
