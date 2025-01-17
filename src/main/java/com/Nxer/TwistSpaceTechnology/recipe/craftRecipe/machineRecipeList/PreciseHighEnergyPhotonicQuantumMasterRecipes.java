@@ -61,10 +61,12 @@ import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
 import tectech.thing.CustomItemList;
 
-public class PreciseHighEnergyPhotonicQuantumMasterRecipeList implements IRecipePool {
+public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePool {
 
     @Override
     public void loadRecipes() {
+
+        // Controller
         GTValues.RA.stdBuilder()
             .itemInputs(
                 CustomItemList.eM_Power.get(6),

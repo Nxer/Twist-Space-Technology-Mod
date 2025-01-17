@@ -22,6 +22,7 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialsElements;
@@ -29,7 +30,17 @@ import gtPlusPlus.core.material.MaterialsElements;
 public class MaterialFix {
 
     // spotless:off
-    public static void loadRecipes() {
+    public static void load() {
+
+        // Holmium Garnet
+        GTValues.RA.stdBuilder()
+            .itemInputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 1))
+            .fluidOutputs(MaterialPool.HolmiumGarnet.getMolten(144))
+            .noOptimize()
+            .eut(96)
+            .duration(72)
+            .addTo(RecipeMaps.fluidExtractionRecipes);
+
         // Neutronium Alloy
 
         addBlastRecipe(MaterialsTST.NeutroniumAlloy, (int) RECIPE_UIV, 54 * 20, 12500, true);

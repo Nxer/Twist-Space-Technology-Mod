@@ -132,7 +132,7 @@ public class TwistSpaceTechnology {
 
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
-        MaterialFix.loadRecipes();
+        MaterialFix.load();
         RecipeLoader.loadRecipes();// Load Recipes
         ExtremeCraftRecipe.initECRecipe();
 
