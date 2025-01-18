@@ -446,7 +446,7 @@ public class Config {
     // endregion
 
     // region Machine Base Class
-    public static int DefaultCycleNum_WirelessEnergyMultiMachineBase = 100_000;
+    public static int DefaultCycleNum_WirelessEnergyMultiMachineBase = 100;
     // endregion
 
     // region Industrial Alchemy Tower
