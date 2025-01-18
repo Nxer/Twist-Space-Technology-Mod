@@ -1695,7 +1695,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 setStackSize(ItemList.Robot_Arm_LuV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Emitter_LuV.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(ItemList.Sensor_LuV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Wetwarecomputer.get(1),ITEMS_FLASK_COUNT),
+                setStackSize(ItemList.Circuit_Neuroprocessor.get(1),ITEMS_FLASK_COUNT),
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 1),ITEMS_FLASK_COUNT)
             )
             .fluidInputs(
