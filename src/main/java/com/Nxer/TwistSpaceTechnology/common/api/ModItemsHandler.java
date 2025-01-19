@@ -27,6 +27,13 @@ public class ModItemsHandler {
     public static Pair<ItemStack, Integer> MeteoricSingularity;
 
     // end region
+
+    // region Amun-Ra
+    public static Pair<ItemStack, Integer> LightWeightPlate;
+    public static Pair<ItemStack, Integer> ShuttleNoseCone;
+    public static Pair<ItemStack, Integer> IonThrusterJet;
+    // end region
+
     public void initStatics() {
         if (Mods.BloodArsenal.isModLoaded()) {
             AmorphicCatalyst = Pair.of(GTModHandler.getModItem(Mods.BloodArsenal.ID, "amorphic_catalyst", 1), 0);
@@ -34,11 +41,11 @@ public class ModItemsHandler {
         } else {
             AmorphicCatalyst = Pair.of(
                 GTCMItemList.TestItem0.get(1)
-                    .setStackDisplayName("Amorphic Catalyst"),
+                    .setStackDisplayName(Mods.BloodArsenal.ID + ":Amorphic Catalyst"),
                 0);
             InfinityEgg = Pair.of(
                 GTCMItemList.TestItem0.get(1)
-                    .setStackDisplayName("Infinity Egg"),
+                    .setStackDisplayName(Mods.BloodArsenal.ID + ":Infinity Egg"),
                 0);
         }
 
@@ -60,36 +67,55 @@ public class ModItemsHandler {
         }
         if (NitronicSingularity.getLeft() == null) NitronicSingularity = Pair.of(
             GTCMItemList.TestItem0.get(1)
-                .setStackDisplayName("Nitronic Singularity"),
+                .setStackDisplayName(Mods.EternalSingularity.ID + ":Nitronic Singularity"),
             0);
         if (PsychoticSingularity.getLeft() == null) PsychoticSingularity = Pair.of(
             GTCMItemList.TestItem0.get(1)
-                .setStackDisplayName("Psychotic Singularity"),
+                .setStackDisplayName(Mods.EternalSingularity.ID + ":Psychotic Singularity"),
             0);
 
         if (SphaghetticSingularity.getLeft() == null) SphaghetticSingularity = Pair.of(
             GTCMItemList.TestItem0.get(1)
-                .setStackDisplayName("Sphaghettic Singularity"),
+                .setStackDisplayName(Mods.EternalSingularity.ID + ":Sphaghettic Singularity"),
             0);
 
         if (PneumaticSingularity.getLeft() == null) PneumaticSingularity = Pair.of(
             GTCMItemList.TestItem0.get(1)
-                .setStackDisplayName("Pneumatic Singularity"),
+                .setStackDisplayName(Mods.EternalSingularity.ID + ":Pneumatic Singularity"),
             0);
 
         if (CrypticSingularity.getLeft() == null) CrypticSingularity = Pair.of(
             GTCMItemList.TestItem0.get(1)
-                .setStackDisplayName("Cryptic Singularity"),
+                .setStackDisplayName(Mods.EternalSingularity.ID + ":Cryptic Singularity"),
             0);
 
         if (HistoricSingularity.getLeft() == null) HistoricSingularity = Pair.of(
             GTCMItemList.TestItem0.get(1)
-                .setStackDisplayName("Historic Singularity"),
+                .setStackDisplayName(Mods.EternalSingularity.ID + ":Historic Singularity"),
             0);
 
         if (MeteoricSingularity.getLeft() == null) MeteoricSingularity = Pair.of(
             GTCMItemList.TestItem0.get(1)
-                .setStackDisplayName("Meteoric Singularity"),
+                .setStackDisplayName(Mods.EternalSingularity.ID + ":Meteoric Singularity"),
             0);
+
+        if (Mods.GalacticraftAmunRa.isModLoaded()) {
+            LightWeightPlate = Pair.of(GTModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "item.baseItem", 1, 15), 0);
+            ShuttleNoseCone = Pair.of(GTModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "item.baseItem", 1, 16), 0);
+            IonThrusterJet = Pair.of(GTModHandler.getModItem(Mods.GalacticraftAmunRa.ID, "tile.machines2", 1, 1), 0);
+        } else {
+            LightWeightPlate = Pair.of(
+                GTCMItemList.TestItem0.get(1)
+                    .setStackDisplayName(Mods.GalacticraftAmunRa.ID + ":Light Weight Plate"),
+                0);
+            ShuttleNoseCone = Pair.of(
+                GTCMItemList.TestItem0.get(1)
+                    .setStackDisplayName(Mods.GalacticraftAmunRa.ID + ":Shuttle Nose Cone"),
+                0);
+            IonThrusterJet = Pair.of(
+                GTCMItemList.TestItem0.get(1)
+                    .setStackDisplayName(Mods.GalacticraftAmunRa.ID + ":Ion Thruster Jet"),
+                0);
+        }
     }
 }

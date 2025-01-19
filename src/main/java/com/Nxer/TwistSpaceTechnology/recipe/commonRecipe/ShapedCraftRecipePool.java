@@ -45,6 +45,12 @@ public class ShapedCraftRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plate, MaterialsBotania.ElvenElementium, 1), 'B',
                 new ItemStack(spark), 'C', ItemList.Hatch_Input_HV.get(1), 'D', new ItemStack(rune, 1, 0) });
 
+        // Eye of Wood
+        addCraftingRecipe(
+            GTCMItemList.EyeOfWood.get(1),
+            new Object[] { "ABA", "BCB", "ABA", 'A', new ItemStack(Blocks.brick_block), 'B', "plankWood", 'C',
+                GTCMItemList.PrimitiveMansSpaceTimeDistortionDevice.get(1) });
+
         if (Config.Enable_IndustrialMagnetarSeparator) {
             // Industrial Magnetar Separator
             addCraftingRecipe(

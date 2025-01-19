@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
-import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
-import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
-import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;

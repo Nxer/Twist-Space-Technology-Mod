@@ -5,7 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierO
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeABSMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool.MoltenToIngot;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool.MoltenToIngot;
 import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;

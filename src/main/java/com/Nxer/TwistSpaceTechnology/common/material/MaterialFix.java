@@ -119,6 +119,27 @@ public class MaterialFix {
             .eut(RECIPE_MAX)
             .duration(45 * 20)
             .addTo(transcendentPlasmaMixerRecipes);
+
+        // Concentrated UU Matter
+        GTValues.RA.stdBuilder()
+            .fluidInputs(
+                Materials.UUMatter.getFluid(1000000),
+                MaterialsTST.Axonium.getMolten(144))
+            .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
+            .eut(RECIPE_UEV)
+            .duration(20 * 60)
+            .specialValue(2_000_000_000)
+            .addTo(fusionRecipes);
+
+        GTValues.RA.stdBuilder()
+            .fluidInputs(
+                Materials.UUMatter.getFluid(1000000),
+                MaterialsTST.Axonium.getPlasma(144))
+            .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
+            .eut(RECIPE_UEV)
+            .duration(20 * 10)
+            .specialValue(2_000_000_000)
+            .addTo(fusionRecipes);
     }
 
     // spotless:on

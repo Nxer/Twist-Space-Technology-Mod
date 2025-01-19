@@ -1,55 +1,65 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import static com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.craftRecipeList.craftRecipe;
-
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
-import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.AssemblyLineWithoutResearchRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.BloodyHellRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CentrifugeRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ChemicalReactorRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CircuitAssemblerRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CokingFactoryRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CompressorRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.CrystallineInfinitierRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.DistillationRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ElvenWorkshopRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ExtractorRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.FluidHeaterRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.FluidSolidifierRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.FusionReactorRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.GTCMMachineRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.HyperSpacetimeTransformerRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IndustrialMagicMatrixRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.IntensifyChemicalDistorterRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MassFabricatorGenesisRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MegaStoneBreakerRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MicroSpaceTimeFabricatorioRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MiracleTopRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.MixerRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ModularHatchesRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.NanoForgeRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.ParticleColliderRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.QFTRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.RuneEngraverRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.SpaceAssemblerRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StarKernelForgeRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarMaterialSiphonRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.AstralArrayRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.BallLightingRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.DSPRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.DualInputBufferRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.IncompactCyclotronRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.LegendLaserHatchRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularHatchesRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularizedMachineSystemRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.PreciseHighEnergyPhotonicQuantumMasterRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleBlockRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleMachineRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SpaceApiaryModuleRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.TSTBufferedEnergyHatchRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.AssemblyLineWithoutResearchRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.BOTRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.RuneEngraverRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BloodyHellRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystallineInfinitierRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DSPRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DragonBloodRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.HyperSpacetimeTransformerRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IndustrialMagicMatrixRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IntensifyChemicalDistorterRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MassFabricatorGenesisRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MegaStoneBreakerRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MegaUniversalSpaceStationRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MicroSpaceTimeFabricatorioRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StarKernelForgeRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarMaterialSiphonRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CentrifugeRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ChemicalReactorRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CircuitAssemblerRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CokingFactoryRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CompressorRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.DistillationRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ElvenWorkshopRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ExtractorRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidHeaterRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidSolidifierRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FusionReactorRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.MixerRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.NanoForgeRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ParticleColliderRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.QFTRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.SpaceAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.NeutronActivatorWithEURecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.BOTRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.CosmicProcessorCircuitRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DSPRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.DragonBloodRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.MegaUniversalSpaceStationRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.TSTBufferedEnergyHatchRecipe;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool;
@@ -58,51 +68,71 @@ import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches;
 public class RecipeLoader {
 
     public static void loadRecipes() {
-        IRecipePool[] recipePools = new IRecipePool[] { new GTCMMachineRecipePool(),
-            new IntensifyChemicalDistorterRecipePool(), new ChemicalReactorRecipePool(),
-            new PreciseHighEnergyPhotonicQuantumMasterRecipePool(), new CircuitAssemblerRecipePool(),
-            new MiracleTopRecipePool(), new FluidSolidifierRecipePool(), new CrystallineInfinitierRecipePool(),
-            new DSPRecipePool(), new MegaUniversalSpaceStationRecipePool(), new StellarMaterialSiphonRecipePool(),
-            new DistillationRecipePool(), new ExtractorRecipePool(), new CompressorRecipePool(), new BOTRecipePool(),
-            new TCRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
-            new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new LanthanidesRecipePool(),
-            new HyperSpacetimeTransformerRecipePool(), new TSTBufferedEnergyHatchRecipe(), new CentrifugeRecipePool(),
-            new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(), new NanoForgeRecipePool(),
-            new FluidHeaterRecipePool(), new ParticleColliderRecipePool(), new DragonBloodRecipe(),
-            new FusionReactorRecipePool(), new ModularHatchesRecipePool(), new MassFabricatorGenesisRecipePool(),
-            new SpaceAssemblerRecipePool(), new CosmicProcessorCircuitRecipePool(),
-            new MicroSpaceTimeFabricatorioRecipePool(), new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool() };
+        TwistSpaceTechnology.LOG.info("GTCMRecipePool loading recipes.");
+
+        /**
+         * For the new recipe classification rules
+         *
+         * @see com.Nxer.TwistSpaceTechnology.recipe.commonRecipe
+         *      Crafting table recipes
+         * @see com.Nxer.TwistSpaceTechnology.recipe.craftRecipe
+         *      Recipes of TST machines, items in assembler, assemblyLine and so on. Among them, machine related
+         *      upgrade blocks and items with a large number of upgrades are separately separated from Single ones.
+         *      When using Config, do not include everything and only activate the controller for Config.
+         * @see com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleBlockRecipes
+         *      Recipes of blocks borrowed from GT, TT or block added by TST that have weak correlation with the main
+         *      machine host recipes.
+         * @see com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original
+         *      Recipes added by TST in the original GTNH recipe pool
+         * @see com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded
+         *      Recipes added by TST in the TST machine recipe pool
+         * @see com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe
+         *      Recipes like platinum treated line
+         */
+
+        IRecipePool[] craftRecipePool = {
+            // Item Recipes
+            new SingleItemRecipes(), new CosmicProcessorCircuitRecipes(), new LapotronChipRecipes(),
+            // Machine Recipes
+            new SingleBlockRecipes(), new SingleMachineRecipes(), new PreciseHighEnergyPhotonicQuantumMasterRecipes(),
+            new DualInputBufferRecipes(), new TSTBufferedEnergyHatchRecipes(), new DSPRecipes(),
+            new LegendLaserHatchRecipes(), new AstralArrayRecipes(), new BallLightingRecipes(),
+            new ModularizedMachineSystemRecipes(), new ModularHatchesRecipes(), new SpaceApiaryModuleRecipes(),
+            new IncompactCyclotronRecipes() };
+
+        for (IRecipePool recipePool : craftRecipePool) {
+            recipePool.loadRecipes();
+        }
+
+        IRecipePool[] machineRecipePools = new IRecipePool[] {
+            // Original GTNH RecipeMap
+            new ChemicalReactorRecipePool(), new CircuitAssemblerRecipePool(), new FluidSolidifierRecipePool(),
+            new DistillationRecipePool(), new ExtractorRecipePool(), new CompressorRecipePool(),
+            new LanthanidesRecipePool(), new CentrifugeRecipePool(), new ShapedCraftRecipePool(), new MixerRecipePool(),
+            new QFTRecipePool(), new NanoForgeRecipePool(), new FluidHeaterRecipePool(),
+            new ParticleColliderRecipePool(), new DragonBloodRecipe(), new FusionReactorRecipePool(),
+            new SpaceAssemblerRecipePool(), new TCRecipePool(),
+            // TST Recipe Map
+            new IntensifyChemicalDistorterRecipePool(), new PreciseHighEnergyPhotonicQuantumMasterRecipePool(),
+            new MiracleTopRecipePool(), new CrystallineInfinitierRecipePool(), new DSPRecipePool(),
+            new MegaUniversalSpaceStationRecipePool(), new StellarMaterialSiphonRecipePool(),
+            new AssemblyLineWithoutResearchRecipePool(), new BOTRecipePool(), new StarKernelForgeRecipePool(),
+            new IndustrialMagicMatrixRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
+            new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new HyperSpacetimeTransformerRecipePool(),
+            new AquaticZoneSimulatorFakeRecipe(), new NeutronActivatorWithEURecipePool(),
+            new MassFabricatorGenesisRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
+            new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool() };
+
+        for (IRecipePool recipePool : machineRecipePools) {
+            recipePool.loadRecipes();
+        }
 
         new SimpleFurnaceFuelPool().loadRecipes();
-        for (IRecipePool recipePool : recipePools) {
-            recipePool.loadRecipes();
-        }
-        for (IRecipePool recipePool : craftRecipe) {
-            recipePool.loadRecipes();
-        }
         new TCResearches().register();
-
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
         new OP_NormalProcessing().enumOreProcessingRecipes();
 
-        if (Config.EnableRecipeRegistry_IndistinctTentacle) {
-            new AssemblyLineWithoutResearchRecipePool().loadRecipes();
-        }
-        if (Config.Enable_BallLightning) {
-            new StarKernelForgeRecipePool().loadRecipes();
-        }
-        if (Config.EnableModularizedMachineSystem) {
-            if (Config.EnableLargeNeutronOscillator) {
-                new NeutronActivatorWithEURecipePool().loadRecipes();
-            }
-        }
-        if (Config.Enable_IndustrialMagicMatrix) {
-            new IndustrialMagicMatrixRecipePool().loadRecipes();
-        }
-        if (Config.Enable_MegaTreeFarm) {
-            new AquaticZoneSimulatorFakeRecipe().loadRecipes();
-        }
     }
 
     public static void loadRecipesPostInit() {
