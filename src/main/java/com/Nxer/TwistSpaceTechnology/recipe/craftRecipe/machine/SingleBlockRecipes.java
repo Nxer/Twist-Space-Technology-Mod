@@ -147,7 +147,7 @@ public class SingleBlockRecipes implements IRecipePool {
         // Teleportation Casing
         // blockCasingsTT 10
         TTRecipeAdder.addResearchableAssemblylineRecipe(
-            CustomItemList.eM_Dimensional.get(1),
+            new ItemStack(GSBlocks.DysonSwarmBlocks,1,1),
             65_536_000,
             8192,
             (int) RECIPE_UMV,
@@ -158,8 +158,8 @@ public class SingleBlockRecipes implements IRecipePool {
                 GregtechItemList.SpaceTimeBendingCore.get(3),
                 CustomItemList.Godforge_HarmonicPhononTransmissionConduit.get(1),
 
-                GGMaterial.metastableOganesson.get(OrePrefixes.gearGt,32),
-                GTCMItemList.SpaceWarper.get(16),
+                ItemRefer.Field_Restriction_Coil_T3.get(1),
+                GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.TranscendentMetal, 16),
                 GTCMItemList.ParticleTrapTimeSpaceShield.get(8),
                 ItemList.Emitter_UMV.get(6),
 
@@ -184,7 +184,7 @@ public class SingleBlockRecipes implements IRecipePool {
         // Dimensional Bridge Generator
         // blockCasingsTT 11
         TTRecipeAdder.addResearchableAssemblylineRecipe(
-            new ItemStack(GSBlocks.DysonSwarmBlocks,1,1),
+            CustomItemList.eM_Teleportation.get(1),
             65_536_000,
             8192,
             (int) RECIPE_UMV,
@@ -195,10 +195,10 @@ public class SingleBlockRecipes implements IRecipePool {
                 GregtechItemList.SpaceTimeContinuumRipper.get(3),
                 CustomItemList.Godforge_HarmonicPhononTransmissionConduit.get(1),
 
-                GGMaterial.metastableOganesson.get(OrePrefixes.gearGt,32),
-                GTCMItemList.EnergyFluctuationSelfHarmonizer.get(16),
+                ItemList.Transdimensional_Alignment_Matrix.get(1),
+                GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.TranscendentMetal, 16),
                 GTCMItemList.OpticalSOC.get(8),
-                ItemList.Emitter_UMV.get(6),
+                ItemList.Sensor_UMV.get(6),
 
                 GTCMItemList.UltimateEnergyFlowCircuit.get(3),
                 ItemList.Wireless_Hatch_Energy_UMV.get(1),

@@ -410,7 +410,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Hull_LuV.get(1),
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 2),
                     ItemList.Circuit_Chip_UHPIC.get(2),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV,2),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 2),
                     ItemList.LuV_Coil.get(2),
                     ItemList.Electric_Pump_LuV.get(1))
                 .itemOutputs(ItemList.Hatch_Energy_LuV.get(1))
@@ -452,7 +452,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Hull_MAX.get(1L),
                     GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 2L),
                     ItemList.Circuit_Chip_QPIC.get(2L),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV,2),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 2),
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
                 .itemOutputs(ItemList.Hatch_Energy_UHV.get(1))
@@ -470,7 +470,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                         Materials.Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid,
                         2),
                     ItemList.Circuit_Chip_UHPIC.get(2),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV,2),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 2),
                     ItemList.LuV_Coil.get(2),
                     ItemList.Electric_Pump_LuV.get(1))
                 .itemOutputs(ItemList.Hatch_Dynamo_LuV.get(1))
@@ -512,7 +512,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Hull_MAX.get(1L),
                     GTOreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuhvwire, 8L),
                     ItemList.Circuit_Chip_QPIC.get(2L),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV,2),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 2),
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
                 .itemOutputs(ItemList.Hatch_Dynamo_UHV.get(1))

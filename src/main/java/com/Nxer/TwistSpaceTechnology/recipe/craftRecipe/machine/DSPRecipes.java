@@ -63,6 +63,34 @@ public class DSPRecipes implements IRecipePool {
     @Override
     public void loadRecipes() {
 
+        // DSP Launch Site machine
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            new ItemStack(GCBlocks.landingPad, 1, 0),
+            20_480_000,
+            4096,
+            (int) TierEU.RECIPE_UIV,
+            16,
+            new Object[] { new ItemStack(GCBlocks.landingPad, 64),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
+                new ItemStack(IGBlocks.SpaceElevatorCasing, 64), new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9),
+
+                ItemList.Electric_Motor_UEV.get(64), ItemList.Electric_Piston_UEV.get(64),
+                ItemList.Robot_Arm_UEV.get(64), ItemList.Sensor_UEV.get(64),
+
+                ItemList.Field_Generator_UEV.get(64), GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 64),
+                GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SixPhasedCopper, 64),
+                GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SixPhasedCopper, 64),
+
+                MaterialsUEVplus.TranscendentMetal.getNanite(64), StellarConstructionFrameMaterial.get(64),
+                GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64),
+                setStackSize(LightWeightPlate.getLeft(), 64), },
+            new FluidStack[] { new FluidStack(MaterialMisc.MUTATED_LIVING_SOLDER.generateFluid(), 144 * 8192),
+                Materials.UUMatter.getFluid(1000 * 1024), Materials.SuperCoolant.getFluid(1000 * 1024),
+                Materials.Bedrockium.getMolten(144 * 8192) },
+            DSPLauncher.get(1),
+            20 * 2400,
+            (int) TierEU.RECIPE_UIV);
+
         // DSP Ray Receiving Station
         TTRecipeAdder.addResearchableAssemblylineRecipe(
             SolarSail.get(1),
@@ -81,41 +109,13 @@ public class DSPRecipes implements IRecipePool {
                 ItemList.ZPM4.get(1),
 
                 CustomItemList.HighEnergyFlowCircuit.get(64),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Neutronium, 64) },
             new FluidStack[] { new FluidStack(MaterialMisc.MUTATED_LIVING_SOLDER.generateFluid(), 144 * 8192),
                 Materials.UUMatter.getFluid(1000 * 1024), Materials.Grade8PurifiedWater.getFluid(1000 * 1024),
                 Materials.CosmicNeutronium.getMolten(144 * 8192) },
             DSPReceiver.get(1),
-            20 * 2400,
-            (int) TierEU.RECIPE_UIV);
-
-        // DSP Launch Site machine
-        TTRecipeAdder.addResearchableAssemblylineRecipe(
-            new ItemStack(GCBlocks.landingPad, 1, 0),
-            20_480_000,
-            4096,
-            (int) TierEU.RECIPE_UIV,
-            16,
-            new Object[] { new ItemStack(GCBlocks.landingPad, 64),
-                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
-                new ItemStack(IGBlocks.SpaceElevatorCasing, 64), new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9),
-
-                ItemList.Electric_Motor_UEV.get(64), ItemList.Electric_Piston_UEV.get(64),
-                ItemList.Robot_Arm_UEV.get(64), ItemList.Sensor_UEV.get(64),
-
-                ItemList.Field_Generator_UEV.get(64), GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
-                GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SixPhasedCopper, 64),
-                GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SixPhasedCopper, 64),
-
-                MaterialsUEVplus.SixPhasedCopper.getNanite(64), StellarConstructionFrameMaterial.get(64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUEV, 64),
-                setStackSize(LightWeightPlate.getLeft(), 64), },
-            new FluidStack[] { new FluidStack(MaterialMisc.MUTATED_LIVING_SOLDER.generateFluid(), 144 * 8192),
-                Materials.UUMatter.getFluid(1000 * 1024), Materials.SuperCoolant.getFluid(1000 * 1024),
-                Materials.Bedrockium.getMolten(144 * 8192) },
-            DSPLauncher.get(1),
             20 * 2400,
             (int) TierEU.RECIPE_UIV);
 

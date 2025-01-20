@@ -43,6 +43,7 @@ import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -99,6 +100,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 3),
                 ItemList.Field_Generator_LV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 4),
+                GTOreDictUnificator.get(OrePrefixes.plate, Materials.Steel, 4),
                 GTUtility.getIntegratedCircuit(10))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 2))
             .itemOutputs(PhotonControllerUpgradeLV.get(1))
@@ -273,7 +275,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 4),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.UV, 4))
+                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.UV, 4))
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(16 * 144))
             .itemOutputs(PhotonControllerUpgradeUHV.get(1))
             .eut(RECIPE_UHV)
@@ -297,7 +299,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 4),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUEV, 4))
+                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUEV, 4))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(64 * 144),
                 Materials.SuperconductorUEVBase.getMolten(64 * 144))
@@ -317,14 +319,14 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 CustomItemList.eM_energyTunnel7_UIV.get(1),
                 ItemList.Casing_Dim_Injector.get(16),
 
-                ItemList.Emitter_UIV.get(4),
+                ItemList.Emitter_UIV.get(8),
                 GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 4L, 32105),
                 ItemList.EnergisedTesseract.get(4),
-                ItemList.Field_Generator_UIV.get(2),
+                ItemList.Field_Generator_UIV.get(4),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 4),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUIV, 8))
+                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUIV, 8))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(256 * 144),
                 Materials.SuperconductorUIVBase.getMolten(64 * 144),
@@ -345,14 +347,14 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 CustomItemList.eM_energyTunnel8_UMV.get(1),
                 ItemList.Casing_Dim_Injector.get(64),
 
-                ItemList.Emitter_UMV.get(8),
+                ItemList.Emitter_UMV.get(16),
                 GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16L, 32105),
                 ItemList.EnergisedTesseract.get(16),
-                ItemList.Field_Generator_UMV.get(4),
+                ItemList.Field_Generator_UMV.get(8),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 8),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 32),
-                GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUMV, 16),
+                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUMV, 16),
                 MaterialsUEVplus.SixPhasedCopper.getNanite(16),
 
                 CustomItemList.EOH_Reinforced_Temporal_Casing.get(4))
@@ -377,19 +379,19 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 CustomItemList.eM_energyTunnel9_UXV.get(1),
                 CustomItemList.EOH_Infinite_Energy_Casing.get(16),
 
-                ItemList.Emitter_UXV.get(16),
+                ItemList.Emitter_UXV.get(32),
                 GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 64L, 32105),
                 ItemList.EnergisedTesseract.get(64),
-                ItemList.Field_Generator_UXV.get(8),
+                ItemList.Field_Generator_UXV.get(16),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 16),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 64),
 
-                MaterialsUEVplus.WhiteDwarfMatter.getNanite(64),
-                MaterialsUEVplus.BlackDwarfMatter.getNanite(64),
-                MaterialsUEVplus.Eternity.getNanite(16),
+                MaterialsTST.Axonium.getNanite(64),
+                MaterialsUEVplus.Eternity.getNanite(48),
+                MaterialsUEVplus.Universium.getNanite(32),
                 CustomItemList.EOH_Reinforced_Temporal_Casing.get(16))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(4096 * 144),
@@ -409,10 +411,10 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 HarmoniousWirelessEnergyHatch.get(2),
                 CustomItemList.EOH_Infinite_Energy_Casing.get(64),
 
-                ItemList.Emitter_MAX.get(32),
+                ItemList.Emitter_MAX.get(64),
                 setStackSize(GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 1L, 32105), 256),
                 setStackSize(ItemList.EnergisedTesseract.get(1), 256),
-                ItemList.Field_Generator_MAX.get(16),
+                ItemList.Field_Generator_MAX.get(32),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 32),
                 setStackSize(CircuitUXV.getIS(1), 256),
