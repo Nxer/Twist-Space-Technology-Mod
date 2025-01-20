@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextWithColor;
-import com.github.bsideup.jabel.Desugar;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -86,8 +86,17 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     private static final BiMap<Integer, ManufacturingMachineType> MODES = HashBiMap.create();
 
-    @Desugar
-    private record ManufacturingMachineType(String typeName, RecipeMap<?> recipeMap, String unlocalizedName) {
+    private static final class ManufacturingMachineType {
+
+        private final String typeName;
+        private final RecipeMap<?> recipeMap;
+        private final String unlocalizedName;
+
+        private ManufacturingMachineType(String typeName, RecipeMap<?> recipeMap, String unlocalizedName) {
+            this.typeName = typeName;
+            this.recipeMap = recipeMap;
+            this.unlocalizedName = unlocalizedName;
+        }
 
         public static ManufacturingMachineType of(RecipeMap<?> recipeMap) {
             var recipeMapNameParts = recipeMap.unlocalizedName.split("\\.");
@@ -96,6 +105,46 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
                 recipeMap,
                 recipeMap.unlocalizedName);
         }
+
+        public String typeName() {
+            return typeName;
+        }
+
+        public RecipeMap<?> recipeMap() {
+            return recipeMap;
+        }
+
+        public String unlocalizedName() {
+            return unlocalizedName;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if (obj == null || obj.getClass() != this.getClass()) return false;
+            var that = (ManufacturingMachineType) obj;
+            return Objects.equals(this.typeName, that.typeName) && Objects.equals(this.recipeMap, that.recipeMap)
+                && Objects.equals(this.unlocalizedName, that.unlocalizedName);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(typeName, recipeMap, unlocalizedName);
+        }
+
+        @Override
+        public String toString() {
+            return "ManufacturingMachineType[" + "typeName="
+                + typeName
+                + ", "
+                + "recipeMap="
+                + recipeMap
+                + ", "
+                + "unlocalizedName="
+                + unlocalizedName
+                + ']';
+        }
+
     }
 
     static {
