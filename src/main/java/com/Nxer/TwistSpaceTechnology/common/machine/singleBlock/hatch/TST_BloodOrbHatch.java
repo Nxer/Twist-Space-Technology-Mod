@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import WayofTime.alchemicalWizardry.AlchemicalWizardry;
@@ -169,7 +170,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
             return false;
         }
 
-        int maxDrainAmount = Math.min(getCapacity() - getFluidAmount(), getMaxCanDrainFromOrb());
+        int maxDrainAmount = MathUtils.clamp(getCapacity() - getFluidAmount(), 0, getMaxCanDrainFromOrb());
         int drainedAmount = drainFromOrb(maxDrainAmount);
         if (drainedAmount > 0) {
             super.fill(FluidUtils.getFluidStack(getFluidToGenerate(), drainedAmount), true);
@@ -187,9 +188,12 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
             getBaseMetaTileEntity().setActive(true);
             this.mMaxProgresstime = getMaxTickTime();
             if (++this.mProgresstime >= this.mMaxProgresstime) {
-                if (this.canTankBeFilled()) {
+                if (this.getOrbItemStack() == null) {
+                    this.mFluid = null;
+                } else if (this.canTankBeFilled()) {
                     this.addFluidToHatch(aTick);
                 }
+                this.mProgresstime = 0;
             }
         } else {
             getBaseMetaTileEntity().setActive(false);
