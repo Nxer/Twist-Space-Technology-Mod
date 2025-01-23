@@ -456,7 +456,7 @@ public class Config {
     // region ManufacturingCenter
     public static float ManufacturingCenter_SpeedBonus_Base = 0.2F;
     public static float ManufacturingCenter_SpeedBonus_Tier = 0.5F;
-    public static float ManufacturingCenter_PowerReduction = 0.2F;
+    public static float ManufacturingCenter_PowerReduction = 0.15F;
     public static int ManufacturingCenter_MaxParallelModifier = 2;
     // endregion
 
