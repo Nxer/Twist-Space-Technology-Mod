@@ -17,9 +17,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextWithColor;
 import com.google.common.collect.BiMap;
@@ -56,15 +58,15 @@ import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_ManufacturingCenter>
     implements ISurvivalConstructable {
 
-    private static final int LOWEST_CORE_TIER = 5;
+    @MagicConstant(valuesFromClass = VoltageIndex.class)
+    private static final int LOWEST_CORE_TIER = VoltageIndex.IV;
 
-    private static final double SPEED_BONUS_BASE = 0.2F;
-    private static final double SPEED_BONUS_FOR_CORE_TIER = 0.5F;
+    private static final double SPEED_BONUS_BASE = Config.ManufacturingCenter_SpeedBonus_Base;
+    private static final double SPEED_BONUS_FOR_CORE_TIER = Config.ManufacturingCenter_SpeedBonus_Tier;
 
-    // for core tier at ZPM and UV
-    private static final double EU_REDUCTION_FOR_CORE_TIER = 0.2F;
+    private static final double EU_REDUCTION_FOR_CORE_TIER = Config.ManufacturingCenter_PowerReduction;
 
-    private static final int MAX_PARALLEL_MODIFIER = 2;
+    private static final int MAX_PARALLEL_MODIFIER = Config.ManufacturingCenter_MaxParallelModifier;
 
     public int coreTier = -1;
     public int casingCount = 0;
@@ -181,7 +183,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     }
 
     private double getEuModifierAtCurrentCore() {
-        return 1.0 - (EU_REDUCTION_FOR_CORE_TIER * Math.max(0, coreTier - LOWEST_CORE_TIER - 2));
+        return 1.0 - (EU_REDUCTION_FOR_CORE_TIER * Math.max(0, coreTier - LOWEST_CORE_TIER));
     }
 
     // endregion
@@ -265,7 +267,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             .addInfo(
                 TextEnums.tr(
                     "ManufacturingCenter_Tooltips_5",
-                    TextWithColor.getTierName(VoltageIndex.IV),
+                    TextWithColor.getTierName(LOWEST_CORE_TIER),
                     TextWithColor.percentage(SPEED_BONUS_FOR_CORE_TIER * 100)))
             // #tr ManufacturingCenter_Tooltips_6
             // # Each Core Tier over %s gains §b%s§7 EU/t Reduction.
@@ -273,7 +275,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             .addInfo(
                 TextEnums.tr(
                     "ManufacturingCenter_Tooltips_6",
-                    TextWithColor.getTierName(VoltageIndex.LuV),
+                    TextWithColor.getTierName(LOWEST_CORE_TIER),
                     TextWithColor.percentage(EU_REDUCTION_FOR_CORE_TIER * 100)))
             // #tr ManufacturingCenter_Tooltips_7
             // # Max parallel is §b%s§7 max voltage tier.
