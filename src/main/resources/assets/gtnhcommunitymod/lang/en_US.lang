@@ -1609,3 +1609,4 @@ tc.research_name.TST_ARCANE_HOLE=Arcane Hole
 tc.research_text.TST_ARCANE_HOLE=Block in the void
 tc.research_text.TST_ARCANE_HOLE.1=Can be used to replace the warded glass on both sides of industrial alchemy tower. Perhaps it's still a good building block?
 Tooltip_Channel_Helper=You can use the §9 channel:§echisel§7 to automatically convert chisel blocks when building, and you can see nei to preview the available blocks
+Tooltip_BloodOrbHatch_5=Deactivating the Hatch will refund the Life Essence back to the Blood Orb.

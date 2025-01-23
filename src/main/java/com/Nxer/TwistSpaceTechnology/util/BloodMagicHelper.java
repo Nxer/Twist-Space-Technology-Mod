@@ -103,4 +103,32 @@ public class BloodMagicHelper {
     public static FluidStack getLifeEssence(int amount) {
         return FluidUtils.getFluidStack("lifeessence", amount);
     }
+
+    /**
+     * Adds blood to the owner's network.
+     *
+     * @param ownerName the network owner name
+     * @param lpAmount  the amount of blood
+     * @return the amount of blood added to the network
+     */
+    public static int addBloodToNetwork(String ownerName, int lpAmount) {
+        var maxOrb = SoulNetworkHandler.getMaximumForOrbTier(SoulNetworkHandler.getCurrentMaxOrb(ownerName));
+        return SoulNetworkHandler.addCurrentEssenceToMaximum(ownerName, lpAmount, maxOrb);
+    }
+
+    /**
+     * Adds blood to the network of blood orb's owner.
+     *
+     * @param orbStack the blood orb
+     * @param lpAmount the amount of blood
+     * @return the amount of blood added to the network
+     */
+    public static int addBloodToNetwork(ItemStack orbStack, int lpAmount) {
+        var ownerName = getOrbOwnerName(orbStack);
+        if (ownerName != null) {
+            return addBloodToNetwork(ownerName, lpAmount);
+        } else {
+            return 0;
+        }
+    }
 }
