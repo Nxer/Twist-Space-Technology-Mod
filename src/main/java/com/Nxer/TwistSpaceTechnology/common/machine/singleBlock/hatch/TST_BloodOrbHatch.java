@@ -53,7 +53,8 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         // #tr Tooltip_BloodOrbHatch_5
         // # Deactivating the Hatch will refund the Life Essence back to the Blood Orb.
         // #zh_CN 关闭血液仓将会把生命本质输回气血宝珠
-        TextEnums.tr("Tooltip_BloodOrbHatch_5"), TextEnums.Author_Taskeren.getText(), };
+        TextEnums.tr("Tooltip_BloodOrbHatch_5"), TextEnums.Author_Taskeren.getText(),
+        TextEnums.Mod_TwistSpaceTechnology.getText() };
 
     private static final String[] TOOLTIP = new String[] { TextEnums.tr("Tooltip_BloodOrbHatch_3"),
         TextEnums.tr("Tooltip_BloodOrbHatch_4"), TextEnums.tr("Tooltip_BloodOrbHatch_5"), };
