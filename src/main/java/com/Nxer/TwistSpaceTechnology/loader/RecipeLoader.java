@@ -19,7 +19,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularizedMachi
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.PreciseHighEnergyPhotonicQuantumMasterRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleMachineRecipes;
-import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SpaceApiaryModuleRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.TSTBufferedEnergyHatchRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.AssemblyLineWithoutResearchRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.BOTRecipePool;
@@ -27,9 +26,11 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.Run
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BloodyHellRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystallineInfinitierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DSPRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DeployedNanoCoreRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DragonBloodRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.ElvenWorkshopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.HyperSpacetimeTransformerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IndustrialMagicMatrixRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IntensifyChemicalDistorterRecipePool;
@@ -48,7 +49,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CircuitAssemb
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CokingFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CompressorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.DistillationRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ElvenWorkshopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ExtractorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidHeaterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidSolidifierRecipePool;
@@ -97,8 +97,7 @@ public class RecipeLoader {
             new SingleBlockRecipes(), new SingleMachineRecipes(), new PreciseHighEnergyPhotonicQuantumMasterRecipes(),
             new DualInputBufferRecipes(), new TSTBufferedEnergyHatchRecipes(), new DSPRecipes(),
             new LegendLaserHatchRecipes(), new AstralArrayRecipes(), new BallLightingRecipes(),
-            new ModularizedMachineSystemRecipes(), new ModularHatchesRecipes(), new SpaceApiaryModuleRecipes(),
-            new IncompactCyclotronRecipes() };
+            new ModularizedMachineSystemRecipes(), new ModularHatchesRecipes(), new IncompactCyclotronRecipes() };
 
         for (IRecipePool recipePool : craftRecipePool) {
             recipePool.loadRecipes();
@@ -121,7 +120,7 @@ public class RecipeLoader {
             new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new HyperSpacetimeTransformerRecipePool(),
             new AquaticZoneSimulatorFakeRecipe(), new NeutronActivatorWithEURecipePool(),
             new MassFabricatorGenesisRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
-            new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool() };
+            new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool(), new DeployedNanoCoreRecipePool() };
 
         for (IRecipePool recipePool : machineRecipePools) {
             recipePool.loadRecipes();

@@ -379,4 +379,15 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaStoneBreaker.get(1)))
         .disableOptimize()
         .build();
+
+    // #tr tst.recipe.DeployedNanoCoreRecipes
+    // # Nano Core
+    // #zh_CN 纳米核心
+    public static final RecipeMap<TST_RecipeMapBackend> DeployedNanoCoreRecipes = RecipeMapBuilder
+        .of("tst.recipe.DeployedNanoCoreRecipes", TST_RecipeMapBackend::new)
+        .maxIO(6, 2, 3, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.DeployedNanoCore.get(1)))
+        .progressBar(GTUITextures.PROGRESSBAR_ASSEMBLE)
+        .disableOptimize()
+        .build();
 }

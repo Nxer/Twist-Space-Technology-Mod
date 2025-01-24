@@ -124,7 +124,7 @@ public class MaterialFix {
         GTValues.RA.stdBuilder()
             .fluidInputs(
                 Materials.UUMatter.getFluid(1000000),
-                MaterialsTST.Axonium.getMolten(144))
+                MaterialsTST.Axonium.getMolten(36))
             .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
             .eut(RECIPE_UEV)
             .duration(20 * 60)
@@ -134,7 +134,7 @@ public class MaterialFix {
         GTValues.RA.stdBuilder()
             .fluidInputs(
                 Materials.UUMatter.getFluid(1000000),
-                MaterialsTST.Axonium.getPlasma(144))
+                MaterialsTST.Axonium.getPlasma(36))
             .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
             .eut(RECIPE_UEV)
             .duration(20 * 10)

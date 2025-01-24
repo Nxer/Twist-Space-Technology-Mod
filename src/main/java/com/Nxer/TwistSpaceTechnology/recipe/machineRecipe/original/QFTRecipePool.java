@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
@@ -97,23 +96,23 @@ public class QFTRecipePool implements IRecipePool {
         // .addTo(QFT);
 
         // FeTiO3
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                Materials.Ilmenite.getDust(32),
-                ItemUtils.getSimpleStack(GenericChem.mTitaTungstenIndiumCatalyst, 0))
-            .itemOutputs(
-                Materials.Iron.getDust(64),
-                Materials.Titanium.getDust(64),
-                Materials.Niobium.getDust(64),
-                Materials.Tantalum.getDust(64),
-                Materials.Manganese.getDust(64),
-                Materials.Magnesium.getDust(64))
-            .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
-            .noOptimize()
-            .specialValue(1)
-            .eut(RECIPE_UV)
-            .duration(400)
-            .addTo(QFT);
+        // GTValues.RA.stdBuilder()
+        // .itemInputs(
+        // Materials.Ilmenite.getDust(32),
+        // ItemUtils.getSimpleStack(GenericChem.mTitaTungstenIndiumCatalyst, 0))
+        // .itemOutputs(
+        // Materials.Iron.getDust(64),
+        // Materials.Titanium.getDust(64),
+        // Materials.Niobium.getDust(64),
+        // Materials.Tantalum.getDust(64),
+        // Materials.Manganese.getDust(64),
+        // Materials.Magnesium.getDust(64))
+        // .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
+        // .noOptimize()
+        // .specialValue(1)
+        // .eut(RECIPE_UV)
+        // .duration(400)
+        // .addTo(QFT);
 
         // Samarium
         GTValues.RA.stdBuilder()
@@ -134,22 +133,22 @@ public class QFTRecipePool implements IRecipePool {
             .addTo(QFT);
 
         // Cerium
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                WerkstoffMaterialPool.CeriumRichMixture.get(OrePrefixes.dust, 32),
-                ItemUtils.getSimpleStack(GenericChem.mRareEarthGroupCatalyst, 0))
-            .itemOutputs(
-                Materials.Cerium.getDust(64),
-                Materials.Lanthanum.getDust(64),
-                Materials.Neodymium.getDust(64),
-                Materials.Europium.getDust(64),
-                Materials.Uranium.getDust(64),
-                Materials.Uranium235.getDust(64))
-            .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
-            .noOptimize()
-            .specialValue(2)
-            .eut(RECIPE_UHV)
-            .duration(400)
-            .addTo(QFT);
+        // GTValues.RA.stdBuilder()
+        // .itemInputs(
+        // WerkstoffMaterialPool.CeriumRichMixture.get(OrePrefixes.dust, 32),
+        // ItemUtils.getSimpleStack(GenericChem.mRareEarthGroupCatalyst, 0))
+        // .itemOutputs(
+        // Materials.Cerium.getDust(64),
+        // Materials.Lanthanum.getDust(64),
+        // Materials.Neodymium.getDust(64),
+        // Materials.Europium.getDust(64),
+        // Materials.Uranium.getDust(64),
+        // Materials.Uranium235.getDust(64))
+        // .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
+        // .noOptimize()
+        // .specialValue(2)
+        // .eut(RECIPE_UHV)
+        // .duration(400)
+        // .addTo(QFT);
     }
 }

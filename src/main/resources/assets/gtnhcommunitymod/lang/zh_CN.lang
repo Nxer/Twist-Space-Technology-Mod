@@ -1572,3 +1572,4 @@ StabilisationFieldGenerator.3.name=稳定力场发生器UMV
 Tooltip_StabilisationFieldGenerator.3=我们需要再深入些.
 StabilisationFieldGenerator.4.name=稳定力场发生器UXV
 Tooltip_StabilisationFieldGenerator.4=结束了?
+tst.recipe.DeployedNanoCoreRecipes=纳米核心

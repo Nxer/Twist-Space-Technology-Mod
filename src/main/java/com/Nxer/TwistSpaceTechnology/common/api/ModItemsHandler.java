@@ -34,6 +34,11 @@ public class ModItemsHandler {
     public static Pair<ItemStack, Integer> IonThrusterJet;
     // end region
 
+    // region Graviation Suite
+    public static Pair<ItemStack, Integer> CoolingCore;
+    public static Pair<ItemStack, Integer> GravitationEngine;
+    // end region
+
     public void initStatics() {
         if (Mods.BloodArsenal.isModLoaded()) {
             AmorphicCatalyst = Pair.of(GTModHandler.getModItem(Mods.BloodArsenal.ID, "amorphic_catalyst", 1), 0);
@@ -115,6 +120,20 @@ public class ModItemsHandler {
             IonThrusterJet = Pair.of(
                 GTCMItemList.TestItem0.get(1)
                     .setStackDisplayName(Mods.GalacticraftAmunRa.ID + ":Ion Thruster Jet"),
+                0);
+        }
+
+        if (Mods.GraviSuite.isModLoaded()) {
+            CoolingCore = Pair.of(GTModHandler.getModItem(Mods.GraviSuite.ID, "itemSimpleItem>", 64, 2), 0);
+            GravitationEngine = Pair.of(GTModHandler.getModItem(Mods.GraviSuite.ID, "itemSimpleItem>", 64, 3), 0);
+        } else {
+            CoolingCore = Pair.of(
+                GTCMItemList.TestItem0.get(1)
+                    .setStackDisplayName(Mods.GraviSuite.ID + ":Cooling Core"),
+                0);
+            GravitationEngine = Pair.of(
+                GTCMItemList.TestItem0.get(1)
+                    .setStackDisplayName(Mods.GraviSuite.ID + ":Gravitation Engine"),
                 0);
         }
     }

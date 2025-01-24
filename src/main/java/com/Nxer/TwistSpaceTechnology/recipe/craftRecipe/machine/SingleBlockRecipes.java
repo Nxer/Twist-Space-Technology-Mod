@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.TestItem0;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler.GravitationEngine;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
@@ -429,9 +431,6 @@ public class SingleBlockRecipes implements IRecipePool {
             .addTo(GTCMRecipe.BloodyHellRecipes);
 
         // Stabilisation Field Generator Framework
-        ItemStack GravitationEngine = Mods.GraviSuite.isModLoaded() ?
-            GTModHandler.getModItem(Mods.GraviSuite.ID, "itemSimpleItem>", 64,3):
-            TestItem0.get(1).setStackDisplayName(Mods.GraviSuite.ID + ":Gravitation Engine");
 
         TTRecipeAdder.addResearchableAssemblylineRecipe(
             CustomItemList.eM_Hollow.get(1),
@@ -455,10 +454,10 @@ public class SingleBlockRecipes implements IRecipePool {
                 HeavyDutyPlateTier8.getIS(64),
                 HeavyDutyPlateTier8.getIS(64),
 
-                GravitationEngine,
-                GravitationEngine,
-                GravitationEngine,
-                GravitationEngine},
+                copyAmount(64,GravitationEngine.getLeft()),
+                copyAmount(64,GravitationEngine.getLeft()),
+                copyAmount(64,GravitationEngine.getLeft()),
+                copyAmount(64,GravitationEngine.getLeft())},
             new FluidStack[] {
                 new FluidStack(MaterialMisc.MUTATED_LIVING_SOLDER.generateFluid(), 144 * 64),
                 Materials.SuperconductorUV.getMolten(144 * 512),

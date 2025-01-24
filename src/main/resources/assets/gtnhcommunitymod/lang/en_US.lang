@@ -1572,3 +1572,4 @@ StabilisationFieldGenerator.3.name=Stabilisation Field Generator UMV Tier
 Tooltip_StabilisationFieldGenerator.3=We Need to Go Deeper
 StabilisationFieldGenerator.4.name=Stabilisation Field Generator UXV Tier
 Tooltip_StabilisationFieldGenerator.4=The End?
+tst.recipe.DeployedNanoCoreRecipes=Nano Core

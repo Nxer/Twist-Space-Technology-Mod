@@ -20,7 +20,6 @@ import static gregtech.api.util.GTModHandler.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.MINUTES;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
-import static tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -885,7 +884,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             fusionCoils[absoluteTier],
                             getModItem(SuperSolarPanels.ID, "PhotonicSolarPanel", absoluteTier + 1, 0),
 
-                            getItemContainer("QuantumCircuit").get(absoluteTier + 1),
+                            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, absoluteTier + 1),
                             getModItem(SuperSolarPanels.ID, "redcomponent", 64),
                             getModItem(SuperSolarPanels.ID, "greencomponent", 64),
                             getModItem(SuperSolarPanels.ID, "bluecomponent", 64),
@@ -985,7 +984,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             getModItem(GraviSuite.ID, "itemSimpleItem", 64, 3),
 
                             boltList[absoluteTier],
-                            getItemContainer("QuantumCircuit").get(2 * (absoluteTier + 1)),
+                            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2 * (absoluteTier + 1)),
                             GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SpaceTime, absoluteTier + 1),
                             GTOreDictUnificator
                                 .get(OrePrefixes.gearGtSmall, MaterialsUEVplus.SpaceTime, absoluteTier + 1))

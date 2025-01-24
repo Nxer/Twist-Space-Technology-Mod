@@ -72,4 +72,14 @@ public class MathUtils {
         return max;
     }
 
+    // get Greatest Common Divisor
+    public static long getGCD(long a, long b) {
+        if (b == 0) return a;
+        else return getGCD(b, a % b);
+    }
+
+    // get Least Common Multiple
+    public static long getLCM(long a, long b) {
+        return a * b / getGCD(a, b);
+    }
 }

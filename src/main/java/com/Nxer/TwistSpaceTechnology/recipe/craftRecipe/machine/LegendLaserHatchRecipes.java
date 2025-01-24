@@ -5,20 +5,20 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.UltimateEnergyFl
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.enums.ItemList.ZPM6;
-import static gregtech.api.enums.Mods.GalaxySpace;
-import static gregtech.api.enums.Mods.GoodGenerator;
-import static gregtech.api.util.GTModHandler.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
+import galaxyspace.core.register.GSBlocks;
+import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -111,14 +111,14 @@ public class LegendLaserHatchRecipes implements IRecipePool {
 
         TTRecipeAdder.addResearchableAssemblylineRecipe(
             LegendTarget.get(1),
-            256_000_000,
-            2048,
-            512_000_000,
-            1_048_576,
+            2147483647,
+            1048576,
+            536870912,
+            16777216,
             new Object[] {
                 LegendTarget.get(1),
-                getModItem(GoodGenerator.ID, "compactFusionCoil", 1, 4),
-                getModItem(GalaxySpace.ID, "dysonswarmparts", 1, 4),
+                ItemRefer.Compact_Fusion_Coil_T4.get(1),
+                new ItemStack(GSBlocks.DysonSwarmBlocks,1,4),
                 CustomItemList.Machine_Multi_Transformer.get(1),
 
                 CustomItemList.eM_Power.get(64),
@@ -137,10 +137,10 @@ public class LegendLaserHatchRecipes implements IRecipePool {
 
         TTRecipeAdder.addResearchableAssemblylineRecipe(
             GTCMItemList.LegendaryWirelessEnergyHatch.get(1),
-            2048_000_000,
-            16384,
-            512_000_000,
-            512_000_000,
+            2147483647,
+            16777216,
+                536870912,
+            536870912,
             new Object[] {
                 GTCMItemList.LegendaryWirelessEnergyHatch.get(16),
                 AdvancedHighPowerCoilBlock.get(64),
@@ -149,10 +149,10 @@ public class LegendLaserHatchRecipes implements IRecipePool {
 
                 HomoStructureMain.get(64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 64),
-                GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 32),
-                GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 16),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.Eternity, 32),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 16),
 
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Transcendent, 16L),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 16L),
                 ItemList.EnergisedTesseract.get(64) },
             new FluidStack[] {
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(1_296 * 256 * 4),

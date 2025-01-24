@@ -140,7 +140,7 @@ public class ItemRegister {
         // #tr MetaItem01.41.tooltips.01
         // # The ultimate choice for high-load circuits
         // #zh_CN 高负载电路的终极选择
-        GTCMItemList.UltimateEnergyFlowCircuit.set(initItem01("Ultimate Energy Flow Circuit", 41));
+        GTCMItemList.UltimateEnergyFlowCircuit.set(initItem01("Ultimate Energy Flow Circuit", 41,new String[]{ tr("MetaItem01.41.tooltips.01")}));
 
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.HighDimensionalExtend.set(initItem01("High-dimensional extend", 176));

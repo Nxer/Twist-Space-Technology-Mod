@@ -106,8 +106,8 @@ public class LapotronChipRecipes implements IRecipePool {
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 16),
                 MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(144 * 4),
-                MaterialsUEVplus.PhononMedium.getFluid(1000 * 4),
-                MaterialsUEVplus.Time.getMolten(144 * 8))
+                MaterialsUEVplus.PhononMedium.getFluid(500 * 4),
+                MaterialsUEVplus.Time.getMolten(72 * 8))
             .itemOutputs(PerfectEngravedEnergyChip.get(4))
             .noOptimize()
             .eut(RECIPE_UIV)
@@ -129,8 +129,8 @@ public class LapotronChipRecipes implements IRecipePool {
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 8),
                 new FluidStack(MaterialsElements.STANDALONE.HYPOGEN.getPlasma(), 144 * 16),
-                MaterialsUEVplus.PhononMedium.getFluid(1000 * 8),
-                MaterialsUEVplus.Time.getMolten(144 * 16))
+                MaterialsUEVplus.PhononMedium.getFluid(500 * 8),
+                MaterialsUEVplus.Time.getMolten(72 * 16))
             .itemOutputs(PerfectEngravedEnergyChip.get(16))
             .noOptimize()
             .eut(RECIPE_UMV)
@@ -178,9 +178,9 @@ public class LapotronChipRecipes implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.DeepIron, 16))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 32),
-                MaterialsUEVplus.SpaceTime.getMolten(144),
+                MaterialsUEVplus.SpaceTime.getMolten(72),
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(2000),
-                MaterialsUEVplus.Space.getMolten(144 * 4))
+                MaterialsUEVplus.Space.getMolten(72 * 4))
             .itemOutputs(PerfectEngravedLaptronChip.get(1))
             .noOptimize()
             .eut(RECIPE_UIV)
@@ -201,9 +201,9 @@ public class LapotronChipRecipes implements IRecipePool {
                 GGMaterial.tairitsu.get(OrePrefixes.foil, 8))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 16),
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 4),
+                MaterialsUEVplus.SpaceTime.getMolten(72 * 4),
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(4000),
-                MaterialsUEVplus.Space.getMolten(144 * 8))
+                MaterialsUEVplus.Space.getMolten(72 * 8))
             .itemOutputs(PerfectEngravedLaptronChip.get(4))
             .noOptimize()
             .eut(RECIPE_UMV)
@@ -224,9 +224,9 @@ public class LapotronChipRecipes implements IRecipePool {
                 MaterialsAlloy.QUANTUM.getFoil(4))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 8),
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 16),
+                MaterialsUEVplus.SpaceTime.getMolten(72 * 16),
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(8000),
-                MaterialsUEVplus.Space.getMolten(144 * 16))
+                MaterialsUEVplus.Space.getMolten(72 * 16))
             .itemOutputs(PerfectEngravedLaptronChip.get(16))
             .noOptimize()
             .eut(RECIPE_UXV)
