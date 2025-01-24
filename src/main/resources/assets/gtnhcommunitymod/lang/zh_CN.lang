@@ -1609,3 +1609,4 @@ tc.research_name.TST_ARCANE_HOLE=奥术裂隙
 tc.research_text.TST_ARCANE_HOLE=虚空中之物
 tc.research_text.TST_ARCANE_HOLE.1=可以用来替代工业炼金塔两侧的守卫者玻璃。或许还是一种不错的建筑方块？
 Tooltip_Channel_Helper=可以使用§9信道:§echisel§7进行搭建时自动转换凿子方块，可以查看nei进行预览可用方块
+Tooltip_BloodOrbHatch_5=关闭血液仓将会把生命本质输回气血宝珠
