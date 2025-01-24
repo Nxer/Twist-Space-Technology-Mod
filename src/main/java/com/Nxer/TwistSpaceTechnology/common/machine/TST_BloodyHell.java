@@ -16,6 +16,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static net.minecraft.block.Block.getBlockFromName;
@@ -294,7 +295,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     ofChain(
                         ofBlock(MetaBlockCasing02, 0),
                         HatchElementBuilder.<TST_BloodyHell>builder()
-                            .atLeast(InputBus, OutputBus)
+                            .atLeast(InputBus, OutputBus, InputHatch)
                             .adder(TST_BloodyHell::addToMachineList)
                             .dot(1)
                             .casingIndex(MetaBlockCasing02.getTextureIndex(0))
