@@ -61,6 +61,7 @@ public class Config {
     public static final String MicroSpaceTimeFabricatorio = "Micro SpaceTime Fabricatorio";
     public static final String StrangeMatterAggregator = "Strange Matter Aggregator";
     public static final String BloodHell = "BloodHell";
+    public static final String IndustrialAlchemyTower = "IndustrialAlchemyTower";
     // endregion
 
     // region General
@@ -323,7 +324,7 @@ public class Config {
     public static boolean Enable_BallLightning = true;
     public static int WirelessModeExtraEuCost_BallLightning = 64;
     public static int WirelessModeTickEveryProcess_BallLightning = 64;
-    // end region
+    // endregion
 
     // region StarcoreMiner
     public static boolean Enable_StarcoreMiner = true;
@@ -445,7 +446,18 @@ public class Config {
     // endregion
 
     // region Machine Base Class
-    public static int DefaultCycleNum_WirelessEnergyMultiMachineBase = 100_000;
+    public static int DefaultCycleNum_WirelessEnergyMultiMachineBase = 100;
+    // endregion
+
+    // region Industrial Alchemy Tower
+    public static boolean Enable_IndustrialAlchemyTower = true;
+    // endregion
+
+    // region ManufacturingCenter
+    public static float ManufacturingCenter_SpeedBonus_Base = 0.2F;
+    public static float ManufacturingCenter_SpeedBonus_Tier = 0.5F;
+    public static float ManufacturingCenter_PowerReduction = 0.15F;
+    public static int ManufacturingCenter_MaxParallelModifier = 2;
     // endregion
 
     public static void synchronizeConfiguration(File configFile) {
@@ -784,6 +796,17 @@ public class Config {
         Enable_BloodHell = configuration.getBoolean("Enable Blood Hell", BloodHell, Enable_BloodHell, "Enable Blood Hell");
         Enable_BloodHatch = configuration.getBoolean("Enable Blood Hatch", BloodHell, Enable_BloodHatch, "Enable Blood Hatch\nThis depends on Enable Blood Hell");
         Enable_BloodHatch_Armok_InfiniteDrain = configuration.getBoolean("Enable Blood Hatch Armok Infinite Drain", BloodHell, Enable_BloodHatch_Armok_InfiniteDrain, "Enable Blood Hatch Drains Armok Orb Infinitely");
+        // endregion
+
+        // region Industrial Alchemy Tower
+        Enable_IndustrialAlchemyTower = configuration.getBoolean("Enable Industrial Alchemy Tower",IndustrialAlchemyTower,Enable_IndustrialAlchemyTower,"Enable Industrial Alchemy Tower");
+        // endregion
+
+        // region ManufacturingCenter
+        ManufacturingCenter_SpeedBonus_Base = configuration.getFloat("Speed Bonus Base", "ManufacturingCenter", ManufacturingCenter_SpeedBonus_Base, 0.0F, Float.MAX_VALUE, "The Base Speed Bonus");
+        ManufacturingCenter_SpeedBonus_Tier = configuration.getFloat("Speed Bonus Tier", "ManufacturingCenter", ManufacturingCenter_SpeedBonus_Tier, 0.0F, Float.MAX_VALUE, "The Speed Bonus for each tier over the lowest tier (not included)");
+        ManufacturingCenter_PowerReduction = configuration.getFloat("Power Reduction", "ManufacturingCenter", ManufacturingCenter_PowerReduction, 0.0F, Float.MAX_VALUE, "The Power Reduction for each tier over the lowest tier (not included)");
+        ManufacturingCenter_MaxParallelModifier = configuration.getInt("Max Parallel Modifier", "ManufacturingCenter", ManufacturingCenter_MaxParallelModifier, 1, Integer.MAX_VALUE, "The maximum parallel modifier");
         // endregion
 
         TST_CleanRoom.loadConfig(configuration);

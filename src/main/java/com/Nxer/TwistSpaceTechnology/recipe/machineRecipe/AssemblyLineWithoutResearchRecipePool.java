@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
@@ -72,6 +73,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTModHandler;
@@ -84,6 +86,7 @@ import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
+import gtnhlanth.common.register.LanthItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 
 public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
@@ -147,7 +150,9 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             tectech.thing.CustomItemList.eM_energyTunnel8_UXV.get(1),
             tectech.thing.CustomItemList.eM_dynamoTunnel8_UXV.get(1),
             tectech.thing.CustomItemList.eM_energyTunnel9_UXV.get(1),
-            tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1) };
+            tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1),
+            new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING),
+            new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING) };
 
         // start check assembly line recipes
         checkRecipe: for (var recipe : GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes) {
@@ -248,6 +253,45 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             : FluidRegistry.getFluid("molten.solderingalloy");
         final Fluid solderIndalloy = MaterialsAlloy.INDALLOY_140.getFluid();
         final Fluid ic2coolant = FluidRegistry.getFluid("ic2coolant");
+
+        // GTNH Lanthanides Focus Manipulation Casing and Target Receptacle Casing
+        {
+            TST_RecipeBuilder.builder()
+                .fluidInputs(
+                    Materials.SolderingAlloy.getMolten(8000),
+                    Materials.Gold.getMolten(2000),
+                    Materials.Argon.getGas(1000))
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(1),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 4),
+                    ItemList.Robot_Arm_LuV.get(4),
+                    ItemList.Conveyor_Module_LuV.get(2),
+                    GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 32),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
+                .itemOutputs(new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING))
+                .duration(60 * GTRecipeBuilder.SECONDS)
+                .eut(TierEU.RECIPE_LuV)
+                .addTo(MASL);
+
+            TST_RecipeBuilder.builder()
+                .fluidInputs(
+                    Materials.SolderingAlloy.getMolten(8000),
+                    Materials.Gold.getMolten(2000),
+                    Materials.Argon.getGas(1000))
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(2),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 4),
+                    ItemList.Robot_Arm_LuV.get(4),
+                    GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 16),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
+                .itemOutputs(new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING))
+                .duration(60 * GTRecipeBuilder.SECONDS)
+                .eut(TierEU.RECIPE_LuV)
+                .addTo(MASL);
+
+        }
 
         {
             // Dyson Swarm Module
@@ -541,12 +585,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
             // 4M UXV Target
             GTValues.RA.stdBuilder()
-                .itemInputs(
+                .itemInputsUnsafe(
                     GTUtility.getIntegratedCircuit(1),
                     ItemList.Hull_UXV.get(1),
-                    // copyAmount(128, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    copyAmount(128, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
                     setStackSize(ItemList.Sensor_UXV.get(1), 128),
                     setStackSize(ItemList.Electric_Pump_UXV.get(1), 128),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 32))
@@ -558,12 +600,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
             // 4M UXV Source
             GTValues.RA.stdBuilder()
-                .itemInputs(
+                .itemInputsUnsafe(
                     GTUtility.getIntegratedCircuit(1),
                     ItemList.Hull_UXV.get(1),
-                    // copyAmount(128, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    copyAmount(128, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
                     setStackSize(ItemList.Emitter_UXV.get(1), 128),
                     setStackSize(ItemList.Electric_Pump_UXV.get(1), 128),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 32))
@@ -575,14 +615,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
             // 16M UXV Target
             GTValues.RA.stdBuilder()
-                .itemInputs(
+                .itemInputsUnsafe(
                     GTUtility.getIntegratedCircuit(2),
                     ItemList.Hull_UXV.get(1),
-                    // copyAmount(256, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    copyAmount(256, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
                     setStackSize(ItemList.Sensor_UXV.get(1), 256),
                     setStackSize(ItemList.Electric_Pump_UXV.get(1), 256),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 64))
@@ -594,14 +630,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 
             // 16M UXV Source
             GTValues.RA.stdBuilder()
-                .itemInputs(
+                .itemInputsUnsafe(
                     GTUtility.getIntegratedCircuit(2),
                     ItemList.Hull_UXV.get(1),
-                    // copyAmount(256, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
-                    GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 64),
+                    copyAmount(256, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
                     setStackSize(ItemList.Emitter_UXV.get(1), 256),
                     setStackSize(ItemList.Electric_Pump_UXV.get(1), 256),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 64))
@@ -645,7 +677,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new ItemStack(BlockInfinityChest.instance, 1),
 
                     GregtechItemList.CosmicFabricManipulator.get(1),
-                    Utils.copyAmount(1, ME_Singularity),
+                    copyAmount(1, ME_Singularity),
                     GGMaterial.shirabon.get(OrePrefixes.bolt, 2),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
                 .fluidInputs(
@@ -668,7 +700,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new ItemStack(BlockInfinityChest.instance, 2),
 
                     GregtechItemList.CosmicFabricManipulator.get(2),
-                    Utils.copyAmount(2, ME_Singularity),
+                    copyAmount(2, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 2),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
                 .fluidInputs(
@@ -691,7 +723,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new ItemStack(BlockInfinityChest.instance, 3),
 
                     GregtechItemList.CosmicFabricManipulator.get(3),
-                    Utils.copyAmount(3, ME_Singularity),
+                    copyAmount(3, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 8),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
                 .fluidInputs(
@@ -714,7 +746,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new ItemStack(BlockInfinityChest.instance, 4),
 
                     GregtechItemList.InfinityInfusedManipulator.get(1),
-                    Utils.copyAmount(4, ME_Singularity),
+                    copyAmount(4, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 32),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2))
                 .fluidInputs(
@@ -737,7 +769,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new ItemStack(BlockInfinityChest.instance, 5),
 
                     GregtechItemList.InfinityInfusedManipulator.get(2),
-                    Utils.copyAmount(5, ME_Singularity),
+                    copyAmount(5, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 2),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2))
                 .fluidInputs(
@@ -760,7 +792,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new ItemStack(BlockInfinityChest.instance, 6),
 
                     GregtechItemList.InfinityInfusedManipulator.get(3),
-                    Utils.copyAmount(6, ME_Singularity),
+                    copyAmount(6, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 8),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2))
                 .fluidInputs(
@@ -783,7 +815,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new ItemStack(BlockInfinityChest.instance, 7),
 
                     GregtechItemList.SpaceTimeContinuumRipper.get(1),
-                    Utils.copyAmount(7, ME_Singularity),
+                    copyAmount(7, ME_Singularity),
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 32),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 3))
                 .fluidInputs(
@@ -806,7 +838,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new ItemStack(BlockInfinityChest.instance, 8),
 
                     GregtechItemList.SpaceTimeContinuumRipper.get(2),
-                    Utils.copyAmount(8, ME_Singularity),
+                    copyAmount(8, ME_Singularity),
                     GTOreDictUnificator
                         .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 2),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 3))
@@ -830,7 +862,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     new ItemStack(BlockInfinityChest.instance, 9),
 
                     GregtechItemList.SpaceTimeContinuumRipper.get(3),
-                    Utils.copyAmount(9, ME_Singularity),
+                    copyAmount(9, ME_Singularity),
                     GTOreDictUnificator
                         .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 8),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 3))

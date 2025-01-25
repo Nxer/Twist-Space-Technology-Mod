@@ -1,11 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.crucibleRecipeArcaneHole;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeBloodHatch;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeBloodyHell;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereSimulator;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeElvenWorkshop;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeFontOfEcology;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialMagicMatrix;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeTimeBendingSpeedRune;
 
@@ -319,6 +321,63 @@ public class TCResearches {
                     new ResearchPage(TextEnums.tr("tc.research_text.TIME_BENDING_SPEED_RUNE.1")),
                     new ResearchPage(infusionRecipeTimeBendingSpeedRune))
                     .setParents("BLOODY_HELL")
+                    .setSecondary()
+                    .registerResearchItem();
+
+            if (Config.Enable_IndustrialAlchemyTower) {
+                // #tr tc.research_name.INDUSTRIAL_ALCHEMY_TOWER
+                // # Industrial Alchemy Tower
+                // #zh_CN 工业炼金塔
+                // #tr tc.research_text.INDUSTRIAL_ALCHEMY_TOWER
+                // # Batch alchemy!
+                // #zh_CN 批量化炼金!
+                new ResearchItem(
+                    "INDUSTRIAL_ALCHEMY_TOWER",
+                    "TST",
+                    new AspectList().merge(Aspect.AIR, 1)
+                        .merge(Aspect.FIRE, 1)
+                        .merge(Aspect.ENTROPY, 1)
+                        .merge(Aspect.ORDER, 1)
+                        .merge(Aspect.EXCHANGE, 1),
+                    -1,
+                    2,
+                    9,
+                    GTCMItemList.IndustrialAlchemyTower.get(1)).setPages(
+                        // spotless:off
+                        // #tr tc.research_text.INDUSTRIAL_ALCHEMY_TOWER.1
+                        // # Your power is unprecedentedly strong, and with a little experimentation, you have created this machine: a machine capable of batch processing thaumic crucible recipes. It's just that this machine needs to be sealed, which is a good thing, right?
+                        // #zh_CN 你的力量空前强大，稍加尝试便创造出了这台机器：一台能够批量化进行神秘坩埚配方的机器。只不过这台机器需要密封，这是件好事对吧？
+                        // spotless:on
+                        new ResearchPage(TextEnums.tr("tc.research_text.INDUSTRIAL_ALCHEMY_TOWER.1")),
+                        new ResearchPage(infusionRecipeIndustrialAlchemyTower))
+                        .setParents("TST_WELCOME")
+                        .registerResearchItem();
+            }
+
+            // #tr tc.research_name.TST_ARCANE_HOLE
+            // # Arcane Hole
+            // #zh_CN 奥术裂隙
+            // #tr tc.research_text.TST_ARCANE_HOLE
+            // # Block in the void
+            // #zh_CN 虚空中之物
+            new ResearchItem(
+                "TST_ARCANE_HOLE",
+                "TST",
+                new AspectList().merge(Aspect.DARKNESS, 4)
+                    .merge(Aspect.VOID, 4)
+                    .merge(Aspect.SENSES, 8),
+                -2,
+                2,
+                1,
+                new ItemStack(BasicBlocks.BlockArcaneHole)).setPages(
+                    // spotless:off
+                // #tr tc.research_text.TST_ARCANE_HOLE.1
+                // # Can be used to replace the warded glass on both sides of industrial alchemy tower. Perhaps it's still a good building block?
+                // #zh_CN 可以用来替代工业炼金塔两侧的守卫者玻璃。或许还是一种不错的建筑方块？
+                // spotless:on
+                    new ResearchPage(TextEnums.tr("tc.research_text.TST_ARCANE_HOLE.1")),
+                    new ResearchPage(crucibleRecipeArcaneHole))
+                    .setParents("TST_WELCOME")
                     .setSecondary()
                     .registerResearchItem();
         }

@@ -16,6 +16,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static net.minecraft.block.Block.getBlockFromName;
@@ -294,7 +295,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     ofChain(
                         ofBlock(MetaBlockCasing02, 0),
                         HatchElementBuilder.<TST_BloodyHell>builder()
-                            .atLeast(InputBus, OutputBus)
+                            .atLeast(InputBus, OutputBus, InputHatch)
                             .adder(TST_BloodyHell::addToMachineList)
                             .dot(1)
                             .casingIndex(MetaBlockCasing02.getTextureIndex(0))
@@ -325,9 +326,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
         int tier = stackSize.stackSize;
         if (tier > 6) tier = 6;
+        if (mMachine && tier <= mTier) return -1;
 
         int blocksBuilt = this.survivialBuildPiece(
             "tier" + tier,
@@ -439,6 +440,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         }
         if (bloodAmountNeeded > mBloodAmount) return false;
 
+        int fixX = 0;
+        int fixY = mTier > 5 ? -1 : -24;
+        int fixZ = mTier > 5 ? 1 : 24;
+
         int setCount = 0;
         for (int y = 0; y < lengthY; y++) {
             for (int x = 0; x < lengthX; x++) {
@@ -446,9 +451,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     String strList = String.valueOf(structureDef[x][y].charAt(z));
                     if (!Objects.equals(strList, "Z")) continue;
 
-                    int aX = offsetX - x;
-                    int aY = offsetY - y - 1;
-                    int aZ = offsetZ - z + 1;
+                    int aX = offsetX - x + fixX;
+                    int aY = offsetY - y + fixY;
+                    int aZ = offsetZ - z + fixZ;
 
                     aX += aBaseMetaTileEntity.getXCoord();
                     aY += aBaseMetaTileEntity.getYCoord();

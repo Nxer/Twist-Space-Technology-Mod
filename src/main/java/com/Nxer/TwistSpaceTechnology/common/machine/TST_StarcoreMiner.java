@@ -467,10 +467,12 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        // spotless:off
         // #tr VoidMiner
         // # Void Miner
         // #zh_CN 虚空采矿场
         tt.addMachineType(TextEnums.tr("VoidMiner"))
+            .addInfo(" ")
             // #tr Tooltip_Starcore_01
             // # {\ITALIC} " Do you sell them ? "
             // #zh_CN {\ITALIC} " Do you sell them ? "
@@ -506,15 +508,15 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
             // #tr Tooltip_Starcore_Crash_20240606
             // # There is a serious bug in the blueprint automatic construction function of borosilicate glass,
             // #zh_CN {\RED}{\BOLD}蓝图自动搭建硼玻璃功能发现严重bug,
-            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606"))
+//            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606"))
             // #tr Tooltip_Starcore_Crash_20240606_02
             // # {\RED}{\BOLD}{\SPACE}which may cause the save file to crash and become inaccessible.
             // #zh_CN {\RED}{\BOLD}{\SPACE}可能导致存档崩溃无法进入.
-            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_02"))
+//            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_02"))
             // #tr Tooltip_Starcore_Crash_20240606_03
             // # In case of emergency, you can install ZeroPointBugFix mod for temporary fix.
             // #zh_CN {\RED}紧急情况可安装 ZeroPointBugFix mod 临时修复.
-            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_03"))
+//            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_03"))
             .addInfo(TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch)
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
@@ -524,6 +526,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
             .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
+        // spotless:on
     }
 
     @Override

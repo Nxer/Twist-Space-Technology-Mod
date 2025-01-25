@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipe.extremeCraftRecipes;
+import static com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipeHandler.extremeCraftRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -73,7 +73,6 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
-import scala.actors.migration.pattern;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.casing.TTCasingsContainer;
 
@@ -405,12 +404,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     @Override
     public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
-        if (cachedOutput.containsKey(patternDetails)) {
-            Long pre = cachedOutput.get(patternDetails);
-            return Objects.equals(cachedOutput.put(patternDetails, pre + 1), pre);
-        }
-        cachedOutput.put(patternDetails, 1L);
-        return true;
+        return cachedOutput.merge(patternDetails, 1L, Long::sum) >= 1;
     }
 
     @Override

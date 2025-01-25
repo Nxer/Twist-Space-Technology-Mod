@@ -344,3 +344,7 @@ tasks.register('preprocessLangInJavaFiles') {
 
     }
 }
+
+tasks.processResources {
+    dependsOn(tasks.preprocessLangInJavaFiles)
+}

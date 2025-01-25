@@ -39,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_Multi
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -315,12 +316,12 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
                     if (null == machine || machine.stackSize < 1) continue;
                     if (LightningRod.equalItemStack(machine)) {
                         if (canAdd > machine.stackSize) {
-                            mStored.add(GTUtility.copy(machine));
+                            mStored.add(machine.copy());
                             tRods += machine.stackSize;
                             canAdd -= machine.stackSize;
                             machine.stackSize = 0;
                         } else {
-                            mStored.add(GTUtility.copyAmount(MAXRODS - tRods, machine));
+                            mStored.add(Utils.copyAmount(MAXRODS - tRods, machine));
                             machine.stackSize -= canAdd;
                             tRods = MAXRODS;
                             break;

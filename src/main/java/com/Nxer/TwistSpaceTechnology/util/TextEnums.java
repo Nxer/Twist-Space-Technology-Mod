@@ -10,6 +10,11 @@ public enum TextEnums {
 
     // region General
 
+    // #tr Mod_TwistSpaceTechnology
+    // # {\RED}Twist Space Technology
+    // #zh_CN {\RED}Twist Space Technology
+    Mod_TwistSpaceTechnology("Mod_TwistSpaceTechnology"),
+
     // #tr Author_Goderium
     // # Author: {\WHITE}{\BOLD}Goderium_
     // #zh_CN 作者: {\WHITE}{\BOLD}Goderium_
@@ -189,6 +194,10 @@ public enum TextEnums {
     // spotless:on
     public static String tr(String key) {
         return translateToLocalFormatted(key);
+    }
+
+    public static String tr(String key, Object... format) {
+        return translateToLocalFormatted(key, format);
     }
 
     private final String text;
