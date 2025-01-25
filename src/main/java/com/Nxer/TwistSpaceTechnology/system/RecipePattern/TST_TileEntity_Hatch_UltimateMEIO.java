@@ -79,8 +79,10 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddGregtechLogo;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.objects.GTDualInputs;
 import gregtech.api.render.TextureFactory;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
@@ -250,6 +252,11 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
         @Override
         public FluidStack[] getFluidInputs() {
             return new FluidStack[0];
+        }
+
+        @Override
+        public GTDualInputs getPatternInputs() {
+            return new GTDualInputs();
         }
 
         public boolean isEmpty() {
@@ -926,6 +933,14 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
     public boolean supportsFluids() {
         return true;
     }
+
+    @Override
+    public ItemStack[] getSharedItems() {
+        return new ItemStack[0];
+    }
+
+    @Override
+    public void setProcessingLogic(ProcessingLogic pl) {}
 
     @Override
     public List<ItemStack> getItemsForHoloGlasses() {

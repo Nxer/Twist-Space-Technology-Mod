@@ -26,8 +26,10 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
+import gregtech.api.objects.GTDualInputs;
 import gregtech.api.render.TextureFactory;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
@@ -65,6 +67,14 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
             return Arrays.stream(fluidInventory)
                 .filter(Objects::nonNull)
                 .toArray(FluidStack[]::new);
+        }
+
+        @Override
+        public GTDualInputs getPatternInputs() {
+            GTDualInputs dualInputs = new GTDualInputs();
+            dualInputs.inputItems = itemInventory;
+            dualInputs.inputFluid = fluidInventory;
+            return dualInputs;
         }
 
         public boolean isEmpty() {
@@ -278,6 +288,14 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
     public boolean supportsFluids() {
         return true;
     }
+
+    @Override
+    public ItemStack[] getSharedItems() {
+        return new ItemStack[0];
+    }
+
+    @Override
+    public void setProcessingLogic(ProcessingLogic pl) {}
 
     @Override
     public boolean canTankBeFilled() {
