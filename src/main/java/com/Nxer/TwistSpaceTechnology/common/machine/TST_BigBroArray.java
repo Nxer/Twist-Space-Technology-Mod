@@ -26,6 +26,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.dreammaster.item.NHItemList;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -2101,7 +2102,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                 tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2.get(4), ItemList.Robot_Arm_UXV.get(16),
                 ItemList.Emitter_UXV.get(16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 8),
-                com.dreammaster.item.ItemList.QuantumCircuit.getIS(4) },
+                NHItemList.QuantumCircuit.getIS(4) },
             new FluidStack[] { MaterialsUEVplus.SpaceTime.getMolten(9216) },
             GTCMItemList.ParallelismCasing4.get(1),
             20 * 1200,
