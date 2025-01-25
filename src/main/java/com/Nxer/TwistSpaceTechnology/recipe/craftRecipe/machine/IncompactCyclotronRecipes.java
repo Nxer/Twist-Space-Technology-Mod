@@ -1,8 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CompactCyclotronCoil;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DSPLauncher;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DenseCyclotronOuterCasing;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IncompactCyclotron;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler.LightWeightPlate;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
@@ -15,6 +19,13 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotr
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_External;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.util.enums.TierEU;
+import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
+import galaxyspace.core.register.GSBlocks;
+import gregtech.api.enums.MaterialsUEVplus;
+import gtPlusPlus.core.material.MaterialMisc;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -33,21 +44,26 @@ import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
+import net.minecraftforge.fluids.FluidStack;
+import tectech.recipe.TTRecipeAdder;
 
 public class IncompactCyclotronRecipes implements IRecipePool {
-
+    // spotless:off
     @Override
     public void loadRecipes() {
 
         if (Config.Enable_IncompactCyclotron) {
-            GTValues.RA.stdBuilder()
-                .metadata(RESEARCH_ITEM, COMET_Cyclotron.get(1))
-                .metadata(RESEARCH_TIME, 2 * HOURS)
-                .itemInputs(
+            TTRecipeAdder.addResearchableAssemblylineRecipe(
+                GregtechItemList.COMET_Cyclotron.get(1),
+                2_048_000,
+                1024,
+                (int) TierEU.RECIPE_UEV,
+                4,
+                new Object[] {
                     ItemList.Hull_UEV.get(64),
-                    COMET_Cyclotron.get(64),
+                    GregtechItemList.COMET_Cyclotron.get(64),
                     ItemList.Casing_Coil_Infinity.get(8),
-                    Laser_Lens_Special.get(4),
+                    GregtechItemList.Laser_Lens_Special.get(4),
 
                     ItemList.Field_Generator_UHV.get(16),
                     ItemRefer.HiC_T5.get(32),
@@ -55,24 +71,24 @@ public class IncompactCyclotronRecipes implements IRecipePool {
                     GGMaterial.enrichedNaquadahAlloy.get(OrePrefixes.plateDense, 16),
 
                     GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.NaquadahAlloy, 16),
-                    GTOreDictUnificator.get(OrePrefixes.screw, Materials.NaquadahAlloy, 64)
-
-                )
-                .fluidInputs(
+                    GTOreDictUnificator.get(OrePrefixes.screw, Materials.NaquadahAlloy, 64)},
+                new FluidStack[] {
                     Materials.NaquadahAlloy.getMolten(144 * 256),
                     FluidRegistry.getFluidStack("cryotheum", 1_000_000),
-                    MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(144 * 2))
-                .itemOutputs(IncompactCyclotron.get(1))
-                .eut(RECIPE_UEV)
-                .duration(20 * 900)
-                .addTo(AssemblyLine);
+                    MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(144 * 2) },
+                GTCMItemList.IncompactCyclotron.get(1),
+                20 * 900,
+                (int) TierEU.RECIPE_UEV);
         }
 
         // Dense Cyclotron Outer Casing
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, Casing_Cyclotron_External.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
-            .itemInputs(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            GregtechItemList.Casing_Cyclotron_External.get(1),
+            1_024_000,
+            512,
+            (int) TierEU.RECIPE_UHV,
+            4,
+            new Object[] {
                 Casing_Cyclotron_External.get(4),
                 Casing_AdvancedVacuum.get(4),
                 ItemUtils.simpleMetaStack("miscutils:itemDehydratorCoilWire", 3, 16),
@@ -80,22 +96,22 @@ public class IncompactCyclotronRecipes implements IRecipePool {
 
                 MaterialsAlloy.ABYSSAL.getLongRod(12),
                 MaterialsAlloy.TITANSTEEL.getScrew(24),
-                ItemList.Electric_Piston_UV.get(6)
-
-            )
-            .fluidInputs(
+                ItemList.Electric_Piston_UV.get(6)},
+            new FluidStack[] {
                 MaterialsAlloy.BLACK_TITANIUM.getFluidStack(144 * 10),
-                GGMaterial.enrichedNaquadahAlloy.getMolten(144 * 4))
-            .itemOutputs(DenseCyclotronOuterCasing.get(1))
-            .eut(RECIPE_UHV)
-            .duration(20 * 30)
-            .addTo(AssemblyLine);
+                GGMaterial.enrichedNaquadahAlloy.getMolten(144 * 4)},
+            GTCMItemList.DenseCyclotronOuterCasing.get(1),
+            20 * 30,
+            (int) TierEU.RECIPE_UHV);
 
         // Compact Cyclotron Coil
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, Casing_Cyclotron_Coil.get(1))
-            .metadata(RESEARCH_TIME, 4 * HOURS)
-            .itemInputs(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            GregtechItemList.Casing_Cyclotron_Coil.get(1),
+            1_024_000,
+            512,
+            (int) TierEU.RECIPE_UHV,
+            4,
+            new Object[] {
                 Casing_Cyclotron_Coil.get(16),
                 ItemList.Casing_Coil_Superconductor.get(4),
                 new ItemStack[] { GregtechItemList.Battery_Gem_2.get(1), ItemList.Energy_Module.get(2) },
@@ -103,15 +119,16 @@ public class IncompactCyclotronRecipes implements IRecipePool {
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 2),
                 ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 19, 16),
-                ItemList.Field_Generator_UHV.get(1))
-            .fluidInputs(
+                ItemList.Field_Generator_UHV.get(1)},
+            new FluidStack[] {
                 Materials.UUMatter.getFluid(1000 * 64),
                 MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(1000 * 16),
                 Materials.Longasssuperconductornameforuhvwire.getMolten(144 * 8),
-                GGMaterial.enrichedNaquadahAlloy.getMolten(144 * 2))
-            .itemOutputs(CompactCyclotronCoil.get(1))
-            .eut(RECIPE_UHV)
-            .duration(20 * 60)
-            .addTo(AssemblyLine);
+                GGMaterial.enrichedNaquadahAlloy.getMolten(144 * 2)},
+            GTCMItemList.DenseCyclotronOuterCasing.get(1),
+            20 * 60,
+            (int) TierEU.RECIPE_UHV);
+
     }
+    // spotless:on
 }

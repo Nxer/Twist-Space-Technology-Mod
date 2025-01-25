@@ -22,6 +22,7 @@ import static gregtech.api.recipe.RecipeMaps.circuitAssemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.laserEngraverRecipes;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -239,7 +240,7 @@ public class LapotronChipRecipes implements IRecipePool {
             .itemInputs(
                 SpaceTimeSuperconductingInlaidMotherboard.get(1),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 2),
-                MaterialsUEVplus.SixPhasedCopper.getNanite(4),
+                MaterialsTST.Axonium.getNanite(2),
 
                 PerfectEngravedEnergyChip.get(2),
                 PerfectEngravedLaptronChip.get(2),
@@ -256,7 +257,7 @@ public class LapotronChipRecipes implements IRecipePool {
                 GTUtility.getIntegratedCircuit(16),
                 SpaceTimeSuperconductingInlaidMotherboard.get(12),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 24),
-                MaterialsUEVplus.SixPhasedCopper.getNanite(48),
+                MaterialsTST.Axonium.getNanite(24),
 
                 PerfectEngravedEnergyChip.get(24),
                 PerfectEngravedLaptronChip.get(24),

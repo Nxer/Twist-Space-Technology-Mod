@@ -26,7 +26,7 @@ public class NanoForgeRecipePool implements IRecipePool {
                 GTCMItemList.InformationHorizonInterventionShell.get(16))
             .fluidInputs(
                 Materials.UUMatter.getFluid(2000000),
-                MaterialsUEVplus.PhononMedium.getFluid(16000),
+                MaterialsUEVplus.PhononMedium.getFluid(4000),
                 Materials.Infinity.getPlasma(8000))
             .itemOutputs(MaterialsTST.Axonium.getNanite(2))
             .eut(RECIPE_MAX)

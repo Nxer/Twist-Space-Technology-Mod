@@ -31,7 +31,6 @@ import tectech.recipe.TTRecipeAdder;
 import tectech.thing.CustomItemList;
 
 public class LegendLaserHatchRecipes implements IRecipePool {
-
     // spotless:off
     @Override
     public void loadRecipes() {
@@ -160,6 +159,7 @@ public class LegendLaserHatchRecipes implements IRecipePool {
             GTCMItemList.HarmoniousWirelessEnergyHatch.get(1),
             20 * 60,
             (int) RECIPE_UXV);
+
     }
     // spotless:on
 }

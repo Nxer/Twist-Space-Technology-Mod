@@ -10,6 +10,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 
+import gregtech.api.util.GTUtility;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -23,12 +24,13 @@ import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
 
 public class DualInputBufferRecipes implements IRecipePool {
-
+    // spotless:off
     @Override
     public void loadRecipes() {
         // IV
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 ItemList.Hatch_Input_Bus_IV.get(1),
                 ItemList.Hatch_Input_Multi_2x2_IV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1),
@@ -42,6 +44,7 @@ public class DualInputBufferRecipes implements IRecipePool {
         // LuV
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 ItemList.Hatch_Input_Bus_LuV.get(1),
                 ItemList.Hatch_Input_Multi_2x2_LuV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ZPM, 1),
@@ -55,6 +58,7 @@ public class DualInputBufferRecipes implements IRecipePool {
         // ZPM
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 ItemList.Hatch_Input_Bus_ZPM.get(1),
                 ItemList.Hatch_Input_Multi_2x2_ZPM.get(1),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 1),
@@ -70,6 +74,7 @@ public class DualInputBufferRecipes implements IRecipePool {
         // UV
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 ItemList.Hatch_Input_Bus_UV.get(1),
                 ItemList.Hatch_Input_Multi_2x2_UV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
@@ -79,5 +84,7 @@ public class DualInputBufferRecipes implements IRecipePool {
             .eut(RECIPE_UV)
             .duration(20 * 15)
             .addTo(assemblerRecipes);
+
     }
+    // spotless:on
 }

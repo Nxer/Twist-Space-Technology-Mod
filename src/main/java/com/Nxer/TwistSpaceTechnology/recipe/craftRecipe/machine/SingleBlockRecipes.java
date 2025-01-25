@@ -177,7 +177,7 @@ public class SingleBlockRecipes implements IRecipePool {
             new FluidStack[] {
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
                 Materials.SuperconductorUIVBase.getMolten(144 * 256),
-                new FluidStack(MaterialsElements.getInstance().XENON.getPlasma(), 1000 * 16),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(1000 * 64),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000)},
             CustomItemList.eM_Teleportation.get(1),
             20 * 120,
@@ -214,7 +214,7 @@ public class SingleBlockRecipes implements IRecipePool {
             new FluidStack[] {
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
                 Materials.SuperconductorUIVBase.getMolten(144 * 256),
-                new FluidStack(MaterialsElements.getInstance().XENON.getPlasma(), 1000 * 16),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(1000 * 64),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000)},
             CustomItemList.eM_Dimensional.get(1),
             20 * 120,
@@ -572,7 +572,7 @@ public class SingleBlockRecipes implements IRecipePool {
             new FluidStack[] {
                 new FluidStack(MaterialMisc.MUTATED_LIVING_SOLDER.generateFluid(), 144 * 256),
                 Materials.Infinity.getPlasma(1000 * 216),
-                MaterialsUEVplus.PhononMedium.getFluid(1000 * 256),
+                MaterialsUEVplus.PhononMedium.getFluid(1000 * 1024),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(200000)},
             GTCMItemList.StabilisationFieldGeneratorUMV.get(1),
             20 * 60 * 64,
@@ -609,7 +609,7 @@ public class SingleBlockRecipes implements IRecipePool {
             new FluidStack[] {
                 new FluidStack(MaterialMisc.MUTATED_LIVING_SOLDER.generateFluid(), 144 * 320),
                 MaterialsUEVplus.QuarkGluonPlasma.getFluid(1000 * 288),
-                MaterialsUEVplus.PhononMedium.getFluid(1000 * 1024),
+                MaterialsUEVplus.PhononMedium.getFluid(1000 * 16384),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(200000000)},
             GTCMItemList.StabilisationFieldGeneratorUXV.get(1),
             20 * 60 * 256,

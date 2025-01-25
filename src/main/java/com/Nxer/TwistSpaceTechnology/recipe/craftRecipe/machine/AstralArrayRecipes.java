@@ -10,6 +10,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
+import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
@@ -19,6 +20,14 @@ import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 
+import appeng.items.materials.MaterialType;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
+import goodgenerator.items.GGMaterial;
+import gtPlusPlus.core.material.MaterialMisc;
+import gtPlusPlus.core.material.MaterialsAlloy;
+import gtPlusPlus.core.material.MaterialsElements;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -31,17 +40,22 @@ import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
+import net.minecraftforge.fluids.FluidStack;
+import tectech.recipe.TTRecipeAdder;
 import tectech.thing.CustomItemList;
 import tectech.thing.casing.TTCasingsContainer;
 
 public class AstralArrayRecipes implements IRecipePool {
-
+    // spotless:off
     @Override
     public void loadRecipes() {
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, CustomItemList.Machine_Multi_Computer.get(1))
-            .metadata(RESEARCH_TIME, 114514 * 20)
-            .itemInputs(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            CustomItemList.Machine_Multi_Computer.get(1),
+            8_192_000,
+            4096,
+            (int) RECIPE_UEV,
+            8,
+            new Object[] {
                 CustomItemList.Machine_Multi_Computer.get(64),
                 CustomItemList.Machine_Multi_Computer.get(64),
                 CustomItemList.Machine_Multi_Computer.get(64),
@@ -57,15 +71,15 @@ public class AstralArrayRecipes implements IRecipePool {
                 new ItemStack(TTCasingsContainer.sBlockCasingsTT, 64, 1),
                 new ItemStack(TTCasingsContainer.sBlockCasingsTT, 64, 1),
                 new ItemStack(TTCasingsContainer.sBlockCasingsTT, 64, 2),
-                new ItemStack(TTCasingsContainer.sBlockCasingsTT, 64, 2))
-            .fluidInputs(
-                Materials.Tin.getPlasma(14400),
-                Materials.SuperCoolant.getFluid(4000000),
-                Materials.Infinity.getMolten(114514))
-            .itemOutputs(AstralComputingArray.get(1))
-            .eut(RECIPE_UEV * 3)
-            .duration(20 * 1000)
-            .addTo(AssemblyLine);
+                new ItemStack(TTCasingsContainer.sBlockCasingsTT, 64, 2)},
+            new FluidStack[] {
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 64),
+                MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getFluidStack(1000 * 144),
+                MaterialsTST.Axonium.getMolten(144 * 4),
+                Materials.UUMatter.getFluid(1000 * 4000),},
+            GTCMItemList.AstralComputingArray.get(1),
+            20 * 1000,
+            (int) RECIPE_UEV * 3);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -84,11 +98,11 @@ public class AstralArrayRecipes implements IRecipePool {
         // Wireless Booster Card
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
                 Materials.Fluix.getDust(1),
                 Materials.CertusQuartz.getGems(1),
                 Materials.EnderPearl.getPlates(1),
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.Titanium, 2))
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.Titanium, 2),
+                GTUtility.getIntegratedCircuit(2))
             .fluidInputs(Materials.Aluminium.getMolten(144))
             .itemOutputs(copyAmount(1, wirelessCard))
             .eut(RECIPE_LV)
@@ -98,10 +112,10 @@ public class AstralArrayRecipes implements IRecipePool {
         // Infinity Booster Card
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 4),
                 copyAmount(32, wirelessCard),
-                new ItemStack(LudicrousItems.resource, 4, 5))
+                new ItemStack(LudicrousItems.resource, 4, 5),
+                GTUtility.getIntegratedCircuit(2))
             .fluidInputs(Materials.Infinity.getMolten(144 * 8))
             .itemOutputs(copyAmount(1, quantumCard))
             .eut(RECIPE_UHV)
@@ -139,10 +153,13 @@ public class AstralArrayRecipes implements IRecipePool {
             .addTo(assemblerRecipes);
 
         // Wireless computation update card
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
-            .metadata(RESEARCH_TIME, 720000)
-            .itemInputs(
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            GTCMItemList.WirelessDataInputHatch.get(1),
+            1_024_000,
+            512,
+            (int) RECIPE_UHV,
+            8,
+            new Object[] {
                 copyAmount(64, quantumCard),
                 copyAmount(64, quantumCard),
                 copyAmount(64, quantumCard),
@@ -150,21 +167,21 @@ public class AstralArrayRecipes implements IRecipePool {
 
                 WirelessDataOutputHatch.get(8),
                 WirelessDataInputHatch.get(8),
-                ItemList.Field_Generator_UMV.get(64),
-                ItemList.Wireless_Dynamo_Energy_UMV.get(8),
+                ItemList.Field_Generator_UIV.get(64),
+                ItemList.Wireless_Dynamo_Energy_UIV.get(8),
 
                 CustomItemList.Machine_Multi_Switch.get(64),
                 CustomItemList.Machine_Multi_Switch.get(64),
                 CustomItemList.Machine_Multi_Switch.get(64),
-                CustomItemList.Machine_Multi_Switch.get(64))
-            .fluidInputs(
+                CustomItemList.Machine_Multi_Switch.get(64)},
+            new FluidStack[] {
                 MaterialsUEVplus.SpaceTime.getMolten(144 * 200),
-                Materials.UUMatter.getFluid(20480000),
-                Materials.SuperconductorUIVBase.getMolten(5000000))
-            .itemOutputs(WirelessUpdateItem.get(1))
-            .eut(RECIPE_UMV)
-            .duration(800)
-            .addTo(AssemblyLine);
+                Materials.SuperconductorUIVBase.getMolten(144 * 32768),
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(10)},
+            WirelessUpdateItem.get(1),
+            20 * 600,
+            (int) RECIPE_UMV);
 
     }
+    // spotless:on
 }

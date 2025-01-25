@@ -41,6 +41,8 @@ import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
@@ -63,13 +65,14 @@ import ic2.core.Ic2Items;
 import tectech.thing.CustomItemList;
 
 public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePool {
-
+    // spotless:off
     @Override
     public void loadRecipes() {
 
         // Controller
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 CustomItemList.eM_Power.get(6),
                 CustomItemList.Machine_Multi_Transformer.get(2),
                 ItemList.Machine_Multi_IndustrialLaserEngraver.get(64),
@@ -79,10 +82,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 ItemList.Field_Generator_UV.get(8),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 8),
-                copyAmount(64, Ic2Items.iridiumPlate),
-                GTUtility.getIntegratedCircuit(10))
+                copyAmount(64, Ic2Items.iridiumPlate))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 128))
-
             .itemOutputs(copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
             .noOptimize()
             .eut(RECIPE_UHV)
@@ -92,16 +93,16 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
         // Upgrade LV
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11100),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 900),
 
+                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 900),
                 ItemList.Emitter_LV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 3),
+
                 ItemList.Field_Generator_LV.get(1),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 4),
-                GTOreDictUnificator.get(OrePrefixes.plate, Materials.Steel, 4),
-                GTUtility.getIntegratedCircuit(10))
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 4))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 2))
             .itemOutputs(PhotonControllerUpgradeLV.get(1))
             .eut(RECIPE_LV)
@@ -111,16 +112,16 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
         // Upgrade MV
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11101),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 901),
 
+                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 901),
                 ItemList.Emitter_MV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 6),
-                ItemList.Field_Generator_MV.get(1),
 
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 4),
-                GTUtility.getIntegratedCircuit(10))
+                ItemList.Field_Generator_MV.get(1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 4))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 8))
             .itemOutputs(PhotonControllerUpgradeMV.get(1))
             .eut(RECIPE_MV)
@@ -130,16 +131,16 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
         // Upgrade HV
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11102),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 902),
 
+                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 902),
                 ItemList.Emitter_HV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 12),
-                ItemList.Field_Generator_HV.get(1),
 
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.HV, 4),
-                GTUtility.getIntegratedCircuit(10))
+                ItemList.Field_Generator_HV.get(1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.HV, 4))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 32))
             .itemOutputs(PhotonControllerUpgradeHV.get(1))
             .eut(RECIPE_HV)
@@ -149,16 +150,16 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
         // Upgrade EV
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11103),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 15229),
 
+                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 15229),
                 ItemList.Emitter_EV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 24),
-                ItemList.Field_Generator_EV.get(1),
 
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.EV, 4),
-                GTUtility.getIntegratedCircuit(10))
+                ItemList.Field_Generator_EV.get(1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.EV, 4))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 128))
             .itemOutputs(PhotonControllerUpgradeEV.get(1))
             .eut(RECIPE_EV)
@@ -168,19 +169,18 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
         // Upgrade IV
         GTValues.RA.stdBuilder()
             .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11104),
-                CustomItemList.eM_energyTunnel1_IV.get(1),
 
+                CustomItemList.eM_energyTunnel1_IV.get(1),
                 ItemList.Emitter_IV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 48),
-                ItemList.Field_Generator_IV.get(1),
 
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 4),
-                GTUtility.getIntegratedCircuit(10))
+                ItemList.Field_Generator_IV.get(1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 4))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 512))
             .itemOutputs(PhotonControllerUpgradeIV.get(1))
-
             .eut(RECIPE_IV)
             .duration(20 * 160)
             .addTo(assemblerRecipes);
@@ -304,7 +304,6 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(64 * 144),
                 Materials.SuperconductorUEVBase.getMolten(64 * 144))
             .itemOutputs(PhotonControllerUpgradeUEV.get(1))
-
             .eut(RECIPE_UEV)
             .duration(20 * 320)
             .addTo(AssemblyLine);
@@ -320,7 +319,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 ItemList.Casing_Dim_Injector.get(16),
 
                 ItemList.Emitter_UIV.get(8),
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 4L, 32105),
+                GregtechItemList.Laser_Lens_Special.get(4),
                 ItemList.EnergisedTesseract.get(4),
                 ItemList.Field_Generator_UIV.get(4),
 
@@ -332,7 +331,6 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 Materials.SuperconductorUIVBase.getMolten(64 * 144),
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(256 * 1000))
             .itemOutputs(PhotonControllerUpgradeUIV.get(1))
-
             .eut(RECIPE_UIV)
             .duration(20 * 640)
             .addTo(AssemblyLine);
@@ -348,7 +346,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 ItemList.Casing_Dim_Injector.get(64),
 
                 ItemList.Emitter_UMV.get(16),
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16L, 32105),
+                GregtechItemList.Laser_Lens_Special.get(16),
                 ItemList.EnergisedTesseract.get(16),
                 ItemList.Field_Generator_UMV.get(8),
 
@@ -364,7 +362,6 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(1024 * 1000),
                 MaterialsUEVplus.Time.getMolten(144 * 64 * 8))
             .itemOutputs(PhotonControllerUpgradeUMV.get(1))
-
             .eut(RECIPE_UMV)
             .duration(20 * 1280)
             .addTo(AssemblyLine);
@@ -380,7 +377,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 CustomItemList.EOH_Infinite_Energy_Casing.get(16),
 
                 ItemList.Emitter_UXV.get(32),
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 64L, 32105),
+                GregtechItemList.Laser_Lens_Special.get(64),
                 ItemList.EnergisedTesseract.get(64),
                 ItemList.Field_Generator_UXV.get(16),
 
@@ -412,14 +409,14 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 CustomItemList.EOH_Infinite_Energy_Casing.get(64),
 
                 ItemList.Emitter_MAX.get(64),
-                setStackSize(GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 1L, 32105), 256),
+                GTCMItemList.GravitationalLens.get(64),
                 setStackSize(ItemList.EnergisedTesseract.get(1), 256),
                 ItemList.Field_Generator_MAX.get(32),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 32),
-                setStackSize(CircuitUXV.getIS(1), 256),
-                setStackSize(CircuitUXV.getIS(1), 256),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 1), 1024),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
+                GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsTST.Axonium, 64),
 
                 MaterialsUEVplus.MagMatter.getNanite(64),
                 ZPM6.get(4),
@@ -439,5 +436,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
             .eut(RECIPE_MAX)
             .duration(20 * 20480)
             .addTo(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes);
+
     }
+    // spotless:on
 }

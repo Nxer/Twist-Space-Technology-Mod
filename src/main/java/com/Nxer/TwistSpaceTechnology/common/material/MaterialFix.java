@@ -14,6 +14,8 @@ import static gregtech.api.util.GTRecipeBuilder.TICKS;
 import static gregtech.api.util.GTRecipeConstants.COIL_HEAT;
 import static gtPlusPlus.api.recipe.GTPPRecipeMaps.alloyBlastSmelterRecipes;
 
+import gregtech.api.metatileentity.implementations.MTECable;
+import gregtech.api.util.GTLanguageManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -183,4 +185,179 @@ public class MaterialFix {
         addVacuumFreezerRecipe(aMaterial, new FluidStack[] {}, new FluidStack[] {}, eut, ticks);
     }
 
+    // copy from GT_Loader_wires
+    public static void makeWires(Materials aMaterial, int aStartID, long aLossInsulated, long aLoss, long aAmperage,
+                                  long aVoltage, boolean aInsulatable, boolean aAutoInsulated) {
+        String displayName = GTLanguageManager.i18nPlaceholder ? "%material" : aMaterial.mDefaultLocalName;
+        GTOreDictUnificator.registerOre(
+            OrePrefixes.wireGt01,
+            aMaterial,
+            new MTECable(
+                aStartID + 0,
+                "wire." + aMaterial.mName.toLowerCase() + ".01",
+                "1x " + displayName + " Wire",
+                0.125F,
+                aMaterial,
+                aLoss,
+                1L * aAmperage,
+                aVoltage,
+                false,
+                !aAutoInsulated).getStackForm(1L));
+        GTOreDictUnificator.registerOre(
+            OrePrefixes.wireGt02,
+            aMaterial,
+            new MTECable(
+                aStartID + 1,
+                "wire." + aMaterial.mName.toLowerCase() + ".02",
+                "2x " + displayName + " Wire",
+                0.25F,
+                aMaterial,
+                aLoss,
+                2L * aAmperage,
+                aVoltage,
+                false,
+                !aAutoInsulated).getStackForm(1L));
+        GTOreDictUnificator.registerOre(
+            OrePrefixes.wireGt04,
+            aMaterial,
+            new MTECable(
+                aStartID + 2,
+                "wire." + aMaterial.mName.toLowerCase() + ".04",
+                "4x " + displayName + " Wire",
+                0.375F,
+                aMaterial,
+                aLoss,
+                4L * aAmperage,
+                aVoltage,
+                false,
+                !aAutoInsulated).getStackForm(1L));
+        GTOreDictUnificator.registerOre(
+            OrePrefixes.wireGt08,
+            aMaterial,
+            new MTECable(
+                aStartID + 3,
+                "wire." + aMaterial.mName.toLowerCase() + ".08",
+                "8x " + displayName + " Wire",
+                0.5F,
+                aMaterial,
+                aLoss,
+                8L * aAmperage,
+                aVoltage,
+                false,
+                !aAutoInsulated).getStackForm(1L));
+        GTOreDictUnificator.registerOre(
+            OrePrefixes.wireGt12,
+            aMaterial,
+            new MTECable(
+                aStartID + 4,
+                "wire." + aMaterial.mName.toLowerCase() + ".12",
+                "12x " + displayName + " Wire",
+                0.625F,
+                aMaterial,
+                aLoss,
+                12L * aAmperage,
+                aVoltage,
+                false,
+                !aAutoInsulated).getStackForm(1L));
+        GTOreDictUnificator.registerOre(
+            OrePrefixes.wireGt16,
+            aMaterial,
+            new MTECable(
+                aStartID + 5,
+                "wire." + aMaterial.mName.toLowerCase() + ".16",
+                "16x " + displayName + " Wire",
+                0.75F,
+                aMaterial,
+                aLoss,
+                16L * aAmperage,
+                aVoltage,
+                false,
+                !aAutoInsulated).getStackForm(1L));
+        if (aInsulatable) {
+            GTOreDictUnificator.registerOre(
+                OrePrefixes.cableGt01,
+                aMaterial,
+                new MTECable(
+                    aStartID + 6,
+                    "cable." + aMaterial.mName.toLowerCase() + ".01",
+                    "1x " + displayName + " Cable",
+                    0.25F,
+                    aMaterial,
+                    aLossInsulated,
+                    1L * aAmperage,
+                    aVoltage,
+                    true,
+                    false).getStackForm(1L));
+            GTOreDictUnificator.registerOre(
+                OrePrefixes.cableGt02,
+                aMaterial,
+                new MTECable(
+                    aStartID + 7,
+                    "cable." + aMaterial.mName.toLowerCase() + ".02",
+                    "2x " + displayName + " Cable",
+                    0.375F,
+                    aMaterial,
+                    aLossInsulated,
+                    2L * aAmperage,
+                    aVoltage,
+                    true,
+                    false).getStackForm(1L));
+            GTOreDictUnificator.registerOre(
+                OrePrefixes.cableGt04,
+                aMaterial,
+                new MTECable(
+                    aStartID + 8,
+                    "cable." + aMaterial.mName.toLowerCase() + ".04",
+                    "4x " + displayName + " Cable",
+                    0.5F,
+                    aMaterial,
+                    aLossInsulated,
+                    4L * aAmperage,
+                    aVoltage,
+                    true,
+                    false).getStackForm(1L));
+            GTOreDictUnificator.registerOre(
+                OrePrefixes.cableGt08,
+                aMaterial,
+                new MTECable(
+                    aStartID + 9,
+                    "cable." + aMaterial.mName.toLowerCase() + ".08",
+                    "8x " + displayName + " Cable",
+                    0.625F,
+                    aMaterial,
+                    aLossInsulated,
+                    8L * aAmperage,
+                    aVoltage,
+                    true,
+                    false).getStackForm(1L));
+            GTOreDictUnificator.registerOre(
+                OrePrefixes.cableGt12,
+                aMaterial,
+                new MTECable(
+                    aStartID + 10,
+                    "cable." + aMaterial.mName.toLowerCase() + ".12",
+                    "12x " + displayName + " Cable",
+                    0.75F,
+                    aMaterial,
+                    aLossInsulated,
+                    12L * aAmperage,
+                    aVoltage,
+                    true,
+                    false).getStackForm(1L));
+            GTOreDictUnificator.registerOre(
+                OrePrefixes.cableGt16,
+                aMaterial,
+                new MTECable(
+                    aStartID + 11,
+                    "cable." + aMaterial.mName.toLowerCase() + ".16",
+                    "16x " + displayName + " Cable",
+                    0.875F,
+                    aMaterial,
+                    aLossInsulated,
+                    16L * aAmperage,
+                    aVoltage,
+                    true,
+                    false).getStackForm(1L));
+        }
+    }
 }
