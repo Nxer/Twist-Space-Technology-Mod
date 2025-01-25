@@ -1557,6 +1557,7 @@ Tooltip_MegaStoneBreaker_Hatch_0=§f岩浆输入仓:§7结构的§a左§7侧
 Tooltip_MegaStoneBreaker_Hatch_1=§f水输入仓:§7结构的§a右§7侧
 tst.recipe.MegaStoneBreakerRecipes=巨型碎石机
 NameMegaStoneBreaker=硅岩制造机
+
 Tooltip_SpaceScaler_09=2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
 GT5U.gui.text.SimpleShutDownReasons.NoEnoughCriticalPhotonInput=没有足够临界光子输入
 Tooltip_EcoSphereSimulator.0.13=二级配方尚未完成
@@ -1610,3 +1611,17 @@ tc.research_text.TST_ARCANE_HOLE=虚空中之物
 tc.research_text.TST_ARCANE_HOLE.1=可以用来替代工业炼金塔两侧的守卫者玻璃。或许还是一种不错的建筑方块？
 Tooltip_Channel_Helper=可以使用§9信道:§echisel§7进行搭建时自动转换凿子方块，可以查看nei进行预览可用方块
 Tooltip_BloodOrbHatch_5=关闭血液仓将会把生命本质输回气血宝珠
+NameGiantVacuumDryingFurnace=巨型真空干燥炉
+Tooltip_GVDF_MachineType=真空干燥炉 | 化学脱水机
+Tooltip_GVDF_00=巨型真空干燥炉的控制器方块
+Tooltip_GVDF_01=§9§l利用真空技术的力量进行工业干燥!
+Tooltip_GVDF_02=该设备由真空泵、主体结构和干燥塔三部分组成
+Tooltip_GVDF_03=并行 = 线圈等级 * 层数 * 32
+Tooltip_GVDF_04=每超出一级电压,所需时间为原来的80%%.
+Tooltip_GVDF_04_1=线圈每升高一级处理速度增加50%%
+Tooltip_GVDF_05=由螺丝刀切换模式
+Tooltip_GVDF_06=注意你的电量小伙子,巨型真空干燥塔耗能200%%
+Tooltip_GVDF_07=真的会有人需要这台机器来处理太空冰淇淋吗？
+Tooltip_GVDF_HatchInfo=输入和输出舱口必须放置在主框架内
+Tooltip_GVDF_EnergyHatch=能量舱口必须放置在主框架内
+

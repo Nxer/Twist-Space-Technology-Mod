@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_IndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
@@ -18,6 +19,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_LightningSpire;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IndustrialMagicMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
+import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticMixer;
@@ -173,7 +175,7 @@ public class MachineLoader {
     public static ItemStack BloodyHell;
     public static ItemStack MegaStoneBreaer;
     public static ItemStack ManufacturingCenter;
-
+    public static ItemStack GiantVacuumDryingFurnace;
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
@@ -753,6 +755,17 @@ public class MachineLoader {
             GTCMItemList.IndustrialAlchemyTower.set(IndustrialAlchemyTower);
         }
 
+
+        // #tr NameGiantVacuumDryingFurnace
+        // # Giant Vacuum Drying Furnace
+        // #zh_CN 巨型真空干燥炉
+        if (Enable_GiantVacuumDryingFurnace) {
+            GiantVacuumDryingFurnace = new GT_TileEntity_GiantVacuumDryingFurnace(
+                19065,
+                "GiantVacuumDryingFurnace",
+                TextEnums.tr("NameGiantVacuumDryingFurnace")).getStackForm(1);
+            GTCMItemList.GiantVacuumDryingFurnace.set(GiantVacuumDryingFurnace);
+        }
         // endregion
 
         // region Single block Machine
