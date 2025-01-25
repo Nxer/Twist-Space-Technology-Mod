@@ -17,6 +17,7 @@ import static gregtech.api.enums.ItemList.Circuit_CosmicComputer;
 import static gregtech.api.enums.ItemList.Circuit_CosmicProcessor;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
+import static gregtech.api.util.GTRecipeConstants.PCB_NANITE_MATERIAL;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.SCANNING;
 import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
@@ -44,6 +45,7 @@ import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.metadata.PCBFactoryTierKey;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
@@ -86,7 +88,6 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                GTUtility.getNaniteAsCatalyst(Materials.Gold),
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.CosmicNeutronium, 1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.InfinityCatalyst, 22),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUIVBase, 22))
@@ -95,12 +96,13 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_UEV)
             .duration(20 * 22)
+            .metadata(PCBFactoryTierKey.INSTANCE, 3)
+            .metadata(PCB_NANITE_MATERIAL, Materials.Gold)
             .addTo(RecipeMaps.pcbFactoryRecipes);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                GTUtility.getNaniteAsCatalyst(Materials.Gold),
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.CosmicNeutronium, 1),
                 GGMaterial.shirabon.get(OrePrefixes.foil, 22),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUMVBase, 22))
@@ -109,6 +111,8 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
             .noOptimize()
             .eut(RECIPE_UEV)
             .duration(20 * 22)
+            .metadata(PCBFactoryTierKey.INSTANCE, 3)
+            .metadata(PCB_NANITE_MATERIAL, Materials.Gold)
             .addTo(RecipeMaps.pcbFactoryRecipes);
 
         // Silicon-based Neuron
