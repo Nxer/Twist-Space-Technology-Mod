@@ -25,7 +25,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTETieredMachineBlock;
-import gregtech.api.objects.GTRenderedTexture;
+import gregtech.api.render.TextureFactory;
 import tectech.mechanics.pipe.IConnectsToEnergyTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
@@ -90,11 +90,11 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
         if (side == aFacing) {
-            return new ITexture[] { new GTRenderedTexture(EMpipe), OVERLAYS_ENERGY_IN_LASER_TT[mTier],
-                new GTRenderedTexture(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
+            return new ITexture[] { TextureFactory.of(EMpipe), OVERLAYS_ENERGY_IN_LASER_TT[mTier],
+                TextureFactory.of(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
         } else {
-            return new ITexture[] { new GTRenderedTexture(EMpipe),
-                new GTRenderedTexture(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
+            return new ITexture[] { TextureFactory.of(EMpipe),
+                TextureFactory.of(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
         }
     }
 
