@@ -1614,14 +1614,15 @@ Tooltip_BloodOrbHatch_5=关闭血液仓将会把生命本质输回气血宝珠
 NameGiantVacuumDryingFurnace=巨型真空干燥炉
 Tooltip_GVDF_MachineType=真空干燥炉 | 化学脱水机
 Tooltip_GVDF_00=巨型真空干燥炉的控制器方块
-Tooltip_GVDF_01=§9§l利用真空技术的力量进行工业干燥!
+Tooltip_GVDF_01=§9利用真空技术的力量进行工业干燥!!!
 Tooltip_GVDF_02=该设备由真空泵、主体结构和干燥塔三部分组成
 Tooltip_GVDF_03=并行 = 线圈等级 * 层数 * 32
-Tooltip_GVDF_04=每超出一级电压,所需时间为原来的80%%.
-Tooltip_GVDF_04_1=线圈每升高一级处理速度增加50%%
+Tooltip_GVDF_04=每超出一级电压,所需时间为原来的80%%,线圈每升高一级处理速度增加50%%
+Tooltip_GVDF_04_1=The processing speed increases by 50%% for each step of the coil.
 Tooltip_GVDF_05=由螺丝刀切换模式
 Tooltip_GVDF_06=注意你的电量小伙子,巨型真空干燥塔耗能200%%
 Tooltip_GVDF_07=真的会有人需要这台机器来处理太空冰淇淋吗？
 Tooltip_GVDF_HatchInfo=输入和输出舱口必须放置在主框架内
 Tooltip_GVDF_EnergyHatch=能量舱口必须放置在主框架内
 
+Tooltip_GVDF_HatchBusInfo=能量舱口必须放置在主框架内

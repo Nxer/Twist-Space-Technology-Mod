@@ -21,8 +21,8 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_ZPM;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrameComponent;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GiantVacuumDryingFurnace;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HighPowerRadiationProofCasing;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IncompactCyclotron;

@@ -804,23 +804,5 @@ public class TextLocalization {
     // endregion
 
 
-    // region Giant Vacuum Drying Furnace
-    public static final String NameGiantVacuumDryingFurnace = texter("Giant Vacuum Drying Furnace", "NameGiantVacuumDryingFurnace");
-
-    public static final String Tooltip_GVDF_MachineType = texter("Vacuum Furnace | Dehydrator", "Tooltip_GVDF_MachineType");
-    public static final String Tooltip_GVDF_00 = texter("Controller block for the Giant Vacuum Drying Furnace", "Tooltip_GVDF_00");
-    public static final String Tooltip_GVDF_01 = texter("Harness the power of vacuum technology for industrial drying!!!", "Tooltip_GVDF_01");
-    public static final String Tooltip_GVDF_02 = texter("This machine consists of vacuum pump, main structure, drying tower three parts.", "Tooltip_GVDF_02");
-    public static final String Tooltip_GVDF_03 = texter("parallel = coil * piece * 32 ", "Tooltip_GVDF_03");
-    public static final String Tooltip_GVDF_04 = texter("Every additional voltage step reduces the time to 80% of the original", "Tooltip_GVDF_04");
-    public static final String Tooltip_GVDF_04_1 = texter("The processing speed increases by 50% for each step of the coil", "Tooltip_GVDF_04_1");
-    public static final String Tooltip_GVDF_05 = texter("Switch modes using a screwdriver", "Tooltip_GVDF_05");
-    public static final String Tooltip_GVDF_06 = texter("Every additional voltage step reduces the time to 80% of the original", "Tooltip_GVDF_06");
-    public static final String Tooltip_GVDF_07 = texter("Would anyone really need this machine to handle space ice cream.", "Tooltip_GVDF_07");
-    public static final String Tooltip_GVDF_HatchBusInfo = texter("The input and output hatches/buses must be placed in the main frame.", "Tooltip_GVDF_HatchInfo");
-    public static final String Tooltip_GVDF_EnergyHatch = texter("Energy Hatch must be placed in the main frame.", "Tooltip_GVDF_EnergyHatch");
-
-// endregion
-
 }
 // spotless:on

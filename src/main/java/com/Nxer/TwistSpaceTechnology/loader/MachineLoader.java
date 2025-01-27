@@ -19,7 +19,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_LightningSpire;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IndustrialMagicMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomainConstructor;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticMixer;
@@ -43,6 +42,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
@@ -755,12 +755,11 @@ public class MachineLoader {
             GTCMItemList.IndustrialAlchemyTower.set(IndustrialAlchemyTower);
         }
 
-
         // #tr NameGiantVacuumDryingFurnace
         // # Giant Vacuum Drying Furnace
         // #zh_CN 巨型真空干燥炉
         if (Enable_GiantVacuumDryingFurnace) {
-            GiantVacuumDryingFurnace = new GT_TileEntity_GiantVacuumDryingFurnace(
+            GiantVacuumDryingFurnace = new TST_GiantVacuumDryingFurnace(
                 19065,
                 "GiantVacuumDryingFurnace",
                 TextEnums.tr("NameGiantVacuumDryingFurnace")).getStackForm(1);
