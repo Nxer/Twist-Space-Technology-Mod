@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationStructureBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static net.minecraft.util.EnumChatFormatting.BLUE;
 import static net.minecraft.util.EnumChatFormatting.DARK_PURPLE;
@@ -294,7 +294,7 @@ public class GT_TileEntity_StellarMaterialSiphon
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_StellarMaterialSiphon>builder()
                 .addShape(shapeName, shape)
-                .addElement('A', ofBlock(spaceStationStructureBlock, 12)) // A ->
+                .addElement('A', ofBlock(SpaceStationStructureBlock, 12)) // A ->
                 // ofBlock...(BW_GlasBlocks2, 0,
                 // ...);
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings5, 13))// B -> ofBlock...(gt.blockcasings5, 13, ...);

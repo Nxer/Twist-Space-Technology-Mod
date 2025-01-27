@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
-import com.Nxer.TwistSpaceTechnology.util.*;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -16,26 +16,29 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaStructureCasing
 
 public class BasicBlocks {
 
-    public static final Block MetaBlock01 = new BlockBase01("MetaBlock01", "MetaBlock01");
+    public static final Block MetaBlock01 = new BlockBase01();
+
+    /**
+     * UnlocalizedName: {@code MetaBlockCasing01}
+     */
     public static final MetaBlockCasing MetaBlockCasing01 = new MetaBlockCasing("MetaBlockCasing01", (byte) 0);
+
+    /**
+     * UnlocalizedName: {@code MetaBlockCasing02}
+     */
     public static final MetaBlockCasing MetaBlockCasing02 = new MetaBlockCasing("MetaBlockCasing02", (byte) 16);
-    public static final Block PhotonControllerUpgrade = new PhotonControllerUpgradeCasing(
-        "PhotonControllerUpgrades",
-        "Photon Controller Upgrade");
 
-    public static final Block SpaceTimeOscillator = new MetaStructureCasing("SpaceTimeOscillator");
-    public static final Block SpaceTimeConstraintor = new MetaStructureCasing("SpaceTimeConstraintor");
-    public static final Block SpaceTimeMerger = new MetaStructureCasing("SpaceTimeMerger");
+    public static final PhotonControllerUpgradeCasing PhotonControllerUpgrade = new PhotonControllerUpgradeCasing();
 
-    public static final Block spaceStationStructureBlock = new SpaceStationStructureCasing(
-        "SpaceStationStructureBlock",
-        "Space Station Structure Block");
+    public static final MetaStructureCasing SpaceTimeOscillator = new MetaStructureCasing("SpaceTimeOscillator");
+    public static final MetaStructureCasing SpaceTimeConstraintor = new MetaStructureCasing("SpaceTimeConstraintor");
+    public static final MetaStructureCasing SpaceTimeMerger = new MetaStructureCasing("SpaceTimeMerger");
 
-    public static final Block SpaceStationAntiGravityBlock = new SpaceStationAntiGravityCasing(
-        "SpaceStationAntiGravityBlock",
-        "Space Station Anti Gravity Block");
+    public static final SpaceStationStructureCasing SpaceStationStructureBlock = new SpaceStationStructureCasing();
+
+    public static final SpaceStationAntiGravityCasing SpaceStationAntiGravityBlock = new SpaceStationAntiGravityCasing();
     public static Block BlockStar;
-    public static Block NuclearReactorBlock = new BlockNuclearReactor("nuclear", "Mega Nuclear Reactor");
+    public static Block NuclearReactorBlock = new BlockNuclearReactor();
 
     public static Block BlockPowerChair = new BlockPowerChair();
     public static Block BlockArcaneHole = new BlockArcaneHole();

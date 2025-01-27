@@ -4,7 +4,9 @@ import static fox.spiteful.avaritia.items.LudicrousItems.bigPearl;
 import static gregtech.api.enums.TierEU.RECIPE_LV;
 import static gregtech.api.enums.TierEU.RECIPE_LuV;
 import static thaumcraft.common.config.ConfigBlocks.blockCosmeticSolid;
-import static thaumcraft.common.config.ConfigItems.*;
+import static thaumcraft.common.config.ConfigItems.itemEssence;
+import static thaumcraft.common.config.ConfigItems.itemJarNode;
+import static thaumcraft.common.config.ConfigItems.itemShard;
 
 import java.util.HashSet;
 import java.util.Set;

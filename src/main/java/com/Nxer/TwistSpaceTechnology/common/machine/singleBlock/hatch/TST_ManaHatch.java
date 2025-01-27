@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.HatchTier;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
@@ -16,6 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 
 import gregtech.api.interfaces.ITexture;
@@ -131,12 +131,24 @@ public class TST_ManaHatch extends MTEHatchInput {
 
     public String[] getCustomTooltip() {
         String[] aTooltip = new String[5];
-        aTooltip[0] = texter("Mana transform hatch", "GT_MetaTileEntity_Hatch_Mana.Tooltip0");
-        aTooltip[1] = texter(
-            "Transform mana up to 10000 mana or 1000L every second",
-            "GT_MetaTileEntity_Hatch_Mana.Tooltip1");
-        aTooltip[2] = texter("Need to facing at a mana pool to work.", "GT_MetaTileEntity_Hatch_Mana.Tooltip2");
+
+        // #tr GT_MetaTileEntity_Hatch_Mana.Tooltip0
+        // # Mana transform hatch
+        // #zh_CN 魔力转换阀
+        aTooltip[0] = TextEnums.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip0");
+
+        // #tr GT_MetaTileEntity_Hatch_Mana.Tooltip1
+        // # Transform mana up to 10000 mana or 1000L every second
+        // #zh_CN 每秒至多转换1000L液态魔力/10000mana.
+        aTooltip[1] = TextEnums.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip1");
+
+        // #tr GT_MetaTileEntity_Hatch_Mana.Tooltip2
+        // # Need to facing at a mana pool to work.
+        // #zh_CN 需要正面朝向魔力池来工作.
+        aTooltip[2] = TextEnums.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip2");
+
         aTooltip[3] = TextLocalization.textScrewdriverChangeMode;
+
         return aTooltip;
     }
 

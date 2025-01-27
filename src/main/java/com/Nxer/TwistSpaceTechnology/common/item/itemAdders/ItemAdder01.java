@@ -38,14 +38,14 @@ public class ItemAdder01 extends ItemAdder_Basic {
     public static final Set<Integer> Meta01Set = new HashSet<>();
     public static final Map<Integer, String[]> MetaItemTooltipsMap01 = new HashMap<>();
 
-    private final String unlocalizedName;
-
     /**
      * Create the basic item MetaItem01.
      */
-    public ItemAdder01(String aName, String aMetaName, CreativeTabs aCreativeTabs) {
-        super(aName, aMetaName, aCreativeTabs);
-        this.unlocalizedName = aMetaName;
+    public ItemAdder01(CreativeTabs aCreativeTabs) {
+        // #tr item.MetaItem01.name
+        // # Test Item
+        // #zh_CN 测试物品
+        super("MetaItem01", aCreativeTabs);
     }
 
     /**
@@ -82,16 +82,6 @@ public class ItemAdder01 extends ItemAdder_Basic {
     // }
 
     // region Overrides
-
-    @Override
-    public String getUnlocalizedName(ItemStack aItemStack) {
-        return this.unlocalizedName + "." + aItemStack.getItemDamage();
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-        return this.unlocalizedName;
-    }
 
     @Override
     @SideOnly(Side.CLIENT)

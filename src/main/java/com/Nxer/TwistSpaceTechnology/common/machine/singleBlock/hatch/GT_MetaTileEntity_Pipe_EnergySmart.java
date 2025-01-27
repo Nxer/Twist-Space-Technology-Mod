@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
 import static tectech.thing.metaTileEntity.Textures.OVERLAYS_ENERGY_IN_LASER_TT;
 
@@ -11,7 +10,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -76,14 +74,18 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     @Override
     public String[] getDescription() {
         return new String[] { CommonValues.TEC_MARK_EM,
-            texter("Reflect after precise calculation.", "LaserSmartNode.getDescription.01"),
-            texter(
-                EnumChatFormatting.AQUA + "Connects devices in different directions.",
-                "LaserSmartNode.getDescription.02"),
-            texter(
-                EnumChatFormatting.AQUA + "Input energy from the front and output from other sides.",
-                "LaserSmartNode.getDescription.03"),
-            TextEnums.AddByTwistSpaceTechnology.getText() };
+            // #tr LaserSmartNode.getDescription.01
+            // # Reflect after precise calculation.
+            // #zh_CN 精密计算, 然后, 反射！
+            TextEnums.tr("LaserSmartNode.getDescription.01"),
+            // #tr LaserSmartNode.getDescription.02
+            // # {\AQUA}Connects devices in different directions.
+            // #zh_CN {\AQUA}连接不同方向的设备.
+            TextEnums.tr("LaserSmartNode.getDescription.02"),
+            // #tr LaserSmartNode.getDescription.03
+            // # {\AQUA}Input energy from the front and output from other sides.
+            // #zh_CN {\AQUA}从正面输入能量, 从其他面输出.
+            TextEnums.tr("LaserSmartNode.getDescription.03"), TextEnums.AddByTwistSpaceTechnology.getText() };
     }
 
     @Override

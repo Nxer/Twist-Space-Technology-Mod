@@ -24,7 +24,6 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.addStringToStackName;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
@@ -269,8 +268,10 @@ public class DSPRecipePool implements IRecipePool {
             .itemOutputs(
                 SmallLaunchVehicle.get(1)
                     .setStackDisplayName(
-                        texter("99%% Return an Empty Small Launch Vehicle.", "NEI.EmptySmallLaunchVehicleRecipe.0")))
-
+                        // #tr NEI.EmptySmallLaunchVehicleRecipe.0
+                        // # 99%% Return an Empty Small Launch Vehicle.
+                        // #zh_CN 99%%返还一个空的小型运载火箭.
+                        TextEnums.tr("NEI.EmptySmallLaunchVehicleRecipe.0")))
             .eut(EUTOfLaunchingNode)
             .duration(ticksOfLaunchingNode)
             .addTo(DSPLauncherRecipe);
@@ -299,7 +300,11 @@ public class DSPRecipePool implements IRecipePool {
         // spotless:off
         GTValues.RA.stdBuilder()
             .itemInputs(AntimatterFuelRod.get(1))
-            .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(texter("Chance to recover some raw materials. Probability is affected by module tier.","NEI.AntimatterFuelRodGeneratingRecipe.01")))
+            .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(
+                // #tr NEI.AntimatterFuelRodGeneratingRecipe.01
+                // # Chance to recover some raw materials. Probability is affected by module tier.
+                // #zh_CN 有概率回收部分材料. 概率受模块等级影响.
+                TextEnums.tr("NEI.AntimatterFuelRodGeneratingRecipe.01")))
             .specialValue((int) (EUEveryAntimatterFuelRod / Integer.MAX_VALUE))
             .eut(0)
             .duration(0)
@@ -307,7 +312,8 @@ public class DSPRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .itemInputs(StrangeAnnihilationFuelRod.get(1))
-            .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(texter("Chance to recover some raw materials. Probability is affected by module tier.","NEI.AntimatterFuelRodGeneratingRecipe.01")))
+            .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(
+                TextEnums.tr("NEI.AntimatterFuelRodGeneratingRecipe.01")))
             .specialValue((int) (EUEveryStrangeAnnihilationFuelRod / Integer.MAX_VALUE))
             .eut(0)
             .duration(0)

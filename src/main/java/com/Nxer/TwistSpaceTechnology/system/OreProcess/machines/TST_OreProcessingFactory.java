@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.Or
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.moveUnprocessedItemsToOutputs;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.ticksOfPerFluidConsuming;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_01;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_02;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_03;
@@ -54,6 +53,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -128,11 +128,17 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isWirelessMode")) {
-            currentTip.add(EnumChatFormatting.AQUA + texter("In Wireless mode", "Waila.TST_OreProcessingFactory.1"));
+            // #tr Waila.TST_OreProcessingFactory.1
+            // # In Wireless mode
+            // #zh_CN 无线EU电网模式
+            currentTip.add(EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_OreProcessingFactory.1"));
         }
         if (tag.getBoolean("isActive") && tag.getBoolean("isWirelessMode")) {
             currentTip.add(
-                EnumChatFormatting.AQUA + texter("Current Using EU: ", "Waila.TST_OreProcessingFactory.2")
+                // #tr Waila.TST_OreProcessingFactory.2
+                // # Current Using EU:
+                // #zh_CN 当前消耗EU:
+                EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_OreProcessingFactory.2")
                     + EnumChatFormatting.GOLD
                     + GTUtility.formatNumbers(tag.getLong("usingEU"))
                     + EnumChatFormatting.RESET

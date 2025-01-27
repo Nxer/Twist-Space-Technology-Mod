@@ -1,9 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationStructureBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClientOnly.iconsSpaceStationStructureCasingMap;
 import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,16 +16,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.Nxer.TwistSpaceTechnology.client.GTCMCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockBase01;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTechAPI;
 
-public class SpaceStationStructureCasing extends BlockBase01 {
+public class SpaceStationStructureCasing extends BlockBase01 implements IHasTooltips {
 
     public SpaceStationStructureCasing() {
+        // #tr tile.SpaceStationStructureBlock.name
+        // # Space Station Structure Block
+        // #zh_CN 空间站结构方块
+        super("SpaceStationStructureBlock");
         this.setHardness(9.0F);
         this.setResistance(5.0F);
         this.setHarvestLevel("wrench", 1);
@@ -35,29 +41,34 @@ public class SpaceStationStructureCasing extends BlockBase01 {
         GregTechAPI.registerMachineBlock(this, -1);
     }
 
-    public SpaceStationStructureCasing(String unlocalizedName, String localName) {
-        this();
-        this.unlocalizedName = unlocalizedName;
-        texter(localName, unlocalizedName + ".name");
-    }
-
     public static Set<Integer> SpaceStationStructureCasingCasingSet = new HashSet<>();
 
     /**
      * Tooltips of these blocks' ItemBlock.
      */
     public static String[][] SpaceStationStructureCasingTooltipsArray = new String[14][];
-    private String unlocalizedName;
+
+    @Override
+    public void setTooltips(int metaValue, @Nullable String[] tooltips) {
+        SpaceStationStructureCasingTooltipsArray[metaValue] = tooltips;
+    }
+
+    @Override
+    public @Nullable String[] getTooltips(int metaValue) {
+        return SpaceStationStructureCasingTooltipsArray[metaValue];
+    }
 
     // endregion
     // -----------------------
     // region Meta Generator
 
+    @Deprecated
     public static ItemStack SpaceStationStructureCasingMeta(String i18nName, int meta) {
 
-        return initMetaItemStack(i18nName, meta, spaceStationStructureBlock, SpaceStationStructureCasingCasingSet);
+        return initMetaItemStack(i18nName, meta, SpaceStationStructureBlock, SpaceStationStructureCasingCasingSet);
     }
 
+    @Deprecated
     public static ItemStack SpaceStationStructureCasingMeta(String i18nName, int meta, String[] tooltips) {
         // Handle the tooltips
         SpaceStationStructureCasingTooltipsArray[meta] = tooltips;
@@ -67,11 +78,6 @@ public class SpaceStationStructureCasing extends BlockBase01 {
     // endregion
     // -----------------------
     // region Getters
-
-    @Override
-    public String getUnlocalizedName() {
-        return this.unlocalizedName;
-    }
 
     @Override
     @SideOnly(Side.CLIENT)

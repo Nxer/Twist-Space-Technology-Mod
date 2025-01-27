@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass;
 
 import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01.MetaBlockSet01;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 
 import java.util.List;
 
@@ -28,39 +27,30 @@ public class BlockBase01 extends Block {
         super(materialIn);
     }
 
-    public BlockBase01() {
+    public BlockBase01(String unlocalizedName) {
         this(Material.iron);
         this.setCreativeTab(GTCMCreativeTabs.TAB_META_BLOCKS);
+        this.setBlockName(unlocalizedName);
     }
 
-    public BlockBase01(String unlocalizedName, String localName) {
-        this();
-        this.unlocalizedName = unlocalizedName;
-        texter(localName, "blockBase01." + unlocalizedName + ".name");
+    public BlockBase01() {
+        // #tr tile.MetaBlock01.name
+        // # MetaBlock01
+        // #zh_CN MetaBlock01
+        this("MetaBlock01");
     }
 
     // endregion
     // -----------------------
     // region member variables
 
-    private String unlocalizedName;
-
     // endregion
     // -----------------------
     // region getters
 
-    @Override
-    public String getUnlocalizedName() {
-        return this.unlocalizedName;
-    }
-
     // endregion
     // -----------------------
     // region setters
-
-    public void setUnlocalizedName(String aUnlocalizedName) {
-        this.unlocalizedName = aUnlocalizedName;
-    }
 
     // endregion
     // -----------------------

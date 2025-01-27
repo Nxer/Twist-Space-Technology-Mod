@@ -45,14 +45,14 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
     public static final Set<Integer> Meta01Set = new HashSet<>();
     public static final Map<Integer, String[]> MetaItemTooltipsMapRune = new HashMap<>();
 
-    private final String unlocalizedName;
-
     /**
      * Create the basic item MetaItemRune.
      */
-    public ItemAdderRune(String aName, String aMetaName, CreativeTabs aCreativeTabs) {
-        super(aName, aMetaName, aCreativeTabs);
-        this.unlocalizedName = aMetaName;
+    public ItemAdderRune(CreativeTabs aCreativeTabs) {
+        // #tr item.MetaItemRune.name
+        // # Meta Item Rune
+        // #zh_CN Meta Item Rune
+        super("MetaItemRune", aCreativeTabs);
         this.maxStackSize = 1;
     }
 
@@ -90,16 +90,6 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
     // }
 
     // region Overrides
-
-    @Override
-    public String getUnlocalizedName(ItemStack aItemStack) {
-        return this.unlocalizedName + "." + aItemStack.getItemDamage();
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-        return this.unlocalizedName;
-    }
 
     @Override
     @SideOnly(Side.CLIENT)

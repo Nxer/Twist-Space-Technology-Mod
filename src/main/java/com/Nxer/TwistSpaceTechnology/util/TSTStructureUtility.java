@@ -217,7 +217,7 @@ public class TSTStructureUtility {
     /**
      * This method is mainly used for chisel blocks, which are automatically transformed when the channel is used to
      * determine whether to place specificBlock by variableStacks.
-     * 
+     *
      * @param channel It can be null, and auto-transform is used by default。
      */
     @NotNull

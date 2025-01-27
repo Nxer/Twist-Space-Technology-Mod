@@ -1,5 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings;
 
+/**
+ * UnlocalizedName: {@code MetaBlockCasing01} for 0-15, {@code MetaBlockCasing02} for 16+
+ */
 public class MetaBlockCasing extends MetaBlockCasingBase {
 
     public final byte texturePageIndex;
@@ -19,11 +22,11 @@ public class MetaBlockCasing extends MetaBlockCasingBase {
 
     /**
      * Used to provide
-     * 
+     *
      * <pre>
      * {@code casingIndex}
      * </pre>
-     * 
+     *
      * at Structure defining.
      */
     @Override

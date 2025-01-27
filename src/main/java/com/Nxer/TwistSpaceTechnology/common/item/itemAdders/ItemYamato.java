@@ -10,8 +10,6 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 
-import com.Nxer.TwistSpaceTechnology.util.TextHandler;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -19,12 +17,14 @@ public class ItemYamato extends ItemSword {
 
     public static final ToolMaterial YAMATO = EnumHelper.addToolMaterial("YAMATO", 4, -1, 16.0F, 110.514F, 514);
 
-    public ItemYamato(String aName, String unlocalizedName, CreativeTabs aCreativeTabs) {
+    public ItemYamato(CreativeTabs aCreativeTabs) {
         super(YAMATO);
-        this.setUnlocalizedName(unlocalizedName);
+        // #tr item.Yamato.name
+        // # Yamato
+        // #zh_CN 阎魔刀
+        this.setUnlocalizedName("Yamato");
         this.setCreativeTab(aCreativeTabs);
         this.setMaxDamage(0);
-        TextHandler.texter(aName, unlocalizedName + ".name");
     }
 
     @Override

@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEuPe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEutPerParallel_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.NEGATIVE_ONE;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -45,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -141,22 +141,14 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         if (coilTier > 1) {
             ret = new String[origin.length + 2];
             System.arraycopy(origin, 0, ret, 0, origin.length);
-            ret[origin.length - 1] = EnumChatFormatting.AQUA
-                + texter("Coil Tier", "HephaestusAtelier.getInfoData.Coil_Tier")
-                + ": "
-                + EnumChatFormatting.RESET
-                + coilTier;
+            ret[origin.length - 1] = TstSharedLocalization.MachineInfo.coilTier(coilTier);
             ret[origin.length] = "" + EnumChatFormatting.RED
                 + EnumChatFormatting.BOLD
                 + TextLocalization.Info_Wireless_mode_enabled;
         } else {
             ret = new String[origin.length + 1];
             System.arraycopy(origin, 0, ret, 0, origin.length);
-            ret[origin.length] = EnumChatFormatting.AQUA
-                + texter("Coil Tier", "HephaestusAtelier.getInfoData.Coil_Tier")
-                + ": "
-                + EnumChatFormatting.RESET
-                + coilTier;
+            ret[origin.length] = TstSharedLocalization.MachineInfo.coilTier(coilTier);
         }
 
         return ret;

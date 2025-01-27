@@ -23,7 +23,6 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.metatileentity.MetaTileEntity;
-import scala.actors.migration.pattern;
 
 public final class Utils {
 
@@ -318,6 +317,7 @@ public final class Utils {
         return null == main ? instead : main;
     }
 
+    @Deprecated
     public static void debugLogInfo(String... strings) {
         if (isInDevMode) {
             for (String msg : strings) {

@@ -1,11 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Antimatter;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AntimatterFuelRod;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EnableRenderDefaultArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_00;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_01;
@@ -78,6 +75,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -162,19 +160,22 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isActive")) {
-            currentTip.add(
-                EnumChatFormatting.AQUA + texter("Current Generating : ", "Waila.TST_ArtificialStar.1")
-                    + EnumChatFormatting.GOLD
-                    + tag.getLong("currentOutputEU")
-                    + EnumChatFormatting.RED
-                    + " * "
-                    + decimalFormat.format(tag.getDouble("outputMultiplier"))
-                    + EnumChatFormatting.GREEN
-                    + " * 2147483647"
-                    + EnumChatFormatting.RESET
-                    + " EU / "
-                    + secondsOfArtificialStarProgressCycleTime
-                    + " s");
+            currentTip.add(EnumChatFormatting.AQUA +
+            // #tr Waila.TST_ArtificialStar.1
+            // # Current Generating :
+            // #zh_CN 当前发电 :
+                TextEnums.tr("Waila.TST_ArtificialStar.1")
+                + EnumChatFormatting.GOLD
+                + tag.getLong("currentOutputEU")
+                + EnumChatFormatting.RED
+                + " * "
+                + decimalFormat.format(tag.getDouble("outputMultiplier"))
+                + EnumChatFormatting.GREEN
+                + " * 2147483647"
+                + EnumChatFormatting.RESET
+                + " EU / "
+                + secondsOfArtificialStarProgressCycleTime
+                + " s");
         }
     }
 
@@ -197,12 +198,47 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 6];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.GOLD+texter("Reward for continuous operation","TST_ArtificialStar.getInfoData.00")+EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+(rewardContinuous+100)+"%";
-        ret[origin.length + 1] = EnumChatFormatting.GOLD+texter("Generating Multiplier","TST_ArtificialStar.getInfoData.01")+EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+outputMultiplier;
-        ret[origin.length + 2] = EnumChatFormatting.GOLD+texter("Dimension Field Tier","TST_ArtificialStar.getInfoData.02")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierDimensionField;
-        ret[origin.length + 3] = EnumChatFormatting.GOLD+texter("Time Field Tier","TST_ArtificialStar.getInfoData.03")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierTimeField;
-        ret[origin.length + 4] = EnumChatFormatting.GOLD+texter("Stabilisation Field Tier","TST_ArtificialStar.getInfoData.04")+EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierStabilisationField;
-        ret[origin.length + 5] = EnumChatFormatting.GOLD+texter("Recover material chance","TST_ArtificialStar.getInfoData.05")+EnumChatFormatting.RESET+": "+EnumChatFormatting.AQUA+recoveryChance+EnumChatFormatting.RESET+"/"+EnumChatFormatting.AQUA+"1000";
+        ret[origin.length] = EnumChatFormatting.GOLD+
+            // #tr TST_ArtificialStar.getInfoData.00
+            // # Reward for continuous operation
+            // #zh_CN 连续运行奖励
+            TextEnums.tr("TST_ArtificialStar.getInfoData.00")
+            +EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+(rewardContinuous+100)+"%";
+
+        ret[origin.length + 1] = EnumChatFormatting.GOLD+
+            // #tr TST_ArtificialStar.getInfoData.01
+            // # Generating Multiplier
+            // #zh_CN 发电倍率
+            TextEnums.tr("TST_ArtificialStar.getInfoData.01")
+            +EnumChatFormatting.RESET+": "+EnumChatFormatting.GREEN+outputMultiplier;
+
+        ret[origin.length + 2] = EnumChatFormatting.GOLD+
+            // #tr TST_ArtificialStar.getInfoData.02
+            // # Dimension Field Tier
+            // #zh_CN 空间场等级
+            TextEnums.tr("TST_ArtificialStar.getInfoData.02")
+            +EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierDimensionField;
+
+        ret[origin.length + 3] = EnumChatFormatting.GOLD+
+            // #tr TST_ArtificialStar.getInfoData.03
+            // # Time Field Tier
+            // #zh_CN 时间场等级
+            TextEnums.tr("TST_ArtificialStar.getInfoData.03")
+            +EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierTimeField;
+
+        ret[origin.length + 4] = EnumChatFormatting.GOLD+
+            // #tr TST_ArtificialStar.getInfoData.04
+            // # Stabilisation Field Tier
+            // #zh_CN 稳定场等级
+            TextEnums.tr("TST_ArtificialStar.getInfoData.04")
+            +EnumChatFormatting.RESET+": "+EnumChatFormatting.YELLOW+tierStabilisationField;
+
+        ret[origin.length + 5] = EnumChatFormatting.GOLD+
+            // #tr TST_ArtificialStar.getInfoData.05
+            // # Recover material chance
+            // #zh_CN 回收原料几率
+            TextEnums.tr("TST_ArtificialStar.getInfoData.05")
+            +EnumChatFormatting.RESET+": "+EnumChatFormatting.AQUA+recoveryChance+EnumChatFormatting.RESET+"/"+EnumChatFormatting.AQUA+"1000";
         return ret;
        // spotless:on
     }

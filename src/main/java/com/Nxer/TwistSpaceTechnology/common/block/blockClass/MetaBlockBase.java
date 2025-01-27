@@ -29,11 +29,10 @@ public abstract class MetaBlockBase extends Block implements IMetaBlock {
     public final Set<Integer> usedMetaSet = new HashSet<>(16);
     public final Map<Integer, String[]> tooltipsMap = new HashMap<>(16);
     public final Map<Integer, IIcon> iconMap = new HashMap<>(16);
-    public final String unlocalizedName;
 
     public MetaBlockBase(String unlocalizedName) {
         super(Material.iron);
-        this.unlocalizedName = unlocalizedName;
+        this.setBlockName(unlocalizedName);
         this.setCreativeTab(GTCMCreativeTabs.TAB_META_BLOCKS);
     }
 
@@ -96,11 +95,6 @@ public abstract class MetaBlockBase extends Block implements IMetaBlock {
     }
 
     @Override
-    public String getUnlocalizedName() {
-        return unlocalizedName;
-    }
-
-    @Override
     public IIcon getIcon(int side, int meta) {
         return getIconMap().get(meta);
     }
@@ -113,7 +107,7 @@ public abstract class MetaBlockBase extends Block implements IMetaBlock {
         if ((iconMap = getIconMap()) == null || (usedMetaSet = getUsedMetaSet()) == null) {
             throw new NullPointerException("Null in " + this.getUnlocalizedName());
         }
-        String root = RESOURCE_ROOT_ID + ":" + getUnlocalizedName() + "/";
+        String root = RESOURCE_ROOT_ID + ":" + unlocalizedName + "/";
         this.blockIcon = reg.registerIcon(root + "0");
         for (int Meta : usedMetaSet) {
             iconMap.put(Meta, reg.registerIcon(root + Meta));

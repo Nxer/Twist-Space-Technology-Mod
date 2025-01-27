@@ -1,10 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
@@ -34,10 +33,15 @@ public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertaint
     @Override
     public String[] getDescription() {
         return new String[] { CommonValues.TEC_MARK_EM,
-            texter("Solve the impossible.", "DebugUncertaintyHatch.getDescription.02"),
-            "" + EnumChatFormatting.AQUA
-                + EnumChatFormatting.BOLD
-                + texter("The quantum world collapses.", "DebugUncertaintyHatch.getDescription.01"),
+            // #tr DebugUncertaintyHatch.getDescription.02
+            // # Solve the impossible.
+            // #zh_CN 解决不可能解决的问题.
+            TextEnums.tr("DebugUncertaintyHatch.getDescription.02"),
+            "" + EnumChatFormatting.AQUA + EnumChatFormatting.BOLD
+            // #tr DebugUncertaintyHatch.getDescription.01
+            // # The quantum world collapses.
+            // #zh_CN 量子世界坍塌.
+                + TextEnums.tr("DebugUncertaintyHatch.getDescription.01"),
             TextLocalization.ModNameDesc };
     }
 

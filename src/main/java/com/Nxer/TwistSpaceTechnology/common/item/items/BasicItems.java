@@ -16,49 +16,45 @@ import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.TSTGeneratedItem;
 
 public final class BasicItems {
 
-    public static final Item MetaItem01 = new ItemAdder01(
-        "MetaItem01Base",
-        "MetaItem01",
-        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItem01/0");
+    public static final Item MetaItem01 = new ItemAdder01(GTCMCreativeTabs.tabMetaItem01)
+        .setTextureName("gtnhcommunitymod:MetaItem01/0");
 
-    public static final Item MetaItemRune = new ItemAdderRune(
-        "MetaItemRuneBase",
-        "MetaItemRune",
-        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItem01/0");
+    public static final Item MetaItemRune = new ItemAdderRune(GTCMCreativeTabs.tabMetaItem01)
+        .setTextureName("gtnhcommunitymod:MetaItem01/0");
 
-    public static final Item MetaItemIzumik = new ItemAdderIzumik(
-        "MetaItemIzumikBase",
-        "MetaItemIzumik",
-        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:MetaItem01/0");
+    public static final Item MetaItemIzumik = new ItemAdderIzumik(GTCMCreativeTabs.tabMetaItem01)
+        .setTextureName("gtnhcommunitymod:MetaItem01/0");
 
+    // #tr item.ProofOfHeroes.name
+    // # 英雄の証
+    // #zh_CN 英雄の証
     public static final Item ProofOfHeroes = new ItemProofOfHeroes(
-        "英雄の証",
         "ProofOfHeroes",
         EnumRarity.common,
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:ProofOfHeroes");
 
+    // #tr item.ProofOfGods.name
+    // # Twist Token
+    // #zh_CN Twist Token
     public static final Item ProofOfGods = new ItemProofOfHeroes(
-        "Twist Token",
         "ProofOfGods",
         EnumRarity.epic,
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:ProofOfGods");
 
     public static final Item MultiStructuresLinkTool = new ItemMultiStructuresLinkTool(
-        "Multi-Structures Link Tool",
-        "MultiStructuresLinkTool",
         GTCMCreativeTabs.tabMultiStructures);
 
-    public static final Item PowerChair = new ItemPowerChair(
-        "Power Chair",
-        "PowerChair",
-        GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:PowerChair");
+    public static final Item PowerChair = new ItemPowerChair(GTCMCreativeTabs.tabMetaItem01)
+        .setTextureName("gtnhcommunitymod:PowerChair");
 
+    // #tr HatchUpdateTool.name
+    // # Hatch Update Tool
+    // #zh_CN 仓室升级工具
     public static final Item HatchUpdateTool = new ItemHatchUpdateTool(
-        "Hatch Update Tool",
         "HatchUpdateTool",
         GTCMCreativeTabs.tabMetaItem01).setTextureName("gtnhcommunitymod:HatchUpdateTool");
 
-    public static final Item Yamato = new ItemYamato("Yamato", "Yamato", GTCMCreativeTabs.tabMetaItem01);
+    public static final Item Yamato = new ItemYamato(GTCMCreativeTabs.tabMetaItem01);
 
     // don't use this item, but found its stack instance in the class, remember to copy the stacks!
     @SuppressWarnings("unused")

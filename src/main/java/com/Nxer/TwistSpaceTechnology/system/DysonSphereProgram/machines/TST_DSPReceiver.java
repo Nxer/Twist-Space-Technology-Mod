@@ -4,7 +4,6 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
@@ -78,6 +77,7 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -166,18 +166,39 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 7];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.GOLD + texter("Generating EU/t: ", "TST_DSPReceiver.getInfoData.01")
+        ret[origin.length] = EnumChatFormatting.GOLD
+            // #tr TST_DSPReceiver.getInfoData.01
+            // # Generating EU/t:
+            // #zh_CN 实际接收 EU/t:
+            + TextEnums.tr("TST_DSPReceiver.getInfoData.01")
             + EnumChatFormatting.RESET
             + generateTickEU();
         ret[origin.length + 1] = EnumChatFormatting.GOLD
-            + texter("Used Power Point: ", "TST_DSPReceiver.getInfoData.02")
+            // #tr TST_DSPReceiver.getInfoData.02
+            // # Used Power Point:
+            // #zh_CN 已占用产能点数:
+            + TextEnums.tr("TST_DSPReceiver.getInfoData.02")
             + EnumChatFormatting.RESET
             + usedPowerPoint;
-        ret[origin.length + 2] = EnumChatFormatting.GOLD + texter("Gravitational Lens Intensify Mode remaining time: ","TST_DSPReceiver.getInfoData.03") + EnumChatFormatting.RESET + (gravitationalLensTime/20) + " s";
-        ret[origin.length + 3] = EnumChatFormatting.GOLD + texter("Overload Multiplier: ", "TST_DSPReceiver.getInfoData.04") + EnumChatFormatting.RESET + astralArrayOverloadMultiplier;
+        ret[origin.length + 2] = EnumChatFormatting.GOLD
+            // #tr TST_DSPReceiver.getInfoData.03
+            // # Gravitational Lens Intensify Mode remaining time:
+            // #zh_CN 引力透镜增强模式剩余时间:
+            + TextEnums.tr("TST_DSPReceiver.getInfoData.03")
+            + EnumChatFormatting.RESET + (gravitationalLensTime/20) + " s";
+        ret[origin.length + 3] = EnumChatFormatting.GOLD
+            // #tr TST_DSPReceiver.getInfoData.04
+            // # Overload Multiplier:
+            // #zh_CN 过载倍率:
+            + TextEnums.tr("TST_DSPReceiver.getInfoData.04")
+            + EnumChatFormatting.RESET + astralArrayOverloadMultiplier;
         ret[origin.length + 4] = EnumChatFormatting.GOLD + infoText_CurrentStellarCoefficient + EnumChatFormatting.RESET + dspDataCell.getGalaxy() + " -> " + EnumChatFormatting.YELLOW + dspDataCell.getGalaxy().stellarCoefficient;
         ret[origin.length + 5] = EnumChatFormatting.GOLD + infoText_CurrentPlanetCoefficient + EnumChatFormatting.RESET + DSP_Planet.getPlanetFromDimID(dimID) + " -> " + EnumChatFormatting.YELLOW + DSP_Planet.getPlanetaryCoefficientWithDimID(dimID);
-        ret[origin.length + 6] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
+        ret[origin.length + 6] = EnumChatFormatting.GOLD
+            // #tr DSPDataCell.getInfoData
+            // # Dyson Sphere Data:
+            // #zh_CN 戴森球信息:
+            + TextEnums.tr("DSPDataCell.getInfoData")
             + EnumChatFormatting.RESET
             + dspDataCell;
         return ret;
@@ -191,7 +212,11 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isActive")) {
             currentTip.add(
-                EnumChatFormatting.AQUA + texter("Energy Receiving: ", "Waila.TST_DSPReceiver.1")
+                EnumChatFormatting.AQUA
+                    // #tr Waila.TST_DSPReceiver.1
+                    // # Energy Receiving:
+                    // #zh_CN 接收能源:
+                    + TextEnums.tr("Waila.TST_DSPReceiver.1")
                     + EnumChatFormatting.GOLD
                     + GTUtility.formatNumbers(tag.getLong("TickEU"))
                     + EnumChatFormatting.RESET

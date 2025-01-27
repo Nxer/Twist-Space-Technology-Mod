@@ -17,8 +17,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-import com.Nxer.TwistSpaceTechnology.util.TextHandler;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
@@ -27,19 +25,10 @@ import gregtech.api.metatileentity.implementations.MTEMultiBlockBase;
 
 public class ItemHatchUpdateTool extends Item {
 
-    public String unlocalizedName;
-
-    public ItemHatchUpdateTool(String aName, String aMetaName, CreativeTabs aCreativeTabs) {
+    public ItemHatchUpdateTool(String aMetaName, CreativeTabs aCreativeTabs) {
         super();
         this.setCreativeTab(aCreativeTabs);
         this.unlocalizedName = aMetaName;
-        TextHandler.texter(aName, this.unlocalizedName + ".name");
-    }
-
-    @Override
-    public Item setUnlocalizedName(String aUnlocalizedName) {
-        this.unlocalizedName = aUnlocalizedName;
-        return this;
     }
 
     @Override

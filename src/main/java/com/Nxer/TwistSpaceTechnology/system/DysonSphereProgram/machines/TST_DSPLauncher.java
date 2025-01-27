@@ -11,7 +11,6 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
@@ -164,10 +163,18 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.GOLD + "Owner Name: " + EnumChatFormatting.RESET + ownerName;
         ret[origin.length + 1] = EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + ownerUUID;
-        ret[origin.length + 2] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
+        ret[origin.length + 2] = EnumChatFormatting.GOLD
+            // #tr DSPDataCell.getInfoData
+            // # Dyson Sphere Data:
+            // #zh_CN 戴森球信息:
+            + TextEnums.tr("DSPDataCell.getInfoData")
             + EnumChatFormatting.RESET
             + dspDataCell;
-        ret[origin.length + 3] = EnumChatFormatting.GOLD + texter("Overload time: ", "TST_DSPLauncher.getInfoData.01")
+        ret[origin.length + 3] = EnumChatFormatting.GOLD
+            // #tr TST_DSPLauncher.getInfoData.01
+            // # Overload time:
+            // #zh_CN 剩余过载时间:
+            + TextEnums.tr("TST_DSPLauncher.getInfoData.01")
             + EnumChatFormatting.RESET
             + (overloadTime / 20)
             + " s";

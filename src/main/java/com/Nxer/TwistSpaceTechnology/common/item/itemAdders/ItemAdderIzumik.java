@@ -18,7 +18,6 @@ import net.minecraft.util.IIcon;
 
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
 import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
-import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -30,10 +29,11 @@ public class ItemAdderIzumik extends ItemAdder_Basic {
     public static final Map<Integer, String[]> MetaItemTooltipsMapIzumikShift = new HashMap<>();
     public String unlocalizedName;
 
-    public ItemAdderIzumik(String aName, String aMetaName, CreativeTabs aCreativeTabs) {
-        super(aName, aMetaName, aCreativeTabs);
-        this.unlocalizedName = aMetaName;
-        TextHandler.texter(aName, this.unlocalizedName + ".name");
+    public ItemAdderIzumik(CreativeTabs aCreativeTabs) {
+        // #tr item.MetaItemIzumik.name
+        // # Meta Item Izumik
+        // #zh_CN Meta Item Izumik
+        super("MetaItemIzumik", aCreativeTabs);
     }
 
     public static ItemStack initItemIzumik(String aName, int aMeta) {
@@ -51,16 +51,6 @@ public class ItemAdderIzumik extends ItemAdder_Basic {
 
         return initItemIzumik(aName, aMeta);
 
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack aItemStack) {
-        return this.unlocalizedName + "." + aItemStack.getItemDamage();
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-        return this.unlocalizedName;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.Nxer.TwistSpaceTechnology.common.block;
 
 import net.minecraft.item.ItemStack;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasingBase;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
 import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
@@ -9,6 +11,8 @@ import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
 import gregtech.api.enums.Textures;
 import gregtech.api.render.TextureFactory;
 
+@Deprecated
+@ApiStatus.ScheduledForRemoval
 public final class MetaBlockConstructors {
 
     public static ItemStack initMetaBlock(String originEnglishName, byte meta, MetaBlockBase basicBlock) {

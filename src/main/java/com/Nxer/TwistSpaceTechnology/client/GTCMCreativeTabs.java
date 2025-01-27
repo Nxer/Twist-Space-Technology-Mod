@@ -1,30 +1,20 @@
 package com.Nxer.TwistSpaceTechnology.client;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class GTCMCreativeTabs {
 
-    /**
-     * Creative Tab for MetaItem01
-     */
-    public static final CreativeTabs tabMetaItem01 = new CreativeTabs(
-        texter("TST Meta Items 1", "itemGroup.TST Meta Items 1")) {
-
-        @Override
-        @SideOnly(Side.CLIENT)
-        public Item getTabIconItem() {
-            return BasicItems.MetaItem01;
-        }
-    };
-    public static final CreativeTabs tabGears = new CreativeTabs(texter("TSTGears", "itemGroup.TSTGears")) {
+    // #tr itemGroup.TSTItems1
+    // # TST Items 1
+    // #zh_CN TST 物品 1
+    public static final CreativeTabs tabMetaItem01 = new CreativeTabs(TextEnums.tr("itemGroup.TSTItems1")) {
 
         @Override
         @SideOnly(Side.CLIENT)
@@ -33,11 +23,10 @@ public class GTCMCreativeTabs {
         }
     };
 
-    /**
-     * Creative Tab for MetaBlocks
-     */
-    public static final CreativeTabs TAB_META_BLOCKS = new CreativeTabs(
-        texter("TST Meta Blocks", "itemGroup.TST Meta Blocks")) {
+    // #tr itemGroup.TSTGears
+    // # TST Gears
+    // #zh_CN TST Gears
+    public static final CreativeTabs tabGears = new CreativeTabs(TextEnums.tr("itemGroup.TSTGears")) {
 
         @Override
         @SideOnly(Side.CLIENT)
@@ -46,10 +35,10 @@ public class GTCMCreativeTabs {
         }
     };
 
-    /**
-     * Creative Tab for MetaBlock01
-     */
-    public static final CreativeTabs tabGTCMGeneralTab = new CreativeTabs(texter("TST", "itemGroup.TST")) {
+    // #tr itemGroup.TSTBlocks1
+    // # TST Blocks 1
+    // #zh_CN TST 方块 1
+    public static final CreativeTabs TAB_META_BLOCKS = new CreativeTabs(TextEnums.tr("itemGroup.TSTBlocks1")) {
 
         @Override
         @SideOnly(Side.CLIENT)
@@ -57,8 +46,24 @@ public class GTCMCreativeTabs {
             return BasicItems.MetaItem01;
         }
     };
+
+    // #tr itemGroup.TST
+    // # Twist Space Technology
+    // #zh_CN 扭曲空间科技
+    public static final CreativeTabs tabGTCMGeneralTab = new CreativeTabs(TextEnums.tr("itemGroup.TST")) {
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Item getTabIconItem() {
+            return BasicItems.MetaItem01;
+        }
+    };
+
+    // #tr itemGroup.TSTMultiStructures
+    // # TST Multi Structures
+    // #zh_CN TST 多方块结构
     public static final CreativeTabs tabMultiStructures = new CreativeTabs(
-        texter("MultiStructures", "itemGroup.MultiStructures")) {
+        TextEnums.tr("itemGroup.TSTMultiStructures")) {
 
         @Override
         @SideOnly(Side.CLIENT)

@@ -13,7 +13,7 @@ public class BlockNuclearComponent extends BlockNuclearReactor {
     public static HashMap<Integer, IReactorComponent> components;
 
     public BlockNuclearComponent(String unlocalizedName, String localName) {
-        super(unlocalizedName, localName);
+        super();
     }
 
     public static class innerItemBlock extends ItemBlockBase01 {

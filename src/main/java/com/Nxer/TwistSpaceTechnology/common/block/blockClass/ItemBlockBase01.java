@@ -45,6 +45,7 @@ public class ItemBlockBase01 extends ItemBlock {
     // -----------------------
     // region MetaBlock Generators
 
+    @Deprecated
     public static ItemStack initMetaBlock01(String i18nName, int Meta) {
         return initMetaItemStack(i18nName, Meta, MetaBlock01, MetaBlockSet01);
     }

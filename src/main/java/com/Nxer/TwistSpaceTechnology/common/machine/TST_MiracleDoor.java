@@ -6,7 +6,6 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMira
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons.NoCriticalPhotonInput;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool.MoltenToIngot;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
@@ -65,6 +64,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.Wireless
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
@@ -128,12 +128,11 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isActive")) {
-            currentTip.add(
-                EnumChatFormatting.AQUA + texter("Current Overclock Parameter", "Waila.TST_MiracleDoor.2")
-                    + EnumChatFormatting.RESET
-                    + ": "
-                    + EnumChatFormatting.GOLD
-                    + tag.getLong("overclockParameter"));
+            // #tr tst.miracleDoor.waila.currentOverclockParameter
+            // # {\AQUA}Current Overclock Parameter{\RESET}: {\GOLD}%s
+            // #zh_CN {\AQUA}当前额外超频系数{\RESET}: {\GOLD}%s
+            currentTip
+                .add(TstUtils.tr("tst.miracleDoor.waila.currentOverclockParameter", tag.getLong("overclockParameter")));
         }
         currentTip.add(
             EnumChatFormatting.BOLD + StatCollector.translateToLocal("MiracleDoor.modeMsg." + tag.getByte("mode")));

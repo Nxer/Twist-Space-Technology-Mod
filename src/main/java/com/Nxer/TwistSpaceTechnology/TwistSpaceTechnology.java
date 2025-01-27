@@ -20,7 +20,6 @@ import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
 import com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipeHandler;
-import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -44,6 +43,7 @@ public class TwistSpaceTechnology {
      * <li>The signal of whether in Development Mode.
      * <li>Keep care to set 'false' when dev complete.
      */
+    @Deprecated
     public static final boolean isInDevMode = false;
 
     /**
@@ -52,14 +52,8 @@ public class TwistSpaceTechnology {
      * If it not work correctly, please operate it manually and disable
      * the{@link PathHelper#initResourceAbsolutePath}.
      */
+    @Deprecated
     public static String DevResource = "";
-    /**
-     * <p>
-     * Set false when auto generation get problems and set DevResource manually.
-     * <p>
-     * Mind to reset these changes when dev complete.
-     */
-    public static final boolean useAutoGeneratingDevResourcePath = true;
 
     public static final String MODID = Tags.MODID;
     public static final String MOD_ID = Tags.MODID;
@@ -84,18 +78,12 @@ public class TwistSpaceTechnology {
     // GameRegistry." (Remove if not needed)
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        // process path
-        if (isInDevMode && useAutoGeneratingDevResourcePath) {
-            DevResource = PathHelper.initResourceAbsolutePath();
-        }
-        TextHandler.initLangMap(isInDevMode);
 
         proxy.preInit(event);
         MaterialLoader.load();// Load MaterialPool
         if (Config.activateCombatStats) {
             ItemRegister.registry();
         }
-
     }
 
     @Mod.EventHandler
@@ -120,8 +108,6 @@ public class TwistSpaceTechnology {
         MachineLoader.loadMachinePostInit();
         OreDictLoader.loadOreDictionary();
         RecipeLoader.loadRecipesPostInit();// To init GTCM Recipemap
-
-        TextHandler.serializeLangMap(isInDevMode);
 
         CropLoader.register();
         CropLoader.registerBaseSeed();
