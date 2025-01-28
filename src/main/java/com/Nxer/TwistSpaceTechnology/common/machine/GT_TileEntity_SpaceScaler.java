@@ -204,6 +204,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             @Override
             protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
 
+                if (fieldGeneratorTier >= 11 || mode > 0) return super.validateRecipe(recipe);
+
                 int recipeReq = 1 + recipe.getMetadataOrDefault(CompressionTierKey.INSTANCE, 0);
                 if (recipeReq > fieldGeneratorTier) {
                     return CheckRecipeResultRegistry.insufficientMachineTier(recipeReq);
@@ -237,6 +239,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                 return GTPPRecipeMaps.cyclotronRecipes;
             case 3:
                 return BartWorksRecipeMaps.electricImplosionCompressorRecipes;
+            case 4:
+                return RecipeMaps.neutroniumCompressorRecipes;
             default:
                 return RecipeMaps.compressorRecipes;
         }
@@ -249,7 +253,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             RecipeMaps.extractorRecipes,
             GTPPRecipeMaps.cyclotronRecipes,
             RecipeMaps.compressorRecipes,
-            BartWorksRecipeMaps.electricImplosionCompressorRecipes);
+            BartWorksRecipeMaps.electricImplosionCompressorRecipes,
+            RecipeMaps.neutroniumCompressorRecipes);
     }
 
     @Override
@@ -257,7 +262,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         if (getBaseMetaTileEntity().isServerSide()) {
             int modeAmount;
             if (fieldGeneratorTier >= 11) {
-                modeAmount = 4;
+                modeAmount = 5;
             } else if (fieldGeneratorTier >= 3) {
                 modeAmount = 3;
             } else {

@@ -1,9 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.HorizontalDirt;
+import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
-import static gregtech.api.enums.Mods.Chisel;
 import static gregtech.api.enums.Textures.BlockIcons;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -27,8 +27,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -533,25 +536,8 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     private static final int BRONZE_PLATED_BRICKS_INDEX = 10;
     private static final int FIREBRICK_METAID = 15;
     private boolean isMultiChunkloaded = true;
-    private static final int HORIZONTAL_DIRT_METAID = 9;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
-    private static final IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> STRUCTURE_DEFINITION = StructureDefinition
-        .<GT_TileEntity_MegaBrickedBlastFurnace>builder()
-        .addShape(STRUCTURE_PIECE_MAIN, structure_string)
-        .addElement(
-            'C',
-            (Chisel.isModLoaded() && Block.getBlockFromName(Chisel.ID + ":dirt") != null)
-                ? ofBlock(Block.getBlockFromName(Chisel.ID + ":dirt"), HORIZONTAL_DIRT_METAID)
-                : ofBlock(Blocks.dirt, 0))
-        .addElement(
-            'b',
-            buildHatchAdder(GT_TileEntity_MegaBrickedBlastFurnace.class).atLeast(InputBus, OutputBus)
-                .casingIndex(BRONZE_PLATED_BRICKS_INDEX)
-                .dot(1)
-                .buildAndChain(ofBlock(GregTechAPI.sBlockCasings1, BRONZE_PLATED_BRICKS_INDEX)))
-        .addElement('N', ofBlock(GregTechAPI.sBlockCasings4, FIREBRICK_METAID))
-        .addElement('s', ofBlock(Blocks.brick_block, 0))
-        .build();
+    private static IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> STRUCTURE_DEFINITION = null;
 
     public GT_TileEntity_MegaBrickedBlastFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -599,6 +585,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             .addPollutionAmount(getPollutionPerSecond(null))
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            .addInfo(TextEnums.tr("Tooltip_Channel_Helper"))
             .addSeparator()
             .addStructureInfo(TextLocalization.textMegaBrickedBlastFurnaceTips)
             .addInputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
@@ -632,6 +619,29 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
     @Override
     public IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_MegaBrickedBlastFurnace>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, structure_string)
+                .addElement(
+                    'C',
+                    ofVariableBlock(
+                        "chisel",
+                        HorizontalDirt.getLeft(),
+                        HorizontalDirt.getRight(),
+                        ImmutableList.of(
+                            Utils.createItemStack(HorizontalDirt.getLeft(), HorizontalDirt.getRight()),
+                            Utils.createItemStack(Blocks.dirt, 0))))
+                .addElement(
+                    'b',
+                    buildHatchAdder(GT_TileEntity_MegaBrickedBlastFurnace.class).atLeast(InputBus, OutputBus)
+                        .casingIndex(BRONZE_PLATED_BRICKS_INDEX)
+                        .dot(1)
+                        .buildAndChain(ofBlock(GregTechAPI.sBlockCasings1, BRONZE_PLATED_BRICKS_INDEX)))
+                .addElement('N', ofBlock(GregTechAPI.sBlockCasings4, FIREBRICK_METAID))
+                .addElement('s', ofBlock(Blocks.brick_block, 0))
+                .build();
+        }
+
         return STRUCTURE_DEFINITION;
     }
 

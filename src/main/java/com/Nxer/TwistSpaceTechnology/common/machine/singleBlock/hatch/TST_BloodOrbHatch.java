@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import WayofTime.alchemicalWizardry.AlchemicalWizardry;
@@ -48,10 +49,15 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         // #tr Tooltip_BloodOrbHatch_4
         // # Drains LP as much as possible from the Soul Network.
         // #zh_CN 尽可能多地从灵魂网络中抽取LP
-        TextEnums.tr("Tooltip_BloodOrbHatch_4"), TextEnums.Author_Taskeren.getText(), };
+        TextEnums.tr("Tooltip_BloodOrbHatch_4"),
+        // #tr Tooltip_BloodOrbHatch_5
+        // # Deactivating the Hatch will refund the Life Essence back to the Blood Orb.
+        // #zh_CN 关闭血液仓将会把生命本质输回气血宝珠
+        TextEnums.tr("Tooltip_BloodOrbHatch_5"), TextEnums.Author_Taskeren.getText(),
+        TextEnums.Mod_TwistSpaceTechnology.getText() };
 
     private static final String[] TOOLTIP = new String[] { TextEnums.tr("Tooltip_BloodOrbHatch_3"),
-        TextEnums.tr("Tooltip_BloodOrbHatch_4") };
+        TextEnums.tr("Tooltip_BloodOrbHatch_4"), TextEnums.tr("Tooltip_BloodOrbHatch_5"), };
 
     public TST_BloodOrbHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
@@ -169,7 +175,14 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
             return false;
         }
 
-        int maxDrainAmount = Math.min(getCapacity() - getFluidAmount(), getMaxCanDrainFromOrb());
+        // the orb is swapped to one with smaller capacity.
+        // update the amount to the capacity, and void the exceeding bloods.
+        if (getFluid() != null && getFluidAmount() > getCapacity()) {
+            getFluid().amount = getCapacity();
+            return false;
+        }
+
+        int maxDrainAmount = MathUtils.clamp(getCapacity() - getFluidAmount(), 0, getMaxCanDrainFromOrb());
         int drainedAmount = drainFromOrb(maxDrainAmount);
         if (drainedAmount > 0) {
             super.fill(FluidUtils.getFluidStack(getFluidToGenerate(), drainedAmount), true);
@@ -177,6 +190,24 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         }
 
         return false;
+    }
+
+    /**
+     * Refund the remaining blood back to the network of orb's owner.
+     */
+    public void refundBlood() {
+        if (!getBaseMetaTileEntity().isServerSide()) {
+            return;
+        }
+
+        // return the bloods back to the network
+        if (getFluid() != null && getFluidAmount() > 0) {
+            var added = BloodMagicHelper.addBloodToNetwork(getOrbItemStack(), getFluidAmount());
+            mFluid.amount -= added;
+            if (mFluid.amount <= 0) {
+                mFluid = null;
+            }
+        }
     }
 
     @Override
@@ -187,14 +218,35 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
             getBaseMetaTileEntity().setActive(true);
             this.mMaxProgresstime = getMaxTickTime();
             if (++this.mProgresstime >= this.mMaxProgresstime) {
-                if (this.canTankBeFilled()) {
+                if (this.getOrbItemStack() == null) { // remove the remaining bloods if the orb is not present
+                    this.mFluid = null;
+                } else { // canTankBeFilled() will always be true, ignored
                     this.addFluidToHatch(aTick);
                 }
+                this.mProgresstime = 0;
             }
         } else {
             getBaseMetaTileEntity().setActive(false);
+            refundBlood();
             this.mProgresstime = 0;
             this.mMaxProgresstime = 0;
         }
+    }
+
+    @Override
+    public boolean isValidSlot(final int aIndex) {
+        return true;
+    }
+
+    @Override
+    public boolean allowPullStack(final IGregTechTileEntity aBaseMetaTileEntity, final int aIndex,
+        final ForgeDirection side, final ItemStack aStack) {
+        return true;
+    }
+
+    @Override
+    public boolean allowPutStack(final IGregTechTileEntity aBaseMetaTileEntity, final int aIndex,
+        final ForgeDirection side, final ItemStack aStack) {
+        return true;
     }
 }

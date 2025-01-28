@@ -20,7 +20,7 @@ import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
-import com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipe;
+import com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipeHandler;
 import com.Nxer.TwistSpaceTechnology.util.TextHandler;
 
 import cpw.mods.fml.common.Mod;
@@ -134,7 +134,7 @@ public class TwistSpaceTechnology {
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
         RecipeLoader.loadRecipes();// Load Recipes
-        ExtremeCraftRecipe.initECRecipe();
+        new ExtremeCraftRecipeHandler().initECRecipe();
 
         // Init static parameters
         new LazyStaticsInitLoader().initStaticsOnCompleteInit();

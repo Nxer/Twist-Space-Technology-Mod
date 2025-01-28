@@ -273,7 +273,8 @@ public class ModularHatchesRecipes implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.WhiteDwarfMatter, 16) },
                 new FluidStack[] {
                     Materials.RadoxPolymer.getMolten(144 * 64 * 128),
-                    MaterialsUEVplus.Time.getMolten(144 * 320), MaterialsUEVplus.PhononMedium.getFluid(1000 * 256),
+                    MaterialsUEVplus.Time.getMolten(144 * 320),
+                    MaterialsUEVplus.PhononMedium.getFluid(1000 * 256),
                     GGMaterial.shirabon.getMolten(144 * 640) },
                 GTCMItemList.PerfectOverclockController.get(1),
                 20 * 600,

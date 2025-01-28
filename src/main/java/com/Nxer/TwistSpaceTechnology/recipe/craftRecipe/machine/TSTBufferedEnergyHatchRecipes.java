@@ -32,7 +32,6 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.dreammaster.gthandler.CustomItemList;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
@@ -49,19 +48,19 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
     @Override
     public void loadRecipes() {
 
-        final ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Basic, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 1),
-            // TODO Piko and Quantum circuit
-            CustomItemList.PikoCircuit.get(1), CustomItemList.QuantumCircuit.get(1) };
+        final ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.HV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.EV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ZPM, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1) };
 
         final IRecipeMap assembler = RecipeMaps.assemblerRecipes;
         GTValues.RA.stdBuilder()
@@ -171,8 +170,8 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(18),
-                ItemList.Battery_Buffer_4by4_UXV.get(1),
-                ItemList.Hatch_Energy_UXV.get(1),
+                ItemList.Battery_Buffer_4by4_UHV.get(1),
+                ItemList.Hatch_Energy_UHV.get(1),
                 circuits[8],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUHV, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))

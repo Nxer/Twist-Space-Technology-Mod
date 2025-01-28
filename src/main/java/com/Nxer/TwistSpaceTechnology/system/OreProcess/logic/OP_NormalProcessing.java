@@ -17,12 +17,12 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.google.common.collect.Sets;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.GregTechAPI;
-import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTModHandler;
@@ -125,6 +125,8 @@ public class OP_NormalProcessing {
                 WerkstoffMaterialPool.CeriumOreConcentrate.get(OrePrefixes.dust, 11) };
             ItemStack[] outputsRich = new ItemStack[] {
                 WerkstoffMaterialPool.CeriumOreConcentrate.get(OrePrefixes.dust, 22) };
+            // registry raw ore item style
+            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.Cerium, 1), outputs);
             for (OrePrefixes prefixes : basicStoneTypes) {
                 if (GTOreDictUnificator.get(prefixes, Materials.Cerium, 1) == null) continue;
                 registryOreProcessRecipe(
@@ -140,6 +142,8 @@ public class OP_NormalProcessing {
                 WerkstoffMaterialPool.SamariumOreConcentrate.get(OrePrefixes.dust, 11) };
             ItemStack[] outputsRich = new ItemStack[] {
                 WerkstoffMaterialPool.SamariumOreConcentrate.get(OrePrefixes.dust, 22) };
+            // registry raw ore item style
+            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.Samarium, 1), outputs);
             for (OrePrefixes prefixes : basicStoneTypes) {
                 if (GTOreDictUnificator.get(prefixes, Materials.Samarium, 1) == null) continue;
                 registryOreProcessRecipe(
@@ -155,6 +159,8 @@ public class OP_NormalProcessing {
                 GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 3), };
             ItemStack[] outputsRich = new ItemStack[] { GGMaterial.naquadahEarth.get(OrePrefixes.dust, 16),
                 GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 8), };
+            // registry raw ore item style
+            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.Naquadah, 1), outputs);
             for (OrePrefixes prefixes : basicStoneTypes) {
                 if (GTOreDictUnificator.get(prefixes, Materials.Naquadah, 1) == null) continue;
                 registryOreProcessRecipe(
@@ -170,6 +176,8 @@ public class OP_NormalProcessing {
                 GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 3) };
             ItemStack[] outputsRich = new ItemStack[] { GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 16),
                 GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 6) };
+            // registry raw ore item style
+            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.NaquadahEnriched, 1), outputs);
             for (OrePrefixes prefixes : basicStoneTypes) {
                 if (GTOreDictUnificator.get(prefixes, Materials.NaquadahEnriched, 1) == null) continue;
                 registryOreProcessRecipe(
@@ -185,6 +193,8 @@ public class OP_NormalProcessing {
                 GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 3), };
             ItemStack[] outputsRich = new ItemStack[] { GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 16),
                 GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 6), };
+            // registry raw ore item style
+            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.Naquadria, 1), outputs);
             for (OrePrefixes prefixes : basicStoneTypes) {
                 if (GTOreDictUnificator.get(prefixes, Materials.Naquadria, 1) == null) continue;
                 registryOreProcessRecipe(
@@ -238,6 +248,9 @@ public class OP_NormalProcessing {
 
         // registry normal stone ore
         registryOreProcessRecipe(GTModHandler.getModItem("gregtech", "gt.blockores", 1, ID), outputs);
+
+        // registry raw ore item style
+        registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, material, 1), outputs);
 
         // registry gt stone ore
         for (OrePrefixes prefixes : basicStoneTypesExceptNormalStone) {
@@ -312,7 +325,8 @@ public class OP_NormalProcessing {
     }
 
     public void registryOreProcessRecipe(ItemStack input, ItemStack[] output) {
-        GTValues.RA.stdBuilder()
+        if (input == null) return;
+        TST_RecipeBuilder.builder()
             .itemInputs(input)
             .itemOutputs(output)
             .fluidInputs(Materials.Lubricant.getFluid(1))

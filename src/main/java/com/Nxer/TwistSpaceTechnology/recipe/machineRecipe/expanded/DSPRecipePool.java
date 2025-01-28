@@ -491,7 +491,6 @@ public class DSPRecipePool implements IRecipePool {
                 ParticleTrapTimeSpaceShield.get(64),
                 CriticalPhoton.get(1),
 
-                // TODO Quantum circuit
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2),
                 ItemList.EnergisedTesseract.get(1))
             .fluidInputs(
@@ -824,7 +823,7 @@ public class DSPRecipePool implements IRecipePool {
                 .duration(20 * 300)
                 .addTo(MiracleTopRecipes);
 
-            // endregion
+            // end region
         }
 
     }

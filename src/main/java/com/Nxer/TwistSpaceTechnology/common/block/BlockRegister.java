@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
+import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockArcaneHole;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockStar;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlock01;
 import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.NuclearReactorBlock;
@@ -22,6 +23,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockBase01;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
+import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -89,11 +91,13 @@ public class BlockRegister {
             NuclearReactorBlock,
             BlockNuclearReactor.innerItemBlock.class,
             NuclearReactorBlock.getUnlocalizedName());
+        GameRegistry.registerBlock(BlockArcaneHole, "BlockArcaneHole");
 
         GameRegistry.registerBlock(BasicBlocks.BlockPowerChair, ItemBlockPowerChair.class, "BlockPowerChair");
         BlockStar = new BlockStar();
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
         GameRegistry.registerTileEntity(TilePowerChair.class, "TilePowerChair");
+        GameRegistry.registerTileEntity(TileArcaneHole.class, "TileArcaneHole");
 
         GameRegistry.registerBlock(BasicBlocks.timeBendingSpeedRune, "TimeBendingSpeedRune");
     }

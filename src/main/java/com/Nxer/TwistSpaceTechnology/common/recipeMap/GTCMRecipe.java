@@ -390,4 +390,15 @@ public class GTCMRecipe {
         .progressBar(GTUITextures.PROGRESSBAR_ASSEMBLE)
         .disableOptimize()
         .build();
+
+    // #tr tst.recipe.IndustrialAlchemyTowerRecipe
+    // # Industrial Alchemy Tower
+    // #zh_CN 工业炼金塔
+    public static final RecipeMap<RecipeMapBackend> IndustrialAlchemyTowerRecipe = RecipeMapBuilder
+        .of("tst.recipe.IndustrialAlchemyTowerRecipe")
+        .maxIO(2, 1, 0, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialAlchemyTower.get(1)))
+        .useSpecialSlot()
+        .disableOptimize()
+        .build();
 }

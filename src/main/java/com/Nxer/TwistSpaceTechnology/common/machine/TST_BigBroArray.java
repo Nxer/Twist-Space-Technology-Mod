@@ -92,6 +92,8 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.maps.FuelBackend;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
@@ -710,166 +712,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
     }};
 
 
-    private static final String[][] PATTERN_ADDON_OLD = new String[][]{{
-        "              ",
-        "              ",
-        "              ",
-        "              ",
-        "    A         ",
-        "              ",
-        "              ",
-        "              ",
-        "              "
-    },{
-        "              ",
-        "              ",
-        "              ",
-        "   AAA        ",
-        "   ABA        ",
-        "   AAA        ",
-        "              ",
-        "              ",
-        "              "
-    },{
-        "              ",
-        "              ",
-        "   AAA        ",
-        "  ABBBA       ",
-        "  ABBBA       ",
-        "  ABBBA       ",
-        "   AAA        ",
-        "              ",
-        "              "
-    },{
-        "              ",
-        "   AAA        ",
-        "  ABBBA       ",
-        " ABBBBBA      ",
-        " ABBBBBA      ",
-        " ABBBBBA      ",
-        "  ABBBA       ",
-        "   AAA        ",
-        "              "
-    },{
-        "  AAAAA       ",
-        " AABBBAA      ",
-        "AABBBBBAA     ",
-        "ABBBBBBBA     ",
-        "ABBBBBBBA     ",
-        "ABBBBBBBA     ",
-        "AABBBBBAA     ",
-        " AABBBAA      ",
-        "  AAAAA       "
-    },{
-        "  AAAAA       ",
-        " AABBBAA      ",
-        "AABBBBBAA     ",
-        "ABBBBBBBA     ",
-        "ABBBBBBBA     ",
-        "ABBBBBBBA     ",
-        "AABBBBBAA     ",
-        " AABBBAA      ",
-        "  AAAAA       "
-    },{
-        "              ",
-        "   AAA        ",
-        "  ABBBA       ",
-        " ABBBBBA      ",
-        " ABBBBBA      ",
-        " ABBBBBA      ",
-        "  ABBBA       ",
-        "   AAA        ",
-        "              "
-    },{
-        "              ",
-        "   CCC        ",
-        "  CAAAC       ",
-        " CABBBAC      ",
-        " CABBBAC      ",
-        " CABBBAC      ",
-        "  CAAAC       ",
-        "   CCC        ",
-        "              "
-    },{
-        "              ",
-        "   CCC        ",
-        "  C   C       ",
-        " C AAA C      ",
-        " C ABA C      ",
-        " C AAA C      ",
-        "  C   C       ",
-        "   CCC        ",
-        "              "
-    },{
-        "              ",
-        "   CCC        ",
-        "  C   C       ",
-        " C     C      ",
-        " C  A  C      ",
-        " C     C      ",
-        "  C   C       ",
-        "   CCC        ",
-        "              "
-    },{
-        "              ",
-        "   CCC        ",
-        "  C   C       ",
-        " C     C      ",
-        " C  E  C      ",
-        " C     C      ",
-        "  C   C       ",
-        "   CCC        ",
-        "              "
-    },{
-        "              ",
-        "   CCC        ",
-        "  C   C       ",
-        " C     C      ",
-        " C  E  C      ",
-        " C     C      ",
-        "  C   C       ",
-        "   CCC        ",
-        "              "
-    },{
-        "              ",
-        "   CCC        ",
-        "  C   C       ",
-        " C     C      ",
-        " C  E  C      ",
-        " C     C      ",
-        "  C   C       ",
-        "   CCC        ",
-        "              "
-    },{
-        "              ",
-        "   CCC        ",
-        "  C   C       ",
-        " C EEE C      ",
-        " C EEE C      ",
-        " C EEE C      ",
-        "  C   C       ",
-        "   CCC        ",
-        "              "
-    },{
-        "DDDDDDDDD     ",
-        "DDDDDDDDD     ",
-        "DDEEEEEDD     ",
-        "DDEEEEEDD     ",
-        "DDEEEEEDDDDDDD",
-        "DDEEEEEDD     ",
-        "DDEEEEEDD     ",
-        "DDDDDDDDD     ",
-        "DDDDDDDDD     "
-    }};
     // spotless:on
-
-    private static final String[][] PATTERN_ADDON_90_CW_OLD = new String[PATTERN_ADDON_OLD.length][PATTERN_ADDON_OLD[0][0]
-        .length()];
-
-    private static final String[][] PATTERN_ADDON_90_CCW_OLD = new String[PATTERN_ADDON_OLD.length][PATTERN_ADDON_OLD[0][0]
-        .length()];
-
-    private static final String[][] PATTERN_ADDON_180_OLD = new String[PATTERN_ADDON_OLD.length][PATTERN_ADDON_OLD[0].length];
 
     private static final String[][] PATTERN_ADDON_90_CW = new String[PATTERN_ADDON.length][PATTERN_ADDON[0][0]
         .length()];
@@ -935,13 +778,13 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                 put("Extractor", RecipeMaps.class.getDeclaredField("extractorRecipes"));
                 put("LaserEngraver", RecipeMaps.class.getDeclaredField("laserEngraverRecipes"));
                 put("Autoclave", RecipeMaps.class.getDeclaredField("autoclaveRecipes"));
-                put("Mixer", RecipeMaps.class.getDeclaredField("mixerNonCellRecipes"));
+                put("Mixer", RecipeMaps.class.getDeclaredField("mixerRecipes"));
                 put("AlloySmelter", RecipeMaps.class.getDeclaredField("alloySmelterRecipes"));
-                put("Electrolyzer", RecipeMaps.class.getDeclaredField("electrolyzerNonCellRecipes"));
+                put("Electrolyzer", RecipeMaps.class.getDeclaredField("electrolyzerRecipes"));
                 put("ElectromagneticSeparator", RecipeMaps.class.getDeclaredField("electroMagneticSeparatorRecipes"));
                 put("Recycler", RecipeMaps.class.getDeclaredField("recyclerRecipes"));
                 put("Massfab", RecipeMaps.class.getDeclaredField("massFabFakeRecipes"));
-                put("Centrifuge", RecipeMaps.class.getDeclaredField("centrifugeNonCellRecipes"));
+                put("Centrifuge", RecipeMaps.class.getDeclaredField("centrifugeRecipes"));
                 put("Cutter", RecipeMaps.class.getDeclaredField("cutterRecipes"));
                 put("Assembler", RecipeMaps.class.getDeclaredField("assemblerRecipes"));
                 put("CircuitAssembler", RecipeMaps.class.getDeclaredField("circuitAssemblerRecipes"));
@@ -974,7 +817,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
             put("Gas_Turbine", new float[] { 0.95f, 0.9f, 0.85f, 0.8f, 0.75f });
             put("Steam_Turbine", new float[] { 1f, 1f, 1f });
             put("Semi_Fluid", new float[] { 0.95f, 0.9f, 0.85f, 0.8f, 0.75f });
-            put("Naquadah", new float[] { 80.0f, 100.0f, 150.0f, 200.0f, 250.0f });
+            put("Naquadah", new float[] { 0.8f, 1.0f, 1.5f, 2.0f, 2.5f });
         }
     };
 
@@ -1207,83 +1050,6 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
         return casingTier;
     }
 
-    public static StructureDefinition.Builder<TST_BigBroArray> initializeStructureOld(
-        StructureDefinition.Builder<TST_BigBroArray> builder) {
-        for (int i = 0; i < PATTERN_ADDON_OLD.length; i++) {
-            for (int j = 0; j < PATTERN_ADDON_OLD[i].length; j++) {
-                PATTERN_ADDON_OLD[i][j] = PATTERN_ADDON_OLD[i][j].replace('A', 'K')
-                    .replace('B', 'G')
-                    .replace('C', 'H')
-                    .replace('D', 'L')
-                    .replace('E', 'I');
-            }
-        }
-        for (int i = 0; i < PATTERN_ADDON_OLD.length; i++) {
-            for (int j = 0; j < PATTERN_ADDON_OLD[0].length; j++) {
-                // cw 180 addon
-                PATTERN_ADDON_180_OLD[i][j] = StringUtils.reverse(PATTERN_ADDON_OLD[i][j]);
-            }
-        }
-        for (int i = 0; i < PATTERN_ADDON_OLD.length; i++) {
-            for (int k = 0; k < PATTERN_ADDON_OLD[0][0].length(); k++) {
-                String rotated = "";
-                for (int j = 0; j < PATTERN_ADDON_OLD[0].length; j++) {
-                    // cw 90 addon
-                    rotated += PATTERN_ADDON_OLD[i][j].charAt(k);
-                }
-                PATTERN_ADDON_90_CW_OLD[i][k] = rotated;
-            }
-        }
-
-        for (int i = 0; i < PATTERN_ADDON_90_CW_OLD.length; i++) {
-            for (int j = 0; j <= PATTERN_ADDON_90_CW_OLD.length / 2; j++) {
-                PATTERN_ADDON_90_CCW_OLD[i][j] = PATTERN_ADDON_90_CW_OLD[i][PATTERN_ADDON_90_CW_OLD[0].length - 1 - j];
-                PATTERN_ADDON_90_CCW_OLD[i][PATTERN_ADDON_90_CW_OLD[0].length - 1 - j] = PATTERN_ADDON_90_CW_OLD[i][j];
-            }
-        }
-        List<String[][]> strings = Arrays
-            .asList(PATTERN_ADDON_OLD, PATTERN_ADDON_90_CW_OLD, PATTERN_ADDON_180_OLD, PATTERN_ADDON_90_CCW_OLD);
-        for (int i = 0; i < strings.size(); i++) {
-            String[][] pattern = strings.get(i);
-            builder = builder.addShape("addon_old" + i, StructureUtility.transpose(pattern))
-                .addElement(
-                    'I',
-                    StructureUtility.withChannel(
-                        "coil",
-                        GTStructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
-                .addElement(
-                    'H',
-                    StructureUtility.withChannel(
-                        "frame",
-                        StructureUtility.ofBlocksTiered(
-                            TST_BigBroArray::getFrameTier,
-                            FRAMES,
-                            -1,
-                            (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
-                            (te) -> te.frameTier)))
-                .addElement(
-                    'K',
-                    StructureUtility.withChannel(
-                        "glass",
-                        BorosilicateGlass.ofBoroGlass(
-                            (byte) -1,
-                            (te, tier) -> te.glassTier = te.glassTier >= 0 ? Math.min(tier, te.glassTier) : tier,
-                            (te) -> (byte) te.glassTier)))
-                .addElement(
-                    'G',
-                    StructureUtility.withChannel(
-                        "parallelism",
-                        StructureUtility.ofBlocksTiered(
-                            TST_BigBroArray::getParallelismCasingTier,
-                            PARALLELISM_CASINGS,
-                            0,
-                            (te, tier) -> { te.parallelismTier = Math.max(tier, te.parallelismTier); },
-                            (te) -> te.parallelismTier)))
-                .addElement('L', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 1));
-        }
-        return builder;
-    }
-
     public static void initializeStructure() {
 
         for (int i = 0; i < PATTERN_ADDON.length; i++) {
@@ -1415,7 +1181,6 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                 .addElement('L', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 1))
                 .addElement('J', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 5));
         }
-        builder = initializeStructureOld(builder);
         STRUCTURE_DEFINITION = builder.build();
     }
 
@@ -1615,8 +1380,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
         return tFuel.mSpecialValue;
     }
 
-    private long getNaquadahFuelValue(ItemStack stack) {
-        if (GTUtility.isStackInvalid(stack) || getRecipeMap() == null) return 0;
+    private GTRecipe getNaquadahFuelRecipe(ItemStack stack) {
+        if (GTUtility.isStackInvalid(stack) || getRecipeMap() == null) return null;
 
         GTRecipe tFuel = getRecipeMap().findRecipeQuery()
             .items(stack)
@@ -1627,9 +1392,16 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
             .notUnificated(false)
             .dontCheckStackSizes(false)
             .find();
-        if (tFuel == null) return 0;
-        long liters = 10L; // 1000mb/100
-        return (long) tFuel.mSpecialValue * 10;
+        return tFuel;
+    }
+
+    void consumeFuel(String machineType, FluidStack storedFluid, long liquidFuelValue) {
+        float effiency = GENERATOR_EFFICIENCY.get(machineType)[machineTier - 1];
+        long expectedGeneration = (8L << (machineTier * 2L)) * actualParallelism * 20;
+        long energyInFuel = (long) (storedFluid.amount * liquidFuelValue * effiency);
+        long fuelConsumption = (long) (expectedGeneration / liquidFuelValue / effiency);
+        output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
+        storedFluid.amount = (int) Math.max(0, storedFluid.amount - fuelConsumption);
     }
 
     @NotNull
@@ -1661,7 +1433,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                 } else if (generatorTE instanceof TileEntitySolarBase te) {
                     te.checkConditions();
                     te.updateEntity();
-                    eut = BigDecimal.valueOf(te.energySource.getEnergyStored());
+                    eut = BigDecimal.valueOf(te.generating);
                     te.energySource.drawEnergy(te.energySource.getEnergyStored());
                 } else {
                     endRecipeProcessing();
@@ -1679,34 +1451,53 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                     for (FluidStack storedFluid : getStoredFluids()) {
                         long liquidFuelValue = getDieselFuelValue(storedFluid);
                         if (liquidFuelValue > 0) {
-                            float effiency = GENERATOR_EFFICIENCY.get(machineType)[machineTier - 1];
-                            long expectedGeneration = (32L << (machineTier * 2L)) * actualParallelism * 20;
-                            long energyInFuel = (long) (storedFluid.amount * liquidFuelValue * effiency);
-                            long fuelConsumption = (long) (expectedGeneration / liquidFuelValue / effiency);
-                            output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
-                            storedFluid.amount = (int) Math.max(0, storedFluid.amount - fuelConsumption);
+                            consumeFuel(machineType, storedFluid, liquidFuelValue);
+                            result = CheckRecipeResultRegistry.SUCCESSFUL;
+                            break;
+                        }
+                    }
+                } else if ("Steam_Turbine".equals(machineType)) {
+                    result = CheckRecipeResultRegistry.NO_RECIPE;
+                    for (FluidStack storedFluid : getStoredFluids()) {
+                        if (GTModHandler.isAnySteam(storedFluid)) {
+                            long liquidFuelValue = 3;
+                            consumeFuel(machineType, storedFluid, liquidFuelValue);
                             result = CheckRecipeResultRegistry.SUCCESSFUL;
                             break;
                         }
                     }
                 } else if ("Naquadah".equals(machineType)) {
                     result = CheckRecipeResultRegistry.NO_RECIPE;
+                    List<ItemStack> outputItems = new ArrayList<>();
                     for (ItemStack storedInput : getStoredInputs()) {
-                        long fuelValue = getNaquadahFuelValue(storedInput);
-                        if (fuelValue > 0) {
-                            float effiency = GENERATOR_EFFICIENCY.get("Naquadah")[machineTier - 1];
-                            long machineEUt = (32L << ((machineTier + 2) * 2L));
-                            mMaxProgresstime = (int) (fuelValue * effiency / machineEUt);
+                        GTRecipe recipe = getNaquadahFuelRecipe(storedInput);
+                        if (recipe != null) {
+                            long fuelValue = recipe.mSpecialValue * 1000;
+                            for (ItemStack out : recipe.mOutputs) {
+                                if (out != null) {
+                                    ItemStack stack = ItemStack.copyItemStack(out);
+                                    // 暂时不知道怎么处理，捏妈的
+                                    // 如果是Long.MAX个2333
+                                    // 谁知道什么时候会有人丢那么多个螺栓呢
+                                    stack.stackSize = (int) Math
+                                        .min(Math.min(storedInput.stackSize, actualParallelism), 2147483647L);
+                                    outputItems.add(stack);
+                                }
+                            }
+                            float effiency = GENERATOR_EFFICIENCY.get("Naquadah")[machineTier - 4];
+                            long machineEUt = (8L << (machineTier * 2L)) * actualParallelism;
                             long expectedGeneration = (long) (fuelValue * effiency * actualParallelism);
                             long energyInFuel = (long) (storedInput.stackSize * fuelValue * effiency);
                             long fuelConsumption = (long) (expectedGeneration / fuelValue / effiency);
                             output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
+                            mMaxProgresstime = output.divide(BigInteger.valueOf(machineEUt))
+                                .intValue();
                             storedInput.stackSize = (int) Math.max(0, storedInput.stackSize - fuelConsumption);
                             result = CheckRecipeResultRegistry.SUCCESSFUL;
                             break;
                         }
                     }
-
+                    mOutputItems = outputItems.toArray(new ItemStack[0]);
                 } else {
                     result = CheckRecipeResultRegistry.NO_RECIPE;
                 }
@@ -1829,7 +1620,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
     public RecipeMap<?> getRecipeMap() {
         if (machines != null) {
             try {
-                String key = "Naquadah".equals(machineType) ? machineType + "_" + machineTier : machineType;
+                String key = "Naquadah".equals(machineType) ? machineType + "_" + (machineTier - 3) : machineType;
                 Field field = recipeBackendRefMapping.get(key);
                 if (field == null) {
                     return null;
@@ -1943,22 +1734,22 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
         this.addonCount = 0;
         int p = 5;
         this.parallelismTier = 0;
-        if (checkPiece("addon0", -6, 23, 6) || checkPiece("addon_old0", 19, 12, 3)) {
+        if (checkPiece("addon0", -6, 23, 6)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon1", 7, 23, -7) || checkPiece("addon_old1", 4, 12, 18)) {
+        if (checkPiece("addon1", 7, 23, -7)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon2", 22, 23, 6) || checkPiece("addon_old2", -6, 12, 3)) {
+        if (checkPiece("addon2", 22, 23, 6)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon3", 7, 23, 21) || checkPiece("addon_old3", 4, 12, -7)) {
+        if (checkPiece("addon3", 7, 23, 21)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
@@ -2012,6 +1803,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         machineType = null;
         startRecipeProcessing();
+        int maxTier = (frameTier >= 6 || addonCount == 0) ? 16 : frameTier + 4;
+        MachineHintMessages hint = null;
         if (machines == null) {
             for (ItemStack storedInput : getStoredInputs()) {
                 for (String[] machineType : PROCESSING_MACHINE_LIST) {
@@ -2025,8 +1818,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                         } catch (IllegalArgumentException ex) {
                             name = String.format("%s%s", machineType[1], tierName);
                             try {
-                                CustomItemList customItemList = CustomItemList.valueOf(name);
-                                machineTypeToBeUsed = customItemList.get(1);
+                                ItemList itemList = ItemList.valueOf(name);
+                                machineTypeToBeUsed = itemList.get(1);
                             } catch (IllegalArgumentException e) {
 
                             }
@@ -2034,7 +1827,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                         if (machineTypeToBeUsed != null) {
                             if (GTUtility.areStacksEqual(machineTypeToBeUsed, storedInput, true)) {
                                 // supports all machines when there's no additional strucutures or frame level >= 6
-                                if (i < frameTier + 5 || frameTier >= 6 || addonCount == 0) {
+                                if (i + 1 <= maxTier) {
                                     if (machines != null) {
                                         if (GTUtility.areStacksEqual(machines, storedInput)) {
                                             int d = Math
@@ -2054,6 +1847,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                                         machineTier = i + 1;
                                         mode = MODE_PROCESSOR;
                                     }
+                                } else {
+                                    hint = MachineHintMessages.FAIL_TIER_MISMATCH;
                                 }
                             }
                         }
@@ -2067,63 +1862,57 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                             // create dummy TE for solar generation
                             generatorTE = Block.getBlockFromItem(machineTypeToBeUsed.getItem())
                                 .createTileEntity(aPlayer.worldObj, machineTypeToBeUsed.getItemDamage());
-                            if ("ASP_Solar".equals(machineType) && i >= (frameTier + 4) && addonCount > 0) continue;
+                            int tier;
+                            if ("Naquadah".equals(machineType)) {
+                                tier = i + 4;
+                            } else if ("EMT_Solar".equals(machineType)) {
+                                tier = (int) Math
+                                    .floor(Math.log(((TileEntitySolarBase) generatorTE).output / 8) / Math.log(4));
+                            } else {
+                                tier = i + 1;
+                            }
                             // calculate tier with log
                             // (int)log(output / 8, 4) = LV(1), MV(2), HV(3), EV(4), IV(5), .......
                             // supports all machines when there's no additional strucutures or frame level >= 6
-                            if ("EMT_Solar".equals(machineType)
-                                && (int) Math
-                                    .floor(Math.log(((TileEntitySolarBase) generatorTE).output / 8) / Math.log(4))
-                                    >= (frameTier + 4)
-                                && frameTier < 6
-                                && addonCount > 0) continue;
-                            if ("Diesel".equals(machineType) && i >= (frameTier + 4) && addonCount > 0) continue;
-                            if ("Naquadah".equals(machineType) && i >= (frameTier + 1) && addonCount > 0) continue;
-                            if (machines != null) {
-                                if (GTUtility.areStacksEqual(machines, storedInput)) {
-                                    int d = Math
-                                        .min(machineCountForMaxParallelism - machines.stackSize, storedInput.stackSize);
-                                    machines.stackSize += d;
-                                    storedInput.stackSize -= d;
+
+                            if (tier <= maxTier) {
+                                if (machines != null) {
+                                    if (GTUtility.areStacksEqual(machines, storedInput)) {
+                                        int d = Math.min(
+                                            machineCountForMaxParallelism - machines.stackSize,
+                                            storedInput.stackSize);
+                                        machines.stackSize += d;
+                                        storedInput.stackSize -= d;
+                                    }
+                                } else if (storedInput.stackSize > 0) { // or parallelism will be 0
+                                    mode = MODE_GENERATOR;
+                                    machines = storedInput.copy();
+                                    machines.stackSize = Math.min(machineCountForMaxParallelism, machines.stackSize);
+                                    storedInput.stackSize -= machines.stackSize;
+                                    this.machineType = machineType;
+                                    if (generatorTE != null) generatorTE.setWorldObj(aPlayer.worldObj);
+                                    machineTier = tier;
                                 }
-                            } else if (storedInput.stackSize > 0) { // or parallelism will be 0
-                                mode = MODE_GENERATOR;
-                                machines = storedInput.copy();
-                                machines.stackSize = Math.min(machineCountForMaxParallelism, machines.stackSize);
-                                storedInput.stackSize -= machines.stackSize;
-                                this.machineType = machineType;
-                                if (generatorTE != null) generatorTE.setWorldObj(aPlayer.worldObj);
-                                machineTier = i + 1;
+                            } else {
+                                hint = MachineHintMessages.FAIL_TIER_MISMATCH;
                             }
                         }
                     }
                 }
             }
             if (machineType != null) {
+                hint = MachineHintMessages.SUCCESS;
                 this.actualParallelism = calculateParallelismByAddonTier();
-                GTUtility.sendChatToPlayer(
-                    aPlayer,
-                    String.format(
-                        "Machine [%s] is set, parallelism is %s",
-                        machines.getDisplayName(),
-                        actualParallelism));
                 int xCoord = getBaseMetaTileEntity().getXCoord();
                 int yCoord = getBaseMetaTileEntity().getYCoord();
                 int zCoord = getBaseMetaTileEntity().getZCoord();
                 TST_Network.tst.sendToAll(new PackSyncMachineType(xCoord, yCoord, zCoord, machineType));
             } else {
-                GTUtility.sendChatToPlayer(
-                    aPlayer,
-                    "No valid machine detected, machines will always be accepted when there's no addons.");
-                GTUtility.sendChatToPlayer(
-                    aPlayer,
-                    "When there's addon attached, arcanite frames unlock IV machines, quantum alloy frames unlock UEV and higher tier machines.");
-                GTUtility
-                    .sendChatToPlayer(aPlayer, "Valid processing machine types: " + recipeBackendRefMapping.keySet());
-                GTUtility.sendChatToPlayer(aPlayer, "Valid generators: ASP & EMT Solars");
+                if (hint == null) hint = MachineHintMessages.FAIL_NON_ACCEPT;
             }
+
         } else {
-            GTUtility.sendChatToPlayer(aPlayer, "Machines are sent to output bus");
+            hint = MachineHintMessages.MACHINE_TO_OUTPUT;
             // clear
             addOutput(machines);
             machines = null;
@@ -2135,6 +1924,26 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
             int zCoord = getBaseMetaTileEntity().getZCoord();
             TST_Network.tst.sendToAll(new PackSyncMachineType(xCoord, yCoord, zCoord, machineType));
         }
+        String message;
+        switch (hint) {
+            case FAIL_NON_ACCEPT: {
+                message = String.format(hint.message, recipeBackendRefMapping.keySet());
+                break;
+            }
+            case FAIL_TIER_MISMATCH: {
+                message = String.format(hint.message, 8L << (2 * maxTier));
+                break;
+            }
+            case SUCCESS: {
+                message = String.format(hint.message, machines.getDisplayName(), actualParallelism);
+                break;
+            }
+            default: {
+                message = hint.message;
+                break;
+            }
+        }
+        GTUtility.sendChatToPlayer(aPlayer, message);
         endRecipeProcessing();
     }
 
@@ -2196,6 +2005,23 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
             return idleTextures;
         }
         return DEFAULT_CASING_TEXTURE;
+    }
+
+    enum MachineHintMessages {
+
+        SUCCESS("Machine [%s] is set, parallelism is %s"),
+        FAIL_NON_ACCEPT("Machines are not acceptable, acceptable types are %s"),
+        FAIL_TIER_MISMATCH("Tier of machine is beyond the max tier that structure can hold. Max Tier is %s EU/t. "
+            + "Machines will always be accepted when there's no addons. "
+            + "When there's addon attached, arcanite frames unlock IV machines, quantum alloy frames unlock UEV and higher tier machines."),
+
+        MACHINE_TO_OUTPUT("Machines are sent to output bus");
+
+        private String message;
+
+        private MachineHintMessages(String message) {
+            this.message = message;
+        }
     }
 
     public static class PackRequestMachineType

@@ -114,7 +114,7 @@ public class RecipeLoader {
             new MiracleTopRecipePool(), new CrystallineInfinitierRecipePool(), new DSPRecipePool(),
             new MegaUniversalSpaceStationRecipePool(), new StellarMaterialSiphonRecipePool(),
             new AssemblyLineWithoutResearchRecipePool(), new BOTRecipePool(), new StarKernelForgeRecipePool(),
-            new IndustrialMagicMatrixRecipePool(), new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
+            new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
             new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new HyperSpacetimeTransformerRecipePool(),
             new AquaticZoneSimulatorFakeRecipe(), new NeutronActivatorWithEURecipePool(),
             new MassFabricatorGenesisRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
@@ -134,15 +134,25 @@ public class RecipeLoader {
 
     public static void loadRecipesPostInit() {
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
-        new IndustrialMagicMatrixRecipePool().loadRecipes();
     }
 
+    public static boolean hasLoadedRecipesServerStarted = false;
+
     public static void loadRecipesServerStarted() {
+        if (hasLoadedRecipesServerStarted) {
+            TwistSpaceTechnology.LOG.info("Has loaded recipes server started.");
+            return;
+        }
+        hasLoadedRecipesServerStarted = true;
+
         new StellarForgeRecipePool().loadOnServerStarted();
+        new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
+        if (Config.Enable_IndustrialMagicMatrix) {
+            new IndustrialMagicMatrixRecipePool().loadRecipes();
+        }
     }
 
     public static void loadRecipemixin() {
-        new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
         // new Mode3SimulatorFakeRecipe().loadRecipes();
     }
 }

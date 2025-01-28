@@ -16,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 public class Config {
     // region Regions enum
     public static final String GENERAL = "General";
+    public static final String NETWORK = "Network";
     public static final String RECIPE = "Recipe";
     public static final String DSP = "DSP";
     public static final String IntensifyChemicalDistorter = "IntensifyChemicalDistorter";
@@ -60,12 +61,17 @@ public class Config {
     public static final String MicroSpaceTimeFabricatorio = "Micro SpaceTime Fabricatorio";
     public static final String StrangeMatterAggregator = "Strange Matter Aggregator";
     public static final String BloodHell = "BloodHell";
+    public static final String IndustrialAlchemyTower = "IndustrialAlchemyTower";
     // endregion
 
     // region General
     public static int MAX_PARALLEL_LIMIT = Integer.MAX_VALUE;
     public static boolean DEFAULT_BATCH_MODE = false;
 
+    // endregion
+
+    // region Network
+    public static byte IDServerJoinedPacket = 99;
     // endregion
 
     // region Dyson Sphere Program
@@ -318,7 +324,7 @@ public class Config {
     public static boolean Enable_BallLightning = true;
     public static int WirelessModeExtraEuCost_BallLightning = 64;
     public static int WirelessModeTickEveryProcess_BallLightning = 64;
-    // end region
+    // endregion
 
     // region StarcoreMiner
     public static boolean Enable_StarcoreMiner = true;
@@ -380,7 +386,12 @@ public class Config {
 
     // endregion
 
+    // region Mega Space Station
     public static boolean activateMegaSpaceStation = false;
+    public static int EntityShipID = 114;
+
+    // endregion
+
     public static boolean activateCombatStats = false;
     public static boolean Enable_LargeCanner = true;
     public static boolean Enable_LightningSpire = true;
@@ -434,12 +445,31 @@ public class Config {
     public static boolean Enable_BloodHatch_Armok_InfiniteDrain = true;
     // endregion
 
+    // region Machine Base Class
+    public static int DefaultCycleNum_WirelessEnergyMultiMachineBase = 100;
+    // endregion
+
+    // region Industrial Alchemy Tower
+    public static boolean Enable_IndustrialAlchemyTower = true;
+    // endregion
+
+    // region ManufacturingCenter
+    public static float ManufacturingCenter_SpeedBonus_Base = 0.2F;
+    public static float ManufacturingCenter_SpeedBonus_Tier = 0.5F;
+    public static float ManufacturingCenter_PowerReduction = 0.15F;
+    public static int ManufacturingCenter_MaxParallelModifier = 2;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
         DEFAULT_BATCH_MODE = configuration.getBoolean("DEFAULT_BATCH_MODE", GENERAL, DEFAULT_BATCH_MODE, "Default Batch mode state of machine when placed. True is auto enable Batch mode.");
+        // endregion
+
+        // region Machine Base Class
+        DefaultCycleNum_WirelessEnergyMultiMachineBase = configuration.getInt("DefaultCycleNum_WirelessEnergyMultiMachineBase", GENERAL, DefaultCycleNum_WirelessEnergyMultiMachineBase, 1, Integer.MAX_VALUE, "Wireless energy machine parallel over recipes limitation in one processing. How many recipes can be processed at once.");
         // endregion
 
         // region Recipe
@@ -674,6 +704,7 @@ public class Config {
 
         // region Space Station
         activateMegaSpaceStation = configuration.getBoolean("activateMegaSpaceStation", spaceStation, activateMegaSpaceStation, "decide whether can use mega space station.");
+        EntityShipID = configuration.getInt("EntityShipID", spaceStation, EntityShipID, 1, 32767, "Entity Ship ID");
         // endregion
 
         // region CombatRework
@@ -765,6 +796,17 @@ public class Config {
         Enable_BloodHell = configuration.getBoolean("Enable Blood Hell", BloodHell, Enable_BloodHell, "Enable Blood Hell");
         Enable_BloodHatch = configuration.getBoolean("Enable Blood Hatch", BloodHell, Enable_BloodHatch, "Enable Blood Hatch\nThis depends on Enable Blood Hell");
         Enable_BloodHatch_Armok_InfiniteDrain = configuration.getBoolean("Enable Blood Hatch Armok Infinite Drain", BloodHell, Enable_BloodHatch_Armok_InfiniteDrain, "Enable Blood Hatch Drains Armok Orb Infinitely");
+        // endregion
+
+        // region Industrial Alchemy Tower
+        Enable_IndustrialAlchemyTower = configuration.getBoolean("Enable Industrial Alchemy Tower",IndustrialAlchemyTower,Enable_IndustrialAlchemyTower,"Enable Industrial Alchemy Tower");
+        // endregion
+
+        // region ManufacturingCenter
+        ManufacturingCenter_SpeedBonus_Base = configuration.getFloat("Speed Bonus Base", "ManufacturingCenter", ManufacturingCenter_SpeedBonus_Base, 0.0F, Float.MAX_VALUE, "The Base Speed Bonus");
+        ManufacturingCenter_SpeedBonus_Tier = configuration.getFloat("Speed Bonus Tier", "ManufacturingCenter", ManufacturingCenter_SpeedBonus_Tier, 0.0F, Float.MAX_VALUE, "The Speed Bonus for each tier over the lowest tier (not included)");
+        ManufacturingCenter_PowerReduction = configuration.getFloat("Power Reduction", "ManufacturingCenter", ManufacturingCenter_PowerReduction, 0.0F, Float.MAX_VALUE, "The Power Reduction for each tier over the lowest tier (not included)");
+        ManufacturingCenter_MaxParallelModifier = configuration.getInt("Max Parallel Modifier", "ManufacturingCenter", ManufacturingCenter_MaxParallelModifier, 1, Integer.MAX_VALUE, "The maximum parallel modifier");
         // endregion
 
         TST_CleanRoom.loadConfig(configuration);

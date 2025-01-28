@@ -43,6 +43,7 @@ https://discord.gg/aJS5q2Yspt
 
 ### 注意
 这是一个非官方mod，讨论此mod时请注意场合。
+GTNH新手群严禁私货内容讨论。
 
 ### Discord
 https://discord.gg/yR35zmdY4c

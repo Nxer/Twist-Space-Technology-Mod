@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_IndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
@@ -43,11 +44,13 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialMagnetarSeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_ManufacturingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaStoneBreaker;
@@ -68,10 +71,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_W
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_output;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Mana;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
@@ -137,6 +140,7 @@ public class MachineLoader {
     public static ItemStack LargeSteamForgeHammer;
     public static ItemStack LargeSteamAlloySmelter;
     public static ItemStack IndustrialMagicMatrix;
+    public static ItemStack IndustrialAlchemyTower;
     public static ItemStack EyeOfWood;
     public static ItemStack BeeEngineer;
     public static ItemStack MegaMacerator;
@@ -168,6 +172,7 @@ public class MachineLoader {
     public static ItemStack MicroSpaceTimeFabricatorio;
     public static ItemStack BloodyHell;
     public static ItemStack MegaStoneBreaer;
+    public static ItemStack ManufacturingCenter;
 
     // Single Block
     public static ItemStack InfiniteAirHatch;
@@ -261,7 +266,9 @@ public class MachineLoader {
 
     public static void loadMachines() {
 
-        EntityList.addMapping(Ship.class, "Ship", 114);
+        if (Config.activateMegaSpaceStation) {
+            EntityList.addMapping(Ship.class, "Ship", 114);
+        }
         // test
         // TestMachine = new Test_ModularizedMachine(19000, "TestMachine", "TestMachine").getStackForm(1);
 
@@ -726,6 +733,26 @@ public class MachineLoader {
             GTCMItemList.MegaStoneBreaker.set(MegaStoneBreaer);
         }
 
+        // #tr NameManufacturingCenter
+        // # Manufacturing Center
+        // #zh_CN 加工中心
+        ManufacturingCenter = new TST_ManufacturingCenter(
+            19063,
+            "NameManufacturingCenter",
+            TextEnums.tr("NameManufacturingCenter")).getStackForm(1);
+        GTCMItemList.ManufacturingCenter.set(ManufacturingCenter);
+
+        if (Enable_IndustrialAlchemyTower) {
+            IndustrialAlchemyTower = new TST_IndustrialAlchemyTower(
+                // #tr NameIndustrialAlchemyTower
+                // # Industrial Alchemy Tower
+                // #zh_CN 工业炼金塔
+                19064,
+                "IndustrialAlchemyTower",
+                TextEnums.tr("NameIndustrialAlchemyTower")).getStackForm(1);
+            GTCMItemList.IndustrialAlchemyTower.set(IndustrialAlchemyTower);
+        }
+
         // endregion
 
         // region Single block Machine
@@ -747,8 +774,7 @@ public class MachineLoader {
         GTCMItemList.InfiniteWirelessDynamoHatch.set(InfiniteWirelessDynamoHatch);
 
         //
-        ManaHatch = new GT_MetaTileEntity_Hatch_Mana(18979, "NameManaHatch", TextLocalization.NameManaHatch, 9)
-            .getStackForm(1);
+        ManaHatch = new TST_ManaHatch(18979, "NameManaHatch", TextLocalization.NameManaHatch, 9).getStackForm(1);
         GTCMItemList.ManaHatch.set(ManaHatch);
 
         // region Dual Input Buffer
@@ -1414,8 +1440,8 @@ public class MachineLoader {
                 "NameLowSpeedPerfectOverclockController",
                 TextEnums.tr("NameLowSpeedPerfectOverclockController"),
                 12,
-                1,
-                1).getStackForm(1);
+                2,
+                2).getStackForm(1);
             GTCMItemList.LowSpeedPerfectOverclockController.set(LowSpeedPerfectOverclockController);
 
             // #tr NamePerfectOverclockController
@@ -1426,8 +1452,8 @@ public class MachineLoader {
                 "NamePerfectOverclockController",
                 TextEnums.tr("NamePerfectOverclockController"),
                 13,
-                2,
-                2).getStackForm(1);
+                4,
+                4).getStackForm(1);
             GTCMItemList.PerfectOverclockController.set(PerfectOverclockController);
 
             // #tr NameSingularityPerfectOverclockController
@@ -1438,8 +1464,8 @@ public class MachineLoader {
                 "NameSingularityPerfectOverclockController",
                 TextEnums.tr("NameSingularityPerfectOverclockController"),
                 14,
-                3,
-                2).getStackForm(1);
+                8,
+                4).getStackForm(1);
             GTCMItemList.SingularityPerfectOverclockController.set(SingularityPerfectOverclockController);
 
             /*

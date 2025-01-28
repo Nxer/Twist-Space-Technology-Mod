@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
+import static cofh.lib.util.helpers.FluidHelper.isFluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
@@ -7,6 +8,7 @@ import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 
@@ -31,6 +33,7 @@ import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
@@ -96,8 +99,13 @@ public class StellarForgeRecipePool implements IRecipePool {
             if (metaItemEqual(
                 GTModHandler.getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32306),
                 recipeSolidifier.mInputs[0])) {
-                MoltenToIngot.put(recipeSolidifier.mFluidInputs[0].getFluid(), recipeSolidifier.mOutputs[0]);
+                if (!isFluidEqual(recipeSolidifier.mFluidInputs[0], Materials.AnnealedCopper.getMolten(1)))
+                    MoltenToIngot.put(recipeSolidifier.mFluidInputs[0].getFluid(), recipeSolidifier.mOutputs[0]);
             }
+            MoltenToIngot.put(
+                Materials.AnnealedCopper.getMolten(1)
+                    .getFluid(),
+                Materials.AnnealedCopper.getIngots(1));
         }
     }
 
@@ -368,7 +376,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
         // Meteoric Iron
         addToMiracleDoorRecipes(
-            new ItemStack[] { GTUtility.getIntegratedCircuit(1), Materials.MeteoricIron.getDust(1) },
+            new ItemStack[] { Materials.MeteoricIron.getDust(1), GTUtility.getIntegratedCircuit(1) },
             null,
             null,
             new FluidStack[] { Materials.MeteoricIron.getMolten(144) },
@@ -378,7 +386,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
         // Meteoric Steel
         addToMiracleDoorRecipes(
-            new ItemStack[] { GTUtility.getIntegratedCircuit(2), Materials.MeteoricIron.getDust(1) },
+            new ItemStack[] { Materials.MeteoricIron.getDust(1), GTUtility.getIntegratedCircuit(2) },
             null,
             null,
             new FluidStack[] { Materials.MeteoricSteel.getMolten(144) },
@@ -388,7 +396,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
         // Neutronium
         addToMiracleDoorRecipes(
-            new ItemStack[] { Materials.Neutronium.getDust(1) },
+            new ItemStack[] { Materials.Neutronium.getDust(1), GTUtility.getIntegratedCircuit(1) },
             null,
             null,
             new FluidStack[] { Materials.Neutronium.getMolten(144) },
@@ -396,6 +404,15 @@ public class StellarForgeRecipePool implements IRecipePool {
             20 * 112,
             GTCMRecipe.StellarForgeRecipes);
 
+        // Creon && Mellion
+        addToMiracleDoorRecipes(
+            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(2) },
+            new FluidStack[] { MaterialsUEVplus.Creon.getPlasma(144) },
+            null,
+            new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144), MaterialsUEVplus.Creon.getMolten(144) },
+            (int) RECIPE_UXV,
+            399,
+            GTCMRecipe.StellarForgeRecipes);
     }
 
     public static Collection<GTRecipe> stellarForgeRecipeListCache;
@@ -413,16 +430,11 @@ public class StellarForgeRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
         initData();
-        // prepareEBFRecipes();
-        // prepareABSRecipes();
-        loadManualRecipes();
-        // cacheRecipeList();
-        // New version no longer requires this
     }
 
     public void loadOnServerStarted() {
         prepareEBFRecipes();
         prepareABSRecipes();
-        // loadRecipeListCache();
+        loadManualRecipes();
     }
 }

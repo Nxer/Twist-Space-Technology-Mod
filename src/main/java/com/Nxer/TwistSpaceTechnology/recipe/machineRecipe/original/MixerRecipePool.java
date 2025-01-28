@@ -2,13 +2,14 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
-import static galaxyspace.core.register.GSMaterials.tantalumCarbideHafniumCarbideMixture;
 
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
@@ -24,7 +25,7 @@ public class MixerRecipePool implements IRecipePool {
                 WerkstoffMaterialPool.Hafnium.get(OrePrefixes.dust, 1),
                 Materials.Tantalum.getDust(4),
                 Materials.Carbon.getDust(5))
-            .itemOutputs(tantalumCarbideHafniumCarbideMixture.get(OrePrefixes.dust, 10))
+            .itemOutputs(GTModHandler.getModItem(Mods.BartWorks.ID, "gt.bwMetaGenerateddust", 10, 11502))
             .noOptimize()
             .eut(RECIPE_EV)
             .duration(20 * 10)
