@@ -282,7 +282,7 @@ public class TextLocalization {
     public static final String Tooltip_ICD_06 = TextEnums.tr("Tooltip_ICD_06");
 
     // #tr Tooltip_ICD_07
-    // # 1024 Parallel and 900% faster than using LCR of the same voltage.
+    // # 1024 Parallel and 900%% faster than using LCR of the same voltage.
     // #zh_CN 拥有 1024 并行并且比相同电压的大型化学反应釜快 900%%
     public static final String Tooltip_ICD_07 = TextEnums.tr("Tooltip_ICD_07");
 
@@ -348,7 +348,7 @@ public class TextLocalization {
     public static final String Tooltip_PhC_08 = TextEnums.tr("Tooltip_PhC_08");
 
     // #tr Tooltip_PhC_09
-    // # 256x Parallel | Extra reduce 50% recipe time spent
+    // # 256x Parallel | Extra reduce 50%% recipe time spent
     // #zh_CN 256x 并行 | 额外降低50%%耗时
     public static final String Tooltip_PhC_09 = TextEnums.tr("Tooltip_PhC_09");
 
@@ -363,74 +363,74 @@ public class TextLocalization {
     public static final String textUpgradeCasingAndLocation = TextEnums.tr("textUpgradeCasing");
 
     // #tr PhotonControllerUpgradeLV.tooltips.01
-    // # Extra 1% Speed Up !
+    // # Extra 1%% Speed Up !
     // #zh_CN 额外1%%的速度提升！
     public static final String[] Tooltips_Upgrades_LV = new String[]{TextEnums.tr("PhotonControllerUpgradeLV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeMV.tooltips.01
-    // # Extra 2% Speed Up !
+    // # Extra 2%% Speed Up !
     // #zh_CN 额外2%%的速度提升！
     public static final String[] Tooltips_Upgrades_MV = new String[]{TextEnums.tr("PhotonControllerUpgradeMV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeHV.tooltips.01
-    // # Extra 3% Speed Up !
+    // # Extra 3%% Speed Up !
     // #zh_CN 额外3%%的速度提升！
     public static final String[] Tooltips_Upgrades_HV = new String[]{TextEnums.tr("PhotonControllerUpgradeHV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeEV.tooltips.01
-    // # Extra 4% Speed Up !
+    // # Extra 4%% Speed Up !
     // #zh_CN 额外4%%的速度提升！
     public static final String[] Tooltips_Upgrades_EV = new String[]{TextEnums.tr("PhotonControllerUpgradeEV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeIV.tooltips.01
-    // # Extra 5% Speed Up !
+    // # Extra 5%% Speed Up !
     // #zh_CN 额外5%%的速度提升！
     public static final String[] Tooltips_Upgrades_IV = new String[]{TextEnums.tr("PhotonControllerUpgradeIV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeLuV.tooltips.01
-    // # Extra 10% Speed Up !
+    // # Extra 10%% Speed Up !
     // #zh_CN 额外10%%的速度提升！
     public static final String[] Tooltips_Upgrades_LuV = new String[]{TextEnums.tr("PhotonControllerUpgradeLuV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeZPM.tooltips.01
-    // # Extra 20% Speed Up !
+    // # Extra 20%% Speed Up !
     // #zh_CN 额外20%%的速度提升！
     public static final String[] Tooltips_Upgrades_ZPM = new String[]{TextEnums.tr("PhotonControllerUpgradeZPM.tooltips.01")};
 
     // #tr PhotonControllerUpgradeUV.tooltips.01
-    // # Extra 40% Speed Up !
+    // # Extra 40%% Speed Up !
     // #zh_CN 额外40%%的速度提升！
     public static final String[] Tooltips_Upgrades_UV = new String[]{TextEnums.tr("PhotonControllerUpgradeUV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeUHV.tooltips.01
-    // # Extra 70% Speed Up !
+    // # Extra 70%% Speed Up !
     // #zh_CN 额外70%%的速度提升！
     public static final String[] Tooltips_Upgrades_UHV = new String[]{TextEnums.tr("PhotonControllerUpgradeUHV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeUEV.tooltips.01
-    // # Extra 100% Speed Up !
+    // # Extra 100%% Speed Up !
     // #zh_CN 额外100%%的速度提升！
     public static final String[] Tooltips_Upgrades_UEV = new String[]{TextEnums.tr("PhotonControllerUpgradeUEV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeUiV.tooltips.01
-    // # Extra 140% Speed Up !
+    // # Extra 140%% Speed Up !
     // #zh_CN 额外140%%的速度提升！
     public static final String[] Tooltips_Upgrades_UIV = new String[]{TextEnums.tr("PhotonControllerUpgradeUiV.tooltips.01")};
 
     // #tr PhotonControllerUpgradeUMV.tooltips.01
-    // # Extra 190% Speed Up !
+    // # Extra 190%% Speed Up !
     // #zh_CN 额外190%%的速度提升！
     public static final String[] Tooltips_Upgrades_UMV = new String[]{TextEnums.tr("PhotonControllerUpgradeUMV.tooltips.01"),
         TextEnums.tr("PhotonControllerUpgradeUMV.tooltips.02")};
 
     // #tr PhotonControllerUpgradeUXV.tooltips.01
-    // # Extra 250% Speed Up !
+    // # Extra 250%% Speed Up !
     // #zh_CN 额外250%%的速度提升！
     public static final String[] Tooltips_Upgrades_UXV = new String[]{TextEnums.tr("PhotonControllerUpgradeUXV.tooltips.01"),
         TextEnums.tr("PhotonControllerUpgradeUXV.tooltips.02")};
 
     // #tr PhotonControllerUpgradeMAX.tooltips.01
-    // # Extra 320% Speed Up !
+    // # Extra 320%% Speed Up !
     // #zh_CN 额外320%%的速度提升！
     public static final String[] Tooltips_Upgrades_MAX = new String[]{TextEnums.tr("PhotonControllerUpgradeMAX.tooltips.01"),
         TextEnums.tr("PhotonControllerUpgradeMAX.tooltips.02")};
@@ -518,7 +518,7 @@ public class TextLocalization {
     public static final String Tooltip_MiracleTop_04 = TextEnums.tr("Tooltip_MiracleTop_04");
 
     // #tr Tooltip_MiracleTop_05
-    // # Total speed multiplier is equal to 400% x num of rings.
+    // # Total speed multiplier is equal to 400%% x num of rings.
     // #zh_CN 速度倍率 = 环数 x 400%%.
     public static final String Tooltip_MiracleTop_05 = TextEnums.tr("Tooltip_MiracleTop_05");
 
@@ -572,7 +572,7 @@ public class TextLocalization {
     public static final String Tooltip_MagneticDrivePressureFormer_03 = TextEnums.tr("Tooltip_MagneticDrivePressureFormer_03");
 
     // #tr Tooltip_MagneticDrivePressureFormer_04
-    // # 700% faster than normal | Infinity Coil+ enable Perfect Overclock
+    // # 700%% faster than normal | Infinity Coil+ enable Perfect Overclock
     // #zh_CN 8倍速 | 无尽线圈解锁无损超频
     public static final String Tooltip_MagneticDrivePressureFormer_04 = TextEnums.tr("Tooltip_MagneticDrivePressureFormer_04");
 
@@ -582,12 +582,12 @@ public class TextLocalization {
     public static final String Tooltip_MagneticDrivePressureFormer_05 = TextEnums.tr("Tooltip_MagneticDrivePressureFormer_05");
 
     // #tr Tooltip_MagneticDrivePressureFormer_06
-    // # 1500% faster than normal | Enable Perfect Overclock
+    // # 1500%% faster than normal | Enable Perfect Overclock
     // #zh_CN 16倍速 | 无损超频
     public static final String Tooltip_MagneticDrivePressureFormer_06 = TextEnums.tr("Tooltip_MagneticDrivePressureFormer_06");
 
     // #tr Tooltip_MagneticDrivePressureFormer_07
-    // # Extra +100% speed multiplier per Coil Level.
+    // # Extra +100%% speed multiplier per Coil Level.
     // #zh_CN 线圈等级每提高1级, 额外加速100%%, 线圈加速部分独立计算.
     public static final String Tooltip_MagneticDrivePressureFormer_07 = TextEnums.tr("Tooltip_MagneticDrivePressureFormer_07");
 
@@ -646,7 +646,7 @@ public class TextLocalization {
     public static final String Tooltip_PhysicalFormSwitcher_03 = TextEnums.tr("Tooltip_PhysicalFormSwitcher_03");
 
     // #tr Tooltip_PhysicalFormSwitcher_04
-    // # Additional 10% reduction in time per Voltage Tier, multiplication calculus.
+    // # Additional 10%% reduction in time per Voltage Tier, multiplication calculus.
     // #zh_CN 电压每提高1级, 额外降低10%%配方耗时, 叠乘计算.
     public static final String Tooltip_PhysicalFormSwitcher_04 = TextEnums.tr("Tooltip_PhysicalFormSwitcher_04");
 
@@ -691,7 +691,7 @@ public class TextLocalization {
     public static final String Tooltip_MagneticMixer_03 = TextEnums.tr("Tooltip_MagneticMixer_03");
 
     // #tr Tooltip_MagneticMixer_04
-    // # Additional 20% reduction in time per Voltage Tier, multiplication calculus.
+    // # Additional 20%% reduction in time per Voltage Tier, multiplication calculus.
     // #zh_CN 电压每提高1级, 额外降低20%%配方耗时, 叠乘计算.
     public static final String Tooltip_MagneticMixer_04 = TextEnums.tr("Tooltip_MagneticMixer_04");
 
@@ -730,7 +730,7 @@ public class TextLocalization {
     public static final String Tooltip_MagneticDomainConstructor_03 = TextEnums.tr("Tooltip_MagneticDomainConstructor_03");
 
     // #tr Tooltip_MagneticDomainConstructor_04
-    // # Additional 25% reduction in time per Voltage Tier, multiplication calculus.
+    // # Additional 25%% reduction in time per Voltage Tier, multiplication calculus.
     // #zh_CN 电压每提高1级, 额外降低25%%配方耗时, 叠乘计算.
     public static final String Tooltip_MagneticDomainConstructor_04 = TextEnums.tr("Tooltip_MagneticDomainConstructor_04");
 
@@ -769,12 +769,12 @@ public class TextLocalization {
     public static final String Tooltip_Silksong_03 = TextEnums.tr("Tooltip_Silksong_03");
 
     // #tr Tooltip_Silksong_04
-    // # Each level of coil increases the speed by 100%.
+    // # Each level of coil increases the speed by 100%%.
     // #zh_CN 线圈每提高1级额外加速100%%.
     public static final String Tooltip_Silksong_04 = TextEnums.tr("Tooltip_Silksong_04");
 
     // #tr Tooltip_Silksong_05
-    // # Additional 15% reduction in time per Coil Tier, multiplication calculus.
+    // # Additional 15%% reduction in time per Coil Tier, multiplication calculus.
     // #zh_CN 电压每提高1级, 额外降低15%%配方耗时, 叠乘计算.
     public static final String Tooltip_Silksong_05 = TextEnums.tr("Tooltip_Silksong_05");
 
@@ -818,7 +818,7 @@ public class TextLocalization {
     public static final String Tooltip_HolySeparator_04 = TextEnums.tr("Tooltip_HolySeparator_04");
 
     // #tr Tooltip_HolySeparator_05
-    // # Additional 10% reduction in time per Voltage Tier, multiplication calculus.
+    // # Additional 10%% reduction in time per Voltage Tier, multiplication calculus.
     // #zh_CN 电压每提高1级, 额外降低10%%配方耗时, 叠乘计算.
     public static final String Tooltip_HolySeparator_05 = TextEnums.tr("Tooltip_HolySeparator_05");
 
@@ -911,7 +911,7 @@ public class TextLocalization {
     public static final String Tooltip_MoleculeDeconstructor_03 = TextEnums.tr("Tooltip_MoleculeDeconstructor_03");
 
     // #tr Tooltip_MoleculeDeconstructor_04
-    // # Additional 10% reduction in time per Voltage Tier, multiplication calculus.
+    // # Additional 10%% reduction in time per Voltage Tier, multiplication calculus.
     // #zh_CN 电压每提高1级, 额外降低10%%配方耗时, 叠乘计算.
     public static final String Tooltip_MoleculeDeconstructor_04 = TextEnums.tr("Tooltip_MoleculeDeconstructor_04");
 
@@ -965,7 +965,7 @@ public class TextLocalization {
     public static final String Tooltip_CrystallineInfinitier_05 = TextEnums.tr("Tooltip_CrystallineInfinitier_05");
 
     // #tr Tooltip_CrystallineInfinitier_06
-    // # Extra +300% speed in Autoclave mode. Extra +1500% speed in Chemical Bath mode.
+    // # Extra +300%% speed in Autoclave mode. Extra +1500%% speed in Chemical Bath mode.
     // #zh_CN 高压釜模式额外加速300%%. 化学浸洗机模式额外加速1500%%.
     public static final String Tooltip_CrystallineInfinitier_06 = TextEnums.tr("Tooltip_CrystallineInfinitier_06");
 
@@ -1221,12 +1221,12 @@ public class TextLocalization {
     public static final String Tooltip_ArtificialStar_02_04 = TextEnums.tr("Tooltip_ArtificialStar_02_04");
 
     // #tr Tooltip_ArtificialStar_02_05
-    // # Rewards multiplier 1% increase per run when continuous operation.
+    // # Rewards multiplier 1%% increase per run when continuous operation.
     // #zh_CN 在连续运行时, 每次运行连续运行奖励系数提高 1%% .
     public static final String Tooltip_ArtificialStar_02_05 = TextEnums.tr("Tooltip_ArtificialStar_02_05");
 
     // #tr Tooltip_ArtificialStar_02_06
-    // # Maximum is 150%, Minimum is 100% when uncontinuous.
+    // # Maximum is 150%%, Minimum is 100%% when uncontinuous.
     // #zh_CN 连续运行奖励系数最大值 150%% , 中断后降到 100%% .
     public static final String Tooltip_ArtificialStar_02_06 = TextEnums.tr("Tooltip_ArtificialStar_02_06");
 
@@ -1319,7 +1319,7 @@ public class TextLocalization {
     public static final String Tooltip_MiracleDoor_03 = TextEnums.tr("Tooltip_MiracleDoor_03");
 
     // #tr Tooltip_MiracleDoor_04
-    // # Power consumption: Alloy Smelter §c1600% | Stellar Forge §c6400%
+    // # Power consumption: Alloy Smelter §c1600%% | Stellar Forge §c6400%%
     // #zh_CN 能量消耗: {\RESET}合金冶炼模式 {\RED}{\BOLD}1600%% {\GRAY}| {\RESET}恒星锻炉模式 {\RED}{\BOLD}6400%%
     public static final String Tooltip_MiracleDoor_04 = TextEnums.tr("Tooltip_MiracleDoor_04");
 
@@ -1524,7 +1524,7 @@ public class TextLocalization {
     public static final String Tooltip_HyperSpacetimeTransformer_02 = TextEnums.tr("Tooltip_HyperSpacetimeTransformer_02");
 
     // #tr Tooltip_HyperSpacetimeTransformer_03
-    // # Tier 9 field generator will decrease energy use by 25%, max 75%.
+    // # Tier 9 field generator will decrease energy use by 25%%, max 75%%.
     // #zh_CN 9级时空场会带来额外的能耗降低，最多降低75%%。
     public static final String Tooltip_HyperSpacetimeTransformer_03 = TextEnums.tr("Tooltip_HyperSpacetimeTransformer_03");
 
@@ -1572,12 +1572,12 @@ public class TextLocalization {
     public static final String Tooltip_Scavenger_02 = TextEnums.tr("Tooltip_Scavenger_02");
 
     // #tr Tooltip_Scavenger_03
-    // # Only uses 60% of the EU/t normally required.
+    // # Only uses 60%% of the EU/t normally required.
     // #zh_CN 只需要使用配方要求功率的60%% .
     public static final String Tooltip_Scavenger_03 = TextEnums.tr("Tooltip_Scavenger_03");
 
     // #tr Tooltip_Scavenger_04
-    // # Additional 20% reduction in time per Voltage Tier, multiplication calculus.
+    // # Additional 20%% reduction in time per Voltage Tier, multiplication calculus.
     // #zh_CN 电压每提高1级, 额外降低20%%配方耗时, 叠乘计算.
     public static final String Tooltip_Scavenger_04 = TextEnums.tr("Tooltip_Scavenger_04");
 
@@ -1748,7 +1748,7 @@ public class TextLocalization {
     public static final String Tooltip_MegaBrickedBlastFurnace_03 = TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_03");
 
     // #tr Tooltip_MegaBrickedBlastFurnace_04
-    // # process 50% of (wrought) iron input and consume all coke coal input at once.
+    // # process 50%% of (wrought) iron input and consume all coke coal input at once.
     // #zh_CN 一次性消耗输入的(锻)铁锭的50%%与输入的全部焦煤.
     public static final String Tooltip_MegaBrickedBlastFurnace_04 = TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_04");
 
@@ -1763,7 +1763,7 @@ public class TextLocalization {
     public static final String Tooltip_MegaBrickedBlastFurnace_06 = TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_06");
 
     // #tr Tooltip_MegaBrickedBlastFurnace_07
-    // # This improve coal efficiency by up to {\RED}800%{\GRAY}. Reduce minimum coal requirement and calculate in actual progress time.
+    // # This improve coal efficiency by up to {\RED}800%%{\GRAY}. Reduce minimum coal requirement and calculate in actual progress time.
     // #zh_CN 最多可使焦煤的使用效率提高至{\RED}800%%{\GRAY},降低焦煤最低需求量并计入处理时间计算
     public static final String Tooltip_MegaBrickedBlastFurnace_07 = TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_07");
 
@@ -1850,7 +1850,7 @@ public class TextLocalization {
     public static final String Tooltip_BiosphereIII_Mode1_02 = TextEnums.tr("Tooltip_BiosphereIII_Mode1_02");
 
     // #tr Tooltip_BiosphereIII_Mode1_03
-    // # Original efficiency of control is 40% of the maximum. Each glass tier over recipe requirement improve the efficiency by 15%.
+    // # Original efficiency of control is 40%% of the maximum. Each glass tier over recipe requirement improve the efficiency by 15%%.
     // #zh_CN 初始控制效率为最高效率的160%%.玻璃等级每超出配方要求1级,将控制效率提高60%%.
     public static final String Tooltip_BiosphereIII_Mode1_03 = TextEnums.tr("Tooltip_BiosphereIII_Mode1_03");
 
@@ -1939,17 +1939,17 @@ public class TextLocalization {
     public static final String Tooltip_MegaEggGenerator_04 = TextEnums.tr("Tooltip_MegaEggGenerator_04");
 
     // #tr Tooltip_MegaEggGenerator_05
-    // # Every 2^n pieces give 2% max efficiency bonus, and every infinity egg gives 1%.
+    // # Every 2^n pieces give 2%% max efficiency bonus, and every infinity egg gives 1%%.
     // #zh_CN 每2^n层提供2%%的最大效率加成,而每个无限之蛋提高1%%.
     public static final String Tooltip_MegaEggGenerator_05 = TextEnums.tr("Tooltip_MegaEggGenerator_05");
 
     // #tr Tooltip_MegaEggGenerator_06
-    // # You can also put nothing on the egg pos, but every empty pos decreases 5% max efficiency.
+    // # You can also put nothing on the egg pos, but every empty pos decreases 5%% max efficiency.
     // #zh_CN 在这能量的殿堂里，每一个未被诸蛋之力占据的空缺，都将令整体的效率减损5%%。
     public static final String Tooltip_MegaEggGenerator_06 = TextEnums.tr("Tooltip_MegaEggGenerator_06");
 
     // #tr Tooltip_MegaEggGenerator_07
-    // # Warm-up process for 0.01% per second as base, each pair of Dragon Eggs add 0.01% but limit for 50 pairs, each Infinity Egg add 1% with no limits.
+    // # Warm-up process for 0.01%% per second as base, each pair of Dragon Eggs add 0.01%% but limit for 50 pairs, each Infinity Egg add 1%% with no limits.
     // #zh_CN 基础预热速度0.01%%每秒，一对龙蛋增加0.01%%但最多只计算50对，无限之蛋增加1%%且无加速上限.
     public static final String Tooltip_MegaEggGenerator_07 = TextEnums.tr("Tooltip_MegaEggGenerator_07");
 
@@ -2053,22 +2053,22 @@ public class TextLocalization {
     public static final String Tooltip_IndistinctTentacle_2_01 = TextEnums.tr("Tooltip_IndistinctTentacle_2_01");
 
     // #tr Tooltip_IndistinctTentacle_2_02
-    // #     Assembly Line = 100%
+    // #     Assembly Line = 100%%
     // #zh_CN     装配线 = 100%%
     public static final String Tooltip_IndistinctTentacle_2_02 = TextEnums.tr("Tooltip_IndistinctTentacle_2_02");
 
     // #tr Tooltip_IndistinctTentacle_2_03
-    // #     Component Assembly Line = 200%;
+    // #     Component Assembly Line = 200%%;
     // #zh_CN     部件装配线 = 200%%
     public static final String Tooltip_IndistinctTentacle_2_03 = TextEnums.tr("Tooltip_IndistinctTentacle_2_03");
 
     // #tr Tooltip_IndistinctTentacle_2_04
-    // #     Assembler = 400%
+    // #     Assembler = 400%%
     // #zh_CN     组装机 = 400%%
     public static final String Tooltip_IndistinctTentacle_2_04 = TextEnums.tr("Tooltip_IndistinctTentacle_2_04");
 
     // #tr Tooltip_IndistinctTentacle_2_05
-    // #     Precise Assembler = 400%
+    // #     Precise Assembler = 400%%
     // #zh_CN     精密组装机 = 400%%
     public static final String Tooltip_IndistinctTentacle_2_05 = TextEnums.tr("Tooltip_IndistinctTentacle_2_05");
 
@@ -2235,7 +2235,7 @@ public class TextLocalization {
     public static final String Tooltip_VacuumFilterExtractor_03 = TextEnums.tr("Tooltip_VacuumFilterExtractor_03");
 
     // #tr Tooltip_VacuumFilterExtractor_04
-    // # Recipe voltage is only 50% of normal.
+    // # Recipe voltage is only 50%% of normal.
     // #zh_CN 只需要正常配方电压的50%%.
     public static final String Tooltip_VacuumFilterExtractor_04 = TextEnums.tr("Tooltip_VacuumFilterExtractor_04");
 
@@ -2356,12 +2356,12 @@ public class TextLocalization {
     public static final String Tooltip_BeeEngineer_03 = TextEnums.tr("Tooltip_BeeEngineer_03");
 
     // #tr Tooltip_BeeEngineer_04
-    // # Cost 128kL Honey to transform a drone into princess, but with 40% failing chance.
+    // # Cost 128kL Honey to transform a drone into princess, but with 40%% failing chance.
     // #zh_CN 消耗128kL蜂蜜, 将雄蜂转化为公主蜂，但失败几率为40%%.
     public static final String Tooltip_BeeEngineer_04 = TextEnums.tr("Tooltip_BeeEngineer_04");
 
     // #tr Tooltip_BeeEngineer_05
-    // # Will try to consume 32kL UUM (if exists) to increase success rate to 80%.
+    // # Will try to consume 32kL UUM (if exists) to increase success rate to 80%%.
     // #zh_CN 将尝试消耗32kL的UU物质(如果存在)以将成功率提高到80%%.
     public static final String Tooltip_BeeEngineer_05 = TextEnums.tr("Tooltip_BeeEngineer_05");
 

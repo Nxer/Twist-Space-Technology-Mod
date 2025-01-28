@@ -1,8 +1,10 @@
-def searchSourceFiles(javaFiles, en_lang, langMap) {
+import java.util.regex.Matcher
+
+def searchSourceFiles(SourceDirectorySet javaFiles, Map<String, String> en_lang, Map<String, Map<String, String>> langMap) {
     // Source File Search Start
     // 源文件搜索使用的状态变量
-    def state = null
-    def trMatch = null
+    String state = null
+    Matcher trMatch = null
 
     def colorCodeMap = project.ext.colorCodeMap
 
@@ -31,9 +33,9 @@ def searchSourceFiles(javaFiles, en_lang, langMap) {
                                 }
                                 def key = trMatch.group(1) as String
                                 def value = matcher.group(2)
-                                def lang1 = langMap[lang] as Map
+                                def lang1 = langMap[lang]
                                 if (lang1 == null) {
-                                    lang1 = [:]
+                                    lang1 = new HashMap<String, String>()
                                     langMap[lang] = lang1
                                 }
 
@@ -47,11 +49,15 @@ def searchSourceFiles(javaFiles, en_lang, langMap) {
                                 if(lang1.containsKey(key)) { // warn if a key is reassigned
                                     def originalText = lang1[key]
                                     if(originalText == value1) {
-                                        logger.warn("[Key Overwrite|1] Key '${key}' is reassigned with same text in file '${file}'")
+                                        logger.warn("[Key Overwrite|Duplicated] Key '${key}' is reassigned with same text in file '${file}'")
                                     }
                                     else {
-                                        logger.warn("[Key Overwrite|0] Key '${key}' is reassigned from '${lang1[key]}' to '${value1}' in file '${file}'")
+                                        logger.warn("[Key Overwrite|Overwrited] Key '${key}' is reassigned from '${lang1[key]}' to '${value1}' in file '${file}'")
                                     }
+                                }
+
+                                if(!checkFormatPattern(value1)) {
+                                    logger.warn("[Invalid Formatter] Key '${key}' has an invalid formatter string from '${lang}' in '${file.name}': ${value1}")
                                 }
 
                                 lang1[key] = value1
@@ -150,7 +156,7 @@ def searchLanguageFiles(namespace, sort, langMap) {
     // Language File Search Finish
 }
 
-def writeLanguageFiles(namespace, sort, langMap, ignoreKeyInFile, onlyFile, en_lang) {
+def writeLanguageFiles(String namespace, Set<String> sort, Map<String, Map<String, String>> langMap, boolean ignoreKeyInFile, Set<String> onlyFile, Map<String, String> en_lang) {
     langMap.each { fileName, innerMap ->
         def outputFile = new File("src/main/resources/assets/$namespace/lang/${fileName}.lang")
         outputFile.getParentFile().mkdirs()
@@ -178,6 +184,22 @@ def writeLanguageFiles(namespace, sort, langMap, ignoreKeyInFile, onlyFile, en_l
                 }
             }
         }
+    }
+}
+
+static checkFormatPattern(String str) {
+    def parseMethod = Formatter.metaClass.pickMethod("parse", String.class)
+    // println(parseMethod)
+
+    try {
+        if (parseMethod.isStatic()) {
+            parseMethod.invoke(null, str)
+        } else {
+            parseMethod.invoke(new Formatter(), str)
+        }
+        return true
+    } catch(IllegalFormatException ignored) {
+        return false
     }
 }
 
