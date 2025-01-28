@@ -94,13 +94,13 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.0.name
         // # Test Casing
         // #zh_CN Test Casing
-        GTCMItemList.TestCasing.set(TstUtils.withMeta(MetaBlockCasing01, 0));
+        GTCMItemList.TestCasing.set(TstUtils.newItemWithMeta(MetaBlockCasing01, 0));
 
         // #tr tile.MetaBlockCasing01.1.name
         // # High Power Radiation Proof Casing
         // #zh_CN 高能防辐射机械方块
         GTCMItemList.HighPowerRadiationProofCasing.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 1,
                 new String[] { TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.01"),
@@ -110,7 +110,7 @@ public class BlockRegister {
         // # Advanced High Power Coil Block
         // #zh_CN 进阶高能线圈
         GTCMItemList.AdvancedHighPowerCoilBlock.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 2,
                 new String[] { TextEnums.tr("Tooltips_AdvancedHighPowerCoil.01"),
@@ -120,7 +120,7 @@ public class BlockRegister {
         // # Parallelism Casing Mark 0
         // #zh_CN 初等处理阵列并行机械方块
         GTCMItemList.ParallelismCasing0.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 3,
                 new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.3.name_0"),
@@ -130,7 +130,7 @@ public class BlockRegister {
         // # Parallelism Casing Mark 1
         // #zh_CN 进阶处理阵列并行机械方块
         GTCMItemList.ParallelismCasing1.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 4,
                 new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.4.name_0"),
@@ -140,7 +140,7 @@ public class BlockRegister {
         // # Parallelism Casing Mark 2
         // #zh_CN 高能处理阵列并行机械方块
         GTCMItemList.ParallelismCasing2.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 5,
                 new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.5.name_0"),
@@ -150,7 +150,7 @@ public class BlockRegister {
         // # Parallelism Casing Mark 3
         // #zh_CN 超能处理阵列并行机械方块
         GTCMItemList.ParallelismCasing3.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 6,
                 new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.6.name_0"),
@@ -160,7 +160,7 @@ public class BlockRegister {
         // # Parallelism Casing Mark 4
         // #zh_CN 寰宇处理阵列并行机械方块
         GTCMItemList.ParallelismCasing4.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 7,
                 new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_0"),
@@ -169,7 +169,7 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.8.name
         // # Anti-Magnetic Casing
         // #zh_CN 抗磁机械方块
-        GTCMItemList.AntiMagneticCasing.set(TstUtils.newCasingBlockItemStack(MetaBlockCasing01, 8));
+        GTCMItemList.AntiMagneticCasing.set(TstUtils.registerCasingBlockItemStack(MetaBlockCasing01, 8));
 
         // #tr tile.MetaBlockCasing01.9.name
         // # Reinforced Stone Brick Casing
@@ -178,7 +178,7 @@ public class BlockRegister {
         // # Just a stone?
         // #zh_CN 只是块石头?
         GTCMItemList.ReinforcedStoneBrickCasing.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 9,
                 new String[] { TextEnums.tr("Tooltip_ReinforcedStoneBrickCasing") }));
@@ -190,7 +190,7 @@ public class BlockRegister {
         // # A force stronger than four combined.
         // #zh_CN 一个更比四个强
         GTCMItemList.CompositeFarmCasing.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 10,
                 new String[] { TextEnums.tr("Tooltip_CompositeFarmCasing") }));
@@ -198,12 +198,12 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.11.name
         // # Dense Cyclotron Outer Casing
         // #zh_CN 致密回旋加速器机械方块
-        GTCMItemList.DenseCyclotronOuterCasing.set(TstUtils.newCasingBlockItemStack(MetaBlockCasing01, 11));
+        GTCMItemList.DenseCyclotronOuterCasing.set(TstUtils.registerCasingBlockItemStack(MetaBlockCasing01, 11));
 
         // #tr tile.MetaBlockCasing01.12.name
         // # Compact Cyclotron Coil
         // #zh_CN 压缩回旋加速器线圈
-        GTCMItemList.CompactCyclotronCoil.set(TstUtils.newCasingBlockItemStack(MetaBlockCasing01, 12));
+        GTCMItemList.CompactCyclotronCoil.set(TstUtils.registerCasingBlockItemStack(MetaBlockCasing01, 12));
 
         // #tr tile.MetaBlockCasing01.13.name
         // # Aseptic Greenhouse Casing
@@ -212,7 +212,7 @@ public class BlockRegister {
         // # Absolutely Clean!
         // #zh_CN 一尘不染!
         GTCMItemList.AsepticGreenhouseCasing.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 13,
                 new String[] { TextEnums.tr("Tooltip_AsepticGreenhouseCasing") }));
@@ -224,7 +224,7 @@ public class BlockRegister {
         // # Stronger than bedrock!
         // #zh_CN 比磐石更坚！
         GTCMItemList.ReinforcedBedrockCasing.set(
-            TstUtils.newCasingBlockItemStack(
+            TstUtils.registerCasingBlockItemStack(
                 MetaBlockCasing01,
                 14,
                 new String[] { TextEnums.tr("Tooltip_ReinforcedBedrockCasing") }));
@@ -232,12 +232,12 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing02.0.name
         // # Gore Casing
         // #zh_CN 凝血机械方块
-        GTCMItemList.BloodyCasing1.set(TstUtils.newCasingBlockItemStack(MetaBlockCasing02, 0));
+        GTCMItemList.BloodyCasing1.set(TstUtils.registerCasingBlockItemStack(MetaBlockCasing02, 0));
 
         // #tr tile.MetaBlockCasing02.1.name
         // # Ichor Draconic Block
         // #zh_CN 血腥龙块
-        GTCMItemList.BloodyCasing2.set(TstUtils.newCasingBlockItemStack(MetaBlockCasing02, 1));
+        GTCMItemList.BloodyCasing2.set(TstUtils.registerCasingBlockItemStack(MetaBlockCasing02, 1));
 
         // region SpaceTimeOscillator
 

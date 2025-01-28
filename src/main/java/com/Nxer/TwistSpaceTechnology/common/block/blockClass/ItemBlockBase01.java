@@ -1,9 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlock01;
-import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
-import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.metaItemStackTooltipsAdd;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,18 +40,6 @@ public class ItemBlockBase01 extends ItemBlock {
     // endregion
     // -----------------------
     // region MetaBlock Generators
-
-    @Deprecated
-    public static ItemStack initMetaBlock01(String i18nName, int Meta) {
-        return initMetaItemStack(i18nName, Meta, MetaBlock01, MetaBlockSet01);
-    }
-
-    public static ItemStack initMetaBlock01(String i18nName, int Meta, String[] tooltips) {
-        if (tooltips != null) {
-            metaItemStackTooltipsAdd(MetaBlockTooltipsMap01, Meta, tooltips);
-        }
-        return initMetaBlock01(i18nName, Meta);
-    }
 
     // endregion
     // -----------------------

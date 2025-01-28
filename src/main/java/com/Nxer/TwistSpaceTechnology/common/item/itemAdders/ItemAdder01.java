@@ -14,18 +14,21 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import org.jetbrains.annotations.Nullable;
+
+import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
-import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * An ItemStack Generator used Meta Item System.
- * <li>Use {@link ItemAdder01#initItem01(String, int)} to create your Item at ItemList01.
+ * <li>Use {@link com.Nxer.TwistSpaceTechnology.util.TstUtils#registerItemAdder(ItemAdder_Basic, int, String[])} to
+ * create your Item at ItemList01.
  *
  */
-public class ItemAdder01 extends ItemAdder_Basic {
+public class ItemAdder01 extends ItemAdder_Basic implements IHasTooltips {
 
     /**
      * An Item Map for managing basic items
@@ -46,30 +49,32 @@ public class ItemAdder01 extends ItemAdder_Basic {
         // # Test Item
         // #zh_CN 测试物品
         super("MetaItem01", aCreativeTabs);
+        setTextureName("gtnhcommunitymod:MetaItem01/0");
     }
 
-    /**
-     * The method about creating Items with ItemStack form by Meta Item System.
-     * Use this method to create Items at ItemList.
-     *
-     * @param aName The name of your creating item.
-     * @param aMeta The MetaValue of your creating item.
-     * @return Return the Item with ItemStack form you create.
-     */
-    public static ItemStack initItem01(String aName, int aMeta) {
-
-        return MetaItemStackUtils.initMetaItemStack(aName, aMeta, BasicItems.MetaItem01, Meta01Set);
-
+    @Override
+    public ItemStack getVariant(int meta) throws IllegalArgumentException {
+        return checkAndGetVariant(this, meta, Meta01Set);
     }
 
-    public static ItemStack initItem01(String aName, int aMeta, String[] tooltips) {
+    @Override
+    public ItemStack[] getVariants() {
+        return getAllVariants(this, Meta01Set);
+    }
 
-        if (tooltips != null) {
-            MetaItemStackUtils.metaItemStackTooltipsAdd(MetaItemTooltipsMap01, aMeta, tooltips);
-        }
+    @Override
+    public ItemStack registerVariant(int meta) throws IllegalArgumentException {
+        return checkAndRegisterVariant(this, meta, Meta01Set);
+    }
 
-        return initItem01(aName, aMeta);
+    @Override
+    public void setTooltips(int metaValue, @Nullable String[] tooltips) {
+        MetaItemTooltipsMap01.put(metaValue, tooltips);
+    }
 
+    @Override
+    public @Nullable String[] getTooltips(int metaValue) {
+        return MetaItemTooltipsMap01.get(metaValue);
     }
 
     /**

@@ -16,13 +16,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import org.jetbrains.annotations.Nullable;
+
+import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
-import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemAdderIzumik extends ItemAdder_Basic {
+public class ItemAdderIzumik extends ItemAdder_Basic implements IHasTooltips.Advanced {
 
     public static final Set<Integer> MetaSet = new HashSet<>();
     public static final Map<Integer, String[]> MetaItemTooltipsMapIzumik = new HashMap<>();
@@ -34,23 +36,40 @@ public class ItemAdderIzumik extends ItemAdder_Basic {
         // # Meta Item Izumik
         // #zh_CN Meta Item Izumik
         super("MetaItemIzumik", aCreativeTabs);
+        setTextureName("gtnhcommunitymod:MetaItem01/0");
     }
 
-    public static ItemStack initItemIzumik(String aName, int aMeta) {
-
-        return MetaItemStackUtils.initMetaItemStack(aName, aMeta, BasicItems.MetaItemIzumik, MetaSet);
-
+    @Override
+    public ItemStack getVariant(int meta) throws IllegalArgumentException {
+        return checkAndGetVariant(this, meta, MetaSet);
     }
 
-    public static ItemStack initItemIzumik(String aName, int aMeta, String[] tooltips1, String[] tooltips2) {
+    @Override
+    public ItemStack[] getVariants() {
+        return getAllVariants(this, MetaSet);
+    }
 
-        if (tooltips1 != null && tooltips2 != null) {
-            MetaItemStackUtils.metaItemStackTooltipsAdd(MetaItemTooltipsMapIzumik, aMeta, tooltips1);
-            MetaItemStackUtils.metaItemStackTooltipsAdd(MetaItemTooltipsMapIzumikShift, aMeta, tooltips2);
+    @Override
+    public ItemStack registerVariant(int meta) throws IllegalArgumentException {
+        return checkAndRegisterVariant(this, meta, MetaSet);
+    }
+
+    @Override
+    public void setTooltips(int metaValue, @Nullable String[] tooltips, boolean advancedMode) {
+        if (advancedMode) {
+            MetaItemTooltipsMapIzumikShift.put(metaValue, tooltips);
+        } else {
+            MetaItemTooltipsMapIzumik.put(metaValue, tooltips);
         }
+    }
 
-        return initItemIzumik(aName, aMeta);
-
+    @Override
+    public @Nullable String[] getTooltips(int metaValue, boolean advancedMode) {
+        if (advancedMode) {
+            return MetaItemTooltipsMapIzumikShift.get(metaValue);
+        } else {
+            return MetaItemTooltipsMapIzumik.get(metaValue);
+        }
     }
 
     @Override

@@ -18,10 +18,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.IItemHasCooldown;
-import com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -29,10 +31,10 @@ import gregtech.api.util.GTUtility;
 
 /**
  * An ItemStack Generator used Meta Item System.
- * <li>Use {@link ItemAdderRune#initItem01(String, int)} to create your Item at ItemList01.
- *
+ * <li>Use {@link com.Nxer.TwistSpaceTechnology.util.TstUtils#registerItemAdder(ItemAdder_Basic, int)} to create your
+ * Item at ItemList01.
  */
-public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
+public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown, IHasTooltips {
 
     /**
      * An Item Map for managing basic items
@@ -54,40 +56,33 @@ public class ItemAdderRune extends ItemAdder_Basic implements IItemHasCooldown {
         // #zh_CN Meta Item Rune
         super("MetaItemRune", aCreativeTabs);
         this.maxStackSize = 1;
+        setTextureName("gtnhcommunitymod:MetaItem01/0");
     }
 
-    /**
-     * The method about creating Items with ItemStack form by Meta Item System.
-     * Use this method to create Items at ItemList.
-     *
-     * @param aName The name of your creating item.
-     * @param aMeta The MetaValue of your creating item.
-     * @return Return the Item with ItemStack form you create.
-     */
-    public static ItemStack initItemRune(String aName, int aMeta) {
-
-        return MetaItemStackUtils.initMetaItemStack(aName, aMeta, BasicItems.MetaItemRune, Meta01Set);
-
+    @Override
+    public ItemStack getVariant(int meta) throws IllegalArgumentException {
+        return checkAndGetVariant(this, meta, Meta01Set);
     }
 
-    public static ItemStack initItemRune(String aName, int aMeta, String[] tooltips) {
-
-        if (tooltips != null) {
-            MetaItemStackUtils.metaItemStackTooltipsAdd(MetaItemTooltipsMapRune, aMeta, tooltips);
-        }
-
-        return initItemRune(aName, aMeta);
-
+    @Override
+    public ItemStack[] getVariants() {
+        return getAllVariants(this, Meta01Set);
     }
 
-    /**
-     * Init the basic items at the game pre init.
-     */
-    // public static void init() {
-    // for (String MetaName : Item01Map.keySet()) {
-    // GameRegistry.registerItem(Item01Map.get(MetaName), MetaName);
-    // }
-    // }
+    @Override
+    public ItemStack registerVariant(int meta) throws IllegalArgumentException {
+        return checkAndRegisterVariant(this, meta, Meta01Set);
+    }
+
+    @Override
+    public void setTooltips(int metaValue, @Nullable String[] tooltips) {
+        MetaItemTooltipsMapRune.put(metaValue, tooltips);
+    }
+
+    @Override
+    public @Nullable String[] getTooltips(int metaValue) {
+        return MetaItemTooltipsMapRune.get(metaValue);
+    }
 
     // region Overrides
 

@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings;
 
-import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,18 +12,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
-import com.Nxer.TwistSpaceTechnology.common.block.MetaBlockConstructors;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClientOnly;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.enums.Textures;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 
 /**
- * Use {@link MetaBlockCasing} with {@link MetaBlockConstructors}
+ * Use {@link MetaBlockCasing} with {@link TstUtils#newMetaBlockItemStack(MetaBlockBase, int, String[])}.
  */
 @Deprecated
 public class MetaBlockCasing01 extends MetaBlockCasingBase {
@@ -46,39 +42,6 @@ public class MetaBlockCasing01 extends MetaBlockCasingBase {
 
     private static byte getTextureIndexInPageStatic(int meta) {
         return (byte) (meta + TEXTURE_ID_OFFSITE);
-    }
-
-    /**
-     * Init a meta block of MetaBlockCasing01.
-     * <p>
-     * Put the texture file at MetaBlockCasing01/meta.png
-     * </p>
-     *
-     * @param enName The default English name of this meta block.
-     * @param metaID The meta ID.
-     * @return An item stack of this meta block.
-     */
-    public static ItemStack initMetaCasing01(String enName, int metaID) {
-        Textures.BlockIcons.setCasingTextureForId(
-            getTextureIndexStatic(metaID),
-            TextureFactory.of(BasicBlocks.MetaBlockCasing01, metaID));
-        return initMetaItemStack(enName, metaID, BasicBlocks.MetaBlockCasing01, USED_META);
-    }
-
-    /**
-     * Init a meta block of MetaBlockCasing01 with tooltips.
-     * <p>
-     * Put the texture file at MetaBlockCasing01/meta.png
-     * </p>
-     *
-     * @param enName   The default English name of this meta block.
-     * @param metaID   The meta ID.
-     * @param tooltips A String[] to hold tooltips.
-     * @return An item stack of this meta block.
-     */
-    public static ItemStack initMetaCasing01(String enName, int metaID, String[] tooltips) {
-        TOOLTIPS.put(metaID, tooltips);
-        return initMetaCasing01(enName, metaID);
     }
 
     /**

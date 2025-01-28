@@ -1,8 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationStructureBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClientOnly.iconsSpaceStationStructureCasingMap;
-import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
 
 import java.util.HashSet;
 import java.util.List;
@@ -61,19 +59,6 @@ public class SpaceStationStructureCasing extends BlockBase01 implements IHasTool
     // endregion
     // -----------------------
     // region Meta Generator
-
-    @Deprecated
-    public static ItemStack SpaceStationStructureCasingMeta(String i18nName, int meta) {
-
-        return initMetaItemStack(i18nName, meta, SpaceStationStructureBlock, SpaceStationStructureCasingCasingSet);
-    }
-
-    @Deprecated
-    public static ItemStack SpaceStationStructureCasingMeta(String i18nName, int meta, String[] tooltips) {
-        // Handle the tooltips
-        SpaceStationStructureCasingTooltipsArray[meta] = tooltips;
-        return SpaceStationStructureCasingMeta(i18nName, meta);
-    }
 
     // endregion
     // -----------------------

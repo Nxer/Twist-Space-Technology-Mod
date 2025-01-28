@@ -1,8 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.spaceStation;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockStaticDataClientOnly.iconsSpaceStationAntiGravityCasingMap;
-import static com.Nxer.TwistSpaceTechnology.util.MetaItemStackUtils.initMetaItemStack;
 
 import java.util.HashSet;
 import java.util.List;
@@ -61,19 +59,6 @@ public class SpaceStationAntiGravityCasing extends BlockBase01 implements IHasTo
     // endregion
     // -----------------------
     // region Meta Generator
-
-    @Deprecated
-    public static ItemStack SpaceStationAntiGravityCasingMeta(String i18nName, int meta) {
-
-        return initMetaItemStack(i18nName, meta, SpaceStationAntiGravityBlock, SpaceStationAntiGravityCasingCasingSet);
-    }
-
-    @Deprecated
-    public static ItemStack SpaceStationAntiGravityCasingMeta(String i18nName, int meta, String[] tooltips) {
-        // Handle the tooltips
-        SpaceStationAntiGravityCasingTooltipsArray[meta] = tooltips;
-        return SpaceStationAntiGravityCasingMeta(i18nName, meta);
-    }
 
     // endregion
     // -----------------------

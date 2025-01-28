@@ -16,14 +16,11 @@ import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.TSTGeneratedItem;
 
 public final class BasicItems {
 
-    public static final Item MetaItem01 = new ItemAdder01(GTCMCreativeTabs.tabMetaItem01)
-        .setTextureName("gtnhcommunitymod:MetaItem01/0");
+    public static final ItemAdder01 MetaItem01 = new ItemAdder01(GTCMCreativeTabs.tabMetaItem01);
 
-    public static final Item MetaItemRune = new ItemAdderRune(GTCMCreativeTabs.tabMetaItem01)
-        .setTextureName("gtnhcommunitymod:MetaItem01/0");
+    public static final ItemAdderRune MetaItemRune = new ItemAdderRune(GTCMCreativeTabs.tabMetaItem01);
 
-    public static final Item MetaItemIzumik = new ItemAdderIzumik(GTCMCreativeTabs.tabMetaItem01)
-        .setTextureName("gtnhcommunitymod:MetaItem01/0");
+    public static final ItemAdderIzumik MetaItemIzumik = new ItemAdderIzumik(GTCMCreativeTabs.tabMetaItem01);
 
     // #tr item.ProofOfHeroes.name
     // # 英雄の証
