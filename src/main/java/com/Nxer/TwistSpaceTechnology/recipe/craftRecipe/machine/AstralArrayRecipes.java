@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AstralComputingArray;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.RealRackHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataInputHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataOutputHatch;
@@ -10,26 +9,18 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
-import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.util.GTModHandler.getModItem;
-import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 
-import appeng.items.materials.MaterialType;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
-import goodgenerator.items.GGMaterial;
-import gtPlusPlus.core.material.MaterialMisc;
-import gtPlusPlus.core.material.MaterialsAlloy;
-import gtPlusPlus.core.material.MaterialsElements;
-import net.minecraft.item.ItemStack;
-
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import fox.spiteful.avaritia.items.LudicrousItems;
@@ -40,12 +31,14 @@ import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
-import net.minecraftforge.fluids.FluidStack;
+import gtPlusPlus.core.material.MaterialMisc;
+import gtPlusPlus.core.material.MaterialsElements;
 import tectech.recipe.TTRecipeAdder;
 import tectech.thing.CustomItemList;
 import tectech.thing.casing.TTCasingsContainer;
 
 public class AstralArrayRecipes implements IRecipePool {
+
     // spotless:off
     @Override
     public void loadRecipes() {
@@ -125,7 +118,7 @@ public class AstralArrayRecipes implements IRecipePool {
         // Wireless Data Input Hatch
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 CustomItemList.dataIn_Hatch.get(1),
                 CustomItemList.Machine_Multi_Switch.get(1),
                 copyAmount(16, quantumCard),
@@ -140,7 +133,7 @@ public class AstralArrayRecipes implements IRecipePool {
         // Wireless Data Output Hatch
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 CustomItemList.dataOut_Hatch.get(1),
                 CustomItemList.Machine_Multi_Switch.get(1),
                 copyAmount(16, quantumCard),

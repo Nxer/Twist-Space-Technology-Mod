@@ -124,8 +124,8 @@ public class ModItemsHandler {
         }
 
         if (Mods.GraviSuite.isModLoaded()) {
-            CoolingCore = Pair.of(GTModHandler.getModItem(Mods.GraviSuite.ID, "itemSimpleItem>", 64, 2), 0);
-            GravitationEngine = Pair.of(GTModHandler.getModItem(Mods.GraviSuite.ID, "itemSimpleItem>", 64, 3), 0);
+            CoolingCore = Pair.of(GTModHandler.getModItem(Mods.GraviSuite.ID, "itemSimpleItem", 64, 2), 0);
+            GravitationEngine = Pair.of(GTModHandler.getModItem(Mods.GraviSuite.ID, "itemSimpleItem", 64, 3), 0);
         } else {
             CoolingCore = Pair.of(
                 GTCMItemList.TestItem0.get(1)

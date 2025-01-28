@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
+package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoldSingularity;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
@@ -13,6 +13,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -21,7 +22,7 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
-public class FluidSolidifierRecipePool implements IRecipePool {
+public class MoldSingularityRecipes implements IRecipePool {
 
     @Override
     public void loadRecipes() {
@@ -29,7 +30,7 @@ public class FluidSolidifierRecipePool implements IRecipePool {
         // Mold Singularity
         GTValues.RA.stdBuilder()
             .itemInputs(GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))
-            .fluidInputs(Materials.Bedrockium.getMolten(144 * 1919))
+            .fluidInputs(MaterialsUEVplus.Universium.getMolten(144 * 1920))
             .itemOutputs(MoldSingularity.get(1))
 
             .eut(19198100)

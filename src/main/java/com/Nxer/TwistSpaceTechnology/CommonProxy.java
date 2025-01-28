@@ -75,7 +75,6 @@ public class CommonProxy {
         TST_BigBroArray.getGeneratorsForArray();
         TST_BigBroArray.initializeMaterials();
         TST_BigBroArray.initializeStructure();
-        TST_BigBroArray.addRecipes();
     }
 
     // register server commands in this event handler (Remove if not needed)

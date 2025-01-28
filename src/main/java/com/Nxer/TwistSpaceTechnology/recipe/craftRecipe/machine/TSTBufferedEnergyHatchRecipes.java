@@ -28,7 +28,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.GT_Loader_Machines.bitsd;
 
-import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -43,6 +42,7 @@ import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
 
 public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
 
@@ -66,7 +66,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
         final IRecipeMap assembler = RecipeMaps.assemblerRecipes;
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_LV.get(1),
                 ItemList.Hatch_Energy_LV.get(1),
                 circuits[0],
@@ -79,7 +79,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_MV.get(1),
                 ItemList.Hatch_Energy_MV.get(1),
                 circuits[1],
@@ -92,7 +92,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_HV.get(1),
                 ItemList.Hatch_Energy_HV.get(1),
                 circuits[2],
@@ -105,7 +105,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_EV.get(1),
                 ItemList.Hatch_Energy_EV.get(1),
                 circuits[3],
@@ -118,7 +118,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_IV.get(1),
                 ItemList.Hatch_Energy_IV.get(1),
                 circuits[4],
@@ -131,7 +131,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_LuV.get(1),
                 ItemList.Hatch_Energy_LuV.get(1),
                 circuits[5],
@@ -144,7 +144,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_ZPM.get(1),
                 ItemList.Hatch_Energy_ZPM.get(1),
                 circuits[6],
@@ -157,7 +157,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_UV.get(1),
                 ItemList.Hatch_Energy_UV.get(1),
                 circuits[7],
@@ -170,7 +170,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_UXV.get(1),
                 ItemList.Hatch_Energy_UXV.get(1),
                 circuits[8],
@@ -183,7 +183,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_UEV.get(1),
                 ItemList.Hatch_Energy_UEV.get(1),
                 circuits[9],
@@ -196,7 +196,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_UIV.get(1),
                 ItemList.Hatch_Energy_UIV.get(1),
                 circuits[10],
@@ -209,7 +209,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_UMV.get(1),
                 ItemList.Hatch_Energy_UMV.get(1),
                 circuits[11],
@@ -222,7 +222,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .addTo(assembler);
         GTValues.RA.stdBuilder()
             .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
+                GTUtility.getIntegratedCircuit(18),
                 ItemList.Battery_Buffer_4by4_UXV.get(1),
                 ItemList.Hatch_Energy_UXV.get(1),
                 circuits[12],

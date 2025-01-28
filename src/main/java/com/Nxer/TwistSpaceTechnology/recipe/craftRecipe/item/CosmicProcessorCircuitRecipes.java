@@ -419,41 +419,6 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
             .duration(20 * 30)
             .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
 
-        // MicroSpaceTimeFabricatorio
-        GTValues.RA.stdBuilder()
-            .metadata(
-                RESEARCH_ITEM,
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 1))
-            .metadata(RESEARCH_TIME, 24 * HOURS)
-            .itemInputs(
-                GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
-                GTCMItemList.SpaceWarper.get(16),
-                GTCMItemList.GravitationalLens.get(16),
-                // TODO piko
-                CustomItemList.PikoCircuit.get(16),
-
-                EnergyFluctuationSelfHarmonizer.get(16),
-                PacketInformationTranslationArray.get(16),
-                setStackSize(eternal_singularity.copy(), 16),
-                ItemList.EnergisedTesseract.get(16),
-
-                ItemList.Field_Generator_UIV.get(16),
-                ItemList.Emitter_UIV.get(16),
-                ItemList.Sensor_UIV.get(16),
-                CustomItemList.HighEnergyFlowCircuit.get(16),
-
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
-            .fluidInputs(
-                MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
-                Materials.Hydrogen.getPlasma(1000 * 64),
-                Materials.UUMatter.getFluid(1000 * 64),
-                Materials.Quantium.getMolten(144 * 128))
-            .itemOutputs(GTCMItemList.MicroSpaceTimeFabricatorio.get(1))
-            .eut(RECIPE_UMV)
-            .duration(20 * 900)
-            .addTo(GTRecipeConstants.AssemblyLine);
-
         // AE Singularity
         GTValues.RA.stdBuilder()
             .itemInputs(Laser_Lens_Special.get(1), eternal_singularity.copy())

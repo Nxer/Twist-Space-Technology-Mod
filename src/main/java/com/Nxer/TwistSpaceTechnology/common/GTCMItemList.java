@@ -215,8 +215,8 @@ public enum GTCMItemList {
     AntiMagneticCasing,
     ReinforcedStoneBrickCasing,
     CompositeFarmCasing,
-    DenseCyclotronOuterCasing,
-    CompactCyclotronCoil,
+    DenseParticleProtectionCasing,
+    CompactHighSpeedParticleCoil,
     AsepticGreenhouseCasing,
     ReinforcedBedrockCasing,
 

@@ -7,21 +7,18 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.VP;
-import static gregtech.api.enums.Materials.RadoxPolymer;
+import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
-import static gregtech.api.util.GTRecipeBuilder.HOURS;
-import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
+import com.Nxer.TwistSpaceTechnology.util.enums.TierEU;
 
 import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
@@ -35,6 +32,8 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
+import tectech.recipe.TTRecipeAdder;
+import tectech.thing.CustomItemList;
 
 public class ModularHatchesRecipes implements IRecipePool {
 
@@ -55,14 +54,14 @@ public class ModularHatchesRecipes implements IRecipePool {
             ItemList.Hull_MAX.get(1), ItemList.Hull_UEV.get(1), ItemList.Hull_UIV.get(1), ItemList.Hull_UMV.get(1),
             ItemList.Hull_UXV.get(1), ItemList.Hull_MAXV.get(1) };
 
-        ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 1),
-            // TODO piko circuit and quantum circuit
-            CustomItemList.PikoCircuit.get(1), CustomItemList.QuantumCircuit.get(1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Transcendent, 1), };
+        ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ZPM, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 1), };
 
         ItemStack[] fieldGenerators = new ItemStack[] { ItemList.Field_Generator_ZPM.get(1),
             ItemList.Field_Generator_UV.get(1), ItemList.Field_Generator_UHV.get(1),
@@ -94,13 +93,32 @@ public class ModularHatchesRecipes implements IRecipePool {
             ItemList.Electric_Piston_UIV.get(1), ItemList.Electric_Piston_UMV.get(1),
             ItemList.Electric_Piston_UXV.get(1), ItemList.Electric_Piston_MAX.get(1) };
 
+        ItemStack[] nanites = new ItemStack[] { Materials.Carbon.getNanite(1), Materials.Neutronium.getNanite(1),
+            Materials.Silver.getNanite(1), Materials.Gold.getNanite(1), MaterialsUEVplus.SixPhasedCopper.getNanite(1),
+            MaterialsTST.Axonium.getNanite(1), MaterialsUEVplus.Eternity.getNanite(1),
+            MaterialsUEVplus.MagMatter.getNanite(1) };
+
+        ItemStack[] speedUps = new ItemStack[] { GTCMItemList.PhotonControllerUpgradeZPM.get(1),
+            GTCMItemList.PhotonControllerUpgradeUV.get(1), GTCMItemList.PhotonControllerUpgradeUHV.get(1),
+            GTCMItemList.PhotonControllerUpgradeUEV.get(1), GTCMItemList.PhotonControllerUpgradeUIV.get(1),
+            GTCMItemList.PhotonControllerUpgradeUMV.get(1), GTCMItemList.PhotonControllerUpgradeUXV.get(1),
+            GTCMItemList.PhotonControllerUpgradeMAX.get(1), };
+
+        ItemStack[] batteries = new ItemStack[] { ItemList.Energy_LapotronicOrb2.get(1), ItemList.Energy_Module.get(1),
+            ItemList.Energy_Cluster.get(1), ItemList.ZPM2.get(1), ItemList.ZPM3.get(1), ItemList.ZPM4.get(1),
+            ItemList.ZPM5.get(1), ItemList.ZPM6.get(1), };
+
+        // spotless:off
         // region Execution Cores
         {
             // Normal Execution Core
-            GTValues.RA.stdBuilder()
-                .metadata(RESEARCH_ITEM, ItemList.Cover_Screen.get(1))
-                .metadata(RESEARCH_TIME, 24 * HOURS)
-                .itemInputs(
+            TTRecipeAdder.addResearchableAssemblylineRecipe(
+                ItemList.Cover_Screen.get(1),
+                1_024_000,
+                512,
+                (int) TierEU.RECIPE_UV,
+                16,
+                new Object[] {
                     ItemList.Hull_UIV.get(1),
                     ItemList.Electric_Motor_UV.get(16),
                     ItemList.Conveyor_Module_UV.get(12),
@@ -108,95 +126,94 @@ public class ModularHatchesRecipes implements IRecipePool {
 
                     ItemList.Electric_Pump_UV.get(12),
                     ItemList.Field_Generator_UV.get(1),
-                    ItemList.Sensor_UV.get(1),
-                    new Object[] { OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2 },
+                    ItemList.Sensor_UV.get(2),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 2),
 
-                    CustomItemList.HighEnergyFlowCircuit.get(36),
+                    HighEnergyFlowCircuit.get(36),
                     GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Infinity, 32),
                     GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.Neutronium, 6),
                     GTOreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Neutronium, 16),
 
                     GTOreDictUnificator.get(OrePrefixes.screw, Materials.Neutronium, 32),
-                    GTOreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 16))
-                .fluidInputs(
-                    Materials.CosmicNeutronium.getMolten(144 * 64),
-                    Materials.Neutronium.getMolten(144 * 64),
+                    GTOreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 16) },
+                new FluidStack[] {
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
                     Materials.Quantium.getMolten(144 * 64 * 16),
-                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128))
-                .itemOutputs(GTCMItemList.ExecutionCore.get(1))
-                .eut(RECIPE_UV)
-                .duration(20 * 240)
-                .addTo(AssemblyLine);
+                    Materials.CosmicNeutronium.getMolten(144 * 64),
+                    Materials.UUMatter.getFluid(1000 * 1024) },
+                GTCMItemList.ExecutionCore.get(1),
+                20 * 300,
+                (int) RECIPE_UV);
 
             // Advanced Execution Core
-            GTValues.RA.stdBuilder()
-                .metadata(RESEARCH_ITEM, GTCMItemList.ExecutionCore.get(1))
-                .metadata(RESEARCH_TIME, 48 * HOURS)
-                .itemInputs(
-                    ItemList.Hull_UMV.get(1),
+            TTRecipeAdder.addResearchableAssemblylineRecipe(
+                GTCMItemList.ExecutionCore.get(1),
+                65_536_000,
+                16384,
+                (int) RECIPE_UIV,
+                16,
+                new Object[] { ItemList.Hull_UMV.get(1),
                     ItemList.Electric_Motor_UMV.get(64),
                     ItemList.Conveyor_Module_UMV.get(32),
                     ItemList.Robot_Arm_UMV.get(48),
 
                     ItemList.Electric_Pump_UMV.get(32),
-                    ItemList.Field_Generator_UMV.get(48),
-                    ItemList.Sensor_UMV.get(8),
-                    // TODO Piko circuit will be deprecated.
-                    CustomItemList.PikoCircuit.get(64),
+                    ItemList.Field_Generator_UMV.get(8),
+                    ItemList.Sensor_UMV.get(16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
 
-                    CustomItemList.HighEnergyFlowCircuit.get(64),
+                    GTCMItemList.UltimateEnergyFlowCircuit.get(28),
                     ItemList.EnergisedTesseract.get(64),
-                    GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SpaceTime, 16),
-                    GTOreDictUnificator.get(OrePrefixes.gearGtSmall, MaterialsUEVplus.SpaceTime, 64),
+                    GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsTST.Axonium, 24),
+                    GTOreDictUnificator.get(OrePrefixes.gearGtSmall, MaterialsTST.Axonium, 64),
 
-                    GTOreDictUnificator.get(OrePrefixes.stickLong, MaterialsUEVplus.SpaceTime, 64),
-                    GTOreDictUnificator.get(OrePrefixes.screw, MaterialsUEVplus.SpaceTime, 64),
-                    GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 64),
-                    GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.SpaceTime, 64))
-                .fluidInputs(
-                    MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(144 * 64 * 64 * 4),
+                    GTOreDictUnificator.get(OrePrefixes.stickLong, MaterialsTST.Axonium, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsTST.Axonium, 64),
+                    GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsTST.Axonium, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.SpaceTime, 64) },
+                new FluidStack[] {
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128 * 16),
+                    Materials.Infinity.getPlasma(144 * 64 * 64 * 4 * 4),
                     MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(144 * 64 * 64 * 4),
-                    Materials.Infinity.getMolten(144 * 64 * 64 * 4 * 4),
-                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128 * 4))
-                .itemOutputs(GTCMItemList.AdvancedExecutionCore.get(1))
-                .eut(RECIPE_UMV)
-                .duration(20 * 1200)
-                .addTo(AssemblyLine);
+                    MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000 * 10) },
+                GTCMItemList.AdvancedExecutionCore.get(1),
+                20 * 1200,
+                (int) RECIPE_UMV);
 
             // Perfect Execution Core
-            GTValues.RA.stdBuilder()
-                .metadata(RESEARCH_ITEM, GTCMItemList.AdvancedExecutionCore.get(1))
-                .metadata(RESEARCH_TIME, 96 * HOURS)
-                .itemInputs(
-                    ItemList.Hull_UXV.get(1),
+            TTRecipeAdder.addResearchableAssemblylineRecipe(
+                GTCMItemList.AdvancedExecutionCore.get(1),
+                524_288_000,
+                262144,
+                (int) RECIPE_UXV,
+                64,
+                new Object[] { ItemList.Hull_UXV.get(1),
                     ItemList.Electric_Motor_UXV.get(64),
                     ItemList.Conveyor_Module_UXV.get(48),
                     ItemList.Robot_Arm_UXV.get(64),
 
                     ItemList.Electric_Pump_UXV.get(48),
                     ItemList.Field_Generator_UXV.get(16),
-                    ItemList.Sensor_UXV.get(16),
-                    // TODO Quantum circuit will be deprecated.
-                    CustomItemList.QuantumCircuit.get(64),
+                    ItemList.Sensor_UXV.get(32),
+                    MaterialsUEVplus.MagMatter.getNanite(64),
+
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
+                    GTCMItemList.UltimateEnergyFlowCircuit.get(64),
+                    GTOreDictUnificator.get(OrePrefixes.gear, MaterialsTST.NeutroniumAlloy, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 64),
 
                     MaterialsUEVplus.Eternity.getNanite(64),
                     MaterialsUEVplus.Eternity.getNanite(64),
                     MaterialsUEVplus.Eternity.getNanite(64),
-                    MaterialsUEVplus.Eternity.getNanite(64),
-
-                    MaterialsUEVplus.Universium.getNanite(64),
-                    MaterialsUEVplus.Universium.getNanite(64),
-                    MaterialsUEVplus.Universium.getNanite(64),
-                    MaterialsUEVplus.Universium.getNanite(64))
-                .fluidInputs(
-                    MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64 * 64 * 6),
+                    MaterialsUEVplus.Eternity.getNanite(64) },
+                new FluidStack[] {
+                    MaterialsUEVplus.SpaceTime.getMolten(144 * 64 * 512),
+                    MaterialsTST.Axonium.getPlasma(144 * 64 * 64 * 64),
                     MaterialsUEVplus.Universium.getMolten(144 * 64 * 64 * 12),
-                    MaterialsUEVplus.Eternity.getMolten(144 * 64 * 64 * 24),
-                    MaterialsUEVplus.SpaceTime.getMolten(144 * 64 * 64))
-                .itemOutputs(GTCMItemList.PerfectExecutionCore.get(1))
-                .eut(RECIPE_UXV)
-                .duration(20 * 3600)
-                .addTo(AssemblyLine);
+                    MaterialsUEVplus.Eternity.getMolten(144 * 64 * 64 * 24) },
+                GTCMItemList.PerfectExecutionCore.get(1),
+                20 * 3600,
+                (int) RECIPE_UXV);
 
         }
         // endregion
@@ -206,31 +223,39 @@ public class ModularHatchesRecipes implements IRecipePool {
             // low speed
             GTValues.RA.stdBuilder()
                 .itemInputs(
+                    GTUtility.getIntegratedCircuit(18),
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 2),
                     tectech.thing.CustomItemList.Machine_Multi_Transformer.get(1),
-                    CustomItemList.HighEnergyFlowCircuit.get(64),
 
+                    HighEnergyFlowCircuit.get(64),
                     GregtechItemList.Casing_Coil_QuantumForceTransformer.get(32),
                     ItemList.UHV_Coil.get(64),
-                    ItemList.Field_Generator_UIV.get(32),
 
-                    ItemList.Emitter_UIV.get(64),
+                    ItemList.Field_Generator_UEV.get(16),
+                    ItemList.Emitter_UEV.get(32),
                     Materials.Gold.getNanite(16))
-                .fluidInputs(MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(144 * 64 * 6))
+                .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 4))
                 .itemOutputs(GTCMItemList.LowSpeedPerfectOverclockController.get(1))
                 .eut(RECIPE_UIV)
                 .duration(20 * 336)
                 .addTo(assemblerRecipes);
 
             // perfect overclock
-            GTValues.RA.stdBuilder()
-                .metadata(RESEARCH_ITEM, GTCMItemList.LowSpeedPerfectOverclockController.get(1))
-                .metadata(RESEARCH_TIME, 48 * HOURS)
-                .itemInputs(
-                    GTCMItemList.LowSpeedPerfectOverclockController.get(1),
+            TTRecipeAdder.addResearchableAssemblylineRecipe(
+                GTCMItemList.LowSpeedPerfectOverclockController.get(1),
+                524_288_000,
+                262144,
+                (int) TierEU.RECIPE_UXV,
+                64,
+                new Object[] { GTCMItemList.LowSpeedPerfectOverclockController.get(64),
+                    GTCMItemList.LowSpeedPerfectOverclockController.get(64),
+                    GTCMItemList.LowSpeedPerfectOverclockController.get(64),
+                    GTCMItemList.LowSpeedPerfectOverclockController.get(64),
+
                     GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 16),
+                    CustomItemList.eM_Dimensional.get(16),
                     ItemRefer.Compact_Fusion_Coil_T4.get(64),
-                    Materials.Gold.getNanite(64),
+                    MaterialsUEVplus.SixPhasedCopper.getNanite(64),
 
                     ItemList.Field_Generator_UMV.get(64),
                     ItemList.Field_Generator_UMV.get(64),
@@ -242,44 +267,57 @@ public class ModularHatchesRecipes implements IRecipePool {
                     ItemList.Emitter_UMV.get(64),
                     ItemList.Emitter_UMV.get(64),
 
-                    CustomItemList.QuantumCircuit.get(64),
-                    GGMaterial.metastableOganesson.get(OrePrefixes.plateDense, 64),
-                    GGMaterial.shirabon.get(OrePrefixes.plateDense, 64))
-                .fluidInputs(
-                    RadoxPolymer.getMolten(144 * 64 * 64),
-                    MaterialsUEVplus.Space.getMolten(144 * 320),
-                    MaterialsUEVplus.Time.getMolten(144 * 320),
-                    GGMaterial.shirabon.getMolten(144 * 640))
-                .itemOutputs(GTCMItemList.PerfectOverclockController.get(1))
-                .eut(RECIPE_UMV)
-                .duration(20 * 600)
-                .addTo(AssemblyLine);
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
+                    GTCMItemList.UltimateEnergyFlowCircuit.get(64),
+                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.SuperconductorUMVBase, 16),
+                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense, MaterialsUEVplus.WhiteDwarfMatter, 16) },
+                new FluidStack[] {
+                    Materials.RadoxPolymer.getMolten(144 * 64 * 128),
+                    MaterialsUEVplus.Time.getMolten(144 * 320), MaterialsUEVplus.PhononMedium.getFluid(1000 * 256),
+                    GGMaterial.shirabon.getMolten(144 * 640) },
+                GTCMItemList.PerfectOverclockController.get(1),
+                20 * 600,
+                (int) RECIPE_UMV);
 
             // singularity overclock
-            TST_RecipeBuilder.builder()
-                .itemInputs(
+            TTRecipeAdder.addResearchableAssemblylineRecipe(
+                GTCMItemList.PerfectOverclockController.get(1),
+                2_097_152_000,
+                1048576,
+                (int) RECIPE_UXV,
+                64,
+                new Object[] {
+                    GTCMItemList.PerfectOverclockController.get(64),
+                    GTCMItemList.PerfectOverclockController.get(64),
+                    GTCMItemList.PerfectOverclockController.get(64),
+                    GTCMItemList.PerfectOverclockController.get(64),
+
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 64),
+                    GTCMItemList.AdvancedHighPowerCoilBlock.get(64),
+                    GTCMItemList.StabilisationFieldGeneratorUXV.get(15),
+                    GTCMItemList.HarmoniousWirelessEnergyHatch.get(1),
+
+                    ItemList.Field_Generator_UXV.get(64),
+                    MaterialsUEVplus.MagMatter.getNanite(64),
                     GTCMItemList.ProofOfHeroes.get(1),
-                    copyAmount(2048, GTCMItemList.PerfectOverclockController.get(1)),
-                    copyAmount(4096, ItemList.Field_Generator_UXV.get(1)),
-                    copyAmount(6144, GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.Eternity, 1)),
+                    GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 64),
 
-                    copyAmount(8192, MaterialsUEVplus.Universium.getNanite(1)),
-                    copyAmount(8192, MaterialsUEVplus.Eternity.getNanite(1)),
-                    copyAmount(8192, MaterialsUEVplus.BlackDwarfMatter.getNanite(1)),
-                    copyAmount(8192, MaterialsUEVplus.WhiteDwarfMatter.getNanite(1)),
+                    GTCMItemList.PerfectOverclockController.get(64),
+                    GTCMItemList.PerfectOverclockController.get(64),
+                    GTCMItemList.PerfectOverclockController.get(64),
+                    GTCMItemList.PerfectOverclockController.get(64) },
+                new FluidStack[] {
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 65536),
+                    MaterialsTST.NeutroniumAlloy.getMolten(144 * 14913080),
+                    Materials.Force.getMolten(144 * 14913080),
+                    MaterialsUEVplus.Universium.getMolten(144 * 131072) },
+                GTCMItemList.SingularityPerfectOverclockController.get(1),
+                20 * 3600 * 24 * 64,
+                (int) RECIPE_MAX);
 
-                    copyAmount(65536, ItemList.Timepiece.get(1)),
-                    copyAmount(131072, CustomItemList.QuantumCircuit.get(1)))
-                .fluidInputs(
-                    Materials.DarkIron.getMolten(144 * 16384),
-                    Materials.Force.getMolten(144 * 65536),
-                    MaterialsUEVplus.Universium.getMolten(144 * 131072))
-                .itemOutputs(GTCMItemList.SingularityPerfectOverclockController.get(1))
-                .eut(RECIPE_MAX)
-                .duration(20 * 3600 * 24 * 64)
-                .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
         }
         // endregion
+        // spotless:on
 
         // region Parallel Controllers
         {
@@ -307,7 +345,8 @@ public class ModularHatchesRecipes implements IRecipePool {
                         copyAmount(64, robotArms[i]),
                         copyAmount(64, conveyors[i]),
 
-                        GTOreDictUnificator.get(OrePrefixes.plate, materials[i], 64))
+                        copyAmount(64, nanites[i]),
+                        GTOreDictUnificator.get(OrePrefixes.plateSuperdense, materials[i], 2))
                     .fluidInputs(materials[i].getMolten(144 * 64))
                     .itemOutputs(staticParallelControllers[i])
                     .eut(getRecipeVoltageFromModuleTier(i))
@@ -349,15 +388,15 @@ public class ModularHatchesRecipes implements IRecipePool {
                     .itemInputs(
                         GTUtility.getIntegratedCircuit(18),
                         copyAmount(1, hulls[i]),
-                        copyAmount(64, circuits[i]),
+                        copyAmount(1, speedUps[i]),
 
-                        copyAmount(64, fieldGenerators[i]),
+                        copyAmount(64, circuits[i]),
                         copyAmount(64, fieldGenerators[i]),
                         copyAmount(64, fieldGenerators[i]),
 
                         copyAmount(64, motors[i]),
                         copyAmount(64, pistons[i]),
-                        GTOreDictUnificator.get(OrePrefixes.plate, materials[i], 64))
+                        GTOreDictUnificator.get(OrePrefixes.plateSuperdense, materials[i], 4))
                     .fluidInputs(materials[i].getMolten(144 * 64))
                     .itemOutputs(staticSpeedControllers[i])
                     .eut(getRecipeVoltageFromModuleTier(i))
@@ -404,7 +443,8 @@ public class ModularHatchesRecipes implements IRecipePool {
                         copyAmount(64, fieldGenerators[i]),
                         copyAmount(64, emitters[i]),
 
-                        GTOreDictUnificator.get(OrePrefixes.plate, materials[i], 64))
+                        copyAmount(8 - i, batteries[i]),
+                        GTOreDictUnificator.get(OrePrefixes.plateSuperdense, materials[i], 1))
                     .fluidInputs(materials[i].getMolten(144 * 64))
                     .itemOutputs(staticPowerConsumptionControllers[i])
                     .eut(getRecipeVoltageFromModuleTier(i))

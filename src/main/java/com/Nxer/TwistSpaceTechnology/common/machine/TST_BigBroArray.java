@@ -5,11 +5,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
-import static gregtech.api.util.GTRecipeBuilder.HOURS;
-import static gregtech.api.util.GTRecipeBuilder.SECONDS;
-import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
 import java.lang.reflect.Field;
@@ -37,8 +32,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.StringUtils;
@@ -83,10 +76,7 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
-import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -102,7 +92,6 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.maps.FuelBackend;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
@@ -116,8 +105,6 @@ import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import io.netty.buffer.ByteBuf;
-import tectech.recipe.TTRecipeAdder;
-import tectech.thing.casing.TTCasingsContainer;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyMulti;
@@ -2181,123 +2168,6 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
             rList.addAll(inputsFromME.values());
         }
         return rList;
-    }
-
-    public static void addRecipes() {
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Processing_Array.get(16),
-                ItemList.Robot_Arm_IV.get(32),
-                ItemList.Emitter_IV.get(32),
-                ItemList.Field_Generator_IV.get(32),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64))
-            .fluidInputs(MaterialsAlloy.NITINOL_60.getFluidStack(24576))
-            .itemOutputs(GTCMItemList.BigBroArray.get(1))
-            .noOptimize()
-            .eut(TierEU.RECIPE_IV)
-            .duration(20 * 1200)
-            .addTo(RecipeMaps.assemblerRecipes);
-
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                ItemList.Field_Generator_IV.get(2),
-                ItemList.Casing_RobustTungstenSteel.get(1),
-                ItemList.Robot_Arm_IV.get(16),
-                ItemList.Emitter_IV.get(16),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 8),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 4))
-            .fluidInputs(Materials.SolderingAlloy.getMolten(9216))
-            .itemOutputs(GTCMItemList.ParallelismCasing0.get(1))
-            .noOptimize()
-            .eut(6400)
-            .duration(20 * 150)
-            .addTo(RecipeMaps.assemblerRecipes);
-
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing0.get(1))
-            .metadata(RESEARCH_TIME, 4 * HOURS)
-            .itemInputs(
-                ItemList.Field_Generator_ZPM.get(2),
-                ItemList.Casing_StableTitanium.get(1),
-                GTCMItemList.ParallelismCasing0.get(4),
-                ItemList.Robot_Arm_ZPM.get(16),
-                ItemList.Emitter_ZPM.get(16),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 8),
-                new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 4 })
-            .itemOutputs(GTCMItemList.ParallelismCasing1.get(1))
-            .fluidInputs(
-                Materials.SolderingAlloy.getMolten(9216),
-                new FluidStack(MaterialsAlloy.HELICOPTER.getFluid(), 24576))
-            .duration(600 * SECONDS)
-            .eut((int) TierEU.RECIPE_ZPM)
-            .addTo(AssemblyLine);
-
-        GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing1.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
-            .itemInputs(
-                ItemList.Field_Generator_UHV.get(4),
-                ItemList.Casing_CleanStainlessSteel.get(1),
-                GTCMItemList.ParallelismCasing1.get(4),
-                ItemList.Robot_Arm_UHV.get(16),
-                ItemList.Emitter_UHV.get(16),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 8),
-                new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 4 })
-            .itemOutputs(GTCMItemList.ParallelismCasing2.get(1))
-            .fluidInputs(
-                new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 9216),
-                new FluidStack(MaterialsAlloy.HELICOPTER.getFluid(), 14400),
-                new FluidStack(MaterialsAlloy.PIKYONIUM.getFluid(), 24576))
-            .duration(1200 * SECONDS)
-            .eut((int) TierEU.RECIPE_UHV)
-            .addTo(AssemblyLine);
-
-        Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
-            ? FluidRegistry.getFluid("molten.mutatedlivingsolder")
-            : FluidRegistry.getFluid("molten.solderingalloy");
-
-        TTRecipeAdder.addResearchableAssemblylineRecipe(
-            GTCMItemList.ParallelismCasing2.get(1),
-            20000000,
-            2000,
-            31457280,
-            1,
-            new Object[] { ItemList.Casing_Dim_Bridge.get(64), ItemList.Casing_Dim_Injector.get(64),
-                ItemList.Casing_Dim_Trans.get(64),
-                new ItemStack(ItemBlock.getItemFromBlock(TTCasingsContainer.sBlockCasingsTT), 2, 14),
-                GTCMItemList.SolarSail.get(64), GTCMItemList.SolarSail.get(64), GTCMItemList.SolarSail.get(64),
-                GTCMItemList.SolarSail.get(64), ItemList.Casing_FrostProof.get(1),
-                GTCMItemList.ParallelismCasing2.get(16), ItemList.Robot_Arm_UIV.get(16), ItemList.Emitter_UIV.get(16),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64),
-                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 8 } },
-            new FluidStack[] { new FluidStack(solderUEV, 9216) },
-            GTCMItemList.ParallelismCasing3.get(1),
-            20 * 1200,
-            31457280);
-
-        TTRecipeAdder.addResearchableAssemblylineRecipe(
-            GTCMItemList.ParallelismCasing3.get(1),
-            200000000,
-            20000,
-            503316480,
-            1,
-            new Object[] { GTCMItemList.SolarSail.get(64), GTCMItemList.SolarSail.get(64),
-                GTCMItemList.SolarSail.get(64), GTCMItemList.SolarSail.get(64), GTCMItemList.SolarSail.get(64),
-                GTCMItemList.SolarSail.get(64), ItemList.Field_Generator_UXV.get(8), ItemList.Casing_SolidSteel.get(1),
-                GTCMItemList.ParallelismCasing3.get(16),
-                tectech.thing.CustomItemList.StabilisationFieldGeneratorTier2.get(4),
-                tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier2.get(4),
-                tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2.get(4), ItemList.Robot_Arm_UXV.get(16),
-                ItemList.Emitter_UXV.get(16),
-                GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 8),
-                com.dreammaster.item.ItemList.QuantumCircuit.getIS(4) },
-            new FluidStack[] { MaterialsUEVplus.SpaceTime.getMolten(9216) },
-            GTCMItemList.ParallelismCasing4.get(1),
-            20 * 1200,
-            503316480);
     }
 
     @SideOnly(Side.CLIENT)

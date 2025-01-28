@@ -62,6 +62,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
@@ -738,6 +739,92 @@ public class DSPRecipePool implements IRecipePool {
                 .eut(RECIPE_MAX)
                 .duration(20 * 120)
                 .addTo(StrangeMatterAggregatorRecipes);
+
+            // Core Element
+            TST_RecipeBuilder.builder()
+                .itemInputs(GTCMItemList.MatterRecombinator.get(0), ItemList.ZPM.get(1))
+                .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(1))
+                .itemOutputs(GTCMItemList.EnergyShard.get(1), GTCMItemList.CoreElement.get(1))
+                .outputChances(9990, 10)
+                .eut(RECIPE_MAX)
+                .duration(20 * 60)
+                .addTo(QuantumInversionRecipes);
+
+            // Matter Recombinator
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(11),
+                    ItemList.Field_Generator_UMV.get(4),
+                    ItemList.Emitter_UMV.get(8),
+
+                    GTCMItemList.GravitationalLens.get(32),
+                    Laser_Lens_Special.get(16),
+                    Materials.Void.getPlates(64),
+
+                    MaterialsUEVplus.WhiteDwarfMatter.getNanite(1),
+                    MaterialsUEVplus.BlackDwarfMatter.getNanite(1))
+                .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(100))
+                .itemOutputs(GTCMItemList.MatterRecombinator.get(1))
+                .outputChances(114)
+                .eut(RECIPE_UMV)
+                .duration(20 * 200)
+                .addTo(RecipeMaps.assemblerRecipes);
+
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(11),
+                    ItemList.Field_Generator_UMV.get(4),
+                    ItemList.Emitter_UMV.get(8),
+
+                    GTCMItemList.GravitationalLens.get(32),
+                    Laser_Lens_Special.get(16),
+                    Materials.Void.getPlates(64),
+
+                    MaterialsUEVplus.Eternity.getNanite(1),
+                    MaterialsUEVplus.Universium.getNanite(1))
+                .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(100))
+                .itemOutputs(GTCMItemList.MatterRecombinator.get(1))
+                .outputChances(1140)
+                .eut(RECIPE_UXV)
+                .duration(20 * 300)
+                .addTo(RecipeMaps.assemblerRecipes);
+
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(11),
+                    ItemList.Field_Generator_UMV.get(4),
+                    ItemList.Emitter_UMV.get(8),
+
+                    GTCMItemList.GravitationalLens.get(32),
+                    Laser_Lens_Special.get(16),
+                    MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getPlates(16),
+
+                    MaterialsUEVplus.Eternity.getNanite(1),
+                    MaterialsUEVplus.Universium.getNanite(1))
+                .fluidInputs(MaterialsUEVplus.ExcitedDTSC.getFluid(100))
+                .itemOutputs(GTCMItemList.MatterRecombinator.get(1))
+                .outputChances(5140)
+                .eut(RECIPE_MAX)
+                .duration(20 * 300)
+                .addTo(RecipeMaps.assemblerRecipes);
+
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    GTCMItemList.MatterRecombinator.get(0),
+                    ItemList.Field_Generator_UMV.get(1),
+                    ItemList.Emitter_UMV.get(2),
+                    GTCMItemList.EnergyShard.get(16),
+
+                    GTCMItemList.GravitationalLens.get(6),
+                    Laser_Lens_Special.get(6),
+                    Materials.Void.getPlates(64))
+                .fluidInputs(MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 8))
+                .itemOutputs(GTCMItemList.MatterRecombinator.get(1))
+                .eut(RECIPE_MAX)
+                .duration(20 * 300)
+                .addTo(MiracleTopRecipes);
+
+            // endregion
         }
 
     }

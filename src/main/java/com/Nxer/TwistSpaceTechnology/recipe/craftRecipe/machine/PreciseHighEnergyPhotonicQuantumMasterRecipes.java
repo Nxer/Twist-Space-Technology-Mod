@@ -17,7 +17,6 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonController
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeZPM;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
@@ -32,7 +31,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
-import static com.dreammaster.item.ItemList.CircuitUXV;
 import static gregtech.api.enums.ItemList.ZPM6;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
@@ -41,10 +39,9 @@ import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
@@ -60,11 +57,13 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
 import tectech.thing.CustomItemList;
 
 public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePool {
+
     // spotless:off
     @Override
     public void loadRecipes() {
@@ -299,7 +298,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 4),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUEV, 4))
+                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUEV, 4),
+                Materials.Silver.getNanite(16))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(64 * 144),
                 Materials.SuperconductorUEVBase.getMolten(64 * 144))
@@ -325,7 +325,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 4),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 8),
-                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUIV, 8))
+                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUIV, 8),
+                Materials.Gold.getNanite(32))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(256 * 144),
                 Materials.SuperconductorUIVBase.getMolten(64 * 144),
@@ -351,7 +352,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
                 ItemList.Field_Generator_UMV.get(8),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 8),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 32),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUMV, 16),
                 MaterialsUEVplus.SixPhasedCopper.getNanite(16),
 
@@ -383,8 +384,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 16),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsUEVplus.SpaceTime, 64),
+                ItemList.Timepiece.get(64),
 
                 MaterialsTST.Axonium.getNanite(64),
                 MaterialsUEVplus.Eternity.getNanite(48),
@@ -400,7 +401,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
             .duration(20 * 2560)
             .addTo(AssemblyLine);
 
-        // Upgrade MAX ---Hang on---
+        // Upgrade MAX -- Temporarily, be revised in the next version
         GTValues.RA.stdBuilder()
             .itemInputs(
                 PhotonControllerUpgradeUXV.get(1),
@@ -410,7 +411,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
 
                 ItemList.Emitter_MAX.get(64),
                 GTCMItemList.GravitationalLens.get(64),
-                setStackSize(ItemList.EnergisedTesseract.get(1), 256),
+                ItemList.EnergisedTesseract.get(64),
                 ItemList.Field_Generator_MAX.get(32),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 32),

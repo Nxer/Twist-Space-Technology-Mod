@@ -21,9 +21,9 @@ public class MassFabricatorGenesisRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(2))
-            .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(10))
-            .eut(200000000)
-            .duration(100000)
+            .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
+            .eut(2000000000)
+            .duration(1000)
             .addTo(GTCMRecipe.MassFabricatorGenesis);
     }
 }

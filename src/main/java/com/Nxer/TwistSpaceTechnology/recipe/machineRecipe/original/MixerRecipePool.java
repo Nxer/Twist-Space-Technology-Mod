@@ -30,8 +30,6 @@ public class MixerRecipePool implements IRecipePool {
             .duration(20 * 10)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
-        // endregion
-
         // One Step HSS-S
         GTValues.RA.stdBuilder()
             .itemInputs(

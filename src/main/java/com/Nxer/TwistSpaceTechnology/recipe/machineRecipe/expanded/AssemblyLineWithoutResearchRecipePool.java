@@ -51,10 +51,8 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeBuilder;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import tectech.thing.CustomItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
@@ -247,26 +245,6 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemOutputs(setStackSize(GTModHandler.getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1), 8192))
                 .eut(100000000)
                 .duration(20 * 50)
-                .addTo(MASL);
-        }
-
-        {
-            // adv radiation proof plate
-            TST_RecipeBuilder.builder()
-                .itemInputs(
-                    GTUtility.getIntegratedCircuit(24),
-                    Materials.Neutronium.getNanite(1),
-                    setStackSize(Materials.Lanthanum.getPlates(1), 4096),
-                    setStackSize(Materials.NaquadahAlloy.getPlates(1), 6144),
-                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 0, 1))
-                .fluidInputs(
-                    new FluidStack(solderUEV, 144 * 1024),
-                    Materials.Lead.getMolten(144 * 16 * 1024),
-                    MaterialsUEVplus.SpaceTime.getMolten(144 * 8),
-                    Materials.UUMatter.getFluid(1000 * 16))
-                .itemOutputs(setStackSize(ItemRefer.Advanced_Radiation_Protection_Plate.get(1), 2048))
-                .eut(RECIPE_UXV)
-                .duration(20 * 10)
                 .addTo(MASL);
         }
 

@@ -1,13 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.material;
 
-import static com.Nxer.TwistSpaceTechnology.common.material.MaterialFix.makeWires;
 import static gregtech.api.enums.OrePrefixes.nanite;
 
 import java.util.Collections;
 
 import goodgenerator.util.CharExchanger;
 import gregtech.api.enums.Dyes;
-import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.SubTag;
 import gregtech.api.enums.TCAspects;
@@ -118,7 +116,6 @@ public class MaterialsTST {
                 .setHasCorrespondingPlasma(true);
         Axonium.mChemicalFormula = "A☀";
         nanite.mGeneratedItems.add(MaterialsTST.Axonium);
-        makeWires(Axonium,20000,0L, 0L,Integer.MAX_VALUE, Integer.MAX_VALUE, false, true);
 
     }
 

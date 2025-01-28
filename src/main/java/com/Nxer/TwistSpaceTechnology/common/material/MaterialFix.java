@@ -10,12 +10,15 @@ import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.transcendentPlasmaMixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
+import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gregtech.api.util.GTRecipeBuilder.TICKS;
 import static gregtech.api.util.GTRecipeConstants.COIL_HEAT;
+import static gregtech.api.util.GTRecipeConstants.FOG_PLASMA_MULTISTEP;
+import static gregtech.api.util.GTRecipeConstants.FOG_PLASMA_TIER;
 import static gtPlusPlus.api.recipe.GTPPRecipeMaps.alloyBlastSmelterRecipes;
+import static tectech.recipe.TecTechRecipeMaps.godforgePlasmaRecipes;
 
-import gregtech.api.metatileentity.implementations.MTECable;
-import gregtech.api.util.GTLanguageManager;
+import gregtech.api.enums.TierEU;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -24,7 +27,9 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.metatileentity.implementations.MTECable;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GTLanguageManager;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialsElements;
@@ -96,7 +101,7 @@ public class MaterialFix {
             .addTo(alloyBlastSmelterRecipes);
 
         // Axonium
-
+        makeWires(MaterialsTST.Axonium,20000,0L, 0L,Integer.MAX_VALUE, Integer.MAX_VALUE, false, true);
         GTValues.RA.stdBuilder()
             .fluidInputs(
                 MaterialsTST.AxonisAlloy.getMolten(144),
@@ -121,6 +126,26 @@ public class MaterialFix {
             .eut(RECIPE_MAX)
             .duration(45 * 20)
             .addTo(transcendentPlasmaMixerRecipes);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(MaterialsTST.Axonium.getDust(144))
+            .fluidOutputs(MaterialsTST.Axonium.getPlasma(144))
+            .duration(25 * SECONDS)
+            .eut(TierEU.RECIPE_MAX)
+            .metadata(FOG_PLASMA_MULTISTEP, true)
+            .metadata(FOG_PLASMA_TIER, 2)
+            .noOptimize()
+            .addTo(godforgePlasmaRecipes);
+
+        GTValues.RA.stdBuilder()
+            .fluidInputs(MaterialsTST.Axonium.getMolten(144))
+            .fluidOutputs(MaterialsTST.Axonium.getPlasma(144))
+            .duration(25 * SECONDS)
+            .eut(TierEU.RECIPE_MAX)
+            .metadata(FOG_PLASMA_MULTISTEP, true)
+            .metadata(FOG_PLASMA_TIER, 2)
+            .noOptimize()
+            .addTo(godforgePlasmaRecipes);
 
         // Concentrated UU Matter
         GTValues.RA.stdBuilder()
@@ -187,7 +212,7 @@ public class MaterialFix {
 
     // copy from GT_Loader_wires
     public static void makeWires(Materials aMaterial, int aStartID, long aLossInsulated, long aLoss, long aAmperage,
-                                  long aVoltage, boolean aInsulatable, boolean aAutoInsulated) {
+        long aVoltage, boolean aInsulatable, boolean aAutoInsulated) {
         String displayName = GTLanguageManager.i18nPlaceholder ? "%material" : aMaterial.mDefaultLocalName;
         GTOreDictUnificator.registerOre(
             OrePrefixes.wireGt01,

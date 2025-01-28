@@ -118,8 +118,8 @@ public class MegaStoneBreakerRecipePool implements IRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(24),
-                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Redstone, 1))
-            .itemOutputs(new ItemStack(Blocks.stone))
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Redstone, 0))
+            .itemOutputs(new ItemStack(Blocks.obsidian))
             .eut(6)
             .duration(20)
             .addTo(MegaStoneBreakerRecipes);

@@ -7,17 +7,16 @@ import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.MoldSingularityRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.AstralArrayRecipes;
-import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.BallLightingRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.DSPRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.DualInputBufferRecipes;
-import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.IncompactCyclotronRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.LegendLaserHatchRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularHatchesRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularizedMachineSystemRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.PreciseHighEnergyPhotonicQuantumMasterRecipes;
-import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleMachineRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.TSTBufferedEnergyHatchRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.AssemblyLineWithoutResearchRecipePool;
@@ -51,7 +50,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CompressorRec
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.DistillationRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ExtractorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidHeaterRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidSolidifierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FusionReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.MixerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.NanoForgeRecipePool;
@@ -92,12 +90,13 @@ public class RecipeLoader {
 
         IRecipePool[] craftRecipePool = {
             // Item Recipes
-            new SingleItemRecipes(), new CosmicProcessorCircuitRecipes(), new LapotronChipRecipes(),
+            new SingleItemRecipes(), new SingleBlockRecipes(), new CosmicProcessorCircuitRecipes(),
+            new LapotronChipRecipes(), new MoldSingularityRecipes(),
             // Machine Recipes
-            new SingleBlockRecipes(), new SingleMachineRecipes(), new PreciseHighEnergyPhotonicQuantumMasterRecipes(),
+            new SingleMachineRecipes(), new PreciseHighEnergyPhotonicQuantumMasterRecipes(),
             new DualInputBufferRecipes(), new TSTBufferedEnergyHatchRecipes(), new DSPRecipes(),
-            new LegendLaserHatchRecipes(), new AstralArrayRecipes(), new BallLightingRecipes(),
-            new ModularizedMachineSystemRecipes(), new ModularHatchesRecipes(), new IncompactCyclotronRecipes() };
+            new LegendLaserHatchRecipes(), new AstralArrayRecipes(), new ModularizedMachineSystemRecipes(),
+            new ModularHatchesRecipes() };
 
         for (IRecipePool recipePool : craftRecipePool) {
             recipePool.loadRecipes();
@@ -105,12 +104,11 @@ public class RecipeLoader {
 
         IRecipePool[] machineRecipePools = new IRecipePool[] {
             // Original GTNH RecipeMap
-            new ChemicalReactorRecipePool(), new CircuitAssemblerRecipePool(), new FluidSolidifierRecipePool(),
-            new DistillationRecipePool(), new ExtractorRecipePool(), new CompressorRecipePool(),
-            new LanthanidesRecipePool(), new CentrifugeRecipePool(), new ShapedCraftRecipePool(), new MixerRecipePool(),
-            new QFTRecipePool(), new NanoForgeRecipePool(), new FluidHeaterRecipePool(),
-            new ParticleColliderRecipePool(), new DragonBloodRecipe(), new FusionReactorRecipePool(),
-            new SpaceAssemblerRecipePool(), new TCRecipePool(),
+            new ChemicalReactorRecipePool(), new CircuitAssemblerRecipePool(), new DistillationRecipePool(),
+            new ExtractorRecipePool(), new CompressorRecipePool(), new LanthanidesRecipePool(),
+            new CentrifugeRecipePool(), new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(),
+            new NanoForgeRecipePool(), new FluidHeaterRecipePool(), new ParticleColliderRecipePool(),
+            new DragonBloodRecipe(), new FusionReactorRecipePool(), new SpaceAssemblerRecipePool(), new TCRecipePool(),
             // TST Recipe Map
             new IntensifyChemicalDistorterRecipePool(), new PreciseHighEnergyPhotonicQuantumMasterRecipePool(),
             new MiracleTopRecipePool(), new CrystallineInfinitierRecipePool(), new DSPRecipePool(),

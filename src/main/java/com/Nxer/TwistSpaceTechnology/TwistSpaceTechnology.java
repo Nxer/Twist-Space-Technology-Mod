@@ -128,11 +128,11 @@ public class TwistSpaceTechnology {
         CropLoader.registerBaseSeed();
 
         TCLoader.load();
+        MaterialFix.load();
     }
 
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
-        MaterialFix.load();
         RecipeLoader.loadRecipes();// Load Recipes
         ExtremeCraftRecipe.initECRecipe();
 

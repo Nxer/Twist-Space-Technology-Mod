@@ -198,21 +198,21 @@ public class BlockRegister {
                 // #zh_CN 一个更比四个强
                 }));
 
-        GTCMItemList.DenseCyclotronOuterCasing.set(
+        GTCMItemList.DenseParticleProtectionCasing.set(
             MetaBlockConstructors.initMetaBlockCasing(
-                "Dense Cyclotron Outer Casing",
+                "Dense Particle Protection Casing",
                 // #tr MetaBlockCasing01.11.name
-                // # Dense Cyclotron Outer Casing
-                // #zh_CN 致密回旋加速器机械方块
+                // # Dense Particle protection Casing
+                // #zh_CN 致密粒子防护机械方块
                 (byte) 11,
                 BasicBlocks.MetaBlockCasing01));
 
-        GTCMItemList.CompactCyclotronCoil.set(
+        GTCMItemList.CompactHighSpeedParticleCoil.set(
             MetaBlockConstructors.initMetaBlockCasing(
-                "Compact Cyclotron Coil",
+                "Compact High-Speed Particle Coil",
                 // #tr MetaBlockCasing01.12.name
-                // # Compact Cyclotron Coil
-                // #zh_CN 压缩回旋加速器线圈
+                // # Compact High-Speed Particle Coil
+                // #zh_CN 压缩高速粒子线圈
                 (byte) 12,
                 BasicBlocks.MetaBlockCasing01));
 
