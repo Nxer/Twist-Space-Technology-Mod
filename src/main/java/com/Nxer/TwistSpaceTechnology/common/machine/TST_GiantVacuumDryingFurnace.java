@@ -186,7 +186,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
 
     private static IStructureDefinition<TST_GiantVacuumDryingFurnace> STRUCTURE_DEFINITION = null;
 
-
     // region Structure
 
     // 'S' = Stainless casing
@@ -200,54 +199,71 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     // 'J' = Vacuum casing
     // 'H' = Invar Frame
 
-
     // VacuumPump height = 8 , length = width = 9 , and x-OffSet = 10 , y-OffSet = 4 ;
     private static final String[][] shapeVacuumPump = new String[][] {
-        {"         "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS ","         "},
-        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
-        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
-        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
-        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
-        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
-        {"         "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS ","         "},
-        {"VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV"}
-    };
+        { "         ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ",
+            "         " },
+        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
+            "         " },
+        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
+            "         " },
+        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
+            "         " },
+        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
+            "         " },
+        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
+            "         " },
+        { "         ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ",
+            "         " },
+        { "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV",
+            "VVVVVVVVV" } };
 
     // mainFrame height = 7 , length = 9 , width = 3 ,and x-OffSet = 1 , y-OffSet = 3 ;
     private static final String[][] shapeMainFrame = new String[][] {
-        {"EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE"},
-        {"EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE"},
-        {"EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE"},
-        {"E~E", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE"},
-        {"EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE"},
-        {"EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE"},
-        {"EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE"}
-    };
+        { "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE" },
+        { "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE" },
+        { "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE" },
+        { "E~E", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE" },
+        { "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE" },
+        { "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE" },
+        { "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE" } };
 
     // dryingTowerBase height = 5 , length = width = 11 , x-os = -2 , y-os = 1;
     private static final String[][] shapeDryingTowerBase = new String[][] {
-        {"           "," IIIIIIIII "," IJJJAJJJI "," IJJJAJJJI "," IJJJAJJJI "," AAAAGAAAA "," IJJJAJJJI "," IJJJAJJJI "," IJJJAJJJI "," IIIIIIIII ","           "},
-        {"           "," H       H ","           ","  FFFFFFF  ","     V     ","    VGV    ","     V     ","  FFFFFFF  ","           "," H       H ","           "},
-        {"           "," H       H ","  FFFFFFF  "," FGGGGGGGF ","  FFFFFFF  ","           ","  FFFFFFF  "," FGGGGGGGF ","  FFFFFFF  "," H       H ","           "},
-        {"  HHHHHHH  "," H       H ","H         H","H FFFFFFF H","H         H","H         H","H         H","H FFFFFFF H"," H       H "," H       H ","  HHHHHHH  "},
-        {" VVVVVVVVV ","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV"," VVVVVVVVV "}
-    };
+        { "           ", " IIIIIIIII ", " IJJJAJJJI ", " IJJJAJJJI ", " IJJJAJJJI ", " AAAAGAAAA ", " IJJJAJJJI ",
+            " IJJJAJJJI ", " IJJJAJJJI ", " IIIIIIIII ", "           " },
+        { "           ", " H       H ", "           ", "  FFFFFFF  ", "     V     ", "    VGV    ", "     V     ",
+            "  FFFFFFF  ", "           ", " H       H ", "           " },
+        { "           ", " H       H ", "  FFFFFFF  ", " FGGGGGGGF ", "  FFFFFFF  ", "           ", "  FFFFFFF  ",
+            " FGGGGGGGF ", "  FFFFFFF  ", " H       H ", "           " },
+        { "  HHHHHHH  ", " H       H ", "H         H", "H FFFFFFF H", "H         H", "H         H", "H         H",
+            "H FFFFFFF H", " H       H ", " H       H ", "  HHHHHHH  " },
+        { " VVVVVVVVV ", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV",
+            "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", " VVVVVVVVV " } };
     // dryingTowerMiddle height = 7 , length = width = 11 , x-os = -2 , y-os = 1+7n ; n is the number of this part
     private static final String[][] shapeDryingTowerMiddle = new String[][] {
-        {"           ","   I   I   ","  JJJAJJJ  "," IJJJAJJJI ","  JJJAJJJ  "," AAAAGAAAA ","  JJJAJJJ  "," IJJJAJJJI ","  JJJAJJJ  ","   I   I   ","           "},
-        {"           ","   I   I   ","           "," I C   C I ","           ","     G     ","           "," I C   C I ","           ","   I   I   ","           "},
-        {"           ","   I   I   ","   C   C   "," IC C C CI ","   C   C   ","     G     ","   C   C   "," IC C C CI ","   C   C   ","   I   I   ","           "},
-        {"           ","   I   I   ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","     G     ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","   I   I   ","           "},
-        {"           ","   I   I   ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","     G     ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","   I   I   ","           "},
-        {"           ","   I   I   ","   C   C   "," IC C C CI ","   C   C   ","     G     ","   C   C   "," IC C C CI ","   C   C   ","   I   I   ","           "},
-        {"           ","   I   I   ","           "," I C   C I ","           ","     G     ","           "," I C   C I ","           ","   I   I   ","           "}
-    };
+        { "           ", "   I   I   ", "  JJJAJJJ  ", " IJJJAJJJI ", "  JJJAJJJ  ", " AAAAGAAAA ", "  JJJAJJJ  ",
+            " IJJJAJJJI ", "  JJJAJJJ  ", "   I   I   ", "           " },
+        { "           ", "   I   I   ", "           ", " I C   C I ", "           ", "     G     ", "           ",
+            " I C   C I ", "           ", "   I   I   ", "           " },
+        { "           ", "   I   I   ", "   C   C   ", " IC C C CI ", "   C   C   ", "     G     ", "   C   C   ",
+            " IC C C CI ", "   C   C   ", "   I   I   ", "           " },
+        { "           ", "   I   I   ", "  CCC CCC  ", " IC C C CI ", "  CCC CCC  ", "     G     ", "  CCC CCC  ",
+            " IC C C CI ", "  CCC CCC  ", "   I   I   ", "           " },
+        { "           ", "   I   I   ", "  CCC CCC  ", " IC C C CI ", "  CCC CCC  ", "     G     ", "  CCC CCC  ",
+            " IC C C CI ", "  CCC CCC  ", "   I   I   ", "           " },
+        { "           ", "   I   I   ", "   C   C   ", " IC C C CI ", "   C   C   ", "     G     ", "   C   C   ",
+            " IC C C CI ", "   C   C   ", "   I   I   ", "           " },
+        { "           ", "   I   I   ", "           ", " I C   C I ", "           ", "     G     ", "           ",
+            " I C   C I ", "           ", "   I   I   ", "           " } };
     // dryingTowerMiddle height = 3 , length = width = 11 , x-os = -2 , y-os = 4+7n;
     private static final String[][] shapeDryingTowerHat = new String[][] {
-        {"           ","           ","           ","    VVV    ","   VGGGV   ","   VGGGV   ","   VGGGV   ","    VVV    ","           ","           ","           "},
-        {"           ","           ","   I   I   ","  IV   VI  ","     V     ","    VGV    ","     V     ","  IV   VI  ","   I   I   ","           ","           "},
-        {"           ","           ","   I   I   ","  I     I  ","           ","     G     ","           ","  I     I  ","   I   I   ","           ","           "}
-    };
+        { "           ", "           ", "           ", "    VVV    ", "   VGGGV   ", "   VGGGV   ", "   VGGGV   ",
+            "    VVV    ", "           ", "           ", "           " },
+        { "           ", "           ", "   I   I   ", "  IV   VI  ", "     V     ", "    VGV    ", "     V     ",
+            "  IV   VI  ", "   I   I   ", "           ", "           " },
+        { "           ", "           ", "   I   I   ", "  I     I  ", "           ", "     G     ", "           ",
+            "  I     I  ", "   I   I   ", "           ", "           " } };
 
     private final int VP_horizontalOffSet = 10;
     private final int VP_verticalOffSet = 4;
@@ -306,6 +322,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         }
         return STRUCTURE_DEFINITION;
     }
+
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         int piece = stackSize.stackSize;
