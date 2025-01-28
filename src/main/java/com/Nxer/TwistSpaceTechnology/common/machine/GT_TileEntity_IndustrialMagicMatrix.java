@@ -154,26 +154,26 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     }
                 }
 
-                if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-
+                AspectList aspects = tcRecipe.getInputAspects();
+                if (aspects.visSize() == 0) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
+                }
+                if (mTileInfusionProvider.isEmpty()) {
+                    return Essentia_InsentiaL;
+                }
                 HashMap<Aspect, TileInfusionProvider> hatchMap = new HashMap<>();
-
-                aspectLoop: for (Aspect aspect : tcRecipe.getInputAspects()
-                    .getAspects()) {
+                aspectLoop: for (Aspect aspect : aspects.getAspects()) {
                     for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        if (hatch.doesContainerContainAmount(aspect, tcRecipe.getAspectAmount(aspect) * Para)) {
+                        if (hatch.doesContainerContainAmount(aspect, aspects.getAmount(aspect) * Para)) {
                             hatchMap.put(aspect, hatch);
                             continue aspectLoop;
                         }
                     }
-
                     return Essentia_InsentiaL;
                 }
-
-                for (Aspect aspect : tcRecipe.getInputAspects()
-                    .getAspects()) {
+                for (Aspect aspect : aspects.getAspects()) {
                     hatchMap.get(aspect)
-                        .takeFromContainer(aspect, tcRecipe.getAspectAmount(aspect) * Para);
+                        .takeFromContainer(aspect, aspects.getAmount(aspect) * Para);
                 }
 
                 return CheckRecipeResultRegistry.SUCCESSFUL;

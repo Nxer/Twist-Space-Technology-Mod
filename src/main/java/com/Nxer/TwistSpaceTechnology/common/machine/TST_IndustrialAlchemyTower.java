@@ -171,26 +171,26 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     }
                 }
 
-                if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-
+                AspectList aspects = recipe1.getInputAspects();
+                if (aspects.visSize() == 0) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
+                }
+                if (mTileInfusionProvider.isEmpty()) {
+                    return Essentia_InsentiaL;
+                }
                 HashMap<Aspect, TileInfusionProvider> hatchMap = new HashMap<>();
-
-                aspectLoop: for (Aspect aspect : recipe1.getInputAspects()
-                    .getAspects()) {
+                aspectLoop: for (Aspect aspect : aspects.getAspects()) {
                     for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        if (hatch.doesContainerContainAmount(aspect, recipe1.getAspectAmount(aspect) * Para)) {
+                        if (hatch.doesContainerContainAmount(aspect, aspects.getAmount(aspect) * Para)) {
                             hatchMap.put(aspect, hatch);
                             continue aspectLoop;
                         }
                     }
-
                     return Essentia_InsentiaL;
                 }
-
-                for (Aspect aspect : recipe1.getInputAspects()
-                    .getAspects()) {
+                for (Aspect aspect : aspects.getAspects()) {
                     hatchMap.get(aspect)
-                        .takeFromContainer(aspect, recipe1.getAspectAmount(aspect) * Para);
+                        .takeFromContainer(aspect, aspects.getAmount(aspect) * Para);
                 }
 
                 return CheckRecipeResultRegistry.SUCCESSFUL;
