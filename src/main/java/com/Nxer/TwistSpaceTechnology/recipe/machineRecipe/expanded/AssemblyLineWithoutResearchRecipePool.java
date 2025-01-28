@@ -8,7 +8,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
-import static com.dreammaster.item.ItemList.HighEnergyFlowCircuit;
+import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static com.google.common.math.LongMath.pow;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GalaxySpace;
@@ -56,8 +56,8 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
-import tectech.thing.CustomItemList;
 import gtnhlanth.common.register.LanthItemList;
+import tectech.thing.CustomItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 
 public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
@@ -132,30 +132,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             ItemList.Hatch_Dynamo_UHV.get(1), ItemList.Casing_Dim_Injector.get(1), ItemList.Casing_Dim_Trans.get(1),
             ItemRefer.Advanced_Radiation_Protection_Plate.get(1), CustomItemList.eM_energyTunnel8_UXV.get(1),
             CustomItemList.eM_dynamoTunnel8_UXV.get(1), CustomItemList.eM_energyTunnel9_UXV.get(1),
-            CustomItemList.eM_dynamoTunnel9_UXV.get(1) };
-            ItemList.Circuit_OpticalMainframe.get(1), SpacetimeCompressionFieldGeneratorTier0.get(1),
-            SpacetimeCompressionFieldGeneratorTier1.get(1), SpacetimeCompressionFieldGeneratorTier2.get(1),
-            SpacetimeCompressionFieldGeneratorTier3.get(1), SpacetimeCompressionFieldGeneratorTier4.get(1),
-            SpacetimeCompressionFieldGeneratorTier5.get(1), SpacetimeCompressionFieldGeneratorTier6.get(1),
-            SpacetimeCompressionFieldGeneratorTier7.get(1), SpacetimeCompressionFieldGeneratorTier8.get(1),
-            TimeAccelerationFieldGeneratorTier0.get(1), TimeAccelerationFieldGeneratorTier1.get(1),
-            TimeAccelerationFieldGeneratorTier2.get(1), TimeAccelerationFieldGeneratorTier3.get(1),
-            TimeAccelerationFieldGeneratorTier4.get(1), TimeAccelerationFieldGeneratorTier5.get(1),
-            TimeAccelerationFieldGeneratorTier6.get(1), TimeAccelerationFieldGeneratorTier7.get(1),
-            TimeAccelerationFieldGeneratorTier8.get(1), StabilisationFieldGeneratorTier0.get(1),
-            StabilisationFieldGeneratorTier1.get(1), StabilisationFieldGeneratorTier2.get(1),
-            StabilisationFieldGeneratorTier3.get(1), StabilisationFieldGeneratorTier4.get(1),
-            StabilisationFieldGeneratorTier5.get(1), StabilisationFieldGeneratorTier6.get(1),
-            StabilisationFieldGeneratorTier7.get(1), StabilisationFieldGeneratorTier8.get(1),
-            ItemList.Hatch_Energy_LuV.get(1), ItemList.Hatch_Energy_ZPM.get(1), ItemList.Hatch_Energy_UV.get(1),
-            ItemList.Hatch_Energy_UHV.get(1), ItemList.Hatch_Dynamo_LuV.get(1), ItemList.Hatch_Dynamo_ZPM.get(1),
-            ItemList.Hatch_Dynamo_UV.get(1), ItemList.Hatch_Dynamo_UHV.get(1), ItemList.Casing_Dim_Injector.get(1),
-            ItemList.Casing_Dim_Trans.get(1), ItemRefer.Advanced_Radiation_Protection_Plate.get(1),
-            tectech.thing.CustomItemList.eM_energyTunnel8_UXV.get(1),
-            tectech.thing.CustomItemList.eM_dynamoTunnel8_UXV.get(1),
-            tectech.thing.CustomItemList.eM_energyTunnel9_UXV.get(1),
-            tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1),
-            new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING),
+            CustomItemList.eM_dynamoTunnel9_UXV.get(1), new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING),
             new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING) };
 
         // start check assembly line recipes
@@ -312,91 +289,6 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .eut(100000000)
                 .duration(20 * 50)
                 .addTo(MASL);
-        }
-
-        {
-            // ultimate battery
-
-            // UMV
-            TST_RecipeBuilder.builder()
-                .itemInputs(
-                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
-                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 6144),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 16),
-                    ItemList.Field_Generator_UEV.get(8),
-
-                    ItemList.Circuit_Wafer_PPIC.get(64),
-                    HighEnergyFlowCircuit.get(64),
-                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 64))
-                .fluidInputs(
-                    new FluidStack(solderUEV, 144 * 64),
-                    MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(144 * 64),
-                    Materials.UUMatter.getFluid(1000 * 64))
-                .itemOutputs(ItemList.ZPM3.get(1))
-                .eut(32_000_000)
-                .duration(20 * 128)
-                .addTo(MASL);
-
-            // UXV
-            TST_RecipeBuilder.builder()
-                .itemInputs(
-                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Infinity, 64),
-                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 48912),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 16),
-                    ItemList.Field_Generator_UIV.get(8),
-
-                    ItemList.Circuit_Wafer_QPIC.get(64),
-                    HighEnergyFlowCircuit.get(64),
-                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64))
-                .fluidInputs(
-                    new FluidStack(solderUEV, 144 * 128),
-                    MaterialsUEVplus.SpaceTime.getMolten(144 * 128),
-                    Materials.UUMatter.getFluid(1000 * 128))
-                .itemOutputs(ItemList.ZPM4.get(1))
-                .eut(128_000_000)
-                .duration(20 * 256)
-                .addTo(MASL);
-
-            // MAX
-            TST_RecipeBuilder.builder()
-                .itemInputs(
-                    MaterialsElements.STANDALONE.HYPOGEN.getPlateDense(64),
-                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 391296),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
-                    ItemList.Field_Generator_UMV.get(8),
-
-                    setStackSize(ItemList.Circuit_Wafer_QPIC.get(1), 2048),
-                    HighEnergyFlowCircuit.get(64),
-                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 64))
-                .fluidInputs(
-                    new FluidStack(solderUEV, 144 * 256),
-                    MaterialsUEVplus.Eternity.getMolten(144 * 256),
-                    Materials.UUMatter.getFluid(1000 * 256))
-                .itemOutputs(ItemList.ZPM5.get(1))
-                .eut(512_000_000)
-                .duration(20 * 512)
-                .addTo(MASL);
-
-            // ERR
-            TST_RecipeBuilder.builder()
-                .itemInputs(
-                    MaterialsElements.STANDALONE.DRAGON_METAL.getBlock(64),
-                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 3130368),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 16),
-                    ItemList.Field_Generator_UXV.get(2),
-
-                    ItemList.EnergisedTesseract.get(64),
-                    HighEnergyFlowCircuit.get(64),
-                    GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUMV, 64))
-                .fluidInputs(
-                    new FluidStack(solderUEV, 144 * 512),
-                    MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 128),
-                    Materials.UUMatter.getFluid(1000 * 512))
-                .itemOutputs(ItemList.ZPM6.get(1))
-                .eut(2_048_000_000)
-                .duration(20 * 1024)
-                .addTo(MASL);
-
         }
 
         {

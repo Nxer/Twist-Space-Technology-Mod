@@ -649,7 +649,7 @@ public class SingleBlockRecipes implements IRecipePool {
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.BloodInfusedIron, 1),
                 new ItemStack(WayofTime.alchemicalWizardry.ModItems.blankSlate, 6),
-                GTUtility.getIntegratedCircuit(1))
+                GTUtility.getIntegratedCircuit(6))
             .fluidInputs(BloodMagicHelper.getLifeEssence(1000))
             .itemOutputs(GTCMItemList.BloodyCasing1.get(1))
             .eut(0)
@@ -663,7 +663,7 @@ public class SingleBlockRecipes implements IRecipePool {
                 Mods.DraconicEvolution.isModLoaded()
                     ? GTModHandler.getModItem(Mods.DraconicEvolution.ID, "draconicBlock", 1)
                     : TestItem0.get(1),
-                GTUtility.getIntegratedCircuit(1))
+                GTUtility.getIntegratedCircuit(6))
             .fluidInputs(BloodMagicHelper.getLifeEssence(100000))
             .itemOutputs(GTCMItemList.BloodyCasing2.get(1))
             .eut(0)

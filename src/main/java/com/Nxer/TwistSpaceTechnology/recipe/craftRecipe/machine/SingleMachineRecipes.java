@@ -3,11 +3,8 @@ package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 import static bartworks.common.loaders.ItemRegistry.cal;
 import static bartworks.common.loaders.ItemRegistry.megaMachines;
 import static bartworks.common.loaders.ItemRegistry.voidminer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EnergyFluctuationSelfHarmonizer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PacketInformationTranslationArray;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler.CoolingCore;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV;
@@ -28,7 +25,6 @@ import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
-import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Controller_IndustrialRockBreaker;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_CuttingFactoryController;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MacerationStack;
@@ -37,7 +33,6 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlas
 import static kekztech.common.Blocks.lscLapotronicEnergyUnit;
 import static kubatech.api.enums.ItemList.ExtremeIndustrialApiary;
 
-import gregtech.api.util.GTRecipeConstants;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -1114,7 +1109,7 @@ public class SingleMachineRecipes implements IRecipePool {
                     ItemList.IndustrialApiary_Upgrade_Acceleration_8_Upgraded.get(64))
                 .fluidInputs(
                     MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
-                    Materials.EnrichedNaquadria.getMolten(144 * 64),
+                    Materials.NaquadahEnriched.getMolten(144 * 64),
                     Materials.UUMatter.getFluid(1000 * 256),
                     Materials.Honey.getFluid(1000 * 512))
                 .itemOutputs(GTCMItemList.SpaceApiaryT2.get(1))
@@ -1273,7 +1268,7 @@ public class SingleMachineRecipes implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(10),
-                ItemList.Processing_Array.get(16),
+                GTCMItemList.ResearchOnAncientPA.get(16),
                 ItemList.Robot_Arm_IV.get(32),
 
                 ItemList.Emitter_IV.get(32),

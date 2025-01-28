@@ -113,7 +113,8 @@ public class DSPRecipes implements IRecipePool {
             20 * 2400,
             (int) TierEU.RECIPE_UIV);
 
-        // ArtificialStar   -- Temporarily, be revised in the next version
+        // ArtificialStar
+        // TODO -- Temporarily, be revised in the next version
         TTRecipeAdder.addResearchableAssemblylineRecipe(
             GTCMItemList.Antimatter.get(1),
             2_000_000_000,

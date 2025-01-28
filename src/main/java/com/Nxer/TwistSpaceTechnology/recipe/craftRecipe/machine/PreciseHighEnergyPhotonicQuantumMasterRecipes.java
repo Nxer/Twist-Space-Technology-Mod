@@ -401,7 +401,8 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
             .duration(20 * 2560)
             .addTo(AssemblyLine);
 
-        // Upgrade MAX -- Temporarily, be revised in the next version
+        // Upgrade MAX
+        // TODO -- Temporarily, be revised in the next version
         GTValues.RA.stdBuilder()
             .itemInputs(
                 PhotonControllerUpgradeUXV.get(1),

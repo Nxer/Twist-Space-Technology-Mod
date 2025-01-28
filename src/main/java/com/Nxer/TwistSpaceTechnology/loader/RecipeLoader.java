@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.loader;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
@@ -31,6 +32,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFake
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.ElvenWorkshopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.HyperSpacetimeTransformerRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IndustrialAlchemyTowerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IndustrialMagicMatrixRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IntensifyChemicalDistorterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MassFabricatorGenesisRecipePool;
@@ -114,11 +116,12 @@ public class RecipeLoader {
             new MiracleTopRecipePool(), new CrystallineInfinitierRecipePool(), new DSPRecipePool(),
             new MegaUniversalSpaceStationRecipePool(), new StellarMaterialSiphonRecipePool(),
             new AssemblyLineWithoutResearchRecipePool(), new BOTRecipePool(), new StarKernelForgeRecipePool(),
-            new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(),
-            new CokingFactoryRecipePool(), new StellarForgeRecipePool(), new HyperSpacetimeTransformerRecipePool(),
+            new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(), new CokingFactoryRecipePool(),
+            new StellarForgeRecipePool(), new HyperSpacetimeTransformerRecipePool(),
             new AquaticZoneSimulatorFakeRecipe(), new NeutronActivatorWithEURecipePool(),
             new MassFabricatorGenesisRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
-            new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool(), new DeployedNanoCoreRecipePool() };
+            new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool(), new DeployedNanoCoreRecipePool(),
+            new IndustrialAlchemyTowerRecipePool() };
 
         for (IRecipePool recipePool : machineRecipePools) {
             recipePool.loadRecipes();

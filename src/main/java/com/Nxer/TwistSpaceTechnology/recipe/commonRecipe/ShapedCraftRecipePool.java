@@ -8,6 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
@@ -16,6 +17,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsBotania;
 import gregtech.api.enums.OreDictNames;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.interfaces.IItemContainer;
 import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
 
@@ -80,5 +82,40 @@ public class ShapedCraftRecipePool implements IRecipePool {
             new Object[] { "CTC", "FMF", "CBC", 'M', ItemList.Hull_IV, 'B',
                 OrePrefixes.pipeLarge.get(Materials.StainlessSteel), 'C', OrePrefixes.circuit.get(Materials.IV), 'F',
                 ItemList.Robot_Arm_EV, 'T', ItemList.Energy_LapotronicOrb });
+
+        // Manufacturing Center
+        addCraftingRecipe(
+            GTCMItemList.ManufacturingCenter.get(1),
+            new Object[] { "AhA", "BHB", "CdC", 'A', MaterialsAlloy.STABALLOY.getPlate(1), 'B',
+                Materials.StainlessSteel.getPlates(1), 'C', MaterialsAlloy.ZIRCONIUM_CARBIDE.getPlate(1), 'H',
+                ItemList.Hull_IV, });
+
+        // MultiUse Core
+
+        BlockMultiUseCore.setupMultiUseCoreRecipe(
+            GTCMItemList.MultiUseCore_IV.get(1),
+            new IItemContainer[] { ItemList.Machine_IV_Compressor, ItemList.Machine_IV_Lathe,
+                ItemList.Machine_IV_Polarizer, ItemList.Machine_IV_Fermenter, ItemList.Machine_IV_FluidExtractor,
+                ItemList.Machine_IV_Extractor, ItemList.Machine_IV_LaserEngraver, ItemList.Machine_IV_Autoclave,
+                ItemList.Machine_IV_FluidSolidifier, });
+
+        BlockMultiUseCore.setupMultiUseCoreRecipe(
+            GTCMItemList.MultiUseCore_LuV.get(1),
+            new IItemContainer[] { ItemList.CompressorLuV, ItemList.LatheLuV, ItemList.PolarizerLuV,
+                ItemList.FermenterLuV, ItemList.FluidExtractorLuV, ItemList.ExtractorLuV,
+                ItemList.PrecisionLaserEngraverLuV, ItemList.AutoclaveLuV, ItemList.FluidSolidifierLuV, });
+
+        BlockMultiUseCore.setupMultiUseCoreRecipe(
+            GTCMItemList.MultiUseCore_ZPM.get(1),
+            new IItemContainer[] { ItemList.CompressorZPM, ItemList.LatheZPM, ItemList.PolarizerZPM,
+                ItemList.FermenterZPM, ItemList.FluidExtractorZPM, ItemList.ExtractorZPM,
+                ItemList.PrecisionLaserEngraverZPM, ItemList.AutoclaveZPM, ItemList.FluidSolidifierZPM, });
+
+        BlockMultiUseCore.setupMultiUseCoreRecipe(
+            GTCMItemList.MultiUseCore_UV.get(1),
+            new IItemContainer[] { ItemList.CompressorUV, ItemList.LatheUV, ItemList.PolarizerUV, ItemList.FermenterUV,
+                ItemList.FluidExtractorUV, ItemList.ExtractorUV, ItemList.PrecisionLaserEngraverUV,
+                ItemList.AutoclaveUV, ItemList.FluidSolidifierUV, });
+        // end region
     }
 }

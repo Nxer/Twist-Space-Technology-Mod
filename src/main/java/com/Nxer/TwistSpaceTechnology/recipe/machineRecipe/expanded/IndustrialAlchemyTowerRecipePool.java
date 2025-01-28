@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
+package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static gregtech.api.enums.TierEU.RECIPE_IV;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;

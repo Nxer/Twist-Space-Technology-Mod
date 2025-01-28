@@ -106,7 +106,7 @@ public class BlockRegister {
 
         GTCMItemList.TestMetaBlock01_0.set(ItemBlockBase01.initMetaBlock01("TestMetaBlock01_0", 0));
 
-        // region Casing 01
+        // Casing 01
         GTCMItemList.TestCasing
             .set(MetaBlockConstructors.initMetaBlockCasing("Test Casing", (byte) 0, BasicBlocks.MetaBlockCasing01));
         GTCMItemList.HighPowerRadiationProofCasing.set(
@@ -248,7 +248,7 @@ public class BlockRegister {
                 // #zh_CN 比磐石更坚！
                 }));
 
-        // region Casing 02
+        // Casing 02
         GTCMItemList.BloodyCasing1.set(
             MetaBlockConstructors.initMetaBlockCasing(
                 "BloodyCasing1",
@@ -267,7 +267,7 @@ public class BlockRegister {
                 (byte) 1,
                 BasicBlocks.MetaBlockCasing02));
 
-        // region SpaceTimeOscillator
+        // SpaceTimeOscillator
 
         // #tr SpaceTimeOscillator.0.name
         // # SpaceTime Oscillator T1
@@ -292,7 +292,7 @@ public class BlockRegister {
 
         // end region
 
-        // region SpaceTimeConstraintor
+        // SpaceTimeConstraintor
 
         // #tr SpaceTimeConstraintor.0.name
         // # SpaceTime Constraintor T1
@@ -323,7 +323,7 @@ public class BlockRegister {
 
         // end region
 
-        // region SpaceTimeMerger
+        // SpaceTimeMerger
 
         // #tr SpaceTimeMerger.0.name
         // # SpaceTime Merger T1
@@ -348,7 +348,7 @@ public class BlockRegister {
 
         // end region
 
-        // region Stabilisation Field Generator
+        // Stabilisation Field Generator
         GTCMItemList.StabilisationFieldGeneratorFramework.set(
             MetaBlockConstructors.initMetaBlock(
                 "StabilisationFieldGeneratorFramework",
@@ -421,7 +421,7 @@ public class BlockRegister {
 
         // end region
 
-        // region MaterialBlock
+        // MaterialBlock
         BasicBlocks.MetalBlock = new BlockMetal(
             "tst.blockmetal01",
             new Materials[] { MaterialsTST.NeutroniumAlloy, MaterialsTST.AxonisAlloy, MaterialsTST.Axonium },
@@ -431,7 +431,7 @@ public class BlockRegister {
                 new CustomIcon(TST_ID + ":MetaBlocks/BlockAxonium") });
         // end region
 
-        // region PhotonControllerUpgrade
+        // PhotonControllerUpgrade
         GTCMItemList.PhotonControllerUpgradeLV
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier LV Tier", 0));
         GTCMItemList.PhotonControllerUpgradeMV
@@ -462,7 +462,7 @@ public class BlockRegister {
             .set(PhotonControllerUpgradeCasing.photonControllerUpgradeCasingMeta("Photonic Intensifier MAX Tier", 13));
         // end region
         // ---------------------------------------------------------------------------------------------------------------------------//
-        // region MegaSpaceStation
+        // MegaSpaceStation
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.spaceStationStructureBlockLV.set(
                 SpaceStationStructureCasing.SpaceStationStructureCasingMeta("spaceStationStructureBlock LV Tier", 0));

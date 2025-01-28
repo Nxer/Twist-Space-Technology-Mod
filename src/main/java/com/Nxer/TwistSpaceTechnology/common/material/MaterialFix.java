@@ -18,7 +18,6 @@ import static gregtech.api.util.GTRecipeConstants.FOG_PLASMA_TIER;
 import static gtPlusPlus.api.recipe.GTPPRecipeMaps.alloyBlastSmelterRecipes;
 import static tectech.recipe.TecTechRecipeMaps.godforgePlasmaRecipes;
 
-import gregtech.api.enums.TierEU;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -27,6 +26,7 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.metatileentity.implementations.MTECable;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTLanguageManager;
@@ -151,7 +151,7 @@ public class MaterialFix {
         GTValues.RA.stdBuilder()
             .fluidInputs(
                 Materials.UUMatter.getFluid(1000000),
-                MaterialsTST.Axonium.getMolten(36))
+                MaterialsTST.Axonium.getMolten(72))
             .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
             .eut(RECIPE_UEV)
             .duration(20 * 60)
@@ -161,7 +161,7 @@ public class MaterialFix {
         GTValues.RA.stdBuilder()
             .fluidInputs(
                 Materials.UUMatter.getFluid(1000000),
-                MaterialsTST.Axonium.getPlasma(36))
+                MaterialsTST.Axonium.getPlasma(18))
             .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
             .eut(RECIPE_UEV)
             .duration(20 * 10)
