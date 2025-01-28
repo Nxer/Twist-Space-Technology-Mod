@@ -41,7 +41,7 @@ import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
-import gregtech.api.objects.GTRenderedTexture;
+import gregtech.api.render.TextureFactory;
 import tectech.TecTech;
 import tectech.thing.gui.TecTechUITextures;
 import tectech.util.TTUtility;
@@ -113,12 +113,12 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGre
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, new GTRenderedTexture(EM_R_ACTIVE) };
+        return new ITexture[] { aBaseTexture, TextureFactory.of(EM_R_ACTIVE) };
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
-        return new ITexture[] { aBaseTexture, new GTRenderedTexture(EM_R) };
+        return new ITexture[] { aBaseTexture, TextureFactory.of(EM_R) };
     }
 
     @Override

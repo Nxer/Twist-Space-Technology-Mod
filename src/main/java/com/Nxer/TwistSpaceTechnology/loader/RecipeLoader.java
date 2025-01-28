@@ -94,9 +94,6 @@ public class RecipeLoader {
                 new NeutronActivatorWithEURecipePool().loadRecipes();
             }
         }
-        if (Config.Enable_IndustrialMagicMatrix) {
-            new IndustrialMagicMatrixRecipePool().loadRecipes();
-        }
         if (Config.Enable_MegaTreeFarm) {
             new AquaticZoneSimulatorFakeRecipe().loadRecipes();
         }
@@ -107,7 +104,6 @@ public class RecipeLoader {
 
     public static void loadRecipesPostInit() {
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
-        new IndustrialMagicMatrixRecipePool().loadRecipes();
     }
 
     public static boolean hasLoadedRecipesServerStarted = false;
@@ -121,6 +117,9 @@ public class RecipeLoader {
 
         new StellarForgeRecipePool().loadOnServerStarted();
         new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
+        if (Config.Enable_IndustrialMagicMatrix) {
+            new IndustrialMagicMatrixRecipePool().loadRecipes();
+        }
     }
 
     public static void loadRecipemixin() {
