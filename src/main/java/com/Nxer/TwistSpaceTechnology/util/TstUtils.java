@@ -1,5 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,9 +23,13 @@ import com.Nxer.TwistSpaceTechnology.common.api.IHasVariant;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasingBase;
 import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
 import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder_Basic;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
+import com.google.common.collect.Lists;
 
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.ITexture;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTUtility;
 
 /**
  * <h1>The Twist-Space-Technology Utilities.</h1>
@@ -363,4 +370,50 @@ public class TstUtils {
         return StatCollector.translateToLocal(key);
     }
 
+    /**
+     * Build the machine info data array.
+     *
+     * @param builder the builder that puts info into the list
+     * @return the built array of info data
+     */
+    public static String[] buildInfoData(Consumer<ArrayList<String>> builder) {
+        return buildInfoData(null, builder);
+    }
+
+    /**
+     * Build the machine info data array.
+     *
+     * @param superInfoData the info data array from parent
+     * @param builder       the builder that puts info into the list
+     * @return the built array of info data
+     * @see TST_BloodyHell#getInfoData() example
+     */
+    public static String[] buildInfoData(@Nullable String[] superInfoData, Consumer<ArrayList<String>> builder) {
+        ArrayList<String> ret = superInfoData != null ? Lists.newArrayList(superInfoData) : new ArrayList<>();
+        builder.accept(ret);
+        return ret.toArray(new String[0]);
+    }
+
+    /**
+     * Register the texture to GregTech {@link gregtech.api.enums.Textures.BlockIcons}.
+     *
+     * @param page    the texture pages index
+     * @param index   the texture index of the page
+     * @param texture the texture
+     */
+    public static void registerTexture(int page, int index, ITexture texture) {
+        GTUtility.addTexturePage((byte) page);
+        Textures.BlockIcons.setCasingTexture((byte) page, (byte) index, texture);
+    }
+
+    /**
+     * Get the global texture index of given page and index.
+     *
+     * @param page  the page index where the texture is
+     * @param index the index of the page where the texture is
+     * @return the calculated global texture index
+     */
+    public static int getTextureIndex(int page, int index) {
+        return 128 * page + index;
+    }
 }

@@ -9,10 +9,10 @@ import gregtech.api.util.GTLanguageManager;
 // spotless:off
 
 /**
- * Use {@link com.Nxer.TwistSpaceTechnology.util.TextEnums}
+ * Use #tr comments and {@link TstUtils#tr(String)}.
  * <p>See <a href="https://github.com/Nxer/Twist-Space-Technology-Mod/pull/284">This PR: Use a preprocessor to help complete the creation of language files</a>
  *
- * @deprecated You should put your localization texts inside the class where it is used, except the commonly used ones, see TextEnums for them.
+ * @deprecated You should put your localization texts inside the class where it is used, except the commonly used ones, see {@link TextEnums} and {@link TstSharedLocalization} for them.
  */
 @Deprecated
 public class TextLocalization {

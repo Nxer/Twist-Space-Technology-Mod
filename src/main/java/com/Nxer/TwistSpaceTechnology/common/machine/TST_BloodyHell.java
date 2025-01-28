@@ -49,9 +49,9 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
-import com.Nxer.TwistSpaceTechnology.util.InfoDataHelper;
 import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.dreammaster.block.BlockList;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -506,7 +506,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public String[] getInfoData() {
-        return InfoDataHelper.buildInfoData(super.getInfoData(), (info) -> {
+        return TstUtils.buildInfoData(super.getInfoData(), (info) -> {
             info.add(EnumChatFormatting.BLUE + "Structure Tier: " + EnumChatFormatting.GOLD + mTier);
             info.add(
                 EnumChatFormatting.BLUE + "Speed Rune Count: "

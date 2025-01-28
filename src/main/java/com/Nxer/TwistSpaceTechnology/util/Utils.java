@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.isInDevMode;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
 import java.lang.reflect.Array;
@@ -17,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -24,6 +24,12 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.metatileentity.MetaTileEntity;
 
+/**
+ * @deprecated see {@link TstUtils}, {@link gregtech.api.util.GTUtility} and other utility classes for better
+ *             resolution.
+ */
+@Deprecated
+@ApiStatus.ScheduledForRemoval
 public final class Utils {
 
     public static final double LOG2 = Math.log(2);
@@ -315,15 +321,6 @@ public final class Utils {
 
     public static <T> T withNull(T main, T instead) {
         return null == main ? instead : main;
-    }
-
-    @Deprecated
-    public static void debugLogInfo(String... strings) {
-        if (isInDevMode) {
-            for (String msg : strings) {
-                TwistSpaceTechnology.LOG.info(msg);
-            }
-        }
     }
 
     public static int safeInt(long number, int margin) {

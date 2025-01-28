@@ -12,7 +12,6 @@ import com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler;
 import com.Nxer.TwistSpaceTechnology.common.crop.CropLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.devTools.PathHelper;
 import com.Nxer.TwistSpaceTechnology.loader.LazyStaticsInitLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
@@ -38,22 +37,6 @@ import cpw.mods.fml.common.registry.EntityRegistry;
     dependencies = "required-before:gregtech; " + "before:dreamcraft;",
     acceptedMinecraftVersions = "[1.7.10]")
 public class TwistSpaceTechnology {
-
-    /**
-     * <li>The signal of whether in Development Mode.
-     * <li>Keep care to set 'false' when dev complete.
-     */
-    @Deprecated
-    public static final boolean isInDevMode = false;
-
-    /**
-     * The absolute Path of your workspace/resources folder.
-     * It will be replaced by {@link PathHelper#initResourceAbsolutePath}.
-     * If it not work correctly, please operate it manually and disable
-     * the{@link PathHelper#initResourceAbsolutePath}.
-     */
-    @Deprecated
-    public static String DevResource = "";
 
     public static final String MODID = Tags.MODID;
     public static final String MOD_ID = Tags.MODID;
