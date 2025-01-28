@@ -46,6 +46,7 @@ import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlaye
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -169,16 +170,30 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                         return CheckRecipeResultRegistry.SUCCESSFUL;
                     }
                 }
+
+                if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+
+                HashMap<Aspect, TileInfusionProvider> hatchMap = new HashMap<>();
+
+                aspectLoop: for (Aspect aspect : recipe1.getInputAspects()
+                    .getAspects()) {
+                    for (TileInfusionProvider hatch : mTileInfusionProvider) {
+                        if (hatch.doesContainerContainAmount(aspect, recipe1.getAspectAmount(aspect) * Para)) {
+                            hatchMap.put(aspect, hatch);
+                            continue aspectLoop;
+                        }
+                    }
+
+                    return Essentia_InsentiaL;
+                }
+
                 for (Aspect aspect : recipe1.getInputAspects()
                     .getAspects()) {
-                    if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-                    for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        if (hatch.takeFromContainer(aspect, recipe1.getAspectAmount(aspect) * Para)) {
-                            return CheckRecipeResultRegistry.SUCCESSFUL;
-                        } else return Essentia_InsentiaL;
-                    }
+                    hatchMap.get(aspect)
+                        .takeFromContainer(aspect, recipe1.getAspectAmount(aspect) * Para);
                 }
-                return CheckRecipeResultRegistry.NO_RECIPE;
+
+                return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
