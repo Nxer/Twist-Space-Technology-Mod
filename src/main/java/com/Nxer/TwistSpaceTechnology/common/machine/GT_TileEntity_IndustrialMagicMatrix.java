@@ -15,6 +15,7 @@ import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMatrixRecipeIndexKey;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -128,32 +130,53 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 int Para = createParallelHelper(recipe).setConsumption(false)
                     .build()
                     .getCurrentParallel();
-                for (TCRecipeTools.InfusionCraftingRecipe recipe1 : TCRecipeTools.ICR) {
-                    if (recipe1.getOutput()
-                        .isItemEqual(recipe.mOutputs[0])) {
-                        if (!(isResearchComplete(recipe1.getResearch()))) {
-                            return Research_not_completed;
-                        }
-                        if (!(getControllerSlot() == null)) {
-                            if (getControllerSlot().isItemEqual(EssentiaCell_Creative)
-                                || getControllerSlot().isItemEqual(ProofOfHeroes)) {
-                                return CheckRecipeResultRegistry.SUCCESSFUL;
-                            }
-                        }
-                        for (Aspect aspect : recipe1.getInputAspects()
-                            .getAspects()) {
-                            if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-                            for (TileInfusionProvider hatch : mTileInfusionProvider) {
 
-                                if (hatch.takeFromContainer(aspect, recipe1.getAspectAmount(aspect) * Para)) {
-                                    return CheckRecipeResultRegistry.SUCCESSFUL;
-                                } else return Essentia_InsentiaL;
-                            }
+                int recipeIndex = recipe.getMetadataOrDefault(IndustrialMagicMatrixRecipeIndexKey.INSTANCE, -1);
+                if (recipeIndex == -1) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
 
-                        }
+                TCRecipeTools.InfusionCraftingRecipe tcRecipe = TCRecipeTools.ICR.get(recipeIndex);
+
+                if (!tcRecipe.getOutput()
+                    .isItemEqual(recipe.mOutputs[0])) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+
+                if (!(isResearchComplete(tcRecipe.getResearch()))) {
+                    return Research_not_completed;
+                }
+
+                if (!(getControllerSlot() == null)) {
+                    if (getControllerSlot().isItemEqual(EssentiaCell_Creative)
+                        || getControllerSlot().isItemEqual(ProofOfHeroes)) {
+                        return CheckRecipeResultRegistry.SUCCESSFUL;
                     }
                 }
-                return CheckRecipeResultRegistry.NO_RECIPE;
+
+                if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+
+                HashMap<Aspect, TileInfusionProvider> hatchMap = new HashMap<>();
+
+                aspectLoop: for (Aspect aspect : tcRecipe.getInputAspects()
+                    .getAspects()) {
+                    for (TileInfusionProvider hatch : mTileInfusionProvider) {
+                        if (hatch.doesContainerContainAmount(aspect, tcRecipe.getAspectAmount(aspect) * Para)) {
+                            hatchMap.put(aspect, hatch);
+                            continue aspectLoop;
+                        }
+                    }
+
+                    return Essentia_InsentiaL;
+                }
+
+                for (Aspect aspect : tcRecipe.getInputAspects()
+                    .getAspects()) {
+                    hatchMap.get(aspect)
+                        .takeFromContainer(aspect, tcRecipe.getAspectAmount(aspect) * Para);
+                }
+
+                return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
