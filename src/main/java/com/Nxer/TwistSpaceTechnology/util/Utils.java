@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import static net.minecraft.util.StatCollector.translateToLocalFormatted;
-
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -297,11 +295,6 @@ public final class Utils {
 
     // endregion
 
-    // region About Text
-    public static String i18n(String key) {
-        return translateToLocalFormatted(key);
-    }
-
     /**
      * Send a string to player's chat area directly.
      */
@@ -313,7 +306,7 @@ public final class Utils {
 
     /**
      * Send localized message to player.
-     * 
+     *
      * @param player         the player
      * @param translationKey the message's localization key
      */
@@ -325,7 +318,7 @@ public final class Utils {
 
     /**
      * Send localized message to player.
-     * 
+     *
      * @param player         the player
      * @param translationKey the message's localization key
      * @param formatArgs     extra arguments

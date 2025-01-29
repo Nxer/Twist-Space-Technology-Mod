@@ -37,6 +37,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 
+import static net.minecraft.util.StatCollector.translateToLocalFormatted;
+
 /**
  * <h1>The Twist-Space-Technology Utilities.</h1>
  * <p>

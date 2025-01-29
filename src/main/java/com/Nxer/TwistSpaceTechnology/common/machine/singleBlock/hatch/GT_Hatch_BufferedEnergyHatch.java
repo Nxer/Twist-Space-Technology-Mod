@@ -4,6 +4,7 @@ import static gregtech.api.enums.GTValues.V;
 
 import java.util.List;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.internal.wrapper.BaseSlot;
@@ -49,7 +49,7 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
             aNameRegional,
             aTier,
             aInvSlotCount,
-            new String[] { Utils.i18n("BufferedEnergyHatch.Tooltips.01"), Utils.i18n("BufferedEnergyHatch.Tooltips.02"),
+            new String[] { TstUtils.tr("BufferedEnergyHatch.Tooltips.01"), TstUtils.tr("BufferedEnergyHatch.Tooltips.02"),
                 TextLocalization.ModNameDesc },
             aTextures);
     }
@@ -66,7 +66,7 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
         // #tr Slots
         // #en_US Slots
         // #zh_CN 格
-        desc[mDescriptionArray.length] = mInventory.length + " " + Utils.i18n("Slots");
+        desc[mDescriptionArray.length] = mInventory.length + " " + TstUtils.tr("Slots");
         return desc;
     }
 
