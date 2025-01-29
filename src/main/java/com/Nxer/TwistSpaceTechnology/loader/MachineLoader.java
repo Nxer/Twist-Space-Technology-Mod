@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_IndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaStoneBreaker;
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
@@ -41,6 +42,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
@@ -173,7 +175,7 @@ public class MachineLoader {
     public static ItemStack BloodyHell;
     public static ItemStack MegaStoneBreaer;
     public static ItemStack ManufacturingCenter;
-
+    public static ItemStack GiantVacuumDryingFurnace;
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
@@ -753,6 +755,16 @@ public class MachineLoader {
             GTCMItemList.IndustrialAlchemyTower.set(IndustrialAlchemyTower);
         }
 
+        // #tr NameGiantVacuumDryingFurnace
+        // # Giant Vacuum Drying Furnace
+        // #zh_CN 巨型真空干燥炉
+        if (Enable_GiantVacuumDryingFurnace) {
+            GiantVacuumDryingFurnace = new TST_GiantVacuumDryingFurnace(
+                19065,
+                "GiantVacuumDryingFurnace",
+                TextEnums.tr("NameGiantVacuumDryingFurnace")).getStackForm(1);
+            GTCMItemList.GiantVacuumDryingFurnace.set(GiantVacuumDryingFurnace);
+        }
         // endregion
 
         // region Single block Machine

@@ -8,6 +8,7 @@ import static thaumcraft.common.config.ConfigItems.itemEssence;
 import static thaumcraft.common.config.ConfigItems.itemJarNode;
 import static thaumcraft.common.config.ConfigItems.itemShard;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMatrixRecipeIndexKey;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -73,7 +75,9 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
         TCRecipeTools.getInfusionCraftingRecipe();
 
         final IRecipeMap IIM = GTCMRecipe.IndustrialMagicMatrixRecipe;
-        for (TCRecipeTools.InfusionCraftingRecipe Recipe : TCRecipeTools.ICR) {
+        ArrayList<TCRecipeTools.InfusionCraftingRecipe> icr = TCRecipeTools.ICR;
+        for (int i = 0; i < icr.size(); i++) {
+            TCRecipeTools.InfusionCraftingRecipe Recipe = icr.get(i);
             if (shouldSkip(
                 Recipe.getOutput()
                     .getItem()))
@@ -90,6 +94,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
                 .ignoreCollision()
                 .clearInvalid()
                 .special(Essence)
+                .metadata(IndustrialMagicMatrixRecipeIndexKey.INSTANCE, i)
                 .itemInputsUnified(checkInputSpecial(Recipe.getInputItem()))
                 .itemOutputs((Recipe.getOutput()))
                 .fluidInputs()

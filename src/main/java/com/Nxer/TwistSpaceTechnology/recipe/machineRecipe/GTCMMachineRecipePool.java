@@ -21,6 +21,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_ZPM;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrameComponent;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HighPowerRadiationProofCasing;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
@@ -127,7 +128,9 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotr
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_External;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Industrial_Arc_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Controller_IndustrialRockBreaker;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Controller_Vacuum_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GTPP_Casing_UHV;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GT_Dehydrator_ZPM;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Arc_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
@@ -912,6 +915,26 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .duration(20 * 600)
             .addTo(assembler);
 
+        // endregion
+
+        // region GiantVacuumDryingFurnace
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
+                Controller_Vacuum_Furnace.get(16),
+                GT_Dehydrator_ZPM.get(16),
+                ItemList.Robot_Arm_ZPM.get(16),
+                ItemList.Conveyor_Module_ZPM.get(16),
+                new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 32},
+                GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorZPM, 16),
+                GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 16)
+            )
+            .fluidInputs(Materials.Iridium.getMolten(144 * 32))
+            .itemOutputs(GiantVacuumDryingFurnace.get(1))
+            .noOptimize()
+            .eut(RECIPE_ZPM)
+            .duration(20 * 600)
+            .addTo(assembler);
         // endregion
 
         // region HolySeparator

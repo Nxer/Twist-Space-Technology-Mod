@@ -2709,5 +2709,6 @@ public class TextLocalization {
 
     // endregion
 
+
 }
 // spotless:on
