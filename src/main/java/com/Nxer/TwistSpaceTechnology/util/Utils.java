@@ -13,8 +13,12 @@ import java.util.Objects;
 import java.util.function.IntFunction;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -291,6 +295,40 @@ public final class Utils {
     // region About Text
     public static String i18n(String key) {
         return translateToLocalFormatted(key);
+    }
+
+    /**
+     * Send a string to player's chat area directly.
+     */
+    public static void sendTextToPlayer(EntityPlayer player, String text) {
+        if (player instanceof EntityPlayerMP && text != null) {
+            player.addChatComponentMessage(new ChatComponentText(text));
+        }
+    }
+
+    /**
+     * Send localized message to player.
+     * 
+     * @param player         the player
+     * @param translationKey the message's localization key
+     */
+    public static void sendMessageToPlayerLocalized(EntityPlayer player, String translationKey) {
+        if (player instanceof EntityPlayerMP && translationKey != null) {
+            player.addChatComponentMessage(new ChatComponentTranslation(translationKey));
+        }
+    }
+
+    /**
+     * Send localized message to player.
+     * 
+     * @param player         the player
+     * @param translationKey the message's localization key
+     * @param formatArgs     extra arguments
+     */
+    public static void sendMessageToPlayerLocalized(EntityPlayer player, String translationKey, Object... formatArgs) {
+        if (player instanceof EntityPlayerMP && translationKey != null) {
+            player.addChatComponentMessage(new ChatComponentTranslation(translationKey, formatArgs));
+        }
     }
 
     // endregion
