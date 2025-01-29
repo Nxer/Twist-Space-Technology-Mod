@@ -803,5 +803,6 @@ public class TextLocalization {
     public static final String NamesuperCleanRoom = texter("CleanRoom","NamesuperCleanRoom");
     // endregion
 
+
 }
 // spotless:on

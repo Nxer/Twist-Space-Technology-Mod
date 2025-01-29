@@ -1557,6 +1557,7 @@ Tooltip_MegaStoneBreaker_Hatch_0=§fLava Hatch:{GREEN\} Left§7 side of Structur
 Tooltip_MegaStoneBreaker_Hatch_1=§fWater Hatch:{GREEN\} Right§7 side of Structure
 tst.recipe.MegaStoneBreakerRecipes=Mega Stone Breaker
 NameMegaStoneBreaker=Silicon Rock Synthesizer
+
 Tooltip_SpaceScaler_09=T2 block unlock HIP Unit limitation, T3 block unlock Stabilized Black Hole limitation.
 GT5U.gui.text.SimpleShutDownReasons.NoEnoughCriticalPhotonInput=No Enough Critical Photon Input
 Tooltip_EcoSphereSimulator.0.13=Secondary recipes incomplete
@@ -1610,3 +1611,18 @@ tc.research_text.TST_ARCANE_HOLE=Block in the void
 tc.research_text.TST_ARCANE_HOLE.1=Can be used to replace the warded glass on both sides of industrial alchemy tower. Perhaps it's still a good building block?
 Tooltip_Channel_Helper=You can use the §9 channel:§echisel§7 to automatically convert chisel blocks when building, and you can see nei to preview the available blocks
 Tooltip_BloodOrbHatch_5=Deactivating the Hatch will refund the Life Essence back to the Blood Orb.
+NameGiantVacuumDryingFurnace=Giant Vacuum Drying Furnace
+Tooltip_GVDF_MachineType=Vacuum Furnace | Dehydrator
+Tooltip_GVDF_00=Controller block for the Giant Vacuum Drying Furnace
+Tooltip_GVDF_01=§9Harness the power of vacuum technology for industrial drying!!!
+Tooltip_GVDF_02=This machine consists of vacuum pump, main structure, drying tower three parts.
+Tooltip_GVDF_03=parallel = coil * piece * 32
+Tooltip_GVDF_04=Every additional voltage step reduces the time to 80%% of the original and The processing speed
+Tooltip_GVDF_04_1=The processing speed increases by 50%% for each step of the coil.
+Tooltip_GVDF_05=Switch modes using a screwdriver
+Tooltip_GVDF_06=Every additional voltage step reduces the time to 80%% of the original
+Tooltip_GVDF_07=Would anyone really need this machine to handle space ice cream?
+Tooltip_GVDF_HatchInfo=The input and output hatches/buses must be placed in the main frame.
+Tooltip_GVDF_EnergyHatch=Energy Hatch must be placed in the main frame.
+
+Tooltip_GVDF_HatchBusInfo=The input and output hatches/buses must be placed in the main frame.

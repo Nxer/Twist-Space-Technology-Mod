@@ -215,7 +215,6 @@ public enum GTCMItemList {
     // endregion
 
     // region Machines
-
     IntensifyChemicalDistorter,
     PreciseHighEnergyPhotonicQuantumMaster,
     MiracleTop,
@@ -273,7 +272,7 @@ public enum GTCMItemList {
     MegaStoneBreaker,
     ManufacturingCenter,
     IndustrialAlchemyTower,
-
+    GiantVacuumDryingFurnace,
     // endregion
 
     // region Modularized Machines
