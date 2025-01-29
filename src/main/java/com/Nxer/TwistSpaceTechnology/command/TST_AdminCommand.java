@@ -17,6 +17,7 @@ import net.minecraft.util.EnumChatFormatting;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 
 public class TST_AdminCommand extends CommandBase implements IDSP_IO {
 
@@ -53,7 +54,7 @@ public class TST_AdminCommand extends CommandBase implements IDSP_IO {
                 // check
                 if (args.length < 3) {
                     // spotless:off
-                    sender.addChatMessage(CommandCommonText.invalidCommand());
+                    sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
                     sender.addChatMessage(
                         new ChatComponentText(
                             "↓ Use this to join " + EnumChatFormatting.AQUA + "User1" + EnumChatFormatting.RESET + " to " + EnumChatFormatting.AQUA + "User2" + EnumChatFormatting.RESET + " team ↓"));
@@ -67,7 +68,7 @@ public class TST_AdminCommand extends CommandBase implements IDSP_IO {
                 String waitJoinID = args[1];
                 String toJoinID = args[2];
                 if (waitJoinID.isEmpty() || toJoinID.isEmpty()) {
-                    sender.addChatMessage(CommandCommonText.invalidCommand());
+                    sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
                     break;
                 }
                 joinUserTeam(waitJoinID, toJoinID);
@@ -180,7 +181,7 @@ public class TST_AdminCommand extends CommandBase implements IDSP_IO {
                 // check
                 if (args.length < 2) {
                     // spotless:off
-                    sender.addChatMessage(CommandCommonText.invalidCommand());
+                    sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
                     sender.addChatMessage(
                         new ChatComponentText(
                             "↓ Use this to set Dyson Sphere Solar Sail " + EnumChatFormatting.GREEN + "amount" + EnumChatFormatting.RESET + " of you or your " + EnumChatFormatting.AQUA + "team" + EnumChatFormatting.RESET + " in current galaxy or in " +EnumChatFormatting.AQUA + " dimension's galaxy " +EnumChatFormatting.RESET+ "↓"));
@@ -199,7 +200,7 @@ public class TST_AdminCommand extends CommandBase implements IDSP_IO {
                 try {
                     solarSail = Long.parseLong(args[1]);
                 } catch (NumberFormatException e) {
-                    sender.addChatMessage(CommandCommonText.formatError());
+                    sender.addChatMessage(TstSharedLocalization.Command.formatError());
                     break;
                 }
 
@@ -218,7 +219,7 @@ public class TST_AdminCommand extends CommandBase implements IDSP_IO {
                     try {
                         dimID = Integer.parseInt(args[2]);
                     } catch (NumberFormatException e) {
-                        sender.addChatMessage(CommandCommonText.formatError());
+                        sender.addChatMessage(TstSharedLocalization.Command.formatError());
                         break;
                     }
                 } else {
@@ -226,7 +227,7 @@ public class TST_AdminCommand extends CommandBase implements IDSP_IO {
                         dimID = Integer.parseInt(args[2]);
                         teamName = args[3];
                     } catch (NumberFormatException e) {
-                        sender.addChatMessage(CommandCommonText.formatError());
+                        sender.addChatMessage(TstSharedLocalization.Command.formatError());
                         break;
                     }
                 }
@@ -268,7 +269,7 @@ public class TST_AdminCommand extends CommandBase implements IDSP_IO {
             }
 
             default -> {
-                sender.addChatMessage(CommandCommonText.invalidCommand());
+                sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
             }
         }
 

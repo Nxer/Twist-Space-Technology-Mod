@@ -17,6 +17,7 @@ import net.minecraft.util.EnumChatFormatting;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 
 public final class TST_Command extends CommandBase implements IDSP_IO {
 
@@ -53,7 +54,7 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                 // check
                 if (args.length < 3) {
                     // spotless:off
-                    sender.addChatMessage(CommandCommonText.invalidCommand());
+                    sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
                     sender.addChatMessage(
                         new ChatComponentText(
                             "↓ Use this to join " + EnumChatFormatting.AQUA + "User1" + EnumChatFormatting.RESET + " to " + EnumChatFormatting.AQUA + "User2" + EnumChatFormatting.RESET + " team ↓"));
@@ -67,7 +68,7 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                 String waitJoinID = args[1];
                 String toJoinID = args[2];
                 if (waitJoinID.isEmpty() || toJoinID.isEmpty()) {
-                    sender.addChatMessage(CommandCommonText.invalidCommand());
+                    sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
                     break;
                 }
                 joinUserTeam(waitJoinID, toJoinID);
@@ -190,7 +191,7 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
             }
 
             default -> {
-                sender.addChatMessage(CommandCommonText.invalidCommand());
+                sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
             }
         }
     }
