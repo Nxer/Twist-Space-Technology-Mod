@@ -46,6 +46,7 @@ import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlaye
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -169,16 +170,30 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                         return CheckRecipeResultRegistry.SUCCESSFUL;
                     }
                 }
-                for (Aspect aspect : recipe1.getInputAspects()
-                    .getAspects()) {
-                    if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-                    for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        if (hatch.takeFromContainer(aspect, recipe1.getAspectAmount(aspect) * Para)) {
-                            return CheckRecipeResultRegistry.SUCCESSFUL;
-                        } else return Essentia_InsentiaL;
-                    }
+
+                AspectList aspects = recipe1.getInputAspects();
+                if (aspects.visSize() == 0) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
-                return CheckRecipeResultRegistry.NO_RECIPE;
+                if (mTileInfusionProvider.isEmpty()) {
+                    return Essentia_InsentiaL;
+                }
+                HashMap<Aspect, TileInfusionProvider> hatchMap = new HashMap<>();
+                aspectLoop: for (Aspect aspect : aspects.getAspects()) {
+                    for (TileInfusionProvider hatch : mTileInfusionProvider) {
+                        if (hatch.doesContainerContainAmount(aspect, aspects.getAmount(aspect) * Para)) {
+                            hatchMap.put(aspect, hatch);
+                            continue aspectLoop;
+                        }
+                    }
+                    return Essentia_InsentiaL;
+                }
+                for (Aspect aspect : aspects.getAspects()) {
+                    hatchMap.get(aspect)
+                        .takeFromContainer(aspect, aspects.getAmount(aspect) * Para);
+                }
+
+                return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
