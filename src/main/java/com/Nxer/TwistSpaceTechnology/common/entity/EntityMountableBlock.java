@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.entity;
 
-import static com.Nxer.TwistSpaceTechnology.client.Sound.SoundLoader.BGM;
+import static com.Nxer.TwistSpaceTechnology.client.sound.SoundLoader.BGM;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;

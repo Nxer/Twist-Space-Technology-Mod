@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.client.Sound;
+package com.Nxer.TwistSpaceTechnology.client.sound;
 
 import net.minecraft.util.ResourceLocation;
 
