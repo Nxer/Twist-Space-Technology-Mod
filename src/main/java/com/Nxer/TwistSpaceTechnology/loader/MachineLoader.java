@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelCont
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
@@ -101,6 +100,7 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_Stra
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 @SuppressWarnings("deprecation") // ignore deprecation for TextLocalization
 public class MachineLoader {
@@ -404,7 +404,8 @@ public class MachineLoader {
         GTCMItemList.LargeIndustrialCokingFactory.set(LargeIndustrialCokingFactory);
 
         //
-        ElvenWorkshop = new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", TextLocalization.NameElvenWorkshop).getStackForm(1);
+        ElvenWorkshop = new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", TextLocalization.NameElvenWorkshop)
+            .getStackForm(1);
         GTCMItemList.ElvenWorkshop.set(ElvenWorkshop);
 
         //
