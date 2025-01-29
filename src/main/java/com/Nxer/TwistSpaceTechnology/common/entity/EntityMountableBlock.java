@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
-import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
+import com.Nxer.TwistSpaceTechnology.client.audio.Sound;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 

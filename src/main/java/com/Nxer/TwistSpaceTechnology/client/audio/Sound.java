@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.client.Audio;
+package com.Nxer.TwistSpaceTechnology.client.audio;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
