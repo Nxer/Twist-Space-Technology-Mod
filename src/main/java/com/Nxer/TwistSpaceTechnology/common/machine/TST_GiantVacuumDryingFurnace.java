@@ -116,8 +116,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         onModeChangeByScrewdriver(side, aPlayer, aX, aY, aZ);
     }
 
@@ -564,51 +563,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             .pow(SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace, GTUtility.getTier(this.getMaxInputEu())))
             / (getCoilTier() * SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace);
 
-        return true;
-    }
-
-    /**
-     * Gets the maximum Efficiency that spare Part can get (0 - 10000)
-     *
-     * @param aStack
-     */
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    /**
-     * Gets the damage to the ItemStack, usually 0 or 1.
-     *
-     * @param aStack
-     */
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    /**
-     * If it explodes when the Component has to be replaced.
-     *
-     * @param aStack
-     */
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
         return true;
     }
 
