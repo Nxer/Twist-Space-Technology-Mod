@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.crop;
+package com.Nxer.TwistSpaceTechnology.common.ic2Crop;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import ic2.api.crops.CropCard;
 import ic2.api.crops.ICropTile;
 import speiger.src.crops.api.ICropCardInfo;
 
-public abstract class BasicGTCMCrop extends CropCard implements ICropCardInfo {
+public abstract class AbstractTstCrop extends CropCard implements ICropCardInfo {
 
     @SideOnly(Side.CLIENT)
     public void registerSprites(IIconRegister iconRegister) {

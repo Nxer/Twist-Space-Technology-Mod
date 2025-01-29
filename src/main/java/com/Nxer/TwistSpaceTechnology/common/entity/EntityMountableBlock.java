@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.Entity;
+package com.Nxer.TwistSpaceTechnology.common.entity;
 
 import static com.Nxer.TwistSpaceTechnology.client.Sound.SoundLoader.BGM;
 

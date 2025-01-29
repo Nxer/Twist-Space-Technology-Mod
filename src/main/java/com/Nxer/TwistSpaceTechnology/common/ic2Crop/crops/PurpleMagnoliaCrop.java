@@ -1,13 +1,13 @@
-package com.Nxer.TwistSpaceTechnology.common.crop.crops;
+package com.Nxer.TwistSpaceTechnology.common.ic2Crop.crops;
 
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.crop.BasicGTCMCrop;
+import com.Nxer.TwistSpaceTechnology.common.ic2Crop.AbstractTstCrop;
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 
 import ic2.api.crops.ICropTile;
 
-public class PurpleMagnoliaCrop extends BasicGTCMCrop {
+public class PurpleMagnoliaCrop extends AbstractTstCrop {
 
     public PurpleMagnoliaCrop() {
         super();
