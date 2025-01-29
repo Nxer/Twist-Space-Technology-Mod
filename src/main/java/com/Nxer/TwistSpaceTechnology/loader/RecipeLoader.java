@@ -27,7 +27,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BloodyHellRec
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystallineInfinitierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DeployedNanoCoreRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DragonBloodRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.ElvenWorkshopRecipePool;
@@ -45,11 +44,13 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StarKernelFor
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarMaterialSiphonRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CentrifugeRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ChemicalBathRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ChemicalReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CircuitAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CokingFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CompressorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.DistillationRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ElectricImplosionCompressorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ExtractorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidHeaterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FusionReactorRecipePool;
@@ -79,7 +80,7 @@ public class RecipeLoader {
          *      Recipes of TST machines, items in assembler, assemblyLine and so on. Among them, machine related
          *      upgrade blocks and items with a large number of upgrades are separately separated from Single ones.
          *      When using Config, do not include everything and only activate the controller for Config.
-         * @see com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleBlockRecipes
+         * @see com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes
          *      Recipes of blocks borrowed from GT, TT or block added by TST that have weak correlation with the main
          *      machine host recipes.
          * @see com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original
@@ -110,7 +111,8 @@ public class RecipeLoader {
             new ExtractorRecipePool(), new CompressorRecipePool(), new LanthanidesRecipePool(),
             new CentrifugeRecipePool(), new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(),
             new NanoForgeRecipePool(), new FluidHeaterRecipePool(), new ParticleColliderRecipePool(),
-            new DragonBloodRecipe(), new FusionReactorRecipePool(), new SpaceAssemblerRecipePool(), new TCRecipePool(),
+            new FusionReactorRecipePool(), new SpaceAssemblerRecipePool(), new TCRecipePool(),
+            new ElectricImplosionCompressorRecipePool(), new ChemicalBathRecipePool(),
             // TST Recipe Map
             new IntensifyChemicalDistorterRecipePool(), new PreciseHighEnergyPhotonicQuantumMasterRecipePool(),
             new MiracleTopRecipePool(), new CrystallineInfinitierRecipePool(), new DSPRecipePool(),

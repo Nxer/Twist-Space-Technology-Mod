@@ -767,7 +767,7 @@ public class SingleBlockRecipes implements IRecipePool {
                 GTCMItemList.UltimateEnergyFlowCircuit.get(16),
                 ItemList.ZPM4.get(1),
 
-                GTOreDictUnificator.get(OrePrefixes.plateSuperdense,MaterialsUEVplus.TranscendentMetal,64),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense,MaterialsUEVplus.ProtoHalkonite,64),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense,MaterialsUEVplus.Creon,64),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense,MaterialsUEVplus.Mellion,64),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense,Materials.Infinity,64),
@@ -807,7 +807,7 @@ public class SingleBlockRecipes implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense,MaterialsUEVplus.SixPhasedCopper,64),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense,MaterialsUEVplus.WhiteDwarfMatter,64),
                 GTOreDictUnificator.get(OrePrefixes.plateSuperdense,MaterialsUEVplus.BlackDwarfMatter,64),
-                GTOreDictUnificator.get(OrePrefixes.plateSuperdense,MaterialsUEVplus.ProtoHalkonite,64),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense,MaterialsUEVplus.TranscendentMetal,64)
             },
             new FluidStack[] {
                 new FluidStack(MaterialMisc.MUTATED_LIVING_SOLDER.generateFluid(), 144 * 256),

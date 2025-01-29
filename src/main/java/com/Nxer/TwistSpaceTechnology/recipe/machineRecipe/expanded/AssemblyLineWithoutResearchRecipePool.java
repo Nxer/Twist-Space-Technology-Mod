@@ -8,7 +8,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
-import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static com.google.common.math.LongMath.pow;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GalaxySpace;
@@ -20,7 +19,6 @@ import static gregtech.api.enums.Mods.SuperSolarPanels;
 import static gregtech.api.util.GTModHandler.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.MINUTES;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
-import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +36,7 @@ import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import bartworks.system.material.WerkstoffLoader;
+import galaxyspace.core.register.GSItems;
 import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GTValues;
@@ -48,13 +47,12 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeBuilder;
 import gregtech.api.util.GTUtility;
+import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
-import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.LanthItemList;
 import tectech.thing.CustomItemList;
@@ -238,10 +236,6 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
         // GTNH Lanthanides Focus Manipulation Casing and Target Receptacle Casing
         {
             TST_RecipeBuilder.builder()
-                .fluidInputs(
-                    Materials.SolderingAlloy.getMolten(8000),
-                    Materials.Gold.getMolten(2000),
-                    Materials.Argon.getGas(1000))
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(1),
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
@@ -250,16 +244,16 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Conveyor_Module_LuV.get(2),
                     GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 32),
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
+                .fluidInputs(
+                    Materials.SolderingAlloy.getMolten(8000),
+                    Materials.Gold.getMolten(2000),
+                    Materials.Argon.getGas(1000))
                 .itemOutputs(new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING))
                 .duration(60 * GTRecipeBuilder.SECONDS)
                 .eut(TierEU.RECIPE_LuV)
                 .addTo(MASL);
 
             TST_RecipeBuilder.builder()
-                .fluidInputs(
-                    Materials.SolderingAlloy.getMolten(8000),
-                    Materials.Gold.getMolten(2000),
-                    Materials.Argon.getGas(1000))
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(2),
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
@@ -267,6 +261,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Robot_Arm_LuV.get(4),
                     GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 16),
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
+                .fluidInputs(
+                    Materials.SolderingAlloy.getMolten(8000),
+                    Materials.Gold.getMolten(2000),
+                    Materials.Argon.getGas(1000))
                 .itemOutputs(new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING))
                 .duration(60 * GTRecipeBuilder.SECONDS)
                 .eut(TierEU.RECIPE_LuV)
@@ -284,8 +282,8 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Circuit_Wafer_QPIC.get(32),
                     ItemList.Emitter_UMV.get(4),
                     ItemList.Sensor_UMV.get(4))
-                .fluidInputs(new FluidStack(solderUEV, 144 * 256))
-                .itemOutputs(setStackSize(GTModHandler.getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1), 8192))
+                .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 256))
+                .itemOutputs(new ItemStack(GSItems.DysonSwarmItems, 8192))
                 .eut(100000000)
                 .duration(20 * 50)
                 .addTo(MASL);
@@ -309,7 +307,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     getModItem(NewHorizonsCoreMod.ID, "item.PicoWafer", 1, 0))
                 .fluidInputs(
                     WerkstoffLoader.Oganesson.getFluidOrGas(1000),
-                    new FluidStack(solderUEV, 576),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(576),
                     Materials.NaquadahEnriched.getMolten(288L))
                 .itemOutputs(ItemList.Casing_Dim_Injector.get(1))
                 .eut(32_000_000)
@@ -326,7 +324,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1))
                 .fluidInputs(
                     WerkstoffLoader.Oganesson.getFluidOrGas(500),
-                    new FluidStack(solderUEV, 288),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(288),
                     Materials.NaquadahEnriched.getMolten(144L))
                 .itemOutputs(ItemList.Casing_Dim_Trans.get(1))
                 .eut(32_000_000)
@@ -469,7 +467,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     setStackSize(ItemList.Electric_Pump_UXV.get(1), 128),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 32))
                 .itemOutputs(CustomItemList.eM_energyTunnel8_UXV.get(1))
-                .fluidInputs(new FluidStack(solderUEV, 1_296 * 64 * 4))
+                .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(1_296 * 64 * 4))
                 .duration(106 * MINUTES + 40 * SECONDS)
                 .eut(RECIPE_UXV)
                 .addTo(MASL);
@@ -484,7 +482,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     setStackSize(ItemList.Electric_Pump_UXV.get(1), 128),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 32))
                 .itemOutputs(CustomItemList.eM_dynamoTunnel8_UXV.get(1))
-                .fluidInputs(new FluidStack(solderUEV, 1_296 * 64 * 4))
+                .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(1_296 * 64 * 4))
                 .duration(106 * MINUTES + 40 * SECONDS)
                 .eut(RECIPE_UXV)
                 .addTo(MASL);
@@ -499,7 +497,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     setStackSize(ItemList.Electric_Pump_UXV.get(1), 256),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 64))
                 .itemOutputs(CustomItemList.eM_energyTunnel9_UXV.get(1))
-                .fluidInputs(new FluidStack(solderUEV, 1_296 * 128 * 4))
+                .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(1_296 * 128 * 4))
                 .duration(213 * MINUTES + 20 * SECONDS)
                 .eut(RECIPE_UXV)
                 .addTo(MASL);
@@ -514,7 +512,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     setStackSize(ItemList.Electric_Pump_UXV.get(1), 256),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 64))
                 .itemOutputs(CustomItemList.eM_dynamoTunnel9_UXV.get(1))
-                .fluidInputs(new FluidStack(solderUEV, 1_296 * 128 * 4))
+                .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(1_296 * 128 * 4))
                 .duration(213 * MINUTES + 20 * SECONDS)
                 .eut(RECIPE_UXV)
                 .addTo(MASL);
@@ -557,7 +555,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GGMaterial.shirabon.get(OrePrefixes.bolt, 2),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
                 .fluidInputs(
-                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 20),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 20),
                     MaterialsUEVplus.Space.getMolten(144 * 10),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(CustomItemList.SpacetimeCompressionFieldGeneratorTier0.get(1))
@@ -580,7 +578,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 2),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
                 .fluidInputs(
-                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 40),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 40),
                     MaterialsUEVplus.Space.getMolten(144 * 20),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(CustomItemList.SpacetimeCompressionFieldGeneratorTier1.get(1))
@@ -603,7 +601,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 8),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
                 .fluidInputs(
-                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 80),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 80),
                     MaterialsUEVplus.Space.getMolten(144 * 30),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(CustomItemList.SpacetimeCompressionFieldGeneratorTier2.get(1))
@@ -626,7 +624,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.WhiteDwarfMatter, 32),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2))
                 .fluidInputs(
-                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 160),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 160),
                     MaterialsUEVplus.Space.getMolten(144 * 40),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(CustomItemList.SpacetimeCompressionFieldGeneratorTier3.get(1))
@@ -649,7 +647,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 2),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2))
                 .fluidInputs(
-                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 320),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 320),
                     MaterialsUEVplus.Space.getMolten(144 * 50),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(CustomItemList.SpacetimeCompressionFieldGeneratorTier4.get(1))
@@ -672,7 +670,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 8),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 2))
                 .fluidInputs(
-                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 640),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 640),
                     MaterialsUEVplus.Space.getMolten(144 * 60),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(CustomItemList.SpacetimeCompressionFieldGeneratorTier5.get(1))
@@ -695,7 +693,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.BlackDwarfMatter, 32),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 3))
                 .fluidInputs(
-                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 1280),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 1280),
                     MaterialsUEVplus.Space.getMolten(144 * 70),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(CustomItemList.SpacetimeCompressionFieldGeneratorTier6.get(1))
@@ -719,7 +717,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                         .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 2),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 3))
                 .fluidInputs(
-                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 2560),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 2560),
                     MaterialsUEVplus.Space.getMolten(144 * 80),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(CustomItemList.SpacetimeCompressionFieldGeneratorTier7.get(1))
@@ -743,7 +741,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                         .get(OrePrefixes.bolt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 8),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 3))
                 .fluidInputs(
-                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 5120),
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 5120),
                     MaterialsUEVplus.Space.getMolten(144 * 90),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(CustomItemList.SpacetimeCompressionFieldGeneratorTier8.get(1))
@@ -820,7 +818,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             GTOreDictUnificator
                                 .get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, (absoluteTier + 1) * 4))
                         .fluidInputs(
-                            MUTATED_LIVING_SOLDER.getFluidStack((int) (2_880 * pow(2, absoluteTier))),
+                            MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack((int) (2_880 * pow(2, absoluteTier))),
                             MaterialsUEVplus.Time.getMolten(1_440 * (absoluteTier + 1)),
                             MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                         .itemOutputs(researchStuff[absoluteTier + 1])
@@ -911,7 +909,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             GTOreDictUnificator
                                 .get(OrePrefixes.gearGtSmall, MaterialsUEVplus.SpaceTime, absoluteTier + 1))
                         .fluidInputs(
-                            MUTATED_LIVING_SOLDER.getFluidStack((int) (2_880 * pow(2, absoluteTier))),
+                            MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack((int) (2_880 * pow(2, absoluteTier))),
                             MaterialsUEVplus.Time.getMolten(1_440 * (absoluteTier + 1)),
                             MaterialsUEVplus.Space.getMolten(1_440 * (absoluteTier + 1)),
                             MaterialsUEVplus.SpaceTime.getMolten(144 * 10))

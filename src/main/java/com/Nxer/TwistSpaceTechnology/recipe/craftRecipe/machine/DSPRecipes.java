@@ -144,7 +144,7 @@ public class DSPRecipes implements IRecipePool {
                     MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter,
                     64) },
             new FluidStack[] { MaterialsUEVplus.SpaceTime.getMolten(144 * 262144),
-                MaterialsUEVplus.Antimatter.getFluid(144 * 262144),
+                MaterialsUEVplus.Antimatter.getFluid(144 * 65536),
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(1000 * 65536),
                 MaterialsUEVplus.PhononMedium.getFluid(1000 * 65536) },
             GTCMItemList.ArtificialStar.get(1),

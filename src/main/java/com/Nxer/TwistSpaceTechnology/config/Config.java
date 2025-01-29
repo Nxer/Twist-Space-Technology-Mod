@@ -199,7 +199,7 @@ public class Config {
     // region Holy Separator
     public static byte Mode_Default_HolySeparator = 0;
     public static int Piece_EnablePerfectOverclock_HolySeparator = 16;
-    public static int ParallelPerPiece_HolySeparator = 8;
+    public static int ParallelPerPiece_HolySeparator = 64;
     public static float SpeedBonus_MultiplyPerTier_HolySeparator = 0.9F;
     // endregion
 

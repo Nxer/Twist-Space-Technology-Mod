@@ -1324,13 +1324,13 @@ public class SingleMachineRecipes implements IRecipePool {
                 new ItemStack(BlockExtremeAutoCrafter.instance,64),
 
                 GregtechItemList.Controller_MolecularTransformer.get(4),
-                ItemRefer.HiC_T5.get(16),
                 ItemList.Field_Generator_UIV.get(4),
-                GTCMItemList.WirelessUpdateItem.get(4)},
+                ItemList.Robot_Arm_UIV.get(8),
+                ItemRefer.HiC_T5.get(16),},
             new FluidStack[] {
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 64),
-                MaterialPool.ConcentratedUUMatter.getFluidOrGas(40),
+                MaterialsUEVplus.SpaceTime.getMolten(144 * 16),
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(20),
                 Materials.Hydrogen.getPlasma(1000 * 4000)},
             GTCMItemList.ExtremeCraftCenter.get(1),
             20 * 1800,

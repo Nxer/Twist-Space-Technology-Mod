@@ -1,12 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HarmoniousWirelessEnergyHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeEV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeHV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeIV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeLV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeLuV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeMAX;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeMV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUEV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUHV;
@@ -22,7 +20,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
@@ -31,7 +28,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
-import static gregtech.api.enums.ItemList.ZPM6;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
@@ -41,9 +37,7 @@ import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
@@ -403,41 +397,41 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipes implements IRecipePoo
 
         // Upgrade MAX
         // TODO -- Temporarily, be revised in the next version
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                PhotonControllerUpgradeUXV.get(1),
-                SpaceWarper.get(64),
-                HarmoniousWirelessEnergyHatch.get(2),
-                CustomItemList.EOH_Infinite_Energy_Casing.get(64),
-
-                ItemList.Emitter_MAX.get(64),
-                GTCMItemList.GravitationalLens.get(64),
-                ItemList.EnergisedTesseract.get(64),
-                ItemList.Field_Generator_MAX.get(32),
-
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 32),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsTST.Axonium, 64),
-
-                MaterialsUEVplus.MagMatter.getNanite(64),
-                ZPM6.get(4),
-                ItemList.Timepiece.get(4),
-                CustomItemList.EOH_Reinforced_Temporal_Casing.get(64))
-            .fluidInputs(
-                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(65536 * 144),
-                MaterialsUEVplus.QuarkGluonPlasma.getFluid(4096 * 1000),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(65536 * 1000),
-                MaterialsUEVplus.Time.getMolten(144 * 64 * 512),
-
-                MaterialsUEVplus.Universium.getMolten(144 * 8192),
-                MaterialsUEVplus.Eternity.getMolten(144 * 8192),
-                MaterialsUEVplus.PrimordialMatter.getFluid(144 * 8192),
-                Materials.Tritanium.getPlasma(144 * 8192))
-            .itemOutputs(PhotonControllerUpgradeMAX.get(1))
-            .eut(RECIPE_MAX)
-            .duration(20 * 20480)
-            .addTo(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes);
+//        GTValues.RA.stdBuilder()
+//            .itemInputs(
+//                PhotonControllerUpgradeUXV.get(1),
+//                SpaceWarper.get(64),
+//                HarmoniousWirelessEnergyHatch.get(2),
+//                CustomItemList.EOH_Infinite_Energy_Casing.get(64),
+//
+//                ItemList.Emitter_MAX.get(64),
+//                GTCMItemList.GravitationalLens.get(64),
+//                ItemList.EnergisedTesseract.get(64),
+//                ItemList.Field_Generator_MAX.get(32),
+//
+//                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 32),
+//                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
+//                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
+//                GTOreDictUnificator.get(OrePrefixes.wireGt16, MaterialsTST.Axonium, 64),
+//
+//                MaterialsUEVplus.MagMatter.getNanite(64),
+//                ZPM6.get(4),
+//                ItemList.Timepiece.get(4),
+//                CustomItemList.EOH_Reinforced_Temporal_Casing.get(64))
+//            .fluidInputs(
+//                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(65536 * 144),
+//                MaterialsUEVplus.QuarkGluonPlasma.getFluid(4096 * 1000),
+//                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(65536 * 1000),
+//                MaterialsUEVplus.Time.getMolten(144 * 64 * 512),
+//
+//                MaterialsUEVplus.Universium.getMolten(144 * 8192),
+//                MaterialsUEVplus.Eternity.getMolten(144 * 8192),
+//                MaterialsUEVplus.PrimordialMatter.getFluid(144 * 8192),
+//                Materials.Tritanium.getPlasma(144 * 8192))
+//            .itemOutputs(PhotonControllerUpgradeMAX.get(1))
+//            .eut(RECIPE_MAX)
+//            .duration(20 * 20480)
+//            .addTo(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes);
 
     }
     // spotless:on
