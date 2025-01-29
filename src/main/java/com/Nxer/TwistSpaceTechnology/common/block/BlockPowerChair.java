@@ -17,8 +17,8 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import com.Nxer.TwistSpaceTechnology.client.audio.Sound;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.client.audio.Sound;
 import com.Nxer.TwistSpaceTechnology.common.entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
