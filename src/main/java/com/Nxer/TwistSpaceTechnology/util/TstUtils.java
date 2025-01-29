@@ -1,13 +1,19 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -20,9 +26,9 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariant;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.MetaBlockCasingBase;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.MetaBlockBase;
-import com.Nxer.TwistSpaceTechnology.common.item.itemAdders.ItemAdder_Basic;
+import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
+import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.AbstractTstMetaBlockCasing;
+import com.Nxer.TwistSpaceTechnology.common.item.AbstractTstMetaItem;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
 import com.google.common.collect.Lists;
 
@@ -47,7 +53,7 @@ import gregtech.api.util.GTUtility;
  * For example, {@code newVariantItemUnsafe} that accepts an {@code Item} but requires it to implement
  * {@code IHasVariant}.<br>
  * But since it is very unsafe to do so, we can add more functions with more exact types, like using
- * {@link MetaBlockBase} to make sure it implements {@link IHasTooltips}.
+ * {@link AbstractTstMetaBlock} to make sure it implements {@link IHasTooltips}.
  * </li>
  * <li>
  * <b>(Legacy Names)</b> Functions moved from other places are allowed to be named as before, like {@link #tr(String)}.
@@ -179,32 +185,32 @@ public class TstUtils {
      * <p>
      * <b>UNSAFE</b>: It is caller's responsibility to check if the block supports meta values.
      * <p>
-     * I'd recommend you to {@code extends} {@link MetaBlockBase} to mark it as meta block.
+     * I'd recommend you to {@code extends} {@link AbstractTstMetaBlock} to mark it as meta block.
      *
      * @param blockMeta the meta block
      * @param meta      the meta
      * @return the copy of the instance of the meta block.
-     * @see #newMetaBlockItemStack(MetaBlockBase, int)
-     * @see #newMetaBlockItemStack(MetaBlockBase, int, String[])
+     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int)
+     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int, String[])
      */
     public static ItemStack newMetaBlockItemStackUnsafe(Block blockMeta, int meta) {
         return newMetaBlockItemStackUnsafe(blockMeta, meta, null);
     }
 
     /**
-     * Register the tooltips of the {@link MetaBlockBase}, and return a copy of the instance of the block.
+     * Register the tooltips of the {@link AbstractTstMetaBlock}, and return a copy of the instance of the block.
      * <p>
      * <b>UNSAFE</b>: It is caller's responsibility to check if the block supports meta values and tooltips.
      * <p>
-     * I'd recommend you to {@code extends} {@link MetaBlockBase} to mark it as meta block.
+     * I'd recommend you to {@code extends} {@link AbstractTstMetaBlock} to mark it as meta block.
      *
      * @param blockMeta the meta block that must implement {@link IHasTooltips}
      * @param meta      the meta
      * @param tooltips  the tooltips (optional)
      * @return the copy of the instance of the meta block.
      * @throws IllegalArgumentException if tooltips is provided, but the block doesn't implement {@link IHasTooltips}.
-     * @see #newMetaBlockItemStack(MetaBlockBase, int)
-     * @see #newMetaBlockItemStack(MetaBlockBase, int, String[])
+     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int)
+     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int, String[])
      */
     public static ItemStack newMetaBlockItemStackUnsafe(Block blockMeta, int meta, @Nullable String[] tooltips)
         throws IllegalArgumentException {
@@ -223,35 +229,62 @@ public class TstUtils {
      * @param meta      the meta
      * @return the copy of the instance of the meta block.
      */
-    public static ItemStack newMetaBlockItemStack(MetaBlockBase blockMeta, int meta) {
+    public static ItemStack newMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta) {
         return newMetaBlockItemStackUnsafe(blockMeta, meta);
     }
 
     /**
-     * Register the tooltips of the {@link MetaBlockBase}, and return a copy of the instance of the block.
+     * Register the tooltips of the {@link AbstractTstMetaBlock}, and return a copy of the instance of the block.
      *
      * @param blockMeta the meta block
      * @param meta      the meta
      * @param tooltips  the tooltips (optional)
      * @return the copy of the instance of the meta block.
      */
-    public static ItemStack newMetaBlockItemStack(MetaBlockBase blockMeta, int meta, @Nullable String[] tooltips) {
+    public static ItemStack newMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
+        @Nullable String[] tooltips) {
         return newMetaBlockItemStackUnsafe(blockMeta, meta, tooltips);
     }
 
     /**
-     * Register the Texture of the {@link MetaBlockCasingBase}, and return a copy of the instance of the casing.
+     * Register the {@link AbstractTstMetaBlock} with given meta.
+     *
+     * @param blockMeta the meta block
+     * @param meta      the meta
+     * @return the copy of the instance of the meta block.
+     */
+    public static ItemStack registerMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta) {
+        return registerMetaBlockItemStack(blockMeta, meta, null);
+    }
+
+    /**
+     * Register the {@link AbstractTstMetaBlock} with given meta and tooltips.
+     *
+     * @param blockMeta the meta block
+     * @param meta      the meta
+     * @param tooltips  the tooltips (optional)
+     * @return the copy of the instance of the meta block.
+     */
+    public static ItemStack registerMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
+        @Nullable String[] tooltips) {
+        var stack = blockMeta.registerVariant(meta);
+        blockMeta.setTooltips(meta, tooltips);
+        return stack;
+    }
+
+    /**
+     * Register the Texture of the {@link AbstractTstMetaBlockCasing}, and return a copy of the instance of the casing.
      *
      * @param blockCasing the casing block
      * @param meta        the meta
      * @return the copy of the instance of the casing.
      */
-    public static ItemStack registerCasingBlockItemStack(MetaBlockCasingBase blockCasing, int meta) {
+    public static ItemStack registerCasingBlockItemStack(AbstractTstMetaBlockCasing blockCasing, int meta) {
         return registerCasingBlockItemStack(blockCasing, meta, null);
     }
 
     /**
-     * Register the Texture of the {@link MetaBlockCasingBase}, and add the tooltips if present.
+     * Register the Texture of the {@link AbstractTstMetaBlockCasing}, and add the tooltips if present.
      * Return a copy of the instance of the casing.
      *
      * @param blockCasing the casing block
@@ -259,11 +292,11 @@ public class TstUtils {
      * @param tooltips    the tooltips (optional)
      * @return the copy of the instance of the casing
      */
-    public static ItemStack registerCasingBlockItemStack(MetaBlockCasingBase blockCasing, int meta,
+    public static ItemStack registerCasingBlockItemStack(AbstractTstMetaBlockCasing blockCasing, int meta,
         @Nullable String[] tooltips) {
         Textures.BlockIcons
             .setCasingTextureForId(blockCasing.getTextureIndex(meta), TextureFactory.of(blockCasing, meta));
-        return newMetaBlockItemStack(blockCasing, meta, tooltips);
+        return registerMetaBlockItemStack(blockCasing, meta, tooltips);
     }
 
     /**
@@ -304,11 +337,11 @@ public class TstUtils {
         return stack;
     }
 
-    public static ItemStack registerItemAdder(ItemAdder_Basic itemAdder, int meta) {
+    public static ItemStack registerItemAdder(AbstractTstMetaItem itemAdder, int meta) {
         return registerItemAdder(itemAdder, meta, null);
     }
 
-    public static ItemStack registerItemAdder(ItemAdder_Basic itemAdder, int meta, @Nullable String[] tooltips) {
+    public static ItemStack registerItemAdder(AbstractTstMetaItem itemAdder, int meta, @Nullable String[] tooltips) {
         return registerVariantMetaItemStackUnsafe(itemAdder, meta, tooltips);
     }
 
@@ -341,6 +374,22 @@ public class TstUtils {
         }
 
         return stack;
+    }
+
+    /**
+     * Register all icons for variants.
+     *
+     * @param hasVariant the variant reference
+     * @param iconPath   the icon path transformer, taking a meta value and resulting an icon path.
+     * @param register   the icon register
+     * @return the icon map keyed by meta values
+     */
+    public static Map<Integer, IIcon> registerAllVariantIcons(IHasVariant hasVariant,
+        Function<Integer, String> iconPath, IIconRegister register) {
+        return hasVariant.getVariantIds()
+            .stream()
+            .map(meta -> Pair.of(meta, register.registerIcon(iconPath.apply(meta))))
+            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
     }
 
     /**

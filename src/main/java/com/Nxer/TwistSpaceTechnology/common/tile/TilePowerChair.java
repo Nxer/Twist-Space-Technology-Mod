@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockPowerChair;
+import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 
 public class TilePowerChair extends TileEntity {
 

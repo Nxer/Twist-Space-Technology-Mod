@@ -20,7 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
+import com.Nxer.TwistSpaceTechnology.common.block.meta.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedFormat;

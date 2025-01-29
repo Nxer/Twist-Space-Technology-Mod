@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CriticalPhoton;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;

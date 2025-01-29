@@ -22,7 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -233,7 +233,7 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
                     HatchElementBuilder.<Test_ModularizedMachine>builder()
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), AllModule)
                         .adder(Test_ModularizedMachine::addToMachineList)
-                        .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(0))
+                        .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(0))
                         .dot(1)
                         .buildAndChain(tierBlockElement))
                 .build();

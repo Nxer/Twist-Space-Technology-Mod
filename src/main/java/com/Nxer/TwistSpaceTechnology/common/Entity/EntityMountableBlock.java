@@ -11,7 +11,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.client.Audio.Sound;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.BlockPowerChair;
+import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.relauncher.Side;

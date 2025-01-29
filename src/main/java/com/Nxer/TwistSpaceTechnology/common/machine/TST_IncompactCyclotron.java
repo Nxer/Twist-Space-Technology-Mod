@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_IncompactCyclotron;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_IncompactCyclotron;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.MaxParallel_IncompactCyclotron;
@@ -26,7 +26,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -142,7 +142,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
                             .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                             .adder(TST_IncompactCyclotron::addToMachineList)
                             .dot(1)
-                            .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(11))
+                            .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
                             .build()))
                 .addElement(
                     'F',
@@ -152,7 +152,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
                             .atLeast(Energy.or(ExoticEnergy))
                             .adder(TST_IncompactCyclotron::addToMachineList)
                             .dot(2)
-                            .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(11))
+                            .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
                             .build()))
                 .build();
         }

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.StellarConstructionFrameMaterial;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EnableRenderDefaultArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
@@ -71,8 +71,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -742,7 +742,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
             .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), Blocks.air);
         this.getBaseMetaTileEntity()
             .getWorld()
-            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), BasicBlocks.BlockStar);
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), TstBlocks.BlockStar);
         /*
          * This wouldn't work since there are no Network System. Todo: Add a message to SERVER.
          * if (getBaseMetaTileEntity().getWorld()

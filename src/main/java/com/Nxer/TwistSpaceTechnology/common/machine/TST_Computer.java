@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.WirelessUpdateItem;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static goodgenerator.loader.Loaders.FRF_Coil_1;
 import static goodgenerator.loader.Loaders.compactFusionCoil;

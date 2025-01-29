@@ -65,8 +65,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -388,7 +388,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     'D',
                     ofChain(
                         ofAccurateTileAdder(TST_IndustrialAlchemyTower::addCosmeticOpaque, blockCosmeticOpaque, 2),
-                        ofAccurateTile(TileArcaneHole.class, BasicBlocks.BlockArcaneHole, 0)))
+                        ofAccurateTile(TileArcaneHole.class, TstBlocks.BlockArcaneHole, 0)))
                 .addElement('E', ofBlockStrict(blockSlabStone, 0))
                 .addElement('F', ofBlock(blockCosmeticSolid, 0))
                 .addElement('G', ofVariableBlock(channel, blockCosmeticSolid, 6, list))

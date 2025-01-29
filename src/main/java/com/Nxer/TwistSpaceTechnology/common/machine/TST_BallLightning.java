@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeExtraEuCost_BallLightning;
 import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeTickEveryProcess_BallLightning;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
@@ -54,8 +54,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -544,9 +544,9 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                     HatchElementBuilder.<TST_BallLightning>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
-                        .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(1))
+                        .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(1))
                         .dot(1)
-                        .buildAndChain(BasicBlocks.MetaBlockCasing01, 1))
+                        .buildAndChain(TstBlocks.MetaBlockCasing01, 1))
                 .addElement(
                     'Z',
                     HatchElementBuilder.<TST_BallLightning>builder()
