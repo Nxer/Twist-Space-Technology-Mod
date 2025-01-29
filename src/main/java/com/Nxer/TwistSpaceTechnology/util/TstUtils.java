@@ -92,7 +92,7 @@ public class TstUtils {
      * @return a new ItemStack of given Item with meta
      */
     public static ItemStack newItemWithMeta(Item item, int meta) {
-        return new ItemStack(item, meta);
+        return new ItemStack(item, 1, meta);
     }
 
     /**
@@ -103,7 +103,7 @@ public class TstUtils {
      * @return a new ItemStack of given Item with meta
      */
     public static ItemStack newItemWithMeta(Block block, int meta) {
-        return new ItemStack(block, meta);
+        return new ItemStack(block, 1, meta);
     }
 
     /**
