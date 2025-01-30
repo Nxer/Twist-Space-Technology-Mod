@@ -25,14 +25,14 @@ public enum ItemGearList {
 
     public Item getItem() {
         sanityCheck();
-        if (Utils.isStackInvalid(mStack)) return null;// TODO replace a default issue item
+        if (GTUtility.isStackInvalid(mStack)) return null;// TODO replace a default issue item
         return mStack.getItem();
     }
 
     public ItemStack get(int aAmount, Object... aReplacements) {
         sanityCheck();
         // if invalid, return a replacements
-        if (Utils.isStackInvalid(mStack)) {
+        if (GTUtility.isStackInvalid(mStack)) {
             GTLog.out.println("Object in the ItemList is null at:");
             new NullPointerException().printStackTrace(GTLog.out);
             return GTUtility.copyAmountUnsafe(aAmount, WoodenSword.get(1));

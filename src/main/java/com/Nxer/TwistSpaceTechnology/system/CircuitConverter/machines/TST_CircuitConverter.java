@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -93,7 +94,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         Set<ItemStack> outputs = new HashSet<>();
         // check every input
         for (ItemStack item : inputs) {
-            if (isStackInvalid(item)) continue;
+            if (GTUtility.isStackInvalid(item)) continue;
 
             // check special convert
             TST_ItemID ii = SPECIAL_CONVERTING.get(TST_ItemID.createNoNBT(item));
