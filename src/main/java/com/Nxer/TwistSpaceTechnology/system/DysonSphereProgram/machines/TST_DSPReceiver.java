@@ -37,7 +37,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotN
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentPlanetCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentStellarCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -294,7 +293,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             long limited = (long) (multiplier * maxPowerPointLimit);
             astralArrayOverloadMultiplier = 1;
             return Math.min(DSP_Values.maxPowerPointPerReceiver, Math.min(limited, canUse));
-        } else if (metaItemEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
+        } else if (GTUtility.areStacksEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
             // use Astral Array Fabricator to overload over max input limitation
             astralArrayOverloadMultiplier = calculateAstralArrayOverloadMultiplier(controllerStack.stackSize);
             return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
@@ -353,12 +352,12 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
         final ItemStack controllerSlot = getControllerSlot();
         if (astralArrayOverloadMultiplier > 1) {
-            if (controllerSlot == null || !metaItemEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)
+            if (controllerSlot == null || !GTUtility.areStacksEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)
                 || calculateAstralArrayOverloadMultiplier(controllerSlot.stackSize) != astralArrayOverloadMultiplier) {
                 this.stopUsingDSP();
                 this.startUsingDSP();
             }
-        } else if (controllerSlot != null && metaItemEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)) {
+        } else if (controllerSlot != null && GTUtility.areStacksEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)) {
             this.stopUsingDSP();
             this.startUsingDSP();
         }
@@ -449,7 +448,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         ArrayList<ItemStack> storedInputs = getStoredInputs();
         if (storedInputs.isEmpty()) return;
         for (ItemStack items : storedInputs) {
-            if (metaItemEqual(items, GravitationalLens.get(1))) {
+            if (GTUtility.areStacksEqual(items, GravitationalLens.get(1))) {
                 gravitationalLensTime += 20L * items.stackSize
                     * DSP_Values.secondsOfEveryGravitationalLensProvideToIntensifyTime;
                 items.stackSize = 0;

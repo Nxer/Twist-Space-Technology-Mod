@@ -26,7 +26,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Miracl
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_05;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -234,7 +233,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         int needAmount = amount;
         for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
             if (items == null) continue;
-            if (metaItemEqual(items, MiscHelper.CRITICAL_PHOTON)) {
+            if (GTUtility.areStacksEqual(items, MiscHelper.CRITICAL_PHOTON)) {
                 if (items.stackSize >= needAmount) {
                     items.stackSize -= needAmount;
                     return true;

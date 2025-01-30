@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -320,7 +321,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                 if (recipe.mInputs == null || recipe.mOutputs.length > 1
                     || (recipe.mFluidOutputs != null && recipe.mFluidOutputs.length > 0)) continue;
                 // Not this recipe.
-                if (!Utils.metaItemEqual(items, recipe.mOutputs[0])) continue;
+                if (!GTUtility.areStacksEqual(items, recipe.mOutputs[0])) continue;
                 // Amount is not enough.
                 if (items.stackSize < recipe.mOutputs[0].stackSize) continue base;
                 // Tier block limit.

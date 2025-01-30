@@ -1,9 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
-
 import java.util.List;
 
+import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -33,7 +32,7 @@ public class TST_StellarForgeFrontend extends RecipeMapFrontend {
         // #zh_CN 放入输入总线,将熔融金属熔铸为锭
 
         // Special Stack
-        if (metaItemEqual(
+        if (GTUtility.areStacksEqual(
             stack,
             neiCachedRecipe.mInputs
                 .get(neiCachedRecipe.mInputs.size() - neiCachedRecipe.mRecipe.mFluidInputs.length - 1).item)) {

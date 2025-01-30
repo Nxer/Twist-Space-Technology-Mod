@@ -24,8 +24,7 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.addStringToStackName;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmountUnlimited;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
@@ -88,6 +87,14 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 
 public class DSPRecipePool implements IRecipePool {
+
+    private static ItemStack appendToItemStackDisplayName(ItemStack itemStack, String extra) {
+        String originName = itemStack.getDisplayName();
+        String newName = originName + " " + extra;
+        itemStack.setStackDisplayName(newName);
+
+        return itemStack;
+    }
 
     @Override
     public void loadRecipes() {
@@ -188,7 +195,7 @@ public class DSPRecipePool implements IRecipePool {
                 ItemList.EnergisedTesseract.get(16),
 
                 ItemList.Field_Generator_UMV.get(8),
-                copyAmount(64, Particle.getBaseParticle(Particle.HIGGS_BOSON)))
+                copyAmountUnlimited(64, Particle.getBaseParticle(Particle.HIGGS_BOSON)))
             .fluidInputs(GGMaterial.metastableOganesson.getMolten(144 * 256))
             .itemOutputs(eM_Ultimate_Containment_Advanced.get(8))
 
@@ -434,7 +441,7 @@ public class DSPRecipePool implements IRecipePool {
                 EmptySmallLaunchVehicle.get(1),
                 SpaceWarper.get(1),
                 DysonSphereFrameComponent.get(24),
-                copyAmount(16, Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmountUnlimited(16, Particle.getBaseParticle(Particle.GRAVITON)),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 16))
             .itemOutputs(SmallLaunchVehicle.get(1))
@@ -640,8 +647,8 @@ public class DSPRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(23),
-                copyAmount(0, MaterialsUEVplus.Universium.getNanite(1)),
-                copyAmount(0, MaterialsUEVplus.Eternity.getNanite(1)),
+                copyAmountUnlimited(0, MaterialsUEVplus.Universium.getNanite(1)),
+                copyAmountUnlimited(0, MaterialsUEVplus.Eternity.getNanite(1)),
                 GTOreDictUnificator
                     .get(OrePrefixes.frameGt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 1),
 
@@ -743,10 +750,10 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 SpaceWarper.get(1),
                 Laser_Lens_Special.get(4),
-                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)))
+                copyAmountUnlimited(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmountUnlimited(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmountUnlimited(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                copyAmountUnlimited(64, Particle.getBaseParticle(Particle.GRAVITON)))
             .fluidInputs(Materials.MysteriousCrystal.getMolten(144 * 9 * 64 * 2))
             .itemOutputs(
                 GravitationalLens.get(1),
@@ -771,28 +778,28 @@ public class DSPRecipePool implements IRecipePool {
                     // #tr StrangeMatterAggregation.RecipeDescription.firstSlot
                     // # basic material, input from general input bus, actual amount is set by machine internal parameters
                     // #zh_CN 基础材料, 从通用输入总线输入, 实际数量与机器内部参数有关
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         Antimatter.get(256),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
                     // second slot is the right input bus input and consumption rate set by structure
                     // #tr StrangeMatterAggregation.RecipeDescription.secondSlot
                     // # input from the right input bus and consumption rate set by structure
                     // #zh_CN 由右侧输入总线输入, 消耗率与结构有关
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
                     // third slot is only consume one time per process
                     // #tr StrangeMatterAggregation.RecipeDescription.thirdSlot
                     // # auxiliary material, input from general input bus, only consume 1 per parallel
                     // #zh_CN 辅助材料, 从通用输入总线输入, 每并行只消耗1个
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
                     // #tr StrangeMatterAggregation.RecipeDescription.fourthSlot
                     // # auxiliary material, input from general input bus, consumed amount same as output amount, affected by structure
                     // #zh_CN 辅助材料, 从通用输入总线输入, 消耗量等于产物数量, 受结构等级影响
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StellarConstructionFrameMaterial.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.fourthSlot")))
                 .fluidInputs(
@@ -805,14 +812,14 @@ public class DSPRecipePool implements IRecipePool {
                     // #tr StrangeMatterAggregation.RecipeDescription.output1
                     // # T1 production
                     // #zh_CN 1级产物
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
                     // #tr StrangeMatterAggregation.RecipeDescription.output2
                     // # T2 production
                     // #zh_CN 2级产物
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output2")))
                 .fluidOutputs(
@@ -823,7 +830,7 @@ public class DSPRecipePool implements IRecipePool {
                 // # input from the right input bus, upgrades a portion of the product to T2 product, same ratio as the annihilation constrainer
                 // #zh_CN 由右侧输入总线输入, 将一部分产物升级为2级产物, 比率与湮灭约束器相同
                 .special(
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
                 // machine will always use a fixed power, adjusted by structure
@@ -835,19 +842,19 @@ public class DSPRecipePool implements IRecipePool {
             GTValues.RA.stdBuilder()
                 .itemInputs(
                     // first slot is the general input , amount is set by machine internal parameters
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         Antimatter.get(256),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
                     // second slot is the right input bus input and consumption rate set by structure
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
                     // third slot is only consume one time per process
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StellarConstructionFrameMaterial.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.fourthSlot")))
                 .fluidInputs(
@@ -857,11 +864,11 @@ public class DSPRecipePool implements IRecipePool {
                     MaterialsUEVplus.Universium.getMolten(96))
                 .itemOutputs(
                     // first output is T1 output
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output2")))
                 .fluidOutputs(
@@ -869,7 +876,7 @@ public class DSPRecipePool implements IRecipePool {
                     MaterialsUEVplus.SpaceTime.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator),
                     GGMaterial.shirabon.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator))
                 .special(
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
                 // machine will always use a fixed power, adjusted by structure
@@ -880,15 +887,15 @@ public class DSPRecipePool implements IRecipePool {
             GTValues.RA.stdBuilder()
                 .itemInputs(
                     // first slot is the general input , amount is set by machine internal parameters
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         Antimatter.get(256),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
                     // second slot is the right input bus input and consumption rate set by structure
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
                     // third slot is only consume one time per process
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
@@ -900,18 +907,18 @@ public class DSPRecipePool implements IRecipePool {
                     MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(16))
                 .itemOutputs(
                     // first output is T1 output
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output2")))
                 .fluidOutputs(
                     // here is T3 byproduct
                     MaterialsUEVplus.Universium.getMolten(Config.ByproductBaseAmount_T3_StrangeMatterAggregator))
                 .special(
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
                 // machine will always use a fixed power, adjusted by structure

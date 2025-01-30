@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.SpecialProcessingLineMaterialInstead;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmountUnlimited;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.google.common.collect.Sets;
 
@@ -74,7 +74,7 @@ public class OP_NormalProcessing {
         if (SpecialProcessingLineMaterialInstead) {
             ItemStack t = processingLineMaterials.get(material);
             if (t != null) {
-                return Utils.copyAmount(amount * 3, t);
+                return TstUtils.copyAmountUnlimited(amount * 3, t);
             }
         }
         return setStackSize(GTOreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
@@ -221,7 +221,7 @@ public class OP_NormalProcessing {
 
         // IC2 Uranium ore
         processOreRecipe(
-            copyAmount(1,Ic2Items.uraniumOre),
+            copyAmountUnlimited(1,Ic2Items.uraniumOre),
             Materials.Uranium,
             false
         );

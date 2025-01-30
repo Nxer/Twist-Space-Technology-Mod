@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import gregtech.api.util.GTUtility;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -21,7 +23,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMa
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.GTValues;
@@ -38,7 +39,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
     protected ItemStack[] checkInputSpecial(ItemStack... itemStacks) {
         baseLoop: for (ItemStack i : itemStacks) {
             for (ItemStack u : itemsUnconsumed) {
-                if (Utils.metaItemEqual(i, u)) {
+                if (GTUtility.areStacksEqual(i, u)) {
                     i.stackSize = 0;
                     break baseLoop;
                 }

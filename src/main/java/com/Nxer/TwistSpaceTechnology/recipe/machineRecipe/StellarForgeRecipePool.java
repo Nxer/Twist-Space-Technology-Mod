@@ -1,11 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static cofh.lib.util.helpers.FluidHelper.isFluidEqual;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmountUnlimited;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.itemStackArrayEqualFuzzy;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
@@ -54,6 +52,24 @@ public class StellarForgeRecipePool implements IRecipePool {
     public static final HashSet<TST_ItemID> SpecialRecipeOutputs = new HashSet<>();
     public static final HashMap<Fluid, ItemStack> MoltenToIngot = new HashMap<>();
 
+    /**
+     * Moved from Utils.
+     */
+    private static boolean itemStackArrayEqualFuzzy(ItemStack[] isa1, ItemStack[] isa2) {
+        if (isa1.length != isa2.length) return false;
+        for (ItemStack itemStack1 : isa1) {
+            boolean flag = false;
+            for (ItemStack itemStack2 : isa2) {
+                if (GTUtility.areStacksEqual(itemStack1, itemStack2)) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) return false;
+        }
+        return true;
+    }
+
     public void initData() {
 
         for (String name : OreDictionary.getOreNames()) {
@@ -96,7 +112,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             if (recipeSolidifier.mInputs == null || recipeSolidifier.mInputs.length < 1
                 || recipeSolidifier.mOutputs == null
                 || recipeSolidifier.mOutputs.length < 1) continue;
-            if (metaItemEqual(
+            if (GTUtility.areStacksEqual(
                 GTModHandler.getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32306),
                 recipeSolidifier.mInputs[0])) {
                 if (!isFluidEqual(recipeSolidifier.mFluidInputs[0], Materials.AnnealedCopper.getMolten(1)))
@@ -139,11 +155,11 @@ public class StellarForgeRecipePool implements IRecipePool {
             byte integrateNum = 0;
             for (ItemStack inputs : recipe.mInputs) {
 
-                if (metaItemEqual(inputs, GTUtility.getIntegratedCircuit(1))) {
+                if (GTUtility.areStacksEqual(inputs, GTUtility.getIntegratedCircuit(1))) {
                     integrateNum = 1;
                     continue;
                 }
-                if (metaItemEqual(inputs, GTUtility.getIntegratedCircuit(11))) {
+                if (GTUtility.areStacksEqual(inputs, GTUtility.getIntegratedCircuit(11))) {
                     integrateNum = 11;
                     continue;
                 }
@@ -168,7 +184,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
                 } else if (Ingots.contains(outputItemID)) {
                     // if this output item is normal Ingot
-                    FluidStack fluidStack = getMoltenFluids(copyAmount(1, outputs), outputs.stackSize);
+                    FluidStack fluidStack = getMoltenFluids(copyAmountUnlimited(1, outputs), outputs.stackSize);
                     if (fluidStack != null) {
                         outputFluids.add(fluidStack);
                         isRecipeAdded = true;
@@ -361,7 +377,7 @@ public class StellarForgeRecipePool implements IRecipePool {
     public static FluidStack getMoltenFluids(ItemStack ingot, int ingotAmount) {
         FluidStack out = null;
         for (GTRecipe recipeMolten : fluidExtractionRecipes.getAllRecipes()) {
-            if (metaItemEqual(ingot, recipeMolten.mInputs[0])) {
+            if (GTUtility.areStacksEqual(ingot, recipeMolten.mInputs[0])) {
                 if (recipeMolten.mFluidOutputs[0] != null) {
                     out = recipeMolten.mFluidOutputs[0].copy();
                     out.amount = 144 * ingotAmount;

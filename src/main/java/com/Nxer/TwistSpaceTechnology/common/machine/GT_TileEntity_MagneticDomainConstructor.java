@@ -20,6 +20,7 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -257,7 +258,7 @@ public class GT_TileEntity_MagneticDomainConstructor
             false,
             true);
 
-        return Utils.multiBuildPiece(built);
+        return TstUtils.multiBuildPiece(built);
 
     }
 

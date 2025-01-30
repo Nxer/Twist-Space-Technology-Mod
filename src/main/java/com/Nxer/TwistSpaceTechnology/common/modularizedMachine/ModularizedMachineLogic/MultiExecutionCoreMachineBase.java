@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic;
 
 import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTE;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.mergeArray;
 import static gregtech.api.util.GTUtility.filterValidMTEs;
 
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -565,11 +565,11 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     public void mergeOutputItems(ItemStack... outputs) {
-        mOutputItems = mergeArray(mOutputItems, outputs);
+        mOutputItems = ArrayUtils.addAll(mOutputItems, outputs);
     }
 
     public void mergeOutputFluids(FluidStack... outputs) {
-        mOutputFluids = mergeArray(mOutputFluids, outputs);
+        mOutputFluids = ArrayUtils.addAll(mOutputFluids, outputs);
     }
 
     public boolean tryUseEut(long eut) {

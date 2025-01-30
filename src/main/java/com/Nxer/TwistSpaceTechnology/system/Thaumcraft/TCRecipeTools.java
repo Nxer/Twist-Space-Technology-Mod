@@ -1,14 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.isStackValid;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.util.GTOreDictUnificator;
 import thaumcraft.api.ThaumcraftApi;
@@ -53,13 +52,13 @@ public class TCRecipeTools {
     public static void getCrucibleCraftingRecipe() {
         for (var o : ThaumcraftApi.getCraftingRecipes()) {
             if (!(o instanceof CrucibleRecipe o1)) continue;
-            if (isStackValid(o1.getRecipeOutput())) {
+            if (GTUtility.isStackValid(o1.getRecipeOutput())) {
                 ItemStack input;
                 Object cat = o1.catalyst;
                 if (cat instanceof ArrayList<?>catalyst1) {
                     input = GTOreDictUnificator.get(false, (ItemStack) catalyst1.get(0), true);
                 } else if (cat instanceof ItemStack itemStack) {
-                    input = Utils.copyAmount(1, itemStack);
+                    input = TstUtils.copyAmountUnlimited(1, itemStack);
                 } else continue;
                 String inputKey = null;
                 if (input != null) {

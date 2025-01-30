@@ -1,11 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import gregtech.api.enums.HeatingCoilLevel;
+import gregtech.api.enums.VoltageIndex;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
@@ -14,6 +17,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -136,7 +140,7 @@ public class TstUtils {
      * @return the exception instance with nice message built up by the arguments
      */
     private static IllegalArgumentException makeNotSupportInterfaceException(String type, String unlocalizedName,
-        Class<?> objectClass, Class<?> interfaceClass) {
+                                                                             Class<?> objectClass, Class<?> interfaceClass) {
         return new IllegalArgumentException(
             type + " "
                 + tr(unlocalizedName)
@@ -242,7 +246,7 @@ public class TstUtils {
      * @return the copy of the instance of the meta block.
      */
     public static ItemStack newMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-        @Nullable String[] tooltips) {
+                                                  @Nullable String[] tooltips) {
         return newMetaBlockItemStackUnsafe(blockMeta, meta, tooltips);
     }
 
@@ -266,7 +270,7 @@ public class TstUtils {
      * @return the copy of the instance of the meta block.
      */
     public static ItemStack registerMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-        @Nullable String[] tooltips) {
+                                                       @Nullable String[] tooltips) {
         var stack = blockMeta.registerVariant(meta);
         blockMeta.setTooltips(meta, tooltips);
         return stack;
@@ -293,7 +297,7 @@ public class TstUtils {
      * @return the copy of the instance of the casing
      */
     public static ItemStack registerCasingBlockItemStack(AbstractTstMetaBlockCasing blockCasing, int meta,
-        @Nullable String[] tooltips) {
+                                                         @Nullable String[] tooltips) {
         Textures.BlockIcons
             .setCasingTextureForId(blockCasing.getTextureIndex(meta), TextureFactory.of(blockCasing, meta));
         return registerMetaBlockItemStack(blockCasing, meta, tooltips);
@@ -308,7 +312,7 @@ public class TstUtils {
      * @param advancedTooltips the advanced tooltips
      */
     public static void registerAdvancedTooltips(IHasTooltips hasTooltips, int meta, String[] normalTooltips,
-        String[] advancedTooltips) {
+                                                String[] advancedTooltips) {
         hasTooltips.setTooltips(meta, normalTooltips, false);
         hasTooltips.setTooltips(meta, advancedTooltips, true);
     }
@@ -359,7 +363,7 @@ public class TstUtils {
      *                                  {@link IHasTooltips}.
      */
     public static ItemStack registerVariantMetaItemStackWithAdvancedTooltipsUnsafe(Item itemMeta, int meta,
-        String[] tooltips, String[] advancedTooltips) throws IllegalArgumentException {
+                                                                                   String[] tooltips, String[] advancedTooltips) throws IllegalArgumentException {
         ItemStack stack;
         if (itemMeta instanceof IHasVariant hasVariant) {
             stack = hasVariant.registerVariant(meta);
@@ -385,7 +389,7 @@ public class TstUtils {
      * @return the icon map keyed by meta values
      */
     public static Map<Integer, IIcon> registerAllVariantIcons(IHasVariant hasVariant,
-        Function<Integer, String> iconPath, IIconRegister register) {
+                                                              Function<Integer, String> iconPath, IIconRegister register) {
         return hasVariant.getVariantIds()
             .stream()
             .map(meta -> Pair.of(meta, register.registerIcon(iconPath.apply(meta))))
@@ -464,5 +468,64 @@ public class TstUtils {
      */
     public static int getTextureIndex(int page, int index) {
         return 128 * page + index;
+    }
+
+    /**
+     * Return the voltage tier of given Coil.
+     * <p>
+     * LV = 1, MAX = 14.
+     *
+     * @return the voltage index of the coil.
+     */
+    @MagicConstant(valuesFromClass = VoltageIndex.class)
+    public static int getVoltageForCoil(HeatingCoilLevel coilLevel) {
+        //noinspection MagicConstant
+        return coilLevel.getTier() + 1;
+    }
+
+    /**
+     * One method to handle multi survivialBuildPiece at once.
+     *
+     * @param buildPieces All result of `survivialBuildPiece`.
+     * @return If all result is -1, return -1. Otherwise, return the sum of all non-negative values.
+     * @deprecated replace with {@link #getBuiltBlockCount(int...)}
+     */
+    @Deprecated
+    public static int multiBuildPiece(int... buildPieces) {
+        int out = 0x80000000;
+        for (int v : buildPieces) {
+            out &= (v & 0x80000000) | 0x7fffffff;
+            if (v != -1) out += v;
+        }
+        return out < 0 ? -1 : out;
+    }
+
+    /**
+     * Calculate the total built block count.
+     *
+     * @param builtBlockCountEachPart the built block count on each part
+     * @return the total built block count
+     */
+    public static int getBuiltBlockCount(int... builtBlockCountEachPart) {
+        return Arrays.stream(builtBlockCountEachPart).filter(x -> x > 0).sum();
+    }
+
+    /**
+     * Check if all ItemStacks in the given array are valid.
+     *
+     * @param stacks the array of stacks
+     * @return `true` if all ItemStacks are valid
+     */
+    public static boolean areItemsValid(ItemStack... stacks) {
+        if (stacks == null || stacks.length < 1) return false;
+        return Arrays.stream(stacks).allMatch(GTUtility::isStackValid);
+    }
+
+    /**
+     * @deprecated use {@link GTUtility#copyAmountUnsafe(int, ItemStack)}
+     */
+    @Deprecated
+    public static ItemStack copyAmountUnlimited(int aAmount, ItemStack aStack) {
+        return GTUtility.copyAmountUnsafe(aAmount, aStack);
     }
 }

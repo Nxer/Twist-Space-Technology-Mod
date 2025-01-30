@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -540,9 +541,9 @@ public enum GTCMItemList {
         if (Utils.isStackInvalid(mStack)) {
             GTLog.out.println("Object in the ItemList is null at:");
             new NullPointerException().printStackTrace(GTLog.out);
-            return Utils.copyAmount(aAmount, TestItem0.get(1));
+            return TstUtils.copyAmountUnlimited(aAmount, TestItem0.get(1));
         }
-        return Utils.copyAmount(aAmount, mStack);
+        return TstUtils.copyAmountUnlimited(aAmount, mStack);
     }
 
     public int getMeta() {
@@ -553,14 +554,14 @@ public enum GTCMItemList {
         mHasNotBeenSet = false;
         if (aItem == null) return this;
         ItemStack aStack = new ItemStack(aItem, 1, 0);
-        mStack = Utils.copyAmount(1, aStack);
+        mStack = TstUtils.copyAmountUnlimited(1, aStack);
         return this;
     }
 
     public GTCMItemList set(ItemStack aStack) {
         if (aStack != null) {
             mHasNotBeenSet = false;
-            mStack = Utils.copyAmount(1, aStack);
+            mStack = TstUtils.copyAmountUnlimited(1, aStack);
 
             // workaround: add machines to the creative tab
             if (Block.getBlockFromItem(aStack.getItem()) == GregTechAPI.sBlockMachines) {

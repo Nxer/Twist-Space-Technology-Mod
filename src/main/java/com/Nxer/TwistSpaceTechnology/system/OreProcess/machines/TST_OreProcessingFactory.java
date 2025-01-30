@@ -14,7 +14,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OrePro
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_MachineType;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -169,7 +168,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             boolean hasNotFound = true;
             for (GTRecipe recipe : recipeMap.getAllRecipes()) {
                 if (recipe.mInputs == null || recipe.mInputs.length < 1) continue;
-                if (metaItemEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
+                if (GTUtility.areStacksEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
                     hasNotFound = false;
                     ItemStack recipeInput = recipe.mInputs[0];
@@ -239,7 +238,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
 
             boolean hasNotFound = true;
             for (GTRecipe recipe : recipeMap.getAllRecipes()) {
-                if (metaItemEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
+                if (GTUtility.areStacksEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
                     hasNotFound = false;
                     ItemStack recipeInput = recipe.mInputs[0];

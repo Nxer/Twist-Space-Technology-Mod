@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -36,14 +37,14 @@ public class TST_SimpleDisassemblyRecipe {
             if (amount > Integer.MAX_VALUE) {
                 long t = amount;
                 while (t > Integer.MAX_VALUE) {
-                    outputs.add(Utils.copyAmount(Integer.MAX_VALUE, itemStack));
+                    outputs.add(TstUtils.copyAmountUnlimited(Integer.MAX_VALUE, itemStack));
                     t -= Integer.MAX_VALUE;
                 }
                 if (t > 0) {
-                    outputs.add(Utils.copyAmount((int) t, itemStack));
+                    outputs.add(TstUtils.copyAmountUnlimited((int) t, itemStack));
                 }
             } else {
-                outputs.add(Utils.copyAmount((int) amount, itemStack));
+                outputs.add(TstUtils.copyAmountUnlimited((int) amount, itemStack));
             }
         }
         return outputs;

@@ -186,7 +186,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
         coefficientMultiplier = 1 + getExtraCoefficientMultiplierByVoltageTier();
         ItemStack controllerSlot = getControllerSlot();
         wirelessMode = controllerSlot != null && controllerSlot.stackSize > 0
-            && Utils.metaItemEqual(controllerSlot, ItemList.EnergisedTesseract.get(1));
+            && GTUtility.areStacksEqual(controllerSlot, ItemList.EnergisedTesseract.get(1));
         return true;
     }
 

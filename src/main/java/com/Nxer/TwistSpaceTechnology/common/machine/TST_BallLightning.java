@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INF
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -255,7 +254,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
 
     private void flushOverclockParameter() {
         ItemStack controllerStack = getControllerSlot();
-        if (metaItemEqual(controllerStack, GTCMItemList.BallLightningUpgradeChip.get(1))
+        if (GTUtility.areStacksEqual(controllerStack, GTCMItemList.BallLightningUpgradeChip.get(1))
             && controllerStack.stackSize >= 1) this.overclockParameter = controllerStack.stackSize;
         else this.overclockParameter = 1;
 

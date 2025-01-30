@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.combat.items;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -34,23 +35,23 @@ public enum ItemGearList {
         if (Utils.isStackInvalid(mStack)) {
             GTLog.out.println("Object in the ItemList is null at:");
             new NullPointerException().printStackTrace(GTLog.out);
-            return Utils.copyAmount(aAmount, WoodenSword.get(1));
+            return TstUtils.copyAmountUnlimited(aAmount, WoodenSword.get(1));
         }
-        return Utils.copyAmount(aAmount, GTOreDictUnificator.get(mStack));
+        return TstUtils.copyAmountUnlimited(aAmount, GTOreDictUnificator.get(mStack));
     }
 
     public ItemGearList set(Item aItem) {
         mHasNotBeenSet = false;
         if (aItem == null) return this;
         ItemStack aStack = new ItemStack(aItem, 1, 0);
-        mStack = Utils.copyAmount(1, aStack);
+        mStack = TstUtils.copyAmountUnlimited(1, aStack);
         return this;
     }
 
     public ItemGearList set(ItemStack aStack) {
         if (aStack != null) {
             mHasNotBeenSet = false;
-            mStack = Utils.copyAmount(1, aStack);
+            mStack = TstUtils.copyAmountUnlimited(1, aStack);
         }
         return this;
     }

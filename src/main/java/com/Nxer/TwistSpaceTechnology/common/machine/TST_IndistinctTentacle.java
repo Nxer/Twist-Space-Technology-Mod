@@ -55,7 +55,6 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -115,7 +114,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     protected boolean hasAstralArray = false;
 
     public void checkAstralArray() {
-        hasAstralArray = Utils.metaItemEqual(getControllerSlot(), MiscHelper.ASTRAL_ARRAY_FABRICATOR);
+        hasAstralArray = GTUtility.areStacksEqual(getControllerSlot(), MiscHelper.ASTRAL_ARRAY_FABRICATOR);
     }
 
     @Override

@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -116,7 +117,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     protected static boolean checkPatternRecipe(GTRecipe r, ItemStack[] in, ItemStack out) {
         ItemStack rOut = r.mOutputs[0];
         if (out == null || out.getItem() == null || out.stackSize < 1) return false;
-        if (!Utils.metaItemEqual(out, rOut)) return false;
+        if (!GTUtility.areStacksEqual(out, rOut)) return false;
         // check amount
         if (out.stackSize < rOut.stackSize || out.stackSize % rOut.stackSize != 0) return false;
         // the multiple of pattern
@@ -182,7 +183,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 if (dOutputs == null || dOutputs.length != 1 || dOutputs[0] == null) return null;
 
                 ItemStack[] dInputs = convertAEToMC(d.getInputs());
-                if (!Utils.isValid(dInputs)) return null;
+                if (!TstUtils.areItemsValid(dInputs)) return null;
 
                 // fine all available extreme recipes of this pattern
                 GTRecipe[] validResult = extremeCraftRecipes.findRecipeQuery()
