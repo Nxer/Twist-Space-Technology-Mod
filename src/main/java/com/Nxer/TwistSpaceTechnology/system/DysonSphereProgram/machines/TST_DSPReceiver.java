@@ -293,14 +293,15 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             long limited = (long) (multiplier * maxPowerPointLimit);
             astralArrayOverloadMultiplier = 1;
             return Math.min(DSP_Values.maxPowerPointPerReceiver, Math.min(limited, canUse));
-        } else if (GTUtility.areStacksEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
-            // use Astral Array Fabricator to overload over max input limitation
-            astralArrayOverloadMultiplier = calculateAstralArrayOverloadMultiplier(controllerStack.stackSize);
-            return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
-        } else {
-            astralArrayOverloadMultiplier = 1;
-            return 0;
-        }
+        } else
+            if (GTUtility.areStacksEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
+                // use Astral Array Fabricator to overload over max input limitation
+                astralArrayOverloadMultiplier = calculateAstralArrayOverloadMultiplier(controllerStack.stackSize);
+                return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
+            } else {
+                astralArrayOverloadMultiplier = 1;
+                return 0;
+            }
     }
 
     protected static int calculateAstralArrayOverloadMultiplier(int astralArrayAmount) {

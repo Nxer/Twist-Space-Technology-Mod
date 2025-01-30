@@ -20,7 +20,6 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;

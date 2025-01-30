@@ -7,8 +7,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import gregtech.api.enums.HeatingCoilLevel;
-import gregtech.api.enums.VoltageIndex;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
@@ -36,7 +34,9 @@ import com.Nxer.TwistSpaceTechnology.common.item.AbstractTstMetaItem;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
 import com.google.common.collect.Lists;
 
+import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
+import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
@@ -140,7 +140,7 @@ public class TstUtils {
      * @return the exception instance with nice message built up by the arguments
      */
     private static IllegalArgumentException makeNotSupportInterfaceException(String type, String unlocalizedName,
-                                                                             Class<?> objectClass, Class<?> interfaceClass) {
+        Class<?> objectClass, Class<?> interfaceClass) {
         return new IllegalArgumentException(
             type + " "
                 + tr(unlocalizedName)
@@ -246,7 +246,7 @@ public class TstUtils {
      * @return the copy of the instance of the meta block.
      */
     public static ItemStack newMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-                                                  @Nullable String[] tooltips) {
+        @Nullable String[] tooltips) {
         return newMetaBlockItemStackUnsafe(blockMeta, meta, tooltips);
     }
 
@@ -270,7 +270,7 @@ public class TstUtils {
      * @return the copy of the instance of the meta block.
      */
     public static ItemStack registerMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-                                                       @Nullable String[] tooltips) {
+        @Nullable String[] tooltips) {
         var stack = blockMeta.registerVariant(meta);
         blockMeta.setTooltips(meta, tooltips);
         return stack;
@@ -297,7 +297,7 @@ public class TstUtils {
      * @return the copy of the instance of the casing
      */
     public static ItemStack registerCasingBlockItemStack(AbstractTstMetaBlockCasing blockCasing, int meta,
-                                                         @Nullable String[] tooltips) {
+        @Nullable String[] tooltips) {
         Textures.BlockIcons
             .setCasingTextureForId(blockCasing.getTextureIndex(meta), TextureFactory.of(blockCasing, meta));
         return registerMetaBlockItemStack(blockCasing, meta, tooltips);
@@ -312,7 +312,7 @@ public class TstUtils {
      * @param advancedTooltips the advanced tooltips
      */
     public static void registerAdvancedTooltips(IHasTooltips hasTooltips, int meta, String[] normalTooltips,
-                                                String[] advancedTooltips) {
+        String[] advancedTooltips) {
         hasTooltips.setTooltips(meta, normalTooltips, false);
         hasTooltips.setTooltips(meta, advancedTooltips, true);
     }
@@ -363,7 +363,7 @@ public class TstUtils {
      *                                  {@link IHasTooltips}.
      */
     public static ItemStack registerVariantMetaItemStackWithAdvancedTooltipsUnsafe(Item itemMeta, int meta,
-                                                                                   String[] tooltips, String[] advancedTooltips) throws IllegalArgumentException {
+        String[] tooltips, String[] advancedTooltips) throws IllegalArgumentException {
         ItemStack stack;
         if (itemMeta instanceof IHasVariant hasVariant) {
             stack = hasVariant.registerVariant(meta);
@@ -389,7 +389,7 @@ public class TstUtils {
      * @return the icon map keyed by meta values
      */
     public static Map<Integer, IIcon> registerAllVariantIcons(IHasVariant hasVariant,
-                                                              Function<Integer, String> iconPath, IIconRegister register) {
+        Function<Integer, String> iconPath, IIconRegister register) {
         return hasVariant.getVariantIds()
             .stream()
             .map(meta -> Pair.of(meta, register.registerIcon(iconPath.apply(meta))))
@@ -479,7 +479,7 @@ public class TstUtils {
      */
     @MagicConstant(valuesFromClass = VoltageIndex.class)
     public static int getVoltageForCoil(HeatingCoilLevel coilLevel) {
-        //noinspection MagicConstant
+        // noinspection MagicConstant
         return coilLevel.getTier() + 1;
     }
 
@@ -507,7 +507,9 @@ public class TstUtils {
      * @return the total built block count
      */
     public static int getBuiltBlockCount(int... builtBlockCountEachPart) {
-        return Arrays.stream(builtBlockCountEachPart).filter(x -> x > 0).sum();
+        return Arrays.stream(builtBlockCountEachPart)
+            .filter(x -> x > 0)
+            .sum();
     }
 
     /**
@@ -518,7 +520,8 @@ public class TstUtils {
      */
     public static boolean areItemsValid(ItemStack... stacks) {
         if (stacks == null || stacks.length < 1) return false;
-        return Arrays.stream(stacks).allMatch(GTUtility::isStackValid);
+        return Arrays.stream(stacks)
+            .allMatch(GTUtility::isStackValid);
     }
 
     /**

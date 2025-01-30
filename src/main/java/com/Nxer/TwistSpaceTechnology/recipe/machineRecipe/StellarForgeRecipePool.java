@@ -184,7 +184,7 @@ public class StellarForgeRecipePool implements IRecipePool {
 
                 } else if (Ingots.contains(outputItemID)) {
                     // if this output item is normal Ingot
-                    FluidStack fluidStack = getMoltenFluids(copyAmountUnlimited(1, outputs), outputs.stackSize);
+                    FluidStack fluidStack = getMoltenFluids(GTUtility.copyAmountUnsafe(1, outputs), outputs.stackSize);
                     if (fluidStack != null) {
                         outputFluids.add(fluidStack);
                         isRecipeAdded = true;

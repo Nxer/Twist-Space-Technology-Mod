@@ -52,7 +52,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(19),
-                copyAmountUnlimited(0, Materials.Potassiumdichromate.getDust(1)),
+                GTUtility.copyAmountUnsafe(0, Materials.Potassiumdichromate.getDust(1)),
                 Materials.Copper.getDust(16),
                 setStackSize(Materials.Zinc.getDust(1), 144))
             .fluidInputs(
@@ -92,8 +92,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(18),
-                copyAmountUnlimited(0, Materials.Potassiumdichromate.getDust(1)),
-                setStackSize(Materials.Carbon.getDust(1), 64*18),
+                GTUtility.copyAmountUnsafe(0, Materials.Potassiumdichromate.getDust(1)),
+                setStackSize(Materials.Carbon.getDust(1), 64 * 18),
                 Materials.Copper.getDust(16),
                 setStackSize(Materials.Zinc.getDust(1), 144))
             .fluidInputs(
@@ -116,7 +116,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(6),
-                copyAmountUnlimited(0,Materials.Potassiumdichromate.getDust(1)),
+                GTUtility.copyAmountUnsafe(0, Materials.Potassiumdichromate.getDust(1)),
                 Materials.Carbon.getDust(8))
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*6),
@@ -133,8 +133,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(7),
-                copyAmountUnlimited(0,Materials.Potassiumdichromate.getDust(1)),
-                setStackSize(Materials.Carbon.getDust(1),64*8))
+                GTUtility.copyAmountUnsafe(0, Materials.Potassiumdichromate.getDust(1)),
+                setStackSize(Materials.Carbon.getDust(1), 64 * 8))
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*6*64),
                 Materials.Oxygen.getGas(1000*4*64))
@@ -654,7 +654,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Oxygen.getGas(1000)
             )
             .itemOutputs(
-                copyAmountUnlimited(12,GenericChem.mPotassiumEthylXanthate)
+                GTUtility.copyAmountUnsafe(12, GenericChem.mPotassiumEthylXanthate)
             )
             .specialValue(9000)
             .eut(RECIPE_HV)
@@ -676,7 +676,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Oxygen.getGas(1000)
             )
             .itemOutputs(
-                copyAmountUnlimited(12,GenericChem.mSodiumEthylXanthate)
+                GTUtility.copyAmountUnsafe(12, GenericChem.mSodiumEthylXanthate)
             )
             .specialValue(9000)
             .eut(RECIPE_HV)
@@ -690,7 +690,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.PTMetallicPowder.get(OrePrefixes.dust, 28)
             )
             .fluidInputs(
@@ -711,7 +711,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 28),
                 Materials.Carbon.getDust(10)
             )
@@ -732,8 +732,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, CustomItemList.RadoxPolymerLens.get(1)),
-                setStackSize(WerkstoffLoader.PTResidue.get(OrePrefixes.dust, 1),220),
+                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
+                setStackSize(WerkstoffLoader.PTResidue.get(OrePrefixes.dust, 1), 220),
                 Materials.Sulfur.getDust(52),
                 setStackSize(Materials.Saltpeter.getDust(1), 570)
             )
@@ -755,8 +755,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, CustomItemList.RadoxPolymerLens.get(1)),
-                setStackSize(WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 1),100),
+                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
+                setStackSize(WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 1), 100),
                 Materials.Sodium.getDust(50)
             )
             .fluidInputs(
@@ -779,7 +779,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.SodiumRuthenate.get(OrePrefixes.dust, 5)
             )
             .fluidInputs(
@@ -801,7 +801,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 20)
             )
             .fluidInputs(
@@ -825,7 +825,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.IrLeachResidue.get(OrePrefixes.dust, 10)
             )
             .fluidInputs(
@@ -848,7 +848,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, CustomItemList.RadoxPolymerLens.get(1))
+                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1))
             )
             .fluidInputs(
                 WerkstoffLoader.AcidicOsmiumSolution.getFluidOrGas(10000),
@@ -873,8 +873,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, Materials.Neutronium.getNanite(1)),
-                setStackSize(GGMaterial.naquadahEarth.get(OrePrefixes.dust,1), 480),
+                GTUtility.copyAmountUnsafe(0, Materials.Neutronium.getNanite(1)),
+                setStackSize(GGMaterial.naquadahEarth.get(OrePrefixes.dust, 1), 480),
                 setStackSize(Materials.Sodium.getDust(1), 1128)
             )
             .fluidInputs(Materials.Fluorine.getGas(1000*800))
@@ -902,8 +902,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, Materials.Neutronium.getNanite(1)),
-                setStackSize(GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust,1), 220),
+                GTUtility.copyAmountUnsafe(0, Materials.Neutronium.getNanite(1)),
+                setStackSize(GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 1), 220),
                 setStackSize(Materials.Sulfur.getDust(1), 102)
             )
             .fluidInputs(Materials.Oxygen.getGas(1000*288))
@@ -926,8 +926,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, Materials.Neutronium.getNanite(1)),
-                setStackSize(GGMaterial.naquadriaEarth.get(OrePrefixes.dust,1), 100),
+                GTUtility.copyAmountUnsafe(0, Materials.Neutronium.getNanite(1)),
+                setStackSize(GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 1), 100),
                 setStackSize(Materials.Phosphorus.getDust(1), 95)
             )
             .itemOutputs(
@@ -949,8 +949,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, Materials.Gold.getNanite(1)),
-                setStackSize(GGMaterial.naquadahEarth.get(OrePrefixes.dust,1), 480),
+                GTUtility.copyAmountUnsafe(0, Materials.Gold.getNanite(1)),
+                setStackSize(GGMaterial.naquadahEarth.get(OrePrefixes.dust, 1), 480),
                 setStackSize(Materials.Sodium.getDust(1), 112)
             )
             .fluidInputs(Materials.Fluorine.getGas(1000*800))
@@ -978,8 +978,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, Materials.Gold.getNanite(1)),
-                setStackSize(GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust,1), 220),
+                GTUtility.copyAmountUnsafe(0, Materials.Gold.getNanite(1)),
+                setStackSize(GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 1), 220),
                 setStackSize(Materials.Sulfur.getDust(1), 10)
             )
             .fluidInputs(Materials.Oxygen.getGas(1000*288))
@@ -1002,8 +1002,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                copyAmountUnlimited(0, Materials.Gold.getNanite(1)),
-                setStackSize(GGMaterial.naquadriaEarth.get(OrePrefixes.dust,1), 100),
+                GTUtility.copyAmountUnsafe(0, Materials.Gold.getNanite(1)),
+                setStackSize(GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 1), 100),
                 setStackSize(Materials.Phosphorus.getDust(1), 9)
             )
             .itemOutputs(

@@ -3,13 +3,13 @@ package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
-import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -58,7 +58,7 @@ public class TCRecipeTools {
                 if (cat instanceof ArrayList<?>catalyst1) {
                     input = GTOreDictUnificator.get(false, (ItemStack) catalyst1.get(0), true);
                 } else if (cat instanceof ItemStack itemStack) {
-                    input = TstUtils.copyAmountUnlimited(1, itemStack);
+                    input = GTUtility.copyAmountUnsafe(1, itemStack);
                 } else continue;
                 String inputKey = null;
                 if (input != null) {

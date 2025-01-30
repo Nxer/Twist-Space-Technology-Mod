@@ -12,11 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.google.common.collect.Sets;
 
@@ -74,7 +75,7 @@ public class OP_NormalProcessing {
         if (SpecialProcessingLineMaterialInstead) {
             ItemStack t = processingLineMaterials.get(material);
             if (t != null) {
-                return TstUtils.copyAmountUnlimited(amount * 3, t);
+                return GTUtility.copyAmountUnsafe(amount * 3, t);
             }
         }
         return setStackSize(GTOreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
@@ -221,9 +222,9 @@ public class OP_NormalProcessing {
 
         // IC2 Uranium ore
         processOreRecipe(
-            copyAmountUnlimited(1,Ic2Items.uraniumOre),
-            Materials.Uranium,
-            false
+                GTUtility.copyAmountUnsafe(1, Ic2Items.uraniumOre),
+                Materials.Uranium,
+                false
         );
 
         // HEE end powder

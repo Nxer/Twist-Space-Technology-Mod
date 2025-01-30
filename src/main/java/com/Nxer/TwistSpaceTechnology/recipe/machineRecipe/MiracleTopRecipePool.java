@@ -23,7 +23,6 @@ import static tectech.loader.recipe.BaseRecipeLoader.getItemContainer;
 import static tectech.thing.CustomItemList.DATApipe;
 import static thaumcraft.common.config.ConfigBlocks.blockEssentiaReservoir;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -36,6 +35,7 @@ import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 import com.glodblock.github.common.storage.CellType;
@@ -660,10 +660,10 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                TstUtils.copyAmountUnlimited(1, Wrapped_Optically_Perfected_CPU),
-                TstUtils.copyAmountUnlimited(2, Wrapped_Optically_Compatible_Memory),
-                TstUtils.copyAmountUnlimited(16, Wrapped_Circuit_Parts_CapacitorXSMD),
-                TstUtils.copyAmountUnlimited(16, Wrapped_Circuit_Parts_DiodeXSMD),
+                GTUtility.copyAmountUnsafe(1, Wrapped_Optically_Perfected_CPU),
+                GTUtility.copyAmountUnsafe(2, Wrapped_Optically_Compatible_Memory),
+                GTUtility.copyAmountUnsafe(16, Wrapped_Circuit_Parts_CapacitorXSMD),
+                GTUtility.copyAmountUnsafe(16, Wrapped_Circuit_Parts_DiodeXSMD),
                 DATApipe.get(64)
             )
             .fluidInputs(
@@ -679,7 +679,7 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                TstUtils.copyAmountUnlimited(1, Wrapped_Circuit_Board_Optical),
+                GTUtility.copyAmountUnsafe(1, Wrapped_Circuit_Board_Optical),
                 GTCMItemList.OpticalSOC.get(1),
                 DATApipe.get(16)
             )
@@ -697,7 +697,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(16),
-                TstUtils.copyAmountUnlimited(16, Wrapped_Circuit_Board_Optical),
+                GTUtility.copyAmountUnsafe(16, Wrapped_Circuit_Board_Optical),
                 GTCMItemList.OpticalSOC.get(16),
                 DATApipe.get(64)
             )
@@ -960,11 +960,11 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                TstUtils.copyAmountUnlimited(1, Wrapped_Circuit_Board_Bio_Ultra),
+                GTUtility.copyAmountUnsafe(1, Wrapped_Circuit_Board_Bio_Ultra),
                 ItemList.Circuit_Bioprocessor.get(32),
-                TstUtils.copyAmountUnlimited(12, Wrapped_Circuit_Parts_InductorASMD),
-                TstUtils.copyAmountUnlimited(16, Wrapped_Circuit_Parts_CapacitorASMD),
-                TstUtils.copyAmountUnlimited(32, Wrapped_Circuit_Chip_Ram)
+                GTUtility.copyAmountUnsafe(12, Wrapped_Circuit_Parts_InductorASMD),
+                GTUtility.copyAmountUnsafe(16, Wrapped_Circuit_Parts_CapacitorASMD),
+                GTUtility.copyAmountUnsafe(32, Wrapped_Circuit_Chip_Ram)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144),
@@ -981,11 +981,11 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                TstUtils.copyAmountUnlimited(1, Wrapped_Circuit_Board_Bio_Ultra),
+                GTUtility.copyAmountUnsafe(1, Wrapped_Circuit_Board_Bio_Ultra),
                 ItemList.Circuit_Bioprocessor.get(32),
-                TstUtils.copyAmountUnlimited(3, Wrapped_Circuit_Parts_InductorXSMD),
-                TstUtils.copyAmountUnlimited(4, Wrapped_Circuit_Parts_CapacitorXSMD),
-                TstUtils.copyAmountUnlimited(32, Wrapped_Circuit_Chip_Ram)
+                GTUtility.copyAmountUnsafe(3, Wrapped_Circuit_Parts_InductorXSMD),
+                GTUtility.copyAmountUnsafe(4, Wrapped_Circuit_Parts_CapacitorXSMD),
+                GTUtility.copyAmountUnsafe(32, Wrapped_Circuit_Chip_Ram)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144),
@@ -1003,11 +1003,11 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32714),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32716),
-                TstUtils.copyAmountUnlimited(2, Wrapped_Circuit_Chip_NanoCPU),
-                TstUtils.copyAmountUnlimited(12, Wrapped_Circuit_Parts_CapacitorASMD),
-                TstUtils.copyAmountUnlimited(12, Wrapped_Circuit_Parts_TransistorASMD)
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32714),
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32716),
+                GTUtility.copyAmountUnsafe(2, Wrapped_Circuit_Chip_NanoCPU),
+                GTUtility.copyAmountUnsafe(12, Wrapped_Circuit_Parts_CapacitorASMD),
+                GTUtility.copyAmountUnsafe(12, Wrapped_Circuit_Parts_TransistorASMD)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 72),
@@ -1024,11 +1024,11 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32714),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32716),
-                TstUtils.copyAmountUnlimited(2, Wrapped_Circuit_Chip_NanoCPU),
-                TstUtils.copyAmountUnlimited(3, Wrapped_Circuit_Parts_CapacitorXSMD),
-                TstUtils.copyAmountUnlimited(3, Wrapped_Circuit_Parts_TransistorXSMD)
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32714),
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32716),
+                GTUtility.copyAmountUnsafe(2, Wrapped_Circuit_Chip_NanoCPU),
+                GTUtility.copyAmountUnsafe(3, Wrapped_Circuit_Parts_CapacitorXSMD),
+                GTUtility.copyAmountUnsafe(3, Wrapped_Circuit_Parts_TransistorXSMD)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 72),
@@ -1045,8 +1045,8 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                TstUtils.copyAmountUnlimited(1, Wrapped_Circuit_Board_Bio_Ultra),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32699)
+                GTUtility.copyAmountUnsafe(1, Wrapped_Circuit_Board_Bio_Ultra),
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32699)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144),
@@ -1065,8 +1065,8 @@ public class MiracleTopRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(16),
-                TstUtils.copyAmountUnlimited(12, Wrapped_Circuit_Board_Bio_Ultra),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32699)
+                GTUtility.copyAmountUnsafe(12, Wrapped_Circuit_Board_Bio_Ultra),
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32699)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144 * 12),
@@ -1412,25 +1412,25 @@ public class MiracleTopRecipePool implements IRecipePool {
         // Liquid Stargate
         GTValues.RA.stdBuilder()
             .itemInputs(
-                TstUtils.copyAmountUnlimited(1, ringBlock),
-                TstUtils.copyAmountUnlimited(1, chevronBlock),
-                TstUtils.copyAmountUnlimited(1, chevronBlock),
-                TstUtils.copyAmountUnlimited(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
 
-                TstUtils.copyAmountUnlimited(1, chevronBlock),
-                TstUtils.copyAmountUnlimited(1, irisUpgrade),
-                TstUtils.copyAmountUnlimited(1, irisUpgrade),
-                TstUtils.copyAmountUnlimited(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, irisUpgrade),
+                GTUtility.copyAmountUnsafe(1, irisUpgrade),
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
 
-                TstUtils.copyAmountUnlimited(1, ringBlock),
-                TstUtils.copyAmountUnlimited(1, irisUpgrade),
-                TstUtils.copyAmountUnlimited(1, irisUpgrade),
-                TstUtils.copyAmountUnlimited(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, irisUpgrade),
+                GTUtility.copyAmountUnsafe(1, irisUpgrade),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
 
-                TstUtils.copyAmountUnlimited(1, chevronBlock),
-                TstUtils.copyAmountUnlimited(1, ringBlock),
-                TstUtils.copyAmountUnlimited(1, ringBlock),
-                TstUtils.copyAmountUnlimited(1, chevronBlock)
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, chevronBlock)
             )
             .fluidInputs(
                 MaterialPool.StabiliseVoidMatter.getFluidOrGas(1_000)

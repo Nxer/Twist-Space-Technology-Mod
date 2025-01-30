@@ -36,7 +36,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,6 +46,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;

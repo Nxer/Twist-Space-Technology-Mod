@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
-import gregtech.api.util.GTUtility;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -30,6 +28,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GTUtility;
 import thaumcraft.common.items.ItemEssence;
 
 public class IndustrialMagicMatrixRecipePool implements IRecipePool {

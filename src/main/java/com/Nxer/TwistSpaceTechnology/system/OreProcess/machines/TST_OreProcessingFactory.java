@@ -168,7 +168,8 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             boolean hasNotFound = true;
             for (GTRecipe recipe : recipeMap.getAllRecipes()) {
                 if (recipe.mInputs == null || recipe.mInputs.length < 1) continue;
-                if (GTUtility.areStacksEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
+                if (GTUtility.areStacksEqual(recipe.mInputs[0], items)
+                    && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
                     hasNotFound = false;
                     ItemStack recipeInput = recipe.mInputs[0];
@@ -238,7 +239,8 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
 
             boolean hasNotFound = true;
             for (GTRecipe recipe : recipeMap.getAllRecipes()) {
-                if (GTUtility.areStacksEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
+                if (GTUtility.areStacksEqual(recipe.mInputs[0], items)
+                    && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
                     hasNotFound = false;
                     ItemStack recipeInput = recipe.mInputs[0];

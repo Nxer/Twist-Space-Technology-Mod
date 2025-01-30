@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -39,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;

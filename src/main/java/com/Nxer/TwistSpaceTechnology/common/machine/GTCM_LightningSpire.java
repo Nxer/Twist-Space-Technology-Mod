@@ -21,7 +21,6 @@ import static tectech.thing.metaTileEntity.multi.base.TTMultiblockBase.HatchElem
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -40,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_Multi
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -321,7 +321,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
                             canAdd -= machine.stackSize;
                             machine.stackSize = 0;
                         } else {
-                            mStored.add(TstUtils.copyAmountUnlimited(MAXRODS - tRods, machine));
+                            mStored.add(GTUtility.copyAmountUnsafe(MAXRODS - tRods, machine));
                             machine.stackSize -= canAdd;
                             tRods = MAXRODS;
                             break;

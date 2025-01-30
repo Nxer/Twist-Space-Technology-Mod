@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
@@ -37,14 +38,14 @@ public class TST_SimpleDisassemblyRecipe {
             if (amount > Integer.MAX_VALUE) {
                 long t = amount;
                 while (t > Integer.MAX_VALUE) {
-                    outputs.add(TstUtils.copyAmountUnlimited(Integer.MAX_VALUE, itemStack));
+                    outputs.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, itemStack));
                     t -= Integer.MAX_VALUE;
                 }
                 if (t > 0) {
-                    outputs.add(TstUtils.copyAmountUnlimited((int) t, itemStack));
+                    outputs.add(GTUtility.copyAmountUnsafe((int) t, itemStack));
                 }
             } else {
-                outputs.add(TstUtils.copyAmountUnlimited((int) amount, itemStack));
+                outputs.add(GTUtility.copyAmountUnsafe((int) amount, itemStack));
             }
         }
         return outputs;

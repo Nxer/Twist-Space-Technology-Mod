@@ -1,9 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.combat.items;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import gregtech.api.util.GTUtility;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.util.GTLog;
@@ -35,23 +36,23 @@ public enum ItemGearList {
         if (Utils.isStackInvalid(mStack)) {
             GTLog.out.println("Object in the ItemList is null at:");
             new NullPointerException().printStackTrace(GTLog.out);
-            return TstUtils.copyAmountUnlimited(aAmount, WoodenSword.get(1));
+            return GTUtility.copyAmountUnsafe(aAmount, WoodenSword.get(1));
         }
-        return TstUtils.copyAmountUnlimited(aAmount, GTOreDictUnificator.get(mStack));
+        return GTUtility.copyAmountUnsafe(aAmount, GTOreDictUnificator.get(mStack));
     }
 
     public ItemGearList set(Item aItem) {
         mHasNotBeenSet = false;
         if (aItem == null) return this;
         ItemStack aStack = new ItemStack(aItem, 1, 0);
-        mStack = TstUtils.copyAmountUnlimited(1, aStack);
+        mStack = GTUtility.copyAmountUnsafe(1, aStack);
         return this;
     }
 
     public ItemGearList set(ItemStack aStack) {
         if (aStack != null) {
             mHasNotBeenSet = false;
-            mStack = TstUtils.copyAmountUnlimited(1, aStack);
+            mStack = GTUtility.copyAmountUnsafe(1, aStack);
         }
         return this;
     }

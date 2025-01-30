@@ -342,7 +342,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
             for (int i = 0; i < stack; i++) {
                 r[i] = t.copy();
             }
-            if (remainder > 0) r[stack] = copyAmountUnlimited(remainder, t);
+            if (remainder > 0) r[stack] = GTUtility.copyAmountUnsafe(remainder, t);
             return r;
         }
     }

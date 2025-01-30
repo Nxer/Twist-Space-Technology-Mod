@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 
 import java.util.List;
 
-import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -14,6 +13,7 @@ import com.gtnewhorizons.modularui.api.math.Pos2d;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
+import gregtech.api.util.GTUtility;
 import gregtech.nei.GTNEIDefaultHandler;
 
 public class TST_StellarForgeFrontend extends RecipeMapFrontend {
