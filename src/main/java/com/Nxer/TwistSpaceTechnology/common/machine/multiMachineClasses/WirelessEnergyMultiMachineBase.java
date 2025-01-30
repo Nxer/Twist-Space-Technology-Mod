@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
 import static com.Nxer.TwistSpaceTechnology.config.Config.DefaultCycleNum_WirelessEnergyMultiMachineBase;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.NEGATIVE_ONE;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.NEGATIVE_ONE;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
 import java.math.BigInteger;

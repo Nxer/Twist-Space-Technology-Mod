@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.util.GTLog;

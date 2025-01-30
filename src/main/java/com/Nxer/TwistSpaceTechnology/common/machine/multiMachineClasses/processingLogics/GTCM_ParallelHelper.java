@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.ItemList;
@@ -428,12 +427,12 @@ public class GTCM_ParallelHelper extends ParallelHelper {
         double tickTimeAfterOC = calculator.setParallel(originalMaxParallel)
                                            .calculateDurationUnderOneTick();
         if (tickTimeAfterOC < 1) {
-            maxParallel = Utils.safeInt((long) (maxParallel / tickTimeAfterOC), 1);
+            maxParallel = GTUtility.safeInt((long) (maxParallel / tickTimeAfterOC), 1);
         }
 
         int maxParallelBeforeBatchMode = maxParallel;
         if (batchMode) {
-            maxParallel = Utils.safeInt((long) maxParallel * batchModifier, 1);
+            maxParallel = GTUtility.safeInt((long) maxParallel * batchModifier, 1);
         }
 
         final ItemStack[] truncatedItemOutputs = recipe.mOutputs != null

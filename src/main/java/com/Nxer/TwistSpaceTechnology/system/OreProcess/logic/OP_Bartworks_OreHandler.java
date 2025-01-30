@@ -11,7 +11,6 @@ import static gregtech.api.enums.OrePrefixes.rawOre;
 
 import java.util.ArrayList;
 
-import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -19,6 +18,7 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import bartworks.system.material.Werkstoff;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GTUtility;
 
 public class OP_Bartworks_OreHandler {
 

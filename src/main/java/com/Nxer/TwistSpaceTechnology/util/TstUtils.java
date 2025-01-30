@@ -1,8 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+import java.lang.reflect.Array;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -13,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.intellij.lang.annotations.MagicConstant;
@@ -21,6 +26,7 @@ import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.Obsolete;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -93,6 +99,12 @@ import gregtech.api.util.GTUtility;
  */
 @SuppressWarnings("unused")
 public class TstUtils {
+
+    public static final double LOG2 = Math.log(2);
+    public static final double LOG4 = Math.log(4);
+
+    public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
+    public static final BigInteger INTEGER_MAX_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
 
     /**
      * Create a new {@link ItemStack} of given Item with meta.
@@ -513,5 +525,67 @@ public class TstUtils {
     @Deprecated
     public static ItemStack copyAmountUnlimited(int aAmount, ItemStack aStack) {
         return GTUtility.copyAmountUnsafe(aAmount, aStack);
+    }
+
+    /**
+     * Return a shallow copy list of the array where the {@code null} elements are removed.
+     *
+     * @param array the array
+     * @param <T>   the type of elements
+     * @return the array copy where the {@code null} elements are removed.
+     */
+    public static <T> List<T> toNonNullList(T[] array) {
+        return Arrays.stream(array)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Return a shallow copy of the array where the {@code null} elements are removed.
+     * <p>
+     * Recommend to use {@link #toNonNullList(Object[])} if possible.
+     *
+     * @param array the array
+     * @param <T>   the type of elements
+     * @return the array copy where the {@code null} elements are removed.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T[] toNonNullArray(T[] array, Class<T> tClass) {
+        return Arrays.stream(array)
+            .filter(Objects::nonNull)
+            .toArray(size -> (T[]) Array.newInstance(tClass, size));
+    }
+
+    /**
+     * Return a shallow copy of the array where the {@code null} elements are removed.
+     *
+     * @param array the array
+     * @return the array copy where the {@code null} elements are removed.
+     */
+    @Contract("null -> null; !null -> !null")
+    public static ItemStack[] toNonNullItemStackArray(@Nullable ItemStack[] array) {
+        return array != null ? toNonNullArray(array, ItemStack.class) : null;
+    }
+
+    /**
+     * Return a shallow copy of the array where the {@code null} elements are removed.
+     *
+     * @param array the array
+     * @return the array copy where the {@code null} elements are removed.
+     */
+    @Contract("null -> null; !null -> !null")
+    public static FluidStack[] toNonNullFluidStackArray(@Nullable FluidStack[] array) {
+        return array != null ? toNonNullArray(array, FluidStack.class) : null;
+    }
+
+    /**
+     * Calculate the voltage tier in double (not Integer!)
+     * For example, {@code 8190} EU/t will return a double around {@code 4.9}.
+     *
+     * @param voltage the voltage
+     * @return the voltage tier in double
+     */
+    public static double calculateVoltageTier(double voltage) {
+        return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
     }
 }

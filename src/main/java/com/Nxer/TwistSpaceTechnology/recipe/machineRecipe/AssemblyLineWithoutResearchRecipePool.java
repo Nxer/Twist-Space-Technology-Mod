@@ -59,7 +59,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
@@ -194,10 +194,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             if (!hasCustomWildcardItemList) {
                 // debugLogInfo("Normal recipe generating.");
                 GTRecipeBuilder ra = GTValues.RA.stdBuilder();
-                ra.itemInputs(Utils.sortNoNullArray(inputItems))
+                ra.itemInputs(TstUtils.toNonNullItemStackArray(inputItems))
                     .itemOutputs(recipe.mOutput);
                 if (recipe.mFluidInputs != null) {
-                    ra.fluidInputs(Utils.sortNoNullArray(recipe.mFluidInputs));
+                    ra.fluidInputs(TstUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
                 }
                 ra.noOptimize()
                     .eut(recipe.mEUt)
@@ -222,10 +222,10 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     // loopFlag++;
 
                     GTRecipeBuilder ra = GTValues.RA.stdBuilder();
-                    ra.itemInputs(Utils.sortNoNullArray(inputs))
+                    ra.itemInputs(TstUtils.toNonNullItemStackArray(inputs))
                         .itemOutputs(recipe.mOutput);
                     if (recipe.mFluidInputs != null) {
-                        ra.fluidInputs(Utils.sortNoNullArray(recipe.mFluidInputs));
+                        ra.fluidInputs(TstUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
                     }
                     ra.noOptimize()
                         .eut(recipe.mEUt)

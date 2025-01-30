@@ -1,8 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static cofh.lib.util.helpers.FluidHelper.isFluidEqual;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidEqual;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
@@ -60,6 +58,24 @@ public class StellarForgeRecipePool implements IRecipePool {
             boolean flag = false;
             for (ItemStack itemStack2 : isa2) {
                 if (GTUtility.areStacksEqual(itemStack1, itemStack2)) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Moved from Utils.
+     */
+    private static boolean fluidStackEqualFuzzy(FluidStack[] fsa1, FluidStack[] fsa2) {
+        if (fsa1.length != fsa2.length) return false;
+        for (FluidStack fluidStack1 : fsa1) {
+            boolean flag = false;
+            for (FluidStack fluidStack2 : fsa2) {
+                if (GTUtility.areFluidsEqual(fluidStack1, fluidStack2)) {
                     flag = true;
                     break;
                 }
@@ -314,7 +330,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             for (FluidStack aFluidTemp : outputFluidListTemp) {
                 boolean isFluidRepetitious = false;
                 for (FluidStack aFluidOut : outputFluidList) {
-                    if (fluidEqual(aFluidTemp, aFluidOut)) {
+                    if (GTUtility.areFluidsEqual(aFluidTemp, aFluidOut)) {
                         aFluidOut.amount += aFluidTemp.amount;
                         isFluidRepetitious = true;
                     }

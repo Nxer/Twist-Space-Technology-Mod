@@ -3,8 +3,6 @@ package com.Nxer.TwistSpaceTechnology.combat.items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.util.Utils;
-
 import gregtech.api.util.GTLog;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;

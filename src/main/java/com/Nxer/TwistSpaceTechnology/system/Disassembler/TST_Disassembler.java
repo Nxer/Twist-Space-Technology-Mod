@@ -35,7 +35,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -368,14 +367,14 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                         if (outs.amount <= 0) continue;
                         long amount = (long) outs.amount * outputMultiplier;
                         if (amount <= Integer.MAX_VALUE) {
-                            outputFluids.add(GTUtility.copyAmountUnsafe((int) amount, outs));
+                            outputFluids.add(GTUtility.copyAmount((int) amount, outs));
                         } else {
                             while (amount > 0) {
                                 if (amount > Integer.MAX_VALUE) {
-                                    outputFluids.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, outs));
+                                    outputFluids.add(GTUtility.copyAmount(Integer.MAX_VALUE, outs));
                                     amount -= Integer.MAX_VALUE;
                                 } else {
-                                    outputFluids.add(GTUtility.copyAmountUnsafe((int) amount, outs));
+                                    outputFluids.add(GTUtility.copyAmount((int) amount, outs));
                                     amount = 0;
                                 }
                             }

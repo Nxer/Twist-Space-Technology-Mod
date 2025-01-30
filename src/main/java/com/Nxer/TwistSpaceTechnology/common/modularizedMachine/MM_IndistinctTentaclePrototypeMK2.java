@@ -49,7 +49,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.Ex
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -104,7 +104,7 @@ public class MM_IndistinctTentaclePrototypeMK2
         BigInteger costEU = BigInteger.valueOf(eEut)
             .multiply(BigInteger.valueOf(eMaxProgressingTime));
         // check wireless EU at this moment
-        if (!addEUToGlobalEnergyMap(ownerUUID, costEU.multiply(Utils.NEGATIVE_ONE))) {
+        if (!addEUToGlobalEnergyMap(ownerUUID, costEU.multiply(TstUtils.NEGATIVE_ONE))) {
             shutDown();
             IGregTechTileEntity mte = getBaseMetaTileEntity();
             TwistSpaceTechnology.LOG.info(

@@ -395,7 +395,11 @@ public class TSTStructureUtility {
     public static <T, E> IStructureElement<T> ofAccurateTileExt(Class<E> tileClass, Block tileBlock, int tileBlockMeta,
         Item specialItem, int specialItemMeta) {
         if (tileClass == null) throw new IllegalArgumentException();
-        return ofAccurateTileExt(tileClass, tileBlock, tileBlockMeta, TstUtils.newItemWithMeta(specialItem, specialItemMeta));
+        return ofAccurateTileExt(
+            tileClass,
+            tileBlock,
+            tileBlockMeta,
+            TstUtils.newItemWithMeta(specialItem, specialItemMeta));
     }
 
     /**

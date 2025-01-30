@@ -77,7 +77,7 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -375,7 +375,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                 // Generate EU directly
                 if (this.storageEU > 0 || storageEUMAX > 0) {
                     BigInteger eu = BigInteger.valueOf(storageEUMAX)
-                        .multiply(Utils.INTEGER_MAX_VALUE)
+                        .multiply(TstUtils.INTEGER_MAX_VALUE)
                         .add(BigInteger.valueOf(storageEU));
                     addEUToGlobalEnergyMap(ownerUUID, eu);
                     this.storageEU = 0;
@@ -401,7 +401,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                     }
                     mOutputItems = output.toArray(new ItemStack[0]);
                 } else {
-                    mOutputItems = new ItemStack[]{GTUtility.copyAmountUnsafe((int) amount, CRITICAL_PHOTON)};
+                    mOutputItems = new ItemStack[] { GTUtility.copyAmountUnsafe((int) amount, CRITICAL_PHOTON) };
                 }
 
             }

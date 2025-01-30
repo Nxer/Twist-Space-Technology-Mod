@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTE;
 import static gregtech.api.util.GTUtility.filterValidMTEs;
 
 import java.util.ArrayList;
@@ -33,10 +32,11 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.Ex
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -85,6 +85,22 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
      * A collector contains all storage input buses and hatches (ME) to conveniently handle ME network.
      */
     protected final Collection<IRecipeProcessingAwareHatch> MEInputHatches = new ArrayList<>();
+
+    /**
+     * Moved from Utils.
+     */
+    private static <T extends Collection<?>> T filterValidMTE(T metaTileEntities) {
+        metaTileEntities.removeIf(o -> {
+            if (o == null) {
+                return true;
+            }
+            if (o instanceof MetaTileEntity mte) {
+                return !mte.isValid();
+            }
+            return false;
+        });
+        return metaTileEntities;
+    }
 
     @Override
     public void resetModularHatchCollections() {
@@ -656,7 +672,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             } else {
                 long eutMultiplier = eutExtraMultiplier + 1;
                 int canOverclockTimes = (int) Math
-                    .min(Math.log(eutMultiplier) / Utils.LOG4, Math.log(maxTickCanBoost) / Utils.LOG2);
+                    .min(Math.log(eutMultiplier) / TstUtils.LOG4, Math.log(maxTickCanBoost) / TstUtils.LOG2);
                 boostedTick = (int) Math.pow(2, canOverclockTimes) - 1;
                 thisCoreUsed = (long) ((Math.pow(4, canOverclockTimes) - 1) * thisCoreEUt);
             }

@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.filterValidMTEs;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -189,7 +187,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     public ArrayList<ItemStack> getStoredInputsWithoutDualInputHatch() {
 
         ArrayList<ItemStack> rList = new ArrayList<>();
-        for (MTEHatchInputBus tHatch : filterValidMTEs(mInputBusses)) {
+        for (MTEHatchInputBus tHatch : GTUtility.filterValidMTEs(mInputBusses)) {
             tHatch.mRecipeMap = getRecipeMap();
             IGregTechTileEntity tileEntity = tHatch.getBaseMetaTileEntity();
             for (int i = tileEntity.getSizeInventory() - 1; i >= 0; i--) {
@@ -227,7 +225,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         }
 
         ArrayList<ItemStack> rList = new ArrayList<>();
-        for (MTEHatchInputBus tHatch : filterValidMTEs(mInputBusses)) {
+        for (MTEHatchInputBus tHatch : GTUtility.filterValidMTEs(mInputBusses)) {
             tHatch.mRecipeMap = getRecipeMap();
             IGregTechTileEntity tileEntity = tHatch.getBaseMetaTileEntity();
             for (int i = tileEntity.getSizeInventory() - 1; i >= 0; i--) {
@@ -438,7 +436,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         long totalOutput = 0;
         long aFirstVoltageFound = -1;
         boolean aFoundMixedDynamos = false;
-        for (MTEHatchDynamo aDynamo : filterValidMTEs(mDynamoHatches)) {
+        for (MTEHatchDynamo aDynamo : GTUtility.filterValidMTEs(mDynamoHatches)) {
             long aVoltage = aDynamo.maxEUOutput();
             long aTotal = aDynamo.maxAmperesOut() * aVoltage;
             // Check against voltage to check when hatch mixing
@@ -472,7 +470,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         int aAmpsToInject;
         int aRemainder;
         int ampsOnCurrentHatch;
-        for (MTEHatchDynamo aDynamo : filterValidMTEs(mDynamoHatches)) {
+        for (MTEHatchDynamo aDynamo : GTUtility.filterValidMTEs(mDynamoHatches)) {
             leftToInject = actualOutputEU - injected;
             aVoltage = aDynamo.maxEUOutput();
             aAmpsToInject = (int) (leftToInject / aVoltage);

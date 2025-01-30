@@ -76,7 +76,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -301,7 +301,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         // add EU to the wireless EU net
         BigInteger eu = BigInteger
             .valueOf((long) (currentOutputEU * outputMultiplier * ((rewardContinuous + 100d) / 100d)))
-            .multiply(Utils.INTEGER_MAX_VALUE);
+            .multiply(TstUtils.INTEGER_MAX_VALUE);
         if (!addEUToGlobalEnergyMap(ownerUUID, eu)) {
             return CheckRecipeResultRegistry.INTERNAL_ERROR;
         }

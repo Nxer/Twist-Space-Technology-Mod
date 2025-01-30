@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -30,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
@@ -630,8 +629,8 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
                         HorizontalDirt.getLeft(),
                         HorizontalDirt.getRight(),
                         ImmutableList.of(
-                                TstUtils.newItemWithMeta(HorizontalDirt.getLeft(), HorizontalDirt.getRight()),
-                                TstUtils.newItemWithMeta(Blocks.dirt, 0))))
+                            TstUtils.newItemWithMeta(HorizontalDirt.getLeft(), HorizontalDirt.getRight()),
+                            TstUtils.newItemWithMeta(Blocks.dirt, 0))))
                 .addElement(
                     'b',
                     buildHatchAdder(GT_TileEntity_MegaBrickedBlastFurnace.class).atLeast(InputBus, OutputBus)

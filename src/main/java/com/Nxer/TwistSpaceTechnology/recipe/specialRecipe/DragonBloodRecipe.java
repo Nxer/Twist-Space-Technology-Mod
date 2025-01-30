@@ -17,7 +17,6 @@ import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
@@ -96,7 +95,11 @@ public class DragonBloodRecipe implements IRecipePool {
                 GTCMRecipe.StellarForgeRecipes);
 
             addToMiracleDoorRecipes(
-                new ItemStack[]{GTUtility.copyAmountUnsafe(0, GTModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1))), GTPPCombType.DRAGONBLOOD.getStackForType(4), GTUtility.getIntegratedCircuit(2)},
+                new ItemStack[] {
+                    GTUtility.copyAmountUnsafe(
+                        0,
+                        GTModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1))),
+                    GTPPCombType.DRAGONBLOOD.getStackForType(4), GTUtility.getIntegratedCircuit(2) },
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 48) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 3) },
@@ -114,7 +117,11 @@ public class DragonBloodRecipe implements IRecipePool {
                 GTCMRecipe.StellarForgeRecipes);
 
             addToMiracleDoorRecipes(
-                new ItemStack[]{GTUtility.copyAmountUnsafe(0, GTModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1))), GTUtility.getIntegratedCircuit(1)},
+                new ItemStack[] {
+                    GTUtility.copyAmountUnsafe(
+                        0,
+                        GTModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1))),
+                    GTUtility.getIntegratedCircuit(1) },
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 64) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 2) },
@@ -134,7 +141,9 @@ public class DragonBloodRecipe implements IRecipePool {
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
-                    GTUtility.copyAmountUnsafe(1, GTModHandler.getModItem("witchery", "infinityegg", 1, GTCMItemList.TestItem0.get(1))))
+                    GTUtility.copyAmountUnsafe(
+                        1,
+                        GTModHandler.getModItem("witchery", "infinityegg", 1, GTCMItemList.TestItem0.get(1))))
                 .fluidInputs(getFluidStack("fieryblood", 1000 * 16384))
                 .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 16384))
                 .noOptimize()

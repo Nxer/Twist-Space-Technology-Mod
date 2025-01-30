@@ -425,23 +425,23 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 1))
             .metadata(RESEARCH_TIME, 24 * HOURS)
             .itemInputs(
-                    GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
-                    GTCMItemList.SpaceWarper.get(16),
-                    GTCMItemList.GravitationalLens.get(16),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
+                GTCMItemList.SpaceWarper.get(16),
+                GTCMItemList.GravitationalLens.get(16),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
 
-                    EnergyFluctuationSelfHarmonizer.get(16),
-                    PacketInformationTranslationArray.get(16),
-                    GTUtility.copyAmountUnsafe(16, eternal_singularity),
-                    ItemList.EnergisedTesseract.get(16),
+                EnergyFluctuationSelfHarmonizer.get(16),
+                PacketInformationTranslationArray.get(16),
+                GTUtility.copyAmountUnsafe(16, eternal_singularity),
+                ItemList.EnergisedTesseract.get(16),
 
-                    ItemList.Field_Generator_UIV.get(16),
-                    ItemList.Emitter_UIV.get(16),
-                    ItemList.Sensor_UIV.get(16),
-                    CustomItemList.HighEnergyFlowCircuit.get(16),
+                ItemList.Field_Generator_UIV.get(16),
+                ItemList.Emitter_UIV.get(16),
+                ItemList.Sensor_UIV.get(16),
+                CustomItemList.HighEnergyFlowCircuit.get(16),
 
-                    GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
-                    GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
+                GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
             .fluidInputs(
                 MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
                 Materials.Hydrogen.getPlasma(1000 * 64),

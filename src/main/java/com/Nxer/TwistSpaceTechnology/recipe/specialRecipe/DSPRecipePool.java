@@ -928,7 +928,9 @@ public class DSPRecipePool implements IRecipePool {
         // Strange Matter Aggregator Controller
         TST_RecipeBuilder.builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(8192, GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 1)),
+                GTUtility.copyAmountUnsafe(
+                    8192,
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 1)),
                 AntimatterFuelRod.get(512),
                 AnnihilationConstrainer.get(512),
                 DysonSphereFrameComponent.get(512),
