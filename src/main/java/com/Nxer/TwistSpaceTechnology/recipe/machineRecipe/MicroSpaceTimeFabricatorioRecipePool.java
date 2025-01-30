@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static gtPlusPlus.core.material.Particle.GRAVITON;
@@ -37,7 +36,7 @@ public class MicroSpaceTimeFabricatorioRecipePool implements IRecipePool {
             .fluidInputs(
                 MaterialsUEVplus.ExcitedDTSC.getFluid(1000),
                 MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getFluidStack(144 * 64))
-            .itemOutputs(setStackSize(ItemList.Tesseract.get(1), 512))
+            .itemOutputs(GTUtility.copyAmountUnsafe(512, ItemList.Tesseract.get(1)))
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(3000))
             .eut(RECIPE_UXV)
             .duration(20 * 60)
@@ -49,8 +48,8 @@ public class MicroSpaceTimeFabricatorioRecipePool implements IRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(24),
-                setStackSize(Particle.getBaseParticle(UNKNOWN), 64),
-                setStackSize(Particle.getBaseParticle(GRAVITON), 64),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(UNKNOWN)),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(GRAVITON)),
                 GTCMItemList.Antimatter.get(1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000))
             .itemOutputs(Laser_Lens_Special.get(64))

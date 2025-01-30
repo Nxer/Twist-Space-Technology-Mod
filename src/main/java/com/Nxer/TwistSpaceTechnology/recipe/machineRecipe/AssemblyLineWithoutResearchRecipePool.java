@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -75,7 +74,6 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeBuilder;
@@ -303,7 +301,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Emitter_UMV.get(4),
                     ItemList.Sensor_UMV.get(4))
                 .fluidInputs(new FluidStack(solderUEV, 144 * 256))
-                .itemOutputs(setStackSize(GTModHandler.getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1), 8192))
+                .itemOutputs(GTUtility.copyAmountUnsafe(8192, getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1)))
                 .eut(100000000)
                 .duration(20 * 50)
                 .addTo(MASL);
@@ -315,15 +313,15 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(24),
                     Materials.Neutronium.getNanite(1),
-                    setStackSize(Materials.Lanthanum.getPlates(1), 4096),
-                    setStackSize(Materials.NaquadahAlloy.getPlates(1), 6144),
+                    GTUtility.copyAmountUnsafe(4096, Materials.Lanthanum.getPlates(1)),
+                    GTUtility.copyAmountUnsafe(6144, Materials.NaquadahAlloy.getPlates(1)),
                     ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 0, 1))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 1024),
                     Materials.Lead.getMolten(144 * 16 * 1024),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 8),
                     Materials.UUMatter.getFluid(1000 * 16))
-                .itemOutputs(setStackSize(ItemRefer.Advanced_Radiation_Protection_Plate.get(1), 2048))
+                .itemOutputs(GTUtility.copyAmountUnsafe(2048, ItemRefer.Advanced_Radiation_Protection_Plate.get(1)))
                 .eut(RECIPE_UXV)
                 .duration(20 * 10)
                 .addTo(MASL);
@@ -336,7 +334,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             TST_RecipeBuilder.builder()
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
-                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 6144),
+                    GTUtility.copyAmountUnsafe(6144, ItemList.Circuit_Parts_Crystal_Chip_Master.get(1)),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 16),
                     ItemList.Field_Generator_UEV.get(8),
 
@@ -356,7 +354,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             TST_RecipeBuilder.builder()
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Infinity, 64),
-                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 48912),
+                    GTUtility.copyAmountUnsafe(48912, ItemList.Circuit_Parts_Crystal_Chip_Master.get(1)),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 16),
                     ItemList.Field_Generator_UIV.get(8),
 
@@ -376,11 +374,11 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             TST_RecipeBuilder.builder()
                 .itemInputs(
                     MaterialsElements.STANDALONE.HYPOGEN.getPlateDense(64),
-                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 391296),
+                    GTUtility.copyAmountUnsafe(391296, ItemList.Circuit_Parts_Crystal_Chip_Master.get(1)),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
                     ItemList.Field_Generator_UMV.get(8),
 
-                    setStackSize(ItemList.Circuit_Wafer_QPIC.get(1), 2048),
+                    GTUtility.copyAmountUnsafe(2048, ItemList.Circuit_Wafer_QPIC.get(1)),
                     CustomItemList.HighEnergyFlowCircuit.get(64),
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 64))
                 .fluidInputs(
@@ -396,7 +394,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
             TST_RecipeBuilder.builder()
                 .itemInputs(
                     MaterialsElements.STANDALONE.DRAGON_METAL.getBlock(64),
-                    setStackSize(ItemList.Circuit_Parts_Crystal_Chip_Master.get(1), 3130368),
+                    GTUtility.copyAmountUnsafe(3130368, ItemList.Circuit_Parts_Crystal_Chip_Master.get(1)),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 16),
                     ItemList.Field_Generator_UXV.get(2),
 
@@ -588,8 +586,8 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTUtility.getIntegratedCircuit(1),
                     ItemList.Hull_UXV.get(1),
                     GTUtility.copyAmountUnsafe(128, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
-                    setStackSize(ItemList.Sensor_UXV.get(1), 128),
-                    setStackSize(ItemList.Electric_Pump_UXV.get(1), 128),
+                    GTUtility.copyAmountUnsafe(128, ItemList.Sensor_UXV.get(1)),
+                    GTUtility.copyAmountUnsafe(128, ItemList.Electric_Pump_UXV.get(1)),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 32))
                 .itemOutputs(tectech.thing.CustomItemList.eM_energyTunnel8_UXV.get(1))
                 .fluidInputs(new FluidStack(solderUEV, 1_296 * 64 * 4))
@@ -603,8 +601,8 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTUtility.getIntegratedCircuit(1),
                     ItemList.Hull_UXV.get(1),
                     GTUtility.copyAmountUnsafe(128, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
-                    setStackSize(ItemList.Emitter_UXV.get(1), 128),
-                    setStackSize(ItemList.Electric_Pump_UXV.get(1), 128),
+                    GTUtility.copyAmountUnsafe(128, ItemList.Emitter_UXV.get(1)),
+                    GTUtility.copyAmountUnsafe(128, ItemList.Electric_Pump_UXV.get(1)),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 32))
                 .itemOutputs(tectech.thing.CustomItemList.eM_dynamoTunnel8_UXV.get(1))
                 .fluidInputs(new FluidStack(solderUEV, 1_296 * 64 * 4))
@@ -618,8 +616,8 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTUtility.getIntegratedCircuit(2),
                     ItemList.Hull_UXV.get(1),
                     GTUtility.copyAmountUnsafe(256, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
-                    setStackSize(ItemList.Sensor_UXV.get(1), 256),
-                    setStackSize(ItemList.Electric_Pump_UXV.get(1), 256),
+                    GTUtility.copyAmountUnsafe(256, ItemList.Sensor_UXV.get(1)),
+                    GTUtility.copyAmountUnsafe(256, ItemList.Electric_Pump_UXV.get(1)),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 64))
                 .itemOutputs(tectech.thing.CustomItemList.eM_energyTunnel9_UXV.get(1))
                 .fluidInputs(new FluidStack(solderUEV, 1_296 * 128 * 4))
@@ -633,8 +631,8 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTUtility.getIntegratedCircuit(2),
                     ItemList.Hull_UXV.get(1),
                     GTUtility.copyAmountUnsafe(256, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 1)),
-                    setStackSize(ItemList.Emitter_UXV.get(1), 256),
-                    setStackSize(ItemList.Electric_Pump_UXV.get(1), 256),
+                    GTUtility.copyAmountUnsafe(256, ItemList.Emitter_UXV.get(1)),
+                    GTUtility.copyAmountUnsafe(256, ItemList.Electric_Pump_UXV.get(1)),
                     GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.BlackPlutonium, 64))
                 .itemOutputs(tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1))
                 .fluidInputs(new FluidStack(solderUEV, 1_296 * 128 * 4))

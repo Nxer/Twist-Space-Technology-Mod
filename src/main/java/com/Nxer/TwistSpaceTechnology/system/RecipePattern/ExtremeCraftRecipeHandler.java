@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -71,7 +72,7 @@ public class ExtremeCraftRecipeHandler {
         for (Map.Entry<Object, Integer> oe : inputsMap.entrySet()) {
             Object o = oe.getKey();
             if (o instanceof ItemStack i) {
-                sorted.add(Utils.setStackSize(i.copy(), oe.getValue()));
+                sorted.add(GTUtility.copyAmountUnsafe(oe.getValue(), i));
             } else if (o instanceof ArrayList) {
                 ArrayList<ItemStack> il = (ArrayList) o;
                 ItemStack first = il.get(0);
@@ -80,7 +81,7 @@ public class ExtremeCraftRecipeHandler {
                     continue;
                 }
                 ItemStack target = GTOreDictUnificator.get(false, first, true);
-                sorted.add(Utils.setStackSize(target.copy(), oe.getValue()));
+                sorted.add(GTUtility.copyAmountUnsafe(oe.getValue(), target));
             } else {
                 LOG.info("ERROR ExtremeCraftRecipeHandler.sortOutInputs catch unknown type");
             }

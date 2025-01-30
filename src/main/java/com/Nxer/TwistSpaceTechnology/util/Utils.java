@@ -18,8 +18,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-
 import gregtech.api.metatileentity.MetaTileEntity;
 
 /**
@@ -38,21 +36,6 @@ public final class Utils {
     // region about game
 
     // endregion
-
-    public static boolean isStackInvalid(ItemStack aStack) {
-        return aStack == null || aStack.getItem() == null || aStack.stackSize < 0;
-    }
-
-    public static ItemStack setStackSize(ItemStack itemStack, int amount) {
-        if (itemStack == null) return null;
-        if (amount < 0) {
-            TwistSpaceTechnology.LOG
-                .info("Error! Trying to set a item stack size lower than zero! " + itemStack + " to amount " + amount);
-            return itemStack;
-        }
-        itemStack.stackSize = amount;
-        return itemStack;
-    }
 
     /**
      * Used to create a size of 1 itemStack, a very light method to reduce the "new" keyword and obfuscated fields are
@@ -101,17 +84,6 @@ public final class Utils {
 
     public static boolean fluidEqual(FluidStack a, FluidStack b) {
         return a.getFluid() == b.getFluid();
-    }
-
-    public static FluidStack setStackSize(FluidStack fluidStack, int amount) {
-        if (fluidStack == null) return null;
-        if (amount < 0) {
-            TwistSpaceTechnology.LOG
-                .info("Error! Trying to set a item stack size lower than zero! " + fluidStack + " to amount " + amount);
-            return fluidStack;
-        }
-        fluidStack.amount = amount;
-        return fluidStack;
     }
 
     // endregion

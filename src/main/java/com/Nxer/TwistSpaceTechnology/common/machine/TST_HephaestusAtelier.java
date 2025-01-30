@@ -313,7 +313,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 outputs.add(items.copy());
                 items.stackSize = 0;
             } else {
-                outputs.add(Utils.setStackSize(smeltedOutput, items.stackSize));
+                outputs.add(GTUtility.copyAmountUnsafe(items.stackSize, smeltedOutput));
                 smeltedAmount += items.stackSize;
                 items.stackSize = 0;
             }
@@ -360,11 +360,11 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 items.stackSize = 0;
             } else {
                 if (canProcess >= items.stackSize) {
-                    outputs.add(Utils.setStackSize(smeltedOutput, items.stackSize));
+                    outputs.add(GTUtility.copyAmountUnsafe(items.stackSize, smeltedOutput));
                     canProcess -= items.stackSize;
                     items.stackSize = 0;
                 } else {
-                    outputs.add(Utils.setStackSize(smeltedOutput, canProcess));
+                    outputs.add(GTUtility.copyAmountUnsafe(canProcess, smeltedOutput));
                     items.stackSize -= canProcess;
                     canProcess = 0;
                     break;

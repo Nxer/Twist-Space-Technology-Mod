@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
@@ -53,7 +52,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 GTUtility.getIntegratedCircuit(19),
                 GTUtility.copyAmountUnsafe(0, Materials.Potassiumdichromate.getDust(1)),
                 Materials.Copper.getDust(16),
-                setStackSize(Materials.Zinc.getDust(1), 144))
+                GTUtility.copyAmountUnsafe(144, Materials.Zinc.getDust(1)))
             .fluidInputs(
                 Materials.Dimethylbenzene.getFluid(144000),
                 Materials.Chlorobenzene.getFluid(288000),
@@ -73,7 +72,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(19),
                 Materials.Copper.getDust(16),
-                setStackSize(Materials.Zinc.getDust(1), 144))
+                GTUtility.copyAmountUnsafe(144, Materials.Zinc.getDust(1)))
             .fluidInputs(
                 Materials.PhthalicAcid.getFluid(144000),
                 Materials.Chlorobenzene.getFluid(288000),
@@ -92,9 +91,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(18),
                 GTUtility.copyAmountUnsafe(0, Materials.Potassiumdichromate.getDust(1)),
-                setStackSize(Materials.Carbon.getDust(1), 64 * 18),
+                GTUtility.copyAmountUnsafe(64 * 18, Materials.Carbon.getDust(1)),
                 Materials.Copper.getDust(16),
-                setStackSize(Materials.Zinc.getDust(1), 144))
+                GTUtility.copyAmountUnsafe(144, Materials.Zinc.getDust(1)))
             .fluidInputs(
                 Materials.Chlorobenzene.getFluid(288000),
                 Materials.SulfuricAcid.getFluid(144000),
@@ -133,7 +132,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(7),
                 GTUtility.copyAmountUnsafe(0, Materials.Potassiumdichromate.getDust(1)),
-                setStackSize(Materials.Carbon.getDust(1), 64 * 8))
+                GTUtility.copyAmountUnsafe(64 * 8, Materials.Carbon.getDust(1)))
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000*6*64),
                 Materials.Oxygen.getGas(1000*4*64))
@@ -166,9 +165,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(19),
-                setStackSize(Materials.Apatite.getDust(1), 64*9))
+                GTUtility.copyAmountUnsafe(64 * 9, Materials.Apatite.getDust(1)))
             .fluidInputs(Materials.Water.getFluid(1000 * 5 * 64))
-            .itemOutputs(setStackSize(Materials.Calcium.getDust(1), 64*5))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 5, Materials.Calcium.getDust(1)))
             .fluidOutputs(
                 Materials.PhosphoricAcid.getFluid(1000 * 3 * 64),
                 Materials.HydrochloricAcid.getFluid(1000 * 1 * 64))
@@ -199,8 +198,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(19),
                 Materials.Sulfur.getDust(64),
-                setStackSize(Materials.Silicon.getDust(1), 64*3),
-                setStackSize(Materials.Carbon.getDust(1), 64*6)
+                GTUtility.copyAmountUnsafe(64 * 3, Materials.Silicon.getDust(1)),
+                GTUtility.copyAmountUnsafe(64 * 6, Materials.Carbon.getDust(1))
             )
             .fluidInputs(Materials.Hydrogen.getGas(12000 * 64), Materials.Water.getFluid(3000 * 64))
             .fluidOutputs(Materials.Silicone.getMolten(1296 * 64))
@@ -253,14 +252,12 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(19),
-                setStackSize(Materials.MeatRaw.getDust(64), 64*6))
+                GTUtility.copyAmountUnsafe(64 * 6, Materials.MeatRaw.getDust(64)))
             .fluidInputs(
                 Materials.SulfuricAcid.getFluid(4000 * 64),
                 Materials.PhosphoricAcid.getFluid(64000))
             .itemOutputs(
-                setStackSize(
-                    GTModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2),
-                    64*8)
+                GTUtility.copyAmountUnsafe(64 * 8, GTModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2))
             )
             .noOptimize()
             .specialValue(10800)
@@ -275,7 +272,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(23),
                 ItemList.Spinneret.get(0),
-                setStackSize(Materials.Carbon.getDust(64),64*4+6),
+                GTUtility.copyAmountUnsafe(64 * 4 + 6, Materials.Carbon.getDust(64)),
                 Materials.Calcium.getDust(2))
             .fluidInputs(
                 Materials.Chlorine.getGas(1000 * 34),
@@ -283,7 +280,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Oxygen.getGas(1000 * 36),
                 Materials.Nitrogen.getGas(1000 * 36))
             .itemOutputs(
-                setStackSize(ItemList.WovenKevlar.get(64),64+61))
+                GTUtility.copyAmountUnsafe(64 + 61, ItemList.WovenKevlar.get(64)))
             .specialValue(11700)
             .eut(RECIPE_UIV)
             .duration(20 * 64)
@@ -294,7 +291,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(22),
                 Materials.Tin.getDust(45),
-                setStackSize(Materials.Carbon.getDust(1),64*71+11),
+                GTUtility.copyAmountUnsafe(64 * 71 + 11, Materials.Carbon.getDust(1)),
                 Materials.Nickel.getDust(5),
                 Materials.Palladium.getDust(10),
                 Materials.Iron.getDust(5),
@@ -327,7 +324,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(19),
-                setStackSize(Materials.Carbon.getDust(64), 64*9))
+                GTUtility.copyAmountUnsafe(64 * 9, Materials.Carbon.getDust(64)))
             .fluidInputs(Materials.Fluorine.getGas(4000 * 9 * 32), Materials.Oxygen.getGas(125000 * 32))
             .fluidOutputs(Materials.Polytetrafluoroethylene.getMolten(36000 * 32))
             .specialValue(1800)
@@ -351,7 +348,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(18),
-                setStackSize(Materials.Antimony.getDust(64),64*12))
+                GTUtility.copyAmountUnsafe(64 * 12, Materials.Antimony.getDust(64)))
             .fluidInputs(
                 Materials.Fluorine.getGas(1000 * 5 * 12 * 64),
                 Materials.HydrofluoricAcid.getFluid(1000 * 12 * 64))
@@ -374,7 +371,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(19),
-                setStackSize(Materials.Antimony.getDust(64),64*12))
+                GTUtility.copyAmountUnsafe(64 * 12, Materials.Antimony.getDust(64)))
             .fluidInputs(Materials.Fluorine.getGas(1000 * 6 * 12 * 64), Materials.Hydrogen.getGas(1000 * 12 * 64))
 
             .fluidOutputs(GGMaterial.fluoroantimonicAcid.getFluidOrGas(1000 * 12 * 64))
@@ -398,7 +395,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(4),
-                setStackSize(Materials.Carbon.getDust(64), 64*11+52))
+                GTUtility.copyAmountUnsafe(64 * 11 + 52, Materials.Carbon.getDust(64)))
             .fluidInputs(Materials.Hydrogen.getGas(1000 * 24 * 36), Materials.Oxygen.getGas(1000 * 4 * 36))
             .fluidOutputs(Materials.Epoxid.getMolten(1000 * 36))
             .specialValue(5400)
@@ -410,10 +407,10 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(5),
-                setStackSize(Materials.Carbon.getDust(64), 64*13+49))
+                GTUtility.copyAmountUnsafe(64 * 13 + 49, Materials.Carbon.getDust(64)))
             .fluidInputs(Materials.Hydrogen.getGas(1000 * 24 * 36), Materials.Oxygen.getGas(1000 * 4 * 36))
             .itemOutputs(
-                setStackSize(Materials.EpoxidFiberReinforced.getPlates(64),64*3+58))
+                GTUtility.copyAmountUnsafe(64 * 3 + 58, Materials.EpoxidFiberReinforced.getPlates(64)))
             .specialValue(5400)
             .eut(RECIPE_HV)
             .duration(128 * 36)
@@ -427,11 +424,11 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
                 GTOreDictUnificator.get(OrePrefixes.crushed, Materials.Bastnasite, 64),// Bastnasite
-                setStackSize(Materials.Carbon.getDust(1), 64*3),
+                GTUtility.copyAmountUnsafe(64 * 3, Materials.Carbon.getDust(1)),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 16),
-                setStackSize(Materials.Sugar.getDust(1), 64*2)
+                GTUtility.copyAmountUnsafe(64 * 2, Materials.Sugar.getDust(1))
             )
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000 * 768),
@@ -439,7 +436,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Chlorine.getGas(1000 * 260)
             )
             .itemOutputs(
-                setStackSize(Materials.Cerium.getDust(1), 64+15),
+                GTUtility.copyAmountUnsafe(64 + 15, Materials.Cerium.getDust(1)),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
@@ -447,8 +444,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
-                setStackSize(Materials.Silicon.getDust(1), 64*3),
-                setStackSize(Materials.Titanium.getDust(1), 64*2+35)
+                GTUtility.copyAmountUnsafe(64 * 3, Materials.Silicon.getDust(1)),
+                GTUtility.copyAmountUnsafe(64 * 2 + 35, Materials.Titanium.getDust(1))
             )
             .fluidOutputs(
                 Materials.Fluorine.getGas(1000 * 12),
@@ -464,11 +461,11 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
                 GTOreDictUnificator.get(OrePrefixes.crushed, Materials.Bastnasite, 64),// Bastnasite
-                setStackSize(Materials.Carbon.getDust(1), 64*3),
+                GTUtility.copyAmountUnsafe(64 * 3, Materials.Carbon.getDust(1)),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 48),
-                setStackSize(Materials.Sugar.getDust(1), 64*2)
+                GTUtility.copyAmountUnsafe(64 * 2, Materials.Sugar.getDust(1))
             )
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000 * 752),
@@ -476,7 +473,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Chlorine.getGas(1000 * 260)
             )
             .itemOutputs(
-                setStackSize(Materials.Cerium.getDust(1), 64+15),
+                GTUtility.copyAmountUnsafe(64 + 15, Materials.Cerium.getDust(1)),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
@@ -484,8 +481,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
-                setStackSize(Materials.Silicon.getDust(1), 64*3),
-                setStackSize(Materials.Titanium.getDust(1), 64*2+35)
+                GTUtility.copyAmountUnsafe(64 * 3, Materials.Silicon.getDust(1)),
+                GTUtility.copyAmountUnsafe(64 * 2 + 35, Materials.Titanium.getDust(1))
             )
             .fluidOutputs(
                 Materials.Fluorine.getGas(1000 * 12),
@@ -501,11 +498,11 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Bastnasite, 64),// Bastnasite
-                setStackSize(Materials.Carbon.getDust(1), 64*3),
+                GTUtility.copyAmountUnsafe(64 * 3, Materials.Carbon.getDust(1)),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 16),
-                setStackSize(Materials.Sugar.getDust(1), 64*2)
+                GTUtility.copyAmountUnsafe(64 * 2, Materials.Sugar.getDust(1))
             )
             .fluidInputs(
                 Materials.Hydrogen.getGas(1000 * 768),
@@ -513,7 +510,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Chlorine.getGas(1000 * 260)
             )
             .itemOutputs(
-                setStackSize(Materials.Cerium.getDust(1), 64+15),
+                GTUtility.copyAmountUnsafe(64 + 15, Materials.Cerium.getDust(1)),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
@@ -521,8 +518,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
-                setStackSize(Materials.Silicon.getDust(1), 64*3),
-                setStackSize(Materials.Titanium.getDust(1), 64*2+35)
+                GTUtility.copyAmountUnsafe(64 * 3, Materials.Silicon.getDust(1)),
+                GTUtility.copyAmountUnsafe(64 * 2 + 35, Materials.Titanium.getDust(1))
             )
             .fluidOutputs(
                 Materials.Fluorine.getGas(1000 * 12),
@@ -538,11 +535,11 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Bastnasite, 64),// Bastnasite
-                setStackSize(Materials.Carbon.getDust(1), 64*3),
+                GTUtility.copyAmountUnsafe(64 * 3, Materials.Carbon.getDust(1)),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 59),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 8),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 48),
-                setStackSize(Materials.Sugar.getDust(1), 64*2)
+                GTUtility.copyAmountUnsafe(64 * 2, Materials.Sugar.getDust(1))
 
             )
             .fluidInputs(
@@ -551,7 +548,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 Materials.Chlorine.getGas(1000 * 260)
             )
             .itemOutputs(
-                setStackSize(Materials.Cerium.getDust(1), 64+15),
+                GTUtility.copyAmountUnsafe(64 + 15, Materials.Cerium.getDust(1)),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 42),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Lanthanum, 26),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Holmium, 17),
@@ -559,8 +556,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
                 WerkstoffMaterialPool.Zirconium.get(OrePrefixes.dust, 11),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Gadolinium, 6),
                 GTOreDictUnificator.get(OrePrefixes.dust, Materials.Terbium, 3),
-                setStackSize(Materials.Silicon.getDust(1), 64*3),
-                setStackSize(Materials.Titanium.getDust(1), 64*2+35)
+                GTUtility.copyAmountUnsafe(64 * 3, Materials.Silicon.getDust(1)),
+                GTUtility.copyAmountUnsafe(64 * 2 + 35, Materials.Titanium.getDust(1))
             )
             .fluidOutputs(
                 Materials.Fluorine.getGas(1000 * 12),
@@ -600,9 +597,9 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(9),
-                setStackSize(ItemList.Circuit_Chip_Biocell.get(64),64*12),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8),8*12),
-                Materials.InfinityCatalyst.getDust(2*12)
+                GTUtility.copyAmountUnsafe(64 * 12, ItemList.Circuit_Chip_Biocell.get(64)),
+                GTUtility.copyAmountUnsafe(8 * 12, GTOreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 8)),
+                Materials.InfinityCatalyst.getDust(2 * 12)
             )
             .fluidInputs(
                 Materials.Tin.getPlasma(1000*18*12),
@@ -732,18 +729,18 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
-                setStackSize(WerkstoffLoader.PTResidue.get(OrePrefixes.dust, 1), 220),
+                GTUtility.copyAmountUnsafe(220, WerkstoffLoader.PTResidue.get(OrePrefixes.dust, 1)),
                 Materials.Sulfur.getDust(52),
-                setStackSize(Materials.Saltpeter.getDust(1), 570)
+                GTUtility.copyAmountUnsafe(570, Materials.Saltpeter.getDust(1))
             )
             .fluidInputs(
                 Materials.Oxygen.getGas(1000*83),
                 Materials.SaltWater.getFluid(1000*57)
             )
             .itemOutputs(
-                setStackSize(WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 1),198),
-                setStackSize(WerkstoffLoader.SodiumRuthenate.get(OrePrefixes.dust, 1),171),
-                setStackSize(WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 1),342)
+                GTUtility.copyAmountUnsafe(198, WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 1)),
+                GTUtility.copyAmountUnsafe(171, WerkstoffLoader.SodiumRuthenate.get(OrePrefixes.dust, 1)),
+                GTUtility.copyAmountUnsafe(342, WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 1))
             )
             .specialValue(9900)
             .eut(RECIPE_IV)
@@ -755,7 +752,7 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
-                setStackSize(WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 1), 100),
+                GTUtility.copyAmountUnsafe(100, WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 1)),
                 Materials.Sodium.getDust(50)
             )
             .fluidInputs(
@@ -873,15 +870,15 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.copyAmountUnsafe(0, Materials.Neutronium.getNanite(1)),
-                setStackSize(GGMaterial.naquadahEarth.get(OrePrefixes.dust, 1), 480),
-                setStackSize(Materials.Sodium.getDust(1), 1128)
+                GTUtility.copyAmountUnsafe(480, GGMaterial.naquadahEarth.get(OrePrefixes.dust, 1)),
+                GTUtility.copyAmountUnsafe(1128, Materials.Sodium.getDust(1))
             )
             .fluidInputs(Materials.Fluorine.getGas(1000*800))
             .itemOutputs(
                 GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 25),
-                setStackSize(Materials.Gallium.getDust(1), 960),
-                setStackSize(Materials.Adamantium.getDust(1), 384),
-                setStackSize(Materials.Sulfur.getDust(1), 1210)
+                GTUtility.copyAmountUnsafe(960, Materials.Gallium.getDust(1)),
+                GTUtility.copyAmountUnsafe(384, Materials.Adamantium.getDust(1)),
+                GTUtility.copyAmountUnsafe(1210, Materials.Sulfur.getDust(1))
             )
             .fluidOutputs(
                 Materials.Naquadah.getMolten(144*960),
@@ -902,8 +899,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.copyAmountUnsafe(0, Materials.Neutronium.getNanite(1)),
-                setStackSize(GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 1), 220),
-                setStackSize(Materials.Sulfur.getDust(1), 102)
+                GTUtility.copyAmountUnsafe(220, GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 1)),
+                GTUtility.copyAmountUnsafe(102, Materials.Sulfur.getDust(1))
             )
             .fluidInputs(Materials.Oxygen.getGas(1000*288))
             .itemOutputs(
@@ -926,14 +923,14 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.copyAmountUnsafe(0, Materials.Neutronium.getNanite(1)),
-                setStackSize(GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 1), 100),
-                setStackSize(Materials.Phosphorus.getDust(1), 95)
+                GTUtility.copyAmountUnsafe(100, GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 1)),
+                GTUtility.copyAmountUnsafe(95, Materials.Phosphorus.getDust(1))
             )
             .itemOutputs(
                 GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 50),
                 Materials.Barium.getDust(2),
                 Materials.Indium.getDust(5),
-                setStackSize(Materials.Sulfur.getDust(1), 102)
+                GTUtility.copyAmountUnsafe(102, Materials.Sulfur.getDust(1))
             )
             .fluidOutputs(
                 Materials.Naquadria.getMolten(144*100),
@@ -949,15 +946,15 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.copyAmountUnsafe(0, Materials.Gold.getNanite(1)),
-                setStackSize(GGMaterial.naquadahEarth.get(OrePrefixes.dust, 1), 480),
-                setStackSize(Materials.Sodium.getDust(1), 112)
+                GTUtility.copyAmountUnsafe(480, GGMaterial.naquadahEarth.get(OrePrefixes.dust, 1)),
+                GTUtility.copyAmountUnsafe(112, Materials.Sodium.getDust(1))
             )
             .fluidInputs(Materials.Fluorine.getGas(1000*800))
             .itemOutputs(
                 GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 25),
-                setStackSize(Materials.Gallium.getDust(1), 960),
-                setStackSize(Materials.Adamantium.getDust(1), 384),
-                setStackSize(Materials.Sulfur.getDust(1), 1210)
+                GTUtility.copyAmountUnsafe(960, Materials.Gallium.getDust(1)),
+                GTUtility.copyAmountUnsafe(384, Materials.Adamantium.getDust(1)),
+                GTUtility.copyAmountUnsafe(1210, Materials.Sulfur.getDust(1))
             )
             .fluidOutputs(
                 Materials.Naquadah.getMolten(144*960),
@@ -978,8 +975,8 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.copyAmountUnsafe(0, Materials.Gold.getNanite(1)),
-                setStackSize(GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 1), 220),
-                setStackSize(Materials.Sulfur.getDust(1), 10)
+                GTUtility.copyAmountUnsafe(220, GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 1)),
+                GTUtility.copyAmountUnsafe(10, Materials.Sulfur.getDust(1))
             )
             .fluidInputs(Materials.Oxygen.getGas(1000*288))
             .itemOutputs(
@@ -1002,14 +999,14 @@ public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.copyAmountUnsafe(0, Materials.Gold.getNanite(1)),
-                setStackSize(GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 1), 100),
-                setStackSize(Materials.Phosphorus.getDust(1), 9)
+                GTUtility.copyAmountUnsafe(100, GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 1)),
+                GTUtility.copyAmountUnsafe(9, Materials.Phosphorus.getDust(1))
             )
             .itemOutputs(
                 GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 50),
                 Materials.Barium.getDust(2),
                 Materials.Indium.getDust(5),
-                setStackSize(Materials.Sulfur.getDust(1), 102)
+                GTUtility.copyAmountUnsafe(102, Materials.Sulfur.getDust(1))
             )
             .fluidOutputs(
                 Materials.Naquadria.getMolten(144*100),

@@ -37,7 +37,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotN
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentPlanetCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentStellarCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -394,15 +393,15 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                 if (amount > Integer.MAX_VALUE) {
                     List<ItemStack> output = new ArrayList<>();
                     while (amount > Integer.MAX_VALUE) {
-                        output.add(setStackSize(CRITICAL_PHOTON.copy(), Integer.MAX_VALUE));
+                        output.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, CRITICAL_PHOTON));
                         amount -= Integer.MAX_VALUE;
                     }
                     if (amount > 0) {
-                        output.add(setStackSize(CRITICAL_PHOTON.copy(), (int) amount));
+                        output.add(GTUtility.copyAmountUnsafe((int) amount, CRITICAL_PHOTON));
                     }
                     mOutputItems = output.toArray(new ItemStack[0]);
                 } else {
-                    mOutputItems = new ItemStack[] { setStackSize(CRITICAL_PHOTON.copy(), (int) amount) };
+                    mOutputItems = new ItemStack[]{GTUtility.copyAmountUnsafe((int) amount, CRITICAL_PHOTON)};
                 }
 
             }

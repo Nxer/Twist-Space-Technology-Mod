@@ -14,7 +14,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OrePro
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_MachineType;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -185,16 +184,16 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                     for (ItemStack recipeOutput : recipe.mOutputs) {
                         if (Integer.MAX_VALUE / parallel >= recipeOutput.stackSize) {
                             // direct output
-                            outputs.add(setStackSize(recipeOutput.copy(), recipeOutput.stackSize * parallel));
+                            outputs.add(GTUtility.copyAmountUnsafe(recipeOutput.stackSize * parallel, recipeOutput));
                         } else {
                             // separate to any integer max stack
                             long outputAmount = (long) parallel * recipeOutput.stackSize;
                             while (outputAmount > 0) {
                                 if (outputAmount >= Integer.MAX_VALUE) {
-                                    outputs.add(setStackSize(recipeOutput.copy(), Integer.MAX_VALUE));
+                                    outputs.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, recipeOutput));
                                     outputAmount -= Integer.MAX_VALUE;
                                 } else {
-                                    outputs.add(setStackSize(recipeOutput.copy(), (int) outputAmount));
+                                    outputs.add(GTUtility.copyAmountUnsafe((int) outputAmount, recipeOutput));
                                     outputAmount = 0;
                                 }
                             }
@@ -266,16 +265,16 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                     for (ItemStack recipeOutput : recipe.mOutputs) {
                         if (Integer.MAX_VALUE / parallel >= recipeOutput.stackSize) {
                             // direct output
-                            outputs.add(setStackSize(recipeOutput.copy(), recipeOutput.stackSize * parallel));
+                            outputs.add(GTUtility.copyAmountUnsafe(recipeOutput.stackSize * parallel, recipeOutput));
                         } else {
                             // separate to any integer max stack
                             long outputAmount = (long) parallel * recipeOutput.stackSize;
                             while (outputAmount > 0) {
                                 if (outputAmount >= Integer.MAX_VALUE) {
-                                    outputs.add(setStackSize(recipeOutput.copy(), Integer.MAX_VALUE));
+                                    outputs.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, recipeOutput));
                                     outputAmount -= Integer.MAX_VALUE;
                                 } else {
-                                    outputs.add(setStackSize(recipeOutput.copy(), (int) outputAmount));
+                                    outputs.add(GTUtility.copyAmountUnsafe((int) outputAmount, recipeOutput));
                                     outputAmount = 0;
                                 }
                             }

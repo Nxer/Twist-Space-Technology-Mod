@@ -59,14 +59,14 @@ public class TST_SimpleDisassemblyRecipe {
             if (amount > Integer.MAX_VALUE) {
                 long t = amount;
                 while (t > Integer.MAX_VALUE) {
-                    outputs.add(Utils.setStackSize(fluidStack.copy(), Integer.MAX_VALUE));
+                    outputs.add(GTUtility.copyAmount(Integer.MAX_VALUE, fluidStack));
                     t -= Integer.MAX_VALUE;
                 }
                 if (t > 0) {
-                    outputs.add(Utils.setStackSize(fluidStack.copy(), (int) t));
+                    outputs.add(GTUtility.copyAmount((int) t, fluidStack));
                 }
             } else {
-                outputs.add(Utils.setStackSize(fluidStack.copy(), (int) amount));
+                outputs.add(GTUtility.copyAmount((int) amount, fluidStack));
             }
         }
         return outputs;

@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PacketInfor
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ParticleTrapTimeSpaceShield;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SeedsSpaceTime;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -114,7 +113,7 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                setStackSize(ItemList.Field_Generator_UIV.get(1), 0),
+                GTUtility.copyAmountUnsafe(0, ItemList.Field_Generator_UIV.get(1)),
                 Materials.Infinity.getDust(1),
                 ItemList.Circuit_Chip_Optical.get(1))
             .fluidInputs(
@@ -134,7 +133,7 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                setStackSize(ItemList.Field_Generator_UIV.get(1), 0),
+                GTUtility.copyAmountUnsafe(0, ItemList.Field_Generator_UIV.get(1)),
                 MaterialsUEVplus.Eternity.getDust(1),
                 ItemList.Circuit_Chip_Optical.get(1))
             .fluidInputs(
@@ -426,23 +425,23 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 1))
             .metadata(RESEARCH_TIME, 24 * HOURS)
             .itemInputs(
-                GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
-                GTCMItemList.SpaceWarper.get(16),
-                GTCMItemList.GravitationalLens.get(16),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
+                    GTCMItemList.SpaceWarper.get(16),
+                    GTCMItemList.GravitationalLens.get(16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
 
-                EnergyFluctuationSelfHarmonizer.get(16),
-                PacketInformationTranslationArray.get(16),
-                setStackSize(eternal_singularity.copy(), 16),
-                ItemList.EnergisedTesseract.get(16),
+                    EnergyFluctuationSelfHarmonizer.get(16),
+                    PacketInformationTranslationArray.get(16),
+                    GTUtility.copyAmountUnsafe(16, eternal_singularity),
+                    ItemList.EnergisedTesseract.get(16),
 
-                ItemList.Field_Generator_UIV.get(16),
-                ItemList.Emitter_UIV.get(16),
-                ItemList.Sensor_UIV.get(16),
-                CustomItemList.HighEnergyFlowCircuit.get(16),
+                    ItemList.Field_Generator_UIV.get(16),
+                    ItemList.Emitter_UIV.get(16),
+                    ItemList.Sensor_UIV.get(16),
+                    CustomItemList.HighEnergyFlowCircuit.get(16),
 
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
-                GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
+                    GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
             .fluidInputs(
                 MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
                 Materials.Hydrogen.getPlasma(1000 * 64),

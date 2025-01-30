@@ -296,7 +296,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 patternDetails.add(d);
 
                 if (in.stackSize > 1) {
-                    l.add(Utils.setStackSize(in.copy(), in.stackSize - 1));
+                    l.add(GTUtility.copyAmountUnsafe(in.stackSize - 1, in));
                     in.stackSize = 1;
                 }
 

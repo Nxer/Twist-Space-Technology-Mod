@@ -347,14 +347,14 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                         if (outs.stackSize <= 0) continue;
                         long amount = (long) outs.stackSize * outputMultiplier;
                         if (amount <= Integer.MAX_VALUE) {
-                            outputItems.add(Utils.setStackSize(outs.copy(), (int) amount));
+                            outputItems.add(GTUtility.copyAmountUnsafe((int) amount, outs));
                         } else {
                             while (amount > 0) {
                                 if (amount > Integer.MAX_VALUE) {
-                                    outputItems.add(Utils.setStackSize(outs.copy(), Integer.MAX_VALUE));
+                                    outputItems.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, outs));
                                     amount -= Integer.MAX_VALUE;
                                 } else {
-                                    outputItems.add(Utils.setStackSize(outs.copy(), (int) amount));
+                                    outputItems.add(GTUtility.copyAmountUnsafe((int) amount, outs));
                                     amount = 0;
                                 }
                             }
@@ -368,14 +368,14 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                         if (outs.amount <= 0) continue;
                         long amount = (long) outs.amount * outputMultiplier;
                         if (amount <= Integer.MAX_VALUE) {
-                            outputFluids.add(Utils.setStackSize(outs.copy(), (int) amount));
+                            outputFluids.add(GTUtility.copyAmountUnsafe((int) amount, outs));
                         } else {
                             while (amount > 0) {
                                 if (amount > Integer.MAX_VALUE) {
-                                    outputFluids.add(Utils.setStackSize(outs.copy(), Integer.MAX_VALUE));
+                                    outputFluids.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, outs));
                                     amount -= Integer.MAX_VALUE;
                                 } else {
-                                    outputFluids.add(Utils.setStackSize(outs.copy(), (int) amount));
+                                    outputFluids.add(GTUtility.copyAmountUnsafe((int) amount, outs));
                                     amount = 0;
                                 }
                             }

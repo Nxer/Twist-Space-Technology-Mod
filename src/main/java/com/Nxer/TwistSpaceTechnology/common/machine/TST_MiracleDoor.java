@@ -26,7 +26,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Miracl
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_05;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -268,7 +267,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                 outputFluidList.add(fluidStack);
             } else {
                 int ingotAmount = fluidStack.amount / 144;
-                outputItemList.add(setStackSize(ingot.copy(), ingotAmount));
+                outputItemList.add(GTUtility.copyAmountUnsafe(ingotAmount, ingot));
                 int remainingFluidAmount = fluidStack.amount - 144 * ingotAmount;
                 if (remainingFluidAmount > 0) {
                     TwistSpaceTechnology.LOG

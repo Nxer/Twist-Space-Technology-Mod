@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -132,14 +133,14 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
             if (outItems == null || outItems.stackSize < 1) continue;
             long amount = (long) outItems.stackSize * mParallel;
             if (amount <= Integer.MAX_VALUE) {
-                outputs.add(Utils.setStackSize(outItems.copy(), (int) amount));
+                outputs.add(GTUtility.copyAmountUnsafe((int) amount, outItems));
             } else {
                 while (amount >= Integer.MAX_VALUE) {
-                    outputs.add(Utils.setStackSize(outItems.copy(), Integer.MAX_VALUE));
+                    outputs.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, outItems));
                     amount -= Integer.MAX_VALUE;
                 }
                 if (amount > 0) {
-                    outputs.add(Utils.setStackSize(outItems.copy(), (int) amount));
+                    outputs.add(GTUtility.copyAmountUnsafe((int) amount, outItems));
                 }
             }
         }

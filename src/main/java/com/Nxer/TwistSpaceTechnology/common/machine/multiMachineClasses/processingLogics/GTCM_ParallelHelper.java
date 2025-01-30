@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.util.GTRecipe.GTppRecipeHelper;
 
 import java.util.ArrayList;
@@ -580,21 +579,21 @@ public class GTCM_ParallelHelper extends ParallelHelper {
                 }
 
                 while (outputs >= Integer.MAX_VALUE) {
-                    toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    toOutput.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, origin));
                     outputs -= Integer.MAX_VALUE;
                 }
 
                 if (outputs > 0) {
-                    toOutput.add(setStackSize(origin.copy(), (int) outputs));
+                    toOutput.add(GTUtility.copyAmountUnsafe((int) outputs, origin));
                 }
 
             } else {
                 long outputs = (long) currentParallel * origin.stackSize;
                 while (outputs > Integer.MAX_VALUE) {
-                    toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    toOutput.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, origin));
                     outputs -= Integer.MAX_VALUE;
                 }
-                toOutput.add(setStackSize(origin.copy(), (int) outputs));
+                toOutput.add(GTUtility.copyAmountUnsafe((int) outputs, origin));
             }
 
         }

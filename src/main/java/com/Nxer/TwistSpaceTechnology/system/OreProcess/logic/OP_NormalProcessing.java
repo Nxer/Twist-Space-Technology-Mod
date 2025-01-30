@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.SpecialProcessingLineMaterialInstead;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +75,7 @@ public class OP_NormalProcessing {
                 return GTUtility.copyAmountUnsafe(amount * 3, t);
             }
         }
-        return setStackSize(GTOreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
+        return GTUtility.copyAmountUnsafe(amount, GTOreDictUnificator.get(OrePrefixes.dust, material, 1));
     }
 
     /**

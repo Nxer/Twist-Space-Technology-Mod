@@ -73,7 +73,6 @@ import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.WirelessDat
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.WirelessUpdateItem;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleTopRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeUtils.getCircuits;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
@@ -1596,18 +1595,18 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GGItemList.AdvAssLine.get(64),
-                ItemRefer.Component_Assembly_Line.get(64),
+                Component_Assembly_Line.get(64),
                 ItemList.AssemblingMachineUMV.get(64),
                 ItemRefer.Precise_Assembler.get(64),
 
-                setStackSize(GTCMItemList.StellarConstructionFrameMaterial.get(64), 128),
-                setStackSize(GTCMItemList.AnnihilationConstrainer.get(64), 128),
-                setStackSize(GTCMItemList.DysonSphereFrameComponent.get(64), 128),
-                setStackSize(GTCMItemList.SpaceWarper.get(64), 128),
+                GTUtility.copyAmountUnsafe(128, StellarConstructionFrameMaterial.get(64)),
+                GTUtility.copyAmountUnsafe(128, AnnihilationConstrainer.get(64)),
+                GTUtility.copyAmountUnsafe(128, DysonSphereFrameComponent.get(64)),
+                GTUtility.copyAmountUnsafe(128, SpaceWarper.get(64)),
 
-                setStackSize(GTCMItemList.GravitationalLens.get(64), 128),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1), 128),
-                setStackSize(eM_Ultimate_Containment_Advanced.get(64), 128)
+                GTUtility.copyAmountUnsafe(128, GravitationalLens.get(64)),
+                GTUtility.copyAmountUnsafe(128, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)),
+                GTUtility.copyAmountUnsafe(128, eM_Ultimate_Containment_Advanced.get(64))
             )
             .fluidInputs(
                 MaterialsUEVplus.SpaceTime.getMolten(144 * 524288),
@@ -1996,10 +1995,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
             TST_RecipeBuilder
                 .builder()
                 .itemInputs(
-                    setStackSize(ItemList.NanoForge.get(1), 512),
+                    GTUtility.copyAmountUnsafe(512, ItemList.NanoForge.get(1)),
                     MaterialsUEVplus.Universium.getNanite(64),
-                    setStackSize(MaterialsUEVplus.Eternity.getNanite(1), 128),
-                    setStackSize(MaterialsUEVplus.TranscendentMetal.getNanite(1), 1024),
+                    GTUtility.copyAmountUnsafe(128, MaterialsUEVplus.Eternity.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(1024, MaterialsUEVplus.TranscendentMetal.getNanite(1)),
 
                     SpaceScaler.get(64),
                     GravitationalLens.get(1024),
@@ -2007,12 +2006,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     DysonSphereFrameComponent.get(1024),
 
                     PerfectLapotronCrystal.get(2048),
-                    setStackSize(ItemList.Field_Generator_UMV.get(1), 1024),
-                    setStackSize(ItemList.Emitter_UMV.get(1), 2048),
-                    setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1), 4096),
+                    GTUtility.copyAmountUnsafe(1024, ItemList.Field_Generator_UMV.get(1)),
+                    GTUtility.copyAmountUnsafe(2048, ItemList.Emitter_UMV.get(1)),
+                    GTUtility.copyAmountUnsafe(4096, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)),
 
                     StellarConstructionFrameMaterial.get(2048),
-                    setStackSize(GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 1), 4096)
+                    GTUtility.copyAmountUnsafe(4096, GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 1))
                 )
                 .fluidInputs(
                     MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 256),

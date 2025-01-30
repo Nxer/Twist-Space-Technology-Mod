@@ -24,7 +24,6 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
@@ -167,7 +166,7 @@ public class DSPRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
                 GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
 
-                setStackSize(LightWeightPlate.copy(), 64),
+                GTUtility.copyAmountUnsafe(64, LightWeightPlate),
                 eM_Power.get(64),
                 new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
                 new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9))
@@ -339,7 +338,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(21),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
-                setStackSize(LightWeightPlate.copy(), 6),
+                GTUtility.copyAmountUnsafe(6, LightWeightPlate),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.BlackPlutonium, 16),
                 Materials.Neutronium.getNanite(1))
             .fluidInputs(
@@ -357,7 +356,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(22),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
-                setStackSize(LightWeightPlate.copy(), 9),
+                GTUtility.copyAmountUnsafe(9, LightWeightPlate),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 8),
                 Materials.Neutronium.getNanite(1))
             .fluidInputs(
@@ -376,7 +375,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(23),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 48),
-                setStackSize(LightWeightPlate.copy(), 36),
+                GTUtility.copyAmountUnsafe(36, LightWeightPlate),
                 ItemList.EnergisedTesseract.get(12),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 12),
                 Materials.Neutronium.getNanite(1))
@@ -402,7 +401,7 @@ public class DSPRecipePool implements IRecipePool {
                 new FluidStack(solderPlasma, 144 * 4),
                 RadoxPolymer.getMolten(144 * 4),
                 Materials.Neutronium.getMolten(144 * 2))
-            .itemOutputs(setStackSize(LightWeightPlate.copy(), 1))
+            .itemOutputs(GTUtility.copyAmountUnsafe(1, LightWeightPlate))
 
             .noOptimize()
             .specialValue(2)
@@ -413,14 +412,14 @@ public class DSPRecipePool implements IRecipePool {
         // Empty Small Launch Vehicle
         GTValues.RA.stdBuilder()
             .itemInputs(
-                setStackSize(ShuttleNoseCone.copy(), 1),
+                GTUtility.copyAmountUnsafe(1, ShuttleNoseCone),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
                 SpaceWarper.get(16),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 32),
 
                 StellarConstructionFrameMaterial.get(32),
-                setStackSize(LightWeightPlate.copy(), 32),
-                setStackSize(IonThrusterJet.copy(), 4))
+                GTUtility.copyAmountUnsafe(32, LightWeightPlate),
+                GTUtility.copyAmountUnsafe(4, IonThrusterJet))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 4),
                 RadoxPolymer.getMolten(144 * 4),
@@ -929,7 +928,7 @@ public class DSPRecipePool implements IRecipePool {
         // Strange Matter Aggregator Controller
         TST_RecipeBuilder.builder()
             .itemInputs(
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 1), 8192),
+                GTUtility.copyAmountUnsafe(8192, GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 1)),
                 AntimatterFuelRod.get(512),
                 AnnihilationConstrainer.get(512),
                 DysonSphereFrameComponent.get(512),
@@ -939,12 +938,12 @@ public class DSPRecipePool implements IRecipePool {
                 eM_Ultimate_Containment_Field.get(64),
                 eM_Teleportation.get(64),
 
-                setStackSize(ItemList.Field_Generator_UMV.get(1), 512),
-                setStackSize(MaterialsUEVplus.TranscendentMetal.getNanite(1), 512),
-                setStackSize(ItemList.Tesseract.get(1), 512),
-                setStackSize(ItemList.EnergisedTesseract.get(1), 512),
+                GTUtility.copyAmountUnsafe(512, ItemList.Field_Generator_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(512, MaterialsUEVplus.TranscendentMetal.getNanite(1)),
+                GTUtility.copyAmountUnsafe(512, ItemList.Tesseract.get(1)),
+                GTUtility.copyAmountUnsafe(512, ItemList.EnergisedTesseract.get(1)),
 
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1), 512),
+                GTUtility.copyAmountUnsafe(512, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)),
                 ItemList.ZPM.get(1))
             .fluidInputs(
                 Materials.Void.getMolten(144 * 131072),
