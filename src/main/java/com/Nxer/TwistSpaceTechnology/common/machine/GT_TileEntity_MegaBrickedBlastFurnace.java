@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -629,8 +630,8 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
                         HorizontalDirt.getLeft(),
                         HorizontalDirt.getRight(),
                         ImmutableList.of(
-                            Utils.createItemStack(HorizontalDirt.getLeft(), HorizontalDirt.getRight()),
-                            Utils.createItemStack(Blocks.dirt, 0))))
+                                TstUtils.newItemWithMeta(HorizontalDirt.getLeft(), HorizontalDirt.getRight()),
+                                TstUtils.newItemWithMeta(Blocks.dirt, 0))))
                 .addElement(
                     'b',
                     buildHatchAdder(GT_TileEntity_MegaBrickedBlastFurnace.class).atLeast(InputBus, OutputBus)

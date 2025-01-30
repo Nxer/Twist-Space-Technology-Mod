@@ -6,17 +6,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.metatileentity.MetaTileEntity;
 
@@ -37,23 +34,6 @@ public final class Utils {
 
     // endregion
 
-    /**
-     * Used to create a size of 1 itemStack, a very light method to reduce the "new" keyword and obfuscated fields are
-     * displayed。
-     */
-    @NotNull
-    public static ItemStack createItemStack(Item item, int meta) {
-        return new ItemStack(item, 1, meta);
-    }
-
-    /**
-     * Used to create a size of 1 itemStack, a very light method to reduce the "new" keyword and obfuscated fields are
-     * displayed。
-     */
-    @NotNull
-    public static ItemStack createItemStack(Block block, int meta) {
-        return new ItemStack(block, 1, meta);
-    }
     // endregion
 
     // region About FluidStack

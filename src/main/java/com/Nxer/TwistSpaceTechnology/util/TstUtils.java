@@ -167,23 +167,6 @@ public class TstUtils {
         return makeNotSupportInterfaceException("Block", item.unlocalizedName, item.getClass(), interfaceClass);
     }
 
-    public static ItemStack newMetaItemStackUnsafe(Item itemMeta, int meta) {
-        return newMetaItemStackUnsafe(itemMeta, meta, null);
-    }
-
-    public static ItemStack newMetaItemStackUnsafe(Item itemMeta, int meta, @Nullable String[] tooltips)
-        throws IllegalArgumentException {
-        if (tooltips != null) {
-            if (itemMeta instanceof IHasTooltips hasTooltips) {
-                hasTooltips.setTooltips(meta, tooltips);
-            } else {
-                throw makeItemNotSupportInterfaceException(itemMeta, IHasTooltips.class);
-            }
-        }
-
-        return newItemWithMeta(itemMeta, meta);
-    }
-
     /**
      * Return a copy of the instance of the block with given meta.
      * <p>

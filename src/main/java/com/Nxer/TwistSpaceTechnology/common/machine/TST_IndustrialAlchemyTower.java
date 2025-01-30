@@ -17,7 +17,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofBlockStri
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.createItemStack;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -52,6 +51,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.init.Blocks;
@@ -348,9 +348,9 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
         if (STRUCTURE_DEFINITION == null) {
             var channel = "chisel";
             var list = ImmutableList.of(
-                createItemStack(blockCosmeticSolid, 6),
-                createItemStack(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
-                createItemStack(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
+                TstUtils.newItemWithMeta(blockCosmeticSolid, 6),
+                TstUtils.newItemWithMeta(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
+                TstUtils.newItemWithMeta(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
             STRUCTURE_DEFINITION = StructureDefinitionBuilder(TST_IndustrialAlchemyTower.class)
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addElement(
