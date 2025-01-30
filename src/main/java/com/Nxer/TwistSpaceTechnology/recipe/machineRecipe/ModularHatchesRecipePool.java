@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmountUnlimited;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -259,7 +258,8 @@ public class ModularHatchesRecipePool implements IRecipePool {
                     GTCMItemList.ProofOfHeroes.get(1),
                     GTUtility.copyAmountUnsafe(2048, GTCMItemList.PerfectOverclockController.get(1)),
                     GTUtility.copyAmountUnsafe(4096, ItemList.Field_Generator_UXV.get(1)),
-                    GTUtility.copyAmountUnsafe(6144,
+                    GTUtility.copyAmountUnsafe(
+                        6144,
                         GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.Eternity, 1)),
 
                     GTUtility.copyAmountUnsafe(8192, MaterialsUEVplus.Universium.getNanite(1)),

@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static cofh.lib.util.helpers.FluidHelper.isFluidEqual;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmountUnlimited;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.fluidStackEqualFuzzy;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;

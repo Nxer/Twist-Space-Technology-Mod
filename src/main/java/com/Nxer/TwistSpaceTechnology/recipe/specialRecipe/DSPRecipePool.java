@@ -24,7 +24,6 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmountUnlimited;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
@@ -186,16 +185,16 @@ public class DSPRecipePool implements IRecipePool {
         // eM_Ultimate_Containment_Advanced casing 13
         GTValues.RA.stdBuilder()
             .itemInputs(
-                    eM_Ultimate_Containment.get(64),
-                    GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 64),
-                    GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.SpaceTime, 64),
+                eM_Ultimate_Containment.get(64),
+                GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 64),
+                GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.SpaceTime, 64),
 
-                    GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.SpaceTime, 64),
-                    ItemList.Tesseract.get(16),
-                    ItemList.EnergisedTesseract.get(16),
+                GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.SpaceTime, 64),
+                ItemList.Tesseract.get(16),
+                ItemList.EnergisedTesseract.get(16),
 
-                    ItemList.Field_Generator_UMV.get(8),
-                    GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.HIGGS_BOSON)))
+                ItemList.Field_Generator_UMV.get(8),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.HIGGS_BOSON)))
             .fluidInputs(GGMaterial.metastableOganesson.getMolten(144 * 256))
             .itemOutputs(eM_Ultimate_Containment_Advanced.get(8))
 
@@ -438,11 +437,11 @@ public class DSPRecipePool implements IRecipePool {
         // Small Launch Vehicle
         GTValues.RA.stdBuilder()
             .itemInputs(
-                    EmptySmallLaunchVehicle.get(1),
-                    SpaceWarper.get(1),
-                    DysonSphereFrameComponent.get(24),
-                    GTUtility.copyAmountUnsafe(16, Particle.getBaseParticle(Particle.GRAVITON)),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
+                EmptySmallLaunchVehicle.get(1),
+                SpaceWarper.get(1),
+                DysonSphereFrameComponent.get(24),
+                GTUtility.copyAmountUnsafe(16, Particle.getBaseParticle(Particle.GRAVITON)),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 16))
             .itemOutputs(SmallLaunchVehicle.get(1))
 
@@ -646,20 +645,20 @@ public class DSPRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .itemInputs(
-                    GTUtility.getIntegratedCircuit(23),
-                    GTUtility.copyAmountUnsafe(0, MaterialsUEVplus.Universium.getNanite(1)),
-                    GTUtility.copyAmountUnsafe(0, MaterialsUEVplus.Eternity.getNanite(1)),
-                    GTOreDictUnificator
-                            .get(OrePrefixes.frameGt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 1),
+                GTUtility.getIntegratedCircuit(23),
+                GTUtility.copyAmountUnsafe(0, MaterialsUEVplus.Universium.getNanite(1)),
+                GTUtility.copyAmountUnsafe(0, MaterialsUEVplus.Eternity.getNanite(1)),
+                GTOreDictUnificator
+                    .get(OrePrefixes.frameGt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 1),
 
-                    SpaceWarper.get(4),
-                    ParticleTrapTimeSpaceShield.get(8),
-                    GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 4),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),
+                SpaceWarper.get(4),
+                ParticleTrapTimeSpaceShield.get(8),
+                GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 4),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),
 
-                    ItemList.EnergisedTesseract.get(1),
-                    GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.Universium, 64),
-                    GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.Universium, 64))
+                ItemList.EnergisedTesseract.get(1),
+                GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.Universium, 64),
+                GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.Universium, 64))
             .fluidInputs(
                 MaterialsUEVplus.PrimordialMatter.getFluid(144 * 16),
                 MaterialsUEVplus.Eternity.getMolten(144 * 16))
@@ -748,12 +747,12 @@ public class DSPRecipePool implements IRecipePool {
         // Gravitational Lens
         GTValues.RA.stdBuilder()
             .itemInputs(
-                    SpaceWarper.get(1),
-                    Laser_Lens_Special.get(4),
-                    GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                    GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                    GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                    GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)))
+                SpaceWarper.get(1),
+                Laser_Lens_Special.get(4),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)))
             .fluidInputs(Materials.MysteriousCrystal.getMolten(144 * 9 * 64 * 2))
             .itemOutputs(
                 GravitationalLens.get(1),

@@ -1,16 +1,15 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
-import gregtech.api.util.GTUtility;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.util.GTLog;
+import gregtech.api.util.GTUtility;
 
 public enum GTCMItemList {
 

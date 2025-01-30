@@ -1,14 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.combat.items;
 
-import gregtech.api.util.GTUtility;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.util.GTLog;
 import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
 
 public enum ItemGearList {
 

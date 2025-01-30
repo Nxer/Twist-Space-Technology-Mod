@@ -6,7 +6,6 @@ import java.util.HashMap;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
