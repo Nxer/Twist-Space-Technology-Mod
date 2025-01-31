@@ -22,8 +22,7 @@ public class ItemRegister {
     public static void registryItems() {
         Item[] itemsToReg = { MetaItem01, TstItems.ProofOfHeroes, TstItems.ProofOfGods, MultiStructuresLinkTool,
 
-            TstItems.MetaItemRune, TstItems.MetaItemIzumik, TstItems.PowerChair, TstItems.HatchUpdateTool,
-            TstItems.Yamato };
+            TstItems.MetaItemRune, TstItems.MetaItemIzumik, TstItems.Yamato };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -977,7 +976,7 @@ public class ItemRegister {
 
         GTCMItemList.ProofOfGods.set(new ItemStack(TstItems.ProofOfGods, 1));
         GTCMItemList.ProofOfHeroes.set(new ItemStack(TstItems.ProofOfHeroes, 2));
-        GTCMItemList.PowerChair.set(new ItemStack(TstItems.PowerChair, 1));
+//        GTCMItemList.PowerChair.set(new ItemStack(TstItems.PowerChair, 1));
 
         GTCMItemList.HatchUpdateTool.set(new ItemStack(TstItems.HatchUpdateTool, 1));
 

@@ -9,7 +9,6 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderIzumik;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderRune;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemMultiStructuresLinkTool;
-import com.Nxer.TwistSpaceTechnology.common.item.ItemPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemProofOfHeroes;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
 import com.Nxer.TwistSpaceTechnology.common.item.TSTGeneratedItem;
@@ -39,8 +38,8 @@ public class TstItems {
     public static final Item MultiStructuresLinkTool = new ItemMultiStructuresLinkTool(
         TstCreativeTabs.TabMultiStructures);
 
-    public static final Item PowerChair = new ItemPowerChair(TstCreativeTabs.TabGeneral)
-        .setTextureName("gtnhcommunitymod:PowerChair");
+    // public static final Item PowerChair = new ItemPowerChair(TstCreativeTabs.TabGeneral)
+    // .setTextureName("gtnhcommunitymod:PowerChair");
 
     // #tr HatchUpdateTool.name
     // # Hatch Update Tool
