@@ -133,7 +133,8 @@ public class TCRecipePool implements IRecipePool {
                         TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
 
-                        Mods.EnderIO.isModLoaded() ? ExtremeEntityCrusher.get(1) : new ItemStack(diamond_sword, 1),
+                        (Mods.EnderIO.isModLoaded() && Mods.MobsInfo.isModLoaded()) ? ExtremeEntityCrusher.get(1)
+                            : new ItemStack(diamond_sword, 1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
                         TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1) });

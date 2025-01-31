@@ -27,17 +27,13 @@ public class BlockRegister {
 
         GameRegistry.registerBlock(MetaBlock01, TstMetaBlockItem.class, MetaBlock01.unlocalizedName);
 
-        GameRegistry.registerBlock(
-            TstBlocks.MetaBlockCasing01,
-            TstMetaBlockItem.class,
-            MetaBlockCasing01.unlocalizedName);
+        GameRegistry
+            .registerBlock(TstBlocks.MetaBlockCasing01, TstMetaBlockItem.class, MetaBlockCasing01.unlocalizedName);
 
         GameRegistry.registerBlock(MetaBlockCasing02, TstMetaBlockItem.class, MetaBlockCasing02.unlocalizedName);
 
-        GameRegistry.registerBlock(
-            PhotonControllerUpgrade,
-            TstMetaBlockItem.class,
-            PhotonControllerUpgrade.unlocalizedName);
+        GameRegistry
+            .registerBlock(PhotonControllerUpgrade, TstMetaBlockItem.class, PhotonControllerUpgrade.unlocalizedName);
 
         GameRegistry.registerBlock(
             TstBlocks.SpaceTimeOscillator,
@@ -52,16 +48,19 @@ public class BlockRegister {
             TstMetaBlockItem.class,
             TstBlocks.SpaceTimeMerger.unlocalizedName);
 
-        GameRegistry.registerBlock(
-            SpaceStationStructureBlock,
-            TstMetaBlockItem.class,
-            SpaceStationStructureBlock.unlocalizedName);
-        GameRegistry.registerBlock(
-            SpaceStationAntiGravityBlock,
-            TstMetaBlockItem.class,
-            SpaceStationAntiGravityBlock.unlocalizedName);
-        GameRegistry
-            .registerBlock(NuclearReactorBlock, TstMetaBlockItem.class, NuclearReactorBlock.unlocalizedName);
+        if (Config.activateMegaSpaceStation) {
+            GameRegistry.registerBlock(
+                SpaceStationStructureBlock,
+                TstMetaBlockItem.class,
+                SpaceStationStructureBlock.unlocalizedName);
+            GameRegistry.registerBlock(
+                SpaceStationAntiGravityBlock,
+                TstMetaBlockItem.class,
+                SpaceStationAntiGravityBlock.unlocalizedName);
+            GameRegistry
+                .registerBlock(NuclearReactorBlock, TstMetaBlockItem.class, NuclearReactorBlock.unlocalizedName);
+        }
+
         GameRegistry.registerBlock(BlockArcaneHole, "BlockArcaneHole");
 
         GameRegistry
