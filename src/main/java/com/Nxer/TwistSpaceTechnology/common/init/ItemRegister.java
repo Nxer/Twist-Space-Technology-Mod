@@ -26,7 +26,7 @@ public class ItemRegister {
             TstItems.Yamato };
 
         for (Item item : itemsToReg) {
-            GameRegistry.registerItem(item, item.getUnlocalizedName());
+            GameRegistry.registerItem(item, item.unlocalizedName);
         }
 
     }

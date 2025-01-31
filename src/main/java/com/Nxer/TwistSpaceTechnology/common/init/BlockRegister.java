@@ -25,48 +25,48 @@ public class BlockRegister {
 
     public static void registryBlocks() {
 
-        GameRegistry.registerBlock(MetaBlock01, TstMetaBlockItem.class, MetaBlock01.getUnlocalizedName());
+        GameRegistry.registerBlock(MetaBlock01, TstMetaBlockItem.class, MetaBlock01.unlocalizedName);
 
         GameRegistry.registerBlock(
             TstBlocks.MetaBlockCasing01,
             TstMetaBlockItem.class,
-            TstBlocks.MetaBlockCasing01.getUnlocalizedName());
+            MetaBlockCasing01.unlocalizedName);
 
-        GameRegistry.registerBlock(MetaBlockCasing02, TstMetaBlockItem.class, MetaBlockCasing02.getUnlocalizedName());
+        GameRegistry.registerBlock(MetaBlockCasing02, TstMetaBlockItem.class, MetaBlockCasing02.unlocalizedName);
 
         GameRegistry.registerBlock(
             PhotonControllerUpgrade,
             TstMetaBlockItem.class,
-            PhotonControllerUpgrade.getUnlocalizedName());
+            PhotonControllerUpgrade.unlocalizedName);
 
         GameRegistry.registerBlock(
             TstBlocks.SpaceTimeOscillator,
             TstMetaBlockItem.class,
-            TstBlocks.SpaceTimeOscillator.getUnlocalizedName());
+            TstBlocks.SpaceTimeOscillator.unlocalizedName);
         GameRegistry.registerBlock(
             TstBlocks.SpaceTimeConstraintor,
             TstMetaBlockItem.class,
-            TstBlocks.SpaceTimeConstraintor.getUnlocalizedName());
+            TstBlocks.SpaceTimeConstraintor.unlocalizedName);
         GameRegistry.registerBlock(
             TstBlocks.SpaceTimeMerger,
             TstMetaBlockItem.class,
-            TstBlocks.SpaceTimeMerger.getUnlocalizedName());
+            TstBlocks.SpaceTimeMerger.unlocalizedName);
 
         GameRegistry.registerBlock(
             SpaceStationStructureBlock,
             TstMetaBlockItem.class,
-            SpaceStationStructureBlock.getUnlocalizedName());
+            SpaceStationStructureBlock.unlocalizedName);
         GameRegistry.registerBlock(
             SpaceStationAntiGravityBlock,
             TstMetaBlockItem.class,
-            SpaceStationAntiGravityBlock.getUnlocalizedName());
+            SpaceStationAntiGravityBlock.unlocalizedName);
         GameRegistry
-            .registerBlock(NuclearReactorBlock, TstMetaBlockItem.class, NuclearReactorBlock.getUnlocalizedName());
+            .registerBlock(NuclearReactorBlock, TstMetaBlockItem.class, NuclearReactorBlock.unlocalizedName);
         GameRegistry.registerBlock(BlockArcaneHole, "BlockArcaneHole");
 
         GameRegistry
             .registerBlock(TstBlocks.BlockPowerChair, BlockPowerChair.ItemBlockPowerChair.class, "BlockPowerChair");
-        GameRegistry.registerBlock(BlockStar, BlockStar.getUnlocalizedName());
+        GameRegistry.registerBlock(BlockStar, BlockStar.unlocalizedName);
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
         GameRegistry.registerTileEntity(TilePowerChair.class, "TilePowerChair");
         GameRegistry.registerTileEntity(TileArcaneHole.class, "TileArcaneHole");
