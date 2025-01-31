@@ -502,9 +502,10 @@ public class TstUtils {
      * @return the total built block count
      */
     public static int getBuiltBlockCount(int... builtBlockCountEachPart) {
-        return Arrays.stream(builtBlockCountEachPart)
+        var count = Arrays.stream(builtBlockCountEachPart)
             .filter(x -> x > 0)
             .sum();
+        return count <= 0 ? -1 : count;
     }
 
     /**
