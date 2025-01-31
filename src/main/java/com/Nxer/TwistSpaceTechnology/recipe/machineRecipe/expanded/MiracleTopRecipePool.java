@@ -1,21 +1,30 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.Utils.removeIntegratedCircuitFromStacks;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
-import static com.dreammaster.item.ItemList.EngineeringProcessorFluidEmeraldCore;
 import static gregtech.api.enums.Mods.SuperSolarPanels;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
-import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.recipe.RecipeMaps.circuitAssemblerRecipes;
 import static gregtech.api.util.GTModHandler.getModItem;
+import static gtPlusPlus.core.material.Material.mComponentMap;
+import static net.minecraft.item.ItemStack.areItemStacksEqual;
 import static tectech.thing.CustomItemList.DATApipe;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -24,144 +33,505 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
-import com.glodblock.github.common.storage.CellType;
 
-import appeng.items.materials.MaterialType;
-import bartworks.API.recipe.BartWorksRecipeMaps;
+import bartworks.util.BWUtil;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
+import gtPlusPlus.core.material.Material;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsElements;
-import thaumicenergistics.implementaion.ThEAPIImplementation;
 
-// spotless:off
 public class MiracleTopRecipePool implements IRecipePool {
+
     final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipes;
-    final RecipeMap<?> CAL = BartWorksRecipeMaps.circuitAssemblyLineRecipes;
-    private void loadCustomRecipes(){
-        for (GTRecipe OriginalRecipe : circuitAssemblerRecipes.getAllRecipes()){
-            TST_RecipeBuilder.builder()
-                .itemInputs(OriginalRecipe.mInputs)
-                .fluidInputs(OriginalRecipe.mFluidInputs)
-                .itemOutputs(OriginalRecipe.mOutputs)
-                .eut(OriginalRecipe.mEUt)
-                .duration(OriginalRecipe.mDuration)
-                .noOptimize()
-                .addTo(MT);
-        }
+    public static final HashSet<ItemStack> NotModifyRecipeOutputs = new HashSet<>();
+    public static final HashSet<ItemStack> IgnoreRecipeOutputs = new HashSet<>();
+    public static final HashMap<ItemStack, ItemStack> circuitItemsToWrapped = new HashMap<>();
+    public static final HashSet<Materials> superConductorMaterialList = new HashSet<>();
+    public static final HashSet<OrePrefixes> targetModifyOreDict = new HashSet<>();
+    public static final HashMap<ItemStack, FluidStack> specialMaterialCantAutoModify = new HashMap<>();
 
-
-    }
     @Override
     public void loadRecipes() {
-
         TwistSpaceTechnology.LOG.info("MiracleTopRecipePool loading recipes.");
+        initStatics();
+        loadCircuitAssemblerRecipes();
+        loadCustumRecipes();
+    }
 
-        Fluid solderIndAlloy = FluidRegistry.getFluid("molten.indalloy140");
-        Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
+    private void loadCircuitAssemblerRecipes() {
 
-        final ItemStack Wrapped_Circuit_UV = GTModHandler.getModItem("GoodGenerator", "circuitWrap", 1, 8);
-        final ItemStack Wrapped_Circuit_LuV = GTModHandler.getModItem("GoodGenerator", "circuitWrap", 1, 6);
+        // Exclude low-level solder recipe
+        ArrayList<GTRecipe> recipeCache = new ArrayList<>();
+        for (GTRecipe originalRecipe : circuitAssemblerRecipes.getAllRecipes()) {
+            if (IgnoreRecipeOutputs.contains(copyAmount(1, originalRecipe.mOutputs[0]))) continue;
+            boolean isRecipeAdded = false;
+            for (GTRecipe cachedRecipe : recipeCache) {
+                if (isRecipeInputItemSame(originalRecipe, cachedRecipe)) {
+                    isRecipeAdded = true;
+                    break;
+                }
+            }
 
-        final ItemStack Wrapped_Circuit_Chip_Ram = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32735);
-        final ItemStack Wrapped_Circuit_Chip_NanoCPU = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32720);
+            if (!isRecipeAdded) {
+                GTRecipe recipeCopy = originalRecipe.copy();
+                FluidStack recipeFluid = recipeCopy.mFluidInputs[0];
+                if (recipeFluid.isFluidEqual(Materials.Lead.getMolten(1)))
+                    recipeFluid = Materials.SolderingAlloy.getMolten(recipeFluid.amount / 4);
+                else if (recipeFluid.isFluidEqual(Materials.Tin.getMolten(1)))
+                    recipeFluid = Materials.SolderingAlloy.getMolten(recipeFluid.amount / 2);
+                recipeCopy.mFluidInputs[0] = recipeFluid;
+                recipeCache.add(recipeCopy);
+            }
+        }
 
-        final ItemStack Wrapped_Circuit_Parts_CapacitorASMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32737);
-        final ItemStack Wrapped_Circuit_Parts_TransistorASMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32738);
-        final ItemStack Wrapped_Circuit_Parts_DiodeASMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32739);
-        final ItemStack Wrapped_Circuit_Parts_ResistorASMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32740);
-        final ItemStack Wrapped_Circuit_Parts_InductorASMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32707);
+        for (GTRecipe aRecipe : ModifyRecipe(recipeCache)) {
+            addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(aRecipe, 3, 3, 4, 4, 4, 3), 16));
+        }
 
-        final ItemStack Wrapped_Circuit_Parts_CapacitorXSMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32708);
-        final ItemStack Wrapped_Circuit_Parts_TransistorXSMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32709);
-        final ItemStack Wrapped_Circuit_Parts_DiodeXSMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32710);
-        final ItemStack Wrapped_Circuit_Parts_ResistorXSMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32711);
+    }
 
-        final ItemStack Wrapped_Circuit_Board = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32760);
-        final ItemStack Wrapped_Circuit_Board_Good = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32758);
-        final ItemStack Wrapped_Circuit_Board_Plastic = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32748);
-        final ItemStack Wrapped_Circuit_Board_Advanced = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32756);
-        final ItemStack Wrapped_Circuit_Board_More_Advanced = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32754);
-        final ItemStack Wrapped_Circuit_Board_Elite = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32753);
-        final ItemStack Wrapped_Circuit_Board_Extreme_Wetware = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32746);
-        final ItemStack Wrapped_Circuit_Board_Bio_Ultra = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32746);
-        final ItemStack Wrapped_Circuit_Board_Optical = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32704);
+    public ArrayList<GTRecipe> ModifyRecipe(ArrayList<GTRecipe> oRecipes) {
+        ArrayList<GTRecipe> rRecipes = new ArrayList<>();
+        for (GTRecipe baseRecipe : oRecipes) {
+            if (NotModifyRecipeOutputs.contains(copyAmount(1, baseRecipe.mOutputs[0]))) continue;
+            ArrayList<ItemStack> inputItems = new ArrayList<>();
+            ArrayList<FluidStack> inputFluids = new ArrayList<>();
+            inputFluids.add(baseRecipe.mFluidInputs[0]);
 
-        final ItemStack Wrapped_Optically_Perfected_CPU = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32703);
-        final ItemStack Wrapped_Optically_Compatible_Memory = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32701);
-        final ItemStack Wrapped_Circuit_Parts_InductorXSMD = GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32706);
+            for (ItemStack aStack : removeIntegratedCircuitFromStacks(baseRecipe.mInputs)) {
+                boolean isItemModified = false;
+                boolean isNeedTraverse = true;
+                for (Map.Entry<ItemStack, ItemStack> entry : circuitItemsToWrapped.entrySet()) {
+                    if (GTUtility.areStacksEqual(entry.getKey(), aStack)) {
+                        inputItems.add(copyAmount(aStack.stackSize, entry.getValue()));
+                        isItemModified = true;
+                        break;
+                    }
+                }
+
+                if (!isItemModified && BWUtil.checkStackAndPrefix(aStack)) {
+                    ItemData Data = Objects.requireNonNull(GTOreDictUnificator.getAssociation(aStack));
+                    Materials Material = Data.mMaterial.mMaterial;
+                    OrePrefixes OreDict = Data.mPrefix;
+                    if (Material.getMolten(1) != null && targetModifyOreDict.contains(OreDict)) {
+                        inputFluids.add(
+                            Material
+                                .getMolten(OreDict.mMaterialAmount * GTValues.L * aStack.stackSize / GTValues.M * 16));
+                        isItemModified = true;
+                    } else if (superConductorMaterialList.contains(Material)) {
+                        inputItems.add(
+                            copyAmount(
+                                (int) (OreDict.mMaterialAmount * aStack.stackSize * 2 / GTValues.M),
+                                GTOreDictUnificator.get(OrePrefixes.wireGt16, Material, 1)));
+                        isItemModified = true;
+                    }
+                    // if an item has GT ore dict, It not requires additional processing (like GTPP Materials)
+                    isNeedTraverse = false;
+                }
+
+                if (!isItemModified && isNeedTraverse) {
+                    // It's better to determine whether it contains ore dict
+
+                    for (Map.Entry<ItemStack, FluidStack> entry : specialMaterialCantAutoModify.entrySet()) {
+                        if (GTUtility.areStacksEqual(entry.getKey(), aStack)) {
+                            inputFluids
+                                .add(setStackSize(entry.getValue(), entry.getValue().amount * aStack.stackSize * 16));
+                            isItemModified = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!isItemModified) inputItems.add(copyAmount(aStack.stackSize * 16, aStack));
+            }
+
+            rRecipes.add(
+                new GTRecipe(
+                    false,
+                    inputItems.toArray(new ItemStack[0]),
+                    new ItemStack[] { copyAmount(baseRecipe.mOutputs[0].stackSize * 16, baseRecipe.mOutputs[0]) },
+                    null,
+                    null,
+                    mergeSameFluid(inputFluids.toArray(new FluidStack[0])),
+                    null,
+                    baseRecipe.mDuration * 12,
+                    baseRecipe.mEUt,
+                    0));
+        }
+        return rRecipes;
+    }
+
+    public GTRecipe reduplicateRecipe(GTRecipe oRecipe, int inputItemMultiTimes, int inputFluidMultiTimes,
+        int outputItemMultiTimes, int outputFluidMultiTimes, int eutMultiTimes, int durationMultiTimes) {
+        ArrayList<ItemStack> inputItems = new ArrayList<>();
+        ArrayList<FluidStack> inputFluids = new ArrayList<>();
+        ArrayList<ItemStack> outputItems = new ArrayList<>();
+        ArrayList<FluidStack> outputFluids = new ArrayList<>();
+
+        if (oRecipe == null) return null;
+
+        for (ItemStack aStack : oRecipe.mInputs) {
+            if (aStack != null) inputItems.add(copyAmount(aStack.stackSize * inputItemMultiTimes, aStack));
+        }
+        for (FluidStack aStack : oRecipe.mFluidInputs) {
+            if (aStack != null) inputFluids.add(setStackSize(aStack, aStack.amount * inputFluidMultiTimes));
+        }
+
+        for (ItemStack aStack : oRecipe.mOutputs) {
+            if (aStack != null) outputItems.add(copyAmount(aStack.stackSize * outputItemMultiTimes, aStack));
+        }
+        for (FluidStack aStack : oRecipe.mFluidOutputs) {
+            if (aStack != null) outputFluids.add(setStackSize(aStack, aStack.amount * outputFluidMultiTimes));
+        }
+
+        return new GTRecipe(
+            false,
+            inputItems.toArray(new ItemStack[0]),
+            outputItems.toArray(new ItemStack[0]),
+            null,
+            null,
+            inputFluids.toArray(new FluidStack[0]),
+            outputFluids.toArray(new FluidStack[0]),
+            oRecipe.mDuration * eutMultiTimes,
+            oRecipe.mEUt * durationMultiTimes,
+            0);
+    }
+
+    public GTRecipe addIntegratedCircuitToRecipe(GTRecipe oRecipe, int circuitNum) {
+        ArrayList<ItemStack> inputItems = new ArrayList<>();
+        inputItems.add(GTUtility.getIntegratedCircuit(circuitNum));
+
+        if (oRecipe == null) return null;
+        Collections.addAll(inputItems, oRecipe.mInputs);
+
+        return new GTRecipe(
+            false,
+            inputItems.toArray(new ItemStack[0]),
+            oRecipe.mOutputs,
+            null,
+            null,
+            oRecipe.mFluidInputs,
+            oRecipe.mFluidOutputs,
+            oRecipe.mDuration,
+            oRecipe.mEUt,
+            0);
+    }
+
+    public FluidStack[] mergeSameFluid(FluidStack[] fluidStacks) {
+
+        Map<Fluid, Integer> fluidMap = new LinkedHashMap<>();
+
+        for (FluidStack aStack : fluidStacks) {
+            fluidMap.put(aStack.getFluid(), fluidMap.getOrDefault(aStack.getFluid(), 0) + aStack.amount);
+        }
+
+        ArrayList<FluidStack> mergedList = new ArrayList<>();
+        for (Map.Entry<Fluid, Integer> entry : fluidMap.entrySet()) {
+            mergedList.add(new FluidStack(entry.getKey(), entry.getValue()));
+        }
+
+        return mergedList.toArray(new FluidStack[0]);
+    }
+
+    private boolean isRecipeInputItemSame(GTRecipe a, GTRecipe b) {
+        if (!areItemStacksEqual(a.mOutputs[0], b.mOutputs[0])) return false;
+        if (a.mInputs.length != b.mInputs.length) return false;
+        for (int i = 0; i < a.mInputs.length; i++) {
+            if (!areItemStacksEqual(a.mInputs[i], b.mInputs[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void addRecipeMT(GTRecipe aRecipe) {
+        if (aRecipe == null) return;
+        TST_RecipeBuilder.builder()
+            .itemInputs(aRecipe.mInputs)
+            .fluidInputs(aRecipe.mFluidInputs)
+            .itemOutputs(aRecipe.mOutputs)
+            .eut(aRecipe.mEUt)
+            .duration(aRecipe.mDuration)
+            .noOptimize()
+            .addTo(MT);
+    }
+
+    private static void initStatics() {
+
+        /**
+         * init Wrap circuit parts
+         */
+        // spotless:off
+        ItemStack[] CircuitParts = new ItemStack[] {
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ULV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.HV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.EV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ZPM, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 1),
+            ItemList.Circuit_Parts_Crystal_Chip_Elite.get(1),
+            ItemList.Circuit_Parts_Crystal_Chip_Master.get(1),
+            ItemList.Circuit_Board_Coated.get(1),
+            ItemList.Circuit_Board_Coated_Basic.get(1),
+            ItemList.Circuit_Board_Phenolic.get(1),
+            ItemList.Circuit_Board_Phenolic_Good.get(1),
+            ItemList.Circuit_Board_Epoxy.get(1),
+            ItemList.Circuit_Board_Epoxy_Advanced.get(1),
+            ItemList.Circuit_Board_Fiberglass.get(1),
+            ItemList.Circuit_Board_Fiberglass_Advanced.get(1),
+            ItemList.Circuit_Board_Multifiberglass_Elite.get(1),
+            ItemList.Circuit_Board_Multifiberglass.get(1),
+            ItemList.Circuit_Board_Wetware.get(1),
+            ItemList.Circuit_Board_Wetware_Extreme.get(1),
+            ItemList.Circuit_Board_Plastic.get(1),
+            ItemList.Circuit_Board_Plastic_Advanced.get(1),
+            ItemList.Circuit_Board_Bio.get(1),
+            ItemList.Circuit_Board_Bio_Ultra.get(1),
+            ItemList.Circuit_Parts_Resistor.get(1),
+            //ItemList.Circuit_Parts_ResistorSMD.get(1),
+            ItemList.Circuit_Parts_Coil.get(1),
+            //ItemList.Circuit_Parts_InductorSMD.get(1),
+            ItemList.Circuit_Parts_Diode.get(1),
+            //ItemList.Circuit_Parts_DiodeSMD.get(1),
+            ItemList.Circuit_Parts_Transistor.get(1),
+            //ItemList.Circuit_Parts_TransistorSMD.get(1),
+            ItemList.Circuit_Parts_Capacitor.get(1),
+            //ItemList.Circuit_Parts_CapacitorSMD.get(1),
+            ItemList.Circuit_Parts_ResistorASMD.get(1),
+            ItemList.Circuit_Parts_DiodeASMD.get(1),
+            ItemList.Circuit_Parts_TransistorASMD.get(1),
+            ItemList.Circuit_Parts_CapacitorASMD.get(1),
+            ItemList.Circuit_Chip_ILC.get(1),
+            ItemList.Circuit_Chip_Ram.get(1),
+            ItemList.Circuit_Chip_NAND.get(1),
+            ItemList.Circuit_Chip_NOR.get(1),
+            ItemList.Circuit_Chip_CPU.get(1),
+            ItemList.Circuit_Chip_SoC.get(1),
+            ItemList.Circuit_Chip_SoC2.get(1),
+            ItemList.Circuit_Chip_PIC.get(1),
+            ItemList.Circuit_Chip_Simple_SoC.get(1),
+            ItemList.Circuit_Chip_HPIC.get(1),
+            ItemList.Circuit_Chip_UHPIC.get(1),
+            ItemList.Circuit_Chip_ULPIC.get(1),
+            ItemList.Circuit_Chip_LPIC.get(1),
+            ItemList.Circuit_Chip_NPIC.get(1),
+            ItemList.Circuit_Chip_PPIC.get(1),
+            ItemList.Circuit_Chip_QPIC.get(1),
+            ItemList.Circuit_Chip_NanoCPU.get(1),
+            ItemList.Circuit_Chip_QuantumCPU.get(1),
+            ItemList.Circuit_Chip_CrystalCPU.get(1),
+            ItemList.Circuit_Chip_CrystalSoC.get(1),
+            ItemList.Circuit_Chip_CrystalSoC2.get(1),
+            ItemList.Circuit_Chip_NeuroCPU.get(1),
+            ItemList.Circuit_Chip_BioCPU.get(1),
+            ItemList.Circuit_Chip_Stemcell.get(1),
+            ItemList.Circuit_Chip_Biocell.get(1),
+            ItemList.Circuit_Parts_ResistorXSMD.get(1),
+            ItemList.Circuit_Parts_DiodeXSMD.get(1),
+            ItemList.Circuit_Parts_TransistorXSMD.get(1),
+            ItemList.Circuit_Parts_CapacitorXSMD.get(1),
+            ItemList.Circuit_Parts_InductorASMD.get(1),
+            ItemList.Circuit_Parts_InductorXSMD.get(1),
+            ItemList.Circuit_Chip_Optical.get(1),
+            ItemList.Circuit_Board_Optical.get(1),
+            ItemList.Optically_Perfected_CPU.get(1),
+            ItemList.Optical_Cpu_Containment_Housing.get(1),
+            ItemList.Optically_Compatible_Memory.get(1),
+            ItemList.Circuit_Parts_Crystal_Chip_Wetware.get(1),
+            ItemList.Circuit_Parts_Chip_Bioware.get(1) };
+        // spotless:on
+
+        int Count = 0;
+        for (WarpCircuitItem item : WarpCircuitItem.values()) {
+            if (Count < 15) {
+                item.set(GTModHandler.getModItem("GoodGenerator", "circuitWrap", 1, Count));
+            } else {
+                item.set(GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32778 - Count));
+            }
+            if (CircuitParts[Count] != null && item.get(1) != null) {
+                circuitItemsToWrapped.put(CircuitParts[Count], item.get(1));
+            } else circuitItemsToWrapped.put(GTCMItemList.TestItem0.get(1), GTCMItemList.TestItem0.get(1));
+            Count++;
+        }
+
+        /**
+         * init GTPP Material Map
+         */
+        // Set<Material> generateMaterialList =new HashSet<>();
+        // generateMaterialList.add(MaterialsElements.STANDALONE.CHRONOMATIC_GLASS);
+        // generateMaterialList.add(MaterialsAlloy.QUANTUM);
+
+        for (Map.Entry<String, Map<String, ItemStack>> outerEntry : mComponentMap.entrySet()) {
+            String materialName = outerEntry.getKey();
+            Map<String, ItemStack> innerMap = outerEntry.getValue();
+
+            Material material = null;
+
+            for (Material aMaterial : Material.mMaterialMap) {
+                if (aMaterial.getUnlocalizedName()
+                    .equals(materialName)) {
+                    material = aMaterial;
+                }
+            }
+
+            if (material == null) continue;
+            // if (!generateMaterialList.contains(material)) continue;
+
+            for (Map.Entry<String, ItemStack> innerEntry : innerMap.entrySet()) {
+                String orePrefixName = innerEntry.getKey();
+                ItemStack aStack = innerEntry.getValue();
+
+                OrePrefixes OreDict = OrePrefixes.valueOf(orePrefixName);
+
+                int amount = (int) (OreDict.mMaterialAmount * GTValues.L * aStack.stackSize / GTValues.M);
+                FluidStack fluidStack = material.getFluidStack(amount);
+
+                if (fluidStack != null) {
+                    specialMaterialCantAutoModify.put(aStack, fluidStack);
+                }
+            }
+        }
+
+        superConductorMaterialList.add(Materials.SuperconductorMV);
+        superConductorMaterialList.add(Materials.SuperconductorHV);
+        superConductorMaterialList.add(Materials.SuperconductorEV);
+        superConductorMaterialList.add(Materials.SuperconductorIV);
+        superConductorMaterialList.add(Materials.SuperconductorLuV);
+        superConductorMaterialList.add(Materials.SuperconductorZPM);
+        superConductorMaterialList.add(Materials.SuperconductorUV);
+        superConductorMaterialList.add(Materials.SuperconductorUHV);
+        superConductorMaterialList.add(Materials.SuperconductorUEV);
+        superConductorMaterialList.add(Materials.SuperconductorUIV);
+        superConductorMaterialList.add(Materials.SuperconductorUMV);
+
+        targetModifyOreDict.add(OrePrefixes.wireGt01);
+        targetModifyOreDict.add(OrePrefixes.wireGt02);
+        targetModifyOreDict.add(OrePrefixes.wireGt04);
+        targetModifyOreDict.add(OrePrefixes.wireGt08);
+        targetModifyOreDict.add(OrePrefixes.wireGt12);
+        targetModifyOreDict.add(OrePrefixes.wireGt16);
+        targetModifyOreDict.add(OrePrefixes.frameGt);
+        targetModifyOreDict.add(OrePrefixes.dust);
+        targetModifyOreDict.add(OrePrefixes.nugget);
+        targetModifyOreDict.add(OrePrefixes.ingot);
+        targetModifyOreDict.add(OrePrefixes.plate);
+        targetModifyOreDict.add(OrePrefixes.plateDouble);
+        targetModifyOreDict.add(OrePrefixes.plateDense);
+        targetModifyOreDict.add(OrePrefixes.rod);
+        targetModifyOreDict.add(OrePrefixes.round);
+        targetModifyOreDict.add(OrePrefixes.bolt);
+        targetModifyOreDict.add(OrePrefixes.screw);
+        targetModifyOreDict.add(OrePrefixes.ring);
+        targetModifyOreDict.add(OrePrefixes.foil);
+        targetModifyOreDict.add(OrePrefixes.itemCasing);
+        targetModifyOreDict.add(OrePrefixes.wireFine);
+        targetModifyOreDict.add(OrePrefixes.gearGt);
+        targetModifyOreDict.add(OrePrefixes.gearGtSmall);
+        targetModifyOreDict.add(OrePrefixes.rotor);
+        targetModifyOreDict.add(OrePrefixes.stickLong);
+        targetModifyOreDict.add(OrePrefixes.spring);
+        targetModifyOreDict.add(OrePrefixes.springSmall);
+        targetModifyOreDict.add(OrePrefixes.plateSuperdense);
+
+    }
+
+    private static Material getMaterialByUnlocalizedName(String unlocalizedName) {
+
+        for (Material material : Material.mMaterialMap) {
+            if (material.getUnlocalizedName()
+                .equals(unlocalizedName)) {
+                return material;
+            }
+        }
+
+        return null;
+    }
+
+    // spotless:off
+    public void loadCustumRecipes(){
 
 
         final ItemStack ringBlock = GTModHandler.getModItem("SGCraft", "stargateRing" , 1, 0);
         final ItemStack chevronBlock = GTModHandler.getModItem("SGCraft", "stargateRing", 1, 1);
         final ItemStack irisUpgrade = GTModHandler.getModItem("SGCraft", "sgIrisUpgrade" , 1, 0);
 
-        loadCustomRecipes();
+
 
 
 
         // region ME Storage Component
-        {
-
-            // Item
-            TST_RecipeBuilder
-                .builder()
-                .itemInputs(
-                    GTUtility.getIntegratedCircuit(1),
-                    copyAmount(4, Wrapped_Circuit_UV),
-                    copyAmount(16, Wrapped_Circuit_LuV),
-                    CustomItemList.EngineeringProcessorItemAdvEmeraldCore.get(16),
-                    Wrapped_Circuit_Board_Extreme_Wetware)
-                .fluidInputs(
-                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(72))
-                .itemOutputs(MaterialType.Cell16384kPart.stack(16))
-                .eut(RECIPE_UV)
-                .duration(20 * 10 * 4)
-                .addTo(MT);
-
-            // Fluid
-            TST_RecipeBuilder
-                .builder()
-                .itemInputs(
-                    GTUtility.getIntegratedCircuit(1),
-                    copyAmount(4, Wrapped_Circuit_UV),
-                    copyAmount(16, Wrapped_Circuit_LuV),
-                    ItemList.Electric_Pump_EV.get(32),
-                    EngineeringProcessorFluidEmeraldCore.getIS(16),
-                    Wrapped_Circuit_Board_Extreme_Wetware)
-                .fluidInputs(
-                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(72))
-                .itemOutputs(CellType.Cell16384kPart.stack(16))
-                .eut(RECIPE_UV)
-                .duration(20 * 10 * 4)
-                .addTo(MT);
-
-            // Essentia
-            TST_RecipeBuilder
-                .builder()
-                .itemInputs(
-                    GTUtility.getIntegratedCircuit(1),
-                    copyAmount(4, Wrapped_Circuit_UV),
-                    copyAmount(16, Wrapped_Circuit_LuV),
-                    CustomItemList.EngineeringProcessorEssentiaPulsatingCore.get(16),
-                    Wrapped_Circuit_Board_Extreme_Wetware)
-                .fluidInputs(
-                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(72))
-                .itemOutputs(ThEAPIImplementation.instance().items().EssentiaStorageComponent_16384k.getStacks(16))
-                .eut(RECIPE_UV)
-                .duration(20 * 10 * 4)
-                .addTo(MT);
-
-        }
+//        {
+//
+//            // Item
+//            TST_RecipeBuilder
+//                .builder()
+//                .itemInputs(
+//                    GTUtility.getIntegratedCircuit(1),
+//                    copyAmount(4, Wrapped_Circuit_UV),
+//                    copyAmount(16, Wrapped_Circuit_LuV),
+//                    CustomItemList.EngineeringProcessorItemAdvEmeraldCore.get(16),
+//                    Wrapped_Circuit_Board_Extreme_Wetware)
+//                .fluidInputs(
+//                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(72))
+//                .itemOutputs(MaterialType.Cell16384kPart.stack(16))
+//                .eut(RECIPE_UV)
+//                .duration(20 * 10 * 4)
+//                .addTo(MT);
+//
+//            // Fluid
+//            TST_RecipeBuilder
+//                .builder()
+//                .itemInputs(
+//                    GTUtility.getIntegratedCircuit(1),
+//                    copyAmount(4, Wrapped_Circuit_UV),
+//                    copyAmount(16, Wrapped_Circuit_LuV),
+//                    ItemList.Electric_Pump_EV.get(32),
+//                    EngineeringProcessorFluidEmeraldCore.getIS(16),
+//                    Wrapped_Circuit_Board_Extreme_Wetware)
+//                .fluidInputs(
+//                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(72))
+//                .itemOutputs(CellType.Cell16384kPart.stack(16))
+//                .eut(RECIPE_UV)
+//                .duration(20 * 10 * 4)
+//                .addTo(MT);
+//
+//            // Essentia
+//            TST_RecipeBuilder
+//                .builder()
+//                .itemInputs(
+//                    GTUtility.getIntegratedCircuit(1),
+//                    copyAmount(4, Wrapped_Circuit_UV),
+//                    copyAmount(16, Wrapped_Circuit_LuV),
+//                    CustomItemList.EngineeringProcessorEssentiaPulsatingCore.get(16),
+//                    Wrapped_Circuit_Board_Extreme_Wetware)
+//                .fluidInputs(
+//                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(72))
+//                .itemOutputs(ThEAPIImplementation.instance().items().EssentiaStorageComponent_16384k.getStacks(16))
+//                .eut(RECIPE_UV)
+//                .duration(20 * 10 * 4)
+//                .addTo(MT);
+//
+//        }
         // endregion
 
 
@@ -1804,6 +2174,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .eut(RECIPE_MAX)
             .duration(100_000_000 * 20)
             .addTo(MT);
+
     }
 
 //    HighDimensionalExtend,
@@ -1827,5 +2198,95 @@ public class MiracleTopRecipePool implements IRecipePool {
             .duration(20)
             .addTo(MT);
      */
+    public enum WarpCircuitItem{
+        Wrapped_Circuit_ULV,
+        Wrapped_Circuit_LV,
+        Wrapped_Circuit_MV,
+        Wrapped_Circuit_HV,
+        Wrapped_Circuit_EV ,
+        Wrapped_Circuit_IV ,
+        Wrapped_Circuit_LuV,
+        Wrapped_Circuit_ZPM ,
+        Wrapped_Circuit_UV ,
+        Wrapped_Circuit_UHV ,
+        Wrapped_Circuit_UEV ,
+        Wrapped_Circuit_UIV ,
+        Wrapped_Circuit_UMV ,
+        Wrapped_Circuit_UXV ,
+        Wrapped_Circuit_MAX ,
+
+        Warp_Circuit_Parts_Crystal_Chip_Elite,
+        Warp_Circuit_Parts_Crystal_Chip_Master,
+        Warp_Circuit_Board_Coated,
+        Warp_Circuit_Board_Coated_Basic,
+        Warp_Circuit_Board_Phenolic,
+        Warp_Circuit_Board_Phenolic_Good,
+        Warp_Circuit_Board_Epoxy,
+        Warp_Circuit_Board_Epoxy_Advanced,
+        Warp_Circuit_Board_Fiberglass,
+        Warp_Circuit_Board_Fiberglass_Advanced,
+        Warp_Circuit_Board_Multifiberglass_Elite,
+        Warp_Circuit_Board_Multifiberglass,
+        Warp_Circuit_Board_Wetware,
+        Warp_Circuit_Board_Wetware_Extreme,
+        Warp_Circuit_Board_Plastic,
+        Warp_Circuit_Board_Plastic_Advanced,
+        Warp_Circuit_Board_Bio,
+        Warp_Circuit_Board_Bio_Ultra,
+        Warp_Circuit_Parts_ResistorSMD,
+        Warp_Circuit_Parts_InductorSMD,
+        Warp_Circuit_Parts_DiodeSMD,
+        Warp_Circuit_Parts_TransistorSMD,
+        Warp_Circuit_Parts_CapacitorSMD,
+        Warp_Circuit_Parts_ResistorASMD,
+        Warp_Circuit_Parts_DiodeASMD,
+        Warp_Circuit_Parts_TransistorASMD,
+        Warp_Circuit_Parts_CapacitorASMD,
+        Warp_Circuit_Chip_ILC,
+        Warp_Circuit_Chip_Ram,
+        Warp_Circuit_Chip_NAND,
+        Warp_Circuit_Chip_NOR,
+        Warp_Circuit_Chip_CPU,
+        Warp_Circuit_Chip_SoC,
+        Warp_Circuit_Chip_SoC2,
+        Warp_Circuit_Chip_PIC,
+        Warp_Circuit_Chip_Simple_SoC,
+        Warp_Circuit_Chip_HPIC,
+        Warp_Circuit_Chip_UHPIC,
+        Warp_Circuit_Chip_ULPIC,
+        Warp_Circuit_Chip_LPIC,
+        Warp_Circuit_Chip_NPIC,
+        Warp_Circuit_Chip_PPIC,
+        Warp_Circuit_Chip_QPIC,
+        Warp_Circuit_Chip_NanoCPU,
+        Warp_Circuit_Chip_QuantumCPU,
+        Warp_Circuit_Chip_CrystalCPU,
+        Warp_Circuit_Chip_CrystalSoC,
+        Warp_Circuit_Chip_CrystalSoC2,
+        Warp_Circuit_Chip_NeuroCPU,
+        Warp_Circuit_Chip_BioCPU,
+        Warp_Circuit_Chip_Stemcell,
+        Warp_Circuit_Chip_Biocell,
+        Warp_Circuit_Parts_ResistorXSMD,
+        Warp_Circuit_Parts_DiodeXSMD,
+        Warp_Circuit_Parts_TransistorXSMD,
+        Warp_Circuit_Parts_CapacitorXSMD,
+        Warp_Circuit_Parts_InductorASMD,
+        Warp_Circuit_Parts_InductorXSMD,
+        Warp_Circuit_Chip_Optical,
+        Warp_Circuit_Board_Optical,
+        Warp_Optically_Perfected_CPU,
+        Warp_Optical_Cpu_Containment_Housing,
+        Warp_Optically_Compatible_Memory,
+        Warp_Circuit_Parts_Crystal_Chip_Wetware,
+        Warp_Circuit_Parts_Chip_Bioware;
+        private ItemStack itemStack;
+        public ItemStack get(int amount){
+            return copyAmount(amount, this.itemStack);
+        }
+        public void set(ItemStack itemStack) {
+            this.itemStack = itemStack;
+        }
+    }
 }
 // spotless:on

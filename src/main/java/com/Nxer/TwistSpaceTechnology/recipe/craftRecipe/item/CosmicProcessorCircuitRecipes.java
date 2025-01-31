@@ -276,8 +276,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.screw, MaterialsUEVplus.TranscendentMetal, 2),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Infinity, 4))
             .fluidInputs(
-                // TODO spacetime glue
-                Materials.Hydrogen.getPlasma(100),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(100),
                 Materials.Lead.getPlasma(72),
                 Materials.Plutonium241.getPlasma(72),
                 RadoxPolymer.getMolten(288))
@@ -300,8 +299,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 ParticleTrapTimeSpaceShield.get(1),
                 GTOreDictUnificator.get(OrePrefixes.foil, RadoxPolymer, 4))
             .fluidInputs(
-                // TODO spacetime glue
-                Materials.Hydrogen.getPlasma(200),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(200),
                 HYPOGEN.getFluidStack(72),
                 GGMaterial.metastableOganesson.getMolten(144),
                 RadoxPolymer.getMolten(288))
@@ -326,8 +324,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 ItemList.Tesseract.get(1),
                 ItemList.EnergisedTesseract.get(1))
             .fluidInputs(
-                // TODO spacetime glue
-                Materials.Hydrogen.getPlasma(500),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(500),
                 Materials.UUMatter.getFluid(8000),
                 MaterialsUEVplus.SpaceTime.getMolten(288),
                 Materials.Thorium.getPlasma(288))
@@ -351,8 +348,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 SpaceTimeSuperconductingInlaidMotherboard.get(2),
                 CELESTIAL_TUNGSTEN.getPlate(8))
             .fluidInputs(
-                // TODO spacetime glue
-                Materials.Hydrogen.getPlasma(1000),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(1000),
                 GGMaterial.shirabon.getMolten(1152),
                 MaterialsUEVplus.Space.getMolten(1152),
                 MaterialsUEVplus.Time.getMolten(1152))
@@ -373,8 +369,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 SpaceTimeSuperconductingInlaidMotherboard.get(3),
                 CELESTIAL_TUNGSTEN.getPlate(9))
             .fluidInputs(
-                // TODO spacetime glue
-                Materials.Hydrogen.getPlasma(1000),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(1000),
                 MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(72),
                 MaterialsUEVplus.Space.getMolten(1152),
                 MaterialsUEVplus.Time.getMolten(1152))

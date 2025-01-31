@@ -22,8 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 
 import gregtech.api.enums.HeatingCoilLevel;
+import gregtech.api.enums.ItemList;
 import gregtech.api.metatileentity.MetaTileEntity;
-import scala.actors.migration.pattern;
 
 public final class Utils {
 
@@ -390,5 +390,15 @@ public final class Utils {
 
     public static double calculatePowerTier(double voltage) {
         return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
+    }
+
+    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack[] aStack) {
+        ArrayList<ItemStack> newStack = new ArrayList<>();
+        for (ItemStack itemStack : aStack) {
+            if (itemStack.getItem() != ItemList.Circuit_Integrated.getItem()) {
+                newStack.add(itemStack);
+            }
+        }
+        return newStack.toArray(new ItemStack[0]);
     }
 }

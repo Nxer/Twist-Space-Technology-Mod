@@ -10,7 +10,6 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceTimeSuperco
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.UltimateEnergyFlowCircuit;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler.MeteoricSingularity;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler.NitronicSingularity;
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleTopRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -34,7 +33,6 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
-import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
@@ -252,21 +250,21 @@ public class LapotronChipRecipes implements IRecipePool {
             .duration(120 * 20)
             .addTo(circuitAssemblerRecipes);
 
-        TST_RecipeBuilder.builder()
-            .itemInputs(
-                GTUtility.getIntegratedCircuit(16),
-                SpaceTimeSuperconductingInlaidMotherboard.get(12),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 24),
-                MaterialsTST.Axonium.getNanite(24),
-
-                PerfectEngravedEnergyChip.get(24),
-                PerfectEngravedLaptronChip.get(24),
-                GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
-            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 8))
-            .itemOutputs(UltimateEnergyFlowCircuit.get(16))
-            .noOptimize()
-            .eut(RECIPE_UMV)
-            .duration(360 * 20)
-            .addTo(MiracleTopRecipes);
+        // TST_RecipeBuilder.builder()
+        // .itemInputs(
+        // GTUtility.getIntegratedCircuit(16),
+        // SpaceTimeSuperconductingInlaidMotherboard.get(12),
+        // GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 24),
+        // MaterialsTST.Axonium.getNanite(24),
+        //
+        // PerfectEngravedEnergyChip.get(24),
+        // PerfectEngravedLaptronChip.get(24),
+        // GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
+        // .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 8))
+        // .itemOutputs(UltimateEnergyFlowCircuit.get(16))
+        // .noOptimize()
+        // .eut(RECIPE_UMV)
+        // .duration(360 * 20)
+        // .addTo(MiracleTopRecipes);
     }
 }
