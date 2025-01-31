@@ -29,6 +29,7 @@ import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -57,6 +58,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMa
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -128,6 +130,9 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
+            final HashMap<Aspect, TileInfusionProvider> aspectProvider = new HashMap<>();
+            AspectList aspects = null;
+
             @NotNull
             @Override
             public CheckRecipeResult process() {
@@ -141,10 +146,6 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             @Nonnull
             @Override
             protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                int Para = createParallelHelper(recipe).setConsumption(false)
-                    .build()
-                    .getCurrentParallel();
-
                 int recipeIndex = recipe.getMetadataOrDefault(IndustrialMagicMatrixRecipeIndexKey.INSTANCE, -1);
                 if (recipeIndex == -1) {
                     return CheckRecipeResultRegistry.NO_RECIPE;
@@ -168,29 +169,51 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     }
                 }
 
-                AspectList aspects = tcRecipe.getInputAspects();
+                aspectProvider.clear();
+                aspects = tcRecipe.getInputAspects();
                 if (aspects.visSize() == 0) {
                     return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
                 if (mTileInfusionProvider.isEmpty()) {
                     return Essentia_InsentiaL;
                 }
-                HashMap<Aspect, TileInfusionProvider> hatchMap = new HashMap<>();
-                aspectLoop: for (Aspect aspect : aspects.getAspects()) {
+
+                HashMap<Aspect, Integer> aspectMaxParallel = new HashMap<>();
+                for (Aspect aspect : aspects.getAspects()) {
+                    int amount = aspects.getAmount(aspect);
+                    if (amount <= 0) {
+                        continue;
+                    }
+
                     for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        if (hatch.doesContainerContainAmount(aspect, aspects.getAmount(aspect) * Para)) {
-                            hatchMap.put(aspect, hatch);
-                            continue aspectLoop;
+                        int possibleParallel = Utils.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
+                        if (possibleParallel <= 0) {
+                            continue;
+                        }
+
+                        if (possibleParallel > aspectMaxParallel.computeIfAbsent(aspect, k -> 0)) {
+                            aspectMaxParallel.put(aspect, possibleParallel);
+                            aspectProvider.put(aspect, hatch);
                         }
                     }
-                    return Essentia_InsentiaL;
+
+                    if (aspectMaxParallel.get(aspect) == 0) {
+                        return Essentia_InsentiaL;
+                    }
                 }
-                for (Aspect aspect : aspects.getAspects()) {
-                    hatchMap.get(aspect)
-                        .takeFromContainer(aspect, aspects.getAmount(aspect) * Para);
-                }
+                maxParallel = Utils.min(Collections.min(aspectMaxParallel.values()), maxParallel);
 
                 return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult onRecipeStart(@NotNull GTRecipe recipe) {
+                for (Aspect aspect : aspectProvider.keySet()) {
+                    aspectProvider.get(aspect)
+                        .takeFromContainer(aspect, aspects.getAmount(aspect) * getCurrentParallels());
+                }
+                return super.onRecipeStart(recipe);
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
