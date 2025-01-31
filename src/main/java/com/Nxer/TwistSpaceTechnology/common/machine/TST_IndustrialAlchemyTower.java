@@ -90,6 +90,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -188,7 +189,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     }
 
                     for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        int possibleParallel = Utils.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
+                        int possibleParallel = GTUtility.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
                         if (possibleParallel <= 0) {
                             continue;
                         }
@@ -203,7 +204,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                         return Essentia_InsentiaL;
                     }
                 }
-                maxParallel = Utils.min(Collections.min(aspectMaxParallel.values()), maxParallel);
+                maxParallel = Integer.min(Collections.min(aspectMaxParallel.values()), maxParallel);
 
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }

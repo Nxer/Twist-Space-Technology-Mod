@@ -58,7 +58,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMa
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -77,6 +76,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import scala.Int;
@@ -186,7 +186,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     }
 
                     for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        int possibleParallel = Utils.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
+                        int possibleParallel = GTUtility.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
                         if (possibleParallel <= 0) {
                             continue;
                         }
@@ -201,7 +201,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                         return Essentia_InsentiaL;
                     }
                 }
-                maxParallel = Utils.min(Collections.min(aspectMaxParallel.values()), maxParallel);
+                maxParallel = Integer.min(Collections.min(aspectMaxParallel.values()), maxParallel);
 
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
