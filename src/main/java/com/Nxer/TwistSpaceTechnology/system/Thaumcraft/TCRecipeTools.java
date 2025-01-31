@@ -23,8 +23,11 @@ public class TCRecipeTools {
 
     public static HashMap<String, ArrayList<CrucibleCraftingRecipe>> CCR = new HashMap<>();// CrucibleCraftingRecipeMap
 
+    @SuppressWarnings("ConstantConditions")
     public static String toStringWithoutStackSize(ItemStack itemStack) {
-        return itemStack.getUnlocalizedName() + "@" + itemStack.getItemDamage();
+        return itemStack.getItem()
+            .getUnlocalizedName() + "@"
+            + itemStack.getItemDamage();
     }
 
     public TCRecipeTools() {}
@@ -61,11 +64,12 @@ public class TCRecipeTools {
                 } else if (cat instanceof ItemStack itemStack) {
                     input = Utils.copyAmount(1, itemStack);
                 } else continue;
-                String inputKey = null;
-                if (input != null) {
+                String inputKey;
+                if (input != null && input.getItem() != null) {
                     inputKey = toStringWithoutStackSize(input);
                 } else {
                     TwistSpaceTechnology.LOG.info("input is null when getting CrucibleCraftingRecipe");
+                    continue;
                 }
                 CrucibleCraftingRecipe p = new CrucibleCraftingRecipe(
                     input,
