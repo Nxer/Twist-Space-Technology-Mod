@@ -589,4 +589,14 @@ public class TstUtils {
     public static double calculateVoltageTier(double voltage) {
         return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
     }
+
+    public static ItemStack setStackSize(ItemStack itemStack, int size) {
+        itemStack.stackSize = size;
+        return itemStack;
+    }
+
+    public FluidStack setStackSize(FluidStack fluidStack, int size) {
+        fluidStack.amount = size;
+        return fluidStack;
+    }
 }
