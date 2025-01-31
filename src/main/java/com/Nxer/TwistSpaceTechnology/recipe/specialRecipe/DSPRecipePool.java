@@ -1,22 +1,22 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Antimatter;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AntimatterFuelRod;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ArtificialStar;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CoreElement;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DSPLauncher;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DSPReceiver;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrameComponent;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EmptySmallLaunchVehicle;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehicle;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StrangeAnnihilationFuelRod;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.AnnihilationConstrainer;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.Antimatter;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.AntimatterFuelRod;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ArtificialStar;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CoreElement;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CriticalPhoton;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DSPLauncher;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DSPReceiver;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DysonSphereFrameComponent;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EmptySmallLaunchVehicle;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.GravitationalLens;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ParticleTrapTimeSpaceShield;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SmallLaunchVehicle;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SolarSail;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceWarper;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.StrangeAnnihilationFuelRod;
 import static com.Nxer.TwistSpaceTechnology.config.Config.EUEveryStrangeAnnihilationFuelRod;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatter;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
@@ -24,10 +24,6 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.addStringToStackName;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
@@ -59,7 +55,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -89,6 +85,14 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 
 public class DSPRecipePool implements IRecipePool {
+
+    private static ItemStack appendToItemStackDisplayName(ItemStack itemStack, String extra) {
+        String originName = itemStack.getDisplayName();
+        String newName = originName + " " + extra;
+        itemStack.setStackDisplayName(newName);
+
+        return itemStack;
+    }
 
     @Override
     public void loadRecipes() {
@@ -162,7 +166,7 @@ public class DSPRecipePool implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
                 GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 16),
 
-                setStackSize(LightWeightPlate.copy(), 64),
+                GTUtility.copyAmountUnsafe(64, LightWeightPlate),
                 eM_Power.get(64),
                 new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
                 new ItemStack(GSBlocks.DysonSwarmBlocks, 64, 9))
@@ -189,7 +193,7 @@ public class DSPRecipePool implements IRecipePool {
                 ItemList.EnergisedTesseract.get(16),
 
                 ItemList.Field_Generator_UMV.get(8),
-                copyAmount(64, Particle.getBaseParticle(Particle.HIGGS_BOSON)))
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.HIGGS_BOSON)))
             .fluidInputs(GGMaterial.metastableOganesson.getMolten(144 * 256))
             .itemOutputs(eM_Ultimate_Containment_Advanced.get(8))
 
@@ -269,8 +273,10 @@ public class DSPRecipePool implements IRecipePool {
             .itemOutputs(
                 SmallLaunchVehicle.get(1)
                     .setStackDisplayName(
-                        texter("99%% Return an Empty Small Launch Vehicle.", "NEI.EmptySmallLaunchVehicleRecipe.0")))
-
+                        // #tr NEI.EmptySmallLaunchVehicleRecipe.0
+                        // # 99%% Return an Empty Small Launch Vehicle.
+                        // #zh_CN 99%%返还一个空的小型运载火箭.
+                        TextEnums.tr("NEI.EmptySmallLaunchVehicleRecipe.0")))
             .eut(EUTOfLaunchingNode)
             .duration(ticksOfLaunchingNode)
             .addTo(DSPLauncherRecipe);
@@ -299,7 +305,11 @@ public class DSPRecipePool implements IRecipePool {
         // spotless:off
         GTValues.RA.stdBuilder()
             .itemInputs(AntimatterFuelRod.get(1))
-            .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(texter("Chance to recover some raw materials. Probability is affected by module tier.","NEI.AntimatterFuelRodGeneratingRecipe.01")))
+            .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(
+                // #tr NEI.AntimatterFuelRodGeneratingRecipe.01
+                // # Chance to recover some raw materials. Probability is affected by module tier.
+                // #zh_CN 有概率回收部分材料. 概率受模块等级影响.
+                TextEnums.tr("NEI.AntimatterFuelRodGeneratingRecipe.01")))
             .specialValue((int) (EUEveryAntimatterFuelRod / Integer.MAX_VALUE))
             .eut(0)
             .duration(0)
@@ -307,7 +317,8 @@ public class DSPRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .itemInputs(StrangeAnnihilationFuelRod.get(1))
-            .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(texter("Chance to recover some raw materials. Probability is affected by module tier.","NEI.AntimatterFuelRodGeneratingRecipe.01")))
+            .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(
+                TextEnums.tr("NEI.AntimatterFuelRodGeneratingRecipe.01")))
             .specialValue((int) (EUEveryStrangeAnnihilationFuelRod / Integer.MAX_VALUE))
             .eut(0)
             .duration(0)
@@ -327,7 +338,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(21),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
-                setStackSize(LightWeightPlate.copy(), 6),
+                GTUtility.copyAmountUnsafe(6, LightWeightPlate),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.BlackPlutonium, 16),
                 Materials.Neutronium.getNanite(1))
             .fluidInputs(
@@ -345,7 +356,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(22),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
-                setStackSize(LightWeightPlate.copy(), 9),
+                GTUtility.copyAmountUnsafe(9, LightWeightPlate),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 8),
                 Materials.Neutronium.getNanite(1))
             .fluidInputs(
@@ -364,7 +375,7 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(23),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 48),
-                setStackSize(LightWeightPlate.copy(), 36),
+                GTUtility.copyAmountUnsafe(36, LightWeightPlate),
                 ItemList.EnergisedTesseract.get(12),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 12),
                 Materials.Neutronium.getNanite(1))
@@ -390,7 +401,7 @@ public class DSPRecipePool implements IRecipePool {
                 new FluidStack(solderPlasma, 144 * 4),
                 RadoxPolymer.getMolten(144 * 4),
                 Materials.Neutronium.getMolten(144 * 2))
-            .itemOutputs(setStackSize(LightWeightPlate.copy(), 1))
+            .itemOutputs(GTUtility.copyAmountUnsafe(1, LightWeightPlate))
 
             .noOptimize()
             .specialValue(2)
@@ -401,14 +412,14 @@ public class DSPRecipePool implements IRecipePool {
         // Empty Small Launch Vehicle
         GTValues.RA.stdBuilder()
             .itemInputs(
-                setStackSize(ShuttleNoseCone.copy(), 1),
+                GTUtility.copyAmountUnsafe(1, ShuttleNoseCone),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
                 SpaceWarper.get(16),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 32),
 
                 StellarConstructionFrameMaterial.get(32),
-                setStackSize(LightWeightPlate.copy(), 32),
-                setStackSize(IonThrusterJet.copy(), 4))
+                GTUtility.copyAmountUnsafe(32, LightWeightPlate),
+                GTUtility.copyAmountUnsafe(4, IonThrusterJet))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 4),
                 RadoxPolymer.getMolten(144 * 4),
@@ -428,7 +439,7 @@ public class DSPRecipePool implements IRecipePool {
                 EmptySmallLaunchVehicle.get(1),
                 SpaceWarper.get(1),
                 DysonSphereFrameComponent.get(24),
-                copyAmount(16, Particle.getBaseParticle(Particle.GRAVITON)),
+                GTUtility.copyAmountUnsafe(16, Particle.getBaseParticle(Particle.GRAVITON)),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 16))
             .itemOutputs(SmallLaunchVehicle.get(1))
@@ -634,8 +645,8 @@ public class DSPRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(23),
-                copyAmount(0, MaterialsUEVplus.Universium.getNanite(1)),
-                copyAmount(0, MaterialsUEVplus.Eternity.getNanite(1)),
+                GTUtility.copyAmountUnsafe(0, MaterialsUEVplus.Universium.getNanite(1)),
+                GTUtility.copyAmountUnsafe(0, MaterialsUEVplus.Eternity.getNanite(1)),
                 GTOreDictUnificator
                     .get(OrePrefixes.frameGt, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter, 1),
 
@@ -737,10 +748,10 @@ public class DSPRecipePool implements IRecipePool {
             .itemInputs(
                 SpaceWarper.get(1),
                 Laser_Lens_Special.get(4),
-                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)),
-                copyAmount(64, Particle.getBaseParticle(Particle.GRAVITON)))
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)),
+                GTUtility.copyAmountUnsafe(64, Particle.getBaseParticle(Particle.GRAVITON)))
             .fluidInputs(Materials.MysteriousCrystal.getMolten(144 * 9 * 64 * 2))
             .itemOutputs(
                 GravitationalLens.get(1),
@@ -765,28 +776,28 @@ public class DSPRecipePool implements IRecipePool {
                     // #tr StrangeMatterAggregation.RecipeDescription.firstSlot
                     // # basic material, input from general input bus, actual amount is set by machine internal parameters
                     // #zh_CN 基础材料, 从通用输入总线输入, 实际数量与机器内部参数有关
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         Antimatter.get(256),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
                     // second slot is the right input bus input and consumption rate set by structure
                     // #tr StrangeMatterAggregation.RecipeDescription.secondSlot
                     // # input from the right input bus and consumption rate set by structure
                     // #zh_CN 由右侧输入总线输入, 消耗率与结构有关
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
                     // third slot is only consume one time per process
                     // #tr StrangeMatterAggregation.RecipeDescription.thirdSlot
                     // # auxiliary material, input from general input bus, only consume 1 per parallel
                     // #zh_CN 辅助材料, 从通用输入总线输入, 每并行只消耗1个
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
                     // #tr StrangeMatterAggregation.RecipeDescription.fourthSlot
                     // # auxiliary material, input from general input bus, consumed amount same as output amount, affected by structure
                     // #zh_CN 辅助材料, 从通用输入总线输入, 消耗量等于产物数量, 受结构等级影响
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StellarConstructionFrameMaterial.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.fourthSlot")))
                 .fluidInputs(
@@ -799,14 +810,14 @@ public class DSPRecipePool implements IRecipePool {
                     // #tr StrangeMatterAggregation.RecipeDescription.output1
                     // # T1 production
                     // #zh_CN 1级产物
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
                     // #tr StrangeMatterAggregation.RecipeDescription.output2
                     // # T2 production
                     // #zh_CN 2级产物
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output2")))
                 .fluidOutputs(
@@ -817,7 +828,7 @@ public class DSPRecipePool implements IRecipePool {
                 // # input from the right input bus, upgrades a portion of the product to T2 product, same ratio as the annihilation constrainer
                 // #zh_CN 由右侧输入总线输入, 将一部分产物升级为2级产物, 比率与湮灭约束器相同
                 .special(
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
                 // machine will always use a fixed power, adjusted by structure
@@ -829,19 +840,19 @@ public class DSPRecipePool implements IRecipePool {
             GTValues.RA.stdBuilder()
                 .itemInputs(
                     // first slot is the general input , amount is set by machine internal parameters
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         Antimatter.get(256),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
                     // second slot is the right input bus input and consumption rate set by structure
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
                     // third slot is only consume one time per process
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StellarConstructionFrameMaterial.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.fourthSlot")))
                 .fluidInputs(
@@ -851,11 +862,11 @@ public class DSPRecipePool implements IRecipePool {
                     MaterialsUEVplus.Universium.getMolten(96))
                 .itemOutputs(
                     // first output is T1 output
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output2")))
                 .fluidOutputs(
@@ -863,7 +874,7 @@ public class DSPRecipePool implements IRecipePool {
                     MaterialsUEVplus.SpaceTime.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator),
                     GGMaterial.shirabon.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator))
                 .special(
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
                 // machine will always use a fixed power, adjusted by structure
@@ -874,15 +885,15 @@ public class DSPRecipePool implements IRecipePool {
             GTValues.RA.stdBuilder()
                 .itemInputs(
                     // first slot is the general input , amount is set by machine internal parameters
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         Antimatter.get(256),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
                     // second slot is the right input bus input and consumption rate set by structure
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
                     // third slot is only consume one time per process
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
@@ -894,18 +905,18 @@ public class DSPRecipePool implements IRecipePool {
                     MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(16))
                 .itemOutputs(
                     // first output is T1 output
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output2")))
                 .fluidOutputs(
                     // here is T3 byproduct
                     MaterialsUEVplus.Universium.getMolten(Config.ByproductBaseAmount_T3_StrangeMatterAggregator))
                 .special(
-                    addStringToStackName(
+                    appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
                         "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
                 // machine will always use a fixed power, adjusted by structure
@@ -917,7 +928,9 @@ public class DSPRecipePool implements IRecipePool {
         // Strange Matter Aggregator Controller
         TST_RecipeBuilder.builder()
             .itemInputs(
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 1), 8192),
+                GTUtility.copyAmountUnsafe(
+                    8192,
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 1)),
                 AntimatterFuelRod.get(512),
                 AnnihilationConstrainer.get(512),
                 DysonSphereFrameComponent.get(512),
@@ -927,12 +940,12 @@ public class DSPRecipePool implements IRecipePool {
                 eM_Ultimate_Containment_Field.get(64),
                 eM_Teleportation.get(64),
 
-                setStackSize(ItemList.Field_Generator_UMV.get(1), 512),
-                setStackSize(MaterialsUEVplus.TranscendentMetal.getNanite(1), 512),
-                setStackSize(ItemList.Tesseract.get(1), 512),
-                setStackSize(ItemList.EnergisedTesseract.get(1), 512),
+                GTUtility.copyAmountUnsafe(512, ItemList.Field_Generator_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(512, MaterialsUEVplus.TranscendentMetal.getNanite(1)),
+                GTUtility.copyAmountUnsafe(512, ItemList.Tesseract.get(1)),
+                GTUtility.copyAmountUnsafe(512, ItemList.EnergisedTesseract.get(1)),
 
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1), 512),
+                GTUtility.copyAmountUnsafe(512, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)),
                 ItemList.ZPM.get(1))
             .fluidInputs(
                 Materials.Void.getMolten(144 * 131072),

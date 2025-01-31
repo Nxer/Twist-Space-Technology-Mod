@@ -17,8 +17,8 @@ import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
@@ -133,7 +133,8 @@ public class TCRecipePool implements IRecipePool {
                         TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
 
-                        Mods.EnderIO.isModLoaded() ? ExtremeEntityCrusher.get(1) : new ItemStack(diamond_sword, 1),
+                        (Mods.EnderIO.isModLoaded() && Mods.MobsInfo.isModLoaded()) ? ExtremeEntityCrusher.get(1)
+                            : new ItemStack(diamond_sword, 1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
                         TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1) });
@@ -205,7 +206,7 @@ public class TCRecipePool implements IRecipePool {
                 }
                 infusionRecipeTimeBendingSpeedRune = ThaumcraftApi.addInfusionCraftingRecipe(
                     "TIME_BENDING_SPEED_RUNE",
-                    new ItemStack(BasicBlocks.timeBendingSpeedRune),
+                    new ItemStack(TstBlocks.TimeBendingSpeedRune),
                     10,
                     new AspectList().merge(Aspect.LIFE, 64)
                         .merge(Aspect.MOTION, 256)
@@ -236,7 +237,7 @@ public class TCRecipePool implements IRecipePool {
             }
             crucibleRecipeArcaneHole = ThaumcraftApi.addCrucibleRecipe(
                 "TST_ARCANE_HOLE",
-                new ItemStack(BasicBlocks.BlockArcaneHole, 1),
+                new ItemStack(TstBlocks.BlockArcaneHole, 1),
                 new ItemStack(ConfigBlocks.blockCosmeticOpaque, 1, 2),
                 new AspectList().merge(Aspect.VOID, 16)
                     .merge(Aspect.DARKNESS, 8)

@@ -20,10 +20,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
+import com.Nxer.TwistSpaceTechnology.common.block.meta.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextWithColor;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedFormat;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -242,7 +242,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     protected MultiblockTooltipBuilder createTooltip() {
         var tt = new MultiblockTooltipBuilder();
 
-        TextWithColor.setDefaultColor(EnumChatFormatting.GRAY);
+        TstSharedFormat.setDefaultColor(EnumChatFormatting.GRAY);
 
         tt.addMachineType(getMachineType())
             // #tr ManufacturingCenter_Tooltips_1
@@ -256,7 +256,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             // #tr ManufacturingCenter_Tooltips_3
             // # Manufacturing Center cannot handle recipes over %s.
             // #zh_CN 加工中心不能制作%s以上的配方。
-            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_3", TextWithColor.getTierName(VoltageIndex.UHV)))
+            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_3", TstSharedFormat.getTierName(VoltageIndex.UHV)))
             // #tr ManufacturingCenter_Tooltips_4
             // # §b20%%§7 faster than single blocks.
             // #zh_CN 比单方块机器快§b20%%§7。
@@ -267,20 +267,20 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             .addInfo(
                 TextEnums.tr(
                     "ManufacturingCenter_Tooltips_5",
-                    TextWithColor.getTierName(LOWEST_CORE_TIER),
-                    TextWithColor.percentage(SPEED_BONUS_FOR_CORE_TIER * 100)))
+                    TstSharedFormat.getTierName(LOWEST_CORE_TIER),
+                    TstSharedFormat.percentage(SPEED_BONUS_FOR_CORE_TIER * 100)))
             // #tr ManufacturingCenter_Tooltips_6
             // # Each Core Tier over %s gains §b%s§7 EU/t Reduction.
             // #zh_CN 每级超过%s的核心等级获得§b%s§7的能量减免。
             .addInfo(
                 TextEnums.tr(
                     "ManufacturingCenter_Tooltips_6",
-                    TextWithColor.getTierName(LOWEST_CORE_TIER),
-                    TextWithColor.percentage(EU_REDUCTION_FOR_CORE_TIER * 100)))
+                    TstSharedFormat.getTierName(LOWEST_CORE_TIER),
+                    TstSharedFormat.percentage(EU_REDUCTION_FOR_CORE_TIER * 100)))
             // #tr ManufacturingCenter_Tooltips_7
             // # Max parallel is §b%s§7 max voltage tier.
             // #zh_CN 最大并行为§b%s§7最大电压等级。
-            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_7", TextWithColor.factor(MAX_PARALLEL_MODIFIER)))
+            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_7", TstSharedFormat.factor(MAX_PARALLEL_MODIFIER)))
             .addPollutionAmount(getPollutionPerSecond(null))
             .beginStructureBlock(3, 3, 3, false)
             .addController("Front Center")

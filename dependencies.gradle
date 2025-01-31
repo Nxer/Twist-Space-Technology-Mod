@@ -68,6 +68,8 @@ dependencies {
 //    devOnlyNonPublishable("com.github.GTNewHorizons:Infernal-Mobs:1.10.0-GTNH:dev")
 
     implementation('com.github.GTNewHorizons:BloodMagic:1.6.9:dev')
+    implementation('com.github.GTNewHorizons:EnderIO:2.8.22:dev') { transitive = false }
+    implementation('com.github.GTNewHorizons:EnderCore:0.4.6:dev') { transitive = false }
 
     // dependencies for mod testing
     // using transitive to prevent mod duplication and conflicts

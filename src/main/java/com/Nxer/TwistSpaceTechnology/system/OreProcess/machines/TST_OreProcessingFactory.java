@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.Or
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.moveUnprocessedItemsToOutputs;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.ticksOfPerFluidConsuming;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_01;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_02;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_03;
@@ -15,8 +14,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OrePro
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_MachineType;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -54,6 +51,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -128,11 +126,17 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isWirelessMode")) {
-            currentTip.add(EnumChatFormatting.AQUA + texter("In Wireless mode", "Waila.TST_OreProcessingFactory.1"));
+            // #tr Waila.TST_OreProcessingFactory.1
+            // # In Wireless mode
+            // #zh_CN 无线EU电网模式
+            currentTip.add(EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_OreProcessingFactory.1"));
         }
         if (tag.getBoolean("isActive") && tag.getBoolean("isWirelessMode")) {
             currentTip.add(
-                EnumChatFormatting.AQUA + texter("Current Using EU: ", "Waila.TST_OreProcessingFactory.2")
+                // #tr Waila.TST_OreProcessingFactory.2
+                // # Current Using EU:
+                // #zh_CN 当前消耗EU:
+                EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_OreProcessingFactory.2")
                     + EnumChatFormatting.GOLD
                     + GTUtility.formatNumbers(tag.getLong("usingEU"))
                     + EnumChatFormatting.RESET
@@ -163,7 +167,8 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             boolean hasNotFound = true;
             for (GTRecipe recipe : recipeMap.getAllRecipes()) {
                 if (recipe.mInputs == null || recipe.mInputs.length < 1) continue;
-                if (metaItemEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
+                if (GTUtility.areStacksEqual(recipe.mInputs[0], items)
+                    && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
                     hasNotFound = false;
                     ItemStack recipeInput = recipe.mInputs[0];
@@ -179,16 +184,16 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                     for (ItemStack recipeOutput : recipe.mOutputs) {
                         if (Integer.MAX_VALUE / parallel >= recipeOutput.stackSize) {
                             // direct output
-                            outputs.add(setStackSize(recipeOutput.copy(), recipeOutput.stackSize * parallel));
+                            outputs.add(GTUtility.copyAmountUnsafe(recipeOutput.stackSize * parallel, recipeOutput));
                         } else {
                             // separate to any integer max stack
                             long outputAmount = (long) parallel * recipeOutput.stackSize;
                             while (outputAmount > 0) {
                                 if (outputAmount >= Integer.MAX_VALUE) {
-                                    outputs.add(setStackSize(recipeOutput.copy(), Integer.MAX_VALUE));
+                                    outputs.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, recipeOutput));
                                     outputAmount -= Integer.MAX_VALUE;
                                 } else {
-                                    outputs.add(setStackSize(recipeOutput.copy(), (int) outputAmount));
+                                    outputs.add(GTUtility.copyAmountUnsafe((int) outputAmount, recipeOutput));
                                     outputAmount = 0;
                                 }
                             }
@@ -233,7 +238,8 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
 
             boolean hasNotFound = true;
             for (GTRecipe recipe : recipeMap.getAllRecipes()) {
-                if (metaItemEqual(recipe.mInputs[0], items) && items.stackSize >= recipe.mInputs[0].stackSize) {
+                if (GTUtility.areStacksEqual(recipe.mInputs[0], items)
+                    && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
                     hasNotFound = false;
                     ItemStack recipeInput = recipe.mInputs[0];
@@ -259,16 +265,16 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                     for (ItemStack recipeOutput : recipe.mOutputs) {
                         if (Integer.MAX_VALUE / parallel >= recipeOutput.stackSize) {
                             // direct output
-                            outputs.add(setStackSize(recipeOutput.copy(), recipeOutput.stackSize * parallel));
+                            outputs.add(GTUtility.copyAmountUnsafe(recipeOutput.stackSize * parallel, recipeOutput));
                         } else {
                             // separate to any integer max stack
                             long outputAmount = (long) parallel * recipeOutput.stackSize;
                             while (outputAmount > 0) {
                                 if (outputAmount >= Integer.MAX_VALUE) {
-                                    outputs.add(setStackSize(recipeOutput.copy(), Integer.MAX_VALUE));
+                                    outputs.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, recipeOutput));
                                     outputAmount -= Integer.MAX_VALUE;
                                 } else {
-                                    outputs.add(setStackSize(recipeOutput.copy(), (int) outputAmount));
+                                    outputs.add(GTUtility.copyAmountUnsafe((int) outputAmount, recipeOutput));
                                     outputAmount = 0;
                                 }
                             }

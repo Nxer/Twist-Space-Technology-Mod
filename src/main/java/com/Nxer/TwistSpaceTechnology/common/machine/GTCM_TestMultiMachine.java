@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -79,9 +79,9 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
                 HatchElementBuilder.<GTCM_TestMultiMachine>builder()
                     .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy))
                     .adder(GTCM_TestMultiMachine::addToMachineList)
-                    .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(0))
+                    .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(0))
                     .dot(1)
-                    .buildAndChain(BasicBlocks.MetaBlockCasing01, 0))
+                    .buildAndChain(TstBlocks.MetaBlockCasing01, 0))
             .build();
     }
 

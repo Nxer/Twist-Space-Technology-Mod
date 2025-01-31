@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -33,7 +32,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -107,11 +106,11 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA
-            + texter("Coefficient Multiplier", "MachineInfoData.ThermalEnergyDevourer.coefficientMultiplier")
-            + ": "
-            + EnumChatFormatting.GOLD
-            + this.coefficientMultiplier;
+        // #tr tst.thermalEnergyDevourer.machineInfo.coefficientMultiplier
+        // # {\AQUA}Coefficient Multiplier: {\GOLD}%s
+        // #zh_CN {\AQUA}效率倍率: {\GOLD}%s
+        ret[origin.length] = TstUtils
+            .tr("tst.thermalEnergyDevourer.machineInfo.coefficientMultiplier", this.coefficientMultiplier);
         return ret;
     }
 
@@ -186,12 +185,12 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
         coefficientMultiplier = 1 + getExtraCoefficientMultiplierByVoltageTier();
         ItemStack controllerSlot = getControllerSlot();
         wirelessMode = controllerSlot != null && controllerSlot.stackSize > 0
-            && Utils.metaItemEqual(controllerSlot, ItemList.EnergisedTesseract.get(1));
+            && GTUtility.areStacksEqual(controllerSlot, ItemList.EnergisedTesseract.get(1));
         return true;
     }
 
     public int getExtraCoefficientMultiplierByVoltageTier() {
-        return (int) Utils.calculatePowerTier(getMaxInputEu());
+        return (int) TstUtils.calculateVoltageTier(getMaxInputEu());
     }
     // endregion
 

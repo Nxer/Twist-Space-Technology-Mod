@@ -1,13 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleTop;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MiracleTop;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
 
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;

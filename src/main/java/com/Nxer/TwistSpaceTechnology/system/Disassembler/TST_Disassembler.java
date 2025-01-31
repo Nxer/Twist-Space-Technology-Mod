@@ -35,7 +35,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -320,7 +319,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                 if (recipe.mInputs == null || recipe.mOutputs.length > 1
                     || (recipe.mFluidOutputs != null && recipe.mFluidOutputs.length > 0)) continue;
                 // Not this recipe.
-                if (!Utils.metaItemEqual(items, recipe.mOutputs[0])) continue;
+                if (!GTUtility.areStacksEqual(items, recipe.mOutputs[0])) continue;
                 // Amount is not enough.
                 if (items.stackSize < recipe.mOutputs[0].stackSize) continue base;
                 // Tier block limit.
@@ -347,14 +346,14 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                         if (outs.stackSize <= 0) continue;
                         long amount = (long) outs.stackSize * outputMultiplier;
                         if (amount <= Integer.MAX_VALUE) {
-                            outputItems.add(Utils.setStackSize(outs.copy(), (int) amount));
+                            outputItems.add(GTUtility.copyAmountUnsafe((int) amount, outs));
                         } else {
                             while (amount > 0) {
                                 if (amount > Integer.MAX_VALUE) {
-                                    outputItems.add(Utils.setStackSize(outs.copy(), Integer.MAX_VALUE));
+                                    outputItems.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, outs));
                                     amount -= Integer.MAX_VALUE;
                                 } else {
-                                    outputItems.add(Utils.setStackSize(outs.copy(), (int) amount));
+                                    outputItems.add(GTUtility.copyAmountUnsafe((int) amount, outs));
                                     amount = 0;
                                 }
                             }
@@ -368,14 +367,14 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                         if (outs.amount <= 0) continue;
                         long amount = (long) outs.amount * outputMultiplier;
                         if (amount <= Integer.MAX_VALUE) {
-                            outputFluids.add(Utils.setStackSize(outs.copy(), (int) amount));
+                            outputFluids.add(GTUtility.copyAmount((int) amount, outs));
                         } else {
                             while (amount > 0) {
                                 if (amount > Integer.MAX_VALUE) {
-                                    outputFluids.add(Utils.setStackSize(outs.copy(), Integer.MAX_VALUE));
+                                    outputFluids.add(GTUtility.copyAmount(Integer.MAX_VALUE, outs));
                                     amount -= Integer.MAX_VALUE;
                                 } else {
-                                    outputFluids.add(Utils.setStackSize(outs.copy(), (int) amount));
+                                    outputFluids.add(GTUtility.copyAmount((int) amount, outs));
                                     amount = 0;
                                 }
                             }

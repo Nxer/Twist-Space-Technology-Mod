@@ -6,12 +6,11 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.Enable_MegaStoneBreake
 import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.NameElvenWorkshop;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
@@ -101,8 +100,9 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_Stra
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
+@SuppressWarnings("deprecation") // ignore deprecation for TextLocalization
 public class MachineLoader {
 
     public static ItemStack IntensifyChemicalDistorter; // INTENSIFY_CHEMICAL_DISTORTER
@@ -404,7 +404,8 @@ public class MachineLoader {
         GTCMItemList.LargeIndustrialCokingFactory.set(LargeIndustrialCokingFactory);
 
         //
-        ElvenWorkshop = new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", NameElvenWorkshop).getStackForm(1);
+        ElvenWorkshop = new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", TextLocalization.NameElvenWorkshop)
+            .getStackForm(1);
         GTCMItemList.ElvenWorkshop.set(ElvenWorkshop);
 
         //
@@ -823,98 +824,98 @@ public class MachineLoader {
         BufferedEnergyHatchLV = new GT_Hatch_BufferedEnergyHatch(
             18984,
             "NameBufferedEnergyHatchLV",
-            Utils.i18n("NameBufferedEnergyHatchLV"),
+            TstUtils.tr("NameBufferedEnergyHatchLV"),
             1,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchMV = new GT_Hatch_BufferedEnergyHatch(
             18985,
             "NameBufferedEnergyHatchMV",
-            Utils.i18n("NameBufferedEnergyHatchMV"),
+            TstUtils.tr("NameBufferedEnergyHatchMV"),
             2,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchHV = new GT_Hatch_BufferedEnergyHatch(
             18986,
             "NameBufferedEnergyHatchHV",
-            Utils.i18n("NameBufferedEnergyHatchHV"),
+            TstUtils.tr("NameBufferedEnergyHatchHV"),
             3,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchEV = new GT_Hatch_BufferedEnergyHatch(
             18987,
             "NameBufferedEnergyHatchEV",
-            Utils.i18n("NameBufferedEnergyHatchEV"),
+            TstUtils.tr("NameBufferedEnergyHatchEV"),
             4,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchIV = new GT_Hatch_BufferedEnergyHatch(
             18988,
             "NameBufferedEnergyHatchIV",
-            Utils.i18n("NameBufferedEnergyHatchIV"),
+            TstUtils.tr("NameBufferedEnergyHatchIV"),
             5,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchLuV = new GT_Hatch_BufferedEnergyHatch(
             18989,
             "NameBufferedEnergyHatchLuV",
-            Utils.i18n("NameBufferedEnergyHatchLuV"),
+            TstUtils.tr("NameBufferedEnergyHatchLuV"),
             6,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchZPM = new GT_Hatch_BufferedEnergyHatch(
             18990,
             "NameBufferedEnergyHatchZPM",
-            Utils.i18n("NameBufferedEnergyHatchZPM"),
+            TstUtils.tr("NameBufferedEnergyHatchZPM"),
             7,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUV = new GT_Hatch_BufferedEnergyHatch(
             18991,
             "NameBufferedEnergyHatchUV",
-            Utils.i18n("NameBufferedEnergyHatchUV"),
+            TstUtils.tr("NameBufferedEnergyHatchUV"),
             8,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUHV = new GT_Hatch_BufferedEnergyHatch(
             18992,
             "NameBufferedEnergyHatchUHV",
-            Utils.i18n("NameBufferedEnergyHatchUHV"),
+            TstUtils.tr("NameBufferedEnergyHatchUHV"),
             9,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUEV = new GT_Hatch_BufferedEnergyHatch(
             18993,
             "NameBufferedEnergyHatchUEV",
-            Utils.i18n("NameBufferedEnergyHatchUEV"),
+            TstUtils.tr("NameBufferedEnergyHatchUEV"),
             10,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUIV = new GT_Hatch_BufferedEnergyHatch(
             18994,
             "NameBufferedEnergyHatchUIV",
-            Utils.i18n("NameBufferedEnergyHatchUIV"),
+            TstUtils.tr("NameBufferedEnergyHatchUIV"),
             11,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUMV = new GT_Hatch_BufferedEnergyHatch(
             18995,
             "NameBufferedEnergyHatchUMV",
-            Utils.i18n("NameBufferedEnergyHatchUMV"),
+            TstUtils.tr("NameBufferedEnergyHatchUMV"),
             12,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchUXV = new GT_Hatch_BufferedEnergyHatch(
             18996,
             "NameBufferedEnergyHatchUXV",
-            Utils.i18n("NameBufferedEnergyHatchUXV"),
+            TstUtils.tr("NameBufferedEnergyHatchUXV"),
             13,
             16,
             null).getStackForm(1);
         BufferedEnergyHatchMAX = new GT_Hatch_BufferedEnergyHatch(
             18997,
             "NameBufferedEnergyHatchMAX",
-            Utils.i18n("NameBufferedEnergyHatchMAX"),
+            TstUtils.tr("NameBufferedEnergyHatchMAX"),
             14,
             16,
             null).getStackForm(1);

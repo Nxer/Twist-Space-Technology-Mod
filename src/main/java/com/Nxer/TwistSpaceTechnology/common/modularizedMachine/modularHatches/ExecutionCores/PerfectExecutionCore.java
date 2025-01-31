@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -65,7 +65,7 @@ public class PerfectExecutionCore extends ExecutionCoreBase implements IWireless
         BigInteger costEU = BigInteger.valueOf(eut)
             .multiply(BigInteger.valueOf(maxProgressingTime));
         // check wireless EU at this moment
-        if (!addEUToGlobalEnergyMap(ownerUUID, costEU.multiply(Utils.NEGATIVE_ONE))) {
+        if (!addEUToGlobalEnergyMap(ownerUUID, costEU.multiply(TstUtils.NEGATIVE_ONE))) {
             shutDown();
             IGregTechTileEntity mte = getBaseMetaTileEntity();
             TwistSpaceTechnology.LOG.info(

@@ -2,79 +2,77 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static bartworks.common.loaders.ItemRegistry.megaMachines;
 import static bartworks.common.loaders.ItemRegistry.voidminer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AdvancedHighPowerCoilBlock;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AdvancedMegaOilCracker;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Antimatter;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AstralComputingArray;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BallLightning;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BallLightningUpgradeChip;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BiosphereIII;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CircuitConverter;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CompactCyclotronCoil;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CrystallineInfinitier;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DebugUncertaintyHatch;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DenseCyclotronOuterCasing;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_IV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_LuV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_UV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DualInputBuffer_ZPM;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrameComponent;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GiantVacuumDryingFurnace;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HighPowerRadiationProofCasing;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.HolySeparator;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IncompactCyclotron;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IndustrialMagnetarSeparator;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LargeIndustrialCokingFactory;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LaserSmartNode;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaBrickedBlastFurnace;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaMacerator;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OpticalSOC;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.OreProcessingFactory;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PerfectLapotronCrystal;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeEV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeHV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeIV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeLV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeLuV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeMAX;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeMV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUEV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUHV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUIV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUMV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeUXV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhotonControllerUpgradeZPM;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PhysicalFormSwitcher;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.RealRackHatch;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Scavenger;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.TestItem0;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ThermalEnergyDevourer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.VacuumFilterExtractor;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WhiteDwarfMold_Ingot;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataInputHatch;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataOutputHatch;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.AdvancedHighPowerCoilBlock;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.AdvancedMegaOilCracker;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.AnnihilationConstrainer;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.Antimatter;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.AstralComputingArray;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BallLightning;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BallLightningUpgradeChip;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BiosphereIII;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CircuitConverter;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CompactCyclotronCoil;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CriticalPhoton;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CrystallineInfinitier;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DebugUncertaintyHatch;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DenseCyclotronOuterCasing;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DualInputBuffer_IV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DualInputBuffer_LuV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DualInputBuffer_UV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DualInputBuffer_ZPM;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DysonSphereFrameComponent;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.GiantVacuumDryingFurnace;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.GravitationalLens;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.HighPowerRadiationProofCasing;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.HolySeparator;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.IncompactCyclotron;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.IndustrialMagnetarSeparator;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.InfiniteAirHatch;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.InfiniteWirelessDynamoHatch;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.IntensifyChemicalDistorter;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.LargeIndustrialCokingFactory;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.LaserSmartNode;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MagneticDomainConstructor;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MagneticMixer;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MegaBrickedBlastFurnace;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MegaMacerator;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MiracleDoor;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MoleculeDeconstructor;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.OpticalSOC;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.OreProcessingFactory;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ParticleTrapTimeSpaceShield;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PerfectLapotronCrystal;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeEV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeHV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeIV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeLV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeLuV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeMAX;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeMV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeUEV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeUHV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeUIV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeUMV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeUV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeUXV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhotonControllerUpgradeZPM;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PhysicalFormSwitcher;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.RealRackHatch;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.Scavenger;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.Silksong;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceScaler;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceWarper;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.TestItem0;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ThermalEnergyDevourer;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.VacuumFilterExtractor;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.WhiteDwarfMold_Ingot;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.WirelessDataInputHatch;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.WirelessDataOutputHatch;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.WirelessUpdateItem;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleTopRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeUtils.getCircuits;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
@@ -171,8 +169,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.multiuse.BlockMultiUseCore;
+import com.Nxer.TwistSpaceTechnology.common.block.meta.multiuse.BlockMultiUseCore;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
@@ -213,10 +211,12 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
-import gtPlusPlus.core.item.*;
-import gtPlusPlus.core.material.*;
+import gtPlusPlus.core.item.ModItems;
+import gtPlusPlus.core.material.MaterialMisc;
+import gtPlusPlus.core.material.MaterialsAlloy;
+import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.recipe.common.CI;
-import gtPlusPlus.core.util.minecraft.*;
+import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
@@ -297,7 +297,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(10),
-                copyAmount(1, megaMachines[3]),
+                GTUtility.copyAmountUnsafe(1, megaMachines[3]),
                 Materials.Carbon.getNanite(16),
                 ItemList.Emitter_UV.get(16),
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16})
@@ -315,16 +315,16 @@ public class GTCMMachineRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 eM_Power.get(4),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 8, 10932),
+                getModItem("gregtech", "gt.blockmachines", 8, 10932),
                 WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.lens, 64),
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 1L, 32105),
+                getModItem(GTPlusPlus.ID, "MU-metaitem.01", 1L, 32105),
                 ItemList.Emitter_UV.get(5),
                 ItemList.Field_Generator_UV.get(1),
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 4},
-                copyAmount(64, Ic2Items.iridiumPlate),
+                GTUtility.copyAmountUnsafe(64, Ic2Items.iridiumPlate),
                 GTUtility.getIntegratedCircuit(10))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 128))
-            .itemOutputs(copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
+            .itemOutputs(GTUtility.copyAmountUnsafe(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20 * 120)
@@ -485,7 +485,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
         // Upgrade UHV
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, copyAmount(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
+            .metadata(RESEARCH_ITEM, GTUtility.copyAmountUnsafe(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
             .metadata(RESEARCH_TIME, 2 * HOURS)
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
@@ -705,7 +705,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 Materials.SuperconductorUEVBase.getMolten(512 * 144)
             )
             .itemOutputs(
-                copyAmount(1, MachineLoader.MiracleTop)
+                GTUtility.copyAmountUnsafe(1, MachineLoader.MiracleTop)
             )
             .eut(RECIPE_UMV)
             .duration(20 * 3600)
@@ -952,7 +952,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
                 new Object[]{OrePrefixes.circuit.get(Materials.Bio), 16},
                 new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 16},
-                copyAmount(64, Ic2Items.iridiumPlate),
+                GTUtility.copyAmountUnsafe(64, Ic2Items.iridiumPlate),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 16),
 
                 GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 16)
@@ -1523,7 +1523,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
 
                 new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 16},
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 9),
-                copyAmount(36, Ic2Items.iridiumPlate),
+                GTUtility.copyAmountUnsafe(36, Ic2Items.iridiumPlate),
 
                 GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorZPM, 8)
             )
@@ -1544,8 +1544,8 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .metadata(RESEARCH_TIME, 16 * HOURS)
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 64),
-                copyAmount(64, bioVat),
-                copyAmount(64, BioItemList.getPetriDish(null)),
+                GTUtility.copyAmountUnsafe(64, bioVat),
+                GTUtility.copyAmountUnsafe(64, BioItemList.getPetriDish(null)),
                 GTOreDictUnificator.get(OrePrefixes.pipeHuge, Materials.Infinity, 3),
 
                 ItemList.Electric_Pump_UHV.get(16),
@@ -1558,7 +1558,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 ItemList.Circuit_Parts_Chip_Bioware.get(64),
                 HighEnergyFlowCircuit.get(16),
 
-                copyAmount(64, Ic2Items.iridiumPlate),
+                GTUtility.copyAmountUnsafe(64, Ic2Items.iridiumPlate),
                 GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUHV, 16)
             )
             .fluidInputs(
@@ -1595,18 +1595,18 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GGItemList.AdvAssLine.get(64),
-                ItemRefer.Component_Assembly_Line.get(64),
+                Component_Assembly_Line.get(64),
                 ItemList.AssemblingMachineUMV.get(64),
                 ItemRefer.Precise_Assembler.get(64),
 
-                setStackSize(GTCMItemList.StellarConstructionFrameMaterial.get(64), 128),
-                setStackSize(GTCMItemList.AnnihilationConstrainer.get(64), 128),
-                setStackSize(GTCMItemList.DysonSphereFrameComponent.get(64), 128),
-                setStackSize(GTCMItemList.SpaceWarper.get(64), 128),
+                GTUtility.copyAmountUnsafe(128, StellarConstructionFrameMaterial.get(64)),
+                GTUtility.copyAmountUnsafe(128, AnnihilationConstrainer.get(64)),
+                GTUtility.copyAmountUnsafe(128, DysonSphereFrameComponent.get(64)),
+                GTUtility.copyAmountUnsafe(128, SpaceWarper.get(64)),
 
-                setStackSize(GTCMItemList.GravitationalLens.get(64), 128),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1), 128),
-                setStackSize(eM_Ultimate_Containment_Advanced.get(64), 128)
+                GTUtility.copyAmountUnsafe(128, GravitationalLens.get(64)),
+                GTUtility.copyAmountUnsafe(128, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)),
+                GTUtility.copyAmountUnsafe(128, eM_Ultimate_Containment_Advanced.get(64))
             )
             .fluidInputs(
                 MaterialsUEVplus.SpaceTime.getMolten(144 * 524288),
@@ -1658,7 +1658,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .metadata(RESEARCH_TIME, 8 * HOURS)
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 64),
-                copyAmount(64, megaMachines[1]),
+                GTUtility.copyAmountUnsafe(64, megaMachines[1]),
                 ItemList.Field_Generator_UHV.get(16),
                 ItemList.Electric_Pump_UHV.get(64),
 
@@ -1733,7 +1733,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
             .metadata(RESEARCH_TIME, 8 * HOURS)
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackPlutonium, 64),
-                copyAmount(64, megaMachines[2]),
+                GTUtility.copyAmountUnsafe(64, megaMachines[2]),
                 Materials.Carbon.getNanite(64),
                 ItemList.Field_Generator_UHV.get(8),
 
@@ -1995,10 +1995,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
             TST_RecipeBuilder
                 .builder()
                 .itemInputs(
-                    setStackSize(ItemList.NanoForge.get(1), 512),
+                    GTUtility.copyAmountUnsafe(512, ItemList.NanoForge.get(1)),
                     MaterialsUEVplus.Universium.getNanite(64),
-                    setStackSize(MaterialsUEVplus.Eternity.getNanite(1), 128),
-                    setStackSize(MaterialsUEVplus.TranscendentMetal.getNanite(1), 1024),
+                    GTUtility.copyAmountUnsafe(128, MaterialsUEVplus.Eternity.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(1024, MaterialsUEVplus.TranscendentMetal.getNanite(1)),
 
                     SpaceScaler.get(64),
                     GravitationalLens.get(1024),
@@ -2006,12 +2006,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     DysonSphereFrameComponent.get(1024),
 
                     PerfectLapotronCrystal.get(2048),
-                    setStackSize(ItemList.Field_Generator_UMV.get(1), 1024),
-                    setStackSize(ItemList.Emitter_UMV.get(1), 2048),
-                    setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1), 4096),
+                    GTUtility.copyAmountUnsafe(1024, ItemList.Field_Generator_UMV.get(1)),
+                    GTUtility.copyAmountUnsafe(2048, ItemList.Emitter_UMV.get(1)),
+                    GTUtility.copyAmountUnsafe(4096, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)),
 
                     StellarConstructionFrameMaterial.get(2048),
-                    setStackSize(GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 1), 4096)
+                    GTUtility.copyAmountUnsafe(4096, GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.Eternity, 1))
                 )
                 .fluidInputs(
                     MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 256),
@@ -2086,7 +2086,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.Titanium, 2)
                 )
                 .fluidInputs(Materials.Aluminium.getMolten(144))
-                .itemOutputs(copyAmount(1, wirelessCard))
+                .itemOutputs(GTUtility.copyAmountUnsafe(1, wirelessCard))
                 .eut(RECIPE_LV)
                 .duration(100)
                 .addTo(assembler);
@@ -2097,11 +2097,11 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(10),
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 4),
-                    copyAmount(32, wirelessCard),
+                    GTUtility.copyAmountUnsafe(32, wirelessCard),
                     new ItemStack(LudicrousItems.resource, 4, 5)
                 )
                 .fluidInputs(Materials.Infinity.getMolten(144 * 8))
-                .itemOutputs(copyAmount(1, quantumCard))
+                .itemOutputs(GTUtility.copyAmountUnsafe(1, quantumCard))
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(assembler);
@@ -2113,7 +2113,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     GTUtility.getIntegratedCircuit(10),
                     dataIn_Hatch.get(1),
                     Machine_Multi_Switch.get(1),
-                    copyAmount(16, quantumCard),
+                    GTUtility.copyAmountUnsafe(16, quantumCard),
                     ItemList.Sensor_UIV.get(16),
                     ItemList.Tesseract.get(64)
                 )
@@ -2130,7 +2130,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                     GTUtility.getIntegratedCircuit(10),
                     dataOut_Hatch.get(1),
                     Machine_Multi_Switch.get(1),
-                    copyAmount(16, quantumCard),
+                    GTUtility.copyAmountUnsafe(16, quantumCard),
                     ItemList.Emitter_UIV.get(16),
                     ItemList.EnergisedTesseract.get(64)
                 )
@@ -2146,10 +2146,10 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
                 .metadata(RESEARCH_TIME, 720000)
                 .itemInputs(
-                    copyAmount(64, quantumCard),
-                    copyAmount(64, quantumCard),
-                    copyAmount(64, quantumCard),
-                    copyAmount(64, quantumCard),
+                    GTUtility.copyAmountUnsafe(64, quantumCard),
+                    GTUtility.copyAmountUnsafe(64, quantumCard),
+                    GTUtility.copyAmountUnsafe(64, quantumCard),
+                    GTUtility.copyAmountUnsafe(64, quantumCard),
 
                     WirelessDataOutputHatch.get(8),
                     WirelessDataInputHatch.get(8),
@@ -2202,7 +2202,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 .metadata(RESEARCH_TIME, 8 * HOURS)
                 .itemInputs(
                     new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
-                    copyAmount(64, voidminer[2]),
+                    GTUtility.copyAmountUnsafe(64, voidminer[2]),
                     new ItemStack(IGItems.MiningDrones, 18, ItemMiningDrones.DroneTiers.UEV.ordinal()),
                     SpaceWarper.get(18),
 
@@ -3082,7 +3082,7 @@ public class GTCMMachineRecipePool implements IRecipePool {
                 GTValues.RA
                     .stdBuilder()
                     .itemInputs(
-                        copyAmount(64, Loaders.NA),
+                        GTUtility.copyAmountUnsafe(64, Loaders.NA),
                         HiC_T5.get(64),
                         ItemRefer.Compact_Fusion_Coil_T3.get(8),
                         new Object[]{OrePrefixes.circuit.get(Materials.Optical), 8}
@@ -3108,12 +3108,12 @@ public class GTCMMachineRecipePool implements IRecipePool {
                         GTCMItemList.IndistinctTentacle.get(16),
                         AdvancedHighPowerCoilBlock.get(64),
 
-                        copyAmount(16384, ItemList.EnergisedTesseract.get(1)),
+                        GTUtility.copyAmountUnsafe(16384, ItemList.EnergisedTesseract.get(1)),
                         StellarConstructionFrameMaterial.get(512),
                         DysonSphereFrameComponent.get(512),
                         AnnihilationConstrainer.get(512),
-                        copyAmount(1024, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)),
-                        copyAmount(1024, eM_Ultimate_Containment_Advanced.get(1))
+                        GTUtility.copyAmountUnsafe(1024, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)),
+                        GTUtility.copyAmountUnsafe(1024, eM_Ultimate_Containment_Advanced.get(1))
                     )
                     .fluidInputs(
                         Materials.UUMatter.getFluid(2_000_000_000),

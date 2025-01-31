@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+/**
+ * @deprecated see {@link com.gtnewhorizon.gtnhlib.blockpos.BlockPos}
+ */
+@Deprecated
 public class BlockPos {
 
     public int x;

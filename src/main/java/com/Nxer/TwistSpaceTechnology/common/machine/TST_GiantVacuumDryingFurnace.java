@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -443,7 +443,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             false,
             true);
 
-        return Utils.multiBuildPiece(built);
+        return TstUtils.multiBuildPiece(built);
     }
 
     // endregion
@@ -457,7 +457,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     }
 
     public int getCoilTier() {
-        return Utils.getCoilTier(coilLevel);
+        return TstUtils.getVoltageForCoil(coilLevel);
     }
 
     @Override

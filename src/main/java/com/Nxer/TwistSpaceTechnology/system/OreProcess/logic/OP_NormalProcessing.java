@@ -3,8 +3,6 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.SpecialProcessingLineMaterialInstead;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +14,6 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.google.common.collect.Sets;
 
@@ -27,6 +24,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
 
@@ -74,10 +72,10 @@ public class OP_NormalProcessing {
         if (SpecialProcessingLineMaterialInstead) {
             ItemStack t = processingLineMaterials.get(material);
             if (t != null) {
-                return Utils.copyAmount(amount * 3, t);
+                return GTUtility.copyAmountUnsafe(amount * 3, t);
             }
         }
-        return setStackSize(GTOreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
+        return GTUtility.copyAmountUnsafe(amount, GTOreDictUnificator.get(OrePrefixes.dust, material, 1));
     }
 
     /**
@@ -221,9 +219,9 @@ public class OP_NormalProcessing {
 
         // IC2 Uranium ore
         processOreRecipe(
-            copyAmount(1,Ic2Items.uraniumOre),
-            Materials.Uranium,
-            false
+                GTUtility.copyAmountUnsafe(1, Ic2Items.uraniumOre),
+                Materials.Uranium,
+                false
         );
 
         // HEE end powder

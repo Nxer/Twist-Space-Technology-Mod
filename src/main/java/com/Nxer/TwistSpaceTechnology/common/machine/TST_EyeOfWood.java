@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -238,7 +237,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     }
 
     public ItemStack getDustStack(Materials material, int amount) {
-        return setStackSize(GTOreDictUnificator.get(OrePrefixes.dust, material, 1), amount);
+        return GTUtility.copyAmountUnsafe(amount, GTOreDictUnificator.get(OrePrefixes.dust, material, 1));
     }
 
     /**

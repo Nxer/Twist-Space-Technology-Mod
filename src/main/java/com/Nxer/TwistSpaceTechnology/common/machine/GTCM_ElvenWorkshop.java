@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -24,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.ElvenWorkshopTexture;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -185,9 +185,10 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
         tt.addMachineType(TextLocalization.Tooltip_ElvenWorkshop_MachineType)
             .addSeparator()
             .addInfo(
-                texter(
-                    "For its unique structure, you may need to use Blueprint to build the machine.",
-                    "ElvenWorkshopStructureNote"))
+                // #tr ElvenWorkshopStructureNote
+                // # For its unique structure, you may need to use Blueprint to build the machine.
+                // #zh_CN 由于该机器独特的结构，你可能需要在建成之后重新摆放主机以通过结构检测。
+                TextEnums.tr("ElvenWorkshopStructureNote"))
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(5, 3, 5, false)

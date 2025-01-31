@@ -17,7 +17,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofBlockStri
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.createItemStack;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -65,8 +64,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -75,7 +74,7 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -91,6 +90,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -189,7 +189,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     }
 
                     for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        int possibleParallel = Utils.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
+                        int possibleParallel = GTUtility.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
                         if (possibleParallel <= 0) {
                             continue;
                         }
@@ -204,7 +204,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                         return Essentia_InsentiaL;
                     }
                 }
-                maxParallel = Utils.min(Collections.min(aspectMaxParallel.values()), maxParallel);
+                maxParallel = Integer.min(Collections.min(aspectMaxParallel.values()), maxParallel);
 
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
@@ -371,9 +371,9 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
         if (STRUCTURE_DEFINITION == null) {
             var channel = "chisel";
             var list = ImmutableList.of(
-                createItemStack(blockCosmeticSolid, 6),
-                createItemStack(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
-                createItemStack(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
+                TstUtils.newItemWithMeta(blockCosmeticSolid, 6),
+                TstUtils.newItemWithMeta(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
+                TstUtils.newItemWithMeta(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
             STRUCTURE_DEFINITION = StructureDefinitionBuilder(TST_IndustrialAlchemyTower.class)
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addElement(
@@ -411,7 +411,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     'D',
                     ofChain(
                         ofAccurateTileAdder(TST_IndustrialAlchemyTower::addCosmeticOpaque, blockCosmeticOpaque, 2),
-                        ofAccurateTile(TileArcaneHole.class, BasicBlocks.BlockArcaneHole, 0)))
+                        ofAccurateTile(TileArcaneHole.class, TstBlocks.BlockArcaneHole, 0)))
                 .addElement('E', ofBlockStrict(blockSlabStone, 0))
                 .addElement('F', ofBlock(blockCosmeticSolid, 0))
                 .addElement('G', ofVariableBlock(channel, blockCosmeticSolid, 6, list))

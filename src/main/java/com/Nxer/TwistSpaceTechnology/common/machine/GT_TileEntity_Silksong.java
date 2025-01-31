@@ -25,7 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -73,7 +73,7 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
     }
 
     public int getCoilTier() {
-        return Utils.getCoilTier(coilLevel);
+        return TstUtils.getVoltageForCoil(coilLevel);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
             false,
             true);
 
-        return Utils.multiBuildPiece(built);
+        return TstUtils.multiBuildPiece(built);
     }
 
     private static final String STRUCTURE_PIECE_MAIN = "mainSilksong";

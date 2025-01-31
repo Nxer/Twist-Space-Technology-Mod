@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;

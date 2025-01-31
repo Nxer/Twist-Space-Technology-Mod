@@ -4,13 +4,27 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.dreammaster.block.BlockList.BloodyThaumium;
 import static com.dreammaster.block.BlockList.BloodyVoid;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofTileAdder;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.essentiaCell;
 import static goodgenerator.loader.Loaders.magicCasing;
-import static gregtech.api.enums.HatchElement.*;
-import static gregtech.api.enums.Textures.BlockIcons.*;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static thaumcraft.common.config.ConfigBlocks.*;
+import static thaumcraft.common.config.ConfigBlocks.blockCosmeticOpaque;
+import static thaumcraft.common.config.ConfigBlocks.blockCosmeticSolid;
+import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
+import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
@@ -34,8 +48,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -44,7 +58,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMa
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -63,6 +76,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import scala.Int;
@@ -172,7 +186,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     }
 
                     for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        int possibleParallel = Utils.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
+                        int possibleParallel = GTUtility.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
                         if (possibleParallel <= 0) {
                             continue;
                         }
@@ -187,7 +201,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                         return Essentia_InsentiaL;
                     }
                 }
-                maxParallel = Utils.min(Collections.min(aspectMaxParallel.values()), maxParallel);
+                maxParallel = Integer.min(Collections.min(aspectMaxParallel.values()), maxParallel);
 
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }

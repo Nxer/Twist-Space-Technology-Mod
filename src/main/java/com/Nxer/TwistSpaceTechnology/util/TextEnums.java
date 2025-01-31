@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import static net.minecraft.util.StatCollector.translateToLocalFormatted;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  *
@@ -192,12 +192,14 @@ public enum TextEnums {
     StructureTooComplex("StructureTooComplex");
 
     // spotless:on
+    @ApiStatus.Obsolete
     public static String tr(String key) {
-        return translateToLocalFormatted(key);
+        return TstUtils.tr(key);
     }
 
+    @ApiStatus.Obsolete
     public static String tr(String key, Object... format) {
-        return translateToLocalFormatted(key, format);
+        return TstUtils.tr(key, format);
     }
 
     private final String text;

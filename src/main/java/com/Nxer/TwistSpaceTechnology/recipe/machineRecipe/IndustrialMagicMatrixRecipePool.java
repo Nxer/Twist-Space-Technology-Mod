@@ -4,7 +4,9 @@ import static fox.spiteful.avaritia.items.LudicrousItems.bigPearl;
 import static gregtech.api.enums.TierEU.RECIPE_LV;
 import static gregtech.api.enums.TierEU.RECIPE_LuV;
 import static thaumcraft.common.config.ConfigBlocks.blockCosmeticSolid;
-import static thaumcraft.common.config.ConfigItems.*;
+import static thaumcraft.common.config.ConfigItems.itemEssence;
+import static thaumcraft.common.config.ConfigItems.itemJarNode;
+import static thaumcraft.common.config.ConfigItems.itemShard;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +21,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMa
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.GTValues;
@@ -27,6 +28,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GTUtility;
 import thaumcraft.common.items.ItemEssence;
 
 public class IndustrialMagicMatrixRecipePool implements IRecipePool {
@@ -36,7 +38,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
     protected ItemStack[] checkInputSpecial(ItemStack... itemStacks) {
         baseLoop: for (ItemStack i : itemStacks) {
             for (ItemStack u : itemsUnconsumed) {
-                if (Utils.metaItemEqual(i, u)) {
+                if (GTUtility.areStacksEqual(i, u)) {
                     i.stackSize = 0;
                     break baseLoop;
                 }

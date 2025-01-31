@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -37,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -468,10 +468,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + texter("Glass Tier: ", "MachineInfoData.GlassTier")
-            + ":"
-            + EnumChatFormatting.GOLD
-            + this.mGlassTier;
+        ret[origin.length] = TstSharedLocalization.MachineInfo.glassTier(this.mGlassTier);
         ret[origin.length + 1] = EnumChatFormatting.BLUE + getDisplayMode(mode);
         ret[origin.length + 2] = TextLocalization.BiosphereIIIEfficiency + ((mode == 2 || mode == 3) ?
         // Brewing & Fermenting

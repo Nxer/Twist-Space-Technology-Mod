@@ -6,7 +6,6 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMira
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons.NoCriticalPhotonInput;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.StellarForgeRecipePool.MoltenToIngot;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
@@ -27,8 +26,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Miracl
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_05;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -60,11 +57,12 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
@@ -128,12 +126,11 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isActive")) {
-            currentTip.add(
-                EnumChatFormatting.AQUA + texter("Current Overclock Parameter", "Waila.TST_MiracleDoor.2")
-                    + EnumChatFormatting.RESET
-                    + ": "
-                    + EnumChatFormatting.GOLD
-                    + tag.getLong("overclockParameter"));
+            // #tr tst.miracleDoor.waila.currentOverclockParameter
+            // # {\AQUA}Current Overclock Parameter{\RESET}: {\GOLD}%s
+            // #zh_CN {\AQUA}当前额外超频系数{\RESET}: {\GOLD}%s
+            currentTip
+                .add(TstUtils.tr("tst.miracleDoor.waila.currentOverclockParameter", tag.getLong("overclockParameter")));
         }
         currentTip.add(
             EnumChatFormatting.BOLD + StatCollector.translateToLocal("MiracleDoor.modeMsg." + tag.getByte("mode")));
@@ -235,7 +232,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         int needAmount = amount;
         for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
             if (items == null) continue;
-            if (metaItemEqual(items, MiscHelper.CRITICAL_PHOTON)) {
+            if (GTUtility.areStacksEqual(items, MiscHelper.CRITICAL_PHOTON)) {
                 if (items.stackSize >= needAmount) {
                     items.stackSize -= needAmount;
                     return true;
@@ -270,7 +267,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                 outputFluidList.add(fluidStack);
             } else {
                 int ingotAmount = fluidStack.amount / 144;
-                outputItemList.add(setStackSize(ingot.copy(), ingotAmount));
+                outputItemList.add(GTUtility.copyAmountUnsafe(ingotAmount, ingot));
                 int remainingFluidAmount = fluidStack.amount - 144 * ingotAmount;
                 if (remainingFluidAmount > 0) {
                     TwistSpaceTechnology.LOG

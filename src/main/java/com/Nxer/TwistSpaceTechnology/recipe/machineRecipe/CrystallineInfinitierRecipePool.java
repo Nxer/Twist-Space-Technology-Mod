@@ -14,11 +14,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.dreammaster.gthandler.CustomItemList;
 
 import bartworks.system.material.WerkstoffLoader;
@@ -234,7 +233,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         // Chip
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensBlue")) {
             GTValues.RA.stdBuilder()
-                .itemInputs(Utils.copyAmount(0, itemStack), GTCMItemList.PerfectLapotronCrystal.get(1))
+                .itemInputs(GTUtility.copyAmountUnsafe(0, itemStack), GTCMItemList.PerfectLapotronCrystal.get(1))
 
                 .itemOutputs(
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
@@ -285,7 +284,7 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
         // Chip
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensRed")) {
             GTValues.RA.stdBuilder()
-                .itemInputs(Utils.copyAmount(0, itemStack), GTCMItemList.PerfectEnergyCrystal.get(1))
+                .itemInputs(GTUtility.copyAmountUnsafe(0, itemStack), GTCMItemList.PerfectEnergyCrystal.get(1))
 
                 .itemOutputs(CustomItemList.EngravedEnergyChip.get(64), CustomItemList.EngravedEnergyChip.get(64))
 

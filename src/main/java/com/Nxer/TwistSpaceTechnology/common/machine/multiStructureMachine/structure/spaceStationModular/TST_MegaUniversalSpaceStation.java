@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular;// spotless:off
 
 import static bartworks.common.loaders.ItemRegistry.bw_realglas2;
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.SpaceStationAntiGravityBlock;
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.spaceStationStructureBlock;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationAntiGravityBlock;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationStructureBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
@@ -204,13 +204,13 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
                 .addElement('J', ofBlock(TTCasingsContainer.sBlockCasingsTT, 3))
                 .addElement('K', ofBlock(GregTechAPI.sBlockMetal9, 6))
                 .addElement('L', ofBlock(GregTechAPI.sBlockMetal9, 7))
-                .addElement('M', ofBlock(spaceStationStructureBlock, 13))
+                .addElement('M', ofBlock(SpaceStationStructureBlock, 13))
                 .addElement('N', ofBlock(ModBlocks.blockCasings5Misc, 10))
                 .addElement('O', ofBlock(ModBlocks.blockCasings5Misc, 14))
                 .addElement('P', ofBlock(ModBlocks.blockCasings6Misc, 0))
                 .addElement('Q', ofBlock(ModBlocks.blockSpecialMultiCasings, 15))
                 .addElement('B', ofBlock(Block.getBlockById(1), 0))
-                .addElement('C', ofBlock(spaceStationStructureBlock, 13))
+                .addElement('C', ofBlock(SpaceStationStructureBlock, 13))
                 // .addElement('C', ofBlock(Block.getBlockById(1),0))
                 // .addElement('D', ofBlock(Block.getBlockById(1),0))
                 // .addElement('E', ofBlock(Block.getBlockById(1),0))

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockPowerChair;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockPowerChair;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -10,8 +10,7 @@ import net.minecraftforge.client.model.IModelCustom;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.PowerChairRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.YamatoRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.TileEntityRenderer;
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
-import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
+import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 
 public class RendereLoader {
 
@@ -27,10 +26,11 @@ public class RendereLoader {
 
     public static void registerItemRenderers() {
         MinecraftForgeClient.registerItemRenderer(
-            ItemBlockPowerChair.getItemFromBlock(BlockPowerChair),
+            com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair.ItemBlockPowerChair
+                .getItemFromBlock(BlockPowerChair),
             new PowerChairRenderer(PowerChairModel, new ResourceLocation("gtnhcommunitymod", "model/PowerChair.png")));
         MinecraftForgeClient.registerItemRenderer(
-            BasicItems.Yamato,
+            TstItems.Yamato,
             new YamatoRenderer(YamatoModel, new ResourceLocation("gtnhcommunitymod", "model/Yamato.png")));
     }
 

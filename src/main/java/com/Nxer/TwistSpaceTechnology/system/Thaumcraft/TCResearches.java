@@ -15,8 +15,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
@@ -312,7 +312,7 @@ public class TCResearches {
                 2,
                 5,
                 5,
-                new ItemStack(BasicBlocks.timeBendingSpeedRune)).setPages(
+                new ItemStack(TstBlocks.TimeBendingSpeedRune)).setPages(
                     // spotless:off
                     // #tr tc.research_text.TIME_BENDING_SPEED_RUNE.1
                     // # The SpaceTime bends with Speed Runes and Accelerators, and it showed the compatibility to the advanced Altars.
@@ -369,7 +369,7 @@ public class TCResearches {
                 -2,
                 2,
                 1,
-                new ItemStack(BasicBlocks.BlockArcaneHole)).setPages(
+                new ItemStack(TstBlocks.BlockArcaneHole)).setPages(
                     // spotless:off
                 // #tr tc.research_text.TST_ARCANE_HOLE.1
                 // # Can be used to replace the warded glass on both sides of industrial alchemy tower. Perhaps it's still a good building block?

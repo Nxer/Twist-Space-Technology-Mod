@@ -18,7 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -672,7 +672,7 @@ public class TileArcaneHoleRender extends TileEntitySpecialRenderer {
             .getBlock(te.xCoord, te.yCoord + 1, te.zCoord)
             .isOpaqueCube()
             && te.getWorldObj()
-                .getBlock(te.xCoord, te.yCoord + 1, te.zCoord) != BasicBlocks.BlockArcaneHole) {
+                .getBlock(te.xCoord, te.yCoord + 1, te.zCoord) != TstBlocks.BlockArcaneHole) {
             this.drawPlaneYPos((TileArcaneHole) te, x, y, z, f);
         }
 
@@ -680,7 +680,7 @@ public class TileArcaneHoleRender extends TileEntitySpecialRenderer {
             .getBlock(te.xCoord, te.yCoord - 1, te.zCoord)
             .isOpaqueCube()
             && te.getWorldObj()
-                .getBlock(te.xCoord, te.yCoord - 1, te.zCoord) != BasicBlocks.BlockArcaneHole) {
+                .getBlock(te.xCoord, te.yCoord - 1, te.zCoord) != TstBlocks.BlockArcaneHole) {
             this.drawPlaneYNeg((TileArcaneHole) te, x, y, z, f);
         }
 
@@ -688,7 +688,7 @@ public class TileArcaneHoleRender extends TileEntitySpecialRenderer {
             .getBlock(te.xCoord, te.yCoord, te.zCoord - 1)
             .isOpaqueCube()
             && te.getWorldObj()
-                .getBlock(te.xCoord, te.yCoord, te.zCoord - 1) != BasicBlocks.BlockArcaneHole) {
+                .getBlock(te.xCoord, te.yCoord, te.zCoord - 1) != TstBlocks.BlockArcaneHole) {
             this.drawPlaneZNeg((TileArcaneHole) te, x, y, z, f);
         }
 
@@ -696,7 +696,7 @@ public class TileArcaneHoleRender extends TileEntitySpecialRenderer {
             .getBlock(te.xCoord, te.yCoord, te.zCoord + 1)
             .isOpaqueCube()
             && te.getWorldObj()
-                .getBlock(te.xCoord, te.yCoord, te.zCoord + 1) != BasicBlocks.BlockArcaneHole) {
+                .getBlock(te.xCoord, te.yCoord, te.zCoord + 1) != TstBlocks.BlockArcaneHole) {
             this.drawPlaneZPos((TileArcaneHole) te, x, y, z, f);
         }
 
@@ -704,7 +704,7 @@ public class TileArcaneHoleRender extends TileEntitySpecialRenderer {
             .getBlock(te.xCoord - 1, te.yCoord, te.zCoord)
             .isOpaqueCube()
             && te.getWorldObj()
-                .getBlock(te.xCoord - 1, te.yCoord, te.zCoord) != BasicBlocks.BlockArcaneHole) {
+                .getBlock(te.xCoord - 1, te.yCoord, te.zCoord) != TstBlocks.BlockArcaneHole) {
             this.drawPlaneXNeg((TileArcaneHole) te, x, y, z, f);
         }
 
@@ -712,7 +712,7 @@ public class TileArcaneHoleRender extends TileEntitySpecialRenderer {
             .getBlock(te.xCoord + 1, te.yCoord, te.zCoord)
             .isOpaqueCube()
             && te.getWorldObj()
-                .getBlock(te.xCoord + 1, te.yCoord, te.zCoord) != BasicBlocks.BlockArcaneHole) {
+                .getBlock(te.xCoord + 1, te.yCoord, te.zCoord) != TstBlocks.BlockArcaneHole) {
             this.drawPlaneXPos((TileArcaneHole) te, x, y, z, f);
         }
 

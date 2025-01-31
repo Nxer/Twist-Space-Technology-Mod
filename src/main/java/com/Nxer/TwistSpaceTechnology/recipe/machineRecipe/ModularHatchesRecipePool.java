@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.copyAmount;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -16,7 +15,7 @@ import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
 
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -257,17 +256,19 @@ public class ModularHatchesRecipePool implements IRecipePool {
             TST_RecipeBuilder.builder()
                 .itemInputs(
                     GTCMItemList.ProofOfHeroes.get(1),
-                    copyAmount(2048, GTCMItemList.PerfectOverclockController.get(1)),
-                    copyAmount(4096, ItemList.Field_Generator_UXV.get(1)),
-                    copyAmount(6144, GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.Eternity, 1)),
+                    GTUtility.copyAmountUnsafe(2048, GTCMItemList.PerfectOverclockController.get(1)),
+                    GTUtility.copyAmountUnsafe(4096, ItemList.Field_Generator_UXV.get(1)),
+                    GTUtility.copyAmountUnsafe(
+                        6144,
+                        GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.Eternity, 1)),
 
-                    copyAmount(8192, MaterialsUEVplus.Universium.getNanite(1)),
-                    copyAmount(8192, MaterialsUEVplus.Eternity.getNanite(1)),
-                    copyAmount(8192, MaterialsUEVplus.BlackDwarfMatter.getNanite(1)),
-                    copyAmount(8192, MaterialsUEVplus.WhiteDwarfMatter.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(8192, MaterialsUEVplus.Universium.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(8192, MaterialsUEVplus.Eternity.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(8192, MaterialsUEVplus.BlackDwarfMatter.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(8192, MaterialsUEVplus.WhiteDwarfMatter.getNanite(1)),
 
-                    copyAmount(65536, ItemList.Timepiece.get(1)),
-                    copyAmount(131072, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)))
+                    GTUtility.copyAmountUnsafe(65536, ItemList.Timepiece.get(1)),
+                    GTUtility.copyAmountUnsafe(131072, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)))
                 .fluidInputs(
                     Materials.DarkIron.getMolten(144 * 16384),
                     Materials.Force.getMolten(144 * 65536),
@@ -298,12 +299,12 @@ public class ModularHatchesRecipePool implements IRecipePool {
                 GTValues.RA.stdBuilder()
                     .itemInputs(
                         GTUtility.getIntegratedCircuit(18),
-                        copyAmount(1, hulls[i]),
-                        copyAmount(64, circuits[i]),
+                        GTUtility.copyAmountUnsafe(1, hulls[i]),
+                        GTUtility.copyAmountUnsafe(64, circuits[i]),
 
-                        copyAmount(64, fieldGenerators[i]),
-                        copyAmount(64, robotArms[i]),
-                        copyAmount(64, conveyors[i]),
+                        GTUtility.copyAmountUnsafe(64, fieldGenerators[i]),
+                        GTUtility.copyAmountUnsafe(64, robotArms[i]),
+                        GTUtility.copyAmountUnsafe(64, conveyors[i]),
 
                         GTOreDictUnificator.get(OrePrefixes.plate, materials[i], 64))
                     .fluidInputs(materials[i].getMolten(144 * 64))
@@ -318,7 +319,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
                         staticParallelControllers[i],
                         ItemList.Cover_Screen.get(1),
                         ItemList.Tool_DataOrb.get(1),
-                        copyAmount(2, circuits[i]))
+                        GTUtility.copyAmountUnsafe(2, circuits[i]))
                     .fluidInputs()
                     .itemOutputs(dynamicParallelControllers[i])
                     .eut(getRecipeVoltageFromModuleTier(i))
@@ -346,15 +347,15 @@ public class ModularHatchesRecipePool implements IRecipePool {
                 GTValues.RA.stdBuilder()
                     .itemInputs(
                         GTUtility.getIntegratedCircuit(18),
-                        copyAmount(1, hulls[i]),
-                        copyAmount(64, circuits[i]),
+                        GTUtility.copyAmountUnsafe(1, hulls[i]),
+                        GTUtility.copyAmountUnsafe(64, circuits[i]),
 
-                        copyAmount(64, fieldGenerators[i]),
-                        copyAmount(64, fieldGenerators[i]),
-                        copyAmount(64, fieldGenerators[i]),
+                        GTUtility.copyAmountUnsafe(64, fieldGenerators[i]),
+                        GTUtility.copyAmountUnsafe(64, fieldGenerators[i]),
+                        GTUtility.copyAmountUnsafe(64, fieldGenerators[i]),
 
-                        copyAmount(64, motors[i]),
-                        copyAmount(64, pistons[i]),
+                        GTUtility.copyAmountUnsafe(64, motors[i]),
+                        GTUtility.copyAmountUnsafe(64, pistons[i]),
                         GTOreDictUnificator.get(OrePrefixes.plate, materials[i], 64))
                     .fluidInputs(materials[i].getMolten(144 * 64))
                     .itemOutputs(staticSpeedControllers[i])
@@ -368,7 +369,7 @@ public class ModularHatchesRecipePool implements IRecipePool {
                         staticSpeedControllers[i],
                         ItemList.Cover_Screen.get(1),
                         ItemList.Tool_DataOrb.get(1),
-                        copyAmount(2, circuits[i]))
+                        GTUtility.copyAmountUnsafe(2, circuits[i]))
                     .fluidInputs()
                     .itemOutputs(dynamicSpeedControllers[i])
                     .eut(getRecipeVoltageFromModuleTier(i))
@@ -395,12 +396,12 @@ public class ModularHatchesRecipePool implements IRecipePool {
                 GTValues.RA.stdBuilder()
                     .itemInputs(
                         GTUtility.getIntegratedCircuit(18),
-                        copyAmount(1, hulls[i]),
-                        copyAmount(64, circuits[i]),
+                        GTUtility.copyAmountUnsafe(1, hulls[i]),
+                        GTUtility.copyAmountUnsafe(64, circuits[i]),
 
-                        copyAmount(64, fieldGenerators[i]),
-                        copyAmount(64, fieldGenerators[i]),
-                        copyAmount(64, emitters[i]),
+                        GTUtility.copyAmountUnsafe(64, fieldGenerators[i]),
+                        GTUtility.copyAmountUnsafe(64, fieldGenerators[i]),
+                        GTUtility.copyAmountUnsafe(64, emitters[i]),
 
                         GTOreDictUnificator.get(OrePrefixes.plate, materials[i], 64))
                     .fluidInputs(materials[i].getMolten(144 * 64))

@@ -5,8 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEuPe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEutPerParallel_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.NEGATIVE_ONE;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.NEGATIVE_ONE;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -45,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -141,22 +140,14 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         if (coilTier > 1) {
             ret = new String[origin.length + 2];
             System.arraycopy(origin, 0, ret, 0, origin.length);
-            ret[origin.length - 1] = EnumChatFormatting.AQUA
-                + texter("Coil Tier", "HephaestusAtelier.getInfoData.Coil_Tier")
-                + ": "
-                + EnumChatFormatting.RESET
-                + coilTier;
+            ret[origin.length - 1] = TstSharedLocalization.MachineInfo.coilTier(coilTier);
             ret[origin.length] = "" + EnumChatFormatting.RED
                 + EnumChatFormatting.BOLD
                 + TextLocalization.Info_Wireless_mode_enabled;
         } else {
             ret = new String[origin.length + 1];
             System.arraycopy(origin, 0, ret, 0, origin.length);
-            ret[origin.length] = EnumChatFormatting.AQUA
-                + texter("Coil Tier", "HephaestusAtelier.getInfoData.Coil_Tier")
-                + ": "
-                + EnumChatFormatting.RESET
-                + coilTier;
+            ret[origin.length] = TstSharedLocalization.MachineInfo.coilTier(coilTier);
         }
 
         return ret;
@@ -321,7 +312,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 outputs.add(items.copy());
                 items.stackSize = 0;
             } else {
-                outputs.add(Utils.setStackSize(smeltedOutput, items.stackSize));
+                outputs.add(GTUtility.copyAmountUnsafe(items.stackSize, smeltedOutput));
                 smeltedAmount += items.stackSize;
                 items.stackSize = 0;
             }
@@ -368,11 +359,11 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 items.stackSize = 0;
             } else {
                 if (canProcess >= items.stackSize) {
-                    outputs.add(Utils.setStackSize(smeltedOutput, items.stackSize));
+                    outputs.add(GTUtility.copyAmountUnsafe(items.stackSize, smeltedOutput));
                     canProcess -= items.stackSize;
                     items.stackSize = 0;
                 } else {
-                    outputs.add(Utils.setStackSize(smeltedOutput, canProcess));
+                    outputs.add(GTUtility.copyAmountUnsafe(canProcess, smeltedOutput));
                     items.stackSize -= canProcess;
                     canProcess = 0;
                     break;

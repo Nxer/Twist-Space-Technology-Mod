@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ExtraEuCost
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_LaserHatch_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_WirelessMode_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_IndistinctTentacle;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -54,7 +53,8 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -114,7 +114,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     protected boolean hasAstralArray = false;
 
     public void checkAstralArray() {
-        hasAstralArray = Utils.metaItemEqual(getControllerSlot(), MiscHelper.ASTRAL_ARRAY_FABRICATOR);
+        hasAstralArray = GTUtility.areStacksEqual(getControllerSlot(), MiscHelper.ASTRAL_ARRAY_FABRICATOR);
     }
 
     @Override
@@ -141,15 +141,8 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + texter("Glass Tier", "MachineInfoData.GlassTier")
-            + ": "
-            + EnumChatFormatting.GOLD
-            + this.glassTier;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA
-            + texter("Component Block Tier", "MachineInfoData.ComponentBlockTier")
-            + ": "
-            + EnumChatFormatting.GOLD
-            + (this.tierComponentCasing + 1);
+        ret[origin.length] = TstSharedLocalization.MachineInfo.glassTier(glassTier);
+        ret[origin.length + 1] = TstSharedLocalization.MachineInfo.componentTier(this.tierComponentCasing + 1);
 
         return ret;
     }
@@ -169,16 +162,12 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
         if (tag.getBoolean("wirelessMode")) {
 
             if (1 != tag.getInteger("extraEuCostMultiplier")) {
+                // #tr tst.indistinctTentacle.waila.extraEuMultiplier
+                // # {\BLUE}{\BOLD} Extra EU cost multiplier{\RESET}: {\GOLD}{\BOLD}%s{\RESET}
+                // #zh_CN {\BLUE}{\BOLD} 额外EU消耗倍率{\RESET}: {\GOLD}{\BOLD}%s{\RESET}
                 currentTip.add(
-                    "" + EnumChatFormatting.BLUE
-                        + EnumChatFormatting.BOLD
-                        + texter("    Extra EU cost multiplier", "Waila.TST_IndistinctTentacle.2")
-                        + EnumChatFormatting.RESET
-                        + ": "
-                        + EnumChatFormatting.GOLD
-                        + EnumChatFormatting.BOLD
-                        + tag.getInteger("extraEuCostMultiplier")
-                        + EnumChatFormatting.RESET);
+                    TstUtils
+                        .tr("tst.indistinctTentacle.waila.extraEuMultiplier", tag.getInteger("extraEuCostMultiplier")));
             }
         }
         currentTip.add(modeName);

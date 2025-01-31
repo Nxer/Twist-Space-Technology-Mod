@@ -8,8 +8,9 @@ import java.util.stream.Stream;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+
+import gregtech.api.util.GTUtility;
 
 public class TST_SimpleDisassemblyRecipe {
 
@@ -36,14 +37,14 @@ public class TST_SimpleDisassemblyRecipe {
             if (amount > Integer.MAX_VALUE) {
                 long t = amount;
                 while (t > Integer.MAX_VALUE) {
-                    outputs.add(Utils.copyAmount(Integer.MAX_VALUE, itemStack));
+                    outputs.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, itemStack));
                     t -= Integer.MAX_VALUE;
                 }
                 if (t > 0) {
-                    outputs.add(Utils.copyAmount((int) t, itemStack));
+                    outputs.add(GTUtility.copyAmountUnsafe((int) t, itemStack));
                 }
             } else {
-                outputs.add(Utils.copyAmount((int) amount, itemStack));
+                outputs.add(GTUtility.copyAmountUnsafe((int) amount, itemStack));
             }
         }
         return outputs;
@@ -57,14 +58,14 @@ public class TST_SimpleDisassemblyRecipe {
             if (amount > Integer.MAX_VALUE) {
                 long t = amount;
                 while (t > Integer.MAX_VALUE) {
-                    outputs.add(Utils.setStackSize(fluidStack.copy(), Integer.MAX_VALUE));
+                    outputs.add(GTUtility.copyAmount(Integer.MAX_VALUE, fluidStack));
                     t -= Integer.MAX_VALUE;
                 }
                 if (t > 0) {
-                    outputs.add(Utils.setStackSize(fluidStack.copy(), (int) t));
+                    outputs.add(GTUtility.copyAmount((int) t, fluidStack));
                 }
             } else {
-                outputs.add(Utils.setStackSize(fluidStack.copy(), (int) amount));
+                outputs.add(GTUtility.copyAmount((int) amount, fluidStack));
             }
         }
         return outputs;

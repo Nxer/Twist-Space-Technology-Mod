@@ -4,7 +4,7 @@ import static WayofTime.alchemicalWizardry.ModBlocks.blockLifeEssence;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedDiamondBlock;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedGlowstone;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedIronBlock;
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing02;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -40,7 +40,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -49,9 +49,9 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
-import com.Nxer.TwistSpaceTechnology.util.InfoDataHelper;
 import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.dreammaster.block.BlockList;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -267,7 +267,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 .addShape(STRUCTURE_PIECE_6, transpose(STRUCTURE_TIER_6))
                 .addShape(STRUCTURE_FLUID_1, transpose(STRUCTURE_BLOOD_1))
                 .addShape(STRUCTURE_FLUID_2, transpose(STRUCTURE_BLOOD_2))
-                .addElement('A', ofBlock(BasicBlocks.MetaBlockCasing01, 9))
+                .addElement('A', ofBlock(TstBlocks.MetaBlockCasing01, 9))
                 .addElement('B', ofBlock(MetaBlockCasing02, 0))
                 .addElement('C', ofBlock(MetaBlockCasing02, 1))
                 .addElement('D', ofBlockAnyMeta(BlockList.BloodyIchorium.getBlock()))
@@ -280,7 +280,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                         onElementPass((x) -> { x.speedRuneCount += 1; }, ofBlockAnyMeta(ModBlocks.speedRune)),
                         onElementPass(
                             (x) -> { x.tbSpeedRuneCount += 1; },
-                            ofBlockAnyMeta(BasicBlocks.timeBendingSpeedRune))))
+                            ofBlockAnyMeta(TstBlocks.TimeBendingSpeedRune))))
                 .addElement('H', ofBlockAnyMeta(ModBlocks.largeBloodStoneBrick))
                 .addElement('I', ofBlock(BloodInfusedIronBlock.getLeft(), BloodInfusedIronBlock.getRight()))
                 .addElement('J', ofBlockAnyMeta(ModBlocks.blockCrystal))
@@ -506,7 +506,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public String[] getInfoData() {
-        return InfoDataHelper.buildInfoData(super.getInfoData(), (info) -> {
+        return TstUtils.buildInfoData(super.getInfoData(), (info) -> {
             info.add(EnumChatFormatting.BLUE + "Structure Tier: " + EnumChatFormatting.GOLD + mTier);
             info.add(
                 EnumChatFormatting.BLUE + "Speed Rune Count: "
