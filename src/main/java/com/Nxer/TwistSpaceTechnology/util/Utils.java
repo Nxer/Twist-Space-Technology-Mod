@@ -393,6 +393,7 @@ public final class Utils {
     }
 
     public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack[] aStack) {
+        if (aStack == null) return new ItemStack[0];
         ArrayList<ItemStack> newStack = new ArrayList<>();
         for (ItemStack itemStack : aStack) {
             if (itemStack.getItem() != ItemList.Circuit_Integrated.getItem()) {

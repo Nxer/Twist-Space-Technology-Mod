@@ -118,6 +118,7 @@ public class TwistSpaceTechnology {
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
+        MaterialFix.load();
         MachineLoader.loadMachinePostInit();
         OreDictLoader.loadOreDictionary();
         RecipeLoader.loadRecipesPostInit();// To init GTCM Recipemap
@@ -128,7 +129,6 @@ public class TwistSpaceTechnology {
         CropLoader.registerBaseSeed();
 
         TCLoader.load();
-        MaterialFix.load();
     }
 
     @Mod.EventHandler

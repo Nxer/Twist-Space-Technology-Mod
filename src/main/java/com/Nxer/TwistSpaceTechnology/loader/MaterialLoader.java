@@ -17,8 +17,7 @@ public class MaterialLoader {
     public static void load() {
 
         WerkstoffAdderRegistry.addWerkstoffAdder(new MaterialPool());
-        MaterialsTST.init();
-
+        new MaterialsTST();
         ItemRegister.registry();
         BlockRegister.registry();
 
