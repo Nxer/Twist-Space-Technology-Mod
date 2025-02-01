@@ -62,6 +62,7 @@ public class Config {
     public static final String StrangeMatterAggregator = "Strange Matter Aggregator";
     public static final String BloodHell = "BloodHell";
     public static final String IndustrialAlchemyTower = "IndustrialAlchemyTower";
+    public static final String ProcessingArray = "ProcessingArray";
     // endregion
 
     // region General
@@ -467,6 +468,10 @@ public class Config {
     public static int Parallel_PerPiece_GiantVacuumDryingFurnace = 32;
     // endregion
 
+    // region Processing Array
+    public static boolean Enable_ProcessingArray = true;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -481,6 +486,10 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        // endregion
+
+        // region Processing Array
+        Enable_ProcessingArray = configuration.getBoolean("Enable_ProcessingArray", ProcessingArray, Enable_ProcessingArray, "Enable Processing Array System.");
         // endregion
 
         // region MicroSpaceTimeFabricatorioRecipes

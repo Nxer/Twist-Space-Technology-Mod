@@ -69,10 +69,24 @@ public class ShapedCraftRecipePool implements IRecipePool {
         // original PA recipe, changed output to PA Research
         // but the machine hull is changed from EV to IV, to prevent recipe dupe, just in case,
         // since it's just used for MegaArray, so it should not matter at all.
-        addCraftingRecipe(
-            GTCMItemList.ResearchOnAncientPA.get(1),
-            new Object[] { "CTC", "FMF", "CBC", 'M', ItemList.Hull_IV, 'B',
-                OrePrefixes.pipeLarge.get(Materials.StainlessSteel), 'C', OrePrefixes.circuit.get(Materials.IV), 'F',
-                ItemList.Robot_Arm_EV, 'T', ItemList.Energy_LapotronicOrb });
+
+        if (Config.Enable_ProcessingArray) {
+            addCraftingRecipe(
+                GTCMItemList.ProcessingArray.get(1),
+                new Object[] { "CTC", "FMF", "CBC", 'M', ItemList.Hull_IV, 'B',
+                    OrePrefixes.pipeLarge.get(Materials.StainlessSteel), 'C', OrePrefixes.circuit.get(Materials.IV),
+                    'F', ItemList.Robot_Arm_EV, 'T', ItemList.Energy_LapotronicOrb });
+
+            addCraftingRecipe(
+                GTCMItemList.ResearchOnAncientPA.get(1),
+                new Object[] { "X", 'X', GTCMItemList.ProcessingArray.get(1) });
+        } else {
+            addCraftingRecipe(
+                GTCMItemList.ResearchOnAncientPA.get(1),
+                new Object[] { "CTC", "FMF", "CBC", 'M', ItemList.Hull_IV, 'B',
+                    OrePrefixes.pipeLarge.get(Materials.StainlessSteel), 'C', OrePrefixes.circuit.get(Materials.IV),
+                    'F', ItemList.Robot_Arm_EV, 'T', ItemList.Energy_LapotronicOrb });
+        }
+
     }
 }

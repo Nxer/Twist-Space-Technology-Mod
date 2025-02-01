@@ -275,6 +275,7 @@ public enum GTCMItemList {
     ManufacturingCenter,
     IndustrialAlchemyTower,
     GiantVacuumDryingFurnace,
+    ProcessingArray,
     // endregion
 
     // region Modularized Machines
