@@ -22,8 +22,6 @@ import thaumcraft.common.items.ItemEssence;
 
 public class IndustrialAlchemyTowerRecipePool implements IRecipePool {
 
-    private static final boolean isDevEnvironment = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
-
     @Override
     public void loadRecipes() {
         TCRecipeTools.getCrucibleCraftingRecipe();
