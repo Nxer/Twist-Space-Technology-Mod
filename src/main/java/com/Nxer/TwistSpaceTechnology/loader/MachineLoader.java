@@ -58,6 +58,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaStoneBreaker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_ProcessingArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
@@ -158,7 +159,6 @@ public class MachineLoader {
     public static ItemStack SpaceApiaryT2;
     public static ItemStack SpaceApiaryT3;
     public static ItemStack SpaceApiaryT4;
-    public static ItemStack SpaceModuleTest;
     public static ItemStack LargeCanner;
     public static ItemStack IndustrialMagnetarSeparator;
     public static ItemStack MegaTreeFarm;
@@ -176,6 +176,7 @@ public class MachineLoader {
     public static ItemStack MegaStoneBreaer;
     public static ItemStack ManufacturingCenter;
     public static ItemStack GiantVacuumDryingFurnace;
+    public static ItemStack ProcessingArray;
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
@@ -765,6 +766,15 @@ public class MachineLoader {
                 "GiantVacuumDryingFurnace",
                 TextEnums.tr("NameGiantVacuumDryingFurnace")).getStackForm(1);
             GTCMItemList.GiantVacuumDryingFurnace.set(GiantVacuumDryingFurnace);
+        }
+
+        if (Config.Enable_ProcessingArray) {
+            // #tr NameProcessingArray
+            // # TST Processing Array
+            // #zh_CN TST处理阵列
+            ProcessingArray = new TST_ProcessingArray(19066, "NameProcessingArray", TextEnums.tr("NameProcessingArray"))
+                .getStackForm(1);
+            GTCMItemList.ProcessingArray.set(ProcessingArray);
         }
         // endregion
 

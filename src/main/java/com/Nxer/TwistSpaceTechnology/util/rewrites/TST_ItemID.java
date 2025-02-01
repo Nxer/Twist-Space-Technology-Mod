@@ -56,6 +56,14 @@ public class TST_ItemID extends GTUtility.ItemId {
         if (null == itemStack) return NULL;
         return new TST_ItemID(itemStack.getItem(), OreDictionary.WILDCARD_VALUE);
     }
+
+    public static TST_ItemID[] create(ItemStack... itemStacks) {
+        TST_ItemID[] out = new TST_ItemID[itemStacks.length];
+        for (int i = 0; i < itemStacks.length; i++) {
+            out[i] = TST_ItemID.create(itemStacks[i]);
+        }
+        return out;
+    }
     // endregion
 
     // region Special Methods

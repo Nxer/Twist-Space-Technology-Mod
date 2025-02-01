@@ -15,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
 import com.Nxer.TwistSpaceTechnology.event.TickingEvent;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
+import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
@@ -77,6 +78,10 @@ public class CommonProxy {
         TST_BigBroArray.initializeMaterials();
         TST_BigBroArray.initializeStructure();
         TST_BigBroArray.addRecipes();
+
+        if (Config.Enable_ProcessingArray) {
+            PAHelper.initStatics();
+        }
     }
 
     // register server commands in this event handler (Remove if not needed)
@@ -87,8 +92,6 @@ public class CommonProxy {
         if (Config.activateCombatStats) {
             event.registerServerCommand(new CombatRework_Command());
         }
-        // test
-        // *Unfinished */ event.registerServerCommand(new alftest_Command());
     }
 
     public void serverStarted(FMLServerStartedEvent event) {
