@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.launchwrapper.Launch;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -20,6 +21,8 @@ import gregtech.api.util.GTUtility;
 import thaumcraft.common.items.ItemEssence;
 
 public class IndustrialAlchemyTowerRecipePool implements IRecipePool {
+
+    private static final boolean isDevEnvironment = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
     @Override
     public void loadRecipes() {

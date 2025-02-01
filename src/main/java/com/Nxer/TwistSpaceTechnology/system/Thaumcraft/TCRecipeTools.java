@@ -16,12 +16,15 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.common.config.ConfigItems;
 
 public class TCRecipeTools {
 
     public static ArrayList<InfusionCraftingRecipe> ICR = new ArrayList<>();// InfusionCraftingRecipeList
 
     public static HashMap<String, ArrayList<CrucibleCraftingRecipe>> CCR = new HashMap<>();// CrucibleCraftingRecipeMap
+
+    public static final ItemStack voidSeed = new ItemStack(ConfigItems.itemResource, 1, 17);
 
     @SuppressWarnings("ConstantConditions")
     public static String toStringWithoutStackSize(ItemStack itemStack) {
@@ -60,7 +63,26 @@ public class TCRecipeTools {
                 ItemStack input;
                 Object cat = o1.catalyst;
                 if (cat instanceof ArrayList<?>catalyst1) {
-                    input = GTOreDictUnificator.get(false, (ItemStack) catalyst1.get(0), true);
+                    if (o1.getRecipeOutput()
+                        .isItemEqual(voidSeed)) {// fix void seed problem
+                        for (var eachItemStack : catalyst1) {
+                            if (eachItemStack instanceof ItemStack) {
+                                CrucibleCraftingRecipe p = new CrucibleCraftingRecipe(
+                                    eachItemStack,
+                                    voidSeed,
+                                    o1.aspects,
+                                    o1.key);
+                                String inputKey = toStringWithoutStackSize((ItemStack) eachItemStack);
+                                CCR.computeIfAbsent(inputKey, K -> new ArrayList<>())
+                                    .add(0, p);
+                            } else {
+                                TwistSpaceTechnology.LOG.info("error to change Object to ItemStack in IAT");
+                            }
+                        }
+                        continue;
+                    } else {
+                        input = GTOreDictUnificator.get(false, (ItemStack) catalyst1.get(0), true);
+                    }
                 } else if (cat instanceof ItemStack itemStack) {
                     input = Utils.copyAmount(1, itemStack);
                 } else continue;
