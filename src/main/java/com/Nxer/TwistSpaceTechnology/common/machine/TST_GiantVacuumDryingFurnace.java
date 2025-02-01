@@ -19,6 +19,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
@@ -50,7 +51,6 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
@@ -294,7 +294,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
                 .addShape(STRUCTURE_PIECE_DTM, transpose(shapeDryingTowerMiddle))
                 .addShape(STRUCTURE_PIECE_DTH, transpose(shapeDryingTowerHat))
 
-                .addElement('A', Glasses.chainAllGlasses())
+                .addElement('A', chainAllGlasses())
                 .addElement('S', ofBlock(GregTechAPI.sBlockCasings4, 1))
                 .addElement('G', ofBlock(GregTechAPI.sBlockCasings8, 1))
                 .addElement('V', ofBlock(GregTechAPI.sBlockCasings8, 0))
