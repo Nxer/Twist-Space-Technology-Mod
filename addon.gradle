@@ -1,8 +1,10 @@
-def searchSourceFiles(javaFiles, en_lang, langMap) {
+import java.util.regex.Matcher
+
+def searchSourceFiles(SourceDirectorySet javaFiles, Map<String, String> en_lang, Map<String, Map<String, String>> langMap) {
     // Source File Search Start
     // 源文件搜索使用的状态变量
-    def state = null
-    def trMatch = null
+    String state = null
+    Matcher trMatch = null
 
     def colorCodeMap = project.ext.colorCodeMap
 
@@ -15,7 +17,7 @@ def searchSourceFiles(javaFiles, en_lang, langMap) {
                     def matcher = line =~ /\/\/\s*#([a-z]{2}_[A-Z]{2})?\s+(.+)/
 
                     if (matcher) {
-                        println "Match line: $line"
+                        logger.debug("Match line: $line")
 
                         def groupCount = matcher.groupCount()
                         // 如果匹配到一组或两组
@@ -31,9 +33,9 @@ def searchSourceFiles(javaFiles, en_lang, langMap) {
                                 }
                                 def key = trMatch.group(1) as String
                                 def value = matcher.group(2)
-                                def lang1 = langMap[lang] as Map
+                                def lang1 = langMap[lang]
                                 if (lang1 == null) {
-                                    lang1 = [:]
+                                    lang1 = new HashMap<String, String>()
                                     langMap[lang] = lang1
                                 }
 
@@ -44,13 +46,27 @@ def searchSourceFiles(javaFiles, en_lang, langMap) {
                                     return replacement ?: match
                                 })
 
+                                if(lang1.containsKey(key)) { // warn if a key is reassigned
+                                    def originalText = lang1[key]
+                                    if(originalText == value1) {
+                                        logger.warn("[Key Overwrite|Duplicated] Key '${key}' is reassigned with same text in file '${file}'")
+                                    }
+                                    else {
+                                        logger.warn("[Key Overwrite|Overwrited] Key '${key}' is reassigned from '${lang1[key]}' to '${value1}' in file '${file}'")
+                                    }
+                                }
+
+                                if(!checkFormatPattern(value1)) {
+                                    logger.warn("[Invalid Formatter] Key '${key}' has an invalid formatter string from '${lang}' in '${file.name}': ${value1}")
+                                }
+
                                 lang1[key] = value1
 
                             }
                         } else {
                             trMatch = null
                             state = null
-                            println "Waring: The wrong format has been captured: $line"
+                            logger.warn("Waring: The wrong format has been captured: $line")
                         }
                         break
                     } else {
@@ -61,7 +77,7 @@ def searchSourceFiles(javaFiles, en_lang, langMap) {
                     def matcher = line =~ /\/\/\s*#tr\s+([a-zA-Z0-9._]+)\s*(.+)?\s*/
                     // 检查是否匹配了#tr模式
                     if (matcher) {
-                        println "Match line: $line"
+                        logger.debug("Match line: $line")
 
                         def groupCount = matcher.groupCount()
 
@@ -85,7 +101,7 @@ def searchSourceFiles(javaFiles, en_lang, langMap) {
                                 en_lang[key] = value1
                             }
                         } else {
-                            println "Waring: The wrong format has been captured: $line"
+                            logger.warn("Waring: The wrong format has been captured: $line")
                         }
                     }
                     break
@@ -126,8 +142,8 @@ def searchLanguageFiles(namespace, sort, langMap) {
                         if (needSort) sort.add(key)
                         if (lang1.containsKey(key)) {
                             if (value != lang1[key]) {
-                                println "The key: $key is already defined in the code! The Lang file will be overwritten!"
-                                println "Code: ${lang1[key]} Lang file: $value"
+                                logger.info("The key: $key is already defined in the code! The Lang file will be overwritten!")
+                                logger.info("Code: ${lang1[key]} Lang file: $value")
                             }
                         } else {
                             lang1[key] = value
@@ -140,7 +156,7 @@ def searchLanguageFiles(namespace, sort, langMap) {
     // Language File Search Finish
 }
 
-def writeLanguageFiles(namespace, sort, langMap, ignoreKeyInFile, onlyFile, en_lang) {
+def writeLanguageFiles(String namespace, Set<String> sort, Map<String, Map<String, String>> langMap, boolean ignoreKeyInFile, Set<String> onlyFile, Map<String, String> en_lang) {
     langMap.each { fileName, innerMap ->
         def outputFile = new File("src/main/resources/assets/$namespace/lang/${fileName}.lang")
         outputFile.getParentFile().mkdirs()
@@ -152,12 +168,12 @@ def writeLanguageFiles(namespace, sort, langMap, ignoreKeyInFile, onlyFile, en_l
                     else {
                         if (innerMap.containsKey(line)) {
                             if (ignoreKeyInFile && onlyFile.contains(line)) {
-                                println "Ignore the $line, Because it only exists in the language file!"
+                                logger.info("Ignore the $line, because it only exists in the language file!")
                             } else {
                                 writer.write("${line}=${innerMap[line]}\n")
                             }
                         } else {
-                            println "The $fileName file does not contain the $line"
+                            logger.warn("[Translation Missing] The $fileName file does not contain the $line")
                             writer.write("${line}=${en_lang[line]}\n")
                         }
                     }
@@ -171,99 +187,22 @@ def writeLanguageFiles(namespace, sort, langMap, ignoreKeyInFile, onlyFile, en_l
     }
 }
 
-//def searchSourceFiles(javaFiles, en_lang){
-//    def state = null
-//    def trMatch = null
-//
-//    def colorCodeMap = project.ext.colorCodeMap
-//
-//    javaFiles.each { file ->
-//        def content = file.text
-//        content.eachLine { line ->
-//            switch (state) {
-//                case 'tr':
-//                    // 如果上一行匹配了#tr模式
-//                    def matcher = line =~ /\/\/\s*#([a-z]{2}_[A-Z]{2})?\s*(.+)/
-//
-//                    if (matcher) {
-//                        println "Match line: $line"
-//
-//                        def groupCount = matcher.groupCount()
-//                        // 如果匹配到一组或两组
-//                        if (groupCount == 1 || groupCount == 2) {
-//                            if (groupCount == 1) {
-//                                def key = trMatch.group(1) as String
-//                                def value = matcher.group(1)
-//                                en_lang[key] = value
-//                            } else {
-//                                def lang = matcher.group(1)
-//                                if (lang == null || lang == '') {
-//                                    lang = 'en_US'
-//                                }
-//                                def key = trMatch.group(1) as String
-//                                def value = matcher.group(2)
-//                                def lang1 = langMap[lang] as Map
-//                                if (lang1 == null) {
-//                                    lang1 = [:]
-//                                    langMap[lang] = lang1
-//                                }
-//
-//                                // 替换颜色代码
-//                                def value1 = value.replaceAll("\\{\\\\([A-Z_]+)\\}", { match ->
-//                                    def colorValue = match[1]
-//                                    def replacement = colorCodeMap[colorValue]
-//                                    return replacement ?: match
-//                                })
-//
-//                                lang1[key] = value1
-//
-//                            }
-//                        } else {
-//                            trMatch = null
-//                            state = null
-//                            println "Waring: The wrong format has been captured: $line"
-//                        }
-//                    } else {
-//                        trMatch = null
-//                        state = null
-//                    }
-//                    break
-//                default:
-//                    def matcher = line =~ /\/\/\s*#tr\s+([a-zA-Z0-9._]+)\s*(.+)?\s*/
-//                    // 检查是否匹配了#tr模式
-//                    if (matcher) {
-//                        println "Match line: $line"
-//
-//                        def groupCount = matcher.groupCount()
-//
-//                        // 如果匹配到一组或两组
-//                        if (groupCount == 1) {
-//                            state = 'tr'
-//                            trMatch = matcher
-//                        } else if (groupCount == 2) {
-//                            def value = matcher.group(2)
-//                            if (value == null) {
-//                                state = 'tr'
-//                                trMatch = matcher
-//                            } else {
-//                                def key = matcher.group(1)
-//
-//                                def value1 = value.replaceAll("\\{\\\\([A-Z_]+)\\}", { match ->
-//                                    def colorValue = match[1]
-//                                    def replacement = colorCodeMap[colorValue]
-//                                    return replacement ?: match
-//                                })
-//                                en_lang[key] = value1
-//                            }
-//                        } else {
-//                            println "Waring: The wrong format has been captured: $line"
-//                        }
-//                    }
-//                    break
-//            }
-//        }
-//    }
-//}
+static checkFormatPattern(String str) {
+    def parseMethod = Formatter.metaClass.pickMethod("parse", String.class)
+    // println(parseMethod)
+
+    try {
+        if (parseMethod.isStatic()) {
+            parseMethod.invoke(null, str)
+        } else {
+            parseMethod.invoke(new Formatter(), str)
+        }
+        return true
+    } catch(IllegalFormatException ignored) {
+        return false
+    }
+}
+
 ext {
     colorCodeMap = [
         "BLACK"        : "\u00a70",
@@ -305,42 +244,53 @@ tasks.register('preprocessLangInJavaFiles') {
 
         // 搜索源文件
         def javaFiles = sourceSets.main.java
-        def langMap = [:]
-        def en_lang = [:]
-        langMap['en_US'] = en_lang
-        def keySet = [] as Set
 
-        searchSourceFiles(javaFiles, en_lang, langMap)
+        Map<String, Map<String, String>> langMaps = [:]
+        Map<String, String> en_lang = [:]
+        langMaps['en_US'] = en_lang
+        Set<String> allLangKeys = [] as Set
+
+        searchSourceFiles(javaFiles, en_lang, langMaps)
 
         // 收集所有源文件中的键
-        langMap.each { name, map ->
-            keySet.addAll(map.keySet())
+        langMaps.each { name, map ->
+            allLangKeys.addAll(map.keySet())
         }
-        println "LangMap: $langMap"
+        logger.debug("LangMap: $langMaps")
+
+        // check if the translation values exist in other languages
+        en_lang.keySet().each { String key ->
+            langMaps.each { langName, langMap ->
+                if(!langMap.containsKey(key)) {
+                    getLogger().warn("[Translation Missing] Key '${key}' is missing in language '${langName}' (en_US = ${en_lang[key]})".toString())
+                }
+            }
+        }
 
         // Language File Search Start
-        def sort = [] // en_US的键序
+        Set<String> enUsKeys = [] // en_US的键序
 
         // 获取所有资源文件
 
-        searchLanguageFiles(namespace, sort, langMap)
+        searchLanguageFiles(namespace, enUsKeys, langMaps)
         // Source File Search Finish
 
         // 只存在于语言文件中的键
-        def onlyFile = [] as Set
-        onlyFile.addAll(sort)
-        onlyFile.removeAll(keySet)
-        if (!onlyFile.empty) {
-            println "Some of the keys don't exist in the code comments, so they may have been deprecated!"
-            println onlyFile
+        Set<String> keysOnlyInLangFiles = []
+        keysOnlyInLangFiles.addAll(enUsKeys)
+        keysOnlyInLangFiles.removeAll(allLangKeys)
+        if (!keysOnlyInLangFiles.empty) {
+            keysOnlyInLangFiles.each {
+                logger.warn("[#tr Missing] Key '${it}' only exists in language files, but not code comments. (en_US = ${langMaps["en_US"][it]}, zh_CN = ${langMaps["zh_CN"][it]})")
+            }
         }
 
-        keySet.removeAll(sort) // 只存在代码中的键
+        allLangKeys.removeAll(enUsKeys) // 只存在代码中的键
 
-        sort.addAll(keySet) // 将只存在代码中的键添加到最后
+        enUsKeys.addAll(allLangKeys) // 将只存在代码中的键添加到最后
 
-        println "File key sequence: $sort"
-        writeLanguageFiles(namespace, sort, langMap, ignoreKeyInFile, onlyFile, en_lang)
+        logger.debug("File key sequence: $enUsKeys")
+        writeLanguageFiles(namespace, enUsKeys, langMaps, ignoreKeyInFile, keysOnlyInLangFiles, en_lang)
 
     }
 }

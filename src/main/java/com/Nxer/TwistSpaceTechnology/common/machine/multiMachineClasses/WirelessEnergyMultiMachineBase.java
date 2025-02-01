@@ -1,8 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
 import static com.Nxer.TwistSpaceTechnology.config.Config.DefaultCycleNum_WirelessEnergyMultiMachineBase;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.NEGATIVE_ONE;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.mergeArray;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.NEGATIVE_ONE;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
 import java.math.BigInteger;
@@ -18,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
@@ -191,8 +191,8 @@ public abstract class WirelessEnergyMultiMachineBase<T extends WirelessEnergyMul
 
         costingEU = costingEU.add(costEU);
 
-        mOutputItems = mergeArray(mOutputItems, processingLogic.getOutputItems());
-        mOutputFluids = mergeArray(mOutputFluids, processingLogic.getOutputFluids());
+        mOutputItems = ArrayUtils.addAll(mOutputItems, processingLogic.getOutputItems());
+        mOutputFluids = ArrayUtils.addAll(mOutputFluids, processingLogic.getOutputFluids());
 
         endRecipeProcessing();
         return result;

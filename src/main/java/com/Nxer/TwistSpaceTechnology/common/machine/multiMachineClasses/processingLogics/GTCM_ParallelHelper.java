@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.util.GTRecipe.GTppRecipeHelper;
 
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.ItemList;
@@ -429,12 +427,12 @@ public class GTCM_ParallelHelper extends ParallelHelper {
         double tickTimeAfterOC = calculator.setParallel(originalMaxParallel)
                                            .calculateDurationUnderOneTick();
         if (tickTimeAfterOC < 1) {
-            maxParallel = Utils.safeInt((long) (maxParallel / tickTimeAfterOC), 1);
+            maxParallel = GTUtility.safeInt((long) (maxParallel / tickTimeAfterOC), 1);
         }
 
         int maxParallelBeforeBatchMode = maxParallel;
         if (batchMode) {
-            maxParallel = Utils.safeInt((long) maxParallel * batchModifier, 1);
+            maxParallel = GTUtility.safeInt((long) maxParallel * batchModifier, 1);
         }
 
         final ItemStack[] truncatedItemOutputs = recipe.mOutputs != null
@@ -580,21 +578,21 @@ public class GTCM_ParallelHelper extends ParallelHelper {
                 }
 
                 while (outputs >= Integer.MAX_VALUE) {
-                    toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    toOutput.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, origin));
                     outputs -= Integer.MAX_VALUE;
                 }
 
                 if (outputs > 0) {
-                    toOutput.add(setStackSize(origin.copy(), (int) outputs));
+                    toOutput.add(GTUtility.copyAmountUnsafe((int) outputs, origin));
                 }
 
             } else {
                 long outputs = (long) currentParallel * origin.stackSize;
                 while (outputs > Integer.MAX_VALUE) {
-                    toOutput.add(setStackSize(origin.copy(), Integer.MAX_VALUE));
+                    toOutput.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, origin));
                     outputs -= Integer.MAX_VALUE;
                 }
-                toOutput.add(setStackSize(origin.copy(), (int) outputs));
+                toOutput.add(GTUtility.copyAmountUnsafe((int) outputs, origin));
             }
 
         }

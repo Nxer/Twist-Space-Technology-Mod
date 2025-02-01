@@ -35,10 +35,10 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -116,7 +116,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     protected static boolean checkPatternRecipe(GTRecipe r, ItemStack[] in, ItemStack out) {
         ItemStack rOut = r.mOutputs[0];
         if (out == null || out.getItem() == null || out.stackSize < 1) return false;
-        if (!Utils.metaItemEqual(out, rOut)) return false;
+        if (!GTUtility.areStacksEqual(out, rOut)) return false;
         // check amount
         if (out.stackSize < rOut.stackSize || out.stackSize % rOut.stackSize != 0) return false;
         // the multiple of pattern
@@ -182,7 +182,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 if (dOutputs == null || dOutputs.length != 1 || dOutputs[0] == null) return null;
 
                 ItemStack[] dInputs = convertAEToMC(d.getInputs());
-                if (!Utils.isValid(dInputs)) return null;
+                if (!TstUtils.areItemsValid(dInputs)) return null;
 
                 // fine all available extreme recipes of this pattern
                 GTRecipe[] validResult = extremeCraftRecipes.findRecipeQuery()
@@ -295,7 +295,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 patternDetails.add(d);
 
                 if (in.stackSize > 1) {
-                    l.add(Utils.setStackSize(in.copy(), in.stackSize - 1));
+                    l.add(GTUtility.copyAmountUnsafe(in.stackSize - 1, in));
                     in.stackSize = 1;
                 }
 

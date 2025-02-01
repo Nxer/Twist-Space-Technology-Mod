@@ -1,21 +1,20 @@
 package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.isStackValid;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 
 import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.common.config.ConfigItems;
 
 public class TCRecipeTools {
 
@@ -23,8 +22,13 @@ public class TCRecipeTools {
 
     public static HashMap<String, ArrayList<CrucibleCraftingRecipe>> CCR = new HashMap<>();// CrucibleCraftingRecipeMap
 
+    public static final ItemStack voidSeed = new ItemStack(ConfigItems.itemResource, 1, 17);
+
+    @SuppressWarnings("ConstantConditions")
     public static String toStringWithoutStackSize(ItemStack itemStack) {
-        return itemStack.getUnlocalizedName() + "@" + itemStack.getItemDamage();
+        return itemStack.getItem()
+            .getUnlocalizedName() + "@"
+            + itemStack.getItemDamage();
     }
 
     public TCRecipeTools() {}
@@ -53,19 +57,39 @@ public class TCRecipeTools {
     public static void getCrucibleCraftingRecipe() {
         for (var o : ThaumcraftApi.getCraftingRecipes()) {
             if (!(o instanceof CrucibleRecipe o1)) continue;
-            if (isStackValid(o1.getRecipeOutput())) {
+            if (GTUtility.isStackValid(o1.getRecipeOutput())) {
                 ItemStack input;
                 Object cat = o1.catalyst;
                 if (cat instanceof ArrayList<?>catalyst1) {
-                    input = GTOreDictUnificator.get(false, (ItemStack) catalyst1.get(0), true);
+                    if (o1.getRecipeOutput()
+                        .isItemEqual(voidSeed)) {// fix void seed problem
+                        for (var eachItemStack : catalyst1) {
+                            if (eachItemStack instanceof ItemStack) {
+                                CrucibleCraftingRecipe p = new CrucibleCraftingRecipe(
+                                    eachItemStack,
+                                    voidSeed,
+                                    o1.aspects,
+                                    o1.key);
+                                String inputKey = toStringWithoutStackSize((ItemStack) eachItemStack);
+                                CCR.computeIfAbsent(inputKey, K -> new ArrayList<>())
+                                    .add(0, p);
+                            } else {
+                                TwistSpaceTechnology.LOG.info("error to change Object to ItemStack in IAT");
+                            }
+                        }
+                        continue;
+                    } else {
+                        input = GTOreDictUnificator.get(false, (ItemStack) catalyst1.get(0), true);
+                    }
                 } else if (cat instanceof ItemStack itemStack) {
-                    input = Utils.copyAmount(1, itemStack);
+                    input = GTUtility.copyAmountUnsafe(1, itemStack);
                 } else continue;
-                String inputKey = null;
-                if (input != null) {
+                String inputKey;
+                if (input != null && input.getItem() != null) {
                     inputKey = toStringWithoutStackSize(input);
                 } else {
                     TwistSpaceTechnology.LOG.info("input is null when getting CrucibleCraftingRecipe");
+                    continue;
                 }
                 CrucibleCraftingRecipe p = new CrucibleCraftingRecipe(
                     input,

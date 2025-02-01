@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Circui
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.isStackInvalid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
@@ -46,6 +45,7 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
@@ -93,7 +93,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         Set<ItemStack> outputs = new HashSet<>();
         // check every input
         for (ItemStack item : inputs) {
-            if (isStackInvalid(item)) continue;
+            if (GTUtility.isStackInvalid(item)) continue;
 
             // check special convert
             TST_ItemID ii = SPECIAL_CONVERTING.get(TST_ItemID.createNoNBT(item));

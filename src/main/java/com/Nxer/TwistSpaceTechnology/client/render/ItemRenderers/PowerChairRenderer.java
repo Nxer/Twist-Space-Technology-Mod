@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockPowerChair;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockPowerChair;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -9,8 +9,6 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
-
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.ItemBlockPowerChair;
 
 public class PowerChairRenderer implements IItemRenderer {
 
@@ -24,7 +22,8 @@ public class PowerChairRenderer implements IItemRenderer {
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        if (item.getItem() != ItemBlockPowerChair.getItemFromBlock(BlockPowerChair)) {
+        if (item.getItem() != com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair.ItemBlockPowerChair
+            .getItemFromBlock(BlockPowerChair)) {
             return false;
         }
         return switch (type) {
@@ -40,7 +39,8 @@ public class PowerChairRenderer implements IItemRenderer {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        if (item.getItem() == ItemBlockPowerChair.getItemFromBlock(BlockPowerChair)) {
+        if (item.getItem() == com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair.ItemBlockPowerChair
+            .getItemFromBlock(BlockPowerChair)) {
             final ResourceLocation texture = this.textures;
             final IModelCustom model = this.models;
             switch (type) {

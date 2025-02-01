@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
 import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
 import static com.Nxer.TwistSpaceTechnology.recipe.specialRecipe.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
@@ -9,7 +9,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -51,9 +50,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -139,7 +138,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0 && controllerTier == 0) {
             ItemStack ControllerSlot = this.getControllerSlot();
-            if (metaItemEqual(FountOfEcology, ControllerSlot)) {
+            if (GTUtility.areStacksEqual(FountOfEcology, ControllerSlot)) {
                 controllerTier = 1;
                 mInventory[1] = ItemUtils.depleteStack(ControllerSlot);
                 markDirty();
@@ -154,7 +153,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         float aX, float aY, float aZ) {
         if (controllerTier == 0 && !aPlayer.isSneaking()) {
             ItemStack heldItem = aPlayer.getHeldItem();
-            if (metaItemEqual(FountOfEcology, heldItem)) {
+            if (GTUtility.areStacksEqual(FountOfEcology, heldItem)) {
                 controllerTier = 1;
                 aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
                 if (getBaseMetaTileEntity().isServerSide()) {
@@ -367,7 +366,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(1)
-                            .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(13))
+                            .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(13))
                             .build()))
                 .addElement(
                     'R',
@@ -387,7 +386,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                             .atLeast(Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
                             .dot(2)
-                            .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(13))
+                            .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(13))
                             .build()))
                 .addElement('S', ofFrame(Materials.Mytryl))
                 .addElement('s', ofFrame(Materials.AstralSilver))
@@ -404,7 +403,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 return new ITexture[] {
                     Textures.BlockIcons.getCasingTextureForId(
                         controllerTier == 0 ? TAE.getIndexFromPage(1, 15)
-                            : BasicBlocks.MetaBlockCasing01.getTextureIndex(13)),
+                            : TstBlocks.MetaBlockCasing01.getTextureIndex(13)),
                     TextureFactory.builder()
                         .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
                         .extFacing()
@@ -417,7 +416,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             }
 
             return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(
-                controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : BasicBlocks.MetaBlockCasing01.getTextureIndex(13)),
+                controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : TstBlocks.MetaBlockCasing01.getTextureIndex(13)),
                 TextureFactory.builder()
                     .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
                     .extFacing()
@@ -425,7 +424,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         }
 
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(
-            controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : BasicBlocks.MetaBlockCasing01.getTextureIndex(13)) };
+            controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : TstBlocks.MetaBlockCasing01.getTextureIndex(13)) };
     }
 
     // spotless:off

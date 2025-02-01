@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 
 import net.minecraftforge.fluids.Fluid;
@@ -56,7 +55,7 @@ public class SpaceAssemblerRecipePool implements IRecipePool {
                     Materials.Lead.getMolten(144 * 16 * 1024),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 8),
                     Materials.UUMatter.getFluid(1000 * 16))
-                .itemOutputs(setStackSize(ItemRefer.Advanced_Radiation_Protection_Plate.get(1), 1024))
+                .itemOutputs(GTUtility.copyAmountUnsafe(1024, ItemRefer.Advanced_Radiation_Protection_Plate.get(1)))
                 .specialValue(2)
                 .eut(RECIPE_UXV)
                 .duration(20 * 10)

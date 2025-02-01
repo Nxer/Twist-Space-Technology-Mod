@@ -3,6 +3,12 @@ package com.Nxer.TwistSpaceTechnology.util;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Use {@link org.apache.commons.lang3.tuple.Pair} instead.
+ *
+ * @deprecated see {@link org.apache.commons.lang3.tuple.Pair}
+ */
+@Deprecated
 public class SimplePair<L, R> implements Serializable {
 
     private static final long serialVersionUID = 202405181655L;

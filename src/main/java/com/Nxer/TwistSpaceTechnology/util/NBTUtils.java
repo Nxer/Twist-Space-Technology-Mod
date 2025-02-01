@@ -7,6 +7,10 @@ import net.minecraftforge.fluids.FluidStack;
 
 import gregtech.api.util.GTOreDictUnificator;
 
+/**
+ * @deprecated see {@link gregtech.api.util.GTUtility}
+ */
+@Deprecated
 public final class NBTUtils {
 
     public static ItemStack loadItem(NBTTagCompound aNBT, String aTagName) {

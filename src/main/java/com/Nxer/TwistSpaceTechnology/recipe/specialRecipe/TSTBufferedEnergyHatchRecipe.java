@@ -1,18 +1,18 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchEV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchHV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchIV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchLV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchLuV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchMV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchUEV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchUHV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchUIV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchUMV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchUV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchUXV;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchZPM;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchEV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchHV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchIV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchLV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchLuV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchMV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchUEV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchUHV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchUIV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchUMV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchUV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchUXV;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchZPM;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
@@ -30,7 +30,7 @@ import static com.dreammaster.gthandler.GT_Loader_Machines.bitsd;
 
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;

@@ -3,6 +3,15 @@ package com.Nxer.TwistSpaceTechnology.util.enums;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import org.jetbrains.annotations.ApiStatus;
+
+/**
+ * @deprecated use GregTech ones.
+ *
+ * @see gregtech.api.enums.VoltageIndex
+ * @see gregtech.api.enums.TierEU
+ */
+@ApiStatus.Obsolete
 public class TierEU {
 
     public static final long[] V = new long[] { 8L, 32L, 128L, 512L, 2048L, 8192L, 32_768L, 131_072L, 524_288L,

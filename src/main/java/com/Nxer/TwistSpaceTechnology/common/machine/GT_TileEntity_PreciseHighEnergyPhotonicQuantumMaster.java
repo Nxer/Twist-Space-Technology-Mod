@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.PhotonControllerUpgrade;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.PhotonControllerUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_PreciseHighEnergyPhotonicQuantumMaster;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster;
@@ -35,7 +35,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.block.blockClass.Casings.PhotonControllerUpgradeCasing;
+import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;

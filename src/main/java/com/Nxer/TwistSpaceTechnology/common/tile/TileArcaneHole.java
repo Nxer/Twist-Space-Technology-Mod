@@ -5,7 +5,7 @@
 
 package com.Nxer.TwistSpaceTechnology.common.tile;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.BlockArcaneHole;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockArcaneHole;
 
 import net.minecraft.tileentity.TileEntity;
 

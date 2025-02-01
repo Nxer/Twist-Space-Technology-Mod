@@ -8,7 +8,7 @@ import net.minecraftforge.client.model.IModelCustom;
 
 import org.lwjgl.opengl.GL11;
 
-import com.Nxer.TwistSpaceTechnology.common.item.items.BasicItems;
+import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 
 public class YamatoRenderer implements IItemRenderer {
 
@@ -30,7 +30,7 @@ public class YamatoRenderer implements IItemRenderer {
      */
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        if (item.getItem() != BasicItems.Yamato) {
+        if (item.getItem() != TstItems.Yamato) {
             return false;
         }
         return switch (type) {
@@ -63,7 +63,7 @@ public class YamatoRenderer implements IItemRenderer {
      */
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        if (item.getItem() == BasicItems.Yamato) {
+        if (item.getItem() == TstItems.Yamato) {
             final ResourceLocation texture = this.textures;
             final IModelCustom model = this.models;
             switch (type) {

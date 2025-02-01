@@ -23,7 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -332,7 +332,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
         if (Mods.Witchery.isModLoaded()) {
             return Block.getBlockFromName(Mods.Witchery.ID + ":infinityegg");
 //             Witchery.Blocks.INFINITY_EGG;
-        } else return BasicBlocks.PhotonControllerUpgrade;
+        } else return TstBlocks.PhotonControllerUpgrade;
     }
 
 	@Override

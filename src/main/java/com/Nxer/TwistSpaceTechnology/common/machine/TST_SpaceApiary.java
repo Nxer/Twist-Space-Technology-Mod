@@ -32,7 +32,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevatormodules.TileEntityModuleBase;
 import com.gtnewhorizons.modularui.api.math.Alignment;
@@ -42,13 +41,19 @@ import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
-import forestry.api.apiculture.*;
+import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.IBeekeepingMode;
 import forestry.apiculture.genetics.Bee;
 import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import tectech.thing.metaTileEntity.multi.base.INameFunction;
 import tectech.thing.metaTileEntity.multi.base.IStatusFunction;
@@ -127,14 +132,14 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
             if (outItems == null || outItems.stackSize < 1) continue;
             long amount = (long) outItems.stackSize * mParallel;
             if (amount <= Integer.MAX_VALUE) {
-                outputs.add(Utils.setStackSize(outItems.copy(), (int) amount));
+                outputs.add(GTUtility.copyAmountUnsafe((int) amount, outItems));
             } else {
                 while (amount >= Integer.MAX_VALUE) {
-                    outputs.add(Utils.setStackSize(outItems.copy(), Integer.MAX_VALUE));
+                    outputs.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, outItems));
                     amount -= Integer.MAX_VALUE;
                 }
                 if (amount > 0) {
-                    outputs.add(Utils.setStackSize(outItems.copy(), (int) amount));
+                    outputs.add(GTUtility.copyAmountUnsafe((int) amount, outItems));
                 }
             }
         }

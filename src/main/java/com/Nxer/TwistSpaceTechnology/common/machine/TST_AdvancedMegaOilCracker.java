@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_AdvancedMegaOilCracker;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_AdvancedMegaOilCracker;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_AdvancedMegaOilCracker;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -25,6 +24,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -122,8 +122,10 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + texter("Glass Tier", "MachineInfoData.GlassTier")
-            + ": "
+        // #tr MachineInfoData.GlassTier
+        // # {\AQUA}Glass Tier
+        // #zh_CN {\AQUA}玻璃等级
+        ret[origin.length] = TextEnums.tr("MachineInfoData.GlassTier") + ": "
             + EnumChatFormatting.GOLD
             + this.glassTier;
         return ret;

@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static gregtech.api.enums.OrePrefixes.dust;
 import static gregtech.api.enums.OrePrefixes.gem;
 import static gregtech.api.enums.OrePrefixes.gemExquisite;
@@ -19,6 +18,7 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import bartworks.system.material.Werkstoff;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GTUtility;
 
 public class OP_Bartworks_OreHandler {
 
@@ -43,10 +43,10 @@ public class OP_Bartworks_OreHandler {
             // byproducts
             if (werkstoff.getNoOfByProducts() >= 1) {
                 if (werkstoff.getNoOfByProducts() == 1) {
-                    outputs.add(setStackSize(werkstoff.getOreByProduct(0, dust), 3));
+                    outputs.add(GTUtility.copyAmountUnsafe(3, werkstoff.getOreByProduct(0, dust)));
                 } else {
                     for (int i = 0; i < werkstoff.getNoOfByProducts(); i++) {
-                        outputs.add(setStackSize(werkstoff.getOreByProduct(i, dust), 2));
+                        outputs.add(GTUtility.copyAmountUnsafe(2, werkstoff.getOreByProduct(i, dust)));
                     }
                 }
             } else {

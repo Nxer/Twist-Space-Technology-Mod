@@ -36,8 +36,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
@@ -1308,9 +1308,9 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                         ofBlocksTiered(
                             TST_StrangeMatterAggregator::getSpaceTimeOscillatorTier,
                             ImmutableList.of(
-                                Pair.of(BasicBlocks.SpaceTimeOscillator, 0),
-                                Pair.of(BasicBlocks.SpaceTimeOscillator, 1),
-                                Pair.of(BasicBlocks.SpaceTimeOscillator, 2)),
+                                Pair.of(TstBlocks.SpaceTimeOscillator, 0),
+                                Pair.of(TstBlocks.SpaceTimeOscillator, 1),
+                                Pair.of(TstBlocks.SpaceTimeOscillator, 2)),
                             0,
                             (m, t) -> m.oscillatorTier = t,
                             m -> m.oscillatorTier)))
@@ -1321,9 +1321,9 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                         ofBlocksTiered(
                             TST_StrangeMatterAggregator::getSpaceTimeConstraintor,
                             ImmutableList.of(
-                                Pair.of(BasicBlocks.SpaceTimeConstraintor, 0),
-                                Pair.of(BasicBlocks.SpaceTimeConstraintor, 1),
-                                Pair.of(BasicBlocks.SpaceTimeConstraintor, 2)),
+                                Pair.of(TstBlocks.SpaceTimeConstraintor, 0),
+                                Pair.of(TstBlocks.SpaceTimeConstraintor, 1),
+                                Pair.of(TstBlocks.SpaceTimeConstraintor, 2)),
                             0,
                             (m, t) -> m.constraintorTier = t,
                             m -> m.constraintorTier)))
@@ -1334,9 +1334,9 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                         ofBlocksTiered(
                             TST_StrangeMatterAggregator::getSpaceTimeMerger,
                             ImmutableList.of(
-                                Pair.of(BasicBlocks.SpaceTimeMerger, 0),
-                                Pair.of(BasicBlocks.SpaceTimeMerger, 1),
-                                Pair.of(BasicBlocks.SpaceTimeMerger, 2)),
+                                Pair.of(TstBlocks.SpaceTimeMerger, 0),
+                                Pair.of(TstBlocks.SpaceTimeMerger, 1),
+                                Pair.of(TstBlocks.SpaceTimeMerger, 2)),
                             0,
                             (m, t) -> m.mergerTier = t,
                             m -> m.mergerTier)))
@@ -1347,17 +1347,17 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     }
 
     public static int getSpaceTimeOscillatorTier(Block b, int m) {
-        if (b != BasicBlocks.SpaceTimeOscillator) return 0;
+        if (b != TstBlocks.SpaceTimeOscillator) return 0;
         return m + 1;
     }
 
     public static int getSpaceTimeConstraintor(Block b, int m) {
-        if (b != BasicBlocks.SpaceTimeConstraintor) return 0;
+        if (b != TstBlocks.SpaceTimeConstraintor) return 0;
         return m + 1;
     }
 
     public static int getSpaceTimeMerger(Block b, int m) {
-        if (b != BasicBlocks.SpaceTimeMerger) return 0;
+        if (b != TstBlocks.SpaceTimeMerger) return 0;
         return m + 1;
     }
 

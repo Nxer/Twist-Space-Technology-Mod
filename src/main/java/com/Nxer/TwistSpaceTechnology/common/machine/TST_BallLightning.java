@@ -1,14 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeExtraEuCost_BallLightning;
 import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeTickEveryProcess_BallLightning;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -55,8 +53,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -256,7 +254,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
 
     private void flushOverclockParameter() {
         ItemStack controllerStack = getControllerSlot();
-        if (metaItemEqual(controllerStack, GTCMItemList.BallLightningUpgradeChip.get(1))
+        if (GTUtility.areStacksEqual(controllerStack, GTCMItemList.BallLightningUpgradeChip.get(1))
             && controllerStack.stackSize >= 1) this.overclockParameter = controllerStack.stackSize;
         else this.overclockParameter = 1;
 
@@ -545,9 +543,9 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                     HatchElementBuilder.<TST_BallLightning>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
-                        .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(1))
+                        .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(1))
                         .dot(1)
-                        .buildAndChain(BasicBlocks.MetaBlockCasing01, 1))
+                        .buildAndChain(TstBlocks.MetaBlockCasing01, 1))
                 .addElement(
                     'Z',
                     HatchElementBuilder.<TST_BallLightning>builder()
@@ -588,7 +586,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
         currentTip.add(modeName);
         if (tag.getByte("mode") == 2) {
             currentTip.add(
-                (EnumChatFormatting.AQUA + texter("Max Fusion Eu Cost", "Waila.TST_BallLightning.1")
+                // #tr Waila.TST_BallLightning.1
+                // # Max Fusion Eu Cost
+                // #zh_CN 聚变功耗上限
+                (EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_BallLightning.1")
                     + EnumChatFormatting.RESET
                     + ": "
                     + EnumChatFormatting.GOLD
@@ -597,9 +598,15 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                     + " EU/t"));
         }
         if (tag.getBoolean("isWirelessMode")) {
-            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + texter("Wireless Mode", "Waila.TST_IndistinctTentacle.1"));
+            // #tr Waila.TST_IndistinctTentacle.1
+            // # Wireless Mode
+            // #zh_CN 无线模式
+            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + TextEnums.tr("Waila.TST_IndistinctTentacle.1"));
             currentTip.add(
-                EnumChatFormatting.AQUA + texter("Current EU cost", "Waila.TST_MiracleDoor.1")
+                // #tr Waila.TST_MiracleDoor.1
+                // # Current EU cost
+                // #zh_CN 当前EU消耗
+                EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_MiracleDoor.1")
                     + EnumChatFormatting.RESET
                     + ": "
                     + EnumChatFormatting.GOLD
@@ -608,16 +615,17 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                     + " EU");
 
             if (1 != tag.getInteger("EuCostMultiplier")) {
-                currentTip.add(
-                    "" + EnumChatFormatting.BLUE
-                        + EnumChatFormatting.BOLD
-                        + texter("Extra EU cost multiplier", "Waila.TST_BallLightning.2")
-                        + EnumChatFormatting.RESET
-                        + ": "
-                        + EnumChatFormatting.GOLD
-                        + EnumChatFormatting.BOLD
-                        + tag.getInteger("extraEuCostMultiplier")
-                        + EnumChatFormatting.RESET);
+                currentTip.add("" + EnumChatFormatting.BLUE + EnumChatFormatting.BOLD
+                // #tr Waila.TST_BallLightning.2
+                // # Extra EU cost multiplier
+                // #zh_CN 额外EU消耗倍率
+                    + TextEnums.tr("Waila.TST_BallLightning.2")
+                    + EnumChatFormatting.RESET
+                    + ": "
+                    + EnumChatFormatting.GOLD
+                    + EnumChatFormatting.BOLD
+                    + tag.getInteger("extraEuCostMultiplier")
+                    + EnumChatFormatting.RESET);
             }
         }
     }

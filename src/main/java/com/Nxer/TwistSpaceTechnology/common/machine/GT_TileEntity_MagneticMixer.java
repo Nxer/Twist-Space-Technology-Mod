@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -109,7 +109,7 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         speedBonus = (float) Math
-            .pow(SpeedBonus_MultiplyPerTier_MagneticMixer, Utils.calculatePowerTier(getMaxInputEu()));
+            .pow(SpeedBonus_MultiplyPerTier_MagneticMixer, TstUtils.calculateVoltageTier(getMaxInputEu()));
         return true;
     }
 

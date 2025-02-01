@@ -460,6 +460,13 @@ public class Config {
     public static int ManufacturingCenter_MaxParallelModifier = 2;
     // endregion
 
+    // region GiantVacuumDryingFurnace
+    public static boolean Enable_GiantVacuumDryingFurnace = true;
+    public static float SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace = 0.5F;
+    public static float SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace = 0.8F;
+    public static int Parallel_PerPiece_GiantVacuumDryingFurnace = 32;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 

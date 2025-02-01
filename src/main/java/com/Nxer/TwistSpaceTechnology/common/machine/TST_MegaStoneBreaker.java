@@ -8,7 +8,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_Separatin
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.calculatePowerTier;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.calculateVoltageTier;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -98,7 +98,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
 
     @Override
     protected int getMaxParallelRecipes() {
-        int EuTier = (int) calculatePowerTier(getMaxInputEu());
+        int EuTier = (int) calculateVoltageTier(getMaxInputEu());
         return EuTier < 29 ? (int) (Math.pow(2, EuTier) * 4) : Integer.MAX_VALUE;
     }
 

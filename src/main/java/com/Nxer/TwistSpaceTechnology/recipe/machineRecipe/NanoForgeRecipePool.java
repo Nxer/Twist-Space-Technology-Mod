@@ -1,14 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
-
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GTUtility;
 
 public class NanoForgeRecipePool implements IRecipePool {
 
@@ -19,7 +18,7 @@ public class NanoForgeRecipePool implements IRecipePool {
             .itemInputs(
                 GTCMItemList.AnnihilationConstrainer.get(0),
                 MaterialsUEVplus.TranscendentMetal.getBlocks(64),
-                setStackSize(ItemList.Circuit_Wafer_SoC2.get(1), 128))
+                GTUtility.copyAmountUnsafe(128, ItemList.Circuit_Wafer_SoC2.get(1)))
             .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 16))
             .itemOutputs(MaterialsUEVplus.TranscendentMetal.getNanite(12))
             .specialValue(3)

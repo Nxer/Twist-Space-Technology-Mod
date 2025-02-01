@@ -17,7 +17,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofBlockStri
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.createItemStack;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -46,6 +45,7 @@ import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlaye
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,8 +64,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -74,6 +74,7 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -89,6 +90,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -139,6 +141,9 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
+            final HashMap<Aspect, TileInfusionProvider> aspectProvider = new HashMap<>();
+            AspectList aspects = null;
+
             @NotNull
             @Override
             public CheckRecipeResult process() {
@@ -151,9 +156,6 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             @Nonnull
             @Override
             protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
-                int Para = createParallelHelper(recipe).setConsumption(false)
-                    .build()
-                    .getCurrentParallel();
                 ItemStack input1 = recipe.mInputs[0];
                 ItemStack circuit = recipe.mInputs[1];
                 String key = TCRecipeTools.toStringWithoutStackSize(input1);
@@ -169,16 +171,52 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                         return CheckRecipeResultRegistry.SUCCESSFUL;
                     }
                 }
-                for (Aspect aspect : recipe1.getInputAspects()
-                    .getAspects()) {
-                    if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+
+                aspectProvider.clear();
+                aspects = recipe1.getInputAspects();
+                if (aspects.visSize() == 0) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
+                }
+                if (mTileInfusionProvider.isEmpty()) {
+                    return Essentia_InsentiaL;
+                }
+
+                HashMap<Aspect, Integer> aspectMaxParallel = new HashMap<>();
+                for (Aspect aspect : aspects.getAspects()) {
+                    int amount = aspects.getAmount(aspect);
+                    if (amount <= 0) {
+                        continue;
+                    }
+
                     for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        if (hatch.takeFromContainer(aspect, recipe1.getAspectAmount(aspect) * Para)) {
-                            return CheckRecipeResultRegistry.SUCCESSFUL;
-                        } else return Essentia_InsentiaL;
+                        int possibleParallel = GTUtility.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
+                        if (possibleParallel <= 0) {
+                            continue;
+                        }
+
+                        if (possibleParallel > aspectMaxParallel.computeIfAbsent(aspect, k -> 0)) {
+                            aspectMaxParallel.put(aspect, possibleParallel);
+                            aspectProvider.put(aspect, hatch);
+                        }
+                    }
+
+                    if (aspectMaxParallel.get(aspect) == 0) {
+                        return Essentia_InsentiaL;
                     }
                 }
-                return CheckRecipeResultRegistry.NO_RECIPE;
+                maxParallel = Integer.min(Collections.min(aspectMaxParallel.values()), maxParallel);
+
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult onRecipeStart(@NotNull GTRecipe recipe) {
+                for (Aspect aspect : aspectProvider.keySet()) {
+                    aspectProvider.get(aspect)
+                        .takeFromContainer(aspect, aspects.getAmount(aspect) * getCurrentParallels());
+                }
+                return super.onRecipeStart(recipe);
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
@@ -333,9 +371,9 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
         if (STRUCTURE_DEFINITION == null) {
             var channel = "chisel";
             var list = ImmutableList.of(
-                createItemStack(blockCosmeticSolid, 6),
-                createItemStack(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
-                createItemStack(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
+                TstUtils.newItemWithMeta(blockCosmeticSolid, 6),
+                TstUtils.newItemWithMeta(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
+                TstUtils.newItemWithMeta(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
             STRUCTURE_DEFINITION = StructureDefinitionBuilder(TST_IndustrialAlchemyTower.class)
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addElement(
@@ -373,7 +411,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     'D',
                     ofChain(
                         ofAccurateTileAdder(TST_IndustrialAlchemyTower::addCosmeticOpaque, blockCosmeticOpaque, 2),
-                        ofAccurateTile(TileArcaneHole.class, BasicBlocks.BlockArcaneHole, 0)))
+                        ofAccurateTile(TileArcaneHole.class, TstBlocks.BlockArcaneHole, 0)))
                 .addElement('E', ofBlockStrict(blockSlabStone, 0))
                 .addElement('F', ofBlock(blockCosmeticSolid, 0))
                 .addElement('G', ofVariableBlock(channel, blockCosmeticSolid, 6, list))

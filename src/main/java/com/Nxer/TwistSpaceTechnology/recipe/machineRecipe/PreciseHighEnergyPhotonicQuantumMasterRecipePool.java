@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ParticleTrapTimeSpaceShield;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceWarper;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 

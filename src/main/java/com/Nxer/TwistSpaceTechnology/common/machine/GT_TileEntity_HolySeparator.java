@@ -34,7 +34,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -204,7 +204,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
 			false,
 			true);
 
-		return Utils.multiBuildPiece(built);
+		return TstUtils.multiBuildPiece(built);
 	}
 
 	private static final String STRUCTURE_PIECE_MAIN = "mainHolySeparator";

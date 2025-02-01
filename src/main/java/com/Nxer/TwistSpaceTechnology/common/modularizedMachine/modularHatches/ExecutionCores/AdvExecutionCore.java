@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -52,7 +52,7 @@ public class AdvExecutionCore extends ExecutionCoreBase implements IWirelessEner
             BigInteger.valueOf(eut)
                 .multiply(
                     BigInteger.valueOf(maxProgressingTime)
-                        .multiply(Utils.NEGATIVE_ONE)))) {
+                        .multiply(TstUtils.NEGATIVE_ONE)))) {
             shutDown();
             IGregTechTileEntity mte = getBaseMetaTileEntity();
             TwistSpaceTechnology.LOG.info(

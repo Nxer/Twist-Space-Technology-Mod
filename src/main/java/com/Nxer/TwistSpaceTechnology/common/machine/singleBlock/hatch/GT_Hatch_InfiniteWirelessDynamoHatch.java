@@ -1,10 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.authorName_Nxer;
 
 import net.minecraft.util.EnumChatFormatting;
+
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -62,9 +63,11 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEWirelessDynamo {
     public String[] getDescription() {
         return new String[] { EnumChatFormatting.GRAY + "Stores energy globally in a network, up to 2^(2^31) EU.",
             EnumChatFormatting.GRAY + "Does not connect to wires. This block accepts EU into the network.",
-            EnumChatFormatting.WHITE
-                + texter("Infinite output voltage limit.", "Description.InfiniteWirelessDynamoHatch.1"),
-            ModNameDesc, authorName_Nxer };
+            // #tr Description.InfiniteWirelessDynamoHatch.1
+            // # Infinite output voltage limit.
+            // #zh_CN 无限输出电压限制.
+            EnumChatFormatting.WHITE + TextEnums.tr("Description.InfiniteWirelessDynamoHatch.1"), ModNameDesc,
+            authorName_Nxer };
     }
 
     @Override

@@ -4,17 +4,33 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.dreammaster.block.BlockList.BloodyThaumium;
 import static com.dreammaster.block.BlockList.BloodyVoid;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofTileAdder;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.essentiaCell;
 import static goodgenerator.loader.Loaders.magicCasing;
-import static gregtech.api.enums.HatchElement.*;
-import static gregtech.api.enums.Textures.BlockIcons.*;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static thaumcraft.common.config.ConfigBlocks.*;
+import static thaumcraft.common.config.ConfigBlocks.blockCosmeticOpaque;
+import static thaumcraft.common.config.ConfigBlocks.blockCosmeticSolid;
+import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
+import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
 import static thaumcraft.common.config.ConfigItems.itemEldritchObject;
 import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlayer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,12 +48,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMatrixRecipeIndexKey;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -59,6 +76,7 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import scala.Int;
@@ -112,6 +130,9 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
+            final HashMap<Aspect, TileInfusionProvider> aspectProvider = new HashMap<>();
+            AspectList aspects = null;
+
             @NotNull
             @Override
             public CheckRecipeResult process() {
@@ -125,35 +146,74 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             @Nonnull
             @Override
             protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                int Para = createParallelHelper(recipe).setConsumption(false)
-                    .build()
-                    .getCurrentParallel();
-                for (TCRecipeTools.InfusionCraftingRecipe recipe1 : TCRecipeTools.ICR) {
-                    if (recipe1.getOutput()
-                        .isItemEqual(recipe.mOutputs[0])) {
-                        if (!(isResearchComplete(recipe1.getResearch()))) {
-                            return Research_not_completed;
-                        }
-                        if (!(getControllerSlot() == null)) {
-                            if (getControllerSlot().isItemEqual(EssentiaCell_Creative)
-                                || getControllerSlot().isItemEqual(ProofOfHeroes)) {
-                                return CheckRecipeResultRegistry.SUCCESSFUL;
-                            }
-                        }
-                        for (Aspect aspect : recipe1.getInputAspects()
-                            .getAspects()) {
-                            if (mTileInfusionProvider.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-                            for (TileInfusionProvider hatch : mTileInfusionProvider) {
+                int recipeIndex = recipe.getMetadataOrDefault(IndustrialMagicMatrixRecipeIndexKey.INSTANCE, -1);
+                if (recipeIndex == -1) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
 
-                                if (hatch.takeFromContainer(aspect, recipe1.getAspectAmount(aspect) * Para)) {
-                                    return CheckRecipeResultRegistry.SUCCESSFUL;
-                                } else return Essentia_InsentiaL;
-                            }
+                TCRecipeTools.InfusionCraftingRecipe tcRecipe = TCRecipeTools.ICR.get(recipeIndex);
 
-                        }
+                if (!tcRecipe.getOutput()
+                    .isItemEqual(recipe.mOutputs[0])) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+
+                if (!(isResearchComplete(tcRecipe.getResearch()))) {
+                    return Research_not_completed;
+                }
+
+                if (!(getControllerSlot() == null)) {
+                    if (getControllerSlot().isItemEqual(EssentiaCell_Creative)
+                        || getControllerSlot().isItemEqual(ProofOfHeroes)) {
+                        return CheckRecipeResultRegistry.SUCCESSFUL;
                     }
                 }
-                return CheckRecipeResultRegistry.NO_RECIPE;
+
+                aspectProvider.clear();
+                aspects = tcRecipe.getInputAspects();
+                if (aspects.visSize() == 0) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
+                }
+                if (mTileInfusionProvider.isEmpty()) {
+                    return Essentia_InsentiaL;
+                }
+
+                HashMap<Aspect, Integer> aspectMaxParallel = new HashMap<>();
+                for (Aspect aspect : aspects.getAspects()) {
+                    int amount = aspects.getAmount(aspect);
+                    if (amount <= 0) {
+                        continue;
+                    }
+
+                    for (TileInfusionProvider hatch : mTileInfusionProvider) {
+                        int possibleParallel = GTUtility.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
+                        if (possibleParallel <= 0) {
+                            continue;
+                        }
+
+                        if (possibleParallel > aspectMaxParallel.computeIfAbsent(aspect, k -> 0)) {
+                            aspectMaxParallel.put(aspect, possibleParallel);
+                            aspectProvider.put(aspect, hatch);
+                        }
+                    }
+
+                    if (aspectMaxParallel.get(aspect) == 0) {
+                        return Essentia_InsentiaL;
+                    }
+                }
+                maxParallel = Integer.min(Collections.min(aspectMaxParallel.values()), maxParallel);
+
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult onRecipeStart(@NotNull GTRecipe recipe) {
+                for (Aspect aspect : aspectProvider.keySet()) {
+                    aspectProvider.get(aspect)
+                        .takeFromContainer(aspect, aspects.getAmount(aspect) * getCurrentParallels());
+                }
+                return super.onRecipeStart(recipe);
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }

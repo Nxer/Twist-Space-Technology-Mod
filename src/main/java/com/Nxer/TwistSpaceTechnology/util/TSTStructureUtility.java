@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.createItemStack;
 import static com.gtnewhorizon.structurelib.structure.IStructureElement.PlaceResult;
 
 import java.util.List;
@@ -106,7 +105,7 @@ public class TSTStructureUtility {
     @NotNull
     public static <T> IStructureElement<T> ofBlockStrictExt(Block block, int meta, Block specialBlock,
         int specialItemMeta) {
-        return ofBlockStrictExt(block, meta, createItemStack(specialBlock, specialItemMeta), block, meta);
+        return ofBlockStrictExt(block, meta, TstUtils.newItemWithMeta(specialBlock, specialItemMeta), block, meta);
     }
 
     /**
@@ -123,7 +122,7 @@ public class TSTStructureUtility {
 
         return new IStructureElement<>() {
 
-            private final ItemStack blockStack = createItemStack(block, meta);
+            private final ItemStack blockStack = TstUtils.newItemWithMeta(block, meta);
 
             @Override
             public boolean check(T t, World world, int x, int y, int z) {
@@ -217,7 +216,7 @@ public class TSTStructureUtility {
     /**
      * This method is mainly used for chisel blocks, which are automatically transformed when the channel is used to
      * determine whether to place specificBlock by variableStacks.
-     * 
+     *
      * @param channel It can be null, and auto-transform is used by default。
      */
     @NotNull
@@ -229,7 +228,7 @@ public class TSTStructureUtility {
             if (channel.isEmpty() || !channel.toLowerCase(Locale.ROOT)
                 .equals(channel)) throw new IllegalArgumentException();
         }
-        final ItemStack blockStack = createItemStack(specificBlock, specificMeta);
+        final ItemStack blockStack = TstUtils.newItemWithMeta(specificBlock, specificMeta);
         return new IStructureElement<>() {
 
             @Override
@@ -396,7 +395,11 @@ public class TSTStructureUtility {
     public static <T, E> IStructureElement<T> ofAccurateTileExt(Class<E> tileClass, Block tileBlock, int tileBlockMeta,
         Item specialItem, int specialItemMeta) {
         if (tileClass == null) throw new IllegalArgumentException();
-        return ofAccurateTileExt(tileClass, tileBlock, tileBlockMeta, createItemStack(specialItem, specialItemMeta));
+        return ofAccurateTileExt(
+            tileClass,
+            tileBlock,
+            tileBlockMeta,
+            TstUtils.newItemWithMeta(specialItem, specialItemMeta));
     }
 
     /**

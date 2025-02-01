@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.glodblock.github.loader.ItemAndBlockHolder.SINGULARITY_CELL;
 import static gregtech.api.enums.Mods.EternalSingularity;
@@ -30,12 +29,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 import com.glodblock.github.common.storage.CellType;
@@ -178,7 +176,7 @@ public class MiracleTopRecipePool implements IRecipePool {
 
                     ItemList.Field_Generator_UV.get(6),
                     ItemList.Conveyor_Module_UEV.get(6),
-                    setStackSize(Materials.InfinityCatalyst.getDust(1), 192)
+                    GTUtility.copyAmountUnsafe(192, Materials.InfinityCatalyst.getDust(1))
                 )
                 .fluidInputs(
                     Materials.Infinity.getMolten(144*24),
@@ -205,7 +203,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                     ItemList.Electric_Pump_UV.get(6),
 
                     new ItemStack(Items.nether_star, 144),
-                    setStackSize(Materials.InfinityCatalyst.getDust(1), 192)
+                    GTUtility.copyAmountUnsafe(192, Materials.InfinityCatalyst.getDust(1))
                 )
                 .fluidInputs(
                     Materials.DraconiumAwakened.getMolten(144*150),
@@ -226,7 +224,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                     eternalSingularity,
                     ThEAPIImplementation.instance().items().EssentiaStorageComponent_16384k.getStacks(9),
                     new ItemStack(blockEssentiaReservoir, 6),
-                    setStackSize(Materials.InfinityCatalyst.getDust(1), 192)
+                    GTUtility.copyAmountUnsafe(192, Materials.InfinityCatalyst.getDust(1))
                 )
                 .fluidInputs(
                     Materials.Infinity.getMolten(144*24),
@@ -302,9 +300,9 @@ public class MiracleTopRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(16),
-                setStackSize(ItemList.Circuit_Chip_Optical.get(1), 192),
-                setStackSize(ItemList.Optical_Cpu_Containment_Housing.get(1), 192),
-                setStackSize(DATApipe.get(1), 192)
+                GTUtility.copyAmountUnsafe(192, ItemList.Circuit_Chip_Optical.get(1)),
+                GTUtility.copyAmountUnsafe(192, ItemList.Optical_Cpu_Containment_Housing.get(1)),
+                GTUtility.copyAmountUnsafe(192, DATApipe.get(1))
             )
             .fluidInputs(
                 new FluidStack(solderPlasma, 1152 * 12),
@@ -314,7 +312,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 GGMaterial.enrichedNaquadahAlloy.getMolten(144 * 24),
                 GGMaterial.shirabon.getMolten(144 * 24)
             )
-            .itemOutputs(setStackSize(ItemList.Optically_Perfected_CPU.get(1), 256))
+            .itemOutputs(GTUtility.copyAmountUnsafe(256, ItemList.Optically_Perfected_CPU.get(1)))
             .eut(RECIPE_UIV)
             .duration(20 * 20 * 12)
             .addTo(MT);
@@ -324,12 +322,12 @@ public class MiracleTopRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(16),
-                setStackSize(ItemList.Circuit_Chip_Optical.get(1), 192),
+                GTUtility.copyAmountUnsafe(192, ItemList.Circuit_Chip_Optical.get(1)),
                 getModItem(SuperSolarPanels.ID, "solarsplitter", 192),
-                setStackSize(DATApipe.get(1), 768),
-                setStackSize(ItemList.Circuit_Chip_Ram.get(1), 192),
-                setStackSize(ItemList.Circuit_Chip_SoC.get(1), 192),
-                setStackSize(ItemList.Circuit_Chip_NAND.get(1), 192)
+                GTUtility.copyAmountUnsafe(768, DATApipe.get(1)),
+                GTUtility.copyAmountUnsafe(192, ItemList.Circuit_Chip_Ram.get(1)),
+                GTUtility.copyAmountUnsafe(192, ItemList.Circuit_Chip_SoC.get(1)),
+                GTUtility.copyAmountUnsafe(192, ItemList.Circuit_Chip_NAND.get(1))
             )
             .fluidInputs(
                 new FluidStack(solderPlasma, 1152 * 12),
@@ -338,7 +336,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.SuperconductorUMVBase.getMolten(144 * 24),
                 MaterialsUEVplus.SpaceTime.getMolten(144 * 7)
             )
-            .itemOutputs(setStackSize(ItemList.Optically_Compatible_Memory.get(1), 512))
+            .itemOutputs(GTUtility.copyAmountUnsafe(512, ItemList.Optically_Compatible_Memory.get(1)))
             .eut(RECIPE_UIV)
             .duration(20 * 20 * 12)
             .addTo(MT);
@@ -660,10 +658,10 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                Utils.copyAmount(1, Wrapped_Optically_Perfected_CPU),
-                Utils.copyAmount(2, Wrapped_Optically_Compatible_Memory),
-                Utils.copyAmount(16, Wrapped_Circuit_Parts_CapacitorXSMD),
-                Utils.copyAmount(16, Wrapped_Circuit_Parts_DiodeXSMD),
+                GTUtility.copyAmountUnsafe(1, Wrapped_Optically_Perfected_CPU),
+                GTUtility.copyAmountUnsafe(2, Wrapped_Optically_Compatible_Memory),
+                GTUtility.copyAmountUnsafe(16, Wrapped_Circuit_Parts_CapacitorXSMD),
+                GTUtility.copyAmountUnsafe(16, Wrapped_Circuit_Parts_DiodeXSMD),
                 DATApipe.get(64)
             )
             .fluidInputs(
@@ -679,7 +677,7 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                Utils.copyAmount(1, Wrapped_Circuit_Board_Optical),
+                GTUtility.copyAmountUnsafe(1, Wrapped_Circuit_Board_Optical),
                 GTCMItemList.OpticalSOC.get(1),
                 DATApipe.get(16)
             )
@@ -697,7 +695,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(16),
-                Utils.copyAmount(16, Wrapped_Circuit_Board_Optical),
+                GTUtility.copyAmountUnsafe(16, Wrapped_Circuit_Board_Optical),
                 GTCMItemList.OpticalSOC.get(16),
                 DATApipe.get(64)
             )
@@ -705,7 +703,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 new FluidStack(solderPlasma, 144 * 32),
                 Materials.EnrichedHolmium.getMolten(144 * 16)
             )
-            .itemOutputs(setStackSize(ItemList.Circuit_OpticalProcessor.get(64), 64*4))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 4, ItemList.Circuit_OpticalProcessor.get(64)))
             .eut(9830400 * 4)
             .duration(20 * 10 * 4)
             .addTo(MT);
@@ -960,11 +958,11 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                Utils.copyAmount(1, Wrapped_Circuit_Board_Bio_Ultra),
+                GTUtility.copyAmountUnsafe(1, Wrapped_Circuit_Board_Bio_Ultra),
                 ItemList.Circuit_Bioprocessor.get(32),
-                Utils.copyAmount(12, Wrapped_Circuit_Parts_InductorASMD),
-                Utils.copyAmount(16, Wrapped_Circuit_Parts_CapacitorASMD),
-                Utils.copyAmount(32, Wrapped_Circuit_Chip_Ram)
+                GTUtility.copyAmountUnsafe(12, Wrapped_Circuit_Parts_InductorASMD),
+                GTUtility.copyAmountUnsafe(16, Wrapped_Circuit_Parts_CapacitorASMD),
+                GTUtility.copyAmountUnsafe(32, Wrapped_Circuit_Chip_Ram)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144),
@@ -981,11 +979,11 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                Utils.copyAmount(1, Wrapped_Circuit_Board_Bio_Ultra),
+                GTUtility.copyAmountUnsafe(1, Wrapped_Circuit_Board_Bio_Ultra),
                 ItemList.Circuit_Bioprocessor.get(32),
-                Utils.copyAmount(3, Wrapped_Circuit_Parts_InductorXSMD),
-                Utils.copyAmount(4, Wrapped_Circuit_Parts_CapacitorXSMD),
-                Utils.copyAmount(32, Wrapped_Circuit_Chip_Ram)
+                GTUtility.copyAmountUnsafe(3, Wrapped_Circuit_Parts_InductorXSMD),
+                GTUtility.copyAmountUnsafe(4, Wrapped_Circuit_Parts_CapacitorXSMD),
+                GTUtility.copyAmountUnsafe(32, Wrapped_Circuit_Chip_Ram)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144),
@@ -1003,11 +1001,11 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32714),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32716),
-                Utils.copyAmount(2, Wrapped_Circuit_Chip_NanoCPU),
-                Utils.copyAmount(12, Wrapped_Circuit_Parts_CapacitorASMD),
-                Utils.copyAmount(12, Wrapped_Circuit_Parts_TransistorASMD)
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32714),
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32716),
+                GTUtility.copyAmountUnsafe(2, Wrapped_Circuit_Chip_NanoCPU),
+                GTUtility.copyAmountUnsafe(12, Wrapped_Circuit_Parts_CapacitorASMD),
+                GTUtility.copyAmountUnsafe(12, Wrapped_Circuit_Parts_TransistorASMD)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 72),
@@ -1024,11 +1022,11 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32714),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32716),
-                Utils.copyAmount(2, Wrapped_Circuit_Chip_NanoCPU),
-                Utils.copyAmount(3, Wrapped_Circuit_Parts_CapacitorXSMD),
-                Utils.copyAmount(3, Wrapped_Circuit_Parts_TransistorXSMD)
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32714),
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32716),
+                GTUtility.copyAmountUnsafe(2, Wrapped_Circuit_Chip_NanoCPU),
+                GTUtility.copyAmountUnsafe(3, Wrapped_Circuit_Parts_CapacitorXSMD),
+                GTUtility.copyAmountUnsafe(3, Wrapped_Circuit_Parts_TransistorXSMD)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 72),
@@ -1045,8 +1043,8 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                Utils.copyAmount(1, Wrapped_Circuit_Board_Bio_Ultra),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32699)
+                GTUtility.copyAmountUnsafe(1, Wrapped_Circuit_Board_Bio_Ultra),
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32699)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144),
@@ -1065,15 +1063,15 @@ public class MiracleTopRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(16),
-                Utils.copyAmount(12, Wrapped_Circuit_Board_Bio_Ultra),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32699)
+                GTUtility.copyAmountUnsafe(12, Wrapped_Circuit_Board_Bio_Ultra),
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32699)
             )
             .fluidInputs(
                 new FluidStack(solderIndAlloy, 144 * 12),
                 new FluidStack(FluidRegistry.getFluid("molten.chromaticglass"), 144 * 8 * 12),
                 Materials.NiobiumTitanium.getMolten(144 * 32 * 12)
             )
-            .itemOutputs(setStackSize(ItemList.Circuit_Bioprocessor.get(64), 64*4))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 4, ItemList.Circuit_Bioprocessor.get(64)))
             .eut(RECIPE_UIV)
             .duration(450 * 3)
             .addTo(MT);
@@ -1111,7 +1109,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.YttriumBariumCuprate.getMolten(144 * 16 * 12),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 12)
             )
-            .itemOutputs(setStackSize(ItemList.Circuit_Neuroprocessor.get(64), 64*4))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 4, ItemList.Circuit_Neuroprocessor.get(64)))
             .eut(614400 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -1148,7 +1146,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 new FluidStack(solderIndAlloy, 72 * 12),
                 Materials.NiobiumTitanium.getMolten(144 * 16 * 12),
                 Materials.YttriumBariumCuprate.getMolten(144 * 8 * 12))
-            .itemOutputs(setStackSize(ItemList.Circuit_Crystalprocessor.get(64), 64*4))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 4, ItemList.Circuit_Crystalprocessor.get(64)))
             .eut(153600 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -1187,7 +1185,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Platinum.getMolten(144 * 32 * 12),
                 Materials.NiobiumTitanium.getMolten(144 * 8 * 12)
             )
-            .itemOutputs(setStackSize(ItemList.Circuit_Quantumprocessor.get(64), 64*4))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 4, ItemList.Circuit_Quantumprocessor.get(64)))
             .eut(38400 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -1225,7 +1223,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.Electrum.getMolten(144 * 16 * 12),
                 Materials.Platinum.getMolten(144 * 8 * 12)
             )
-            .itemOutputs(setStackSize(ItemList.Circuit_Nanoprocessor.get(64), 64*4))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 4, ItemList.Circuit_Nanoprocessor.get(64)))
             .eut(9600 * 4)
             .duration(20 * 15 * 3)
             .addTo(MT);
@@ -1264,7 +1262,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 new FluidStack(solderIndAlloy, 288 * 12),
                 Materials.Infinity.getMolten(144 * 12)
             )
-            .itemOutputs(setStackSize(GTModHandler.getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64),64*4))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 4, getModItem("dreamcraft", "item.HighEnergyFlowCircuit", 64)))
             .eut(RECIPE_LuV)
             .duration(20 * 720 * 3)
             .addTo(MT);
@@ -1282,7 +1280,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.AnnealedCopper.getMolten(144 * 2 * 4),
                 Materials.RedAlloy.getMolten(144 * 8)
             )
-            .itemOutputs(setStackSize(CustomItemList.NandChipBoard.get(64), 64*16))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 16, CustomItemList.NandChipBoard.get(64)))
             .eut(RECIPE_EV)
             .duration(20 * 90 * 4)
             .addTo(MT);
@@ -1298,7 +1296,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.SolderingAlloy.getMolten(72 * 12),
                 Materials.Copper.getMolten(144 * 96)
             )
-            .itemOutputs(setStackSize(ItemList.Circuit_Microprocessor.get(64),64*8))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 8, ItemList.Circuit_Microprocessor.get(64)))
             .eut(600)
             .duration(20 * 30 * 4)
             .addTo(MT);
@@ -1315,7 +1313,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                 Materials.AnnealedCopper.getMolten(144 * 8 * 12),
                 Materials.RedAlloy.getMolten(144 * 24)
             )
-            .itemOutputs(setStackSize(ItemList.Circuit_Processor.get(1), 64*4))
+            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 4, ItemList.Circuit_Processor.get(1)))
             .eut(RECIPE_EV)
             .duration(20 * 90 * 4)
             .addTo(MT);
@@ -1327,8 +1325,8 @@ public class MiracleTopRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32750),
-                setStackSize(ItemList.Circuit_Chip_Stemcell.get(64), 64*4)
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32750),
+                GTUtility.copyAmountUnsafe(64 * 4, ItemList.Circuit_Chip_Stemcell.get(64))
             )
             .fluidInputs(
                 Materials.ReinforceGlass.getMolten(16 * 16 * 288),
@@ -1349,8 +1347,8 @@ public class MiracleTopRecipePool implements IRecipePool {
             .builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(1),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32746),
-                setStackSize(ItemList.Circuit_Chip_Biocell.get(64), 64*4)
+                getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32746),
+                GTUtility.copyAmountUnsafe(64 * 4, ItemList.Circuit_Chip_Biocell.get(64))
             )
             .fluidInputs(
                 Materials.ReinforceGlass.getMolten(16 * 16 * 288),
@@ -1412,25 +1410,25 @@ public class MiracleTopRecipePool implements IRecipePool {
         // Liquid Stargate
         GTValues.RA.stdBuilder()
             .itemInputs(
-                Utils.copyAmount(1, ringBlock),
-                Utils.copyAmount(1, chevronBlock),
-                Utils.copyAmount(1, chevronBlock),
-                Utils.copyAmount(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
 
-                Utils.copyAmount(1, chevronBlock),
-                Utils.copyAmount(1, irisUpgrade),
-                Utils.copyAmount(1, irisUpgrade),
-                Utils.copyAmount(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, irisUpgrade),
+                GTUtility.copyAmountUnsafe(1, irisUpgrade),
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
 
-                Utils.copyAmount(1, ringBlock),
-                Utils.copyAmount(1, irisUpgrade),
-                Utils.copyAmount(1, irisUpgrade),
-                Utils.copyAmount(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, irisUpgrade),
+                GTUtility.copyAmountUnsafe(1, irisUpgrade),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
 
-                Utils.copyAmount(1, chevronBlock),
-                Utils.copyAmount(1, ringBlock),
-                Utils.copyAmount(1, ringBlock),
-                Utils.copyAmount(1, chevronBlock)
+                GTUtility.copyAmountUnsafe(1, chevronBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, ringBlock),
+                GTUtility.copyAmountUnsafe(1, chevronBlock)
             )
             .fluidInputs(
                 MaterialPool.StabiliseVoidMatter.getFluidOrGas(1_000)
@@ -1446,22 +1444,22 @@ public class MiracleTopRecipePool implements IRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                setStackSize(Materials.CosmicNeutronium.getDust(1), 10_000_000),
-                setStackSize(Materials.Bedrockium.getDust(1),10_000_000),
-                setStackSize(Materials.Carbon.getDust(1),10_000_000),
-                setStackSize(Materials.Oilsands.getDust(1),10_000_000),
-                setStackSize(Materials.NiobiumTitanium.getDust(1),10_000_000),
-                setStackSize(MaterialsElements.STANDALONE.BLACK_METAL.getDust(1),10_000_000),
-                setStackSize(Materials.Naquadria.getDust(1),10_000_000),
-                setStackSize(Materials.Obsidian.getDust(1),10_000_000),
-                setStackSize(Materials.Coal.getDust(1),10_000_000),
-                setStackSize(Materials.NaquadahAlloy.getDust(1),10_000_000),
-                setStackSize(Materials.Tungsten.getDust(1),10_000_000),
-                setStackSize(MaterialsUEVplus.TranscendentMetal.getDust(1),10_000_000),
-                setStackSize(Materials.Perlite.getDust(1),10_000_000),
-                setStackSize(Materials.DarkAsh.getDust(1),10_000_000),
-                setStackSize(Materials.GraniticMineralSand.getDust(1),10_000_000),
-                setStackSize(MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getDust(1),10_000_000)
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.CosmicNeutronium.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.Bedrockium.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.Carbon.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.Oilsands.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.NiobiumTitanium.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, MaterialsElements.STANDALONE.BLACK_METAL.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.Naquadria.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.Obsidian.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.Coal.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.NaquadahAlloy.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.Tungsten.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, MaterialsUEVplus.TranscendentMetal.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.Perlite.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.DarkAsh.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, Materials.GraniticMineralSand.getDust(1)),
+                GTUtility.copyAmountUnsafe(10_000_000, MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getDust(1))
             )
             .fluidInputs(
                 Materials.Polycaprolactam.getMolten(10_000_000),
@@ -1493,15 +1491,15 @@ public class MiracleTopRecipePool implements IRecipePool {
             .itemInputs(
                 GTCMItemList.UxvFlask.get(1),
                 GTCMItemList.ProofOfHeroes.get(64),
-                setStackSize(Materials.Silver.getNanite(1), 1_000),
-                setStackSize(Materials.Gold.getNanite(1), 1_000),
-                setStackSize(Materials.Neutronium.getNanite(1), 1_000),
-                setStackSize(MaterialsUEVplus.Universium.getNanite(1), 1_000),
-                setStackSize(MaterialsUEVplus.Eternity.getNanite(1), 1_000),
-                setStackSize(MaterialsUEVplus.TranscendentMetal.getNanite(1), 1_000),
-                setStackSize(Materials.Glowstone.getNanite(1), 1_000),
-                setStackSize(MaterialsUEVplus.WhiteDwarfMatter.getNanite(1), 1_000),
-                setStackSize(MaterialsUEVplus.BlackDwarfMatter.getNanite(1), 1_000)
+                GTUtility.copyAmountUnsafe(1_000, Materials.Silver.getNanite(1)),
+                GTUtility.copyAmountUnsafe(1_000, Materials.Gold.getNanite(1)),
+                GTUtility.copyAmountUnsafe(1_000, Materials.Neutronium.getNanite(1)),
+                GTUtility.copyAmountUnsafe(1_000, MaterialsUEVplus.Universium.getNanite(1)),
+                GTUtility.copyAmountUnsafe(1_000, MaterialsUEVplus.Eternity.getNanite(1)),
+                GTUtility.copyAmountUnsafe(1_000, MaterialsUEVplus.TranscendentMetal.getNanite(1)),
+                GTUtility.copyAmountUnsafe(1_000, Materials.Glowstone.getNanite(1)),
+                GTUtility.copyAmountUnsafe(1_000, MaterialsUEVplus.WhiteDwarfMatter.getNanite(1)),
+                GTUtility.copyAmountUnsafe(1_000, MaterialsUEVplus.BlackDwarfMatter.getNanite(1))
             )
             .fluidInputs(
                 MaterialPool.LiquidStargate.getFluidOrGas(50_000),
@@ -1567,16 +1565,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         // LV FLASK
         GTValues.RA.stdBuilder()
             .itemInputs(
-                setStackSize(ItemList.Electric_Motor_LV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_LV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_LV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_LV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_LV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_LV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_LV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_LV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Microprocessor.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.RedstoneAlloy, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_LV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_LV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_LV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_LV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_LV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_LV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_LV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_LV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_Microprocessor.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.RedstoneAlloy, 1))
             )
             .fluidInputs(
                 Materials.Iron.getPlasma(1_000_000_000)
@@ -1591,16 +1589,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.LvFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_MV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_MV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_MV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_MV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_MV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_MV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_MV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_MV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Processor.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorMV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_MV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_MV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_MV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_MV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_MV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_MV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_MV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_MV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_Processor.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorMV, 1))
             )
             .fluidInputs(
                 Materials.Copper.getPlasma(1_000_000_000)
@@ -1615,16 +1613,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.MvFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_HV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_HV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_HV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_HV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_HV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_HV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_HV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_HV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Nanoprocessor.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorHV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_HV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_HV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_HV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_HV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_HV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_HV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_HV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_HV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_Nanoprocessor.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorHV, 1))
             )
             .fluidInputs(
                 Materials.Nickel.getPlasma(1_000_000_000)
@@ -1639,16 +1637,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.HvFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_EV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_EV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_EV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_EV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_EV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_EV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_EV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_EV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Quantumprocessor.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorEV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_EV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_EV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_EV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_EV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_EV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_EV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_EV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_EV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_Quantumprocessor.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorEV, 1))
             )
             .fluidInputs(
                 Materials.Titanium.getPlasma(1_000_000_000)
@@ -1663,16 +1661,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.EvFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_IV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_IV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_IV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_IV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_IV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_IV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_IV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_IV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Crystalprocessor.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_IV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_IV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_IV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_IV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_IV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_IV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_IV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_IV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_Crystalprocessor.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 1))
             )
             .fluidInputs(
                 Materials.Tungsten.getPlasma(1_000_000_000)
@@ -1687,16 +1685,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.IvFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_LuV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_LuV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_LuV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_LuV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_LuV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_LuV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_LuV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_LuV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Neuroprocessor.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_LuV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_LuV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_LuV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_LuV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_LuV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_LuV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_LuV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_LuV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_Neuroprocessor.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 1))
             )
             .fluidInputs(
                 Materials.Osmium.getPlasma(1_000_000_000)
@@ -1711,16 +1709,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.LuvFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_ZPM.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_ZPM.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_ZPM.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_ZPM.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_ZPM.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_ZPM.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_ZPM.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_ZPM.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_Bioprocessor.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_ZPM.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_ZPM.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_ZPM.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_ZPM.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_ZPM.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_ZPM.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_ZPM.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_ZPM.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_Bioprocessor.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 1))
             )
             .fluidInputs(
                 Materials.Naquadah.getPlasma(1_000_000_000)
@@ -1735,16 +1733,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.ZpmFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_UV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_UV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_UV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_UV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_UV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_UV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_UV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_UV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_OpticalProcessor.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_UV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_UV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_UV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_UV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_UV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_UV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_UV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_UV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_OpticalProcessor.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUV, 1))
             )
             .fluidInputs(
                 Materials.Neutronium.getPlasma(1_000_000_000)
@@ -1759,16 +1757,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.UvFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_UHV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_UHV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_UHV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_UHV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_UHV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_UHV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_UHV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_UHV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_OpticalAssembly.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_UHV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_UHV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_UHV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_UHV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_UHV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_UHV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_UHV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_UHV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_OpticalAssembly.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 1))
             )
             .fluidInputs(
                 Materials.Samarium.getPlasma(1_000_000_000)
@@ -1783,16 +1781,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.UhvFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_UEV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_UEV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_UEV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_UEV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_UEV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_UEV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_UEV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_UEV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_CosmicProcessor.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_UEV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_UEV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_UEV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_UEV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_UEV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_UEV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_UEV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_UEV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_CosmicProcessor.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUEV, 1))
             )
             .fluidInputs(
                 Materials.Americium.getPlasma(1_000_000_000)
@@ -1807,16 +1805,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.UevFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_UIV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_UIV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_UIV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_UIV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_UIV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_UIV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_UIV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_UIV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_CosmicAssembly.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_UIV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_UIV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_UIV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_UIV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_UIV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_UIV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_UIV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_UIV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_CosmicAssembly.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 1))
             )
             .fluidInputs(
                 Materials.Thorium.getPlasma(1_000_000_000)
@@ -1831,16 +1829,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.UivFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_UMV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_UMV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_UMV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_UMV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_UMV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_UMV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_UMV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_UMV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_CosmicComputer.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_UMV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_CosmicComputer.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 1))
             )
             .fluidInputs(
                 Materials.Plutonium241.getPlasma(1_000_000_000)
@@ -1855,16 +1853,16 @@ public class MiracleTopRecipePool implements IRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.UmvFlask.get(1),
-                setStackSize(ItemList.Electric_Motor_UXV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Piston_UXV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Electric_Pump_UXV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Field_Generator_UXV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Conveyor_Module_UXV.get(1), ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Robot_Arm_UXV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Emitter_UXV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Sensor_UXV.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(ItemList.Circuit_CosmicMainframe.get(1),ITEMS_FLASK_COUNT),
-                setStackSize(GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Infinity, 1),ITEMS_FLASK_COUNT)
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Motor_UXV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Piston_UXV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Electric_Pump_UXV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Field_Generator_UXV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Conveyor_Module_UXV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Robot_Arm_UXV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Emitter_UXV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Sensor_UXV.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, ItemList.Circuit_CosmicMainframe.get(1)),
+                GTUtility.copyAmountUnsafe(ITEMS_FLASK_COUNT, GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Infinity, 1))
             )
             .fluidInputs(
                 Materials.Radon.getPlasma(1_000_000_000)

@@ -1,10 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CriticalPhoton;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.util.TextHandler.texter;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
@@ -38,8 +37,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotN
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentPlanetCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentStellarCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.metaItemEqual;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -78,8 +75,9 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -165,18 +163,39 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 7];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.GOLD + texter("Generating EU/t: ", "TST_DSPReceiver.getInfoData.01")
+        ret[origin.length] = EnumChatFormatting.GOLD
+            // #tr TST_DSPReceiver.getInfoData.01
+            // # Generating EU/t:
+            // #zh_CN 实际接收 EU/t:
+            + TextEnums.tr("TST_DSPReceiver.getInfoData.01")
             + EnumChatFormatting.RESET
             + generateTickEU();
         ret[origin.length + 1] = EnumChatFormatting.GOLD
-            + texter("Used Power Point: ", "TST_DSPReceiver.getInfoData.02")
+            // #tr TST_DSPReceiver.getInfoData.02
+            // # Used Power Point:
+            // #zh_CN 已占用产能点数:
+            + TextEnums.tr("TST_DSPReceiver.getInfoData.02")
             + EnumChatFormatting.RESET
             + usedPowerPoint;
-        ret[origin.length + 2] = EnumChatFormatting.GOLD + texter("Gravitational Lens Intensify Mode remaining time: ","TST_DSPReceiver.getInfoData.03") + EnumChatFormatting.RESET + (gravitationalLensTime/20) + " s";
-        ret[origin.length + 3] = EnumChatFormatting.GOLD + texter("Overload Multiplier: ", "TST_DSPReceiver.getInfoData.04") + EnumChatFormatting.RESET + astralArrayOverloadMultiplier;
+        ret[origin.length + 2] = EnumChatFormatting.GOLD
+            // #tr TST_DSPReceiver.getInfoData.03
+            // # Gravitational Lens Intensify Mode remaining time:
+            // #zh_CN 引力透镜增强模式剩余时间:
+            + TextEnums.tr("TST_DSPReceiver.getInfoData.03")
+            + EnumChatFormatting.RESET + (gravitationalLensTime/20) + " s";
+        ret[origin.length + 3] = EnumChatFormatting.GOLD
+            // #tr TST_DSPReceiver.getInfoData.04
+            // # Overload Multiplier:
+            // #zh_CN 过载倍率:
+            + TextEnums.tr("TST_DSPReceiver.getInfoData.04")
+            + EnumChatFormatting.RESET + astralArrayOverloadMultiplier;
         ret[origin.length + 4] = EnumChatFormatting.GOLD + infoText_CurrentStellarCoefficient + EnumChatFormatting.RESET + dspDataCell.getGalaxy() + " -> " + EnumChatFormatting.YELLOW + dspDataCell.getGalaxy().stellarCoefficient;
         ret[origin.length + 5] = EnumChatFormatting.GOLD + infoText_CurrentPlanetCoefficient + EnumChatFormatting.RESET + DSP_Planet.getPlanetFromDimID(dimID) + " -> " + EnumChatFormatting.YELLOW + DSP_Planet.getPlanetaryCoefficientWithDimID(dimID);
-        ret[origin.length + 6] = EnumChatFormatting.GOLD + texter("Dyson Sphere Data: ", "DSPDataCell.getInfoData")
+        ret[origin.length + 6] = EnumChatFormatting.GOLD
+            // #tr DSPDataCell.getInfoData
+            // # Dyson Sphere Data:
+            // #zh_CN 戴森球信息:
+            + TextEnums.tr("DSPDataCell.getInfoData")
             + EnumChatFormatting.RESET
             + dspDataCell;
         return ret;
@@ -190,7 +209,11 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isActive")) {
             currentTip.add(
-                EnumChatFormatting.AQUA + texter("Energy Receiving: ", "Waila.TST_DSPReceiver.1")
+                EnumChatFormatting.AQUA
+                    // #tr Waila.TST_DSPReceiver.1
+                    // # Energy Receiving:
+                    // #zh_CN 接收能源:
+                    + TextEnums.tr("Waila.TST_DSPReceiver.1")
                     + EnumChatFormatting.GOLD
                     + GTUtility.formatNumbers(tag.getLong("TickEU"))
                     + EnumChatFormatting.RESET
@@ -268,14 +291,15 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             long limited = (long) (multiplier * maxPowerPointLimit);
             astralArrayOverloadMultiplier = 1;
             return Math.min(DSP_Values.maxPowerPointPerReceiver, Math.min(limited, canUse));
-        } else if (metaItemEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
-            // use Astral Array Fabricator to overload over max input limitation
-            astralArrayOverloadMultiplier = calculateAstralArrayOverloadMultiplier(controllerStack.stackSize);
-            return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
-        } else {
-            astralArrayOverloadMultiplier = 1;
-            return 0;
-        }
+        } else
+            if (GTUtility.areStacksEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
+                // use Astral Array Fabricator to overload over max input limitation
+                astralArrayOverloadMultiplier = calculateAstralArrayOverloadMultiplier(controllerStack.stackSize);
+                return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
+            } else {
+                astralArrayOverloadMultiplier = 1;
+                return 0;
+            }
     }
 
     protected static int calculateAstralArrayOverloadMultiplier(int astralArrayAmount) {
@@ -327,12 +351,12 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
         final ItemStack controllerSlot = getControllerSlot();
         if (astralArrayOverloadMultiplier > 1) {
-            if (controllerSlot == null || !metaItemEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)
+            if (controllerSlot == null || !GTUtility.areStacksEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)
                 || calculateAstralArrayOverloadMultiplier(controllerSlot.stackSize) != astralArrayOverloadMultiplier) {
                 this.stopUsingDSP();
                 this.startUsingDSP();
             }
-        } else if (controllerSlot != null && metaItemEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)) {
+        } else if (controllerSlot != null && GTUtility.areStacksEqual(controllerSlot, ASTRAL_ARRAY_FABRICATOR)) {
             this.stopUsingDSP();
             this.startUsingDSP();
         }
@@ -350,7 +374,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                 // Generate EU directly
                 if (this.storageEU > 0 || storageEUMAX > 0) {
                     BigInteger eu = BigInteger.valueOf(storageEUMAX)
-                        .multiply(Utils.INTEGER_MAX_VALUE)
+                        .multiply(TstUtils.INTEGER_MAX_VALUE)
                         .add(BigInteger.valueOf(storageEU));
                     addEUToGlobalEnergyMap(ownerUUID, eu);
                     this.storageEU = 0;
@@ -368,15 +392,15 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                 if (amount > Integer.MAX_VALUE) {
                     List<ItemStack> output = new ArrayList<>();
                     while (amount > Integer.MAX_VALUE) {
-                        output.add(setStackSize(CRITICAL_PHOTON.copy(), Integer.MAX_VALUE));
+                        output.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, CRITICAL_PHOTON));
                         amount -= Integer.MAX_VALUE;
                     }
                     if (amount > 0) {
-                        output.add(setStackSize(CRITICAL_PHOTON.copy(), (int) amount));
+                        output.add(GTUtility.copyAmountUnsafe((int) amount, CRITICAL_PHOTON));
                     }
                     mOutputItems = output.toArray(new ItemStack[0]);
                 } else {
-                    mOutputItems = new ItemStack[] { setStackSize(CRITICAL_PHOTON.copy(), (int) amount) };
+                    mOutputItems = new ItemStack[] { GTUtility.copyAmountUnsafe((int) amount, CRITICAL_PHOTON) };
                 }
 
             }
@@ -423,7 +447,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         ArrayList<ItemStack> storedInputs = getStoredInputs();
         if (storedInputs.isEmpty()) return;
         for (ItemStack items : storedInputs) {
-            if (metaItemEqual(items, GravitationalLens.get(1))) {
+            if (GTUtility.areStacksEqual(items, GravitationalLens.get(1))) {
                 gravitationalLensTime += 20L * items.stackSize
                     * DSP_Values.secondsOfEveryGravitationalLensProvideToIntensifyTime;
                 items.stackSize = 0;

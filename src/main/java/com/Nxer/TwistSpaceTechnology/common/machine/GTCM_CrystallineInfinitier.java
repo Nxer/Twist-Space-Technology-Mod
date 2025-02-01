@@ -42,7 +42,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.Utils;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -211,7 +211,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         maxParallel = (int) Math.min(
             Integer.MAX_VALUE,
             (long) glassTier * fieldGeneratorTier
-                * Utils.calculatePowerTier(getMaxInputEu())
+                * TstUtils.calculateVoltageTier(getMaxInputEu())
                 * ParallelMultiplier_CrystallineInfinitier);
         enablePerfectOverclock = fieldGeneratorTier >= FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
 

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiply_IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBouns_IndustrialMagnetarSeparator;
@@ -26,7 +26,7 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.block.BasicBlocks;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -134,8 +134,8 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
                         .atLeast(InputBus, OutputBus, Maintenance, Muffler, Energy)
                         .adder(TST_IndustrialMagnetarSeparator::addToMachineList)
                         .dot(1)
-                        .casingIndex(BasicBlocks.MetaBlockCasing01.getTextureIndex(8))
-                        .buildAndChain(onElementPass(x -> ++x.mCasing, ofBlock(BasicBlocks.MetaBlockCasing01, 8))))
+                        .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(8))
+                        .buildAndChain(onElementPass(x -> ++x.mCasing, ofBlock(TstBlocks.MetaBlockCasing01, 8))))
                 .build();
         }
         return STRUCTURE_DEFINITION;

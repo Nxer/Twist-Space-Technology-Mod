@@ -1,13 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.recipe.specialRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EncapsulatedMicroSpaceTimeUnit;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EnergyFluctuationSelfHarmonizer;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InformationHorizonInterventionShell;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PacketInformationTranslationArray;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SeedsSpaceTime;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
-import static com.Nxer.TwistSpaceTechnology.util.Utils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EncapsulatedMicroSpaceTimeUnit;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EnergyFluctuationSelfHarmonizer;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.InformationHorizonInterventionShell;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PacketInformationTranslationArray;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ParticleTrapTimeSpaceShield;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SeedsSpaceTime;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -28,7 +27,7 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendi
 
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
@@ -119,7 +118,7 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                setStackSize(ItemList.Field_Generator_UIV.get(1), 0),
+                GTUtility.copyAmountUnsafe(0, ItemList.Field_Generator_UIV.get(1)),
                 Materials.Infinity.getDust(1),
                 ItemList.Circuit_Chip_Optical.get(1))
             .fluidInputs(
@@ -139,7 +138,7 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                setStackSize(ItemList.Field_Generator_UIV.get(1), 0),
+                GTUtility.copyAmountUnsafe(0, ItemList.Field_Generator_UIV.get(1)),
                 MaterialsUEVplus.Eternity.getDust(1),
                 ItemList.Circuit_Chip_Optical.get(1))
             .fluidInputs(
@@ -438,7 +437,7 @@ public class CosmicProcessorCircuitRecipePool implements IRecipePool {
 
                 EnergyFluctuationSelfHarmonizer.get(16),
                 PacketInformationTranslationArray.get(16),
-                setStackSize(eternal_singularity.copy(), 16),
+                GTUtility.copyAmountUnsafe(16, eternal_singularity),
                 ItemList.EnergisedTesseract.get(16),
 
                 ItemList.Field_Generator_UIV.get(16),
