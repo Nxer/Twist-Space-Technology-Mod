@@ -8,7 +8,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.google.common.math.LongMath.pow;
 import static gregtech.api.enums.Mods.GTPlusPlus;
-import static gregtech.api.enums.Mods.GalaxySpace;
 import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.enums.Mods.GraviSuite;
 import static gregtech.api.enums.Mods.GregTech;
@@ -62,6 +61,8 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
+import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
+import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
@@ -301,7 +302,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Emitter_UMV.get(4),
                     ItemList.Sensor_UMV.get(4))
                 .fluidInputs(new FluidStack(solderUEV, 144 * 256))
-                .itemOutputs(GTUtility.copyAmountUnsafe(8192, getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1)))
+                .itemOutputs(GTUtility.copyAmountUnsafe(8192, new ItemStack(IGItems.DysonSwarmItems, 1)))
                 .eut(100000000)
                 .duration(20 * 50)
                 .addTo(MASL);
@@ -929,8 +930,8 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             getModItem(SuperSolarPanels.ID, "bluecomponent", 64),
 
                             boltList[absoluteTier],
-                            getModItem(GalaxySpace.ID, "dysonswarmparts", (absoluteTier + 1) * 4, 2),
-                            getModItem(GalaxySpace.ID, "dysonswarmparts", (absoluteTier + 1) * 4, 1),
+                            new ItemStack(IGBlocks.DysonSwarmCasing, (absoluteTier + 1) * 4, 2),
+                            new ItemStack(IGBlocks.DysonSwarmCasing, (absoluteTier + 1) * 4, 1),
                             getModItem(GregTech.ID, "gt.blockmachines", (absoluteTier + 1) * 4, 11107),
 
                             ItemList.Energy_Module.get(absoluteTier + 1),
@@ -988,7 +989,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             spatialCasings[absoluteTier],
                             baseCasing,
                             // Dyson Swarm Module.
-                            getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 4 * (absoluteTier + 1), 0),
+                            new ItemStack(IGItems.DysonSwarmItems, 4 * (absoluteTier + 1), 0),
 
                             GTOreDictUnificator
                                 .get(OrePrefixes.frameGt, Materials.SuperconductorUMVBase, 4 * (absoluteTier + 1)),
