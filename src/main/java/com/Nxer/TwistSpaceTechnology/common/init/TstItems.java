@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
+import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 
@@ -52,5 +53,7 @@ public class TstItems {
     // don't use this item, but found its stack instance in the class, remember to copy the stacks!
     @SuppressWarnings("unused")
     public static final TSTGeneratedItem Generated = new TSTGeneratedItem();
+
+    public static final ItemCardigan Cardian = new ItemCardigan(0);
 
 }
