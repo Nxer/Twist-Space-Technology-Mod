@@ -54,6 +54,6 @@ public class TstItems {
     @SuppressWarnings("unused")
     public static final TSTGeneratedItem Generated = new TSTGeneratedItem();
 
-    public static final ItemCardigan Cardian = new ItemCardigan(0);
+    public static final ItemCardigan Cardian = new ItemCardigan();
 
 }
