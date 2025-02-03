@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.Mods.Forestry;
+import static gregtech.api.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
 import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.DRAGON_METAL;
 import static net.minecraftforge.fluids.FluidRegistry.getFluidStack;
@@ -17,9 +18,11 @@ import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.xmod.forestry.bees.handler.GTPPCombType;
@@ -32,27 +35,27 @@ public class DragonBloodRecipe implements IRecipePool {
     @Override
     public void loadRecipes() {
         if (Config.Registry_DragonBlood_ExtraRecipe) {
-            // // Fluid Heater
-            // GTValues.RA.stdBuilder()
-            // .itemInputs(new ItemStack(Blocks.dragon_egg, 0, 0))
-            // .fluidInputs(getFluidStack("potion.dragonblood", 1000))
-            // .fluidOutputs(DRAGON_METAL.getFluidStack(36))
-            // .noOptimize()
-            // .eut(RECIPE_UXV)
-            // .duration(20 * 6)
-            // .addTo(RecipeMaps.fluidHeaterRecipes);
-            //
-            // GTValues.RA.stdBuilder()
-            // .itemInputs(
-            // Utils.setStackSize(
-            // GTModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1)),
-            // 0))
-            // .fluidInputs(getFluidStack("potion.dragonblood", 1000))
-            // .fluidOutputs(DRAGON_METAL.getFluidStack(144))
-            // .noOptimize()
-            // .eut(RECIPE_UXV)
-            // .duration(20 * 3)
-            // .addTo(RecipeMaps.fluidHeaterRecipes);
+            // Fluid Heater
+            GTValues.RA.stdBuilder()
+                .itemInputs(new ItemStack(Blocks.dragon_egg, 0, 0))
+                .fluidInputs(getFluidStack("potion.dragonblood", 16000))
+                .fluidOutputs(DRAGON_METAL.getFluidStack(36))
+                .noOptimize()
+                .eut(RECIPE_UXV)
+                .duration(20 * 6)
+                .addTo(RecipeMaps.fluidHeaterRecipes);
+
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    TstUtils.setStackSize(
+                        GTModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1)),
+                        0))
+                .fluidInputs(getFluidStack("potion.dragonblood", 16000))
+                .fluidOutputs(DRAGON_METAL.getFluidStack(144))
+                .noOptimize()
+                .eut(RECIPE_UXV)
+                .duration(20 * 3)
+                .addTo(RecipeMaps.fluidHeaterRecipes);
 
             // Chemical Bath
             GTValues.RA.stdBuilder()
