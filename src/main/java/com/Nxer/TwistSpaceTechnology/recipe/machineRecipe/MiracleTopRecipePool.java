@@ -23,15 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import goodgenerator.items.GGMaterial;
-import gtPlusPlus.core.material.MaterialsElements;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -40,6 +38,7 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.dreammaster.gthandler.CustomItemList;
 
 import bartworks.util.BWUtil;
+import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -52,6 +51,7 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.Material;
+import gtPlusPlus.core.material.MaterialsElements;
 
 public class MiracleTopRecipePool implements IRecipePool {
 

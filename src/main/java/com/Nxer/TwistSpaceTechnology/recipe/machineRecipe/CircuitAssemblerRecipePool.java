@@ -2,22 +2,17 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe;
 
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 
-import gregtech.api.enums.MaterialsUEVplus;
-import gtPlusPlus.core.material.MaterialMisc;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTOreDictUnificator;
+import gtPlusPlus.core.material.MaterialMisc;
 import tectech.thing.CustomItemList;
 
 public class CircuitAssemblerRecipePool implements IRecipePool {
