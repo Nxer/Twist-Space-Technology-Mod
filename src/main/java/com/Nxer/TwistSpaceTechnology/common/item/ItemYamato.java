@@ -1,6 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.item;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.RewriteEIOTravelStaffConfig;
+import static crazypants.enderio.config.Config.teleportStaffMaxBlinkDistance;
+import static crazypants.enderio.config.Config.teleportStaffMaxDistance;
+import static crazypants.enderio.config.Config.travelStaffMaxBlinkDistance;
+import static crazypants.enderio.config.Config.travelStaffMaxDistance;
+
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,12 +17,25 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 
+import com.enderio.core.common.util.BlockCoord;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import crazypants.enderio.api.teleport.IItemOfTravel;
+import crazypants.enderio.api.teleport.TravelSource;
+import crazypants.enderio.teleport.TravelController;
 
-public class ItemYamato extends ItemSword {
+public class ItemYamato extends ItemSword implements IItemOfTravel {
 
     public static final ToolMaterial YAMATO = EnumHelper.addToolMaterial("YAMATO", 4, -1, 16.0F, 110.514F, 514);
+
+    // TODO It would be the best way that mixin the
+    // crazypants.enderio.teleport.TravelController.validatePacketTravelEvent because of its shit coding structure of
+    // item checking.
+    public static void rewriteEIOTravelStaffConfig() {
+        travelStaffMaxBlinkDistance = teleportStaffMaxBlinkDistance;
+        travelStaffMaxDistance = teleportStaffMaxDistance;
+    }
 
     public ItemYamato(CreativeTabs aCreativeTabs) {
         super(YAMATO);
@@ -58,17 +78,65 @@ public class ItemYamato extends ItemSword {
             switch (itemStackIn.getItemDamage()) {
                 case 0 -> {
                     itemStackIn.setItemDamage(1);
-                    return itemStackIn;
                 }
                 case 1 -> {
                     itemStackIn.setItemDamage(0);
-                    return itemStackIn;
                 }
             }
-
+            return itemStackIn;
         }
-        player.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
+
+        if (worldIn.isRemote) {
+            if (RewriteEIOTravelStaffConfig) {
+                doTeleport(player);
+            } else {
+                TravelController.instance.doBlink(itemStackIn, player);
+            }
+            player.swingItem();
+        }
+
         return itemStackIn;
     }
 
+    public boolean doTeleport(EntityPlayer player) {
+        Optional<BlockCoord> destinationOptional = TravelController.instance.findTeleportDestination(player);
+        if (destinationOptional.isPresent()) {
+            return TravelController.instance
+                .travelToLocation(player, TravelSource.STAFF_BLINK, destinationOptional.get(), false);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isActive(EntityPlayer ep, ItemStack equipped) {
+        return true;
+    }
+
+    @Override
+    public void extractInternal(ItemStack equipped, int power) {}
+
+    @Override
+    public int receiveEnergy(ItemStack itemStack, int i, boolean b) {
+        return 0;
+    }
+
+    @Override
+    public int extractEnergy(ItemStack itemStack, int i, boolean b) {
+        return i;
+    }
+
+    @Override
+    public int getEnergyStored(ItemStack itemStack) {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public int getMaxEnergyStored(ItemStack itemStack) {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public int canExtractInternal(ItemStack equipped, int power) {
+        return power;
+    }
 }
