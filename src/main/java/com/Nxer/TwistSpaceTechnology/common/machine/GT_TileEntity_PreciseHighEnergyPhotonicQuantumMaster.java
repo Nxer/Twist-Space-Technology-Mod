@@ -142,51 +142,55 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
                         .dot(3)
                         .casingIndex(1024)
                         .buildAndChain(sBlockCasingsTT, 0))
-                .addElement('A', ofChain(onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[0];
-                    x.recipeTier = Math.max(recipeTier, 1);
-                }, ofBlock(PhotonControllerUpgrade, 0)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[1];
-                    x.recipeTier = Math.max(recipeTier, 2);
-                }, ofBlock(PhotonControllerUpgrade, 1)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[2];
-                    x.recipeTier = Math.max(recipeTier, 3);
-                }, ofBlock(PhotonControllerUpgrade, 2)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[3];
-                    x.recipeTier = Math.max(recipeTier, 4);
-                }, ofBlock(PhotonControllerUpgrade, 3)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[4];
-                    x.recipeTier = Math.max(recipeTier, 5);
-                }, ofBlock(PhotonControllerUpgrade, 4)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[5];
-                    x.recipeTier = Math.max(recipeTier, 6);
-                }, ofBlock(PhotonControllerUpgrade, 5)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[6];
-                    x.recipeTier = Math.max(recipeTier, 7);
-                }, ofBlock(PhotonControllerUpgrade, 6)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[7];
-                    x.recipeTier = Math.max(recipeTier, 8);
-                }, ofBlock(PhotonControllerUpgrade, 7)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[8];
-                    x.recipeTier = Math.max(recipeTier, 9);
-                }, ofBlock(PhotonControllerUpgrade, 8)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[9];
-                    x.recipeTier = Math.max(recipeTier, 10);
-                }, ofBlock(PhotonControllerUpgrade, 9)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[10];
-                    x.recipeTier = Math.max(recipeTier, 11);
-                }, ofBlock(PhotonControllerUpgrade, 10)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[11];
-                    x.recipeTier = Math.max(recipeTier, 12);
-                }, ofBlock(PhotonControllerUpgrade, 11)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[12];
-                    x.enablePerfectOverclockSignal = true;
-                    x.recipeTier = Math.max(recipeTier, 13);
-                }, ofBlock(PhotonControllerUpgrade, 12)), onElementPass(x -> {
-                    x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[13];
-                    x.enablePerfectOverclockSignal = true;
-                    x.recipeTier = Math.max(recipeTier, 14);
-                }, ofBlock(PhotonControllerUpgrade, 13)), ofBlock(GregTechAPI.sBlockCasings8, 7)))
+                .addElement(
+                    'A',
+                    ofChain(
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[0],
+                            ofBlock(PhotonControllerUpgrade, 0)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[1],
+                            ofBlock(PhotonControllerUpgrade, 1)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[2],
+                            ofBlock(PhotonControllerUpgrade, 2)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[3],
+                            ofBlock(PhotonControllerUpgrade, 3)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[4],
+                            ofBlock(PhotonControllerUpgrade, 4)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[5],
+                            ofBlock(PhotonControllerUpgrade, 5)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[6],
+                            ofBlock(PhotonControllerUpgrade, 6)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[7],
+                            ofBlock(PhotonControllerUpgrade, 7)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[8],
+                            ofBlock(PhotonControllerUpgrade, 8)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[9],
+                            ofBlock(PhotonControllerUpgrade, 9)),
+                        onElementPass(
+                            x -> x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[10],
+                            ofBlock(PhotonControllerUpgrade, 10)),
+                        onElementPass(x -> {
+                            x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[11];
+                            x.enablePerfectOverclockSignal = true;
+                        }, ofBlock(PhotonControllerUpgrade, 11)),
+                        onElementPass(x -> {
+                            x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[12];
+                            x.enablePerfectOverclockSignal = true;
+                        }, ofBlock(PhotonControllerUpgrade, 12)),
+                        onElementPass(x -> {
+                            x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[13];
+                            x.enablePerfectOverclockSignal = true;
+                        }, ofBlock(PhotonControllerUpgrade, 13)),
+                        ofBlock(GregTechAPI.sBlockCasings8, 7)))
                 .build();
         }
         return STRUCTURE_DEFINITION;
