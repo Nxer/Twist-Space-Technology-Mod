@@ -233,32 +233,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes, RecipeMaps.laserEngraverRecipes);
     }
-
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus(getSpeedBonus());
-                setEuModifier(getEuModifier());
-                setOverclock(isEnablePerfectOverclock() ? 2 : 1, 2);
-                return super.process();
-            }
-
-            @NotNull
-            @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
-                int mRecipeTier = GTUtility.getTier(recipe.mEUt);
-                if (recipeTier < 13 && recipeTier < mRecipeTier) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTier);
-                }
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
-
+    
     @Override
     protected boolean isEnablePerfectOverclock() {
         return enablePerfectOverclockSignal;
