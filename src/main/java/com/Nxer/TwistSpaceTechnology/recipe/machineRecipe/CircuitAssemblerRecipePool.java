@@ -7,7 +7,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
-import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -29,7 +29,7 @@ public class CircuitAssemblerRecipePool implements IRecipePool {
                 ItemList.Circuit_Board_Optical.get(1),
                 GTCMItemList.OpticalSOC.get(1),
                 CustomItemList.DATApipe.get(4),
-                GTOreDictUnificator.get(OrePrefixes.bolt, MaterialsUEVplus.SixPhasedCopper, 8))
+                GTOreDictUnificator.get(OrePrefixes.bolt, Materials.Infinity, 8))
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 3))
             .itemOutputs(ItemList.Circuit_OpticalProcessor.get(1))
             .eut(RECIPE_UIV)

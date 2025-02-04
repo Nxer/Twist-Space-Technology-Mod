@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -43,6 +44,7 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
@@ -56,10 +58,10 @@ import gtPlusPlus.core.material.MaterialsElements;
 public class MiracleTopRecipePool implements IRecipePool {
 
     final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipes;
-    public static final HashMap<ItemStack, ItemStack> circuitItemsToWrapped = new HashMap<>();
-    public static final HashSet<Materials> superConductorMaterialList = new HashSet<>();
-    public static final HashSet<OrePrefixes> targetModifyOreDict = new HashSet<>();
-    public static final HashMap<ItemStack, FluidStack> specialMaterialCantAutoModify = new HashMap<>();
+    public final HashMap<ItemStack, ItemStack> circuitItemsToWrapped = new HashMap<>();
+    public final HashSet<Materials> superConductorMaterialList = new HashSet<>();
+    public final HashSet<OrePrefixes> targetModifyOreDict = new HashSet<>();
+    public final HashMap<ItemStack, FluidStack> specialMaterialCantAutoModify = new HashMap<>();
 
     @Override
     public void loadRecipes() {
@@ -73,39 +75,48 @@ public class MiracleTopRecipePool implements IRecipePool {
 
     private void loadCircuitAssemblerRecipes() {
         HashSet<TST_ItemID> IgnoreRecipeOutputs = new HashSet<>();
-        HashSet<TST_ItemID> NotModifyRecipeOutputs = new HashSet<>();
+        // HashSet<TST_ItemID> NotModifyRecipeOutputs = new HashSet<>();
 
         IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("appliedenergistics2", "item.ItemMultiPart", 1, 220)));
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(GTModHandler.getModItem("ae2fc", "part_fluid_storage_bus", 1)));
-
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsAstroMiner", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsMoonBuggy", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsCargoRocket", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier1", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier2", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier3", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier4", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier5", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier6", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier7", 1)));
-        NotModifyRecipeOutputs
+        IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier8", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(tectech.thing.CustomItemList.parametrizerMemory.get(1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Board_Wetware.get(1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Board_Bio.get(1)));
 
         // Exclude low-level solder recipe
         ArrayList<GTRecipe> recipeCache = new ArrayList<>();
         for (GTRecipe originalRecipe : circuitAssemblerRecipes.getAllRecipes()) {
             if (IgnoreRecipeOutputs.contains(TST_ItemID.createNoNBT(originalRecipe.mOutputs[0]))) continue;
+            // Do not generate some Mod recipe
+            String itemName = Item.itemRegistry.getNameForObject(originalRecipe.mOutputs[0].getItem());
+            if (itemName.contains(Mods.Railcraft.ID) || itemName.contains(Mods.Forestry.ID)
+                || itemName.contains(Mods.StevesCarts2.ID)
+                || itemName.contains(Mods.ProjectRedCore.ID)
+                || itemName.contains(Mods.ProjectRedTransportation.ID)) continue;
+
             boolean isRecipeAdded = false;
             for (GTRecipe cachedRecipe : recipeCache) {
                 if (isRecipeInputItemSame(originalRecipe, cachedRecipe)) {
@@ -129,15 +140,15 @@ public class MiracleTopRecipePool implements IRecipePool {
         }
 
         for (GTRecipe aRecipe : recipeCache) {
-            if (NotModifyRecipeOutputs.contains(TST_ItemID.createNoNBT(aRecipe.mOutputs[0])))
-                addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe), 1, 1), 1));
-            else addRecipeMT(
-                addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe), 3, 3, 4, 4, 1, 3), 16));
+            // if (NotModifyRecipeOutputs.contains(TST_ItemID.createNoNBT(aRecipe.mOutputs[0])))
+            // addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe), 1, 1), 1));
+            // else
+            addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe), 3, 3, 4, 4, 1, 3), 16));
         }
 
     }
 
-    public void loadAssemblyLineRecipes() {
+    private void loadAssemblyLineRecipes() {
         HashSet<TST_ItemID> GenerateRecipeOutputs = new HashSet<>();
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Wetwaremainframe.get(1)));
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Biowaresupercomputer.get(1)));
@@ -214,7 +225,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                     // check for valid recipe
                     while (true) {
                         List<ItemStack> currentCombination = new ArrayList<>();
-                        boolean hasBasic = false, hasAdvanced = false;
+                        boolean hasAdvanced = false, hasOptical = false;
                         boolean illegalRubber = false;
                         Materials usedMaterial = null;
 
@@ -237,11 +248,11 @@ public class MiracleTopRecipePool implements IRecipePool {
 
                             }
 
-                            if (AdvanceCircuitPart.contains(TST_ItemID.create(aChoice))) hasBasic = true;
-                            if (OpticalCircuitPart.contains(TST_ItemID.create(aChoice))) hasAdvanced = true;
+                            if (AdvanceCircuitPart.contains(TST_ItemID.create(aChoice))) hasAdvanced = true;
+                            if (OpticalCircuitPart.contains(TST_ItemID.create(aChoice))) hasOptical = true;
                         }
 
-                        if (!((hasBasic && hasAdvanced) || illegalRubber)) {
+                        if (!((hasAdvanced && hasOptical) || illegalRubber)) {
                             validRecipes.add(currentCombination.toArray(new ItemStack[0]));
                         }
 
@@ -294,7 +305,7 @@ public class MiracleTopRecipePool implements IRecipePool {
         }
     }
 
-    public void loadSpaceAssemblerRecipes() {
+    private void loadSpaceAssemblerRecipes() {
         HashSet<TST_ItemID> GenerateRecipeOutputs = new HashSet<>();
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(GTModHandler.getModItem("OpenComputers", "item", 1, 39)));
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Optically_Perfected_CPU.get(1)));
@@ -477,7 +488,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .addTo(MT);
     }
 
-    private static void initStatics() {
+    private void initStatics() {
 
         /**
          * init Wrap circuit parts
@@ -517,16 +528,11 @@ public class MiracleTopRecipePool implements IRecipePool {
             ItemList.Circuit_Board_Plastic_Advanced.get(1),
             ItemList.Circuit_Board_Bio.get(1),
             ItemList.Circuit_Board_Bio_Ultra.get(1),
-            ItemList.Circuit_Parts_Resistor.get(1),
-            //ItemList.Circuit_Parts_ResistorSMD.get(1),
-            ItemList.Circuit_Parts_Coil.get(1),
-            //ItemList.Circuit_Parts_InductorSMD.get(1),
-            ItemList.Circuit_Parts_Diode.get(1),
-            //ItemList.Circuit_Parts_DiodeSMD.get(1),
-            ItemList.Circuit_Parts_Transistor.get(1),
-            //ItemList.Circuit_Parts_TransistorSMD.get(1),
-            ItemList.Circuit_Parts_Capacitor.get(1),
-            //ItemList.Circuit_Parts_CapacitorSMD.get(1),
+            ItemList.Circuit_Parts_ResistorSMD.get(1),
+            ItemList.Circuit_Parts_InductorSMD.get(1),
+            ItemList.Circuit_Parts_DiodeSMD.get(1),
+            ItemList.Circuit_Parts_TransistorSMD.get(1),
+            ItemList.Circuit_Parts_CapacitorSMD.get(1),
             ItemList.Circuit_Parts_ResistorASMD.get(1),
             ItemList.Circuit_Parts_DiodeASMD.get(1),
             ItemList.Circuit_Parts_TransistorASMD.get(1),
@@ -569,7 +575,6 @@ public class MiracleTopRecipePool implements IRecipePool {
             ItemList.Optically_Compatible_Memory.get(1),
             ItemList.Circuit_Parts_Crystal_Chip_Wetware.get(1),
             ItemList.Circuit_Parts_Chip_Bioware.get(1) };
-        // spotless:on
 
         int Count = 0;
         for (WrappedCircuitItem item : WrappedCircuitItem.values()) {
@@ -583,8 +588,15 @@ public class MiracleTopRecipePool implements IRecipePool {
             } else circuitItemsToWrapped.put(GTCMItemList.TestItem0.get(1), GTCMItemList.TestItem0.get(1));
             Count++;
         }
+
+        circuitItemsToWrapped.put(ItemList.Circuit_Parts_Resistor.get(1), WrappedCircuitItem.Wrapped_Circuit_Parts_ResistorSMD.get(1));
+        circuitItemsToWrapped.put(ItemList.Circuit_Parts_Coil.get(1), WrappedCircuitItem.Wrapped_Circuit_Parts_InductorSMD.get(1));
+        circuitItemsToWrapped.put(ItemList.Circuit_Parts_Diode.get(1), WrappedCircuitItem.Wrapped_Circuit_Parts_DiodeSMD.get(1));
+        circuitItemsToWrapped.put(ItemList.Circuit_Parts_Transistor.get(1), WrappedCircuitItem.Wrapped_Circuit_Parts_TransistorSMD.get(1));
+        circuitItemsToWrapped.put(ItemList.Circuit_Parts_Capacitor.get(1), WrappedCircuitItem.Wrapped_Circuit_Parts_CapacitorSMD.get(1));
         circuitItemsToWrapped.put(CustomItemList.PikoCircuit.get(1), WrappedCircuitItem.Wrapped_Circuit_UMV.get(1));
         circuitItemsToWrapped.put(CustomItemList.QuantumCircuit.get(1), WrappedCircuitItem.Wrapped_Circuit_UXV.get(1));
+        // spotless:on
 
         /**
          * init GTPP Material Map
