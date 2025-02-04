@@ -79,7 +79,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     private boolean mode = Mode_Default_PreciseHighEnergyPhotonicQuantumMaster;
     private boolean enablePerfectOverclockSignal = false;
     private int totalSpeedIncrement = 0;
-    private int recipeTier = 0;
 
     public int getTotalSpeedIncrement() {
         return this.totalSpeedIncrement;
@@ -233,7 +232,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes, RecipeMaps.laserEngraverRecipes);
     }
-    
+
     @Override
     protected boolean isEnablePerfectOverclock() {
         return enablePerfectOverclockSignal;
