@@ -7,6 +7,7 @@ import com.Nxer.TwistSpaceTechnology.combat.PlayerEventHandler;
 import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
 import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -45,9 +46,11 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
 
         MinecraftForge.EVENT_BUS.register(new DSP_WorldSavedData());
+
         if (Config.activateCombatStats) {
             MinecraftForge.EVENT_BUS.register(DamageEventHandler.instance);
         }
+
         ServerEvent serverEvent = new ServerEvent();
         if (SideReference.Side.Server) {
             MinecraftForge.EVENT_BUS.register(serverEvent);
@@ -67,6 +70,7 @@ public class CommonProxy {
             0,
             new GTTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
                 .build());
+
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
@@ -81,6 +85,10 @@ public class CommonProxy {
 
         if (Config.Enable_ProcessingArray) {
             PAHelper.initStatics();
+        }
+
+        if (Config.RewriteEIOTravelStaffConfig) {
+            ItemYamato.rewriteEIOTravelStaffConfig();
         }
     }
 
