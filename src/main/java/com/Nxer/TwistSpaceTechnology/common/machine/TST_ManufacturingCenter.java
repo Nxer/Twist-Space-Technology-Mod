@@ -234,17 +234,22 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     // region Tooltips
 
     @Override
+    @Deprecated
     public String getMachineType() {
-        return "Manufacturing Center | Nine in One";
+        return null;
     }
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         var tt = new MultiblockTooltipBuilder();
 
+        // spotless:off
         TstSharedFormat.setDefaultColor(EnumChatFormatting.GRAY);
 
-        tt.addMachineType(getMachineType())
+        // #tr ManufacturingCenter_Tooltips_MachineType
+        // # Manufacturing Center | Nine in One
+        // #zh_CN 加工中心 | 九合一
+        tt.addMachineType(TextEnums.tr("ManufacturingCenter_Tooltips_MachineType"))
             // #tr ManufacturingCenter_Tooltips_1
             // # A Combination of Machines.
             // #zh_CN 一些机器的组合。
@@ -297,6 +302,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             .addInfo(TextEnums.Author_Taskeren.toString())
             .toolTipFinisher(TextEnums.Mod_TwistSpaceTechnology.toString());
 
+        // spotless:on
         return tt;
     }
 
