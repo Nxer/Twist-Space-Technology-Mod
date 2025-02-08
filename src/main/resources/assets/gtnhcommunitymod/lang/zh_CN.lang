@@ -1908,3 +1908,4 @@ TST_ProcessingArray.tooltips.04=执行有损超频
 TST_ProcessingArray.tooltips.05=离心机,电解机,搅拌机执行其对应多方块机器配方
 Machine_of_TwistSpaceTechnology=§l§9Twist §bSpace §eTechnology§r 很荣幸为您服务!
 NameProcessingArray=TST处理阵列
+ManufacturingCenter_Tooltips_MachineType=加工中心 | 九合一
