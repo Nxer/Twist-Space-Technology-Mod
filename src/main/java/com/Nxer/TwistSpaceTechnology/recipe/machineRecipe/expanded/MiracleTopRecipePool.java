@@ -186,13 +186,15 @@ public class MiracleTopRecipePool implements IRecipePool {
                     for (int i = 0; i < aRecipe.mInputs.length; i++) {
                         boolean hasCircuit = false;
 
+                        // Check if the Alt includes circuit.
+                        // If stack has not itemData, it is a regular item and skip Ore Dict inspection
+                        // If stack equals circuit, not process
                         if (i < aRecipe.mOreDictAlt.length && aRecipe.mOreDictAlt[i] != null) {
                             for (ItemStack stack : aRecipe.mOreDictAlt[i]) {
 
                                 ItemData stackData = GTOreDictUnificator.getAssociation(stack);
                                 if (stackData == null) break;
                                 OrePrefixes prefix = stackData.mPrefix;
-
                                 if (prefix == OrePrefixes.circuit) {
                                     hasCircuit = true;
                                     break;
@@ -201,7 +203,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                         }
 
                         if (hasCircuit) {
-                            // If is circuit, not do it
+                            // If is tiered circuit, add ore dict form, and it will be modified to warp next.
                             ItemStack circuitStack = aRecipe.mOreDictAlt[i][0];
                             choiceList.add(
                                 Collections.singletonList(
@@ -211,6 +213,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                                             GTOreDictUnificator.getAssociation(circuitStack)).mMaterial.mMaterial,
                                         circuitStack.stackSize)));
                         } else if (i < aRecipe.mOreDictAlt.length && aRecipe.mOreDictAlt[i] != null) {
+                            // Regular Alt input
                             choiceList.add(Arrays.asList(aRecipe.mOreDictAlt[i]));
                         } else {
                             // Only one input
@@ -234,6 +237,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                                 .get(indexArray[i]);
                             currentCombination.add(aChoice);
 
+                            // Check rubber for same (Material.AnyRubber)
                             ItemData stackData = GTOreDictUnificator.getAssociation(aChoice);
                             if (stackData != null) {
                                 Materials material = stackData.mMaterial.mMaterial;
@@ -247,7 +251,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                                 }
 
                             }
-
+                            // Check circuit part for same
                             if (AdvanceCircuitPart.contains(TST_ItemID.create(aChoice))) hasAdvanced = true;
                             if (OpticalCircuitPart.contains(TST_ItemID.create(aChoice))) hasOptical = true;
                         }
@@ -318,6 +322,7 @@ public class MiracleTopRecipePool implements IRecipePool {
         }
     }
 
+    // Modify the circuit part to warp, others turn 16 times. All Material to molten.
     public GTRecipe ModifyRecipe(GTRecipe baseRecipe) {
 
         ArrayList<ItemStack> inputItems = new ArrayList<>();
