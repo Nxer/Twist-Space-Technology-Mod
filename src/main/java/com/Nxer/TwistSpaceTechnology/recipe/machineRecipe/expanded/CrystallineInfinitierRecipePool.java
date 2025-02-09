@@ -76,6 +76,15 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .duration(20 * 144)
             .addTo(CI);
         // endregion
+        // region Lapotron circuit
+        // Shard
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(1))
+            .itemOutputs(GTCMItemList.LapotronShard.get(64))
+            .eut(RECIPE_UV)
+            .duration(20 * 5)
+            .addTo(HM);
+
 
         // Growth
         GTValues.RA.stdBuilder()
