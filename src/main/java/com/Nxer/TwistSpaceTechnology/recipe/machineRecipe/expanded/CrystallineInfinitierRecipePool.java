@@ -7,6 +7,7 @@ import static gregtech.api.enums.TierEU.RECIPE_LuV;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
+import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
@@ -99,6 +100,16 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .eut(RECIPE_UHV)
             .duration(20 * 3000)
             .addTo(CI);
+
+        //Crystal
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(0), MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 512))
+            .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 128))
+            .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(1))
+            .eut(RECIPE_UIV)
+            .duration(20 * 30)
+            .addTo(CI);
+
 
         // Holmium Garnet Dust
         // gt mixer
@@ -251,6 +262,14 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .duration(20 * 5)
             .addTo(HM);
 
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(0), ItemList.IC2_Energium_Dust.get(64 * 64))
+            .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 128))
+            .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(1))
+            .eut(RECIPE_UIV)
+            .duration(20 * 30)
+            .addTo(CI);
+        
         // Growth
         GTValues.RA.stdBuilder()
             .itemInputs(GTCMItemList.EnergyCrystalShard.get(1), ItemList.IC2_Energium_Dust.get(64))
@@ -465,14 +484,6 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_UEV)
                     .duration(20*30)
                     .addTo(CI);
-//NEW RECIPES
-        GTValues.RA.stdBuilder()
-            .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(0), MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 512))
-            .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 128))
-            .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(1))
-            .eut(RECIPE_UHV)
-            .duration(20 * 30)
-            .addTo(CI);
 
         GTValues.RA.stdBuilder()
                     .itemInputs(
