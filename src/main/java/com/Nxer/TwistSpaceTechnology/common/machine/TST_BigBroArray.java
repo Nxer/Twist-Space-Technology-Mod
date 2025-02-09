@@ -1038,11 +1038,11 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
         return 0;
     }
 
-    public static int getParallelismCasingTier(Block block, int meta) {
+    public static Integer getParallelismCasingTier(Block block, int meta) {
         if (block == GTCMItemList.ParallelismCasing0.getBlock()) {
             return meta - 2;
         }
-        return 0;
+        return null;
     }
 
     public void setCoilTier(HeatingCoilLevel level) {
