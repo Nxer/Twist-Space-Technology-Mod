@@ -76,15 +76,6 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
             .addTo(CI);
         // endregion
 
-        // region Lapotron circuit
-        // Shard
-        GTValues.RA.stdBuilder()
-            .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(1))
-            .itemOutputs(GTCMItemList.LapotronShard.get(64))
-            .eut(RECIPE_UV)
-            .duration(20 * 5)
-            .addTo(HM);
-
         // Growth
         GTValues.RA.stdBuilder()
             .itemInputs(GTCMItemList.LapotronShard.get(1), MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
@@ -474,6 +465,14 @@ public class CrystallineInfinitierRecipePool implements IRecipePool {
                     .eut(RECIPE_UEV)
                     .duration(20*30)
                     .addTo(CI);
+//NEW RECIPES
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(0), MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 512))
+            .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 128))
+            .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(1))
+            .eut(RECIPE_UHV)
+            .duration(20 * 30)
+            .addTo(CI);
 
         GTValues.RA.stdBuilder()
                     .itemInputs(
