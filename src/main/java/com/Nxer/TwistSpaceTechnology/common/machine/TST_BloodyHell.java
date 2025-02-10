@@ -88,6 +88,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     private int speedRuneCount = 0;
     private int tbSpeedRuneCount = 0;
     private int mTier = 0;
+    /**
+     * parallel = mTier^3
+     */
+    private int parallel = 1;
     private boolean isBloodChecked = false;
     private boolean mIsAnimated = true;
     protected boolean mFormed;
@@ -161,7 +165,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     protected int getMaxParallelRecipes() {
-        return 1;
+        return parallel;
     }
 
     @Override
@@ -227,7 +231,18 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             isBloodChecked = true;
         }
 
-        return mTier > 0;
+        if (mTier <= 0) {
+            parallel = 1;
+            return false;
+        }
+
+        calculateParallel();
+
+        return true;
+    }
+
+    protected void calculateParallel() {
+        parallel = mTier * mTier * mTier;
     }
 
     @Override
@@ -493,6 +508,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         aNBT.setInteger("speedRuneCount", speedRuneCount);
         aNBT.setInteger("tbSpeedRuneCount", tbSpeedRuneCount);
         aNBT.setInteger("mTier", mTier);
+        aNBT.setInteger("parallel", parallel);
     }
 
     @Override
@@ -502,6 +518,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         speedRuneCount = aNBT.getInteger("speedRuneCount");
         tbSpeedRuneCount = aNBT.getInteger("tbSpeedRuneCount");
         mTier = aNBT.getInteger("mTier");
+        parallel = aNBT.getInteger("parallel");
     }
 
     @Override
