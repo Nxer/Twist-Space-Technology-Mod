@@ -63,6 +63,7 @@ public class Config {
     public static final String BloodHell = "BloodHell";
     public static final String IndustrialAlchemyTower = "IndustrialAlchemyTower";
     public static final String ProcessingArray = "ProcessingArray";
+    public static final String MegaCraftingCenter = "MegaCraftingCenter";
     // endregion
 
     // region General
@@ -474,6 +475,12 @@ public class Config {
     public static boolean Enable_ProcessingArray = true;
     // endregion
 
+    // region Mega Crafting Center
+    public static boolean Enable_MegaCraftingCenter = true;
+    public static int TickEveryProcess_MegaCraftingCenter = 20;
+    public static int MaxMagnification_MegaCraftingCenter = 8388608;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -489,6 +496,12 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        // endregion
+
+        // region Mega Crafting Center
+        Enable_MegaCraftingCenter = configuration.getBoolean("Enable_MegaCraftingCenter", MegaCraftingCenter, Enable_MegaCraftingCenter, "Enable Mega Crafting Center.");
+        TickEveryProcess_MegaCraftingCenter = configuration.getInt("TickEveryProcess_MegaCraftingCenter", MegaCraftingCenter, TickEveryProcess_MegaCraftingCenter, 1, 8192, "Tick in need every processing of Mega Crafting Center. Type: int");
+        MaxMagnification_MegaCraftingCenter = configuration.getInt("MaxMagnification_MegaCraftingCenter", MegaCraftingCenter, MaxMagnification_MegaCraftingCenter, 1, Integer.MAX_VALUE, "Max Magnification parameter limitation of Mega Crafting Center. Type: int");
         // endregion
 
         // region Processing Array

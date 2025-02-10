@@ -11,6 +11,7 @@ import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
+import appeng.api.AEApi;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsBotania;
@@ -18,6 +19,8 @@ import gregtech.api.enums.OreDictNames;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
+import wanion.avaritiaddons.block.extremeautocrafter.BlockExtremeAutoCrafter;
 
 public class ShapedCraftRecipePool implements IRecipePool {
 
@@ -86,6 +89,19 @@ public class ShapedCraftRecipePool implements IRecipePool {
                 new Object[] { "CTC", "FMF", "CBC", 'M', ItemList.Hull_IV, 'B',
                     OrePrefixes.pipeLarge.get(Materials.StainlessSteel), 'C', OrePrefixes.circuit.get(Materials.IV),
                     'F', ItemList.Robot_Arm_EV, 'T', ItemList.Energy_LapotronicOrb });
+        }
+
+        if (Config.Enable_MegaCraftingCenter) {
+            addCraftingRecipe(
+                GTCMItemList.ExtremeCraftCenter.get(1),
+                new Object[] { "ABA", "BCB", "ABA", 'A', new ItemStack(BlockExtremeAutoCrafter.instance), 'B',
+                    AEApi.instance()
+                        .definitions()
+                        .blocks()
+                        .molecularAssembler()
+                        .maybeStack(1)
+                        .orNull(),
+                    'C', GregtechItemList.Controller_MolecularTransformer.get(1) });
         }
 
     }

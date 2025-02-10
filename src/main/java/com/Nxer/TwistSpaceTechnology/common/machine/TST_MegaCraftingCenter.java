@@ -19,16 +19,19 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -37,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -44,6 +48,15 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.modularui.api.drawable.IDrawable;
+import com.gtnewhorizons.modularui.api.drawable.UITexture;
+import com.gtnewhorizons.modularui.api.math.Alignment;
+import com.gtnewhorizons.modularui.api.math.Color;
+import com.gtnewhorizons.modularui.api.screen.ModularWindow;
+import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
+import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
+import com.gtnewhorizons.modularui.common.widget.TextWidget;
+import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
 
 import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.GridFlags;
@@ -58,7 +71,8 @@ import appeng.api.util.DimensionalCoord;
 import appeng.me.GridAccessException;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
-import gregtech.api.GregTechAPI;
+import appeng.util.item.AEItemStack;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -72,7 +86,6 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gtPlusPlus.core.block.ModBlocks;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.casing.TTCasingsContainer;
 
@@ -97,6 +110,164 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     // endregion
 
     // region Statics
+
+    /**
+     * Generating visual pattern to handle actual crafting.
+     */
+    public static class ActualPattern implements ICraftingPatternDetails {
+
+        protected ItemStack patternItem = new ItemStack(Blocks.fire);
+        protected IAEItemStack[] inputs = new IAEItemStack[0];
+        protected IAEItemStack[] outputs = new IAEItemStack[0];
+        protected boolean canSubstitute = false;
+        protected int priority = 0;
+
+        private ActualPattern() {}
+
+        /**
+         * Generate a visual ICraftingPatternDetails with real pattern, and make input/output amount multiplied by
+         * variable.
+         *
+         * @param origin     The origin pattern.
+         * @param multiplier This pattern details are the origin pattern's multiplied by this parameter.
+         */
+        public ActualPattern(ICraftingPatternDetails origin, int multiplier) {
+            this.patternItem = origin.getPattern();
+            this.canSubstitute = origin.canSubstitute();
+            this.priority = origin.getPriority();
+
+            // regenerate items' amount
+            ItemStack[] originInputs = convertAEToMC(origin.getCondensedInputs());
+            ItemStack[] originOutputs = convertAEToMC(origin.getCondensedOutputs());
+
+            Map<TST_ItemID, Long> inputs = new HashMap<>();
+            Map<TST_ItemID, Long> outputs = new HashMap<>();
+
+            for (ItemStack i : originInputs) {
+                inputs.merge(TST_ItemID.create(i), (long) i.stackSize, Long::sum);
+            }
+
+            for (ItemStack i : originOutputs) {
+                outputs.merge(TST_ItemID.create(i), (long) i.stackSize, Long::sum);
+            }
+
+            List<IAEItemStack> actualInputs = new ArrayList<>();
+            List<IAEItemStack> actualOutputs = new ArrayList<>();
+
+            for (Map.Entry<TST_ItemID, Long> i : inputs.entrySet()) {
+                long amount = i.getValue() * multiplier;
+                if (amount <= Integer.MAX_VALUE) {
+                    // in int limitation
+                    actualInputs.add(
+                        AEItemStack.create(
+                            i.getKey()
+                                .getItemStack((int) amount)));
+                } else {
+                    // over int limitation
+                    TST_ItemID itemID = i.getKey();
+                    for (;;) {
+                        if (amount > Integer.MAX_VALUE) {
+                            actualInputs.add(AEItemStack.create(itemID.getItemStack(Integer.MAX_VALUE)));
+                            amount -= Integer.MAX_VALUE;
+                        } else if (amount < 1) {
+                            break;
+                        } else {
+                            actualInputs.add(AEItemStack.create(itemID.getItemStack((int) amount)));
+                            break;
+                        }
+                    }
+                }
+            }
+
+            for (Map.Entry<TST_ItemID, Long> i : outputs.entrySet()) {
+                long amount = i.getValue() * multiplier;
+                if (amount <= Integer.MAX_VALUE) {
+                    // in int limitation
+                    actualOutputs.add(
+                        AEItemStack.create(
+                            i.getKey()
+                                .getItemStack((int) amount)));
+                } else {
+                    // over int limitation
+                    TST_ItemID itemID = i.getKey();
+                    for (;;) {
+                        if (amount > Integer.MAX_VALUE) {
+                            actualOutputs.add(AEItemStack.create(itemID.getItemStack(Integer.MAX_VALUE)));
+                            amount -= Integer.MAX_VALUE;
+                        } else if (amount < 1) {
+                            break;
+                        } else {
+                            actualOutputs.add(AEItemStack.create(itemID.getItemStack((int) amount)));
+                            break;
+                        }
+                    }
+                }
+            }
+
+            this.inputs = actualInputs.toArray(new IAEItemStack[0]);
+            this.outputs = actualOutputs.toArray(new IAEItemStack[0]);
+
+        }
+
+        @Override
+        public ItemStack getPattern() {
+            return patternItem;
+        }
+
+        @Override
+        public IAEItemStack[] getInputs() {
+            return inputs;
+        }
+
+        @Override
+        public IAEItemStack[] getCondensedInputs() {
+            return inputs;
+        }
+
+        @Override
+        public IAEItemStack[] getCondensedOutputs() {
+            return outputs;
+        }
+
+        @Override
+        public IAEItemStack[] getOutputs() {
+            return outputs;
+        }
+
+        @Override
+        public boolean canSubstitute() {
+            return canSubstitute;
+        }
+
+        @Override
+        public int getPriority() {
+            return priority;
+        }
+
+        @Override
+        public void setPriority(int priority) {
+            this.priority = priority;
+        }
+
+        // region unused
+
+        @Override
+        public boolean isCraftable() {
+            return false;
+        }
+
+        @Override
+        public ItemStack getOutput(InventoryCrafting craftingInv, World world) {
+            return null;
+        }
+
+        @Override
+        public boolean isValidItemForSlot(int slotIndex, ItemStack itemStack, World world) {
+            return false;
+        }
+
+        // endregion
+    }
 
     public static ItemStack[] convertAEToMC(IAEItemStack... STACK) {
         // TODO use normal code style instead `Stream`
@@ -170,6 +341,13 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     }
 
+    /**
+     * Check input item stack whether is a valid crafting pattern for crafting table recipe or Extreme Crafting table
+     * recipe.
+     *
+     * @param pattern The item stack inputting.
+     * @return If pattern is valid, return its ICraftingPatternDetails. Return null if it is invalid.
+     */
     public static @Nullable ICraftingPatternDetails checkPattern(ItemStack pattern) {
         if (pattern == null || pattern.stackSize < 1) return null;
         if (pattern.getItem() instanceof ICraftingPatternItem patternItem) {
@@ -229,19 +407,36 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     protected Collection<ItemStack> internalPatterns = new ArrayList<>();
 
     protected Collection<ICraftingPatternDetails> patternDetails = new HashSet<>();
-
+    protected Collection<ICraftingPatternDetails> actualPatternDetails = new HashSet<>();
     private final HashMap<ICraftingPatternDetails, Long> cachedOutput = new HashMap<>();
+
+    /**
+     * Finally the pattern actual IO numbers will be multiplied by this number, also include the crafting table recipe
+     * patterns.
+     */
+    protected int magnification = 1;
 
     @Nullable
     private AENetworkProxy gridProxy;
 
     protected boolean toReturnPatterns = false;
 
+    /**
+     * Re-calculate the patterns, flush the actual pattern pool.
+     */
+    public void recalculatePatterns() {
+        actualPatternDetails.clear();
+        for (ICraftingPatternDetails origin : patternDetails) {
+            actualPatternDetails.add(new ActualPattern(origin, magnification));
+        }
+    }
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
         aNBT.setBoolean("toReturnPatterns", toReturnPatterns);
+        aNBT.setInteger("magnification", magnification);
 
         // save internal patterns
         if (!internalPatterns.isEmpty()) {
@@ -259,6 +454,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         super.loadNBTData(aNBT);
 
         toReturnPatterns = aNBT.getBoolean("toReturnPatterns");
+        magnification = aNBT.getInteger("magnification");
+        if (magnification < 1) magnification = 1;
 
         // load internal patterns
         NBTTagList l = aNBT.getTagList("internalPatterns", TAG_COMPOUND);
@@ -277,6 +474,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 }
             }
         }
+
+        flush();
     }
 
     /**
@@ -315,7 +514,11 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         return l;
     }
 
+    /**
+     * Call ME net flush itself. Always call this when there is new things inputted.
+     */
     protected void flush() {
+        recalculatePatterns();
         if (getProxy().isActive()) {
             try {
                 getProxy().getGrid()
@@ -333,7 +536,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             internalPatterns.clear();
             patternDetails.clear();
             flush();
-            mMaxProgresstime = 20;
+            mMaxProgresstime = Config.TickEveryProcess_MegaCraftingCenter;
 
             return CheckRecipeResultRegistry.SUCCESSFUL;
         }
@@ -360,7 +563,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         }
         if (additionalOutput.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
         mOutputItems = additionalOutput.toArray(new ItemStack[0]);
-        mMaxProgresstime = 128;
+        mMaxProgresstime = Config.TickEveryProcess_MegaCraftingCenter;
         mProgresstime = 0;
         cachedOutput.clear();
         return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -392,16 +595,24 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         }
     }
 
+    /**
+     * Commit all patterns this machine handled to ME net.
+     *
+     * @param craftingTracker crafting helper
+     */
     @Override
     public void provideCrafting(@NotNull ICraftingProviderHelper craftingTracker) {
         AENetworkProxy proxy = this.getProxy();
         if (proxy != null && proxy.isReady()) {
-            for (var details : patternDetails) {
+            for (var details : actualPatternDetails) {
                 craftingTracker.addCraftingOption(this, details);
             }
         }
     }
 
+    /**
+     * Receive pattern task from ME net, in this machine we just collect these task and turn to sign the output items.
+     */
     @Override
     public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
         return cachedOutput.merge(patternDetails, 1L, Long::sum) >= 1;
@@ -506,14 +717,13 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                         // spotless:off
                         new String[][] {
                             { "BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB" },
-                            { "BEEEEEB", "E     E", "E  D  E", "E DAD E", "E  D  E", "E     E", "BEEEEEB" },
-                            { "BEEEEEB", "E  D  E", "E D D E", "ED A DE", "E D D E", "E  D  E", "BEEEEEB" },
-                            { "BEE~EEB", "E DAD E", "ED A DE", "EAACAAE", "ED A DE", "E DAD E", "BEEEEEB" },
-                            { "BEEEEEB", "E  D  E", "E D D E", "ED A DE", "E D D E", "E  D  E", "BEEEEEB" },
-                            { "BEEEEEB", "E     E", "E  D  E", "E DAD E", "E  D  E", "E     E", "BEEEEEB" },
+                            { "BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
+                            { "BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
+                            { "BEE~EEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
+                            { "BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
+                            { "BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
                             { "BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB" } }))
                 // spotless:on
-                .addElement('A', ofBlock(GregTechAPI.sBlockCasings1, 14))
                 .addElement(
                     'B',
                     HatchElementBuilder.<TST_MegaCraftingCenter>builder()
@@ -521,9 +731,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                         .adder(TST_MegaCraftingCenter::addToMachineList)
                         .casingIndex(textureOffset + 12)
                         .dot(1)
-                        .buildAndChain(ofBlock(TTCasingsContainer.sBlockCasingsTT, 12)))
-                .addElement('C', ofBlock(TTCasingsContainer.sBlockCasingsTT, 10))
-                .addElement('D', ofBlock(ModBlocks.blockCasings3Misc, 15))
+                        .buildAndChain(ofBlock(TTCasingsContainer.sBlockCasingsTT, 4)))
                 .addElement('E', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .build();
         }
@@ -556,6 +764,62 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     // region General
 
+    protected static final int SYNC_WINDOW_MAGNIFICATION_ID = 10_114;
+
+    @Override
+    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+        super.addUIWidgets(builder, buildContext);
+        buildContext.addSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID, this::createMagnificationConfigurationWindow);
+        builder.widget(
+            new ButtonWidget().setOnClick(
+                (clickData, widget) -> {
+                    if (!widget.isClient()) widget.getContext()
+                        .openSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID);
+                })
+                .setSize(16, 16)
+                .setBackground(() -> {
+                    List<UITexture> ret = new ArrayList<>();
+                    ret.add(GTUITextures.BUTTON_STANDARD);
+                    ret.add(GTUITextures.OVERLAY_BUTTON_CYCLIC);
+                    return ret.toArray(new IDrawable[0]);
+                })
+                // #tr MegaCraftingCenter.UI.MagnificationInfoMenuButton.name
+                // # Pattern Magnification Configuration Menu
+                // #zh_CN 样板倍率配置菜单
+                .addTooltip(TextEnums.tr("MegaCraftingCenter.UI.MagnificationInfoMenuButton.name"))
+                .setPos(174, 97));
+    }
+
+    protected ModularWindow createMagnificationConfigurationWindow(final EntityPlayer player) {
+        ModularWindow.Builder builder = ModularWindow.builder(240, 80);
+        builder.setBackground(GTUITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
+        builder.setGuiTint(getGUIColorization());
+
+        builder.widget(
+            // spotless:off
+                   // #tr MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text
+                   // # Set actual pattern magnification, actual input/output numbers of patterns will be multiplied by this number.
+                   // #zh_CN 设置样板实际运行倍率, 实际合成输入输出等于样板数值乘以此参数.
+                   // spotless:on
+            TextWidget.localised("MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text")
+                .setPos(20, 10)
+                .setSize(200, 14))
+            .widget(new TextFieldWidget().setSetterInt(val -> {
+                magnification = val;
+                flush();
+            })
+                .setGetterInt(() -> magnification)
+                .setNumbers(1, Config.MaxMagnification_MegaCraftingCenter)
+                .setOnScrollNumbers(1, 64, 2048)
+                .setTextAlignment(Alignment.Center)
+                .setTextColor(Color.WHITE.normal)
+                .setSize(60, 18)
+                .setPos(100, 36)
+                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD));
+
+        return builder.build();
+    }
+
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
@@ -586,13 +850,17 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // spotless:off
         tt.addMachineType(TextEnums.tr("tst.megacraftingcenter.machinetype"))
+            // #tr tst.megacraftingcenter.desc.firstWords
+            // # {\AQUA}{\ITALIC}{\BOLD}Goodbye, all crafting lags.{\RESET}{\GRAY}
+            // #zh_CN {\AQUA}{\ITALIC}{\BOLD}再见了, 所有的合成卡顿.{\RESET}{\GRAY}
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.firstWords"))
             // #tr tst.megacraftingcenter.desc.0
             // # Do not use power. Need to connect the controller to ME net.
             // #zh_CN 不需要耗电. 需要将主机连接至ME网络.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.0"))
             // #tr tst.megacraftingcenter.desc.1
-            // # Time consumption is fixed at 6.4 second, output items in output buses.
-            // #zh_CN 固定耗时 6.4 秒, 在输出总线产出产物.
+            // # Time consumption is fixed at 1 second, output items in output buses.
+            // #zh_CN 固定耗时 1 秒, 在输出总线产出产物.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.1"))
             // #tr tst.megacraftingcenter.desc.2
             // # Input encoded patterns into input bus, the valid will be moved to internal, the invalid will be moved to output bus.
@@ -607,9 +875,21 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             // #zh_CN 允许倍增样板.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.4"))
             // #tr tst.megacraftingcenter.desc.5
+            // # Set the pattern Magnification parameters in the controller GUI.
+            // #zh_CN 在主方块GUI内设置样板倍率参数.
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.5"))
+            // #tr tst.megacraftingcenter.desc.6
+            // # The internal pattern input and output quantity will be multiplied by the magnification parameter as the actual pattern information in running.
+            // #zh_CN 内部样板输入输出数量将乘以倍率参数作为运行时的实际样板信息.
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.6"))
+            // #tr tst.megacraftingcenter.desc.7
+            // # Include crafting pattern (crafting table recipes).
+            // #zh_CN 包括合成样板 (工作台配方).
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.7"))
+            // #tr tst.megacraftingcenter.desc.onScrewDriverRightClick
             // # Use a screwdriver right click controller to move internal patterns to output bus.
             // #zh_CN 使用螺丝刀右键主机将内部样板转移至输出总线.
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.5"))
+            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.onScrewDriverRightClick"))
             .addInfo(Text_SeparatingLine)
             .toolTipFinisher(ModName);
         // spotless:on

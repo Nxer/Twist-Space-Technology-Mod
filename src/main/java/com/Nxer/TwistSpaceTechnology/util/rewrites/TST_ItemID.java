@@ -68,11 +68,19 @@ public class TST_ItemID extends GTUtility.ItemId {
 
     // region Special Methods
     public ItemStack getItemStack() {
-        return new ItemStack(item, 1, metaData);
+        ItemStack r = new ItemStack(item, 1, metaData);
+        if (nbt != null) {
+            r.setTagCompound(nbt);
+        }
+        return r;
     }
 
     public ItemStack getItemStack(int amount) {
-        return new ItemStack(item, amount, metaData);
+        ItemStack r = new ItemStack(item, amount, metaData);
+        if (nbt != null) {
+            r.setTagCompound(nbt);
+        }
+        return r;
     }
 
     public ItemStack getItemStackWithNBT() {
@@ -85,6 +93,14 @@ public class TST_ItemID extends GTUtility.ItemId {
         ItemStack itemStack = new ItemStack(item, amount, metaData);
         itemStack.setTagCompound(nbt);
         return itemStack;
+    }
+
+    public ItemStack getItemStackWithoutNBT() {
+        return new ItemStack(item, 1, metaData);
+    }
+
+    public ItemStack getItemStackWithoutNBT(int amount) {
+        return new ItemStack(item, amount, metaData);
     }
 
     // endregion
