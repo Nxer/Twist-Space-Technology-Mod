@@ -234,6 +234,7 @@ public class Config {
     public static int SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = 1;
     public static int ParallelMultiplier_CrystallineInfinitier = 1;
     public static byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = 3;
+    public static boolean PerfectCrystalRecipeNonCyclized = false;
     // endregion
 
     // region Scavenger
@@ -672,6 +673,7 @@ public class Config {
         SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = configuration.getInt("SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier", CrystallineInfinitier, SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier, 1, 64, "Speed Multiplier of Crystalline Infinitier in Crystalline Infinitier mode. Type: int");
         ParallelMultiplier_CrystallineInfinitier = configuration.getInt("ParallelMultiplier_CrystallineInfinitier", CrystallineInfinitier, ParallelMultiplier_CrystallineInfinitier, 1, 256, "Parallel Multiplier of Crystalline Infinitier. The final parallel will be multiplied this value. Type: int");
         FieldTier_EnablePerfectOverclock_CrystallineInfinitier = (byte) configuration.getInt("FieldTier_EnablePerfectOverclock_CrystallineInfinitier", CrystallineInfinitier, FieldTier_EnablePerfectOverclock_CrystallineInfinitier, 1, 11, "When field generator block tier is beyond this value, machine will enable perfect overclock. 3 is the lowest EOH block. Type: byte");
+        PerfectCrystalRecipeNonCyclized = configuration.getBoolean("PerfectCrystalRecipeNonCyclized", CrystallineInfinitier, PerfectCrystalRecipeNonCyclized, "Generate direct recipe of Perfect Lapotron Crystal and Perfect Energy Crystal.");
         // endregion
 
         // region Molecule Deconstructor
