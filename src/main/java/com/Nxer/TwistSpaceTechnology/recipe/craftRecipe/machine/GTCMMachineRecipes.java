@@ -184,7 +184,6 @@ import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
 import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
-import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import bartworks.common.loaders.BioItemList;
 import bartworks.common.loaders.ItemRegistry;
@@ -222,7 +221,6 @@ import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
 import tectech.recipe.TTRecipeAdder;
 import tectech.thing.casing.TTCasingsContainer;
-import wanion.avaritiaddons.block.extremeautocrafter.BlockExtremeAutoCrafter;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class GTCMMachineRecipes implements IRecipePool {
@@ -2777,31 +2775,6 @@ public class GTCMMachineRecipes implements IRecipePool {
                 .eut(RECIPE_UV)
                 .duration(20 * 300)
                 .addTo(assembler);
-        }
-        {
-            ItemStack extremeCraftTable = new ItemStack(BlockExtremeAutoCrafter.instance);
-            extremeCraftTable.stackSize = 64;
-            // endregion
-            GTValues.RA.stdBuilder()
-                .itemInputs(
-                    AEApi.instance().definitions().blocks().molecularAssembler().maybeStack(64).orNull(),
-                    AEApi.instance().definitions().blocks().molecularAssembler().maybeStack(64).orNull(),
-                    AEApi.instance().definitions().blocks().molecularAssembler().maybeStack(64).orNull(),
-                    AEApi.instance().definitions().blocks().molecularAssembler().maybeStack(64).orNull(),
-                    extremeCraftTable.copy(),
-                    extremeCraftTable.copy(),
-                    extremeCraftTable.copy(),
-                    extremeCraftTable.copy(),
-                    GregtechItemList.Controller_MolecularTransformer.get(4),
-                    ItemList.Field_Generator_UMV.get(4),
-                    WirelessUpdateItem.get(4)
-                )
-                .fluidInputs(Materials.Infinity.getMolten(144 * 64), MaterialsUEVplus.SpaceTime.getMolten(144 * 64), Materials.UUMatter.getFluid(4000000), Materials.Hydrogen.getPlasma(4000000))
-                .itemOutputs(GTCMItemList.ExtremeCraftCenter.get(1))
-                .eut(RECIPE_UMV)
-                .duration(20 * 500)
-                .addTo(MiracleTopRecipes);
-
         }
 
         //region Lightning Spire

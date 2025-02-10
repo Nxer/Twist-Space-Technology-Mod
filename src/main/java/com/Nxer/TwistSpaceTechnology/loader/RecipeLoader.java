@@ -52,6 +52,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.DragonBloodReci
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
+import com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipeHandler;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches;
 
@@ -100,6 +101,10 @@ public class RecipeLoader {
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
         new OP_NormalProcessing().enumOreProcessingRecipes();
+
+        if (Config.Enable_MegaCraftingCenter) {
+            new ExtremeCraftRecipeHandler().initECRecipe();
+        }
 
     }
 
