@@ -135,10 +135,14 @@ public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
 
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        if (BlockBreakDropTable.containsKey(metadata)) {
-            return Arrays.stream(BlockBreakDropTable.get(metadata))
-                .map(item -> item.get(1))
-                .collect(Collectors.toCollection(ArrayList::new));
+        if (!world.getClass()
+            .getSimpleName()
+            .equals("TrackedDummyWorld")) {
+            if (BlockBreakDropTable.containsKey(metadata)) {
+                return Arrays.stream(BlockBreakDropTable.get(metadata))
+                    .map(item -> item.get(1))
+                    .collect(Collectors.toCollection(ArrayList::new));
+            }
         }
         return super.getDrops(world, x, y, z, metadata, fortune);
     }

@@ -555,7 +555,7 @@ public class DSPRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .itemInputs(
-                ItemList.Circuit_OpticalMainframe.get(24),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 24),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Graphene, 32),
                 ItemList.Circuit_Silicon_Wafer7.get(12),
                 ItemList.Emitter_UIV.get(12))

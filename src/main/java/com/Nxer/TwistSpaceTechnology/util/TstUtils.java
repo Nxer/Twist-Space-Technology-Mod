@@ -41,6 +41,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
 import com.google.common.collect.Lists;
 
 import gregtech.api.enums.HeatingCoilLevel;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.ITexture;
@@ -595,8 +596,19 @@ public class TstUtils {
         return itemStack;
     }
 
-    public FluidStack setStackSize(FluidStack fluidStack, int size) {
+    public static FluidStack setStackSize(FluidStack fluidStack, int size) {
         fluidStack.amount = size;
         return fluidStack;
+    }
+
+    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack[] aStack) {
+        if (aStack == null) return new ItemStack[0];
+        ArrayList<ItemStack> newStack = new ArrayList<>();
+        for (ItemStack itemStack : aStack) {
+            if (itemStack.getItem() != ItemList.Circuit_Integrated.getItem()) {
+                newStack.add(itemStack);
+            }
+        }
+        return newStack.toArray(new ItemStack[0]);
     }
 }

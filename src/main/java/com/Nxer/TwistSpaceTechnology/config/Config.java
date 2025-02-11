@@ -63,6 +63,7 @@ public class Config {
     public static final String BloodHell = "BloodHell";
     public static final String IndustrialAlchemyTower = "IndustrialAlchemyTower";
     public static final String ProcessingArray = "ProcessingArray";
+    public static final String MegaCraftingCenter = "MegaCraftingCenter";
     // endregion
 
     // region General
@@ -234,6 +235,7 @@ public class Config {
     public static int SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = 1;
     public static int ParallelMultiplier_CrystallineInfinitier = 1;
     public static byte FieldTier_EnablePerfectOverclock_CrystallineInfinitier = 3;
+    public static boolean PerfectCrystalRecipeNonCyclized = false;
     // endregion
 
     // region Scavenger
@@ -473,6 +475,12 @@ public class Config {
     public static boolean Enable_ProcessingArray = true;
     // endregion
 
+    // region Mega Crafting Center
+    public static boolean Enable_MegaCraftingCenter = true;
+    public static int TickEveryProcess_MegaCraftingCenter = 20;
+    public static int MaxMagnification_MegaCraftingCenter = 8388608;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -488,6 +496,12 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        // endregion
+
+        // region Mega Crafting Center
+        Enable_MegaCraftingCenter = configuration.getBoolean("Enable_MegaCraftingCenter", MegaCraftingCenter, Enable_MegaCraftingCenter, "Enable Mega Crafting Center.");
+        TickEveryProcess_MegaCraftingCenter = configuration.getInt("TickEveryProcess_MegaCraftingCenter", MegaCraftingCenter, TickEveryProcess_MegaCraftingCenter, 1, 8192, "Tick in need every processing of Mega Crafting Center. Type: int");
+        MaxMagnification_MegaCraftingCenter = configuration.getInt("MaxMagnification_MegaCraftingCenter", MegaCraftingCenter, MaxMagnification_MegaCraftingCenter, 1, Integer.MAX_VALUE, "Max Magnification parameter limitation of Mega Crafting Center. Type: int");
         // endregion
 
         // region Processing Array
@@ -672,6 +686,7 @@ public class Config {
         SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier = configuration.getInt("SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier", CrystallineInfinitier, SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier, 1, 64, "Speed Multiplier of Crystalline Infinitier in Crystalline Infinitier mode. Type: int");
         ParallelMultiplier_CrystallineInfinitier = configuration.getInt("ParallelMultiplier_CrystallineInfinitier", CrystallineInfinitier, ParallelMultiplier_CrystallineInfinitier, 1, 256, "Parallel Multiplier of Crystalline Infinitier. The final parallel will be multiplied this value. Type: int");
         FieldTier_EnablePerfectOverclock_CrystallineInfinitier = (byte) configuration.getInt("FieldTier_EnablePerfectOverclock_CrystallineInfinitier", CrystallineInfinitier, FieldTier_EnablePerfectOverclock_CrystallineInfinitier, 1, 11, "When field generator block tier is beyond this value, machine will enable perfect overclock. 3 is the lowest EOH block. Type: byte");
+        PerfectCrystalRecipeNonCyclized = configuration.getBoolean("PerfectCrystalRecipeNonCyclized", CrystallineInfinitier, PerfectCrystalRecipeNonCyclized, "Generate direct recipe of Perfect Lapotron Crystal and Perfect Energy Crystal.");
         // endregion
 
         // region Molecule Deconstructor
