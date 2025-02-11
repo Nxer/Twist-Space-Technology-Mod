@@ -9,6 +9,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregtech.api.GregTechAPI;
 import gregtech.api.damagesources.GTDamageSources;
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
@@ -63,6 +64,10 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
     private static final int MULTIPLIER_RUBBING_CATS = 40;
     private static final int MULTIPLIER_RUBBING_SHEEP = 30;
     private static final int MULTIPLIER_RUBBING_WOOLS = 25;
+
+    // don't set to final to change in debug
+    @SuppressWarnings("FieldMayBeFinal")
+    private static boolean CARDIGAN_DEBUG_MODE = Boolean.getBoolean("cardigan_debug_mode");
 
     /**
      * The {@link InternalName} instance for Cardigans, created by the mixin ({@link com.Nxer.TwistSpaceTechnology.mixin.IC2_InternalName_Adder_Mixin}).
@@ -121,7 +126,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     public void setTier(ItemStack itemStack, int tier) {
         NBTTagCompound tag = itemStack.getTagCompound();
-        if(tag == null) tag = new NBTTagCompound();
+        if (tag == null) tag = new NBTTagCompound();
         tag.setInteger("cardiganTier", tier);
         itemStack.setTagCompound(tag);
     }
@@ -180,7 +185,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
             tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.error"));
         }
 
-        if(tier == VoltageIndex.ULV) {
+        if (tier == VoltageIndex.ULV) {
             // #tr tst.cardigan.tooltip.ulv
             // # {\RED}Useless Bullshit!
             // #zh_CN {\RED}没用的废物！
@@ -245,13 +250,13 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
         return GTModHandler.dischargeElectricItem(cardiganStack, value, Integer.MAX_VALUE, false, false, true);
     }
 
-    private static void applyElectricDamage(Entity target, int damage) {
+    private static void applyElectricDamage(Entity target, float damage) {
         target.attackEntityFrom(GTDamageSources.getElectricDamage(), damage);
     }
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if(!event.player.worldObj.isRemote) return;
+        if (event.player.worldObj.isRemote) return;
 
         EntityPlayer player = event.player;
 
@@ -272,7 +277,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     @SubscribeEvent
     public static void onPlayerRubbingEntity(EntityInteractEvent event) {
-        if(!event.entityPlayer.worldObj.isRemote) return;
+        if (event.entityPlayer.worldObj.isRemote) return;
 
         EntityPlayer player = event.entityPlayer;
 
@@ -283,7 +288,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                 Entity target = event.target;
 
                 // charging by interacting with entities
-                if(checkCooldown(player)) {
+                if (checkCooldown(player)) {
                     if (target instanceof EntityOcelot) {
                         tryCharge(player, armorStack, CHARGE_BASE * MULTIPLIER_RUBBING_CATS);
                     } else if (target instanceof EntitySheep) {
@@ -292,9 +297,9 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                 }
 
                 // shocking other players
-                if(target instanceof EntityPlayer targetPlayer) {
+                if (target instanceof EntityPlayer targetPlayer) {
                     discharge(armorStack, 10);
-                    applyElectricDamage(player, 6);
+                    applyElectricDamage(player, Math.min(player.getHealth() - 1, 6));
                     applyElectricDamage(targetPlayer, 4);
                 }
 
@@ -305,7 +310,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     @SubscribeEvent
     public static void onPlayerRubbingBlock(PlayerInteractEvent event) {
-        if(!event.world.isRemote) return;
+        if (event.world.isRemote) return;
 
         // must be rightclick
         if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
@@ -325,8 +330,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
                     if (discharge > 0) {
                         // have 10% chance to shock the wearer
-                        if (world.rand.nextInt(10) > 8) {
-                            applyElectricDamage(player, 4);
+                        if (CARDIGAN_DEBUG_MODE || world.rand.nextInt(10) > 8) {
+                            applyElectricDamage(player, Math.min(player.getHealth() - 1, 4));
                             // #tr tst.cardigan.ouch
                             // # Ouch!
                             // #zh_CN 啊！
@@ -336,7 +341,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                 }
 
                 // charging unlimited by interacting with the power chair
-                if(target == TstBlocks.BlockPowerChair) {
+                if (target == TstBlocks.BlockPowerChair) {
                     tryCharge(player, armorStack, Integer.MAX_VALUE);
 
                     // #tr tst.cardigan.powah
@@ -346,29 +351,29 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                 }
 
                 // harming the machines
-                if(target == GregTechAPI.sBlockMachines) {
+                if (target == GregTechAPI.sBlockMachines) {
                     TileEntity te = world.getTileEntity(event.x, event.y, event.z);
-                    if(te != null) {
-                        if(te instanceof BaseMetaTileEntity bmte) {
+                    if (te != null) {
+                        if (te instanceof BaseMetaTileEntity bmte) {
                             IMetaTileEntity mte = bmte.getMetaTileEntity();
 
                             // explode single machines
-                            if(mte instanceof MTEBasicMachine basicMachine) {
+                            if (mte instanceof MTEBasicMachine basicMachine) {
                                 int tier = TstItems.Cardian.getTier(armorStack);
                                 int targetTier = basicMachine.mTier;
 
-                                if(tier > targetTier) {
+                                if (tier > targetTier) {
                                     // have 1% chance to cause the machine to explode!
-                                    if (world.rand.nextInt(100) == 99) {
-                                        bmte.doExplosion(1);
+                                    if (CARDIGAN_DEBUG_MODE || world.rand.nextInt(100) == 99) {
+                                        bmte.doExplosion(GTValues.V[VoltageIndex.LV]);
                                     }
                                 }
                             }
 
                             // explode multiblock machines
-                            if(mte instanceof MTEMultiBlockBase multiBlockBase) {
+                            if (mte instanceof MTEMultiBlockBase multiBlockBase) {
                                 // have 1% chance to cause maintanence issues, regardless the voltage tier
-                                if(world.rand.nextInt(100) == 99) {
+                                if (CARDIGAN_DEBUG_MODE || world.rand.nextInt(100) == 99) {
                                     multiBlockBase.causeMaintenanceIssue();
 
                                     // #tr tst.cardigan.damageMachine
