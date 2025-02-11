@@ -40,6 +40,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
      * The {@link InternalName} instance for Cardigans, created by the mixin ({@link com.Nxer.TwistSpaceTechnology.mixin.IC2_InternalName_Adder_Mixin}).
      */
     public static final InternalName Cardigan = Objects.requireNonNull(InternalName.valueOf("Cardigan"), "Failed to get InternalName instance for Cardigan!");
+    
+    public static ItemStack CardiganULV, CardiganLV, CardiganMV, CardiganHV, CardiganHV_Charged;
 
     public ItemCardigan() {
         // this item will be registered in the super class constructor, so don't register twice!
@@ -135,16 +138,27 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
     @Override
     public void getSubItems(Item item, CreativeTabs tabs, List itemList) {
         // normal ones
-        for (int tier = 0; tier < TIERED_MAX_CHARGE.length; tier++) {
-            ItemStack stack = new ItemStack(this, 1, getMaxDamage());
-            setTier(stack, tier);
-            itemList.add(stack);
-        }
+        CardiganULV = new ItemStack(this, 1, getMaxDamage());
+        setTier(CardiganULV, 0);
+        itemList.add(CardiganULV);
+
+        CardiganLV = new ItemStack(this, 1, getMaxDamage());
+        setTier(CardiganLV, 1);
+        itemList.add(CardiganLV);
+
+        CardiganMV = new ItemStack(this, 1, getMaxDamage());
+        setTier(CardiganMV, 2);
+        itemList.add(CardiganMV);
+
+        CardiganHV = new ItemStack(this, 1, getMaxDamage());
+        setTier(CardiganHV, 3);
+        itemList.add(CardiganHV);
+
         // fully charged one
-        ItemStack stack = new ItemStack(this, 1, getMaxDamage());
-        setTier(stack, TIERED_MAX_CHARGE.length - 1);
-        GTModHandler.chargeElectricItem(stack, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false);
-        itemList.add(stack);
+        CardiganHV_Charged = new ItemStack(this, 1, getMaxDamage());
+        setTier(CardiganHV_Charged, 3);
+        GTModHandler.chargeElectricItem(CardiganHV_Charged, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false);
+        itemList.add(CardiganHV_Charged);
     }
 
     @Override
