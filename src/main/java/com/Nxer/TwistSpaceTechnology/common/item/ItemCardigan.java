@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.item;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
-import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -164,12 +164,12 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     @Override
     public double getMaxCharge(ItemStack itemStack) {
-        return TIERED_MAX_CHARGE[getTier(itemStack)];
+        return TIERED_MAX_CHARGE[getCardiganTier(itemStack)];
     }
 
     @Override
     public double getTransferLimit(ItemStack itemStack) {
-        return TIERED_TRANSFER_LIMIT[getTier(itemStack)];
+        return TIERED_TRANSFER_LIMIT[getCardiganTier(itemStack)];
     }
 
     @Override
@@ -179,7 +179,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
     }
 
     private void addInformationTypeChecked(ItemStack itemStack, List<String> tooltips) {
-        int tier = getTier(itemStack);
+        int tier = getCardiganTier(itemStack);
         tooltips.add(EnumChatFormatting.GRAY + "Tier: " + GTUtility.getColoredTierNameFromTier((byte) tier));
 
         Optional<Long[]> chargeOptional = GTModHandler.getElectricItemCharge(itemStack);
@@ -206,6 +206,29 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
             // #zh_CN {\RED}没用的废物！
             tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.ulv"));
         }
+
+        // #tr tst.cardigan.tooltip.1
+        // # {\GRAY}Cardigan will be slowly charged by moving around, rubbing certain blocks and animals, and other ways.
+        // #zh_CN {\GRAY}羊毛衫会随着移动，摸方块，撸生物和其他方法缓慢充电。
+        tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.1"));
+
+        // #tr tst.cardigan.tooltip.2
+        // # {\GRAY}You can take it off and use it as a battery by inserting it to a machine.
+        // #zh_CN {\GRAY}你可以脱下，放进机器里作为电池使用。
+        tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.2"));
+
+        // #tr tst.cardigan.tooltip.3
+        // # {\RED}When wearing Cardigan, there is a very small chance to EXPLODE your Machines with LOWER Voltage!
+        // #zh_CN {\RED}穿着羊毛衫时，有非常小的概率引爆更低电压等级的机器！
+        tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.3"));
+
+        // #tr tst.cardigan.tooltip.4
+        // # {\RED}Multiblock Machines are more robust that they don't explode but still need repair.
+        // #zh_CN {\RED}多方块机器更加结实，它们不会爆炸，但是还是需要维修。
+        tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.4"));
+
+        tooltips.add(TextEnums.Author_Taskeren.toString());
+        tooltips.add(TextEnums.AddByTwistSpaceTechnology.toString());
     }
 
     @Override // to override IC2 special logic
@@ -215,7 +238,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        return "item." + unlocalizedName + "." + getTier(itemStack);
+        return "item." + unlocalizedName + "." + getCardiganTier(itemStack);
     }
 
     @Override // to override IC2 special logic
@@ -385,13 +408,13 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
                             // explode single machines
                             if (mte instanceof MTEBasicMachine basicMachine) {
-                                int tier = TstItems.Cardian.getTier(armorStack);
+                                int tier = getCardiganTier(armorStack);
                                 int targetTier = basicMachine.mTier;
 
                                 if (tier > targetTier) {
                                     // have 1% chance to cause the machine to explode!
                                     if (CARDIGAN_DEBUG_MODE || world.rand.nextInt(100) == 99) {
-                                        bmte.doExplosion(GTValues.V[VoltageIndex.LV]);
+                                        bmte.doExplosion(GTValues.V[basicMachine.mTier]);
                                     }
                                 }
                             }

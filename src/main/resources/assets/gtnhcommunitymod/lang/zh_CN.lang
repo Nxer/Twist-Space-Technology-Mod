@@ -1926,3 +1926,7 @@ tst.megacraftingcenter.desc.firstWords=§b§o§l再见了, 所有的合成卡顿
 tst.megacraftingcenter.desc.6=内部样板输入输出数量将乘以倍率参数作为运行时的实际样板信息.
 tst.megacraftingcenter.desc.7=包括合成样板 (工作台配方).
 tst.megacraftingcenter.desc.onScrewDriverRightClick=使用螺丝刀右键主机将内部样板转移至输出总线.
+tst.cardigan.tooltip.1=§7羊毛衫会随着移动，摸方块，撸生物和其他方法缓慢充电。
+tst.cardigan.tooltip.2=§7你可以脱下，放进机器里作为电池使用。
+tst.cardigan.tooltip.3=§c穿着羊毛衫时，有非常小的概率引爆更低电压等级的机器！
+tst.cardigan.tooltip.4=§c多方块机器更加结实，它们不会爆炸，但是还是需要维修。

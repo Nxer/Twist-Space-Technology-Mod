@@ -1926,3 +1926,7 @@ tst.megacraftingcenter.desc.firstWords=§b§o§lGoodbye, all crafting lags.§r§
 tst.megacraftingcenter.desc.6=The internal pattern input and output quantity will be multiplied by the magnification parameter as the actual pattern information in running.
 tst.megacraftingcenter.desc.7=Include crafting pattern (crafting table recipes).
 tst.megacraftingcenter.desc.onScrewDriverRightClick=Use a screwdriver right click controller to move internal patterns to output bus.
+tst.cardigan.tooltip.1=§7Cardigan will be slowly charged by moving around, rubbing certain blocks and animals, and other ways.
+tst.cardigan.tooltip.2=§7You can take it off and use it as a battery by inserting it to a machine.
+tst.cardigan.tooltip.3=§cWhen wearing Cardigan, there is a very small chance to EXPLODE your Machines with LOWER Voltage!
+tst.cardigan.tooltip.4=§cMultiblock Machines are more robust that they don't explode but still need repair.
