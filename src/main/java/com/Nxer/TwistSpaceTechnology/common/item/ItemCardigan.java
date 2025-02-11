@@ -40,7 +40,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +58,6 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
     // @formatter:on
     // spotless:on
 
-    private static final int CHARGE_BASE = 1;
-
     private static final int MULTIPLIER_SPRINTING = 20;
     private static final int MULTIPLIER_RUBBING_CATS = 40;
     private static final int MULTIPLIER_RUBBING_SHEEP = 30;
@@ -74,7 +71,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
      * The {@link InternalName} instance for Cardigans, created by the mixin ({@link com.Nxer.TwistSpaceTechnology.mixin.IC2_InternalName_Adder_Mixin}).
      */
     public static final InternalName Cardigan = Objects.requireNonNull(InternalName.valueOf("Cardigan"), "Failed to get InternalName instance for Cardigan!");
-    
+
     public static ItemStack CardiganULV, CardiganLV, CardiganMV, CardiganHV, CardiganHV_Charged;
 
     public ItemCardigan() {
@@ -122,12 +119,16 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     @Override
     public int getTier(ItemStack itemStack) {
+        return getCardiganTier(itemStack);
+    }
+
+    public static int getCardiganTier(ItemStack itemStack) {
         NBTTagCompound tag = itemStack.getTagCompound();
         int tier = tag.getInteger("cardiganTier");
         return tier >= 0 && tier < TIERED_MAX_CHARGE.length ? tier : 0;
     }
 
-    public void setTier(ItemStack itemStack, int tier) {
+    public void setCardiganTier(ItemStack itemStack, int tier) {
         NBTTagCompound tag = itemStack.getTagCompound();
         if (tag == null) tag = new NBTTagCompound();
         tag.setInteger("cardiganTier", tier);
@@ -139,24 +140,24 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
     public void getSubItems(Item item, CreativeTabs tabs, List itemList) {
         // normal ones
         CardiganULV = new ItemStack(this, 1, getMaxDamage());
-        setTier(CardiganULV, 0);
+        setCardiganTier(CardiganULV, 0);
         itemList.add(CardiganULV);
 
         CardiganLV = new ItemStack(this, 1, getMaxDamage());
-        setTier(CardiganLV, 1);
+        setCardiganTier(CardiganLV, 1);
         itemList.add(CardiganLV);
 
         CardiganMV = new ItemStack(this, 1, getMaxDamage());
-        setTier(CardiganMV, 2);
+        setCardiganTier(CardiganMV, 2);
         itemList.add(CardiganMV);
 
         CardiganHV = new ItemStack(this, 1, getMaxDamage());
-        setTier(CardiganHV, 3);
+        setCardiganTier(CardiganHV, 3);
         itemList.add(CardiganHV);
 
         // fully charged one
         CardiganHV_Charged = new ItemStack(this, 1, getMaxDamage());
-        setTier(CardiganHV_Charged, 3);
+        setCardiganTier(CardiganHV_Charged, 3);
         GTModHandler.chargeElectricItem(CardiganHV_Charged, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false);
         itemList.add(CardiganHV_Charged);
     }
@@ -236,8 +237,19 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
         return itemStack != null && itemStack.getItem() instanceof ItemCardigan;
     }
 
+    public static int getChargeBase(ItemStack cardiganStack) {
+        if(!isCardigan(cardiganStack)) return -1;
+        return switch(getCardiganTier(cardiganStack)) {
+            case 0 -> 2;
+            case 1 -> 32;
+            case 2 -> 256;
+            case 3 -> 1024;
+            default -> 0; // unsupported voltage level of cardigan, should be unreachable
+        };
+    }
+
     public static final Map<UUID, Integer> CHARGE_COOLDOWN_MAP = new HashMap<>();
-    public static final int CHARGE_COOLDOWN_TICK = 10 * 20;
+    public static final int CHARGE_COOLDOWN_TICK = 10 * 20; // 10s
 
     private static boolean checkCooldown(EntityPlayer player) {
         int tickNow = MinecraftServer.getServer().getTickCounter();
@@ -281,7 +293,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
                 if (isCardigan(armorStack)) {
                     if (player.isSprinting()) {
-                        tryCharge(player, armorStack, CHARGE_BASE * MULTIPLIER_SPRINTING);
+                        tryCharge(player, armorStack, getChargeBase(armorStack) * MULTIPLIER_SPRINTING);
                     }
                     return; // only works for 1 cardigan, if the player somehow put 2 or more on his armor inventory.
                 }
@@ -304,9 +316,9 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                 // charging by interacting with entities
                 if (checkCooldown(player)) {
                     if (target instanceof EntityOcelot) {
-                        tryCharge(player, armorStack, CHARGE_BASE * MULTIPLIER_RUBBING_CATS);
+                        tryCharge(player, armorStack, getChargeBase(armorStack) * MULTIPLIER_RUBBING_CATS);
                     } else if (target instanceof EntitySheep) {
-                        tryCharge(player, armorStack, CHARGE_BASE * MULTIPLIER_RUBBING_SHEEP);
+                        tryCharge(player, armorStack, getChargeBase(armorStack) * MULTIPLIER_RUBBING_SHEEP);
                     }
                 }
 
@@ -403,7 +415,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                 // charging by interacting with wools
                 if (checkCooldown(player)) {
                     if (target == Blocks.wool) {
-                        tryCharge(player, armorStack, CHARGE_BASE * MULTIPLIER_RUBBING_WOOLS);
+                        tryCharge(player, armorStack, getChargeBase(armorStack) * MULTIPLIER_RUBBING_WOOLS);
                     }
                 }
 
