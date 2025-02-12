@@ -1507,8 +1507,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                             long energyInFuel = (long) (storedInput.stackSize * fuelValue * effiency);
                             long fuelConsumption = (long) (expectedGeneration / fuelValue / effiency);
                             output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
-                            mMaxProgresstime = output.divide(BigInteger.valueOf(machineEUt))
-                                .intValue();
+                            mMaxProgresstime = MathUtils.bigToInt(output.divide(BigInteger.valueOf(machineEUt)));
                             storedInput.stackSize = (int) Math.max(0, storedInput.stackSize - fuelConsumption);
                             result = CheckRecipeResultRegistry.SUCCESSFUL;
                             break;

@@ -43,6 +43,14 @@ public class MathUtils {
         return x.signum() > 0 ? Long.MAX_VALUE : Long.MIN_VALUE;
     }
 
+    public static int bigToInt(BigInteger x) {
+        int result = x.intValue();
+        if (x.equals(BigInteger.valueOf(result))) {
+            return result;
+        }
+        return x.signum() > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+    }
+
     public static int gridIndex(int x, int y, int size, int width) {
         x = x / size;
         y = y / size;
