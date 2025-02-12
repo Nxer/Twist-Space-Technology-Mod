@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+import java.math.BigInteger;
+
 /**
  * Copy from com.cleanroommc.modularui.utils.MathUtils
  */
@@ -31,6 +33,14 @@ public class MathUtils {
 
     public static double cycler(double x, double min, double max) {
         return x < min ? max : (x > max ? min : x);
+    }
+
+    public static long bigToLong(BigInteger x) {
+        long result = x.longValue();
+        if (x.equals(BigInteger.valueOf(result))) {
+            return result;
+        }
+        return x.signum() > 0 ? Long.MAX_VALUE : Long.MIN_VALUE;
     }
 
     public static int gridIndex(int x, int y, int size, int width) {

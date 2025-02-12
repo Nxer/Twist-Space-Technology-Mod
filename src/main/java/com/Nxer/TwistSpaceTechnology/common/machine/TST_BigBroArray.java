@@ -50,6 +50,7 @@ import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
+import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.dreammaster.gthandler.CustomItemList;
@@ -1514,8 +1515,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                     result = CheckRecipeResultRegistry.NO_RECIPE;
                 }
             if (result == CheckRecipeResultRegistry.SUCCESSFUL) {
-                long lv = output.longValue();
-                lEUt = lv > 0 ? lv : Long.MAX_VALUE;
+                lEUt = MathUtils.bigToLong(output);
                 if (isWirelessMode) {
                     if (ownerUUID == null) {
                         result = CheckRecipeResultRegistry.INTERNAL_ERROR;
