@@ -26,14 +26,14 @@ public class CircuitAssemblerRecipePool implements IRecipePool {
 
         GTValues.RA.stdBuilder()
             .itemInputs(
-                ItemList.Circuit_Board_Optical.get(1),
+                ItemList.Circuit_Board_Optical.get(16),
                 GTCMItemList.OpticalSOC.get(1),
-                CustomItemList.DATApipe.get(4),
-                GTOreDictUnificator.get(OrePrefixes.bolt, Materials.Infinity, 8))
+                CustomItemList.DATApipe.get(16),
+                GTOreDictUnificator.get(OrePrefixes.bolt, Materials.Infinity, 3))
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 3))
-            .itemOutputs(ItemList.Circuit_OpticalProcessor.get(1))
+            .itemOutputs(ItemList.Circuit_OpticalProcessor.get(16))
             .eut(RECIPE_UIV)
-            .duration(20 * 90)
+            .duration(20 * 60)
             .addTo(CA);
     }
 }
