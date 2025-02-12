@@ -18,6 +18,7 @@ import static gregtech.api.enums.Textures.BlockIcons.getCasingTextureForId;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,7 +45,11 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings4;
 import gregtech.common.blocks.BlockCasings8;
+import org.jetbrains.annotations.NotNull;
 import tectech.thing.block.BlockQuantumGlass;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 // 真空抽滤器
 public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumFilterExtractor> {
@@ -104,6 +109,12 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
             return RecipeMaps.distilleryRecipes;
         }
         return RecipeMaps.distillationTowerRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(RecipeMaps.distillationTowerRecipes, RecipeMaps.distilleryRecipes);
     }
 
     @Override
