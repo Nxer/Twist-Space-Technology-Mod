@@ -1,15 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmountFluid;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.removeIntegratedCircuitFromStacks;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps.spaceAssemblerRecipes;
 import static gregtech.api.enums.Mods.GTPlusPlus;
-import static gregtech.api.enums.TierEU.RECIPE_LuV;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
-import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
-import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static gregtech.api.recipe.RecipeMaps.circuitAssemblerRecipes;
 import static gregtech.api.util.GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes;
 import static gregtech.api.util.GTUtility.copyAmount;
@@ -30,7 +28,6 @@ import java.util.Objects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -58,8 +55,6 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.Material;
-import gtPlusPlus.core.material.MaterialMisc;
-import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 
@@ -113,7 +108,6 @@ public class MiracleTopRecipePool implements IRecipePool {
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(tectech.thing.CustomItemList.parametrizerMemory.get(1)));
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Board_Wetware.get(1)));
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Board_Bio.get(1)));
-        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_OpticalProcessor.get(1)));
 
         // Exclude low-level solder recipe
         ArrayList<GTRecipe> recipeCache = new ArrayList<>();
@@ -150,9 +144,10 @@ public class MiracleTopRecipePool implements IRecipePool {
 
         for (GTRecipe aRecipe : recipeCache) {
             // if (NotModifyRecipeOutputs.contains(TST_ItemID.createNoNBT(aRecipe.mOutputs[0])))
-            // addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe), 1, 1), 1));
+            // addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe,false), 1, 1), 1));
             // else
-            addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe), 3, 3, 4, 4, 1, 3), 16));
+            addRecipeMT(
+                addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe, false), 3, 3, 4, 4, 1, 3), 16));
         }
 
     }
@@ -165,6 +160,8 @@ public class MiracleTopRecipePool implements IRecipePool {
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_OpticalAssembly.get(1)));
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_OpticalComputer.get(1)));
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_OpticalMainframe.get(1)));
+        GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Chip_NeuroCPU.get(1)));
+        GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Chip_BioCPU.get(1)));
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(CustomItemList.PikoCircuit.get(1)));
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(CustomItemList.QuantumCircuit.get(1)));
 
@@ -294,7 +291,8 @@ public class MiracleTopRecipePool implements IRecipePool {
                                         null,
                                         aRecipe.mDuration,
                                         aRecipe.mEUt,
-                                        0)),
+                                        0),
+                                    true),
                                 4));
                     }
                 } else {
@@ -311,7 +309,8 @@ public class MiracleTopRecipePool implements IRecipePool {
                                     null,
                                     aRecipe.mDuration,
                                     aRecipe.mEUt,
-                                    0)),
+                                    0),
+                                true),
                             4));
                 }
             }
@@ -326,19 +325,21 @@ public class MiracleTopRecipePool implements IRecipePool {
 
         for (GTRecipe aRecipe : spaceAssemblerRecipes.getAllRecipes()) {
             if (GenerateRecipeOutputs.contains(TST_ItemID.createNoNBT(aRecipe.mOutputs[0]))) {
-                addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe), 4, 1), 16));
+                addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe, true), 4, 1), 16));
             }
         }
     }
 
     // Modify the circuit part to warp, others turn 16 times. All Material to molten.
-    public GTRecipe ModifyRecipe(GTRecipe baseRecipe) {
+    public GTRecipe ModifyRecipe(GTRecipe baseRecipe, boolean isFluidInputMultiply) {
 
         ArrayList<ItemStack> inputItems = new ArrayList<>();
         ArrayList<FluidStack> inputFluids = new ArrayList<>();
 
         if (baseRecipe.mFluidInputs != null && baseRecipe.mFluidInputs.length > 0) {
-            Collections.addAll(inputFluids, baseRecipe.mFluidInputs);
+            if (isFluidInputMultiply)
+                Collections.addAll(inputFluids, reduplicateRecipe(baseRecipe, 16, 1).mFluidInputs);
+            else Collections.addAll(inputFluids, baseRecipe.mFluidInputs);
         }
 
         if (baseRecipe.mInputs != null && baseRecipe.mInputs.length > 0) {
@@ -378,8 +379,8 @@ public class MiracleTopRecipePool implements IRecipePool {
 
                     for (Map.Entry<ItemStack, FluidStack> entry : specialMaterialCantAutoModify.entrySet()) {
                         if (GTUtility.areStacksEqual(entry.getKey(), aStack)) {
-                            inputFluids
-                                .add(setStackSize(entry.getValue(), entry.getValue().amount * aStack.stackSize * 16));
+                            inputFluids.add(
+                                copyAmountFluid(entry.getValue().amount * aStack.stackSize * 16, entry.getValue()));
                             isItemModified = true;
                             break;
                         }
@@ -416,14 +417,14 @@ public class MiracleTopRecipePool implements IRecipePool {
             if (aStack != null) inputItems.add(copyAmountUnsafe(aStack.stackSize * inputItemMultiTimes, aStack));
         }
         for (FluidStack aStack : oRecipe.mFluidInputs) {
-            if (aStack != null) inputFluids.add(setStackSize(aStack, aStack.amount * inputFluidMultiTimes));
+            if (aStack != null) inputFluids.add(copyAmountFluid(aStack.amount * inputFluidMultiTimes, aStack));
         }
 
         for (ItemStack aStack : oRecipe.mOutputs) {
             if (aStack != null) outputItems.add(copyAmountUnsafe(aStack.stackSize * outputItemMultiTimes, aStack));
         }
         for (FluidStack aStack : oRecipe.mFluidOutputs) {
-            if (aStack != null) outputFluids.add(setStackSize(aStack, aStack.amount * outputFluidMultiTimes));
+            if (aStack != null) outputFluids.add(copyAmountFluid(aStack.amount * outputFluidMultiTimes, aStack));
         }
 
         return new GTRecipe(
@@ -650,6 +651,9 @@ public class MiracleTopRecipePool implements IRecipePool {
             }
         }
 
+        specialMaterialCantAutoModify
+            .put(ItemList.Circuit_Parts_Reinforced_Glass_Tube.get(1), Materials.ReinforceGlass.getMolten(288));
+
         superConductorMaterialList.add(Materials.SuperconductorMV);
         superConductorMaterialList.add(Materials.SuperconductorHV);
         superConductorMaterialList.add(Materials.SuperconductorEV);
@@ -690,6 +694,13 @@ public class MiracleTopRecipePool implements IRecipePool {
         targetModifyOreDict.add(OrePrefixes.spring);
         targetModifyOreDict.add(OrePrefixes.springSmall);
         targetModifyOreDict.add(OrePrefixes.plateSuperdense);
+        targetModifyOreDict.add(OrePrefixes.pipeTiny);
+        targetModifyOreDict.add(OrePrefixes.pipeSmall);
+        targetModifyOreDict.add(OrePrefixes.pipeMedium);
+        targetModifyOreDict.add(OrePrefixes.pipeLarge);
+        targetModifyOreDict.add(OrePrefixes.pipeHuge);
+        targetModifyOreDict.add(OrePrefixes.pipeQuadruple);
+        targetModifyOreDict.add(OrePrefixes.pipeNonuple);
     }
 
     // spotless:off
@@ -699,7 +710,6 @@ public class MiracleTopRecipePool implements IRecipePool {
         final ItemStack ringBlock = GTModHandler.getModItem("SGCraft", "stargateRing" , 1, 0);
         final ItemStack chevronBlock = GTModHandler.getModItem("SGCraft", "stargateRing", 1, 1);
         final ItemStack irisUpgrade = GTModHandler.getModItem("SGCraft", "sgIrisUpgrade" , 1, 0);
-        final Fluid ic2Coolant = FluidRegistry.getFluid("ic2coolant");
 
         // region Proof Of Heroes
         GTValues.RA.stdBuilder()
@@ -737,40 +747,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             .duration(20 * 1919810)
             .addTo(MT);
 
-
         // endregion
-
-        // region Optical circuit stuffs
-
-        // Optical Processor general recipe
-        TST_RecipeBuilder.builder()
-            .itemInputs(
-                GTUtility.getIntegratedCircuit(16),
-                WrappedCircuitItem.Wrapped_Optically_Perfected_CPU.get(3),
-                WrappedCircuitItem.Wrapped_Optically_Compatible_Memory.get(6),
-                WrappedCircuitItem.Wrapped_Circuit_Parts_CapacitorXSMD.get(48),
-                WrappedCircuitItem.Wrapped_Circuit_Parts_TransistorXSMD.get(48),
-                setStackSize(tectech.thing.CustomItemList.DATApipe.get(1), 192))
-            .fluidInputs(
-                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 6),
-                Materials.EnrichedHolmium.getMolten(144 * 96))
-            .itemOutputs(setStackSize(ItemList.Circuit_OpticalProcessor.get(1), 256))
-            .eut(614400)
-            .duration(20 * 720)
-            .addTo(MT);
-
-        // Optical Processor SoC recipe
-        TST_RecipeBuilder.builder()
-            .itemInputs(
-                GTUtility.getIntegratedCircuit(16),
-                WrappedCircuitItem.Wrapped_Circuit_Board_Optical.get(16),
-                GTCMItemList.OpticalSOC.get(16),
-                tectech.thing.CustomItemList.DATApipe.get(64))
-            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(4608), Materials.Infinity.getMolten(144 * 8))
-            .itemOutputs(setStackSize(ItemList.Circuit_OpticalProcessor.get(1), 256))
-            .eut(39321600)
-            .duration(20 * 40)
-            .addTo(MT);
 
         // Optical SoC Shield
         TST_RecipeBuilder.builder()
@@ -800,66 +777,6 @@ public class MiracleTopRecipePool implements IRecipePool {
             .eut(RECIPE_UMV)
             .duration(20 * 64)
             .addTo(MT);
-
-        // endregion
-
-        // region Neuro Processing Unit and Bio Processing Unit
-
-        // Neuro Processing Unit
-        TST_RecipeBuilder.builder()
-            .itemInputs(
-                GTUtility.getIntegratedCircuit(11),
-                WrappedCircuitItem.Wrapped_Circuit_Board_Wetware_Extreme.get(1),
-                WrappedCircuitItem.Wrapped_Circuit_Chip_Stemcell.get(16))
-            .fluidInputs(
-                Materials.ReinforceGlass.getMolten(16 * 16 * 288),
-                Materials.Polybenzimidazole.getMolten(16 * 8 * 72),
-                Materials.NaquadahEnriched.getMolten(16 * 4 * 72),
-                Materials.Silicone.getMolten(16 * 16 * 144),
-                Materials.TungstenSteel.getMolten(16 * 32 * 18),
-                Materials.GrowthMediumSterilized.getFluid(16 * 250),
-                Materials.UUMatter.getFluid(16 * 250),
-                new FluidStack(ic2Coolant, 1000 * 16))
-            .itemOutputs(ItemList.Circuit_Chip_NeuroCPU.get(16))
-            .eut(RECIPE_ZPM)
-            .duration(20)
-            .addTo(MT);
-
-        // Bio Processing Unit
-        TST_RecipeBuilder.builder()
-            .itemInputs(
-                GTUtility.getIntegratedCircuit(11),
-                WrappedCircuitItem.Wrapped_Circuit_Board_Bio_Ultra.get(1),
-                WrappedCircuitItem.Wrapped_Circuit_Chip_Biocell.get(16))
-            .fluidInputs(
-                Materials.ReinforceGlass.getMolten(16 * 16 * 288),
-                Materials.Polybenzimidazole.getMolten(16 * 16 * 72),
-                Materials.ElectrumFlux.getMolten(16 * 16 * 72),
-                Materials.Silicone.getMolten(16 * 16 * 144),
-                Materials.HSSS.getMolten(16 * 32 * 18),
-                Materials.BioMediumSterilized.getFluid(16 * 500),
-                Materials.UUMatter.getFluid(16 * 500),
-                new FluidStack(ic2Coolant, 2000 * 16))
-            .itemOutputs(ItemList.Circuit_Chip_BioCPU.get(16))
-            .eut(RECIPE_UHV)
-            .duration(20)
-            .addTo(MT);
-
-        // endregion
-
-        // region HighEnergyFlowCircuit
-        TST_RecipeBuilder.builder()
-            .itemInputs(
-                GTUtility.getIntegratedCircuit(16),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 12, 32753),
-                GTModHandler.getModItem("GoodGenerator", "circuitWrap", 24, 7),
-                GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 48, 32721))
-            .fluidInputs(MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 24), Materials.Infinity.getMolten(144 * 12))
-            .itemOutputs(GTUtility.copyAmountUnsafe(64 * 4, CustomItemList.HighEnergyFlowCircuit.get(1)))
-            .eut(RECIPE_LuV)
-            .duration(20 * 720 * 3)
-            .addTo(MT);
-        // endregion
 
         // region Endgame Challenge content
 

@@ -530,6 +530,17 @@ public class TstUtils {
     }
 
     /**
+     * Copy a new amount of a fluid stack
+     *
+     * @param aAmount the amount of new stack
+     * @param aStack  the target fluid stack
+     * @return new fluid stack
+     */
+    public static FluidStack copyAmountFluid(int aAmount, FluidStack aStack) {
+        return new FluidStack(aStack.getFluid(), aAmount);
+    }
+
+    /**
      * Return a shallow copy list of the array where the {@code null} elements are removed.
      *
      * @param array the array
