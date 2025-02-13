@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmountFluid;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.mergeSameFluid;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.removeIntegratedCircuitFromStacks;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps.spaceAssemblerRecipes;
@@ -462,22 +463,6 @@ public class MiracleTopRecipePool implements IRecipePool {
             oRecipe.mDuration,
             oRecipe.mEUt,
             0);
-    }
-
-    public FluidStack[] mergeSameFluid(FluidStack[] fluidStacks) {
-
-        Map<Fluid, Integer> fluidMap = new LinkedHashMap<>();
-
-        for (FluidStack aStack : fluidStacks) {
-            fluidMap.put(aStack.getFluid(), fluidMap.getOrDefault(aStack.getFluid(), 0) + aStack.amount);
-        }
-
-        ArrayList<FluidStack> mergedList = new ArrayList<>();
-        for (Map.Entry<Fluid, Integer> entry : fluidMap.entrySet()) {
-            mergedList.add(new FluidStack(entry.getKey(), entry.getValue()));
-        }
-
-        return mergedList.toArray(new FluidStack[0]);
     }
 
     private boolean isRecipeInputItemSame(GTRecipe a, GTRecipe b) {
