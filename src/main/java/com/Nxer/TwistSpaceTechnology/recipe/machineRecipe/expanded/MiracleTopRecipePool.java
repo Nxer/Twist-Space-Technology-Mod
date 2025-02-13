@@ -358,6 +358,7 @@ public class MiracleTopRecipePool implements IRecipePool {
                     Materials Material = Data.mMaterial.mMaterial;
                     OrePrefixes OreDict = Data.mPrefix;
                     if (Material.getMolten(1) != null && targetModifyOreDict.contains(OreDict)) {
+                        if (Material == Materials.TengamAttuned) Material = Materials.TengamPurified;
                         inputFluids.add(
                             Material
                                 .getMolten(OreDict.mMaterialAmount * GTValues.L * aStack.stackSize / GTValues.M * 16));
