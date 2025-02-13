@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -530,6 +532,17 @@ public class TstUtils {
     }
 
     /**
+     * Copy a new amount of a fluid stack
+     *
+     * @param aAmount the amount of new stack
+     * @param aStack  the target fluid stack
+     * @return new fluid stack
+     */
+    public static FluidStack copyAmountFluid(int aAmount, FluidStack aStack) {
+        return new FluidStack(aStack.getFluid(), aAmount);
+    }
+
+    /**
      * Return a shallow copy list of the array where the {@code null} elements are removed.
      *
      * @param array the array
@@ -610,5 +623,37 @@ public class TstUtils {
             }
         }
         return newStack.toArray(new ItemStack[0]);
+    }
+
+    public static FluidStack[] mergeSameFluid(FluidStack[] fluidStacks) {
+
+        Map<Fluid, Integer> fluidMap = new LinkedHashMap<>();
+
+        for (FluidStack aStack : fluidStacks) {
+            fluidMap.put(aStack.getFluid(), fluidMap.getOrDefault(aStack.getFluid(), 0) + aStack.amount);
+        }
+
+        ArrayList<FluidStack> mergedList = new ArrayList<>();
+        for (Map.Entry<Fluid, Integer> entry : fluidMap.entrySet()) {
+            mergedList.add(new FluidStack(entry.getKey(), entry.getValue()));
+        }
+
+        return mergedList.toArray(new FluidStack[0]);
+    }
+
+    public static ItemStack[] mergeSameItem(ItemStack[] itemStacks) {
+
+        Map<Item, Integer> itemMap = new LinkedHashMap<>();
+
+        for (ItemStack aStack : itemStacks) {
+            itemMap.put(aStack.getItem(), itemMap.getOrDefault(aStack.getItem(), 0) + aStack.stackSize);
+        }
+
+        ArrayList<ItemStack> mergedList = new ArrayList<>();
+        for (Map.Entry<Item, Integer> entry : itemMap.entrySet()) {
+            mergedList.add(new ItemStack(entry.getKey(), entry.getValue()));
+        }
+
+        return mergedList.toArray(new ItemStack[0]);
     }
 }
