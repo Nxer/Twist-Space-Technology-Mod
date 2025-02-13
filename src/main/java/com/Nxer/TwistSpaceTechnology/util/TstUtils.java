@@ -625,7 +625,6 @@ public class TstUtils {
         return newStack.toArray(new ItemStack[0]);
     }
 
-
     public static FluidStack[] mergeSameFluid(FluidStack[] fluidStacks) {
 
         Map<Fluid, Integer> fluidMap = new LinkedHashMap<>();
