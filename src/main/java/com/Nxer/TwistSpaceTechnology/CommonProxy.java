@@ -93,8 +93,14 @@ public class CommonProxy {
         new LazyStaticsInitLoader().initStaticsOnInit();
         MachineLoader.loadMachines();
         GT_Hatch_RackComputationMonitor.run();
-        EntityRegistry
-            .registerModEntity(EntityMountableBlock.class, "TST:EntityMountableBlock", 1, TwistSpaceTechnology.instance, 256, 20, false);
+        EntityRegistry.registerModEntity(
+            EntityMountableBlock.class,
+            "TST:EntityMountableBlock",
+            1,
+            TwistSpaceTechnology.instance,
+            256,
+            20,
+            false);
 
         new ModBlocksHandler().initStatics();
         new ModItemsHandler().initStatics();
