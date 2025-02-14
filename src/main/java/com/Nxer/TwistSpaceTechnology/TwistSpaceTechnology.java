@@ -33,7 +33,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
     modid = Tags.MODID,
     version = Tags.VERSION,
     name = Tags.MODNAME,
-    dependencies = "required-before:gregtech; " + "before:dreamcraft;",
+    dependencies = "required-after:gregtech;",
     acceptedMinecraftVersions = "[1.7.10]")
 public class TwistSpaceTechnology {
 
