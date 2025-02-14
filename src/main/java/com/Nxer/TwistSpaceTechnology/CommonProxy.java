@@ -1,33 +1,33 @@
 package com.Nxer.TwistSpaceTechnology;
 
+import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
+
+import net.minecraftforge.common.MinecraftForge;
+
+import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
+import com.Nxer.TwistSpaceTechnology.combat.PlayerEventHandler;
 import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
+import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
+import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
+import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler;
 import com.Nxer.TwistSpaceTechnology.common.entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.ic2Crop.CropInfo;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
+import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.event.ServerEvent;
+import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
+import com.Nxer.TwistSpaceTechnology.event.TickingEvent;
 import com.Nxer.TwistSpaceTechnology.loader.LazyStaticsInitLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
-import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import net.minecraftforge.common.MinecraftForge;
-
-import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
-import com.Nxer.TwistSpaceTechnology.combat.PlayerEventHandler;
-import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
-import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
-import com.Nxer.TwistSpaceTechnology.command.TST_Command;
-import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
-import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.event.ServerEvent;
-import com.Nxer.TwistSpaceTechnology.event.StartServerEvent;
-import com.Nxer.TwistSpaceTechnology.event.TickingEvent;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
@@ -37,19 +37,17 @@ import WayofTime.alchemicalWizardry.ModBlocks;
 import bartworks.API.SideReference;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.common.render.GTTextureBuilder;
 
-import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
-
 public class CommonProxy {
 
-    // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
-    // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         if (Config.activateCombatStats) {
@@ -57,13 +55,13 @@ public class CommonProxy {
         }
         TwistSpaceTechnology.LOG.info(Tags.MODNAME + " at version " + Tags.VERSION);
 
-        MaterialLoader.load();// Load MaterialPool
+        MaterialLoader.load();
+
         if (Config.activateCombatStats) {
             ItemRegister.registry();
         }
     }
 
-    // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
 
         MinecraftForge.EVENT_BUS.register(new DSP_WorldSavedData());
@@ -93,9 +91,8 @@ public class CommonProxy {
                 .build());
 
         new LazyStaticsInitLoader().initStaticsOnInit();
-        MachineLoader.loadMachines();// Load Machines
+        MachineLoader.loadMachines();
         GT_Hatch_RackComputationMonitor.run();
-        // NEIHandler.IMCSender();// NEI reg
         EntityRegistry
             .registerModEntity(EntityMountableBlock.class, "TST:EntityMountableBlock", 1, this, 256, 20, false);
 
@@ -103,7 +100,6 @@ public class CommonProxy {
         new ModItemsHandler().initStatics();
     }
 
-    // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         TST_Network.registryNetwork();
 
@@ -123,20 +119,17 @@ public class CommonProxy {
 
         MachineLoader.loadMachinePostInit();
         OreDictLoader.loadOreDictionary();
-        RecipeLoader.loadRecipesPostInit();// To init GTCM Recipemap
+        RecipeLoader.loadRecipesPostInit();
 
         CropInfo.registerAllCropInfo();
 
         TCLoader.load();
     }
 
-    // register server commands in this event handler (Remove if not needed)
     public void complete(FMLLoadCompleteEvent event) {
-        RecipeLoader.loadRecipes();// Load Recipes
+        RecipeLoader.loadRecipes();
 
-        // Init static parameters
         new LazyStaticsInitLoader().initStaticsOnCompleteInit();
-        // reflect
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

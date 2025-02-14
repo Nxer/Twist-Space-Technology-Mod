@@ -1,23 +1,7 @@
 package com.Nxer.TwistSpaceTechnology;
 
-import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
-import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
-import com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler;
-import com.Nxer.TwistSpaceTechnology.common.entity.EntityMountableBlock;
-import com.Nxer.TwistSpaceTechnology.common.ic2Crop.CropInfo;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
-import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.loader.LazyStaticsInitLoader;
-import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
-import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
-import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
-import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
-import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -27,7 +11,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.registry.EntityRegistry;
 
 @Mod(
     modid = Tags.MODID,
