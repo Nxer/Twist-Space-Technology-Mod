@@ -1,5 +1,19 @@
 package com.Nxer.TwistSpaceTechnology;
 
+import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
+import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
+import com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler;
+import com.Nxer.TwistSpaceTechnology.common.entity.EntityMountableBlock;
+import com.Nxer.TwistSpaceTechnology.common.ic2Crop.CropInfo;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
+import com.Nxer.TwistSpaceTechnology.loader.LazyStaticsInitLoader;
+import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
+import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
+import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
+import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
+import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
@@ -30,6 +44,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.common.render.GTTextureBuilder;
 
+import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
+
 public class CommonProxy {
 
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
@@ -40,6 +56,11 @@ public class CommonProxy {
             MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
         }
         TwistSpaceTechnology.LOG.info(Tags.MODNAME + " at version " + Tags.VERSION);
+
+        MaterialLoader.load();// Load MaterialPool
+        if (Config.activateCombatStats) {
+            ItemRegister.registry();
+        }
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
@@ -71,6 +92,15 @@ public class CommonProxy {
             new GTTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
                 .build());
 
+        new LazyStaticsInitLoader().initStaticsOnInit();
+        MachineLoader.loadMachines();// Load Machines
+        GT_Hatch_RackComputationMonitor.run();
+        // NEIHandler.IMCSender();// NEI reg
+        EntityRegistry
+            .registerModEntity(EntityMountableBlock.class, "TST:EntityMountableBlock", 1, this, 256, 20, false);
+
+        new ModBlocksHandler().initStatics();
+        new ModItemsHandler().initStatics();
     }
 
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
@@ -90,9 +120,25 @@ public class CommonProxy {
         if (Config.RewriteEIOTravelStaffConfig) {
             ItemYamato.rewriteEIOTravelStaffConfig();
         }
+
+        MachineLoader.loadMachinePostInit();
+        OreDictLoader.loadOreDictionary();
+        RecipeLoader.loadRecipesPostInit();// To init GTCM Recipemap
+
+        CropInfo.registerAllCropInfo();
+
+        TCLoader.load();
     }
 
     // register server commands in this event handler (Remove if not needed)
+    public void complete(FMLLoadCompleteEvent event) {
+        RecipeLoader.loadRecipes();// Load Recipes
+
+        // Init static parameters
+        new LazyStaticsInitLoader().initStaticsOnCompleteInit();
+        // reflect
+    }
+
     public void serverStarting(FMLServerStartingEvent event) {
         TwistSpaceTechnology.LOG.info("Ok, " + Tags.MODNAME + " at version " + Tags.VERSION + " load success .");
         event.registerServerCommand(new TST_Command());
@@ -105,6 +151,7 @@ public class CommonProxy {
     public void serverStarted(FMLServerStartedEvent event) {
         TwistSpaceTechnology.LOG.info("Init DSP Event.");
         StartServerEvent.INSTANCE.onLoading(event);
-    }
 
+        loadRecipesServerStarted();
+    }
 }

@@ -56,58 +56,27 @@ public class TwistSpaceTechnology {
         serverSide = "com.Nxer.TwistSpaceTechnology.CommonProxy")
     public static CommonProxy proxy;
 
-    // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
-    // GameRegistry." (Remove if not needed)
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
         proxy.preInit(event);
-        MaterialLoader.load();// Load MaterialPool
-        if (Config.activateCombatStats) {
-            ItemRegister.registry();
-        }
     }
 
     @Mod.EventHandler
-    // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
-        new LazyStaticsInitLoader().initStaticsOnInit();
-        MachineLoader.loadMachines();// Load Machines
-        GT_Hatch_RackComputationMonitor.run();
-        // NEIHandler.IMCSender();// NEI reg
-        EntityRegistry
-            .registerModEntity(EntityMountableBlock.class, "TST:EntityMountableBlock", 1, this, 256, 20, false);
-
-        new ModBlocksHandler().initStatics();
-        new ModItemsHandler().initStatics();
     }
 
     @Mod.EventHandler
-    // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-        MachineLoader.loadMachinePostInit();
-        OreDictLoader.loadOreDictionary();
-        RecipeLoader.loadRecipesPostInit();// To init GTCM Recipemap
-
-        CropInfo.registerAllCropInfo();
-
-        TCLoader.load();
     }
 
     @Mod.EventHandler
     public void completeInit(FMLLoadCompleteEvent event) {
-        RecipeLoader.loadRecipes();// Load Recipes
-
-        // Init static parameters
-        new LazyStaticsInitLoader().initStaticsOnCompleteInit();
-        // reflect
-
+        proxy.complete(event);
     }
 
     @Mod.EventHandler
-    // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
     }
@@ -115,7 +84,6 @@ public class TwistSpaceTechnology {
     @Mod.EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
         proxy.serverStarted(event);
-        loadRecipesServerStarted();
     }
 
 }
