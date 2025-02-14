@@ -56,6 +56,8 @@ public class TwistSpaceTechnology {
         serverSide = "com.Nxer.TwistSpaceTechnology.CommonProxy")
     public static CommonProxy proxy;
 
+    /* Don't add codes here, see CommonProxy for codes called on both sides and ClientProxy for client-only stuff */
+    // region FML Events
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
@@ -85,5 +87,6 @@ public class TwistSpaceTechnology {
     public void serverStarted(FMLServerStartedEvent event) {
         proxy.serverStarted(event);
     }
+    // endregion
 
 }
