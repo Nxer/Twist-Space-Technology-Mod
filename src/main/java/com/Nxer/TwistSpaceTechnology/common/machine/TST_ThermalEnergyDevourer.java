@@ -15,19 +15,15 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
@@ -36,10 +32,17 @@ import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.modularui.api.drawable.IDrawable;
+import com.gtnewhorizons.modularui.api.drawable.UITexture;
+import com.gtnewhorizons.modularui.api.widget.IWidgetBuilder;
+import com.gtnewhorizons.modularui.api.widget.Widget;
+import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
+import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -72,33 +75,60 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     // endregion
 
     // region Processing Logic
-
-    /**
-     * 0 = high speed mode
-     * <p>
-     * 1 = high parallel mode
-     */
-    private byte mode = ValueEnum.Mode_Default_ThermalEnergyDevourer;
     private int coefficientMultiplier = 1;
 
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - High Speed
+         * 1 - Devourer
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        if (wirelessMode) {
+            return TextLocalization.Waila_WirelessMode;
+        }
+        return StatCollector.translateToLocal("ThermalEnergyDevourer.modeMsg." + mode);
+    }
+
+    @Override
+    public ButtonWidget createModeSwitchButton(IWidgetBuilder<?> builder) {
+        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> { setMachineMode(nextMachineMode()); })
+            .setPlayClickSound(supportsMachineModeSwitch())
+            .setBackground(() -> {
+                List<UITexture> ret = new ArrayList<>();
+                if (supportsMachineModeSwitch()) {
+                    ret.add(GTUITextures.BUTTON_STANDARD);
+                    ret.add(getMachineModeIcon(getMachineMode()));
+                } else return null;
+                return ret.toArray(new IDrawable[0]);
+            })
+            .attachSyncer(new FakeSyncWidget.IntegerSyncer(this::getMachineMode, this::setMachineMode), builder)
+            .attachSyncer(new FakeSyncWidget.BooleanSyncer(() -> wirelessMode, (w) -> wirelessMode = w), builder)
+            .addTooltip(StatCollector.translateToLocal("GT5U.gui.button.mode_switch"))
+            .setTooltipShowUpDelay(TOOLTIP_DELAY)
+            .setPos(getMachineModeSwitchButtonPos())
+            .setSize(16, 16)
+            .setEnabled(widget -> !wirelessMode);
+        return (ButtonWidget) button;
+    }
+
+    @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        if (!tag.getBoolean("wirelessMode")) {
-            currentTip.add(
-                EnumChatFormatting.GOLD
-                    + translateToLocalFormatted("ThermalEnergyDevourer.modeMsg." + tag.getByte("mode")));
-        }
-    }
-
-    @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
-        if (tileEntity != null) {
-            tag.setByte("mode", mode);
+        if (tag.getBoolean("wirelessMode")) {
+            currentTip.remove(3);
         }
     }
 
@@ -117,25 +147,15 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("coefficientMultiplier", coefficientMultiplier);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         coefficientMultiplier = aNBT.getInteger("coefficientMultiplier");
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("ThermalEnergyDevourer.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -162,19 +182,19 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     @Override
     protected float getEuModifier() {
         if (wirelessMode) return 1;
-        return mode == 0 ? 1 : 1F / coefficientMultiplier;
+        return machineMode == 0 ? 1 : 1F / coefficientMultiplier;
     }
 
     @Override
     protected float getSpeedBonus() {
         if (wirelessMode) return 1;
-        return mode == 1 ? 1 : 0.5F / coefficientMultiplier;
+        return machineMode == 1 ? 1 : 0.5F / coefficientMultiplier;
     }
 
     @Override
     protected int getMaxParallelRecipes() {
         if (wirelessMode) return Integer.MAX_VALUE;
-        return mode == 1 ? ValueEnum.Parallel_HighParallelMode_ThermalEnergyDevourer
+        return machineMode == 1 ? ValueEnum.Parallel_HighParallelMode_ThermalEnergyDevourer
             : ValueEnum.Parallel_HighSpeedMode_ThermalEnergyDevourer;
     }
 
