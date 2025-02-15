@@ -11,10 +11,13 @@ import java.util.List;
 import java.util.Objects;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.intellij.lang.annotations.MagicConstant;
@@ -54,6 +57,8 @@ import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.PlayerUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.GTPPMultiBlockBase;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_ManufacturingCenter>
     implements ISurvivalConstructable {
@@ -378,6 +383,10 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         return StatCollector.translateToLocal(getManufacturingMachineMode().unlocalizedName);
     }
 
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal(MODES.get(mode).unlocalizedName);
+    }
+
     @Override
     public void setMachineMode(int index) {
         machineMode = index % getMachineModesCount();
@@ -400,6 +409,25 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL); // TODO: Laser Engraver
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID); // TODO: Autoclave
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT); // TODO: Fluid Solidifier
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        tag.setInteger("mode", machineMode);
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        currentTip.add(
+            StatCollector.translateToLocal("GT5U.machines.oreprocessor1") + " "
+                + EnumChatFormatting.WHITE
+                + getMachineModeName(tag.getInteger("mode"))
+                + EnumChatFormatting.RESET);
     }
 
     // endregion
