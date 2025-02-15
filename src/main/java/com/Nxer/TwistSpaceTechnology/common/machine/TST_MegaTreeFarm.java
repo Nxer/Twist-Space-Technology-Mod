@@ -16,6 +16,7 @@ import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.Mode;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.treeProductsMap;
@@ -61,6 +62,12 @@ import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.modularui.api.drawable.IDrawable;
+import com.gtnewhorizons.modularui.api.drawable.UITexture;
+import com.gtnewhorizons.modularui.api.widget.IWidgetBuilder;
+import com.gtnewhorizons.modularui.api.widget.Widget;
+import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
+import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 
 import bartworks.API.BorosilicateGlass;
 import forestry.api.arboriculture.ITree;
@@ -155,6 +162,38 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         // # Directed Mob Cloner
         // #zh_CN 定向克隆模式
         return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + mode);
+    }
+
+    @Override
+    public void setMachineMode(int index) {
+        super.setMachineMode(index);
+        SetRemoveWater();
+    }
+
+    @Override
+    public ButtonWidget createModeSwitchButton(IWidgetBuilder<?> builder) {
+        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
+            if (!checkStructure(true)) {
+                return;
+            }
+            setMachineMode(nextMachineMode());
+
+        })
+            .setPlayClickSound(supportsMachineModeSwitch())
+            .setBackground(() -> {
+                List<UITexture> ret = new ArrayList<>();
+                if (supportsMachineModeSwitch()) {
+                    ret.add(GTUITextures.BUTTON_STANDARD);
+                    ret.add(getMachineModeIcon(getMachineMode()));
+                } else return null;
+                return ret.toArray(new IDrawable[0]);
+            })
+            .attachSyncer(new FakeSyncWidget.IntegerSyncer(this::getMachineMode, this::setMachineMode), builder)
+            .addTooltip(StatCollector.translateToLocal("GT5U.gui.button.mode_switch"))
+            .setTooltipShowUpDelay(TOOLTIP_DELAY)
+            .setPos(getMachineModeSwitchButtonPos())
+            .setSize(16, 16);
+        return (ButtonWidget) button;
     }
 
     @Override
@@ -282,7 +321,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 return;
             }
             super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
-            SetRemoveWater();
         }
     }
 

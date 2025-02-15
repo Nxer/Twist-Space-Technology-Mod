@@ -23,6 +23,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.api.util.GTUtility.getCasingTextureIndex;
@@ -31,6 +32,7 @@ import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerato
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -64,6 +66,12 @@ import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.modularui.api.drawable.IDrawable;
+import com.gtnewhorizons.modularui.api.drawable.UITexture;
+import com.gtnewhorizons.modularui.api.widget.IWidgetBuilder;
+import com.gtnewhorizons.modularui.api.widget.Widget;
+import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
+import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 
 import bartworks.API.BorosilicateGlass;
 import galaxyspace.core.register.GSBlocks;
@@ -179,6 +187,31 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     @Override
     public String getMachineModeName(int mode) {
         return StatCollector.translateToLocal("BallLightning.modeMsg." + mode);
+    }
+
+    @Override
+    public ButtonWidget createModeSwitchButton(IWidgetBuilder<?> builder) {
+        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
+            if (!checkStructure(true)) {
+                return;
+            }
+            setMachineMode(nextMachineMode());
+        })
+            .setPlayClickSound(supportsMachineModeSwitch())
+            .setBackground(() -> {
+                List<UITexture> ret = new ArrayList<>();
+                if (supportsMachineModeSwitch()) {
+                    ret.add(GTUITextures.BUTTON_STANDARD);
+                    ret.add(getMachineModeIcon(getMachineMode()));
+                } else return null;
+                return ret.toArray(new IDrawable[0]);
+            })
+            .attachSyncer(new FakeSyncWidget.IntegerSyncer(this::getMachineMode, this::setMachineMode), builder)
+            .addTooltip(StatCollector.translateToLocal("GT5U.gui.button.mode_switch"))
+            .setTooltipShowUpDelay(TOOLTIP_DELAY)
+            .setPos(getMachineModeSwitchButtonPos())
+            .setSize(16, 16);
+        return (ButtonWidget) button;
     }
 
     @Override

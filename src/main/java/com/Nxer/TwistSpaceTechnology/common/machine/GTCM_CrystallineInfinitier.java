@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -109,6 +108,16 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     @Override
     public String getMachineModeName(int mode) {
         return StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + mode);
+    }
+
+    @Override
+    public void setMachineMode(int index) {
+        super.setMachineMode(index);
+        this.speedBonus = switch (machineMode) {
+            case 0 -> 1F / SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
+            case 2 -> 1F / SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
+            default -> 1F / SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
+        };
     }
 
     @Override
@@ -196,16 +205,6 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
             RecipeMaps.autoclaveRecipes,
             RecipeMaps.chemicalBathRecipes,
             GTCMRecipe.CrystallineInfinitierRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
-        this.speedBonus = switch (machineMode) {
-            case 0 -> 1F / SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
-            case 2 -> 1F / SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
-            default -> 1F / SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
-        };
     }
 
     @Override
