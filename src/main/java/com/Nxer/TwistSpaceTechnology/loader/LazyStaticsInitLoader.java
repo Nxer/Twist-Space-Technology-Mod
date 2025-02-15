@@ -12,11 +12,11 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_Stra
 
 public class LazyStaticsInitLoader {
 
-    public void initStaticsOnInit() {
+    public static void initStaticsOnInit() {
         CheckRecipeResults.initStatics();
     }
 
-    public void initStaticsOnCompleteInit() {
+    public static void initStaticsOnCompleteInit() {
         MiscHelper.initStatics();
         TST_StrangeMatterAggregator.initStatics();
         TST_ArtificialStar.initStatics();

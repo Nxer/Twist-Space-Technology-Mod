@@ -90,7 +90,7 @@ public class CommonProxy {
             new GTTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
                 .build());
 
-        new LazyStaticsInitLoader().initStaticsOnInit();
+        LazyStaticsInitLoader.initStaticsOnInit();
         MachineLoader.loadMachines();
         GT_Hatch_RackComputationMonitor.run();
         EntityRegistry.registerModEntity(
@@ -102,8 +102,8 @@ public class CommonProxy {
             20,
             false);
 
-        new ModBlocksHandler().initStatics();
-        new ModItemsHandler().initStatics();
+        ModBlocksHandler.initStatics();
+        ModItemsHandler.initStatics();
     }
 
     public void postInit(FMLPostInitializationEvent event) {
@@ -135,7 +135,7 @@ public class CommonProxy {
     public void complete(FMLLoadCompleteEvent event) {
         RecipeLoader.loadRecipes();
 
-        new LazyStaticsInitLoader().initStaticsOnCompleteInit();
+        LazyStaticsInitLoader.initStaticsOnCompleteInit();
     }
 
     public void serverStarting(FMLServerStartingEvent event) {
