@@ -50,7 +50,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.QFTRecipePool
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.SpaceAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.DragonBloodRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
-import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
 import com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipeHandler;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool;
@@ -97,7 +96,6 @@ public class RecipeLoader {
         new SimpleFurnaceFuelPool().loadRecipes();
         new TCResearches().register();
 
-        StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
         new OP_NormalProcessing().enumOreProcessingRecipes();
@@ -109,6 +107,7 @@ public class RecipeLoader {
     }
 
     public static void loadRecipesPostInit() {
+        // TODO: Merge into #loadRecipes
         new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
     }
 

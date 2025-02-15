@@ -87,16 +87,16 @@ public class TCRecipePool implements IRecipePool {
                     .merge(Aspect.ORDER, 128)
                     .merge(Aspect.ENTROPY, 128),
                 ItemList.Machine_Multi_Assemblyline.get(1, 0),
-                new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                     new ItemStack(blockMetalDevice, 1, 12),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                     new ItemStack(blockMetalDevice, 1, 12),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                     new ItemStack(blockMetalDevice, 1, 12),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                     new ItemStack(blockMetalDevice, 1, 12) });
 
@@ -119,25 +119,25 @@ public class TCRecipePool implements IRecipePool {
 
                     GTModHandler.getModItem(Mods.Botania.ID, "manaResource", 1, 5),
                     new ItemStack[] { Industrial_TreeFarm.get(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
                         TITANSTEEL.getPlateDense(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
 
                         Industrial_FishingPond.get(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
                         TITANSTEEL.getPlateDense(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
 
                         ExtremeIndustrialGreenhouse.get(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
                         TITANSTEEL.getPlateDense(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
 
                         (Mods.EnderIO.isModLoaded() && Mods.MobsInfo.isModLoaded()) ? ExtremeEntityCrusher.get(1)
                             : new ItemStack(diamond_sword, 1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
                         TITANSTEEL.getPlateDense(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1) });
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1) });
 
                 infusionRecipeFontOfEcology = ThaumcraftApi.addInfusionCraftingRecipe(
                     "FONT_OF_ECOLOGY",

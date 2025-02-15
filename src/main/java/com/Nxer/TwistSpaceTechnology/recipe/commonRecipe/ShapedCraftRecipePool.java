@@ -53,7 +53,7 @@ public class ShapedCraftRecipePool implements IRecipePool {
             addCraftingRecipe(
                 GTCMItemList.IndustrialMagnetarSeparator.get(1),
                 new Object[] { "ABA", "CDC", "ABA", 'A', MaterialsAlloy.TALONITE.getPlate(1), 'B',
-                    OrePrefixes.circuit.get(Materials.Elite), 'C', ItemList.IV_Coil.get(1), 'D',
+                    OrePrefixes.circuit.get(Materials.IV), 'C', ItemList.IV_Coil.get(1), 'D',
                     ItemList.Machine_IV_ElectromagneticSeparator.get(1) });
 
             // Anti Magnetic Casing

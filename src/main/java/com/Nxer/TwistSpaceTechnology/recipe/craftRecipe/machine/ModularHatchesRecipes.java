@@ -56,12 +56,12 @@ public class ModularHatchesRecipes implements IRecipePool {
 
         ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Transcendent, 1), };
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 1), };
 
         ItemStack[] fieldGenerators = new ItemStack[] { ItemList.Field_Generator_ZPM.get(1),
             ItemList.Field_Generator_UV.get(1), ItemList.Field_Generator_UHV.get(1),

@@ -296,7 +296,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     GTCMItemList.SolarSail.get(16),
                     GTCMItemList.StellarConstructionFrameMaterial.get(4),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 24),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 24),
                     ItemList.Circuit_Wafer_QPIC.get(32),
                     ItemList.Emitter_UMV.get(4),
                     ItemList.Sensor_UMV.get(4))
@@ -335,7 +335,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
                     GTUtility.copyAmountUnsafe(6144, ItemList.Circuit_Parts_Crystal_Chip_Master.get(1)),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 16),
                     ItemList.Field_Generator_UEV.get(8),
 
                     ItemList.Circuit_Wafer_PPIC.get(64),
@@ -355,7 +355,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Infinity, 64),
                     GTUtility.copyAmountUnsafe(48912, ItemList.Circuit_Parts_Crystal_Chip_Master.get(1)),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 16),
                     ItemList.Field_Generator_UIV.get(8),
 
                     ItemList.Circuit_Wafer_QPIC.get(64),
@@ -423,7 +423,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.CallistoIce, 1),
                     ItemList.Reactor_Coolant_Sp_6.get(1L),
                     getModItem(GTPlusPlus.ID, "itemScrewLaurenium", 12, 0),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Elite), 2L },
+                    new Object[] { OrePrefixes.circuit.get(Materials.IV), 2L },
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 2),
                     ItemList.Super_Chest_IV.get(1),
                     ItemList.Super_Tank_IV.get(1),
@@ -464,7 +464,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Hull_LuV.get(1),
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 2),
                     ItemList.Circuit_Chip_UHPIC.get(2),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Master), 2 },
+                    new Object[] { OrePrefixes.circuit.get(Materials.LuV), 2 },
                     ItemList.LuV_Coil.get(2),
                     ItemList.Electric_Pump_LuV.get(1))
                 .itemOutputs(ItemList.Hatch_Energy_LuV.get(1))
@@ -506,7 +506,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Hull_MAX.get(1L),
                     GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 2L),
                     ItemList.Circuit_Chip_QPIC.get(2L),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
+                    new Object[] { OrePrefixes.circuit.get(Materials.UHV), 2L },
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
                 .itemOutputs(ItemList.Hatch_Energy_UHV.get(1))
@@ -524,7 +524,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                         Materials.Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid,
                         2),
                     ItemList.Circuit_Chip_UHPIC.get(2),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Master), 2 },
+                    new Object[] { OrePrefixes.circuit.get(Materials.LuV), 2 },
                     ItemList.LuV_Coil.get(2),
                     ItemList.Electric_Pump_LuV.get(1))
                 .itemOutputs(ItemList.Hatch_Dynamo_LuV.get(1))
@@ -566,7 +566,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Hull_MAX.get(1L),
                     GTOreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuhvwire, 8L),
                     ItemList.Circuit_Chip_QPIC.get(2L),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
+                    new Object[] { OrePrefixes.circuit.get(Materials.UHV), 2L },
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
                 .itemOutputs(ItemList.Hatch_Dynamo_UHV.get(1))
