@@ -1,18 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import gregtech.api.enums.GTValues;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.TierEU;
-import gregtech.api.interfaces.IRecipeMap;
-import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GTModHandler;
-import gregtech.api.util.GTOreDictUnificator;
-import net.minecraft.item.ItemStack;
-
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchEV;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchHV;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchIV;
@@ -27,6 +14,21 @@ import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEne
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchUXV;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchZPM;
 import static com.dreammaster.gthandler.GT_Loader_Machines.bitsd;
+
+import net.minecraft.item.ItemStack;
+
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+
+import gregtech.api.enums.GTValues;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
+import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTOreDictUnificator;
 
 public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
 

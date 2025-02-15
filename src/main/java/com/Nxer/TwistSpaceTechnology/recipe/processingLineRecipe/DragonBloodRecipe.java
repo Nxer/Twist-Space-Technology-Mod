@@ -1,10 +1,22 @@
 package com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe;
 
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool.addToMiracleDoorRecipes;
+import static gregtech.api.enums.Mods.Forestry;
+import static gregtech.api.enums.TierEU.RECIPE_UXV;
+import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
+import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.DRAGON_METAL;
+import static net.minecraftforge.fluids.FluidRegistry.getFluidStack;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.TierEU;
@@ -15,16 +27,6 @@ import gtPlusPlus.xmod.forestry.bees.handler.GTPPCombType;
 import gtPlusPlus.xmod.forestry.bees.handler.GTPPDropType;
 import gtPlusPlus.xmod.forestry.bees.handler.GTPPPropolisType;
 import gtPlusPlus.xmod.forestry.bees.registry.GTPP_Bees;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool.addToMiracleDoorRecipes;
-import static gregtech.api.enums.Mods.Forestry;
-import static gregtech.api.enums.TierEU.RECIPE_UXV;
-import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
-import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.DRAGON_METAL;
-import static net.minecraftforge.fluids.FluidRegistry.getFluidStack;
 
 public class DragonBloodRecipe implements IRecipePool {
 

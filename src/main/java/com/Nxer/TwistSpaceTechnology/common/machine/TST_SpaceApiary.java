@@ -1,5 +1,35 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryCycleTime;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T1;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T2;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T3;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T4;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryEnableDisplayInfo;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T1;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T2;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T3;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T4;
+import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.enableDNAConsuming;
+import static forestry.api.apiculture.BeeManager.beeRoot;
+import static net.minecraft.util.StatCollector.translateToLocal;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevatormodules.TileEntityModuleBase;
@@ -9,6 +39,7 @@ import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
 import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
+
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
@@ -24,38 +55,10 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 import tectech.thing.metaTileEntity.multi.base.INameFunction;
 import tectech.thing.metaTileEntity.multi.base.IStatusFunction;
 import tectech.thing.metaTileEntity.multi.base.LedStatus;
 import tectech.thing.metaTileEntity.multi.base.Parameters;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryCycleTime;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T1;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T2;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T3;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T4;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryEnableDisplayInfo;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T1;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T2;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T3;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T4;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.enableDNAConsuming;
-import static forestry.api.apiculture.BeeManager.beeRoot;
-import static net.minecraft.util.StatCollector.translateToLocal;
 
 public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 

@@ -1,42 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import bartworks.system.material.WerkstoffLoader;
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
-import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
-import goodgenerator.items.GGMaterial;
-import goodgenerator.util.ItemRefer;
-import gregtech.api.enums.GTValues;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.TierEU;
-import gregtech.api.objects.ItemData;
-import gregtech.api.recipe.RecipeMap;
-import gregtech.api.util.GTOreDictUnificator;
-import gregtech.api.util.GTRecipe;
-import gregtech.api.util.GTRecipeBuilder;
-import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.item.ModItems;
-import gtPlusPlus.core.material.MaterialsAlloy;
-import gtPlusPlus.core.material.MaterialsElements;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
-import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
-import gtnhlanth.common.register.LanthItemList;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.google.common.math.LongMath.pow;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GalaxySpace;
@@ -77,6 +40,45 @@ import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier5;
 import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier6;
 import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier7;
 import static tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.gthandler.CustomItemList;
+
+import bartworks.system.material.WerkstoffLoader;
+import goodgenerator.items.GGMaterial;
+import goodgenerator.util.ItemRefer;
+import gregtech.api.enums.GTValues;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
+import gregtech.api.objects.ItemData;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTRecipeBuilder;
+import gregtech.api.util.GTUtility;
+import gtPlusPlus.core.item.ModItems;
+import gtPlusPlus.core.material.MaterialsAlloy;
+import gtPlusPlus.core.material.MaterialsElements;
+import gtPlusPlus.core.util.minecraft.ItemUtils;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
+import gtnhlanth.common.register.LanthItemList;
+import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 
 public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
 

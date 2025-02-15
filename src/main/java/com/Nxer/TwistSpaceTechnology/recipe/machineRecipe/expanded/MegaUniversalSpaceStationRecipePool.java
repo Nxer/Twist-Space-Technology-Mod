@@ -1,12 +1,18 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import bartworks.system.material.Werkstoff;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MiracleTop;
+import static gregtech.api.enums.TierEU.RECIPE_UXV;
+
+import net.minecraft.item.ItemStack;
+
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
+
+import bartworks.system.material.Werkstoff;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
@@ -17,10 +23,6 @@ import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
-import net.minecraft.item.ItemStack;
-
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MiracleTop;
-import static gregtech.api.enums.TierEU.RECIPE_UXV;
 
 public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
 

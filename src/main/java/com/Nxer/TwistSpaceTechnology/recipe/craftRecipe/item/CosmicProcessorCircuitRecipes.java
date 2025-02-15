@@ -1,29 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
-import appeng.items.materials.MaterialType;
-import bartworks.API.recipe.BartWorksRecipeMaps;
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
-import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
-import goodgenerator.items.GGMaterial;
-import gregtech.api.enums.GTValues;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.TierEU;
-import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GTModHandler;
-import gregtech.api.util.GTOreDictUnificator;
-import gregtech.api.util.GTRecipeConstants;
-import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.item.ModItems;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
-import net.minecraft.item.ItemStack;
-
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EncapsulatedMicroSpaceTimeUnit;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EnergyFluctuationSelfHarmonizer;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.InformationHorizonInterventionShell;
@@ -43,6 +19,32 @@ import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.CELESTIAL_TU
 import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
+
+import net.minecraft.item.ItemStack;
+
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.gthandler.CustomItemList;
+
+import appeng.items.materials.MaterialType;
+import bartworks.API.recipe.BartWorksRecipeMaps;
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
+import goodgenerator.items.GGMaterial;
+import gregtech.api.enums.GTValues;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
+import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTRecipeConstants;
+import gregtech.api.util.GTUtility;
+import gtPlusPlus.core.item.ModItems;
+import gtPlusPlus.core.util.minecraft.ItemUtils;
 
 public class CosmicProcessorCircuitRecipes implements IRecipePool {
 

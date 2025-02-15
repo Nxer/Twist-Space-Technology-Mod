@@ -1,12 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.config;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
-import gregtech.api.enums.TierEU;
+import java.io.File;
+import java.math.BigInteger;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
-import java.io.File;
-import java.math.BigInteger;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+
+import gregtech.api.enums.TierEU;
 
 // spotless:off
 public class Config {

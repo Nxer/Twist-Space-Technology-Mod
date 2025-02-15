@@ -1,13 +1,15 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
+import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.TierEU;
 import gtPlusPlus.core.material.MaterialsElements;
-import net.minecraftforge.fluids.FluidStack;
-
-import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 
 public class FusionReactorRecipePool implements IRecipePool {
 
