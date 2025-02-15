@@ -108,7 +108,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 
     @Override
     public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("CrystallineInfinitier.modeMsg" + mode);
+        return StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + mode);
     }
 
     @Override
