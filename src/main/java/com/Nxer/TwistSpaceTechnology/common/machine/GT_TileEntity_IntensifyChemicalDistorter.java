@@ -3,7 +3,6 @@
  */
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_ICDMode_IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_LCRMode_IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter;
@@ -27,7 +26,6 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -46,6 +44,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -56,7 +55,6 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
@@ -81,13 +79,31 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     // endregion
 
     // region Processing Logic
-
-    protected int mode = Mode_Default_IntensifyChemicalDistorter;// 0 means IntensifyChemicalDistorter; 1 means LCR adv
     private HeatingCoilLevel coilLevel;
 
     @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Intense Chemical Distorter
+         * 1 - Chemical Reactor
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + mode);
+    }
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
-        if (mode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
+        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
         return RecipeMaps.multiblockChemicalReactorRecipes;
     }
 
@@ -130,13 +146,13 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     @Override
     protected float getSpeedBonus() {
-        return mode == 0 ? 1F / SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
+        return machineMode == 0 ? 1F / SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
             : 1F / SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter;
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return this.mode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter
+        return machineMode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter
             : Parallel_LCRMode_IntensifyChemicalDistorter;
     }
 
@@ -281,18 +297,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             true);
     }
 
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (this.mode + 1) % 2;
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
-        }
-    }
-
-    //
-
     /**
      * Checks if this is a Correct Machine Part for this kind of Machine (Turbine Rotor for example)
      *
@@ -365,14 +369,14 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
-        aNBT.setInteger("mode", mode);
+        aNBT.setInteger("mode", machineMode);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
-        mode = aNBT.getInteger("mode");
+        machineMode = aNBT.getInteger("mode");
     }
 
     /**

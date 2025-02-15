@@ -27,7 +27,6 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.api.util.GTUtility.getCasingTextureIndex;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
-import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerators;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
@@ -71,6 +70,7 @@ import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -121,7 +121,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     public byte mMachineTier = 1;
     private byte mStructureTier = 0;
     private int overclockParameter = 1;
-    public byte mode = 0;
     public long FusionMaxEut = 0;
     private boolean isWirelessMode = false;
     private String costingWirelessEU = "0";
@@ -149,9 +148,34 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     }
 
     // region Processing Logic
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Arc Furnace
+         * 1 - Plasma Arc Furnace
+         * 2 - Fusion
+         * 3 - Ball Lightning
+         */
+        return mMachineTier;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("BallLightning.modeMsg." + mode);
+    }
+
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return switch (mode) {
+        return switch (machineMode) {
             case 1 -> RecipeMaps.plasmaArcFurnaceRecipes;
             case 2 -> RecipeMaps.fusionRecipes;
             case 3 -> GTCMRecipe.BallLightningRecipes;
@@ -171,14 +195,14 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
 
     @Override
     protected int getMaxParallelRecipes() {
-        if (isWirelessMode || mode == 3) return Integer.MAX_VALUE;
-        else if (mode == 2) return 65536;
+        if (isWirelessMode || machineMode == 3) return Integer.MAX_VALUE;
+        else if (machineMode == 2) return 65536;
         else return (int) Math.pow(2, compactFusionCoilTier * (coilLevel.getTier() - 10));
     }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return switch (mode) {
+        return switch (machineMode) {
             case (2) -> true;
             case (3) -> false;
             default -> fieldGeneratorTier > 2;
@@ -224,9 +248,9 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     }
 
     public void checkBonus() {
-        if (mMachineTier - mode > 1) speedBonus = (float) Math.pow(0.25, mMachineTier - mode - 1);
+        if (mMachineTier - machineMode > 1) speedBonus = (float) Math.pow(0.25, mMachineTier - machineMode - 1);
         else speedBonus = 1;
-        EuModifier = mode != 3 ? 1 : (float) (1 - 0.099 * (fieldGeneratorTier - 1));
+        EuModifier = machineMode != 3 ? 1 : (float) (1 - 0.099 * (fieldGeneratorTier - 1));
     }
 
     public void checkWireless() {
@@ -245,11 +269,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
-
-            this.mode = (byte) ((this.mode + 1) % mMachineTier);
-            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("BallLightning.modeMsg." + this.mode));
-
         }
+        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
     }
 
     private void flushOverclockParameter() {
@@ -287,7 +308,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                 if (glassTier < 12 && glassTier < GTUtility.getTier(recipe.mEUt)) {
                     return CheckRecipeResultRegistry.insufficientMachineTier(GTUtility.getTier(recipe.mEUt));
                 }
-                if (mode == 2) {
+                if (machineMode == 2) {
                     mRecipeTierModeFusion = getFusionRecipeTier(recipe.mSpecialValue, GTUtility.getTier(recipe.mEUt));
                     if (mRecipeTierModeFusion > compactFusionCoilTier)
                         return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTierModeFusion);
@@ -309,7 +330,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
 
     @Override
     protected void setProcessingLogicPower(ProcessingLogic logic) {
-        if (mode != 2) {
+        if (machineMode != 2) {
             if (isWirelessMode) {
                 // wireless mode ignore voltage limit
                 logic.setAvailableVoltage(Long.MAX_VALUE);
@@ -577,14 +598,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        String modeName = switch (tag.getByte("mode")) {
-            case 1 -> EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("gt.recipe.plasmaarcfurnace");
-            case 2 -> EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("gt.recipe.fusionreactor");
-            case 3 -> EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("tst.recipe.BallLightningRecipes");
-            default -> EnumChatFormatting.DARK_GREEN + translateToLocalFormatted("gt.recipe.arcfurnace");
-        };
-        currentTip.add(modeName);
-        if (tag.getByte("mode") == 2) {
+        if (tag.getInteger("mode") == 2) {
             currentTip.add(
                 // #tr Waila.TST_BallLightning.1
                 // # Max Fusion Eu Cost
@@ -636,7 +650,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setByte("mode", mode);
             tag.setString("FusionMaxEut", GTUtility.formatNumbers(FusionMaxEut));
             tag.setBoolean("isWirelessMode", isWirelessMode);
             tag.setString("costingWirelessEU", costingWirelessEU);
@@ -652,7 +665,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
         ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.MachineMode.getText()
             + " : "
             + EnumChatFormatting.GOLD
-            + (this.mode + 1);
+            + (this.machineMode + 1);
         ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums.MachineTier.getText()
             + " : "
             + EnumChatFormatting.GOLD
@@ -679,7 +692,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setByte(" mMachineTier", mMachineTier);
         aNBT.setByte(" mStructureTier", mStructureTier);
         aNBT.setBoolean("isWirelessMode", isWirelessMode);
@@ -695,7 +708,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         mMachineTier = aNBT.getByte("mMachineTier");
         mStructureTier = aNBT.getByte("mStructureTier");
         isWirelessMode = aNBT.getBoolean("isWirelessMode");

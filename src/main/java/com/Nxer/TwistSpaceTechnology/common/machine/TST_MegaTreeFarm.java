@@ -71,6 +71,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -111,7 +112,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // region Structure
 
     private int controllerTier = 0;
-    byte mMode = 0;
     boolean checkWaterFinish = false;
     boolean checkAirFinish = false;
     boolean isFocusMode = false;
@@ -119,6 +119,43 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private static ItemStack Offspring;
     // public ESSFakePlayer ESSPlayer = null;
     // public final Random rand = new FastRandom();
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Tree Growth Simulator
+         * 1 - Aqua Zone Simulator
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        // #tr EcoSphereSimulator.modeMsg.0
+        // # Tree Growth Simulator
+        // #zh_CN 原木拟生模式
+
+        // #tr EcoSphereSimulator.modeMsg.1
+        // # Aqua Zone Simulator
+        // #zh_CN 水域模拟模式
+
+        // #tr EcoSphereSimulator.modeMsg.2
+        // # Artificial Green House
+        // #zh_CN 人工温室模式
+
+        // #tr EcoSphereSimulator.modeMsg.3
+        // # Directed Mob Cloner
+        // #zh_CN 定向克隆模式
+        return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + mode);
+    }
 
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
@@ -182,7 +219,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mTier", (byte) controllerTier);
-        aNBT.setByte("mMode", mMode);
+        aNBT.setByte("mMode", (byte) machineMode);
         aNBT.setBoolean("checkWater", checkWaterFinish);
         aNBT.setBoolean("checkAir", checkAirFinish);
     }
@@ -191,7 +228,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         controllerTier = aNBT.getByte("mTier");
-        mMode = aNBT.getByte("mMode");
+        machineMode = aNBT.getByte("mMode");
         checkWaterFinish = aNBT.getBoolean("checkWater");
         checkAirFinish = aNBT.getBoolean("checkAir");
     }
@@ -244,25 +281,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
-            this.mMode = (byte) ((this.mMode + 1) % 2);
+            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
             SetRemoveWater();
-            GTUtility
-                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + this.mMode));
-            // #tr EcoSphereSimulator.modeMsg.0
-            // # Tree Growth Simulator
-            // #zh_CN 原木拟生模式
-
-            // #tr EcoSphereSimulator.modeMsg.1
-            // # Aqua Zone Simulator
-            // #zh_CN 水域模拟模式
-
-            // #tr EcoSphereSimulator.modeMsg.2
-            // # Artificial Green House
-            // #zh_CN 人工温室模式
-
-            // #tr EcoSphereSimulator.modeMsg.3
-            // # Directed Mob Cloner
-            // #zh_CN 定向克隆模式
         }
     }
 
@@ -567,7 +587,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private void SetRemoveWater() {
 
         // checkType = true, check Water
-        boolean checkType = mMode != 0;
+        boolean checkType = machineMode != 0;
         if (checkType && checkWaterFinish) return;
         if (!checkType && checkAirFinish) return;
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
@@ -819,7 +839,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 EuTier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
                 if (EuTier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
                 tierMultiplier = getTierMultiplier(EuTier);
-                return switch (mMode) {
+                return switch (machineMode) {
                     case 1 -> AquaticZoneSimulator();
                     // case 2 -> MachineMode3();
                     default -> TreeGrowthSimulator();

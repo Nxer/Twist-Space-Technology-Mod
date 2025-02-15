@@ -31,7 +31,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -51,6 +50,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -91,7 +91,6 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     // region Processing Logic
     protected static final BigInteger CONSUME_EU_PER_SMELTING = BigInteger
         .valueOf(ConsumeEuPerSmelting_HephaestusAtelier);
-    protected byte mode = 0;
     protected int coilTier = 0;
     protected int maxProcessNormalModeFurnace = 0;
     protected long maxEut = 0;
@@ -99,9 +98,29 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     protected boolean startRecipeProcessing = false;
 
     @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Furnace
+         * 1 - Alloy Smelter
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("HephaestusAtelier.modeMsg." + mode);
+    }
+
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("coilTier", coilTier);
         aNBT.setInteger("maxProcessNormalModeFurnace", maxProcessNormalModeFurnace);
         aNBT.setLong("maxEut", maxEut);
@@ -111,26 +130,11 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         coilTier = aNBT.getInteger("coilTier");
         maxProcessNormalModeFurnace = aNBT.getInteger("maxProcessNormalModeFurnace");
         maxEut = aNBT.getLong("maxEut");
         startRecipeProcessing = aNBT.getBoolean("startRecipeProcessing");
-    }
-
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            // #tr HephaestusAtelier.modeMsg.0
-            // # Mode : Furnace
-            // #zh_CN 模式 : 熔炉
-            // #tr HephaestusAtelier.modeMsg.1
-            // # Mode : Alloy Smelter
-            // #zh_CN 模式 : 合金冶炼炉
-            GTUtility
-                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("HephaestusAtelier.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -189,7 +193,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     @Override
     public CheckRecipeResult checkProcessing() {
         lEUt = 0;
-        return mode == 1 ? checkProcessingAlloySmelter() : checkProcessingFurnace();
+        return machineMode == 1 ? checkProcessingAlloySmelter() : checkProcessingFurnace();
     }
 
     public CheckRecipeResult checkProcessingAlloySmelter() {
@@ -407,7 +411,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return mode == 1 ? RecipeMaps.alloySmelterRecipes : RecipeMaps.furnaceRecipes;
+        return machineMode == 1 ? RecipeMaps.alloySmelterRecipes : RecipeMaps.furnaceRecipes;
     }
 
     @NotNull
