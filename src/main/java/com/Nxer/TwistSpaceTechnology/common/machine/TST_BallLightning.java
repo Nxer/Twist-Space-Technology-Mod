@@ -157,7 +157,15 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
          * 2 - Fusion
          * 3 - Ball Lightning
          */
-        return mMachineTier;
+        return 4;
+    }
+
+    @Override
+    public int nextMachineMode() {
+        if (machineMode + 1 >= mMachineTier) {
+            return 0;
+        }
+        return machineMode + 1;
     }
 
     @Override

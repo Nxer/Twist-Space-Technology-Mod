@@ -92,12 +92,17 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
          * 3 - Electric Implosion Compressor
          * 4 - Neutronium Compressor
          */
+        return 5;
+    }
+
+    @Override
+    public int nextMachineMode() {
         if (fieldGeneratorTier >= 11) {
-            return 5;
+            return super.nextMachineMode();
         } else if (fieldGeneratorTier >= 3) {
-            return 3;
+            return super.nextMachineMode() % 3;
         } else {
-            return 2;
+            return super.nextMachineMode() % 2;
         }
     }
 
