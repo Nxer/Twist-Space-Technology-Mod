@@ -33,7 +33,7 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 public class ModularHatchesRecipes implements IRecipePool {
 
     private long getRecipeVoltageFromModuleTier(int t) {
-        return TierEU.VP[7 + t];
+        return GTValues.VP[7 + t];
     }
 
     @Override
