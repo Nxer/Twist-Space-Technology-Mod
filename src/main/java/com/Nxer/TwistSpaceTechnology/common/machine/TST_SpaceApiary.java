@@ -1,5 +1,48 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevatormodules.TileEntityModuleBase;
+import com.gtnewhorizons.modularui.api.math.Alignment;
+import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
+import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
+import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
+import com.gtnewhorizons.modularui.common.widget.SlotWidget;
+import com.gtnewhorizons.modularui.common.widget.TextWidget;
+import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.IBeekeepingMode;
+import forestry.apiculture.genetics.Bee;
+import gregtech.api.enums.GTValues;
+import gregtech.api.enums.TierEU;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
+import tectech.thing.metaTileEntity.multi.base.INameFunction;
+import tectech.thing.metaTileEntity.multi.base.IStatusFunction;
+import tectech.thing.metaTileEntity.multi.base.LedStatus;
+import tectech.thing.metaTileEntity.multi.base.Parameters;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryCycleTime;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T1;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryDNACost_T2;
@@ -11,54 +54,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiary
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T3;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T4;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.enableDNAConsuming;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static forestry.api.apiculture.BeeManager.beeRoot;
 import static net.minecraft.util.StatCollector.translateToLocal;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.jetbrains.annotations.NotNull;
-
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevatormodules.TileEntityModuleBase;
-import com.gtnewhorizons.modularui.api.math.Alignment;
-import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
-import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
-import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
-import com.gtnewhorizons.modularui.common.widget.SlotWidget;
-import com.gtnewhorizons.modularui.common.widget.TextWidget;
-
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.IBeekeepingMode;
-import forestry.apiculture.genetics.Bee;
-import gregtech.api.enums.GTValues;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GTUtility;
-import gregtech.api.util.MultiblockTooltipBuilder;
-import tectech.thing.metaTileEntity.multi.base.INameFunction;
-import tectech.thing.metaTileEntity.multi.base.IStatusFunction;
-import tectech.thing.metaTileEntity.multi.base.LedStatus;
-import tectech.thing.metaTileEntity.multi.base.Parameters;
 
 public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
@@ -110,8 +107,8 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         int mParallel = getCurrentParallel();
-        if (RECIPE_LuV * mParallel > getEUVar()) {
-            return CheckRecipeResultRegistry.insufficientPower(RECIPE_LuV * mParallel);
+        if (TierEU.RECIPE_LuV * mParallel > getEUVar()) {
+            return CheckRecipeResultRegistry.insufficientPower(TierEU.RECIPE_LuV * mParallel);
         }
 
         if (enableDNAConsuming) {
@@ -144,7 +141,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
             }
         }
 
-        this.lEUt = -RECIPE_LuV * mParallel;
+        this.lEUt = -TierEU.RECIPE_LuV * mParallel;
         this.mEfficiency = 10000;
         this.mEfficiencyIncrease = 10000;
         this.mMaxProgresstime = SpaceApiaryCycleTime;

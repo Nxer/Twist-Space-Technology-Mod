@@ -1,14 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
-
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
@@ -27,7 +24,7 @@ public class MixerRecipePool implements IRecipePool {
                 Materials.Carbon.getDust(5))
             .itemOutputs(GTModHandler.getModItem(Mods.BartWorks.ID, "gt.bwMetaGenerateddust", 10, 11502))
             .noOptimize()
-            .eut(RECIPE_EV)
+            .eut(TierEU.RECIPE_EV)
             .duration(20 * 10)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 
@@ -45,7 +42,7 @@ public class MixerRecipePool implements IRecipePool {
                 Materials.Vanadium.getDust(2))
             .itemOutputs(Materials.HSSS.getDust(27))
             .noOptimize()
-            .eut(RECIPE_LuV)
+            .eut(TierEU.RECIPE_LuV)
             .duration(20 * 30)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
 

@@ -1,14 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
-
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import bartworks.system.material.WerkstoffLoader;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IRecipeMap;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.item.chemistry.GenericChem;
@@ -111,7 +108,7 @@ public class QFTRecipePool implements IRecipePool {
             .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
             .noOptimize()
             .specialValue(1)
-            .eut(RECIPE_UV)
+            .eut(TierEU.RECIPE_UV)
             .duration(400)
             .addTo(QFT);
 
@@ -129,7 +126,7 @@ public class QFTRecipePool implements IRecipePool {
             .outputChances(2000, 2000, 2000, 2000, 2000)
             .noOptimize()
             .specialValue(2)
-            .eut(RECIPE_UHV)
+            .eut(TierEU.RECIPE_UHV)
             .duration(400)
             .addTo(QFT);
 
@@ -148,7 +145,7 @@ public class QFTRecipePool implements IRecipePool {
             .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
             .noOptimize()
             .specialValue(2)
-            .eut(RECIPE_UHV)
+            .eut(TierEU.RECIPE_UHV)
             .duration(400)
             .addTo(QFT);
     }

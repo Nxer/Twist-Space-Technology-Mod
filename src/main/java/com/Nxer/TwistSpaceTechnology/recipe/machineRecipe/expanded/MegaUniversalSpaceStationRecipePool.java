@@ -1,29 +1,26 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MiracleTop;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
-import static gregtech.api.enums.TierEU.RECIPE_UXV;
-
-import net.minecraft.item.ItemStack;
-
+import bartworks.system.material.Werkstoff;
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
-
-import bartworks.system.material.Werkstoff;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
+import net.minecraft.item.ItemStack;
+
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MiracleTop;
+import static gregtech.api.enums.TierEU.RECIPE_UXV;
 
 public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
 
@@ -146,7 +143,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .itemOutputs(processor)
 
             .noOptimize()
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20)
             .addTo(MT);
         var assembly = uevPlusCircuit[5].copy();
@@ -165,7 +162,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .itemOutputs(assembly)
 
             .noOptimize()
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(200)
             .addTo(MT);
         var computer = uevPlusCircuit[6].copy();
@@ -186,7 +183,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .itemOutputs(computer)
 
             .noOptimize()
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(2000)
             .addTo(MT);
         GTValues.RA.stdBuilder()
@@ -209,7 +206,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 16 * 144))
             .itemOutputs(ItemList.Circuit_ExoticMainframe.get(1))
 
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 1000)
             .addTo(MT);
 
@@ -303,7 +300,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .fluidInputs(MaterialsUEVplus.Time.getMolten(1000 * 16), MaterialsUEVplus.Space.getMolten(1000 * 16))
             .itemOutputs(ItemList.Circuit_CosmicMainframe.get(1))
 
-            .eut(RECIPE_MAX)
+            .eut(TierEU.RECIPE_MAX)
             .duration(20 * 1000)
             .addTo(MT);
         // endregion
@@ -405,7 +402,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
                 MaterialPool.realSingularity.getMolten(144000))
             .itemOutputs(ItemList.Circuit_TranscendentMainframe.get(1))
 
-            .eut(RECIPE_MAX * 16)
+            .eut(TierEU.RECIPE_MAX * 16)
             .duration(20 * 1500)
             .addTo(MT);
         // endregion
@@ -614,7 +611,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
             .itemOutputs(GTCMItemList.megaUniversalSpaceStation.get(1))
 
             .noOptimize()
-            .eut(1024 * RECIPE_MAX)
+            .eut(1024 * TierEU.RECIPE_MAX)
             .duration(20 * 1000)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 

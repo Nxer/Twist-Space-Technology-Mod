@@ -1,39 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EncapsulatedMicroSpaceTimeUnit;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EnergyFluctuationSelfHarmonizer;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.InformationHorizonInterventionShell;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PacketInformationTranslationArray;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ParticleTrapTimeSpaceShield;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SeedsSpaceTime;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
-import static gregtech.api.enums.ItemList.Circuit_CosmicAssembly;
-import static gregtech.api.enums.ItemList.Circuit_CosmicComputer;
-import static gregtech.api.enums.ItemList.Circuit_CosmicProcessor;
-import static gregtech.api.enums.Materials.RadoxPolymer;
-import static gregtech.api.util.GTRecipeBuilder.HOURS;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
-import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
-import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN;
-import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
-
-import net.minecraft.item.ItemStack;
-
+import appeng.items.materials.MaterialType;
+import bartworks.API.recipe.BartWorksRecipeMaps;
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
-
-import appeng.items.materials.MaterialType;
-import bartworks.API.recipe.BartWorksRecipeMaps;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
@@ -49,6 +22,27 @@ import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
+import net.minecraft.item.ItemStack;
+
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EncapsulatedMicroSpaceTimeUnit;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EnergyFluctuationSelfHarmonizer;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.InformationHorizonInterventionShell;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PacketInformationTranslationArray;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ParticleTrapTimeSpaceShield;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SeedsSpaceTime;
+import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
+import static gregtech.api.enums.ItemList.Circuit_CosmicAssembly;
+import static gregtech.api.enums.ItemList.Circuit_CosmicComputer;
+import static gregtech.api.enums.ItemList.Circuit_CosmicProcessor;
+import static gregtech.api.enums.Materials.RadoxPolymer;
+import static gregtech.api.util.GTRecipeBuilder.HOURS;
+import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
+import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
+import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN;
+import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
+import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 
 public class CosmicProcessorCircuitRecipes implements IRecipePool {
 
@@ -65,7 +59,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUEVBase, 2))
             .itemOutputs(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1))
             .noOptimize()
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 5)
             .addTo(RecipeMaps.formingPressRecipes);
 
@@ -76,7 +70,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUIVBase, 1))
             .itemOutputs(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 2))
             .noOptimize()
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 5)
             .addTo(RecipeMaps.formingPressRecipes);
 
@@ -91,7 +85,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
             .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(334))
             .itemOutputs(SpaceTimeSuperconductingInlaidMotherboard.get(16))
             .noOptimize()
-            .eut(RECIPE_UEV)
+            .eut(TierEU.RECIPE_UEV)
             .duration(20 * 22)
             .addTo(RecipeMaps.pcbFactoryRecipes);
 
@@ -105,7 +99,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
             .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(667))
             .itemOutputs(SpaceTimeSuperconductingInlaidMotherboard.get(64))
             .noOptimize()
-            .eut(RECIPE_UEV)
+            .eut(TierEU.RECIPE_UEV)
             .duration(20 * 22)
             .addTo(RecipeMaps.pcbFactoryRecipes);
 
@@ -126,7 +120,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GTCMItemList.SiliconBasedNeuron.get(4))
             .outputChances(10000, 8000, 2000)
             .specialValue(2)
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 30)
             .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
 
@@ -146,7 +140,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GTCMItemList.SiliconBasedNeuron.get(64))
             .outputChances(10000, 8000, 2000)
             .specialValue(11)
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 30)
             .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
 
@@ -160,7 +154,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
             .fluidInputs(Materials.UUMatter.getFluid(250), MaterialsUEVplus.TranscendentMetal.getMolten(72))
             .itemOutputs(GTCMItemList.PacketInformationTranslationArray.get(2))
             .specialValue(3)
-            .eut(RECIPE_UIV)
+            .eut(TierEU.RECIPE_UIV)
             .duration(20 * 5)
             .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
 
@@ -173,7 +167,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
             .fluidInputs(Materials.UUMatter.getFluid(500), MaterialsUEVplus.TranscendentMetal.getMolten(144))
             .itemOutputs(GTCMItemList.PacketInformationTranslationArray.get(8))
             .specialValue(3)
-            .eut(RECIPE_UIV)
+            .eut(TierEU.RECIPE_UIV)
             .duration(20 * 5)
             .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
 
@@ -186,7 +180,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
             .fluidInputs(Materials.UUMatter.getFluid(1000), MaterialsUEVplus.TranscendentMetal.getMolten(288))
             .itemOutputs(GTCMItemList.PacketInformationTranslationArray.get(64))
             .specialValue(3)
-            .eut(RECIPE_UIV)
+            .eut(TierEU.RECIPE_UIV)
             .duration(20 * 5)
             .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
 
@@ -202,7 +196,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 16))
             .fluidInputs(MaterialsUEVplus.Time.getMolten(36), CELESTIAL_TUNGSTEN.getFluidStack(36))
             .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(64))
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 30)
             .addTo(GTRecipeConstants.AssemblyLine);
 
@@ -215,7 +209,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 32))
             .fluidInputs(MaterialsUEVplus.Time.getMolten(144))
             .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(128))
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 120)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
@@ -232,7 +226,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(100))
             .itemOutputs(GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
             .outputChances(9000)
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 120)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
@@ -247,7 +241,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 MaterialsUEVplus.Time.getMolten(36),
                 MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(50))
             .itemOutputs(GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 120)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
@@ -265,7 +259,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GTCMItemList.EnergyFluctuationSelfHarmonizer.get(2),
                 GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
             .outputChances(10000, 2000)
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 120)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
@@ -289,7 +283,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 Circuit_CosmicProcessor.get(1),
                 GTOreDictUnificator.get(OrePrefixes.nugget, MaterialsUEVplus.SpaceTime, 3))
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(333))
-            .eut(RECIPE_UEV)
+            .eut(TierEU.RECIPE_UEV)
             .duration(20 * 50)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
@@ -313,7 +307,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 ItemList.Circuit_CosmicAssembly.get(1),
                 GTOreDictUnificator.get(OrePrefixes.nugget, MaterialsUEVplus.SpaceTime, 3))
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(333))
-            .eut(RECIPE_UIV)
+            .eut(TierEU.RECIPE_UIV)
             .duration(20 * 100)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
@@ -339,7 +333,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 ItemList.Circuit_CosmicComputer.get(1),
                 GTOreDictUnificator.get(OrePrefixes.nugget, MaterialsUEVplus.SpaceTime, 3))
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(333))
-            .eut(RECIPE_UIV)
+            .eut(TierEU.RECIPE_UIV)
             .duration(20 * 1000)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
@@ -362,7 +356,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 MaterialsUEVplus.Time.getMolten(1152))
             .itemOutputs(ItemList.Circuit_CosmicMainframe.get(1), ItemList.Tesseract.get(2))
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(666))
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 1500)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
@@ -384,7 +378,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 MaterialsUEVplus.Time.getMolten(1152))
             .itemOutputs(ItemList.Circuit_CosmicMainframe.get(3), ItemList.Tesseract.get(6))
             .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(666))
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 2400)
             .addTo(GTCMRecipe.MiracleTopRecipes);
 
@@ -399,7 +393,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GGMaterial.shirabon.get(OrePrefixes.stick, 2))
             .fluidInputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(500))
             .itemOutputs(SeedsSpaceTime.get(1))
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 60)
             .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
 
@@ -414,7 +408,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 3))
             .fluidInputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(200))
             .itemOutputs(EncapsulatedMicroSpaceTimeUnit.get(1))
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 30)
             .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
 
@@ -448,7 +442,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 Materials.UUMatter.getFluid(1000 * 64),
                 Materials.Quantium.getMolten(144 * 128))
             .itemOutputs(GTCMItemList.MicroSpaceTimeFabricatorio.get(1))
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(20 * 900)
             .addTo(GTRecipeConstants.AssemblyLine);
 
@@ -457,7 +451,7 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
             .itemInputs(Laser_Lens_Special.get(1), eternal_singularity.copy())
             .itemOutputs(MaterialType.Singularity.stack(16), MaterialType.Singularity.stack(16))
             .outputChances(5000, 5000)
-            .eut(RECIPE_UXV)
+            .eut(TierEU.RECIPE_UXV)
             .duration(20 * 100)
             .addTo(BartWorksRecipeMaps.electricImplosionCompressorRecipes);
 

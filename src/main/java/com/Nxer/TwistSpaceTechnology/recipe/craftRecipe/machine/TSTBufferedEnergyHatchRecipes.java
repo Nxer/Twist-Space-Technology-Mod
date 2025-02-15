@@ -1,5 +1,18 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import gregtech.api.enums.GTValues;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
+import gregtech.api.interfaces.IRecipeMap;
+import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTOreDictUnificator;
+import net.minecraft.item.ItemStack;
+
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchEV;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchHV;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchIV;
@@ -13,34 +26,7 @@ import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEne
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchUV;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchUXV;
 import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.BufferedEnergyHatchZPM;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.GT_Loader_Machines.bitsd;
-
-import net.minecraft.item.ItemStack;
-
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
-import gregtech.api.enums.GTValues;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.interfaces.IRecipeMap;
-import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GTModHandler;
-import gregtech.api.util.GTOreDictUnificator;
 
 public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
 
@@ -71,7 +57,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchLV.get(1))
             .noOptimize()
-            .eut(RECIPE_LV)
+            .eut(TierEU.RECIPE_LV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -83,7 +69,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchMV.get(1))
             .noOptimize()
-            .eut(RECIPE_MV)
+            .eut(TierEU.RECIPE_MV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -95,7 +81,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchHV.get(1))
             .noOptimize()
-            .eut(RECIPE_HV)
+            .eut(TierEU.RECIPE_HV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -107,7 +93,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchEV.get(1))
             .noOptimize()
-            .eut(RECIPE_EV)
+            .eut(TierEU.RECIPE_EV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -119,7 +105,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchIV.get(1))
             .noOptimize()
-            .eut(RECIPE_IV)
+            .eut(TierEU.RECIPE_IV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -131,7 +117,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchLuV.get(1))
             .noOptimize()
-            .eut(RECIPE_LuV)
+            .eut(TierEU.RECIPE_LuV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -143,7 +129,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchZPM.get(1))
             .noOptimize()
-            .eut(RECIPE_ZPM)
+            .eut(TierEU.RECIPE_ZPM)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -155,7 +141,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUV.get(1))
             .noOptimize()
-            .eut(RECIPE_UV)
+            .eut(TierEU.RECIPE_UV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -167,7 +153,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUHV.get(1))
             .noOptimize()
-            .eut(RECIPE_UHV)
+            .eut(TierEU.RECIPE_UHV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -179,7 +165,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUEV.get(1))
             .noOptimize()
-            .eut(RECIPE_UEV)
+            .eut(TierEU.RECIPE_UEV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -191,7 +177,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUIV.get(1))
             .noOptimize()
-            .eut(RECIPE_UIV)
+            .eut(TierEU.RECIPE_UIV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -203,7 +189,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUMV.get(1))
             .noOptimize()
-            .eut(RECIPE_UMV)
+            .eut(TierEU.RECIPE_UMV)
             .duration(120)
             .addTo(assembler);
         GTValues.RA.stdBuilder()
@@ -215,7 +201,7 @@ public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUXV.get(1))
             .noOptimize()
-            .eut(RECIPE_UXV)
+            .eut(TierEU.RECIPE_UXV)
             .duration(120)
             .addTo(assembler);
         GTModHandler.addCraftingRecipe(

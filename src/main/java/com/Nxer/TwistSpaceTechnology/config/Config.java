@@ -1,16 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.config;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
-
-import java.io.File;
-import java.math.BigInteger;
-
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+import gregtech.api.enums.TierEU;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
+import java.io.File;
+import java.math.BigInteger;
 
 // spotless:off
 public class Config {
@@ -95,15 +91,15 @@ public class Config {
     public static int secondsOfEveryGravitationalLensProvideToIntensifyTime = 60 * 10;
     public static double secondsOfLaunchingSolarSail = 120;
     public static double secondsOfLaunchingNode = 900;
-    public static int EUTOfLaunchingSolarSail = (int) RECIPE_UHV;
-    public static int EUTOfLaunchingNode = (int) RECIPE_UMV;
+    public static int EUTOfLaunchingSolarSail = (int) TierEU.RECIPE_UHV;
+    public static int EUTOfLaunchingNode = (int) TierEU.RECIPE_UMV;
     public static boolean EnableRenderDefaultArtificialStar = true;
     public static long EUEveryStrangeAnnihilationFuelRod = 32768L * Integer.MAX_VALUE;
 
     // TODO cfg of StrangeMatterAggregator
     // region StrangeMatterAggregator
     public static int StructureLoopBuildingLimit_StrangeMatterAggregator = 1;
-    public static long PowerConsume_StrangeMatterAggregator = RECIPE_MAX * 256L;
+    public static long PowerConsume_StrangeMatterAggregator = TierEU.RECIPE_MAX * 256L;
     public static int RecipeTime_T1SpaceTimeOscillator_StrangeMatterAggregator = 120 * 20;
     public static int RecipeTime_T2SpaceTimeOscillator_StrangeMatterAggregator = 40 * 20;
     public static int RecipeTime_T3SpaceTimeOscillator_StrangeMatterAggregator = 10 * 20;
@@ -335,7 +331,7 @@ public class Config {
     public static byte HeightValueLimit_StarcoreMiner = 24;
     public static int StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner = 131072;
     public static int AmountOfOreStackPerMining_StarcoreMiner = 24;
-    public static int Eut_StarcoreMiner = (int) RECIPE_MAX;
+    public static int Eut_StarcoreMiner = (int) TierEU.RECIPE_MAX;
     public static int DurationPerMining_StarcoreMiner = 128;
     public static boolean DebugMode_StarcoreMiner = false;
     public static boolean CheckMiningPipeStructure_StarcoreMiner = true;
