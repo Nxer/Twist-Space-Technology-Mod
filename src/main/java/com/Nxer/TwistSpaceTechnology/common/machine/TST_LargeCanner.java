@@ -17,7 +17,6 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -35,13 +34,13 @@ import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
@@ -142,31 +141,35 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     // region end
 
     // process
-    protected boolean fluidMode = false;
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Canner
+         * 1 - Fluid Canner
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("LargeCanner.modeMsg." + mode);
+    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return fluidMode ? RecipeMaps.fluidCannerRecipes : RecipeMaps.cannerRecipes;
+        return machineMode == 1 ? RecipeMaps.fluidCannerRecipes : RecipeMaps.cannerRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(RecipeMaps.fluidCannerRecipes, RecipeMaps.cannerRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.fluidMode = !this.fluidMode;
-            // #tr LargeCanner.modeMsg.true
-            // # Mode: Fluid Canner
-            // #zh_CN 流体灌装机模式
-            // #tr LargeCanner.modeMsg.false
-            // # Mode: Canning Machine
-            // #zh_CN 装罐机模式
-            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("LargeCanner.modeMsg." + fluidMode));
-        }
     }
 
     @Override
@@ -187,13 +190,13 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setBoolean("fluidMode", fluidMode);
+        aNBT.setBoolean("fluidMode", machineMode == 1);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        fluidMode = aNBT.getBoolean("fluidMode");
+        machineMode = aNBT.getBoolean("fluidMode") ? 0 : 1;
     }
 
     @Override

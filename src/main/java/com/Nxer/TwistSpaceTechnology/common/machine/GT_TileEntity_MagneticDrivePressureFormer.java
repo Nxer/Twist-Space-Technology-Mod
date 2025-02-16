@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EU_Multiplier_MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTier_LimitLaserHatch_MagneticDrivePressureFormer;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_Coil_MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer;
@@ -27,7 +26,6 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -46,6 +44,7 @@ import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -53,7 +52,6 @@ import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
@@ -80,7 +78,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
      * <li>2 = Forming Press
      * <li>3 = Forge Hammer
      */
-    public byte mode = Mode_Default_MagneticDrivePressureFormer;
+
     public byte glassTier;
     public HeatingCoilLevel coilLevel;
 
@@ -96,19 +94,43 @@ public class GT_TileEntity_MagneticDrivePressureFormer
 
     // region Processing Logic
     @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Extruder
+         * 1 - Bending Machine
+         * 2 - Forming Press
+         * 3 - Forge Hammer
+         */
+        return 4;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + mode);
+    }
+
+    @Override
     protected float getEuModifier() {
         return EU_Multiplier_MagneticDrivePressureFormer;
     }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return mode != 0
+        return machineMode != 0
             || coilLevel.getTier() >= CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer;
     }
 
     @Override
     protected float getSpeedBonus() {
-        return ((mode == 0 ? (1.0F / SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer)
+        return ((machineMode == 0 ? (1.0F / SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer)
             : (1.0F / SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer))
             / (1 + coilLevel.getTier() * SpeedUpMultiplier_Coil_MagneticDrivePressureFormer));
     }
@@ -138,7 +160,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (mode) {
+        switch (machineMode) {
             case 1:
                 return RecipeMaps.benderRecipes;
             case 2:
@@ -159,18 +181,6 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             RecipeMaps.hammerRecipes,
             RecipeMaps.extruderRecipes);
     }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 4);
-
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + this.mode));
-        }
-    }
-
     // endregion
 
     // region Structure
@@ -402,14 +412,14 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
     }
 
     // endregion

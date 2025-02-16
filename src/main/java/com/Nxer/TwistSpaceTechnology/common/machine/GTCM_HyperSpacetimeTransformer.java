@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiplier_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer;
@@ -28,7 +27,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -45,12 +43,12 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
@@ -71,16 +69,35 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     // endregion
 
     // region Processing Logic
-    private byte mode = Mode_Default_HyperSpacetimeTransformer;
     private int SCfieldGeneratorTier = 0;
     private int TAfieldGeneratorTier = 0;
     private int STfieldGeneratorTier = 0;
     private int mCraftingTier = 0;
     private int mFocusingTier = 0;
 
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Molecular Transformer
+         * 1 - Hyper Spacetime Transformer
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CUTTING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("HyperSpacetimeTransformer.modeMsg." + mode);
+    }
+
     protected float getEuModifier() {
         float EuUsage = 1.0F;
-        if (mode == 0) {
+        if (machineMode == 0) {
             if (SCfieldGeneratorTier == 9) EuUsage -= 0.25F;
             if (TAfieldGeneratorTier == 9) EuUsage -= 0.25F;
             if (STfieldGeneratorTier == 9) EuUsage -= 0.25F;
@@ -92,12 +109,12 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     };
 
     protected float getSpeedBonus() {
-        return 1F / (mode == 0 ? SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer
+        return 1F / (machineMode == 0 ? SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer
             : SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer);
     };
 
     protected int getMaxParallelRecipes() {
-        if (mode == 0) return Math.min(
+        if (machineMode == 0) return Math.min(
             ValueEnum.MAX_PARALLEL_LIMIT,
             Math.min(SCfieldGeneratorTier * TAfieldGeneratorTier * STfieldGeneratorTier, 512)
                 * ParallelMultiplier_HyperSpacetimeTransformer);
@@ -105,13 +122,13 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     };
 
     protected boolean isEnablePerfectOverclock() {
-        if (mode == 0) return EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer;
+        if (machineMode == 0) return EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer;
         return false;
     };
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (mode) {
+        switch (machineMode) {
             case 1:
                 return GTCMRecipe.HyperSpacetimeTransformerRecipe;
             default:
@@ -123,16 +140,6 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(GTCMRecipe.HyperSpacetimeTransformerRecipe, GTPPRecipeMaps.molecularTransformerRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("HyperSpacetimeTransformer.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -840,7 +847,7 @@ J -> ofBlock...(tile.quantumGlass, 0, ...);
         aNBT.setInteger("SCfieldGeneratorTier", SCfieldGeneratorTier);
         aNBT.setInteger("STfieldGeneratorTier", STfieldGeneratorTier);
         aNBT.setInteger("TAfieldGeneratorTier", TAfieldGeneratorTier);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
     }
 
     @Override
@@ -852,7 +859,7 @@ J -> ofBlock...(tile.quantumGlass, 0, ...);
         SCfieldGeneratorTier = aNBT.getInteger("SCfieldGeneratorTier");
         STfieldGeneratorTier = aNBT.getInteger("STfieldGeneratorTier");
         TAfieldGeneratorTier = aNBT.getInteger("TAfieldGeneratorTier");
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
     }
 
     @Override
