@@ -5,21 +5,16 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.ApiStatus.Experimental;
@@ -32,11 +27,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
-import com.Nxer.TwistSpaceTechnology.common.api.IHasVariant;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
-import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.AbstractTstMetaBlockCasing;
-import com.Nxer.TwistSpaceTechnology.common.item.AbstractTstMetaItem;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
 import com.google.common.collect.Lists;
 
@@ -45,7 +37,6 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 
 /**
@@ -64,7 +55,7 @@ import gregtech.api.util.GTUtility;
  * For example, {@code newVariantItemUnsafe} that accepts an {@code Item} but requires it to implement
  * {@code IHasVariant}.<br>
  * But since it is very unsafe to do so, we can add more functions with more exact types, like using
- * {@link AbstractTstMetaBlock} to make sure it implements {@link IHasTooltips}.
+ * {@link AbstractTstMetaBlock} to make sure it implements {@link IHasVariantAndTooltips}.
  * </li>
  * <li>
  * <b>(Legacy Names)</b> Functions moved from other places are allowed to be named as before, like {@link #tr(String)}.
@@ -132,271 +123,6 @@ public class TstUtils {
     }
 
     // endregion
-
-    // region Item and Block Registrator
-
-    // region Exception
-
-    /**
-     * Make an {@link IllegalArgumentException} for the situation that an input argument (Item or Block) is expected to
-     * implement an interface but not.
-     *
-     * @param type            the type of the argument, "Item" or "Block"
-     * @param unlocalizedName the unlocalized name of the argument
-     * @param objectClass     the argument class
-     * @param interfaceClass  the interface class that expected to be implemented
-     * @return the exception instance with nice message built up by the arguments
-     */
-    private static IllegalArgumentException makeNotSupportInterfaceException(String type, String unlocalizedName,
-                                                                             Class<?> objectClass, Class<?> interfaceClass) {
-        return new IllegalArgumentException(
-            type + " "
-                + tr(unlocalizedName)
-                + " ("
-                + unlocalizedName
-                + ", class = "
-                + objectClass.getSimpleName()
-                + ") doesn't support "
-                + interfaceClass.getSimpleName()
-                + ".");
-    }
-
-    /**
-     * @see #makeNotSupportInterfaceException(String, String, Class, Class)
-     */
-    private static IllegalArgumentException makeItemNotSupportInterfaceException(Item item, Class<?> interfaceClass) {
-        return makeNotSupportInterfaceException("Item", item.unlocalizedName, item.getClass(), interfaceClass);
-    }
-
-    /**
-     * @see #makeNotSupportInterfaceException(String, String, Class, Class)
-     */
-    private static IllegalArgumentException makeBlockNotSupportInterfaceException(Block item, Class<?> interfaceClass) {
-        return makeNotSupportInterfaceException("Block", item.unlocalizedName, item.getClass(), interfaceClass);
-    }
-
-    // endregion Exception
-
-    // region Block
-
-    /**
-     * Register an {@link IHasVariant} block.
-     * <p>
-     * <b>UNSAFE</b>: It is caller's responsibility to check if the block supports meta values.
-     * <p>
-     * I'd recommend you to {@code extends} {@link AbstractTstMetaBlock} to mark it as meta block.
-     *
-     * @param blockMeta the meta block that must implement {@link IHasVariant}
-     * @param meta      the meta
-     * @return the copy of the instance of the meta block.
-     * @throws IllegalArgumentException if the given block doesn't implement {@link IHasVariant}
-     */
-    public static ItemStack registerHasVariantBlockUnsafe(Block blockMeta, int meta) {
-        return registerHasVariantBlockUnsafe(blockMeta, meta, null);
-    }
-
-    /**
-     * Register an {@link IHasVariant} block with its tooltips.
-     * <p>
-     * <b>UNSAFE</b>: It is caller's responsibility to check if the block supports meta values and tooltips.
-     * <p>
-     * I'd recommend you to {@code extends} {@link AbstractTstMetaBlock} to mark it as meta block.
-     *
-     * @param blockMeta the meta block that must implement both {@link IHasVariant}
-     * @param meta      the meta
-     * @param tooltips  the tooltips (optional)
-     * @return the copy of the instance of the meta block.
-     * @throws IllegalArgumentException if the given block doesn't implement {@link IHasVariant}
-     * @throws IllegalArgumentException if tooltips is provided, but the block doesn't implement {@link IHasTooltips}.
-     */
-    public static ItemStack registerHasVariantBlockUnsafe(Block blockMeta, int meta, @Nullable String[] tooltips)
-        throws IllegalArgumentException {
-        ItemStack stack;
-        if(blockMeta instanceof IHasVariant hasVariant) {
-            stack = hasVariant.registerVariant(meta);
-        } else {
-            throw makeBlockNotSupportInterfaceException(blockMeta, IHasVariant.class);
-        }
-
-        if (tooltips != null) {
-            if (blockMeta instanceof IHasTooltips hasTooltips) {
-                hasTooltips.setTooltips(meta, tooltips);
-            } else {
-                throw makeBlockNotSupportInterfaceException(blockMeta, IHasTooltips.class);
-            }
-        }
-
-        return stack;
-    }
-
-    /**
-     * Register the {@link AbstractTstMetaBlock} with given meta.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack registerTstMetaBlock(AbstractTstMetaBlock blockMeta, int meta) {
-        return registerTstMetaBlock(blockMeta, meta, null);
-    }
-
-    /**
-     * Register the {@link AbstractTstMetaBlock} with given meta and tooltips.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @param tooltips  the tooltips (optional)
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack registerTstMetaBlock(AbstractTstMetaBlock blockMeta, int meta,
-                                                 @Nullable String[] tooltips) {
-        return registerHasVariantBlockUnsafe(blockMeta, meta, tooltips);
-    }
-
-    /**
-     * Register the Texture of the {@link AbstractTstMetaBlockCasing}, and return a copy of the instance of the casing.
-     *
-     * @param blockCasing the casing block
-     * @param meta        the meta
-     * @return the copy of the instance of the casing.
-     */
-    public static ItemStack registerTstCasingBlock(AbstractTstMetaBlockCasing blockCasing, int meta) {
-        return registerTstCasingBlock(blockCasing, meta, null);
-    }
-
-    /**
-     * Register the Texture of the {@link AbstractTstMetaBlockCasing}, and add the tooltips if present.
-     * Return a copy of the instance of the casing.
-     *
-     * @param blockCasing the casing block
-     * @param meta        the meta
-     * @param tooltips    the tooltips (optional)
-     * @return the copy of the instance of the casing
-     */
-    public static ItemStack registerTstCasingBlock(AbstractTstMetaBlockCasing blockCasing, int meta,
-                                                   @Nullable String[] tooltips) {
-        Textures.BlockIcons
-            .setCasingTextureForId(blockCasing.getTextureIndex(meta), TextureFactory.of(blockCasing, meta));
-        return registerTstMetaBlock(blockCasing, meta, tooltips);
-    }
-
-    // endregion Block
-
-    /**
-     * Register tooltips with both normal and advanced.
-     *
-     * @param hasTooltips      the object reference that has tooltips
-     * @param meta             the meta value
-     * @param normalTooltips   the normal tooltips
-     * @param advancedTooltips the advanced tooltips
-     */
-    public static void registerAdvancedTooltips(IHasTooltips hasTooltips, int meta, String[] normalTooltips,
-                                                String[] advancedTooltips) {
-        hasTooltips.setTooltips(meta, normalTooltips, false);
-        hasTooltips.setTooltips(meta, advancedTooltips, true);
-    }
-
-    // region Item
-
-    /**
-     * Register an {@link IHasVariant} item.
-     *
-     * @param itemMeta the meta item that must implement {@link IHasVariant}
-     * @param meta     the meta
-     * @return the copy of the instance of the meta item.
-     * @throws IllegalArgumentException if the given item doesn't implement {@link IHasVariant}
-     */
-    public static ItemStack registerHasVariantItemUnsafe(Item itemMeta, int meta) {
-        return registerHasVariantItemUnsafe(itemMeta, meta, null);
-    }
-
-    /**
-     * Register an {@link IHasVariant} item with its tooltips.
-     *
-     * @param itemMeta the meta item that must implement {@link IHasVariant}
-     * @param meta     the meta
-     * @return the copy of the instance of the meta item.
-     * @throws IllegalArgumentException if the given item doesn't implement {@link IHasVariant}
-     * @throws IllegalArgumentException if tooltips is provided, but the block doesn't implement {@link IHasTooltips}.
-     */
-    public static ItemStack registerHasVariantItemUnsafe(Item itemMeta, int meta, @Nullable String[] tooltips)
-        throws IllegalArgumentException {
-        ItemStack stack;
-        if (itemMeta instanceof IHasVariant hasVariant) {
-            stack = hasVariant.registerVariant(meta);
-        } else {
-            throw makeItemNotSupportInterfaceException(itemMeta, IHasVariant.class);
-        }
-
-        if (tooltips != null) {
-            if (itemMeta instanceof IHasTooltips hasTooltips) {
-                hasTooltips.setTooltips(meta, tooltips);
-            } else {
-                throw makeItemNotSupportInterfaceException(itemMeta, IHasTooltips.class);
-            }
-        }
-
-        return stack;
-    }
-
-    public static ItemStack registerTstMetaItem(AbstractTstMetaItem itemAdder, int meta) {
-        return registerTstMetaItem(itemAdder, meta, null);
-    }
-
-    public static ItemStack registerTstMetaItem(AbstractTstMetaItem itemAdder, int meta, @Nullable String[] tooltips) {
-        return registerHasVariantItemUnsafe(itemAdder, meta, tooltips);
-    }
-
-    /**
-     * Register a variant of a meta item with its tooltips, and return the instance of the variant item.
-     * <p>
-     * <b>UNSAFE</b>: It is caller's responsibility to check if the item supports variants and tooltips.
-     *
-     * @param itemMeta         the meta item
-     * @param meta             the meta value
-     * @param tooltips         the normal tooltips
-     * @param advancedTooltips the advanced tooltips
-     * @return the instance of the variant item.
-     * @throws IllegalArgumentException if the item doesn't implement either {@link IHasVariant} or
-     *                                  {@link IHasTooltips}.
-     */
-    public static ItemStack registerVariantMetaItemStackWithAdvancedTooltipsUnsafe(Item itemMeta, int meta,
-                                                                                   String[] tooltips, String[] advancedTooltips) throws IllegalArgumentException {
-        ItemStack stack;
-        if (itemMeta instanceof IHasVariant hasVariant) {
-            stack = hasVariant.registerVariant(meta);
-        } else {
-            throw makeItemNotSupportInterfaceException(itemMeta, IHasVariant.class);
-        }
-
-        if (itemMeta instanceof IHasTooltips hasTooltips) {
-            registerAdvancedTooltips(hasTooltips, meta, tooltips, advancedTooltips);
-        } else {
-            throw makeItemNotSupportInterfaceException(itemMeta, IHasTooltips.class);
-        }
-
-        return stack;
-    }
-
-    /**
-     * Register all icons for variants.
-     *
-     * @param hasVariant the variant reference
-     * @param iconPath   the icon path transformer, taking a meta value and resulting an icon path.
-     * @param register   the icon register
-     * @return the icon map keyed by meta values
-     */
-    public static Map<Integer, IIcon> registerAllVariantIcons(IHasVariant hasVariant,
-                                                              Function<Integer, String> iconPath, IIconRegister register) {
-        return hasVariant.getVariantIds()
-            .stream()
-            .map(meta -> Pair.of(meta, register.registerIcon(iconPath.apply(meta))))
-            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
-    }
-
-    // endregion Item
-
-    // endregion Item and Block Registrator
 
     /**
      * Localize by key and given formats.

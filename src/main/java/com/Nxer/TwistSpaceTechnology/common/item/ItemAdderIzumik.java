@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 
-public class ItemAdderIzumik extends AbstractTstMetaItem implements IHasTooltips.Advanced {
+public class ItemAdderIzumik extends AbstractTstMetaItem implements IHasVariantAndTooltips.Advanced {
 
     private final Map<Integer, String[]> MetaItemTooltipsMapIzumik = new HashMap<>();
     private final Map<Integer, String[]> MetaItemTooltipsMapIzumikShift = new HashMap<>();

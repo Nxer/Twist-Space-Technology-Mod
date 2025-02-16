@@ -21,14 +21,14 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariant;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class AbstractTstMetaItem extends Item implements IHasTooltips, IHasVariant {
+public abstract class AbstractTstMetaItem extends Item implements IHasVariantAndTooltips, IHasVariant {
 
     protected final HashSet<Integer> usedMetaIds = new HashSet<>();
     protected final HashMap<Integer, String[]> tooltipMap = new HashMap<>();
@@ -82,10 +82,9 @@ public abstract class AbstractTstMetaItem extends Item implements IHasTooltips, 
 
     @Override
     public void registerIcons(IIconRegister register) {
-        this.iconMap = TstUtils.registerAllVariantIcons(
-            this,
-            meta -> TwistSpaceTechnology.RESOURCE_ROOT_ID + ":" + unlocalizedName + "/" + meta,
-            register);
+        this.iconMap = registerAllVariantIcons(
+            register, meta -> TwistSpaceTechnology.RESOURCE_ROOT_ID + ":" + unlocalizedName + "/" + meta
+        );
         this.itemIcon = iconMap.get(0);
     }
 

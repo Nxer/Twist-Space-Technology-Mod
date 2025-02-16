@@ -8,18 +8,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.IItemHasCooldown;
 
 import gregtech.api.util.GTUtility;
 
 /**
  * An ItemStack Generator used Meta Item System.
- * <li>Use {@link com.Nxer.TwistSpaceTechnology.util.TstUtils#registerTstMetaItem(AbstractTstMetaItem, int)} to create
- * your
- * Item at ItemList01.
  */
-public class ItemAdderRune extends AbstractTstMetaItem implements IItemHasCooldown, IHasTooltips {
+public class ItemAdderRune extends AbstractTstMetaItem implements IItemHasCooldown, IHasVariantAndTooltips {
 
     /**
      * Create the basic item MetaItemRune.
