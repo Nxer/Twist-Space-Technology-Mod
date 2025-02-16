@@ -127,7 +127,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
-        aNBT.setInteger("mode", machineMode);
         aNBT.setInteger("piece", piece);
         aNBT.setInteger("parallel", parallel);
         aNBT.setFloat("speedBonus", speedBonus);
@@ -137,7 +136,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
-        machineMode = aNBT.getInteger("mode");
         piece = aNBT.getInteger("piece");
         parallel = aNBT.getInteger("parallel");
         speedBonus = aNBT.getFloat("speedBonus");
