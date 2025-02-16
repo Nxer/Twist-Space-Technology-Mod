@@ -411,8 +411,8 @@ public class MiracleTopRecipePool implements IRecipePool {
 
                     for (Map.Entry<ItemStack, FluidStack> entry : specialMaterialCantAutoModify.entrySet()) {
                         if (GTUtility.areStacksEqual(entry.getKey(), aStack)) {
-                            inputFluids.add(
-                                copyAmount(entry.getValue().amount * aStack.stackSize * 16, entry.getValue()));
+                            inputFluids
+                                .add(copyAmount(entry.getValue().amount * aStack.stackSize * 16, entry.getValue()));
                             isItemModified = true;
                             break;
                         }

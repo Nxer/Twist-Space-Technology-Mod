@@ -17,7 +17,6 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -89,50 +88,64 @@ public class BlockRegister {
         // # High Power Radiation Proof Casing
         // #zh_CN 高能防辐射机械方块
         GTCMItemList.HighPowerRadiationProofCasing.set(
-            MetaBlockCasing01.registerVariantWithTooltips(1, new String[]{TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.01"),
-                TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.02")}));
+            MetaBlockCasing01.registerVariantWithTooltips(
+                1,
+                new String[] { TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.01"),
+                    TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.02") }));
 
         // #tr tile.MetaBlockCasing01.2.name
         // # Advanced High Power Coil Block
         // #zh_CN 进阶高能线圈
         GTCMItemList.AdvancedHighPowerCoilBlock.set(
-            MetaBlockCasing01.registerVariantWithTooltips(2, new String[]{TextEnums.tr("Tooltips_AdvancedHighPowerCoil.01"),
-                TextEnums.tr("Tooltips_AdvancedHighPowerCoil.02")}));
+            MetaBlockCasing01.registerVariantWithTooltips(
+                2,
+                new String[] { TextEnums.tr("Tooltips_AdvancedHighPowerCoil.01"),
+                    TextEnums.tr("Tooltips_AdvancedHighPowerCoil.02") }));
 
         // #tr tile.MetaBlockCasing01.3.name
         // # Parallelism Casing Mark 0
         // #zh_CN 初等处理阵列并行机械方块
         GTCMItemList.ParallelismCasing0.set(
-            MetaBlockCasing01.registerVariantWithTooltips(3, new String[]{TextEnums.tr("Tooltip_MetaBlockCasing01.3.name_0"),
-                TextEnums.tr("Tooltip_MetaBlockCasing01.3.name_1")}));
+            MetaBlockCasing01.registerVariantWithTooltips(
+                3,
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.3.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.3.name_1") }));
 
         // #tr tile.MetaBlockCasing01.4.name
         // # Parallelism Casing Mark 1
         // #zh_CN 进阶处理阵列并行机械方块
         GTCMItemList.ParallelismCasing1.set(
-            MetaBlockCasing01.registerVariantWithTooltips(4, new String[]{TextEnums.tr("Tooltip_MetaBlockCasing01.4.name_0"),
-                TextEnums.tr("Tooltip_MetaBlockCasing01.4.name_1")}));
+            MetaBlockCasing01.registerVariantWithTooltips(
+                4,
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.4.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.4.name_1") }));
 
         // #tr tile.MetaBlockCasing01.5.name
         // # Parallelism Casing Mark 2
         // #zh_CN 高能处理阵列并行机械方块
         GTCMItemList.ParallelismCasing2.set(
-            MetaBlockCasing01.registerVariantWithTooltips(5, new String[]{TextEnums.tr("Tooltip_MetaBlockCasing01.5.name_0"),
-                TextEnums.tr("Tooltip_MetaBlockCasing01.5.name_1")}));
+            MetaBlockCasing01.registerVariantWithTooltips(
+                5,
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.5.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.5.name_1") }));
 
         // #tr tile.MetaBlockCasing01.6.name
         // # Parallelism Casing Mark 3
         // #zh_CN 超能处理阵列并行机械方块
         GTCMItemList.ParallelismCasing3.set(
-            MetaBlockCasing01.registerVariantWithTooltips(6, new String[]{TextEnums.tr("Tooltip_MetaBlockCasing01.6.name_0"),
-                TextEnums.tr("Tooltip_MetaBlockCasing01.6.name_1")}));
+            MetaBlockCasing01.registerVariantWithTooltips(
+                6,
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.6.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.6.name_1") }));
 
         // #tr tile.MetaBlockCasing01.7.name
         // # Parallelism Casing Mark 4
         // #zh_CN 寰宇处理阵列并行机械方块
         GTCMItemList.ParallelismCasing4.set(
-            MetaBlockCasing01.registerVariantWithTooltips(7, new String[]{TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_0"),
-                TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_1")}));
+            MetaBlockCasing01.registerVariantWithTooltips(
+                7,
+                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_0"),
+                    TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_1") }));
 
         // #tr tile.MetaBlockCasing01.8.name
         // # Anti-Magnetic Casing
@@ -146,7 +159,8 @@ public class BlockRegister {
         // # Just a stone?
         // #zh_CN 只是块石头?
         GTCMItemList.ReinforcedStoneBrickCasing.set(
-            MetaBlockCasing01.registerVariantWithTooltips(9, new String[]{TextEnums.tr("Tooltip_ReinforcedStoneBrickCasing")}));
+            MetaBlockCasing01
+                .registerVariantWithTooltips(9, new String[] { TextEnums.tr("Tooltip_ReinforcedStoneBrickCasing") }));
 
         // #tr tile.MetaBlockCasing01.10.name
         // # Composite Farm Casing
@@ -155,7 +169,8 @@ public class BlockRegister {
         // # A force stronger than four combined.
         // #zh_CN 一个更比四个强
         GTCMItemList.CompositeFarmCasing.set(
-            MetaBlockCasing01.registerVariantWithTooltips(10, new String[]{TextEnums.tr("Tooltip_CompositeFarmCasing")}));
+            MetaBlockCasing01
+                .registerVariantWithTooltips(10, new String[] { TextEnums.tr("Tooltip_CompositeFarmCasing") }));
 
         // #tr tile.MetaBlockCasing01.11.name
         // # Dense Cyclotron Outer Casing
@@ -174,7 +189,8 @@ public class BlockRegister {
         // # Absolutely Clean!
         // #zh_CN 一尘不染!
         GTCMItemList.AsepticGreenhouseCasing.set(
-            MetaBlockCasing01.registerVariantWithTooltips(13, new String[]{TextEnums.tr("Tooltip_AsepticGreenhouseCasing")}));
+            MetaBlockCasing01
+                .registerVariantWithTooltips(13, new String[] { TextEnums.tr("Tooltip_AsepticGreenhouseCasing") }));
 
         // #tr tile.MetaBlockCasing01.14.name
         // # Reinforced Bedrock Casing
@@ -183,7 +199,8 @@ public class BlockRegister {
         // # Stronger than bedrock!
         // #zh_CN 比磐石更坚！
         GTCMItemList.ReinforcedBedrockCasing.set(
-            MetaBlockCasing01.registerVariantWithTooltips(14, new String[]{TextEnums.tr("Tooltip_ReinforcedBedrockCasing")}));
+            MetaBlockCasing01
+                .registerVariantWithTooltips(14, new String[] { TextEnums.tr("Tooltip_ReinforcedBedrockCasing") }));
 
         // #tr tile.MetaBlockCasing02.0.name
         // # Gore Casing
@@ -219,20 +236,17 @@ public class BlockRegister {
         // #tr tile.SpaceTimeConstraintor.0.name
         // # SpaceTime Constraintor T1
         // #zh_CN 时空约束器T1
-        GTCMItemList.SpaceTimeConstraintorT1
-            .set(TstBlocks.SpaceTimeConstraintor.registerVariant(0));
+        GTCMItemList.SpaceTimeConstraintorT1.set(TstBlocks.SpaceTimeConstraintor.registerVariant(0));
 
         // #tr tile.SpaceTimeConstraintor.1.name
         // # SpaceTime Constraintor T2
         // #zh_CN 时空约束器T2
-        GTCMItemList.SpaceTimeConstraintorT2
-            .set(TstBlocks.SpaceTimeConstraintor.registerVariant(1));
+        GTCMItemList.SpaceTimeConstraintorT2.set(TstBlocks.SpaceTimeConstraintor.registerVariant(1));
 
         // #tr tile.SpaceTimeConstraintor.2.name
         // # SpaceTime Constraintor T3
         // #zh_CN 时空约束器T3
-        GTCMItemList.SpaceTimeConstraintorT3
-            .set(TstBlocks.SpaceTimeConstraintor.registerVariant(2));
+        GTCMItemList.SpaceTimeConstraintorT3.set(TstBlocks.SpaceTimeConstraintor.registerVariant(2));
 
         // endregion
 
@@ -335,172 +349,144 @@ public class BlockRegister {
             // #tr tile.SpaceStationStructureBlock.0.name
             // # SpaceStationStructureBlock LV Tier
             // #zh_CN 空间站结构方块 LV Tier
-            GTCMItemList.spaceStationStructureBlockLV
-                .set(SpaceStationStructureBlock.registerVariant(0));
+            GTCMItemList.spaceStationStructureBlockLV.set(SpaceStationStructureBlock.registerVariant(0));
 
             // #tr tile.SpaceStationStructureBlock.1.name
             // # SpaceStationStructureBlock MV Tier
             // #zh_CN 空间站结构方块 MV Tier
-            GTCMItemList.spaceStationStructureBlockMV
-                .set(SpaceStationStructureBlock.registerVariant(1));
+            GTCMItemList.spaceStationStructureBlockMV.set(SpaceStationStructureBlock.registerVariant(1));
 
             // #tr tile.SpaceStationStructureBlock.2.name
             // # SpaceStationStructureBlock HV Tier
             // #zh_CN 空间站结构方块 HV Tier
-            GTCMItemList.spaceStationStructureBlockHV
-                .set(SpaceStationStructureBlock.registerVariant(2));
+            GTCMItemList.spaceStationStructureBlockHV.set(SpaceStationStructureBlock.registerVariant(2));
 
             // #tr tile.SpaceStationStructureBlock.3.name
             // # SpaceStationStructureBlock EV Tier
             // #zh_CN 空间站结构方块 EV Tier
-            GTCMItemList.spaceStationStructureBlockEV
-                .set(SpaceStationStructureBlock.registerVariant(3));
+            GTCMItemList.spaceStationStructureBlockEV.set(SpaceStationStructureBlock.registerVariant(3));
 
             // #tr tile.SpaceStationStructureBlock.4.name
             // # SpaceStationStructureBlock IV Tier
             // #zh_CN 空间站结构方块 IV Tier
-            GTCMItemList.spaceStationStructureBlockIV
-                .set(SpaceStationStructureBlock.registerVariant(4));
+            GTCMItemList.spaceStationStructureBlockIV.set(SpaceStationStructureBlock.registerVariant(4));
 
             // #tr tile.SpaceStationStructureBlock.5.name
             // # SpaceStationStructureBlock LuV Tier
             // #zh_CN 空间站结构方块 LuV Tier
-            GTCMItemList.spaceStationStructureBlockLuV
-                .set(SpaceStationStructureBlock.registerVariant(5));
+            GTCMItemList.spaceStationStructureBlockLuV.set(SpaceStationStructureBlock.registerVariant(5));
 
             // #tr tile.SpaceStationStructureBlock.6.name
             // # SpaceStationStructureBlock ZPM Tier
             // #zh_CN 空间站结构方块 ZPM Tier
-            GTCMItemList.spaceStationStructureBlockZPM
-                .set(SpaceStationStructureBlock.registerVariant(6));
+            GTCMItemList.spaceStationStructureBlockZPM.set(SpaceStationStructureBlock.registerVariant(6));
 
             // #tr tile.SpaceStationStructureBlock.7.name
             // # SpaceStationStructureBlock UV Tier
             // #zh_CN 空间站结构方块 UV Tier
-            GTCMItemList.spaceStationStructureBlockUV
-                .set(SpaceStationStructureBlock.registerVariant(7));
+            GTCMItemList.spaceStationStructureBlockUV.set(SpaceStationStructureBlock.registerVariant(7));
 
             // #tr tile.SpaceStationStructureBlock.8.name
             // # SpaceStationStructureBlock UHV Tier
             // #zh_CN 空间站结构方块 UHV Tier
-            GTCMItemList.spaceStationStructureBlockUHV
-                .set(SpaceStationStructureBlock.registerVariant(8));
+            GTCMItemList.spaceStationStructureBlockUHV.set(SpaceStationStructureBlock.registerVariant(8));
 
             // #tr tile.SpaceStationStructureBlock.9.name
             // # SpaceStationStructureBlock UEV Tier
             // #zh_CN 空间站结构方块 UEV Tier
-            GTCMItemList.spaceStationStructureBlockUEV
-                .set(SpaceStationStructureBlock.registerVariant(9));
+            GTCMItemList.spaceStationStructureBlockUEV.set(SpaceStationStructureBlock.registerVariant(9));
 
             // #tr tile.SpaceStationStructureBlock.10.name
             // # SpaceStationStructureBlock UIV Tier
             // #zh_CN 空间站结构方块 UIV Tier
-            GTCMItemList.spaceStationStructureBlockUIV
-                .set(SpaceStationStructureBlock.registerVariant(10));
+            GTCMItemList.spaceStationStructureBlockUIV.set(SpaceStationStructureBlock.registerVariant(10));
 
             // #tr tile.SpaceStationStructureBlock.11.name
             // # SpaceStationStructureBlock UMV Tier
             // #zh_CN 空间站结构方块 UMV Tier
-            GTCMItemList.spaceStationStructureBlockUMV
-                .set(SpaceStationStructureBlock.registerVariant(11));
+            GTCMItemList.spaceStationStructureBlockUMV.set(SpaceStationStructureBlock.registerVariant(11));
 
             // #tr tile.SpaceStationStructureBlock.12.name
             // # SpaceStationStructureBlock UXV Tier
             // #zh_CN 空间站结构方块 UXV Tier
-            GTCMItemList.spaceStationStructureBlockUXV
-                .set(SpaceStationStructureBlock.registerVariant(12));
+            GTCMItemList.spaceStationStructureBlockUXV.set(SpaceStationStructureBlock.registerVariant(12));
 
             // #tr tile.SpaceStationStructureBlock.13.name
             // # SpaceStationStructureBlock MAX Tier
             // #zh_CN 空间站结构方块 MAX Tier
-            GTCMItemList.spaceStationStructureBlockMAX
-                .set(SpaceStationStructureBlock.registerVariant(13));
+            GTCMItemList.spaceStationStructureBlockMAX.set(SpaceStationStructureBlock.registerVariant(13));
 
             // ----------------------------------------
 
             // #tr tile.SpaceStationAntiGravityBlock.0.name
             // # SpaceStationAntiGravityBlock LV Tier
             // #zh_CN 空间站反重力方块 Low Tier
-            GTCMItemList.SpaceStationAntiGravityBlockLV
-                .set(SpaceStationAntiGravityBlock.registerVariant(0));
+            GTCMItemList.SpaceStationAntiGravityBlockLV.set(SpaceStationAntiGravityBlock.registerVariant(0));
 
             // #tr tile.SpaceStationAntiGravityBlock.1.name
             // # SpaceStationAntiGravityBlock MV Tier
             // #zh_CN 空间站反重力方块 Middle Tier
-            GTCMItemList.SpaceStationAntiGravityBlockMV
-                .set(SpaceStationAntiGravityBlock.registerVariant(1));
+            GTCMItemList.SpaceStationAntiGravityBlockMV.set(SpaceStationAntiGravityBlock.registerVariant(1));
 
             // #tr tile.SpaceStationAntiGravityBlock.2.name
             // # SpaceStationAntiGravityBlock HV Tier
             // #zh_CN 空间站反重力方块 HV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockHV
-                .set(SpaceStationAntiGravityBlock.registerVariant(2));
+            GTCMItemList.SpaceStationAntiGravityBlockHV.set(SpaceStationAntiGravityBlock.registerVariant(2));
 
             // #tr tile.SpaceStationAntiGravityBlock.3.name
             // # SpaceStationAntiGravityBlock EV Tier
             // #zh_CN 空间站反重力方块 EV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockEV
-                .set(SpaceStationAntiGravityBlock.registerVariant(3));
+            GTCMItemList.SpaceStationAntiGravityBlockEV.set(SpaceStationAntiGravityBlock.registerVariant(3));
 
             // #tr tile.SpaceStationAntiGravityBlock.4.name
             // # SpaceStationAntiGravityBlock IV Tier
             // #zh_CN 空间站反重力方块 IV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockIV
-                .set(SpaceStationAntiGravityBlock.registerVariant(4));
+            GTCMItemList.SpaceStationAntiGravityBlockIV.set(SpaceStationAntiGravityBlock.registerVariant(4));
 
             // #tr tile.SpaceStationAntiGravityBlock.5.name
             // # SpaceStationAntiGravityBlock LuV Tier
             // #zh_CN 空间站反重力方块 LuV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockLuV
-                .set(SpaceStationAntiGravityBlock.registerVariant(5));
+            GTCMItemList.SpaceStationAntiGravityBlockLuV.set(SpaceStationAntiGravityBlock.registerVariant(5));
 
             // #tr tile.SpaceStationAntiGravityBlock.6.name
             // # SpaceStationAntiGravityBlock ZPM Tier
             // #zh_CN 空间站反重力方块 ZPM Tier
-            GTCMItemList.SpaceStationAntiGravityBlockZPM
-                .set(SpaceStationAntiGravityBlock.registerVariant(6));
+            GTCMItemList.SpaceStationAntiGravityBlockZPM.set(SpaceStationAntiGravityBlock.registerVariant(6));
 
             // #tr tile.SpaceStationAntiGravityBlock.7.name
             // # SpaceStationAntiGravityBlock UV Tier
             // #zh_CN 空间站反重力方块 UV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockUV
-                .set(SpaceStationAntiGravityBlock.registerVariant(7));
+            GTCMItemList.SpaceStationAntiGravityBlockUV.set(SpaceStationAntiGravityBlock.registerVariant(7));
 
             // #tr tile.SpaceStationAntiGravityBlock.8.name
             // # SpaceStationAntiGravityBlock UHV Tier
             // #zh_CN 空间站反重力方块 UHV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockUHV
-                .set(SpaceStationAntiGravityBlock.registerVariant(8));
+            GTCMItemList.SpaceStationAntiGravityBlockUHV.set(SpaceStationAntiGravityBlock.registerVariant(8));
 
             // #tr tile.SpaceStationAntiGravityBlock.9.name
             // # SpaceStationAntiGravityBlock UEV Tier
             // #zh_CN 空间站反重力方块 UEV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockUEV
-                .set(SpaceStationAntiGravityBlock.registerVariant(9));
+            GTCMItemList.SpaceStationAntiGravityBlockUEV.set(SpaceStationAntiGravityBlock.registerVariant(9));
 
             // #tr tile.SpaceStationAntiGravityBlock.10.name
             // # SpaceStationAntiGravityBlock UIV Tier
             // #zh_CN 空间站反重力方块 UIV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockUIV
-                .set(SpaceStationAntiGravityBlock.registerVariant(10));
+            GTCMItemList.SpaceStationAntiGravityBlockUIV.set(SpaceStationAntiGravityBlock.registerVariant(10));
 
             // #tr tile.SpaceStationAntiGravityBlock.11.name
             // # SpaceStationAntiGravityBlock UMV Tier
             // #zh_CN 空间站反重力方块 UMV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockUMV
-                .set(SpaceStationAntiGravityBlock.registerVariant(11));
+            GTCMItemList.SpaceStationAntiGravityBlockUMV.set(SpaceStationAntiGravityBlock.registerVariant(11));
 
             // #tr tile.SpaceStationAntiGravityBlock.12.name
             // # SpaceStationAntiGravityBlock UXV Tier
             // #zh_CN 空间站反重力方块 UXV Tier
-            GTCMItemList.SpaceStationAntiGravityBlockUXV
-                .set(SpaceStationAntiGravityBlock.registerVariant(12));
+            GTCMItemList.SpaceStationAntiGravityBlockUXV.set(SpaceStationAntiGravityBlock.registerVariant(12));
 
             // #tr tile.SpaceStationAntiGravityBlock.13.name
             // # SpaceStationAntiGravityBlock MAX Tier
             // #zh_CN 空间站反重力方块 MAX Tier
-            GTCMItemList.SpaceStationAntiGravityBlockMAX
-                .set(SpaceStationAntiGravityBlock.registerVariant(13));
+            GTCMItemList.SpaceStationAntiGravityBlockMAX.set(SpaceStationAntiGravityBlock.registerVariant(13));
 
             // GTCMItemList.NuclearReactorStructure0.set(NuclearReactorBlockMeta("Nuclear Reactor structure block0",
             // 0));

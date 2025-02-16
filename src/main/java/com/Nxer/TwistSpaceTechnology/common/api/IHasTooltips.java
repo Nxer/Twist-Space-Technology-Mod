@@ -1,9 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.api;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Blocks and Items with meta/damage related tooltips should implement this interface.

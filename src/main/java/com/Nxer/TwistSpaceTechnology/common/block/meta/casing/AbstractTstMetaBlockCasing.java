@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.block.meta.casing;
 
-import gregtech.api.enums.Textures;
-import gregtech.api.render.TextureFactory;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
@@ -14,6 +12,8 @@ import com.Nxer.TwistSpaceTechnology.common.block.IHasMoreBlockInfo;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.enums.Textures;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 
 /**

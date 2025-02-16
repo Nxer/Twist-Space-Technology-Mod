@@ -169,7 +169,8 @@ public class TstUtils {
      * @return the built array of info data
      * @see TST_BloodyHell#getInfoData() example
      */
-    public static String[] buildInfoData(@NotNull String @Nullable [] superInfoData, Consumer<ArrayList<@NotNull String>> builder) {
+    public static String[] buildInfoData(@NotNull String @Nullable [] superInfoData,
+        Consumer<ArrayList<@NotNull String>> builder) {
         ArrayList<String> ret = superInfoData != null ? Lists.newArrayList(superInfoData) : new ArrayList<>();
         builder.accept(ret);
         return ret.toArray(new String[0]);
@@ -260,7 +261,7 @@ public class TstUtils {
      * @param <T>   the type of elements
      * @return the array copy where the {@code null} elements are removed.
      */
-    public static <T> List<T> toNonNullList(@Nullable T @NotNull[] array) {
+    public static <T> List<T> toNonNullList(@Nullable T @NotNull [] array) {
         return Arrays.stream(array)
             .filter(Objects::nonNull)
             .collect(Collectors.toList());

@@ -3,13 +3,13 @@ package com.Nxer.TwistSpaceTechnology.common.item.blockItem;
 import java.util.Arrays;
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.block.IHasMoreBlockInfo;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
 

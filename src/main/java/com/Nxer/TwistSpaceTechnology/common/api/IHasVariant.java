@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
-
 import net.minecraft.util.IIcon;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -65,8 +65,7 @@ public interface IHasVariant {
      * @return the icon map keyed by meta values
      */
     default Map<Integer, IIcon> registerAllVariantIcons(IIconRegister register, Function<Integer, String> iconPath) {
-        return getVariantIds()
-            .stream()
+        return getVariantIds().stream()
             .map(meta -> Pair.of(meta, register.registerIcon(iconPath.apply(meta))))
             .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
     }

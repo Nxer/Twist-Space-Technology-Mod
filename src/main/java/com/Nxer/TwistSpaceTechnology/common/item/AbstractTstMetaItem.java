@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +21,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
@@ -83,8 +83,8 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     @Override
     public void registerIcons(IIconRegister register) {
         this.iconMap = registerAllVariantIcons(
-            register, meta -> TwistSpaceTechnology.RESOURCE_ROOT_ID + ":" + unlocalizedName + "/" + meta
-        );
+            register,
+            meta -> TwistSpaceTechnology.RESOURCE_ROOT_ID + ":" + unlocalizedName + "/" + meta);
         this.itemIcon = iconMap.get(0);
     }
 
