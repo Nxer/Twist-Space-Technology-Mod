@@ -4,7 +4,6 @@ import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -18,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -132,19 +130,6 @@ public class TstUtils {
     }
 
     /**
-     * Create a copy of given ItemStack, and set the meta.
-     *
-     * @param stack the ItemStack
-     * @param meta  the meta value
-     * @return a copy of ItemStack of given ItemStack with meta
-     */
-    public static ItemStack copyItemWithMeta(ItemStack stack, int meta) {
-        var copy = stack.copy();
-        copy.setItemDamage(meta);
-        return copy;
-    }
-
-    /**
      * Make an {@link IllegalArgumentException} for the situation that an input argument (Item or Block) is expected to
      * implement an interface but not.
      *
@@ -155,7 +140,7 @@ public class TstUtils {
      * @return the exception instance with nice message built up by the arguments
      */
     private static IllegalArgumentException makeNotSupportInterfaceException(String type, String unlocalizedName,
-        Class<?> objectClass, Class<?> interfaceClass) {
+                                                                             Class<?> objectClass, Class<?> interfaceClass) {
         return new IllegalArgumentException(
             type + " "
                 + tr(unlocalizedName)
@@ -244,7 +229,7 @@ public class TstUtils {
      * @return the copy of the instance of the meta block.
      */
     public static ItemStack newMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-        @Nullable String[] tooltips) {
+                                                  @Nullable String[] tooltips) {
         return newMetaBlockItemStackUnsafe(blockMeta, meta, tooltips);
     }
 
@@ -268,7 +253,7 @@ public class TstUtils {
      * @return the copy of the instance of the meta block.
      */
     public static ItemStack registerMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-        @Nullable String[] tooltips) {
+                                                       @Nullable String[] tooltips) {
         var stack = blockMeta.registerVariant(meta);
         blockMeta.setTooltips(meta, tooltips);
         return stack;
@@ -295,7 +280,7 @@ public class TstUtils {
      * @return the copy of the instance of the casing
      */
     public static ItemStack registerCasingBlockItemStack(AbstractTstMetaBlockCasing blockCasing, int meta,
-        @Nullable String[] tooltips) {
+                                                         @Nullable String[] tooltips) {
         Textures.BlockIcons
             .setCasingTextureForId(blockCasing.getTextureIndex(meta), TextureFactory.of(blockCasing, meta));
         return registerMetaBlockItemStack(blockCasing, meta, tooltips);
@@ -310,7 +295,7 @@ public class TstUtils {
      * @param advancedTooltips the advanced tooltips
      */
     public static void registerAdvancedTooltips(IHasTooltips hasTooltips, int meta, String[] normalTooltips,
-        String[] advancedTooltips) {
+                                                String[] advancedTooltips) {
         hasTooltips.setTooltips(meta, normalTooltips, false);
         hasTooltips.setTooltips(meta, advancedTooltips, true);
     }
@@ -361,7 +346,7 @@ public class TstUtils {
      *                                  {@link IHasTooltips}.
      */
     public static ItemStack registerVariantMetaItemStackWithAdvancedTooltipsUnsafe(Item itemMeta, int meta,
-        String[] tooltips, String[] advancedTooltips) throws IllegalArgumentException {
+                                                                                   String[] tooltips, String[] advancedTooltips) throws IllegalArgumentException {
         ItemStack stack;
         if (itemMeta instanceof IHasVariant hasVariant) {
             stack = hasVariant.registerVariant(meta);
@@ -387,7 +372,7 @@ public class TstUtils {
      * @return the icon map keyed by meta values
      */
     public static Map<Integer, IIcon> registerAllVariantIcons(IHasVariant hasVariant,
-        Function<Integer, String> iconPath, IIconRegister register) {
+                                                              Function<Integer, String> iconPath, IIconRegister register) {
         return hasVariant.getVariantIds()
             .stream()
             .map(meta -> Pair.of(meta, register.registerIcon(iconPath.apply(meta))))
@@ -524,25 +509,6 @@ public class TstUtils {
     }
 
     /**
-     * @deprecated use {@link GTUtility#copyAmountUnsafe(int, ItemStack)}
-     */
-    @Deprecated
-    public static ItemStack copyAmountUnlimited(int aAmount, ItemStack aStack) {
-        return GTUtility.copyAmountUnsafe(aAmount, aStack);
-    }
-
-    /**
-     * Copy a new amount of a fluid stack
-     *
-     * @param aAmount the amount of new stack
-     * @param aStack  the target fluid stack
-     * @return new fluid stack
-     */
-    public static FluidStack copyAmountFluid(int aAmount, FluidStack aStack) {
-        return new FluidStack(aStack.getFluid(), aAmount);
-    }
-
-    /**
      * Return a shallow copy list of the array where the {@code null} elements are removed.
      *
      * @param array the array
@@ -604,20 +570,41 @@ public class TstUtils {
         return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
     }
 
+    /**
+     * Set the stacksize of the given ItemStack, and return the given stack.
+     * The 64 limit is unchecked, be aware.
+     *
+     * @param itemStack the given stack
+     * @param size      the size to set
+     * @return the given stack
+     */
     public static ItemStack setStackSize(ItemStack itemStack, int size) {
         itemStack.stackSize = size;
         return itemStack;
     }
 
+    /**
+     * Set the stacksize of the given FluidStack, and return the given stack.
+     *
+     * @param fluidStack the given stack
+     * @param size       the size to set
+     * @return the given stack
+     */
     public static FluidStack setStackSize(FluidStack fluidStack, int size) {
         fluidStack.amount = size;
         return fluidStack;
     }
 
-    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack[] aStack) {
-        if (aStack == null) return new ItemStack[0];
+    /**
+     * Copy the itemstack array and filter Integrated Circuits out.
+     *
+     * @param itemStacks the itemstack array
+     * @return the copy of the given array without Integrated Circuits.
+     */
+    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack[] @Nullable itemStacks) {
+        if (itemStacks == null) return new ItemStack[0];
         ArrayList<ItemStack> newStack = new ArrayList<>();
-        for (ItemStack itemStack : aStack) {
+        for (ItemStack itemStack : itemStacks) {
             if (itemStack.getItem() != ItemList.Circuit_Integrated.getItem()) {
                 newStack.add(itemStack);
             }
@@ -625,35 +612,4 @@ public class TstUtils {
         return newStack.toArray(new ItemStack[0]);
     }
 
-    public static FluidStack[] mergeSameFluid(FluidStack[] fluidStacks) {
-
-        Map<Fluid, Integer> fluidMap = new LinkedHashMap<>();
-
-        for (FluidStack aStack : fluidStacks) {
-            fluidMap.put(aStack.getFluid(), fluidMap.getOrDefault(aStack.getFluid(), 0) + aStack.amount);
-        }
-
-        ArrayList<FluidStack> mergedList = new ArrayList<>();
-        for (Map.Entry<Fluid, Integer> entry : fluidMap.entrySet()) {
-            mergedList.add(new FluidStack(entry.getKey(), entry.getValue()));
-        }
-
-        return mergedList.toArray(new FluidStack[0]);
-    }
-
-    public static ItemStack[] mergeSameItem(ItemStack[] itemStacks) {
-
-        Map<Item, Integer> itemMap = new LinkedHashMap<>();
-
-        for (ItemStack aStack : itemStacks) {
-            itemMap.put(aStack.getItem(), itemMap.getOrDefault(aStack.getItem(), 0) + aStack.stackSize);
-        }
-
-        ArrayList<ItemStack> mergedList = new ArrayList<>();
-        for (Map.Entry<Item, Integer> entry : itemMap.entrySet()) {
-            mergedList.add(new ItemStack(entry.getKey(), entry.getValue()));
-        }
-
-        return mergedList.toArray(new ItemStack[0]);
-    }
 }
