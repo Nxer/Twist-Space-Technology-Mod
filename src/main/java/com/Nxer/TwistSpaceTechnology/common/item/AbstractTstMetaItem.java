@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -73,7 +74,7 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack aItemStack, EntityPlayer aEntityPlayer, List<String> aTooltipsList,
         boolean isAdvancedMode) {
-        String[] tooltips = getTooltips(aItemStack.getItemDamage(), isAdvancedMode);
+        String[] tooltips = getTooltips(aItemStack.getItemDamage(), IHasTooltips.isShiftKeyDown());
         if (tooltips != null) {
             aTooltipsList.addAll(Arrays.asList(tooltips));
         }

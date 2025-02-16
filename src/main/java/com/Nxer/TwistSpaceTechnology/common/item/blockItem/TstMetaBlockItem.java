@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.item.blockItem;
 import java.util.Arrays;
 import java.util.List;
 
+import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -77,7 +78,7 @@ public class TstMetaBlockItem extends ItemBlock {
         boolean advanced) {
         int meta = aItemStack.getItemDamage();
 
-        var tooltips = getMetaBlock().getTooltips(meta, advanced);
+        var tooltips = getMetaBlock().getTooltips(meta, IHasTooltips.isShiftKeyDown());
         if (tooltips != null) {
             theTooltipsList.addAll(Arrays.asList(tooltips));
         }
