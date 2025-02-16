@@ -73,6 +73,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_W
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_WirelessData_output;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Air;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_DualInput;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Solidify;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
@@ -211,6 +212,11 @@ public class MachineLoader {
 
     public static ItemStack LegendaryWirelessEnergyHatch;
     public static ItemStack HarmoniousWirelessEnergyHatch;
+    public static ItemStack SolidifyHatch_IV;
+    public static ItemStack SolidifyHatch_LuV;
+    public static ItemStack SolidifyHatch_ZPM;
+    public static ItemStack SolidifyHatch_UV;
+    public static ItemStack SolidifyHatch_UHV;
 
     // region Modularized Stuff
     public static ItemStack DynamicParallelControllerT1;
@@ -1010,6 +1016,56 @@ public class MachineLoader {
             14,
             2147483647).getStackForm(1);
         GTCMItemList.HarmoniousWirelessEnergyHatch.set(HarmoniousWirelessEnergyHatch);
+
+        // #tr NameSolidifyHatchUHV
+        // # Solidifier Hatch(UHV)
+        // #zh_CN 固化仓(UHV)
+        SolidifyHatch_UHV = new GT_MetaTileEntity_Hatch_Solidify(
+            18797,
+            "NameSolidifyHatchUHV",
+            TextEnums.tr("NameSolidifyHatchUHV"),
+            9).getStackForm(1);
+        GTCMItemList.SolidifyHatch_UHV.set(SolidifyHatch_UHV);
+
+        // #tr NameSolidifyHatchUV
+        // # Solidifier Hatch(UV)
+        // #zh_CN 固化仓(UV)
+        SolidifyHatch_UV = new GT_MetaTileEntity_Hatch_Solidify(
+            18796,
+            "NameSolidifyHatchUV",
+            TextEnums.tr("NameSolidifyHatchUV"),
+            8).getStackForm(1);
+        GTCMItemList.SolidifyHatch_UV.set(SolidifyHatch_UV);
+
+        // #tr NameSolidifyHatchZPM
+        // # Solidifier Hatch(ZPM)
+        // #zh_CN 固化仓(ZPM)
+        SolidifyHatch_ZPM = new GT_MetaTileEntity_Hatch_Solidify(
+            18795,
+            "NameSolidifyHatchZPM",
+            TextEnums.tr("NameSolidifyHatchZPM"),
+            7).getStackForm(1);
+        GTCMItemList.SolidifyHatch_ZPM.set(SolidifyHatch_ZPM);
+
+        // #tr NameSolidifyHatchLuV
+        // # Solidifier Hatch(LuV)
+        // #zh_CN 固化仓(LuV)
+        SolidifyHatch_LuV = new GT_MetaTileEntity_Hatch_Solidify(
+            18794,
+            "NameSolidifyHatchLuV",
+            TextEnums.tr("NameSolidifyHatchLuV"),
+            6).getStackForm(1);
+        GTCMItemList.SolidifyHatch_LuV.set(SolidifyHatch_LuV);
+
+        // #tr NameSolidifyHatchIV
+        // # Solidifier Hatch(IV)
+        // #zh_CN 固化仓(IV)
+        SolidifyHatch_IV = new GT_MetaTileEntity_Hatch_Solidify(
+            18793,
+            "NameSolidifyHatchIV",
+            TextEnums.tr("NameSolidifyHatchIV"),
+            5).getStackForm(1);
+        GTCMItemList.SolidifyHatch_IV.set(SolidifyHatch_IV);
 
         // region Modularized Stuff
 
