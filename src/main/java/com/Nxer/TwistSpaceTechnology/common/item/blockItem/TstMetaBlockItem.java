@@ -74,10 +74,10 @@ public class TstMetaBlockItem extends ItemBlock {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack aItemStack, EntityPlayer p_77624_2_, List<String> theTooltipsList,
-        boolean p_77624_4_) {
+        boolean advanced) {
         int meta = aItemStack.getItemDamage();
 
-        var tooltips = getMetaBlock().getTooltips(meta);
+        var tooltips = getMetaBlock().getTooltips(meta, advanced);
         if (tooltips != null) {
             theTooltipsList.addAll(Arrays.asList(tooltips));
         }

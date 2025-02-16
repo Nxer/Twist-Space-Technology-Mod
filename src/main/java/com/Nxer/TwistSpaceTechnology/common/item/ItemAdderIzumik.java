@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 
-public class ItemAdderIzumik extends AbstractTstMetaItem implements IHasVariantAndTooltips.Advanced {
+public class ItemAdderIzumik extends AbstractTstMetaItem implements IHasVariantAndTooltips {
 
     private final Map<Integer, String[]> MetaItemTooltipsMapIzumik = new HashMap<>();
     private final Map<Integer, String[]> MetaItemTooltipsMapIzumikShift = new HashMap<>();

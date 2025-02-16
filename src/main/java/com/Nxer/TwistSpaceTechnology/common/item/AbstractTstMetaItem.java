@@ -22,13 +22,12 @@ import org.jetbrains.annotations.Unmodifiable;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
-import com.Nxer.TwistSpaceTechnology.common.api.IHasVariant;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class AbstractTstMetaItem extends Item implements IHasVariantAndTooltips, IHasVariant {
+public abstract class AbstractTstMetaItem extends Item implements IHasVariantAndTooltips {
 
     protected final HashSet<Integer> usedMetaIds = new HashSet<>();
     protected final HashMap<Integer, String[]> tooltipMap = new HashMap<>();
@@ -114,12 +113,12 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     }
 
     @Override
-    public void setTooltips(int metaValue, @Nullable String[] tooltips) {
+    public void setTooltips(int metaValue, @Nullable String[] tooltips, boolean advanced) {
         tooltipMap.put(metaValue, tooltips);
     }
 
     @Override
-    public @Nullable String[] getTooltips(int metaValue) {
+    public @Nullable String[] getTooltips(int metaValue, boolean advanced) {
         return tooltipMap.get(metaValue);
     }
 

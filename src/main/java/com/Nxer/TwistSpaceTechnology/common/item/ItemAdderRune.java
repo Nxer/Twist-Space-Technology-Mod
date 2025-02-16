@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.IItemHasCooldown;
 
 import gregtech.api.util.GTUtility;
@@ -16,7 +15,7 @@ import gregtech.api.util.GTUtility;
 /**
  * An ItemStack Generator used Meta Item System.
  */
-public class ItemAdderRune extends AbstractTstMetaItem implements IItemHasCooldown, IHasVariantAndTooltips {
+public class ItemAdderRune extends AbstractTstMetaItem implements IItemHasCooldown {
 
     /**
      * Create the basic item MetaItemRune.
