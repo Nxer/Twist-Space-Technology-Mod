@@ -66,7 +66,8 @@ public class RecipeLoader {
             // Item Recipes
             new CosmicProcessorCircuitRecipes(),
             // Machine Recipes
-            new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(), new ModularHatchesRecipes(),new TSTSolidifierHatchRecipes()};
+            new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(), new ModularHatchesRecipes(),
+            new TSTSolidifierHatchRecipes() };
 
         for (IRecipePool recipePool : craftRecipePool) {
             recipePool.loadRecipes();
