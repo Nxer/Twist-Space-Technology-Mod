@@ -1,9 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.block.meta.casing;
 
+import gregtech.api.enums.Textures;
+import gregtech.api.render.TextureFactory;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -29,6 +32,14 @@ public abstract class AbstractTstMetaBlockCasing extends AbstractTstMetaBlock im
         this.setHardness(9.0F);
         this.setResistance(5.0F);
         GregTechAPI.registerMachineBlock(this, -1);
+    }
+
+    @Override
+    public ItemStack registerVariant(int meta) throws IllegalArgumentException {
+        // register casing textures
+        ItemStack stack = super.registerVariant(meta);
+        Textures.BlockIcons.setCasingTextureForId(getTextureIndex(meta), TextureFactory.of(this, meta));
+        return stack;
     }
 
     // region Texture
