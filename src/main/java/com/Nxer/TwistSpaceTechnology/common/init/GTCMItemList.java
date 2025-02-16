@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.util.GTLog;
 import gregtech.api.util.GTUtility;
 
@@ -573,6 +574,11 @@ public enum GTCMItemList {
             }
         }
         return this;
+    }
+
+    public GTCMItemList set(IMetaTileEntity metaTileEntity) {
+        if (metaTileEntity == null) throw new IllegalArgumentException();
+        return set(metaTileEntity.getStackForm(1L));
     }
 
     public boolean hasBeenSet() {
