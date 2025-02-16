@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_CRAFTING_INPUT_BUFFER;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -25,6 +27,8 @@ import com.gtnewhorizons.modularui.common.fluid.FluidStackTank;
 import com.gtnewhorizons.modularui.common.widget.FluidSlotWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 
+import ggfab.GGItemList;
+import gregtech.api.enums.ItemList;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
@@ -35,14 +39,52 @@ import gregtech.api.render.TextureFactory;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
 
-public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implements IAddUIWidgets, IDualInputHatch {
+public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus implements IAddUIWidgets, IDualInputHatch {
 
+    public static final HashSet<TST_ItemID> solidifierMolds = new HashSet<>();
+    static {
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Bottle.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Plate.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Ingot.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Casing.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Gear.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Gear_Small.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Credit.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Nugget.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Block.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Ball.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Cylinder.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Anvil.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Arrow.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Rod.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Bolt.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Round.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Screw.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Ring.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Rod_Long.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Rotor.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Turbine_Blade.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Pipe_Tiny.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Pipe_Small.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Pipe_Medium.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Pipe_Large.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_Pipe_Huge.get(1));
+        TST_ItemID.createNoNBT(ItemList.Shape_Mold_ToolHeadDrill.get(1));
+
+        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolFile.get(1));
+        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolWrench.get(1));
+        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolCrowbar.get(1));
+        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolWireCutter.get(1));
+        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolHardHammer.get(1));
+        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolSoftHammer.get(1));
+        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolScrewdriver.get(1));
+        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolSaw.get(1));
+    }
     private final FluidStack[] mStoredFluid;
     private final FluidStackTank[] fluidTanks;
     public final int mCapacityPer;
-    private static final int ITEM_SLOT_AMOUNT = 19;
-    private static final int CATALYST_SLOT_1 = 16;
-    private static final int CATALYST_SLOT_2 = 17;
+    private static final int ITEM_SLOT_AMOUNT = 1;
+    private static final int MOLD_SLOT = 0;
 
     public static class Inventory implements IDualInputInventory {
 
@@ -71,15 +113,6 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
         }
 
         public boolean isEmpty() {
-            if (itemInventory != null) {
-                // Circuit slot is the last slot; catalyst slots are the second & third to last slots. Will not check
-                // them
-                for (int i = 0; i < itemInventory.length - 3; i++) {
-                    if (itemInventory[i] != null && itemInventory[i].stackSize > 0) {
-                        return false;
-                    }
-                }
-            }
             if (fluidInventory != null) {
                 for (FluidStack fluid : fluidInventory) {
                     if (fluid != null && fluid.amount > 0) {
@@ -91,45 +124,28 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
         }
     }
 
-    Inventory inventory;
+    GT_MetaTileEntity_Hatch_Solidify.Inventory inventory;
 
-    public GT_MetaTileEntity_Hatch_DualInput(int aID, String aName, String aNameRegional, int aTier) {
+    public GT_MetaTileEntity_Hatch_Solidify(int aID, String aName, String aNameRegional, int aTier) {
         super(
             aID,
             aName,
             aNameRegional,
             aTier,
             ITEM_SLOT_AMOUNT,
-            // #tr ToolTip_DualInputHatch_1
-            // # Advanced input for Multiblocks
-            // #zh_CN 多方块的进阶输入
-            // #tr ToolTip_DualInputHatch_2
-            // # Can hold
-            // #zh_CN 能容纳
-            // #tr ToolTip_DualInputHatch_3
-            // # types of item and
-            // #zh_CN 种物品与
-            // #tr ToolTip_DualInputHatch_4
-            // # types of fluid
-            // #zh_CN 种流体
-            new String[] { TextEnums.tr("ToolTip_DualInputHatch_1"),
-                FluidCapacity + " " + getCapacityPerTank(aTier) + " L",
-                TextEnums.tr("ToolTip_DualInputHatch_2") + " "
-                    + getSlots(aTier)
-                    + " "
-                    + TextEnums.tr("ToolTip_DualInputHatch_3")
-                    + " "
-                    + getFluidSlotsAmount(aTier)
-                    + " "
-                    + TextEnums.tr("ToolTip_DualInputHatch_4"),
-                AutoSeparation, ModNameDesc });
+            // #tr ToolTip_SolidifyHatch_1
+            // # {\RESET}Fluid Input with Mold for {\GOLD}Fluid Solidifier{\RESET}
+            // #zh_CN {\RESET}为{\GOLD}流体固化机{\RESET}带模具输入流体
+            new String[] { TextEnums.tr("ToolTip_SolidifyHatch_1"),
+                FluidCapacity + " " + getCapacityPerTank(aTier) + " L x " + getFluidSlotsAmount(aTier), AutoSeparation,
+                ModNameDesc });
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];
         fluidTanks = new FluidStackTank[getFluidSlotsAmount(aTier)];
         mCapacityPer = getCapacityPerTank(aTier);
-        inventory = new Inventory(mInventory, mStoredFluid);
+        inventory = new GT_MetaTileEntity_Hatch_Solidify.Inventory(mInventory, mStoredFluid);
     }
 
-    public GT_MetaTileEntity_Hatch_DualInput(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+    public GT_MetaTileEntity_Hatch_Solidify(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, ITEM_SLOT_AMOUNT, aDescription, aTextures);
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];
         fluidTanks = new FluidStackTank[getFluidSlotsAmount(aTier)];
@@ -141,12 +157,12 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
                 fluid -> mStoredFluid[index] = fluid,
                 mCapacityPer);
         }
-        inventory = new Inventory(mInventory, mStoredFluid);
+        inventory = new GT_MetaTileEntity_Hatch_Solidify.Inventory(mInventory, mStoredFluid);
     }
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Hatch_DualInput(mName, mTier, mDescriptionArray, mTextures);
+        return new GT_MetaTileEntity_Hatch_Solidify(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override
@@ -198,15 +214,14 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
         ItemStack aStack) {
-        return super.allowPullStack(aBaseMetaTileEntity, aIndex, side, aStack) && aIndex != CATALYST_SLOT_1
-            && aIndex != CATALYST_SLOT_2;
+        return super.allowPullStack(aBaseMetaTileEntity, aIndex, side, aStack) && aIndex != MOLD_SLOT;
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, ForgeDirection side,
         ItemStack aStack) {
-        return aIndex != CATALYST_SLOT_1 && aIndex != CATALYST_SLOT_2
-            && super.allowPutStack(aBaseMetaTileEntity, aIndex, side, aStack);
+        if (solidifierMolds.contains(TST_ItemID.createNoNBT(aStack))) return true;
+        return false;
     }
 
     public FluidStack getFluid(int aSlot) {
@@ -284,7 +299,7 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
 
     @Override
     public Iterator<? extends IDualInputInventory> inventories() {
-        return Arrays.stream(new Inventory[] { inventory })
+        return Arrays.stream(new GT_MetaTileEntity_Hatch_Solidify.Inventory[] { inventory })
             .filter(Objects::nonNull)
             .iterator();
     }
@@ -308,8 +323,8 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
     }
 
     @Override
-    public int getCircuitSlot() {
-        return ITEM_SLOT_AMOUNT - 1;
+    public boolean allowSelectCircuit() {
+        return false;
     }
 
     @Override
@@ -382,12 +397,7 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
     }
 
     public void updateSlots() {
-        // items
-        if (mInventory != null) {
-            for (int i = 0; i < mInventory.length - 1; i++)
-                if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
-        }
-        // fluids
+
         if (mStoredFluid != null) {
             for (int i = 0; i < getMaxType(); i++) {
                 if (mStoredFluid[i] != null && mStoredFluid[i].amount <= 0) mStoredFluid[i] = null;
@@ -410,38 +420,34 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
 
     public static int getFluidSlotsAmount(int tier) {
         return switch (tier) {
-            case 5 -> 2;
-            case 6 -> 3;
-            case 7 -> 4;
-            case 8 -> 6;
+            case 5 -> 1;
+            case 6, 7 -> 2;
+            case 8 -> 4;
+            case 9 -> 6;
             default -> 0;
         };
     }
 
     public static int getCapacityPerTank(int aTier) {
         return switch (aTier) {
-            case 5 -> 20000;
-            case 6 -> 60000;
-            case 7 -> 180000;
-            case 8 -> 540000;
+            case 5 -> 256_000;
+            case 6 -> 512_000;
+            case 7 -> 1024_000;
+            case 8 -> 2048_000;
+            case 9 -> 4096_000;
             default -> 0;
         };
     }
-
-    // @Override
-    // public boolean useModularUI() {
-    // return true;
-    // }
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         final int SLOT_NUMBER = fluidTanks.length;
         final Pos2d[] positions = switch (SLOT_NUMBER) {
-            case 2 -> new Pos2d[] { new Pos2d(124, 7), new Pos2d(124, 25) };
-            case 3 -> new Pos2d[] { new Pos2d(124, 7), new Pos2d(124, 25), new Pos2d(124, 43) };
-            case 4 -> new Pos2d[] { new Pos2d(124, 7), new Pos2d(124, 25), new Pos2d(124, 43), new Pos2d(124, 61) };
-            case 6 -> new Pos2d[] { new Pos2d(124, 7), new Pos2d(124, 25), new Pos2d(124, 43), new Pos2d(142, 7),
-                new Pos2d(142, 25), new Pos2d(142, 43) };
+            case 1 -> new Pos2d[] { new Pos2d(79, 34) };
+            case 2 -> new Pos2d[] { new Pos2d(70, 34), new Pos2d(88, 34) };
+            case 4 -> new Pos2d[] { new Pos2d(70, 25), new Pos2d(88, 25), new Pos2d(70, 43), new Pos2d(88, 43) };
+            case 6 -> new Pos2d[] { new Pos2d(61, 25), new Pos2d(79, 25), new Pos2d(97, 25), new Pos2d(61, 43),
+                new Pos2d(79, 43), new Pos2d(97, 43) };
             default -> new Pos2d[] {};
         };
 
@@ -452,11 +458,10 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
         }
         builder.widget(
             SlotGroup.ofItemHandler(inventoryHandler, 2)
-                .startFromSlot(CATALYST_SLOT_1)
-                .endAtSlot(CATALYST_SLOT_2)
-                .background(ModularUITextures.ITEM_SLOT, GTUITextures.OVERLAY_SLOT_MOLECULAR_1)
+                .startFromSlot(MOLD_SLOT)
+                .endAtSlot(MOLD_SLOT)
+                .background(ModularUITextures.ITEM_SLOT, GTUITextures.OVERLAY_SLOT_MOLD)
                 .build()
                 .setPos(7, 7));
-        getBaseMetaTileEntity().add4by4Slots(builder);
     }
 }

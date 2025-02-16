@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -52,6 +51,7 @@ import bartworks.util.ResultWrongSievert;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -86,7 +86,6 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     // endregion
 
     // region Processing Logic
-    private byte mode = 0;
     private byte mGlassTier = 0;
     private int mNeededGlassTier = 0;
     private int mSievert = 0;
@@ -95,8 +94,37 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     private ArrayList<GT_MetaTileEntity_RadioHatch> mRadHatches = new ArrayList<>();
 
     @Override
-    public RecipeMap<?> getRecipeMap() {
+    public int totalMachineMode() {
+        /*
+         * 0 - Bacterial Vat
+         * 1 - Bacterial Vat Auto
+         * 2 - Brewery
+         * 3 - Fermenter
+         */
+        return 4;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SIMPLEWASHER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
         return switch (mode) {
+            case 0 -> TextLocalization.BiosphereIII_Mode_00;
+            case 1 -> TextLocalization.BiosphereIII_Mode_01;
+            case 2 -> TextLocalization.BiosphereIII_Mode_02;
+            default -> TextLocalization.BiosphereIII_Mode_03;
+        };
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return switch (machineMode) {
             case 0, 1 -> BartWorksRecipeMaps.bacterialVatRecipes;
             case 2 -> RecipeMaps.brewingRecipes;
             default -> RecipeMaps.fermentingRecipes;
@@ -117,7 +145,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
     @Override
     protected float getSpeedBonus() {
-        return switch (mode) {
+        return switch (machineMode) {
             case 0 -> 0.5f; // Bio Vat normal
             case 1 -> 1; // Bio Vat automation
             default -> 0.25f; // Brewing && Fermenting
@@ -126,7 +154,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
     @Override
     protected int getMaxParallelRecipes() {
-        return switch (mode) {
+        return switch (machineMode) {
             case 0 -> (getControllerSlot() == null) ? 0 : getControllerSlot().stackSize * 4; // Bio Vat normal
             case 1 -> (getControllerSlot() == null) ? 0 : getControllerSlot().stackSize; // Bio Vat automation
             default -> 1 << Math.max(mGlassTier * 2 - 6, 0); // Brewing && Fermenting
@@ -141,7 +169,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             @Override
             protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
                 // no check for Brewing & Fermenting
-                if (mode == 2 || mode == 3) return CheckRecipeResultRegistry.SUCCESSFUL;
+                if (machineMode == 2 || machineMode == 3) return CheckRecipeResultRegistry.SUCCESSFUL;
 
                 // Bio Vat check
                 // Petri Dish check
@@ -186,10 +214,10 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
     private GTRecipe recipeAfterEfficiencyCalculation(GTRecipe recipe, FluidStack[] inputFluids) {
         // Brewing & Fermenting, no change to the recipe
-        if (mode == 2 || mode == 3) return recipe;
+        if (machineMode == 2 || machineMode == 3) return recipe;
 
         GTRecipe tRecipe = recipe.copy();
-        if (mode == 0) efficiency = getExpectedMultiplier(tRecipe.mFluidOutputs[0]);// Bio Vat Normal
+        if (machineMode == 0) efficiency = getExpectedMultiplier(tRecipe.mFluidOutputs[0]);// Bio Vat Normal
         else efficiency = (int) (((mGlassTier - mNeededGlassTier) * 600 + 1601.0) / 1000
             * Configuration.Multiblocks.bioVatMaxParallelBonus);// Bio Vat Automation
 
@@ -426,7 +454,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setInteger("mSievert", mSievert);
         aNBT.setInteger("mNeededSievert", mNeededSievert);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("efficiency", efficiency);
         super.saveNBTData(aNBT);
     }
@@ -435,27 +463,9 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     public void loadNBTData(NBTTagCompound aNBT) {
         mSievert = aNBT.getInteger("mSievert");
         mNeededSievert = aNBT.getInteger("mNeededSievert");
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         efficiency = aNBT.getInteger("efficiency");
         super.loadNBTData(aNBT);
-    }
-
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            mode = (byte) ((mode + 1) % 4);
-            String des = getDisplayMode(mode);
-            GTUtility.sendChatToPlayer(aPlayer, String.join("", des));
-        }
-    }
-
-    private String getDisplayMode(int mode) {
-        return switch (mode) {
-            case 0 -> TextLocalization.BiosphereIII_Mode_00;
-            case 1 -> TextLocalization.BiosphereIII_Mode_01;
-            case 2 -> TextLocalization.BiosphereIII_Mode_02;
-            default -> TextLocalization.BiosphereIII_Mode_03;
-        };
     }
 
     @Override
@@ -469,8 +479,8 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = TstSharedLocalization.MachineInfo.glassTier(this.mGlassTier);
-        ret[origin.length + 1] = EnumChatFormatting.BLUE + getDisplayMode(mode);
-        ret[origin.length + 2] = TextLocalization.BiosphereIIIEfficiency + ((mode == 2 || mode == 3) ?
+        ret[origin.length + 1] = EnumChatFormatting.BLUE + getMachineModeName(machineMode);
+        ret[origin.length + 2] = TextLocalization.BiosphereIIIEfficiency + ((machineMode == 2 || machineMode == 3) ?
         // Brewing & Fermenting
             (EnumChatFormatting.GREEN + "100" + EnumChatFormatting.RESET + "%") :
             // Bio Vat
