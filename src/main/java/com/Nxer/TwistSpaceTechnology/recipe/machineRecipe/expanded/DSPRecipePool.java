@@ -260,23 +260,14 @@ public class DSPRecipePool implements IRecipePool {
         // launcher
         GTValues.RA.stdBuilder()
             .itemInputs(SolarSail.get(1))
-
-            .itemOutputs(SolarSail.get(1))
-
             .eut(EUTOfLaunchingSolarSail)
             .duration(ticksOfLaunchingSolarSail)
             .addTo(DSPLauncherRecipe);
 
         GTValues.RA.stdBuilder()
             .itemInputs(SmallLaunchVehicle.get(1))
-
-            .itemOutputs(
-                SmallLaunchVehicle.get(1)
-                    .setStackDisplayName(
-                        // #tr NEI.EmptySmallLaunchVehicleRecipe.0
-                        // # 99%% Return an Empty Small Launch Vehicle.
-                        // #zh_CN 99%%返还一个空的小型运载火箭.
-                        TextEnums.tr("NEI.EmptySmallLaunchVehicleRecipe.0")))
+            .itemOutputs(EmptySmallLaunchVehicle.get(1))
+            .outputChances(9900)
             .eut(EUTOfLaunchingNode)
             .duration(ticksOfLaunchingNode)
             .addTo(DSPLauncherRecipe);
