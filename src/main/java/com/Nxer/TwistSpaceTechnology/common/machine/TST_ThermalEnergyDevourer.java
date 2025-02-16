@@ -15,11 +15,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,10 +28,7 @@ import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.modularui.api.drawable.IDrawable;
-import com.gtnewhorizons.modularui.api.drawable.UITexture;
 import com.gtnewhorizons.modularui.api.widget.IWidgetBuilder;
-import com.gtnewhorizons.modularui.api.widget.Widget;
 import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
 import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 
@@ -54,8 +47,6 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings2;
 import gregtech.common.blocks.BlockCasings8;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TST_ThermalEnergyDevourer> {
 
@@ -102,34 +93,16 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
 
     @Override
     public ButtonWidget createModeSwitchButton(IWidgetBuilder<?> builder) {
-        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> { setMachineMode(nextMachineMode()); })
-            .setPlayClickSound(supportsMachineModeSwitch())
-            .setBackground(() -> {
-                List<UITexture> ret = new ArrayList<>();
-                if (supportsMachineModeSwitch()) {
-                    ret.add(GTUITextures.BUTTON_STANDARD);
-                    ret.add(getMachineModeIcon(getMachineMode()));
-                } else return null;
-                return ret.toArray(new IDrawable[0]);
-            })
-            .attachSyncer(new FakeSyncWidget.IntegerSyncer(this::getMachineMode, this::setMachineMode), builder)
+        ButtonWidget modeSwitchButton = super.createModeSwitchButton(builder);
+        modeSwitchButton
             .attachSyncer(new FakeSyncWidget.BooleanSyncer(() -> wirelessMode, (w) -> wirelessMode = w), builder)
-            .addTooltip(StatCollector.translateToLocal("GT5U.gui.button.mode_switch"))
-            .setTooltipShowUpDelay(TOOLTIP_DELAY)
-            .setPos(getMachineModeSwitchButtonPos())
-            .setSize(16, 16)
             .setEnabled(widget -> !wirelessMode);
-        return (ButtonWidget) button;
+        return modeSwitchButton;
     }
 
     @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getBoolean("wirelessMode")) {
-            currentTip.remove(3);
-        }
+    public boolean showModeInWaila() {
+        return !wirelessMode;
     }
 
     public String[] getInfoData() {
