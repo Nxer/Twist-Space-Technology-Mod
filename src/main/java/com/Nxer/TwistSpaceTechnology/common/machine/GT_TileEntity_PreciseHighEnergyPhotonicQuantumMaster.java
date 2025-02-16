@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.PhotonControllerUpgrade;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_PreciseHighEnergyPhotonicQuantumMaster;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
@@ -26,7 +25,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -45,6 +43,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -52,7 +51,6 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTStructureUtility;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
@@ -71,7 +69,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
 
     // region Member Variables
 
-    private boolean mode = Mode_Default_PreciseHighEnergyPhotonicQuantumMaster;
     private boolean enablePerfectOverclockSignal = false;
     private int totalSpeedIncrement = 0;
 
@@ -215,8 +212,28 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     // region Processing Logic
 
     @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Laser Engraver
+         * 1 - Photon Manipulator
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + mode);
+    }
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
-        if (this.mode) {
+        if (machineMode == 1) {
             return GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes;
         }
         return RecipeMaps.laserEngraverRecipes;
@@ -236,13 +253,13 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     @Override
     protected float getSpeedBonus() {
         return 10000F / (10000F + totalSpeedIncrement)
-            / (mode ? SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
+            / (machineMode == 1 ? SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
                 : SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster);
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return this.mode ? Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
+        return machineMode == 1 ? Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
             : Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
     }
 
@@ -260,16 +277,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = !this.mode;
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + (this.mode ? 1 : 0)));
-        }
-    }
-
     // endregion
 
     // region General Overrides
@@ -278,7 +285,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
-        aNBT.setBoolean("mode", mode);
+        aNBT.setBoolean("mode", machineMode == 1);
         aNBT.setBoolean("enablePerfectOverclockSignal", enablePerfectOverclockSignal);
         aNBT.setInteger("totalSpeedIncrement", totalSpeedIncrement);
     }
@@ -287,7 +294,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
-        mode = aNBT.getBoolean("mode");
+        machineMode = aNBT.getBoolean("mode") ? 0 : 1;
         enablePerfectOverclockSignal = aNBT.getBoolean("enablePerfectOverclockSignal");
         totalSpeedIncrement = aNBT.getInteger("totalSpeedIncrement");
     }

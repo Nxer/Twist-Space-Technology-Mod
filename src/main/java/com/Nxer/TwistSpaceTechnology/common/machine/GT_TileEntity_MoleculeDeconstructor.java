@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerPiece_MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_MoleculeDeconstructor;
@@ -36,7 +35,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -57,6 +55,7 @@ import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -86,7 +85,26 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     private byte glassTier = 0;
     private int piece = 1;
     protected float speedBonus = 1F;
-    private byte mode = Mode_Default_MoleculeDeconstructor;
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Electrolyzer
+         * 1 - Centrifuge
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("MoleculeDeconstructor.modeMsg." + mode);
+    }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -103,7 +121,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (mode) {
+        switch (machineMode) {
             case 1:
                 return GTPPRecipeMaps.centrifugeNonCellRecipes;
             default:
@@ -115,16 +133,6 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(GTPPRecipeMaps.centrifugeNonCellRecipes, GTPPRecipeMaps.electrolyzerNonCellRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("MoleculeDeconstructor.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -428,7 +436,7 @@ I -> ofFrame...();
 
         aNBT.setFloat("speedBonus", speedBonus);
         aNBT.setInteger("piece", piece);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
     }
 
     @Override
@@ -437,7 +445,7 @@ I -> ofFrame...();
 
         speedBonus = aNBT.getFloat("speedBonus");
         piece = aNBT.getInteger("piece");
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
     }
 
     @Override
