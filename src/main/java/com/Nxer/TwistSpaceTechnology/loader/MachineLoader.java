@@ -30,6 +30,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvCircuitAssemblyLine;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
@@ -76,6 +77,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
@@ -177,6 +179,7 @@ public class MachineLoader {
     public static ItemStack ManufacturingCenter;
     public static ItemStack GiantVacuumDryingFurnace;
     public static ItemStack ProcessingArray;
+    public static ItemStack AdvCircuitAssemblyLine;
     // Single Block
     public static ItemStack InfiniteAirHatch;
     public static ItemStack ManaHatch;
@@ -259,8 +262,8 @@ public class MachineLoader {
     public static ItemStack ExecutionCore;
     public static ItemStack AdvancedExecutionCore;
     public static ItemStack PerfectExecutionCore;
-
     public static ItemStack BloodOrbHatch;
+    public static ItemStack CircuitImprintHatch;
 
     // endregion
 
@@ -776,6 +779,18 @@ public class MachineLoader {
                 .getStackForm(1);
             GTCMItemList.ProcessingArray.set(ProcessingArray);
         }
+
+        if (Config.Enable_AdvCircuitAssemblyLine) {
+            // #tr NameAdvCircuitAssemblyLine
+            // # NameAdvCircuitAssemblyLine
+            // #zh_CN NameAdvCircuitAssemblyLine
+            AdvCircuitAssemblyLine = new TST_AdvCircuitAssemblyLine(
+                19067,
+                "NameAdvCircuitAssemblyLine",
+                TextEnums.tr("AdvCircuitAssemblyLine")).getStackForm(1);
+            GTCMItemList.AdvCircuitAssemblyLine.set(AdvCircuitAssemblyLine);
+        }
+
         // endregion
 
         // region Single block Machine
@@ -1010,6 +1025,16 @@ public class MachineLoader {
             14,
             2147483647).getStackForm(1);
         GTCMItemList.HarmoniousWirelessEnergyHatch.set(HarmoniousWirelessEnergyHatch);
+
+        // #tr NameCircuitImprintHatch
+        // # NameCircuitImprintHatchTwist
+        // #zh_CN NameCircuitImprintHatchTwist
+        CircuitImprintHatch = new TST_CircuitImprintHatch(
+            18792,
+            "NameCircuitImprintHatch",
+            TextEnums.tr("NameCircuitImprintHatch"),
+            4).getStackForm(1);
+        GTCMItemList.CircuitImprintHatch.set(CircuitImprintHatch);
 
         // region Modularized Stuff
 

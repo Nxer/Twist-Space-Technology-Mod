@@ -748,7 +748,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         "         AAA         ",
         "                     "
     }};
-// spotless:on
+    // spotless:on
     // endregion
 
 }

@@ -1,0 +1,456 @@
+package com.Nxer.TwistSpaceTechnology.common.machine;
+
+import static bartworks.util.BWUtil.ofGlassTieredMixed;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.Maintenance;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
+import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
+import static gregtech.api.util.GTUtility.validMTEList;
+import static gtPlusPlus.core.util.data.ArrayUtils.removeNulls;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import bartworks.system.material.CircuitGeneration.BWMetaItems;
+import bartworks.system.material.CircuitGeneration.CircuitImprintLoader;
+import bartworks.util.BWUtil;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.GTCMMachineRecipes;
+import gregtech.api.recipe.RecipeMapBackend;
+import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+import gregtech.api.util.OverclockCalculator;
+import gregtech.api.util.ParallelHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
+
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
+import bartworks.API.recipe.BartWorksRecipeMaps;
+import gregtech.api.GregTechAPI;
+import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IHatchElement;
+import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.IGTHatchAdder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+
+public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCircuitAssemblyLine> {
+
+    // region Class Constructor
+    public TST_AdvCircuitAssemblyLine(int aID, String aName, String aNameRegional) {
+        super(aID, aName, aNameRegional);
+    }
+
+    public TST_AdvCircuitAssemblyLine(String aName) {
+        super(aName);
+    }
+
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_AdvCircuitAssemblyLine(this.mName);
+    }
+
+    // endregion
+
+    // region Structure
+    private final int baseHorizontalOffSet = 0;
+    private final int baseVerticalOffSet = 1;
+    private final int baseDepthOffSet = 0;
+    private static final String STRUCTURE_PIECE_MAIN = "mainAdvCAL";
+    private static final String STRUCTURE_PIECE_MIDDLE = "middleAdvCAL";
+    private static final String STRUCTURE_PIECE_MIDDLE_HINT = "middleHintAdvCAL";
+    private static final String STRUCTURE_PIECE_END = "endAdvCAL";
+    // spotless:off
+    private static final String[][] shapeMain =new String[][]{
+        {" ","E"," "},
+        {"~","C","g"},
+        {"A","B","A"},
+        {"F","D","F"}
+    };
+
+    private static final String[][] shapeMiddle =new String[][]{
+        {" ","E"," "},
+        {"G","C","G"},
+        {"A","B","A"},
+        {"F","D","F"}
+    };
+
+    private static final String[][] shapeMiddleHint =new String[][]{
+        {" ","E"," "},
+        {"G","C","G"},
+        {"A","B","A"},
+        {"F","d","F"}
+    };
+
+    private static final String[][] shapeEnd =new String[][]{
+        {" ","E"," "},
+        {"G","C","G"},
+        {"A","B","A"},
+        {"F","H","F"}
+    };
+    // spotless:on
+    private static final IStructureDefinition<TST_AdvCircuitAssemblyLine> STRUCTURE_DEFINITION = StructureDefinition
+        .<TST_AdvCircuitAssemblyLine>builder()
+        .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+        .addShape(STRUCTURE_PIECE_MIDDLE, transpose(shapeMiddle))
+        .addShape(STRUCTURE_PIECE_MIDDLE_HINT, transpose(shapeMiddleHint))
+        .addShape(STRUCTURE_PIECE_END, transpose(shapeEnd))
+        .addElement('A', ofGlassTieredMixed((byte) 4, (byte) 127, 5))
+        .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 5))
+        .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))
+        .addElement('d', InputBus.newAny(16, 3, ForgeDirection.DOWN))
+        .addElement(
+            'D',
+            buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(InputBus, OutputBus)
+                .casingIndex(16)
+                .dot(2)
+                .disallowOnly(ForgeDirection.EAST, ForgeDirection.WEST)
+                .buildAndChain(GregTechAPI.sBlockCasings2, 0))
+        .addElement(
+            'E',
+            buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(Energy.or(ExoticEnergy))
+                .casingIndex(16)
+                .dot(1)
+                .buildAndChain(GregTechAPI.sBlockCasings2, 6))
+        .addElement(
+            'F',
+            buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(InputHatch, Maintenance)
+                .casingIndex(16)
+                .dot(3)
+                .disallowOnly(ForgeDirection.EAST, ForgeDirection.WEST)
+                .buildAndChain(GregTechAPI.sBlockCasings2, 0))
+        .addElement('g', ofBlock(GregTechAPI.sBlockCasings3, 10))
+        .addElement(
+            'G',
+            buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(CircuitImprintHatchElement.CircuitAccess)
+                .dot(2)
+                .casingIndex(42)
+                .allowOnly(ForgeDirection.NORTH)
+                .buildAndChain(GregTechAPI.sBlockCasings3, 10))
+        .addElement('H', OutputBus.newAny(16, 4, ForgeDirection.DOWN))
+        .build();
+
+    @Override
+    public IStructureDefinition<TST_AdvCircuitAssemblyLine> getStructureDefinition() {
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        int built;
+        built = survivialBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            baseHorizontalOffSet,
+            baseVerticalOffSet,
+            baseDepthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+        if (built >= 0) return built;
+        int tLength = Math.min(stackSize.stackSize + 1, 7);
+
+        for (int i = 1; i < tLength - 1; ++i) {
+            built = survivialBuildPiece(
+                STRUCTURE_PIECE_MIDDLE_HINT,
+                stackSize,
+                baseHorizontalOffSet - i,
+                baseVerticalOffSet,
+                baseDepthOffSet,
+                elementBudget,
+                env,
+                false,
+                true);
+            if (built >= 0) return built;
+        }
+        return survivialBuildPiece(
+            STRUCTURE_PIECE_END,
+            stackSize,
+            baseHorizontalOffSet - (tLength - 1),
+            baseVerticalOffSet,
+            baseDepthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.buildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            hintsOnly,
+            baseHorizontalOffSet,
+            baseVerticalOffSet,
+            baseDepthOffSet);
+        int layer = 1;
+        for (; layer < Math.min(6, stackSize.stackSize + 1); layer++) {
+            buildPiece(
+                STRUCTURE_PIECE_MIDDLE,
+                stackSize,
+                hintsOnly,
+                baseHorizontalOffSet - layer,
+                baseVerticalOffSet,
+                baseDepthOffSet);
+        }
+        buildPiece(
+            STRUCTURE_PIECE_END,
+            stackSize,
+            hintsOnly,
+            baseHorizontalOffSet - layer,
+            baseVerticalOffSet,
+            baseDepthOffSet);
+    }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
+        mCircuitImprintHatches.clear();
+        // init the pointer, also the Properties.
+        this.length = 1;
+
+        // check the Top layer.
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
+            return false;
+        }
+
+        while (checkPiece(
+            STRUCTURE_PIECE_MIDDLE_HINT,
+            baseHorizontalOffSet - this.length,
+            baseVerticalOffSet,
+            baseDepthOffSet)) {
+            this.length++;
+            if (length > 7) {
+                return false;
+            }
+        }
+
+        // check the end layer
+        boolean signal = checkPiece(
+            STRUCTURE_PIECE_END,
+            baseHorizontalOffSet - this.length,
+            baseVerticalOffSet,
+            baseDepthOffSet);
+
+        this.length++;
+
+        return signal;
+    }
+
+    // endregion
+
+    // region Processing Logic
+    public int length = 1;
+    ItemStack imprintedStack;
+    GTRecipe trueRecipe;
+    public ArrayList<TST_CircuitImprintHatch> mCircuitImprintHatches = new ArrayList<>();
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return true;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 1;
+    }
+
+    @Override
+    protected int getMaxParallelRecipes() {
+        return 16;
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+//        return BartWorksRecipeMaps.bacterialVatRecipes;
+        return BartWorksRecipeMaps.circuitAssemblyLineRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(BartWorksRecipeMaps.circuitAssemblyLineRecipes,GTCMRecipe.MiracleTopRecipes);
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("length", length);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        length = aNBT.getInteger("length");
+    }
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public boolean addCircuitImprintHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof TST_CircuitImprintHatch) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            return mCircuitImprintHatches.add((TST_CircuitImprintHatch) aMetaTileEntity);
+        }
+        return false;
+    }
+
+    public ArrayList<ItemStack> getCircuitImprintItems() {
+        ArrayList<ItemStack> rList = new ArrayList<>();
+        for (TST_CircuitImprintHatch tHatch : validMTEList(mCircuitImprintHatches)) {
+            rList.addAll(tHatch.getInventoryItems(stack -> true));
+        }
+        return rList;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new ProcessingLogic() {
+            @Override
+            @Nonnull
+            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+                // limit CA mode recipes to hatch tier - 1
+                if (recipe.mEUt > TST_AdvCircuitAssemblyLine.this.getMaxInputVoltage()) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+
+                imprintedStack=BWMetaItems.getCircuitParts()
+                    .getStackWithNBT(CircuitImprintLoader.getTagFromStack(recipe.mOutputs[0]),0,0);
+                if (!BWUtil
+                    .areStacksEqualOrNull(imprintedStack, TST_AdvCircuitAssemblyLine.this.getControllerSlot()))
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+        }.enablePerfectOverclock().setMaxParallelSupplier(this::getMaxParallelRecipes);
+
+    }
+
+    private GTRecipe findRecipe(ArrayList<ItemStack> inputList) {
+        RecipeMap<RecipeMapBackend> CALRecipes = BartWorksRecipeMaps.circuitAssemblyLineRecipes;
+        ItemStack[] inputArr = inputList.toArray(new ItemStack[inputList.size()]);
+        return CALRecipes.findRecipeQuery()
+            .items(inputArr)
+            .find();
+    }
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+        for (TST_CircuitImprintHatch hatch_circuitImprint : mCircuitImprintHatches) {
+            hatch_circuitImprint.setActive(true);
+        }
+        return super.onRunningTick(aStack);
+    }
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int aColorIndex, boolean aActive, boolean aRedstone) {
+        if (side == facing) {
+            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(16), TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(16), TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(16) };
+    }
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        tt.addMachineType(TextLocalization.Tooltip_MiracleTop_MachineType)
+            .addInfo(TextLocalization.Tooltip_MiracleTop_00)
+            .addInfo(TextLocalization.Tooltip_MiracleTop_01)
+            .addInfo(TextLocalization.Tooltip_MiracleTop_02)
+            .addInfo(TextLocalization.Tooltip_MiracleTop_03)
+            .addInfo(TextLocalization.Tooltip_MiracleTop_04)
+            .addInfo(TextLocalization.Tooltip_MiracleTop_05)
+            .addInfo(TextLocalization.Tooltip_MiracleTop_06)
+            .addInfo(TextLocalization.Tooltip_MiracleTop_07)
+            .addInfo(TextLocalization.StructureTooComplex)
+            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            .addSeparator()
+            .addController(TextLocalization.textFrontCenter)
+            .addInputHatch(TextLocalization.textMiracleTopHatchLocation, 2)
+            .addOutputHatch(TextLocalization.textMiracleTopHatchLocation, 2)
+            .addInputBus(TextLocalization.textMiracleTopHatchLocation, 2)
+            .addOutputBus(TextLocalization.textMiracleTopHatchLocation, 2)
+            .addEnergyHatch(TextLocalization.textMiracleTopHatchLocation, 2)
+            .toolTipFinisher(TextLocalization.ModName);
+        return tt;
+    }
+
+    private enum CircuitImprintHatchElement implements IHatchElement<TST_AdvCircuitAssemblyLine> {
+
+        CircuitAccess;
+
+        @Override
+        public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
+            return Collections.singletonList(TST_CircuitImprintHatch.class);
+        }
+
+        @Override
+        public IGTHatchAdder<TST_AdvCircuitAssemblyLine> adder() {
+            return TST_AdvCircuitAssemblyLine::addCircuitImprintHatchToMachineList;
+        }
+
+        @Override
+        public long count(TST_AdvCircuitAssemblyLine t) {
+            return t.mCircuitImprintHatches.size();
+        }
+    }
+}

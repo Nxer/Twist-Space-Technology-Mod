@@ -276,6 +276,7 @@ public enum GTCMItemList {
     IndustrialAlchemyTower,
     GiantVacuumDryingFurnace,
     ProcessingArray,
+    AdvCircuitAssemblyLine,
     // endregion
 
     // region Modularized Machines
@@ -433,9 +434,9 @@ public enum GTCMItemList {
     WirelessDataInputHatch,
     WirelessDataOutputHatch,
     BloodOrbHatch,
-
     LegendaryWirelessEnergyHatch,
     HarmoniousWirelessEnergyHatch,
+    CircuitImprintHatch,
 
     // endregion
 

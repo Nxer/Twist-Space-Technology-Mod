@@ -1915,3 +1915,5 @@ tst.megacraftingcenter.desc.firstWords=§b§o§lGoodbye, all crafting lags.§r§
 tst.megacraftingcenter.desc.6=The internal pattern input and output quantity will be multiplied by the magnification parameter as the actual pattern information in running.
 tst.megacraftingcenter.desc.7=Include crafting pattern (crafting table recipes).
 tst.megacraftingcenter.desc.onScrewDriverRightClick=Use a screwdriver right click controller to move internal patterns to output bus.
+NameAdvCircuitAssemblyLine=NameAdvCircuitAssemblyLine
+NameCircuitImprintHatch=NameCircuitImprintHatchTwist

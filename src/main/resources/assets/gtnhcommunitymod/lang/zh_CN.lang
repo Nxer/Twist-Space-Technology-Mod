@@ -1915,3 +1915,5 @@ tst.megacraftingcenter.desc.firstWords=§b§o§l再见了, 所有的合成卡顿
 tst.megacraftingcenter.desc.6=内部样板输入输出数量将乘以倍率参数作为运行时的实际样板信息.
 tst.megacraftingcenter.desc.7=包括合成样板 (工作台配方).
 tst.megacraftingcenter.desc.onScrewDriverRightClick=使用螺丝刀右键主机将内部样板转移至输出总线.
+NameAdvCircuitAssemblyLine=NameAdvCircuitAssemblyLine
+NameCircuitImprintHatch=NameCircuitImprintHatchTwist

@@ -475,6 +475,10 @@ public class Config {
     public static boolean Enable_ProcessingArray = true;
     // endregion
 
+    // region Processing Array
+    public static boolean Enable_AdvCircuitAssemblyLine = true;
+    // endregion
+
     // region Mega Crafting Center
     public static boolean Enable_MegaCraftingCenter = true;
     public static int TickEveryProcess_MegaCraftingCenter = 20;
