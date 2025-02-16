@@ -15,7 +15,7 @@ import gregtech.api.util.GTUtility;
 
 /**
  * An ItemStack Generator used Meta Item System.
- * <li>Use {@link com.Nxer.TwistSpaceTechnology.util.TstUtils#registerItemAdder(AbstractTstMetaItem, int)} to create
+ * <li>Use {@link com.Nxer.TwistSpaceTechnology.util.TstUtils#registerTstMetaItem(AbstractTstMetaItem, int)} to create
  * your
  * Item at ItemList01.
  */

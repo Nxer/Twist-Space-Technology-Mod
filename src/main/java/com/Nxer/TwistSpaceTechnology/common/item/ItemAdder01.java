@@ -4,7 +4,7 @@ import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 
 /**
  * An ItemStack Generator used Meta Item System.
- * <li>Use {@link com.Nxer.TwistSpaceTechnology.util.TstUtils#registerItemAdder(AbstractTstMetaItem, int, String[])} to
+ * <li>Use {@link com.Nxer.TwistSpaceTechnology.util.TstUtils#registerTstMetaItem(AbstractTstMetaItem, int, String[])} to
  * create your Item at ItemList01.
  *
  */
