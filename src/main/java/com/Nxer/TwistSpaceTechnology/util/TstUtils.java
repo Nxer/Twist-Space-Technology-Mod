@@ -157,7 +157,7 @@ public class TstUtils {
      * @param builder the builder that puts info into the list
      * @return the built array of info data
      */
-    public static String[] buildInfoData(Consumer<ArrayList<String>> builder) {
+    public static String[] buildInfoData(Consumer<ArrayList<@NotNull String>> builder) {
         return buildInfoData(null, builder);
     }
 
@@ -169,7 +169,7 @@ public class TstUtils {
      * @return the built array of info data
      * @see TST_BloodyHell#getInfoData() example
      */
-    public static String[] buildInfoData(@Nullable String[] superInfoData, Consumer<ArrayList<String>> builder) {
+    public static String[] buildInfoData(@NotNull String @Nullable [] superInfoData, Consumer<ArrayList<@NotNull String>> builder) {
         ArrayList<String> ret = superInfoData != null ? Lists.newArrayList(superInfoData) : new ArrayList<>();
         builder.accept(ret);
         return ret.toArray(new String[0]);
@@ -260,7 +260,7 @@ public class TstUtils {
      * @param <T>   the type of elements
      * @return the array copy where the {@code null} elements are removed.
      */
-    public static <T> List<T> toNonNullList(T[] array) {
+    public static <T> List<T> toNonNullList(@Nullable T @NotNull[] array) {
         return Arrays.stream(array)
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
@@ -276,7 +276,7 @@ public class TstUtils {
      * @return the array copy where the {@code null} elements are removed.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T[] toNonNullArray(T[] array, Class<T> tClass) {
+    public static <T> T[] toNonNullArray(@Nullable T @NotNull [] array, Class<T> tClass) {
         return Arrays.stream(array)
             .filter(Objects::nonNull)
             .toArray(size -> (T[]) Array.newInstance(tClass, size));
@@ -289,7 +289,7 @@ public class TstUtils {
      * @return the array copy where the {@code null} elements are removed.
      */
     @Contract("null -> null; !null -> !null")
-    public static ItemStack[] toNonNullItemStackArray(@Nullable ItemStack[] array) {
+    public static ItemStack[] toNonNullItemStackArray(@Nullable ItemStack @Nullable [] array) {
         return array != null ? toNonNullArray(array, ItemStack.class) : null;
     }
 
@@ -300,7 +300,7 @@ public class TstUtils {
      * @return the array copy where the {@code null} elements are removed.
      */
     @Contract("null -> null; !null -> !null")
-    public static FluidStack[] toNonNullFluidStackArray(@Nullable FluidStack[] array) {
+    public static FluidStack[] toNonNullFluidStackArray(@Nullable FluidStack @Nullable [] array) {
         return array != null ? toNonNullArray(array, FluidStack.class) : null;
     }
 
@@ -323,7 +323,7 @@ public class TstUtils {
      * @param size      the size to set
      * @return the given stack
      */
-    public static ItemStack setStackSize(ItemStack itemStack, int size) {
+    public static ItemStack setStackSize(@NotNull ItemStack itemStack, int size) {
         itemStack.stackSize = size;
         return itemStack;
     }
@@ -335,7 +335,7 @@ public class TstUtils {
      * @param size       the size to set
      * @return the given stack
      */
-    public static FluidStack setStackSize(FluidStack fluidStack, int size) {
+    public static FluidStack setStackSize(@NotNull FluidStack fluidStack, int size) {
         fluidStack.amount = size;
         return fluidStack;
     }
@@ -346,7 +346,7 @@ public class TstUtils {
      * @param itemStacks the itemstack array
      * @return the copy of the given array without Integrated Circuits.
      */
-    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack[] @Nullable itemStacks) {
+    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack @Nullable [] itemStacks) {
         if (itemStacks == null) return new ItemStack[0];
         ArrayList<ItemStack> newStack = new ArrayList<>();
         for (ItemStack itemStack : itemStacks) {
