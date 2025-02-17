@@ -274,72 +274,117 @@ public class BlockRegister {
         // #tr tile.PhotonControllerUpgrades.0.name
         // # Photonic Intensifier LV Tier
         // #zh_CN 光量子增幅器LV Tier
-        GTCMItemList.PhotonControllerUpgradeLV.set(PhotonControllerUpgrade.registerVariant(0));
+        GTCMItemList.PhotonControllerUpgradeLV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                0,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeLV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.1.name
         // # Photonic Intensifier MV Tier
         // #zh_CN 光量子增幅器MV Tier
-        GTCMItemList.PhotonControllerUpgradeMV.set(PhotonControllerUpgrade.registerVariant(1));
+        GTCMItemList.PhotonControllerUpgradeMV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                1,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeMV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.2.name
         // # Photonic Intensifier HV Tier
         // #zh_CN 光量子增幅器HV Tier
-        GTCMItemList.PhotonControllerUpgradeHV.set(PhotonControllerUpgrade.registerVariant(2));
+        GTCMItemList.PhotonControllerUpgradeHV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                2,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeHV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.3.name
         // # Photonic Intensifier EV Tier
         // #zh_CN 光量子增幅器EV Tier
-        GTCMItemList.PhotonControllerUpgradeEV.set(PhotonControllerUpgrade.registerVariant(3));
+        GTCMItemList.PhotonControllerUpgradeEV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                3,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeEV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.4.name
         // # Photonic Intensifier IV Tier
         // #zh_CN 光量子增幅器IV Tier
-        GTCMItemList.PhotonControllerUpgradeIV.set(PhotonControllerUpgrade.registerVariant(4));
+        GTCMItemList.PhotonControllerUpgradeIV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                4,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeIV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.5.name
         // # Photonic Intensifier LuV Tier
         // #zh_CN 光量子增幅器LuV Tier
-        GTCMItemList.PhotonControllerUpgradeLuV.set(PhotonControllerUpgrade.registerVariant(5));
+        GTCMItemList.PhotonControllerUpgradeLuV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                5,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeLuV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.6.name
         // # Photonic Intensifier ZPM Tier
         // #zh_CN 光量子增幅器ZPM Tier
-        GTCMItemList.PhotonControllerUpgradeZPM.set(PhotonControllerUpgrade.registerVariant(6));
+        GTCMItemList.PhotonControllerUpgradeZPM.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                6,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeZPM.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.7.name
         // # Photonic Intensifier UV Tier
         // #zh_CN 光量子增幅器UV Tier
-        GTCMItemList.PhotonControllerUpgradeUV.set(PhotonControllerUpgrade.registerVariant(7));
+        GTCMItemList.PhotonControllerUpgradeUV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                7,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeUV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.8.name
         // # Photonic Intensifier UHV Tier
         // #zh_CN 光量子增幅器UHV Tier
-        GTCMItemList.PhotonControllerUpgradeUHV.set(PhotonControllerUpgrade.registerVariant(8));
+        GTCMItemList.PhotonControllerUpgradeUHV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                8,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeUHV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.9.name
         // # Photonic Intensifier UEV Tier
         // #zh_CN 光量子增幅器UEV Tier
-        GTCMItemList.PhotonControllerUpgradeUEV.set(PhotonControllerUpgrade.registerVariant(9));
+        GTCMItemList.PhotonControllerUpgradeUEV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                9,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeUEV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.10.name
         // # Photonic Intensifier UIV Tier
         // #zh_CN 光量子增幅器UIV Tier
-        GTCMItemList.PhotonControllerUpgradeUIV.set(PhotonControllerUpgrade.registerVariant(10));
+        GTCMItemList.PhotonControllerUpgradeUIV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                10,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeUIV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.11.name
         // # Photonic Intensifier UMV Tier
         // #zh_CN 光量子增幅器UMV Tier
-        GTCMItemList.PhotonControllerUpgradeUMV.set(PhotonControllerUpgrade.registerVariant(11));
+        GTCMItemList.PhotonControllerUpgradeUMV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                11,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeUMV.tooltips.01"),
+                    TextEnums.tr("PhotonControllerUpgradeUMV.tooltips.02") }));
 
         // #tr tile.PhotonControllerUpgrades.12.name
         // # Photonic Intensifier UXV Tier
         // #zh_CN 光量子增幅器UXV Tier
-        GTCMItemList.PhotonControllerUpgradeUXV.set(PhotonControllerUpgrade.registerVariant(12));
+        GTCMItemList.PhotonControllerUpgradeUXV.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                12,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeUXV.tooltips.01"),
+                    TextEnums.tr("PhotonControllerUpgradeUXV.tooltips.02") }));
 
         // #tr tile.PhotonControllerUpgrades.13.name
         // # Photonic Intensifier MAX Tier
         // #zh_CN 光量子增幅器MAX Tier
-        GTCMItemList.PhotonControllerUpgradeMAX.set(PhotonControllerUpgrade.registerVariant(13));
+        GTCMItemList.PhotonControllerUpgradeMAX.set(
+            PhotonControllerUpgrade.registerVariantWithTooltips(
+                13,
+                new String[] { TextEnums.tr("PhotonControllerUpgradeMAX.tooltips.01"),
+                    TextEnums.tr("PhotonControllerUpgradeMAX.tooltips.02") }));
 
         // endregion
         // ---------------------------------------------------------------------------------------------------------------------------//
