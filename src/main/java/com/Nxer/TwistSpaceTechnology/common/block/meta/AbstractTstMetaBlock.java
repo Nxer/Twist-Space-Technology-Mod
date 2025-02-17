@@ -24,8 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
-import com.Nxer.TwistSpaceTechnology.common.api.IHasVariant;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.common.item.blockItem.TstMetaBlockItem;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
@@ -37,7 +36,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  * @see TstMetaBlockItem
  */
-public abstract class AbstractTstMetaBlock extends Block implements IHasTooltips, IHasVariant {
+public abstract class AbstractTstMetaBlock extends Block implements IHasVariantAndTooltips {
 
     protected final Set<Integer> usedMetaSet = new HashSet<>(16);
     protected final Map<Integer, String[]> tooltipMap = new HashMap<>();
@@ -62,8 +61,7 @@ public abstract class AbstractTstMetaBlock extends Block implements IHasTooltips
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
-        iconMap = TstUtils
-            .registerAllVariantIcons(this, meta -> RESOURCE_ROOT_ID + ":" + unlocalizedName + "/" + meta, register);
+        iconMap = registerAllVariantIcons(register, meta -> RESOURCE_ROOT_ID + ":" + unlocalizedName + "/" + meta);
         blockIcon = iconMap.get(0);
     }
 
@@ -84,12 +82,12 @@ public abstract class AbstractTstMetaBlock extends Block implements IHasTooltips
     }
 
     @Override
-    public String[] getTooltips(int meta) {
+    public String[] getTooltips(int meta, boolean advanced) {
         return tooltipMap.get(meta);
     }
 
     @Override
-    public void setTooltips(int metaValue, @Nullable String[] tooltips) {
+    public void setTooltips(int metaValue, @Nullable String[] tooltips, boolean advanced) {
         tooltipMap.put(metaValue, tooltips);
     }
 

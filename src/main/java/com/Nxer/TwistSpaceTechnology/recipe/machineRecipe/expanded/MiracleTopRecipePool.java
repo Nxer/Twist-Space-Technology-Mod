@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmountFluid;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.mergeSameFluid;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.removeIntegratedCircuitFromStacks;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps.spaceAssemblerRecipes;
@@ -21,12 +19,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -64,6 +64,38 @@ public class MiracleTopRecipePool implements IRecipePool {
     public final HashSet<Materials> superConductorMaterialList = new HashSet<>();
     public final HashSet<OrePrefixes> targetModifyOreDict = new HashSet<>();
     public final HashMap<ItemStack, FluidStack> specialMaterialCantAutoModify = new HashMap<>();
+
+    public static FluidStack[] mergeSameFluid(FluidStack[] fluidStacks) {
+
+        Map<Fluid, Integer> fluidMap = new LinkedHashMap<>();
+
+        for (FluidStack aStack : fluidStacks) {
+            fluidMap.put(aStack.getFluid(), fluidMap.getOrDefault(aStack.getFluid(), 0) + aStack.amount);
+        }
+
+        ArrayList<FluidStack> mergedList = new ArrayList<>();
+        for (Map.Entry<Fluid, Integer> entry : fluidMap.entrySet()) {
+            mergedList.add(new FluidStack(entry.getKey(), entry.getValue()));
+        }
+
+        return mergedList.toArray(new FluidStack[0]);
+    }
+
+    public static ItemStack[] mergeSameItem(ItemStack[] itemStacks) {
+
+        Map<Item, Integer> itemMap = new LinkedHashMap<>();
+
+        for (ItemStack aStack : itemStacks) {
+            itemMap.put(aStack.getItem(), itemMap.getOrDefault(aStack.getItem(), 0) + aStack.stackSize);
+        }
+
+        ArrayList<ItemStack> mergedList = new ArrayList<>();
+        for (Map.Entry<Item, Integer> entry : itemMap.entrySet()) {
+            mergedList.add(new ItemStack(entry.getKey(), entry.getValue()));
+        }
+
+        return mergedList.toArray(new ItemStack[0]);
+    }
 
     @Override
     public void loadRecipes() {
@@ -379,8 +411,8 @@ public class MiracleTopRecipePool implements IRecipePool {
 
                     for (Map.Entry<ItemStack, FluidStack> entry : specialMaterialCantAutoModify.entrySet()) {
                         if (GTUtility.areStacksEqual(entry.getKey(), aStack)) {
-                            inputFluids.add(
-                                copyAmountFluid(entry.getValue().amount * aStack.stackSize * 16, entry.getValue()));
+                            inputFluids
+                                .add(copyAmount(entry.getValue().amount * aStack.stackSize * 16, entry.getValue()));
                             isItemModified = true;
                             break;
                         }
@@ -417,14 +449,14 @@ public class MiracleTopRecipePool implements IRecipePool {
             if (aStack != null) inputItems.add(copyAmountUnsafe(aStack.stackSize * inputItemMultiTimes, aStack));
         }
         for (FluidStack aStack : oRecipe.mFluidInputs) {
-            if (aStack != null) inputFluids.add(copyAmountFluid(aStack.amount * inputFluidMultiTimes, aStack));
+            if (aStack != null) inputFluids.add(copyAmount(aStack.amount * inputFluidMultiTimes, aStack));
         }
 
         for (ItemStack aStack : oRecipe.mOutputs) {
             if (aStack != null) outputItems.add(copyAmountUnsafe(aStack.stackSize * outputItemMultiTimes, aStack));
         }
         for (FluidStack aStack : oRecipe.mFluidOutputs) {
-            if (aStack != null) outputFluids.add(copyAmountFluid(aStack.amount * outputFluidMultiTimes, aStack));
+            if (aStack != null) outputFluids.add(copyAmount(aStack.amount * outputFluidMultiTimes, aStack));
         }
 
         return new GTRecipe(

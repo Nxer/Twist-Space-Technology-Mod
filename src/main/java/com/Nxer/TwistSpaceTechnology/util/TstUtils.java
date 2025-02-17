@@ -4,24 +4,17 @@ import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.ApiStatus.Experimental;
@@ -34,11 +27,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
-import com.Nxer.TwistSpaceTechnology.common.api.IHasVariant;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
-import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.AbstractTstMetaBlockCasing;
-import com.Nxer.TwistSpaceTechnology.common.item.AbstractTstMetaItem;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
 import com.google.common.collect.Lists;
 
@@ -47,7 +37,6 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 
 /**
@@ -66,7 +55,7 @@ import gregtech.api.util.GTUtility;
  * For example, {@code newVariantItemUnsafe} that accepts an {@code Item} but requires it to implement
  * {@code IHasVariant}.<br>
  * But since it is very unsafe to do so, we can add more functions with more exact types, like using
- * {@link AbstractTstMetaBlock} to make sure it implements {@link IHasTooltips}.
+ * {@link AbstractTstMetaBlock} to make sure it implements {@link IHasVariantAndTooltips}.
  * </li>
  * <li>
  * <b>(Legacy Names)</b> Functions moved from other places are allowed to be named as before, like {@link #tr(String)}.
@@ -109,6 +98,8 @@ public class TstUtils {
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
     public static final BigInteger INTEGER_MAX_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
 
+    // region Instance Creator
+
     /**
      * Create a new {@link ItemStack} of given Item with meta.
      *
@@ -131,268 +122,7 @@ public class TstUtils {
         return new ItemStack(block, 1, meta);
     }
 
-    /**
-     * Create a copy of given ItemStack, and set the meta.
-     *
-     * @param stack the ItemStack
-     * @param meta  the meta value
-     * @return a copy of ItemStack of given ItemStack with meta
-     */
-    public static ItemStack copyItemWithMeta(ItemStack stack, int meta) {
-        var copy = stack.copy();
-        copy.setItemDamage(meta);
-        return copy;
-    }
-
-    /**
-     * Make an {@link IllegalArgumentException} for the situation that an input argument (Item or Block) is expected to
-     * implement an interface but not.
-     *
-     * @param type            the type of the argument, "Item" or "Block"
-     * @param unlocalizedName the unlocalized name of the argument
-     * @param objectClass     the argument class
-     * @param interfaceClass  the interface class that expected to be implemented
-     * @return the exception instance with nice message built up by the arguments
-     */
-    private static IllegalArgumentException makeNotSupportInterfaceException(String type, String unlocalizedName,
-        Class<?> objectClass, Class<?> interfaceClass) {
-        return new IllegalArgumentException(
-            type + " "
-                + tr(unlocalizedName)
-                + " ("
-                + unlocalizedName
-                + ", class = "
-                + objectClass.getSimpleName()
-                + ") doesn't support "
-                + interfaceClass.getSimpleName()
-                + ".");
-    }
-
-    /**
-     * @see #makeNotSupportInterfaceException(String, String, Class, Class)
-     */
-    private static IllegalArgumentException makeItemNotSupportInterfaceException(Item item, Class<?> interfaceClass) {
-        return makeNotSupportInterfaceException("Item", item.unlocalizedName, item.getClass(), interfaceClass);
-    }
-
-    /**
-     * @see #makeNotSupportInterfaceException(String, String, Class, Class)
-     */
-    private static IllegalArgumentException makeBlockNotSupportInterfaceException(Block item, Class<?> interfaceClass) {
-        return makeNotSupportInterfaceException("Block", item.unlocalizedName, item.getClass(), interfaceClass);
-    }
-
-    /**
-     * Return a copy of the instance of the block with given meta.
-     * <p>
-     * <b>UNSAFE</b>: It is caller's responsibility to check if the block supports meta values.
-     * <p>
-     * I'd recommend you to {@code extends} {@link AbstractTstMetaBlock} to mark it as meta block.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @return the copy of the instance of the meta block.
-     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int)
-     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int, String[])
-     */
-    public static ItemStack newMetaBlockItemStackUnsafe(Block blockMeta, int meta) {
-        return newMetaBlockItemStackUnsafe(blockMeta, meta, null);
-    }
-
-    /**
-     * Register the tooltips of the {@link AbstractTstMetaBlock}, and return a copy of the instance of the block.
-     * <p>
-     * <b>UNSAFE</b>: It is caller's responsibility to check if the block supports meta values and tooltips.
-     * <p>
-     * I'd recommend you to {@code extends} {@link AbstractTstMetaBlock} to mark it as meta block.
-     *
-     * @param blockMeta the meta block that must implement {@link IHasTooltips}
-     * @param meta      the meta
-     * @param tooltips  the tooltips (optional)
-     * @return the copy of the instance of the meta block.
-     * @throws IllegalArgumentException if tooltips is provided, but the block doesn't implement {@link IHasTooltips}.
-     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int)
-     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int, String[])
-     */
-    public static ItemStack newMetaBlockItemStackUnsafe(Block blockMeta, int meta, @Nullable String[] tooltips)
-        throws IllegalArgumentException {
-        if (tooltips != null) if (blockMeta instanceof IHasTooltips hasTooltips) {
-            hasTooltips.setTooltips(meta, tooltips);
-        } else {
-            throw makeBlockNotSupportInterfaceException(blockMeta, IHasTooltips.class);
-        }
-        return newItemWithMeta(blockMeta, meta);
-    }
-
-    /**
-     * Return a copy of the instance of the block with given meta.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack newMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta) {
-        return newMetaBlockItemStackUnsafe(blockMeta, meta);
-    }
-
-    /**
-     * Register the tooltips of the {@link AbstractTstMetaBlock}, and return a copy of the instance of the block.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @param tooltips  the tooltips (optional)
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack newMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-        @Nullable String[] tooltips) {
-        return newMetaBlockItemStackUnsafe(blockMeta, meta, tooltips);
-    }
-
-    /**
-     * Register the {@link AbstractTstMetaBlock} with given meta.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack registerMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta) {
-        return registerMetaBlockItemStack(blockMeta, meta, null);
-    }
-
-    /**
-     * Register the {@link AbstractTstMetaBlock} with given meta and tooltips.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @param tooltips  the tooltips (optional)
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack registerMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-        @Nullable String[] tooltips) {
-        var stack = blockMeta.registerVariant(meta);
-        blockMeta.setTooltips(meta, tooltips);
-        return stack;
-    }
-
-    /**
-     * Register the Texture of the {@link AbstractTstMetaBlockCasing}, and return a copy of the instance of the casing.
-     *
-     * @param blockCasing the casing block
-     * @param meta        the meta
-     * @return the copy of the instance of the casing.
-     */
-    public static ItemStack registerCasingBlockItemStack(AbstractTstMetaBlockCasing blockCasing, int meta) {
-        return registerCasingBlockItemStack(blockCasing, meta, null);
-    }
-
-    /**
-     * Register the Texture of the {@link AbstractTstMetaBlockCasing}, and add the tooltips if present.
-     * Return a copy of the instance of the casing.
-     *
-     * @param blockCasing the casing block
-     * @param meta        the meta
-     * @param tooltips    the tooltips (optional)
-     * @return the copy of the instance of the casing
-     */
-    public static ItemStack registerCasingBlockItemStack(AbstractTstMetaBlockCasing blockCasing, int meta,
-        @Nullable String[] tooltips) {
-        Textures.BlockIcons
-            .setCasingTextureForId(blockCasing.getTextureIndex(meta), TextureFactory.of(blockCasing, meta));
-        return registerMetaBlockItemStack(blockCasing, meta, tooltips);
-    }
-
-    /**
-     * Register tooltips with both normal and advanced.
-     *
-     * @param hasTooltips      the object reference that has tooltips
-     * @param meta             the meta value
-     * @param normalTooltips   the normal tooltips
-     * @param advancedTooltips the advanced tooltips
-     */
-    public static void registerAdvancedTooltips(IHasTooltips hasTooltips, int meta, String[] normalTooltips,
-        String[] advancedTooltips) {
-        hasTooltips.setTooltips(meta, normalTooltips, false);
-        hasTooltips.setTooltips(meta, advancedTooltips, true);
-    }
-
-    public static ItemStack registerVariantMetaItemStackUnsafe(Item itemMeta, int meta) {
-        return registerVariantMetaItemStackUnsafe(itemMeta, meta, null);
-    }
-
-    public static ItemStack registerVariantMetaItemStackUnsafe(Item itemMeta, int meta, @Nullable String[] tooltips)
-        throws IllegalArgumentException {
-        ItemStack stack;
-        if (itemMeta instanceof IHasVariant hasVariant) {
-            stack = hasVariant.registerVariant(meta);
-        } else {
-            throw makeItemNotSupportInterfaceException(itemMeta, IHasVariant.class);
-        }
-
-        if (tooltips != null) {
-            if (itemMeta instanceof IHasTooltips hasTooltips) {
-                hasTooltips.setTooltips(meta, tooltips);
-            } else {
-                throw makeItemNotSupportInterfaceException(itemMeta, IHasTooltips.class);
-            }
-        }
-
-        return stack;
-    }
-
-    public static ItemStack registerItemAdder(AbstractTstMetaItem itemAdder, int meta) {
-        return registerItemAdder(itemAdder, meta, null);
-    }
-
-    public static ItemStack registerItemAdder(AbstractTstMetaItem itemAdder, int meta, @Nullable String[] tooltips) {
-        return registerVariantMetaItemStackUnsafe(itemAdder, meta, tooltips);
-    }
-
-    /**
-     * Register a variant of a meta item with its tooltips, and return the instance of the variant item.
-     * <p>
-     * <b>UNSAFE</b>: It is caller's responsibility to check if the item supports variants and tooltips.
-     *
-     * @param itemMeta         the meta item
-     * @param meta             the meta value
-     * @param tooltips         the normal tooltips
-     * @param advancedTooltips the advanced tooltips
-     * @return the instance of the variant item.
-     * @throws IllegalArgumentException if the item doesn't implement either {@link IHasVariant} or
-     *                                  {@link IHasTooltips}.
-     */
-    public static ItemStack registerVariantMetaItemStackWithAdvancedTooltipsUnsafe(Item itemMeta, int meta,
-        String[] tooltips, String[] advancedTooltips) throws IllegalArgumentException {
-        ItemStack stack;
-        if (itemMeta instanceof IHasVariant hasVariant) {
-            stack = hasVariant.registerVariant(meta);
-        } else {
-            throw makeItemNotSupportInterfaceException(itemMeta, IHasVariant.class);
-        }
-
-        if (itemMeta instanceof IHasTooltips hasTooltips) {
-            registerAdvancedTooltips(hasTooltips, meta, tooltips, advancedTooltips);
-        } else {
-            throw makeItemNotSupportInterfaceException(itemMeta, IHasTooltips.class);
-        }
-
-        return stack;
-    }
-
-    /**
-     * Register all icons for variants.
-     *
-     * @param hasVariant the variant reference
-     * @param iconPath   the icon path transformer, taking a meta value and resulting an icon path.
-     * @param register   the icon register
-     * @return the icon map keyed by meta values
-     */
-    public static Map<Integer, IIcon> registerAllVariantIcons(IHasVariant hasVariant,
-        Function<Integer, String> iconPath, IIconRegister register) {
-        return hasVariant.getVariantIds()
-            .stream()
-            .map(meta -> Pair.of(meta, register.registerIcon(iconPath.apply(meta))))
-            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
-    }
+    // endregion
 
     /**
      * Localize by key and given formats.
@@ -427,7 +157,7 @@ public class TstUtils {
      * @param builder the builder that puts info into the list
      * @return the built array of info data
      */
-    public static String[] buildInfoData(Consumer<ArrayList<String>> builder) {
+    public static String[] buildInfoData(Consumer<ArrayList<@NotNull String>> builder) {
         return buildInfoData(null, builder);
     }
 
@@ -439,7 +169,8 @@ public class TstUtils {
      * @return the built array of info data
      * @see TST_BloodyHell#getInfoData() example
      */
-    public static String[] buildInfoData(@Nullable String[] superInfoData, Consumer<ArrayList<String>> builder) {
+    public static String[] buildInfoData(@NotNull String @Nullable [] superInfoData,
+        Consumer<ArrayList<@NotNull String>> builder) {
         ArrayList<String> ret = superInfoData != null ? Lists.newArrayList(superInfoData) : new ArrayList<>();
         builder.accept(ret);
         return ret.toArray(new String[0]);
@@ -524,32 +255,13 @@ public class TstUtils {
     }
 
     /**
-     * @deprecated use {@link GTUtility#copyAmountUnsafe(int, ItemStack)}
-     */
-    @Deprecated
-    public static ItemStack copyAmountUnlimited(int aAmount, ItemStack aStack) {
-        return GTUtility.copyAmountUnsafe(aAmount, aStack);
-    }
-
-    /**
-     * Copy a new amount of a fluid stack
-     *
-     * @param aAmount the amount of new stack
-     * @param aStack  the target fluid stack
-     * @return new fluid stack
-     */
-    public static FluidStack copyAmountFluid(int aAmount, FluidStack aStack) {
-        return new FluidStack(aStack.getFluid(), aAmount);
-    }
-
-    /**
      * Return a shallow copy list of the array where the {@code null} elements are removed.
      *
      * @param array the array
      * @param <T>   the type of elements
      * @return the array copy where the {@code null} elements are removed.
      */
-    public static <T> List<T> toNonNullList(T[] array) {
+    public static <T> List<T> toNonNullList(@Nullable T @NotNull [] array) {
         return Arrays.stream(array)
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
@@ -565,7 +277,7 @@ public class TstUtils {
      * @return the array copy where the {@code null} elements are removed.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T[] toNonNullArray(T[] array, Class<T> tClass) {
+    public static <T> T[] toNonNullArray(@Nullable T @NotNull [] array, Class<T> tClass) {
         return Arrays.stream(array)
             .filter(Objects::nonNull)
             .toArray(size -> (T[]) Array.newInstance(tClass, size));
@@ -578,7 +290,7 @@ public class TstUtils {
      * @return the array copy where the {@code null} elements are removed.
      */
     @Contract("null -> null; !null -> !null")
-    public static ItemStack[] toNonNullItemStackArray(@Nullable ItemStack[] array) {
+    public static ItemStack[] toNonNullItemStackArray(@Nullable ItemStack @Nullable [] array) {
         return array != null ? toNonNullArray(array, ItemStack.class) : null;
     }
 
@@ -589,7 +301,7 @@ public class TstUtils {
      * @return the array copy where the {@code null} elements are removed.
      */
     @Contract("null -> null; !null -> !null")
-    public static FluidStack[] toNonNullFluidStackArray(@Nullable FluidStack[] array) {
+    public static FluidStack[] toNonNullFluidStackArray(@Nullable FluidStack @Nullable [] array) {
         return array != null ? toNonNullArray(array, FluidStack.class) : null;
     }
 
@@ -604,20 +316,41 @@ public class TstUtils {
         return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
     }
 
-    public static ItemStack setStackSize(ItemStack itemStack, int size) {
+    /**
+     * Set the stacksize of the given ItemStack, and return the given stack.
+     * The 64 limit is unchecked, be aware.
+     *
+     * @param itemStack the given stack
+     * @param size      the size to set
+     * @return the given stack
+     */
+    public static ItemStack setStackSize(@NotNull ItemStack itemStack, int size) {
         itemStack.stackSize = size;
         return itemStack;
     }
 
-    public static FluidStack setStackSize(FluidStack fluidStack, int size) {
+    /**
+     * Set the stacksize of the given FluidStack, and return the given stack.
+     *
+     * @param fluidStack the given stack
+     * @param size       the size to set
+     * @return the given stack
+     */
+    public static FluidStack setStackSize(@NotNull FluidStack fluidStack, int size) {
         fluidStack.amount = size;
         return fluidStack;
     }
 
-    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack[] aStack) {
-        if (aStack == null) return new ItemStack[0];
+    /**
+     * Copy the itemstack array and filter Integrated Circuits out.
+     *
+     * @param itemStacks the itemstack array
+     * @return the copy of the given array without Integrated Circuits.
+     */
+    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack @Nullable [] itemStacks) {
+        if (itemStacks == null) return new ItemStack[0];
         ArrayList<ItemStack> newStack = new ArrayList<>();
-        for (ItemStack itemStack : aStack) {
+        for (ItemStack itemStack : itemStacks) {
             if (itemStack.getItem() != ItemList.Circuit_Integrated.getItem()) {
                 newStack.add(itemStack);
             }
@@ -625,35 +358,4 @@ public class TstUtils {
         return newStack.toArray(new ItemStack[0]);
     }
 
-    public static FluidStack[] mergeSameFluid(FluidStack[] fluidStacks) {
-
-        Map<Fluid, Integer> fluidMap = new LinkedHashMap<>();
-
-        for (FluidStack aStack : fluidStacks) {
-            fluidMap.put(aStack.getFluid(), fluidMap.getOrDefault(aStack.getFluid(), 0) + aStack.amount);
-        }
-
-        ArrayList<FluidStack> mergedList = new ArrayList<>();
-        for (Map.Entry<Fluid, Integer> entry : fluidMap.entrySet()) {
-            mergedList.add(new FluidStack(entry.getKey(), entry.getValue()));
-        }
-
-        return mergedList.toArray(new FluidStack[0]);
-    }
-
-    public static ItemStack[] mergeSameItem(ItemStack[] itemStacks) {
-
-        Map<Item, Integer> itemMap = new LinkedHashMap<>();
-
-        for (ItemStack aStack : itemStacks) {
-            itemMap.put(aStack.getItem(), itemMap.getOrDefault(aStack.getItem(), 0) + aStack.stackSize);
-        }
-
-        ArrayList<ItemStack> mergedList = new ArrayList<>();
-        for (Map.Entry<Item, Integer> entry : itemMap.entrySet()) {
-            mergedList.add(new ItemStack(entry.getKey(), entry.getValue()));
-        }
-
-        return mergedList.toArray(new ItemStack[0]);
-    }
 }

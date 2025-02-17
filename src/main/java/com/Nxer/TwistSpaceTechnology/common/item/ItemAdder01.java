@@ -1,14 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.item;
 
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
-
 /**
  * An ItemStack Generator used Meta Item System.
- * <li>Use {@link com.Nxer.TwistSpaceTechnology.util.TstUtils#registerItemAdder(AbstractTstMetaItem, int, String[])} to
- * create your Item at ItemList01.
- *
  */
-public class ItemAdder01 extends AbstractTstMetaItem implements IHasTooltips {
+public class ItemAdder01 extends AbstractTstMetaItem {
 
     /**
      * Create the basic item MetaItem01.
