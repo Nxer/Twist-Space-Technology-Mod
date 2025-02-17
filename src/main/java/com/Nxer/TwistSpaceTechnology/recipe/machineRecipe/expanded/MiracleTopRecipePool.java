@@ -60,7 +60,7 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 public class MiracleTopRecipePool implements IRecipePool {
 
     final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipes;
-    public final HashMap<ItemStack, ItemStack> circuitItemsToWrapped = new HashMap<>();
+    public static final HashMap<ItemStack, ItemStack> circuitItemsToWrapped = new HashMap<>();
     public final HashSet<Materials> superConductorMaterialList = new HashSet<>();
     public final HashSet<OrePrefixes> targetModifyOreDict = new HashSet<>();
     public final HashMap<ItemStack, FluidStack> specialMaterialCantAutoModify = new HashMap<>();
@@ -464,7 +464,7 @@ public class MiracleTopRecipePool implements IRecipePool {
             0);
     }
 
-    private boolean isRecipeInputItemSame(GTRecipe a, GTRecipe b) {
+    public static boolean isRecipeInputItemSame(GTRecipe a, GTRecipe b) {
         if (!areItemStacksEqual(a.mOutputs[0], b.mOutputs[0])) return false;
         if (a.mInputs.length != b.mInputs.length) return false;
         for (int i = 0; i < a.mInputs.length; i++) {

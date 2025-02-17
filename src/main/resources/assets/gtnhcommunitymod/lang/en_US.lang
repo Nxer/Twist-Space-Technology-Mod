@@ -1917,3 +1917,4 @@ tst.megacraftingcenter.desc.7=Include crafting pattern (crafting table recipes).
 tst.megacraftingcenter.desc.onScrewDriverRightClick=Use a screwdriver right click controller to move internal patterns to output bus.
 NameAdvCircuitAssemblyLine=NameAdvCircuitAssemblyLine
 NameCircuitImprintHatch=NameCircuitImprintHatchTwist
+tst.recipe.advCircuitAssemblyLineRecipes=Circuit Assembly Line

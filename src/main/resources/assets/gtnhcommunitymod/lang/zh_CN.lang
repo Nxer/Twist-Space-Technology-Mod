@@ -1917,3 +1917,4 @@ tst.megacraftingcenter.desc.7=包括合成样板 (工作台配方).
 tst.megacraftingcenter.desc.onScrewDriverRightClick=使用螺丝刀右键主机将内部样板转移至输出总线.
 NameAdvCircuitAssemblyLine=NameAdvCircuitAssemblyLine
 NameCircuitImprintHatch=NameCircuitImprintHatchTwist
+tst.recipe.advCircuitAssemblyLineRecipes=电路装配线

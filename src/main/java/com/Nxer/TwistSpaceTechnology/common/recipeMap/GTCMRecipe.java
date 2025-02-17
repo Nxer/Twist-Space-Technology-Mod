@@ -390,4 +390,18 @@ public class GTCMRecipe {
         .useSpecialSlot()
         .disableOptimize()
         .build();
+
+    // #tr tst.recipe.advCircuitAssemblyLineRecipes
+    // # Circuit Assembly Line
+    // #zh_CN 电路装配线
+    public static final RecipeMap<RecipeMapBackend> advCircuitAssemblyLineRecipes = RecipeMapBuilder
+        .of("tst.recipe.advCircuitAssemblyLineRecipes")
+        .maxIO(6, 1, 1, 0)
+        .minInputs(1, 1)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.AdvCircuitAssemblyLine.get(1)))
+        .progressBar(GTUITextures.PROGRESSBAR_CIRCUIT_ASSEMBLER)
+        // .disableRegisterNEI()
+        .useSpecialSlot()
+        .disableOptimize()
+        .build();
 }

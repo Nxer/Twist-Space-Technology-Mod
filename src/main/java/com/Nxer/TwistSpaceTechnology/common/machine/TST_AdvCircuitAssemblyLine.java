@@ -9,14 +9,12 @@ import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.Maintenance;
 import static gregtech.api.enums.HatchElement.OutputBus;
-import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTUtility.validMTEList;
-import static gtPlusPlus.core.util.data.ArrayUtils.removeNulls;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,31 +24,24 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import bartworks.system.material.CircuitGeneration.BWMetaItems;
-import bartworks.system.material.CircuitGeneration.CircuitImprintLoader;
-import bartworks.util.BWUtil;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.GTCMMachineRecipes;
-import gregtech.api.recipe.RecipeMapBackend;
-import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import gregtech.api.util.OverclockCalculator;
-import gregtech.api.util.ParallelHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.recipe.BartWorksRecipeMaps;
+import bartworks.system.material.CircuitGeneration.BWMetaItems;
+import bartworks.system.material.CircuitGeneration.CircuitImprintLoader;
+import bartworks.util.BWUtil;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHatchElement;
@@ -60,6 +51,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -298,14 +290,14 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-//        return BartWorksRecipeMaps.bacterialVatRecipes;
-        return BartWorksRecipeMaps.circuitAssemblyLineRecipes;
+        // return BartWorksRecipeMaps.bacterialVatRecipes;
+        return GTCMRecipe.advCircuitAssemblyLineRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(BartWorksRecipeMaps.circuitAssemblyLineRecipes,GTCMRecipe.MiracleTopRecipes);
+        return Arrays.asList(GTCMRecipe.advCircuitAssemblyLineRecipes);
     }
 
     @Override
@@ -348,6 +340,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     @Override
     protected ProcessingLogic createProcessingLogic() {
         return new ProcessingLogic() {
+
             @Override
             @Nonnull
             protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
@@ -356,15 +349,15 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
                     return CheckRecipeResultRegistry.NO_RECIPE;
                 }
 
-                imprintedStack=BWMetaItems.getCircuitParts()
-                    .getStackWithNBT(CircuitImprintLoader.getTagFromStack(recipe.mOutputs[0]),0,0);
-                if (!BWUtil
-                    .areStacksEqualOrNull(imprintedStack, TST_AdvCircuitAssemblyLine.this.getControllerSlot()))
+                imprintedStack = BWMetaItems.getCircuitParts()
+                    .getStackWithNBT(CircuitImprintLoader.getTagFromStack(recipe.mOutputs[0]), 0, 0);
+                if (!BWUtil.areStacksEqualOrNull(imprintedStack, TST_AdvCircuitAssemblyLine.this.getControllerSlot()))
                     return CheckRecipeResultRegistry.NO_RECIPE;
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
 
-        }.enablePerfectOverclock().setMaxParallelSupplier(this::getMaxParallelRecipes);
+        }.enablePerfectOverclock()
+            .setMaxParallelSupplier(this::getMaxParallelRecipes);
 
     }
 
@@ -375,6 +368,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             .items(inputArr)
             .find();
     }
+
     @Override
     public boolean onRunningTick(ItemStack aStack) {
         for (TST_CircuitImprintHatch hatch_circuitImprint : mCircuitImprintHatches) {
