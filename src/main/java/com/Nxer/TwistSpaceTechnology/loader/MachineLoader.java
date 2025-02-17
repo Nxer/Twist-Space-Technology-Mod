@@ -740,52 +740,44 @@ public final class MachineLoader {
         // #tr NameSolidifyHatchUHV
         // # Solidifier Hatch(UHV)
         // #zh_CN 固化仓(UHV)
-        SolidifyHatch_UHV = new GT_MetaTileEntity_Hatch_Solidify(
-            18797,
-            "NameSolidifyHatchUHV",
-            TextEnums.tr("NameSolidifyHatchUHV"),
-            9).getStackForm(1);
-        GTCMItemList.SolidifyHatch_UHV.set(SolidifyHatch_UHV);
+        GTCMItemList.SolidifyHatch_UHV.set(
+            new GT_MetaTileEntity_Hatch_Solidify(
+                18797,
+                "NameSolidifyHatchUHV",
+                TextEnums.tr("NameSolidifyHatchUHV"),
+                9));
 
         // #tr NameSolidifyHatchUV
         // # Solidifier Hatch(UV)
         // #zh_CN 固化仓(UV)
-        SolidifyHatch_UV = new GT_MetaTileEntity_Hatch_Solidify(
-            18796,
-            "NameSolidifyHatchUV",
-            TextEnums.tr("NameSolidifyHatchUV"),
-            8).getStackForm(1);
-        GTCMItemList.SolidifyHatch_UV.set(SolidifyHatch_UV);
+        GTCMItemList.SolidifyHatch_UV.set(
+            new GT_MetaTileEntity_Hatch_Solidify(18796, "NameSolidifyHatchUV", TextEnums.tr("NameSolidifyHatchUV"), 8));
 
         // #tr NameSolidifyHatchZPM
         // # Solidifier Hatch(ZPM)
         // #zh_CN 固化仓(ZPM)
-        SolidifyHatch_ZPM = new GT_MetaTileEntity_Hatch_Solidify(
-            18795,
-            "NameSolidifyHatchZPM",
-            TextEnums.tr("NameSolidifyHatchZPM"),
-            7).getStackForm(1);
-        GTCMItemList.SolidifyHatch_ZPM.set(SolidifyHatch_ZPM);
+        GTCMItemList.SolidifyHatch_ZPM.set(
+            new GT_MetaTileEntity_Hatch_Solidify(
+                18795,
+                "NameSolidifyHatchZPM",
+                TextEnums.tr("NameSolidifyHatchZPM"),
+                7));
 
         // #tr NameSolidifyHatchLuV
         // # Solidifier Hatch(LuV)
         // #zh_CN 固化仓(LuV)
-        SolidifyHatch_LuV = new GT_MetaTileEntity_Hatch_Solidify(
-            18794,
-            "NameSolidifyHatchLuV",
-            TextEnums.tr("NameSolidifyHatchLuV"),
-            6).getStackForm(1);
-        GTCMItemList.SolidifyHatch_LuV.set(SolidifyHatch_LuV);
+        GTCMItemList.SolidifyHatch_LuV.set(
+            new GT_MetaTileEntity_Hatch_Solidify(
+                18794,
+                "NameSolidifyHatchLuV",
+                TextEnums.tr("NameSolidifyHatchLuV"),
+                6));
 
         // #tr NameSolidifyHatchIV
         // # Solidifier Hatch(IV)
         // #zh_CN 固化仓(IV)
-        SolidifyHatch_IV = new GT_MetaTileEntity_Hatch_Solidify(
-            18793,
-            "NameSolidifyHatchIV",
-            TextEnums.tr("NameSolidifyHatchIV"),
-            5).getStackForm(1);
-        GTCMItemList.SolidifyHatch_IV.set(SolidifyHatch_IV);
+        GTCMItemList.SolidifyHatch_IV.set(
+            new GT_MetaTileEntity_Hatch_Solidify(18793, "NameSolidifyHatchIV", TextEnums.tr("NameSolidifyHatchIV"), 5));
 
         // region Modularized Stuff
 
