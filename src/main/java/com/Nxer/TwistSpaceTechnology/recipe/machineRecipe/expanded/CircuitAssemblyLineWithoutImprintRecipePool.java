@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -48,17 +49,14 @@ public class CircuitAssemblyLineWithoutImprintRecipePool implements IRecipePool 
                     || originalRecipe.mFluidInputs[0]
                         .isFluidEqual(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(0))) {
 
+                    ItemStack imprintCircuit = BWMetaItems.getCircuitParts()
+                        .getStackWithNBT(CircuitImprintLoader.getTagFromStack(originalRecipe.mOutputs[0]), 0, 0);
                     GTRecipeBuilder.builder()
-                        .itemInputs(ModifyInput(originalRecipe.mInputs))
+                        .itemInputs(ModifyInput(originalRecipe.mInputs.clone()))
                         .fluidInputs(originalRecipe.mFluidInputs)
                         .itemOutputs(
                             copyAmountUnsafe(originalRecipe.mOutputs[0].stackSize * 16, originalRecipe.mOutputs[0]))
-                        .special(
-                            BWMetaItems.getCircuitParts()
-                                .getStackWithNBT(
-                                    CircuitImprintLoader.getTagFromStack(originalRecipe.mOutputs[0]),
-                                    0,
-                                    0))
+//                        .special(imprintCircuit)
                         .eut(originalRecipe.mEUt)
                         .duration(originalRecipe.mDuration * 12)
                         .addTo(GTCMRecipe.advCircuitAssemblyLineRecipes);
@@ -79,6 +77,11 @@ public class CircuitAssemblyLineWithoutImprintRecipePool implements IRecipePool 
             // Modify circuit part
             for (Map.Entry<ItemStack, ItemStack> entry : circuitItemsToWrapped.entrySet()) {
                 if (GTUtility.areStacksEqual(entry.getKey(), aStack)) {
+                    // not modify to wrap circuit
+                    if (Item.itemRegistry.getNameForObject(
+                        entry.getKey()
+                            .getItem())
+                        .contains(Mods.GoodGenerator.ID)) break;
                     inputItems.add(copyAmount(aStack.stackSize, entry.getValue()));
                     isItemModified = true;
                     break;

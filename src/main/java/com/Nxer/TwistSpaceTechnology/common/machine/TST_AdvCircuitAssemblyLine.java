@@ -290,14 +290,14 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        // return BartWorksRecipeMaps.bacterialVatRecipes;
-        return GTCMRecipe.advCircuitAssemblyLineRecipes;
+//        return BartWorksRecipeMaps.circuitAssemblyLineRecipes;
+         return GTCMRecipe.advCircuitAssemblyLineRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.advCircuitAssemblyLineRecipes);
+        return Arrays.asList(BartWorksRecipeMaps.circuitAssemblyLineRecipes);
     }
 
     @Override
