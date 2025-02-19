@@ -1,12 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DATA_ACCESS;
-import static gregtech.api.util.GTUtility.areStacksEqual;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.function.Predicate;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,7 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
-import gregtech.api.enums.Mods;
+import bartworks.system.material.CircuitGeneration.BWMetaItems;
 import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
@@ -25,8 +21,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTModHandler;
-import gregtech.api.util.GTUtility;
 
 public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
 
@@ -128,52 +122,38 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        // if (aNBT.getByte("mCircuitUpdated") != 1) {
-        // for (int i = 0; i < getSizeInventory(); i++) {
-        // processCircuitImprint(getStackInSlot(i));
-        // }
-        // }
+        if (aNBT.getByte("mCircuitUpdated") != 1) {
+            refreshImprint();
+        }
     }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        // aNBT.setByte("mCircuitUpdated", (byte) 1);
+        aNBT.setByte("mCircuitUpdated", (byte) 1);
     }
 
     @Override
     public void setInventorySlotContents(int aIndex, ItemStack aStack) {
         super.setInventorySlotContents(aIndex, aStack);
-        // processCircuitImprint(aStack);
+        refreshImprint();
     }
 
-    public List<ItemStack> getStoredCircuitImprints() {
-        return getInventoryItems(
-            stack -> stack != null
-                && stack.getItem() == GTModHandler.getModItem(Mods.BartWorks.ID, "gt.bwMetaGeneratedItem0", 1)
-                    .getItem());
+    public HashSet<NBTTagCompound> getStoredCircuitImprints() {
+        return circuitType;
     }
 
-    public void processCircuitImprint(ItemStack aStack) {
-        if (!GTUtility.isStackValid(aStack)) return;
-        if (areStacksEqual(aStack, GTModHandler.getModItem(Mods.BartWorks.ID, "gt.bwMetaGeneratedItem0", 1))) {
-            circuitType.add(aStack.stackTagCompound);
-        }
-
-    }
-
-    public List<ItemStack> getInventoryItems(Predicate<ItemStack> filter) {
-        ArrayList<ItemStack> items = new ArrayList<>();
+    public void refreshImprint() {
+        circuitType = new HashSet<>();
         IGregTechTileEntity te = getBaseMetaTileEntity();
         for (int i = 0; i < te.getSizeInventory(); ++i) {
             ItemStack slot = te.getStackInSlot(i);
-            if (slot != null) {
-                if (filter != null && filter.test(slot)) {
-                    items.add(slot);
-                }
+            if (slot != null && slot.isItemEqual(
+                BWMetaItems.getCircuitParts()
+                    .getStack(0, 0))) {
+                circuitType.add(slot.stackTagCompound);
             }
         }
-        return items;
     }
 
     @Override

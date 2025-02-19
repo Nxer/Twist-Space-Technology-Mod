@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -41,7 +42,6 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import bartworks.API.recipe.BartWorksRecipeMaps;
 import bartworks.system.material.CircuitGeneration.BWMetaItems;
 import bartworks.system.material.CircuitGeneration.CircuitImprintLoader;
-import bartworks.util.BWUtil;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHatchElement;
@@ -50,8 +50,8 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -234,7 +234,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         mCircuitImprintHatches.clear();
-        // init the pointer, also the Properties.
         this.length = 1;
 
         // check the Top layer.
@@ -242,6 +241,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             return false;
         }
 
+        // check the middle layer
         while (checkPiece(
             STRUCTURE_PIECE_MIDDLE_HINT,
             baseHorizontalOffSet - this.length,
@@ -262,16 +262,24 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
 
         this.length++;
 
+        if (mCircuitImprintHatches.size() > 1) return false;
         return signal;
     }
 
     // endregion
 
     // region Processing Logic
-    public int length = 1;
-    ItemStack imprintedStack;
-    GTRecipe trueRecipe;
-    public ArrayList<TST_CircuitImprintHatch> mCircuitImprintHatches = new ArrayList<>();
+    private static ItemStack circuitImprint;
+    int length = 1;
+    ArrayList<TST_CircuitImprintHatch> mCircuitImprintHatches = new ArrayList<>();
+    HashSet<NBTTagCompound> circuitType = new HashSet<>();
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (circuitImprint == null) circuitImprint = BWMetaItems.getCircuitParts()
+            .getStack(0, 0);
+    }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -290,8 +298,8 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-//        return BartWorksRecipeMaps.circuitAssemblyLineRecipes;
-         return GTCMRecipe.advCircuitAssemblyLineRecipes;
+        // return BartWorksRecipeMaps.circuitAssemblyLineRecipes;
+        return GTCMRecipe.advCircuitAssemblyLineRecipes;
     }
 
     @NotNull
@@ -303,7 +311,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setInteger("length", length);
+        aNBT.setInteger("elength", length);
     }
 
     @Override
@@ -329,10 +337,31 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         return false;
     }
 
-    public ArrayList<ItemStack> getCircuitImprintItems() {
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean isInputSeparationEnabled() {
+        return false;
+    }
+
+    @Override
+    public ArrayList<ItemStack> getStoredInputs() {
         ArrayList<ItemStack> rList = new ArrayList<>();
-        for (TST_CircuitImprintHatch tHatch : validMTEList(mCircuitImprintHatches)) {
-            rList.addAll(tHatch.getInventoryItems(stack -> true));
+        for (MTEHatchInputBus tHatch : validMTEList(mInputBusses)) {
+            tHatch.mRecipeMap = this.getRecipeMap();
+            for (int i = 0; i < tHatch.getBaseMetaTileEntity()
+                .getSizeInventory(); i++) {
+                if (tHatch.getBaseMetaTileEntity()
+                    .getStackInSlot(i) != null) {
+                    rList.add(
+                        tHatch.getBaseMetaTileEntity()
+                            .getStackInSlot(i));
+                    break;
+                }
+            }
         }
         return rList;
     }
@@ -349,24 +378,28 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
                     return CheckRecipeResultRegistry.NO_RECIPE;
                 }
 
-                imprintedStack = BWMetaItems.getCircuitParts()
-                    .getStackWithNBT(CircuitImprintLoader.getTagFromStack(recipe.mOutputs[0]), 0, 0);
-                if (!BWUtil.areStacksEqualOrNull(imprintedStack, TST_AdvCircuitAssemblyLine.this.getControllerSlot()))
-                    return CheckRecipeResultRegistry.NO_RECIPE;
-                return CheckRecipeResultRegistry.SUCCESSFUL;
+                NBTTagCompound outputTag = CircuitImprintLoader.getTagFromStack(recipe.mOutputs[0]);
+
+                // Check controller
+                ItemStack controllerStack = TST_AdvCircuitAssemblyLine.this.getControllerSlot();
+                if (controllerStack != null) {
+                    if (controllerStack.isItemEqual(circuitImprint) && controllerStack.stackTagCompound == outputTag) {
+                        return CheckRecipeResultRegistry.SUCCESSFUL;
+                    }
+                }
+
+                // Check imprint hatch
+                mCircuitImprintHatches.get(0)
+                    .refreshImprint();
+                circuitType = mCircuitImprintHatches.get(0)
+                    .getStoredCircuitImprints();
+                if (circuitType.contains(outputTag)) return CheckRecipeResultRegistry.SUCCESSFUL;
+                return CheckRecipeResultRegistry.NO_RECIPE;
             }
 
         }.enablePerfectOverclock()
             .setMaxParallelSupplier(this::getMaxParallelRecipes);
 
-    }
-
-    private GTRecipe findRecipe(ArrayList<ItemStack> inputList) {
-        RecipeMap<RecipeMapBackend> CALRecipes = BartWorksRecipeMaps.circuitAssemblyLineRecipes;
-        ItemStack[] inputArr = inputList.toArray(new ItemStack[inputList.size()]);
-        return CALRecipes.findRecipeQuery()
-            .items(inputArr)
-            .find();
     }
 
     @Override

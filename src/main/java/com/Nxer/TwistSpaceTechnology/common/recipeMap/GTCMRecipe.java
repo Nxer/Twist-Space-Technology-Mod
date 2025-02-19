@@ -391,16 +391,16 @@ public class GTCMRecipe {
         .disableOptimize()
         .build();
 
-    // #tr tst.recipe.advCircuitAssemblyLineRecipes
-    // # Circuit Assembly Line
-    // #zh_CN 电路装配线
+    // #tr tst.recipe.advCircuitAssemblyLineTrueRecipes
+    // # Adv Circuit Assembly Line (Hide)
+    // #zh_CN 进阶电路装配线(隐藏)
     public static final RecipeMap<RecipeMapBackend> advCircuitAssemblyLineRecipes = RecipeMapBuilder
         .of("tst.recipe.advCircuitAssemblyLineRecipes")
         .maxIO(6, 1, 1, 0)
         .minInputs(1, 1)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.AdvCircuitAssemblyLine.get(1)))
         .progressBar(GTUITextures.PROGRESSBAR_CIRCUIT_ASSEMBLER)
-        // .disableRegisterNEI()
+        .disableRegisterNEI()
         .useSpecialSlot()
         .disableOptimize()
         .build();

@@ -56,7 +56,7 @@ public class CircuitAssemblyLineWithoutImprintRecipePool implements IRecipePool 
                         .fluidInputs(originalRecipe.mFluidInputs)
                         .itemOutputs(
                             copyAmountUnsafe(originalRecipe.mOutputs[0].stackSize * 16, originalRecipe.mOutputs[0]))
-//                        .special(imprintCircuit)
+                        // .special(imprintCircuit)
                         .eut(originalRecipe.mEUt)
                         .duration(originalRecipe.mDuration * 12)
                         .addTo(GTCMRecipe.advCircuitAssemblyLineRecipes);
