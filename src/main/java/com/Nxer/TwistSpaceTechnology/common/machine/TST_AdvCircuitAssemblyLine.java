@@ -236,7 +236,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         mCircuitImprintHatches.clear();
         this.length = 1;
 
-        // check the Top layer.
+        // check the main layer.
         if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
             return false;
         }
@@ -261,8 +261,17 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             baseDepthOffSet);
 
         this.length++;
-
+        // only one imprint circuit hatch allowed
         if (mCircuitImprintHatches.size() > 1) return false;
+
+        // only one and 64a exotic energy hatch allowed
+        if (!mExoticEnergyHatches.isEmpty()) {
+            if (!mEnergyHatches.isEmpty()) return false;
+            if (mExoticEnergyHatches.size() > 1) return false;
+            return mExoticEnergyHatches.get(0)
+                .maxWorkingAmperesIn() <= 64;
+        }
+
         return signal;
     }
 
@@ -311,7 +320,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setInteger("elength", length);
+        aNBT.setInteger("length", length);
     }
 
     @Override
@@ -373,7 +382,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             @Override
             @Nonnull
             protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                // limit CA mode recipes to hatch tier - 1
                 if (recipe.mEUt > TST_AdvCircuitAssemblyLine.this.getMaxInputVoltage()) {
                     return CheckRecipeResultRegistry.NO_RECIPE;
                 }
