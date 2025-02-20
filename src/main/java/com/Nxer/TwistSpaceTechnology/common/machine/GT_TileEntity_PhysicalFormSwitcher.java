@@ -87,7 +87,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     @Override
     public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("PhysicalFormSwitcher.modeMsg." + (mode == 1 ? 0 : 1));
+        return StatCollector.translateToLocal("PhysicalFormSwitcher.modeMsg." + mode);
     }
 
     @Override
