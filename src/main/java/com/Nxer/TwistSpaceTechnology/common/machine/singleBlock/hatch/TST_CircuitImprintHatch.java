@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DATA_ACCESS;
 
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
@@ -33,17 +35,27 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
             aName,
             aNameRegional,
             aTier,
-            16,
-            new String[] { "Data Access for Multiblocks",
-                "Adds " + (aTier == 4 ? 4 : 16) + " extra slots for Data Sticks" });
+            aTier > 5 ? 16 : 4,
+            // #tr Tooltips.CircuitImprintHatch.01
+            // # Extra imprint circuit input for ACAL
+            // #zh_CN 进阶电路装配线的额外压印电路输入
+            // #tr Tooltips.CircuitImprintHatch.02
+            // # Adds
+            // #zh_CN 为压印电路增加
+            // #tr Tooltips.CircuitImprintHatch.03
+            // # extra slots for imprint circuits
+            // #zh_CN 个额外插槽
+            new String[] { TextEnums.tr("Tooltips.CircuitImprintHatch.01"),
+                TextEnums.tr("Tooltips.CircuitImprintHatch.02") + (aTier > 5 ? 16 : 4)
+                    + TextEnums.tr("Tooltips.CircuitImprintHatch.03"),ModNameDesc });
     }
 
     public TST_CircuitImprintHatch(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, aTier == 4 ? 4 : 16, aDescription, aTextures);
+        super(aName, aTier, aTier > 5 ? 16 : 4, aDescription, aTextures);
     }
 
     public TST_CircuitImprintHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, aTier == 4 ? 4 : 16, aDescription, aTextures);
+        super(aName, aTier, aTier > 5 ? 16 : 4, aDescription, aTextures);
     }
 
     @Override
@@ -158,12 +170,12 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        if (mTier == 4) {
-            getBaseMetaTileEntity()
-                .add2by2Slots(builder, getGUITextureSet().getItemSlot(), GTUITextures.OVERLAY_SLOT_CIRCUIT);
-        } else {
+        if (mTier > 5) {
             getBaseMetaTileEntity()
                 .add4by4Slots(builder, getGUITextureSet().getItemSlot(), GTUITextures.OVERLAY_SLOT_CIRCUIT);
+        } else {
+            getBaseMetaTileEntity()
+                .add2by2Slots(builder, getGUITextureSet().getItemSlot(), GTUITextures.OVERLAY_SLOT_CIRCUIT);
         }
     }
 }

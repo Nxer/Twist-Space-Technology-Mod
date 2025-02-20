@@ -1,6 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static bartworks.util.BWUtil.ofGlassTieredMixed;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textEndSides;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -25,6 +33,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -148,7 +157,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         .addElement(
             'G',
             buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(CircuitImprintHatchElement.CircuitAccess)
-                .dot(2)
+                .dot(5)
                 .casingIndex(42)
                 .allowOnly(ForgeDirection.NORTH)
                 .buildAndChain(GregTechAPI.sBlockCasings3, 10))
@@ -447,25 +456,42 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_MiracleTop_MachineType)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_00)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_01)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_02)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_03)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_04)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_05)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_06)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_07)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+        // #tr Tooltip_AdvCircuitAssemblyLine_MachineType
+        // # Circuit Assembler
+        // #zh_CN 电路组装机
+        tt.addMachineType(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine_MachineType"))
+            // #tr Tooltip_AdvCircuitAssemblyLine_Controller
+            // # Controller block for the Advanced Circuit Assembly Line
+            // #zh_CN 进阶电路装配线的控制方块
+            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine_Controller"))
+            // #tr Tooltip_AdvCircuitAssemblyLine.1
+            // # {\AQUA}Crystal Circuit Ti Super OC Crafting not D version
+            // #zh_CN {\AQUA}晶体电路板Ti Super OC Crafting not D version
+            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.1"))
+            // #tr Tooltip_AdvCircuitAssemblyLine.2
+            // # Circuit assembly line with 64 times overclocking
+            // #zh_CN 拥有64倍超频上限的电路装配线
+            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.2"))
+            // #tr Tooltip_AdvCircuitAssemblyLine.3
+            // # Install imprint circuit hatch for more recipe support
+            // #zh_CN 安装压印电路仓以获得更多配方支持
+            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.3"))
             .addSeparator()
-            .addController(TextLocalization.textFrontCenter)
-            .addInputHatch(TextLocalization.textMiracleTopHatchLocation, 2)
-            .addOutputHatch(TextLocalization.textMiracleTopHatchLocation, 2)
-            .addInputBus(TextLocalization.textMiracleTopHatchLocation, 2)
-            .addOutputBus(TextLocalization.textMiracleTopHatchLocation, 2)
-            .addEnergyHatch(TextLocalization.textMiracleTopHatchLocation, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+            .addInfo(StructureTooComplex)
+            .addInfo(BLUE_PRINT_INFO)
+            .addEnergyHatch(textUseBlueprint, 1)
+            .addInputBus(textUseBlueprint, 2)
+            .addInputHatch(textUseBlueprint, 3)
+            .addOutputBus(textEndSides, 2)
+            // #tr Tooltip_AdvCircuitAssemblyLine.4
+            // # Imprint circuit hatch
+            // #zh_CN 压印电路仓
+            // #tr Tooltip_AdvCircuitAssemblyLine.5
+            // # Any grate machine casing
+            // #zh_CN 任意格栅机械方块
+            .addOtherStructurePart(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.4"), TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.5"), 5)
+            .addStructureInfo(Text_SeparatingLine)
+            .toolTipFinisher(ModName);
         return tt;
     }
 

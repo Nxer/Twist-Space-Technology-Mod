@@ -436,7 +436,8 @@ public enum GTCMItemList {
     BloodOrbHatch,
     LegendaryWirelessEnergyHatch,
     HarmoniousWirelessEnergyHatch,
-    CircuitImprintHatch,
+    CircuitImprintHatchT1,
+    CircuitImprintHatchT2,
 
     // endregion
 

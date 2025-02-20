@@ -263,7 +263,8 @@ public class MachineLoader {
     public static ItemStack AdvancedExecutionCore;
     public static ItemStack PerfectExecutionCore;
     public static ItemStack BloodOrbHatch;
-    public static ItemStack CircuitImprintHatch;
+    public static ItemStack CircuitImprintHatchT1;
+    public static ItemStack CircuitImprintHatchT2;
 
     // endregion
 
@@ -782,12 +783,12 @@ public class MachineLoader {
 
         if (Config.Enable_AdvCircuitAssemblyLine) {
             // #tr NameAdvCircuitAssemblyLine
-            // # NameAdvCircuitAssemblyLine
-            // #zh_CN NameAdvCircuitAssemblyLine
+            // # Advanced Circuit Assembly Line
+            // #zh_CN 进阶电路装配线
             AdvCircuitAssemblyLine = new TST_AdvCircuitAssemblyLine(
                 19067,
                 "NameAdvCircuitAssemblyLine",
-                TextEnums.tr("AdvCircuitAssemblyLine")).getStackForm(1);
+                TextEnums.tr("NameAdvCircuitAssemblyLine")).getStackForm(1);
             GTCMItemList.AdvCircuitAssemblyLine.set(AdvCircuitAssemblyLine);
         }
 
@@ -1026,15 +1027,25 @@ public class MachineLoader {
             2147483647).getStackForm(1);
         GTCMItemList.HarmoniousWirelessEnergyHatch.set(HarmoniousWirelessEnergyHatch);
 
-        // #tr NameCircuitImprintHatch
-        // # NameCircuitImprintHatchTwist
-        // #zh_CN NameCircuitImprintHatchTwist
-        CircuitImprintHatch = new TST_CircuitImprintHatch(
+        // #tr NameCircuitImprintHatchT2
+        // # Imprint Circuit Hatch T2
+        // #zh_CN 压印电路仓T2
+        CircuitImprintHatchT2 = new TST_CircuitImprintHatch(
             18792,
-            "NameCircuitImprintHatch",
-            TextEnums.tr("NameCircuitImprintHatch"),
-            4).getStackForm(1);
-        GTCMItemList.CircuitImprintHatch.set(CircuitImprintHatch);
+            "NameCircuitImprintHatchT2",
+            TextEnums.tr("NameCircuitImprintHatchT2"),
+            8).getStackForm(1);
+        GTCMItemList.CircuitImprintHatchT2.set(CircuitImprintHatchT2);
+
+        // #tr NameCircuitImprintHatchT1
+        // # Imprint Circuit Hatch T1
+        // #zh_CN 压印电路仓T1
+        CircuitImprintHatchT1 = new TST_CircuitImprintHatch(
+            18791,
+            "NameCircuitImprintHatchT1",
+            TextEnums.tr("NameCircuitImprintHatchT1"),
+            5).getStackForm(1);
+        GTCMItemList.CircuitImprintHatchT1.set(CircuitImprintHatchT1);
 
         // region Modularized Stuff
 
