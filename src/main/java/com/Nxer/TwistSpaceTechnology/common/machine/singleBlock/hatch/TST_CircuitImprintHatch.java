@@ -47,7 +47,8 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
             // #zh_CN 个额外插槽
             new String[] { TextEnums.tr("Tooltips.CircuitImprintHatch.01"),
                 TextEnums.tr("Tooltips.CircuitImprintHatch.02") + (aTier > 5 ? 16 : 4)
-                    + TextEnums.tr("Tooltips.CircuitImprintHatch.03"),ModNameDesc });
+                    + TextEnums.tr("Tooltips.CircuitImprintHatch.03"),
+                ModNameDesc });
     }
 
     public TST_CircuitImprintHatch(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {

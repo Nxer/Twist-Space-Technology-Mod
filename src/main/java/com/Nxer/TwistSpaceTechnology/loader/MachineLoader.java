@@ -521,10 +521,11 @@ public final class MachineLoader {
             // #tr NameAdvCircuitAssemblyLine
             // # Advanced Circuit Assembly Line
             // #zh_CN 进阶电路装配线
-            GTCMItemList.AdvCircuitAssemblyLine.set(new TST_AdvCircuitAssemblyLine(
-                19067,
-                "NameAdvCircuitAssemblyLine",
-                TextEnums.tr("NameAdvCircuitAssemblyLine")));
+            GTCMItemList.AdvCircuitAssemblyLine.set(
+                new TST_AdvCircuitAssemblyLine(
+                    19067,
+                    "NameAdvCircuitAssemblyLine",
+                    TextEnums.tr("NameAdvCircuitAssemblyLine")));
         }
 
         // endregion
@@ -795,20 +796,22 @@ public final class MachineLoader {
         // #tr NameCircuitImprintHatchT2
         // # Imprint Circuit Hatch T2
         // #zh_CN 压印电路仓T2
-        GTCMItemList.CircuitImprintHatchT2.set(new TST_CircuitImprintHatch(
-            18792,
-            "NameCircuitImprintHatchT2",
-            TextEnums.tr("NameCircuitImprintHatchT2"),
-            8));
+        GTCMItemList.CircuitImprintHatchT2.set(
+            new TST_CircuitImprintHatch(
+                18792,
+                "NameCircuitImprintHatchT2",
+                TextEnums.tr("NameCircuitImprintHatchT2"),
+                8));
 
         // #tr NameCircuitImprintHatchT1
         // # Imprint Circuit Hatch T1
         // #zh_CN 压印电路仓T1
-        GTCMItemList.CircuitImprintHatchT2.set(new TST_CircuitImprintHatch(
-            18791,
-            "NameCircuitImprintHatchT1",
-            TextEnums.tr("NameCircuitImprintHatchT1"),
-            5));
+        GTCMItemList.CircuitImprintHatchT1.set(
+            new TST_CircuitImprintHatch(
+                18791,
+                "NameCircuitImprintHatchT1",
+                TextEnums.tr("NameCircuitImprintHatchT1"),
+                5));
 
         // region Modularized Stuff
 

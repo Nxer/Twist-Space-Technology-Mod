@@ -5,9 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INF
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textEndSides;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -33,7 +31,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -43,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -489,7 +486,10 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             // #tr Tooltip_AdvCircuitAssemblyLine.5
             // # Any grate machine casing
             // #zh_CN 任意格栅机械方块
-            .addOtherStructurePart(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.4"), TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.5"), 5)
+            .addOtherStructurePart(
+                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.4"),
+                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.5"),
+                5)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher(ModName);
         return tt;
