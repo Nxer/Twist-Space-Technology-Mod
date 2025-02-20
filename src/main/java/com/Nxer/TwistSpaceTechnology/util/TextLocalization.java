@@ -44,6 +44,11 @@ public class TextLocalization {
     // #zh_CN  K
     public static final String Kelvin = TextEnums.tr("Kelvin");
 
+    // #tr AutoSeparation
+    // # Automatically separate inputs
+    // #zh_CN 自动隔离输入
+    public static final String AutoSeparation= TextEnums.tr("AutoSeparation");
+
     // #tr Text_SeparatingLine
     // # {\GOLD}-----------------------------------------
     // #zh_CN {\GOLD}-----------------------------------------

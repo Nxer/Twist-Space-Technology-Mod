@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelPerPiece_HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Piece_EnablePerfectOverclock_HolySeparator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_HolySeparator;
@@ -21,7 +20,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -41,6 +39,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -69,8 +68,29 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
     // endregion
 
     // region Processing Logic
-    private byte mode = Mode_Default_HolySeparator;
     private int piece = 1;
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Cutting Machine
+         * 1 - Slicer
+         * 2 - Lathe
+         */
+        return 3;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CUTTING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("HolySeparator.modeMsg." + mode);
+    }
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
@@ -104,7 +124,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (mode) {
+        switch (machineMode) {
             case 1:
                 return RecipeMaps.slicerRecipes;
             case 2:
@@ -118,15 +138,6 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(RecipeMaps.slicerRecipes, RecipeMaps.latheRecipes, RecipeMaps.cutterRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 3);
-
-            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("HolySeparator.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -302,7 +313,7 @@ G -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
         super.saveNBTData(aNBT);
 
         aNBT.setInteger("piece", piece);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
     }
 
     @Override
@@ -310,7 +321,7 @@ G -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
         super.loadNBTData(aNBT);
 
         piece = aNBT.getInteger("piece");
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
     }
 
     @Override

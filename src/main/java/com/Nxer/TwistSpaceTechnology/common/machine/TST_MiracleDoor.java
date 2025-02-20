@@ -42,12 +42,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -69,6 +67,7 @@ import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -111,13 +110,32 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
 
     // region Processing Logic
 
-    private byte mode = 1;
     private int overclockParameter = 1;
     protected boolean ingotMode = false;
     private static ItemStack IngotMold;
 
     public static void initStatics() {
         IngotMold = GTCMItemList.WhiteDwarfMold_Ingot.get(1);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Alloy Smelter
+         * 1 - Stellar Forge
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("MiracleDoor.modeMsg." + mode);
     }
 
     @Override
@@ -132,8 +150,6 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
             currentTip
                 .add(TstUtils.tr("tst.miracleDoor.waila.currentOverclockParameter", tag.getLong("overclockParameter")));
         }
-        currentTip.add(
-            EnumChatFormatting.BOLD + StatCollector.translateToLocal("MiracleDoor.modeMsg." + tag.getByte("mode")));
     }
 
     @Override
@@ -143,27 +159,26 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
             tag.setInteger("overclockParameter", overclockParameter);
-            tag.setByte("mode", mode);
         }
     }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("overclockParameter", overclockParameter);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         overclockParameter = aNBT.getInteger("overclockParameter");
     }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        if (mode == 1) return GTCMRecipe.StellarForgeRecipes;
+        if (machineMode == 1) return GTCMRecipe.StellarForgeRecipes;
         return GTCMRecipe.StellarForgeAlloySmelterRecipes;
     }
 
@@ -171,14 +186,6 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(GTCMRecipe.StellarForgeRecipes, GTCMRecipe.StellarForgeAlloySmelterRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MiracleDoor.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -204,14 +211,14 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     @Override
     public int getExtraEUCostMultiplier() {
         return overclockParameter
-            * (mode == 1 ? multiplierOfMiracleDoorEUCostEBFMode : multiplierOfMiracleDoorEUCostABSMode);
+            * (machineMode == 1 ? multiplierOfMiracleDoorEUCostEBFMode : multiplierOfMiracleDoorEUCostABSMode);
     }
 
     @Override
     public int getWirelessModeProcessingTime() {
         return Math.max(
             1,
-            (mode == 1 ? ticksOfMiracleDoorProcessingTimeEBFMode : ticksOfMiracleDoorProcessingTimeABSMode)
+            (machineMode == 1 ? ticksOfMiracleDoorProcessingTimeEBFMode : ticksOfMiracleDoorProcessingTimeABSMode)
                 / this.overclockParameter);
     }
 

@@ -176,7 +176,6 @@ import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
@@ -324,7 +323,7 @@ public class GTCMMachineRecipes implements IRecipePool {
                 GTUtility.copyAmountUnsafe(64, Ic2Items.iridiumPlate),
                 GTUtility.getIntegratedCircuit(10))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 128))
-            .itemOutputs(GTUtility.copyAmountUnsafe(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
+            .itemOutputs(GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.get(1))
             .noOptimize()
             .eut(RECIPE_UHV)
             .duration(20 * 120)
@@ -485,7 +484,7 @@ public class GTCMMachineRecipes implements IRecipePool {
 
         // Upgrade UHV
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTUtility.copyAmountUnsafe(1, MachineLoader.PreciseHighEnergyPhotonicQuantumMaster))
+            .metadata(RESEARCH_ITEM, GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.get(1))
             .metadata(RESEARCH_TIME, 2 * HOURS)
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
@@ -704,9 +703,7 @@ public class GTCMMachineRecipes implements IRecipePool {
                 Materials.SuperconductorUIVBase.getMolten(64 * 144),
                 Materials.SuperconductorUEVBase.getMolten(512 * 144)
             )
-            .itemOutputs(
-                GTUtility.copyAmountUnsafe(1, MachineLoader.MiracleTop)
-            )
+            .itemOutputs(GTCMItemList.MiracleTop.get(1))
             .eut(RECIPE_UMV)
             .duration(20 * 3600)
             .addTo(AssemblyLine);
