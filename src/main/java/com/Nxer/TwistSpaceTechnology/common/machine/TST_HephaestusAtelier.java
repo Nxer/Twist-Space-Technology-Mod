@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeDuration_HephaestusAtelier;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEuPerSmelting_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEutPerParallel_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
@@ -42,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.google.common.collect.ImmutableList;
@@ -90,7 +90,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     // region Processing Logic
     protected static final BigInteger CONSUME_EU_PER_SMELTING = BigInteger
-        .valueOf(ConsumeEuPerSmelting_HephaestusAtelier);
+        .valueOf(Config.ConsumeEuPerSmelting_HephaestusAtelier);
     protected int coilTier = 0;
     protected int maxProcessNormalModeFurnace = 0;
     protected long maxEut = 0;
@@ -297,6 +297,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         ArrayList<ItemStack> inputItems = getStoredInputsNoSeparation();
         if (inputItems.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
 
+        setupProcessingLogic(processingLogic);
         if (isWirelessMode()) {
             // wireless
             return wirelessFurnace(inputItems);
@@ -389,7 +390,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             .setRecipeEUt((long) ConsumeEutPerParallel_HephaestusAtelier * (maxProcessNormalModeFurnace - canProcess))
             .setEUt(maxEut)
             .setDuration(ConsumeDuration_HephaestusAtelier)
-            .setDurationDecreasePerOC(1)
+            .setDurationDecreasePerOC(4)
             .calculate();
 
         lEUt = -calculator.getConsumption();
