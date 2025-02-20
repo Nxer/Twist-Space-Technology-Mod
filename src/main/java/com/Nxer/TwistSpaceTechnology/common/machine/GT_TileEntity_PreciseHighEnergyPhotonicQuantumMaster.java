@@ -294,7 +294,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
-        machineMode = aNBT.getBoolean("mode") ? 0 : 1;
+        machineMode = aNBT.getBoolean("mode") ? 1 : 0;
         enablePerfectOverclockSignal = aNBT.getBoolean("enablePerfectOverclockSignal");
         totalSpeedIncrement = aNBT.getInteger("totalSpeedIncrement");
     }
