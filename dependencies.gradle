@@ -34,12 +34,12 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    api('com.github.GTNewHorizons:GT5-Unofficial:5.09.51.00:dev')
-    implementation('com.github.GTNewHorizons:AE2FluidCraft-Rework:1.3.51-gtnh:dev')
+    implementation('com.github.GTNewHorizons:GT5-Unofficial:5.09.50.114:dev')
+    implementation('com.github.GTNewHorizons:AE2FluidCraft-Rework:1.3.53-gtnh:dev')
 //    implementation('com.github.GTNewHorizons:Galaxy-Space-GTNH:1.1.97-GTNH:dev')
-    implementation('com.github.GTNewHorizons:GTNH-Intergalactic:1.5.0:dev')
-    implementation('com.github.GTNewHorizons:NewHorizonsCoreMod:2.6.88:dev')
-    implementation('com.github.GTNewHorizons:Avaritia:1.56:dev')
+    implementation('com.github.GTNewHorizons:GTNH-Intergalactic:1.4.33:dev')
+    implementation('com.github.GTNewHorizons:NewHorizonsCoreMod:2.6.95:dev')
+    implementation('com.github.GTNewHorizons:Avaritia:1.58:dev')
     implementation('com.github.GTNewHorizons:Avaritiaddons:1.8.4-GTNH:dev')
     implementation('com.github.GTNewHorizons:Eternal-Singularity:1.2.1:dev')
     implementation('com.github.GTNewHorizons:Universal-Singularities:8.8.0:dev')
@@ -53,11 +53,11 @@ dependencies {
 //    implementation('curse.maven:automagy-222153:2285272')
 //    implementation('com.github.GTNewHorizons:ThaumicHorizons:1.6.5:dev')
 //    implementation('com.github.GTNewHorizons:Gadomancy:1.3.6:dev')
-    implementation('com.github.GTNewHorizons:Botania:1.11.6-GTNH:dev')
+    implementation('com.github.GTNewHorizons:Botania:1.11.7-GTNH:dev')
 //    implementation('com.github.GTNewHorizons:twilightforest:2.7.0:dev')
     implementation('com.github.GTNewHorizons:supersolarpanels:1.1.3:dev')
     implementation('curse.maven:advsolar-362768:2885953')
-    implementation('com.github.GTNewHorizons:Electro-Magic-Tools:1.5.16:dev')
+    implementation('com.github.GTNewHorizons:Electro-Magic-Tools:1.5.17:dev')
     //These 2 deps have conflicts with Amun-Ra by default, see Twist-Space-Technology-Mod#150
     compileOnly('curse.maven:witchery-69673:2234410')
     implementation('com.github.GTNewHorizons:WitcheryExtras:1.2.3:dev')
@@ -67,8 +67,8 @@ dependencies {
     //These 2 deps are for mixin
 //    devOnlyNonPublishable("com.github.GTNewHorizons:Infernal-Mobs:1.10.0-GTNH:dev")
 
-    implementation('com.github.GTNewHorizons:BloodMagic:1.6.9:dev')
-    implementation('com.github.GTNewHorizons:EnderIO:2.8.22:dev') { transitive = false }
+    implementation('com.github.GTNewHorizons:BloodMagic:1.6.10:dev')
+    implementation('com.github.GTNewHorizons:EnderIO:2.8.24:dev') { transitive = false }
     implementation('com.github.GTNewHorizons:EnderCore:0.4.6:dev') { transitive = false }
 
     // dependencies for mod testing
