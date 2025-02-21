@@ -55,7 +55,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -89,6 +88,7 @@ import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -143,7 +143,6 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     // endregion
     protected String ownerName; // init when load world
     protected UUID ownerUUID; // init when load world
-    protected byte mode = 0;
     protected long usedPowerPoint = 0;
     protected boolean isUsing = false;
     protected long storageEU = 0;
@@ -158,6 +157,26 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     protected void decreaseGravitationalLensTime() {
         if (gravitationalLensTime > 0) gravitationalLensTime--;
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Power Generation
+         * 1 - Photon Collection
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("TST_DSPReceiver.modeMsg." + mode);
     }
 
     @Override
@@ -237,17 +256,9 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("TST_DSPReceiver.modeMsg." + this.mode));
-        }
-    }
-
-    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setLong("usedPowerPoint", usedPowerPoint);
         aNBT.setLong("storageEU", storageEU);
         aNBT.setLong("storageEUMAX", storageEUMAX);
@@ -260,7 +271,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         usedPowerPoint = aNBT.getLong("usedPowerPoint");
         storageEU = aNBT.getLong("storageEU");
         storageEUMAX = aNBT.getLong("storageEUMAX");
@@ -372,7 +383,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         checkGravitationalLensInput();
         this.syncDSPData();
 
-        if (mode == 0) {
+        if (machineMode == 0) {
             if (wirelessMode) {
                 // Generate EU directly
                 if (this.storageEU > 0 || storageEUMAX > 0) {
@@ -384,7 +395,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                     this.storageEUMAX = 0;
                 }
             }
-        } else if (mode == 1) {
+        } else if (machineMode == 1) {
             // Generate Photon per int.MAX EU
             if (storageEUMAX > 0 || storageEU >= EUPerCriticalPhoton) {
                 long amount = storageEU / EUPerCriticalPhoton;
@@ -422,7 +433,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
-        if (mode == 1 || wirelessMode) {
+        if (machineMode == 1 || wirelessMode) {
             long gen = this.generateTickEU();
             storageEUMAX += gen / Integer.MAX_VALUE;
             storageEU += gen % Integer.MAX_VALUE;
