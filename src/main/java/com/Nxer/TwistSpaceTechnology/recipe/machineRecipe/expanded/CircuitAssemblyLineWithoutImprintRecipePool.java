@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipePool.circuitItemsToWrapped;
 import static gregtech.api.recipe.RecipeMaps.circuitAssemblerRecipes;
-import static gregtech.api.util.GTUtility.areStacksEqual;
 import static gregtech.api.util.GTUtility.copyAmount;
 import static gregtech.api.util.GTUtility.copyAmountUnsafe;
 
@@ -12,12 +11,12 @@ import java.util.Objects;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
-import bartworks.system.material.CircuitGeneration.BWMetaItems;
-import bartworks.system.material.CircuitGeneration.CircuitImprintLoader;
 import bartworks.util.BWUtil;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
@@ -35,34 +34,37 @@ public class CircuitAssemblyLineWithoutImprintRecipePool implements IRecipePool 
 
     @Override
     public void loadRecipes() {
+        TST_ItemID IC2_Circuit = TST_ItemID
+            .create(GTModHandler.getModItem(Mods.IndustrialCraft2.ID, "itemPartCircuit", 1));
+        TST_ItemID IC2_AdvCircuit = TST_ItemID
+            .create(GTModHandler.getModItem(Mods.IndustrialCraft2.ID, "itemPartCircuitAdv", 1));
+        FluidStack SolderingAlloy = Materials.SolderingAlloy.getMolten(0);
+        FluidStack INDALLOY_140 = MaterialsAlloy.INDALLOY_140.getFluidStack(0);
+        FluidStack MUTATED_LIVING_SOLDER = MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(0);
+
         for (GTRecipe originalRecipe : circuitAssemblerRecipes.getAllRecipes()) {
             if (originalRecipe == null) continue;
             ItemStack output = originalRecipe.mOutputs[0];
-            boolean isOrePass = isCircuitOreDict(output);
+            // skip IC2 circuit
+            if (IC2_Circuit.equalItemStack(output) || IC2_AdvCircuit.equalItemStack(output)) continue;
+
+            // check fluid
+            if (!originalRecipe.mFluidInputs[0].isFluidEqual(SolderingAlloy)
+                && !originalRecipe.mFluidInputs[0].isFluidEqual(INDALLOY_140)
+                && !originalRecipe.mFluidInputs[0].isFluidEqual(MUTATED_LIVING_SOLDER)) continue;
+
+            // check output item whether is a circuit
             String unlocalizedName = output.getUnlocalizedName();
-            if (areStacksEqual(output, GTModHandler.getModItem(Mods.IndustrialCraft2.ID, "itemPartCircuit", 1))
-                || areStacksEqual(output, GTModHandler.getModItem(Mods.IndustrialCraft2.ID, "itemPartCircuitAdv", 1)))
-                continue;
-            if (isOrePass || unlocalizedName.contains("Circuit") || unlocalizedName.contains("circuit")) {
-                if (originalRecipe.mFluidInputs[0].isFluidEqual(Materials.SolderingAlloy.getMolten(0))
-                    || originalRecipe.mFluidInputs[0].isFluidEqual(MaterialsAlloy.INDALLOY_140.getFluidStack(0))
-                    || originalRecipe.mFluidInputs[0]
-                        .isFluidEqual(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(0))) {
+            if (!isCircuitOreDict(output) && !unlocalizedName.contains("Circuit")
+                && !unlocalizedName.contains("circuit")) continue;
 
-                    ItemStack imprintCircuit = BWMetaItems.getCircuitParts()
-                        .getStackWithNBT(CircuitImprintLoader.getTagFromStack(originalRecipe.mOutputs[0]), 0, 0);
-                    GTRecipeBuilder.builder()
-                        .itemInputs(ModifyInput(originalRecipe.mInputs.clone()))
-                        .fluidInputs(originalRecipe.mFluidInputs)
-                        .itemOutputs(
-                            copyAmountUnsafe(originalRecipe.mOutputs[0].stackSize * 16, originalRecipe.mOutputs[0]))
-                        // .special(imprintCircuit)
-                        .eut(originalRecipe.mEUt)
-                        .duration(originalRecipe.mDuration * 12)
-                        .addTo(GTCMRecipe.advCircuitAssemblyLineRecipes);
-                }
-            }
-
+            GTRecipeBuilder.builder()
+                .itemInputs(ModifyInput(originalRecipe.mInputs.clone()))
+                .fluidInputs(originalRecipe.mFluidInputs)
+                .itemOutputs(copyAmountUnsafe(originalRecipe.mOutputs[0].stackSize * 16, originalRecipe.mOutputs[0]))
+                .eut(originalRecipe.mEUt)
+                .duration(originalRecipe.mDuration * 12)
+                .addTo(GTCMRecipe.advCircuitAssemblyLineRecipes);
         }
 
     }
