@@ -454,8 +454,8 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // #tr Tooltip_AdvCircuitAssemblyLine_MachineType
-        // # Circuit Assembler
-        // #zh_CN 电路组装机
+        // # Circuit Assembly Line
+        // #zh_CN 电路装配线
         tt.addMachineType(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine_MachineType"))
             // #tr Tooltip_AdvCircuitAssemblyLine_Controller
             // # Controller block for the Advanced Circuit Assembly Line
