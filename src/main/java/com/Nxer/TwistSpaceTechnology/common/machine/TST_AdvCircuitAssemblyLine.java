@@ -476,15 +476,15 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             .addInputBus(textUseBlueprint, 2)
             .addInputHatch(textUseBlueprint, 3)
             .addOutputBus(textEndSides, 2)
-            // #tr Tooltip_AdvCircuitAssemblyLine.4
+            // #tr Tooltip_AdvCircuitAssemblyLine.6
             // # Imprint circuit hatch
             // #zh_CN 压印电路仓
-            // #tr Tooltip_AdvCircuitAssemblyLine.5
+            // #tr Tooltip_AdvCircuitAssemblyLine.7
             // # Any grate machine casing
             // #zh_CN 任意格栅机械方块
             .addOtherStructurePart(
-                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.4"),
-                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.5"),
+                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.6"),
+                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.7"),
                 5)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher(ModName);
