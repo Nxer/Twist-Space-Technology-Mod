@@ -49,6 +49,7 @@ public class CircuitAssemblyLineWithoutImprintRecipePool implements IRecipePool 
             if (IC2_Circuit.equalItemStack(output) || IC2_AdvCircuit.equalItemStack(output)) continue;
 
             // check fluid
+            if (originalRecipe.mFluidOutputs == null || originalRecipe.mFluidOutputs.length < 1) continue;
             if (!originalRecipe.mFluidInputs[0].isFluidEqual(SolderingAlloy)
                 && !originalRecipe.mFluidInputs[0].isFluidEqual(INDALLOY_140)
                 && !originalRecipe.mFluidInputs[0].isFluidEqual(MUTATED_LIVING_SOLDER)) continue;
