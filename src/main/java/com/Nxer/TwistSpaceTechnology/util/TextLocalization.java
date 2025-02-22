@@ -631,7 +631,7 @@ public class TextLocalization {
     public static final String NamePhysicalFormSwitcher = TextEnums.tr("NamePhysicalFormSwitcher");
 
     // #tr Tooltip_PhysicalFormSwitcher_MachineType
-    // # Fluid Solidifier | Fluid Extractor | Forge Hammer
+    // # Fluid Solidifier | Fluid Extractor
     // #zh_CN 流体固化器 | 流体提取机
     public static final String Tooltip_PhysicalFormSwitcher_MachineType = TextEnums.tr("Tooltip_PhysicalFormSwitcher_MachineType");
 
