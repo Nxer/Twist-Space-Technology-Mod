@@ -470,9 +470,17 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             // #zh_CN 拥有64倍超频上限的电路装配线
             .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.2"))
             // #tr Tooltip_AdvCircuitAssemblyLine.3
+            // # Allows installation of one 64A energy hatch
+            // #zh_CN 允许安装一个64A能源仓
+            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.3"))
+            // #tr Tooltip_AdvCircuitAssemblyLine.4
+            // # Allows installation of crafting input buffer
+            // #zh_CN 允许安装样板输入总成
+            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.4"))
+            // #tr Tooltip_AdvCircuitAssemblyLine.5
             // # Install imprint circuit hatch for more recipe support
             // #zh_CN 安装压印电路仓以获得更多配方支持
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.3"))
+            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.5"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
