@@ -196,7 +196,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        machineMode = aNBT.getBoolean("fluidMode") ? 0 : 1;
+        machineMode = aNBT.getBoolean("fluidMode") ? 1 : 0;
     }
 
     @Override
