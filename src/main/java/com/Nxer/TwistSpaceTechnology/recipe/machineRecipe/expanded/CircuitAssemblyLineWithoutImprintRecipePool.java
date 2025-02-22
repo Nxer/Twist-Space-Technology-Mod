@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
