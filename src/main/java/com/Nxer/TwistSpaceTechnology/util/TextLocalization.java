@@ -202,6 +202,11 @@ public class TextLocalization {
     // #zh_CN 上下侧的中央区域
     public static final String textCenterOfUDSides = TextEnums.tr("textCenterOfUDSides");
 
+    // #tr textEndSides
+    // # Machine end
+    // #zh_CN 机器末端
+    public static final String textEndSides = TextEnums.tr("textEndSides");
+
     // #tr StructureTooComplex
     // # The structure is too complex!
     // #zh_CN 结构太复杂了！

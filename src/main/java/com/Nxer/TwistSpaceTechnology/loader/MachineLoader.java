@@ -29,6 +29,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvCircuitAssemblyLine;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BeeEngineer;
@@ -76,6 +77,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
@@ -514,6 +516,18 @@ public final class MachineLoader {
             GTCMItemList.ProcessingArray
                 .set(new TST_ProcessingArray(19066, "NameProcessingArray", TextEnums.tr("NameProcessingArray")));
         }
+
+        if (Config.Enable_AdvCircuitAssemblyLine) {
+            // #tr NameAdvCircuitAssemblyLine
+            // # Advanced Circuit Assembly Line
+            // #zh_CN 进阶电路装配线
+            GTCMItemList.AdvCircuitAssemblyLine.set(
+                new TST_AdvCircuitAssemblyLine(
+                    19067,
+                    "NameAdvCircuitAssemblyLine",
+                    TextEnums.tr("NameAdvCircuitAssemblyLine")));
+        }
+
         // endregion
 
         // region Single block Machine
@@ -778,6 +792,26 @@ public final class MachineLoader {
         // #zh_CN 固化仓(IV)
         GTCMItemList.SolidifyHatch_IV.set(
             new GT_MetaTileEntity_Hatch_Solidify(18793, "NameSolidifyHatchIV", TextEnums.tr("NameSolidifyHatchIV"), 5));
+
+        // #tr NameCircuitImprintHatchT2
+        // # Imprint Circuit Hatch T2
+        // #zh_CN 压印电路仓T2
+        GTCMItemList.CircuitImprintHatchT2.set(
+            new TST_CircuitImprintHatch(
+                18792,
+                "NameCircuitImprintHatchT2",
+                TextEnums.tr("NameCircuitImprintHatchT2"),
+                8));
+
+        // #tr NameCircuitImprintHatchT1
+        // # Imprint Circuit Hatch T1
+        // #zh_CN 压印电路仓T1
+        GTCMItemList.CircuitImprintHatchT1.set(
+            new TST_CircuitImprintHatch(
+                18791,
+                "NameCircuitImprintHatchT1",
+                TextEnums.tr("NameCircuitImprintHatchT1"),
+                5));
 
         // region Modularized Stuff
 
