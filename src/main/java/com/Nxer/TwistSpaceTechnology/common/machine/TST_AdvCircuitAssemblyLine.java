@@ -241,6 +241,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         repairMachine();
         mCircuitImprintHatches.clear();
         this.length = 1;
+        maxVoltageAllow = 0;
 
         // check the main layer.
         if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
@@ -274,17 +275,22 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         if (!mExoticEnergyHatches.isEmpty()) {
             if (!mEnergyHatches.isEmpty()) return false;
             if (mExoticEnergyHatches.size() > 1) return false;
-            return mExoticEnergyHatches.get(0)
-                .maxWorkingAmperesIn() <= 64;
-        }
+            if (mExoticEnergyHatches.get(0).maxWorkingAmperesIn() > 64) return false;
 
-        return signal;
+        } else if (!mEnergyHatches.isEmpty()) {
+            if (mEnergyHatches.size() > 1) return false;
+        } else return false;
+
+        maxVoltageAllow = getMaxInputVoltage();
+
+        return maxVoltageAllow > 0;
     }
 
     // endregion
 
     // region Processing Logic
     private static ItemStack circuitImprint;
+    protected long maxVoltageAllow = 0;
     int length = 1;
     ArrayList<TST_CircuitImprintHatch> mCircuitImprintHatches = new ArrayList<>();
     HashSet<NBTTagCompound> circuitType = new HashSet<>();
@@ -327,12 +333,14 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setInteger("length", length);
+        aNBT.setLong("maxVoltageAllow", maxVoltageAllow);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         length = aNBT.getInteger("length");
+        maxVoltageAllow = aNBT.getLong("maxVoltageAllow");
     }
 
     @Override
@@ -363,33 +371,14 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
-    public ArrayList<ItemStack> getStoredInputs() {
-        ArrayList<ItemStack> rList = new ArrayList<>();
-        for (MTEHatchInputBus tHatch : validMTEList(mInputBusses)) {
-            tHatch.mRecipeMap = this.getRecipeMap();
-            for (int i = 0; i < tHatch.getBaseMetaTileEntity()
-                .getSizeInventory(); i++) {
-                if (tHatch.getBaseMetaTileEntity()
-                    .getStackInSlot(i) != null) {
-                    rList.add(
-                        tHatch.getBaseMetaTileEntity()
-                            .getStackInSlot(i));
-                    break;
-                }
-            }
-        }
-        return rList;
-    }
-
-    @Override
     protected ProcessingLogic createProcessingLogic() {
         return new ProcessingLogic() {
 
             @Override
             @Nonnull
             protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                if (recipe.mEUt > TST_AdvCircuitAssemblyLine.this.getMaxInputVoltage()) {
-                    return CheckRecipeResultRegistry.NO_RECIPE;
+                if (recipe.mEUt > maxVoltageAllow) {
+                    return CheckRecipeResultRegistry.insufficientPower(recipe.mEUt);
                 }
 
                 NBTTagCompound outputTag = CircuitImprintLoader.getTagFromStack(recipe.mOutputs[0]);
@@ -470,16 +459,16 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             // #zh_CN 拥有64倍超频上限的电路装配线
             .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.2"))
             // #tr Tooltip_AdvCircuitAssemblyLine.3
-            // # Allows installation of one 64A energy hatch
-            // #zh_CN 允许安装一个64A能源仓
+            // # Allows installation of one energy hatch with max 64 amp limitation
+            // #zh_CN 允许安装一个能源仓, 最高64A电流
             .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.3"))
             // #tr Tooltip_AdvCircuitAssemblyLine.4
             // # Allows installation of crafting input buffer
-            // #zh_CN 允许安装样板输入总成
+            // #zh_CN 允许使用样板输入总成
             .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.4"))
             // #tr Tooltip_AdvCircuitAssemblyLine.5
-            // # Install imprint circuit hatch for more recipe support
-            // #zh_CN 安装压印电路仓以获得更多配方支持
+            // # Install imprint circuit hatch for more recipe support (more than one hatch is not allowed)
+            // #zh_CN 安装压印电路仓以获得更多配方支持 (只允许安装一个压印电路仓)
             .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.5"))
             .addSeparator()
             .addInfo(StructureTooComplex)
