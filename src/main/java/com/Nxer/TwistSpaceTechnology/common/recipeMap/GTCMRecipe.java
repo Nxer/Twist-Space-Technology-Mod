@@ -401,7 +401,6 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.AdvCircuitAssemblyLine.get(1)))
         .progressBar(GTUITextures.PROGRESSBAR_CIRCUIT_ASSEMBLER)
         .disableRegisterNEI()
-        .useSpecialSlot()
         .disableOptimize()
         .build();
 }
