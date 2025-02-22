@@ -259,11 +259,9 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         }
 
         // check the end layer
-        boolean signal = checkPiece(
-            STRUCTURE_PIECE_END,
-            baseHorizontalOffSet - this.length,
-            baseVerticalOffSet,
-            baseDepthOffSet);
+        if (!checkPiece(STRUCTURE_PIECE_END, baseHorizontalOffSet - this.length, baseVerticalOffSet, baseDepthOffSet)) {
+            return false;
+        }
 
         this.length++;
         // only one imprint circuit hatch allowed
