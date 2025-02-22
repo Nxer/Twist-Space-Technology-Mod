@@ -674,18 +674,22 @@ public class GTCMMachineRecipes implements IRecipePool {
 
         // MiracleTop
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTCMItemList.AdvCircuitAssemblyLine.get(1))
+            .metadata(
+                RESEARCH_ITEM,
+                Config.Enable_AdvCircuitAssemblyLine ? GTCMItemList.AdvCircuitAssemblyLine.get(1)
+                    : GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 12735))
             .metadata(RESEARCH_TIME, 2 * HOURS)
             .itemInputs(
-                GTCMItemList.AdvCircuitAssemblyLine.get(64),
+                Config.Enable_AdvCircuitAssemblyLine ? GTCMItemList.AdvCircuitAssemblyLine.get(64)
+                    : GTModHandler.getModItem("gregtech", "gt.blockmachines", 64, 12735),
                 Component_Assembly_Line.get(64),
                 SpaceWarper.get(64),
                 MaterialsUEVplus.TranscendentMetal.getNanite(48),
 
                 eM_Coil.get(64),
                 getCircuits(Materials.UMV, 32),
-                new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64},
-                new Object[]{OrePrefixes.circuit.get(Materials.Optical), 64},
+                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 64 },
+                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 64 },
 
                 OpticalSOC.get(64),
                 GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
@@ -695,14 +699,12 @@ public class GTCMMachineRecipes implements IRecipePool {
                 eM_Spacetime.get(16),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.TranscendentMetal, 64),
                 ItemList.Field_Generator_UIV.get(32),
-                GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Infinity, 64)
-            )
+                GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Infinity, 64))
             .fluidInputs(
                 new FluidStack(solderPlasma, 1024 * 144),
                 MaterialsUEVplus.SpaceTime.getMolten(16 * 144),
                 Materials.SuperconductorUIVBase.getMolten(64 * 144),
-                Materials.SuperconductorUEVBase.getMolten(512 * 144)
-            )
+                Materials.SuperconductorUEVBase.getMolten(512 * 144))
             .itemOutputs(GTCMItemList.MiracleTop.get(1))
             .eut(RECIPE_UMV)
             .duration(20 * 3600)
