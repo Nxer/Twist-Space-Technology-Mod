@@ -84,9 +84,9 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     // endregion
 
     // region Structure
-    private final int baseHorizontalOffSet = 0;
-    private final int baseVerticalOffSet = 1;
-    private final int baseDepthOffSet = 0;
+    private static final int baseHorizontalOffSet = 0;
+    private static final int baseVerticalOffSet = 1;
+    private static final int baseDepthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainAdvCAL";
     private static final String STRUCTURE_PIECE_MIDDLE = "middleAdvCAL";
     private static final String STRUCTURE_PIECE_MIDDLE_HINT = "middleHintAdvCAL";
