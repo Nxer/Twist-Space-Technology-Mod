@@ -82,7 +82,7 @@ public class CircuitAssemblyLineWithoutImprintRecipePool implements IRecipePool 
                 if (GTUtility.areStacksEqual(entry.getKey(), aStack)) {
                     // not modify to wrap circuit
                     if (Item.itemRegistry.getNameForObject(
-                        entry.getKey()
+                        entry.getValue()
                             .getItem())
                         .contains(Mods.GoodGenerator.ID)) break;
                     inputItems.add(copyAmount(aStack.stackSize, entry.getValue()));
