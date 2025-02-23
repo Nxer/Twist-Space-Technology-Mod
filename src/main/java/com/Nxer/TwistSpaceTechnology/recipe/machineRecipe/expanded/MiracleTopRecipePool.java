@@ -109,7 +109,6 @@ public class MiracleTopRecipePool implements IRecipePool {
 
     private void loadCircuitAssemblerRecipes() {
         HashSet<TST_ItemID> IgnoreRecipeOutputs = new HashSet<>();
-        // HashSet<TST_ItemID> NotModifyRecipeOutputs = new HashSet<>();
 
         IgnoreRecipeOutputs
             .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("appliedenergistics2", "item.ItemMultiPart", 1, 220)));
@@ -174,11 +173,19 @@ public class MiracleTopRecipePool implements IRecipePool {
         }
 
         for (GTRecipe aRecipe : recipeCache) {
-            // if (NotModifyRecipeOutputs.contains(TST_ItemID.createNoNBT(aRecipe.mOutputs[0])))
-            // addRecipeMT(addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe,false), 1, 1), 1));
-            // else
+            int IntegratedCircuitNum = 16;
+            for (ItemStack aStack : aRecipe.mInputs) {
+                if (aStack.getItem() ==ItemList.Circuit_Integrated.getItem()) {
+                    IntegratedCircuitNum += aStack.getItemDamage();
+                    if (IntegratedCircuitNum > 24) IntegratedCircuitNum -= 24;
+                    break;
+                }
+            }
+
             addRecipeMT(
-                addIntegratedCircuitToRecipe(reduplicateRecipe(ModifyRecipe(aRecipe, false), 3, 3, 4, 4, 1, 3), 16));
+                addIntegratedCircuitToRecipe(
+                    reduplicateRecipe(ModifyRecipe(aRecipe, false), 3, 3, 4, 4, 1, 3),
+                    IntegratedCircuitNum));
         }
 
     }
