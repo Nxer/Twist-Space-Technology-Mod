@@ -1944,3 +1944,6 @@ Tooltip_AdvCircuitAssemblyLine.5=Install imprint circuit hatch for more recipe s
 textEndSides=Machine end
 Tooltip_AdvCircuitAssemblyLine.6=Imprint circuit hatch
 Tooltip_AdvCircuitAssemblyLine.7=Any grate machine casing
+tile.MetaBlockCasing01.15.name=Refractory Magna Casing
+Tooltip_RefractoryMagmaCasing=§6Withstands the inferno!
+NameSwelegfyrBlastFurnace=Swelegfyr Blast Furnace

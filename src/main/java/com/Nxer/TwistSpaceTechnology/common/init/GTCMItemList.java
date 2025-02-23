@@ -213,6 +213,7 @@ public enum GTCMItemList {
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
     ReinforcedBedrockCasing,
+    RefractoryMagmaCasing,
     BloodyCasing1,
     BloodyCasing2,
     // endregion
@@ -278,6 +279,7 @@ public enum GTCMItemList {
     GiantVacuumDryingFurnace,
     ProcessingArray,
     AdvCircuitAssemblyLine,
+    SwelegfyrBlastFurnace,
     // endregion
 
     // region Modularized Machines

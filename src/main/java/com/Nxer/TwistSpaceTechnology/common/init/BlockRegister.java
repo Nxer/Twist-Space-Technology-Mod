@@ -202,6 +202,16 @@ public class BlockRegister {
             MetaBlockCasing01
                 .registerVariantWithTooltips(14, new String[] { TextEnums.tr("Tooltip_ReinforcedBedrockCasing") }));
 
+        // #tr tile.MetaBlockCasing01.15.name
+        // # Refractory Magna Casing
+        // #zh_CN 耐火炽焱机械方块
+        // #tr Tooltip_RefractoryMagmaCasing
+        // # {\GOLD}Withstands the inferno!
+        // #zh_CN {\GOLD}御火而生!
+        GTCMItemList.RefractoryMagmaCasing.set(
+            MetaBlockCasing01
+                .registerVariantWithTooltips(15, new String[] { TextEnums.tr("Tooltip_RefractoryMagmaCasing") }));
+
         // #tr tile.MetaBlockCasing02.0.name
         // # Gore Casing
         // #zh_CN 凝血机械方块

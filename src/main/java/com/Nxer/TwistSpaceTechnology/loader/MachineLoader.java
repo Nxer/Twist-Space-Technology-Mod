@@ -62,6 +62,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_ProcessingArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
@@ -527,6 +528,17 @@ public final class MachineLoader {
                     "NameAdvCircuitAssemblyLine",
                     TextEnums.tr("NameAdvCircuitAssemblyLine")));
         }
+
+//        if (Config.Enable_SwelegfyrBlastFurnace) {
+//            // #tr NameSwelegfyrBlastFurnace
+//            // # Swelegfyr Blast Furnace
+//            // #zh_CN 熯焱高炉
+//            GTCMItemList.SwelegfyrBlastFurnace.set(
+//                new TST_SwelegfyrBlastFurnace(
+//                    19068,
+//                    "NameSwelegfyrBlastFurnace",
+//                    TextEnums.tr("NameSwelegfyrBlastFurnace")));
+//        }
 
         // endregion
 

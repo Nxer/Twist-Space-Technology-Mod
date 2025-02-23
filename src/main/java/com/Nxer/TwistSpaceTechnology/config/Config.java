@@ -475,9 +475,14 @@ public class Config {
     public static boolean Enable_ProcessingArray = true;
     // endregion
 
-    // region Processing Array
+    // region Advanced Circuit Assembly Line
     public static boolean Enable_AdvCircuitAssemblyLine = true;
     // endregion
+
+    // region Swelegfyr Blast Furnace
+    public static boolean Enable_SwelegfyrBlastFurnace = true;
+    // endregion
+
 
     // region Mega Crafting Center
     public static boolean Enable_MegaCraftingCenter = true;

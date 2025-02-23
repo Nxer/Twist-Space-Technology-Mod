@@ -1944,3 +1944,6 @@ Tooltip_AdvCircuitAssemblyLine.5=安装压印电路仓以获得更多配方支�
 textEndSides=机器末端
 Tooltip_AdvCircuitAssemblyLine.6=压印电路仓
 Tooltip_AdvCircuitAssemblyLine.7=任意格栅机械方块
+tile.MetaBlockCasing01.15.name=耐火炽焱机械方块
+Tooltip_RefractoryMagmaCasing=§6御火而生!
+NameSwelegfyrBlastFurnace=熯焱高炉
