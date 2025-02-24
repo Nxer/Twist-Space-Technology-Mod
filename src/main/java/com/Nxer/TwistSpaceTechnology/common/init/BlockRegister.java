@@ -203,14 +203,14 @@ public class BlockRegister {
                 .registerVariantWithTooltips(14, new String[] { TextEnums.tr("Tooltip_ReinforcedBedrockCasing") }));
 
         // #tr tile.MetaBlockCasing01.15.name
-        // # Refractory Magna Casing
-        // #zh_CN 耐火炽焱机械方块
-        // #tr Tooltip_RefractoryMagmaCasing
+        // # Swelegfyr Casing
+        // #zh_CN 熯焱机械方块
+        // #tr Tooltip_SwelegfyrCasing
         // # {\GOLD}Withstands the inferno!
         // #zh_CN {\GOLD}御火而生!
-        GTCMItemList.RefractoryMagmaCasing.set(
+        GTCMItemList.SwelegfyrCasing.set(
             MetaBlockCasing01
-                .registerVariantWithTooltips(15, new String[] { TextEnums.tr("Tooltip_RefractoryMagmaCasing") }));
+                .registerVariantWithTooltips(15, new String[] { TextEnums.tr("Tooltip_SwelegfyrCasing") }));
 
         // #tr tile.MetaBlockCasing02.0.name
         // # Gore Casing
@@ -221,6 +221,11 @@ public class BlockRegister {
         // # Ichor Draconic Block
         // #zh_CN 血腥龙块
         GTCMItemList.BloodyCasing2.set(MetaBlockCasing02.registerVariant(1));
+
+        // #tr tile.MetaBlockCasing02.2.name
+        // # Reinforced Iridium Alloy Casing
+        // #zh_CN 强化铱合金机械方块
+        GTCMItemList.ReinforcedIridiumAlloyCasing.set(MetaBlockCasing02.registerVariant(2));
 
         // region SpaceTimeOscillator
 

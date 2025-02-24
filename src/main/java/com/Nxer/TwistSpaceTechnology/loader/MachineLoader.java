@@ -529,16 +529,16 @@ public final class MachineLoader {
                     TextEnums.tr("NameAdvCircuitAssemblyLine")));
         }
 
-//        if (Config.Enable_SwelegfyrBlastFurnace) {
-//            // #tr NameSwelegfyrBlastFurnace
-//            // # Swelegfyr Blast Furnace
-//            // #zh_CN 熯焱高炉
-//            GTCMItemList.SwelegfyrBlastFurnace.set(
-//                new TST_SwelegfyrBlastFurnace(
-//                    19068,
-//                    "NameSwelegfyrBlastFurnace",
-//                    TextEnums.tr("NameSwelegfyrBlastFurnace")));
-//        }
+        if (Config.Enable_SwelegfyrBlastFurnace) {
+            // #tr NameSwelegfyrBlastFurnace
+            // # Swelegfyr Blast Furnace
+            // #zh_CN 熯焱高炉
+            GTCMItemList.SwelegfyrBlastFurnace.set(
+                new TST_SwelegfyrBlastFurnace(
+                    19068,
+                    "NameSwelegfyrBlastFurnace",
+                    TextEnums.tr("NameSwelegfyrBlastFurnace")));
+        }
 
         // endregion
 

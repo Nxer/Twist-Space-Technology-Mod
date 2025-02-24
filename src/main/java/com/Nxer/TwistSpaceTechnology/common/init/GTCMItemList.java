@@ -213,9 +213,10 @@ public enum GTCMItemList {
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
     ReinforcedBedrockCasing,
-    RefractoryMagmaCasing,
+    SwelegfyrCasing,
     BloodyCasing1,
     BloodyCasing2,
+    ReinforcedIridiumAlloyCasing,
     // endregion
 
     // region Machines
