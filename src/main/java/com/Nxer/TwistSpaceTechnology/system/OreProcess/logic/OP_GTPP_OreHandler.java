@@ -6,6 +6,7 @@ import static gtPlusPlus.core.material.MaterialMisc.RARE_EARTH_HIGH;
 import static gtPlusPlus.core.material.MaterialMisc.RARE_EARTH_LOW;
 import static gtPlusPlus.core.material.MaterialMisc.RARE_EARTH_MID;
 import static gtPlusPlus.core.material.MaterialsAlloy.KOBOLDITE;
+import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.RUNITE;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -44,6 +45,7 @@ public class OP_GTPP_OreHandler {
                     .info("Catch an IllegalAccessException in OP_GTPP_OreHandler.processGTPPOreRecipes");
             }
         }
+        gtppOres.add(RUNITE);
         return gtppOres;
     }
 
