@@ -1386,9 +1386,9 @@ public class GTCMMachineRecipes implements IRecipePool {
                 ItemList.Casing_Processor.get(3),
                 ItemList.Machine_IV_Boxinator.get(1),
 
-                new Object[]{OrePrefixes.circuit.get(Materials.Elite), 1},
-                new Object[]{OrePrefixes.circuit.get(Materials.Data), 2},
-                new Object[]{OrePrefixes.circuit.get(Materials.Advanced), 4},
+                GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.IV), 1),
+                GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.EV), 2),
+                GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.HV), 4),
 
                 GTOreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Titanium, 4),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 8))
@@ -3020,9 +3020,9 @@ public class GTCMMachineRecipes implements IRecipePool {
                 .metadata(RESEARCH_TIME, HOURS)
                 .itemInputs(
                     copyAmount(16,ItemRegistry.cal),
-                    GTOreDictUnificator.get(OrePrefixes.circuit,Materials.ZPM,16),
-                    GTOreDictUnificator.get(OrePrefixes.circuit,Materials.LuV ,32),
-                    GTOreDictUnificator.get(OrePrefixes.circuit,Materials.IV,64),
+                    new Object[] {OrePrefixes.circuit.get(Materials.ZPM), 16},
+                    new Object[] {OrePrefixes.circuit.get(Materials.LuV), 32},
+                    new Object[] {OrePrefixes.circuit.get(Materials.IV), 64},
 
                     ItemList.Automation_ChestBuffer_ZPM.get(1)
                 )
