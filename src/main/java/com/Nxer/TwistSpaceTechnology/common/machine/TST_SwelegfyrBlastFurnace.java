@@ -25,26 +25,28 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.gtnewhorizons.modularui.api.drawable.UITexture;
-import com.gtnewhorizons.modularui.api.screen.ModularWindow;
-import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
-import com.gtnewhorizons.modularui.common.widget.DrawableWidget;
-import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
-import com.gtnewhorizons.modularui.common.widget.Scrollable;
-import com.gtnewhorizons.modularui.common.widget.SlotWidget;
-import gregtech.api.gui.modularui.GTUITextures;
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.modularui.api.drawable.UITexture;
 
 import bartworks.API.BorosilicateGlass;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -55,14 +57,22 @@ import gregtech.api.enums.Mods;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
 import gtPlusPlus.core.block.ModBlocks;
+import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 
@@ -232,7 +242,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .dot(3)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
-                .addElement('Z', ofBlock(TFFluids.fluidPyrotheum.getBlock(), 15))
+                .addElement('Z', ofBlock(TFFluids.fluidPyrotheum.getBlock(), 0))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -290,20 +300,26 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        glassTier = 0;
-        if (checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
-            return checkPiece(STRUCTURE_PIECE_FLAME_T2, flameHorizontalOffSet, flameVerticalOffSet, flameDepthOffSet);
-        } else if (checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
-            return checkPiece(STRUCTURE_PIECE_FLAME_T1, flameHorizontalOffSet, flameVerticalOffSet, flameDepthOffSet);
-        }
-        return false;
+        this.mHeatingCapacity = 0;
+        this.glassTier = 0;
+        this.setCoilLevel(HeatingCoilLevel.None);
+        if (!checkPiece("mainT" + controllerTier, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
+            return false;
+
+        return !mInputHatches.isEmpty();
     }
 
     // region Processing Logic
     byte glassTier = 0;
     byte controllerTier = 1;
+    boolean setFlameFinish = false;
+    boolean clearFlameFinish = false;
+    boolean isPassiveMode = false;
+    boolean isRapidHeating = false;
+    ItemStack UpgradeItem = null;
     private MTEHatchInput mFlameHatch;
     public HeatingCoilLevel coilLevel;
+    private int mHeatingCapacity;
 
     public HeatingCoilLevel getCoilLevel() {
         return coilLevel;
@@ -311,6 +327,61 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     public void setCoilLevel(HeatingCoilLevel coilLevel) {
         this.coilLevel = coilLevel;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        clearFlameFinish = true;
+        if (UpgradeItem == null) UpgradeItem = GTCMItemList.TestItem0.get(1);
+    }
+
+    @Override
+    public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, ForgeDirection side,
+        float aX, float aY, float aZ) {
+        if (controllerTier == 1 && !aPlayer.isSneaking()) {
+            ItemStack heldItem = aPlayer.getHeldItem();
+            if (GTUtility.areStacksEqual(GTCMItemList.TestItem0.get(1), heldItem)) {
+                controllerTier = 2;
+                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
+                if (getBaseMetaTileEntity().isServerSide()) {
+                    markDirty();
+                    aPlayer.inventory.markDirty();
+                    // schedule a structure check
+                    mUpdated = true;
+                }
+                if (setFlameFinish) setRemoveFlame();
+                return true;
+            }
+        }
+        return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
+    }
+
+    private boolean setRemoveFlame() {
+
+        IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
+        String[][] StructureDef = controllerTier > 1 ? shapeFlameT2 : shapeFlameT1;
+        Block Air = Blocks.air;
+        Block Flame = TFFluids.fluidPyrotheum.getBlock();
+        int flameAmount = 1000;
+        int OffSetX = flameHorizontalOffSet;
+        int OffSetY = flameVerticalOffSet;
+        int OffSetZ = flameDepthOffSet;
+        if (clearFlameFinish) {
+            if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), false)) return false;
+            drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), true);
+            clearFlameFinish = false;
+            TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Flame);
+            setFlameFinish = true;
+            return true;
+        } else if (setFlameFinish) {
+            // clear will not return existing pyrotheum
+            setFlameFinish = false;
+            TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Air);
+            clearFlameFinish = true;
+            return true;
+        }
+        return false;
     }
 
     public boolean addFlameHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
@@ -324,6 +395,12 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected IAlignmentLimits getInitialAlignmentLimits() {
+        // only can face to X, Z direction
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
     }
 
     @Override
@@ -344,7 +421,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected float getSpeedBonus() {
-        return 1;
+        return (float) (1 / 4.82);
     }
 
     @Override
@@ -367,6 +444,65 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     public String getMachineModeName(int mode) {
         return StatCollector.translateToLocal("Swelegfyr.modeMsg." + mode);
     }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new ProcessingLogic() {
+
+            @Nonnull
+            @Override
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                return super.createOverclockCalculator(recipe).setRecipeHeat(recipe.mSpecialValue)
+                    .setMachineHeat(TST_SwelegfyrBlastFurnace.this.mHeatingCapacity)
+                    .setHeatOC(true)
+                    .setHeatDiscount(true);
+            }
+
+            @Override
+            @Nonnull
+            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+                int mRecipeTier = GTUtility.getTier(recipe.mEUt);
+                if (glassTier < 12 && glassTier < mRecipeTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTier);
+                }
+
+                if (clearFlameFinish || !setFlameFinish) return SimpleCheckRecipeResult.ofFailure("no_flame");
+
+                return recipe.mSpecialValue <= mHeatingCapacity ? CheckRecipeResultRegistry.SUCCESSFUL
+                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+            }
+
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide() && controllerTier > 1) {
+            if (!checkStructure(true)) {
+                GTUtility.sendChatToPlayer(
+                    aPlayer,
+                    StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
+                return;
+            } else {
+                if (setRemoveFlame()) {
+                    // #tr SBF.Msg.setFlame
+                    // # Pyrotheum placed
+                    // #zh_CN 炽焱填充完毕
+                    if (setFlameFinish)
+                        GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("SBF.Msg.setFlame"));
+                    // #tr SBF.Msg.clearFlame
+                    // # Pyrotheum cleared
+                    // #zh_CN 炽焱清除完毕
+                    if (clearFlameFinish)
+                        GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("SBF.Msg.clearFlame"));
+
+                }
+            }
+        }
+        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+    }
+
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
