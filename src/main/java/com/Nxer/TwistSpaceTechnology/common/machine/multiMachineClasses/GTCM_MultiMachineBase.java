@@ -88,7 +88,8 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     // region Processing Logic
 
     /**
-     * Default parameters. If these parameter is only confirmed by machine structure, they should be calculated in {@link #checkMachine(IGregTechTileEntity, ItemStack)}.
+     * Default parameters. If these parameter is only confirmed by machine structure, they should be calculated in
+     * {@link #checkMachine(IGregTechTileEntity, ItemStack)}.
      */
     protected boolean enablePerfectOverclock = false;
     protected int maxParallel = 1;
