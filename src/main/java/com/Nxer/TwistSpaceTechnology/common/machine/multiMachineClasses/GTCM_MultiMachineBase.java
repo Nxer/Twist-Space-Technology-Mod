@@ -88,6 +88,34 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     // region Processing Logic
 
     /**
+     * Default parameters. If these parameter is only confirmed by machine structure, they should be calculated in {@link #checkMachine(IGregTechTileEntity, ItemStack)}.
+     */
+    protected boolean enablePerfectOverclock = false;
+    protected int maxParallel = 1;
+    protected float euModifier = 1;
+    protected float speedBonus = 1;
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setBoolean("enablePerfectOverclock", enablePerfectOverclock);
+        aNBT.setInteger("maxParallel", maxParallel);
+        aNBT.setFloat("euModifier", euModifier);
+        aNBT.setFloat("speedBonus", speedBonus);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        enablePerfectOverclock = aNBT.getBoolean("enablePerfectOverclock");
+        maxParallel = Math.max(aNBT.getInteger("maxParallel"), 1);
+        euModifier = aNBT.getFloat("euModifier");
+        if (euModifier <= 0) euModifier = 1;
+        speedBonus = aNBT.getFloat("speedBonus");
+        if (speedBonus <= 0) speedBonus = 1;
+    }
+
+    /**
      * Creates logic to run recipe check based on recipemap. This runs only once, on class instantiation.
      * <p>
      * If this machine doesn't use recipemap or does some complex things, override {@link #checkProcessing()}.
@@ -115,7 +143,10 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      *
      * @return If true, enable Perfect Overclock.
      */
-    protected abstract boolean isEnablePerfectOverclock();
+    @ApiStatus.OverrideOnly
+    protected boolean isEnablePerfectOverclock() {
+        return enablePerfectOverclock;
+    }
 
     /**
      * Proxy Standard Eu Modifier Supplier.
@@ -124,7 +155,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      */
     @ApiStatus.OverrideOnly
     protected float getEuModifier() {
-        return 1.0F;
+        return euModifier;
     }
 
     /**
@@ -133,7 +164,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return The value (or a method to get the value) of Speed Multiplier (dynamically) .
      */
     @ApiStatus.OverrideOnly
-    protected abstract float getSpeedBonus();
+    protected float getSpeedBonus() {
+        return speedBonus;
+    }
 
     /**
      * Proxy Standard Parallel Supplier.
@@ -141,7 +174,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return The value (or a method to get the value) of Max Parallel (dynamically) .
      */
     @ApiStatus.OverrideOnly
-    protected abstract int getMaxParallelRecipes();
+    protected int getMaxParallelRecipes() {
+        return maxParallel;
+    }
 
     /**
      * Limit the max parallel to prevent overflow.
