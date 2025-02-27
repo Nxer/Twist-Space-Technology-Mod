@@ -223,8 +223,8 @@ public class BlockRegister {
         GTCMItemList.BloodyCasing2.set(MetaBlockCasing02.registerVariant(1));
 
         // #tr tile.MetaBlockCasing02.2.name
-        // # Reinforced Iridium Alloy Casing
-        // #zh_CN 强化铱合金机械方块
+        // # Iridium-Reinforced Neutronium Casing
+        // #zh_CN 铱强化中子机械方块
         GTCMItemList.ReinforcedIridiumAlloyCasing.set(MetaBlockCasing02.registerVariant(2));
 
         // region SpaceTimeOscillator

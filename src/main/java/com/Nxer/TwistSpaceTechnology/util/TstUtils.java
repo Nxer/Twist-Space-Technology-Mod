@@ -361,7 +361,7 @@ public class TstUtils {
 
     /**
      * Like structure definition, select a character from the structure definition string array as the target to place
-     * blocks in the world, with the machine facing the XZ direction.
+     * blocks in the world, with the machine facing the XZ direction and not flipping.
      *
      * @param aBaseMetaTileEntity the machine
      * @param OffSetX             horizontalOffSet of the machine structure definition
@@ -396,13 +396,13 @@ public class TstUtils {
             xDir = 1;
             zDir = -1;
         }
-        int LengthX = StructureString[0].length;
+        int LengthX = StructureString[0][0].length();
         int LengthY = StructureString.length;
-        int LengthZ = StructureString[0][0].length();
+        int LengthZ = StructureString[0].length;
         for (int x = 0; x < LengthX; x++) {
             for (int z = 0; z < LengthZ; z++) {
                 for (int y = 0; y < LengthY; y++) {
-                    String ListStr = String.valueOf(StructureString[y][x].charAt(z));
+                    String ListStr = String.valueOf(StructureString[y][z].charAt(x));
                     if (!Objects.equals(ListStr, TargetString)) continue;
 
                     int aX = (OffSetX - x) * xDir;

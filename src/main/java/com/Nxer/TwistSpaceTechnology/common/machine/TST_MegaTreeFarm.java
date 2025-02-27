@@ -171,7 +171,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
         // You're right, but there will be water leakage
-        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && f.isNotFlipped();
     }
 
     @Override

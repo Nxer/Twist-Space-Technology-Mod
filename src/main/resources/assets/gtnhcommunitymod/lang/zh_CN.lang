@@ -1948,4 +1948,6 @@ tile.MetaBlockCasing01.15.name=熯焱机械方块
 Tooltip_RefractoryMagmaCasing=§6御火而生!
 NameSwelegfyrBlastFurnace=熯焱高炉
 Tooltip_SwelegfyrCasing=§6御火而生!
-tile.MetaBlockCasing02.2.name=强化铱合金机械方块
+tile.MetaBlockCasing02.2.name=强化铱中子机械方块
+SBF.Msg.setFlame=炽焱填充完毕
+SBF.Msg.clearFlame=炽焱清除完毕

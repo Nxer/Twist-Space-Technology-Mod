@@ -31,6 +31,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
@@ -302,11 +303,12 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         repairMachine();
         this.mHeatingCapacity = 0;
         this.glassTier = 0;
+        this.mFlameHatch=null;
         this.setCoilLevel(HeatingCoilLevel.None);
         if (!checkPiece("mainT" + controllerTier, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
             return false;
 
-        return !mInputHatches.isEmpty();
+        return mFlameHatch != null;
     }
 
     // region Processing Logic
@@ -357,18 +359,52 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
     }
 
+    @Override
+    public void onValueUpdate(byte aValue) {
+        controllerTier = aValue;
+    }
+
+    @Override
+    public byte getUpdateData() {
+        return controllerTier;
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mTier", controllerTier);
+        aNBT.setByte("mGlass", glassTier);
+        aNBT.setByte("mMode", (byte) machineMode);
+        aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
+        aNBT.setBoolean("setFlameFinish", setFlameFinish);
+        aNBT.setBoolean("clearFlameFinish", clearFlameFinish);
+
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        controllerTier = aNBT.getByte("mTier");
+        glassTier = aNBT.getByte("mGlass");
+        machineMode = aNBT.getByte("mMode");
+        mHeatingCapacity = aNBT.getInteger("mHeatingCapacity");
+        setFlameFinish = aNBT.getBoolean("setFlameFinish");
+        clearFlameFinish = aNBT.getBoolean("clearFlameFinish");
+
+    }
+
     private boolean setRemoveFlame() {
 
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
         String[][] StructureDef = controllerTier > 1 ? shapeFlameT2 : shapeFlameT1;
         Block Air = Blocks.air;
         Block Flame = TFFluids.fluidPyrotheum.getBlock();
-        int flameAmount = 1000;
+        int flameAmount = 0;
         int OffSetX = flameHorizontalOffSet;
         int OffSetY = flameVerticalOffSet;
         int OffSetZ = flameDepthOffSet;
         if (clearFlameFinish) {
-            if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), false)) return false;
+//            if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), false)) return false;
             drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), true);
             clearFlameFinish = false;
             TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Flame);
@@ -400,7 +436,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
         // only can face to X, Z direction
-        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && f.isNotFlipped();
     }
 
     @Override
@@ -478,7 +514,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide() && controllerTier > 1) {
+        if (getBaseMetaTileEntity().isServerSide()) {
             if (!checkStructure(true)) {
                 GTUtility.sendChatToPlayer(
                     aPlayer,
@@ -502,6 +538,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         }
         super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
     }
+
+    @Override
+    public void setMachineMode(int index) {
+        super.setMachineMode(index);
+//        setRemoveFlame();
+    }
+
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
