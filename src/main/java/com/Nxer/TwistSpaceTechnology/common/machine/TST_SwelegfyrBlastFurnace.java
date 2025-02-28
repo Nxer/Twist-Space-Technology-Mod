@@ -27,6 +27,9 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.util.shutdown.ShutDownReason;
+import gregtech.api.util.shutdown.ShutDownReasonRegistry;
+import gregtech.api.util.shutdown.SimpleShutDownReason;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -303,7 +306,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         repairMachine();
         this.mHeatingCapacity = 0;
         this.glassTier = 0;
-        this.mFlameHatch=null;
+        this.mFlameHatch = null;
         this.setCoilLevel(HeatingCoilLevel.None);
         if (!checkPiece("mainT" + controllerTier, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
             return false;
@@ -318,6 +321,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     boolean clearFlameFinish = false;
     boolean isPassiveMode = false;
     boolean isRapidHeating = false;
+    boolean isHoldingHeat =false;
     ItemStack UpgradeItem = null;
     private MTEHatchInput mFlameHatch;
     public HeatingCoilLevel coilLevel;
@@ -338,61 +342,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (UpgradeItem == null) UpgradeItem = GTCMItemList.TestItem0.get(1);
     }
 
-    @Override
-    public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, ForgeDirection side,
-        float aX, float aY, float aZ) {
-        if (controllerTier == 1 && !aPlayer.isSneaking()) {
-            ItemStack heldItem = aPlayer.getHeldItem();
-            if (GTUtility.areStacksEqual(GTCMItemList.TestItem0.get(1), heldItem)) {
-                controllerTier = 2;
-                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
-                if (getBaseMetaTileEntity().isServerSide()) {
-                    markDirty();
-                    aPlayer.inventory.markDirty();
-                    // schedule a structure check
-                    mUpdated = true;
-                }
-                if (setFlameFinish) setRemoveFlame();
-                return true;
-            }
-        }
-        return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
-    }
-
-    @Override
-    public void onValueUpdate(byte aValue) {
-        controllerTier = aValue;
-    }
-
-    @Override
-    public byte getUpdateData() {
-        return controllerTier;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("mTier", controllerTier);
-        aNBT.setByte("mGlass", glassTier);
-        aNBT.setByte("mMode", (byte) machineMode);
-        aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
-        aNBT.setBoolean("setFlameFinish", setFlameFinish);
-        aNBT.setBoolean("clearFlameFinish", clearFlameFinish);
-
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        controllerTier = aNBT.getByte("mTier");
-        glassTier = aNBT.getByte("mGlass");
-        machineMode = aNBT.getByte("mMode");
-        mHeatingCapacity = aNBT.getInteger("mHeatingCapacity");
-        setFlameFinish = aNBT.getBoolean("setFlameFinish");
-        clearFlameFinish = aNBT.getBoolean("clearFlameFinish");
-
-    }
-
     private boolean setRemoveFlame() {
 
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
@@ -404,7 +353,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         int OffSetY = flameVerticalOffSet;
         int OffSetZ = flameDepthOffSet;
         if (clearFlameFinish) {
-//            if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), false)) return false;
+            // if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), false)) return false;
             drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), true);
             clearFlameFinish = false;
             TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Flame);
@@ -512,6 +461,56 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     }
 
+    private long runningTick = 0;
+
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+            if (runningTick % 200 == 0) {
+                // Updates every 10 sec
+                if (!isPassiveMode) {
+                    if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
+                        return false;
+                    }
+                } else if (isPassiveMode && !isRapidHeating) {
+                    if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
+                        return false;
+                    }
+                } else if (isPassiveMode && isRapidHeating) {
+                    if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
+                        return false;
+                    }
+                } else if (!isPassiveMode && isRapidHeating) {
+                    return false;
+                }
+                runningTick = 1;
+            } else {
+                runningTick++;
+            }
+        return super.onRunningTick(aStack);
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isServerSide()) {
+            // Updates every 10 sec
+            if (mUpdate <= -150){
+                mUpdate = 50;
+                if(!aBaseMetaTileEntity.isActive()&&isPassiveMode&&!isRapidHeating&&isHoldingHeat){
+                    if (drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
+                        mHeatingCapacity=1000;
+                    }else stopMachine(SimpleShutDownReason.ofNormal("missing_flame"));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void stopMachine(@NotNull ShutDownReason reason) {
+        runningTick = 0;
+        super.stopMachine(reason);
+    }
+
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (getBaseMetaTileEntity().isServerSide()) {
@@ -542,9 +541,63 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void setMachineMode(int index) {
         super.setMachineMode(index);
-//        setRemoveFlame();
     }
 
+
+    @Override
+    public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, ForgeDirection side,
+                                float aX, float aY, float aZ) {
+        if (controllerTier == 1 && !aPlayer.isSneaking()) {
+            ItemStack heldItem = aPlayer.getHeldItem();
+            if (GTUtility.areStacksEqual(GTCMItemList.TestItem0.get(1), heldItem)) {
+                controllerTier = 2;
+                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
+                if (getBaseMetaTileEntity().isServerSide()) {
+                    markDirty();
+                    aPlayer.inventory.markDirty();
+                    // schedule a structure check
+                    mUpdated = true;
+                }
+                if (setFlameFinish) setRemoveFlame();
+                return true;
+            }
+        }
+        return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
+    }
+
+    @Override
+    public void onValueUpdate(byte aValue) {
+        controllerTier = aValue;
+    }
+
+    @Override
+    public byte getUpdateData() {
+        return controllerTier;
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mTier", controllerTier);
+        aNBT.setByte("mGlass", glassTier);
+        aNBT.setByte("mMode", (byte) machineMode);
+        aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
+        aNBT.setBoolean("setFlameFinish", setFlameFinish);
+        aNBT.setBoolean("clearFlameFinish", clearFlameFinish);
+        aNBT.setLong("runningTick",runningTick);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        controllerTier = aNBT.getByte("mTier");
+        glassTier = aNBT.getByte("mGlass");
+        machineMode = aNBT.getByte("mMode");
+        mHeatingCapacity = aNBT.getInteger("mHeatingCapacity");
+        setFlameFinish = aNBT.getBoolean("setFlameFinish");
+        clearFlameFinish = aNBT.getBoolean("clearFlameFinish");
+        runningTick=aNBT.getLong("runningTick");
+    }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
