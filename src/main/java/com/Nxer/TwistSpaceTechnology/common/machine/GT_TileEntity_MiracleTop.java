@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_MiracleTop;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerRing_MiracleTop;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.RingsAmount_EnablePerfectOverclock_MiracleTop;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_PerRing_MiracleTop;
@@ -21,7 +20,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -36,13 +34,13 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTStructureUtility;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
 import tectech.thing.block.BlockQuantumGlass;
@@ -247,8 +245,25 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     // endregion
 
     // region Processing Logic
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Miracle Top Circuit Assembler
+         * 1 - Gravitation Inversion
+         */
+        return 2;
+    }
 
-    private byte mode = Mode_Default_MiracleTop;
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("MiracleTop.modeMsg." + mode);
+    }
 
     public int amountRings = 1;
 
@@ -268,16 +283,8 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("MiracleTop.modeMsg." + this.mode));
-        }
-    }
-
-    @Override
     public RecipeMap<?> getRecipeMap() {
-        return this.mode == 0 ? GTCMRecipe.MiracleTopRecipes : GTCMRecipe.QuantumInversionRecipes;
+        return machineMode == 0 ? GTCMRecipe.MiracleTopRecipes : GTCMRecipe.QuantumInversionRecipes;
     }
 
     @NotNull
@@ -289,14 +296,14 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("amountRings", amountRings);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         amountRings = aNBT.getInteger("amountRings");
     }
 
@@ -748,7 +755,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         "         AAA         ",
         "                     "
     }};
-// spotless:on
+    // spotless:on
     // endregion
 
 }

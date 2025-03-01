@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_PerRing_MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_MagneticDomainConstructor;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -20,7 +19,6 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -40,6 +38,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -67,15 +66,34 @@ public class GT_TileEntity_MagneticDomainConstructor
     // endregion
 
     // region Processing Logic
-    private byte mode = Mode_Default_MagneticDomainConstructor;
     private int rings = 1;
     private int parallel = 1;
     private float speedBonus = 1;
 
     @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Separator
+         * 1 - Polarizer
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("MagneticDomainConstructor.modeMsg." + mode);
+    }
+
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("rings", rings);
         aNBT.setInteger("parallel", parallel);
         aNBT.setFloat("speedBonus", speedBonus);
@@ -85,7 +103,7 @@ public class GT_TileEntity_MagneticDomainConstructor
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         rings = aNBT.getInteger("rings");
         parallel = aNBT.getInteger("parallel");
         speedBonus = aNBT.getFloat("speedBonus");
@@ -119,24 +137,13 @@ public class GT_TileEntity_MagneticDomainConstructor
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return mode == 1 ? RecipeMaps.polarizerRecipes : RecipeMaps.electroMagneticSeparatorRecipes;
+        return machineMode == 1 ? RecipeMaps.polarizerRecipes : RecipeMaps.electroMagneticSeparatorRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(RecipeMaps.polarizerRecipes, RecipeMaps.electroMagneticSeparatorRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("MagneticDomainConstructor.modeMsg." + this.mode));
-        }
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.util.GTLog;
 import gregtech.api.util.GTUtility;
 
@@ -276,6 +277,7 @@ public enum GTCMItemList {
     IndustrialAlchemyTower,
     GiantVacuumDryingFurnace,
     ProcessingArray,
+    AdvCircuitAssemblyLine,
     // endregion
 
     // region Modularized Machines
@@ -433,9 +435,15 @@ public enum GTCMItemList {
     WirelessDataInputHatch,
     WirelessDataOutputHatch,
     BloodOrbHatch,
-
     LegendaryWirelessEnergyHatch,
     HarmoniousWirelessEnergyHatch,
+    SolidifyHatch_IV,
+    SolidifyHatch_LuV,
+    SolidifyHatch_ZPM,
+    SolidifyHatch_UV,
+    SolidifyHatch_UHV,
+    CircuitImprintHatchT1,
+    CircuitImprintHatchT2,
 
     // endregion
 
@@ -569,6 +577,11 @@ public enum GTCMItemList {
             }
         }
         return this;
+    }
+
+    public GTCMItemList set(IMetaTileEntity metaTileEntity) {
+        if (metaTileEntity == null) throw new IllegalArgumentException();
+        return set(metaTileEntity.getStackForm(1L));
     }
 
     public boolean hasBeenSet() {

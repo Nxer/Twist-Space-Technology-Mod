@@ -14,6 +14,7 @@ import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gregtech.api.util.GTUtility.copyAmount;
 import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
 import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
@@ -409,9 +410,24 @@ public class CosmicProcessorCircuitRecipes implements IRecipePool {
                 eternal_singularity.copy(),
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 3))
             .fluidInputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(200))
-            .itemOutputs(EncapsulatedMicroSpaceTimeUnit.get(1))
+            .itemOutputs(EncapsulatedMicroSpaceTimeUnit.get(1), eternal_singularity.copy())
+            .outputChances(10000, 4500)
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 30)
+            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
+
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GTUtility.getIntegratedCircuit(2),
+                SpaceTimeSuperconductingInlaidMotherboard.get(3),
+                InformationHorizonInterventionShell.get(3),
+                EnergyFluctuationSelfHarmonizer.get(3),
+                copyAmount(2, eternal_singularity),
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 9))
+            .fluidInputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(200))
+            .itemOutputs(EncapsulatedMicroSpaceTimeUnit.get(4))
+            .eut(TierEU.RECIPE_UMV)
+            .duration(20 * 90)
             .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
 
         // MicroSpaceTimeFabricatorio

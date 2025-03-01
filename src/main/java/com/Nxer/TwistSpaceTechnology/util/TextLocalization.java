@@ -44,6 +44,11 @@ public class TextLocalization {
     // #zh_CN  K
     public static final String Kelvin = TextEnums.tr("Kelvin");
 
+    // #tr AutoSeparation
+    // # Automatically separate inputs
+    // #zh_CN 自动隔离输入
+    public static final String AutoSeparation= TextEnums.tr("AutoSeparation");
+
     // #tr Text_SeparatingLine
     // # {\GOLD}-----------------------------------------
     // #zh_CN {\GOLD}-----------------------------------------
@@ -196,6 +201,11 @@ public class TextLocalization {
     // # Center area of up and down side
     // #zh_CN 上下侧的中央区域
     public static final String textCenterOfUDSides = TextEnums.tr("textCenterOfUDSides");
+
+    // #tr textEndSides
+    // # Machine end
+    // #zh_CN 机器末端
+    public static final String textEndSides = TextEnums.tr("textEndSides");
 
     // #tr StructureTooComplex
     // # The structure is too complex!
@@ -621,7 +631,7 @@ public class TextLocalization {
     public static final String NamePhysicalFormSwitcher = TextEnums.tr("NamePhysicalFormSwitcher");
 
     // #tr Tooltip_PhysicalFormSwitcher_MachineType
-    // # Fluid Solidifier | Fluid Extractor | Forge Hammer
+    // # Fluid Solidifier | Fluid Extractor
     // #zh_CN 流体固化器 | 流体提取机
     public static final String Tooltip_PhysicalFormSwitcher_MachineType = TextEnums.tr("Tooltip_PhysicalFormSwitcher_MachineType");
 

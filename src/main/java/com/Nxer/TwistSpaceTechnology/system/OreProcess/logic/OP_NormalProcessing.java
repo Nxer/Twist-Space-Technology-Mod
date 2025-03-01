@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -105,10 +106,10 @@ public class OP_NormalProcessing {
             processOreRecipe(material, i);
         }
 
-        processSpecialOreRecipe();
         new OP_GTPP_OreHandler().processGTPPOreRecipes();
         new OP_Bartworks_OreHandler().processBWOreRecipes();
 
+        processSpecialOreRecipe();
     }
 
     /**
@@ -228,6 +229,13 @@ public class OP_NormalProcessing {
         registryOreProcessRecipe(
             GTModHandler.getModItem("HardcoreEnderExpansion","end_powder_ore",1),
             new ItemStack[]{GTModHandler.getModItem("HardcoreEnderExpansion", "end_powder", 24)}
+        );
+
+        // Minecraft Iron ore
+        processOreRecipe(
+            new ItemStack(Blocks.iron_ore),
+            Materials.Iron,
+            false
         );
 
         // spotless:on

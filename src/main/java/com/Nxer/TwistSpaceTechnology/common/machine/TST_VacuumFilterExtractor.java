@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_VacuumFilterExtractor;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_VacuumFilterExtractor;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -21,7 +20,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -38,13 +36,13 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings4;
@@ -71,41 +69,47 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
 
     // region Processing Logic
     /**
-     * 0 = distillation tower ; 1 = distillery
-     */
-    private byte mode = Mode_Default_VacuumFilterExtractor;
-    /**
      * coefficient = input voltage tier
      */
     private int coefficientMultiplier = 1;
 
     @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Distillation Tower
+         * 1 - Distillery
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + mode);
+    }
+
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("coefficientMultiplier", coefficientMultiplier);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         coefficientMultiplier = aNBT.getInteger("coefficientMultiplier");
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + this.mode));
-        }
-    }
-
-    @Override
     public RecipeMap<?> getRecipeMap() {
-        if (mode == 1) {
+        if (machineMode == 1) {
             return RecipeMaps.distilleryRecipes;
         }
         return RecipeMaps.distillationTowerRecipes;
@@ -120,7 +124,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     @Override
     protected boolean isEnablePerfectOverclock() {
         // distillery has perfect overclock
-        return mode == 1;
+        return machineMode == 1;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine;
 
 import static bartworks.API.BorosilicateGlass.ofBoroGlass;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ExecutionCoreModule;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ParallelController;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.PowerConsumptionController;
@@ -16,7 +15,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
-import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
@@ -28,7 +26,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -58,6 +55,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -128,7 +126,6 @@ public class MM_IndistinctTentaclePrototypeMK2
     // endregion
 
     // region Logic
-    private byte mode = Mode_Default_IndistinctTentacle;
     private UUID ownerUUID;
 
     @Override
@@ -138,24 +135,39 @@ public class MM_IndistinctTentaclePrototypeMK2
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 4);
-            GTUtility
-                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + this.mode));
-        }
+    public int totalMachineMode() {
+        /*
+         * 0 - Assembly Line
+         * 1 - Component
+         * 2 - Assembler
+         * 3 - Precise
+         */
+        return 4;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + mode);
     }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
     }
 
     @Override
@@ -199,7 +211,7 @@ public class MM_IndistinctTentaclePrototypeMK2
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return switch (mode) {
+        return switch (machineMode) {
             case 1 -> GoodGeneratorRecipeMaps.componentAssemblyLineRecipes;
             case 2 -> RecipeMaps.assemblerRecipes;
             case 3 -> GoodGeneratorRecipeMaps.preciseAssemblerRecipes;
@@ -379,15 +391,6 @@ public class MM_IndistinctTentaclePrototypeMK2
         IWailaConfigHandler config) {
 
         final NBTTagCompound tag = accessor.getNBTData();
-
-        currentTip.add(switch (tag.getByte("mode")) {
-            case 1 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.componentassemblyline");
-            case 2 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gt.recipe.assembler");
-            case 3 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.precise_assembler");
-            default -> EnumChatFormatting.BOLD
-                + translateToLocalFormatted("tst.recipe.AssemblyLineWithoutResearchRecipe");
-        });
-
         int maxProgressingTime = tag.getInteger("maxProgressingTime");
         if (maxProgressingTime > 0) {
             currentTip.add(
@@ -431,7 +434,6 @@ public class MM_IndistinctTentaclePrototypeMK2
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setByte("mode", mode);
             tag.setString("costEU", costEU);
         }
     }

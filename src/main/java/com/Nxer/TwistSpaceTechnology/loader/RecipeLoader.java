@@ -10,10 +10,12 @@ import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCirc
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.GTCMMachineRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularHatchesRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.TSTBufferedEnergyHatchRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.TSTSolidifierHatchRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.AssemblyLineWithoutResearchRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.BOTRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.RuneEngraverRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BloodyHellRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CircuitAssemblyLineWithoutImprintRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CokingFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystallineInfinitierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DSPRecipePool;
@@ -64,7 +66,8 @@ public class RecipeLoader {
             // Item Recipes
             new CosmicProcessorCircuitRecipes(),
             // Machine Recipes
-            new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(), new ModularHatchesRecipes() };
+            new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(), new ModularHatchesRecipes(),
+            new TSTSolidifierHatchRecipes() };
 
         for (IRecipePool recipePool : craftRecipePool) {
             recipePool.loadRecipes();
@@ -87,7 +90,8 @@ public class RecipeLoader {
             new StellarForgeRecipePool(), new HyperSpacetimeTransformerRecipePool(),
             new AquaticZoneSimulatorFakeRecipe(), new NeutronActivatorWithEURecipePool(),
             new MassFabricatorGenesisRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
-            new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool(), new IndustrialAlchemyTowerRecipePool() };
+            new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool(), new IndustrialAlchemyTowerRecipePool(),
+            new CircuitAssemblyLineWithoutImprintRecipePool() };
 
         for (IRecipePool recipePool : machineRecipePools) {
             recipePool.loadRecipes();

@@ -4,7 +4,6 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ComponentCa
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_LaserHatch_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_WirelessMode_IndistinctTentacle;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -21,7 +20,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 import static tectech.thing.casing.BlockGTCasingsTT.texturePage;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
@@ -34,7 +32,6 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -63,6 +60,7 @@ import bartworks.API.BorosilicateGlass;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -107,7 +105,6 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     // endregion
 
     // region Processing Logic
-    private byte mode = Mode_Default_IndistinctTentacle;
     public int tierComponentCasing = -2;
     public byte glassTier = 0;
     private int extraEuCostMultiplier = 1;
@@ -118,8 +115,32 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     }
 
     @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Assembly Line
+         * 1 - Component
+         * 2 - Assembler
+         * 3 - Precise
+         */
+        return 4;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + mode);
+    }
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
-        return switch (mode) {
+        return switch (machineMode) {
             case 1 -> GoodGeneratorRecipeMaps.componentAssemblyLineRecipes;
             case 2 -> RecipeMaps.assemblerRecipes;
             case 3 -> GoodGeneratorRecipeMaps.preciseAssemblerRecipes;
@@ -152,13 +173,6 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        String modeName = switch (tag.getByte("mode")) {
-            case 1 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.componentassemblyline");
-            case 2 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gt.recipe.assembler");
-            case 3 -> EnumChatFormatting.BOLD + translateToLocalFormatted("gg.recipe.precise_assembler");
-            default -> EnumChatFormatting.BOLD
-                + translateToLocalFormatted("tst.recipe.AssemblyLineWithoutResearchRecipe");
-        };
         if (tag.getBoolean("wirelessMode")) {
 
             if (1 != tag.getInteger("extraEuCostMultiplier")) {
@@ -170,8 +184,6 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
                         .tr("tst.indistinctTentacle.waila.extraEuMultiplier", tag.getInteger("extraEuCostMultiplier")));
             }
         }
-        currentTip.add(modeName);
-
     }
 
     @Override
@@ -180,7 +192,6 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setByte("mode", mode);
             tag.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
         }
     }
@@ -188,7 +199,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setBoolean("hasAstralArray", hasAstralArray);
         aNBT.setInteger("tierComponentCasing", tierComponentCasing);
         aNBT.setByte("glassTier", glassTier);
@@ -198,20 +209,11 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         hasAstralArray = aNBT.getBoolean("hasAstralArray");
         tierComponentCasing = aNBT.getInteger("tierComponentCasing");
         glassTier = aNBT.getByte("glassTier");
         extraEuCostMultiplier = aNBT.getInteger("extraEuCostMultiplier");
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 4);
-            GTUtility
-                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -222,7 +224,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
             @Override
             protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
                 // component assembly line
-                if (mode == 1 && recipe.mSpecialValue > tierComponentCasing + 1) {
+                if (machineMode == 1 && recipe.mSpecialValue > tierComponentCasing + 1) {
                     return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
                 }
                 // check component block tier
@@ -285,7 +287,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
 
     @Override
     protected float getSpeedBonus() {
-        return switch (mode) {
+        return switch (machineMode) {
             case 1 -> 1F / ValueEnum.SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle;
             case 2 -> 1F / ValueEnum.SpeedMultiplier_Assembler_IndistinctTentacle;
             case 3 -> 1F / ValueEnum.SpeedMultiplier_PreciseAssembler_IndistinctTentacle;
