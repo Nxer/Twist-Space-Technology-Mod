@@ -588,8 +588,8 @@ public class GTCMMachineRecipes implements IRecipePool {
                 WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 64),
                 ItemList.Field_Generator_UMV.get(4),
 
-                GTModHandler.getModItem("dreamcraft", "item.PikoCircuit", 8),
-                new Object[]{OrePrefixes.circuit.get(Materials.Optical), 32},
+                new Object[]{OrePrefixes.circuit.get(Materials.UMV), 8},
+                new Object[]{OrePrefixes.circuit.get(Materials.UIV), 32},
                 GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUMV, 16),
                 MaterialsUEVplus.TranscendentMetal.getNanite(16),
 
