@@ -148,7 +148,6 @@ import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static tectech.thing.CustomItemList.rack_Hatch;
 
-import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -691,7 +690,7 @@ public class GTCMMachineRecipes implements IRecipePool {
                 MaterialsUEVplus.SpaceTime.getMolten(16 * 144),
                 Materials.SuperconductorUIVBase.getMolten(64 * 144),
                 Materials.SuperconductorUEVBase.getMolten(512 * 144))
-            .itemOutputs(MachineLoader.MiracleTop.get(1))
+            .itemOutputs(GTCMItemList.MiracleTop.get(1))
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 3600)
             .addTo(AssemblyLine);
