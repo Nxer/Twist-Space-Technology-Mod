@@ -8,8 +8,8 @@ public class UITextures {
 
     public static final UITexture SBF_ModeBase = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_ModeBase");
     public static final UITexture SBF_ModePassive = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_ModePassive");
-    public static final UITexture SBF_FlameClear = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_FlameClear");
-    public static final UITexture SBF_FlameSet = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_FlameSet");
+    public static final UITexture SBF_BlazeClear = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_BlazeClear");
+    public static final UITexture SBF_BlazeSet = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_BlazeSet");
     public static final UITexture SBF_RapidHeating_Forbidden = UITexture
         .fullImage(TST_ID, "icons/UITextures/SBF_RapidHeating_Forbidden");
     public static final UITexture SBF_RapidHeating_Off = UITexture

@@ -110,13 +110,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     private static final int baseHorizontalOffSet = 5;
     private static final int baseVerticalOffSet = 17;
     private static final int baseDepthOffSet = 1;
-    private static final int flameHorizontalOffSet = 3;
-    private static final int flameVerticalOffSet = 10;
-    private static final int flameDepthOffSet = -1;
+    private static final int BlazeHorizontalOffSet = 3;
+    private static final int BlazeVerticalOffSet = 10;
+    private static final int BlazeDepthOffSet = -1;
     private static final String STRUCTURE_PIECE_MAIN_T1 = "mainT1";
     private static final String STRUCTURE_PIECE_MAIN_T2 = "mainT2";
-    private static final String STRUCTURE_PIECE_FLAME_T1 = "flameT1";
-    private static final String STRUCTURE_PIECE_FLAME_T2 = "flameT2";
+    private static final String STRUCTURE_PIECE_Blaze_T1 = "BlazeT1";
+    private static final String STRUCTURE_PIECE_Blaze_T2 = "BlazeT2";
     // spotless:off
     private static final String[][] shapeMainT1 = new String[][]{
         {"           ","           ","   NNNNN   ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","   NNNNN   ","           ","           "},
@@ -164,7 +164,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"                         ","   PPPPP            HHH  ","  PDDDDDP       GGGGGHHH "," PDDDDDDDP     GGNNNGGHH "," PDDDDDDDP     GNNNNNGHHH"," PDDDDDDDP     GNNNNNGHHH"," PDDDDDDDP     GNNNNNGHHH"," PDDDDDDDP     GGNNNGGHH ","  PDDDDDP       GGGGGHHH ","   PPPPP            HHH  ","                         "}
     };
 
-    private static final String[][] shapeFlameT1 = new String[][]{
+    private static final String[][] shapeBlazeT1 = new String[][]{
         {"       ","       ","       ","       ","       ","       ","       "},
         {"       ","       ","       ","       ","       ","       ","       "},
         {"       ","       ","       ","       ","       ","       ","       "},
@@ -179,7 +179,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {" ZZZZZ ","ZZ   ZZ","Z     Z","Z     Z","Z     Z","ZZ   ZZ"," ZZZZZ "}
     };
 
-    private static final String[][] shapeFlameT2 = new String[][]{
+    private static final String[][] shapeBlazeT2 = new String[][]{
         {"                  ","                  ","               ZZZ","               Z Z","               ZZZ","                  ","                  "},
         {"                  ","                  ","               ZZZ","               Z Z","               ZZZ","                  ","                  "},
         {"                  ","                  ","               ZZZ","               Z Z","               ZZZ","                  ","                  "},
@@ -203,8 +203,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             STRUCTURE_DEFINITION = StructureDefinition.<TST_SwelegfyrBlastFurnace>builder()
                 .addShape(STRUCTURE_PIECE_MAIN_T1, transpose(shapeMainT1))
                 .addShape(STRUCTURE_PIECE_MAIN_T2, transpose(shapeMainT2))
-                .addShape(STRUCTURE_PIECE_FLAME_T1, transpose(shapeFlameT1))
-                .addShape(STRUCTURE_PIECE_FLAME_T2, transpose(shapeFlameT2))
+                .addShape(STRUCTURE_PIECE_Blaze_T1, transpose(shapeBlazeT1))
+                .addShape(STRUCTURE_PIECE_Blaze_T2, transpose(shapeBlazeT2))
                 .addElement(
                     'A',
                     withChannel(
@@ -251,7 +251,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 .addElement(
                     'Q',
                     buildHatchAdder(TST_SwelegfyrBlastFurnace.class).hatchClass(MTEHatchInput.class)
-                        .adder(TST_SwelegfyrBlastFurnace::addFlameHatch)
+                        .adder(TST_SwelegfyrBlastFurnace::addBlazeHatch)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .dot(3)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
@@ -296,11 +296,11 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             false,
             true);
         builtW = survivialBuildPiece(
-            "flameT" + structureTier,
+            "BlazeT" + structureTier,
             stackSize,
-            flameHorizontalOffSet,
-            flameVerticalOffSet,
-            flameDepthOffSet,
+            BlazeHorizontalOffSet,
+            BlazeVerticalOffSet,
+            BlazeDepthOffSet,
             elementBudget,
             env,
             false,
@@ -315,24 +315,24 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         repairMachine();
         this.mHeatingCapacity = 0;
         this.glassTier = 0;
-        this.mFlameHatch = null;
+        this.mBlazeHatch = null;
         this.setCoilLevel(HeatingCoilLevel.None);
         if (!checkPiece("mainT" + controllerTier, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
             return false;
 
-        return mFlameHatch != null;
+        return mBlazeHatch != null;
     }
 
     // region Processing Logic
     byte glassTier = 0;
     byte controllerTier = 1;
-    boolean setFlameFinish = false;
-    boolean clearFlameFinish = false;
+    boolean setBlazeFinish = false;
+    boolean clearBlazeFinish = false;
     boolean isPassiveMode = false;
     boolean isRapidHeating = false;
     boolean isHoldingHeat = false;
     ItemStack UpgradeItem = null;
-    private MTEHatchInput mFlameHatch;
+    private MTEHatchInput mBlazeHatch;
     public HeatingCoilLevel coilLevel;
     private int mHeatingCapacity;
 
@@ -347,45 +347,45 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
-        clearFlameFinish = true;
+        clearBlazeFinish = true;
         if (UpgradeItem == null) UpgradeItem = GTCMItemList.TestItem0.get(1);
     }
 
-    private boolean setRemoveFlame() {
+    private boolean setRemoveBlaze() {
 
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        String[][] StructureDef = controllerTier > 1 ? shapeFlameT2 : shapeFlameT1;
+        String[][] StructureDef = controllerTier > 1 ? shapeBlazeT2 : shapeBlazeT1;
         Block Air = Blocks.air;
-        Block Flame = TFFluids.fluidPyrotheum.getBlock();
-        int flameAmount = 0;
-        int OffSetX = flameHorizontalOffSet;
-        int OffSetY = flameVerticalOffSet;
-        int OffSetZ = flameDepthOffSet;
-        if (clearFlameFinish) {
-            // if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), false)) return false;
-            drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, flameAmount), true);
-            clearFlameFinish = false;
-            TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Flame);
-            setFlameFinish = true;
+        Block Blaze = TFFluids.fluidPyrotheum.getBlock();
+        int BlazeAmount = 0;
+        int OffSetX = BlazeHorizontalOffSet;
+        int OffSetY = BlazeVerticalOffSet;
+        int OffSetZ = BlazeDepthOffSet;
+        if (clearBlazeFinish) {
+            // if (!drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, BlazeAmount), false)) return false;
+            drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, BlazeAmount), true);
+            clearBlazeFinish = false;
+            TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Blaze);
+            setBlazeFinish = true;
             return true;
-        } else if (setFlameFinish) {
+        } else if (setBlazeFinish) {
             // clear will not return existing pyrotheum
-            setFlameFinish = false;
+            setBlazeFinish = false;
             TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Air);
-            clearFlameFinish = true;
+            clearBlazeFinish = true;
             return true;
         }
         return false;
     }
 
-    public boolean addFlameHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
+    public boolean addBlazeHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
         if (aTileEntity == null) return false;
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof MTEHatchInput) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
-            mFlameHatch = (MTEHatchInput) aMetaTileEntity;
+            mBlazeHatch = (MTEHatchInput) aMetaTileEntity;
             return true;
         }
         return false;
@@ -444,7 +444,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTier);
                 }
 
-                if (clearFlameFinish || !setFlameFinish) return SimpleCheckRecipeResult.ofFailure("no_flame");
+                if (clearBlazeFinish || !setBlazeFinish) return SimpleCheckRecipeResult.ofFailure("no_Blaze");
 
                 return recipe.mSpecialValue <= mHeatingCapacity ? CheckRecipeResultRegistry.SUCCESSFUL
                     : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
@@ -461,15 +461,15 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (runningTick % 200 == 0) {
             // Updates every 10 sec
             // if (!isPassiveMode) {
-            // if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
+            // if (!drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
             // return false;
             // }
             // } else if (isPassiveMode && !isRapidHeating) {
-            // if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
+            // if (!drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
             // return false;
             // }
             // } else if (isPassiveMode && isRapidHeating) {
-            // if (!drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
+            // if (!drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
             // return false;
             // }
             // } else if (!isPassiveMode && isRapidHeating) {
@@ -490,9 +490,9 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             if (mUpdate <= -150) {
                 mUpdate = 50;
                 // if(!aBaseMetaTileEntity.isActive()&&isPassiveMode&&!isRapidHeating&&isHoldingHeat){
-                // if (drain(mFlameHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
+                // if (drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
                 // mHeatingCapacity=1000;
-                // }else stopMachine(SimpleShutDownReason.ofNormal("missing_flame"));
+                // }else stopMachine(SimpleShutDownReason.ofNormal("missing_Blaze"));
                 // }
             }
         }
@@ -537,51 +537,34 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         super.addUIWidgets(builder, buildContext);
-        builder.widget(createFlameStatusButton(builder));
+        builder.widget(createBlazeStatusButton(builder));
         builder.widget(createRapidHeatingButton(builder));
         builder.widget(createHoldingHeatButton(builder));
 
     }
 
-    public ButtonWidget createFlameStatusButton(IWidgetBuilder<?> builder) {
+    public ButtonWidget createBlazeStatusButton(IWidgetBuilder<?> builder) {
 
-        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-            EntityPlayer aPlayer = Minecraft.getMinecraft().thePlayer;
-            if (!checkStructure(true)) {
-                GTUtility.sendChatToPlayer(
-                    aPlayer,
-                    StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
-            } else {
-                if (setRemoveFlame()) {
-
-                    if (setFlameFinish)
-                        GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("SBF.Msg.setFlame"));
-
-                    if (clearFlameFinish)
-                        GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("SBF.Msg.clearFlame"));
-
-                }
-            }
-        })
+        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {setRemoveBlaze();})
             .setPlayClickSound(true)
             .setBackground(() -> {
                 List<IDrawable> layers = new ArrayList<>();
                 // Add icons per mode
-                if (clearFlameFinish) {
+                if (clearBlazeFinish) {
                     layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_FlameSet);
-                } else if (setFlameFinish) {
-                    layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_FlameClear);
+                    layers.add(UITextures.SBF_BlazeSet);
+                } else if (setBlazeFinish) {
+                    layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
+                    layers.add(UITextures.SBF_BlazeClear);
                 }
 
                 return layers.toArray(new IDrawable[0]);
             })
-            .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getFlameStatus, this::setFlameStatus), builder)
-            // #tr SBF.Msg.setOrClearFlame
+            .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getBlazeStatus, this::setBlazeStatus), builder)
+            // #tr SBF.Msg.setOrClearBlaze
             // # Place / Clear Pyrotheum
             // #zh_CN 填充/清除炽焱
-            .addTooltip(StatCollector.translateToLocal("SBF.Msg.setOrClearFlame"))
+            .addTooltip(StatCollector.translateToLocal("SBF.Msg.setOrClearBlaze"))
             .setTooltipShowUpDelay(TOOLTIP_DELAY)
             .setPos(98, 91)
             .setSize(16, 16);
@@ -589,12 +572,12 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return (ButtonWidget) button;
     }
 
-    public boolean getFlameStatus() {
+    public boolean getBlazeStatus() {
         // if clear, false; if set true
-        return setFlameFinish;
+        return setBlazeFinish;
     }
 
-    public void setFlameStatus(Boolean b) {
+    public void setBlazeStatus(Boolean b) {
         // do nothing
     }
 
@@ -702,7 +685,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     // schedule a structure check
                     mUpdated = true;
                 }
-                if (setFlameFinish) setRemoveFlame();
+                if (setBlazeFinish) setRemoveBlaze();
                 return true;
             }
         }
@@ -726,8 +709,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         aNBT.setByte("mGlass", glassTier);
         aNBT.setByte("mMode", (byte) machineMode);
         aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
-        aNBT.setBoolean("setFlameFinish", setFlameFinish);
-        aNBT.setBoolean("clearFlameFinish", clearFlameFinish);
+        aNBT.setBoolean("setBlazeFinish", setBlazeFinish);
+        aNBT.setBoolean("clearBlazeFinish", clearBlazeFinish);
         aNBT.setBoolean("isPassiveMode", isPassiveMode);
         aNBT.setBoolean("isRapidHeating", isRapidHeating);
         aNBT.setBoolean("isHoldingHeat", isHoldingHeat);
@@ -741,8 +724,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         glassTier = aNBT.getByte("mGlass");
         machineMode = aNBT.getByte("mMode");
         mHeatingCapacity = aNBT.getInteger("mHeatingCapacity");
-        setFlameFinish = aNBT.getBoolean("setFlameFinish");
-        clearFlameFinish = aNBT.getBoolean("clearFlameFinish");
+        setBlazeFinish = aNBT.getBoolean("setBlazeFinish");
+        clearBlazeFinish = aNBT.getBoolean("clearBlazeFinish");
         isPassiveMode = aNBT.getBoolean("isPassiveMode");
         isRapidHeating = aNBT.getBoolean("isRapidHeating");
         isHoldingHeat = aNBT.getBoolean("isHoldingHeat");
