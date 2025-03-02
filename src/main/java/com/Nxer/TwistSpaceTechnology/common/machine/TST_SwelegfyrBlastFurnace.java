@@ -342,7 +342,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (!checkPiece("mainT" + controllerTier, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
             return false;
         if (this.mHeatingCapacity < getCoilHeat()) this.mHeatingCapacity = getCoilHeat();
-        this.maxHeatingCapacity = (int) (Math.floor(Math.pow(getCoilHeat(), 1.08) / 100) * 100 + 1);
+        this.maxHeatingCapacity = (int) (Math.floor(Math.pow(getCoilHeat(), 1.1) / 100) * 100 + 1);
 
         if (glassTier < 12) {
             for (MTEHatchEnergy mEnergyHatch : this.mEnergyHatches) {
@@ -485,7 +485,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected int getMaxParallelRecipes() {
-        return isPassiveMode ? 256 : 4096;
+        return isPassiveMode ? 64 : 1024;
     }
 
     @Override
