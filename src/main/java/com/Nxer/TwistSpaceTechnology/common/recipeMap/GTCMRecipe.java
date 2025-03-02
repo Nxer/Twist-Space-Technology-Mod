@@ -400,7 +400,7 @@ public class GTCMRecipe {
         .minInputs(1, 1)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.AdvCircuitAssemblyLine.get(1)))
         .progressBar(GTUITextures.PROGRESSBAR_CIRCUIT_ASSEMBLER)
-        // .disableRegisterNEI()
+        .disableRegisterNEI()
         .disableOptimize()
         .build();
 }

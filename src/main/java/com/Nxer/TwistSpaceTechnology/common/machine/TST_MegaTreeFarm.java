@@ -171,7 +171,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
         // You're right, but there will be water leakage
-        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && f.isNotFlipped();
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
     }
 
     @Override
@@ -604,16 +604,20 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         String[][] StructureDef = StructureWater;
         Block Air = Blocks.air;
         Block Water = BlocksItems.getFluidBlock(InternalName.fluidDistilledWater);
+        boolean isFlipped = this.getFlip()
+            .isHorizontallyFlipped();
         int OffSetX = 12;
         int OffSetY = 25;
         int OffSetZ = 3;
         if (checkType && !checkWaterFinish) {
             checkAirFinish = false;
-            TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "P", Water);
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Water);
             checkWaterFinish = true;
         } else if (!checkType && !checkAirFinish) {
             checkWaterFinish = false;
-            TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "P", Air);
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Air);
             checkAirFinish = true;
         }
 

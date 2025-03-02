@@ -33,7 +33,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import bartworks.common.tileentities.multis.mega.MegaMultiBlockBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -404,6 +403,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         String[][] StructureDef = controllerTier > 1 ? shapeBlazeT2 : shapeBlazeT1;
         Block Air = Blocks.air;
         Block Blaze = TFFluids.fluidPyrotheum.getBlock();
+        boolean isFlipped = this.getFlip()
+            .isHorizontallyFlipped();
         int BlazeAmount = controllerTier > 1 ? 168000 : 72000;
         int OffSetX = BlazeHorizontalOffSet;
         int OffSetY = BlazeVerticalOffSet;
@@ -413,13 +414,15 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             if (!drainPyrotheumFromBlazeHatch(BlazeAmount, false)) return false;
             drainPyrotheumFromBlazeHatch(BlazeAmount, true);
             isBlazeFinishClear = false;
-            TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Blaze);
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Blaze);
             isBlazeFinishSet = true;
             return true;
         } else if (isBlazeFinishSet) {
             // clear will not return existing pyrotheum
             isBlazeFinishSet = false;
-            TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Air);
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Air);
             isBlazeFinishClear = true;
             return true;
         }
@@ -450,7 +453,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
         // only can face to X, Z direction
-        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && f.isNotFlipped();
+        // return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && f.isNotFlipped();
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
     }
 
     @Override
@@ -611,6 +615,16 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
             // Updates every 10 sec
             if (aTick % 200 == 0) {
+                // Check Blaze structure
+                // if (!checkPiece(
+                // "blazeT" + controllerTier,
+                // BlazeHorizontalOffSet,
+                // BlazeVerticalOffSet,
+                // BlazeDepthOffSet)) {
+                // isBlazeFinishClear = true;
+                // isBlazeFinishSet = false;
+                // }
+
                 // Heat holding mode
                 if (!aBaseMetaTileEntity.isActive() && isPassiveMode && !isRapidHeating && isHoldingHeat) {
                     if (checkBlaze()) {
@@ -1052,7 +1066,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.01"))
             // #tr Tooltip_SwelegfyrBlastFurnace.02
             // # A Volcanus blast furnace specialized in continuous processing, also capable of conventional processes
-            // #zh_CN 专注于持续加工的炽焱高炉，同时也可以进行常规处理
+            // #zh_CN 专注于持续加工的炽焱高炉， 同时也可以进行常规处理
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.02"))
             // #tr Tooltip_SwelegfyrBlastFurnace.03
             // # Blast furnace temp gradually increases in Passive Mode
@@ -1060,7 +1074,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.03"))
             // #tr Tooltip_SwelegfyrBlastFurnace.04
             // # Power consumption decreases by 10% per 1800K above recipe temperature threshold
-            // #zh_CN 炉温每高出配方1800K，耗电减少10%
+            // #zh_CN 炉温每高出配方1800K， 耗电减少10%
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.04"))
             // #tr Tooltip_SwelegfyrBlastFurnace.05
             // # Glass tier restricts Energy Hatch tier
@@ -1112,11 +1126,11 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.23"))
             // #tr Tooltip_SwelegfyrBlastFurnace.24
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: Current Heat × 10% K/s (Minimum: Coil Heat)
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： 当前炉温 x 10% K/s，不低于线圈炉温
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： 当前炉温 x 10% K/s， 不低于线圈炉温
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.24"))
             // #tr Tooltip_SwelegfyrBlastFurnace.25
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown in Non-Retention Mode: Current Heat × 20% K/s (Minimum: Coil Heat)
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}非保温模式关机： 当前炉温 x 20% K/s，不低于线圈炉温
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}非保温模式关机： 当前炉温 x 20% K/s， 不低于线圈炉温
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.25"))
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)

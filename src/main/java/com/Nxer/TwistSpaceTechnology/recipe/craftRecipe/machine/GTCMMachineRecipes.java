@@ -116,6 +116,7 @@ import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 import static gregtech.api.util.GTModHandler.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
+import static gregtech.api.util.GTRecipeBuilder.MINUTES;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
@@ -218,6 +219,7 @@ import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.recipe.common.CI;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
+import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
 import tectech.recipe.TTRecipeAdder;
@@ -3234,6 +3236,120 @@ public class GTCMMachineRecipes implements IRecipePool {
                 .metadata(BloodyHellTierKey.INSTANCE, 5)
                 .addTo(GTCMRecipe.BloodyHellRecipes);
         }
+
+        if(Config.Enable_SwelegfyrBlastFurnace){
+            GTValues.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, GregtechItemList.Machine_Adv_BlastFurnace.get(1))
+                .metadata(RESEARCH_TIME, 30 * MINUTES)
+                .itemInputs(
+                    GregtechItemList.Machine_Adv_BlastFurnace.get(64),
+                    GregtechItemList.Machine_Adv_BlastFurnace.get(64),
+                    GregtechItemList.Machine_Adv_BlastFurnace.get(64),
+                    GregtechItemList.Machine_Adv_BlastFurnace.get(64),
+
+                    ItemList.Electric_Pump_UV.get(8),
+                    ItemList.Conveyor_Module_UV.get(16),
+                    new Object[] { OrePrefixes.circuit.get(Materials.UV), 32},
+                    new Object[] { OrePrefixes.circuit.get(Materials.ZPM), 64},
+
+                    HighEnergyFlowCircuit.get(64),
+                    ItemList.Circuit_Chip_QPIC.get(32),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt08,Materials.SuperconductorUV,16),
+                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense,Materials.Neutronium,4)
+                )
+                .fluidInputs(
+                    MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 16),
+                    MaterialsAlloy.BLACK_TITANIUM.getFluidStack(144 * 64),
+                    WerkstoffLoader.Oganesson.getFluidOrGas(1000 * 8)
+                )
+                .itemOutputs(GTCMItemList.SwelegfyrBlastFurnace.get(1))
+                .eut(RECIPE_UHV)
+                .duration(20 * 120)
+                .addTo(assemblyLine);
+
+            TTRecipeAdder.addResearchableAssemblylineRecipe(
+                GTCMItemList.SwelegfyrBlastFurnace.get(1),
+                64_000,
+                32,
+                600_000,
+                4,
+                new Object[]{
+                    ItemList.Circuit_Board_Elite.get(1),
+                    Materials.Silver.getNanite(2),
+                    ItemRefer.Fluid_Storage_Core_T5.get(4),
+                    ItemList.neutroniumHeatCapacitor.get(6),
+
+                    ItemList.UHV_Coil.get(64),
+                    ItemList.Circuit_Chip_QPIC.get(64),
+                    PicoWafer.get(32),
+                    ItemList.Energy_Cluster.get(8),
+
+                    new Object[] {  OrePrefixes.circuit.get(Materials.UHV), 16},
+                    new Object[] { OrePrefixes.circuit.get(Materials.UV), 32},
+                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense,Materials.InfinityCatalyst,4)
+                },
+                new FluidStack[]{
+                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 16),
+                    MaterialsAlloy.ABYSSAL.getFluidStack(144 * 32),
+                    new FluidStack(TFFluids.fluidPyrotheum, 1000 * 4096)
+                },
+                GTCMItemList.SwelegfgrUpgradeChip.get(1),
+                20 * 320,
+                (int) RECIPE_UEV
+            );
+        }
+
+        GTValues.RA
+            .stdBuilder()
+            .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
+                MaterialsAlloy.PIKYONIUM.getFrameBox(1),
+                GregtechItemList.Casing_Adv_BlastFurnace.get(2),
+
+                GregtechItemList.Hatch_Input_Pyrotheum.get(1),
+                GregtechItemList.TransmissionComponent_LuV.get(4),
+                new ItemStack(GSItems.DysonSwarmItems, 6, 3),
+
+                MaterialsAlloy.PIKYONIUM.getPlateDense(3),
+                MaterialsAlloy.ZERON_100.getPlateDense(3)
+            )
+            .fluidInputs(
+                MaterialsAlloy.ARCANITE.getFluidStack(144 * 4)
+            )
+            .itemOutputs(GTCMItemList.SwelegfyrCasing.get(1))
+            .eut(RECIPE_LuV)
+            .duration(20 * 15)
+            .addTo(assembler);
+
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            GTOreDictUnificator.get(OrePrefixes.block,Materials.Iridium,1),
+            64_000,
+            32,
+            800_000,
+            4,
+            new Object[]{
+                GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.Neutronium,2),
+                new ItemStack(GSItems.DysonSwarmItems, 24, 3),
+                ItemRefer.Radiation_Protection_Plate.get(36),
+                GTUtility.copyAmountUnsafe(48, Ic2Items.iridiumPlate),
+
+                ItemList.neutroniumHeatCapacitor.get(64),
+                ItemList.Electric_Piston_UV.get(4),
+                ItemList.Field_Generator_UV.get(2),
+                GTOreDictUnificator.get(OrePrefixes.ring,Materials.CosmicNeutronium,64),
+
+                GTOreDictUnificator.get(OrePrefixes.screw,Materials.Bedrockium,32)
+            },
+            new FluidStack[]{
+                MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 8),
+                GGMaterial.preciousMetalAlloy.getMolten(144 * 64),
+                Materials.SuperCoolant.getFluid(1000 * 8),
+            },
+            GTCMItemList.ReinforcedIridiumAlloyCasing.get(1),
+            20 * 15,
+            (int) RECIPE_UV
+        );
 
         // Manufacturing Center
         GTModHandler.addCraftingRecipe(GTCMItemList.ManufacturingCenter.get(1), new Object[]{
