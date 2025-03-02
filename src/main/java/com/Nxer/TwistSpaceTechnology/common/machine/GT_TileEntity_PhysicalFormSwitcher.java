@@ -36,6 +36,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.BorosilicateGlass;
+import ggfab.api.GGFabRecipeMaps;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -94,10 +95,37 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
+            RecipeMap<?> currentRecipeMap = RecipeMaps.fluidSolidifierRecipes;
+
+            @Override
+            protected RecipeMap<?> preProcess() {
+                if (machineMode != 0) return super.preProcess();
+
+                // add tool casting recipes to solidifier mode
+                if (lastRecipeMap != RecipeMaps.fluidSolidifierRecipes
+                    && lastRecipeMap != GGFabRecipeMaps.toolCastRecipes) {
+                    lastRecipe = null;
+                    lastRecipeMap = currentRecipeMap;
+                }
+
+                if (maxParallelSupplier != null) {
+                    maxParallel = maxParallelSupplier.get();
+                }
+
+                return currentRecipeMap;
+            }
+
             @NotNull
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
+                if (machineMode != 0) return super.process();
+
+                currentRecipeMap = RecipeMaps.fluidSolidifierRecipes;
+                CheckRecipeResult result = super.process();
+                if (result.wasSuccessful()) return result;
+
+                currentRecipeMap = GGFabRecipeMaps.toolCastRecipes;
                 return super.process();
             }
 
@@ -136,7 +164,10 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.fluidExtractionRecipes, RecipeMaps.fluidSolidifierRecipes);
+        return Arrays.asList(
+            RecipeMaps.fluidExtractionRecipes,
+            RecipeMaps.fluidSolidifierRecipes,
+            GGFabRecipeMaps.toolCastRecipes);
     }
 
     @Override
