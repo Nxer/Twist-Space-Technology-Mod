@@ -374,6 +374,7 @@ public enum GTCMItemList {
     SeedsSpaceTime,
     MicroSpaceTimeFabricatorio,
     WhiteDwarfMold_Ingot,
+    SwelegfgrUpgradeChip,
 
     // endregion
 

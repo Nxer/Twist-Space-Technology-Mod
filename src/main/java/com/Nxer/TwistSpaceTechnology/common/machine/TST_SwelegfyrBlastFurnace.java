@@ -6,9 +6,13 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textColon;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textSpace;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
@@ -29,13 +33,17 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import bartworks.common.tileentities.multis.mega.MegaMultiBlockBase;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -45,7 +53,9 @@ import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -71,12 +81,12 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
@@ -84,10 +94,13 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.shutdown.ShutDownReason;
+import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_SwelegfyrBlastFurnace> {
 
@@ -121,47 +134,47 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     private static final String[][] shapeMainT1 = new String[][]{
         {"           ","           ","   NNNNN   ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","   NNNNN   ","           ","           "},
         {"           ","   NNNNN   ","  NHHHHHN  "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN ","  NHHHHHN  ","   NNNNN   ","           "},
-        {"   FFFFF   ","  FMMMMMF  "," FMFJJJFMF ","FMFEEEEEFMF","FMJEEEEEJMF","FMJEECEEJMF","FMJEEEEEJMF","FMFEEEEEFMF"," FMFJJJFMF ","  FMMMMMF  ","   FFFFF   "},
+        {"   FFFFF   ","  FMMMMMF  "," FMFKKKFMF ","FMFEEEEEFMF","FMKEEEEEKMF","FMKEECEEKMF","FMKEEEEEKMF","FMFEEEEEFMF"," FMFKKKFMF ","  FMMMMMF  ","   FFFFF   "},
         {"           ","   HHHHH   ","  HFFFFFH  "," HFEEEEEFH "," HFEEEEEFH "," HFEECEEFH "," HFEEEEEFH "," HFEEEEEFH ","  HFFFFFH  ","   HHHHH   ","           "},
-        {"           ","   J   J   ","   FAAAF   "," JFEEEEEFJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JFEEEEEFJ ","   FAAAF   ","   J   J   ","           "},
-        {"           ","   J   J   ","   FAAAF   "," JFEEEEEFJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JFEEEEEFJ ","   FAAAF   ","   J   J   ","           "},
+        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEH  ","  AEECEEN  ","  AEEEEEH  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
+        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEH  ","  AEECEEN  ","  AEEEEEH  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
         {"           ","   HHHHH   ","  HFFFFFH  "," HFEEEEEFH "," HFEEEEEFH "," HFEECEEFH "," HFEEEEEFH "," HFEEEEEFH ","  HFFFFFH  ","   HHHHH   ","           "},
         {"   FFFFF   ","  FMMMMMF  "," FMFJJJFMF ","FMFEEEEEFMF","FMJEEEEEJMF","FMJEECEEJMF","FMJEEEEEJMF","FMFEEEEEFMF"," FMFJJJFMF ","  FMMMMMF  ","   FFFFF   "},
-        {"           ","   JJ JJ   ","  JNNNNNJ  "," JNDDDDDNJ ","JJNDEEEDNJ ","  NDECEDN  ","JJNDEEEDNJ "," JNDDDDDNJ ","  JNNNNNJ  ","   JJ JJ   ","           "},
-        {"           ","    J J    ","   NHNHN   ","  N DDD N  "," JHDEEEDHJ ","  NDECEDN  "," JHDEEEDHJ ","  N DDD N  ","   NHNHN   ","    J J    ","           "},
-        {"           ","    J J    ","   NHNHN   ","  N DDD N  "," JHDEEEDHJ ","  NDECEDN  "," JHDEEEDHJ ","  N DDD N  ","   NHNHN   ","    J J    ","           "},
-        {"           ","           ","   NHNHN   ","  N DDD N  ","  HDEEEDH  ","  NDECEDN  ","  HDEEEDH  ","  N DDD N  ","   NHNHN   ","           ","           "},
-        {"           ","           ","   NHNHN   ","  N DDD N  ","  HDEEEDH  ","  NDECEDN  ","  HDEEEDH  ","  N DDD N  ","   NHNHN   ","           ","           "},
-        {"           ","           ","   NHNHN   ","  N DDD N  ","  HDEEEDH  ","  NDECEDN  ","  HDEEEDH  ","  N DDD N  ","   NHNHN   ","           ","           "},
-        {"           ","           ","   NNNNN   ","  N DDD N  ","  NDEEEDN  ","  NDECEDN  ","  NDEEEDN  ","  N DDD N  ","   NNNNN   ","           ","           "},
+        {"           ","   JJ JJ   ","  JNNNNNJ  "," JNEDDDDNJ ","JJNDEEEDNJ ","  NDECEDN  ","JJNDEEEDNJ "," JNEDDDENJ ","  JNNNNNJ  ","   JJ JJ   ","           "},
+        {"           ","    J J    ","   NHNHN   ","  NEDDDEN  "," JHDEEEDHJ ","  NDECEDN  "," JHDEEEDHJ ","  NEDDDEN  ","   NHNHN   ","    J J    ","           "},
+        {"           ","    J J    ","   NHNHN   ","  NEDDDEN  "," JHDEEEDHJ ","  NDECEDN  "," JHDEEEDHJ ","  NEDDDEN  ","   NHNHN   ","    J J    ","           "},
+        {"           ","           ","   NHNHN   ","  NEDDDEN  ","  HDEEEDH  ","  NDECEDN  ","  HDEEEDH  ","  NEDDDEN  ","   NHNHN   ","           ","           "},
+        {"           ","           ","   NHNHN   ","  NEDDDEN  ","  HDEEEDH  ","  NDECEDN  ","  HDEEEDH  ","  NEDDDEN  ","   NHNHN   ","           ","           "},
+        {"           ","           ","   NHNHN   ","  NEDDDEN  ","  HDEEEDH  ","  NDECEDN  ","  HDEEEDH  ","  NEDDDEN  ","   NHNHN   ","           ","           "},
+        {"           ","           ","   NNNNN   ","  NNDDDNN  ","  NDEEEDN  ","  NDECEDN  ","  NDEEEDN  ","  NNDDDNN  ","   NNNNN   ","           ","           "},
         {"           ","   NNNNN   ","  N     N  "," N  DDD  N "," N DEEED N "," N DECED N "," N DEEED N "," N  DDD  N ","  N     N  ","   NNNNN   ","           "},
         {"           ","   MOOOM   ","  M     M  "," M  MMM  M "," M MEEEM M "," M MECEM M "," M MEEEM M "," M  MMM  M ","  M     M  ","   MMMMM   ","           "},
         {"           ","   MO~OM   ","  A     A  "," A  KKK  A "," A KEEEK A "," A KECEK A "," A KEEEK A "," A  KKK  A ","  A     A  ","   AAAAA   ","           "},
-        {"           ","   MOQOM   ","  M     M  "," M  MMM  M "," M MEEEM M "," M MECEM M "," M MEEEM M "," M  MMM  M ","  M     M  ","   MMMMM   ","           "},
+        {"           ","   MOOOM   ","  M     M  "," M  MMM  M "," M MEEEM M "," M MECEM M "," M MEEEM M "," M  MMM  M ","  M     M  ","   MMMMM   ","           "},
         {"           ","   PPPPP   ","  PDDDDDP  "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP ","  PDDDDDP  ","   PPPPP   ","           "}
     };
 
     private static final String[][] shapeMainT2 = new String[][]{
-        {"                         ","                         ","   NNNNN                 ","  NNNNNNN                ","  NNNNNNN                ","  NNNNNNN                ","  NNNNNNN                ","  NNNNNNN                ","   NNNNN                 ","                         ","                         "},
-        {"                         ","   NNNNN                 ","  NHHHHHN                "," NHDDDDDHN               "," NHDDDDDHN               "," NHDDDDDHN               "," NHDDDDDHN               "," NHDDDDDHN               ","  NHHHHHN                ","   NNNNN                 ","                         "},
-        {"   FFFFF                 ","  FMMMMMF                "," FMFJJJFMF       JJJ     ","FMFEEEEEFMF     J   J    ","FMJEEEEEJMFJJJJJ     J   ","FMJEECEEJMF          J   ","FMJEEEEEJMFJJJJJ     J   ","FMFEEEEEFMF     J   J    "," FMFJJJFMF       JJJ     ","  FMMMMMF                ","   FFFFF                 "},
-        {"                         ","   HHHHH                 ","  HFFFFFH        HHH     "," HFEEEEEFH      HNNNH    "," HFEEEEEFHHHHHHHNNNNNH   "," HFEECEEFNNNNNNNNNNNNH   "," HFEEEEEFHHHHHHHNNNNNH   "," HFEEEEEFH      HNNNH    ","  HFFFFFH        HHH     ","   HHHHH                 ","                         "},
-        {"                         ","   J   J                 ","   FAAAF                 "," JFEEEEEFJ      FAAAF    ","  AEEEEEHAAAAAAAA   A    ","  AEECEEN         L A    ","  AEEEEEHAAAAAAAA   A    "," JFEEEEEFJ      FAAAF    ","   FAAAF                 ","   J   J                 ","                         "},
-        {"                         ","   J   J                 ","   FAAAF                 "," JFEEEEEFJ      FAAAF    ","  AEEEEEHAAAAAAAA   A    ","  AEECEEN         L A    ","  AEEEEEHAAAAAAAA   A    "," JFEEEEEFJ      FAAAF    ","   FAAAF                 ","   J   J                 ","                         "},
-        {"                         ","   HHHHH                 ","  HFFFFFH        HHH     "," HFEEEEEFH      HNNNH    "," HFEEEEEFHHHHHHHN   NH   "," HFEECEEFNNNNNNNN L NH   "," HFEEEEEFHHHHHHHN   NH   "," HFEEEEEFH      HNNNH    ","  HFFFFFH        HHH     ","   HHHHH                 ","                         "},
-        {"   FFFFF                 ","  FMMMMMF                "," FMFJJJFMF       JJJ     ","FMFEEEEEFMF     JAAAJ    ","FMJEEEEEJMFJJJJJA   AJ   ","FMJEECEEJMF     N L NJH  ","FMJEEEEEJMFJJJJJA   AJ   ","FMFEEEEEFMF     JAAAJ    "," FMFJJJFMF       JJJ     ","  FMMMMMF                ","   FFFFF                 "},
-        {"                         ","   JJ JJ                 ","  JNNNNNJ                "," JNDDDDDNJ       AAA     ","JJNDEEEDNJJ     A   A    ","  NDECEDN       N L NJH  ","JJNDEEEDNJJ     A   A    "," JNDDDDDNJ       AAA     ","  JNNNNNJ                ","   JJ JJ                 ","                         "},
-        {"                         ","    J J                  ","   NHNHN                 ","  N DDD N        AAA     "," JHDEEEDHJ      A   A    ","  NDECEDN       N L NJHH "," JHDEEEDHJ      A   A    ","  N DDD N        AAA     ","   NHNHN                 ","    J J                  ","                         "},
-        {"                         ","    J J                  ","   NHNHN                 ","  N DDD N        AAA     "," JHDEEEDHJ      A   A    ","  NDECEDN       N L NJHH "," JHDEEEDHJ      A   A    ","  N DDD N        AAA     ","   NHNHN                 ","    J J                  ","                         "},
-        {"                         ","                         ","   NHNHN                 ","  N DDD N        AAA     ","  HDEEEDH       A   A    ","  NDECEDN       N L NJHH ","  HDEEEDH       A   A    ","  N DDD N        AAA     ","   NHNHN                 ","                         ","                         "},
-        {"                         ","                         ","   NHNHN                 ","  N DDD N        AAA     ","  HDEEEDH       A   A    ","  NDECEDN       N L NJHH ","  HDEEEDH       A   A    ","  N DDD N        AAA     ","   NHNHN                 ","                         ","                         "},
-        {"                         ","                         ","   NHNHN                 ","  N DDD N        AAA     ","  HDEEEDH       A   AJJJ ","  NDECEDN       N L NJHHH","  HDEEEDH       A   AJJJ ","  N DDD N        AAA     ","   NHNHN                 ","                         ","                         "},
-        {"                         ","                         ","   NNNNN                 ","  N DDD N        AAA     ","  NDEEEDN       A   AJHJ ","  NDECEDN       N L NJHHH","  NDEEEDN       A   AJHJ ","  N DDD N        AAA     ","   NNNNN                 ","                         ","                         "},
-        {"                         ","   NNNNN                 ","  N     N       GGGGG    "," N  DDD  N     GGNNNGG   "," N DEEED N     GN   NGHJ "," N DECED N     GN L NGHHH"," N DEEED N     GN   NGHJ "," N  DDD  N     GGNNNGG   ","  N     N       GGGGG    ","   NNNNN                 ","                         "},
-        {"                         ","   MOOOM                 ","  M     M       BGIGB    "," M  MMM  M     BNDIDNB   "," M MEEEM M     GD   DGHJ "," M MECEM M     II L IIHHH"," M MEEEM M     GD   DGHJ "," M  MMM  M     BNDIDNB   ","  M     M       BGIGB    ","   MMMMM                 ","                         "},
-        {"                         ","   MO~OM            HHH  ","  A     A       BNQNBHHH "," A  KKK  A     BNDDDNBHH "," A KEEEK A     ND   DNHHH"," A KECEK A     ND L DNHHH"," A KEEEK A     ND   DNHHH"," A  KKK  A     BNDDDNBHH ","  A     A       BNNNBHHH ","   AAAAA            HHH  ","                         "},
-        {"                         ","   MOOOM            HJJ  ","  M     M       BGIGBJJJ "," M  MMM  M     BNDIDNBJJ "," M MEEEM M     GD   DGHHH"," M MECEM M     II L IIHHH"," M MEEEM M     GD   DGHHH"," M  MMM  M     BNDIDNBJJ ","  M     M       BGIGBJJJ ","   MMMMM            HJJ  ","                         "},
-        {"                         ","   PPPPP            HHH  ","  PDDDDDP       GGGGGHHH "," PDDDDDDDP     GGNNNGGHH "," PDDDDDDDP     GNNNNNGHHH"," PDDDDDDDP     GNNNNNGHHH"," PDDDDDDDP     GNNNNNGHHH"," PDDDDDDDP     GGNNNGGHH ","  PDDDDDP       GGGGGHHH ","   PPPPP            HHH  ","                         "}
+        {"                      ","                      ","   NNNNN              ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","   NNNNN              ","                      ","                      "},
+        {"                      ","   NNNNN              ","  NHHHHHN             "," NHDDDDDHN       NNN  "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN       NNN  ","  NHHHHHN             ","   NNNNN              ","                      "},
+        {"   FFFFF              ","  FMMMMMF             "," FMFKKKFMF      GGGGG ","FMFEEEEEFMF    GGGGGGG","FMKEEEEEKMFJJJJGGGGGGG","FMKEECEEKMF    GGGGGGG","FMKEEEEEKMFJJJJGGGGGGG","FMFEEEEEFMF    GGGGGGG"," FMFKKKFMF      GGGGG ","  FMMMMMF             ","   FFFFF              "},
+        {"                      ","   HHHHH              ","  HFFFFFH        HHH  "," HFEEEEEFH      HNNNH "," HFEEEEEFHHHHHHHNLLLNH"," HFEECEEFNNNNNNNNLLLNh"," HFEEEEEFHHHHHHHNLLLNH"," HFEEEEEFH      HNNNH ","  HFFFFFH        HHH  ","   HHHHH              ","                      "},
+        {"                      ","   J   J              ","  BFAAAFB             "," JFEEEEEFJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN       - L a ","  AEEEEEHAAAAAAAA   A "," JFEEEEEFJ      GAAAG ","  BFAAAFB             ","   J   J              ","                      "},
+        {"                      ","   J   J              ","  BFAAAFB             "," JFEEEEEFJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN       - L a ","  AEEEEEHAAAAAAAA   A "," JFEEEEEFJ      GAAAG ","  BFAAAFB             ","   J   J              ","                      "},
+        {"                      ","   HHHHH              ","  HFFFFFH        HHH  "," HFEEEEEFH      HNNNH "," HFEEEEEFHHHHHHHN   NH"," HFEECEEFNNNNNNNN L Nh"," HFEEEEEFHHHHHHHN   NH"," HFEEEEEFH      HNNNH ","  HFFFFFH        HHH  ","   HHHHH              ","                      "},
+        {"   FFFFF              ","  FMMMMMF             "," FMFJJJFMF       GGG  ","FMFEEEEEFMF     GAAAG ","FMJEEEEEJMFJJJJGA   AG","FMJEECEEJMF    GN L NG","FMJEEEEEJMFJJJJGA   AG","FMFEEEEEFMF     GAAAG "," FMFJJJFMF       GGG  ","  FMMMMMF             ","   FFFFF              "},
+        {"                      ","   JJ JJ              ","  JNNNNNJ        JJJ  "," JNEDDDDNJ      JAAAJ ","JJNDEEEDNJJ    JA   AJ","  NDECEDN      JN L NJ","JJNDEEEDNJJ    JA   AJ"," JNEDDDENJ      JAAAJ ","  JNNNNNJ        JJJ  ","   JJ JJ              ","                      "},
+        {"                      ","    J J               ","   NHNHN              ","  NEDDDEN       BAAAB "," JHDEEEDHJ      A   A ","  NDECEDN       N L N "," JHDEEEDHJ      A   A ","  NEDDDEN       BAAAB ","   NHNHN              ","    J J               ","                      "},
+        {"                      ","    J J               ","   NHNHN              ","  NEDDDEN       BAAAB "," JHDEEEDHJ      A   A ","  NDECEDN       N L N "," JHDEEEDHJ      A   A ","  NEDDDEN       BAAAB ","   NHNHN              ","    J J               ","                      "},
+        {"                      ","                      ","   NHNHN              ","  NEDDDEN       BAAAB ","  HDEEEDH       A   A ","  NDECEDN       N L N ","  HDEEEDH       A   A ","  NEDDDEN       BAAAB ","   NHNHN              ","                      ","                      "},
+        {"                      ","                      ","   NHNHN              ","  NEDDDEN       BAAAB ","  HDEEEDH       A   A ","  NDECEDN       N L N ","  HDEEEDH       A   A ","  NEDDDEN       BAAAB ","   NHNHN              ","                      ","                      "},
+        {"                      ","                      ","   NHNHN              ","  NEDDDEN       BAAAB ","  HDEEEDH       A   A ","  NDECEDN       N L N ","  HDEEEDH       A   A ","  NEDDDEN       BAAAB ","   NHNHN              ","                      ","                      "},
+        {"                      ","                      ","   NNNNN              ","  NNDDDNN       BAAAB ","  NDEEEDN       A   A ","  NDECEDN       N L N ","  NDEEEDN       A   A ","  NNDDDNN       BAAAB ","   NNNNN              ","                      ","                      "},
+        {"                      ","   NNNNN              ","  N     N       GGGGG "," N  DDD  N     GGNNNGG"," N DEEED N     GN   NG"," N DECED N     GN L NG"," N DEEED N     GN   NG"," N  DDD  N     GGNNNGG","  N     N       GGGGG ","   NNNNN              ","                      "},
+        {"                      ","   MOOOM              ","  M     M       BGIGB "," M  MMM  M     BHDIDHB"," M MEEEM M     GD   DG"," M MECEM M     II L II"," M MEEEM M     GD   DG"," M  MMM  M     BHDIDHB","  M     M       BGIGB ","   MMMMM              ","                      "},
+        {"                      ","   MO~OM              ","  A     A       BNQNB "," A  KKK  A     BHDDDHB"," A KEEEK A     ND   DN"," A KECEK A     ND L DN"," A KEEEK A     ND   DN"," A  KKK  A     BHDDDHB","  A     A       BNONB ","   AAAAA              ","                      "},
+        {"                      ","   MOOOM              ","  M     M       BGIGB "," M  MMM  M     BHDIDHB"," M MEEEM M     GD   DG"," M MECEM M     II L II"," M MEEEM M     GD   DG"," M  MMM  M     BHDIDHB","  M     M       BGIGB ","   MMMMM              ","                      "},
+        {"                      ","   PPPPP              ","  PDDDDDP       GGGGG "," PDDDDDDDP     GGNNNGG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GGNNNGG","  PDDDDDP       GGGGG ","   PPPPP              ","                      "}
     };
 
     private static final String[][] shapeBlazeT1 = new String[][]{
@@ -205,6 +218,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 .addShape(STRUCTURE_PIECE_MAIN_T2, transpose(shapeMainT2))
                 .addShape(STRUCTURE_PIECE_Blaze_T1, transpose(shapeBlazeT1))
                 .addShape(STRUCTURE_PIECE_Blaze_T2, transpose(shapeBlazeT2))
+                .addElement('-', isAir())
                 .addElement(
                     'A',
                     withChannel(
@@ -215,6 +229,18 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                             Byte.MAX_VALUE,
                             (te, t) -> te.glassTier = t,
                             te -> te.glassTier)))
+                .addElement(
+                    'a',
+                    ofChain(
+                        withChannel(
+                            "glass",
+                            BorosilicateGlass.ofBoroGlass(
+                                (byte) 0,
+                                (byte) 1,
+                                Byte.MAX_VALUE,
+                                (te, t) -> te.glassTier = t,
+                                te -> te.glassTier)),
+                        isAir()))
                 .addElement('B', ofBlock(GameRegistry.findBlock(Mods.IndustrialCraft2.ID, "blockFenceIron"), 0))
                 .addElement('C', ofBlock(compactFusionCoil, 0))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings1, 11))
@@ -226,6 +252,9 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 5))
                 .addElement('G', ofBlock(TstBlocks.MetaBlockCasing02, 2))
                 .addElement('H', ofBlock(GregTechAPI.sBlockCasings8, 10))
+                .addElement(
+                    'h',
+                    ofChain(ofBlock(GregTechAPI.sBlockCasings8, 10), ofBlock(TstBlocks.MetaBlockCasing01, 15)))
                 .addElement('I', ofFrame(Materials.Neutronium))
                 .addElement('J', ofFrame(Materials.NaquadahAlloy))
                 .addElement('K', ofFrame(Materials.CosmicNeutronium))
@@ -261,15 +290,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return STRUCTURE_DEFINITION;
     }
 
-    int getStructureTier(int aTier) {
-        if (aTier > 1) return 2;
-        return 1;
-    }
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
-        int structureTier = getStructureTier(stackSize.stackSize);
+        int structureTier = stackSize.stackSize > 1 ? 2 : 1;
         this.buildPiece(
             "mainT" + structureTier,
             stackSize,
@@ -284,7 +308,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (mMachine) return -1;
         int built;
         int builtW;
-        int structureTier = getStructureTier(stackSize.stackSize);
+        int structureTier = stackSize.stackSize > 1 ? 2 : 1;
         built = survivialBuildPiece(
             "mainT" + structureTier,
             stackSize,
@@ -313,12 +337,26 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.mHeatingCapacity = 0;
         this.glassTier = 0;
         this.mBlazeHatch = null;
         this.setCoilLevel(HeatingCoilLevel.None);
         if (!checkPiece("mainT" + controllerTier, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
             return false;
+        if (this.mHeatingCapacity < getCoilHeat()) this.mHeatingCapacity = getCoilHeat();
+        this.maxHeatingCapacity = (int) (Math.floor(Math.pow(getCoilHeat(), 1.08) / 100) * 100 + 1);
+
+        if (glassTier < 12) {
+            for (MTEHatchEnergy mEnergyHatch : this.mEnergyHatches) {
+                if (this.glassTier < mEnergyHatch.mTier) {
+                    return false;
+                }
+            }
+            for (MTEHatch hatch : this.mExoticEnergyHatches) {
+                if (this.glassTier < hatch.mTier) {
+                    return false;
+                }
+            }
+        }
 
         return mBlazeHatch != null;
     }
@@ -326,18 +364,29 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     // region Processing Logic
     byte glassTier = 0;
     byte controllerTier = 1;
-    boolean setBlazeFinish = false;
-    boolean clearBlazeFinish = false;
+    float EuModifier = 1;
+    // int mStatus = 0b000000;
+    boolean isBlazeFinishSet = false;
+    boolean isBlazeFinishClear = true;
     boolean isPassiveMode = false;
+    boolean inPassiveMode = false;
     boolean isRapidHeating = false;
+    boolean inRapidHeating = false;
     boolean isHoldingHeat = false;
     ItemStack UpgradeItem = null;
+    int previousRecipeCode = 0;
+    int correctBlazeCost = 0;
     private MTEHatchInput mBlazeHatch;
     public HeatingCoilLevel coilLevel;
     private int mHeatingCapacity;
+    private int maxHeatingCapacity;
 
     public HeatingCoilLevel getCoilLevel() {
         return coilLevel;
+    }
+
+    public int getCoilHeat() {
+        return (int) getCoilLevel().getHeat();
     }
 
     public void setCoilLevel(HeatingCoilLevel coilLevel) {
@@ -347,33 +396,40 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
-        clearBlazeFinish = true;
-        if (UpgradeItem == null) UpgradeItem = GTCMItemList.TestItem0.get(1);
+        if (UpgradeItem == null) UpgradeItem = GTCMItemList.SwelegfgrUpgradeChip.get(1);
     }
 
     private boolean setRemoveBlaze() {
-
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
         String[][] StructureDef = controllerTier > 1 ? shapeBlazeT2 : shapeBlazeT1;
         Block Air = Blocks.air;
         Block Blaze = TFFluids.fluidPyrotheum.getBlock();
-        int BlazeAmount = 0;
+        int BlazeAmount = controllerTier > 1 ? 168000 : 72000;
         int OffSetX = BlazeHorizontalOffSet;
         int OffSetY = BlazeVerticalOffSet;
         int OffSetZ = BlazeDepthOffSet;
-        if (clearBlazeFinish) {
-            // if (!drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, BlazeAmount), false)) return false;
-            drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, BlazeAmount), true);
-            clearBlazeFinish = false;
+        // if (!checkStructure(true)) return false;
+        if (isBlazeFinishClear) {
+            if (!drainPyrotheumFromBlazeHatch(BlazeAmount, false)) return false;
+            drainPyrotheumFromBlazeHatch(BlazeAmount, true);
+            isBlazeFinishClear = false;
             TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Blaze);
-            setBlazeFinish = true;
+            isBlazeFinishSet = true;
             return true;
-        } else if (setBlazeFinish) {
+        } else if (isBlazeFinishSet) {
             // clear will not return existing pyrotheum
-            setBlazeFinish = false;
+            isBlazeFinishSet = false;
             TstUtils.setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "Z", Air);
-            clearBlazeFinish = true;
+            isBlazeFinishClear = true;
             return true;
+        }
+        return false;
+    }
+
+    private boolean checkBlaze() {
+        // If blaze illegal return true
+        if (isBlazeFinishClear || !isBlazeFinishSet) {
+            return !setRemoveBlaze();
         }
         return false;
     }
@@ -415,21 +471,47 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected float getSpeedBonus() {
-        return (float) (1 / 4.82);
+        return isPassiveMode ? (float) (1 / 4.8) : (float) (1 / 7.2);
+    }
+
+    @Override
+    protected float getEuModifier() {
+        return EuModifier;
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return 1;
+        return isPassiveMode ? 256 : 4096;
     }
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
         return new ProcessingLogic() {
 
+            @Override
+            @Nonnull
+            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+
+                // Refresh passive status
+                inPassiveMode = isPassiveMode;
+
+                // No recipe change, no heat clear, whether normal or passive
+                if (!(previousRecipeCode == recipe.hashCode() || previousRecipeCode != 0)) {
+                    previousRecipeCode = recipe.hashCode();
+                    mHeatingCapacity = getCoilHeat();
+                }
+
+                EuModifier = (float) Math.pow(0.9, Math.max(mHeatingCapacity - recipe.mSpecialValue, 0) / 1800);
+
+                // whether recipe can be processed depends on the coil heat
+                return recipe.mSpecialValue <= getCoilHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
+                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+            }
+
             @Nonnull
             @Override
             protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                // overclock depends on the correct heat (mHeatingCapacity)
                 return super.createOverclockCalculator(recipe).setRecipeHeat(recipe.mSpecialValue)
                     .setMachineHeat(TST_SwelegfyrBlastFurnace.this.mHeatingCapacity)
                     .setHeatOC(true)
@@ -438,16 +520,46 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
             @Override
             @Nonnull
-            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                int mRecipeTier = GTUtility.getTier(recipe.mEUt);
-                if (glassTier < 12 && glassTier < mRecipeTier) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTier);
+            public CheckRecipeResult process() {
+                setSpeedBonus(getSpeedBonus());
+                setEuModifier(getEuModifier());
+
+                if (checkBlaze()) return shutDownOfMissingPyrotheum(controllerTier > 1 ? 168000 : 72000);
+
+                if (isPassiveMode && isRapidHeating) {
+                    inRapidHeating = true;
+                    return RapidHeating();
+                } else {
+                    inRapidHeating = false;
+                    return super.process();
                 }
+            }
 
-                if (clearBlazeFinish || !setBlazeFinish) return SimpleCheckRecipeResult.ofFailure("no_Blaze");
+            private CheckRecipeResult RapidHeating() {
+                if (mHeatingCapacity < maxHeatingCapacity) {
+                    // Heating with 100 heat/s
+                    int euTier = (int) Math
+                        .max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
+                    if (euTier < 1) stopMachine(ShutDownReasonRegistry.POWER_LOSS);
 
-                return recipe.mSpecialValue <= mHeatingCapacity ? CheckRecipeResultRegistry.SUCCESSFUL
-                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+                    correctBlazeCost = mHeatingCapacity * maxHeatingCapacity / (int) Math.pow(euTier, 3.5);
+                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true))
+                        return shutDownOfMissingPyrotheum(correctBlazeCost * 10);
+
+                    calculatedEut = availableVoltage * availableAmperage * 15 / 16;
+                    duration = 20;
+                    mHeatingCapacity = numericalApproximation(mHeatingCapacity, maxHeatingCapacity, 100);
+
+                    return CheckRecipeResults.RapidHeating;
+                } else {
+                    // Heating finish, as holding mode running
+                    correctBlazeCost = mHeatingCapacity / 20;
+                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true))
+                        return shutDownOfMissingPyrotheum(correctBlazeCost);
+
+                    duration = 200;
+                    return CheckRecipeResults.RapidHeatFinish;
+                }
             }
 
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
@@ -458,23 +570,22 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
-        if (runningTick % 200 == 0) {
-            // Updates every 10 sec
-            // if (!isPassiveMode) {
-            // if (!drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
-            // return false;
-            // }
-            // } else if (isPassiveMode && !isRapidHeating) {
-            // if (!drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
-            // return false;
-            // }
-            // } else if (isPassiveMode && isRapidHeating) {
-            // if (!drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
-            // return false;
-            // }
-            // } else if (!isPassiveMode && isRapidHeating) {
-            // return false;
-            // }
+        if (runningTick % 20 == 0) {
+            // Updates every sec
+            if (!isPassiveMode) {
+                correctBlazeCost = 1000;
+                if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true)) {
+                    stopMachineOfMissingPyrotheum(correctBlazeCost);
+                    return false;
+                }
+            } else if (inPassiveMode && !isRapidHeating) {
+                correctBlazeCost = mHeatingCapacity / 5;
+                if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true)) {
+                    stopMachineOfMissingPyrotheum(correctBlazeCost);
+                    return false;
+                }
+                mHeatingCapacity = numericalApproximation(mHeatingCapacity, maxHeatingCapacity, 5);
+            }
             runningTick = 1;
         } else {
             runningTick++;
@@ -486,21 +597,85 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if (aBaseMetaTileEntity.isServerSide()) {
+            // Update controller
+            if (controllerTier == 1 && aTick % 20 == 0) {
+                ItemStack ControllerSlot = this.getControllerSlot();
+                if (GTUtility.areStacksEqual(UpgradeItem, ControllerSlot)) {
+                    controllerTier = 2;
+                    mInventory[1] = ItemUtils.depleteStack(ControllerSlot);
+                    markDirty();
+                    // schedule a structure check
+                    mUpdated = true;
+                }
+            }
+
             // Updates every 10 sec
-            if (mUpdate <= -150) {
-                mUpdate = 50;
-                // if(!aBaseMetaTileEntity.isActive()&&isPassiveMode&&!isRapidHeating&&isHoldingHeat){
-                // if (drain(mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, 1), true)) {
-                // mHeatingCapacity=1000;
-                // }else stopMachine(SimpleShutDownReason.ofNormal("missing_Blaze"));
-                // }
+            if (aTick % 200 == 0) {
+                // Heat holding mode
+                if (!aBaseMetaTileEntity.isActive() && isPassiveMode && !isRapidHeating && isHoldingHeat) {
+                    if (checkBlaze()) {
+                        mHeatingCapacity = getCoilHeat();
+                        isHoldingHeat = false;
+                        return;
+                    }
+
+                    correctBlazeCost = mHeatingCapacity / 20;
+                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true)) {
+                        isHoldingHeat = false;
+                    }
+                } else if ((aBaseMetaTileEntity.isActive() && !isPassiveMode)
+                    || !aBaseMetaTileEntity.isActive() && isPassiveMode && !isHoldingHeat) {
+                        int targetHeat = getCoilHeat();
+                        double lossRat = isPassiveMode ? 0.2 : 0.1;
+                        if (mHeatingCapacity != targetHeat) {
+                            int delta = (int) (Math.abs(mHeatingCapacity - targetHeat) * lossRat);
+                            mHeatingCapacity = numericalApproximation(
+                                mHeatingCapacity,
+                                targetHeat,
+                                delta > 0 ? delta : 1);
+                        }
+                    }
             }
         }
+    }
+
+    /**
+     * n1 approaches n2 with a step of n3. n3 < |n1-n2|, n1 = n2.
+     *
+     * @param n1 previous number
+     * @param n2 target number
+     * @param n3 step number, n3 > 0
+     * @return modified n1
+     */
+    public int numericalApproximation(int n1, int n2, int n3) {
+        if (n3 < 0) return n1;
+        int delta = n1 - n2;
+        int absDelta = Math.abs(delta);
+        if (absDelta > n3) {
+            n1 += (delta > 0) ? -n3 : n3;
+        } else {
+            n1 = n2;
+        }
+        return n1;
+    }
+
+    private boolean drainPyrotheumFromBlazeHatch(int amount, boolean doDrain) {
+        return drain(this.mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, amount), doDrain);
+    }
+
+    private void stopMachineOfMissingPyrotheum(int amount) {
+        stopMachine(ShutDownReasonRegistry.outOfFluid(new FluidStack(TFFluids.fluidPyrotheum, amount)));
+    }
+
+    private CheckRecipeResult shutDownOfMissingPyrotheum(int amount) {
+        return SimpleResultWithText.outOfFluid(new FluidStack(TFFluids.fluidPyrotheum, amount));
     }
 
     @Override
     public void stopMachine(@NotNull ShutDownReason reason) {
         runningTick = 0;
+        previousRecipeCode = 0;
+        mHeatingCapacity = getCoilHeat();
         super.stopMachine(reason);
     }
 
@@ -522,16 +697,28 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public int nextMachineMode() {
-        if (!(controllerTier > 1)) {
-            return 0;
-        }
-        return (machineMode + 1) % 2;
+    public String getMachineModeName(int mode) {
+        return getMachineModeName(mode, inPassiveMode, inRapidHeating);
     }
 
-    @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("Swelegfyr.modeMsg." + mode);
+    public String getMachineModeName(int mode, boolean isInPassiveMode, boolean isInRapidHeating) {
+        // #tr Swelegfyr.modeMsg.0
+        // # Normal Mode
+        // #zh_CN 普通模式
+
+        // #tr Swelegfyr.modeMsg.1
+        // # Passive Mode
+        // #zh_CN 被动模式
+
+        if (mode == 1 && isInPassiveMode) {
+            String base = StatCollector.translateToLocal("Swelegfyr.modeMsg." + 1);
+            if (isInRapidHeating && this.getBaseMetaTileEntity()
+                .isActive()) return base + textColon + StatCollector.translateToLocal("SBF.Msg.enableRapidHeating");
+            else if (isHoldingHeat && !this.getBaseMetaTileEntity()
+                .isActive()) return base + textColon + StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat");
+            else return base;
+        }
+        return StatCollector.translateToLocal("Swelegfyr.modeMsg." + 0);
     }
 
     @Override
@@ -545,22 +732,32 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     public ButtonWidget createBlazeStatusButton(IWidgetBuilder<?> builder) {
 
-        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {setRemoveBlaze();})
+        Widget button = new ButtonWidget()
+            .setOnClick(
+                (clickData, widget) -> {
+                    if (checkStructure(true) && !this.getBaseMetaTileEntity()
+                        .isActive()) setRemoveBlaze();
+                })
             .setPlayClickSound(true)
             .setBackground(() -> {
                 List<IDrawable> layers = new ArrayList<>();
                 // Add icons per mode
-                if (clearBlazeFinish) {
+                if (isBlazeFinishSet) {
+                    layers.add(GTUITextures.BUTTON_STANDARD);
+                    layers.add(UITextures.SBF_BlazeClear);
+                } else if (isBlazeFinishClear) {
                     layers.add(GTUITextures.BUTTON_STANDARD);
                     layers.add(UITextures.SBF_BlazeSet);
-                } else if (setBlazeFinish) {
-                    layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
-                    layers.add(UITextures.SBF_BlazeClear);
                 }
 
                 return layers.toArray(new IDrawable[0]);
             })
-            .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getBlazeStatus, this::setBlazeStatus), builder)
+            .attachSyncer(
+                new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishSet, val -> isBlazeFinishSet = val),
+                builder)
+            .attachSyncer(
+                new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishClear, val -> isBlazeFinishClear = val),
+                builder)
             // #tr SBF.Msg.setOrClearBlaze
             // # Place / Clear Pyrotheum
             // #zh_CN 填充/清除炽焱
@@ -572,15 +769,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return (ButtonWidget) button;
     }
 
-    public boolean getBlazeStatus() {
-        // if clear, false; if set true
-        return setBlazeFinish;
-    }
-
-    public void setBlazeStatus(Boolean b) {
-        // do nothing
-    }
-
     public ButtonWidget createRapidHeatingButton(IWidgetBuilder<?> builder) {
         // if controller tier = 1, not generate button
         if (controllerTier != 2) return null;
@@ -588,6 +776,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
             if (isPassiveMode) {
                 setRapidHeating(!isRapidHeating);
+                if (isRapidHeating) isHoldingHeat = false;
             }
         })
             .setPlayClickSound(isPassiveMode)
@@ -610,7 +799,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 return layers.toArray(new IDrawable[0]);
             })
             .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getRapidHeating, this::setRapidHeating), builder)
-            .addTooltip(StatCollector.translateToLocal("debug"))
+            // #tr SBF.Msg.enableRapidHeating
+            // # Rapid Thermal Boost
+            // #zh_CN 快速热增强模式
+            .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableRapidHeating"))
             .setTooltipShowUpDelay(TOOLTIP_DELAY)
             .setPos(116, 91)
             .setSize(16, 16);
@@ -633,6 +825,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
             if (isPassiveMode) {
                 setHoldingHeat(!isHoldingHeat);
+                if (isHoldingHeat) isRapidHeating = false;
             }
         })
             .setPlayClickSound(isPassiveMode)
@@ -655,7 +848,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 return layers.toArray(new IDrawable[0]);
             })
             .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getHoldingHeat, this::setHoldingHeat), builder)
-            .addTooltip(StatCollector.translateToLocal("debug"))
+            // #tr SBF.Msg.enableHoldingHeat
+            // # Thermal Retention Standby
+            // #zh_CN 热保持待机模式
+            .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat"))
             .setTooltipShowUpDelay(TOOLTIP_DELAY)
             .setPos(134, 91)
             .setSize(16, 16);
@@ -676,7 +872,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         float aX, float aY, float aZ) {
         if (controllerTier == 1 && !aPlayer.isSneaking()) {
             ItemStack heldItem = aPlayer.getHeldItem();
-            if (GTUtility.areStacksEqual(GTCMItemList.TestItem0.get(1), heldItem)) {
+            if (GTUtility.areStacksEqual(UpgradeItem, heldItem)) {
                 controllerTier = 2;
                 aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
                 if (getBaseMetaTileEntity().isServerSide()) {
@@ -685,7 +881,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     // schedule a structure check
                     mUpdated = true;
                 }
-                if (setBlazeFinish) setRemoveBlaze();
+                if (isBlazeFinishSet) setRemoveBlaze();
                 return true;
             }
         }
@@ -708,12 +904,17 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         aNBT.setByte("mTier", controllerTier);
         aNBT.setByte("mGlass", glassTier);
         aNBT.setByte("mMode", (byte) machineMode);
+        aNBT.setFloat("EuModifier", EuModifier);
         aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
-        aNBT.setBoolean("setBlazeFinish", setBlazeFinish);
-        aNBT.setBoolean("clearBlazeFinish", clearBlazeFinish);
+        aNBT.setBoolean("isBlazeFinishSet", isBlazeFinishSet);
+        aNBT.setBoolean("isBlazeFinishClear", isBlazeFinishClear);
         aNBT.setBoolean("isPassiveMode", isPassiveMode);
+        aNBT.setBoolean("inPassiveMode", inPassiveMode);
         aNBT.setBoolean("isRapidHeating", isRapidHeating);
+        aNBT.setBoolean("inRapidHeating", inRapidHeating);
         aNBT.setBoolean("isHoldingHeat", isHoldingHeat);
+        aNBT.setInteger("previousRecipeCode", previousRecipeCode);
+        aNBT.setInteger("correctBlazeCost", correctBlazeCost);
         aNBT.setLong("runningTick", runningTick);
     }
 
@@ -723,13 +924,91 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         controllerTier = aNBT.getByte("mTier");
         glassTier = aNBT.getByte("mGlass");
         machineMode = aNBT.getByte("mMode");
+        EuModifier = aNBT.getFloat("EuModifier");
         mHeatingCapacity = aNBT.getInteger("mHeatingCapacity");
-        setBlazeFinish = aNBT.getBoolean("setBlazeFinish");
-        clearBlazeFinish = aNBT.getBoolean("clearBlazeFinish");
+        isBlazeFinishSet = aNBT.getBoolean("isBlazeFinishSet");
+        isBlazeFinishClear = aNBT.getBoolean("isBlazeFinishClear");
         isPassiveMode = aNBT.getBoolean("isPassiveMode");
+        inPassiveMode = aNBT.getBoolean("inPassiveMode");
         isRapidHeating = aNBT.getBoolean("isRapidHeating");
+        inRapidHeating = aNBT.getBoolean("inRapidHeating");
         isHoldingHeat = aNBT.getBoolean("isHoldingHeat");
+        previousRecipeCode = aNBT.getInteger("previousRecipeCode");
+        correctBlazeCost = aNBT.getInteger("correctBlazeCost");
         runningTick = aNBT.getLong("runningTick");
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            tag.setInteger("mHeatingCapacity", mHeatingCapacity);
+            tag.setInteger("maxHeatingCapacity", maxHeatingCapacity);
+            tag.setInteger("correctBlazeCost", correctBlazeCost);
+            tag.setBoolean("inPassiveMode", inPassiveMode);
+            tag.setBoolean("inRapidHeating", inRapidHeating);
+        }
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+
+        boolean PassiveMode = tag.getBoolean("inPassiveMode");
+        boolean RapidHeating = tag.getBoolean("inRapidHeating");
+        if (PassiveMode) {
+            // Old one won't refresh automatically, replace it with new one
+            if (tag.hasKey("mode")) {
+                currentTip.removeIf(s -> s.contains(StatCollector.translateToLocal("GT5U.machines.oreprocessor1")));
+                currentTip
+                    .add(StatCollector.translateToLocal("GT5U.machines.oreprocessor1") + " " + EnumChatFormatting.WHITE
+                    // Status switch need special handle
+                        + getMachineModeName(tag.getInteger("mode"), true, RapidHeating)
+                        + EnumChatFormatting.RESET);
+            }
+        }
+
+        currentTip.add(
+            // #tr Waila.SBF.1
+            // # Current Heat
+            // #zh_CN 当前炉温
+            (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.1")
+                + textColon
+                + EnumChatFormatting.WHITE
+                + tag.getInteger("mHeatingCapacity")));
+        if (PassiveMode) {
+            currentTip.add(
+                // #tr Waila.SBF.2
+                // # Max Heat
+                // #zh_CN 最高炉温
+                (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.2")
+                    + textColon
+                    + EnumChatFormatting.WHITE
+                    + tag.getInteger("maxHeatingCapacity")));
+        }
+        currentTip.add(
+            // #tr Waila.SBF.3
+            // # Current Blazing Pyrotheum Cost
+            // #zh_CN 当前炽焰消耗
+            (EnumChatFormatting.YELLOW + TextEnums.tr(
+                "Waila.SBF.3") + textColon + EnumChatFormatting.WHITE + tag.getInteger("correctBlazeCost") + " L/s"));
+
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.tr("Waila.SBF.1")
+            + textColon
+            + EnumChatFormatting.GOLD
+            + mHeatingCapacity;
+        return ret;
     }
 
     @Override
@@ -757,25 +1036,102 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
+        // spotless:off
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_Scavenger_MachineType)
-            .addInfo(TextLocalization.Tooltip_Scavenger_Controller)
-            .addInfo(TextLocalization.Tooltip_Scavenger_01)
-            .addInfo(TextLocalization.Tooltip_Scavenger_02)
-            .addInfo(TextLocalization.Tooltip_Scavenger_03)
-            .addInfo(TextLocalization.Tooltip_Scavenger_04)
+        // #tr Tooltip_SwelegfyrBlastFurnace_MachineType
+        // # Blast Furnace
+        // #zh_CN 工业高炉
+        tt.addMachineType(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace_MachineType"))
+            // #tr Tooltip_SwelegfyrBlastFurnace_Controller
+            // # Controller block for the Swelegfyr Blast Furnace
+            // #zh_CN 熯焱高炉的控制方块
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace_Controller"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.01
+            // # {\ITALIC}{\GOLD}Blaze Pyrotheum feeds celestial forges. Soulsteel wrought, flame-bound cosmic rite.
+            // #zh_CN {\ITALIC}{\GOLD}炽焱为薪，焚天作工。铸形炼魄，器道同烽
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.01"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.02
+            // # A Volcanus blast furnace specialized in continuous processing, also capable of conventional processes
+            // #zh_CN 专注于持续加工的炽焱高炉，同时也可以进行常规处理
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.02"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.03
+            // # Blast furnace temp gradually increases in Passive Mode
+            // #zh_CN 当处于被动模式时炉温会缓慢升高
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.03"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.04
+            // # Power consumption decreases by 10% per 1800K above recipe temperature threshold
+            // #zh_CN 炉温每高出配方1800K，耗电减少10%
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.04"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.05
+            // # Glass tier restricts Energy Hatch tier
+            // #zh_CN 玻璃等级限制能源仓等级
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.06
+            // # Upgrade structure to unlock additional functions
+            // #zh_CN 升级结构以解锁更多功能
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
+            .addInfo(textSpace)
+            // #tr Tooltip_SwelegfyrBlastFurnace.07
+            // # {\YELLOW}Do not open the cabin door while the machine is running!
+            // #zh_CN {\YELLOW}禁止在机器运行时打开舱门！
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
-            .addController(textFrontBottom)
-            .addInputHatch(textUseBlueprint, 1)
-            .addOutputHatch(textUseBlueprint, 2)
-            .addInputBus(textUseBlueprint, 1)
-            .addOutputBus(textUseBlueprint, 2)
-            .addEnergyHatch(textUseBlueprint, 2)
+            // #tr Tooltip_SwelegfyrBlastFurnace.11
+            // # {\GOLD}Blaze Pyrotheum {\WHITE}Consumption:
+            // #zh_CN {\GOLD}炽焱{\WHITE}消耗:
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.11"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.12
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: 1000 L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： 1000 L/s
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.12"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.13
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: Current Heat / 5 L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： 当前炉温 / 5 L/s
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.13"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.14
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: (Current Heat × Max Heat) / Voltage Tier ^ 3.5 L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： 当前炉温 x 最高炉温 / 电压等级 ^ 3.5 L/s
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.14"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.15
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Thermal Retention Mode: Current Heat / 20 L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}保温模式： 当前炉温 / 20 L/s
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.15"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.21
+            // # {\GOLD}Heat Capacity {\WHITE}Change:
+            // #zh_CN {\GOLD}炉温{\WHITE}改变:
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.21"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.22
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: 5 K/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： 5 K/s
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.22"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.23
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: 100 K/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： 100 K/s
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.23"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.24
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: Current Heat × 10% K/s (Minimum: Coil Heat)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： 当前炉温 x 10% K/s，不低于线圈炉温
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.24"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.25
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown in Non-Retention Mode: Current Heat × 20% K/s (Minimum: Coil Heat)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}非保温模式关机： 当前炉温 x 20% K/s，不低于线圈炉温
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.25"))
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addController(textFrontBottom)
+            .addInputHatch(getBlueprintWithDot(1), 1)
+            .addOutputHatch(getBlueprintWithDot(1), 1)
+            .addInputBus(getBlueprintWithDot(1), 1)
+            .addOutputBus(getBlueprintWithDot(1), 1)
+            .addEnergyHatch(getBlueprintWithDot(2), 2)
+            // #tr Tooltip_SwelegfyrBlastFurnace.31
+            // # Imprint circuit hatch
+            // #zh_CN 炽焱输入仓
+            .addOtherStructurePart(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
             .toolTipFinisher(ModName);
         return tt;
+        // spotless:on
     }
 }

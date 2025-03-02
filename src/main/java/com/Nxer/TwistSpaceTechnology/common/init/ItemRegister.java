@@ -337,6 +337,10 @@ public class ItemRegister {
         // # White Dwarf Mold (Ingot)
         // #zh_CN 白矮星模具(锭)
         GTCMItemList.WhiteDwarfMold_Ingot.set(MetaItem01.registerVariant(36));
+        // #tr item.MetaItem01.42.name
+        // # Swelegfgr Upgrade Chip
+        // #zh_CN 熯焱高炉升级芯片
+        GTCMItemList.SwelegfgrUpgradeChip.set(MetaItem01.registerVariant(42));
         if (Config.activateMegaSpaceStation) {
             // #tr item.MetaItem01.176.name
             // # High-dimensional extend
