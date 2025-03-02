@@ -727,9 +727,9 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (mode == 1 && isInPassiveMode) {
             String base = StatCollector.translateToLocal("Swelegfyr.modeMsg." + 1);
             if (isInRapidHeating && this.getBaseMetaTileEntity()
-                .isActive()) return base + textColon + StatCollector.translateToLocal("SBF.Msg.enableRapidHeating");
+                .isActive()) return base + "-" + StatCollector.translateToLocal("SBF.Msg.enableRapidHeating");
             else if (isHoldingHeat && !this.getBaseMetaTileEntity()
-                .isActive()) return base + textColon + StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat");
+                .isActive()) return base + "-" + StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat");
             else return base;
         }
         return StatCollector.translateToLocal("Swelegfyr.modeMsg." + 0);
