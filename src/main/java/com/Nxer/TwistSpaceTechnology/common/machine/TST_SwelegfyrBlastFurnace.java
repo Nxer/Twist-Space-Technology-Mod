@@ -372,7 +372,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     boolean isRapidHeating = false;
     boolean inRapidHeating = false;
     boolean isHoldingHeat = false;
-    ItemStack UpgradeItem = null;
+    static ItemStack UpgradeItem = null;
     int previousRecipeCode = 0;
     int correctBlazeCost = 0;
     private MTEHatchInput mBlazeHatch;
