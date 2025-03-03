@@ -149,7 +149,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"           ","   NNNNN   ","  N     N  "," N  DDD  N "," N DEEED N "," N DECED N "," N DEEED N "," N  DDD  N ","  N     N  ","   NNNNN   ","           "},
         {"           ","   MOOOM   ","  M     M  "," M  MMM  M "," M MEEEM M "," M MECEM M "," M MEEEM M "," M  MMM  M ","  M     M  ","   MMMMM   ","           "},
         {"           ","   MO~OM   ","  A     A  "," A  KKK  A "," A KEEEK A "," A KECEK A "," A KEEEK A "," A  KKK  A ","  A     A  ","   AAAAA   ","           "},
-        {"           ","   MOOOM   ","  M     M  "," M  MMM  M "," M MEEEM M "," M MECEM M "," M MEEEM M "," M  MMM  M ","  M     M  ","   MMMMM   ","           "},
+        {"           ","   MOSOM   ","  M     M  "," M  MMM  M "," M MEEEM M "," M MECEM M "," M MEEEM M "," M  MMM  M ","  M     M  ","   MMMMM   ","           "},
         {"           ","   PPPPP   ","  PDDDDDP  "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP ","  PDDDDDP  ","   PPPPP   ","           "}
     };
 
@@ -171,7 +171,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"                      ","                      ","   NNNNN              ","  NNDDDNN       BAAAB ","  NDEEEDN       A   A ","  NDECEDN       N L N ","  NDEEEDN       A   A ","  NNDDDNN       BAAAB ","   NNNNN              ","                      ","                      "},
         {"                      ","   NNNNN              ","  N     N       GGGGG "," N  DDD  N     GGNNNGG"," N DEEED N     GN   NG"," N DECED N     GN L NG"," N DEEED N     GN   NG"," N  DDD  N     GGNNNGG","  N     N       GGGGG ","   NNNNN              ","                      "},
         {"                      ","   MOOOM              ","  M     M       BGIGB "," M  MMM  M     BHDIDHB"," M MEEEM M     GD   DG"," M MECEM M     II L II"," M MEEEM M     GD   DG"," M  MMM  M     BHDIDHB","  M     M       BGIGB ","   MMMMM              ","                      "},
-        {"                      ","   MO~OM              ","  A     A       BNQNB "," A  KKK  A     BHDDDHB"," A KEEEK A     ND   DN"," A KECEK A     ND L DN"," A KEEEK A     ND   DN"," A  KKK  A     BHDDDHB","  A     A       BNONB ","   AAAAA              ","                      "},
+        {"                      ","   MO~OM              ","  A     A       BNSNB "," A  KKK  A     BHDDDHB"," A KEEEK A     ND   DN"," A KECEK A     ND L DN"," A KEEEK A     ND   DN"," A  KKK  A     BHDDDHB","  A     A       BNONB ","   AAAAA              ","                      "},
         {"                      ","   MOOOM              ","  M     M       BGIGB "," M  MMM  M     BHDIDHB"," M MEEEM M     GD   DG"," M MECEM M     II L II"," M MEEEM M     GD   DG"," M  MMM  M     BHDIDHB","  M     M       BGIGB ","   MMMMM              ","                      "},
         {"                      ","   PPPPP              ","  PDDDDDP       GGGGG "," PDDDDDDDP     GGNNNGG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GGNNNGG","  PDDDDDP       GGGGG ","   PPPPP              ","                      "}
     };
@@ -277,7 +277,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement(
-                    'Q',
+                    'S',
                     buildHatchAdder(TST_SwelegfyrBlastFurnace.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_SwelegfyrBlastFurnace::addBlazeHatch)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
