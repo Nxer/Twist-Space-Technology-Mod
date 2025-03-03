@@ -213,8 +213,10 @@ public enum GTCMItemList {
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
     ReinforcedBedrockCasing,
+    SwelegfyrCasing,
     BloodyCasing1,
     BloodyCasing2,
+    ReinforcedIridiumAlloyCasing,
     // endregion
 
     // region Machines
@@ -278,6 +280,7 @@ public enum GTCMItemList {
     GiantVacuumDryingFurnace,
     ProcessingArray,
     AdvCircuitAssemblyLine,
+    SwelegfyrBlastFurnace,
     // endregion
 
     // region Modularized Machines
@@ -371,6 +374,7 @@ public enum GTCMItemList {
     SeedsSpaceTime,
     MicroSpaceTimeFabricatorio,
     WhiteDwarfMold_Ingot,
+    SwelegfgrUpgradeChip,
 
     // endregion
 

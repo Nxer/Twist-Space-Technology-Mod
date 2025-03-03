@@ -37,6 +37,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GTUtility;
 
 /**
@@ -356,6 +357,91 @@ public class TstUtils {
             }
         }
         return newStack.toArray(new ItemStack[0]);
+    }
+
+    /**
+     * Like structure definition, select a character from the structure definition string array as the target to place
+     * blocks in the world, with the machine facing the XZ direction.
+     *
+     * @param aBaseMetaTileEntity the machine
+     * @param OffSetX             horizontalOffSet of the machine structure definition
+     * @param OffSetY             verticalOffSet of the machine structure definition
+     * @param OffSetZ             depthOffSet of the machine structure definition
+     * @param StructureString     the machine structure definition string array
+     * @param isStructureFlipped  if the machine is flipped, use getFlip().isHorizontallyFlipped() to get it
+     * @param TargetString        target character
+     * @param TargetBlock         target block
+     * @param TargetMeta          target block meta
+     */
+    public static void setStringBlockXZ(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
+        String[][] StructureString, boolean isStructureFlipped, String TargetString, Block TargetBlock,
+        int TargetMeta) {
+        int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
+        int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
+        int xDir = 0;
+        int zDir = 0;
+        if (mDirectionX == 1) {
+            // EAST
+            xDir = 1;
+            zDir = 1;
+        } else if (mDirectionX == -1) {
+            // WEST
+            xDir = -1;
+            zDir = -1;
+        }
+        if (mDirectionZ == 1) {
+            // SOUTH
+            xDir = -1;
+            zDir = 1;
+        } else if (mDirectionZ == -1) {
+            // NORTH
+            xDir = 1;
+            zDir = -1;
+        }
+        int LengthX = StructureString[0][0].length();
+        int LengthY = StructureString.length;
+        int LengthZ = StructureString[0].length;
+        for (int x = 0; x < LengthX; x++) {
+            for (int z = 0; z < LengthZ; z++) {
+                for (int y = 0; y < LengthY; y++) {
+                    String ListStr = String.valueOf(StructureString[y][z].charAt(x));
+                    if (!Objects.equals(ListStr, TargetString)) continue;
+
+                    int aX = (OffSetX - x) * xDir;
+                    int aY = OffSetY - y;
+                    int aZ = (OffSetZ - z) * zDir;
+                    if (mDirectionX == 1 || mDirectionX == -1) {
+                        int temp = aX;
+                        aX = aZ;
+                        aZ = temp;
+                    }
+                    if (isStructureFlipped) aX = -aX;
+
+                    aBaseMetaTileEntity.getWorld()
+                        .setBlock(
+                            aBaseMetaTileEntity.getXCoord() + aX,
+                            aBaseMetaTileEntity.getYCoord() + aY,
+                            aBaseMetaTileEntity.getZCoord() + aZ,
+                            TargetBlock,
+                            TargetMeta,
+                            3);
+                }
+            }
+        }
+    }
+
+    public static void setStringBlockXZ(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
+        String[][] StructureString, boolean isStructureFlipped, String TargetString, Block TargetBlock) {
+        setStringBlockXZ(
+            aBaseMetaTileEntity,
+            OffSetX,
+            OffSetY,
+            OffSetZ,
+            StructureString,
+            isStructureFlipped,
+            TargetString,
+            TargetBlock,
+            0);
     }
 
 }

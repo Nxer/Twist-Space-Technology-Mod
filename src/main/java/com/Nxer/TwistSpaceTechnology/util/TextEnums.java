@@ -34,6 +34,11 @@ public enum TextEnums {
     // # Added by {\GREEN}Twist Space Technology{\GRAY}
     // #zh_CN 由 {\GREEN}Twist Space Technology{\GRAY} 添加
     AddByTwistSpaceTechnology("AddByTwistSpaceTechnology"),
+
+    // #tr MoreInfoCheckingInScanner
+    // # {\WHITE}Use scanner check controller block to get more information.
+    // #zh_CN {\WHITE}使用三录仪查看主机获取更多信息.
+    MoreInfoCheckingInScanner("MoreInfoCheckingInScanner"),
     SpeedMultiplier("MachineInfoData.SpeedMultiplier"),
     Parallels("MachineInfoData.Parallels"),
     EuModifier("MachineInfoData.EuModifier"),

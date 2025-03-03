@@ -172,6 +172,19 @@ public class TextLocalization {
     // #zh_CN 用{\BLUE}蓝{\AQUA}图{\RESET}预览
     public static final String textUseBlueprint = TextEnums.tr("textUseBlueprint");
 
+    // #tr textColon
+    // # :{\SPACE}
+    // #zh_CN ：{\SPACE}
+    public static final String textColon = TextEnums.tr("textColon");
+    public static String getBlueprintWithDot(int dot){
+        return textUseBlueprint + EnumChatFormatting.WHITE + " Dot: " + EnumChatFormatting.AQUA+dot;
+    }
+
+    // #tr textSpace
+    // # {\SPACE}
+    // #zh_CN {\SPACE}
+    public static final String textSpace = TextEnums.tr("textSpace");
+
     // #tr textAnyCasing
     // # Any Casing
     // #zh_CN 任意机械方块

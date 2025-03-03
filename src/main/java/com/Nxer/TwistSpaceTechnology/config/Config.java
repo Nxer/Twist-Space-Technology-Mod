@@ -64,6 +64,7 @@ public class Config {
     public static final String IndustrialAlchemyTower = "IndustrialAlchemyTower";
     public static final String ProcessingArray = "ProcessingArray";
     public static final String MegaCraftingCenter = "MegaCraftingCenter";
+    public static final String SwelegfyrBlastFurnace = "SwelegfyrBlastFurnace";
     // endregion
 
     // region General
@@ -475,9 +476,20 @@ public class Config {
     public static boolean Enable_ProcessingArray = true;
     // endregion
 
-    // region Processing Array
+    // region Advanced Circuit Assembly Line
     public static boolean Enable_AdvCircuitAssemblyLine = true;
     // endregion
+
+    // region Swelegfyr Blast Furnace
+    public static boolean Enable_SwelegfyrBlastFurnace = true;
+    public static float SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace = 4.8f;
+    public static float SpeedBonus_NormalMode_SwelegfyrBlastFurnace = 1f / 4.8f;
+    public static float SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace = 4.8f;
+    public static float SpeedBonus_PassiveMode_SwelegfyrBlastFurnace = 1f / 4.8f;
+    public static int Parallel_NormalMode_SwelegfyrBlastFurnace = 4096;
+    public static int Parallel_PassiveMode_SwelegfyrBlastFurnace = 256;
+    // endregion
+
 
     // region Mega Crafting Center
     public static boolean Enable_MegaCraftingCenter = true;
@@ -500,6 +512,16 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        // endregion
+
+        // region SwelegfyrBlastFurnace
+        Enable_SwelegfyrBlastFurnace = configuration.getBoolean("Enable_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, Enable_SwelegfyrBlastFurnace, "Enable Swelegfyr Blast Furnace.");
+        SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace = (float) configuration.get("SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace, "Speed Multiplier in Normal Mode of Swelegfyr Blast Furnace. Type: float").getDouble();
+        SpeedBonus_NormalMode_SwelegfyrBlastFurnace = 1f / SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace;
+        SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace = (float) configuration.get("SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace, "Speed Multiplier in Passive Mode of Swelegfyr Blast Furnace. Type: float").getDouble();
+        SpeedBonus_PassiveMode_SwelegfyrBlastFurnace = 1f / SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace;
+        Parallel_NormalMode_SwelegfyrBlastFurnace = configuration.getInt("Parallel_NormalMode_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, Parallel_NormalMode_SwelegfyrBlastFurnace, 1, Integer.MAX_VALUE, "Max Parallel in Normal Mode of Swelegfyr Blast Furnace.");
+        Parallel_PassiveMode_SwelegfyrBlastFurnace = configuration.getInt("Parallel_PassiveMode_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, Parallel_PassiveMode_SwelegfyrBlastFurnace, 1, Integer.MAX_VALUE, "Max Parallel in Passive Mode of Swelegfyr Blast Furnace.");
         // endregion
 
         // region Mega Crafting Center

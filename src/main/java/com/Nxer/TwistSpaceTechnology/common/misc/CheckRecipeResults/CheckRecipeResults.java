@@ -39,4 +39,15 @@ public final class CheckRecipeResults {
     public static final CheckRecipeResult NoCorrectFluidInput = SimpleResultWithText
         .ofFailurePersistOnShutdown("CheckRecipeResult.NoCorrectFluidInput");
 
+    // #tr CheckRecipeResult.RapidHeating
+    // # Rapid Thermal Boosting
+    // #zh_CN 快速升温中
+    public static final CheckRecipeResult RapidHeating = SimpleResultWithText
+        .ofSuccess("CheckRecipeResult.RapidHeating");
+
+    // #tr CheckRecipeResult.RapidHeatFinish
+    // # Heating Complete: Thermal Retention Activated
+    // #zh_CN 升温完成：已自动执行热保持操作
+    public static final CheckRecipeResult RapidHeatFinish = SimpleResultWithText
+        .ofSuccess("CheckRecipeResult.RapidHeatFinish");
 }

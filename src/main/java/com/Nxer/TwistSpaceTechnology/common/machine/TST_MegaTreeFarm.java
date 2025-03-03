@@ -27,7 +27,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -57,6 +56,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -604,79 +604,23 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         String[][] StructureDef = StructureWater;
         Block Air = Blocks.air;
         Block Water = BlocksItems.getFluidBlock(InternalName.fluidDistilledWater);
+        boolean isFlipped = this.getFlip()
+            .isHorizontallyFlipped();
         int OffSetX = 12;
         int OffSetY = 25;
         int OffSetZ = 3;
         if (checkType && !checkWaterFinish) {
             checkAirFinish = false;
-            setStringBlock(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "P", Water);
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Water);
             checkWaterFinish = true;
         } else if (!checkType && !checkAirFinish) {
             checkWaterFinish = false;
-            setStringBlock(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "P", Air);
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Air);
             checkAirFinish = true;
         }
 
-    }
-
-    public void setStringBlock(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
-        String[][] StructureString, String TargetString, Block TargetBlock, int TargetMeta) {
-        int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
-        int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
-        int xDir = 0;
-        int zDir = 0;
-        if (mDirectionX == 1) {
-            // EAST
-            xDir = 1;
-            zDir = 1;
-        } else if (mDirectionX == -1) {
-            // WEST
-            xDir = -1;
-            zDir = -1;
-        }
-        if (mDirectionZ == 1) {
-            // SOUTH
-            xDir = -1;
-            zDir = 1;
-        } else if (mDirectionZ == -1) {
-            // NORTH
-            xDir = 1;
-            zDir = -1;
-        }
-        int LengthX = StructureString[0].length;
-        int LengthY = StructureString.length;
-        int LengthZ = StructureString[0][0].length();
-        for (int x = 0; x < LengthX; x++) {
-            for (int z = 0; z < LengthZ; z++) {
-                for (int y = 0; y < LengthY; y++) {
-                    String ListStr = String.valueOf(StructureString[y][x].charAt(z));
-                    if (!Objects.equals(ListStr, TargetString)) continue;
-
-                    int aX = (OffSetX - x) * xDir;
-                    int aY = OffSetY - y;
-                    int aZ = (OffSetZ - z) * zDir;
-                    if (mDirectionX == 1 || mDirectionX == -1) {
-                        int temp = aX;
-                        aX = aZ;
-                        aZ = temp;
-                    }
-
-                    aBaseMetaTileEntity.getWorld()
-                        .setBlock(
-                            aBaseMetaTileEntity.getXCoord() + aX,
-                            aBaseMetaTileEntity.getYCoord() + aY,
-                            aBaseMetaTileEntity.getZCoord() + aZ,
-                            TargetBlock,
-                            TargetMeta,
-                            3);
-                }
-            }
-        }
-    }
-
-    public void setStringBlock(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
-        String[][] StructureString, String TargetString, Block TargetBlock) {
-        setStringBlock(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureString, TargetString, TargetBlock, 0);
     }
 
     // region Processing Logic
