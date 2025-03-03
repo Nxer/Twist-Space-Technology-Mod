@@ -618,9 +618,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 }
             }
 
-            boolean isActive = aBaseMetaTileEntity.isActive();
             // Updates every 10 sec
             if (aTick % 200 == 0) {
+                boolean isActive = aBaseMetaTileEntity.isActive();
+
                 // Heat holding mode
                 if (!isActive && isPassiveMode && !isRapidHeating && isHoldingHeat) {
                     // If missing blaze, stop holding
