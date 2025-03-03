@@ -712,10 +712,11 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     public String getMachineModeName(int mode) {
-        return getMachineModeName(mode, inPassiveMode, inRapidHeating);
+        // Override the origin logic, check machine mode name with the machine status
+        return getMachineModeName(mode != 0, inPassiveMode, inRapidHeating);
     }
 
-    public String getMachineModeName(int mode, boolean isInPassiveMode, boolean isInRapidHeating) {
+    public String getMachineModeName(boolean isPassiveMode, boolean inPassiveMode, boolean inRapidHeating) {
         // #tr Swelegfyr.modeMsg.0
         // # Normal Mode
         // #zh_CN 普通模式
@@ -724,15 +725,34 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         // # Passive Mode
         // #zh_CN 被动模式
 
-        if (mode == 1 && isInPassiveMode) {
-            String base = StatCollector.translateToLocal("Swelegfyr.modeMsg." + 1);
-            if (isInRapidHeating && this.getBaseMetaTileEntity()
-                .isActive()) return base + "-" + StatCollector.translateToLocal("SBF.Msg.enableRapidHeating");
-            else if (isHoldingHeat && !this.getBaseMetaTileEntity()
-                .isActive()) return base + "-" + StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat");
-            else return base;
+        int correctMode = 0;
+        boolean isActive = this.getBaseMetaTileEntity()
+            .isActive();
+        String suffixKey = null;
+
+        if (isActive) {
+            // Machine active, check work status
+            if (inPassiveMode) {
+                correctMode = 1;
+                if (inRapidHeating) {
+                    suffixKey = "SBF.Msg.enableRapidHeating";
+                }
+            }
+        } else {
+            // Machine inactive, check real-time status
+            if (isPassiveMode) {
+                correctMode = 1;
+                if (isHoldingHeat) {
+                    suffixKey = "SBF.Msg.enableHoldingHeat";
+                }
+            }
         }
-        return StatCollector.translateToLocal("Swelegfyr.modeMsg." + 0);
+
+        String base = StatCollector.translateToLocal("Swelegfyr.modeMsg." + correctMode);
+        if (suffixKey != null) {
+            return base + "-" + StatCollector.translateToLocal(suffixKey);
+        }
+        return base;
     }
 
     @Override
@@ -961,6 +981,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             tag.setInteger("mHeatingCapacity", mHeatingCapacity);
             tag.setInteger("maxHeatingCapacity", maxHeatingCapacity);
             tag.setInteger("correctBlazeCost", correctBlazeCost);
+            tag.setBoolean("isPassiveMode", isPassiveMode);
             tag.setBoolean("inPassiveMode", inPassiveMode);
             tag.setBoolean("inRapidHeating", inRapidHeating);
         }
@@ -972,18 +993,20 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
 
-        boolean PassiveMode = tag.getBoolean("inPassiveMode");
-        boolean RapidHeating = tag.getBoolean("inRapidHeating");
-        if (PassiveMode) {
+        boolean IsPassiveMode = tag.getBoolean("isPassiveMode");
+        boolean InPassiveMode = tag.getBoolean("inPassiveMode");
+        boolean InRapidHeating = tag.getBoolean("inRapidHeating");
+        boolean IsActive = this.getBaseMetaTileEntity()
+            .isActive();
+
+        if (tag.hasKey("mode")) {
             // Old one won't refresh automatically, replace it with new one
-            if (tag.hasKey("mode")) {
-                currentTip.removeIf(s -> s.contains(StatCollector.translateToLocal("GT5U.machines.oreprocessor1")));
-                currentTip
-                    .add(StatCollector.translateToLocal("GT5U.machines.oreprocessor1") + " " + EnumChatFormatting.WHITE
-                    // Status switch need special handle
-                        + getMachineModeName(tag.getInteger("mode"), true, RapidHeating)
-                        + EnumChatFormatting.RESET);
-            }
+            currentTip.removeIf(s -> s.contains(StatCollector.translateToLocal("GT5U.machines.oreprocessor1")));
+            currentTip
+                .add(StatCollector.translateToLocal("GT5U.machines.oreprocessor1") + " " + EnumChatFormatting.WHITE
+                // Status switch need special handle
+                    + getMachineModeName(IsPassiveMode, InPassiveMode, InRapidHeating)
+                    + EnumChatFormatting.RESET);
         }
 
         currentTip.add(
@@ -994,7 +1017,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 + textColon
                 + EnumChatFormatting.WHITE
                 + tag.getInteger("mHeatingCapacity")));
-        if (PassiveMode) {
+        if ((IsActive && InPassiveMode) || (!IsActive && IsPassiveMode)) {
             currentTip.add(
                 // #tr Waila.SBF.2
                 // # Max Heat
