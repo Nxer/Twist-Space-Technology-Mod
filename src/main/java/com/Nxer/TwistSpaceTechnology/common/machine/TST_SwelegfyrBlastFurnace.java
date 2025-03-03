@@ -476,7 +476,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected float getSpeedBonus() {
-        return isPassiveMode ? (float) (1 / 4.8) : (float) (1 / 7.2);
+        return (float) (1 / 4.8);
     }
 
     @Override
@@ -630,7 +630,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     }
                 } else if ((aBaseMetaTileEntity.isActive() && !isPassiveMode)
                     || !aBaseMetaTileEntity.isActive() && isPassiveMode && !isHoldingHeat) {
-                    // Not hold, loss heat
+                        // Not hold, loss heat
                         int targetHeat = getCoilHeat();
                         double lossRat = isPassiveMode ? 0.2 : 0.1;
                         if (mHeatingCapacity != targetHeat) {
@@ -668,7 +668,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     /**
      * drain Blaze Pyrotheum from mBlazeHatch
      *
-     * @param amount amount of Blaze Pyrotheum
+     * @param amount  amount of Blaze Pyrotheum
      * @param doDrain if really drain
      * @return can it drain
      */

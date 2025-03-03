@@ -163,7 +163,6 @@ import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static tectech.thing.CustomItemList.rack_Hatch;
 
-import gtPlusPlus.core.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
