@@ -55,6 +55,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
@@ -476,7 +477,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected float getSpeedBonus() {
-        return (float) (1 / 4.8);
+        return isPassiveMode ? Config.SpeedBonus_PassiveMode_SwelegfyrBlastFurnace
+            : Config.SpeedBonus_NormalMode_SwelegfyrBlastFurnace;
     }
 
     @Override
@@ -486,7 +488,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected int getMaxParallelRecipes() {
-        return isPassiveMode ? 256 : 4096;
+        return isPassiveMode ? Config.Parallel_NormalMode_SwelegfyrBlastFurnace
+            : Config.Parallel_PassiveMode_SwelegfyrBlastFurnace;
     }
 
     @Override
