@@ -3276,9 +3276,9 @@ public class GTCMMachineRecipes implements IRecipePool {
                 4,
                 new Object[]{
                     ItemList.Circuit_Board_Multifiberglass_Elite.get(1),
+                    ItemList.ZPM2.get(1),
                     Materials.Silver.getNanite(2),
                     ItemRefer.Fluid_Storage_Core_T5.get(2),
-                    ItemList.ZPM2.get(1),
 
                     ItemList.UHV_Coil.get(64),
                     PicoWafer.get(64),
@@ -3292,7 +3292,7 @@ public class GTCMMachineRecipes implements IRecipePool {
                 },
                 new FluidStack[]{
                     MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 16),
-                    MaterialsAlloy.ABYSSAL.getFluidStack(144 * 32),
+                    MaterialsAlloy.ABYSSAL.getFluidStack(144 * 64),
                     new FluidStack(TFFluids.fluidPyrotheum, 1000 * 4096)
                 },
                 GTCMItemList.SwelegfgrUpgradeChip.get(1),
