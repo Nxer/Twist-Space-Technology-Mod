@@ -618,10 +618,12 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 }
             }
 
+            boolean isActive = aBaseMetaTileEntity.isActive();
             // Updates every 10 sec
             if (aTick % 200 == 0) {
                 // Heat holding mode
-                if (!aBaseMetaTileEntity.isActive() && isPassiveMode && !isRapidHeating && isHoldingHeat) {
+                if (!isActive && isPassiveMode && !isRapidHeating && isHoldingHeat) {
+                    // If missing blaze, stop holding
                     if (checkBlaze()) {
                         mHeatingCapacity = getCoilHeat();
                         isHoldingHeat = false;
@@ -632,20 +634,18 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true)) {
                         isHoldingHeat = false;
                     }
-                } else if ((aBaseMetaTileEntity.isActive() && !isPassiveMode)
-                    || !aBaseMetaTileEntity.isActive() && isPassiveMode && !isHoldingHeat) {
-                        // Not hold, loss heat
-                        int targetHeat = getCoilHeat();
-                        double lossRat = isPassiveMode ? 0.2 : 0.1;
-                        if (!aBaseMetaTileEntity.isActive()) correctBlazeCost = 0;
-                        if (mHeatingCapacity != targetHeat) {
-                            int delta = (int) (Math.abs(mHeatingCapacity - targetHeat) * lossRat);
-                            mHeatingCapacity = numericalApproximation(
-                                mHeatingCapacity,
-                                targetHeat,
-                                delta > 0 ? delta : 1);
-                        }
+                } else if (!isPassiveMode || (!isActive && !isHoldingHeat)) {
+                    // Not hold, loss heat
+                    int targetHeat = getCoilHeat();
+                    double lossRat = isActive && !isPassiveMode ? 0.1 : 0.2;
+                    if (!isActive && !isHoldingHeat) correctBlazeCost = 0;
+                    // Normal mode inactive not cost Blaze
+
+                    if (mHeatingCapacity != targetHeat) {
+                        int delta = (int) (Math.abs(mHeatingCapacity - targetHeat) * lossRat);
+                        mHeatingCapacity = numericalApproximation(mHeatingCapacity, targetHeat, delta > 0 ? delta : 1);
                     }
+                }
             }
         }
     }
