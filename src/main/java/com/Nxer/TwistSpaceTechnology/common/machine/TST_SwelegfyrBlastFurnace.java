@@ -532,6 +532,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 if (checkBlaze()) return shutDownOfMissingPyrotheum(controllerTier > 1 ? 168000 : 72000);
 
                 if (isPassiveMode && isRapidHeating) {
+                    inPassiveMode = true;
                     inRapidHeating = true;
                     return RapidHeating();
                 } else {
@@ -547,9 +548,9 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                         .max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
                     if (euTier < 1) stopMachine(ShutDownReasonRegistry.POWER_LOSS);
 
-                    correctBlazeCost = mHeatingCapacity * maxHeatingCapacity / (int) Math.pow(euTier, 3.5);
-                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true))
-                        return shutDownOfMissingPyrotheum(correctBlazeCost * 10);
+                    correctBlazeCost = mHeatingCapacity * maxHeatingCapacity / (int) Math.pow(euTier, 3);
+                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true))
+                        return shutDownOfMissingPyrotheum(correctBlazeCost);
 
                     calculatedEut = availableVoltage * availableAmperage * 15 / 16;
                     duration = 20;
@@ -559,8 +560,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 } else {
                     // Heating finish, as holding mode running
                     correctBlazeCost = mHeatingCapacity / 20;
-                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true))
-                        return shutDownOfMissingPyrotheum(correctBlazeCost);
+                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true))
+                        return shutDownOfMissingPyrotheum(correctBlazeCost * 10);
 
                     duration = 200;
                     return CheckRecipeResults.RapidHeatFinish;
@@ -633,6 +634,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                         // Not hold, loss heat
                         int targetHeat = getCoilHeat();
                         double lossRat = isPassiveMode ? 0.2 : 0.1;
+                        if(!aBaseMetaTileEntity.isActive()) correctBlazeCost = 0;
                         if (mHeatingCapacity != targetHeat) {
                             int delta = (int) (Math.abs(mHeatingCapacity - targetHeat) * lossRat);
                             mHeatingCapacity = numericalApproximation(
@@ -1128,8 +1130,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}当前炉温 {\WHITE}/ {\GOLD}5 {\WHITE}L/s
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.13"))
             // #tr Tooltip_SwelegfyrBlastFurnace.14
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Current Heat {\WHITE}× {\AQUA}Max Heat{\WHITE}) / {\AQUA}Voltage Tier {\WHITE}^ {\GOLD}3.5 {\WHITE}L/s
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}电压等级 {\WHITE}^ {\GOLD}3.5 {\WHITE}L/s
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Current Heat {\WHITE}× {\AQUA}Max Heat{\WHITE}) / {\AQUA}Voltage Tier {\WHITE}^ {\GOLD}3 {\WHITE}L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}电压等级 {\WHITE}^ {\GOLD}3 {\WHITE}L/s
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.14"))
             // #tr Tooltip_SwelegfyrBlastFurnace.15
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Thermal Retention Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}20 {\WHITE}L/s
