@@ -1105,8 +1105,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN 玻璃等级限制能源仓等级。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
             // #tr Tooltip_SwelegfyrBlastFurnace.06
-            // # Use Swelegfgr Upgrade Chip to upgrade machine and structure to unlock additional functions.
-            // #zh_CN 使用熯焱升级芯片升级机器与结构以解锁更多功能。
+            // # Use Swelegfgr Upgrade Chip to upgrade machine and build adv structure to unlock additional functions.
+            // #zh_CN 使用熯焱升级芯片升级机器并搭建附加结构以解锁更多功能。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
             .addInfo(textSpace)
             // #tr Tooltip_SwelegfyrBlastFurnace.07
@@ -1131,7 +1131,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.13"))
             // #tr Tooltip_SwelegfyrBlastFurnace.14
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Current Heat {\WHITE}× {\AQUA}Max Heat{\WHITE}) / {\AQUA}Voltage Tier {\WHITE}^ {\GOLD}3.5 {\WHITE}L/s
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\AQUA}当前炉温 {\WHITE}x {\AQUA}高炉温 {\WHITE}/ {\AQUA}电压等级 {\WHITE}^ {\GOLD}3.5 {\WHITE}L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}电压等级 {\WHITE}^ {\GOLD}3.5 {\WHITE}L/s
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.14"))
             // #tr Tooltip_SwelegfyrBlastFurnace.15
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Thermal Retention Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}20 {\WHITE}L/s
@@ -1158,6 +1158,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}非保温模式关机： {\AQUA}当前炉温 {\WHITE}x {\GOLD}20% {\WHITE}K/s [{\BLUE}降温{\WHITE}]， 不低于线圈炉温
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.25"))
             .addStructureInfo(Text_SeparatingLine)
+            // #tr Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn
+            // # Attention: Pyrotheum input hatch location will be changed when upgrade machine.
+            // #zh_CN 注意：升级结构后炽焱输入仓位置会发生变化.
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addController(textFrontBottom)
             .addInputHatch(getBlueprintWithDot(1), 1)
@@ -1166,7 +1170,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addOutputBus(getBlueprintWithDot(1), 1)
             .addEnergyHatch(getBlueprintWithDot(2), 2)
             // #tr Tooltip_SwelegfyrBlastFurnace.31
-            // # Imprint circuit hatch
+            // # Pyrotheum input hatch
             // #zh_CN 炽焱输入仓
             .addOtherStructurePart(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
             .toolTipFinisher(ModName);
