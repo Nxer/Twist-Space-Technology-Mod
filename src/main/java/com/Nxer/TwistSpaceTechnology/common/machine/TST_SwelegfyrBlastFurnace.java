@@ -637,7 +637,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                         // Not hold, loss heat
                         int targetHeat = getCoilHeat();
                         double lossRat = isPassiveMode ? 0.2 : 0.1;
-                        if(!aBaseMetaTileEntity.isActive()) correctBlazeCost = 0;
+                        if (!aBaseMetaTileEntity.isActive()) correctBlazeCost = 0;
                         if (mHeatingCapacity != targetHeat) {
                             int delta = (int) (Math.abs(mHeatingCapacity - targetHeat) * lossRat);
                             mHeatingCapacity = numericalApproximation(
