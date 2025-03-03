@@ -616,16 +616,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
             // Updates every 10 sec
             if (aTick % 200 == 0) {
-                // Check Blaze structure
-                // if (!checkPiece(
-                // "blazeT" + controllerTier,
-                // BlazeHorizontalOffSet,
-                // BlazeVerticalOffSet,
-                // BlazeDepthOffSet)) {
-                // isBlazeFinishClear = true;
-                // isBlazeFinishSet = false;
-                // }
-
                 // Heat holding mode
                 if (!aBaseMetaTileEntity.isActive() && isPassiveMode && !isRapidHeating && isHoldingHeat) {
                     if (checkBlaze()) {
@@ -640,6 +630,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     }
                 } else if ((aBaseMetaTileEntity.isActive() && !isPassiveMode)
                     || !aBaseMetaTileEntity.isActive() && isPassiveMode && !isHoldingHeat) {
+                    // Not hold, loss heat
                         int targetHeat = getCoilHeat();
                         double lossRat = isPassiveMode ? 0.2 : 0.1;
                         if (mHeatingCapacity != targetHeat) {
@@ -674,6 +665,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return n1;
     }
 
+    /**
+     * drain Blaze Pyrotheum from mBlazeHatch
+     *
+     * @param amount amount of Blaze Pyrotheum
+     * @param doDrain if really drain
+     * @return can it drain
+     */
     private boolean drainPyrotheumFromBlazeHatch(int amount, boolean doDrain) {
         return drain(this.mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, amount), doDrain);
     }
@@ -1105,8 +1103,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN 玻璃等级限制能源仓等级。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
             // #tr Tooltip_SwelegfyrBlastFurnace.06
-            // # Use Swelegfgr Upgrade Chip to upgrade machine and build adv structure to unlock additional functions.
-            // #zh_CN 使用熯焱升级芯片升级机器并搭建附加结构以解锁更多功能。
+            // # Upgrade machine and build additional structure to unlock additional functions.
+            // #zh_CN 升级机器并搭建附加结构以解锁更多功能。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
             .addInfo(textSpace)
             // #tr Tooltip_SwelegfyrBlastFurnace.07

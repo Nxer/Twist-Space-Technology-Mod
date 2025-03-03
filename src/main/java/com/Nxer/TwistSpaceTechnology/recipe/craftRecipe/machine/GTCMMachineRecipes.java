@@ -163,6 +163,7 @@ import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static tectech.thing.CustomItemList.rack_Hatch;
 
+import gtPlusPlus.core.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -3275,19 +3276,20 @@ public class GTCMMachineRecipes implements IRecipePool {
                 600_000,
                 4,
                 new Object[]{
-                    ItemList.Circuit_Board_Elite.get(1),
+                    ItemList.Circuit_Board_Multifiberglass_Elite.get(1),
                     Materials.Silver.getNanite(2),
-                    ItemRefer.Fluid_Storage_Core_T5.get(4),
-                    ItemList.neutroniumHeatCapacitor.get(6),
+                    ItemRefer.Fluid_Storage_Core_T5.get(2),
+                    ItemList.ZPM2.get(1),
 
                     ItemList.UHV_Coil.get(64),
+                    PicoWafer.get(64),
                     ItemList.Circuit_Chip_QPIC.get(64),
-                    PicoWafer.get(32),
-                    ItemList.Energy_Cluster.get(8),
+                    ItemList.Circuit_Chip_QPIC.get(64),
 
-                    new Object[] {  OrePrefixes.circuit.get(Materials.UHV), 16},
+                    new Object[] { OrePrefixes.circuit.get(Materials.UHV), 16},
                     new Object[] { OrePrefixes.circuit.get(Materials.UV), 32},
-                    GTOreDictUnificator.get(OrePrefixes.plateSuperdense,Materials.InfinityCatalyst,4)
+                    MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getBolt(48),
+                    MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFoil(64),
                 },
                 new FluidStack[]{
                     MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 16),
