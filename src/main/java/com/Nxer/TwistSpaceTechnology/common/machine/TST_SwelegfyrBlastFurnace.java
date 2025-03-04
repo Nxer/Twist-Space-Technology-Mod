@@ -365,8 +365,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     // region Processing Logic
     byte glassTier = 0;
     byte controllerTier = 1;
-    float EuModifier = 1;
-    // int mStatus = 0b000000;
     boolean isBlazeFinishSet = false;
     boolean isBlazeFinishClear = true;
     boolean isPassiveMode = false;
@@ -482,11 +480,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    protected float getEuModifier() {
-        return EuModifier;
-    }
-
-    @Override
     protected int getMaxParallelRecipes() {
         return isPassiveMode ? Config.Parallel_NormalMode_SwelegfyrBlastFurnace
             : Config.Parallel_PassiveMode_SwelegfyrBlastFurnace;
@@ -509,7 +502,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     mHeatingCapacity = getCoilHeat();
                 }
 
-                EuModifier = (float) Math.pow(0.9, Math.max(mHeatingCapacity - recipe.mSpecialValue, 0) / 1800);
+                euModifier = (float) Math.pow(0.9, Math.max(mHeatingCapacity - recipe.mSpecialValue, 0) / 1800);
 
                 // whether recipe can be processed depends on the coil heat
                 return recipe.mSpecialValue <= getCoilHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
@@ -943,7 +936,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         aNBT.setByte("mTier", controllerTier);
         aNBT.setByte("mGlass", glassTier);
         aNBT.setByte("mMode", (byte) machineMode);
-        aNBT.setFloat("EuModifier", EuModifier);
         aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
         aNBT.setBoolean("isBlazeFinishSet", isBlazeFinishSet);
         aNBT.setBoolean("isBlazeFinishClear", isBlazeFinishClear);
@@ -963,7 +955,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         controllerTier = aNBT.getByte("mTier");
         glassTier = aNBT.getByte("mGlass");
         machineMode = aNBT.getByte("mMode");
-        EuModifier = aNBT.getFloat("EuModifier");
         mHeatingCapacity = aNBT.getInteger("mHeatingCapacity");
         isBlazeFinishSet = aNBT.getBoolean("isBlazeFinishSet");
         isBlazeFinishClear = aNBT.getBoolean("isBlazeFinishClear");
