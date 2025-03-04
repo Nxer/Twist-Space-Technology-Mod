@@ -73,21 +73,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     // endregion
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return speedBonus;
-    }
-
-    @Override
-    protected int getMaxParallelRecipes() {
-        return parallel;
-    }
-
-    @Override
     public int totalMachineMode() {
         /*
          * 0 - Vacuum Furnace
