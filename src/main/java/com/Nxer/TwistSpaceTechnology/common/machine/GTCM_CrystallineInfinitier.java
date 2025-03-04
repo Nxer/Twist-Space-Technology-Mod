@@ -40,7 +40,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -83,10 +82,6 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     // region Processing Logic
     public byte glassTier = 0;
     private int fieldGeneratorTier = 0;
-    private float euModifier = 1;
-    private float speedBonus = 1;
-    private int maxParallel = 1;
-    private boolean enablePerfectOverclock = false;
 
     @Override
     public int totalMachineMode() {
@@ -127,10 +122,6 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
         aNBT.setByte("glassTier", glassTier);
         aNBT.setByte("mode", (byte) machineMode);
-        aNBT.setFloat("euModifier", euModifier);
-        aNBT.setFloat("speedBonus", speedBonus);
-        aNBT.setInteger("maxParallel", maxParallel);
-        aNBT.setBoolean("enablePerfectOverclock", enablePerfectOverclock);
     }
 
     @Override
@@ -140,10 +131,6 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
         glassTier = aNBT.getByte("glassTier");
         machineMode = aNBT.getByte("mode");
-        euModifier = aNBT.getFloat("euModifier");
-        speedBonus = aNBT.getFloat("speedBonus");
-        maxParallel = aNBT.getInteger("maxParallel");
-        enablePerfectOverclock = aNBT.getBoolean("enablePerfectOverclock");
     }
 
     @Override
@@ -171,22 +158,6 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
             }
 
         }.setMaxParallelSupplier(this::getLimitedMaxParallel);
-    }
-
-    protected float getEuModifier() {
-        return euModifier;
-    }
-
-    protected float getSpeedBonus() {
-        return speedBonus;
-    }
-
-    protected int getMaxParallelRecipes() {
-        return maxParallel;
-    }
-
-    protected boolean isEnablePerfectOverclock() {
-        return enablePerfectOverclock;
     }
 
     @Override
@@ -225,9 +196,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         euModifier = 1.0F / Math.max(fieldGeneratorTier, 1);
         maxParallel = (int) Math.min(
             Integer.MAX_VALUE,
-            (long) glassTier * fieldGeneratorTier
-                * TstUtils.calculateVoltageTier(getMaxInputEu())
-                * ParallelMultiplier_CrystallineInfinitier);
+            (long) glassTier * fieldGeneratorTier * getTotalPowerTier() * ParallelMultiplier_CrystallineInfinitier);
         enablePerfectOverclock = fieldGeneratorTier >= FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
 
         return sign;
