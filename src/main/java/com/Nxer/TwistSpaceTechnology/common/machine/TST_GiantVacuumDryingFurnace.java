@@ -60,8 +60,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     private static final int MACHINEMODE_VACUUMFURNACE = 0;
     private static final int MACHINEMODE_DEHYDRATOR = 1;
     private int piece = 1;
-    private int parallel = 1;
-    private float speedBonus = 1;
     private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
 
     // region constructor
@@ -128,8 +126,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         super.saveNBTData(aNBT);
 
         aNBT.setInteger("piece", piece);
-        aNBT.setInteger("parallel", parallel);
-        aNBT.setFloat("speedBonus", speedBonus);
     }
 
     @Override
@@ -137,8 +133,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         super.loadNBTData(aNBT);
 
         piece = aNBT.getInteger("piece");
-        parallel = aNBT.getInteger("parallel");
-        speedBonus = aNBT.getFloat("speedBonus");
     }
 
     private static IStructureDefinition<TST_GiantVacuumDryingFurnace> STRUCTURE_DEFINITION = null;
@@ -513,12 +507,11 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             return false;
         }
         // parallel = piece * 32
-        parallel = (int) Math
+        maxParallel = (int) Math
             .min((long) piece * getCoilTier() * Parallel_PerPiece_GiantVacuumDryingFurnace, Integer.MAX_VALUE);
 
         // speed bonus = 0.8^voltageTier
-        speedBonus = (float) (Math
-            .pow(SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace, GTUtility.getTier(this.getMaxInputEu())))
+        speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace, getTotalPowerTier()))
             / (getCoilTier() * SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace);
 
         return true;
