@@ -85,7 +85,6 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     // region Processing Logic
     public TST_ItemID internalMachine;
     public RecipeMap<?> recipeMap;
-    public int parallel;
     public long voltage;
     public SoundResource sound = SoundResource.NONE;
 
@@ -109,7 +108,7 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
                 // set to new machine
                 internalMachine = TST_ItemID.createNoNBT(controllerStack);
                 recipeMap = PAHelper.getRecipeMapFromMTE(mte);
-                parallel = controllerStack.stackSize;
+                maxParallel = controllerStack.stackSize;
                 voltage = PAHelper.getVoltageFromMTE(mte);
                 sound = PAHelper.getSoundFromMTE(mte);
 
@@ -123,13 +122,13 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
         }
 
         // check if machine amount has been changed
-        parallel = controllerStack.stackSize;
+        maxParallel = controllerStack.stackSize;
     }
 
     public void resetMachineInfo() {
         if (internalMachine == null) return;
         internalMachine = null;
-        parallel = 0;
+        maxParallel = 0;
         voltage = 0;
         recipeMap = null;
         sound = SoundResource.NONE;
@@ -196,21 +195,6 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     @Override
     public RecipeMap<?> getRecipeMap() {
         return recipeMap;
-    }
-
-    @Override
-    protected int getMaxParallelRecipes() {
-        return parallel;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
     }
 
     @Override
