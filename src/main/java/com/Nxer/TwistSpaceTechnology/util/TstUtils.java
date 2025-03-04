@@ -32,12 +32,14 @@ import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
 import com.google.common.collect.Lists;
 
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
 import gregtech.api.util.GTUtility;
 
 /**
@@ -175,6 +177,38 @@ public class TstUtils {
         ArrayList<String> ret = superInfoData != null ? Lists.newArrayList(superInfoData) : new ArrayList<>();
         builder.accept(ret);
         return ret.toArray(new String[0]);
+    }
+
+    /**
+     * To get the machine maximum EU/t can get from energy hatches.
+     *
+     * @param machine The machine to calculate.
+     * @return Total EU/t that all energy hatches supply.
+     */
+    public static long getMachineTotalPower(@NotNull MTEExtendedPowerMultiBlockBase<?> machine) {
+        return machine.getMaxInputEu();
+    }
+
+    /**
+     * To get the voltage tier of the machine total EU/t , allow the voltage tier over MAX tier.
+     *
+     * @param machine The machine to calculate.
+     * @return Which voltage tier the machine's maximum EU/t from its energy hatches should be in.
+     */
+    public static int getMachineTotalPowerTier(@NotNull MTEExtendedPowerMultiBlockBase<?> machine) {
+        return (int) Math.ceil(calculateVoltageTier(getMachineTotalPower(machine)));
+    }
+
+    /**
+     * 0 = ULV, 1 = LV, 13 = UXV, 14 = MAX, 15+ = MAX+.
+     * 
+     * @param tier The tier of machine or voltage.
+     * @return The tier name.
+     */
+    public static String getPowerTierName(int tier) {
+        if (tier < 0) throw new IllegalArgumentException("Voltage tier should not be small than 0.");
+        if (tier > 14) return GTValues.VN[15];
+        return GTValues.VN[tier];
     }
 
     /**
