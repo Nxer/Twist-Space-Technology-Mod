@@ -67,8 +67,6 @@ public class GT_TileEntity_MagneticDomainConstructor
 
     // region Processing Logic
     private int rings = 1;
-    private int parallel = 1;
-    private float speedBonus = 1;
 
     @Override
     public int totalMachineMode() {
@@ -95,8 +93,6 @@ public class GT_TileEntity_MagneticDomainConstructor
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("rings", rings);
-        aNBT.setInteger("parallel", parallel);
-        aNBT.setFloat("speedBonus", speedBonus);
 
     }
 
@@ -105,8 +101,6 @@ public class GT_TileEntity_MagneticDomainConstructor
         super.loadNBTData(aNBT);
         machineMode = aNBT.getByte("mode");
         rings = aNBT.getInteger("rings");
-        parallel = aNBT.getInteger("parallel");
-        speedBonus = aNBT.getFloat("speedBonus");
     }
 
     @Override
@@ -125,14 +119,6 @@ public class GT_TileEntity_MagneticDomainConstructor
     @Override
     protected boolean isEnablePerfectOverclock() {
         return false;
-    }
-
-    public int getMaxParallelRecipes() {
-        return parallel;
-    }
-
-    public float getSpeedBonus() {
-        return speedBonus;
     }
 
     @Override
@@ -174,9 +160,8 @@ public class GT_TileEntity_MagneticDomainConstructor
             return false;
         }
 
-        parallel = (int) Math.min((long) rings * Parallel_PerRing_MagneticDomainConstructor, Integer.MAX_VALUE);
-        speedBonus = (float) Math
-            .pow(SpeedBonus_MultiplyPerTier_MagneticDomainConstructor, TstUtils.calculateVoltageTier(getMaxInputEu()));
+        maxParallel = (int) Math.min((long) rings * Parallel_PerRing_MagneticDomainConstructor, Integer.MAX_VALUE);
+        speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_MagneticDomainConstructor, getTotalPowerTier());
 
         return true;
     }
