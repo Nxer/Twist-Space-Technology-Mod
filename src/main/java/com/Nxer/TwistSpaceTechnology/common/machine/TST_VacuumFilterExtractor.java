@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -128,11 +127,6 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     }
 
     @Override
-    protected float getSpeedBonus() {
-        return 1F / coefficientMultiplier;
-    }
-
-    @Override
     protected int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
@@ -146,7 +140,8 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        coefficientMultiplier = 1 + (int) TstUtils.calculateVoltageTier(getMaxInputEu());
+        coefficientMultiplier = 1 + getTotalPowerTier();
+        speedBonus = 1F / coefficientMultiplier;
         return true;
     }
     // endregion
