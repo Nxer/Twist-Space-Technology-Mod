@@ -1,11 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.google.common.math.LongMath.pow;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GalaxySpace;
@@ -296,7 +290,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     GTCMItemList.SolarSail.get(16),
                     GTCMItemList.StellarConstructionFrameMaterial.get(4),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 24),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 24),
                     ItemList.Circuit_Wafer_QPIC.get(32),
                     ItemList.Emitter_UMV.get(4),
                     ItemList.Sensor_UMV.get(4))
@@ -322,7 +316,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 8),
                     Materials.UUMatter.getFluid(1000 * 16))
                 .itemOutputs(GTUtility.copyAmountUnsafe(2048, ItemRefer.Advanced_Radiation_Protection_Plate.get(1)))
-                .eut(RECIPE_UXV)
+                .eut(TierEU.RECIPE_UXV)
                 .duration(20 * 10)
                 .addTo(MASL);
         }
@@ -335,7 +329,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 64),
                     GTUtility.copyAmountUnsafe(6144, ItemList.Circuit_Parts_Crystal_Chip_Master.get(1)),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 16),
                     ItemList.Field_Generator_UEV.get(8),
 
                     ItemList.Circuit_Wafer_PPIC.get(64),
@@ -355,7 +349,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Infinity, 64),
                     GTUtility.copyAmountUnsafe(48912, ItemList.Circuit_Parts_Crystal_Chip_Master.get(1)),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 16),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 16),
                     ItemList.Field_Generator_UIV.get(8),
 
                     ItemList.Circuit_Wafer_QPIC.get(64),
@@ -423,7 +417,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.CallistoIce, 1),
                     ItemList.Reactor_Coolant_Sp_6.get(1L),
                     getModItem(GTPlusPlus.ID, "itemScrewLaurenium", 12, 0),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Elite), 2L },
+                    new Object[] { OrePrefixes.circuit.get(Materials.IV), 2L },
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 2),
                     ItemList.Super_Chest_IV.get(1),
                     ItemList.Super_Tank_IV.get(1),
@@ -464,13 +458,13 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Hull_LuV.get(1),
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 2),
                     ItemList.Circuit_Chip_UHPIC.get(2),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Master), 2 },
+                    new Object[] { OrePrefixes.circuit.get(Materials.LuV), 2 },
                     ItemList.LuV_Coil.get(2),
                     ItemList.Electric_Pump_LuV.get(1))
                 .itemOutputs(ItemList.Hatch_Energy_LuV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 2000), new FluidStack(solderIndalloy, 720))
                 .duration(20 * 20)
-                .eut(RECIPE_LuV)
+                .eut(TierEU.RECIPE_LuV)
                 .addTo(MASL);
             // ZPM energy hatch
             GTValues.RA.stdBuilder()
@@ -484,7 +478,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemOutputs(ItemList.Hatch_Energy_ZPM.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 4000), new FluidStack(solderIndalloy, 1440))
                 .duration(30 * 20)
-                .eut(RECIPE_ZPM)
+                .eut(TierEU.RECIPE_ZPM)
                 .addTo(MASL);
             // UV energy hatch
             GTValues.RA.stdBuilder()
@@ -498,7 +492,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemOutputs(ItemList.Hatch_Energy_UV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 8000), new FluidStack(solderIndalloy, 2880))
                 .duration(40 * 20)
-                .eut(RECIPE_UV)
+                .eut(TierEU.RECIPE_UV)
                 .addTo(MASL);
             // UHV energy hatch
             GTValues.RA.stdBuilder()
@@ -506,13 +500,13 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Hull_MAX.get(1L),
                     GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 2L),
                     ItemList.Circuit_Chip_QPIC.get(2L),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
+                    new Object[] { OrePrefixes.circuit.get(Materials.UHV), 2L },
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
                 .itemOutputs(ItemList.Hatch_Energy_UHV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 16000), new FluidStack(solderIndalloy, 40 * 144))
                 .duration(50 * 20)
-                .eut(RECIPE_UHV)
+                .eut(TierEU.RECIPE_UHV)
                 .addTo(MASL);
 
             // LuV dynamo hatch
@@ -524,13 +518,13 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                         Materials.Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid,
                         2),
                     ItemList.Circuit_Chip_UHPIC.get(2),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Master), 2 },
+                    new Object[] { OrePrefixes.circuit.get(Materials.LuV), 2 },
                     ItemList.LuV_Coil.get(2),
                     ItemList.Electric_Pump_LuV.get(1))
                 .itemOutputs(ItemList.Hatch_Dynamo_LuV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 2000), new FluidStack(solderIndalloy, 720))
                 .duration(20 * 20)
-                .eut(RECIPE_LuV)
+                .eut(TierEU.RECIPE_LuV)
                 .addTo(MASL);
             // ZPM dynamo hatch
             GTValues.RA.stdBuilder()
@@ -544,7 +538,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemOutputs(ItemList.Hatch_Dynamo_ZPM.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 4000), new FluidStack(solderIndalloy, 1440))
                 .duration(30 * 20)
-                .eut(RECIPE_ZPM)
+                .eut(TierEU.RECIPE_ZPM)
                 .addTo(MASL);
             // UV dynamo hatch
             GTValues.RA.stdBuilder()
@@ -558,7 +552,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemOutputs(ItemList.Hatch_Dynamo_UV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 8000), new FluidStack(solderIndalloy, 2880))
                 .duration(40 * 20)
-                .eut(RECIPE_UV)
+                .eut(TierEU.RECIPE_UV)
                 .addTo(MASL);
             // UHV dynamo hatch
             GTValues.RA.stdBuilder()
@@ -566,13 +560,13 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     ItemList.Hull_MAX.get(1L),
                     GTOreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuhvwire, 8L),
                     ItemList.Circuit_Chip_QPIC.get(2L),
-                    new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 2L },
+                    new Object[] { OrePrefixes.circuit.get(Materials.UHV), 2L },
                     ItemList.UHV_Coil.get(2L),
                     ItemList.Electric_Pump_UHV.get(1L))
                 .itemOutputs(ItemList.Hatch_Dynamo_UHV.get(1))
                 .fluidInputs(new FluidStack(ic2coolant, 16000), new FluidStack(solderIndalloy, 40 * 144))
                 .duration(50 * 20)
-                .eut(RECIPE_UHV)
+                .eut(TierEU.RECIPE_UHV)
                 .addTo(MASL);
 
         }
@@ -592,7 +586,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemOutputs(tectech.thing.CustomItemList.eM_energyTunnel8_UXV.get(1))
                 .fluidInputs(new FluidStack(solderUEV, 1_296 * 64 * 4))
                 .duration(106 * MINUTES + 40 * SECONDS)
-                .eut(RECIPE_UXV)
+                .eut(TierEU.RECIPE_UXV)
                 .addTo(MASL);
 
             // 4M UXV Source
@@ -607,7 +601,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemOutputs(tectech.thing.CustomItemList.eM_dynamoTunnel8_UXV.get(1))
                 .fluidInputs(new FluidStack(solderUEV, 1_296 * 64 * 4))
                 .duration(106 * MINUTES + 40 * SECONDS)
-                .eut(RECIPE_UXV)
+                .eut(TierEU.RECIPE_UXV)
                 .addTo(MASL);
 
             // 16M UXV Target
@@ -622,7 +616,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemOutputs(tectech.thing.CustomItemList.eM_energyTunnel9_UXV.get(1))
                 .fluidInputs(new FluidStack(solderUEV, 1_296 * 128 * 4))
                 .duration(213 * MINUTES + 20 * SECONDS)
-                .eut(RECIPE_UXV)
+                .eut(TierEU.RECIPE_UXV)
                 .addTo(MASL);
 
             // 16M UXV Source
@@ -637,7 +631,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                 .itemOutputs(tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1))
                 .fluidInputs(new FluidStack(solderUEV, 1_296 * 128 * 4))
                 .duration(213 * MINUTES + 20 * SECONDS)
-                .eut(RECIPE_UXV)
+                .eut(TierEU.RECIPE_UXV)
                 .addTo(MASL);
 
         }
@@ -682,7 +676,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.Space.getMolten(144 * 10),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(SpacetimeCompressionFieldGeneratorTier0.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 4000)
                 .addTo(MASL);
 
@@ -705,7 +699,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.Space.getMolten(144 * 20),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(SpacetimeCompressionFieldGeneratorTier1.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 4000 * 2)
                 .addTo(MASL);
 
@@ -728,7 +722,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.Space.getMolten(144 * 30),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(SpacetimeCompressionFieldGeneratorTier2.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 4000 * 3)
                 .addTo(MASL);
 
@@ -751,7 +745,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.Space.getMolten(144 * 40),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(SpacetimeCompressionFieldGeneratorTier3.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 4000 * 4)
                 .addTo(MASL);
 
@@ -774,7 +768,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.Space.getMolten(144 * 50),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(SpacetimeCompressionFieldGeneratorTier4.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 4000 * 5)
                 .addTo(MASL);
 
@@ -797,7 +791,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.Space.getMolten(144 * 60),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(SpacetimeCompressionFieldGeneratorTier5.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 4000 * 6)
                 .addTo(MASL);
 
@@ -820,7 +814,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.Space.getMolten(144 * 70),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(SpacetimeCompressionFieldGeneratorTier6.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 4000 * 7)
                 .addTo(MASL);
 
@@ -844,7 +838,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.Space.getMolten(144 * 80),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(SpacetimeCompressionFieldGeneratorTier7.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 4000 * 8)
                 .addTo(MASL);
 
@@ -868,7 +862,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                     MaterialsUEVplus.Space.getMolten(144 * 90),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                 .itemOutputs(SpacetimeCompressionFieldGeneratorTier8.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 4000 * 9)
                 .addTo(MASL);
 
@@ -941,7 +935,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             MaterialsUEVplus.Time.getMolten(1_440 * (absoluteTier + 1)),
                             MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                         .itemOutputs(researchStuff[absoluteTier + 1])
-                        .eut(RECIPE_UMV)
+                        .eut(TierEU.RECIPE_UMV)
                         .duration((absoluteTier + 1) * 4_000 * 20)
                         .addTo(MASL);
                 }
@@ -1018,7 +1012,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
                             MaterialsUEVplus.Space.getMolten(1_440 * (absoluteTier + 1)),
                             MaterialsUEVplus.SpaceTime.getMolten(144 * 10))
                         .itemOutputs(researchStuff[absoluteTier + 1])
-                        .eut(RECIPE_UMV)
+                        .eut(TierEU.RECIPE_UMV)
                         .duration((absoluteTier + 1) * 4_000 * 20)
                         .addTo(MASL);
                 }

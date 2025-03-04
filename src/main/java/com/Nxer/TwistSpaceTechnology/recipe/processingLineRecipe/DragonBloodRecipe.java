@@ -1,9 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe;
 
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool.addToMiracleDoorRecipes;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
@@ -22,6 +19,7 @@ import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
@@ -68,7 +66,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 .outputChances(4000, 2250, 750)
                 .fluidOutputs(getFluidStack("fieryblood", 500))
                 .noOptimize()
-                .eut(RECIPE_UEV)
+                .eut(TierEU.RECIPE_UEV)
                 .duration(20 * 120)
                 .addTo(chemicalBathRecipes);
 
@@ -82,7 +80,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 .fluidOutputs(DRAGON_METAL.getFluidStack(36))
                 .outputChances(10000, 6000, 2000)
                 .noOptimize()
-                .eut(RECIPE_UEV)
+                .eut(TierEU.RECIPE_UEV)
                 .duration(20 * 100)
                 .addTo(chemicalBathRecipes);
 
@@ -93,7 +91,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 96) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 12) },
-                (int) RECIPE_UIV,
+                (int) TierEU.RECIPE_UIV,
                 20 * 10,
                 GTCMRecipe.StellarForgeRecipes);
 
@@ -106,7 +104,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 48) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 3) },
-                (int) RECIPE_UIV,
+                (int) TierEU.RECIPE_UIV,
                 20 * 20,
                 GTCMRecipe.StellarForgeRecipes);
 
@@ -115,7 +113,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 128) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 8) },
-                (int) RECIPE_UIV,
+                (int) TierEU.RECIPE_UIV,
                 20 * 60,
                 GTCMRecipe.StellarForgeRecipes);
 
@@ -128,7 +126,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 new FluidStack[] { Materials.DraconiumAwakened.getMolten(144 * 64) },
                 null,
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 2) },
-                (int) RECIPE_UIV,
+                (int) TierEU.RECIPE_UIV,
                 20 * 40,
                 GTCMRecipe.StellarForgeRecipes);
 
@@ -138,7 +136,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 16))
                 .noOptimize()
                 .specialValue(13500)
-                .eut(RECIPE_MAX)
+                .eut(TierEU.RECIPE_MAX)
                 .duration(20 * 10)
                 .addTo(GTCMRecipe.BallLightningRecipes);
 
@@ -151,7 +149,7 @@ public class DragonBloodRecipe implements IRecipePool {
                 .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 16384))
                 .noOptimize()
                 .specialValue(13500)
-                .eut(RECIPE_MAX)
+                .eut(TierEU.RECIPE_MAX)
                 .duration(20 * 10)
                 .addTo(GTCMRecipe.BallLightningRecipes);
         }

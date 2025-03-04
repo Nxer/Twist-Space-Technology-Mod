@@ -65,7 +65,7 @@ public class TST_DisassemblerRecipeHandler {
                         ItemList.Casing_Coil_Superconductor.get(1),
                         ItemList.Neutron_Reflector.get(2),
                         ItemList.Field_Generator_MV.get(2),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 4))
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 4))
                     .setEut(480)
                     .setTier(GTUtility.getTier(480)));
 

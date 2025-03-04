@@ -1,11 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.VP;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
@@ -29,6 +23,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialMisc;
@@ -38,7 +33,7 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 public class ModularHatchesRecipes implements IRecipePool {
 
     private long getRecipeVoltageFromModuleTier(int t) {
-        return VP[7 + t];
+        return GTValues.VP[7 + t];
     }
 
     @Override
@@ -56,12 +51,12 @@ public class ModularHatchesRecipes implements IRecipePool {
 
         ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Transcendent, 1), };
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MAX, 1), };
 
         ItemStack[] fieldGenerators = new ItemStack[] { ItemList.Field_Generator_ZPM.get(1),
             ItemList.Field_Generator_UV.get(1), ItemList.Field_Generator_UHV.get(1),
@@ -123,7 +118,7 @@ public class ModularHatchesRecipes implements IRecipePool {
                     Materials.Quantium.getMolten(144 * 64 * 16),
                     MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128))
                 .itemOutputs(GTCMItemList.ExecutionCore.get(1))
-                .eut(RECIPE_UV)
+                .eut(TierEU.RECIPE_UV)
                 .duration(20 * 240)
                 .addTo(AssemblyLine);
 
@@ -157,7 +152,7 @@ public class ModularHatchesRecipes implements IRecipePool {
                     Materials.Infinity.getMolten(144 * 64 * 64 * 4 * 4),
                     MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128 * 4))
                 .itemOutputs(GTCMItemList.AdvancedExecutionCore.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 1200)
                 .addTo(AssemblyLine);
 
@@ -191,7 +186,7 @@ public class ModularHatchesRecipes implements IRecipePool {
                     MaterialsUEVplus.Eternity.getMolten(144 * 64 * 64 * 24),
                     MaterialsUEVplus.SpaceTime.getMolten(144 * 64 * 64))
                 .itemOutputs(GTCMItemList.PerfectExecutionCore.get(1))
-                .eut(RECIPE_UXV)
+                .eut(TierEU.RECIPE_UXV)
                 .duration(20 * 3600)
                 .addTo(AssemblyLine);
 
@@ -215,7 +210,7 @@ public class ModularHatchesRecipes implements IRecipePool {
                     Materials.Gold.getNanite(16))
                 .fluidInputs(MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(144 * 64 * 6))
                 .itemOutputs(GTCMItemList.LowSpeedPerfectOverclockController.get(1))
-                .eut(RECIPE_UIV)
+                .eut(TierEU.RECIPE_UIV)
                 .duration(20 * 336)
                 .addTo(assemblerRecipes);
 
@@ -248,7 +243,7 @@ public class ModularHatchesRecipes implements IRecipePool {
                     MaterialsUEVplus.Time.getMolten(144 * 320),
                     GGMaterial.shirabon.getMolten(144 * 640))
                 .itemOutputs(GTCMItemList.PerfectOverclockController.get(1))
-                .eut(RECIPE_UMV)
+                .eut(TierEU.RECIPE_UMV)
                 .duration(20 * 600)
                 .addTo(AssemblyLine);
 
@@ -274,7 +269,7 @@ public class ModularHatchesRecipes implements IRecipePool {
                     Materials.Force.getMolten(144 * 65536),
                     MaterialsUEVplus.Universium.getMolten(144 * 131072))
                 .itemOutputs(GTCMItemList.SingularityPerfectOverclockController.get(1))
-                .eut(RECIPE_MAX)
+                .eut(TierEU.RECIPE_MAX)
                 .duration(20 * 3600 * 24 * 64)
                 .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
         }

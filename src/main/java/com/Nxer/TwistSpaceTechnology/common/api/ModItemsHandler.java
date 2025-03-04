@@ -16,7 +16,7 @@ public class ModItemsHandler {
 
     // endregion
 
-    public void initStatics() {
+    public static void initStatics() {
         if (Mods.BloodArsenal.isModLoaded()) {
             AmorphicCatalyst = Pair.of(GTModHandler.getModItem(Mods.BloodArsenal.ID, "amorphic_catalyst", 1), 0);
         } else {

@@ -1,9 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static cofh.lib.util.helpers.FluidHelper.isFluidEqual;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 
@@ -31,6 +28,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
@@ -411,7 +409,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             null,
             null,
             new FluidStack[] { Materials.MeteoricIron.getMolten(144) },
-            (int) RECIPE_MV,
+            (int) TierEU.RECIPE_MV,
             20 * 25,
             GTCMRecipe.StellarForgeRecipes);
 
@@ -421,7 +419,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             null,
             null,
             new FluidStack[] { Materials.MeteoricSteel.getMolten(144) },
-            (int) RECIPE_MV,
+            (int) TierEU.RECIPE_MV,
             20 * 10,
             GTCMRecipe.StellarForgeRecipes);
 
@@ -431,7 +429,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             null,
             null,
             new FluidStack[] { Materials.Neutronium.getMolten(144) },
-            (int) RECIPE_UV,
+            (int) TierEU.RECIPE_UV,
             20 * 112,
             GTCMRecipe.StellarForgeRecipes);
 
@@ -441,7 +439,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             new FluidStack[] { MaterialsUEVplus.Creon.getPlasma(144) },
             null,
             new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144), MaterialsUEVplus.Creon.getMolten(144) },
-            (int) RECIPE_UXV,
+            (int) TierEU.RECIPE_UXV,
             399,
             GTCMRecipe.StellarForgeRecipes);
     }

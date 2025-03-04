@@ -1,12 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
-
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IRecipeMap;
 import gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
@@ -25,7 +23,7 @@ public class LanthanidesRecipePool implements IRecipePool {
             .itemOutputs(Materials.SiliconDioxide.getDust(1))
             .fluidOutputs(WerkstoffMaterialPool.ChlorinatedRareEarthEnrichedSolution.getFluidOrGas(1000))
             .noOptimize()
-            .eut(RECIPE_ZPM)
+            .eut(TierEU.RECIPE_ZPM)
             .duration(40)
             .addTo(digester);
 
@@ -37,7 +35,7 @@ public class LanthanidesRecipePool implements IRecipePool {
             .fluidOutputs(WerkstoffMaterialPool.MuddyRareEarthMonaziteSolution.getFluidOrGas(400))
             .specialValue(800)
             .noOptimize()
-            .eut(RECIPE_EV)
+            .eut(TierEU.RECIPE_EV)
             .duration(20 * 20)
             .addTo(digester);
 
@@ -49,7 +47,7 @@ public class LanthanidesRecipePool implements IRecipePool {
             .fluidOutputs(WerkstoffMaterialPool.MuddyRareEarthBastnasiteSolution.getFluidOrGas(400))
             .specialValue(800)
             .noOptimize()
-            .eut(RECIPE_EV)
+            .eut(TierEU.RECIPE_EV)
             .duration(20 * 20)
             .addTo(digester);
 

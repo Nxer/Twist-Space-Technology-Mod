@@ -11,7 +11,6 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiary
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T3;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T4;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.enableDNAConsuming;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static forestry.api.apiculture.BeeManager.beeRoot;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
@@ -49,6 +48,7 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.apiculture.genetics.Bee;
 import gregtech.api.enums.GTValues;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -110,8 +110,8 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
 
         int mParallel = getCurrentParallel();
-        if (RECIPE_LuV * mParallel > getEUVar()) {
-            return CheckRecipeResultRegistry.insufficientPower(RECIPE_LuV * mParallel);
+        if (TierEU.RECIPE_LuV * mParallel > getEUVar()) {
+            return CheckRecipeResultRegistry.insufficientPower(TierEU.RECIPE_LuV * mParallel);
         }
 
         if (enableDNAConsuming) {
@@ -144,7 +144,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
             }
         }
 
-        this.lEUt = -RECIPE_LuV * mParallel;
+        this.lEUt = -TierEU.RECIPE_LuV * mParallel;
         this.mEfficiency = 10000;
         this.mEfficiencyIncrease = 10000;
         this.mMaxProgresstime = SpaceApiaryCycleTime;

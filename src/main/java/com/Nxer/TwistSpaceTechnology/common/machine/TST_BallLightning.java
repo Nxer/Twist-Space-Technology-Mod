@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INF
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -70,6 +69,7 @@ import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.TierEU;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -336,7 +336,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                 super.setProcessingLogicPower(logic);
             }
         } else {
-            FusionMaxEut = (long) (RECIPE_MAX
+            FusionMaxEut = (long) (TierEU.RECIPE_MAX
                 * (Math.pow(4, (compactFusionCoilTier - 2)) * Math.pow(1.8, fieldGeneratorTier - 1)));
             if (isWirelessMode || FusionMaxEut < getMaxInputEu()) {
                 logic.setAvailableVoltage(FusionMaxEut);

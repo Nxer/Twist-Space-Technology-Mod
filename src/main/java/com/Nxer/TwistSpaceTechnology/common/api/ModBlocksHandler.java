@@ -82,7 +82,7 @@ public final class ModBlocksHandler {
 
     // endregion
 
-    public void initStatics() {
+    public static void initStatics() {
         if (Mods.ThaumicBases.isModLoaded()) {
             Block crystalBlock = Block.getBlockFromName(Mods.ThaumicBases.ID + ":crystalBlock");
             AirCrystalBlock = Pair.of(crystalBlock, 0);
