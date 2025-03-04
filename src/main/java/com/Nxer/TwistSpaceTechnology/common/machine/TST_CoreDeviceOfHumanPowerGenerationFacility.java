@@ -64,7 +64,6 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     // endregion
 
     // region Processing Logic
-    private float speedBonus = 1;
     private byte glassTier = 0;
     private String glassTierName = "NONE";
     private HeatingCoilLevel coilLevel;
@@ -88,14 +87,12 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setFloat("speedBonus", speedBonus);
         aNBT.setByte("glassTier", glassTier);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        speedBonus = aNBT.getFloat("speedBonus");
         glassTier = aNBT.getByte("glassTier");
     }
 

@@ -62,7 +62,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
@@ -84,7 +83,6 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     // region Processing Logic
     private byte glassTier = 0;
     private int piece = 1;
-    protected float speedBonus = 1F;
 
     @Override
     public int totalMachineMode() {
@@ -161,8 +159,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
             }
         }
 
-        speedBonus = (float) (Math
-            .pow(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor, GTUtility.getTier(this.getMaxInputEu())));
+        speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerTier_MoleculeDeconstructor, getTotalPowerTier()));
 
         return true;
     }
@@ -434,7 +431,6 @@ I -> ofFrame...();
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
-        aNBT.setFloat("speedBonus", speedBonus);
         aNBT.setInteger("piece", piece);
         aNBT.setByte("mode", (byte) machineMode);
     }
@@ -443,7 +439,6 @@ I -> ofFrame...();
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
-        speedBonus = aNBT.getFloat("speedBonus");
         piece = aNBT.getInteger("piece");
         machineMode = aNBT.getByte("mode");
     }

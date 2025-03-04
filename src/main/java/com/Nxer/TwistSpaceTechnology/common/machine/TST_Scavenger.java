@@ -43,7 +43,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings4;
@@ -69,8 +68,6 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
 
     // region Processing Logic
 
-    private float speedBonus = 1;
-
     @Override
     protected float getEuModifier() {
         return EuModifier_Scavenger;
@@ -79,11 +76,6 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     @Override
     protected boolean isEnablePerfectOverclock() {
         return EnablePerfectOverclock_Scavenger;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return speedBonus;
     }
 
     @Override
@@ -110,8 +102,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        this.speedBonus = (float) Math
-            .pow(SpeedBonus_MultiplyPerTier_Scavenger, GTUtility.getTier(this.getMaxInputEu()));
+        this.speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_Scavenger, getTotalPowerTier());
         return true;
     }
 

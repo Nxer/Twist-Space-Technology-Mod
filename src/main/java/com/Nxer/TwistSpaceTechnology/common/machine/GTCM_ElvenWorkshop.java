@@ -76,18 +76,6 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
         return StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + mode);
     }
 
-    protected float getSpeedBonus() {
-        return 1.0F;
-    };
-
-    protected int getMaxParallelRecipes() {
-        return 1;
-    };
-
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    };
-
     @Override
     public RecipeMap<?> getRecipeMap() {
         switch (machineMode) {
@@ -233,9 +221,5 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
                 .build() };
     }
 
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
-    }
     // endregion
 }

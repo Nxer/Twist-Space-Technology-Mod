@@ -305,11 +305,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
     protected int getMaxParallelRecipes() {
         return 16;
     }

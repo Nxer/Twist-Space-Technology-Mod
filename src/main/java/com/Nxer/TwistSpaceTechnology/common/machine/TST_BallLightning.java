@@ -112,8 +112,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     // region default value
 
     public int mRecipeTierModeFusion = 1;
-    public float speedBonus = 1;
-    public float EuModifier = 1;
     public byte glassTier;
     private int fieldGeneratorTier = 0;
     private int compactFusionCoilTier = 0;
@@ -217,16 +215,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
         };
     }
 
-    @Override
-    protected float getSpeedBonus() {
-        return speedBonus;
-    }
-
-    @Override
-    protected float getEuModifier() {
-        return EuModifier;
-    }
-
     public static int getBlockFieldGeneratorTier(Block block, int meta) {
         if (block == sBlockCasingsTT) {
             return meta - 7;
@@ -258,7 +246,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     public void checkBonus() {
         if (mMachineTier - machineMode > 1) speedBonus = (float) Math.pow(0.25, mMachineTier - machineMode - 1);
         else speedBonus = 1;
-        EuModifier = machineMode != 3 ? 1 : (float) (1 - 0.099 * (fieldGeneratorTier - 1));
+        euModifier = machineMode != 3 ? 1 : (float) (1 - 0.099 * (fieldGeneratorTier - 1));
     }
 
     public void checkWireless() {
@@ -384,7 +372,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
             BigInteger costingWirelessEUTemp = BigInteger.valueOf(processingLogic.getCalculatedEut())
                 .multiply(BigInteger.valueOf(processingLogic.getDuration()))
                 .multiply(BigInteger.valueOf(Math.round((extraEuCostMultiplier * speedBonus))))
-                .divide(BigInteger.valueOf((long) (1 / EuModifier)));
+                .divide(BigInteger.valueOf((long) (1 / euModifier)));
             costingWirelessEU = GTUtility.formatNumbers(costingWirelessEUTemp);
             if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
                 return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
@@ -705,7 +693,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
         aNBT.setByte(" mStructureTier", mStructureTier);
         aNBT.setBoolean("isWirelessMode", isWirelessMode);
         aNBT.setFloat("speedBonus", speedBonus);
-        aNBT.setFloat("EuModifier", EuModifier);
         aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
         aNBT.setInteger("compactFusionCoilTier", compactFusionCoilTier);
         aNBT.setByte("glassTier", glassTier);
@@ -721,7 +708,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
         mStructureTier = aNBT.getByte("mStructureTier");
         isWirelessMode = aNBT.getBoolean("isWirelessMode");
         speedBonus = aNBT.getFloat("speedBonus");
-        EuModifier = aNBT.getFloat("EuModifiers");
         fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
         compactFusionCoilTier = aNBT.getInteger("compactFusionCoilTier");
         glassTier = aNBT.getByte("glassTier");

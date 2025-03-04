@@ -322,16 +322,6 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
     protected int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }

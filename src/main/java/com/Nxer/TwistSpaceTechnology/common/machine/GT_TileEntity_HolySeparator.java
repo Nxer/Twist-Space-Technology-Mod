@@ -48,7 +48,6 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings8;
@@ -113,15 +112,6 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
         return piece >= Piece_EnablePerfectOverclock_HolySeparator;
     }
 
-    public int getMaxParallelRecipes() {
-        return ParallelPerPiece_HolySeparator * this.piece;
-    }
-
-    public float getSpeedBonus() {
-        return (float) (Math
-            .pow(SpeedBonus_MultiplyPerTier_HolySeparator, GTUtility.getTier(this.getAverageInputVoltage())));
-    }
-
     @Override
     public RecipeMap<?> getRecipeMap() {
         switch (machineMode) {
@@ -157,7 +147,15 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
         if (piece < 1) {
             return false;
         }
-        return checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet + (this.piece + 1) * 4, depthOffSet);
+        if (!checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet + (this.piece + 1) * 4, depthOffSet)) {
+            return false;
+        }
+
+        speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerTier_HolySeparator, getTotalPowerTier()));
+
+        maxParallel = ParallelPerPiece_HolySeparator * piece;
+
+        return true;
     }
 
     // endregion

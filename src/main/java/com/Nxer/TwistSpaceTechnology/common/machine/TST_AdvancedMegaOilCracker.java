@@ -63,9 +63,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     // endregion
 
     // region Processing Logic
-    private float euModifier = 1.0F;
     public byte glassTier = 1;
-    public boolean perfectOverclock = false;
     private HeatingCoilLevel coilLevel;
 
     public HeatingCoilLevel getCoilLevel() {
@@ -75,17 +73,13 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setFloat("euModifier", euModifier);
         aNBT.setByte("glassTier", glassTier);
-        aNBT.setBoolean("perfectOverclock", perfectOverclock);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        euModifier = aNBT.getFloat("euModifier");
         glassTier = aNBT.getByte("glassTier");
-        perfectOverclock = aNBT.getBoolean("perfectOverclock");
     }
 
     public void setCoilLevel(HeatingCoilLevel coilLevel) {
@@ -99,17 +93,12 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
 
     @Override
     protected boolean isEnablePerfectOverclock() {
-        return EnablePerfectOverclock_AdvancedMegaOilCracker || perfectOverclock;
+        return EnablePerfectOverclock_AdvancedMegaOilCracker || enablePerfectOverclock;
     }
 
     @Override
     protected float getSpeedBonus() {
         return SpeedBonus_AdvancedMegaOilCracker;
-    }
-
-    @Override
-    protected float getEuModifier() {
-        return euModifier;
     }
 
     @Override
@@ -165,12 +154,12 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         repairMachine();
         this.coilLevel = HeatingCoilLevel.None;
         this.glassTier = 0;
-        this.perfectOverclock = false;
+        this.enablePerfectOverclock = false;
         clearHatches();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         if (this.glassTier <= 0 || coilLevel == HeatingCoilLevel.None) return false;
         this.euModifier = 1F / (coilLevel.getTier() + 1);
-        this.perfectOverclock = coilLevel.getTier() >= HeatingCoilLevel.UXV.getTier();
+        this.enablePerfectOverclock = coilLevel.getTier() >= HeatingCoilLevel.UXV.getTier();
         return true;
     }
 

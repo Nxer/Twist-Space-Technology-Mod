@@ -87,8 +87,6 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     protected int bridgeCasingTier = 0;
     protected int fieldTier = 0;
     protected MTEHatchInputBus specialInputBus;
-    protected boolean perfectOverclock = false;
-    protected float speedBonus = 1;
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -97,8 +95,6 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         aNBT.setInteger("injectionCasingTier", injectionCasingTier);
         aNBT.setInteger("bridgeCasingTier", bridgeCasingTier);
         aNBT.setInteger("fieldTier", fieldTier);
-        aNBT.setBoolean("perfectOverclock", perfectOverclock);
-        aNBT.setFloat("speedBonus", speedBonus);
     }
 
     @Override
@@ -108,8 +104,6 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         injectionCasingTier = aNBT.getInteger("injectionCasingTier");
         bridgeCasingTier = aNBT.getInteger("bridgeCasingTier");
         fieldTier = aNBT.getInteger("fieldTier");
-        perfectOverclock = aNBT.getBoolean("perfectOverclock");
-        speedBonus = aNBT.getFloat("speedBonus");
     }
 
     @Override
@@ -189,16 +183,6 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return perfectOverclock;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return speedBonus;
-    }
-
-    @Override
     protected int getMaxParallelRecipes() {
         return Parallel_MicroSpaceTimeFabricatorio;
     }
@@ -211,7 +195,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         injectionCasingTier = 0;
         bridgeCasingTier = 0;
         fieldTier = 0;
-        perfectOverclock = false;
+        enablePerfectOverclock = false;
         speedBonus = 1;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         if (fieldTier < 1) return false;
@@ -221,7 +205,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
                 if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) return false;
             }
             // using homo field block enable perfect overclock
-            perfectOverclock = true;
+            enablePerfectOverclock = true;
             if (fieldTier > 2) {
                 // higher tier gives a stacked speed up parameter
                 int t = fieldTier - 2;

@@ -226,20 +226,24 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             }
         }
 
-        boolean signal = false;
         // check the end layer
-        if (checkPiece(
+        if (!checkPiece(
             STRUCTURE_PIECE_END,
             baseHorizontalOffSet,
             baseVerticalOffSet,
             baseDepthOffSet - this.amountRings * 8)) {
-            signal = true;
+            return false;
         }
 
         // basic two layers: the top and the end, means amountRings default is 2 .
         this.amountRings++;
 
-        return signal;
+        // calculate parameters
+        enablePerfectOverclock = amountRings >= RingsAmount_EnablePerfectOverclock_MiracleTop;
+        speedBonus = 1.0F / (amountRings * SpeedUpMultiplier_PerRing_MiracleTop);
+        maxParallel = amountRings * Parallel_PerRing_MiracleTop;
+
+        return true;
     }
 
     // endregion
@@ -266,21 +270,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     }
 
     public int amountRings = 1;
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return amountRings >= RingsAmount_EnablePerfectOverclock_MiracleTop;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1.0F / (amountRings * SpeedUpMultiplier_PerRing_MiracleTop);
-    }
-
-    @Override
-    protected int getMaxParallelRecipes() {
-        return amountRings * Parallel_PerRing_MiracleTop;
-    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {

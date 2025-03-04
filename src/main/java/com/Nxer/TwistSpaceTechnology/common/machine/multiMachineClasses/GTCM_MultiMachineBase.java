@@ -29,6 +29,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizons.modularui.api.drawable.IDrawable;
@@ -186,6 +187,14 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      */
     protected int getLimitedMaxParallel() {
         return getMaxParallelRecipes();
+    }
+
+    /**
+     *
+     * @return The voltage tier should be in of this machine total EU/t, allow over MAX calculation.
+     */
+    public int getTotalPowerTier() {
+        return TstUtils.getMachineTotalPowerTier(this);
     }
 
     /**

@@ -92,6 +92,23 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
+        this.glassTier = 0;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
+            return false;
+        }
+
+        speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, getTotalPowerTier());
+
+        return true;
+    }
+
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
@@ -137,20 +154,6 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
-    }
-
-    public float getSpeedBonus() {
-        return (float) Math
-            .pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, GTUtility.getTier(this.getAverageInputVoltage()));
     }
 
     @Override
@@ -328,13 +331,6 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
             .addEnergyHatch(TextLocalization.textAnyCasing, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
-    }
-
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        repairMachine();
-        this.glassTier = 0;
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
     @Override
