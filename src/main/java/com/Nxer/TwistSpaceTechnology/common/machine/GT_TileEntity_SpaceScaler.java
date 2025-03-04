@@ -250,11 +250,6 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
     public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
