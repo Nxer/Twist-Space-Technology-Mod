@@ -61,7 +61,6 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
     // endregion
 
     // region Processing Logic
-    private float speedBonus = 1;
 
     public HeatingCoilLevel coilLevel;
 
@@ -76,16 +75,6 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
     @Override
     public RecipeMap<?> getRecipeMap() {
         return GTCMRecipe.CokingFactoryRecipes;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return speedBonus;
     }
 
     @Override
