@@ -24,12 +24,14 @@ import java.util.Map;
 import java.util.Objects;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -86,6 +88,8 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.casing.TTCasingsContainer;
 
@@ -429,6 +433,79 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         for (ICraftingPatternDetails origin : patternDetails) {
             actualPatternDetails.add(new ActualPattern(origin, magnification));
         }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+
+        tag.setInteger("magnification", magnification);
+        tag.setInteger("patternAmount", patternDetails.size());
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        // #tr MegaCraftingCenter.waila.ForceRunningMagnification
+        // # Force running magnification
+        // #zh_CN 强制运行倍率
+        currentTip.add(
+            TextEnums.tr("MegaCraftingCenter.waila.ForceRunningMagnification") + " : "
+                + tag.getInteger("magnification"));
+
+        // #tr MegaCraftingCenter.waila.PatternAmount
+        // # Internal Pattern Amount
+        // #zh_CN 已载入样板数量
+        currentTip
+            .add(TextEnums.tr("MegaCraftingCenter.waila.PatternAmount") + " : " + tag.getInteger("patternAmount"));
+    }
+
+    @Override
+    public String[] getInfoData() {
+        if (patternDetails.isEmpty()) {
+            return super.getInfoData();
+        }
+
+        ArrayList<String> items = new ArrayList<>();
+        for (ICraftingPatternDetails d : patternDetails) {
+            items.add(
+                d.getOutputs()[0].getItemStack()
+                    .getDisplayName());
+        }
+
+        // every 4 item in a row
+        int rows = (int) Math.ceil((double) items.size() / 4);
+
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + rows + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+
+        // #tr MegaCraftingCenter.info.InternalPatterns
+        // # Internal patterns
+        // #zh_CN 已载入样板
+        ret[origin.length] = TextEnums.tr("MegaCraftingCenter.info.InternalPatterns");
+        StringBuilder t = new StringBuilder();
+        int signal = 0;
+        int row = origin.length + 1;
+        for (String s : items) {
+            t.append(s)
+                .append("; ");
+            signal++;
+            if (signal == 4) {
+                signal = 0;
+                ret[row] = t.toString();
+                t = new StringBuilder();
+                row++;
+            }
+        }
+        if (signal != 0) {
+            ret[row] = t.toString();
+        }
+
+        return ret;
     }
 
     @Override
@@ -891,6 +968,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             // #zh_CN 使用螺丝刀右键主机将内部样板转移至输出总线.
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.onScrewDriverRightClick"))
             .addInfo(Text_SeparatingLine)
+            .addInfo(TextEnums.MoreInfoCheckingInScanner.getText())
             .toolTipFinisher(ModName);
         // spotless:on
         return tt;
