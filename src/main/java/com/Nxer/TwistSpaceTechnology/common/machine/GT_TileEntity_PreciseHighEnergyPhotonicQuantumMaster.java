@@ -69,12 +69,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
 
     // region Member Variables
 
-    private boolean enablePerfectOverclockSignal = false;
-    private int totalSpeedIncrement = 0;
-
-    public int getTotalSpeedIncrement() {
-        return this.totalSpeedIncrement;
-    }
+    protected int totalSpeedIncrement = 0;
 
     // endregion
 
@@ -171,15 +166,15 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
                             ofBlock(PhotonControllerUpgrade, 10)),
                         onElementPass(x -> {
                             x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[11];
-                            x.enablePerfectOverclockSignal = true;
+                            x.enablePerfectOverclock = true;
                         }, ofBlock(PhotonControllerUpgrade, 11)),
                         onElementPass(x -> {
                             x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[12];
-                            x.enablePerfectOverclockSignal = true;
+                            x.enablePerfectOverclock = true;
                         }, ofBlock(PhotonControllerUpgrade, 12)),
                         onElementPass(x -> {
                             x.totalSpeedIncrement += PhotonControllerUpgradeCasing.speedIncrement[13];
-                            x.enablePerfectOverclockSignal = true;
+                            x.enablePerfectOverclock = true;
                         }, ofBlock(PhotonControllerUpgrade, 13)),
                         ofBlock(GregTechAPI.sBlockCasings8, 7)))
                 .build();
@@ -246,15 +241,9 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return enablePerfectOverclockSignal;
-    }
-
-    @Override
     protected float getSpeedBonus() {
-        return 10000F / (10000F + totalSpeedIncrement)
-            / (machineMode == 1 ? SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
-                : SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster);
+        return speedBonus / (machineMode == 1 ? SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
+            : SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster);
     }
 
     @Override
@@ -273,8 +262,14 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         this.totalSpeedIncrement = 0;
-        this.enablePerfectOverclockSignal = false;
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        this.enablePerfectOverclock = false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
+            return false;
+        }
+
+        speedBonus = 10000F / (10000F + totalSpeedIncrement);
+
+        return true;
     }
 
     // endregion
@@ -286,7 +281,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         super.saveNBTData(aNBT);
 
         aNBT.setBoolean("mode", machineMode == 1);
-        aNBT.setBoolean("enablePerfectOverclockSignal", enablePerfectOverclockSignal);
         aNBT.setInteger("totalSpeedIncrement", totalSpeedIncrement);
     }
 
@@ -295,7 +289,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         super.loadNBTData(aNBT);
 
         machineMode = aNBT.getBoolean("mode") ? 1 : 0;
-        enablePerfectOverclockSignal = aNBT.getBoolean("enablePerfectOverclockSignal");
         totalSpeedIncrement = aNBT.getInteger("totalSpeedIncrement");
     }
 
@@ -309,7 +302,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
             + " Perfect Overclock"
             + EnumChatFormatting.RESET
             + ": "
-            + this.enablePerfectOverclockSignal;
+            + this.enablePerfectOverclock;
         return ret;
     }
 
