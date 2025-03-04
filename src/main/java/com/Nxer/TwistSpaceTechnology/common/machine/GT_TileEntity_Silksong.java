@@ -60,8 +60,6 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
 
     // region Processing Logic
     private int piece = 1;
-    private int parallel = 1;
-    private float speedBonus = 1;
     private HeatingCoilLevel coilLevel;
 
     public HeatingCoilLevel getCoilLevel() {
@@ -81,8 +79,6 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
         super.saveNBTData(aNBT);
 
         aNBT.setInteger("piece", piece);
-        aNBT.setInteger("parallel", parallel);
-        aNBT.setFloat("speedBonus", speedBonus);
     }
 
     @Override
@@ -90,21 +86,6 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
         super.loadNBTData(aNBT);
 
         piece = aNBT.getInteger("piece");
-        parallel = aNBT.getInteger("parallel");
-        speedBonus = aNBT.getFloat("speedBonus");
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    protected int getMaxParallelRecipes() {
-        return parallel;
-    }
-
-    protected float getSpeedBonus() {
-        return speedBonus;
     }
 
     @Override
@@ -133,11 +114,10 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
         }
 
         // parallel = piece * coilTier * 32
-        parallel = (int) Math.min((long) piece * getCoilTier() * Parallel_PerPiece_Silksong, Integer.MAX_VALUE);
+        maxParallel = (int) Math.min((long) piece * getCoilTier() * Parallel_PerPiece_Silksong, Integer.MAX_VALUE);
 
         // speed bonus = 0.85^voltageTier / (coilTier * 1)
-        speedBonus = (float) (Math
-            .pow(SpeedBonus_MultiplyPerVoltageTier_Silksong, GTUtility.getTier(this.getMaxInputEu()))
+        speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerVoltageTier_Silksong, getTotalPowerTier())
             / (getCoilTier() * SpeedMultiplier_CoilTier_Silksong));
 
         return true;
