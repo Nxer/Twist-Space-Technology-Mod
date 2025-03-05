@@ -16,7 +16,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     modid = Tags.MODID,
     version = Tags.VERSION,
     name = Tags.MODNAME,
-    dependencies = "required-after:gregtech;" + " required-after:bartworks;",
+    dependencies = "required-after:gregtech;" + "required-after:bartworks;" + "required-after:gtnhintergalactic;",
     acceptedMinecraftVersions = "[1.7.10]")
 public class TwistSpaceTechnology {
 
