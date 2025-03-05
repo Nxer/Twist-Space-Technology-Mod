@@ -8,3 +8,9 @@ minecraft {
     extraRunJvmArguments.add("-Xmx8G")
     extraRunJvmArguments.add("-Xms8G")
 }
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.github.GTNewHorizons:GTNHLib:0.6.0:dev'
+    }
+}
