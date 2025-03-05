@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -42,10 +44,12 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -75,6 +79,7 @@ import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import appeng.util.item.AEItemStack;
 import gregtech.api.gui.modularui.GTUITextures;
+import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -87,6 +92,7 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -125,6 +131,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         protected IAEItemStack[] outputs = new IAEItemStack[0];
         protected boolean canSubstitute = false;
         protected int priority = 0;
+        protected ICraftingPatternDetails originPattern;
+        protected int multiplier;
 
         private ActualPattern() {}
 
@@ -136,6 +144,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
          * @param multiplier This pattern details are the origin pattern's multiplied by this parameter.
          */
         public ActualPattern(ICraftingPatternDetails origin, int multiplier) {
+            this.originPattern = origin;
+            this.multiplier = multiplier;
             this.patternItem = origin.getPattern();
             this.canSubstitute = origin.canSubstitute();
             this.priority = origin.getPriority();
@@ -253,6 +263,28 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             this.priority = priority;
         }
 
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (this.getClass() != obj.getClass()) {
+                return false;
+            }
+
+            final ActualPattern other = (ActualPattern) obj;
+
+            if (this.originPattern != null && other.originPattern != null) {
+                return this.originPattern.equals(other.originPattern) && this.multiplier == other.multiplier;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            if (originPattern == null) return 0;
+            return originPattern.hashCode() * 31 + multiplier;
+        }
         // region unused
 
         @Override
@@ -435,6 +467,32 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         }
     }
 
+    /**
+     * Return a read-only pattern list.
+     */
+    public Collection<ItemStack> getInternalPatterns() {
+        return ImmutableList.copyOf(internalPatterns);
+    }
+
+    public ItemStack extractPattern(@Nonnull AEItemStack request) {
+        if (mMaxProgresstime > 0) return null;
+        if (request.getStackSize() > 1) return null;
+        if (internalPatterns.removeIf(request::isSameType)) {
+            ItemStack stack = request.getItemStack();
+            if (stack.getItem() instanceof ICraftingPatternItem pattern) {
+                patternDetails.remove(
+                    pattern.getPatternForItem(
+                        stack,
+                        this.getBaseMetaTileEntity()
+                            .getWorld()));
+            }
+            flush();
+            return request.getItemStack();
+        }
+
+        return null;
+    }
+
     @Override
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
         int z) {
@@ -564,31 +622,39 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         ArrayList<ItemStack> l = new ArrayList<>();
         ArrayList<ItemStack> inputs = getStoredInputs();
         if (inputs.isEmpty()) return l;
-        boolean addNew = false;
         for (ItemStack in : inputs) {
-            ICraftingPatternDetails d = checkPattern(in);
-            if (d != null && !patternDetails.contains(d)) {
-                patternDetails.add(d);
-
-                if (in.stackSize > 1) {
-                    l.add(GTUtility.copyAmountUnsafe(in.stackSize - 1, in));
-                    in.stackSize = 1;
-                }
-
-                internalPatterns.add(in.copy());
-                in.stackSize = 0;
-                addNew = true;
-            } else {
-                l.add(in.copy());
-                in.stackSize = 0;
-            }
+            ItemStack refund = tryInjectPattern(in);
+            if (refund != null) l.add(refund);
         }
         updateSlots();
-
-        if (addNew) {
-            flush();
-        }
         return l;
+    }
+
+    /**
+     * Try to add pattern to internal inventory.
+     *
+     * @return Return null if all accepted, or unwanted item otherwise.
+     */
+    @Nullable
+    public ItemStack tryInjectPattern(ItemStack in) {
+        ItemStack refund = null;
+        ICraftingPatternDetails d = checkPattern(in);
+        if (d != null && !patternDetails.contains(d)) {
+            patternDetails.add(d);
+
+            if (in.stackSize > 1) {
+                refund = GTUtility.copyAmountUnsafe(in.stackSize - 1, in);
+                in.stackSize = 1;
+            }
+            internalPatterns.add(in.copy());
+            flush();
+            in.stackSize = 0;
+            return refund;
+        } else {
+            refund = (in.copy());
+            in.stackSize = 0;
+            return refund;
+        }
     }
 
     /**
@@ -602,6 +668,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                     .postEvent(new MENetworkCraftingPatternChange(this, getProxy().getNode()));
             } catch (GridAccessException ignored) {}
         }
+        notifyAcessHatch();
     }
 
     @Override
@@ -739,8 +806,12 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     @Override
     protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+        mPatternAccessHatch.clear();
         maintenance_EM();
         if (structureCheck_EM("MAIN", 3, 3, 0)) {
+            if (mPatternAccessHatch.size() > 1) {
+                return false;
+            }
             return !mOutputBusses.isEmpty();
         }
         return false;
@@ -804,8 +875,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 .addElement(
                     'B',
                     HatchElementBuilder.<TST_MegaCraftingCenter>builder()
-                        .atLeast(InputBus, OutputBus)
-                        .adder(TST_MegaCraftingCenter::addToMachineList)
+                        .atLeast(InputBus, OutputBus, AccessHatchAdder)
+                        .adder(TST_MegaCraftingCenter::superAddToMachineList)
                         .casingIndex(textureOffset + 12)
                         .dot(1)
                         .buildAndChain(ofBlock(TTCasingsContainer.sBlockCasingsTT, 4)))
@@ -834,6 +905,57 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     @Override
     protected boolean supportsCraftingMEBuffer() {
+        return false;
+    }
+
+    private static IHatchElement<TST_MegaCraftingCenter> AccessHatchAdder = new IHatchElement<TST_MegaCraftingCenter>() {
+
+        @Override
+        public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
+
+            return ImmutableList.of(TST_PatternAccessHatch.class);
+        }
+
+        @Override
+        public IGTHatchAdder<? super TST_MegaCraftingCenter> adder() {
+
+            return TST_MegaCraftingCenter::addAccessHatchToMachineList;
+        }
+
+        @Override
+        public String name() {
+
+            return "PatternAccessHatch";
+        }
+
+        @Override
+        public long count(TST_MegaCraftingCenter t) {
+
+            return t.mPatternAccessHatch.size();
+        }
+    };
+    public ArrayList<TST_PatternAccessHatch> mPatternAccessHatch = new ArrayList<TST_PatternAccessHatch>();
+
+    public final boolean superAddToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (addAccessHatchToMachineList(aTileEntity, aBaseCasingIndex)) return true;
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public final boolean addAccessHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) {
+            return false;
+        }
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) {
+            return false;
+        }
+        if (aMetaTileEntity instanceof TST_PatternAccessHatch pa) {
+            mPatternAccessHatch.add(pa);
+            pa.bind(this);
+
+            pa.updateTexture(aBaseCasingIndex);
+            return true;
+        }
         return false;
     }
 
@@ -974,4 +1096,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         return tt;
     }
 
+    public void notifyAcessHatch() {
+        mPatternAccessHatch.forEach(TST_PatternAccessHatch::onChange);
+
+    }
 }
