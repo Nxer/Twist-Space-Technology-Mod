@@ -1112,26 +1112,39 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addInfo(MoreInfoCheckingInScanner.getText())
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
+            .addStructureInfo(Text_SeparatingLine)
             // #tr Tooltip_SwelegfyrBlastFurnace.11
-            // # {\GOLD}Blaze Pyrotheum {\WHITE}Consumption:
-            // #zh_CN {\GOLD}炽焱{\WHITE}消耗:
+            // # {\GOLD}Heat{\WHITE}Upper Limit:
+            // #zh_CN {\GOLD}炉温{\WHITE}上限：
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.11"))
             // #tr Tooltip_SwelegfyrBlastFurnace.12
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\GOLD}1000 {\WHITE}L/s
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\GOLD}1000 {\WHITE}L/s
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Coil Heat
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\AQUA}线圈炉温
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.12"))
             // #tr Tooltip_SwelegfyrBlastFurnace.13
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}5 {\WHITE}L/s
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}当前炉温 {\WHITE}/ {\GOLD}5 {\WHITE}L/s
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Coil Heat {\WHITE}^ 1.1
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}线圈炉温 {\WHITE}^ 1.1
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.13"))
             // #tr Tooltip_SwelegfyrBlastFurnace.14
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Current Heat {\WHITE}× {\AQUA}Max Heat{\WHITE}) / {\AQUA}Voltage Tier {\WHITE}^ {\GOLD}3 {\WHITE}L/s
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}电压等级 {\WHITE}^ {\GOLD}3 {\WHITE}L/s
+            // # {\GOLD}Blaze Pyrotheum {\WHITE}Consumption:
+            // #zh_CN {\GOLD}炽焱{\WHITE}消耗：
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.14"))
             // #tr Tooltip_SwelegfyrBlastFurnace.15
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\GOLD}1000 {\WHITE}L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\GOLD}1000 {\WHITE}L/s
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.15"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.16
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}5 {\WHITE}L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}当前炉温 {\WHITE}/ {\GOLD}5 {\WHITE}L/s
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.16"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.17
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Current Heat {\WHITE}× {\AQUA}Max Heat{\WHITE}) / {\AQUA}Voltage Tier {\WHITE}^ {\GOLD}3 {\WHITE}L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}电压等级 {\WHITE}^ {\GOLD}3 {\WHITE}L/s
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.17"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.18
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Thermal Retention Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}20 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}保温模式： {\AQUA}当前炉温 {\WHITE}/ {\GOLD}20 {\WHITE}L/s
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.15"))
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.18"))
             // #tr Tooltip_SwelegfyrBlastFurnace.21
             // # {\GOLD}Heat Capacity {\WHITE}Change:
             // #zh_CN {\GOLD}炉温{\WHITE}改变:
