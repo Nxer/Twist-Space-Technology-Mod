@@ -377,10 +377,9 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
 
                 // Check controller
                 ItemStack controllerStack = TST_AdvCircuitAssemblyLine.this.getControllerSlot();
-                if (controllerStack != null) {
-                    if (controllerStack.isItemEqual(circuitImprint) && controllerStack.stackTagCompound == outputTag) {
-                        return CheckRecipeResultRegistry.SUCCESSFUL;
-                    }
+                if (controllerStack != null && controllerStack.isItemEqual(circuitImprint)
+                    && controllerStack.stackTagCompound.equals(outputTag)) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
 
                 // Check imprint hatch
