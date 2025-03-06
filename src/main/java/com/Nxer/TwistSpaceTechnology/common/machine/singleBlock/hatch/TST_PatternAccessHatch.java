@@ -80,7 +80,12 @@ public class TST_PatternAccessHatch extends MTEHatch
 
     public void bind(TST_MegaCraftingCenter controller) {
         this.controller = controller;
-        post();
+        try {
+            this.getProxy()
+                .getGrid()
+                .postEvent(new MENetworkCellArrayUpdate());
+        } catch (GridAccessException e) {}
+        postChanges();
     }
 
     @Override
@@ -246,33 +251,37 @@ public class TST_PatternAccessHatch extends MTEHatch
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
 
-        boolean active = this.getProxy()
-            .isActive();
-        if (!aBaseMetaTileEntity.getWorld().isRemote) {
-            getBaseMetaTileEntity().setActive(active);
-            if (wasActive != active) {
-                wasActive = active;
-                try {
-                    this.getProxy()
-                        .getGrid()
-                        .postEvent(new MENetworkCellArrayUpdate());
-                } catch (GridAccessException e) {
+        if (aBaseMetaTileEntity.isServerSide()) {
+            if (aTick % 20 == 0) {
+                getController();// check controller every 1 second
+            }
+            boolean active = this.getProxy()
+                .isActive();
 
+            if (!aBaseMetaTileEntity.getWorld().isRemote) {
+                getBaseMetaTileEntity().setActive(active);
+                if (wasActive != active) {
+                    wasActive = active;
+                    try {
+                        this.getProxy()
+                            .getGrid()
+                            .postEvent(new MENetworkCellArrayUpdate());
+                    } catch (GridAccessException e) {}
+                    postChanges();
                 }
-                post();
             }
         }
         super.onPostTick(aBaseMetaTileEntity, aTick);
     }
 
     public void onChange() {
-        post();
+        postChanges();
 
     }
 
     List<AEItemStack> lastPattern;
 
-    private void post() {
+    private void postChanges() {
 
         MachineSource src = new MachineSource(this);
         if (lastPattern != null) {
@@ -312,7 +321,16 @@ public class TST_PatternAccessHatch extends MTEHatch
 
     public TST_MegaCraftingCenter getController() {
         if (controller != null) {
-            if ((!controller.isValid()) || (!controller.mPatternAccessHatch.contains(this))) controller = null;
+            if ((!controller.isValid()) || (!controller.mPatternAccessHatch.contains(this))) {
+                controller = null;
+
+                try {
+                    this.getProxy()
+                        .getGrid()
+                        .postEvent(new MENetworkCellArrayUpdate());
+                } catch (GridAccessException e) {}
+                postChanges();
+            }
         }
 
         return controller;
