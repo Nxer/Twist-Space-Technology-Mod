@@ -669,7 +669,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                     .postEvent(new MENetworkCraftingPatternChange(this, getProxy().getNode()));
             } catch (GridAccessException ignored) {}
         }
-        notifyAcessHatch();
+        notifyAccessHatch();
     }
 
     @Override
@@ -876,7 +876,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 .addElement(
                     'B',
                     HatchElementBuilder.<TST_MegaCraftingCenter>builder()
-                        .atLeast(InputBus, OutputBus, AccessHatchAdder)
+                        .atLeast(InputBus, OutputBus, AccessHatchElement)
                         .adder(TST_MegaCraftingCenter::superAddToMachineList)
                         .casingIndex(textureOffset + 12)
                         .dot(1)
@@ -909,7 +909,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         return false;
     }
 
-    private static IHatchElement<TST_MegaCraftingCenter> AccessHatchAdder = new IHatchElement<TST_MegaCraftingCenter>() {
+    private static IHatchElement<TST_MegaCraftingCenter> AccessHatchElement = new IHatchElement<TST_MegaCraftingCenter>() {
 
         @Override
         public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
@@ -1097,7 +1097,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         return tt;
     }
 
-    public void notifyAcessHatch() {
+    public void notifyAccessHatch() {
         mPatternAccessHatch.forEach(TST_PatternAccessHatch::onChange);
 
     }
