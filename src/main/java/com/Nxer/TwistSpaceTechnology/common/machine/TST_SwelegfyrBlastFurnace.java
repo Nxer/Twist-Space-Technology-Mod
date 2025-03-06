@@ -137,8 +137,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"           ","   NNNNN   ","  NHHHHHN  "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN ","  NHHHHHN  ","   NNNNN   ","           "},
         {"   FFFFF   ","  FMMMMMF  "," FMFKKKFMF ","FMFEEEEEFMF","FMKEEEEEKMF","FMKEECEEKMF","FMKEEEEEKMF","FMFEEEEEFMF"," FMFKKKFMF ","  FMMMMMF  ","   FFFFF   "},
         {"           ","   HHHHH   ","  HFFFFFH  "," HFEEEEEFH "," HFEEEEEFH "," HFEECEEFH "," HFEEEEEFH "," HFEEEEEFH ","  HFFFFFH  ","   HHHHH   ","           "},
-        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEH  ","  AEECEEN  ","  AEEEEEH  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
-        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEH  ","  AEECEEN  ","  AEEEEEH  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
+        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
+        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
         {"           ","   HHHHH   ","  HFFFFFH  "," HFEEEEEFH "," HFEEEEEFH "," HFEECEEFH "," HFEEEEEFH "," HFEEEEEFH ","  HFFFFFH  ","   HHHHH   ","           "},
         {"   FFFFF   ","  FMMMMMF  "," FMFJJJFMF ","FMFEEEEEFMF","FMJEEEEEJMF","FMJEECEEJMF","FMJEEEEEJMF","FMFEEEEEFMF"," FMFJJJFMF ","  FMMMMMF  ","   FFFFF   "},
         {"           ","   JJ JJ   ","  JNNNNNJ  "," JNEDDDDNJ ","JJNDEEEDNJ ","  NDECEDN  ","JJNDEEEDNJ "," JNEDDDENJ ","  JNNNNNJ  ","   JJ JJ   ","           "},
@@ -341,8 +341,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         this.glassTier = 0;
         this.mBlazeHatch = null;
         this.setCoilLevel(HeatingCoilLevel.None);
-        if (!checkPiece("mainT" + controllerTier, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
-            return false;
+
+        // Check all tier to render properly in nei
+        if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
+            if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
+                return false;
+        }
+
         if (this.mHeatingCapacity < getCoilHeat()) this.mHeatingCapacity = getCoilHeat();
         this.maxHeatingCapacity = (int) (Math.floor(Math.pow(getCoilHeat(), 1.1) / 100) * 100 + 1);
 
