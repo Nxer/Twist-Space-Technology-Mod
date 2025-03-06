@@ -66,7 +66,7 @@ public class TST_PatternAccessHatch extends MTEHatch
         TextEnums.Mod_TwistSpaceTechnology.getText() };
 
     public TST_PatternAccessHatch(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, 3, 0, "");
+        super(aID, aName, aNameRegional, aTier, 0, "");
     }
 
     public TST_PatternAccessHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
@@ -86,7 +86,7 @@ public class TST_PatternAccessHatch extends MTEHatch
     @Override
     public AENetworkProxy getProxy() {
         if (gridProxy == null) {
-            gridProxy = new AENetworkProxy(this, "proxy", GTCMItemList.ExtremeCraftCenter.get(1), true);
+            gridProxy = new AENetworkProxy(this, "proxy", GTCMItemList.PatternAccessHatch.get(1), true);
             gridProxy.setFlags(GridFlags.REQUIRE_CHANNEL);
             if (getBaseMetaTileEntity().getWorld() != null) {
                 gridProxy.setOwner(

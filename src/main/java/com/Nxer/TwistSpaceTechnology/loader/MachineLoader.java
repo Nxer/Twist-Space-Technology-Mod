@@ -374,6 +374,7 @@ public final class MachineLoader {
 
         GTCMItemList.ExtremeCraftCenter
             .set(new TST_MegaCraftingCenter(19052, "NameExtremeCraftCenter", TextEnums.tr("NameExtremeCraftCenter")));
+        
         GTCMItemList.PatternAccessHatch.set(
             new TST_PatternAccessHatch(18847, "NamePatternAccessHatch", TextEnums.tr("NamePatternAccessHatch"), 9));
 
