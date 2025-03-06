@@ -20,7 +20,7 @@ public class ItemRegister {
     public static void registryItems() {
         Item[] itemsToReg = { MetaItem01, TstItems.ProofOfHeroes, TstItems.ProofOfGods, MultiStructuresLinkTool,
 
-            TstItems.MetaItemRune, TstItems.MetaItemIzumik, TstItems.Yamato };
+            TstItems.MetaItemRune, TstItems.MetaItemIzumik, TstItems.Yamato, TstItems.ActualPattern };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -976,6 +976,7 @@ public class ItemRegister {
 
         GTCMItemList.Yamato.set(new ItemStack(TstItems.Yamato, 1));
 
+        GTCMItemList.ActualPattern.set(new ItemStack(TstItems.ActualPattern, 1));
     }
 
     // spotless:on

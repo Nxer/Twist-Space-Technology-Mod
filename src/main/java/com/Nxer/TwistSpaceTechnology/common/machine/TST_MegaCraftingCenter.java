@@ -43,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemActualPattern;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -131,8 +132,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         protected IAEItemStack[] outputs = new IAEItemStack[0];
         protected boolean canSubstitute = false;
         protected int priority = 0;
-        protected ICraftingPatternDetails originPattern;
-        protected int multiplier;
+        public ICraftingPatternDetails originPattern;
+        public int multiplier;
 
         private ActualPattern() {}
 
@@ -225,7 +226,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
         @Override
         public ItemStack getPattern() {
-            return patternItem;
+            return ItemActualPattern.getStackFromPattern(this);
         }
 
         @Override

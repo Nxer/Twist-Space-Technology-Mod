@@ -45,6 +45,7 @@ public enum GTCMItemList {
     CoreOfT800,
     ExoticCircuitBoard,
     Yamato,
+    ActualPattern,
 
     LightQuantumMatrix,
     StarCore,
