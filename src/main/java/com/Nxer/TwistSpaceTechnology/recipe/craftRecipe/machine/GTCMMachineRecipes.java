@@ -3331,11 +3331,11 @@ public class GTCMMachineRecipes implements IRecipePool {
             4,
             new Object[]{
                 GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.Neutronium,2),
+                ItemList.neutroniumHeatCapacitor.get(1),
+                ItemList.Neutron_Reflector.get(64),
                 new ItemStack(GSItems.DysonSwarmItems, 24, 3),
-                ItemRefer.Radiation_Protection_Plate.get(36),
-                GTUtility.copyAmountUnsafe(48, Ic2Items.iridiumPlate),
 
-                ItemList.neutroniumHeatCapacitor.get(64),
+                ItemRefer.Advanced_Radiation_Protection_Plate.get(36),
                 ItemList.Electric_Piston_UV.get(4),
                 ItemList.Field_Generator_UV.get(2),
                 GTOreDictUnificator.get(OrePrefixes.ring,Materials.CosmicNeutronium,64),
