@@ -811,6 +811,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         maintenance_EM();
         if (structureCheck_EM("MAIN", 3, 3, 0)) {
             if (mPatternAccessHatch.size() > 1) {
+            	mPatternAccessHatch.clear();
                 return false;
             }
             return !mOutputBusses.isEmpty();
