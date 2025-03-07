@@ -35,6 +35,9 @@ public class ItemActualPattern extends Item implements ICraftingPatternItem {
         }
         ICraftingPatternDetails originPattern = ((ICraftingPatternItem) originPatternItem.getItem())
             .getPatternForItem(originPatternItem, w);
+        if (originPattern == null) {
+            return null;
+        }
         return new TST_MegaCraftingCenter.ActualPattern(originPattern, multiplier);
     }
 
