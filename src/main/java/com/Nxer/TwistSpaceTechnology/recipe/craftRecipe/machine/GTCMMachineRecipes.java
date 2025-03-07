@@ -185,6 +185,7 @@ import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
 import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
+import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import bartworks.common.loaders.BioItemList;
 import bartworks.common.loaders.ItemRegistry;
@@ -3412,6 +3413,23 @@ public class GTCMMachineRecipes implements IRecipePool {
             ItemList.AutoclaveUV,
             ItemList.FluidSolidifierUV,
         });
+
+        // region Pattern Access Hatch
+        GTValues.RA
+            .stdBuilder()
+            .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
+                ItemList.Hatch_CraftingInput_Bus_ME_ItemOnly.get(1),
+                AEApi.instance().definitions().parts().storageBus().maybeStack(1).get(),
+                AEApi.instance().definitions().parts().terminal().maybeStack(1).get(),
+                AEApi.instance().definitions().materials().engProcessor().maybeStack(16).get(),
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TungstenSteel, 8)
+            )
+            .itemOutputs(GTCMItemList.PatternAccessHatch.get(1))
+            .eut(RECIPE_LuV)
+            .duration(20 * 15)
+            .addTo(assembler);
     }
+
     // spotless:on
 }
