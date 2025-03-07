@@ -80,6 +80,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_IndistinctTentaclePrototypeMK2;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_LargeNeutronOscillator;
@@ -373,6 +374,9 @@ public final class MachineLoader {
 
         GTCMItemList.ExtremeCraftCenter
             .set(new TST_MegaCraftingCenter(19052, "NameExtremeCraftCenter", TextEnums.tr("NameExtremeCraftCenter")));
+
+        GTCMItemList.PatternAccessHatch.set(
+            new TST_PatternAccessHatch(18847, "NamePatternAccessHatch", TextEnums.tr("NamePatternAccessHatch"), 9));
 
         if (Config.Enable_LightningSpire) {
             GTCMItemList.LightningSpire.set(

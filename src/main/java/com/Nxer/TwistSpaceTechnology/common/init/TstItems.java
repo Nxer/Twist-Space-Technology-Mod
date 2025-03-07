@@ -4,6 +4,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemActualPattern;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdder01;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderIzumik;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderRune;
@@ -52,5 +53,7 @@ public class TstItems {
     // don't use this item, but found its stack instance in the class, remember to copy the stacks!
     @SuppressWarnings("unused")
     public static final TSTGeneratedItem Generated = new TSTGeneratedItem();
+
+    public static final Item ActualPattern = new ItemActualPattern();
 
 }
