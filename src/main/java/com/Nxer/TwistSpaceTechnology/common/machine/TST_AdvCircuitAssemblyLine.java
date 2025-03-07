@@ -13,7 +13,6 @@ import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.InputHatch;
-import static gregtech.api.enums.HatchElement.Maintenance;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
@@ -86,118 +85,57 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     private static final int baseVerticalOffSet = 1;
     private static final int baseDepthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainAdvCAL";
-    private static final String STRUCTURE_PIECE_MIDDLE = "middleAdvCAL";
-    private static final String STRUCTURE_PIECE_MIDDLE_HINT = "middleHintAdvCAL";
-    private static final String STRUCTURE_PIECE_END = "endAdvCAL";
     // spotless:off
-    private static final String[][] shapeMain =new String[][]{
-        {" ","E"," "},
-        {"~","C","g"},
-        {"A","B","A"},
-        {"F","D","F"}
+    private static final String[][] shapeMain = new String[][]{
+        {"       ","DDDDDDD","       "},
+        {"~GFFFFF","EEEEEEE","FFFFFFF"},
+        {"AAAAAAA","CCCCCCC","AAAAAAA"},
+        {"BBBBBBB","BBBBBBB","BBBBBBB"}
     };
 
-    private static final String[][] shapeMiddle =new String[][]{
-        {" ","E"," "},
-        {"G","C","G"},
-        {"A","B","A"},
-        {"F","D","F"}
-    };
-
-    private static final String[][] shapeMiddleHint =new String[][]{
-        {" ","E"," "},
-        {"G","C","G"},
-        {"A","B","A"},
-        {"F","d","F"}
-    };
-
-    private static final String[][] shapeEnd =new String[][]{
-        {" ","E"," "},
-        {"G","C","G"},
-        {"A","B","A"},
-        {"F","H","F"}
-    };
     // spotless:on
-    private static final IStructureDefinition<TST_AdvCircuitAssemblyLine> STRUCTURE_DEFINITION = StructureDefinition
-        .<TST_AdvCircuitAssemblyLine>builder()
-        .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-        .addShape(STRUCTURE_PIECE_MIDDLE, transpose(shapeMiddle))
-        .addShape(STRUCTURE_PIECE_MIDDLE_HINT, transpose(shapeMiddleHint))
-        .addShape(STRUCTURE_PIECE_END, transpose(shapeEnd))
-        .addElement('A', ofGlassTieredMixed((byte) 4, (byte) 127, 5))
-        .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 5))
-        .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))
-        .addElement('d', InputBus.newAny(16, 3, ForgeDirection.DOWN))
-        .addElement(
-            'D',
-            buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(InputBus, OutputBus)
-                .casingIndex(16)
-                .dot(2)
-                .disallowOnly(ForgeDirection.EAST, ForgeDirection.WEST)
-                .buildAndChain(GregTechAPI.sBlockCasings2, 0))
-        .addElement(
-            'E',
-            buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(Energy.or(ExoticEnergy))
-                .casingIndex(16)
-                .dot(1)
-                .buildAndChain(GregTechAPI.sBlockCasings2, 6))
-        .addElement(
-            'F',
-            buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(InputHatch, Maintenance)
-                .casingIndex(16)
-                .dot(3)
-                .disallowOnly(ForgeDirection.EAST, ForgeDirection.WEST)
-                .buildAndChain(GregTechAPI.sBlockCasings2, 0))
-        .addElement('g', ofBlock(GregTechAPI.sBlockCasings3, 10))
-        .addElement(
-            'G',
-            buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(CircuitImprintHatchElement.CircuitAccess)
-                .dot(5)
-                .casingIndex(42)
-                .allowOnly(ForgeDirection.NORTH)
-                .buildAndChain(GregTechAPI.sBlockCasings3, 10))
-        .addElement('H', OutputBus.newAny(16, 4, ForgeDirection.DOWN))
-        .build();
+    private static IStructureDefinition<TST_AdvCircuitAssemblyLine> STRUCTURE_DEFINITION;
 
     @Override
     public IStructureDefinition<TST_AdvCircuitAssemblyLine> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_AdvCircuitAssemblyLine>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement('A', ofGlassTieredMixed((byte) 4, (byte) 127, 5))
+                .addElement(
+                    'B',
+                    buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(InputBus, OutputBus, InputHatch)
+                        .adder(TST_AdvCircuitAssemblyLine::addToMachineList)
+                        .casingIndex(16)
+                        .dot(2)
+                        .buildAndChain(GregTechAPI.sBlockCasings2, 0))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
+                .addElement(
+                    'D',
+                    buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(Energy.or(ExoticEnergy))
+                        .casingIndex(16)
+                        .dot(1)
+                        .buildAndChain(GregTechAPI.sBlockCasings2, 6))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings2, 9))
+                .addElement('F', ofBlock(GregTechAPI.sBlockCasings3, 10))
+                .addElement(
+                    'G',
+                    buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(CircuitImprintHatchElement.CircuitAccess)
+                        .dot(5)
+                        .casingIndex(42)
+                        .buildAndChain(GregTechAPI.sBlockCasings3, 10))
+                .build();
+        }
         return STRUCTURE_DEFINITION;
     }
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
-        int built;
-        built = survivialBuildPiece(
+        return survivialBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             baseHorizontalOffSet,
-            baseVerticalOffSet,
-            baseDepthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-        if (built >= 0) return built;
-        int tLength = Math.min(stackSize.stackSize + 1, 7);
-
-        for (int i = 1; i < tLength - 1; ++i) {
-            built = survivialBuildPiece(
-                STRUCTURE_PIECE_MIDDLE_HINT,
-                stackSize,
-                baseHorizontalOffSet - i,
-                baseVerticalOffSet,
-                baseDepthOffSet,
-                elementBudget,
-                env,
-                false,
-                true);
-            if (built >= 0) return built;
-        }
-        return survivialBuildPiece(
-            STRUCTURE_PIECE_END,
-            stackSize,
-            baseHorizontalOffSet - (tLength - 1),
             baseVerticalOffSet,
             baseDepthOffSet,
             elementBudget,
@@ -215,30 +153,12 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             baseHorizontalOffSet,
             baseVerticalOffSet,
             baseDepthOffSet);
-        int layer = 1;
-        for (; layer < Math.min(6, stackSize.stackSize + 1); layer++) {
-            buildPiece(
-                STRUCTURE_PIECE_MIDDLE,
-                stackSize,
-                hintsOnly,
-                baseHorizontalOffSet - layer,
-                baseVerticalOffSet,
-                baseDepthOffSet);
-        }
-        buildPiece(
-            STRUCTURE_PIECE_END,
-            stackSize,
-            hintsOnly,
-            baseHorizontalOffSet - layer,
-            baseVerticalOffSet,
-            baseDepthOffSet);
     }
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         mCircuitImprintHatches.clear();
-        this.length = 1;
         maxVoltageAllow = 0;
 
         // check the main layer.
@@ -246,24 +166,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             return false;
         }
 
-        // check the middle layer
-        while (checkPiece(
-            STRUCTURE_PIECE_MIDDLE_HINT,
-            baseHorizontalOffSet - this.length,
-            baseVerticalOffSet,
-            baseDepthOffSet)) {
-            this.length++;
-            if (length > 7) {
-                return false;
-            }
-        }
-
-        // check the end layer
-        if (!checkPiece(STRUCTURE_PIECE_END, baseHorizontalOffSet - this.length, baseVerticalOffSet, baseDepthOffSet)) {
-            return false;
-        }
-
-        this.length++;
         // only one imprint circuit hatch allowed
         if (mCircuitImprintHatches.size() > 1) return false;
 
@@ -274,9 +176,9 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             if (mExoticEnergyHatches.get(0)
                 .maxWorkingAmperesIn() > 64) return false;
 
-        } else if (!mEnergyHatches.isEmpty()) {
-            if (mEnergyHatches.size() > 1) return false;
-        } else return false;
+        } else if (mEnergyHatches.size() > 1) {
+            return false;
+        }
 
         maxVoltageAllow = getMaxInputVoltage();
 
@@ -288,7 +190,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     // region Processing Logic
     private static ItemStack circuitImprint;
     protected long maxVoltageAllow = 0;
-    int length = 1;
     ArrayList<TST_CircuitImprintHatch> mCircuitImprintHatches = new ArrayList<>();
     HashSet<NBTTagCompound> circuitType = new HashSet<>();
 
@@ -324,14 +225,12 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setInteger("length", length);
         aNBT.setLong("maxVoltageAllow", maxVoltageAllow);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        length = aNBT.getInteger("length");
         maxVoltageAllow = aNBT.getLong("maxVoltageAllow");
     }
 
