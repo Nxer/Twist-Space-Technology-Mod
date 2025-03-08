@@ -415,7 +415,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         int OffSetY = BlazeVerticalOffSet;
         int OffSetZ = BlazeDepthOffSet;
         // if (!checkStructure(true)) return false;
-        if (isBlazeFinishClear) {
+        if (!isBlazeFinishSet) {
             if (!drainPyrotheumFromBlazeHatch(BlazeAmount, false)) return false;
             drainPyrotheumFromBlazeHatch(BlazeAmount, true);
             isBlazeFinishClear = false;
@@ -423,7 +423,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Blaze);
             isBlazeFinishSet = true;
             return true;
-        } else if (isBlazeFinishSet) {
+        } else if (!isBlazeFinishClear) {
             // clear will not return existing pyrotheum
             isBlazeFinishSet = false;
             TstUtils
@@ -779,10 +779,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .setBackground(() -> {
                 List<IDrawable> layers = new ArrayList<>();
                 // Add icons per mode
-                if (isBlazeFinishSet) {
+                if (!isBlazeFinishClear) {
                     layers.add(GTUITextures.BUTTON_STANDARD);
                     layers.add(UITextures.SBF_BlazeClear);
-                } else if (isBlazeFinishClear) {
+                } else if (!isBlazeFinishSet) {
                     layers.add(GTUITextures.BUTTON_STANDARD);
                     layers.add(UITextures.SBF_BlazeSet);
                 }
@@ -933,6 +933,22 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public byte getUpdateData() {
         return controllerTier;
+    }
+
+    @Override
+    public void setItemNBT(NBTTagCompound aNBT) {
+        super.setItemNBT(aNBT);
+        if (controllerTier > 1) aNBT.setByte("mTier", controllerTier);
+    }
+
+    @Override
+    public void initDefaultModes(NBTTagCompound aNBT) {
+        super.initDefaultModes(aNBT);
+        if (aNBT == null || !aNBT.hasKey("mTier")) {
+            controllerTier = 1;
+        } else {
+            controllerTier = aNBT.getByte("mTier");
+        }
     }
 
     @Override
