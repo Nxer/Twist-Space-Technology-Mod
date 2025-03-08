@@ -251,6 +251,16 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
+    public void initDefaultModes(NBTTagCompound aNBT) {
+        super.initDefaultModes(aNBT);
+        if (aNBT == null || !aNBT.hasKey("mTier")) {
+            controllerTier = 0;
+        } else {
+            controllerTier = aNBT.getByte("mTier");
+        }
+    }
+
+    @Override
     public void addAdditionalTooltipInformation(ItemStack stack, List<String> tooltip) {
         super.addAdditionalTooltipInformation(stack, tooltip);
         NBTTagCompound aNBT = stack.getTagCompound();
