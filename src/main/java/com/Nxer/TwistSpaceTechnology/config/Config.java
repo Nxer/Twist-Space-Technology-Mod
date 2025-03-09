@@ -490,7 +490,9 @@ public class Config {
     public static int Parallel_PassiveMode_SwelegfyrBlastFurnace = 256;
     // endregion
 
-
+    // region Swelegfyr Blast Furnace
+    public static boolean Enable_HighEnergyStateThermalTransferDevice = true;
+    // endregion
     // region Mega Crafting Center
     public static boolean Enable_MegaCraftingCenter = true;
     public static int TickEveryProcess_MegaCraftingCenter = 20;

@@ -341,6 +341,8 @@ public class ItemRegister {
         // # Swelegfgr Upgrade Chip
         // #zh_CN 熯焱高炉升级芯片
         GTCMItemList.SwelegfgrUpgradeChip.set(MetaItem01.registerVariant(42));
+        GTCMItemList.BoropheneFoil.set(MetaItem01.registerVariant(43));
+        GTCMItemList.BoropheneBasedNanowireCompositeThermalConductiveMedium.set(MetaItem01.registerVariant(44));
         if (Config.activateMegaSpaceStation) {
             // #tr item.MetaItem01.176.name
             // # High-dimensional extend

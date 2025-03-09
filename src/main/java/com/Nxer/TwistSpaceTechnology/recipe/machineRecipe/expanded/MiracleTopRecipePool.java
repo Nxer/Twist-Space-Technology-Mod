@@ -65,38 +65,6 @@ public class MiracleTopRecipePool implements IRecipePool {
     public final HashSet<OrePrefixes> targetModifyOreDict = new HashSet<>();
     public final HashMap<ItemStack, FluidStack> specialMaterialCantAutoModify = new HashMap<>();
 
-    public static FluidStack[] mergeSameFluid(FluidStack[] fluidStacks) {
-
-        Map<Fluid, Integer> fluidMap = new LinkedHashMap<>();
-
-        for (FluidStack aStack : fluidStacks) {
-            fluidMap.put(aStack.getFluid(), fluidMap.getOrDefault(aStack.getFluid(), 0) + aStack.amount);
-        }
-
-        ArrayList<FluidStack> mergedList = new ArrayList<>();
-        for (Map.Entry<Fluid, Integer> entry : fluidMap.entrySet()) {
-            mergedList.add(new FluidStack(entry.getKey(), entry.getValue()));
-        }
-
-        return mergedList.toArray(new FluidStack[0]);
-    }
-
-    public static ItemStack[] mergeSameItem(ItemStack[] itemStacks) {
-
-        Map<Item, Integer> itemMap = new LinkedHashMap<>();
-
-        for (ItemStack aStack : itemStacks) {
-            itemMap.put(aStack.getItem(), itemMap.getOrDefault(aStack.getItem(), 0) + aStack.stackSize);
-        }
-
-        ArrayList<ItemStack> mergedList = new ArrayList<>();
-        for (Map.Entry<Item, Integer> entry : itemMap.entrySet()) {
-            mergedList.add(new ItemStack(entry.getKey(), entry.getValue()));
-        }
-
-        return mergedList.toArray(new ItemStack[0]);
-    }
-
     @Override
     public void loadRecipes() {
         TwistSpaceTechnology.LOG.info("MiracleTopRecipePool loading recipes.");
@@ -512,6 +480,38 @@ public class MiracleTopRecipePool implements IRecipePool {
             }
         }
         return true;
+    }
+
+    public static FluidStack[] mergeSameFluid(FluidStack[] fluidStacks) {
+
+        Map<Fluid, Integer> fluidMap = new LinkedHashMap<>();
+
+        for (FluidStack aStack : fluidStacks) {
+            fluidMap.put(aStack.getFluid(), fluidMap.getOrDefault(aStack.getFluid(), 0) + aStack.amount);
+        }
+
+        ArrayList<FluidStack> mergedList = new ArrayList<>();
+        for (Map.Entry<Fluid, Integer> entry : fluidMap.entrySet()) {
+            mergedList.add(new FluidStack(entry.getKey(), entry.getValue()));
+        }
+
+        return mergedList.toArray(new FluidStack[0]);
+    }
+
+    public static ItemStack[] mergeSameItem(ItemStack[] itemStacks) {
+
+        Map<Item, Integer> itemMap = new LinkedHashMap<>();
+
+        for (ItemStack aStack : itemStacks) {
+            itemMap.put(aStack.getItem(), itemMap.getOrDefault(aStack.getItem(), 0) + aStack.stackSize);
+        }
+
+        ArrayList<ItemStack> mergedList = new ArrayList<>();
+        for (Map.Entry<Item, Integer> entry : itemMap.entrySet()) {
+            mergedList.add(new ItemStack(entry.getKey(), entry.getValue()));
+        }
+
+        return mergedList.toArray(new ItemStack[0]);
     }
 
     private void addRecipeMT(GTRecipe aRecipe) {

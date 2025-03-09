@@ -12,6 +12,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.D
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidHeatExchangeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StellarForgeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
@@ -383,7 +384,7 @@ public class GTCMRecipe {
     // #tr tst.recipe.IndustrialAlchemyTowerRecipe
     // # Industrial Alchemy Tower
     // #zh_CN 工业炼金塔
-    public static final RecipeMap<RecipeMapBackend> IndustrialAlchemyTowerRecipe = RecipeMapBuilder
+    public static final RecipeMap<RecipeMapBackend> IndustrialAlchemyTowerRecipes = RecipeMapBuilder
         .of("tst.recipe.IndustrialAlchemyTowerRecipe")
         .maxIO(2, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialAlchemyTower.get(1)))
@@ -403,4 +404,16 @@ public class GTCMRecipe {
         .disableRegisterNEI()
         .disableOptimize()
         .build();
+
+    // #tr tst.recipe.RapidHeatExchangeRecipes
+    // # Rapid Heat Exchange
+    // #zh_CN 快速热交换
+    public static final RecipeMap<TST_RecipeMapBackend> RapidHeatExchangeRecipes = RecipeMapBuilder
+        .of("tst.recipe.RapidHeatExchangeRecipes", TST_RecipeMapBackend::new)
+        .maxIO(0, 0, 2, 2)
+        .dontUseProgressBar()
+        .addSpecialTexture(47, 13, 78, 59, GGUITextures.PICTURE_EXTREME_HEAT_EXCHANGER)
+        .frontend(TST_RapidHeatExchangeFrontend::new)
+        .build();
+
 }

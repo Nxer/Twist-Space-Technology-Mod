@@ -1989,3 +1989,7 @@ Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn=Attention: Pyrotheum input 
 MegaCraftingCenter.waila.ForceRunningMagnification=Force running magnification
 MegaCraftingCenter.waila.PatternAmount=Internal Pattern Amount
 MegaCraftingCenter.info.InternalPatterns=Internal patterns
+HESTTD.modeMsg.0=Heat Exchanger
+NameHighEnergyStateThermalTransferDevice=High-Energy-State Thermal Transfer Device
+HESTTD.modeMsg.1=Rapid cooling
+tst.recipe.RapidHeatExchangeRecipes=Rapid Heat Exchange

@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.MoreInfoCheckingInScanner;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -642,26 +643,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 }
             }
         }
-    }
-
-    /**
-     * n1 approaches n2 with a step of n3. n3 < |n1-n2|, n1 = n2.
-     *
-     * @param n1 previous number
-     * @param n2 target number
-     * @param n3 step number, n3 > 0
-     * @return modified n1
-     */
-    public int numericalApproximation(int n1, int n2, int n3) {
-        if (n3 < 0) return n1;
-        int delta = n1 - n2;
-        int absDelta = Math.abs(delta);
-        if (absDelta > n3) {
-            n1 += (delta > 0) ? -n3 : n3;
-        } else {
-            n1 = n2;
-        }
-        return n1;
     }
 
     /**

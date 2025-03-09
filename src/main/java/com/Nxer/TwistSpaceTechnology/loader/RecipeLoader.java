@@ -33,6 +33,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MicroSpaceTim
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.NeutronActivatorWithEURecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.RapidHeatExchangeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StarKernelForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarMaterialSiphonRecipePool;
@@ -92,7 +93,7 @@ public class RecipeLoader {
             new AquaticZoneSimulatorFakeRecipe(), new NeutronActivatorWithEURecipePool(),
             new MassFabricatorGenesisRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
             new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool(), new IndustrialAlchemyTowerRecipePool(),
-            new CircuitAssemblyLineWithoutImprintRecipePool() };
+            new CircuitAssemblyLineWithoutImprintRecipePool(), new RapidHeatExchangeRecipePool() };
 
         for (IRecipePool recipePool : machineRecipePools) {
             recipePool.loadRecipes();

@@ -43,6 +43,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_HighEnergyStateThermalTransferDevice;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower;
@@ -538,6 +539,17 @@ public final class MachineLoader {
                     19068,
                     "NameSwelegfyrBlastFurnace",
                     TextEnums.tr("NameSwelegfyrBlastFurnace")));
+        }
+
+        if (Config.Enable_HighEnergyStateThermalTransferDevice) {
+            // #tr NameHighEnergyStateThermalTransferDevice
+            // # High-Energy-State Thermal Transfer Device
+            // #zh_CN 高能态热传输装置
+            GTCMItemList.HighEnergyStateThermalTransferDevice.set(
+                new TST_HighEnergyStateThermalTransferDevice(
+                    19069,
+                    "NameHighEnergyStateThermalTransferDevice",
+                    TextEnums.tr("NameHighEnergyStateThermalTransferDevice")));
         }
 
         // endregion

@@ -201,7 +201,7 @@ public class TstUtils {
 
     /**
      * 0 = ULV, 1 = LV, 13 = UXV, 14 = MAX, 15+ = MAX+.
-     * 
+     *
      * @param tier The tier of machine or voltage.
      * @return The tier name.
      */

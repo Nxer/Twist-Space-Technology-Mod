@@ -1989,3 +1989,7 @@ Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn=注意：升级结构后炽
 MegaCraftingCenter.waila.ForceRunningMagnification=强制运行倍率
 MegaCraftingCenter.waila.PatternAmount=已载入样板数量
 MegaCraftingCenter.info.InternalPatterns=已载入样板
+HESTTD.modeMsg.0=热交换模式
+NameHighEnergyStateThermalTransferDevice=高能态热传输装置
+HESTTD.modeMsg.1=快速冷却模式
+tst.recipe.RapidHeatExchangeRecipes=快速热交换
