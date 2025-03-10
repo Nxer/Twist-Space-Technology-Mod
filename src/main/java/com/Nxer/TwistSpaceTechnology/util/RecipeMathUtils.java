@@ -55,7 +55,7 @@ public class RecipeMathUtils {
      */
     public static int roundUpToMultiple(int base, int number) {
         if (base < 1 || number < 1) return number;
-        return ((number + base - 1) / base) * base;
+        return (int) (Math.ceil((double) number / base) * base);
     }
 
     /**

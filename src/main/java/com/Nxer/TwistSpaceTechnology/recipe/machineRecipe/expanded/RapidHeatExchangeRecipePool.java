@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
+import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.roundUpToMultiple;
+
+import java.util.HashMap;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -11,6 +15,8 @@ import gregtech.api.enums.Materials;
 import gregtech.api.util.GTRecipe;
 
 public class RapidHeatExchangeRecipePool implements IRecipePool {
+
+    public static HashMap<String, FluidStack[]> RapidHeatExchangeMap = new HashMap<>();
 
     @Override
     public void loadRecipes() {
@@ -34,15 +40,19 @@ public class RapidHeatExchangeRecipePool implements IRecipePool {
 
             if (isDense) {
                 // Adjust to the nearest multiple of 25 (rounded up)
-                Water.amount = (int) (Math.ceil(scaledDW / 25) * 25);
+                Water.amount = roundUpToMultiple(25, (int) scaledDW);
                 // Calculate the amount of steam (distilled water x 4/25, the result must be an integer)
                 Steam.amount = Water.amount * 4 / 25;
             } else {
                 double decimalNum = scaledDW - Math.floor(scaledDW);
-                if (decimalNum==0)decimalNum=1;
+                if (decimalNum == 0) decimalNum = 1;
                 int Multiplier = (int) (1.0 / decimalNum);
-                Water.amount = Water.amount * Multiplier/HotFluid.amount;
+                Water.amount = Water.amount * Multiplier / HotFluid.amount;
                 Steam.amount = Water.amount * 160;
+
+                if (Steam.amount / 4000 > 0) {
+                    Steam = Materials.DenseSupercriticalSteam.getGas(roundUpToMultiple(4000, Steam.amount) / 1000);
+                }
             }
 
             HotFluid.amount = 1;
@@ -53,6 +63,9 @@ public class RapidHeatExchangeRecipePool implements IRecipePool {
                 .fluidOutputs(Steam, ColdFluid)
                 .duration(20)
                 .addTo(GTCMRecipe.RapidHeatExchangeRecipes);
+
+            RapidHeatExchangeMap
+                .put(HotFluid.getUnlocalizedName(), new FluidStack[] { HotFluid, Water, Steam, ColdFluid });
         }
     }
 
