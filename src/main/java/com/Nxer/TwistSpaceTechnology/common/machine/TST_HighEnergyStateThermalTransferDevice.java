@@ -14,7 +14,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static gtPlusPlus.core.block.base.BlockBaseModular.getMaterialBlock;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.processing.advanced.MTEAdvDistillationTower;
+import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -35,6 +34,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
@@ -207,7 +207,14 @@ public class TST_HighEnergyStateThermalTransferDevice
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet);
+        mHotFluidHatch = null;
+        mDistilledWaterHatch = null;
+        mSteamHatch = null;
+        mColdFluidHatch = null;
+        dedicatedHatches.clear();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) return false;
+        Collections.addAll(dedicatedHatches, mHotFluidHatch, mDistilledWaterHatch);
+        return mHotFluidHatch != null && mColdFluidHatch != null;
     }
 
     // region Processing Logic
@@ -216,6 +223,7 @@ public class TST_HighEnergyStateThermalTransferDevice
     private MTEHatchOutput mSteamHatch;
     private MTEHatchInput mHotFluidHatch;
     private MTEHatchOutput mColdFluidHatch;
+    List<MTEHatchInput> dedicatedHatches = new ArrayList<>();
     Fluid distilledWater;
 
     @Override
@@ -234,6 +242,7 @@ public class TST_HighEnergyStateThermalTransferDevice
         super.onFirstTick(aBaseMetaTileEntity);
         if (distilledWater == null) distilledWater = FluidRegistry.getFluid("ic2distilledwater");
     }
+
     public boolean addHotFluidInputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         if (aTileEntity == null) return false;
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
@@ -295,21 +304,25 @@ public class TST_HighEnergyStateThermalTransferDevice
         return Integer.MAX_VALUE;
     }
 
+    protected boolean isRecipeProcessing = false;
+
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-//        resetProcessingState(); // 重置累计输出
-        int cycleNum = 16; // Fluid number of ME input hatch
-        int mActualCycles = 0;
-
-        // 循环处理多个配方批次
+        int cycleNum = 128; // Process times with the maximum input hot fluid
+        boolean succeeded = false;
+        CheckRecipeResult finalResult = CheckRecipeResultRegistry.SUCCESSFUL;
         for (int i = 0; i < cycleNum; i++) {
-            CheckRecipeResult result = processSingleBatch();
-            if (!result.wasSuccessful()) break;
-            mActualCycles++;
+            CheckRecipeResult r = processSingleBatch();
+            if (!r.wasSuccessful()) {
+                finalResult = r;
+                break;
+            }
+            succeeded = true;
         }
 
-        if (mActualCycles == 0) return CheckRecipeResultRegistry.NO_RECIPE;
+        updateSlots();
+        if (!succeeded) return finalResult;
 
         // 固定配方参数
         mMaxProgresstime = 20;
@@ -318,16 +331,50 @@ public class TST_HighEnergyStateThermalTransferDevice
     }
 
     private CheckRecipeResult processSingleBatch() {
+        if (!isRecipeProcessing) startRecipeProcessing();
+        setupProcessingLogic(processingLogic);
 
-        return CheckRecipeResultRegistry.SUCCESSFUL;
+        CheckRecipeResult result = doCheckRecipe();
+        if (!result.wasSuccessful()) {
+            return result;
+        }
+
+        mOutputFluids = ArrayUtils.addAll(mOutputFluids, processingLogic.getOutputFluids());
+
+        endRecipeProcessing();
+        return result;
+    }
+
+    @Override
+    protected void startRecipeProcessing() {
+        super.startRecipeProcessing();
+        isRecipeProcessing = true;
+        for (MTEHatchInput mHatch:dedicatedHatches){
+            if (null != mHatch && mHatch.isValid()) {
+                if (mHatch instanceof IRecipeProcessingAwareHatch aware) {
+                    aware.startRecipeProcessing();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void endRecipeProcessing() {
+        isRecipeProcessing = false;
+        super.endRecipeProcessing();
+        for (MTEHatchInput mHatch:dedicatedHatches) {
+            if (null != mHatch && mHatch.isValid()) {
+                if (mHatch instanceof IRecipeProcessingAwareHatch aware) {
+                    setResultIfFailure(aware.endRecipeProcessing(this));
+                }
+            }
+        }
     }
 
     @Override
     public ArrayList<FluidStack> getStoredFluids() {
         ArrayList<FluidStack> rList = new ArrayList<>();
         Map<Fluid, FluidStack> inputsFromME = new HashMap<>();
-
-        List<MTEHatchInput> dedicatedHatches = Arrays.asList(mHotFluidHatch, mDistilledWaterHatch);
 
         for (MTEHatchInput tHatch : dedicatedHatches) {
             if (tHatch == null) continue;
@@ -354,14 +401,7 @@ public class TST_HighEnergyStateThermalTransferDevice
                         continue;
                     }
 
-                    inputsFromME.merge(
-                        fluidStack.getFluid(),
-                        fluidStack,
-                        (existing, newStack) -> new FluidStack(
-                            existing.getFluid(),
-                            existing.amount + newStack.amount
-                        )
-                    );
+                    inputsFromME.put(fluidStack.getFluid(), fluidStack);
                 }
             }
             // Normal Hatch
@@ -388,7 +428,8 @@ public class TST_HighEnergyStateThermalTransferDevice
     public boolean addOutput(FluidStack aLiquid) {
         if (aLiquid == null) return false;
         FluidStack copiedFluidStack = aLiquid.copy();
-        List<MTEHatchOutput> targetHatches = Collections.singletonList(isSteam(aLiquid) ? mSteamHatch : mColdFluidHatch);
+        List<MTEHatchOutput> targetHatches = Collections
+            .singletonList(isSteam(aLiquid) ? mSteamHatch : mColdFluidHatch);
         if (!dumpFluid(targetHatches, copiedFluidStack, true)) {
             dumpFluid(targetHatches, copiedFluidStack, false);
         }
@@ -396,14 +437,12 @@ public class TST_HighEnergyStateThermalTransferDevice
     }
 
     private boolean isSteam(FluidStack stack) {
-        return stack != null && (
-            stack.isFluidEqual(Materials.DenseSupercriticalSteam.getGas(1)) ||
-                stack.isFluidEqual(Materials.DenseSuperheatedSteam.getGas(1))
-        );
+        return stack != null && (stack.isFluidEqual(Materials.DenseSupercriticalSteam.getGas(1))
+            || stack.isFluidEqual(Materials.DenseSuperheatedSteam.getGas(1)));
     }
 
     private boolean isNotDistilledWater(Fluid fluid) {
-        return fluid != null && fluid == distilledWater;
+        return fluid != null && fluid != distilledWater;
     }
 
     private FluidStack getActualFluid(MTEHatchInput hatch) {
