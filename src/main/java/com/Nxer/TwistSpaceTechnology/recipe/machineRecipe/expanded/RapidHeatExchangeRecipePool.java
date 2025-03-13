@@ -2,8 +2,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.roundUpToMultiple;
 
-import java.util.HashMap;
-
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -15,8 +13,6 @@ import gregtech.api.enums.Materials;
 import gregtech.api.util.GTRecipe;
 
 public class RapidHeatExchangeRecipePool implements IRecipePool {
-
-    public static HashMap<String, FluidStack[]> RapidHeatExchangeMap = new HashMap<>();
 
     @Override
     public void loadRecipes() {
@@ -64,8 +60,11 @@ public class RapidHeatExchangeRecipePool implements IRecipePool {
                 .duration(20)
                 .addTo(GTCMRecipe.RapidHeatExchangeRecipes);
 
-            RapidHeatExchangeMap
-                .put(HotFluid.getUnlocalizedName(), new FluidStack[] { HotFluid, Water, Steam, ColdFluid });
+            TST_RecipeBuilder.builder()
+                .fluidInputs(HotFluid)
+                .fluidOutputs(ColdFluid)
+                .duration(20)
+                .addTo(GTCMRecipe.RapidCoolingDownRecipes);
         }
     }
 

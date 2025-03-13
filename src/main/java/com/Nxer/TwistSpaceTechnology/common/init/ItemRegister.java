@@ -341,7 +341,13 @@ public class ItemRegister {
         // # Swelegfgr Upgrade Chip
         // #zh_CN 熯焱高炉升级芯片
         GTCMItemList.SwelegfgrUpgradeChip.set(MetaItem01.registerVariant(42));
+        // #tr item.MetaItem01.43.name
+        // # Borophene Foil
+        // #zh_CN 硼烯箔
         GTCMItemList.BoropheneFoil.set(MetaItem01.registerVariant(43));
+        // #tr item.MetaItem01.44.name
+        // # Borophene-Based Nanowire Composite Thermal Conductive Medium
+        // #zh_CN 硼烯基纳米线复合导热介质
         GTCMItemList.BoropheneBasedNanowireCompositeThermalConductiveMedium.set(MetaItem01.registerVariant(44));
         if (Config.activateMegaSpaceStation) {
             // #tr item.MetaItem01.176.name

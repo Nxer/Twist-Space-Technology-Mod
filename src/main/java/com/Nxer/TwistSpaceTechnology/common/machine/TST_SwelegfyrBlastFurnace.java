@@ -345,7 +345,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (!checkPiece("mainT" + controllerTier, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
             return false;
         if (this.mHeatingCapacity < getCoilHeat()) this.mHeatingCapacity = getCoilHeat();
-        this.maxHeatingCapacity = (int) (Math.floor(Math.pow(getCoilHeat(), 1.1) / 100) * 100 + 1);
+        this.maxHeatingCapacity = (int) (Math.floor(Math.pow(getCoilHeat(), 1.08) / 100) * 100 + 1);
 
         if (glassTier < 12) {
             for (MTEHatchEnergy mEnergyHatch : this.mEnergyHatches) {
@@ -1103,8 +1103,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\AQUA}线圈炉温
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.12"))
             // #tr Tooltip_SwelegfyrBlastFurnace.13
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Coil Heat {\WHITE}^ {\GOLD}1.1
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}线圈炉温 {\WHITE}^ {\GOLD}1.1
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Coil Heat {\WHITE}^ {\GOLD}1.08
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}线圈炉温 {\WHITE}^ {\GOLD}1.08
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.13"))
             // #tr Tooltip_SwelegfyrBlastFurnace.14
             // # {\GOLD}Blaze Pyrotheum {\WHITE}Consumption:

@@ -1,0 +1,71 @@
+package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
+
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.TST_Recipe;
+import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.gthandler.CustomItemList;
+import galaxyspace.core.register.GSItems;
+import galaxyspace.core.register.GSMaterials;
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
+import goodgenerator.items.GGMaterial;
+import goodgenerator.util.ItemRefer;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
+import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTRecipe;
+import gtPlusPlus.core.material.MaterialMisc;
+import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
+import ic2.core.Ic2Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
+public class SingleItemRecipes implements IRecipePool {
+    // spotless:off
+    @Override
+    public void loadRecipes() {
+        // Borophene Foil
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Silver, 1),
+                CustomItemList.ChromaticLens.get(0))
+            .fluidInputs(Materials.Boron.getPlasma(144 * 32))
+            .itemOutputs(GTCMItemList.BoropheneFoil.get(1))
+            .outputChances(2500)
+            .eut(TierEU.RECIPE_UV)
+            .duration(20 * 60)
+            .addTo(RecipeMaps.laserEngraverRecipes);
+
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GTOreDictUnificator.get(OrePrefixes.nanite, Materials.Silver, 1),
+                CustomItemList.ChromaticLens.get(0))
+            .fluidInputs(Materials.Boron.getPlasma(144 * 2))
+            .itemOutputs(GTCMItemList.BoropheneFoil.get(1))
+            .eut(TierEU.RECIPE_UEV)
+            .duration(20 * 5)
+            .addTo(RecipeMaps.laserEngraverRecipes);
+
+        // Borophene Based Nanowire Composite Thermal Conductive Medium
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                new ItemStack(GSItems.DysonSwarmItems, 5, 1),
+                new ItemStack(GSItems.DysonSwarmItems, 5, 2),
+                GTCMItemList.BoropheneFoil.get(8),
+                ItemRefer.Special_Ceramics_Plate.get(16))
+            .fluidInputs(
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 2),
+                new FluidStack(TFFluids.fluidCryotheum,1000 * 2),
+                GSMaterials.liquidHelium.getFluidOrGas(1000 * 6),
+                GGMaterial.hikarium.getMolten(144 * 10))
+            .itemOutputs(GTCMItemList.BoropheneBasedNanowireCompositeThermalConductiveMedium.get(3))
+            .eut(TierEU.RECIPE_ZPM)
+            .duration(20 * 10)
+            .specialValue(3)
+            .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
+    }
+    // spotless:on
+}

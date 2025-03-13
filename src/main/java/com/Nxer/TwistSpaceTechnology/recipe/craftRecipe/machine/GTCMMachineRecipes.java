@@ -225,6 +225,7 @@ import ic2.core.Ic2Items;
 import tectech.recipe.TTRecipeAdder;
 import tectech.thing.casing.TTCasingsContainer;
 
+@Deprecated
 @SuppressWarnings("SpellCheckingInspection")
 public class GTCMMachineRecipes implements IRecipePool {
 

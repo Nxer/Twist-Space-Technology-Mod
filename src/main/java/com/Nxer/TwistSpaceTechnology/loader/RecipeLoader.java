@@ -7,8 +7,11 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.GTCMMachineRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.ModularHatchesRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.SingleMachineRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.TSTBufferedEnergyHatchRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.TSTSolidifierHatchRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.AssemblyLineWithoutResearchRecipePool;
@@ -66,10 +69,10 @@ public class RecipeLoader {
         // TODO Split GTCMMachineRecipes
         IRecipePool[] craftRecipePool = {
             // Item Recipes
-            new CosmicProcessorCircuitRecipes(),
+            new SingleItemRecipes(), new SingleBlockRecipes(), new CosmicProcessorCircuitRecipes(),
             // Machine Recipes
-            new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(), new ModularHatchesRecipes(),
-            new TSTSolidifierHatchRecipes() };
+            new SingleMachineRecipes(), new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(),
+            new ModularHatchesRecipes(), new TSTSolidifierHatchRecipes() };
 
         for (IRecipePool recipePool : craftRecipePool) {
             recipePool.loadRecipes();

@@ -26,7 +26,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -64,6 +63,7 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import gregtech.common.tileentities.machines.MTEHatchInputME;
 import gtPlusPlus.core.block.base.BasicBlock;
 import gtPlusPlus.core.material.MaterialsAlloy;
@@ -95,15 +95,15 @@ public class TST_HighEnergyStateThermalTransferDevice
     private static final String[][] shapeMain = new String[][]{
         {"                     ","                     ","                     ","       HHGGGHH       ","      HHHHHHHHH      ","     JGHHHHHHHGJ     ","    JGGGGGGGGGGGJ    ","    JGIIIIIIIIIGJ    ","    JGGGGGGGGGGGJ    ","     JGHHHHHHHGJ     ","      HHHHHHHHH      ","       HHHHHHH       ","                     ","                     ","                     "},
         {"                     ","                     ","       HGGGGGH       ","      HEEEEEEEH      ","     EECCCCCCCEE     ","  EEEGCCCCCCCCCGEEE  "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE ","  EEEGCCCCCCCCCGEEE  ","     EECCCCCCCEE     ","      HEEEEEEEH      ","       HGGGGGH       ","                     ","                     "},
-        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GGGCCLLNNNLLCCGGG  "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
-        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GQGCCLLNNNLLCCGSG  "," GPFPPPPBOOOAPPPPFPG "," GPFFFFPBOOOAPFFFFPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GGGCCLLQQQLLCCGGG  "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG ","  GGGCCLLQQQLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GRGCCLLNNNLLCCGTG  "," GPFPPPPBOOOAPPPPFPG "," GPFFFFPBOOOAPFFFFPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
         {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     GECCCCCCCEG     ","  GGGCCLLNNNLLCCGGG  "," GPPPPPPBOOOAPPPPPPG "," GPPPPFPBOOOAPFPPPPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
-        {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     EECCCCCCCEE     ","  EEECCLLNNNLLCCEEE  "," ENNNPPPBOOOAPPPNNNE "," ENNNPFPBOOOAPFPNNNE "," ENNNPPPBOOOAPPPNNNE ","  EEECCLLNNNLLCCEEE  ","     EECCCCCCCEE     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
+        {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     EECCCCCCCEE     ","  EEECCLLNNNLLCCEEE  "," EQQQPPPBOOOAPPPQQQE "," EQQQPFPBOOOAPFPQQQE "," EQQQPPPBOOOAPPPQQQE ","  EEECCLLNNNLLCCEEE  ","     EECCCCCCCEE     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
         {"                     ","                     ","      HGGG~GGGH      ","     HKDDDDDDDKH     ","     DDCCCCCCCDD     ","  DDDCCLLNNNLLCCDDD  "," DCCCPPPBOOOAPPPCCCD "," DCCCPFPBOOOAPFPCCCD "," DCCCPPPBOOOAPPPCCCD ","  DDDCCLLNNNLLCCDDD  ","     DDCCCCCCCDD     ","     HKDDDDDDDEH     ","      HGGGGGGGH      ","                     ","                     "},
-        {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     EECCCCCCCEE     ","  EEECCLLNNNLLCCEEE  "," ENNNPPPBOOOAPPPNNNE "," ENNNPFPBOOOAPFPNNNE "," ENNNPPPBOOOAPPPNNNE ","  EEECCLLNNNLLCCEEE  ","     EECCCCCCCEE     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
+        {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     EECCCCCCCEE     ","  EEECCLLNNNLLCCEEE  "," EQQQPPPBOOOAPPPQQQE "," EQQQPFPBOOOAPFPQQQE "," EQQQPPPBOOOAPPPQQQE ","  EEECCLLNNNLLCCEEE  ","     EECCCCCCCEE     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
         {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     GECCCCCCCEG     ","  GGGCCLLNNNLLCCGGG  "," GPPPPPPBOOOAPPPPPPG "," GPPPPFPBOOOAPFPPPPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
-        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GRGCCLLNNNLLCCGTG  "," GPFPPPPBOOOAPPPPFPG "," GPFFFFPBOOOAPFFFFPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGNG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
-        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GGGCCLLNNNLLCCGGG  "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GSGCCLLNNNLLCCGUG  "," GPFPPPPBOOOAPPPPFPG "," GPFFFFPBOOOAPFFFFPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGNG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GGGCCLLQQQLLCCGGG  "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG ","  GGGCCLLQQQLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
         {"                     ","                     ","       HGGGGGH       ","      HEEEEEEEH      ","     EECCCCCCCEE     ","  EEEGCCCCCCCCCGEEE  "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE ","  EEEGCCCCCCCCCGEEE  ","     EECCCCCCCEE     ","      HEEEEEEEH      ","       HGGGGGH       ","                     ","                     "},
         {"       MMMMMMM       ","      MMMMMMMMM      ","    MMMMMMMMMMMMM    "," MMMMMMHHGGGHHMMMMMM ","MMMMMMHHHHHHHHHMMMMMM","MMMMMGGHHHHHHHGGMMMMM","MMMMGGGGGGGGGGGGGMMMM","MMMMGGGGGGGGGGGGGMMMM","MMMMGGGGGGGGGGGGGMMMM","MMMMMGGHHHHHHHGGMMMMM","MMMMMMHHHHHHHHHMMMMMM"," MMMMMMHHHHHHHMMMMMM ","    MMMMMMMMMMMMM    ","      MMMMMMMMM      ","       MMMMMMM       "},
         {"       MMMMMMM       ","      MMMMMMMMM      ","    MMMMMMMMMMMMM    "," MMMMMMMMMMMMMMMMMMM ","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM"," MMMMMMMMMMMMMMMMMMM ","    MMMMMMMMMMMMM    ","      MMMMMMMMM      ","       MMMMMMM       "}
@@ -144,29 +144,30 @@ public class TST_HighEnergyStateThermalTransferDevice
                 .addElement('N', ofBlock(TstBlocks.MetaBlockCasing02, 2))
                 .addElement('O', ofBlock(TstBlocks.MetaBlockCasing02, 3))
                 .addElement('P', ofBlock(TstBlocks.MetaBlockCasing02, 4))
+                .addElement('Q', ofBlock(GregTechAPI.sBlockCasings2, 8))
                 .addElement(
-                    'Q',
+                    'R',
                     buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_HighEnergyStateThermalTransferDevice::addHotFluidInputHatch)
                         .dot(1)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
-                    'R',
-                    buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchInput.class)
+                    'S',
+                    buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchOutput.class)
                         .adder(TST_HighEnergyStateThermalTransferDevice::addColdFluidOutputHatch)
                         .dot(2)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
-                    'S',
-                    buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchInput.class)
+                    'T',
+                    buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchOutput.class)
                         .adder(TST_HighEnergyStateThermalTransferDevice::addSteamOutputHatch)
                         .dot(3)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
-                    'T',
+                    'U',
                     buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_HighEnergyStateThermalTransferDevice::addDistilledWaterInputHatch)
                         .dot(4)
@@ -228,13 +229,41 @@ public class TST_HighEnergyStateThermalTransferDevice
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.RapidHeatExchangeRecipes;
+        return machineMode == 0 ? GTCMRecipe.RapidHeatExchangeRecipes : GTCMRecipe.RapidCoolingDownRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.RapidHeatExchangeRecipes);
+        return Arrays.asList(GTCMRecipe.RapidHeatExchangeRecipes, GTCMRecipe.RapidCoolingDownRecipes);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
+        machineModeIcons.add(UITextures.HESTTD_RapidCooling);
+    }
+
+    @Override
+    public void setMachineMode(int index) {
+        super.setMachineMode(index);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        // #tr HESTTD.modeMsg.0
+        // # Heat Exchanger
+        // #zh_CN 热交换模式
+
+        // #tr HESTTD.modeMsg.1
+        // # Rapid cooling
+        // #zh_CN 快速冷却模式
+        return TextEnums.tr("HESTTD.modeMsg." + mode);
     }
 
     @Override
@@ -309,7 +338,9 @@ public class TST_HighEnergyStateThermalTransferDevice
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        int cycleNum = 128; // Process times with the maximum input hot fluid
+        // Process times with the maximum input hot fluid
+        // When running full cycle, may be a bit of lag
+        int cycleNum = machineMode == 0 ? 128 : 16;
         boolean succeeded = false;
         CheckRecipeResult finalResult = CheckRecipeResultRegistry.SUCCESSFUL;
         for (int i = 0; i < cycleNum; i++) {
@@ -324,7 +355,6 @@ public class TST_HighEnergyStateThermalTransferDevice
         updateSlots();
         if (!succeeded) return finalResult;
 
-        // 固定配方参数
         mMaxProgresstime = 20;
         mEfficiency = 10000;
         return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -349,7 +379,7 @@ public class TST_HighEnergyStateThermalTransferDevice
     protected void startRecipeProcessing() {
         super.startRecipeProcessing();
         isRecipeProcessing = true;
-        for (MTEHatchInput mHatch:dedicatedHatches){
+        for (MTEHatchInput mHatch : dedicatedHatches) {
             if (null != mHatch && mHatch.isValid()) {
                 if (mHatch instanceof IRecipeProcessingAwareHatch aware) {
                     aware.startRecipeProcessing();
@@ -362,7 +392,7 @@ public class TST_HighEnergyStateThermalTransferDevice
     protected void endRecipeProcessing() {
         isRecipeProcessing = false;
         super.endRecipeProcessing();
-        for (MTEHatchInput mHatch:dedicatedHatches) {
+        for (MTEHatchInput mHatch : dedicatedHatches) {
             if (null != mHatch && mHatch.isValid()) {
                 if (mHatch instanceof IRecipeProcessingAwareHatch aware) {
                     setResultIfFailure(aware.endRecipeProcessing(this));
@@ -426,7 +456,7 @@ public class TST_HighEnergyStateThermalTransferDevice
 
     @Override
     public boolean addOutput(FluidStack aLiquid) {
-        if (aLiquid == null) return false;
+        if (aLiquid == null || aLiquid.amount == 0) return false;
         FluidStack copiedFluidStack = aLiquid.copy();
         List<MTEHatchOutput> targetHatches = Collections
             .singletonList(isSteam(aLiquid) ? mSteamHatch : mColdFluidHatch);
@@ -443,41 +473,6 @@ public class TST_HighEnergyStateThermalTransferDevice
 
     private boolean isNotDistilledWater(Fluid fluid) {
         return fluid != null && fluid != distilledWater;
-    }
-
-    private FluidStack getActualFluid(MTEHatchInput hatch) {
-        if (hatch instanceof MTEHatchInputME meHatch) {
-            return meHatch.getStoredFluids()[0];
-        }
-        return hatch.getFluid();
-    }
-
-    @Override
-    public int totalMachineMode() {
-        return 2;
-    }
-
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
-        machineModeIcons.add(UITextures.HESTTD_RapidCooling);
-    }
-
-    @Override
-    public void setMachineMode(int index) {
-        super.setMachineMode(index);
-    }
-
-    @Override
-    public String getMachineModeName(int mode) {
-        // #tr HESTTD.modeMsg.0
-        // # Heat Exchanger
-        // #zh_CN 热交换模式
-
-        // #tr HESTTD.modeMsg.1
-        // # Rapid cooling
-        // #zh_CN 快速冷却模式
-        return TextEnums.tr("HESTTD.modeMsg." + mode);
     }
 
     @Override
