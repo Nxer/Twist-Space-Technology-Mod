@@ -491,7 +491,7 @@ public class Config {
     // endregion
 
     // region Swelegfyr Blast Furnace
-    public static boolean Enable_HighEnergyStateThermalTransferDevice = true;
+    public static boolean Enable_HyperThermalConvector = true;
     // endregion
     // region Mega Crafting Center
     public static boolean Enable_MegaCraftingCenter = true;

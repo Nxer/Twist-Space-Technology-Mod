@@ -414,7 +414,7 @@ public class GTCMRecipe {
         .of("tst.recipe.RapidHeatExchangeRecipes", TST_RecipeMapBackend::new)
         .maxIO(0, 0, 2, 2)
         .dontUseProgressBar()
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HighEnergyStateThermalTransferDevice.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HyperThermalConvector.get(1)))
         .addSpecialTexture(47, 13, 78, 59, GGUITextures.PICTURE_EXTREME_HEAT_EXCHANGER)
         .frontend(TST_RapidHeatExchangeFrontend::new)
         .build();
@@ -426,7 +426,7 @@ public class GTCMRecipe {
         .of("tst.recipe.RapidCoolingDownRecipes", TST_RecipeMapBackend::new)
         .maxIO(0, 0, 1, 1)
         .dontUseProgressBar()
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HighEnergyStateThermalTransferDevice.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HyperThermalConvector.get(1)))
         .addSpecialTexture(47, 13, 78, 59, UITextures.HESTTD_NEIPic)
         .frontend(TST_RapidCoolingDownFrontend::new)
         .build();

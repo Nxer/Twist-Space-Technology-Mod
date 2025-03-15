@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelCont
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_HyperThermalConvector;
 import net.minecraft.entity.EntityList;
 
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
@@ -43,7 +44,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_HighEnergyStateThermalTransferDevice;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower;
@@ -541,15 +541,15 @@ public final class MachineLoader {
                     TextEnums.tr("NameSwelegfyrBlastFurnace")));
         }
 
-        if (Config.Enable_HighEnergyStateThermalTransferDevice) {
-            // #tr NameHighEnergyStateThermalTransferDevice
-            // # High-Energy-State Thermal Transfer Device
-            // #zh_CN 高能态热传输装置
-            GTCMItemList.HighEnergyStateThermalTransferDevice.set(
-                new TST_HighEnergyStateThermalTransferDevice(
+        if (Config.Enable_HyperThermalConvector) {
+            // #tr NameHyperThermalConvector
+            // # Hyper Thermal Convector
+            // #zh_CN 高能态热对流器
+            GTCMItemList.HyperThermalConvector.set(
+                new TST_HyperThermalConvector(
                     19069,
-                    "NameHighEnergyStateThermalTransferDevice",
-                    TextEnums.tr("NameHighEnergyStateThermalTransferDevice")));
+                    "NameHyperThermalConvector",
+                    TextEnums.tr("NameHyperThermalConvector")));
         }
 
         // endregion

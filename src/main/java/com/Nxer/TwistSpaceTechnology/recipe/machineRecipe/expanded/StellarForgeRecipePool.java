@@ -434,16 +434,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             (int) RECIPE_UV,
             20 * 112,
             GTCMRecipe.StellarForgeRecipes);
-
-        // Creon && Mellion
-        addToMiracleDoorRecipes(
-            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(2) },
-            new FluidStack[] { MaterialsUEVplus.Creon.getPlasma(144) },
-            null,
-            new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144), MaterialsUEVplus.Creon.getMolten(144) },
-            (int) RECIPE_UXV,
-            399,
-            GTCMRecipe.StellarForgeRecipes);
+        
     }
 
     public static Collection<GTRecipe> stellarForgeRecipeListCache;

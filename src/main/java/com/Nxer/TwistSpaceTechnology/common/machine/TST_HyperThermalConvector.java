@@ -4,8 +4,8 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INF
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textEndSides;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -41,7 +41,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -68,21 +67,21 @@ import gregtech.common.tileentities.machines.MTEHatchInputME;
 import gtPlusPlus.core.block.base.BasicBlock;
 import gtPlusPlus.core.material.MaterialsAlloy;
 
-public class TST_HighEnergyStateThermalTransferDevice
-    extends GTCM_MultiMachineBase<TST_HighEnergyStateThermalTransferDevice> {
+public class TST_HyperThermalConvector
+    extends GTCM_MultiMachineBase<TST_HyperThermalConvector> {
 
     // region Class Constructor
-    public TST_HighEnergyStateThermalTransferDevice(int aID, String aName, String aNameRegional) {
+    public TST_HyperThermalConvector(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public TST_HighEnergyStateThermalTransferDevice(String aName) {
+    public TST_HyperThermalConvector(String aName) {
         super(aName);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_HighEnergyStateThermalTransferDevice(this.mName);
+        return new TST_HyperThermalConvector(this.mName);
     }
     // end region
 
@@ -109,12 +108,12 @@ public class TST_HighEnergyStateThermalTransferDevice
         {"       MMMMMMM       ","      MMMMMMMMM      ","    MMMMMMMMMMMMM    "," MMMMMMMMMMMMMMMMMMM ","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM"," MMMMMMMMMMMMMMMMMMM ","    MMMMMMMMMMMMM    ","      MMMMMMMMM      ","       MMMMMMM       "}
     };
     // spotless:on
-    private static IStructureDefinition<TST_HighEnergyStateThermalTransferDevice> STRUCTURE_DEFINITION = null;
+    private static IStructureDefinition<TST_HyperThermalConvector> STRUCTURE_DEFINITION = null;
 
     @Override
-    public IStructureDefinition<TST_HighEnergyStateThermalTransferDevice> getStructureDefinition() {
+    public IStructureDefinition<TST_HyperThermalConvector> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_HighEnergyStateThermalTransferDevice>builder()
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_HyperThermalConvector>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
                 .addElement(
                     'A',
@@ -147,29 +146,29 @@ public class TST_HighEnergyStateThermalTransferDevice
                 .addElement('Q', ofBlock(GregTechAPI.sBlockCasings2, 8))
                 .addElement(
                     'R',
-                    buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchInput.class)
-                        .adder(TST_HighEnergyStateThermalTransferDevice::addHotFluidInputHatch)
+                    buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchInput.class)
+                        .adder(TST_HyperThermalConvector::addHotFluidInputHatch)
                         .dot(1)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'S',
-                    buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchOutput.class)
-                        .adder(TST_HighEnergyStateThermalTransferDevice::addColdFluidOutputHatch)
+                    buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchOutput.class)
+                        .adder(TST_HyperThermalConvector::addColdFluidOutputHatch)
                         .dot(2)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'T',
-                    buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchOutput.class)
-                        .adder(TST_HighEnergyStateThermalTransferDevice::addSteamOutputHatch)
+                    buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchOutput.class)
+                        .adder(TST_HyperThermalConvector::addSteamOutputHatch)
                         .dot(3)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'U',
-                    buildHatchAdder(TST_HighEnergyStateThermalTransferDevice.class).hatchClass(MTEHatchInput.class)
-                        .adder(TST_HighEnergyStateThermalTransferDevice::addDistilledWaterInputHatch)
+                    buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchInput.class)
+                        .adder(TST_HyperThermalConvector::addDistilledWaterInputHatch)
                         .dot(4)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
@@ -256,14 +255,14 @@ public class TST_HighEnergyStateThermalTransferDevice
 
     @Override
     public String getMachineModeName(int mode) {
-        // #tr HESTTD.modeMsg.0
-        // # Heat Exchanger
-        // #zh_CN 热交换模式
+        // #tr HyperThermalConvector.modeMsg.0
+        // # Rapid Heat Exchange
+        // #zh_CN 快速热交换模式
 
-        // #tr HESTTD.modeMsg.1
-        // # Rapid cooling
+        // #tr HyperThermalConvector.modeMsg.1
+        // # Rapid Cooling
         // #zh_CN 快速冷却模式
-        return TextEnums.tr("HESTTD.modeMsg." + mode);
+        return TextEnums.tr("HyperThermalConvector.modeMsg." + mode);
     }
 
     @Override
@@ -502,23 +501,62 @@ public class TST_HighEnergyStateThermalTransferDevice
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_Scavenger_MachineType)
-            .addInfo(TextLocalization.Tooltip_Scavenger_Controller)
-            .addInfo(TextLocalization.Tooltip_Scavenger_01)
-            .addInfo(TextLocalization.Tooltip_Scavenger_02)
-            .addInfo(TextLocalization.Tooltip_Scavenger_03)
-            .addInfo(TextLocalization.Tooltip_Scavenger_04)
+        // #tr Tooltip_HyperThermalConvector_MachineType
+        // # Heat Exchanger | Heat Cooler
+        // #zh_CN 热交换机 | 热冷却机
+        tt.addMachineType(TextEnums.tr("Tooltip_HyperThermalConvector_MachineType"))
+            // #tr Tooltip_HyperThermalConvector_Controller
+            // # Controller block for the Hyper Thermal Convector
+            // #zh_CN 高能态热对流器的控制方块
+            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector_Controller"))
+            // #tr Tooltip_HyperThermalConvector.1
+            // # {\AQUA}Where did all the heat go?
+            // #zh_CN {\AQUA}热量都到哪去了？
+            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector.1"))
+            // #tr Tooltip_HyperThermalConvector.2
+            // # The fastest and most efficient heat exchange device ever made.
+            // #zh_CN 有史以来最快最充分的热交换装置
+            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector.2"))
+            // #tr Tooltip_HyperThermalConvector.3
+            // # Processes the input thermal fluid as thoroughly as possible in a single pass.
+            // #zh_CN 尽可能一次性处理完全输入的热流体
+            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector.3"))
+            // #tr Tooltip_HyperThermalConvector.4
+            // # This device complies with {\YELLOW}GB/T 28712{\RESET} standards and will not explode!
+            // #zh_CN 本设备符合GB/T 28712标准，不会爆炸！
+            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector.4"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
-            .addController(textFrontBottom)
-            .addInputHatch(textUseBlueprint, 1)
-            .addOutputHatch(textUseBlueprint, 2)
-            .addInputBus(textUseBlueprint, 1)
-            .addOutputBus(textUseBlueprint, 2)
-            .addEnergyHatch(textUseBlueprint, 2)
+            // #tr Tooltip_HyperThermalConvector.11
+            // # Hot fluid input hatch
+            // #zh_CN 热流体输入仓
+            .addOtherStructurePart(
+                TextEnums.tr("Tooltip_HyperThermalConvector.11"),
+                getBlueprintWithDot(1),
+                1)
+            // #tr Tooltip_HyperThermalConvector.12
+            // # Cold fluid output hatch
+            // #zh_CN 冷流体输出仓
+            .addOtherStructurePart(
+                TextEnums.tr("Tooltip_HyperThermalConvector.12"),
+                getBlueprintWithDot(2),
+                2)
+            // #tr Tooltip_HyperThermalConvector.13
+            // # Steam output hatch
+            // #zh_CN 蒸汽输出仓
+            .addOtherStructurePart(
+                TextEnums.tr("Tooltip_HyperThermalConvector.13"),
+                getBlueprintWithDot(3),
+                3)
+            // #tr Tooltip_HyperThermalConvector.14
+            // # Distilled water input hatch
+            // #zh_CN 蒸馏水输入仓
+            .addOtherStructurePart(
+                TextEnums.tr("Tooltip_HyperThermalConvector.14"),
+                getBlueprintWithDot(4),
+                4)
             .addStructureInfo(Text_SeparatingLine)
-            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher(ModName);
         return tt;
     }

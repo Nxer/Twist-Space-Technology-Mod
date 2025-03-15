@@ -283,7 +283,7 @@ public enum GTCMItemList {
     ProcessingArray,
     AdvCircuitAssemblyLine,
     SwelegfyrBlastFurnace,
-    HighEnergyStateThermalTransferDevice,
+    HyperThermalConvector,
     // endregion
 
     // region Modularized Machines
