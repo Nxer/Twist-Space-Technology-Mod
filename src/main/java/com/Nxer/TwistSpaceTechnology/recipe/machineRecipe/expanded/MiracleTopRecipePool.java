@@ -143,7 +143,7 @@ public class MiracleTopRecipePool implements IRecipePool {
         for (GTRecipe aRecipe : recipeCache) {
             int IntegratedCircuitNum = 16;
             for (ItemStack aStack : aRecipe.mInputs) {
-                if (aStack.getItem() == ItemList.Circuit_Integrated.getItem()) {
+                if (aStack != null && aStack.getItem() == ItemList.Circuit_Integrated.getItem()) {
                     IntegratedCircuitNum += aStack.getItemDamage();
                     if (IntegratedCircuitNum > 24) IntegratedCircuitNum -= 24;
                     break;

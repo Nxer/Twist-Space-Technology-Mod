@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
-import static com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler.AmorphicCatalyst;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.BloodArsenal;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static gregtech.api.enums.TCAspects.ELECTRUM;
@@ -173,10 +173,11 @@ public class TCRecipePool implements IRecipePool {
                         .merge(Aspect.MECHANISM, 16),
                     new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockMasterStone),
                     new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModItems.activationCrystal),
-                        AmorphicCatalyst.getLeft(), new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
-                        AmorphicCatalyst.getLeft(),
+                        BloodArsenal.AmorphicCatalyst.get(1),
+                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
+                        BloodArsenal.AmorphicCatalyst.get(1),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockWritingTable),
-                        AmorphicCatalyst.getLeft() });
+                        BloodArsenal.AmorphicCatalyst.get(1) });
 
                 infusionRecipeCoagulatedBloodCasing = ThaumcraftApi.addInfusionCraftingRecipe(
                     "BLOODY_HELL",
@@ -229,10 +230,12 @@ public class TCRecipePool implements IRecipePool {
                         .merge(Aspect.MAGIC, 128),
                     Industrial_AlloyBlastSmelter.get(1),
                     new ItemStack[] { new ItemStack(blockMetalDevice, 1, 9),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), AmorphicCatalyst.getLeft(),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
+                        BloodArsenal.AmorphicCatalyst.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
                         new ItemStack(blockMetalDevice, 1, 9),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), AmorphicCatalyst.getLeft(),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
+                        BloodArsenal.AmorphicCatalyst.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
             }
             crucibleRecipeArcaneHole = ThaumcraftApi.addCrucibleRecipe(

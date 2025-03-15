@@ -1,32 +1,26 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
+import static gregtech.api.util.GTModHandler.addCraftingRecipe;
+
+import net.minecraftforge.fluids.FluidRegistry;
+
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import galaxyspace.core.register.GSItems;
+
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
-import goodgenerator.items.GGMaterial;
-import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.OreDictNames;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
-import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
-import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 
 public class SingleBlockRecipes implements IRecipePool {
+
     // spotless:off
     @Override
     public void loadRecipes() {
