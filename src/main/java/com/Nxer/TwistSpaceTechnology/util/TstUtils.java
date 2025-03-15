@@ -386,7 +386,7 @@ public class TstUtils {
         if (itemStacks == null) return new ItemStack[0];
         ArrayList<ItemStack> newStack = new ArrayList<>();
         for (ItemStack itemStack : itemStacks) {
-            if (itemStack.getItem() != ItemList.Circuit_Integrated.getItem()) {
+            if (itemStack != null && itemStack.getItem() != ItemList.Circuit_Integrated.getItem()) {
                 newStack.add(itemStack);
             }
         }

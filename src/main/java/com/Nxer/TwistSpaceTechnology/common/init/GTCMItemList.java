@@ -218,6 +218,8 @@ public enum GTCMItemList {
     BloodyCasing1,
     BloodyCasing2,
     ReinforcedIridiumAlloyCasing,
+    BoropheneBasedNanowireCompositeThermalConductiveCasing,
+    NeutroniumPipeCasing,
     // endregion
 
     // region Machines
@@ -282,6 +284,7 @@ public enum GTCMItemList {
     ProcessingArray,
     AdvCircuitAssemblyLine,
     SwelegfyrBlastFurnace,
+    HyperThermalConvector,
     // endregion
 
     // region Modularized Machines
@@ -376,6 +379,8 @@ public enum GTCMItemList {
     MicroSpaceTimeFabricatorio,
     WhiteDwarfMold_Ingot,
     SwelegfgrUpgradeChip,
+    BoropheneFoil,
+    BoropheneBasedNanowireCompositeThermalConductiveMedium,
 
     // endregion
 

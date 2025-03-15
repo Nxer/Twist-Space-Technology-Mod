@@ -11,7 +11,6 @@ import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
 import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
-import com.Nxer.TwistSpaceTechnology.common.api.ModItemsHandler;
 import com.Nxer.TwistSpaceTechnology.common.entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.ic2Crop.CropInfo;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
@@ -103,7 +102,6 @@ public class CommonProxy {
             false);
 
         new ModBlocksHandler().initStatics();
-        new ModItemsHandler().initStatics();
     }
 
     public void postInit(FMLPostInitializationEvent event) {

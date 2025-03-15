@@ -24,7 +24,7 @@ public class IndustrialAlchemyTowerRecipePool implements IRecipePool {
     @Override
     public void loadRecipes() {
         TCRecipeTools.getCrucibleCraftingRecipe();
-        final IRecipeMap IIA = GTCMRecipe.IndustrialAlchemyTowerRecipe;
+        final IRecipeMap IIA = GTCMRecipe.IndustrialAlchemyTowerRecipes;
         for (Map.Entry<String, ArrayList<TCRecipeTools.CrucibleCraftingRecipe>> entry : TCRecipeTools.CCR.entrySet()) {
             ArrayList<TCRecipeTools.CrucibleCraftingRecipe> value = entry.getValue();
             for (int i = 0; i < value.size(); i++) {

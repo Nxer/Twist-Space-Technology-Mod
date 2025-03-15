@@ -242,7 +242,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.IndustrialAlchemyTowerRecipe;
+        return GTCMRecipe.IndustrialAlchemyTowerRecipes;
     }
 
     @Override

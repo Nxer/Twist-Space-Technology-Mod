@@ -43,6 +43,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_HyperThermalConvector;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower;
@@ -542,6 +543,17 @@ public final class MachineLoader {
                     19068,
                     "NameSwelegfyrBlastFurnace",
                     TextEnums.tr("NameSwelegfyrBlastFurnace")));
+        }
+
+        if (Config.Enable_HyperThermalConvector) {
+            // #tr NameHyperThermalConvector
+            // # Hyper Thermal Convector
+            // #zh_CN 高能态热对流器
+            GTCMItemList.HyperThermalConvector.set(
+                new TST_HyperThermalConvector(
+                    19069,
+                    "NameHyperThermalConvector",
+                    TextEnums.tr("NameHyperThermalConvector")));
         }
 
         // endregion
