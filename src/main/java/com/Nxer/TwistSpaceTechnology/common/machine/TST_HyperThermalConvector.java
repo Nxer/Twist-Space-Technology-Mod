@@ -5,8 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textEndSides;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
@@ -67,8 +65,7 @@ import gregtech.common.tileentities.machines.MTEHatchInputME;
 import gtPlusPlus.core.block.base.BasicBlock;
 import gtPlusPlus.core.material.MaterialsAlloy;
 
-public class TST_HyperThermalConvector
-    extends GTCM_MultiMachineBase<TST_HyperThermalConvector> {
+public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperThermalConvector> {
 
     // region Class Constructor
     public TST_HyperThermalConvector(int aID, String aName, String aNameRegional) {
@@ -531,31 +528,19 @@ public class TST_HyperThermalConvector
             // #tr Tooltip_HyperThermalConvector.11
             // # Hot fluid input hatch
             // #zh_CN 热流体输入仓
-            .addOtherStructurePart(
-                TextEnums.tr("Tooltip_HyperThermalConvector.11"),
-                getBlueprintWithDot(1),
-                1)
+            .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.11"), getBlueprintWithDot(1), 1)
             // #tr Tooltip_HyperThermalConvector.12
             // # Cold fluid output hatch
             // #zh_CN 冷流体输出仓
-            .addOtherStructurePart(
-                TextEnums.tr("Tooltip_HyperThermalConvector.12"),
-                getBlueprintWithDot(2),
-                2)
+            .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.12"), getBlueprintWithDot(2), 2)
             // #tr Tooltip_HyperThermalConvector.13
             // # Steam output hatch
             // #zh_CN 蒸汽输出仓
-            .addOtherStructurePart(
-                TextEnums.tr("Tooltip_HyperThermalConvector.13"),
-                getBlueprintWithDot(3),
-                3)
+            .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.13"), getBlueprintWithDot(3), 3)
             // #tr Tooltip_HyperThermalConvector.14
             // # Distilled water input hatch
             // #zh_CN 蒸馏水输入仓
-            .addOtherStructurePart(
-                TextEnums.tr("Tooltip_HyperThermalConvector.14"),
-                getBlueprintWithDot(4),
-                4)
+            .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.14"), getBlueprintWithDot(4), 4)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher(ModName);
         return tt;

@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelCont
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_HyperThermalConvector;
 import net.minecraft.entity.EntityList;
 
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
@@ -44,6 +43,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_HyperThermalConvector;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower;

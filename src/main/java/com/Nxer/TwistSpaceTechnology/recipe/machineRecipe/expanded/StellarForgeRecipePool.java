@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 import static cofh.lib.util.helpers.FluidHelper.isFluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 
@@ -28,7 +27,6 @@ import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
@@ -434,7 +432,7 @@ public class StellarForgeRecipePool implements IRecipePool {
             (int) RECIPE_UV,
             20 * 112,
             GTCMRecipe.StellarForgeRecipes);
-        
+
     }
 
     public static Collection<GTRecipe> stellarForgeRecipeListCache;

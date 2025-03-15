@@ -1,23 +1,26 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
+import static gregtech.api.enums.Mods.AppliedEnergistics2;
+import static gregtech.api.util.GTModHandler.getModItem;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
+
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
-import net.minecraftforge.fluids.FluidStack;
 import tectech.recipe.TTRecipeAdder;
 
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
-import static gregtech.api.enums.Mods.AppliedEnergistics2;
-import static gregtech.api.util.GTModHandler.getModItem;
-
 public class SingleMachineRecipes implements IRecipePool {
+
     // spotless:off
     @Override
     public void loadRecipes() {
