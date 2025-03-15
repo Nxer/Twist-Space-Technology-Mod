@@ -40,6 +40,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CentrifugeRec
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ChemicalReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CircuitAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CompressorRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.DTPFRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.DistillationRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ExtractorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidHeaterRecipePool;
@@ -81,7 +82,7 @@ public class RecipeLoader {
             new CentrifugeRecipePool(), new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(),
             new NanoForgeRecipePool(), new FluidHeaterRecipePool(), new ParticleColliderRecipePool(),
             new FusionReactorRecipePool(), new SpaceAssemblerRecipePool(), new TCRecipePool(),
-            new FluidSolidifierRecipePool(), new DragonBloodRecipe(),
+            new FluidSolidifierRecipePool(), new DragonBloodRecipe(), new DTPFRecipePool(),
             // TST Recipe Map
             new IntensifyChemicalDistorterRecipePool(), new PreciseHighEnergyPhotonicQuantumMasterRecipePool(),
             new MiracleTopRecipePool(), new CrystallineInfinitierRecipePool(), new DSPRecipePool(),
