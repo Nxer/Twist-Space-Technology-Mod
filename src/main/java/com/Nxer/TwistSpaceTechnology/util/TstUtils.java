@@ -449,7 +449,13 @@ public class TstUtils {
                         aX = aZ;
                         aZ = temp;
                     }
-                    if (isStructureFlipped) aX = -aX;
+                    if (isStructureFlipped) {
+                        if (mDirectionX == 1 || mDirectionX == -1) {
+                            aZ = -aZ;
+                        } else {
+                            aX = -aX;
+                        }
+                    }
 
                     aBaseMetaTileEntity.getWorld()
                         .setBlock(

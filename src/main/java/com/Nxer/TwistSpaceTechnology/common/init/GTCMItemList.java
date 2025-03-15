@@ -45,6 +45,7 @@ public enum GTCMItemList {
     CoreOfT800,
     ExoticCircuitBoard,
     Yamato,
+    ActualPattern,
 
     LightQuantumMatrix,
     StarCore,
@@ -444,6 +445,7 @@ public enum GTCMItemList {
     WirelessDataInputHatch,
     WirelessDataOutputHatch,
     BloodOrbHatch,
+    PatternAccessHatch,
     LegendaryWirelessEnergyHatch,
     HarmoniousWirelessEnergyHatch,
     SolidifyHatch_IV,

@@ -186,6 +186,7 @@ import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
 import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
 import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
+import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import bartworks.common.loaders.BioItemList;
 import bartworks.common.loaders.ItemRegistry;
@@ -3333,11 +3334,11 @@ public class GTCMMachineRecipes implements IRecipePool {
             4,
             new Object[]{
                 GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.Neutronium,2),
+                ItemList.neutroniumHeatCapacitor.get(1),
+                ItemList.Neutron_Reflector.get(64),
                 new ItemStack(GSItems.DysonSwarmItems, 24, 3),
-                ItemRefer.Radiation_Protection_Plate.get(36),
-                GTUtility.copyAmountUnsafe(48, Ic2Items.iridiumPlate),
 
-                ItemList.neutroniumHeatCapacitor.get(64),
+                ItemRefer.Advanced_Radiation_Protection_Plate.get(36),
                 ItemList.Electric_Piston_UV.get(4),
                 ItemList.Field_Generator_UV.get(2),
                 GTOreDictUnificator.get(OrePrefixes.ring,Materials.CosmicNeutronium,64),
@@ -3414,6 +3415,23 @@ public class GTCMMachineRecipes implements IRecipePool {
             ItemList.AutoclaveUV,
             ItemList.FluidSolidifierUV,
         });
+
+        // region Pattern Access Hatch
+        GTValues.RA
+            .stdBuilder()
+            .itemInputs(
+                GTUtility.getIntegratedCircuit(10),
+                ItemList.Hatch_CraftingInput_Bus_ME_ItemOnly.get(1),
+                AEApi.instance().definitions().parts().storageBus().maybeStack(1).get(),
+                AEApi.instance().definitions().parts().terminal().maybeStack(1).get(),
+                AEApi.instance().definitions().materials().engProcessor().maybeStack(16).get(),
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TungstenSteel, 8)
+            )
+            .itemOutputs(GTCMItemList.PatternAccessHatch.get(1))
+            .eut(RECIPE_LuV)
+            .duration(20 * 15)
+            .addTo(assembler);
     }
+
     // spotless:on
 }

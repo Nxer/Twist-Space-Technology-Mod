@@ -138,8 +138,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"           ","   NNNNN   ","  NHHHHHN  "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN ","  NHHHHHN  ","   NNNNN   ","           "},
         {"   FFFFF   ","  FMMMMMF  "," FMFKKKFMF ","FMFEEEEEFMF","FMKEEEEEKMF","FMKEECEEKMF","FMKEEEEEKMF","FMFEEEEEFMF"," FMFKKKFMF ","  FMMMMMF  ","   FFFFF   "},
         {"           ","   HHHHH   ","  HFFFFFH  "," HFEEEEEFH "," HFEEEEEFH "," HFEECEEFH "," HFEEEEEFH "," HFEEEEEFH ","  HFFFFFH  ","   HHHHH   ","           "},
-        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEH  ","  AEECEEN  ","  AEEEEEH  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
-        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEH  ","  AEECEEN  ","  AEEEEEH  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
+        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
+        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
         {"           ","   HHHHH   ","  HFFFFFH  "," HFEEEEEFH "," HFEEEEEFH "," HFEECEEFH "," HFEEEEEFH "," HFEEEEEFH ","  HFFFFFH  ","   HHHHH   ","           "},
         {"   FFFFF   ","  FMMMMMF  "," FMFJJJFMF ","FMFEEEEEFMF","FMJEEEEEJMF","FMJEECEEJMF","FMJEEEEEJMF","FMFEEEEEFMF"," FMFJJJFMF ","  FMMMMMF  ","   FFFFF   "},
         {"           ","   JJ JJ   ","  JNNNNNJ  "," JNEDDDDNJ ","JJNDEEEDNJ ","  NDECEDN  ","JJNDEEEDNJ "," JNEDDDENJ ","  JNNNNNJ  ","   JJ JJ   ","           "},
@@ -342,8 +342,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         this.glassTier = 0;
         this.mBlazeHatch = null;
         this.setCoilLevel(HeatingCoilLevel.None);
-        if (!checkPiece("mainT" + controllerTier, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
-            return false;
+
+        // Check all tier to render properly in nei
+        if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
+            if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
+                return false;
+        }
+
         if (this.mHeatingCapacity < getCoilHeat()) this.mHeatingCapacity = getCoilHeat();
         this.maxHeatingCapacity = (int) (Math.floor(Math.pow(getCoilHeat(), 1.08) / 100) * 100 + 1);
 
@@ -411,7 +416,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         int OffSetY = BlazeVerticalOffSet;
         int OffSetZ = BlazeDepthOffSet;
         // if (!checkStructure(true)) return false;
-        if (isBlazeFinishClear) {
+        if (!isBlazeFinishSet) {
             if (!drainPyrotheumFromBlazeHatch(BlazeAmount, false)) return false;
             drainPyrotheumFromBlazeHatch(BlazeAmount, true);
             isBlazeFinishClear = false;
@@ -419,7 +424,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Blaze);
             isBlazeFinishSet = true;
             return true;
-        } else if (isBlazeFinishSet) {
+        } else if (!isBlazeFinishClear) {
             // clear will not return existing pyrotheum
             isBlazeFinishSet = false;
             TstUtils
@@ -755,10 +760,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .setBackground(() -> {
                 List<IDrawable> layers = new ArrayList<>();
                 // Add icons per mode
-                if (isBlazeFinishSet) {
+                if (!isBlazeFinishClear) {
                     layers.add(GTUITextures.BUTTON_STANDARD);
                     layers.add(UITextures.SBF_BlazeClear);
-                } else if (isBlazeFinishClear) {
+                } else if (!isBlazeFinishSet) {
                     layers.add(GTUITextures.BUTTON_STANDARD);
                     layers.add(UITextures.SBF_BlazeSet);
                 }
@@ -909,6 +914,22 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public byte getUpdateData() {
         return controllerTier;
+    }
+
+    @Override
+    public void setItemNBT(NBTTagCompound aNBT) {
+        super.setItemNBT(aNBT);
+        if (controllerTier > 1) aNBT.setByte("mTier", controllerTier);
+    }
+
+    @Override
+    public void initDefaultModes(NBTTagCompound aNBT) {
+        super.initDefaultModes(aNBT);
+        if (aNBT == null || !aNBT.hasKey("mTier")) {
+            controllerTier = 1;
+        } else {
+            controllerTier = aNBT.getByte("mTier");
+        }
     }
 
     @Override
