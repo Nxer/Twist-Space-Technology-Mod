@@ -11,6 +11,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.common.registry.GameRegistry;

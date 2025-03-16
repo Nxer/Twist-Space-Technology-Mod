@@ -10,6 +10,7 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.PhotonControll
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationStructureBlock;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.item.blockItem.TstMetaBlockItem;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;

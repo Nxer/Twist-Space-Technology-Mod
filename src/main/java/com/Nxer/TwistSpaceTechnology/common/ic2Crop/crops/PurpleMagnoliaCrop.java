@@ -2,8 +2,8 @@ package com.Nxer.TwistSpaceTechnology.common.ic2Crop.crops;
 
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.ic2Crop.AbstractTstCrop;
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 
 import ic2.api.crops.ICropTile;
 

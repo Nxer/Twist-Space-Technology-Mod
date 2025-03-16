@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.item;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
 import gregtech.api.items.MetaGeneratedItemX32;
 
