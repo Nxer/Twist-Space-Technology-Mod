@@ -96,7 +96,7 @@ public class DTPFRecipePool implements IRecipePool {
                     .fluidOutputs(
                         Materials.Infinity.getMolten(Infinity_amount[i]),
                         MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(Infinity_catalyst[i] / 4))
-                    .duration(Infinity_time[i] * 20)
+                    .duration(Infinity_time[i] * 10)
                     .eut(Infinity_eut[i])
                     .metadata(COIL_HEAT, Coils[i])
                     .addTo(DTPF);
