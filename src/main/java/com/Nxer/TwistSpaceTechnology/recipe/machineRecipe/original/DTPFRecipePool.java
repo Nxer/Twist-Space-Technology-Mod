@@ -2,9 +2,12 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
 import static gregtech.api.enums.Mods.Avaritia;
 import static gregtech.api.util.GTRecipeConstants.COIL_HEAT;
+import static gregtech.api.util.GTUtility.copyAmount;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
@@ -59,42 +62,45 @@ public class DTPFRecipePool implements IRecipePool {
         final int[] Hypogen_eut = { 500_000_000, 1_000_000_000, 1_500_000_000, 2_000_000_000 };
 
         // Infinity
-        for (int i = 0; i < Coils.length; i++) {
-            GTValues.RA.stdBuilder()
-                .itemInputs(
-                    GTModHandler.getModItem(Avaritia.ID, "Resource", 64L / multiply[i], 5),
-                    GTUtility.getIntegratedCircuit(5))
-                .fluidInputs(
-                    Catalysts[i + 1].getFluid(Infinity_catalyst[i]),
-                    Materials.CosmicNeutronium.getMolten(1_152 / multiply[i]),
-                    Materials.Neutronium.getMolten(1_152 / multiply[i]))
-                .fluidOutputs(
-                    Materials.Infinity.getMolten(Infinity_amount[i]),
-                    MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(Infinity_catalyst[i] / 2))
-                .duration(Infinity_time[i] * 20)
-                .eut(Infinity_eut[i])
-                .metadata(COIL_HEAT, Coils[i])
-                .addTo(DTPF);
-        }
+        {
+            final ItemStack InfiniteCatalyst = GTModHandler
+                .getModItem(Avaritia.ID, "Resource", 1, 5, GTCMItemList.TestItem0.get(1));
 
-        // Infinity Bee
-        for (int i = 0; i < Coils.length; i++) {
-            GTValues.RA.stdBuilder()
-                .itemInputs(
-                    GTModHandler.getModItem(Avaritia.ID, "Resource", 64L / multiply[i] / 2, 5),
-                    GTBees.combs.getStackForType(CombType.INFINITY, 64 / multiply[i]),
-                    GTUtility.getIntegratedCircuit(6))
-                .fluidInputs(
-                    Catalysts[i + 1].getFluid(Infinity_catalyst[i] / 2),
-                    Materials.CosmicNeutronium.getMolten(1_152 / multiply[i] / 2),
-                    Materials.Neutronium.getMolten(1_152 / multiply[i] / 2))
-                .fluidOutputs(
-                    Materials.Infinity.getMolten(Infinity_amount[i]),
-                    MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(Infinity_catalyst[i] / 4))
-                .duration(Infinity_time[i] * 20)
-                .eut(Infinity_eut[i])
-                .metadata(COIL_HEAT, Coils[i])
-                .addTo(DTPF);
+            for (int i = 0; i < Coils.length; i++) {
+                GTValues.RA.stdBuilder()
+                    .itemInputs(copyAmount(64 / multiply[i], InfiniteCatalyst), GTUtility.getIntegratedCircuit(5))
+                    .fluidInputs(
+                        Catalysts[i + 1].getFluid(Infinity_catalyst[i]),
+                        Materials.CosmicNeutronium.getMolten(1_152 / multiply[i]),
+                        Materials.Neutronium.getMolten(1_152 / multiply[i]))
+                    .fluidOutputs(
+                        Materials.Infinity.getMolten(Infinity_amount[i]),
+                        MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(Infinity_catalyst[i] / 2))
+                    .duration(Infinity_time[i] * 20)
+                    .eut(Infinity_eut[i])
+                    .metadata(COIL_HEAT, Coils[i])
+                    .addTo(DTPF);
+            }
+
+            // Infinity Bee comb
+            for (int i = 0; i < Coils.length; i++) {
+                GTValues.RA.stdBuilder()
+                    .itemInputs(
+                        copyAmount(32 / multiply[i], InfiniteCatalyst),
+                        GTBees.combs.getStackForType(CombType.INFINITY, 64 / multiply[i]),
+                        GTUtility.getIntegratedCircuit(6))
+                    .fluidInputs(
+                        Catalysts[i + 1].getFluid(Infinity_catalyst[i] / 2),
+                        Materials.CosmicNeutronium.getMolten(1_152 / multiply[i] / 2),
+                        Materials.Neutronium.getMolten(1_152 / multiply[i] / 2))
+                    .fluidOutputs(
+                        Materials.Infinity.getMolten(Infinity_amount[i]),
+                        MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(Infinity_catalyst[i] / 4))
+                    .duration(Infinity_time[i] * 20)
+                    .eut(Infinity_eut[i])
+                    .metadata(COIL_HEAT, Coils[i])
+                    .addTo(DTPF);
+            }
         }
 
         // Hypogen
