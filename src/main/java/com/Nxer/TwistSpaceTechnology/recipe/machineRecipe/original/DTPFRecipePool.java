@@ -80,7 +80,7 @@ public class DTPFRecipePool implements IRecipePool {
                 .itemInputs(
                     GTModHandler.getModItem(Avaritia.ID, "Resource", 64L / multiply[i] / 2, 5),
                     GTBees.combs.getStackForType(CombType.INFINITY, 64 / multiply[i]),
-                    GTUtility.getIntegratedCircuit(5))
+                    GTUtility.getIntegratedCircuit(6))
                 .fluidInputs(
                     Catalysts[i + 1].getFluid(Infinity_catalyst[i] / 2),
                     Materials.CosmicNeutronium.getMolten(1_152 / multiply[i] / 2),
