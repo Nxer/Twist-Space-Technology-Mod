@@ -4,7 +4,7 @@ import static gregtech.common.items.MetaGeneratedItem98.FluidCell.LIQUID_DNA;
 
 import net.minecraft.util.ResourceLocation;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;

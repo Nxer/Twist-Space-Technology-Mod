@@ -1,12 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EncapsulatedMicroSpaceTimeUnit;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EnergyFluctuationSelfHarmonizer;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.InformationHorizonInterventionShell;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.PacketInformationTranslationArray;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ParticleTrapTimeSpaceShield;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SeedsSpaceTime;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EncapsulatedMicroSpaceTimeUnit;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EnergyFluctuationSelfHarmonizer;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InformationHorizonInterventionShell;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PacketInformationTranslationArray;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SeedsSpaceTime;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -27,7 +27,7 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendi
 
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;

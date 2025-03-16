@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EmptySmallLaunchVehicle;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SmallLaunchVehicle;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SolarSail;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceWarper;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EmptySmallLaunchVehicle;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehicle;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.config.Config.overloadSpecialCalculationParameter;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingNode;

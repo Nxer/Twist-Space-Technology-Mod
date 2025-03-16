@@ -8,7 +8,7 @@ import net.minecraft.util.EnumChatFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
 import fox.spiteful.avaritia.items.LudicrousItems;
 import gregtech.api.enums.Mods;

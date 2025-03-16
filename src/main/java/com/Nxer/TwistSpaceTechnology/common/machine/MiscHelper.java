@@ -4,7 +4,7 @@ import static tectech.thing.CustomItemList.astralArrayFabricator;
 
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
 public class MiscHelper {
 

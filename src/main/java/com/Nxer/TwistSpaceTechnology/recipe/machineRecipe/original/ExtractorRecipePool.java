@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
 import static gregtech.api.enums.TierEU.RECIPE_LV;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 

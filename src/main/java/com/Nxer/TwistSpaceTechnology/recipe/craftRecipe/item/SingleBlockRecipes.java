@@ -4,7 +4,7 @@ import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 
 import net.minecraftforge.fluids.FluidRegistry;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 

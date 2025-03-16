@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MoldSingularity;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoldSingularity;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
