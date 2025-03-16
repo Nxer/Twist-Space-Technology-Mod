@@ -469,8 +469,12 @@ public class GTCM_ParallelHelper extends ParallelHelper {
                                 .setMaxParallel(maxParallel)
                                 .build();
             maxParallel = Math.min(voidProtectionHelper.getMaxParallel(), maxParallel);
-            if (maxParallel <= 0) {
+            if (voidProtectionHelper.isItemFull()) {
                 result = CheckRecipeResultRegistry.ITEM_OUTPUT_FULL;
+                return;
+            }
+            if (voidProtectionHelper.isFluidFull()) {
+                result = CheckRecipeResultRegistry.FLUID_OUTPUT_FULL;
                 return;
             }
         }
