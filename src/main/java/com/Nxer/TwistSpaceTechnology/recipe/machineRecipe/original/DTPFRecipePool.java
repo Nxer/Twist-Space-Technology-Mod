@@ -1,13 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
-import static gregtech.api.enums.Mods.Avaritia;
 import static gregtech.api.util.GTRecipeConstants.COIL_HEAT;
 import static gregtech.api.util.GTUtility.copyAmount;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
@@ -17,7 +16,6 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 import gregtech.common.items.CombType;
 import gregtech.loaders.misc.GTBees;
@@ -63,8 +61,7 @@ public class DTPFRecipePool implements IRecipePool {
 
         // Infinity
         {
-            final ItemStack InfiniteCatalyst = GTModHandler
-                .getModItem(Avaritia.ID, "Resource", 1, 5, GTCMItemList.TestItem0.get(1));
+            final ItemStack InfiniteCatalyst = ModItemHandler.getInfinityCatalyst(1);
 
             for (int i = 0; i < Coils.length; i++) {
                 GTValues.RA.stdBuilder()

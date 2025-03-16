@@ -1,10 +1,16 @@
 package com.Nxer.TwistSpaceTechnology.common.api;
 
+import static gregtech.api.util.GTUtility.copyAmount;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 
+import fox.spiteful.avaritia.items.LudicrousItems;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;
 
@@ -19,6 +25,14 @@ public class ModItemHandler {
     public static final GraviSuiteItemHandler GraviSuite = new GraviSuiteItemHandler();
     public static final EternalSingularityItemHandler EternalSingularity = new EternalSingularityItemHandler();
     public static final OpenComputersItemHandler OpenComputers = new OpenComputersItemHandler();
+
+    @Nullable
+    public static ItemStack getInfinityCatalyst(int amount) {
+        if (LudicrousItems.resource != null) {
+            return new ItemStack(LudicrousItems.resource, amount, 5);
+        }
+        return null;
+    }
 
     public static class BloodArsenalItemHandler extends ModHandler {
 
@@ -90,35 +104,50 @@ public class ModItemHandler {
 
     public static abstract class ModHandler {
 
-        protected final Mods mod;
+        public final String mod;
+
+        public ModHandler(String modID) {
+            this.mod = modID;
+        }
 
         public ModHandler(Mods mod) {
-            this.mod = mod;
+            this(mod.ID);
         }
     }
 
     public static class ModItem {
 
-        private final String unlocalizedName;
-        private final String localizedName;
-        private final int meta;
-        private final Mods mod;
+        public final String unlocalizedName;
+        public final String localizedName;
+        public final int meta;
+        public final String modID;
+        protected ItemStack itemStack;
 
-        public ModItem(Mods mod, String unlocalizedName, int meta, String localizedName) {
-            this.mod = mod;
+        public ModItem(@NotNull Mods mod, @NotNull String unlocalizedName, int meta, @NotNull String localizedName) {
+            this(mod.ID, unlocalizedName, meta, localizedName);
+        }
+
+        public ModItem(@NotNull String modID, @NotNull String unlocalizedName, int meta,
+            @NotNull String localizedName) {
+            this.modID = modID;
             this.unlocalizedName = unlocalizedName;
             this.meta = meta;
             this.localizedName = localizedName;
         }
 
         public ItemStack get(int count) {
-            ItemStack ModItem = GTModHandler.getModItem(mod.ID, unlocalizedName, count, meta);
-            return !mod.isModLoaded() || ModItem == null ? createFallbackItem(localizedName, count) : ModItem;
+            if (itemStack == null) {
+                itemStack = GTModHandler.getModItem(modID, unlocalizedName, 1, meta);
+                if (itemStack == null) {
+                    itemStack = createFallbackItem(localizedName, count);
+                }
+            }
+            return copyAmount(count, itemStack);
         }
 
-        private ItemStack createFallbackItem(String name, int count) {
+        public ItemStack createFallbackItem(String name, int count) {
             ItemStack stack = GTCMItemList.TestItem0.get(count);
-            String stackName = EnumChatFormatting.WHITE + mod.ID + " : " + name;
+            String stackName = EnumChatFormatting.WHITE + modID + " : " + name;
             stack.setStackDisplayName(EnumChatFormatting.RESET + stackName);
             return stack;
         }
