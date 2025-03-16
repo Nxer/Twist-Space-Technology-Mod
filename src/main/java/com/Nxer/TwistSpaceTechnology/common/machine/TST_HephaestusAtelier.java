@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEutP
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.NEGATIVE_ONE;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.addStacksToList;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -63,7 +64,6 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
@@ -317,7 +317,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 outputs.add(items.copy());
                 items.stackSize = 0;
             } else {
-                outputs.add(GTUtility.copyAmountUnsafe(items.stackSize, smeltedOutput));
+                addStacksToList(outputs, smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize);
                 smeltedAmount += items.stackSize;
                 items.stackSize = 0;
             }
@@ -364,11 +364,11 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 items.stackSize = 0;
             } else {
                 if (canProcess >= items.stackSize) {
-                    outputs.add(GTUtility.copyAmountUnsafe(items.stackSize, smeltedOutput));
+                    addStacksToList(outputs, smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize);
                     canProcess -= items.stackSize;
                     items.stackSize = 0;
                 } else {
-                    outputs.add(GTUtility.copyAmountUnsafe(canProcess, smeltedOutput));
+                    addStacksToList(outputs, smeltedOutput, (long) canProcess * smeltedOutput.stackSize);
                     items.stackSize -= canProcess;
                     canProcess = 0;
                     break;
