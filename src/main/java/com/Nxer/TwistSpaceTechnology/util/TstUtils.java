@@ -1,9 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+import static gregtech.api.util.GTUtility.copyAmount;
+
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -374,6 +377,89 @@ public class TstUtils {
     public static FluidStack setStackSize(@NotNull FluidStack fluidStack, int size) {
         fluidStack.amount = size;
         return fluidStack;
+    }
+
+    public static ItemStack copyAmount(int amount, ItemStack itemStack) {
+        return GTUtility.copyAmountUnsafe(amount, itemStack);
+    }
+
+    public static ItemStack copyAmount(ItemStack itemStack, int amount) {
+        return GTUtility.copyAmountUnsafe(amount, itemStack);
+    }
+
+    public static FluidStack copyAmount(int amount, FluidStack fluidStack) {
+        if (fluidStack == null) return null;
+        FluidStack rStack = fluidStack.copy();
+        rStack.amount = amount;
+        return rStack;
+    }
+
+    public static FluidStack copyAmount(FluidStack fluidStack, int amount) {
+        return copyAmount(amount, fluidStack);
+    }
+
+    /**
+     * To more conveniently add item stacks to a list.
+     * 
+     * @param list      The list to add.
+     * @param itemStack The item stack to be added.
+     * @param amount    The amount of items, it will be separated to multi item stacks when amount is larger than
+     *                  {@link Integer#MAX_VALUE}.
+     * @return True if processing is success.
+     * @throws IllegalArgumentException if amount is lower than zero.
+     */
+    public static boolean addStacksToList(@NotNull Collection<ItemStack> list, @NotNull ItemStack itemStack,
+        long amount) {
+        if (amount < 0) throw new IllegalArgumentException("Code is trying to set item stack size a negative number.");
+
+        // if amount is in int
+        if (amount <= Integer.MAX_VALUE) {
+            return list.add(copyAmount((int) amount, itemStack));
+        }
+
+        // if amount is larger than 2.1G, separate to multiple item stacks
+        long toAdd = amount;
+        for (;;) {
+            if (toAdd <= Integer.MAX_VALUE) {
+                return list.add(copyAmount((int) toAdd, itemStack));
+
+            } else {
+                list.add(copyAmount(Integer.MAX_VALUE, itemStack));
+                toAdd -= Integer.MAX_VALUE;
+            }
+        }
+    }
+
+    /**
+     * To more conveniently add fluid stacks to a list.
+     * 
+     * @param list            The list to add.
+     * @param fluidStackStack The fluid stack to be added.
+     * @param amount          The amount of fluid, it will be separated to multi fluid stacks when amount is larger than
+     *                        {@link Integer#MAX_VALUE}.
+     * @return True if processing is success.
+     * @throws IllegalArgumentException if amount is lower than zero.
+     */
+    public static boolean addStacksToList(@NotNull Collection<FluidStack> list, @NotNull FluidStack fluidStackStack,
+        long amount) {
+        if (amount < 0) throw new IllegalArgumentException("Code is trying to set item stack size a negative number.");
+
+        // if amount is in int
+        if (amount <= Integer.MAX_VALUE) {
+            return list.add(copyAmount((int) amount, fluidStackStack));
+        }
+
+        // if amount is larger than 2.1G, separate to multiple item stacks
+        long toAdd = amount;
+        for (;;) {
+            if (toAdd <= Integer.MAX_VALUE) {
+                return list.add(copyAmount((int) toAdd, fluidStackStack));
+
+            } else {
+                list.add(copyAmount(Integer.MAX_VALUE, fluidStackStack));
+                toAdd -= Integer.MAX_VALUE;
+            }
+        }
     }
 
     /**
