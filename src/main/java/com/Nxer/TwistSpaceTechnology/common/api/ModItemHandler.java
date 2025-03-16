@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.api;
 
+import static gregtech.api.util.GTUtility.copyAmount;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -103,6 +105,7 @@ public class ModItemHandler {
         private final String localizedName;
         private final int meta;
         private final Mods mod;
+        private ItemStack itemStack;
 
         public ModItem(Mods mod, String unlocalizedName, int meta, String localizedName) {
             this.mod = mod;
@@ -112,8 +115,13 @@ public class ModItemHandler {
         }
 
         public ItemStack get(int count) {
-            ItemStack ModItem = GTModHandler.getModItem(mod.ID, unlocalizedName, count, meta);
-            return !mod.isModLoaded() || ModItem == null ? createFallbackItem(localizedName, count) : ModItem;
+            if (itemStack == null) {
+                itemStack = GTModHandler.getModItem(mod.ID, unlocalizedName, 1, meta);
+                if (itemStack == null) {
+                    itemStack = createFallbackItem(localizedName, count);
+                }
+            }
+            return copyAmount(count, itemStack);
         }
 
         private ItemStack createFallbackItem(String name, int count) {
