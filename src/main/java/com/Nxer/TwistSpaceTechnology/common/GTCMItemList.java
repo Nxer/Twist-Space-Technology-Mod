@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 
 import gregtech.api.GregTechAPI;
@@ -615,5 +617,12 @@ public enum GTCMItemList {
             // warn only once
             mWarned = true;
         }
+    }
+
+    public boolean equal(@Nullable ItemStack itemStack) {
+        if (itemStack == null) return false;
+        if (mHasNotBeenSet) return false;
+        if (this.mStack == itemStack) return true;
+        return this.mStack.isItemEqual(itemStack);
     }
 }
