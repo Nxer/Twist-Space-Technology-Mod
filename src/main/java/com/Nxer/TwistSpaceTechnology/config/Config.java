@@ -371,6 +371,7 @@ public class Config {
 
     // region Recipe
     public static boolean Registry_DragonBlood_ExtraRecipe = true;
+    public static boolean Registry_DTPF_ExtraRecipe = true;
 
     // endregion
 
@@ -512,6 +513,7 @@ public class Config {
 
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
+        Registry_DTPF_ExtraRecipe = configuration.getBoolean("Registry_DTPF_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Enable Registry of DTPF Extra Recipes about Infinity Hypogen and SpaceTime.");
         // endregion
 
         // region SwelegfyrBlastFurnace

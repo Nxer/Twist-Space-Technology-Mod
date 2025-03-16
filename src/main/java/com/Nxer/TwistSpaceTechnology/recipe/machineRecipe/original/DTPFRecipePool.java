@@ -5,6 +5,7 @@ import static gregtech.api.util.GTRecipeConstants.COIL_HEAT;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
@@ -23,6 +24,8 @@ public class DTPFRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
+        if (!Config.Registry_DTPF_ExtraRecipe) return;
+
         final IRecipeMap DTPF = RecipeMaps.plasmaForgeRecipes;
 
         // Coils
