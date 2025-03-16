@@ -371,7 +371,7 @@ public class Config {
 
     // region Recipe
     public static boolean Registry_DragonBlood_ExtraRecipe = true;
-    public static boolean Registry_DTPF_ExtraRecipe = true;
+    public static boolean Registry_DTPF_ExtraRecipe = false;
 
     // endregion
 
