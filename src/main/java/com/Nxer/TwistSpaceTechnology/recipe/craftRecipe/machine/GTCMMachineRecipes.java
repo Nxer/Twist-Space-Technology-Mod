@@ -171,6 +171,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
@@ -226,6 +227,7 @@ import ic2.core.Ic2Items;
 import tectech.recipe.TTRecipeAdder;
 import tectech.thing.casing.TTCasingsContainer;
 
+@Deprecated
 @SuppressWarnings("SpellCheckingInspection")
 public class GTCMMachineRecipes implements IRecipePool {
 
@@ -2429,7 +2431,7 @@ public class GTCMMachineRecipes implements IRecipePool {
                     ItemRefer.HiC_T5.get(64),
                     GravitationalLens.get(64),
                     PerfectLapotronCrystal.get(64),
-                    GTModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 0),
+                    ModItemHandler.EternalSingularity.NitronicSingularity.get(1),
 
                     AnnihilationConstrainer.get(1),
                     ItemList.ZPM2.get(1),

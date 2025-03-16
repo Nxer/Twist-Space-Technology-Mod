@@ -22,4 +22,9 @@ public class UITextures {
         .fullImage(TST_ID, "icons/UITextures/SBF_HoldingHeat_Off");
     public static final UITexture SBF_HoldingHeat_On = UITexture
         .fullImage(TST_ID, "icons/UITextures/SBF_HoldingHeat_On");
+    public static final UITexture HESTTD_HeatExchanger = UITexture
+        .fullImage(TST_ID, "icons/UITextures/HESTTD_HeatExchanger");
+    public static final UITexture HESTTD_RapidCooling = UITexture
+        .fullImage(TST_ID, "icons/UITextures/HESTTD_RapidCooling");
+    public static final UITexture HESTTD_NEIPic = UITexture.fullImage(TST_ID, "icons/Pictures/rapid_heat_exchanger");
 }

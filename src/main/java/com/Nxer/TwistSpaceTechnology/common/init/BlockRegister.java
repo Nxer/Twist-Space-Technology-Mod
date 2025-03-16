@@ -227,6 +227,16 @@ public class BlockRegister {
         // #zh_CN 铱强化中子机械方块
         GTCMItemList.ReinforcedIridiumAlloyCasing.set(MetaBlockCasing02.registerVariant(2));
 
+        // #tr tile.MetaBlockCasing02.3.name
+        // # Borophene-Based Nanowire Composite Thermal Conductive Casing
+        // #zh_CN 硼烯基纳米线复合导热外壳
+        GTCMItemList.BoropheneBasedNanowireCompositeThermalConductiveCasing.set(MetaBlockCasing02.registerVariant(3));
+
+        // #tr tile.MetaBlockCasing02.4.name
+        // # Neutronium Pipe Casing
+        // #zh_CN 中子管道方块
+        GTCMItemList.NeutroniumPipeCasing.set(MetaBlockCasing02.registerVariant(4));
+
         // region SpaceTimeOscillator
 
         // #tr tile.SpaceTimeOscillator.0.name

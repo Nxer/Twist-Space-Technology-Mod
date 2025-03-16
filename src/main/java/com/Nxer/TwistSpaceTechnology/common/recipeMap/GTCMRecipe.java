@@ -7,11 +7,14 @@ import java.util.Optional;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidCoolingDownFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidHeatExchangeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StellarForgeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
@@ -383,7 +386,7 @@ public class GTCMRecipe {
     // #tr tst.recipe.IndustrialAlchemyTowerRecipe
     // # Industrial Alchemy Tower
     // #zh_CN 工业炼金塔
-    public static final RecipeMap<RecipeMapBackend> IndustrialAlchemyTowerRecipe = RecipeMapBuilder
+    public static final RecipeMap<RecipeMapBackend> IndustrialAlchemyTowerRecipes = RecipeMapBuilder
         .of("tst.recipe.IndustrialAlchemyTowerRecipe")
         .maxIO(2, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.IndustrialAlchemyTower.get(1)))
@@ -392,8 +395,8 @@ public class GTCMRecipe {
         .build();
 
     // #tr tst.recipe.advCircuitAssemblyLineTrueRecipes
-    // # Adv Circuit Assembly Line (Hide)
-    // #zh_CN 进阶电路装配线(隐藏)
+    // # Adv Circuit Assembly Line (Hide recipe, report it in Issue)
+    // #zh_CN 进阶电路装配线(隐藏配方， 请在Issue中反馈)
     public static final RecipeMap<RecipeMapBackend> advCircuitAssemblyLineRecipes = RecipeMapBuilder
         .of("tst.recipe.advCircuitAssemblyLineRecipes")
         .maxIO(6, 1, 1, 0)
@@ -402,5 +405,29 @@ public class GTCMRecipe {
         .progressBar(GTUITextures.PROGRESSBAR_CIRCUIT_ASSEMBLER)
         .disableRegisterNEI()
         .disableOptimize()
+        .build();
+
+    // #tr tst.recipe.RapidHeatExchangeRecipes
+    // # Rapid Heat Exchange
+    // #zh_CN 快速热交换
+    public static final RecipeMap<TST_RecipeMapBackend> RapidHeatExchangeRecipes = RecipeMapBuilder
+        .of("tst.recipe.RapidHeatExchangeRecipes", TST_RecipeMapBackend::new)
+        .maxIO(0, 0, 2, 2)
+        .dontUseProgressBar()
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HyperThermalConvector.get(1)))
+        .addSpecialTexture(47, 13, 78, 59, GGUITextures.PICTURE_EXTREME_HEAT_EXCHANGER)
+        .frontend(TST_RapidHeatExchangeFrontend::new)
+        .build();
+
+    // #tr tst.recipe.RapidCoolingDownRecipes
+    // # Rapid Cooling Down
+    // #zh_CN 快速冷却
+    public static final RecipeMap<TST_RecipeMapBackend> RapidCoolingDownRecipes = RecipeMapBuilder
+        .of("tst.recipe.RapidCoolingDownRecipes", TST_RecipeMapBackend::new)
+        .maxIO(0, 0, 1, 1)
+        .dontUseProgressBar()
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HyperThermalConvector.get(1)))
+        .addSpecialTexture(47, 13, 78, 59, UITextures.HESTTD_NEIPic)
+        .frontend(TST_RapidCoolingDownFrontend::new)
         .build();
 }
