@@ -1169,8 +1169,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.25"))
             .addStructureInfo(Text_SeparatingLine)
             // #tr Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn
-            // # Attention: Pyrotheum input hatch location will be changed when upgrade machine.
-            // #zh_CN 注意：升级结构后炽焱输入仓位置会发生变化.
+            // # Attention: Pyrotheum's dedicated input hatch location will be changed when upgrade machine.
+            // #zh_CN 注意：升级结构后炽焱专用的输入仓位置会发生变化.
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addController(textFrontBottom)
@@ -1180,8 +1180,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addOutputBus(getBlueprintWithDot(1), 1)
             .addEnergyHatch(getBlueprintWithDot(2), 2)
             // #tr Tooltip_SwelegfyrBlastFurnace.31
-            // # Pyrotheum input hatch
-            // #zh_CN 炽焱输入仓
+            // # Pyrotheum's dedicated input hatch
+            // #zh_CN 炽焱专用的输入仓
             .addOtherStructurePart(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
             .toolTipFinisher(ModName);
         return tt;
