@@ -1094,22 +1094,26 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN 当处于被动模式时炉温会缓慢升高。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.03"))
             // #tr Tooltip_SwelegfyrBlastFurnace.04
-            // # Power consumption decreases by 10% per 1800K above recipe temperature threshold.
-            // #zh_CN 炉温每高出配方1800K， 耗电减少10% 。
+            // # Additional furnace heat will reset upon recipe change.
+            // #zh_CN 切换配方时，额外炉温会被清空。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.04"))
             // #tr Tooltip_SwelegfyrBlastFurnace.05
-            // # Glass tier restricts Energy Hatch tier.
-            // #zh_CN 玻璃等级限制能源仓等级。
+            // # Power consumption decreases by 10% per 1800K above recipe temperature threshold.
+            // #zh_CN 炉温每高出配方1800K， 耗电减少10% 。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
             // #tr Tooltip_SwelegfyrBlastFurnace.06
+            // # Glass tier restricts Energy Hatch tier.
+            // #zh_CN 玻璃等级限制能源仓等级。
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.07
             // # Upgrade machine and build additional structure to unlock additional functions.
             // #zh_CN 升级机器并搭建附加结构以解锁更多功能。
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
             .addInfo(textSpace)
-            // #tr Tooltip_SwelegfyrBlastFurnace.07
+            // #tr Tooltip_SwelegfyrBlastFurnace.08
             // # {\YELLOW}Do not open the cabin door while the machine is running!
             // #zh_CN {\YELLOW}禁止在机器运行时打开舱门！
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.08"))
             .addSeparator()
             .addInfo(MoreInfoCheckingInScanner.getText())
             .addInfo(StructureTooComplex)
