@@ -59,6 +59,8 @@ public class CommonProxy {
         if (Config.activateCombatStats) {
             ItemRegister.registry();
         }
+
+        TCLoader.preInit();
     }
 
     public void init(FMLInitializationEvent event) {
@@ -127,7 +129,7 @@ public class CommonProxy {
 
         CropInfo.registerAllCropInfo();
 
-        TCLoader.load();
+        TCLoader.postInit();
     }
 
     public void complete(FMLLoadCompleteEvent event) {
