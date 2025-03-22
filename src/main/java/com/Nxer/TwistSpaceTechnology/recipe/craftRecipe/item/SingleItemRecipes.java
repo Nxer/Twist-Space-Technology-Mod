@@ -41,7 +41,7 @@ public class SingleItemRecipes implements IRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.nanite, Materials.Silver, 1),
-                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Dilithium, 0))
+                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Dilithium, 0, false))
             .fluidInputs(Materials.Boron.getPlasma(144 * 2))
             .itemOutputs(GTCMItemList.BoropheneFoil.get(2))
             .eut(TierEU.RECIPE_UEV)
