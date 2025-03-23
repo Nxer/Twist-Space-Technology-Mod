@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemNamedCircuit;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemRune;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MultiStructuresLinkTool;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.RiseOfDarkFog;
@@ -21,7 +22,8 @@ public class ItemRegister {
     public static void registryItems() {
         Item[] itemsToReg = { MetaItem01, TstItems.ProofOfHeroes, TstItems.ProofOfGods, MultiStructuresLinkTool,
 
-            TstItems.MetaItemRune, TstItems.MetaItemIzumik, TstItems.Yamato, TstItems.ActualPattern };
+            TstItems.MetaItemRune, TstItems.MetaItemIzumik, TstItems.Yamato, TstItems.ActualPattern,
+            MetaItemNamedCircuit };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -338,6 +340,28 @@ public class ItemRegister {
         // # White Dwarf Mold (Ingot)
         // #zh_CN 白矮星模具(锭)
         GTCMItemList.WhiteDwarfMold_Ingot.set(MetaItem01.registerVariant(36));
+        // #tr item.MetaItem01.37.name
+        // # Engraved Energy Exposed Chip
+        // #zh_CN 铭刻能量裸片
+        GTCMItemList.EngravedEnergyExposedChip.set(MetaItem01.registerVariant(37));
+        // #tr item.MetaItem01.38.name
+        // # Perfect Engraved Energy Chip
+        // #zh_CN 完美铭刻能量芯片
+        // #tr PerfectEngravedEnergyChip.tooltips.01
+        // # Excellent conductive chip
+        // #zh_CN 优秀的导能芯片
+        GTCMItemList.PerfectEngravedEnergyChip.set(MetaItem01.registerVariantWithTooltips(38,new String[]{ tr("PerfectEngravedEnergyChip.tooltips.01")}));
+        // #tr item.MetaItem01.39.name
+        // # Engraved Energy Laptron Chip
+        // #zh_CN 铭刻兰波顿裸片
+        GTCMItemList.EngravedLaptronExposedChip.set(MetaItem01.registerVariant(39));
+        // #tr item.MetaItem01.40.name
+        // # Perfect Engraved Laptron Chip
+        // #zh_CN 完美铭刻兰波顿芯片
+        // #tr PerfectEngravedLaptronChip.tooltips.01
+        // # Excellent energy storage chip
+        // #zh_CN 优秀的储能芯片
+        GTCMItemList.PerfectEngravedLaptronChip.set(MetaItem01.registerVariantWithTooltips(40,new String[]{ tr("PerfectEngravedLaptronChip.tooltips.01")}));
         // #tr item.MetaItem01.42.name
         // # Swelegfgr Upgrade Chip
         // #zh_CN 熯焱高炉升级芯片
@@ -976,6 +1000,13 @@ public class ItemRegister {
         // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
         // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
         GTCMItemList.OffSpring.set(MetaItemIzumik.registerVariantWithTooltips(1, new String[]{tr("Offspring.tooltips.01"), tr("Offspring.tooltips.02")}, new String[]{tr("Offspring.tooltips.03"), tr("Offspring.tooltips.04")}));
+        // #tr item.MetaItemNamedCircuit.0.name
+        // # Ultimate Energy Flow Circuit
+        // #zh_CN 终极能量流电路
+        // #tr UltimateEnergyFlowCircuit.tooltips.01
+        // # The ultimate choice for high-load circuits
+        // #zh_CN 高负载电路的终极选择
+        GTCMItemList.UltimateEnergyFlowCircuit.set(MetaItemNamedCircuit.registerVariantWithTooltips(0,new String[]{ tr("UltimateEnergyFlowCircuit.tooltips.01")}));
 
         GTCMItemList.ProofOfGods.set(new ItemStack(TstItems.ProofOfGods, 1));
         GTCMItemList.ProofOfHeroes.set(new ItemStack(TstItems.ProofOfHeroes, 2));

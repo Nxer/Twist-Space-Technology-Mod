@@ -113,7 +113,8 @@ public class MiracleTopRecipePool implements IRecipePool {
             if (IgnoreRecipeOutputs.contains(TST_ItemID.createNoNBT(originalRecipe.mOutputs[0]))) continue;
             // Do not generate some Mod recipe
             String itemName = Item.itemRegistry.getNameForObject(originalRecipe.mOutputs[0].getItem());
-            if (itemName.contains(Mods.Railcraft.ID) || itemName.contains(Mods.Forestry.ID)
+            if (itemName == null || itemName.contains(Mods.Railcraft.ID)
+                || itemName.contains(Mods.Forestry.ID)
                 || itemName.contains(Mods.StevesCarts2.ID)
                 || itemName.contains(Mods.ProjectRedCore.ID)
                 || itemName.contains(Mods.ProjectRedTransportation.ID)) continue;

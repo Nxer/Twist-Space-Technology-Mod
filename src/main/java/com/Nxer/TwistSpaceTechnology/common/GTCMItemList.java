@@ -380,6 +380,11 @@ public enum GTCMItemList {
     SeedsSpaceTime,
     MicroSpaceTimeFabricatorio,
     WhiteDwarfMold_Ingot,
+    EngravedEnergyExposedChip,
+    PerfectEngravedEnergyChip,
+    EngravedLaptronExposedChip,
+    PerfectEngravedLaptronChip,
+    UltimateEnergyFlowCircuit,
     SwelegfgrUpgradeChip,
     BoropheneFoil,
     BoropheneBasedNanowireCompositeThermalConductiveMedium,
@@ -415,6 +420,20 @@ public enum GTCMItemList {
     SpaceTimeMergerT1,
     SpaceTimeMergerT2,
     SpaceTimeMergerT3,
+
+    StabilisationFieldGeneratorFramework,
+    StabilisationFieldGeneratorUEV,
+    StabilisationFieldGeneratorUIV,
+    StabilisationFieldGeneratorUMV,
+    StabilisationFieldGeneratorUXV,
+    StabilisationFieldGeneratorMAX,
+
+    EnergySustainmentMatrixFramework,
+    EnergySustainmentMatrixUEV,
+    EnergySustainmentMatrixUIV,
+    EnergySustainmentMatrixUMV,
+    EnergySustainmentMatrixUXV,
+    EnergySustainmentMatrixMAX,
 
     // endregion
 

@@ -7,6 +7,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.GTCMMachineRecipes;
@@ -22,6 +23,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CircuitAssemb
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CokingFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystallineInfinitierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DSPRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DeployedNanoCoreRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.ElvenWorkshopRecipePool;
@@ -71,6 +73,7 @@ public class RecipeLoader {
         IRecipePool[] craftRecipePool = {
             // Item Recipes
             new SingleItemRecipes(), new SingleBlockRecipes(), new CosmicProcessorCircuitRecipes(),
+            new LapotronChipRecipes(),
             // Machine Recipes
             new SingleMachineRecipes(), new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(),
             new ModularHatchesRecipes(), new TSTSolidifierHatchRecipes() };
@@ -97,7 +100,8 @@ public class RecipeLoader {
             new AquaticZoneSimulatorFakeRecipe(), new NeutronActivatorWithEURecipePool(),
             new MassFabricatorGenesisRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
             new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool(), new IndustrialAlchemyTowerRecipePool(),
-            new CircuitAssemblyLineWithoutImprintRecipePool(), new RapidHeatExchangeRecipePool() };
+            new CircuitAssemblyLineWithoutImprintRecipePool(), new RapidHeatExchangeRecipePool(),
+            new DeployedNanoCoreRecipePool() };
 
         for (IRecipePool recipePool : machineRecipePools) {
             recipePool.loadRecipes();

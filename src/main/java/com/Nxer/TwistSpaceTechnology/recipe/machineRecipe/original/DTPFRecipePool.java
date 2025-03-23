@@ -7,13 +7,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
+import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTUtility;
@@ -25,6 +29,85 @@ public class DTPFRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
+
+        // Entropic Flux
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(ItemList.NaquadriaSupersolid.get(1))
+            .fluidInputs(
+                MaterialsTST.Dubnium.getPlasma(144 * 8),
+                GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12),
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(1),
+
+                MaterialsUEVplus.Space.getMolten(144),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(500),
+                MaterialsUEVplus.ExcitedDTPC.getFluid(1000))
+            .fluidOutputs(
+                MaterialPool.EntropicFlux.getFluidOrGas(500),
+                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(250))
+            .specialValue(10800)
+            .eut(TierEU.RECIPE_UIV)
+            .duration(20 * 30)
+            .addTo(RecipeMaps.plasmaForgeRecipes);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(ItemList.NaquadriaSupersolid.get(1))
+            .fluidInputs(
+                MaterialsTST.Dubnium.getPlasma(144 * 8 * 2),
+                GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2),
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(10),
+
+                MaterialsUEVplus.Space.getMolten(144 * 2),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(500 * 2),
+                MaterialsUEVplus.ExcitedDTRC.getFluid(2000))
+            .fluidOutputs(
+                MaterialPool.EntropicFlux.getFluidOrGas(500 * 4),
+                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(1000))
+            .specialValue(11700)
+            .eut(TierEU.RECIPE_UMV)
+            .duration(20 * 25)
+            .addTo(RecipeMaps.plasmaForgeRecipes);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(ItemList.NaquadriaSupersolid.get(1))
+            .fluidInputs(
+                MaterialsTST.Dubnium.getPlasma(144 * 8 * 2 * 3),
+                GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3),
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(100),
+
+                MaterialsUEVplus.Space.getMolten(144 * 4),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(500 * 4),
+                MaterialsUEVplus.ExcitedDTEC.getFluid(4000))
+            .fluidOutputs(
+                MaterialPool.EntropicFlux.getFluidOrGas(500 * 16),
+                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(4000))
+            .specialValue(12600)
+            .eut(TierEU.RECIPE_UXV)
+            .duration(20 * 20)
+            .addTo(RecipeMaps.plasmaForgeRecipes);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(ItemList.NaquadriaSupersolid.get(1))
+            .fluidInputs(
+                MaterialsTST.Dubnium.getPlasma(144 * 8 * 2 * 3 * 4),
+                GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3 * 4),
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000),
+
+                MaterialsUEVplus.Space.getMolten(144 * 8),
+                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(500 * 8),
+                MaterialsUEVplus.ExcitedDTSC.getFluid(8000))
+            .fluidOutputs(
+                MaterialPool.EntropicFlux.getFluidOrGas(500 * 64),
+                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(16000))
+            .specialValue(13500)
+            .eut(TierEU.RECIPE_MAX)
+            .duration(20 * 15)
+            .addTo(RecipeMaps.plasmaForgeRecipes);
+
+        loadExtraRecipes();
+    }
+
+    public void loadExtraRecipes() {
         if (!Config.Registry_DTPF_ExtraRecipe) return;
 
         final IRecipeMap DTPF = RecipeMaps.plasmaForgeRecipes;

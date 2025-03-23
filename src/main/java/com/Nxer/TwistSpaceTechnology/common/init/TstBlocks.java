@@ -40,11 +40,14 @@ public class TstBlocks {
         "SpaceTimeConstraintor");
     public static final TstMetaBlockStructureCasing SpaceTimeMerger = new TstMetaBlockStructureCasing(
         "SpaceTimeMerger");
-
+    public static final TstMetaBlockStructureCasing StabilisationFieldGenerator = new TstMetaBlockStructureCasing(
+        "StabilisationFieldGenerator");
+    public static final TstMetaBlockStructureCasing EnergySustainmentMatrix = new TstMetaBlockStructureCasing(
+        "EnergySustainmentMatrix");
     public static final SpaceStationStructureCasing SpaceStationStructureBlock = new SpaceStationStructureCasing();
 
     public static final SpaceStationAntiGravityCasing SpaceStationAntiGravityBlock = new SpaceStationAntiGravityCasing();
-
+    public static Block MetalBlock;
     public static final Block BlockStar = new BlockStar();
     public static final Block NuclearReactorBlock = new BlockNuclearReactor();
 

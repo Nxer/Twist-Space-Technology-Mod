@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
@@ -15,6 +16,13 @@ public class MassFabricatorGenesisRecipePool implements IRecipePool {
             .itemInputs(GTUtility.getIntegratedCircuit(1))
             .fluidOutputs(Materials.UUMatter.getFluid(1000))
             .eut(200000)
+            .duration(1000)
+            .addTo(GTCMRecipe.MassFabricatorGenesis);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTUtility.getIntegratedCircuit(2))
+            .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
+            .eut(2000000000)
             .duration(1000)
             .addTo(GTCMRecipe.MassFabricatorGenesis);
     }
