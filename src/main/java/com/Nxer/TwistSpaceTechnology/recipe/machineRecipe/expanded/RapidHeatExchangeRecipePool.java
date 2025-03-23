@@ -1,7 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.roundUpToMultiple;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
 
+import gtnhlanth.common.register.WerkstoffMaterialPool;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -16,18 +18,20 @@ public class RapidHeatExchangeRecipePool implements IRecipePool {
 
     @Override
     public void loadRecipes() {
+        FluidStack DenseSupercriticalSteam = Materials.DenseSupercriticalSteam.getGas(1);
+
         for (GTRecipe aRecipe : GoodGeneratorRecipeMaps.extremeHeatExchangerFuels.getAllRecipes()) {
             if (aRecipe == null) continue;
+            if (aRecipe.mFluidInputs[0] == null || aRecipe.mFluidInputs[1] == null || aRecipe.mFluidOutputs[1] == null || aRecipe.mFluidOutputs[2] == null) continue;
             FluidStack HotFluid = aRecipe.mFluidInputs[0].copy();
             FluidStack ColdFluid = aRecipe.mFluidOutputs[2].copy();
             FluidStack Water = aRecipe.mFluidInputs[1].copy();
             FluidStack Steam = aRecipe.mFluidOutputs[1].copy();
-            if (HotFluid == null || ColdFluid == null || Water == null || Steam == null) continue;
 
             // The power generation of hot fluid is directly determined by distilled water consumption.
             // Establishing their relationship enables derivation of all other parameters.
 
-            boolean isDense = Steam.isFluidEqual(Materials.DenseSupercriticalSteam.getGas(1));
+            boolean isDense = Steam.isFluidEqual(DenseSupercriticalSteam);
             int hotFluidAmount = HotFluid.amount;
             int waterAmount = Water.amount;
 
@@ -66,6 +70,26 @@ public class RapidHeatExchangeRecipePool implements IRecipePool {
                 .duration(20)
                 .addTo(GTCMRecipe.RapidCoolingDownRecipes);
         }
+
+        // extra recipe
+        {
+            // Hot super coolant (space coolant)
+            {
+                TST_RecipeBuilder.builder()
+                                 .fluidInputs(WerkstoffMaterialPool.HotSuperCoolant.getFluidOrGas(1), Materials.Water.getFluid(25))
+                                 .fluidOutputs(copyAmount(DenseSupercriticalSteam, 4), Materials.SuperCoolant.getFluid(1))
+                                 .duration(20)
+                                 .addTo(GTCMRecipe.RapidHeatExchangeRecipes);
+
+                TST_RecipeBuilder.builder()
+                                 .fluidInputs(WerkstoffMaterialPool.HotSuperCoolant.getFluidOrGas(1))
+                                 .fluidOutputs(Materials.SuperCoolant.getFluid(1))
+                                 .duration(20)
+                                 .addTo(GTCMRecipe.RapidCoolingDownRecipes);
+            }
+
+        }
+
     }
 
 }
