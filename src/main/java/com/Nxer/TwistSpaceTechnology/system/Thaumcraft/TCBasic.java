@@ -27,7 +27,9 @@ public class TCBasic {
             new Aspect[] { Aspect.LIFE, Aspect.EXCHANGE },
             new ResourceLocation(TST_ID, "textures/icons/TCAspects/evolutio.png"),
             771);
+    }
 
+    public static void setupItemAspects() {
         ThaumcraftApi.registerObjectTag(
             GTCMItemList.OffSpring.get(1),
             new AspectList().add(EVOLUTION, 2)
