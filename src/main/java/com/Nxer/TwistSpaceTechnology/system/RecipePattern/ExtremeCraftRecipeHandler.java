@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.system.RecipePattern;
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
