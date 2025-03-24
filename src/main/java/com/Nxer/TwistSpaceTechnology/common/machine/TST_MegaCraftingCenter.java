@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -136,8 +135,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         public ICraftingPatternDetails originPattern;
         public int multiplier;
 
-        private ActualPattern() {
-        }
+        private ActualPattern() {}
 
         /**
          * Generate a visual ICraftingPatternDetails with real pattern, and make input/output amount multiplied by
@@ -182,7 +180,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 } else {
                     // over int limitation
                     TST_ItemID itemID = i.getKey();
-                    for (; ; ) {
+                    for (;;) {
                         if (amount > Integer.MAX_VALUE) {
                             actualInputs.add(AEItemStack.create(itemID.getItemStack(Integer.MAX_VALUE)));
                             amount -= Integer.MAX_VALUE;
@@ -207,7 +205,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 } else {
                     // over int limitation
                     TST_ItemID itemID = i.getKey();
-                    for (; ; ) {
+                    for (;;) {
                         if (amount > Integer.MAX_VALUE) {
                             actualOutputs.add(AEItemStack.create(itemID.getItemStack(Integer.MAX_VALUE)));
                             amount -= Integer.MAX_VALUE;
@@ -497,7 +495,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     @Override
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-                                int z) {
+        int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
 
         tag.setInteger("magnification", magnification);
@@ -506,7 +504,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-                             IWailaConfigHandler config) {
+        IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         // #tr MegaCraftingCenter.waila.ForceRunningMagnification
@@ -668,8 +666,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             try {
                 getProxy().getGrid()
                     .postEvent(new MENetworkCraftingPatternChange(this, getProxy().getNode()));
-            } catch (GridAccessException ignored) {
-            }
+            } catch (GridAccessException ignored) {}
         }
         notifyAccessHatch();
     }
@@ -692,7 +689,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
         for (Map.Entry<ICraftingPatternDetails, Long> pair : cachedOutput.entrySet()) {
             ICraftingPatternDetails pattern = pair.getKey();
-            ItemStack outputStack = pattern.getOutputs()[0].getItemStack().copy();
+            ItemStack outputStack = pattern.getOutputs()[0].getItemStack()
+                .copy();
             long scale = pair.getValue();
             TstUtils.addStacksToList(additionalOutput, outputStack, outputStack.stackSize * scale);
 
@@ -701,8 +699,12 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             Arrays.stream(pattern.getInputs())
                 .map(IAEItemStack::getItemStack)
                 // check and get the container item
-                .filter(stack -> stack.getItem() != null && stack.getItem().hasContainerItem(stack))
-                .map(stack -> stack.getItem().getContainerItem(stack))
+                .filter(
+                    stack -> stack.getItem() != null && stack.getItem()
+                        .hasContainerItem(stack))
+                .map(
+                    stack -> stack.getItem()
+                        .getContainerItem(stack))
                 // put them to output list
                 .forEach(stack -> TstUtils.addStacksToList(additionalOutput, stack, stack.stackSize * scale));
         }
@@ -973,10 +975,10 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         buildContext.addSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID, this::createMagnificationConfigurationWindow);
         builder.widget(
             new ButtonWidget().setOnClick(
-                    (clickData, widget) -> {
-                        if (!widget.isClient()) widget.getContext()
-                            .openSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID);
-                    })
+                (clickData, widget) -> {
+                    if (!widget.isClient()) widget.getContext()
+                        .openSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID);
+                })
                 .setSize(16, 16)
                 .setBackground(() -> {
                     List<UITexture> ret = new ArrayList<>();
@@ -997,18 +999,18 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         builder.setGuiTint(getGUIColorization());
 
         builder.widget(
-                // spotless:off
+            // spotless:off
                 // #tr MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text
                 // # Set actual pattern magnification, actual input/output numbers of patterns will be multiplied by this number.
                 // #zh_CN 设置样板实际运行倍率, 实际合成输入输出等于样板数值乘以此参数.
                 // spotless:on
-                TextWidget.localised("MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text")
-                    .setPos(20, 10)
-                    .setSize(200, 14))
+            TextWidget.localised("MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text")
+                .setPos(20, 10)
+                .setSize(200, 14))
             .widget(new TextFieldWidget().setSetterInt(val -> {
-                    magnification = val;
-                    flush();
-                })
+                magnification = val;
+                flush();
+            })
                 .setGetterInt(() -> magnification)
                 .setNumbers(1, Config.MaxMagnification_MegaCraftingCenter)
                 .setOnScrollNumbers(1, 64, 2048)
@@ -1023,10 +1025,10 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int colorIndex, boolean aActive, boolean aRedstone) {
+        int colorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
             if (aActive) {
-                return new ITexture[]{casingTexturePages[0][12], TextureFactory.builder()
+                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
                     .addIcon(OVERLAY_DTPF_ON)
                     .extFacing()
                     .build(),
@@ -1034,16 +1036,16 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                         .addIcon(OVERLAY_FUSION1_GLOW)
                         .extFacing()
                         .glow()
-                        .build()};
+                        .build() };
             }
 
-            return new ITexture[]{casingTexturePages[0][12], TextureFactory.builder()
+            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
                 .addIcon(OVERLAY_DTPF_OFF)
                 .extFacing()
-                .build()};
+                .build() };
         }
 
-        return new ITexture[]{casingTexturePages[0][12]};
+        return new ITexture[] { casingTexturePages[0][12] };
     }
 
     @Override
