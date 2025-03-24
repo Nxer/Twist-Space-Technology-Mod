@@ -73,10 +73,9 @@ public class RecipeLoader {
             // Item Recipes
             new SingleItemRecipes(), new SingleBlockRecipes(), new CosmicProcessorCircuitRecipes(),
             // Machine Recipes
-            new SingleMachineRecipes(), new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(),
-            new ModularHatchesRecipes(), new TSTSolidifierHatchRecipes() };
-            new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(), new ModularHatchesRecipes(),
-            new CardiganRecipes()
+            new SingleMachineRecipes(), new TSTBufferedEnergyHatchRecipes(),
+            new ModularHatchesRecipes(), new TSTSolidifierHatchRecipes(),
+            new GTCMMachineRecipes(), new CardiganRecipes()
         };
 
         for (IRecipePool recipePool : craftRecipePool) {
